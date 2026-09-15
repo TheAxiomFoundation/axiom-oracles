@@ -1,9 +1,9 @@
 {
   "schema": "axiom_oracles.closure.de_instrument_graph.v1",
-  "generated_at": "2026-09-15T18:19:34Z",
+  "generated_at": "2026-09-15T19:23:33Z",
   "source": {
     "path": "closure/de/source.json",
-    "sha256": "08feb2e91ec923f31446d037b5d6d42ffc49cdfb77d4f551d2b61d3700f5acb6"
+    "sha256": "679ccd6a1df6fc4815ca84a24d819263a6acd5572263da1fec406d4110071a53"
   },
   "query_set": {
     "path": "conformance/closure/de-subject-matter-queries.json",
@@ -13,13 +13,13 @@
     "corpus_release": {
       "state": "retrieved",
       "repository": "TheAxiomFoundation/axiom-corpus",
-      "release": "de-rulespec-2026-09-15-kindergeld-priority-followup",
-      "commit": "392c71f906eaeec8af62d899d2fe81f1cc309ed8",
-      "release_content_sha256": "b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b",
+      "release": "de-rulespec-2026-09-15-kindergeld-eu-priority-references",
+      "commit": "aad094d00e42b2766b12393e662473bda81411b0",
+      "release_content_sha256": "af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464",
       "release_object": {
-        "path": "releases/de-rulespec-2026-09-15-kindergeld-priority-followup/b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b.json",
-        "raw_sha256": "36572c82eae17e12552bde84364d1bbfc500f0368fc67ac5dee98c8814fcc4a7",
-        "content_sha256": "b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b"
+        "path": "releases/de-rulespec-2026-09-15-kindergeld-eu-priority-references/af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.json",
+        "raw_sha256": "87793fd7dfb5f6c2db86912c4d6d5503d250e45574ff81998747418c4cb6658d",
+        "content_sha256": "af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464"
       },
       "scans": [
         {
@@ -280,6 +280,19 @@
             "path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl",
             "sha256": "b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e",
             "row_count": 2
+          }
+        },
+        {
+          "document_class": "guidance",
+          "inventory": {
+            "path": "data/corpus/inventory/de/guidance/2026-09-15-de-kindergeld-eu-priority-references.json",
+            "sha256": "23a2503915eb4097f39b2a194f5a05e264c6e47346612a2e834cd9fa8240b4c7",
+            "row_count": 14
+          },
+          "provisions": {
+            "path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-eu-priority-references.jsonl",
+            "sha256": "f5db3cbd0a173a36d38555970ba4c332803706a2fcd3aabb8c9d6cf744f10a6e",
+            "row_count": 14
           }
         },
         {
@@ -816,23 +829,23 @@
           }
         }
       ],
-      "scanned_row_count": 10662,
+      "scanned_row_count": 10676,
       "global_extraction_index": {
         "schema": "axiom_oracles.closure.de_corpus_extraction_index.v1",
-        "row_count": 10662,
-        "body_row_count": 10437,
-        "mapped_row_count": 10662,
+        "row_count": 10676,
+        "body_row_count": 10444,
+        "mapped_row_count": 10676,
         "unmapped_row_count": 0,
-        "act_count": 260,
+        "act_count": 267,
         "mechanism_counts": {
           "amendment_targets": 46,
-          "explicit_cross_reference_body": 7346,
+          "explicit_cross_reference_body": 7380,
           "law_metadata_changed_by": 36,
           "law_metadata_fundstelle": 44
         },
-        "row_scan_sha256": "282b148c00b7355a8aca4f3169a404cd97e973d6dd77ac5132a46f0aec873880",
-        "canonical_index_sha256": "61419d052ce60891b6c3288ca2fb26784bd0fa1d7e2fc7371560b577352ff367",
-        "per_act_sha256": "8b0d8cf20b81e53eac490cee386e31edc8c0d478ff1fbb1e21b0d2a27fa38036",
+        "row_scan_sha256": "c89ddfa1004bf0cc378803296a1f0ddaa6b7cda539e7c1bca0054a65bacc7609",
+        "canonical_index_sha256": "aca2779677653e1c44ed45bbab441f79c10995a605cbdbc500a0f574491832af",
+        "per_act_sha256": "8abbb2aa166c2440aff48e9da386816577368c9cd372a63120de5e4ef4ca3bba",
         "acts": [
           {
             "document_citation_path": "de/guidance/aeao-2025-8",
@@ -11016,6 +11029,228 @@
             ]
           },
           {
+            "document_citation_path": "de/guidance/cjeu-c-153-03-2005-07-07",
+            "document_row_sha256": "6f38652d13679e22b2a8a151da24317899120ddfa35d58d3dc47d7b57119eae2",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 3,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "6072b3cb881d41005cccd483c0d1fbe51ff47337f5ea6e71b66472894a2772c1",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-153-03-2005-07-07/document-1",
+                "source_body_sha256": "6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc",
+                "source_row_sha256": "ec70730999a00a575c62e07042bc32c4288a38630021bdba90bec6f82fabb74d",
+                "matched_text": "Arbeitsförderungs-Reformgesetz",
+                "unresolved_identity": "named-instrument:arbeitsförderungs-reformgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-153-03-2005-07-07/document-1",
+                "source_body_sha256": "6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc",
+                "source_row_sha256": "ec70730999a00a575c62e07042bc32c4288a38630021bdba90bec6f82fabb74d",
+                "matched_text": "Bundeserziehungsgeldgesetz",
+                "unresolved_identity": "named-instrument:bundeserziehungsgeldgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-153-03-2005-07-07/document-1",
+                "source_body_sha256": "6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc",
+                "source_row_sha256": "ec70730999a00a575c62e07042bc32c4288a38630021bdba90bec6f82fabb74d",
+                "matched_text": "Verordnung (EG) Nr. 118/97",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 118/97"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14",
+            "document_row_sha256": "eed1fb77c51adf08abbb9b7376d0aba91682a6506cc626b0cf7c57c759fa1be4",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 9,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "6dfc0ba021893cb2e0864d7911f34ac284c8703381be1bb1cf7fad3ab0b61ff6",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+                "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+                "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+                "matched_text": "EStG",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+                "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+                "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+                "matched_text": "Einkommensteuergesetzes",
+                "target_citation_path": "de/statute/estg",
+                "target_row_sha256": "a6971213945039aed0cfb7ff232b26f735d5d1d69aca98be40ebfb99dd52c7ee"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+                "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+                "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+                "matched_text": "SGB III",
+                "target_citation_path": "de/statute/sgb-3",
+                "target_row_sha256": "c5a13e3e0c5665863727d67196a4fdb4a33c0020e086b6ffbb971af831f798ed"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+                "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+                "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+                "matched_text": "SGB IV",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+                "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+                "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+                "matched_text": "SGB VI",
+                "target_citation_path": "de/statute/sgb-6",
+                "target_row_sha256": "2b949901578994fe4fbd3bf3349d5a71bc9f4f40b672b9fb5e712691a04e8d56"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+                "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+                "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+                "matched_text": "Verordnung (EG) Nr. 118/97",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 118/97"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+                "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+                "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+                "matched_text": "Verordnung (EG) Nr. 307/1999",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 307/1999"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+                "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+                "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+                "matched_text": "Verordnung (EG) Nr. 647/2005",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 647/2005"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+                "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+                "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+                "matched_text": "Änderungsverordnung",
+                "unresolved_identity": "named-instrument:änderungsverordnung"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24",
+            "document_row_sha256": "39d7b3bcd1e61e41c434546db952fbd06b92e19cf57238016ab7b588b57565c0",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 4,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "41ae94ea789d221718407ba7fb66d8dd65ae83a2e8954e501b19516caf7562ff",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+                "source_body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+                "source_row_sha256": "b76d310ef11833595442b6ed961ef79ee33d6b5173fc4b36df3b405c88f050df",
+                "matched_text": "Verordnung (EG) Nr. 118/97",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 118/97"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+                "source_body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+                "source_row_sha256": "b76d310ef11833595442b6ed961ef79ee33d6b5173fc4b36df3b405c88f050df",
+                "matched_text": "Verordnung (EG) Nr. 647/2005",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 647/2005"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+                "source_body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+                "source_row_sha256": "b76d310ef11833595442b6ed961ef79ee33d6b5173fc4b36df3b405c88f050df",
+                "matched_text": "Verordnung (EG) Nr. 883/2004",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 883/2004"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+                "source_body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+                "source_row_sha256": "b76d310ef11833595442b6ed961ef79ee33d6b5173fc4b36df3b405c88f050df",
+                "matched_text": "Verordnung (EG) Nr. 987/2009",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 987/2009"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10",
+            "document_row_sha256": "dfc4215d0a9da0393095ff7cb756428f443a002315a4842501870e416ec2c586",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 4,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "d286cfbc9f32bb053410a154439f1480da493e16086de072ed79ab4fa01fad99",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+                "source_body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+                "source_row_sha256": "92db110c2788018d4b709cc26050e7dacdc85eb538da9405547a74d9eb5b6d2b",
+                "matched_text": "Bundeserziehungsgeldgesetz",
+                "unresolved_identity": "named-instrument:bundeserziehungsgeldgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+                "source_body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+                "source_row_sha256": "92db110c2788018d4b709cc26050e7dacdc85eb538da9405547a74d9eb5b6d2b",
+                "matched_text": "Gesetzes vom 17. Dezember 1990 (BGBl. I S. 2823)",
+                "unresolved_identity": "bgbl-act:gesetzes vom 17. dezember 1990 (bgbl. i s. 2823)"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+                "source_body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+                "source_row_sha256": "92db110c2788018d4b709cc26050e7dacdc85eb538da9405547a74d9eb5b6d2b",
+                "matched_text": "Rentenversicherungsänderungsgesetz",
+                "unresolved_identity": "named-instrument:rentenversicherungsänderungsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+                "source_body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+                "source_row_sha256": "92db110c2788018d4b709cc26050e7dacdc85eb538da9405547a74d9eb5b6d2b",
+                "matched_text": "Vierten Buches",
+                "target_citation_path": "de/statute/sgb-4",
+                "target_row_sha256": "46e12c40c7120deacdb5298e1e7f71138dce0499d876a9b3cd87e0d18fe0da7e"
+              }
+            ]
+          },
+          {
             "document_citation_path": "de/guidance/cjeu-c-328-20",
             "document_row_sha256": "7ac423f1001ffcc5aee7b0bd73b25cf1f0520fe334b1d13354efa5341ad0f320",
             "row_count": 2,
@@ -11108,6 +11343,36 @@
                 "source_row_sha256": "ace996b203e96ac1599eb101bf7561b0d3d3b42d4a2bf74ec28f5173e5ea107b",
                 "matched_text": "Verordnung (EU) Nr. 492/2011",
                 "unresolved_identity": "eu-regulation:verordnung (eu) nr. 492/2011"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/cjeu-c-363-08-2009-11-26",
+            "document_row_sha256": "ba3d1c5da1fc15476262a714086ed5af0d747f55b5a9a232834ca6e842bc7793",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 2,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "cd2364e61f4a1fb5a099894752ca8d6a773df724c5bbb7f58fa5f004518cd360",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-363-08-2009-11-26/document-1",
+                "source_body_sha256": "5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a",
+                "source_row_sha256": "575ed11c7a887de8d859d0c4af58275a86b71f1b7f1fb42c7e8f3af527cb7cfa",
+                "matched_text": "Familienlastenausgleichsgesetz",
+                "unresolved_identity": "named-instrument:familienlastenausgleichsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-363-08-2009-11-26/document-1",
+                "source_body_sha256": "5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a",
+                "source_row_sha256": "575ed11c7a887de8d859d0c4af58275a86b71f1b7f1fb42c7e8f3af527cb7cfa",
+                "matched_text": "Verordnung (EG) Nr. 118/97",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 118/97"
               }
             ]
           },
@@ -11252,6 +11517,132 @@
                 "source_row_sha256": "e0ce52e0f46e2e1b805fa7062add44c1b087e2efcba2903fafec77673101a2e2",
                 "matched_text": "Verordnung (EG) Nr. 987/2009",
                 "unresolved_identity": "eu-regulation:verordnung (eg) nr. 987/2009"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07",
+            "document_row_sha256": "9a5ea7340318b0dd57e0eeefb897855738567d751304775bf2970adbef44d605",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 8,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "56b07ad918369792176eaedb7ef78f4ec7807a39d0d164a71bcd0ab31b8d2e8d",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+                "source_body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+                "source_row_sha256": "6f8911735dbadf363df3c2623cdb90493655d1bbbd3562fcbec8964b89804ac3",
+                "matched_text": "Bundeserziehungsgeldgesetz",
+                "unresolved_identity": "named-instrument:bundeserziehungsgeldgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+                "source_body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+                "source_row_sha256": "6f8911735dbadf363df3c2623cdb90493655d1bbbd3562fcbec8964b89804ac3",
+                "matched_text": "Bundeserziehungsgeldgesetzes",
+                "unresolved_identity": "named-instrument:bundeserziehungsgeldgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+                "source_body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+                "source_row_sha256": "6f8911735dbadf363df3c2623cdb90493655d1bbbd3562fcbec8964b89804ac3",
+                "matched_text": "Familienlastenausgleichsgesetz",
+                "unresolved_identity": "named-instrument:familienlastenausgleichsgesetz"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+                "source_body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+                "source_row_sha256": "6f8911735dbadf363df3c2623cdb90493655d1bbbd3562fcbec8964b89804ac3",
+                "matched_text": "Familienlastenausgleichsgesetzes",
+                "unresolved_identity": "named-instrument:familienlastenausgleichsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+                "source_body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+                "source_row_sha256": "6f8911735dbadf363df3c2623cdb90493655d1bbbd3562fcbec8964b89804ac3",
+                "matched_text": "Gemeinschaftsverordnungen",
+                "unresolved_identity": "named-instrument:gemeinschaftsverordnungen"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+                "source_body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+                "source_row_sha256": "6f8911735dbadf363df3c2623cdb90493655d1bbbd3562fcbec8964b89804ac3",
+                "matched_text": "Kinderbetreuungsgeldgesetzes",
+                "unresolved_identity": "named-instrument:kinderbetreuungsgeldgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+                "source_body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+                "source_row_sha256": "6f8911735dbadf363df3c2623cdb90493655d1bbbd3562fcbec8964b89804ac3",
+                "matched_text": "Verordnung (EG) Nr. 1386/2001",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 1386/2001"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+                "source_body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+                "source_row_sha256": "6f8911735dbadf363df3c2623cdb90493655d1bbbd3562fcbec8964b89804ac3",
+                "matched_text": "Verordnung (EG) Nr. 410/2002",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 410/2002"
+              }
+            ]
+          },
+          {
+            "document_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15",
+            "document_row_sha256": "f196f16019723a462258141f24a801f11da918ff14cb9278b5b777fb0009b7d8",
+            "row_count": 2,
+            "mechanism_counts": {
+              "amendment_targets": 0,
+              "explicit_cross_reference_body": 4,
+              "law_metadata_changed_by": 0,
+              "law_metadata_fundstelle": 0
+            },
+            "findings_sha256": "c029e928614521ecc97e7e5da46c6ef4af308568c70956def25cc98e03523ebf",
+            "findings": [
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+                "source_body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+                "source_row_sha256": "32b246064f4a867a520d565e037ac46d06303d86270d7d4cb678a8b1dc5eb9fb",
+                "matched_text": "Bundes-Verfassungsgesetzes",
+                "unresolved_identity": "named-instrument:bundes-verfassungsgesetzes"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+                "source_body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+                "source_row_sha256": "32b246064f4a867a520d565e037ac46d06303d86270d7d4cb678a8b1dc5eb9fb",
+                "matched_text": "Unterhaltsvorschussgesetz",
+                "target_citation_path": "de/statute/uhvorschg",
+                "target_row_sha256": "f52c8090eee75cf64ca0d4fbb256ff9a2b266dfff6b027e6e64fee4c3f06f8e1"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+                "source_body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+                "source_row_sha256": "32b246064f4a867a520d565e037ac46d06303d86270d7d4cb678a8b1dc5eb9fb",
+                "matched_text": "Unterhaltsvorschussgesetzes",
+                "target_citation_path": "de/statute/uhvorschg",
+                "target_row_sha256": "f52c8090eee75cf64ca0d4fbb256ff9a2b266dfff6b027e6e64fee4c3f06f8e1"
+              },
+              {
+                "mechanism": "explicit_cross_reference_body",
+                "source_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+                "source_body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+                "source_row_sha256": "32b246064f4a867a520d565e037ac46d06303d86270d7d4cb678a8b1dc5eb9fb",
+                "matched_text": "Verordnung (EG) Nr. 118/97",
+                "unresolved_identity": "eu-regulation:verordnung (eg) nr. 118/97"
               }
             ]
           },
@@ -66639,7 +67030,7 @@
           "amendment_targets": "every amendment_targets key on every row scanned; counts are canonical unique source-row/target facts retained verbatim",
           "projection": "program frontiers remain the separately recorded relevant-root projection; the global index does not disposition or inject unrelated acts"
         },
-        "receipt_sha256": "0279b031e6304ec00b0b05d02ad7a3dcde256e516093eae59b0bffe0a97ffdb7"
+        "receipt_sha256": "950064b671f087054031b0eab2c5bc2dbb76763e5bb420ac2efe3785eaa8231c"
       },
       "extraction_protocol": {
         "global_index": "every pinned row contributes to a per-act receipt covering law_metadata, body cross-references, and amendment_targets",
@@ -68165,6 +68556,16 @@
           "source_row_sha256": "416f4fe4cc80c540a9bb01bb8e1d660edfb45c4a1da51cd62b2821979aeefbae",
           "matched_text": "§ 65 Satz 1 EStG",
           "resolved_citation_path": "de/statute/estg/65"
+        },
+        {
+          "id": "de-corpus-451f337b3b4f980d0090",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+          "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+          "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+          "matched_text": "§ 62 des Einkommensteuergesetzes",
+          "resolved_citation_path": "de/statute/estg/62"
         },
         {
           "id": "de-corpus-4557bdb1577aa4d1661e",
@@ -70016,6 +70417,16 @@
           "resolved_citation_path": "de/statute/estg/63"
         },
         {
+          "id": "de-corpus-9b11b0ffdd0474060388",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+          "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+          "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+          "matched_text": "§ 65 Abs. 1 EStG",
+          "resolved_citation_path": "de/statute/estg/65"
+        },
+        {
           "id": "de-corpus-9b4089d8ae106c691d3d",
           "program": "de/kindergeld",
           "mechanism": "explicit_cross_reference_inbound",
@@ -70657,6 +71068,16 @@
           "source_citation_path": "de/regulation/milov5",
           "source_row_sha256": "78e94c75f6d48bffea527362980e40680c3d8a4e49ec073849c78e4b9c8cd3f8",
           "raw_reference": "BGBl. I 2025, Nr. 268 (Nr. 312)"
+        },
+        {
+          "id": "de-corpus-c087dfd8721c95323dec",
+          "program": "de/kindergeld",
+          "mechanism": "explicit_cross_reference_inbound",
+          "source_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+          "source_body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+          "source_row_sha256": "7cecd6ed6bca7f8cb9c92ed1fb8586710ccefb180a696bbb2df96ee04bc618d5",
+          "matched_text": "§ 63 EStG",
+          "resolved_citation_path": "de/statute/estg/63"
         },
         {
           "id": "de-corpus-c12c4db12729a1514f1b",
@@ -71702,7 +72123,7 @@
           "matched_text": "Aufenthaltsgesetzes"
         }
       ],
-      "receipt_sha256": "db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab"
+      "receipt_sha256": "f6332f281d1dbba0dbba205ef7d66c24c4b832190e82450375089792ab178e4d"
     },
     "subject_matter_search": {
       "state": "partial",
@@ -73112,6 +73533,22 @@
           "title": "BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes"
         },
         {
+          "id": "de-kg-instr-85a6c84fc59a4411",
+          "status": "pending",
+          "discovery_refs": [
+            "de-corpus-451f337b3b4f980d0090",
+            "de-corpus-9b11b0ffdd0474060388",
+            "de-corpus-c087dfd8721c95323dec"
+          ],
+          "identity_kind": "corpus_citation",
+          "citation_path": "de/guidance/cjeu-c-16-09-2010-10-14",
+          "row_sha256": "eed1fb77c51adf08abbb9b7376d0aba91682a6506cc626b0cf7c57c759fa1be4",
+          "document_class": "guidance",
+          "citation_label": "Urteil des Gerichtshofes (Zweite Kammer) vom 14. Oktober 2010.#Gudrun Schwemmer gegen Agentur für Arbeit Villingen-Schwenningen - Familienkasse.#Ersuchen um Vorabentscheidung: Bundesfinanzhof - Deutschland.#Soziale Sicherheit - Verordnungen (EWG) Nrn. 1408/71 und 574/72 - Familienleistungen - Antikumulierungsvorschriften - Art. 76 Abs. 2 der Verordnung Nr. 1408/71 - Art. 10 Abs. 1 Buchst. a der Verordnung Nr. 574/72 - Kinder, deren Mutter in dem Mitgliedstaat, in dem sie gemeinsam mit ihr wohnen, Anspruch auf Familienleistungen hat, und deren Vater, der in der Schweiz arbeitet und grundsätzlich Anspruch auf gleichartige Familienleistungen nach schweizerischem Recht hat, davon absieht, diese Leistungen zu beantragen.#Rechtssache C-16/09.",
+          "document_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14",
+          "title": "Urteil des Gerichtshofes (Zweite Kammer) vom 14. Oktober 2010.#Gudrun Schwemmer gegen Agentur für Arbeit Villingen-Schwenningen - Familienkasse.#Ersuchen um Vorabentscheidung: Bundesfinanzhof - Deutschland.#Soziale Sicherheit - Verordnungen (EWG) Nrn. 1408/71 und 574/72 - Familienleistungen - Antikumulierungsvorschriften - Art. 76 Abs. 2 der Verordnung Nr. 1408/71 - Art. 10 Abs. 1 Buchst. a der Verordnung Nr. 574/72 - Kinder, deren Mutter in dem Mitgliedstaat, in dem sie gemeinsam mit ihr wohnen, Anspruch auf Familienleistungen hat, und deren Vater, der in der Schweiz arbeitet und grundsätzlich Anspruch auf gleichartige Familienleistungen nach schweizerischem Recht hat, davon absieht, diese Leistungen zu beantragen.#Rechtssache C-16/09."
+        },
+        {
           "id": "de-kg-instr-86411429cdb16a89",
           "status": "pending",
           "discovery_refs": [
@@ -74180,7 +74617,7 @@
           "binding_kind": "discovery_channel_receipts",
           "status": "pending",
           "receipts": {
-            "corpus_release": "db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab",
+            "corpus_release": "f6332f281d1dbba0dbba205ef7d66c24c4b832190e82450375089792ab178e4d",
             "subject_matter_search": "c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a",
             "citation_scan": "c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a"
           }
@@ -74956,5 +75393,5 @@
       ]
     }
   ],
-  "receipt_sha256": "da256f62735377c5a2e2320893e2e911812d4310b664c27a5a2b3e8abeadbd1e"
+  "receipt_sha256": "ab044e594d304966125adf3a6a84d73aa065579305ba21f966465ea5edbfdf9c"
 }

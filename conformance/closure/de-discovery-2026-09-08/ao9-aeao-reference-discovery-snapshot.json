@@ -1,0 +1,106 @@
+{
+  "schema": "de-kindergeld-ao9-aeao-reference-discovery.v1",
+  "status": "Independently reviewed source spans; enrolled pending; discovery classes remain open",
+  "corpus_commit": "aad094d00e42b2766b12393e662473bda81411b0",
+  "source_path": "data/corpus/provisions/de/guidance/2026-09-08-de-kindergeld-handbooks-remaining.jsonl",
+  "source_file_sha256": "3fa9db7aea52a6fcd34dc6d69bc688835bdc4eb32ccae58689f6666d0f321b14",
+  "source_citation_path": "de/guidance/aeao-2025-9/inhalt",
+  "source_body_sha256": "228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5",
+  "new_pending_references": [
+    {
+      "id": "de-kg-suppl-220",
+      "identity": "BFH VI 156/59 U, 1962-07-27, cited by AEAO 2025 zu §9",
+      "title_short": "BFH VI 156/59 U",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A2.1.1",
+      "discovered_in_body_sha256": "739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369",
+      "provenance": "Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl III S. 429; independent publication-index membership and full judgment review remain pending.",
+      "status": "pending",
+      "reason": "Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.",
+      "audit_source": {
+        "citation_path": "de/guidance/aeao-2025-9/inhalt",
+        "body_sha256": "228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5",
+        "excerpt": "27.7.1962, VI 156/59 U, BStBl III S. 429",
+        "excerpt_sha256": "f3419e70daf18fe65e2e85abf02232b261f86ffa159a553b72a8439eee8fce15"
+      }
+    },
+    {
+      "id": "de-kg-suppl-221",
+      "identity": "BFH I R 210/75, 1977-08-03, cited by AEAO 2025 zu §9",
+      "title_short": "BFH I R 210/75",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A2.1.1",
+      "discovered_in_body_sha256": "739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369",
+      "provenance": "Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl 1978 II S. 118; independent publication-index membership and full judgment review remain pending.",
+      "status": "pending",
+      "reason": "Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.",
+      "audit_source": {
+        "citation_path": "de/guidance/aeao-2025-9/inhalt",
+        "body_sha256": "228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5",
+        "excerpt": "3.8.1977, I R 210/75, BStBl 1978 II S. 118",
+        "excerpt_sha256": "6e886ab163ab1e50f08244f73291bfcbce0d49788c143d3f01de0daf654ce757"
+      }
+    },
+    {
+      "id": "de-kg-suppl-222",
+      "identity": "BFH I R 225/82, 1988-05-25, cited by AEAO 2025 zu §9",
+      "title_short": "BFH I R 225/82",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A2.1.1",
+      "discovered_in_body_sha256": "739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369",
+      "provenance": "Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl II S. 944; independent publication-index membership and full judgment review remain pending.",
+      "status": "pending",
+      "reason": "Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.",
+      "audit_source": {
+        "citation_path": "de/guidance/aeao-2025-9/inhalt",
+        "body_sha256": "228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5",
+        "excerpt": "25.5.1988, I R 225/82, BStBl II S. 944",
+        "excerpt_sha256": "df99371536f2f5805cbb18f978c3543f05f3f08358b32e0ac9aeaf33d1e02cc1"
+      }
+    },
+    {
+      "id": "de-kg-suppl-223",
+      "identity": "BFH I R 50/85, 1989-05-10, cited by AEAO 2025 zu §9",
+      "title_short": "BFH I R 50/85",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A2.1.1",
+      "discovered_in_body_sha256": "739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369",
+      "provenance": "Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl II S. 755; independent publication-index membership and full judgment review remain pending.",
+      "status": "pending",
+      "reason": "Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.",
+      "audit_source": {
+        "citation_path": "de/guidance/aeao-2025-9/inhalt",
+        "body_sha256": "228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5",
+        "excerpt": "10.5.1989, I R 50/85, BStBl II S. 755",
+        "excerpt_sha256": "5f7bae05a1cc8da65e7ce5939bbcb628dab2fd0eaaec34b66be926d4fb8d0c16"
+      }
+    },
+    {
+      "id": "de-kg-suppl-224",
+      "identity": "BFH I R 4/96, 1996-07-10, cited by AEAO 2025 zu §9",
+      "title_short": "BFH I R 4/96",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-A2.1.1",
+      "discovered_in_body_sha256": "739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369",
+      "provenance": "Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl 1997 II S. 15; independent publication-index membership and full judgment review remain pending.",
+      "status": "pending",
+      "reason": "Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.",
+      "audit_source": {
+        "citation_path": "de/guidance/aeao-2025-9/inhalt",
+        "body_sha256": "228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5",
+        "excerpt": "10.7.1996, I R 4/96, BStBl 1997 II S. 15",
+        "excerpt_sha256": "7d5f00b38f1b4254b57af8ec2e5d9c48069826e571eb1830403773b785f294a1"
+      }
+    }
+  ],
+  "existing_members": [
+    "de-kg-discovery-94b8bf3c969f58f9",
+    "de-kg-discovery-e66d9bc7e06202a7"
+  ],
+  "note": "I R215/85 and I R23/82 already have frontier identities. Five additional named references are enrolled only after collision verification against the native refreshed graph. No discovery class is closed.",
+  "independent_review": {
+    "reviewer": "review_de_matcher",
+    "result": "All five excerpts, dates and source hashes verified; no exact docket collision; indirect DA binding verified."
+  },
+  "ingest_normalization": "Pending ledger rows carry no disposition reason. The unresolved-review explanation is retained in provenance when enrolled."
+}

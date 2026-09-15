@@ -1,0 +1,698 @@
+{
+  "schema": "de-kindergeld-eu-priority-reference-discovery-snapshot.v1",
+  "as_of": "2026-09-15T18:47:26.122907+00:00",
+  "status": "independently reviewed reference spans; enrolled pending; discovery classes remain open",
+  "scope": "Enumerated citations identified during complete reading of seven official judgments; not exhaustive closure of BStBl II, BMF, BZSt or treaty classes.",
+  "ledger_sha256": "f6f5dbdc33eb362e8191ce9798f873570127a30029ff9c3b2722e17f4a1d85a2",
+  "notes_sha256": "989d57ecc36a5e140efe10fd5c5ca40834b8bd32df351b7ac45aa7e306e4090e",
+  "corpus_capture_commit": "eab1db982513ecc6522c451c2067c39d81f53daa",
+  "source_file": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-eu-priority-references.jsonl",
+  "source_file_sha256": "f5db3cbd0a173a36d38555970ba4c332803706a2fcd3aabb8c9d6cf744f10a6e",
+  "new_pending_references": [
+    {
+      "id": "de-kg-suppl-182",
+      "identity": "CJEU 35/77 Beerens, 29 November 1977",
+      "title_short": "CJEU 35/77 Beerens, 29 November 1977",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 35/77 Beerens, 29 November 1977",
+        "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+        "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+        "excerpt": "res, dass das Unterhaltsvorschussgesetz nicht in den Geltungsbereich dieser Verordnung fällt (vgl. insbesondere Urteil vom 29. November 1977 in der Rechtssache 35/77, Beerens, Slg. 1977, 2249, Randnr. 9). 27 Der Gerichtshof hat, wie die österreichische Regierung und die Kommission vortragen, wiederholt entschieden, dass die Frage, ob eine Leistung in den Geltungsbereich de",
+        "excerpt_sha256": "150400a2106b002907106ce14bcc610ee6e5214818aa375a66f7934160ac3884",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-183",
+      "identity": "CJEU C-78/91 Hughes, 16 July 1992",
+      "title_short": "CJEU C-78/91 Hughes, 16 July 1992",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-78/91 Hughes, 16 July 1992",
+        "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+        "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+        "excerpt": "genden Merkmalen, insbesondere ihrem Zweck und den Voraussetzungen ihrer Gewährung, beantwortet (vgl. insbesondere Urteile vom 16. Juli 1992 in der Rechtssache C-78/91, Hughes, Slg. 1992, I-4839, Randnr. 14, und vom 10. Oktober 1996 in den Rechtssachen C-245/94 und C-312/94, Hoever und Zachow, Slg. 1996, I-4895, Randnr. 17). 28 Nach ständiger Rechtsprechung ist eine Leistung",
+        "excerpt_sha256": "771f227bfae0484b6595d8de51f3b0a9e7e93f58617fbb32fb8447fef924cfbf",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-184",
+      "identity": "CJEU 249/83 Hoeckx, 27 March 1985",
+      "title_short": "CJEU 249/83 Hoeckx, 27 March 1985",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 249/83 Hoeckx, 27 March 1985",
+        "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+        "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+        "excerpt": " eines der in Artikel 4 Absatz 1 der Verordnung Nr. 1408/71 ausdrücklich aufgezählten Risiken bezieht (vgl. hierzu Urteile vom 27. März 1985 in der Rechtssache 249/83, Hoeckx, Slg. 1985, 973, Randnrn. 12 bis 14, und Hughes, Randnr. 15). 29 Der Unterhaltsvorschuss nach dem Unterhaltsvorschussgesetz erfuellt unstreitig die erste dieser Voraussetzungen. Es ist somit zu prüfen,",
+        "excerpt_sha256": "3a3415dc4b227b31fc663498064077648c532114ee4f6949395a3effa1d05d76",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-185",
+      "identity": "CJEU 39/76 Mouthaan, 15 December 1976",
+      "title_short": "CJEU 39/76 Mouthaan, 15 December 1976",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 39/76 Mouthaan, 15 December 1976",
+        "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+        "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+        "excerpt": "da der Unterhaltsschuldner sie zurückzahlen müsse; gegebenenfalls würden sie zwangsweise eingetrieben. Nach dem Urteil vom 15. Dezember 1976 in der Rechtssache 39/76 (Mouthaan, Slg. 1976, 1901, Randnrn. 18 ff.) falle eine Leistung, die eine zivilrechtliche Verpflichtung ersetze, nicht unter Artikel 4 Absatz 1 Buchstabe h der Verordnung Nr. 1408/71. Würdigung durch den Geri",
+        "excerpt_sha256": "1807ae9dc663c85a24afdc470b7f6e3925dae5a3afcc8177e578c4725c0459e1",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-186",
+      "identity": "CJEU 104/84 Kromhout, 4 July 1985",
+      "title_short": "CJEU 104/84 Kromhout, 4 July 1985",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 104/84 Kromhout, 4 July 1985",
+        "referring_citation_path": "de/guidance/cjeu-c-85-99-2001-03-15/document-1",
+        "body_sha256": "e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8",
+        "excerpt": "hmer mit Familienlasten dadurch sozial zu unterstützen, dass sich die Allgemeinheit an diesen Lasten beteiligt (vgl. Urteil vom 4. Juli 1985 in der Rechtssache 104/84, Kromhout, Slg. 1985, 2205, Randnr. 14). 39 Der Gerichtshof hat daher entschieden, dass ein Erziehungsgeld, das es einem Elternteil ermöglichen soll, sich in der ersten Lebensphase eines Kindes dessen Erziehun",
+        "excerpt_sha256": "18388a922be2da694375f653ad14766ea5c753fd7bbbcd23c00a349e34ef6912",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-187",
+      "identity": "CJEU C-228/07 Petersen, 11 September 2008",
+      "title_short": "CJEU C-228/07 Petersen, 11 September 2008",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-228/07 Petersen, 11 September 2008",
+        "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+        "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+        "excerpt": "tandsmerkmale für die Einstufung der Leistungen anzusehen sind (vgl. Urteil vom 11. September 2008, Petersen, C-228/07, Slg. 2008, I-6989 , Randnr. 21 und die dort angeführte Rechtsprechung). Dass eine Leistung dem nationalen Steuerrecht zuzurechnen ist, ist folglich für die Beurteilung ihrer wesentlichen Merkmale nicht entschei",
+        "excerpt_sha256": "ba19dba3bc17594cf001a3100c83e87f3fcf96cca25ee7371582425fbddf0dd2",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-188",
+      "identity": "CJEU C-503/09 Stewart, 21 July 2011",
+      "title_short": "CJEU C-503/09 Stewart, 21 July 2011",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-503/09 Stewart, 21 July 2011",
+        "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+        "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+        "excerpt": "ordnung Nr. 1408/71 ausdrücklich aufgezählten Risiken bezieht (vgl. u. a. Urteil vom 21. Juli 2011, Stewart, C-503/09, Slg. 2011, I-6497 , Randnr. 32 und die dort angeführte Rechtsprechung). 31 Wie die CNPF und die Kommission geltend machen, wird die Leistung, um die es im Ausgangsverfahren geht, bei Unterhaltsberechtigung eines",
+        "excerpt_sha256": "d95454d9cb00563fbf4dee15180c1ab137daa6eaa65441464b3de332862703ca",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-189",
+      "identity": "CJEU C-406/04 De Cuyper, 18 July 2006",
+      "title_short": "CJEU C-406/04 De Cuyper, 18 July 2006",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-406/04 De Cuyper, 18 July 2006",
+        "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+        "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+        "excerpt": "t ist das von der jeweiligen Leistung gedeckte Risiko zu berücksichtigen (Urteil vom 18. Juli 2006, De Cuyper, C-406/04, Slg. 2006, I-6947 , Randnr. 27). 34 Nach Art. 1 Buchst. u Ziff. i der Verordnung Nr. 1408/71 bezeichnet der Begriff „Familienleistungen“„alle Sach- oder Geldleistungen, die zum Ausgleich von Familienlasten … b",
+        "excerpt_sha256": "798818d2b25ca5c2663da30c844637594da2e4ea1fd3a806b4c81927774a8e86",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-190",
+      "identity": "CJEU joined C-216/12 and C-217/12 Hliddal and Bornand, 19 September 2013",
+      "title_short": "CJEU joined C-216/12 and C-217/12 Hliddal and Bornand, 19 September 2013",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU joined C-216/12 and C-217/12 Hliddal and Bornand, 19 September 2013",
+        "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+        "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+        "excerpt": "teile vom 4. Juli 1985, Kromhout, 104/84, Slg. 1985, 2205 , Randnr. 14, und vom 19. September 2013, Hliddal und Bornand, C‑216/12 und C‑217/12, Randnr. 54 und die dort angeführte Rechtsprechung). 35 Der Ausdruck „Ausgleich von Familienlasten“ in Art. 1 Buchst. u Ziff. i der Verordnung Nr. 1408/71 ist dahin auszulegen, dass er u.",
+        "excerpt_sha256": "f7148e339607d9395674ff5209fce08236b36274459c76bb846c2c947a869012",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-191",
+      "identity": "CJEU C-333/00 Maaheimo, 7 November 2002",
+      "title_short": "CJEU C-333/00 Maaheimo, 7 November 2002",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-333/00 Maaheimo, 7 November 2002",
+        "referring_citation_path": "de/guidance/cjeu-c-177-12-2013-10-24/document-1",
+        "body_sha256": "addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541",
+        "excerpt": "für den Unterhalt von Kindern verringert (Urteile Offermanns, Randnr. 41, und vom 7. November 2002, Maaheimo, C-333/00, Slg. 2002, I-10087 , Randnr. 25). 36 Im Ausgangsverfahren ist festzustellen, wie die CNPF und die Kommission hervorheben und wie sich aus den beim Gerichtshof eingereichten Akten ergibt, dass der Kinderbonus, d",
+        "excerpt_sha256": "24788e1b680839af2245f819c9eb5fbf7d97244fe149cbc38224395d80191d5e",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-192",
+      "identity": "CJEU C-255/99 Humer, 5 February 2002",
+      "title_short": "CJEU C-255/99 Humer, 5 February 2002",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-363-08-2009-11-26/document-1, body SHA-256 5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-255/99 Humer, 5 February 2002",
+        "referring_citation_path": "de/guidance/cjeu-c-363-08-2009-11-26/document-1",
+        "body_sha256": "5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a",
+        "excerpt": "nd Zachow, C‑245/94 und C‑312/94, Slg. 1996, I‑4895, Randnr. 32, und vom 5. Februar 2002, Humer, C‑255/99, Slg. 2002, I‑1205, Randnr. 39). 23. Auch wenn das vorlegende Gericht den Gerichtshof hierzu nicht befragt hat, ist darauf hinzuweisen, dass der Anspruch auf – entweder an Frau Slanina oder an ihren frühe",
+        "excerpt_sha256": "b9cda13ac003ebec5217092fd99861ac70f0729a47129874c691800783054cff",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-193",
+      "identity": "CJEU C-352/06 Bosmann",
+      "title_short": "CJEU C-352/06 Bosmann",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-352/06 Bosmann",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "zu gelten (vgl. zu den in § 62 EStG vorgesehenen Leistungen auch Urteil vom 20. Mai 2008, Bosmann, C‑352/06, Slg. 2008, I‑3827, Randnrn. 10 und 27). 34 Hinsichtlich des persönlichen Anwendungsbereichs der Verordnung Nr. 1408/71 ergibt sich zwar aus der Rechtsprechung des Gerichtshofs, dass die Definition in Art. 1 Buch",
+        "excerpt_sha256": "47882d546e6df35bda4c02f486a1f42cd580e1e7124ab72f129f2ae4feb5037e",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-194",
+      "identity": "CJEU C‑194/96 Kulzer",
+      "title_short": "CJEU C‑194/96 Kulzer",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C‑194/96 Kulzer",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "leistungen gemäß Titel III Kapitel 7 dieser Verordnung ist (vgl. Urteil vom 5. März 1998, Kulzer, C‑194/96, Slg. 1998, I‑895, Randnr. 35), so dass nur Personen, die – im Unterschied zu Frau Schwemmer – in einem der in Anhang I Teil I Abschnitt D der Verordnung Nr. 1408/71 genannten Systeme pflichtversichert sind, als „",
+        "excerpt_sha256": "8df261891bad0b77386159132ffe88e1ac4faf62ed371997a13d0232da5bb501",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-195",
+      "identity": "CJEU C‑4/95 und C‑5/95 Stöber und Piosa Pereira",
+      "title_short": "CJEU C‑4/95 und C‑5/95 Stöber und Piosa Pereira",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C‑4/95 und C‑5/95 Stöber und Piosa Pereira",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "rordnung angesehen werden können (vgl. in diesem Sinne u. a. Urteile vom 30. Januar 1997, Stöber und Piosa Pereira, C‑4/95 und C‑5/95, Slg. 1997, I‑511, Randnrn. 29 bis 36, vom 12. Juni 1997, Merino García, C‑266/95, Slg. 1997, I‑3279, Randnrn. 24 bis 26, vom 12. Mai 1998, Martínez Sala, C‑85/96, Slg. 1998, I‑2691, Ran",
+        "excerpt_sha256": "157140cb84eed5f9ebc13a98b1bd0216a396ba5d180ede2e9da6af567f391aff",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-196",
+      "identity": "CJEU C‑266/95 Merino García",
+      "title_short": "CJEU C‑266/95 Merino García",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C‑266/95 Merino García",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "iosa Pereira, C‑4/95 und C‑5/95, Slg. 1997, I‑511, Randnrn. 29 bis 36, vom 12. Juni 1997, Merino García, C‑266/95, Slg. 1997, I‑3279, Randnrn. 24 bis 26, vom 12. Mai 1998, Martínez Sala, C‑85/96, Slg. 1998, I‑2691, Randnrn. 42 und 43, sowie vom 4. Mai 1999, Sürül, C‑262/96, Slg. 1999, I‑2685, Randnr. 89). 35 Auch wenn ",
+        "excerpt_sha256": "d50eeddb2b10ce5ee63545f0de70ce7fa2e1ff1212b07a43e5aab0f3630b9b0e",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-197",
+      "identity": "CJEU C‑85/96 Martínez Sala",
+      "title_short": "CJEU C‑85/96 Martínez Sala",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C‑85/96 Martínez Sala",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "i 1997, Merino García, C‑266/95, Slg. 1997, I‑3279, Randnrn. 24 bis 26, vom 12. Mai 1998, Martínez Sala, C‑85/96, Slg. 1998, I‑2691, Randnrn. 42 und 43, sowie vom 4. Mai 1999, Sürül, C‑262/96, Slg. 1999, I‑2685, Randnr. 89). 35 Auch wenn man davon ausgeht, dass eine Person in einer Lage wie Frau Schwemmer für die Zweck",
+        "excerpt_sha256": "8e223e6ee7ad34de9c8bc65024b577a83d2dba52f7cf7f18eab20f60c71a1585",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-198",
+      "identity": "CJEU C‑262/96 Sürül",
+      "title_short": "CJEU C‑262/96 Sürül",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C‑262/96 Sürül",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "98, Martínez Sala, C‑85/96, Slg. 1998, I‑2691, Randnrn. 42 und 43, sowie vom 4. Mai 1999, Sürül, C‑262/96, Slg. 1999, I‑2685, Randnr. 89). 35 Auch wenn man davon ausgeht, dass eine Person in einer Lage wie Frau Schwemmer für die Zwecke der Gewährung von Familienleistungen gemäß Titel III Kapitel 7 der Verordnung Nr. 14",
+        "excerpt_sha256": "cdb9785fecf03c18600291997033d17a089127a6da10e45388d9cb3c6c533727",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-199",
+      "identity": "CJEU 149/82 Robards",
+      "title_short": "CJEU 149/82 Robards",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 149/82 Robards",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "ionen vom Anwendungsbereich der Verordnung auszunehmen (vgl. Urteile vom 3. Februar 1983, Robards, 149/82, Slg. 1983, 171, Randnr. 15, Kulzer, Randnr. 32, vom 5. Februar 2002, Humer, C‑255/99, Slg. 2002, I‑1205, Randnr. 42, und vom 26. November 2009, Slanina, C‑363/08, noch nicht in der amtlichen Sammlung veröffentlich",
+        "excerpt_sha256": "25177e55bd8f5274962fe884335660e41a31025dc477b8cbd921467221088299",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-200",
+      "identity": "CJEU 302/84 Ten Holder",
+      "title_short": "CJEU 302/84 Ten Holder",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 302/84 Ten Holder",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "erordnung Nr. 1408/71 zum Ausdruck (vgl. in diesem Sinne u. a. Urteile vom 12. Juni 1986, Ten Holder, 302/84, Slg. 1986, 1821, Randnrn. 19 und 20, sowie Bosmann, Randnr. 16). 41 In Bezug auf Familienleistungen bestimmt Art. 73 der Verordnung Nr. 1408/71, dass ein Erwerbstätiger, der den Rechtsvorschriften eines Mitglie",
+        "excerpt_sha256": "9a5578e2616b9200dfb0fd8032c9e15c528ddefc0d0e4d94338d2b9b975e7349",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-201",
+      "identity": "CJEU C‑117/89 Kracht",
+      "title_short": "CJEU C‑117/89 Kracht",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C‑117/89 Kracht",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": " wenn ihre Familie ihnen nicht in diesen Staat gefolgt ist (vgl. Urteil vom 4. Juli 1990, Kracht, C‑117/89, Slg. 1990, I‑2781, Randnr. 15), und insbesondere verhindern, dass ein Mitgliedstaat die Gewährung oder die Höhe von Familienleistungen davon abhängig machen kann, dass die Familienangehörigen des Erwerbstätigen i",
+        "excerpt_sha256": "1826d7b3273ba4d06ad40bc0566e2beb81b0f970b8c1c98c49b97ca147e384a6",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-202",
+      "identity": "CJEU C‑119/91 McMenamin",
+      "title_short": "CJEU C‑119/91 McMenamin",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C‑119/91 McMenamin",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "ch vorgeht, so dass dieser ruht (vgl. in diesem Sinne u. a. Urteile vom 9. Dezember 1992, McMenamin, C‑119/91, Slg. 1992, I‑6393, Randnrn. 17 und 18, sowie Weide, Randnr. 28). 49 Obwohl Art. 10 der Verordnung Nr. 574/72 keine Art. 76 Abs. 2 der Verordnung Nr. 1408/71 entsprechende Bestimmung enthält, macht die Familien",
+        "excerpt_sha256": "7c0c952bf197be74bef5fe415ec95a7de6613c790cf4d6d2dd1af49ad13a755d",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-203",
+      "identity": "CJEU 134/77 Ragazzoni",
+      "title_short": "CJEU 134/77 Ragazzoni",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 134/77 Ragazzoni",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "einer früheren Fassung von Art. 76 der Verordnung Nr. 1408/71 Urteile vom 20. April 1978, Ragazzoni, 134/77, Slg. 1978, 963, Randnrn. 8 bis 11, vom 13. November 1984, Salzano, 191/83, Slg. 1984, 3741, Randnrn. 7 und 10, vom 23. April 1986, Ferraioli, 153/84, Slg. 1986, 1401, Randnr. 14, und Kracht, Randnr. 11). 54 In d",
+        "excerpt_sha256": "e9521f50005fddee9654e0224905e80f0b13e947346a33253fcbc39a1306bde2",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-204",
+      "identity": "CJEU 191/83 Salzano",
+      "title_short": "CJEU 191/83 Salzano",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 191/83 Salzano",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": " April 1978, Ragazzoni, 134/77, Slg. 1978, 963, Randnrn. 8 bis 11, vom 13. November 1984, Salzano, 191/83, Slg. 1984, 3741, Randnrn. 7 und 10, vom 23. April 1986, Ferraioli, 153/84, Slg. 1986, 1401, Randnr. 14, und Kracht, Randnr. 11). 54 In diesem Zusammenhang ist zu beachten, dass der Gerichtshof in diesen Urteilen f",
+        "excerpt_sha256": "cb63ddbc89907afa0dc85c1325b9919f7c292ebaac0944c157380daae743cbfa",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-205",
+      "identity": "CJEU 153/84 Ferraioli",
+      "title_short": "CJEU 153/84 Ferraioli",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 153/84 Ferraioli",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": ". November 1984, Salzano, 191/83, Slg. 1984, 3741, Randnrn. 7 und 10, vom 23. April 1986, Ferraioli, 153/84, Slg. 1986, 1401, Randnr. 14, und Kracht, Randnr. 11). 54 In diesem Zusammenhang ist zu beachten, dass der Gerichtshof in diesen Urteilen für die Beantwortung der Fragen in den betreffenden Verfahren für unerhebl",
+        "excerpt_sha256": "b2d8fc8ddf00f4eae8148dd48831713b2c6a5b43fc3e38649568a85bec2ea4f1",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-206",
+      "identity": "CJEU 100/78 Rossi",
+      "title_short": "CJEU 100/78 Rossi",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 100/78 Rossi",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "Recht eines Mitgliedstaats gewährt werden (vgl. in diesem Sinne Urteile vom 6. März 1979, Rossi, 100/78, Slg. 1979, 831, Randnr. 14, vom 12. Juni 1980, Laterza, 733/79, Slg. 1980, 1915, Randnr. 8, vom 9. Juli 1980, Gravina, 807/79, Slg. 1980, 2205, Randnr. 7, vom 24. November 1983, D’Amario, 320/82, Slg. 1983, 3811, Ra",
+        "excerpt_sha256": "5830b7d7305c72bce30b7079944e04325ac916bc1f9a03dd07bada21d6723074",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-207",
+      "identity": "CJEU 733/79 Laterza",
+      "title_short": "CJEU 733/79 Laterza",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 733/79 Laterza",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "e Urteile vom 6. März 1979, Rossi, 100/78, Slg. 1979, 831, Randnr. 14, vom 12. Juni 1980, Laterza, 733/79, Slg. 1980, 1915, Randnr. 8, vom 9. Juli 1980, Gravina, 807/79, Slg. 1980, 2205, Randnr. 7, vom 24. November 1983, D’Amario, 320/82, Slg. 1983, 3811, Randnr. 4, und Kromhout, Randnr. 21). Daraus folgt, dass es dies",
+        "excerpt_sha256": "e206e3c0991b5aee8816d625c5f8febe0623c30d248aeb25e9b030615e59894c",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-208",
+      "identity": "CJEU 807/79 Gravina",
+      "title_short": "CJEU 807/79 Gravina",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 807/79 Gravina",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "nr. 14, vom 12. Juni 1980, Laterza, 733/79, Slg. 1980, 1915, Randnr. 8, vom 9. Juli 1980, Gravina, 807/79, Slg. 1980, 2205, Randnr. 7, vom 24. November 1983, D’Amario, 320/82, Slg. 1983, 3811, Randnr. 4, und Kromhout, Randnr. 21). Daraus folgt, dass es diesen Zielen widerspräche, eine Antikumulierungsvorschrift wie Art",
+        "excerpt_sha256": "baae050701f35124d825949ac962c3df99bd53828b1ddf1d4f2f6b6736f71aff",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-209",
+      "identity": "CJEU 320/82 D’Amario",
+      "title_short": "CJEU 320/82 D’Amario",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 320/82 D’Amario",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": " 8, vom 9. Juli 1980, Gravina, 807/79, Slg. 1980, 2205, Randnr. 7, vom 24. November 1983, D’Amario, 320/82, Slg. 1983, 3811, Randnr. 4, und Kromhout, Randnr. 21). Daraus folgt, dass es diesen Zielen widerspräche, eine Antikumulierungsvorschrift wie Art. 10 der Verordnung Nr. 574/72 so auszulegen, dass tatsächlich nur e",
+        "excerpt_sha256": "2bf1b12263ee30a7b3d21f4b04c1cc577fecb19d627fc0601fe0a571d03fc9bc",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-210",
+      "identity": "CJEU 104/80 Beeck",
+      "title_short": "CJEU 104/80 Beeck",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 104/80 Beeck",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "h genommen (vgl. entsprechend u. a. Urteile Rossi, Randnrn. 14 ff., vom 19. Februar 1981, Beeck, 104/80, Slg. 1981, 503, Randnr. 12, und Kromhout, Randnr. 21). 59 Nach alledem ist auf die Vorlagefragen zu antworten, dass Art. 76 der Verordnung Nr. 1408/71 und Art. 10 der Verordnung Nr. 574/72 dahin auszulegen sind, das",
+        "excerpt_sha256": "41204fe310d0e888f95234121bb2e272a518ed22903a91277a143bf41537ad06",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-211",
+      "identity": "CJEU 40/76 Kermaschek",
+      "title_short": "CJEU 40/76 Kermaschek",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU 40/76 Kermaschek",
+        "referring_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+        "body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+        "excerpt": "ie französische Regierung sowie die Kommission auf die durch das Urteil vom 23. November 1976 in der Rechtssache 40/76 (Kermaschek, Slg. 1976, 1669, Randnr. 7) eingeleitete Rechtsprechung verwiesen, wonach Familienangehörigen eines Arbeitnehmers nur abgeleitete Rechte zustehen, die sie als Familienangehörige eines Arbe",
+        "excerpt_sha256": "2884bc49f240eb79a323b20ab2b1ba2fe9e79e864784046b67ec1e949a586e78",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-212",
+      "identity": "CJEU C-308/93 Cabanis-Issarte",
+      "title_short": "CJEU C-308/93 Cabanis-Issarte",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-308/93 Cabanis-Issarte",
+        "referring_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+        "body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+        "excerpt": "Nr. 1408/71 das Urteil Hughes, a. a. O.). 32 Allerdings wurde im Urteil vom 30. April 1996 in der Rechtssache C-308/93 (Cabanis-Issarte, noch nicht in der amtlichen Sammlung veröffentlicht, Randnr. 34) die Tragweite des Urteils Kermaschek auf die Sachverhalte beschränkt, in denen sich ein Familienangehöriger eines Arbe",
+        "excerpt_sha256": "f9bd4c4f52095ee55f544a25b0c36682030f4b4b539a221c5484a09cb36685a9",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-213",
+      "identity": "CJEU C-321/93 Imbernon Martínez",
+      "title_short": "CJEU C-321/93 Imbernon Martínez",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-321/93 Imbernon Martínez",
+        "referring_citation_path": "de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1",
+        "body_sha256": "20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2",
+        "excerpt": "d, von seinem Recht auf Freizuegigkeit Gebrauch zu machen (vgl. Urteil vom 5. Oktober 1995 in der Rechtssache C-321/93, Imbernon Martínez, Slg. 1995, I-2821, Randnr. 21). 35 Wäre aber, wie im Ausgangsrechtsstreit, die Gewährung des Erziehungsgelds ° das eine Familienleistung ist ° an die Voraussetzung gebunden, daß der",
+        "excerpt_sha256": "6d698a595b0be883ff250c1208b53eb75dde6b3c05a33e7dfb885bf8763872ae",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-214",
+      "identity": "CJEU C‑2/89 Kits van Heijningen",
+      "title_short": "CJEU C‑2/89 Kits van Heijningen",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-543-03-2005-06-07/document-1, body SHA-256 7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C‑2/89 Kits van Heijningen",
+        "referring_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+        "body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+        "excerpt": "nen Risiken unter den dort genannten Voraussetzungen versichert ist (Urteile vom 3. Mai 1990 in der Rechtssache C‑2/89, Kits van Heijningen, Slg. 1990, I‑1755, Randnr. 9, und vom 11. Juni 1998 in der Rechtssache C‑275/96, Kuusijärvi, Slg. 1998, I‑3419, Randnr. 20). 30 Eine Person besitzt somit die Arbeitnehmereigenscha",
+        "excerpt_sha256": "d100fdc185a97c0f7b7878a2b8c79296d032dc3c290f8182d52f1c370d82d478",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-215",
+      "identity": "CJEU C‑275/96 Kuusijärvi",
+      "title_short": "CJEU C‑275/96 Kuusijärvi",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-543-03-2005-06-07/document-1, body SHA-256 7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C‑275/96 Kuusijärvi",
+        "referring_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+        "body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+        "excerpt": "chtssache C‑2/89, Kits van Heijningen, Slg. 1990, I‑1755, Randnr. 9, und vom 11. Juni 1998 in der Rechtssache C‑275/96, Kuusijärvi, Slg. 1998, I‑3419, Randnr. 20). 30 Eine Person besitzt somit die Arbeitnehmereigenschaft im Sinne der Verordnung Nr. 1408/71, wenn sie auch nur gegen ein einziges Risiko im Rahmen eines de",
+        "excerpt_sha256": "f16be9a021d9f0f7cff1c060e6bdd06b5a1dc6cb21bace7a1039edc7486a7407",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-216",
+      "identity": "CJEU C-60/03 Wolff & Muller, 12 October 2004",
+      "title_short": "CJEU C-60/03 Wolff & Muller, 12 October 2004",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-153-03-2005-07-07/document-1, body SHA-256 6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU C-60/03 Wolff & Muller, 12 October 2004",
+        "referring_citation_path": "de/guidance/cjeu-c-153-03-2005-07-07/document-1",
+        "body_sha256": "6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc",
+        "excerpt": "Vorlagefragen nicht angeführt sind (vgl. insbesondere Urteil vom 12. Oktober 2004 in der Rechtssache C‑60/03, Wolff & Muller, Slg. 2004, I-0000, Randnr. 24). 26 Unter diesen Umständen sind bei der Prüfung der vorliegenden Rechtssache die Antikumulierungsregeln des Artikels 10 der Verordnung Nr. 574/72 zu berü",
+        "excerpt_sha256": "e002508f0b05b49a0b9ae5dfc369741a4ef5eade24381aae170b90bc8dbd40cc",
+        "status": "not yet enrolled; requires duplicate check and next consumer discovery update"
+      }
+    },
+    {
+      "id": "de-kg-suppl-217",
+      "identity": "CJEU Advocate General J. Mazák opinion in C-16/09, 15 April 2010",
+      "title_short": "CJEU Advocate General J. Mazák opinion in C-16/09, 15 April 2010",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect discovery through DA-KG V2 and cross-border priority judgments to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. The judgment explicitly identifies a separate Advocate General opinion; this is not the judgment itself, a binding holding, a captured opinion original or BStBl II membership. Full original and bearing remain pending. Exact span retained in eu-priority-reference-discovery-snapshot.json.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU Advocate General J. Mazák opinion in C-16/09, 15 April 2010",
+        "referring_citation_path": "de/guidance/cjeu-c-16-09-2010-10-14/document-1",
+        "body_sha256": "9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326",
+        "excerpt": "nach Anhörung der Schlussanträge des Generalanwalts in der Sitzung vom 15. April 2010",
+        "excerpt_sha256": "7a075f5f417607d2e45a6bc56a8545206eeda69b13a115dde806dfc1713b3fb3",
+        "status": "Separate opinion, not duplicate judgment docket; original and bearing not reviewed"
+      }
+    },
+    {
+      "id": "de-kg-suppl-218",
+      "identity": "CJEU Advocate General L. A. Geelhoed opinion in C-543/03, 24 February 2005",
+      "title_short": "CJEU Advocate General L. A. Geelhoed opinion in C-543/03, 24 February 2005",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect discovery through DA-KG V2 and cross-border priority judgments to de/guidance/cjeu-c-543-03-2005-06-07/document-1, body SHA-256 7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a. The judgment explicitly identifies a separate Advocate General opinion; this is not the judgment itself, a binding holding, a captured opinion original or BStBl II membership. Full original and bearing remain pending. Exact span retained in eu-priority-reference-discovery-snapshot.json.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU Advocate General L. A. Geelhoed opinion in C-543/03, 24 February 2005",
+        "referring_citation_path": "de/guidance/cjeu-c-543-03-2005-06-07/document-1",
+        "body_sha256": "7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a",
+        "excerpt": "Schlussanträge des Generalanwalts L. A. Geelhoed vom 24. Februar 2005",
+        "excerpt_sha256": "61e17795d257cdb46831a25dc8572100d2e105789091a1c1511cda97282f5d67",
+        "status": "Separate opinion, not duplicate judgment docket; original and bearing not reviewed"
+      }
+    },
+    {
+      "id": "de-kg-suppl-219",
+      "identity": "CJEU Advocate General J. Kokott opinion in C-153/03, 15 July 2004",
+      "title_short": "CJEU Advocate General J. Kokott opinion in C-153/03, 15 July 2004",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Indirect discovery through DA-KG V2 and cross-border priority judgments to de/guidance/cjeu-c-153-03-2005-07-07/document-1, body SHA-256 6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc. The judgment explicitly identifies a separate Advocate General opinion; this is not the judgment itself, a binding holding, a captured opinion original or BStBl II membership. Full original and bearing remain pending. Exact span retained in eu-priority-reference-discovery-snapshot.json.",
+      "status": "pending",
+      "audit_source": {
+        "identity": "CJEU Advocate General J. Kokott opinion in C-153/03, 15 July 2004",
+        "referring_citation_path": "de/guidance/cjeu-c-153-03-2005-07-07/document-1",
+        "body_sha256": "6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc",
+        "excerpt": "Schlussanträge der Generalanwältin J. Kokott vom 15. Juli 2004",
+        "excerpt_sha256": "21ccc8585c201fbfbd64b4edc5cd315ff8c4d449480f558f487b4fafbbc5ecf3",
+        "status": "Separate opinion, not duplicate judgment docket; original and bearing not reviewed"
+      }
+    }
+  ],
+  "possible_duplicates_requiring_review": []
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "de-kindergeld.ao9-native-candidate-review.v1",
+  "native_run": 34242115184,
+  "native_run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34242115184",
+  "encoder_version": "0.2.1765",
+  "candidate_sha256": "2211df08d271032860058b19751f3068ea0f90cf978c22e00eedb05121a7c163",
+  "tests_sha256": "6ffba9dc782c4f0b121188ca6388a4048a39d747ac169e58fa5da3e4abb90064",
+  "source_sha256": "904fe2a8dc33e1f6a038f2aa7a52e67151ab3ed4d49907dc3603e633eb265933",
+  "status": "rejected; no executable coverage",
+  "independent_review": {
+    "reviewer": "review_de_matcher",
+    "result": "Three substantive findings; no edits or dispatch",
+    "findings": [
+      "Parameter-only constants 6 and 1; all three operative sentences deferred. No legal-oracle inputs, but also no executable habitual-residence output.",
+      "Calendar-month/year capability blocker is obsolete at pinned engine af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca; counting conventions and interruption classification still need source-grounded rules.",
+      "Effective-from year 0001 is unsupported by the retained source."
+    ]
+  },
+  "aeao_context": {
+    "citation_path": "de/guidance/aeao-2025-9/inhalt",
+    "body_sha256": "228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5",
+    "read_complete": true,
+    "scope": "Root and independent reviewer read full captured body; cited BFH dependency review remains open."
+  },
+  "required_model": [
+    "Identify observed stays, locations, arrival/departure dates and interruptions.",
+    "Derive continuation and purpose rules; do not invent numeric short-interruption threshold or supplied continuous/non-temporary conclusions.",
+    "Preserve exclusively private-purpose exception and independent sentence-1 route.",
+    "Derive retrospective commencement from beginning after more than six months, with source-grounded counting."
+  ],
+  "missing_tests": [
+    "Six-month and one-year boundaries",
+    "Interruptions and mixed purposes",
+    "Sentence-1 route notwithstanding sentence-2 exception",
+    "Cross-border overnight patterns",
+    "Retrospective onset"
+  ],
+  "next_step": "Prepare materially revised source-grounded model only after prerequisite review; no native retry authorized by this audit."
+}

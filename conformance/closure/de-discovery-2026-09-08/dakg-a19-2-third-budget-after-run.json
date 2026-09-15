@@ -1,0 +1,30 @@
+{
+  "citation": "de/guidance/bzst-dakg-2025/a-19-2/document-1",
+  "as_of": "2026-09-15T18:53:01.834460+00:00",
+  "decision": {
+    "streak": 3,
+    "budget": 3,
+    "counted_runs": [
+      {
+        "id": 35008499776,
+        "created_at": "2026-09-15T18:36:11Z",
+        "conclusion": "failure",
+        "html_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/35008499776"
+      },
+      {
+        "id": 34982600198,
+        "created_at": "2026-09-15T14:34:51Z",
+        "conclusion": "failure",
+        "html_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34982600198"
+      },
+      {
+        "id": 34924883403,
+        "created_at": "2026-09-15T03:24:54Z",
+        "conclusion": "failure",
+        "html_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34924883403"
+      }
+    ]
+  },
+  "exhausted": true,
+  "scope": "Read-only native budget calculation. No override, repair bypass, queue bypass or dispatch."
+}

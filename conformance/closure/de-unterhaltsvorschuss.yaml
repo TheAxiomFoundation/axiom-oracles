@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 08feb2e91ec923f31446d037b5d6d42ffc49cdfb77d4f551d2b61d3700f5acb6
+    sha256: 679ccd6a1df6fc4815ca84a24d819263a6acd5572263da1fec406d4110071a53
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 392c71f906eaeec8af62d899d2fe81f1cc309ed8
-    release: de-rulespec-2026-09-15-kindergeld-priority-followup
-    release_content_sha256: b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b
+    commit: aad094d00e42b2766b12393e662473bda81411b0
+    release: de-rulespec-2026-09-15-kindergeld-eu-priority-references
+    release_content_sha256: af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -100,6 +100,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl
       sha256: b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-eu-priority-references.jsonl
+      sha256: f5db3cbd0a173a36d38555970ba4c332803706a2fcd3aabb8c9d6cf744f10a6e
+      row_count: 14
     - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-priority-followup.jsonl
       sha256: ede878d9909b89e1f0ae45b549d55129526d0158c32f3e3bca942d34dd99fbed
       row_count: 8
@@ -485,9 +488,9 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: c8606bc6d44238067ea37656361fd7a3e9515f104bcf3f5c15f359786c81b08d
+    snapshot_sha256: 62b12ec2521fe876210e77888952810c440fae92d8c54a76e62dcf75d67fa534
     channel_receipts:
-      corpus_release: db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab
+      corpus_release: f6332f281d1dbba0dbba205ef7d66c24c4b832190e82450375089792ab178e4d
       subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:

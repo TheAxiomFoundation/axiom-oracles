@@ -43,12 +43,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 08feb2e91ec923f31446d037b5d6d42ffc49cdfb77d4f551d2b61d3700f5acb6
+    sha256: 679ccd6a1df6fc4815ca84a24d819263a6acd5572263da1fec406d4110071a53
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 392c71f906eaeec8af62d899d2fe81f1cc309ed8
-    release: de-rulespec-2026-09-15-kindergeld-priority-followup
-    release_content_sha256: b8c6d5bf42b21da1cf8a48a75a39e83308d3f3071083a9dacb351a580448330b
+    commit: aad094d00e42b2766b12393e662473bda81411b0
+    release: de-rulespec-2026-09-15-kindergeld-eu-priority-references
+    release_content_sha256: af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -116,6 +116,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl
       sha256: b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e
       row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-eu-priority-references.jsonl
+      sha256: f5db3cbd0a173a36d38555970ba4c332803706a2fcd3aabb8c9d6cf744f10a6e
+      row_count: 14
     - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-priority-followup.jsonl
       sha256: ede878d9909b89e1f0ae45b549d55129526d0158c32f3e3bca942d34dd99fbed
       row_count: 8
@@ -1220,15 +1223,15 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: c8606bc6d44238067ea37656361fd7a3e9515f104bcf3f5c15f359786c81b08d
+    snapshot_sha256: 62b12ec2521fe876210e77888952810c440fae92d8c54a76e62dcf75d67fa534
     channel_receipts:
-      corpus_release: db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab
+      corpus_release: f6332f281d1dbba0dbba205ef7d66c24c4b832190e82450375089792ab178e4d
       subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 780
+    candidate_count: 781
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -10060,6 +10063,19 @@ generated_facts:
       citation_label: 'BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes'
       document_citation_path: de/guidance/bfh-iii-r-52-09-2010-04-28
       title: 'BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes'
+    - id: de-kg-instr-85a6c84fc59a4411
+      status: pending
+      discovery_refs:
+      - de-corpus-451f337b3b4f980d0090
+      - de-corpus-9b11b0ffdd0474060388
+      - de-corpus-c087dfd8721c95323dec
+      identity_kind: corpus_citation
+      citation_path: de/guidance/cjeu-c-16-09-2010-10-14
+      row_sha256: eed1fb77c51adf08abbb9b7376d0aba91682a6506cc626b0cf7c57c759fa1be4
+      document_class: guidance
+      citation_label: 'Urteil des Gerichtshofes (Zweite Kammer) vom 14. Oktober 2010.#Gudrun Schwemmer gegen Agentur für Arbeit Villingen-Schwenningen - Familienkasse.#Ersuchen um Vorabentscheidung: Bundesfinanzhof - Deutschland.#Soziale Sicherheit - Verordnungen (EWG) Nrn. 1408/71 und 574/72 - Familienleistungen - Antikumulierungsvorschriften - Art. 76 Abs. 2 der Verordnung Nr. 1408/71 - Art. 10 Abs. 1 Buchst. a der Verordnung Nr. 574/72 - Kinder, deren Mutter in dem Mitgliedstaat, in dem sie gemeinsam mit ihr wohnen, Anspruch auf Familienleistungen hat, und deren Vater, der in der Schweiz arbeitet und grundsätzlich Anspruch auf gleichartige Familienleistungen nach schweizerischem Recht hat, davon absieht, diese Leistungen zu beantragen.#Rechtssache C-16/09.'
+      document_citation_path: de/guidance/cjeu-c-16-09-2010-10-14
+      title: 'Urteil des Gerichtshofes (Zweite Kammer) vom 14. Oktober 2010.#Gudrun Schwemmer gegen Agentur für Arbeit Villingen-Schwenningen - Familienkasse.#Ersuchen um Vorabentscheidung: Bundesfinanzhof - Deutschland.#Soziale Sicherheit - Verordnungen (EWG) Nrn. 1408/71 und 574/72 - Familienleistungen - Antikumulierungsvorschriften - Art. 76 Abs. 2 der Verordnung Nr. 1408/71 - Art. 10 Abs. 1 Buchst. a der Verordnung Nr. 574/72 - Kinder, deren Mutter in dem Mitgliedstaat, in dem sie gemeinsam mit ihr wohnen, Anspruch auf Familienleistungen hat, und deren Vater, der in der Schweiz arbeitet und grundsätzlich Anspruch auf gleichartige Familienleistungen nach schweizerischem Recht hat, davon absieht, diese Leistungen zu beantragen.#Rechtssache C-16/09.'
     - id: de-kg-instr-86411429cdb16a89
       status: pending
       discovery_refs:
@@ -10918,7 +10934,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 748859ddde640d443993382bed9e535daec8e2643bf957f7d72b8786b9082d50
+      sha256: 381c78aa1f8af894c1f01b56de600c423922cd977203766e1cea3023a7456578
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10967,7 +10983,7 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: db3065309fc827c074b0b1c28d92db389be5c3ca224f60f93745f571855a2dab
+        corpus_release: f6332f281d1dbba0dbba205ef7d66c24c4b832190e82450375089792ab178e4d
         subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
@@ -14143,6 +14159,11 @@ committed_decisions:
     reason: This corpus parent identifies the same complete decision as discovery member de-kg-discovery-17bc04f83ae1dc83. Read the complete official BFH judgment of 13 September 2018, III R 19/17 (paragraphs 1–27). It decides discretionary remission of an already established Kindergeld recovery under AO section 227. Paragraphs 13–19 reject an automatic duty to remit merely because the wrongly paid Kindergeld was counted as SGB II income and address reporting and inter-agency information duties; paragraphs 20–22 expressly leave other possible remission situations open. Paragraphs 24–26 uphold the particular refusal of remission. The training interruption and previous cancellation are facts of the case, not newly defined child-qualification tests. This is recovery/remission and procedure, consistent with the existing DA-KG procedural exclusions, and does not alter the underlying EStG62–66 entitlement, child count, priority, substitute-benefit exclusion, coordination or monthly amount. Complete
       corpus body de/guidance/bfh-iii-r-19-17-2018-09-13/document-1, SHA-256 ed551c71ef381be29c227aefb615ecad5e00b3a05198a668ddb35956da23b9ad, retained in pinned corpus commit9bc4f5f0afad97e8edc9834609a53a56435d0509. Exact BStBlII issue/page verification and exhaustive discovery remain separate open questions.
     bears_on_computed_surface: false
+  - id: de-kg-instr-85a6c84fc59a4411
+    status: classified-with-reason
+    classification: eu_actual_competing_entitlement_current_adoption
+    reason: 'Current Trapkowski paragraph32 adopts Schwemmer paragraph52: potentialforeignpayment alone does not establish overlapping entitlements for883Article68. Actual legalentitlement and currentArticle60/applicationforwardingconditions must be derived. Do not generalize historical574/72nonapplicationexception to every currentunpaidforeignbenefit. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.'
+    bears_on_computed_surface: true
   - id: de-kg-instr-86411429cdb16a89
     status: classified-with-reason
     classification: eu_whole_family_fiction_and_application_entitlement_distinction
@@ -15944,7 +15965,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
-    status: pending
+    status: classified-with-reason
+    classification: eu_family_benefit_definition_current_adoption
+    reason: Current Trapkowski paragraph26 adopts Offermanns paragraph41 family-budget/child-maintenance purpose in classifying Kindergeld under883/2004. This supports family-benefit scope in883Article1(z)/3(1)(j), not the historical operative inclusion of Austrian maintenanceadvances, which current1(z) expressly excludes. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.
+    text_source: Receipted corpus de/guidance/cjeu-c-85-99-2001-03-15/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+    text_sha256: e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8
+    bears_on_computed_surface: true
   - id: de-kg-suppl-161
     identity: CJEU C-177/12, Lachheb, EU:C:2013:689
     title_short: CJEU C-177/12, Lachheb, EU:C:2013:689
@@ -15952,7 +15978,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
-    status: pending
+    status: classified-with-reason
+    classification: eu_family_benefit_definition_current_adoption
+    reason: Current Trapkowski paragraph26 adopts Lachheb paragraph35 family-budget/child-maintenance purpose in classifying Kindergeld under883/2004. Historical Luxembourgbonus amounts and1408/71noncumulation are not currentGerman parameters; secondquestion unanswered. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.
+    text_source: Receipted corpus de/guidance/cjeu-c-177-12-2013-10-24/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+    text_sha256: addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541
+    bears_on_computed_surface: true
   - id: de-kg-suppl-162
     identity: CJEU C-363/08, Slanina, EU:C:2009:732
     title_short: CJEU C-363/08, Slanina, EU:C:2009:732
@@ -15960,7 +15991,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
-    status: pending
+    status: classified-with-reason
+    classification: eu_national_family_member_definition_current_adoption
+    reason: Current Trapkowski paragraph31 cites Slanina paragraph27 for national-law family-member determination under the applicable coordination definition. Preserve national-law membership and applicable correction; do not infer actualmaintenancepaid from obligation or fabricate commonhousehold. Historical Austrianbenefit and1408/71priorityresult are not directly2025rules. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-363-08-2009-11-26/document-1, body SHA-256 5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.
+    text_source: Receipted corpus de/guidance/cjeu-c-363-08-2009-11-26/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+    text_sha256: 5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a
+    bears_on_computed_surface: true
   - id: de-kg-suppl-163
     identity: CJEU C-16/09, Schwemmer, EU:C:2010:605
     title_short: CJEU C-16/09, Schwemmer, EU:C:2010:605
@@ -15968,7 +16004,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
-    status: pending
+    status: classified-with-reason
+    classification: eu_actual_competing_entitlement_current_adoption
+    reason: 'Current Trapkowski paragraph32 adopts Schwemmer paragraph52: potentialforeignpayment alone does not establish overlapping entitlements for883Article68. Actual legalentitlement and currentArticle60/applicationforwardingconditions must be derived. Do not generalize historical574/72nonapplicationexception to every currentunpaidforeignbenefit. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.'
+    text_source: Receipted corpus de/guidance/cjeu-c-16-09-2010-10-14/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+    text_sha256: 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326
+    bears_on_computed_surface: true
   - id: de-kg-suppl-164
     identity: CJEU joined C-245/94 and C-312/94, Hoever and Zachow, EU:C:1996:379
     title_short: CJEU joined C-245/94 and C-312/94, Hoever and Zachow, EU:C:1996:379
@@ -15976,7 +16017,12 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
-    status: pending
+    status: classified-with-reason
+    classification: eu_family_context_and_application_current_adoption
+    reason: Current Trapkowski paragraph49 adopts joinedHoever/Zachow paragraph37 family-context principle for applicationbyotherparent under987Article60(1)sentence3. Whether benefits actuallygranted depends familyconditions; applicationdoesnottransfernationalrecipientpriority. This is not directcurrentBErzGG/79/7eligibility. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.
+    text_source: Receipted corpus de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+    text_sha256: 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2
+    bears_on_computed_surface: true
   - id: de-kg-suppl-165
     identity: CJEU C-543/03, Dodl and Oberhollenzer, 7 June 2005
     title_short: CJEU C-543/03, Dodl and Oberhollenzer, 7 June 2005
@@ -16112,6 +16158,350 @@ committed_decisions:
     discovered_by: de-kg-dakg-V2
     discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
     provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    status: pending
+  - id: de-kg-suppl-182
+    identity: CJEU 35/77 Beerens, 29 November 1977
+    title_short: CJEU 35/77 Beerens, 29 November 1977
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-183
+    identity: CJEU C-78/91 Hughes, 16 July 1992
+    title_short: CJEU C-78/91 Hughes, 16 July 1992
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-184
+    identity: CJEU 249/83 Hoeckx, 27 March 1985
+    title_short: CJEU 249/83 Hoeckx, 27 March 1985
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-185
+    identity: CJEU 39/76 Mouthaan, 15 December 1976
+    title_short: CJEU 39/76 Mouthaan, 15 December 1976
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-186
+    identity: CJEU 104/84 Kromhout, 4 July 1985
+    title_short: CJEU 104/84 Kromhout, 4 July 1985
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-187
+    identity: CJEU C-228/07 Petersen, 11 September 2008
+    title_short: CJEU C-228/07 Petersen, 11 September 2008
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-188
+    identity: CJEU C-503/09 Stewart, 21 July 2011
+    title_short: CJEU C-503/09 Stewart, 21 July 2011
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-189
+    identity: CJEU C-406/04 De Cuyper, 18 July 2006
+    title_short: CJEU C-406/04 De Cuyper, 18 July 2006
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-190
+    identity: CJEU joined C-216/12 and C-217/12 Hliddal and Bornand, 19 September 2013
+    title_short: CJEU joined C-216/12 and C-217/12 Hliddal and Bornand, 19 September 2013
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-191
+    identity: CJEU C-333/00 Maaheimo, 7 November 2002
+    title_short: CJEU C-333/00 Maaheimo, 7 November 2002
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-192
+    identity: CJEU C-255/99 Humer, 5 February 2002
+    title_short: CJEU C-255/99 Humer, 5 February 2002
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-363-08-2009-11-26/document-1, body SHA-256 5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-193
+    identity: CJEU C-352/06 Bosmann
+    title_short: CJEU C-352/06 Bosmann
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-194
+    identity: CJEU C‑194/96 Kulzer
+    title_short: CJEU C‑194/96 Kulzer
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-195
+    identity: CJEU C‑4/95 und C‑5/95 Stöber und Piosa Pereira
+    title_short: CJEU C‑4/95 und C‑5/95 Stöber und Piosa Pereira
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-196
+    identity: CJEU C‑266/95 Merino García
+    title_short: CJEU C‑266/95 Merino García
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-197
+    identity: CJEU C‑85/96 Martínez Sala
+    title_short: CJEU C‑85/96 Martínez Sala
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-198
+    identity: CJEU C‑262/96 Sürül
+    title_short: CJEU C‑262/96 Sürül
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-199
+    identity: CJEU 149/82 Robards
+    title_short: CJEU 149/82 Robards
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-200
+    identity: CJEU 302/84 Ten Holder
+    title_short: CJEU 302/84 Ten Holder
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-201
+    identity: CJEU C‑117/89 Kracht
+    title_short: CJEU C‑117/89 Kracht
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-202
+    identity: CJEU C‑119/91 McMenamin
+    title_short: CJEU C‑119/91 McMenamin
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-203
+    identity: CJEU 134/77 Ragazzoni
+    title_short: CJEU 134/77 Ragazzoni
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-204
+    identity: CJEU 191/83 Salzano
+    title_short: CJEU 191/83 Salzano
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-205
+    identity: CJEU 153/84 Ferraioli
+    title_short: CJEU 153/84 Ferraioli
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-206
+    identity: CJEU 100/78 Rossi
+    title_short: CJEU 100/78 Rossi
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-207
+    identity: CJEU 733/79 Laterza
+    title_short: CJEU 733/79 Laterza
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-208
+    identity: CJEU 807/79 Gravina
+    title_short: CJEU 807/79 Gravina
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-209
+    identity: CJEU 320/82 D’Amario
+    title_short: CJEU 320/82 D’Amario
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-210
+    identity: CJEU 104/80 Beeck
+    title_short: CJEU 104/80 Beeck
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-211
+    identity: CJEU 40/76 Kermaschek
+    title_short: CJEU 40/76 Kermaschek
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-212
+    identity: CJEU C-308/93 Cabanis-Issarte
+    title_short: CJEU C-308/93 Cabanis-Issarte
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-213
+    identity: CJEU C-321/93 Imbernon Martínez
+    title_short: CJEU C-321/93 Imbernon Martínez
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-214
+    identity: CJEU C‑2/89 Kits van Heijningen
+    title_short: CJEU C‑2/89 Kits van Heijningen
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-543-03-2005-06-07/document-1, body SHA-256 7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-215
+    identity: CJEU C‑275/96 Kuusijärvi
+    title_short: CJEU C‑275/96 Kuusijärvi
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-543-03-2005-06-07/document-1, body SHA-256 7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-216
+    identity: CJEU C-60/03 Wolff & Muller, 12 October 2004
+    title_short: CJEU C-60/03 Wolff & Muller, 12 October 2004
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-153-03-2005-07-07/document-1, body SHA-256 6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    status: pending
+  - id: de-kg-suppl-217
+    identity: CJEU Advocate General J. Mazák opinion in C-16/09, 15 April 2010
+    title_short: CJEU Advocate General J. Mazák opinion in C-16/09, 15 April 2010
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect discovery through DA-KG V2 and cross-border priority judgments to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. The judgment explicitly identifies a separate Advocate General opinion; this is not the judgment itself, a binding holding, a captured opinion original or BStBl II membership. Full original and bearing remain pending. Exact span retained in eu-priority-reference-discovery-snapshot.json.
+    status: pending
+  - id: de-kg-suppl-218
+    identity: CJEU Advocate General L. A. Geelhoed opinion in C-543/03, 24 February 2005
+    title_short: CJEU Advocate General L. A. Geelhoed opinion in C-543/03, 24 February 2005
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect discovery through DA-KG V2 and cross-border priority judgments to de/guidance/cjeu-c-543-03-2005-06-07/document-1, body SHA-256 7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a. The judgment explicitly identifies a separate Advocate General opinion; this is not the judgment itself, a binding holding, a captured opinion original or BStBl II membership. Full original and bearing remain pending. Exact span retained in eu-priority-reference-discovery-snapshot.json.
+    status: pending
+  - id: de-kg-suppl-219
+    identity: CJEU Advocate General J. Kokott opinion in C-153/03, 15 July 2004
+    title_short: CJEU Advocate General J. Kokott opinion in C-153/03, 15 July 2004
+    relation: bears_on
+    discovered_by: de-kg-dakg-V2
+    discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+    provenance: Indirect discovery through DA-KG V2 and cross-border priority judgments to de/guidance/cjeu-c-153-03-2005-07-07/document-1, body SHA-256 6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc. The judgment explicitly identifies a separate Advocate General opinion; this is not the judgment itself, a binding holding, a captured opinion original or BStBl II membership. Full original and bearing remain pending. Exact span retained in eu-priority-reference-discovery-snapshot.json.
+    status: pending
+  - id: de-kg-suppl-220
+    identity: BFH VI 156/59 U, 1962-07-27, cited by AEAO 2025 zu §9
+    title_short: BFH VI 156/59 U
+    relation: bears_on
+    discovered_by: de-kg-dakg-A2.1.1
+    discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+    provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl III S. 429; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
+    status: pending
+  - id: de-kg-suppl-221
+    identity: BFH I R 210/75, 1977-08-03, cited by AEAO 2025 zu §9
+    title_short: BFH I R 210/75
+    relation: bears_on
+    discovered_by: de-kg-dakg-A2.1.1
+    discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+    provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl 1978 II S. 118; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
+    status: pending
+  - id: de-kg-suppl-222
+    identity: BFH I R 225/82, 1988-05-25, cited by AEAO 2025 zu §9
+    title_short: BFH I R 225/82
+    relation: bears_on
+    discovered_by: de-kg-dakg-A2.1.1
+    discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+    provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl II S. 944; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
+    status: pending
+  - id: de-kg-suppl-223
+    identity: BFH I R 50/85, 1989-05-10, cited by AEAO 2025 zu §9
+    title_short: BFH I R 50/85
+    relation: bears_on
+    discovered_by: de-kg-dakg-A2.1.1
+    discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+    provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl II S. 755; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
+    status: pending
+  - id: de-kg-suppl-224
+    identity: BFH I R 4/96, 1996-07-10, cited by AEAO 2025 zu §9
+    title_short: BFH I R 4/96
+    relation: bears_on
+    discovered_by: de-kg-dakg-A2.1.1
+    discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+    provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl 1997 II S. 15; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
     status: pending
 computed:
   ledger:
@@ -16851,13 +17241,13 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 961
+    instrument_count: 1005
     counts:
-      total: 961
+      total: 1005
       encoded: 2
-      classified-with-reason: 212
+      classified-with-reason: 218
       excluded-with-reason: 349
-      pending: 398
+      pending: 436
     pending:
     - de-kg-discovery-00f6a665fab961c6
     - de-kg-discovery-03c2fbbc23e2307d
@@ -17235,11 +17625,6 @@ computed:
     - de-kg-suppl-157
     - de-kg-suppl-158
     - de-kg-suppl-159
-    - de-kg-suppl-160
-    - de-kg-suppl-161
-    - de-kg-suppl-162
-    - de-kg-suppl-163
-    - de-kg-suppl-164
     - de-kg-suppl-165
     - de-kg-suppl-166
     - de-kg-suppl-167
@@ -17257,6 +17642,49 @@ computed:
     - de-kg-suppl-179
     - de-kg-suppl-180
     - de-kg-suppl-181
+    - de-kg-suppl-182
+    - de-kg-suppl-183
+    - de-kg-suppl-184
+    - de-kg-suppl-185
+    - de-kg-suppl-186
+    - de-kg-suppl-187
+    - de-kg-suppl-188
+    - de-kg-suppl-189
+    - de-kg-suppl-190
+    - de-kg-suppl-191
+    - de-kg-suppl-192
+    - de-kg-suppl-193
+    - de-kg-suppl-194
+    - de-kg-suppl-195
+    - de-kg-suppl-196
+    - de-kg-suppl-197
+    - de-kg-suppl-198
+    - de-kg-suppl-199
+    - de-kg-suppl-200
+    - de-kg-suppl-201
+    - de-kg-suppl-202
+    - de-kg-suppl-203
+    - de-kg-suppl-204
+    - de-kg-suppl-205
+    - de-kg-suppl-206
+    - de-kg-suppl-207
+    - de-kg-suppl-208
+    - de-kg-suppl-209
+    - de-kg-suppl-210
+    - de-kg-suppl-211
+    - de-kg-suppl-212
+    - de-kg-suppl-213
+    - de-kg-suppl-214
+    - de-kg-suppl-215
+    - de-kg-suppl-216
+    - de-kg-suppl-217
+    - de-kg-suppl-218
+    - de-kg-suppl-219
+    - de-kg-suppl-220
+    - de-kg-suppl-221
+    - de-kg-suppl-222
+    - de-kg-suppl-223
+    - de-kg-suppl-224
     complete: false
     ledger:
     - id: de-kg-dakg-A1
@@ -27663,6 +28091,22 @@ computed:
       citation_label: 'BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes'
       document_citation_path: de/guidance/bfh-iii-r-52-09-2010-04-28
       title: 'BFH, III R 52/09, 2010-04-28: Kindergeld für im Ausland studierende Kinder - Beibehaltung des inländischen Wohnsitzes'
+    - id: de-kg-instr-85a6c84fc59a4411
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-451f337b3b4f980d0090
+      - de-corpus-9b11b0ffdd0474060388
+      - de-corpus-c087dfd8721c95323dec
+      identity_kind: corpus_citation
+      citation_path: de/guidance/cjeu-c-16-09-2010-10-14
+      row_sha256: eed1fb77c51adf08abbb9b7376d0aba91682a6506cc626b0cf7c57c759fa1be4
+      document_class: guidance
+      citation_label: 'Urteil des Gerichtshofes (Zweite Kammer) vom 14. Oktober 2010.#Gudrun Schwemmer gegen Agentur für Arbeit Villingen-Schwenningen - Familienkasse.#Ersuchen um Vorabentscheidung: Bundesfinanzhof - Deutschland.#Soziale Sicherheit - Verordnungen (EWG) Nrn. 1408/71 und 574/72 - Familienleistungen - Antikumulierungsvorschriften - Art. 76 Abs. 2 der Verordnung Nr. 1408/71 - Art. 10 Abs. 1 Buchst. a der Verordnung Nr. 574/72 - Kinder, deren Mutter in dem Mitgliedstaat, in dem sie gemeinsam mit ihr wohnen, Anspruch auf Familienleistungen hat, und deren Vater, der in der Schweiz arbeitet und grundsätzlich Anspruch auf gleichartige Familienleistungen nach schweizerischem Recht hat, davon absieht, diese Leistungen zu beantragen.#Rechtssache C-16/09.'
+      document_citation_path: de/guidance/cjeu-c-16-09-2010-10-14
+      title: 'Urteil des Gerichtshofes (Zweite Kammer) vom 14. Oktober 2010.#Gudrun Schwemmer gegen Agentur für Arbeit Villingen-Schwenningen - Familienkasse.#Ersuchen um Vorabentscheidung: Bundesfinanzhof - Deutschland.#Soziale Sicherheit - Verordnungen (EWG) Nrn. 1408/71 und 574/72 - Familienleistungen - Antikumulierungsvorschriften - Art. 76 Abs. 2 der Verordnung Nr. 1408/71 - Art. 10 Abs. 1 Buchst. a der Verordnung Nr. 574/72 - Kinder, deren Mutter in dem Mitgliedstaat, in dem sie gemeinsam mit ihr wohnen, Anspruch auf Familienleistungen hat, und deren Vater, der in der Schweiz arbeitet und grundsätzlich Anspruch auf gleichartige Familienleistungen nach schweizerischem Recht hat, davon absieht, diese Leistungen zu beantragen.#Rechtssache C-16/09.'
+      classification: eu_actual_competing_entitlement_current_adoption
+      reason: 'Current Trapkowski paragraph32 adopts Schwemmer paragraph52: potentialforeignpayment alone does not establish overlapping entitlements for883Article68. Actual legalentitlement and currentArticle60/applicationforwardingconditions must be derived. Do not generalize historical574/72nonapplicationexception to every currentunpaidforeignbenefit. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.'
+      bears_on_computed_surface: true
     - id: de-kg-instr-86411429cdb16a89
       status: classified-with-reason
       discovery_refs:
@@ -30410,7 +30854,7 @@ computed:
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Search-discovered official PDF https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201650285?type=1646225765 identifies III R50/12 on its first page; PDF SHA-256 836dde220aeb4354e09253965afcac0288b88f8c50c0baf48ca32d86224d20a1. This is distinct from III R40/12 (STRE201650286). Original body and current bearing are not fully reviewed; pending. See additional-cross-border-priority-members.json.
     - id: de-kg-suppl-160
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-V2
       identity_kind: supplemental
@@ -30419,8 +30863,13 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+      classification: eu_family_benefit_definition_current_adoption
+      reason: Current Trapkowski paragraph26 adopts Offermanns paragraph41 family-budget/child-maintenance purpose in classifying Kindergeld under883/2004. This supports family-benefit scope in883Article1(z)/3(1)(j), not the historical operative inclusion of Austrian maintenanceadvances, which current1(z) expressly excludes. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.
+      bears_on_computed_surface: true
+      text_source: Receipted corpus de/guidance/cjeu-c-85-99-2001-03-15/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+      text_sha256: e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8
     - id: de-kg-suppl-161
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-V2
       identity_kind: supplemental
@@ -30429,8 +30878,13 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+      classification: eu_family_benefit_definition_current_adoption
+      reason: Current Trapkowski paragraph26 adopts Lachheb paragraph35 family-budget/child-maintenance purpose in classifying Kindergeld under883/2004. Historical Luxembourgbonus amounts and1408/71noncumulation are not currentGerman parameters; secondquestion unanswered. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.
+      bears_on_computed_surface: true
+      text_source: Receipted corpus de/guidance/cjeu-c-177-12-2013-10-24/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+      text_sha256: addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541
     - id: de-kg-suppl-162
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-V2
       identity_kind: supplemental
@@ -30439,8 +30893,13 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+      classification: eu_national_family_member_definition_current_adoption
+      reason: Current Trapkowski paragraph31 cites Slanina paragraph27 for national-law family-member determination under the applicable coordination definition. Preserve national-law membership and applicable correction; do not infer actualmaintenancepaid from obligation or fabricate commonhousehold. Historical Austrianbenefit and1408/71priorityresult are not directly2025rules. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-363-08-2009-11-26/document-1, body SHA-256 5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.
+      bears_on_computed_surface: true
+      text_source: Receipted corpus de/guidance/cjeu-c-363-08-2009-11-26/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+      text_sha256: 5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a
     - id: de-kg-suppl-163
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-V2
       identity_kind: supplemental
@@ -30449,8 +30908,13 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+      classification: eu_actual_competing_entitlement_current_adoption
+      reason: 'Current Trapkowski paragraph32 adopts Schwemmer paragraph52: potentialforeignpayment alone does not establish overlapping entitlements for883Article68. Actual legalentitlement and currentArticle60/applicationforwardingconditions must be derived. Do not generalize historical574/72nonapplicationexception to every currentunpaidforeignbenefit. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.'
+      bears_on_computed_surface: true
+      text_source: Receipted corpus de/guidance/cjeu-c-16-09-2010-10-14/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+      text_sha256: 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326
     - id: de-kg-suppl-164
-      status: pending
+      status: classified-with-reason
       discovery_refs:
       - de-kg-dakg-V2
       identity_kind: supplemental
@@ -30459,6 +30923,11 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/cjeu-c-378-14-2015-10-22/document-1, body SHA-256 299754b3f91461bf530791d7bfb0d5b48a6647d74625db2bd69693eafa0a9e16. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+      classification: eu_family_context_and_application_current_adoption
+      reason: Current Trapkowski paragraph49 adopts joinedHoever/Zachow paragraph37 family-context principle for applicationbyotherparent under987Article60(1)sentence3. Whether benefits actuallygranted depends familyconditions; applicationdoesnottransfernationalrecipientpriority. This is not directcurrentBErzGG/79/7eligibility. Defining coordination and nationaleligibility modules are not yet encoded; this remains an explicit bearing dependency. Complete text de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2, release de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0. See eu-priority-holdings-review.json.
+      bears_on_computed_surface: true
+      text_source: Receipted corpus de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, de-rulespec-2026-09-15-kindergeld-eu-priority-references at aad094d00e42b2766b12393e662473bda81411b0; content SHA-256 af07a408f89956c62368491e60dd762df44a0647eccc7461c5b5060bb96c9464.
+      text_sha256: 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2
     - id: de-kg-suppl-165
       status: pending
       discovery_refs:
@@ -30629,6 +31098,436 @@ computed:
       relation: bears_on
       discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
       provenance: Indirect reading discovery through DA-KG V2, III R31/15 and the reviewed cross-border chain to de/guidance/bfh-iii-b-127-14-2015-04-27/document-1, body SHA-256 fa83f5fdb61ed5ff9984f780b4b9811724279c68d2b868713bc2336ef850dfca. Exact referring span retained in priority-followup-holdings-review.json. This is a discovery reference, not direct DA-KG naming, proof of BStBl II membership, a captured original or a current binding holding. Original-source retrieval, historical/current applicability and computed-surface bearing remain pending. Proceedings described as pending are historical source statements; their present status is not inferred.
+    - id: de-kg-suppl-182
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 35/77 Beerens, 29 November 1977
+      title_short: CJEU 35/77 Beerens, 29 November 1977
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-183
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-78/91 Hughes, 16 July 1992
+      title_short: CJEU C-78/91 Hughes, 16 July 1992
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-184
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 249/83 Hoeckx, 27 March 1985
+      title_short: CJEU 249/83 Hoeckx, 27 March 1985
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-185
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 39/76 Mouthaan, 15 December 1976
+      title_short: CJEU 39/76 Mouthaan, 15 December 1976
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-186
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 104/84 Kromhout, 4 July 1985
+      title_short: CJEU 104/84 Kromhout, 4 July 1985
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-85-99-2001-03-15/document-1, body SHA-256 e8a22cdbb662de32005f69c2046b5a7747bc54c166bdf91f698d9723c7d021c8. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-187
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-228/07 Petersen, 11 September 2008
+      title_short: CJEU C-228/07 Petersen, 11 September 2008
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-188
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-503/09 Stewart, 21 July 2011
+      title_short: CJEU C-503/09 Stewart, 21 July 2011
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-189
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-406/04 De Cuyper, 18 July 2006
+      title_short: CJEU C-406/04 De Cuyper, 18 July 2006
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-190
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU joined C-216/12 and C-217/12 Hliddal and Bornand, 19 September 2013
+      title_short: CJEU joined C-216/12 and C-217/12 Hliddal and Bornand, 19 September 2013
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-191
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-333/00 Maaheimo, 7 November 2002
+      title_short: CJEU C-333/00 Maaheimo, 7 November 2002
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-177-12-2013-10-24/document-1, body SHA-256 addc6e9e27554e0374b0a3ccb535386a63067273449a9861fb5d8a5fc4282541. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-192
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-255/99 Humer, 5 February 2002
+      title_short: CJEU C-255/99 Humer, 5 February 2002
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-363-08-2009-11-26/document-1, body SHA-256 5a93fbd6ee9a9956027b557292143bff0995b88ce5e775a4c1ac91a3b72d3e5a. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-193
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-352/06 Bosmann
+      title_short: CJEU C-352/06 Bosmann
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-194
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C‑194/96 Kulzer
+      title_short: CJEU C‑194/96 Kulzer
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-195
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C‑4/95 und C‑5/95 Stöber und Piosa Pereira
+      title_short: CJEU C‑4/95 und C‑5/95 Stöber und Piosa Pereira
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-196
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C‑266/95 Merino García
+      title_short: CJEU C‑266/95 Merino García
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-197
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C‑85/96 Martínez Sala
+      title_short: CJEU C‑85/96 Martínez Sala
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-198
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C‑262/96 Sürül
+      title_short: CJEU C‑262/96 Sürül
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-199
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 149/82 Robards
+      title_short: CJEU 149/82 Robards
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-200
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 302/84 Ten Holder
+      title_short: CJEU 302/84 Ten Holder
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-201
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C‑117/89 Kracht
+      title_short: CJEU C‑117/89 Kracht
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-202
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C‑119/91 McMenamin
+      title_short: CJEU C‑119/91 McMenamin
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-203
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 134/77 Ragazzoni
+      title_short: CJEU 134/77 Ragazzoni
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-204
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 191/83 Salzano
+      title_short: CJEU 191/83 Salzano
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-205
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 153/84 Ferraioli
+      title_short: CJEU 153/84 Ferraioli
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-206
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 100/78 Rossi
+      title_short: CJEU 100/78 Rossi
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-207
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 733/79 Laterza
+      title_short: CJEU 733/79 Laterza
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-208
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 807/79 Gravina
+      title_short: CJEU 807/79 Gravina
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-209
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 320/82 D’Amario
+      title_short: CJEU 320/82 D’Amario
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-210
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 104/80 Beeck
+      title_short: CJEU 104/80 Beeck
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-211
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU 40/76 Kermaschek
+      title_short: CJEU 40/76 Kermaschek
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-212
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-308/93 Cabanis-Issarte
+      title_short: CJEU C-308/93 Cabanis-Issarte
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-213
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-321/93 Imbernon Martínez
+      title_short: CJEU C-321/93 Imbernon Martínez
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-245-94-c-312-94-1996-10-10/document-1, body SHA-256 20b0efa8e3d7ce3cc6b56ff06023a0b650164bfc13e1166ab36bcd340f9d80c2. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-214
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C‑2/89 Kits van Heijningen
+      title_short: CJEU C‑2/89 Kits van Heijningen
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-543-03-2005-06-07/document-1, body SHA-256 7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-215
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C‑275/96 Kuusijärvi
+      title_short: CJEU C‑275/96 Kuusijärvi
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-543-03-2005-06-07/document-1, body SHA-256 7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-216
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU C-60/03 Wolff & Muller, 12 October 2004
+      title_short: CJEU C-60/03 Wolff & Muller, 12 October 2004
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect reading discovery through DA-KG V2 and the reviewed cross-border priority chain to de/guidance/cjeu-c-153-03-2005-07-07/document-1, body SHA-256 6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc. Exact referring span retained in eu-priority-reference-discovery-snapshot.json. This is not direct DA-KG naming, BStBl II membership, current bearing or executable coverage. Original-source retrieval and applicability remain pending.
+    - id: de-kg-suppl-217
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU Advocate General J. Mazák opinion in C-16/09, 15 April 2010
+      title_short: CJEU Advocate General J. Mazák opinion in C-16/09, 15 April 2010
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect discovery through DA-KG V2 and cross-border priority judgments to de/guidance/cjeu-c-16-09-2010-10-14/document-1, body SHA-256 9cdae5f58bba3f2e04a7cd075e8160988adacaca9865868dbcfb4ec7f5edd326. The judgment explicitly identifies a separate Advocate General opinion; this is not the judgment itself, a binding holding, a captured opinion original or BStBl II membership. Full original and bearing remain pending. Exact span retained in eu-priority-reference-discovery-snapshot.json.
+    - id: de-kg-suppl-218
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU Advocate General L. A. Geelhoed opinion in C-543/03, 24 February 2005
+      title_short: CJEU Advocate General L. A. Geelhoed opinion in C-543/03, 24 February 2005
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect discovery through DA-KG V2 and cross-border priority judgments to de/guidance/cjeu-c-543-03-2005-06-07/document-1, body SHA-256 7fd6c2fb11ca2a0c9b6cab307ec76917b7470bdb6850a530c0d4e47196f3582a. The judgment explicitly identifies a separate Advocate General opinion; this is not the judgment itself, a binding holding, a captured opinion original or BStBl II membership. Full original and bearing remain pending. Exact span retained in eu-priority-reference-discovery-snapshot.json.
+    - id: de-kg-suppl-219
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-V2
+      identity_kind: supplemental
+      identity: CJEU Advocate General J. Kokott opinion in C-153/03, 15 July 2004
+      title_short: CJEU Advocate General J. Kokott opinion in C-153/03, 15 July 2004
+      relation: bears_on
+      discovered_in_body_sha256: 06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03
+      provenance: Indirect discovery through DA-KG V2 and cross-border priority judgments to de/guidance/cjeu-c-153-03-2005-07-07/document-1, body SHA-256 6c28f187944850865f5e1435cbcfb2c694edb460c22093a42ad653875866d3dc. The judgment explicitly identifies a separate Advocate General opinion; this is not the judgment itself, a binding holding, a captured opinion original or BStBl II membership. Full original and bearing remain pending. Exact span retained in eu-priority-reference-discovery-snapshot.json.
+    - id: de-kg-suppl-220
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A2.1.1
+      identity_kind: supplemental
+      identity: BFH VI 156/59 U, 1962-07-27, cited by AEAO 2025 zu §9
+      title_short: BFH VI 156/59 U
+      relation: bears_on
+      discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+      provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl III S. 429; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
+    - id: de-kg-suppl-221
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A2.1.1
+      identity_kind: supplemental
+      identity: BFH I R 210/75, 1977-08-03, cited by AEAO 2025 zu §9
+      title_short: BFH I R 210/75
+      relation: bears_on
+      discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+      provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl 1978 II S. 118; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
+    - id: de-kg-suppl-222
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A2.1.1
+      identity_kind: supplemental
+      identity: BFH I R 225/82, 1988-05-25, cited by AEAO 2025 zu §9
+      title_short: BFH I R 225/82
+      relation: bears_on
+      discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+      provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl II S. 944; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
+    - id: de-kg-suppl-223
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A2.1.1
+      identity_kind: supplemental
+      identity: BFH I R 50/85, 1989-05-10, cited by AEAO 2025 zu §9
+      title_short: BFH I R 50/85
+      relation: bears_on
+      discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+      provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl II S. 755; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
+    - id: de-kg-suppl-224
+      status: pending
+      discovery_refs:
+      - de-kg-dakg-A2.1.1
+      identity_kind: supplemental
+      identity: BFH I R 4/96, 1996-07-10, cited by AEAO 2025 zu §9
+      title_short: BFH I R 4/96
+      relation: bears_on
+      discovered_in_body_sha256: 739a49069d5a9f43823433f6054a1a1bc3c623194f0729ee4bc0823c6a6cd369
+      provenance: 'Indirect chain: DA-KG A2.1.1 requires AEAO §§8 and9; receipted de/guidance/aeao-2025-9/inhalt, body SHA-256 228e9886ba7f34740f484f50ce006c240503fcd0bba46bc6b313b50b709a01b5, cites this judgment. Exact referring span and source file are retained in ao9-aeao-reference-discovery-snapshot.json. The AEAO prints BStBl 1997 II S. 15; independent publication-index membership and full judgment review remain pending. Source-cited habitual-residence precedent; complete primary text capture and current-bearing review remain pending. No executable coverage or exhaustive discovery asserted.'
   dependency_closure:
     law_derived_inputs:
     - child_allowances_under_sections_31_and_32_6_1_are_increased
@@ -30785,6 +31684,7 @@ computed:
     - de-kg-instr-75c3f434723fb3e9
     - de-kg-instr-78841044a219e9b8
     - de-kg-instr-7b88fe63abf1deb1
+    - de-kg-instr-85a6c84fc59a4411
     - de-kg-instr-86411429cdb16a89
     - de-kg-instr-87d3e50373adabc2
     - de-kg-instr-8d943b84c0c798b3
@@ -30834,12 +31734,17 @@ computed:
     - de-kg-suppl-149
     - de-kg-suppl-151
     - de-kg-suppl-152
-    instruments_bearing_on_computed_count: 191
-    open_dependency_count: 199
+    - de-kg-suppl-160
+    - de-kg-suppl-161
+    - de-kg-suppl-162
+    - de-kg-suppl-163
+    - de-kg-suppl-164
+    instruments_bearing_on_computed_count: 197
+    open_dependency_count: 205
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 961
+    bearing_candidate_instruments: 1005
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0
