@@ -1,0 +1,82 @@
+{
+  "schema": "de-kindergeld-native-candidate-review.v1",
+  "citation_path": "de/guidance/bzst-dakg-2025/a-19-2/document-1",
+  "source_body_sha256": "6691a6027b1764fcfb309aedbcc4466dade9fc48ec6ad2f85847630220669e7e",
+  "native_run": {
+    "id": 34982600198,
+    "url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34982600198",
+    "conclusion": "failure",
+    "encoder_commit": "d965e5239ca47b0c54fc7e83213f813fa6a75f27",
+    "rulespec_commit": "9640f3f700dd039a4ddbfeadbfb60f9ec79e3b13",
+    "corpus_commit": "12a32e752191ca507669aa76f7b5a909c7e3efe6",
+    "release": "de-rulespec-2026-09-15-kindergeld-dakg2025-preface",
+    "internal_candidates": 4,
+    "signatures": 0,
+    "applied": false,
+    "pull_request": null
+  },
+  "candidate_artifacts": [
+    {
+      "path": "generated/target/final-rejected-candidate/policies/bzst-dakg-2025/a-19-2/document-1.yaml",
+      "sha256": "ceda60401795dc3a125e93b71082f62cb2a75fd6f238e85a154b599ab1810d38"
+    },
+    {
+      "path": "generated/target/final-rejected-candidate/policies/bzst-dakg-2025/a-19-2/document-1.test.yaml",
+      "sha256": "ef29c5c4b7a27791bdc3ce820ba76acb3fc547f777c18a6a06e3ddc3b3556173"
+    }
+  ],
+  "review": {
+    "independent_reviewer": "review_de_matcher",
+    "mode": "read-only reproduction and candidate inspection",
+    "result": "unready; candidate defects and checker limitations independently confirmed"
+  },
+  "candidate_findings": [
+    {
+      "kind": "unlinked_record_subject",
+      "inputs": [
+        "document_subject_is_current_child",
+        "subject_child_recorded_birth_date"
+      ],
+      "reason": "The Boolean and document-local birth date do not link an actual child identity to an issued document. The required wrong-child exclusion cannot be established from real record identities."
+    },
+    {
+      "kind": "law_derived_period_leaf",
+      "inputs": [
+        "evaluated_day_is_within_documented_proof_period"
+      ],
+      "reason": "Documented proof period membership is supplied as a Boolean instead of derived from recorded start/end dates and the evaluated day."
+    },
+    {
+      "kind": "missing_model_scenarios",
+      "reason": "No actual wrong-child identity, leap-day, recorded proof-period boundary or later-issued-document scenario establishes the requested observation model."
+    }
+  ],
+  "checker_findings": [
+    {
+      "kind": "source_selector_translation",
+      "reason": "Eight directional witnesses from two pension pairs satisfy path, orientation and output-effect requirements, but the English selector tokens do not match the German source. None is accepted for the pension branch."
+    },
+    {
+      "kind": "calendar_execution_unresolved",
+      "reason": "Medical witnesses cannot be executed through the bounded checker: date_add_years returns unresolved and the case environment does not supply period_start. Asserted dependency environments remain empty and birthday execution returns None."
+    },
+    {
+      "kind": "date_selector_filter",
+      "reason": "The below-25/at-25 pair differs in exactly one ISO birth-date input with the same period and output keys, but the non-Boolean selector filter only permits int/float changes."
+    },
+    {
+      "kind": "condition_region",
+      "reason": "The extracted age condition absorbs the next independent Auswirkungen bullet."
+    }
+  ],
+  "improvements": [
+    "The exact A19.1 paragraphs 7/8 assessment-review dependency is recognized.",
+    "Versions begin in 2025 rather than unsupported year 0001.",
+    "Period validity no longer admits a document without an accepted proof route."
+  ],
+  "limitations": [
+    "Fixing checker limitations alone would not make this candidate acceptable.",
+    "No generated module or tests were edited, no signature was created, and no additional attempt was dispatched.",
+    "No spine provision, law-derived leaf or bearing instrument is closed by this review."
+  ]
+}

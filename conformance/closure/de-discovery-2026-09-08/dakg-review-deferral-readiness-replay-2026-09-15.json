@@ -1,0 +1,150 @@
+{
+  "schema": "de-kindergeld-dakg-review-deferral-readiness-replay.v1",
+  "review_date": "2026-09-15",
+  "purpose": "Readiness diagnostic for source-bound deferral only; not legal encoding or native generation.",
+  "encoder": {
+    "baseline_commit": "8681edc1f774e78d246b1ea0c7445ee0341a7e3f",
+    "baseline_source_sha256": "2223a8415ab06dc5bd03d54dfe97830c5790d5a33a7d8844a5b765092878d256",
+    "reviewed_commit": "7137df55617fb47f1430c1a8c83c4424cf5e0cfd",
+    "version": "0.2.1994",
+    "source": {
+      "path": "encoder-de-boundary/src/axiom_encode/harness/source_completeness.py",
+      "sha256": "22a5fcdbf5461081650ca37361226a57962f95349a740ebbaae822b6a10f6343",
+      "bytes": 1037028
+    }
+  },
+  "original_native_run_id": 34924883403,
+  "artifacts": {
+    "authoritative_source": {
+      "path": "dakg-a19-2-failure-unpacked/generated/target/_eval_workspaces/openai-gpt-5.6-sol/de-guidance-bzst-dakg-2025-a-19-2-document-1/workspace/source.txt",
+      "sha256": "6691a6027b1764fcfb309aedbcc4466dade9fc48ec6ad2f85847630220669e7e",
+      "bytes": 1700
+    },
+    "candidate": {
+      "path": "dakg-a19-2-failure-unpacked/generated/target/final-rejected-candidate/policies/bzst-dakg-2025/a-19-2/document-1.yaml",
+      "sha256": "0725a24d0559222c7da86c0a4b7b2479225c911a5b4b68348ffc7bcf7662edde",
+      "bytes": 15966
+    },
+    "companion_tests": {
+      "path": "dakg-a19-2-failure-unpacked/generated/target/final-rejected-candidate/policies/bzst-dakg-2025/a-19-2/document-1.test.yaml",
+      "sha256": "1a92c690f957ce9ce98197ba0236f29ba15eac0791aabf8605dcbb0919c5b5b3",
+      "bytes": 21616
+    }
+  },
+  "source_branch": {
+    "citation_path": "de/guidance/bzst-dakg-2025/a-19-2/document-1",
+    "path": [
+      "2",
+      "satz-3"
+    ],
+    "exact_text": "3Zur Überprüfung der Festsetzung\nvgl. A 19.1 Abs. 7 und 8.",
+    "source_start": 1619,
+    "source_end": 1677
+  },
+  "supported_deferral_template": {
+    "output": "de:policies/bzst-dakg-2025/a-19-2/document-1/2/satz-3#assessment_review_schedule",
+    "reason": "DA-KG A 19.2 Absatz 2 Satz 3 refers assessment review to A 19.1 Abs. 7 und 8. The executable dependency de:policies/bzst-dakg-2025/numbered-sections/a-19-1#review_interval is not yet encoded.",
+    "blocked_by": [
+      "de:policies/bzst-dakg-2025/numbered-sections/a-19-1#review_interval"
+    ]
+  },
+  "comparison": {
+    "old": {
+      "typed": {
+        "covered_paths": [],
+        "issues": [
+          "[complete-source-unit:deferral] `module.deferred_outputs[0]` identifies source branch (2) (`2/satz-3`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause."
+        ]
+      },
+      "prose": {
+        "covered_paths": [],
+        "issues": [
+          "[complete-source-unit:deferral] `module.deferred_outputs[0]` identifies source branch (2) (`2/satz-3`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause."
+        ]
+      }
+    },
+    "new": {
+      "typed": {
+        "covered_paths": [
+          [
+            "2",
+            "satz-3"
+          ]
+        ],
+        "issues": []
+      },
+      "prose": {
+        "covered_paths": [
+          [
+            "2",
+            "satz-3"
+          ]
+        ],
+        "issues": []
+      }
+    }
+  },
+  "negative_controls": {
+    "wrong_section": {
+      "covered_paths": [],
+      "issues": [
+        "[complete-source-unit:deferral] `module.deferred_outputs[0]` identifies source branch (2) (`2/satz-3`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause."
+      ]
+    },
+    "wrong_edition": {
+      "covered_paths": [],
+      "issues": [
+        "[complete-source-unit:deferral] `module.deferred_outputs[0]` identifies source branch (2) (`2/satz-3`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause."
+      ]
+    },
+    "wrong_jurisdiction": {
+      "covered_paths": [],
+      "issues": [
+        "[complete-source-unit:deferral] `module.deferred_outputs[0]` identifies source branch (2) (`2/satz-3`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause."
+      ]
+    },
+    "unrelated_symbol": {
+      "covered_paths": [],
+      "issues": [
+        "[complete-source-unit:deferral] `module.deferred_outputs[0]` identifies source branch (2) (`2/satz-3`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause."
+      ]
+    }
+  },
+  "immutable_candidate_replay": {
+    "old": [
+      "[complete-source-unit:deferral] `module.deferred_outputs[0]` identifies source branch (source unit) (`<source-unit>`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause.",
+      "[complete-source-unit:deferral] `module.deferred_outputs[1]` identifies source branch (source unit) (`<source-unit>`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause.",
+      "[complete-source-unit:structure] Source branch Satz 1 at de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 1] is neither encoded nor precisely deferred.",
+      "[complete-source-unit:structure] Source branch Satz 3 at de/guidance/bzst-dakg-2025/a-19-2/document-1(2) [Absatz 2, Satz 3] is neither encoded nor precisely deferred.",
+      "[complete-source-unit:formula-output] Source-stated control Satz 3 in de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 3] has no principal derived/relation output (`derived` or `derived_relation`) and is not precisely deferred; parameter-only representation is invalid.",
+      "[complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Nummer 2, Nummer b] [change]: `b) wenn dem Kind wegen seiner Behinderung nach den gesetzlichen Vorschriften Renten oder andere laufende Bezüge zustehen, durch den Rentenbescheid oder einen entsprechenden Bescheid,`; de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 3] [change]: `3Aus der Bescheinigung bzw. dem Gutachten muss Folgendes hervorgehen: − Vorliegen der Behinderung, − Beginn der Behinderung, soweit das Kind da ... und − Auswirkungen der Behinderung auf die Erwerbsfähigkeit des Kindes.`. The evaluator recognized 28 directional formula-toggle witnesses from 13 distinct case pairs, but these do not cover every listed source condition. Check affected rule/path, source-selector relevance, active orientation, required effect, and distinct-condition witness allocation before adding cases. Recognized test pairs alone do not establish source coverage."
+    ],
+    "new": [
+      "[complete-source-unit:deferral] `module.deferred_outputs[0]` identifies source branch (source unit) (`<source-unit>`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause.",
+      "[complete-source-unit:deferral] `module.deferred_outputs[1]` identifies source branch (source unit) (`<source-unit>`) but its deferral does not name an exact missing dependency, input, or runtime capability.\nRequired shape (adapt the output and cited dependency to the omitted branch):\nmodule:\n  deferred_outputs:\n    - output: de:statutes/estg/32a/6#surviving_spouse_splitting_tax\n      reason: Cannot be computed until the joint-assessment conditions cited in EStG § 26 are encoded.\n`output` and `reason` are required; `blocked_by` is optional and, when present, must list exact absolute upstream RuleSpec outputs. When no external legal dependency exists, cite the exact current source branch and name its concrete source-stated missing input or runtime capability in the `reason` itself; the output path is not a source citation, and a generic claim that the branch is unavailable is invalid. When the authoritative branch is a bare `Repealed.` tombstone or a finite Louisiana `Repealed by Acts ...` session-law tombstone, cite that exact current source branch and affirmatively state the repeal in `reason`; do not invent a missing dependency or executable rule. Use the bounded form `<exact branch citation> is repealed.`, optionally adding the exact authenticated history either as `is repealed by <Acts citation>.` or as `is repealed. <Acts citation>.`, and/or adding `and supplies no operative rule`. For Louisiana delegated rates, use `no executable RuleSpec output for those <source-stated modifiers> rates is supplied in the available context`; do not repeat the dependency in that missing object or append a relative clause.",
+      "[complete-source-unit:structure] Source branch Satz 1 at de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 1] is neither encoded nor precisely deferred.",
+      "[complete-source-unit:structure] Source branch Satz 3 at de/guidance/bzst-dakg-2025/a-19-2/document-1(2) [Absatz 2, Satz 3] is neither encoded nor precisely deferred.",
+      "[complete-source-unit:formula-output] Source-stated control Satz 3 in de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 3] has no principal derived/relation output (`derived` or `derived_relation`) and is not precisely deferred; parameter-only representation is invalid.",
+      "[complete-source-unit:tests] Source-stated exceptions or applicability conditions require paired positive/blocking cases that assert the affected principal output and toggle its controlling formula selector. Each listed condition needs its own same-period case pair differing in exactly that one input; missing: de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Nummer 2, Nummer b] [change]: `b) wenn dem Kind wegen seiner Behinderung nach den gesetzlichen Vorschriften Renten oder andere laufende Bezüge zustehen, durch den Rentenbescheid oder einen entsprechenden Bescheid,`; de/guidance/bzst-dakg-2025/a-19-2/document-1(1) [Absatz 1, Satz 3] [change]: `3Aus der Bescheinigung bzw. dem Gutachten muss Folgendes hervorgehen: − Vorliegen der Behinderung, − Beginn der Behinderung, soweit das Kind da ... und − Auswirkungen der Behinderung auf die Erwerbsfähigkeit des Kindes.`. The evaluator recognized 28 directional formula-toggle witnesses from 13 distinct case pairs, but these do not cover every listed source condition. Check affected rule/path, source-selector relevance, active orientation, required effect, and distinct-condition witness allocation before adding cases. Recognized test pairs alone do not establish source coverage."
+    ]
+  },
+  "replay_method": {
+    "baseline": "Complete source_completeness module loaded in memory from exact git blob; no helper patching.",
+    "current": "Current committed source_completeness module.",
+    "numeric_profile": "de-DE",
+    "entrypoints": [
+      "_deferred_coverage",
+      "analyze_complete_source_unit"
+    ],
+    "python": "3.13.3",
+    "template_test": "Separate in-memory branch-scoped deferral record; original candidate was not changed."
+  },
+  "limitations": [
+    "Acceptance here means recognition as precisely deferred, not encoded or closed.",
+    "Original immutable candidate remains rejected; source-bound review scheduling and underlying dependencies remain unencoded.",
+    "This tests source-completeness only, not native execution/signature or full validator pipeline.",
+    "Supported reference is same-edition DA-KG assessment-review referral; no general policy alias or generic vgl rule."
+  ],
+  "generated_artifacts_changed": false,
+  "certification_effect": "None; no native attempt or acceptance asserted."
+}

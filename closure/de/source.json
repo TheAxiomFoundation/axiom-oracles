@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "12a32e752191ca507669aa76f7b5a909c7e3efe6",
-    "release": "de-rulespec-2026-09-15-kindergeld-dakg2025-preface",
-    "release_content_sha256": "4758f8a941c7b8101dc9d9acaecd8e57aed3c190f7a4166bb9cd56b6f39e9f0b",
-    "release_selector_sha256": "dce4dbdd45da7d287888e7a438d417e9873187320f659dc8f58ea806c143c732",
+    "commit": "519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57",
+    "release": "de-rulespec-2026-09-15-kindergeld-cross-border-priority",
+    "release_content_sha256": "f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8",
+    "release_selector_sha256": "f06d72f9b19d4a76f8d7cfe7a8492272262d5eab3cd70ec97f0967588cd4408d",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -105,6 +105,11 @@
         "path": "data/corpus/inventory/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.json",
         "sha256": "ca13a3d8532e77a95f556a74afb20b2460f4d0caac288447a730a066b9198d18",
         "row_count": 421
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-15-de-kindergeld-cross-border-priority.json",
+        "sha256": "cefd038ce4e1949f4fd6dfa1ccc7cc077552c82a0d98f7f9ebb162710190eb28",
+        "row_count": 10
       },
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.json",
@@ -402,6 +407,11 @@
         "path": "data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.jsonl",
         "sha256": "a24002a7caea73d2fe2c680a80983983c55c281e556b65a2e1fb4b39f26f1988",
         "row_count": 421
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-cross-border-priority.jsonl",
+        "sha256": "a0a7109500370522c6d459db918bf8368233ab483264d408f54b1ec884333f20",
+        "row_count": 10
       },
       {
         "path": "data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl",

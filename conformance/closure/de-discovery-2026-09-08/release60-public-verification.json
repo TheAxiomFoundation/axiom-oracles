@@ -1,0 +1,11 @@
+{
+  "release": "de-rulespec-2026-09-15-kindergeld-cross-border-priority",
+  "commit": "519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57",
+  "content_sha256": "f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8",
+  "selector_sha256": "f06d72f9b19d4a76f8d7cfe7a8492272262d5eab3cd70ec97f0967588cd4408d",
+  "object_sha256": "60fb40c98cbe1d5602f31d22439bef28a924e104d3fabd442c5ee1c1a1333092",
+  "native_signature_verified": true,
+  "publish_run": 34993222252,
+  "public_byte_identity_verified": true,
+  "mirror_run": 34993950606
+}

@@ -1,0 +1,205 @@
+{
+  "schema": "de-kindergeld-additional-priority-discovery.v1",
+  "status": "independently reviewed; enrolled as pending committed decisions; computed state produced separately",
+  "members": [
+    {
+      "id": "de-kg-suppl-153",
+      "identity": "BFH, III R 16/13, 08.09.2016",
+      "title_short": "Kindergeld: Anspruchsberechtigung bei grenzüberschreitenden Sachverhalten - Im Wesentlichen inhaltsgleich mit BFH-Urteil vom 28.04.2016 III R 68/13",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Exact official BFH docket/date search returned https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650438/; captured search HTML SHA-256 32af98f6aa5408917e1a3ac8c3d694ac08231ef2a70ffc7b04593ea03114fdf3. The source body, current bearing and BStBl issue membership are not decided. See additional-cross-border-priority-members.json.",
+      "status": "pending",
+      "search_receipt": {
+        "slug": "iii-r-16-13-2016",
+        "docket": "III R 16/13",
+        "date": "08.09.2016",
+        "url": "https://www.bundesfinanzhof.de/de/entscheidungen/entscheidungen-online/?tx_solr%5BsearchTerms%5D%5Baktenzeichen%5D=III+R+16%2F13&tx_solr%5BcreationDateRange%5D%5Bstart%5D=08.09.2016&tx_solr%5BcreationDateRange%5D%5Bend%5D=08.09.2016",
+        "retrieved_at": "2026-09-15T16:03:19.299333+00:00",
+        "sha256": "32af98f6aa5408917e1a3ac8c3d694ac08231ef2a70ffc7b04593ea03114fdf3",
+        "links": [
+          {
+            "url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650438/",
+            "text": "Kindergeld: Anspruchsberechtigung bei grenzüberschreitenden Sachverhalten - Im Wesentlichen inhaltsgleich mit BFH-Urteil vom 28.04.2016 III R 68/13"
+          }
+        ]
+      },
+      "artifact": {
+        "file": "iii-r-16-13-2016-default-search.html",
+        "sha256": "32af98f6aa5408917e1a3ac8c3d694ac08231ef2a70ffc7b04593ea03114fdf3",
+        "path": "conformance/closure/de-discovery-2026-09-08/cross-border-priority-member-search/iii-r-16-13-2016-default-search.html"
+      }
+    },
+    {
+      "id": "de-kg-suppl-154",
+      "identity": "BFH, III R 86/11, 13.04.2016",
+      "title_short": "Kindergeld: Vorrangige Anspruchsberechtigung des im anderen EU-Mitgliedstaat lebenden Elternteils - fiktive Übertragung der Wohnsituation in Inland - Im Wesentlichen inhaltsgleich mit BFH-Urteil vom 4.2.2016 III R 17/13",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Exact official BFH docket/date search returned https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650271/; captured search HTML SHA-256 d01c0a1393b65bb1b5482d255f58a38516b832e9175cdd16243b8c5b7ec2f360. The source body, current bearing and BStBl issue membership are not decided. See additional-cross-border-priority-members.json.",
+      "status": "pending",
+      "search_receipt": {
+        "slug": "iii-r-86-11-2016",
+        "docket": "III R 86/11",
+        "date": "13.04.2016",
+        "url": "https://www.bundesfinanzhof.de/de/entscheidungen/entscheidungen-online/?tx_solr%5BsearchTerms%5D%5Baktenzeichen%5D=III+R+86%2F11&tx_solr%5BcreationDateRange%5D%5Bstart%5D=13.04.2016&tx_solr%5BcreationDateRange%5D%5Bend%5D=13.04.2016",
+        "retrieved_at": "2026-09-15T16:03:19.313268+00:00",
+        "sha256": "d01c0a1393b65bb1b5482d255f58a38516b832e9175cdd16243b8c5b7ec2f360",
+        "links": [
+          {
+            "url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650271/",
+            "text": "Kindergeld: Vorrangige Anspruchsberechtigung des im anderen EU-Mitgliedstaat lebenden Elternteils - fiktive Übertragung der Wohnsituation in Inland - Im Wesentlichen inhaltsgleich mit BFH-Urteil vom 4.2.2016 III R 17/13"
+          }
+        ]
+      },
+      "artifact": {
+        "file": "iii-r-86-11-2016-default-search.html",
+        "sha256": "d01c0a1393b65bb1b5482d255f58a38516b832e9175cdd16243b8c5b7ec2f360",
+        "path": "conformance/closure/de-discovery-2026-09-08/cross-border-priority-member-search/iii-r-86-11-2016-default-search.html"
+      }
+    },
+    {
+      "id": "de-kg-suppl-155",
+      "identity": "BFH, III R 40/12, 28.04.2016",
+      "title_short": "Kindergeld: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils (im Wesentlichen inhaltsgleich mit BFH-Urteil vom 28. April 2016 III R 68/13",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Exact official BFH docket/date search returned https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650286/; captured search HTML SHA-256 aad5e83068a97ab3358a1c777f45971b22e1d1272ef94e09750b29c4bd4a49f0. The source body, current bearing and BStBl issue membership are not decided. See additional-cross-border-priority-members.json.",
+      "status": "pending",
+      "search_receipt": {
+        "slug": "iii-r-40-12-2016",
+        "docket": "III R 40/12",
+        "date": "28.04.2016",
+        "url": "https://www.bundesfinanzhof.de/de/entscheidungen/entscheidungen-online/?tx_solr%5BsearchTerms%5D%5Baktenzeichen%5D=III+R+40%2F12&tx_solr%5BcreationDateRange%5D%5Bstart%5D=28.04.2016&tx_solr%5BcreationDateRange%5D%5Bend%5D=28.04.2016",
+        "retrieved_at": "2026-09-15T16:03:19.289721+00:00",
+        "sha256": "aad5e83068a97ab3358a1c777f45971b22e1d1272ef94e09750b29c4bd4a49f0",
+        "links": [
+          {
+            "url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650286/",
+            "text": "Kindergeld: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils (im Wesentlichen inhaltsgleich mit BFH-Urteil vom 28. April 2016 III R 68/13"
+          }
+        ]
+      },
+      "artifact": {
+        "file": "iii-r-40-12-2016-default-search.html",
+        "sha256": "aad5e83068a97ab3358a1c777f45971b22e1d1272ef94e09750b29c4bd4a49f0",
+        "path": "conformance/closure/de-discovery-2026-09-08/cross-border-priority-member-search/iii-r-40-12-2016-default-search.html"
+      }
+    },
+    {
+      "id": "de-kg-suppl-156",
+      "identity": "BFH, III R 25/12, 10.03.2016",
+      "title_short": "Kindergeld: Vorrangige Anspruchsberechtigung des im anderen EU-Mitgliedstaat lebenden Elternteils - fiktive Übertragung der Wohnsituation in Inland",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Exact official BFH docket/date search returned https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650232/; captured search HTML SHA-256 fcbdab00eaf12b7da57c98d74bfe3e8bf482211841a014cd7218e87db8726d00. The source body, current bearing and BStBl issue membership are not decided. See additional-cross-border-priority-members.json.",
+      "status": "pending",
+      "search_receipt": {
+        "slug": "iii-r-25-12-2016",
+        "docket": "III R 25/12",
+        "date": "10.03.2016",
+        "url": "https://www.bundesfinanzhof.de/de/entscheidungen/entscheidungen-online/?tx_solr%5BsearchTerms%5D%5Baktenzeichen%5D=III+R+25%2F12&tx_solr%5BcreationDateRange%5D%5Bstart%5D=10.03.2016&tx_solr%5BcreationDateRange%5D%5Bend%5D=10.03.2016",
+        "retrieved_at": "2026-09-15T16:03:20.144462+00:00",
+        "sha256": "fcbdab00eaf12b7da57c98d74bfe3e8bf482211841a014cd7218e87db8726d00",
+        "links": [
+          {
+            "url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650232/",
+            "text": "Kindergeld: Vorrangige Anspruchsberechtigung des im anderen EU-Mitgliedstaat lebenden Elternteils - fiktive Übertragung der Wohnsituation in Inland"
+          }
+        ]
+      },
+      "artifact": {
+        "file": "iii-r-25-12-2016-default-search.html",
+        "sha256": "fcbdab00eaf12b7da57c98d74bfe3e8bf482211841a014cd7218e87db8726d00",
+        "path": "conformance/closure/de-discovery-2026-09-08/cross-border-priority-member-search/iii-r-25-12-2016-default-search.html"
+      }
+    },
+    {
+      "id": "de-kg-suppl-157",
+      "identity": "BFH, III R 66/13, 10.03.2016",
+      "title_short": "Im Wesentlichen inhaltsgleich mit BFH-Urteil vom 10.3.2016  III R 62/12 - Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Großelternteils",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Exact official BFH docket/date search returned https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650229/; captured search HTML SHA-256 3b49df6726df4b1befeef909cb2f6c3a6774cbb626f1f637213f3ea62e7175e1. The source body, current bearing and BStBl issue membership are not decided. See additional-cross-border-priority-members.json.",
+      "status": "pending",
+      "search_receipt": {
+        "slug": "iii-r-66-13-2016",
+        "docket": "III R 66/13",
+        "date": "10.03.2016",
+        "url": "https://www.bundesfinanzhof.de/de/entscheidungen/entscheidungen-online/?tx_solr%5BsearchTerms%5D%5Baktenzeichen%5D=III+R+66%2F13&tx_solr%5BcreationDateRange%5D%5Bstart%5D=10.03.2016&tx_solr%5BcreationDateRange%5D%5Bend%5D=10.03.2016",
+        "retrieved_at": "2026-09-15T16:03:20.115943+00:00",
+        "sha256": "3b49df6726df4b1befeef909cb2f6c3a6774cbb626f1f637213f3ea62e7175e1",
+        "links": [
+          {
+            "url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201650229/",
+            "text": "Im Wesentlichen inhaltsgleich mit BFH-Urteil vom 10.3.2016  III R 62/12 - Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Großelternteils"
+          }
+        ]
+      },
+      "artifact": {
+        "file": "iii-r-66-13-2016-default-search.html",
+        "sha256": "3b49df6726df4b1befeef909cb2f6c3a6774cbb626f1f637213f3ea62e7175e1",
+        "path": "conformance/closure/de-discovery-2026-09-08/cross-border-priority-member-search/iii-r-66-13-2016-default-search.html"
+      }
+    },
+    {
+      "id": "de-kg-suppl-158",
+      "identity": "BFH, III R 62/12, 10.03.2016",
+      "title_short": "Kindergeld: Vorrangige Anspruchsberechtigung des im anderen EU-Mitgliedstaat lebenden Großelternteils - fiktive Übertragung der Wohnsituation ins Inland - gemeinsamer Haushalt i.S. des § 64 Abs. 2 Satz 5 EStG",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Exact official BFH docket/date search returned https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201610124/; captured search HTML SHA-256 0e71b6a146f42d8f8d7ff2be0f34c6e7fb4e3abce9ea31e1a5c367a807224c57. The source body, current bearing and BStBl issue membership are not decided. See additional-cross-border-priority-members.json.",
+      "status": "pending",
+      "search_receipt": {
+        "slug": "iii-r-62-12-2016",
+        "docket": "III R 62/12",
+        "date": "10.03.2016",
+        "url": "https://www.bundesfinanzhof.de/de/entscheidungen/entscheidungen-online/?tx_solr%5BsearchTerms%5D%5Baktenzeichen%5D=III+R+62%2F12&tx_solr%5BcreationDateRange%5D%5Bstart%5D=10.03.2016&tx_solr%5BcreationDateRange%5D%5Bend%5D=10.03.2016",
+        "retrieved_at": "2026-09-15T16:03:20.135417+00:00",
+        "sha256": "0e71b6a146f42d8f8d7ff2be0f34c6e7fb4e3abce9ea31e1a5c367a807224c57",
+        "links": [
+          {
+            "url": "https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/STRE201610124/",
+            "text": "Kindergeld: Vorrangige Anspruchsberechtigung des im anderen EU-Mitgliedstaat lebenden Großelternteils - fiktive Übertragung der Wohnsituation ins Inland - gemeinsamer Haushalt i.S. des § 64 Abs. 2 Satz 5 EStG"
+          }
+        ]
+      },
+      "artifact": {
+        "file": "iii-r-62-12-2016-default-search.html",
+        "sha256": "0e71b6a146f42d8f8d7ff2be0f34c6e7fb4e3abce9ea31e1a5c367a807224c57",
+        "path": "conformance/closure/de-discovery-2026-09-08/cross-border-priority-member-search/iii-r-62-12-2016-default-search.html"
+      }
+    },
+    {
+      "id": "de-kg-suppl-159",
+      "identity": "BFH, III R 50/12, 28 April 2016",
+      "title_short": "Kindergeld: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils",
+      "relation": "bears_on",
+      "discovered_by": "de-kg-dakg-V2",
+      "discovered_in_body_sha256": "06f150184d203f69cf2202d1d07cf3dbee1b31f9d295196a9a98047efea91c03",
+      "provenance": "Subject-matter follow-up to the DA-KG V2 / III R31/15 cross-border-priority reading. Search-discovered official PDF https://www.bundesfinanzhof.de/de/entscheidung/entscheidungen-online/detail/pdf/STRE201650285?type=1646225765 identifies III R50/12 on its first page; PDF SHA-256 836dde220aeb4354e09253965afcac0288b88f8c50c0baf48ca32d86224d20a1. This is distinct from III R40/12 (STRE201650286). Original body and current bearing are not fully reviewed; pending. See additional-cross-border-priority-members.json.",
+      "status": "pending",
+      "artifact": {
+        "file": "STRE201650285.pdf",
+        "sha256": "836dde220aeb4354e09253965afcac0288b88f8c50c0baf48ca32d86224d20a1",
+        "path": "conformance/closure/de-discovery-2026-09-08/cross-border-priority-member-search/STRE201650285.pdf"
+      },
+      "identity_excerpt": "Urteil vom 28. April 2016, III R 50/12\nKindergeld: Vorrangiger Kindergeldanspruch des im anderen EU-Mitgliedstaat wohnenden Elternteils (im Wesentlichen\ninhaltsgleich mit BFH-Urteil vom 28. April 2016 III R 68/13\n"
+    }
+  ],
+  "limits": [
+    "Seven pending identities only; no source review, encoding or coverage claimed.",
+    "Search result titles are discovery evidence and cannot replace original judgments.",
+    "The six precise docket/date searches exclude unrelated search-engine results."
+  ],
+  "independent_review": {
+    "reviewer": "review_de_matcher",
+    "result": "no actionable findings; seven artifacts, identity matches and duplicate checks verified"
+  }
+}

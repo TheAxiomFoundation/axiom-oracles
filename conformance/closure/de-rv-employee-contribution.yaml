@@ -29,12 +29,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 615865bd5ddee8e785b2d6ee165645cbe6d594b864b2c4baa54a1d331f57ae6e
+    sha256: ef058eaa4d8eb8992271c7bb0f6dcbd7e1ae7cb3122965e383864585cc296c4d
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 12a32e752191ca507669aa76f7b5a909c7e3efe6
-    release: de-rulespec-2026-09-15-kindergeld-dakg2025-preface
-    release_content_sha256: 4758f8a941c7b8101dc9d9acaecd8e57aed3c190f7a4166bb9cd56b6f39e9f0b
+    commit: 519bcdc8e2e4aaa5bab8a9213769fb9a3dfcbd57
+    release: de-rulespec-2026-09-15-kindergeld-cross-border-priority
+    release_content_sha256: f783a5db90e5b2333d70e31f57188bc72554089d574c0f60c38eb417b03831b8
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -96,6 +96,9 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.jsonl
       sha256: a24002a7caea73d2fe2c680a80983983c55c281e556b65a2e1fb4b39f26f1988
       row_count: 421
+    - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-cross-border-priority.jsonl
+      sha256: a0a7109500370522c6d459db918bf8368233ab483264d408f54b1ec884333f20
+      row_count: 10
     - path: data/corpus/provisions/de/guidance/2026-09-15-de-kindergeld-dakg2025-preface.jsonl
       sha256: b9d5b3f8e4137f879f9155338d2a401de8d5a2df54f5d925a8c72568fa87cd6e
       row_count: 2
@@ -289,9 +292,9 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: b458788576bd90f00bf5b4fd0181236717088240cc4fea407a5f63fd3e664f11
+    snapshot_sha256: 52196ef92ef097f87f088a46a81cc39e206d392348578533b1d36b092aea9ec4
     channel_receipts:
-      corpus_release: 0d4a5e6c79e313ceb69c6f0965ed2e8805cc06dcca714a63c75fc9559752fa99
+      corpus_release: f972c23465201fb1deba6c14813fa081305234603f6c43170a790cf82499b580
       subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
