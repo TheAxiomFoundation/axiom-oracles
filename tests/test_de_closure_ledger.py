@@ -1641,7 +1641,7 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         "de-kg-suppl-025",
     }
     pending_indirect_authorities = {
-        f"de-kg-suppl-{number:03d}" for number in range(26, 136) if number not in (26, 28, 30, 31, 33, 34, 132, 133)
+        f"de-kg-suppl-{number:03d}" for number in range(26, 160) if number not in (26, 28, 30, 31, 33, 34, 132, 133, 144, 145, 146, 147, 148)
     }
     assert {
         row["id"] for row in supplemental if row["status"] == "pending"
@@ -1674,9 +1674,11 @@ def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
         "de-kg-dakg-A17.2",
         "de-kg-dakg-A15.11",
         "de-kg-dakg-A19.5.3",
+        "de-kg-dakg-V2",
+        "de-kg-dakg-V8",
     }
     frontier = document["computed"]["instrument_frontier"]
-    assert frontier["instrument_count"] == 542 + 135 + 229
+    assert frontier["instrument_count"] == 547 + 159 + 229
     assert all(
         sid in frontier["pending"]
         for sid in pending_classes
