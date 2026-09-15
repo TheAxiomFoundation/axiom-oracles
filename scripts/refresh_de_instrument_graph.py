@@ -1580,11 +1580,32 @@ def _render_candidates(program: str, candidates: Mapping[str, Candidate]) -> lis
 
 def _reused_subject_channel(
     snapshot_path: str | Path, source_path: Path, query_set_path: Path,
+    source_ref: str | None = None,
 ) -> dict[str, Any]:
-    prior_snapshot = json.loads(Path(snapshot_path).read_bytes())
+    snapshot_raw = Path(snapshot_path).read_bytes()
+    prior_snapshot = json.loads(snapshot_raw)
+    if source_ref is not None:
+        if not re.fullmatch(r"[0-9a-f]{40}", source_ref):
+            raise CaptureError("subject source ref must be a full immutable Git commit")
+        try:
+            snapshot_rel = Path(snapshot_path).resolve().relative_to(REPO_ROOT).as_posix()
+            source_rel = source_path.resolve().relative_to(REPO_ROOT).as_posix()
+        except ValueError as exc:
+            raise CaptureError("historical subject inputs must be inside the repository") from exc
+        if snapshot_raw != _git_blob(REPO_ROOT, source_ref, snapshot_rel):
+            raise CaptureError("subject snapshot differs from its historical committed bytes")
+        prior_source = json.loads(_git_blob(REPO_ROOT, source_ref, source_rel))
+        current_source = json.loads(source_path.read_bytes())
+        if {k: v for k, v in prior_source.items() if k != "corpus"} != {
+            k: v for k, v in current_source.items() if k != "corpus"
+        }:
+            raise CaptureError("historical subject reuse permits only a corpus repin")
     # Preserve the original attempt timestamps, successes and failures. A
     # refresh of corpus evidence is not a fresh network observation.
-    validate_snapshot(prior_snapshot, source_path=source_path, query_set_path=query_set_path)
+    validate_snapshot(
+        prior_snapshot, source_path=source_path, query_set_path=query_set_path,
+        source_ref=source_ref,
+    )
     return copy.deepcopy(prior_snapshot["channels"]["subject_matter_search"])
 
 
@@ -1596,14 +1617,17 @@ def build_snapshot(
     *,
     timeout: float = DEFAULT_TIMEOUT,
     subject_snapshot_path: str | Path | None = None,
+    subject_source_ref: str | None = None,
 ) -> dict[str, Any]:
     """Build one DE discovery snapshot from pinned corpus blobs and URL attempts."""
     query_path = Path(query_set_path).resolve()
     source_file = Path(source_path).resolve()
     source, source_raw = _read_json(source_file, SOURCE_SCHEMA)
     query_set, query_raw = _read_json(query_path, QUERY_SCHEMA)
+    if subject_source_ref is not None and subject_snapshot_path is None:
+        raise CaptureError("subject source ref requires a subject snapshot")
     reused_subject = (
-        _reused_subject_channel(subject_snapshot_path, source_file, query_path)
+        _reused_subject_channel(subject_snapshot_path, source_file, query_path, subject_source_ref)
         if subject_snapshot_path is not None else None
     )
     if set(source.get("programs", {})) != set(PROGRAMS):
@@ -1731,8 +1755,15 @@ def validate_snapshot(
     source_path: Path = DEFAULT_SOURCE,
     query_set_path: Path = DEFAULT_QUERY_SET,
     corpus: Corpus | None = None,
+    source_ref: str | None = None,
 ) -> None:
     """Validate receipts and the all-pending graph invariants."""
+    if source_ref is not None and not re.fullmatch(r"[0-9a-f]{40}", source_ref):
+        raise CaptureError("subject source ref must be a full immutable Git commit")
+    if source_ref is not None:
+        resolved = _run(["git", "-C", str(REPO_ROOT), "rev-parse", "--verify", f"{source_ref}^{{commit}}"]).decode().strip()
+        if resolved != source_ref:
+            raise CaptureError("subject source ref does not resolve to the exact commit")
     if snapshot.get("schema") != SCHEMA:
         raise CaptureError(f"expected snapshot schema {SCHEMA}")
     if set(snapshot.get("channels", {})) != {
@@ -1746,7 +1777,11 @@ def validate_snapshot(
             raise CaptureError(f"snapshot {key} binding is missing")
         try:
             expected_path = path.resolve().relative_to(REPO_ROOT).as_posix()
-            expected_sha = _sha(path.read_bytes())
+            bound_raw = (
+                _git_blob(REPO_ROOT, source_ref, expected_path)
+                if key == "source" and source_ref is not None else path.read_bytes()
+            )
+            expected_sha = _sha(bound_raw)
         except (OSError, ValueError) as exc:
             raise CaptureError(f"cannot verify snapshot {key} binding: {exc}") from exc
         if binding != {"path": expected_path, "sha256": expected_sha}:
@@ -1924,6 +1959,10 @@ def main(argv: list[str] | None = None) -> int:
         "--subject-snapshot", type=Path,
         help="reuse original subject-channel receipts from a validated snapshot with identical source and query bindings",
     )
+    parser.add_argument(
+        "--subject-source-ref",
+        help="Full prior consumer commit binding the unchanged subject snapshot during a corpus-only repin",
+    )
     parser.add_argument("--diff", action="store_true", help="capture, show semantic drift, and write nothing")
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--query-set", type=Path, default=DEFAULT_QUERY_SET)
@@ -1952,6 +1991,7 @@ def main(argv: list[str] | None = None) -> int:
             attempt_network=not args.offline,
             timeout=args.timeout,
             subject_snapshot_path=args.subject_snapshot,
+            subject_source_ref=args.subject_source_ref,
         )
         if args.diff:
             if not args.output.exists():

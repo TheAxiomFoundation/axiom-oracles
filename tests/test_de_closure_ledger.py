@@ -537,6 +537,56 @@ def test_reused_subject_receipts_preserve_observation_and_reject_drift(
         assert reused == snapshot["channels"]["subject_matter_search"]
 
 
+
+@pytest.mark.parametrize("mutation", [None, "program", "rulespec", "snapshot", "query", "short_ref", "non_commit"])
+def test_historical_subject_reuse_binds_original_git_bytes(tmp_path, monkeypatch, mutation):
+    refresh = _load_refresh_script()
+    prior_ref = "a" * 40
+    source_rel = refresh.DEFAULT_SOURCE.relative_to(REPO_ROOT)
+    query_rel = refresh.DEFAULT_QUERY_SET.relative_to(REPO_ROOT)
+    snapshot_rel = SNAPSHOT.relative_to(REPO_ROOT)
+    original_source = refresh.DEFAULT_SOURCE.read_bytes()
+    original_snapshot = SNAPSHOT.read_bytes()
+    source_path = tmp_path / source_rel
+    query_path = tmp_path / query_rel
+    snapshot_path = tmp_path / snapshot_rel
+    for path, raw in ((source_path, original_source), (query_path, refresh.DEFAULT_QUERY_SET.read_bytes()), (snapshot_path, original_snapshot)):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(raw)
+    current = json.loads(original_source)
+    current["corpus"]["commit"] = "b" * 40
+    current["corpus"]["release"] = "de-rulespec-new-additive-release"
+    if mutation == "program":
+        current["programs"]["de/kindergeld"]["root_nodes"] = []
+    if mutation == "rulespec":
+        current["rulespec"]["commit"] = "c" * 40
+    source_path.write_text(json.dumps(current))
+    if mutation == "snapshot":
+        changed = json.loads(original_snapshot)
+        changed["generated_at"] = "2099-01-01T00:00:00Z"
+        snapshot_path.write_text(json.dumps(refresh._add_receipt(changed)))
+    if mutation == "query":
+        query_path.write_bytes(query_path.read_bytes() + b"\n")
+    monkeypatch.setattr(refresh, "REPO_ROOT", tmp_path)
+    def git_blob(root, ref, path):
+        assert root == tmp_path and ref == prior_ref
+        return {str(source_rel): original_source, str(snapshot_rel): original_snapshot}[path]
+    monkeypatch.setattr(refresh, "_git_blob", git_blob)
+    def run(argv, **kwargs):
+        assert argv == ["git", "-C", str(tmp_path), "rev-parse", "--verify", f"{prior_ref}^{{commit}}"]
+        return (("d" * 40 if mutation == "non_commit" else prior_ref) + "\n").encode()
+    monkeypatch.setattr(refresh, "_run", run)
+    def no_network(*args, **kwargs):
+        raise AssertionError("historical reuse must not fetch new observations")
+    monkeypatch.setattr(refresh.urllib.request, "urlopen", no_network)
+    ref = "HEAD" if mutation == "short_ref" else prior_ref
+    if mutation is not None:
+        with pytest.raises(refresh.CaptureError):
+            refresh._reused_subject_channel(snapshot_path, source_path, query_path, ref)
+    else:
+        reused = refresh._reused_subject_channel(snapshot_path, source_path, query_path, ref)
+        assert reused == json.loads(original_snapshot)["channels"]["subject_matter_search"]
+
 def test_reuse_and_offline_capture_are_mutually_exclusive() -> None:
     refresh = _load_refresh_script()
     assert refresh.main(["--offline", "--subject-snapshot", str(SNAPSHOT)]) == 2
