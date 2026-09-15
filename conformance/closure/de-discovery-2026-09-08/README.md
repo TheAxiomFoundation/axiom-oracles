@@ -226,3 +226,10 @@ The first native A 19.2 run failed with no signed or applied module.
 and separates evidence-model defects from parser findings. The docket-number
 arithmetic false positive is reproducible; fixing it alone cannot make the
 candidate acceptable. A 19.2 remains unencoded.
+
+`dakg-v23-1-rounding-reconciliation.json` distinguishes the statutory
+proportional-increase rounding step from payment of an already assessed
+amount without further rounding. Independent source review found no conflict
+between these two stages. V 23.1 remains bearing and unencoded because its
+payment and recovery requirements are not implemented by the existing §66
+amount calculation.
