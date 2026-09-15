@@ -60,13 +60,43 @@
   "proposed_encoder_repair": {
     "pull_request": "https://github.com/TheAxiomFoundation/axiom-encode/pull/1638",
     "head": "0d2528868358e88eff2dd37b4f623603e574c134",
-    "status": "independent_review_complete_ci_pending",
+    "status": "merged_after_review_and_ci",
     "replay": {
       "path": "sgbix2-reviewed-repair-replay-2026-09-14.json",
       "sha256": "2e1a2998f058c77f1e2aa24b3634b98cf8fb7fbfdd7a3308c3cc7ab814e4ec2b"
     },
     "result": "The unchanged candidate has one accepted witness for the age-relative clause and none for the forecast clause. It remains rejected. No generation attempt, signature, application or module declaration follows from this diagnostic.",
-    "checks": "6476 source-completeness, matcher and version-guard tests pass; Ruff and compileall pass. Independent review found and verified the repair of a compound-selector scope flaw; re-review has no actionable findings and independently passed38 matcher tests. Exact-head full CI and signing checks remain pending.",
-    "remaining": "The complete expected-impairment predicate now has bounded bilingual matching; the rejected candidate still uses subtype and clinical flags and gains no forecast witness. Native generation must establish observable medical evidence associations and dated calendar-duration calculation. The missing BGH original is independent."
+    "checks": "Full CI at the follow-up head:14946 passed,94 skipped; lint and both platform signing checks passed. Independent source-matching and version-fixture reviews have no residual actionable findings. The replay remains bound to0d252, whose matcher bytes are unchanged in the tested follow-up.",
+    "remaining": "The complete expected-impairment predicate now has bounded bilingual matching; the rejected candidate still uses subtype and clinical flags and gains no forecast witness. Native generation must establish observable medical evidence associations and dated calendar-duration calculation. The missing BGH original is independent.",
+    "merged_commit": "809dde9d0977da7880ce52f1d3432b06bcf00e69",
+    "tested_head": "fadf7361389ef3ba26ce3f8030b7e337f14ec17b"
+  },
+  "prepared_native_repair": {
+    "status": "dispatched_pending_native_result",
+    "review_finding": {
+      "path": "sgbix2-second-attempt-review-finding.txt",
+      "sha256": "2deb2fb0da367343798bd7d420a672c2600c7a33ba3c0b7d984ec2a9060972e7"
+    },
+    "prior_failed_run": 34647449032,
+    "budget": "Normal remaining citation budget; no override",
+    "readiness_review": "Independent review identified indefinite-duration and source-cross-reference ambiguities. Both were clarified; re-review found no actionable findings. This approves repair instructions, not a future legal candidate.",
+    "required_before_dispatch": [],
+    "corpus_release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
+    "corpus_commit": "4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2",
+    "rulespec_corpus_pin_merge": "144c8344d34f69a5bd4bfd082baf9b96ea7adc1f",
+    "encoder_followup": {
+      "head": "fadf7361389ef3ba26ce3f8030b7e337f14ec17b",
+      "change": "Exact runtime-version expectations only; matcher source unchanged from the reviewed replay",
+      "review": "No actionable findings; all assertions retained",
+      "checks": "Full CI passes:14946 tests,94 skipped; lint and both signing checks pass."
+    },
+    "coverage_effect": "None; the rejected candidate remains unsigned and unencoded.",
+    "encoder_merge": "809dde9d0977da7880ce52f1d3432b06bcf00e69",
+    "mode": "Fresh generation with reviewed prior-failure findings; no failed-artifact replay",
+    "replay_constraint": "The protected extractor requires exact corpus_ref and a replacement target. The old new-source attempt has corpus_ref3551d366ec6fa276acc193276abafdfbdbf122ca and no replacement path; release55 uses4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2. Omit repair_run_id and replacement path; preserve the same citation and normal budget.",
+    "native_run_url": "https://github.com/TheAxiomFoundation/axiom-encode/actions/runs/34917426587",
+    "encoder_commit": "809dde9d0977da7880ce52f1d3432b06bcf00e69",
+    "rulespec_commit": "ce205b75d6d998bb431de3715ae2a8b105b3a61b",
+    "dispatch_sha256": "51940356afa752b042237d351d846fb9b8790cedf3e083938977fb149dfc4136"
   }
 }
