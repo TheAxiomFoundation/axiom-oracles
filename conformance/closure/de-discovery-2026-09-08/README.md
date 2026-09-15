@@ -193,3 +193,30 @@ RuleSpec merge `73e92a4da6970693215edd28e24295c923cb807d`. They add the monthly
 birth/age criterion and payment-continuity rules, respectively. Full child
 qualification, national eligibility, coordination priority and differential
 amounts remain unencoded.
+
+
+## DA-KG Stand 2025 corpus section capture
+
+The signed release `de-rulespec-2026-09-14-kindergeld-dakg2025-sections`
+adds the complete numbered O/A/V/R/S sections, the separate A 19.2 evidence
+capture, and TEU 50/52 plus TFEU 355 treaty texts. The release identity and
+verification are recorded in `dakg2025-release-review.json`.
+`dakg2025-corpus-crosswalk.json` binds all 420 existing DA-KG frontier IDs to
+exact corpus rows at merge `6047f3acaeb056df101c7aeefdd1718523cfa494`.
+Discovery-layout and corpus-body hashes are deliberately kept separate.
+The crosswalk also binds the original PDF and committed capture audit.
+
+The original 2025 PDF came from the retained Tacheles mirror already bound by
+the discovery receipt; no government-host capture of these bytes is claimed.
+All 420 labels and 507,725 non-whitespace source characters on pages 13–159
+were independently checked. Seventy-eight structural/repealed headings have
+empty bodies. Page numbers and intervening chapter headings remain visible
+and are not operative rules. The original PDF retains the preface, contents
+and appendix outside this normalized scope.
+
+The atomic A 19.2 citation is the planned canonical encoding target; the
+numbered-section alias must not create a duplicate module. Capture alone
+changes no bearing disposition or executable coverage. Existing 2025 search
+observations are preserved from consumer commit `20d74fb4b85b7e319236a3e60aaa50d8087a3bc0`
+through the reviewed native historical-receipt option. The new corpus scan
+is regenerated; the live legacy government PDF endpoint now returns 2026.

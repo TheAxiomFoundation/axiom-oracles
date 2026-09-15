@@ -43,12 +43,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740
+    sha256: dae254694291306798396c66896265bdc5840cdd7dea1eefe83460733d7531fe
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2
-    release: de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor
-    release_content_sha256: 2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914
+    commit: 6047f3acaeb056df101c7aeefdd1718523cfa494
+    release: de-rulespec-2026-09-14-kindergeld-dakg2025-sections
+    release_content_sha256: e92396b54412059d3788910789ac1f59fcf89c660380a9e77e3d9d94b9d2374c
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -104,6 +104,12 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl
       sha256: 1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee
       row_count: 12
+    - path: data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-evidence.jsonl
+      sha256: c93ef687e659a8c491a15c6a52d6d2d4ea53ff42da76f829cfb67dab886f065c
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.jsonl
+      sha256: a24002a7caea73d2fe2c680a80983983c55c281e556b65a2e1fb4b39f26f1988
+      row_count: 421
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -145,6 +151,9 @@ generated_facts:
       row_count: 8
     - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl
       sha256: 559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6
+      row_count: 6
+    - path: data/corpus/provisions/de/regulation/2026-09-14-de-kindergeld-eu-territory.jsonl
+      sha256: b2795aa6713f2fdc249676c562f5a8fae28a3ccb0a468e0589952b545358d8c6
       row_count: 6
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
@@ -1202,15 +1211,15 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: c030ec4a04429befdf687d4dcec0e8d8aa854152e6ccb64f50bd46cbf47a44d6
+    snapshot_sha256: ddc08457fa448233c7564d34c6f76c256214e2df55ffa46701e680e38dd656dc
     channel_receipts:
-      corpus_release: e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea
+      corpus_release: 2126982c1b2937c071f4ec8a21ece932ea83a71da908d0108c2c2a769deee26f
       subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 768
+    candidate_count: 770
     candidates:
     - id: de-kg-dakg-A1
       status: pending
@@ -10089,6 +10098,148 @@ generated_facts:
       citation_label: 'BFH, VI R 45/12, 2013-08-08: Kindergeldanspruch von türkischen Bediensteten einer amtlichen türkischen Vertretung in Deutschland und ihren Angehörigen'
       document_citation_path: de/guidance/bfh-vi-r-45-12-2013-08-08
       title: 'BFH, VI R 45/12, 2013-08-08: Kindergeldanspruch von türkischen Bediensteten einer amtlichen türkischen Vertretung in Deutschland und ihren Angehörigen'
+    - id: de-kg-instr-a258c975546fee8b
+      status: pending
+      discovery_refs:
+      - de-corpus-080673c994a898f01d80
+      - de-corpus-08e9729fbf1c83ce987a
+      - de-corpus-0a5dc6e3641529f4b1ec
+      - de-corpus-0b112381076a1a3b1400
+      - de-corpus-0f466f2a1e01e00557a9
+      - de-corpus-1060bd8143e9e0780be3
+      - de-corpus-108acd451857a28e8697
+      - de-corpus-12ef676241531c7e8c00
+      - de-corpus-17255cd163e198be95d2
+      - de-corpus-176f590a75a4d86db0d6
+      - de-corpus-188f38b36cd0ffc5599b
+      - de-corpus-18f378793585a4695c38
+      - de-corpus-19b16d3b559378e421d9
+      - de-corpus-1a41b95191f495cc6699
+      - de-corpus-1e1e50389892ce6e42e1
+      - de-corpus-1e42e2efef0f31e814a0
+      - de-corpus-219f17641885317ace00
+      - de-corpus-22aed10fba590d6febe5
+      - de-corpus-246a877de385d8bcaa75
+      - de-corpus-250589eee49116cd9197
+      - de-corpus-2739f55eccb89f46978a
+      - de-corpus-28a425162bcd6e5cb9c3
+      - de-corpus-2cbb8e5f687aa9fa8d9c
+      - de-corpus-2e919b4bfdef245b5111
+      - de-corpus-2ed2c74e69dbb7cdd5a5
+      - de-corpus-30fb2560eb7e7c13f0f7
+      - de-corpus-3127730bcbc10e96df23
+      - de-corpus-312ca35be72f6caaa67e
+      - de-corpus-319dcc7d3440df9de724
+      - de-corpus-3236c40966901e332c74
+      - de-corpus-3275c743ed385306827b
+      - de-corpus-34e2b7046df2cf83fd3c
+      - de-corpus-3545517451a08ea34912
+      - de-corpus-38877346f45f6a5d52db
+      - de-corpus-38cf87469f2ee3f145c8
+      - de-corpus-38f371f7fecdadb95858
+      - de-corpus-3aed24d6bbba4e736a94
+      - de-corpus-3bfefddcd858560feaae
+      - de-corpus-3caed268776d7d4ef303
+      - de-corpus-3d04891a7d86b9433714
+      - de-corpus-3f363851250f8aeb2e00
+      - de-corpus-4424326ef5a71266b79f
+      - de-corpus-44cc8a14623091935a6b
+      - de-corpus-459c11b7e36834ea0a4e
+      - de-corpus-46f5a1053d7a6c88f429
+      - de-corpus-47287fa5a90a5d500721
+      - de-corpus-47851613e288fc27b52c
+      - de-corpus-48b5567ec09a07954bb6
+      - de-corpus-49051d4f3d88bcb07f65
+      - de-corpus-499492e6f7ecc90af85c
+      - de-corpus-49aafa1398ea9e9a619d
+      - de-corpus-4bd0986e4c8989f007c9
+      - de-corpus-50460351c54c3da14d3c
+      - de-corpus-52e63265ca3829fd482a
+      - de-corpus-53a7acffa0ab85b43a53
+      - de-corpus-5a77e5b4f029c73a6454
+      - de-corpus-5f1d1fc2fbd3e2e6375c
+      - de-corpus-61e8e9a8a61f26003f3b
+      - de-corpus-62e6eb3e1332eeaaea5b
+      - de-corpus-659c5f4a7e6a6d339aa9
+      - de-corpus-65a79bb9964c1a45bfec
+      - de-corpus-6a355a65fe62b9597c79
+      - de-corpus-6ab1459ae20ed1dab3c3
+      - de-corpus-6c3457274d9087919bd2
+      - de-corpus-6cbe3452198aeb136987
+      - de-corpus-6e45ae583716bc919010
+      - de-corpus-6ebb01a2948721a78691
+      - de-corpus-6edd09cb7ee9b8d43221
+      - de-corpus-7192aa3821b0fe50e3c9
+      - de-corpus-7417d3bb2af4e5cc4259
+      - de-corpus-77dc6c6304c02b28f6d0
+      - de-corpus-78a21ae49687de2a646d
+      - de-corpus-78d3af56f2557c373acd
+      - de-corpus-7aec99fad7058950ffe6
+      - de-corpus-7c4005ea367ba53daf86
+      - de-corpus-7c449462f15be090a552
+      - de-corpus-7ced2e69a0313e293dfe
+      - de-corpus-7cfe139145386baf80e7
+      - de-corpus-7ff79c2bea7ca5101a86
+      - de-corpus-8414128393f8c984a837
+      - de-corpus-849733f5b001c6adcb34
+      - de-corpus-84a0c7862a543b5a579f
+      - de-corpus-87b03904d39848ff90e9
+      - de-corpus-8bf04883a389bb0b1fa0
+      - de-corpus-8eae3f78bb4c8e582fc1
+      - de-corpus-9b4089d8ae106c691d3d
+      - de-corpus-9cf0c034686f154c6668
+      - de-corpus-9d3623f1f920cc96da60
+      - de-corpus-9eed0b9c3680934ffe2e
+      - de-corpus-9f7649061deb08853780
+      - de-corpus-a227db89f45af5721ec6
+      - de-corpus-a348b43a0075dd0a1fe7
+      - de-corpus-a51411c25a6e4b5ac86a
+      - de-corpus-a64dadf21127f45dafb6
+      - de-corpus-ac9bb60f2e347d238651
+      - de-corpus-af756978c52e0c8326c9
+      - de-corpus-b1cff8649ab01dfb26e3
+      - de-corpus-b26db8650fcba0255c11
+      - de-corpus-b3bc12dd8eb83c96e157
+      - de-corpus-b8a55d32a7676570f847
+      - de-corpus-b9cff684b112fc3b24d4
+      - de-corpus-bd59629be50ebd6af4c2
+      - de-corpus-c6828248346cc8882eda
+      - de-corpus-c6872eaff34abe803d0f
+      - de-corpus-caa2d2fb4f204a867d23
+      - de-corpus-cc073ad2ef85d4cf30fe
+      - de-corpus-cd727a274fc073d51838
+      - de-corpus-ce99a6b2fd03ed043e59
+      - de-corpus-d215d0a8077939ed456d
+      - de-corpus-d3269c893796ff2b278a
+      - de-corpus-d5f1eb452055fdc0e043
+      - de-corpus-d818b2ae33a9fad985b4
+      - de-corpus-d9ccc085591c1ae70d41
+      - de-corpus-da33898d354f1eb3da94
+      - de-corpus-dbc1f1aad6cafb0927db
+      - de-corpus-dd69378dc8575ba5f454
+      - de-corpus-e13431bf1f257b0d7a9f
+      - de-corpus-e3bb59edc10461ce70ab
+      - de-corpus-e653eac637750132f51a
+      - de-corpus-e96277e338575cbdb78c
+      - de-corpus-eb14d1b19c670063dcb1
+      - de-corpus-eb53715b7211fc58ddb2
+      - de-corpus-edd9f21f34636d7ce743
+      - de-corpus-f6cacd55663fe117090a
+      - de-corpus-f6d58a65b809c41e3d1f
+      - de-corpus-f8cae3a8b063c6cf3c9b
+      - de-corpus-f9e3f199175b570d1760
+      - de-corpus-fa44817b1350f87c251f
+      - de-corpus-fc1ec3beda25ef4caeaf
+      - de-corpus-fc5de9ccfdd15d729973
+      - de-corpus-fe1dd7b08b6b061c6e23
+      - de-subject-003
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2025/numbered-sections
+      row_sha256: d4b413016bdd00dd6963212c43170f37a49a04f7bd991434923f476f40209151
+      document_class: guidance
+      citation_label: DA-KG Stand 2025 — nummerierte Abschnitte O, A, V, R und S
+      document_citation_path: de/guidance/bzst-dakg-2025/numbered-sections
+      title: DA-KG Stand 2025 — nummerierte Abschnitte O, A, V, R und S
     - id: de-kg-instr-a2bd2172735c10fa
       status: pending
       discovery_refs:
@@ -10613,6 +10764,17 @@ generated_facts:
       citation_label: 'BFH, III R 14/18, 2019-10-23: Umorientierung während einer mehraktigen einheitlichen Erstausbildung'
       document_citation_path: de/guidance/bfh-iii-r-14-18-2019-10-23
       title: 'BFH, III R 14/18, 2019-10-23: Umorientierung während einer mehraktigen einheitlichen Erstausbildung'
+    - id: de-kg-instr-ffa5471d732aefeb
+      status: pending
+      discovery_refs:
+      - de-subject-003
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2025/a-19-2
+      row_sha256: d1be1de52b76b281263ab0158726016c59dbde87f0f09f10ea992121dfe006c8
+      document_class: guidance
+      citation_label: DA-KG Stand 2025 A 19.2 — Nachweis der Behinderung
+      document_citation_path: de/guidance/bzst-dakg-2025/a-19-2
+      title: DA-KG Stand 2025 A 19.2 — Nachweis der Behinderung
     - id: de-kg-instr-rvo-1996
       status: pending
       discovery_refs:
@@ -10623,7 +10785,7 @@ generated_facts:
       - https://www.gesetze-im-internet.de/rvo/
     document_headings:
       path: conformance/closure/de-subject-document-headings.json
-      sha256: 2b2bff81ceccab411e3797092b33f5e2734be9f15d933e8a7a6404b50442fae3
+      sha256: 9e6bd34868c993182df2f761983221238e5cb3c5e99984d63e686705b192d576
       documents:
       - subject_id: de-subject-003
         seed_candidate_id: de-kg-instr-001
@@ -10672,7 +10834,7 @@ generated_facts:
       binding_kind: discovery_channel_receipts
       status: pending
       receipts:
-        corpus_release: e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea
+        corpus_release: 2126982c1b2937c071f4ec8a21ece932ea83a71da908d0108c2c2a769deee26f
         subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
         citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
   measurement_basis:
@@ -13561,7 +13723,8 @@ committed_decisions:
   - id: de-kg-instr-001
     status: classified-with-reason
     classification: document_container
-    reason: The subject seed for the Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025 (DA-KG 2025). The BZSt listing (de-subject-001) returned 404; the 2025 edition was retrieved from the mirror named in oracles#502 (de-subject-003, 690 720 bytes, content sha256 33e1a8c4…), parsed into 420 headings in conformance/closure/de-subject-document-headings.json, and every heading was read and dispositioned as its own frontier row (de-kg-dakg-O*, V*, R*, S*, A*), each bound to its section hash. The bearing content of the document is carried entirely by those rows (the 92 open Kapitel A rows and V 14.3, V 23.1); the container itself states no rule of its own, so it is not counted a second time. de-subject-002 retrieved the 2024 Randstrichfassung (1 304 209 bytes), the edition the 2025 text replaces; it was not read separately.
+    reason: The subject seed for the Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025 (DA-KG 2025). The BZSt listing (de-subject-001) returned 404; the 2025 edition was retrieved from the mirror named in oracles#502 (de-subject-003, 690 720 bytes, content sha256 33e1a8c4…), parsed into 420 headings in conformance/closure/de-subject-document-headings.json, and every heading was read and dispositioned as its own frontier row (de-kg-dakg-O*, V*, R*, S*, A*), each bound to its section hash. The bearing content of the document is carried entirely by those rows (the 92 open Kapitel A rows and V 14.3, V 23.1); the container itself states no rule of its own, so it is not counted a second time. The 1 304 209-byte PDF retained by de-subject-002 and de-subject-017 has SHA-256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c and its cover says Stand 2026; the legacy URL filename is not evidence of a 2024 edition. That separate 2026 subject identity is retained and is
+      not substituted for the 2025 operative text. This container disposition does not assert an exhaustive review of the unnormalized preface or appendices.
     bears_on_computed_surface: false
   - id: de-kg-instr-002
     status: classified-with-reason
@@ -13817,6 +13980,11 @@ committed_decisions:
     reason: Full four-page BFH III R 10/22 decision of 12 October 2023, paragraphs 1–33, read against pinned corpus body SHA-256 537900f5e197c6c8f6dd29ac1db8a7cfe5c61e4ed53bee7d00bfb009eac4f027 at de/guidance/bfh-iii-r-10-22-2023-10-12/document-1 (corpus commit 9bc4f5f0afad97e8edc9834609a53a56435d0509). Paragraphs 19–26 require the close temporal connection to run between the actual training stages, with the next stage taken at the earliest available opportunity. A previously declared plan to continue does not suffice when the next stage could have begun and personal choice of an intervening FSJ delayed it. Paragraphs 27–30 distinguish the independent voluntary-service consideration ground from vocational training; the decision does not exclude a specifically established vocational-training exception. Paragraph 32 rejects substituting a hypothetical transition-period calculation for the first-training assessment. DA-KG 2025 A 20.2.4(2), body SHA-256 e618983cc4323ffa87f53988b2b3967fc9261822b97c787fd424d66a84bb6037,
       expressly retains the earliest-available-start holding. This is an unencoded entitlement condition affecting qualifying_child_count under EStG32(4) sentences2–3, not merely procedural history. The case concerns 2019; the current guidance supplies the 2025 relevance. BStBl II2024 page267 is the guidance citation; direct gazette verification and exhaustive discovery remain open.
     bears_on_computed_surface: true
+  - id: de-kg-instr-a258c975546fee8b
+    status: classified-with-reason
+    classification: document_container
+    reason: The root is a body-null navigation record at corpus commit 6047f3acaeb056df101c7aeefdd1718523cfa494, not an additional operative provision. It retains the same BZSt-authored Stand 2025 PDF, SHA-256 33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd, as de-kg-instr-001. The 420 normalized child sections are mapped individually to existing de-kg-dakg frontier rows in conformance/closure/de-discovery-2026-09-08/dakg2025-corpus-crosswalk.json, including the still-bearing A19.2 row. Their classifications and open dependencies remain in force; no operative child rule is excluded by this container treatment. Preface, contents and appendices remain in the raw PDF outside this normalized scope and are not asserted exhaustively reviewed.
+    bears_on_computed_surface: false
   - id: de-kg-instr-a365b83505706342
     status: excluded-with-reason
     body_sha256: c99788b126259e0f376231245bf47d0354ef30252d33cb4fc534800c11401118
@@ -13901,6 +14069,11 @@ committed_decisions:
     status: excluded-with-reason
     classification: data_and_procedure_reference
     reason: Unresolved reference 'Ersten Buches Sozialgesetzbuch' matched in § 68 Abs. 5 EStG, which names the benefit providers under §§ 19 Abs. 2, 19a Abs. 2, 25 Abs. 3 and 28 Abs. 2 SGB I to whom the Familienkassen may transmit case data. Part of the excluded data provision; no entitlement or amount rule.
+    bears_on_computed_surface: false
+  - id: de-kg-instr-ffa5471d732aefeb
+    status: classified-with-reason
+    classification: document_container
+    reason: The root is a body-null navigation record at corpus commit 6047f3acaeb056df101c7aeefdd1718523cfa494, not an additional operative provision. It retains the same BZSt-authored Stand 2025 PDF, SHA-256 33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd, as de-kg-instr-001. Its operative child de/guidance/bzst-dakg-2025/a-19-2/document-1 has body SHA-256 6691a6027b1764fcfb309aedbcc4466dade9fc48ec6ad2f85847630220669e7e and is the same A19.2 evidence provision already carried by de-kg-dakg-A19.2. The numbered-section counterpart is bound in conformance/closure/de-discovery-2026-09-08/dakg2025-corpus-crosswalk.json. The A19.2 proof routes and period conditions remain bearing and unencoded; the atomic citation is the planned canonical module target, not a duplicate encoding of its navigation alias.
     bears_on_computed_surface: false
   leaf_classifications:
   - input: affected_institution_id
@@ -16024,11 +16197,11 @@ computed:
         classification: open-law-derived-dependency
         reason: substitute_child_benefit_exclusion is a law-derived quantity (65 defines how to compute it); under CERTIFIED.md v3 it is an open dependency, not an exclusion — it may not remain case-supplied, and closed stays false until its defining rules are encoded down to observable-act leaves.
   instrument_frontier:
-    instrument_count: 903
+    instrument_count: 905
     counts:
-      total: 903
+      total: 905
       encoded: 2
-      classified-with-reason: 184
+      classified-with-reason: 186
       excluded-with-reason: 349
       pending: 368
     pending:
@@ -25749,7 +25922,8 @@ computed:
       - https://www.bzst.de/DE/Privatpersonen/Kindergeldberechtigte/kindergeldberechtigte_node.html?lv2=90790
       - https://www.tacheles-sozialhilfe.de/files/Aktuelles/2025/DA-KG%202025..pdf
       classification: document_container
-      reason: The subject seed for the Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025 (DA-KG 2025). The BZSt listing (de-subject-001) returned 404; the 2025 edition was retrieved from the mirror named in oracles#502 (de-subject-003, 690 720 bytes, content sha256 33e1a8c4…), parsed into 420 headings in conformance/closure/de-subject-document-headings.json, and every heading was read and dispositioned as its own frontier row (de-kg-dakg-O*, V*, R*, S*, A*), each bound to its section hash. The bearing content of the document is carried entirely by those rows (the 92 open Kapitel A rows and V 14.3, V 23.1); the container itself states no rule of its own, so it is not counted a second time. de-subject-002 retrieved the 2024 Randstrichfassung (1 304 209 bytes), the edition the 2025 text replaces; it was not read separately.
+      reason: The subject seed for the Dienstanweisung zum Kindergeld nach dem Einkommensteuergesetz 2025 (DA-KG 2025). The BZSt listing (de-subject-001) returned 404; the 2025 edition was retrieved from the mirror named in oracles#502 (de-subject-003, 690 720 bytes, content sha256 33e1a8c4…), parsed into 420 headings in conformance/closure/de-subject-document-headings.json, and every heading was read and dispositioned as its own frontier row (de-kg-dakg-O*, V*, R*, S*, A*), each bound to its section hash. The bearing content of the document is carried entirely by those rows (the 92 open Kapitel A rows and V 14.3, V 23.1); the container itself states no rule of its own, so it is not counted a second time. The 1 304 209-byte PDF retained by de-subject-002 and de-subject-017 has SHA-256 29cf1e1b24708f0bb1680c031bad97e79d87cab805c9a74b6379caa4d5196e9c and its cover says Stand 2026; the legacy URL filename is not evidence of a 2024 edition. That separate 2026 subject identity is retained and
+        is not substituted for the 2025 operative text. This container disposition does not assert an exhaustive review of the unnormalized preface or appendices.
       bears_on_computed_surface: false
     - id: de-kg-instr-002
       status: classified-with-reason
@@ -26831,6 +27005,151 @@ computed:
       citation_label: 'BFH, VI R 45/12, 2013-08-08: Kindergeldanspruch von türkischen Bediensteten einer amtlichen türkischen Vertretung in Deutschland und ihren Angehörigen'
       document_citation_path: de/guidance/bfh-vi-r-45-12-2013-08-08
       title: 'BFH, VI R 45/12, 2013-08-08: Kindergeldanspruch von türkischen Bediensteten einer amtlichen türkischen Vertretung in Deutschland und ihren Angehörigen'
+    - id: de-kg-instr-a258c975546fee8b
+      status: classified-with-reason
+      discovery_refs:
+      - de-corpus-080673c994a898f01d80
+      - de-corpus-08e9729fbf1c83ce987a
+      - de-corpus-0a5dc6e3641529f4b1ec
+      - de-corpus-0b112381076a1a3b1400
+      - de-corpus-0f466f2a1e01e00557a9
+      - de-corpus-1060bd8143e9e0780be3
+      - de-corpus-108acd451857a28e8697
+      - de-corpus-12ef676241531c7e8c00
+      - de-corpus-17255cd163e198be95d2
+      - de-corpus-176f590a75a4d86db0d6
+      - de-corpus-188f38b36cd0ffc5599b
+      - de-corpus-18f378793585a4695c38
+      - de-corpus-19b16d3b559378e421d9
+      - de-corpus-1a41b95191f495cc6699
+      - de-corpus-1e1e50389892ce6e42e1
+      - de-corpus-1e42e2efef0f31e814a0
+      - de-corpus-219f17641885317ace00
+      - de-corpus-22aed10fba590d6febe5
+      - de-corpus-246a877de385d8bcaa75
+      - de-corpus-250589eee49116cd9197
+      - de-corpus-2739f55eccb89f46978a
+      - de-corpus-28a425162bcd6e5cb9c3
+      - de-corpus-2cbb8e5f687aa9fa8d9c
+      - de-corpus-2e919b4bfdef245b5111
+      - de-corpus-2ed2c74e69dbb7cdd5a5
+      - de-corpus-30fb2560eb7e7c13f0f7
+      - de-corpus-3127730bcbc10e96df23
+      - de-corpus-312ca35be72f6caaa67e
+      - de-corpus-319dcc7d3440df9de724
+      - de-corpus-3236c40966901e332c74
+      - de-corpus-3275c743ed385306827b
+      - de-corpus-34e2b7046df2cf83fd3c
+      - de-corpus-3545517451a08ea34912
+      - de-corpus-38877346f45f6a5d52db
+      - de-corpus-38cf87469f2ee3f145c8
+      - de-corpus-38f371f7fecdadb95858
+      - de-corpus-3aed24d6bbba4e736a94
+      - de-corpus-3bfefddcd858560feaae
+      - de-corpus-3caed268776d7d4ef303
+      - de-corpus-3d04891a7d86b9433714
+      - de-corpus-3f363851250f8aeb2e00
+      - de-corpus-4424326ef5a71266b79f
+      - de-corpus-44cc8a14623091935a6b
+      - de-corpus-459c11b7e36834ea0a4e
+      - de-corpus-46f5a1053d7a6c88f429
+      - de-corpus-47287fa5a90a5d500721
+      - de-corpus-47851613e288fc27b52c
+      - de-corpus-48b5567ec09a07954bb6
+      - de-corpus-49051d4f3d88bcb07f65
+      - de-corpus-499492e6f7ecc90af85c
+      - de-corpus-49aafa1398ea9e9a619d
+      - de-corpus-4bd0986e4c8989f007c9
+      - de-corpus-50460351c54c3da14d3c
+      - de-corpus-52e63265ca3829fd482a
+      - de-corpus-53a7acffa0ab85b43a53
+      - de-corpus-5a77e5b4f029c73a6454
+      - de-corpus-5f1d1fc2fbd3e2e6375c
+      - de-corpus-61e8e9a8a61f26003f3b
+      - de-corpus-62e6eb3e1332eeaaea5b
+      - de-corpus-659c5f4a7e6a6d339aa9
+      - de-corpus-65a79bb9964c1a45bfec
+      - de-corpus-6a355a65fe62b9597c79
+      - de-corpus-6ab1459ae20ed1dab3c3
+      - de-corpus-6c3457274d9087919bd2
+      - de-corpus-6cbe3452198aeb136987
+      - de-corpus-6e45ae583716bc919010
+      - de-corpus-6ebb01a2948721a78691
+      - de-corpus-6edd09cb7ee9b8d43221
+      - de-corpus-7192aa3821b0fe50e3c9
+      - de-corpus-7417d3bb2af4e5cc4259
+      - de-corpus-77dc6c6304c02b28f6d0
+      - de-corpus-78a21ae49687de2a646d
+      - de-corpus-78d3af56f2557c373acd
+      - de-corpus-7aec99fad7058950ffe6
+      - de-corpus-7c4005ea367ba53daf86
+      - de-corpus-7c449462f15be090a552
+      - de-corpus-7ced2e69a0313e293dfe
+      - de-corpus-7cfe139145386baf80e7
+      - de-corpus-7ff79c2bea7ca5101a86
+      - de-corpus-8414128393f8c984a837
+      - de-corpus-849733f5b001c6adcb34
+      - de-corpus-84a0c7862a543b5a579f
+      - de-corpus-87b03904d39848ff90e9
+      - de-corpus-8bf04883a389bb0b1fa0
+      - de-corpus-8eae3f78bb4c8e582fc1
+      - de-corpus-9b4089d8ae106c691d3d
+      - de-corpus-9cf0c034686f154c6668
+      - de-corpus-9d3623f1f920cc96da60
+      - de-corpus-9eed0b9c3680934ffe2e
+      - de-corpus-9f7649061deb08853780
+      - de-corpus-a227db89f45af5721ec6
+      - de-corpus-a348b43a0075dd0a1fe7
+      - de-corpus-a51411c25a6e4b5ac86a
+      - de-corpus-a64dadf21127f45dafb6
+      - de-corpus-ac9bb60f2e347d238651
+      - de-corpus-af756978c52e0c8326c9
+      - de-corpus-b1cff8649ab01dfb26e3
+      - de-corpus-b26db8650fcba0255c11
+      - de-corpus-b3bc12dd8eb83c96e157
+      - de-corpus-b8a55d32a7676570f847
+      - de-corpus-b9cff684b112fc3b24d4
+      - de-corpus-bd59629be50ebd6af4c2
+      - de-corpus-c6828248346cc8882eda
+      - de-corpus-c6872eaff34abe803d0f
+      - de-corpus-caa2d2fb4f204a867d23
+      - de-corpus-cc073ad2ef85d4cf30fe
+      - de-corpus-cd727a274fc073d51838
+      - de-corpus-ce99a6b2fd03ed043e59
+      - de-corpus-d215d0a8077939ed456d
+      - de-corpus-d3269c893796ff2b278a
+      - de-corpus-d5f1eb452055fdc0e043
+      - de-corpus-d818b2ae33a9fad985b4
+      - de-corpus-d9ccc085591c1ae70d41
+      - de-corpus-da33898d354f1eb3da94
+      - de-corpus-dbc1f1aad6cafb0927db
+      - de-corpus-dd69378dc8575ba5f454
+      - de-corpus-e13431bf1f257b0d7a9f
+      - de-corpus-e3bb59edc10461ce70ab
+      - de-corpus-e653eac637750132f51a
+      - de-corpus-e96277e338575cbdb78c
+      - de-corpus-eb14d1b19c670063dcb1
+      - de-corpus-eb53715b7211fc58ddb2
+      - de-corpus-edd9f21f34636d7ce743
+      - de-corpus-f6cacd55663fe117090a
+      - de-corpus-f6d58a65b809c41e3d1f
+      - de-corpus-f8cae3a8b063c6cf3c9b
+      - de-corpus-f9e3f199175b570d1760
+      - de-corpus-fa44817b1350f87c251f
+      - de-corpus-fc1ec3beda25ef4caeaf
+      - de-corpus-fc5de9ccfdd15d729973
+      - de-corpus-fe1dd7b08b6b061c6e23
+      - de-subject-003
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2025/numbered-sections
+      row_sha256: d4b413016bdd00dd6963212c43170f37a49a04f7bd991434923f476f40209151
+      document_class: guidance
+      citation_label: DA-KG Stand 2025 — nummerierte Abschnitte O, A, V, R und S
+      document_citation_path: de/guidance/bzst-dakg-2025/numbered-sections
+      title: DA-KG Stand 2025 — nummerierte Abschnitte O, A, V, R und S
+      classification: document_container
+      reason: The root is a body-null navigation record at corpus commit 6047f3acaeb056df101c7aeefdd1718523cfa494, not an additional operative provision. It retains the same BZSt-authored Stand 2025 PDF, SHA-256 33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd, as de-kg-instr-001. The 420 normalized child sections are mapped individually to existing de-kg-dakg frontier rows in conformance/closure/de-discovery-2026-09-08/dakg2025-corpus-crosswalk.json, including the still-bearing A19.2 row. Their classifications and open dependencies remain in force; no operative child rule is excluded by this container treatment. Preface, contents and appendices remain in the raw PDF outside this normalized scope and are not asserted exhaustively reviewed.
+      bears_on_computed_surface: false
     - id: de-kg-instr-a2bd2172735c10fa
       status: pending
       discovery_refs:
@@ -27403,6 +27722,20 @@ computed:
       citation_label: 'BFH, III R 14/18, 2019-10-23: Umorientierung während einer mehraktigen einheitlichen Erstausbildung'
       document_citation_path: de/guidance/bfh-iii-r-14-18-2019-10-23
       title: 'BFH, III R 14/18, 2019-10-23: Umorientierung während einer mehraktigen einheitlichen Erstausbildung'
+    - id: de-kg-instr-ffa5471d732aefeb
+      status: classified-with-reason
+      discovery_refs:
+      - de-subject-003
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2025/a-19-2
+      row_sha256: d1be1de52b76b281263ab0158726016c59dbde87f0f09f10ea992121dfe006c8
+      document_class: guidance
+      citation_label: DA-KG Stand 2025 A 19.2 — Nachweis der Behinderung
+      document_citation_path: de/guidance/bzst-dakg-2025/a-19-2
+      title: DA-KG Stand 2025 A 19.2 — Nachweis der Behinderung
+      classification: document_container
+      reason: The root is a body-null navigation record at corpus commit 6047f3acaeb056df101c7aeefdd1718523cfa494, not an additional operative provision. It retains the same BZSt-authored Stand 2025 PDF, SHA-256 33e1a8c4f6bd65034febc9d0c45850e64e982f665f519f08eaeceb80ac02dedd, as de-kg-instr-001. Its operative child de/guidance/bzst-dakg-2025/a-19-2/document-1 has body SHA-256 6691a6027b1764fcfb309aedbcc4466dade9fc48ec6ad2f85847630220669e7e and is the same A19.2 evidence provision already carried by de-kg-dakg-A19.2. The numbered-section counterpart is bound in conformance/closure/de-discovery-2026-09-08/dakg2025-corpus-crosswalk.json. The A19.2 proof routes and period conditions remain bearing and unencoded; the atomic citation is the planned canonical module target, not a duplicate encoding of its navigation alias.
+      bears_on_computed_surface: false
     - id: de-kg-instr-rvo-1996
       status: pending
       discovery_refs:
@@ -29098,7 +29431,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 18
-    bearing_candidate_instruments: 903
+    bearing_candidate_instruments: 905
     law_derived_leaf_nodes: 8
     max_depth_estimate: 1
     remaining_oracle_work: 0

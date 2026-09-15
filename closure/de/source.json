@@ -11,10 +11,10 @@
   },
   "corpus": {
     "repository": "TheAxiomFoundation/axiom-corpus",
-    "commit": "4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2",
-    "release": "de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor",
-    "release_content_sha256": "2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914",
-    "release_selector_sha256": "440bc1611dd3d2cde8e82fd3cee430180d216d7947d5d80c67bdedca6cf34c5b",
+    "commit": "6047f3acaeb056df101c7aeefdd1718523cfa494",
+    "release": "de-rulespec-2026-09-14-kindergeld-dakg2025-sections",
+    "release_content_sha256": "e92396b54412059d3788910789ac1f59fcf89c660380a9e77e3d9d94b9d2374c",
+    "release_selector_sha256": "3b4f1f9fc163a1ab6e80d9e46f4a286ca406660c34e05339f4557d42454e0f05",
     "inventories": [
       {
         "path": "data/corpus/inventory/de/guidance/2026-09-08-de-kindergeld-cjeu.json",
@@ -97,6 +97,16 @@
         "row_count": 12
       },
       {
+        "path": "data/corpus/inventory/de/guidance/2026-09-14-de-kindergeld-dakg2025-evidence.json",
+        "sha256": "97469c5ceb57a68eef64fad72ab9208cb28b133440b853ba3ccaa0c732eda9d5",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/inventory/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.json",
+        "sha256": "ca13a3d8532e77a95f556a74afb20b2460f4d0caac288447a730a066b9198d18",
+        "row_count": 421
+      },
+      {
         "path": "data/corpus/inventory/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.json",
         "sha256": "1bf25f052f0c0cb5271bab85c24854b4268149c10cd6261649e3e417fee1ca70",
         "row_count": 172
@@ -164,6 +174,11 @@
       {
         "path": "data/corpus/inventory/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.json",
         "sha256": "f6a01566e2b0599a7d621f43e42e1485ad7c2f33062a639ae5ee603c6d58ac11",
+        "row_count": 6
+      },
+      {
+        "path": "data/corpus/inventory/de/regulation/2026-09-14-de-kindergeld-eu-territory.json",
+        "sha256": "a0df67ba2ceb5cbaef5c89db4a2814d8a6b0baf76aacd1fa7cdf84ab388117d5",
         "row_count": 6
       },
       {
@@ -374,6 +389,16 @@
         "row_count": 12
       },
       {
+        "path": "data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-evidence.jsonl",
+        "sha256": "c93ef687e659a8c491a15c6a52d6d2d4ea53ff42da76f829cfb67dab886f065c",
+        "row_count": 2
+      },
+      {
+        "path": "data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.jsonl",
+        "sha256": "a24002a7caea73d2fe2c680a80983983c55c281e556b65a2e1fb4b39f26f1988",
+        "row_count": 421
+      },
+      {
         "path": "data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl",
         "sha256": "abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528",
         "row_count": 172
@@ -441,6 +466,11 @@
       {
         "path": "data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl",
         "sha256": "559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6",
+        "row_count": 6
+      },
+      {
+        "path": "data/corpus/provisions/de/regulation/2026-09-14-de-kindergeld-eu-territory.jsonl",
+        "sha256": "b2795aa6713f2fdc249676c562f5a8fae28a3ccb0a468e0589952b545358d8c6",
         "row_count": 6
       },
       {

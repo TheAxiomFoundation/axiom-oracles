@@ -27,12 +27,12 @@ program:
 generated_facts:
   source_manifest:
     path: closure/de/source.json
-    sha256: 3280c58aa4ac13efb5e709a5b67f1991c57e802499008382864974c2c83ae740
+    sha256: dae254694291306798396c66896265bdc5840cdd7dea1eefe83460733d7531fe
   corpus_release:
     repository: TheAxiomFoundation/axiom-corpus
-    commit: 4a2ab7fcbd24be76ccbd18ffee398abdfcc64ca2
-    release: de-rulespec-2026-09-11-kindergeld-bgh-form-predecessor
-    release_content_sha256: 2afb29105f1498eb56dfe96b65fbc5e32cea9b271d9e75a6b98b2847d2209914
+    commit: 6047f3acaeb056df101c7aeefdd1718523cfa494
+    release: de-rulespec-2026-09-14-kindergeld-dakg2025-sections
+    release_content_sha256: e92396b54412059d3788910789ac1f59fcf89c660380a9e77e3d9d94b9d2374c
     resolution:
       protocol: de-exact-citation-closure-v1
       key: citation_path
@@ -88,6 +88,12 @@ generated_facts:
     - path: data/corpus/provisions/de/guidance/2026-09-11-de-kindergeld-illness-precedents.jsonl
       sha256: 1ffd1192323fdc71ba5e81fa8dfcc8cd5ade7cbe323fd1ccda095c0afa88b9ee
       row_count: 12
+    - path: data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-evidence.jsonl
+      sha256: c93ef687e659a8c491a15c6a52d6d2d4ea53ff42da76f829cfb67dab886f065c
+      row_count: 2
+    - path: data/corpus/provisions/de/guidance/2026-09-14-de-kindergeld-dakg2025-sections.jsonl
+      sha256: a24002a7caea73d2fe2c680a80983983c55c281e556b65a2e1fb4b39f26f1988
+      row_count: 421
     - path: data/corpus/provisions/de/regulation/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: abf3c4dcc16224370a4e5e717325fa6374818a5821f3419d981b4cc9c11f6528
       row_count: 172
@@ -129,6 +135,9 @@ generated_facts:
       row_count: 8
     - path: data/corpus/provisions/de/regulation/2026-09-10-de-kindergeld-eu-service-predecessors.jsonl
       sha256: 559e2836c05e5e61cdb2f3476907aa8b8fc607c7819865147c3f29665f3a69c6
+      row_count: 6
+    - path: data/corpus/provisions/de/regulation/2026-09-14-de-kindergeld-eu-territory.jsonl
+      sha256: b2795aa6713f2fdc249676c562f5a8fae28a3ccb0a468e0589952b545358d8c6
       row_count: 6
     - path: data/corpus/provisions/de/statute/2026-07-16-de-federal-tax-benefit-r2026-07-21-2025-instruments.jsonl
       sha256: e22b6f2910e5d736e7fd58553d23ccb94c5b5f3116ab99d476311bcfb2f83d31
@@ -467,15 +476,15 @@ generated_facts:
     imports: resolved from hash-verified declared module bodies at generation; bindings and all upstream module inputs retained in committed facts
   instrument_graph:
     snapshot_path: conformance/closure/de-instrument-graph.json
-    snapshot_sha256: c030ec4a04429befdf687d4dcec0e8d8aa854152e6ccb64f50bd46cbf47a44d6
+    snapshot_sha256: ddc08457fa448233c7564d34c6f76c256214e2df55ffa46701e680e38dd656dc
     channel_receipts:
-      corpus_release: e312fe6f58c81debba09025a7a2b6d616ff6db1a90f9447d6867d9f499b4a9ea
+      corpus_release: 2126982c1b2937c071f4ec8a21ece932ea83a71da908d0108c2c2a769deee26f
       subject_matter_search: c54ea1ece2fb42bd584579a4c427217244c5afb8b47dc04b44c6dd103cfddc8a
       citation_scan: c054b730862563cf340237949bb339c383d5de360a6c82334a5c0314716fe68a
     subject_search_state:
       total: 17
       unretrieved: 4
-    candidate_count: 42
+    candidate_count: 43
     candidates:
     - id: de-uhv-instr-11739679bb0a1df4
       status: pending
@@ -798,6 +807,25 @@ generated_facts:
       citation_label: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
       document_citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
       title: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
+    - id: de-uhv-instr-a258c975546fee8b
+      status: pending
+      discovery_refs:
+      - de-corpus-14b0a2d16e9edd9c2700
+      - de-corpus-164d88c465512b07f716
+      - de-corpus-2683650de72110ca92c4
+      - de-corpus-4b5c8ab74c9563f3ab85
+      - de-corpus-65b23f10632496ab825f
+      - de-corpus-6c24cbee289e4d2559ef
+      - de-corpus-78cfa976c6de435a924f
+      - de-corpus-9ee8faf6e8f0e4d3ad13
+      - de-corpus-c6da2975defedf4d6bd6
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2025/numbered-sections
+      row_sha256: d4b413016bdd00dd6963212c43170f37a49a04f7bd991434923f476f40209151
+      document_class: guidance
+      citation_label: DA-KG Stand 2025 — nummerierte Abschnitte O, A, V, R und S
+      document_citation_path: de/guidance/bzst-dakg-2025/numbered-sections
+      title: DA-KG Stand 2025 — nummerierte Abschnitte O, A, V, R und S
     - id: de-uhv-instr-a2bd2172735c10fa
       status: pending
       discovery_refs:
@@ -1206,13 +1234,13 @@ computed:
       leaf_kind: unclassified
       status: pending
   instrument_frontier:
-    instrument_count: 42
+    instrument_count: 43
     counts:
-      total: 42
+      total: 43
       encoded: 0
       classified-with-reason: 1
       excluded-with-reason: 0
-      pending: 41
+      pending: 42
     pending:
     - de-uhv-instr-11739679bb0a1df4
     - de-uhv-instr-11b2fee91a7250af
@@ -1244,6 +1272,7 @@ computed:
     - de-uhv-instr-906e7387d896596c
     - de-uhv-instr-9886b8cf5a4c26e8
     - de-uhv-instr-9a821bfac753742b
+    - de-uhv-instr-a258c975546fee8b
     - de-uhv-instr-a2bd2172735c10fa
     - de-uhv-instr-a303758d3667d729
     - de-uhv-instr-a66a4cb13aaf0599
@@ -1578,6 +1607,25 @@ computed:
       citation_label: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
       document_citation_path: de/guidance/bfh-iii-r-21-13-2014-06-26
       title: 'BFH, III R 21/13, 2014-06-26: Hemmung der Festsetzungsverjährung bei strafbarem Bezug von Kindergeld - Rückwirkende Aufhebung von aufgrund einer (einzigen) betrügerischen Falscherklärung fortlaufend gewährten Kindergeld-Leistungen'
+    - id: de-uhv-instr-a258c975546fee8b
+      status: pending
+      discovery_refs:
+      - de-corpus-14b0a2d16e9edd9c2700
+      - de-corpus-164d88c465512b07f716
+      - de-corpus-2683650de72110ca92c4
+      - de-corpus-4b5c8ab74c9563f3ab85
+      - de-corpus-65b23f10632496ab825f
+      - de-corpus-6c24cbee289e4d2559ef
+      - de-corpus-78cfa976c6de435a924f
+      - de-corpus-9ee8faf6e8f0e4d3ad13
+      - de-corpus-c6da2975defedf4d6bd6
+      identity_kind: corpus_citation
+      citation_path: de/guidance/bzst-dakg-2025/numbered-sections
+      row_sha256: d4b413016bdd00dd6963212c43170f37a49a04f7bd991434923f476f40209151
+      document_class: guidance
+      citation_label: DA-KG Stand 2025 — nummerierte Abschnitte O, A, V, R und S
+      document_citation_path: de/guidance/bzst-dakg-2025/numbered-sections
+      title: DA-KG Stand 2025 — nummerierte Abschnitte O, A, V, R und S
     - id: de-uhv-instr-a2bd2172735c10fa
       status: pending
       discovery_refs:
@@ -1735,7 +1783,7 @@ computed:
     closed: false
   measured_denominators:
     spine_rows: 12
-    bearing_candidate_instruments: 42
+    bearing_candidate_instruments: 43
     law_derived_leaf_nodes: 0
     max_depth_estimate: 2
     remaining_oracle_work: 2
