@@ -651,10 +651,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "af6e4ea2920b0c0a97bf6a6f45b0c6643e93c0ca",
+      "axiom_rules_engine_sha": "e3230e0a6d05586b57e10555e576d10497b3e1b0",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-17T17:10:09Z",
+    "generated_at": "2026-09-18T04:55:35Z",
     "generated_by": "scripts/run_comparison.py::uk-income-tax-scottish-ukmod",
     "oracle": {
       "euromod_country": "UK",
