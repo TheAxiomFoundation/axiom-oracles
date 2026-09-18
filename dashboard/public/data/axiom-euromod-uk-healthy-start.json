@@ -248,7 +248,7 @@
       "axiom_rules_engine_sha": "e3230e0a6d05586b57e10555e576d10497b3e1b0",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-17T21:32:33Z",
+    "generated_at": "2026-09-18T11:40:55Z",
     "generated_by": "scripts/run_comparison.py::uk-healthy-start-ukmod",
     "oracle": {
       "euromod_country": "UK",
