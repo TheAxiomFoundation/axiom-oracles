@@ -122,7 +122,7 @@
       "axiom_rules_engine_sha": "6e709eb1ca7ea686263293d932c759d9dee48a4a",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-21T13:03:55Z",
+    "generated_at": "2026-09-21T22:05:23Z",
     "generated_by": "scripts/run_comparison.py::be-elderly-income-support",
     "oracle": {
       "euromod_country": "BE",
