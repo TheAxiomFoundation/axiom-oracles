@@ -1,0 +1,14 @@
+HTTP/2 200
+vary: Origin,Access-Control-Request-Method,Access-Control-Request-Headers
+content-disposition: inline; filename="Chapter 72_2026HTSRev15.pdf"
+accept-ranges: bytes
+content-type: application/octet-stream
+expires: Mon, 07 Sep 2026 22:07:30 GMT
+cache-control: max-age=0, no-cache, no-store
+pragma: no-cache
+date: Mon, 07 Sep 2026 22:07:30 GMT
+server-timing: cdn-cache; desc=MISS
+server-timing: edge; dur=128
+server-timing: origin; dur=70
+strict-transport-security: max-age=31536000
+server-timing: ak_p; desc="1788818850119_389073003_1983395445_19773_10161_5_23_15";dur=1

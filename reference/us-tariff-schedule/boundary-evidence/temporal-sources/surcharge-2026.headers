@@ -1,0 +1,17 @@
+HTTP/2 200
+date: Mon, 07 Sep 2026 22:29:14 GMT
+content-type: application/pdf
+content-length: 10655840
+server: cloudflare
+last-modified: Wed, 25 Feb 2026 06:21:43 GMT
+accept-ranges: bytes
+accept-ranges: bytes
+content-disposition: inline; filename="2026-03824.pdf"
+x-frame-options: SAMEORIGIN
+x-content-type-options: nosniff
+x-xss-protection: 1; mode=block
+referrer-policy: no-referrer-when-downgrade
+strict-transport-security: max-age=31536000; includeSubDomains
+content-security-policy: default-src 'self'  https://analytics.govinfo.gov https://stackpath.bootstrapcdn.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; frame-ancestors 'self'; script-src 'unsafe-inline' 'unsafe-eval' 'self' *.videodelivery.net *.cloudflarestream.com  https://cdn.jsdelivr.net  https://stackpath.bootstrapcdn.com https://api.data.gov https://maxcdn.bootstrapcdn.com https://www.google.com/recaptcha https://recaptcha.google.com/recaptcha; object-src 'unsafe-inline' 'self' ; style-src 'unsafe-inline' 'self' https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com https://api.data.gov  https://stackpath.bootstrapcdn.com https://fonts.googleapis.com https://www.google.com/recaptcha https://recaptcha.google.com/recaptcha; img-src 'unsafe-inline' 'self' https://maxcdn.bootstrapcdn.com https://stackpath.bootstrapcdn.com  https://analytics.govinfo.gov data:; font-src 'unsafe-inline' 'self' https://cdn.jsdelivr.net  https://stackpath.bootstrapcdn.com https://api.data.gov https://maxcdn.bootstrapcdn.com https://fonts.gstatic.com https://fonts.googleapis.com; connect-src 'self' *.videodelivery.net *.cloudflarestream.com https://cdn.jsdelivr.net  https://api.data.gov https://analytics.govinfo.gov; frame-src 'self'  https://stackpath.bootstrapcdn.com https://maxcdn.bootstrapcdn.com https://www.google.com/recaptcha https://recaptcha.google.com/recaptcha;
+cf-cache-status: DYNAMIC
+cf-ray: a37926af5f616392-IAD
