@@ -3367,9 +3367,34 @@ def test_tariff_certificate_rejects_program_set_mismatch(monkeypatch):
 
 
 def test_tariff_certificate_declares_the_v3_closure_contract():
+    """The registry's contract string, the producer's declared contract, the
+    producer's ledger schema version, and the committed ledger's schema must
+    all agree: a contract label cannot drift from the ledger it describes."""
     certify = _load("certify")
     closed = certify.PROGRAMS["us/tariff-duty"]["computed"]["closed"]
     assert closed["contract"] == "us_tariff_closure_v3"
+    assert closed["producer"] == "scripts/us_tariff_closure.py"
+    # Load the producer exactly as certify does (registered in sys.modules,
+    # which its frozen dataclasses need under `from __future__ import
+    # annotations`).
+    closure = certify._producer_module(closed["producer"])
+    assert closed["contract"] == closure.CONTRACT
+    contract_version = closure.CONTRACT.rsplit("_", 1)[-1]
+    schema_version = closure.SCHEMA.rsplit(".", 1)[-1]
+    assert contract_version == schema_version == "v3"
+    ledger = yaml.safe_load(closure.ARTIFACT.read_text())
+    assert ledger["schema"] == closure.SCHEMA
+
+
+def test_tariff_certificate_fails_closed_on_a_stale_closure_contract(monkeypatch):
+    """A registry that still says us_tariff_closure_v1 over the v3 producer is
+    a certificate defect, not a cosmetic label: certification refuses to
+    build rather than describing a ledger the producer no longer emits."""
+    certify = _load("certify")
+    spec = copy.deepcopy(certify.PROGRAMS["us/tariff-duty"])
+    spec["computed"]["closed"]["contract"] = "us_tariff_closure_v1"
+    with pytest.raises(ValueError, match="closure contract mismatch"):
+        certify.build_certificate("us/tariff-duty", spec)
 
 
 def test_tariff_certificate_can_generate_in_isolation(tmp_path, monkeypatch):

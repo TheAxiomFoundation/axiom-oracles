@@ -1205,6 +1205,19 @@ def _producer_closed_verdict(
     if not isinstance(document, dict):
         raise ValueError(f"{artifact_ref} closure artifact must contain an object")
     producer = _producer_module(str(config.get("producer") or ""))
+    declared_contract = config.get("contract")
+    if declared_contract is not None:
+        # A registry that names a closure contract binds itself to the
+        # producer's own declaration: a stale or forged contract string
+        # (e.g. a v1 label over a v3 ledger) fails closed here rather than
+        # silently describing a ledger the producer no longer emits.
+        producer_contract = getattr(producer, "CONTRACT", None)
+        if producer_contract != declared_contract:
+            raise ValueError(
+                f"{artifact_ref} closure contract mismatch: the certificate "
+                f"registry declares {declared_contract!r} but the producer "
+                f"declares {producer_contract!r}"
+            )
     try:
         summary = (
             producer.validate_artifact(document, repo_root=REPO_ROOT)

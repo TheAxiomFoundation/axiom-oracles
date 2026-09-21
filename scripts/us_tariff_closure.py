@@ -50,6 +50,11 @@ RULESPEC_REF = "96d5e7c1e6309dc205b7320bbddaae8dd5d410df"
 SCHEDULE = "data/corpus/provisions/us/statute/2026-08-09-usitc-hts-2026-rev15-full-schedule.jsonl"
 NOTES = "data/corpus/provisions/us/statute/2026-08-04-usitc-hts-2026-rev15-notes.jsonl"
 SCHEMA = "axiom_oracles.closure.ledger.v3"
+# The certificate registry (scripts/certify.py PROGRAMS["us/tariff-duty"]
+# .computed.closed.contract) must name exactly this contract; certify.py
+# fails closed on any mismatch, and the contract version must be the
+# ledger SCHEMA version.
+CONTRACT = "us_tariff_closure_v3"
 SCHEDULE_SHA256 = "6c8d07d21a1e3f2233197c1b2f96169f01a1a768dd2509a71c0fdb03d4a99d14"
 SCHEDULE_VERSION = "2026-08-09-usitc-hts-2026-rev15-full-schedule"
 SCHEDULE_DECLARED_COUNT = 29_845
