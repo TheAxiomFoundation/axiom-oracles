@@ -1,7 +1,10 @@
 """Check actual identity replay, canonicalization boundaries and rate-row binding."""
 
 import json
+import shutil
 from pathlib import Path
+
+import pytest
 
 from scripts import build_us_tariff_identity_evidence as evidence
 from scripts import us_tariff_continuation_runtime as runtime
@@ -11,6 +14,13 @@ def receipt():
     return json.loads(evidence.OUTPUT.read_bytes())
 
 
+@pytest.mark.skipif(
+    shutil.which("pdftotext") is None,
+    reason=(
+        "re-extracting the identity fixtures needs pdftotext (poppler); the "
+        "committed receipt is not re-derived without it"
+    ),
+)
 def test_receipt_binds_sources_producer_and_runtime():
     document = receipt()
     assert document["producer_sha256"] == evidence.sources.sha(
