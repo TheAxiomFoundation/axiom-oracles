@@ -762,7 +762,7 @@
       "axiom_rules_engine_sha": "6e709eb1ca7ea686263293d932c759d9dee48a4a",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-20T20:58:11Z",
+    "generated_at": "2026-09-21T13:09:33Z",
     "generated_by": "scripts/run_comparison.py::uk-benefit-cap-ukmod",
     "oracle": {
       "euromod_country": "UK",
