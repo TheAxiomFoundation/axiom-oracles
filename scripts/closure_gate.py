@@ -41,14 +41,32 @@ def _is_int(value: Any) -> bool:
 def instrument_frontier_summary(computed: Any) -> dict[str, Any]:
     """The central view of an artifact's instrument frontier (oracles#491)."""
 
-    frontier = computed.get("instrument_frontier") if isinstance(computed, dict) else None
+    frontier = (
+        computed.get("instrument_frontier") if isinstance(computed, dict) else None
+    )
     if not isinstance(frontier, dict):
         return {
             "complete": False,
             "missing": True,
             "requirement": FRONTIER_MISSING_REQUIREMENT,
         }
-    return {
+    if "enumerated_seed_candidate_count" in frontier:
+        return {
+            key: frontier.get(key)
+            for key in (
+                "enumeration_scope",
+                "enumerated_seed_candidate_count",
+                "enumerated_seed_counts_by_status",
+                "pending_enumerated_seed_candidates",
+                "discovery_channel_count",
+                "pending_discovery_channels",
+                "additional_known_families_open",
+                "denominator_status",
+                "executable_surface",
+                "complete",
+            )
+        }
+    summary = {
         key: frontier.get(key)
         for key in (
             "instrument_count",
@@ -58,6 +76,9 @@ def instrument_frontier_summary(computed: Any) -> dict[str, Any]:
             "complete",
         )
     }
+    if "executable_surface" in frontier:
+        summary["executable_surface"] = frontier.get("executable_surface")
+    return summary
 
 
 def dependency_closure_summary(computed: Any) -> tuple[dict[str, Any], bool]:
@@ -121,9 +142,7 @@ def dependency_closure_summary(computed: Any) -> tuple[dict[str, Any], bool]:
     return summary, True
 
 
-def closure_blockers(
-    frontier: dict[str, Any], dependency: dict[str, Any]
-) -> list[str]:
+def closure_blockers(frontier: dict[str, Any], dependency: dict[str, Any]) -> list[str]:
     """Blocker lines for a closure that does not compute closed=true.
 
     Empty exactly when both gates pass. Missing and malformed blocks keep
@@ -135,6 +154,17 @@ def closure_blockers(
     if frontier.get("complete") is not True:
         if frontier.get("requirement"):
             blockers.append("closed: " + str(frontier["requirement"]))
+        elif frontier.get("denominator_status") == "unknown":
+            pending = frontier.get("pending_enumerated_seed_candidates")
+            pending_count = len(pending) if isinstance(pending, list) else pending
+            channels = frontier.get("pending_discovery_channels")
+            channel_count = len(channels) if isinstance(channels, list) else channels
+            blockers.append(
+                "closed: instrument frontier incomplete — "
+                f"{pending_count} enumerated seed candidates pending; "
+                f"additional known families and {channel_count} discovery channels "
+                "open; denominator unknown (oracles#491)"
+            )
         else:
             pending = frontier.get("pending")
             pending_count = len(pending) if isinstance(pending, list) else pending
@@ -143,6 +173,21 @@ def closure_blockers(
                 f"{pending_count} of {frontier.get('instrument_count')} "
                 "subordinate/bearing instruments pending disposition (oracles#491)"
             )
+    executable_surface = frontier.get("executable_surface")
+    if (
+        isinstance(executable_surface, dict)
+        and executable_surface.get("closure_eligible") is not True
+    ):
+        blockers.append(
+            "closed: executable surface is not a singular composed program — "
+            f"{executable_surface.get('program_count')} separately compiled "
+            "program/output rows are bound, but composition identity remains open"
+        )
+    elif executable_surface is not None and not isinstance(executable_surface, dict):
+        blockers.append(
+            "closed: executable surface block is malformed and cannot satisfy "
+            "composition identity"
+        )
     if dependency.get("closed") is not True:
         if dependency.get("requirement"):
             blockers.append("closed: " + str(dependency["requirement"]))
@@ -158,10 +203,13 @@ def closure_blockers(
                 f"{len(dependency.get('instruments_bearing_on_computed') or [])} "
                 "bearing instruments"
             )
+            seed_only = frontier.get("denominator_status") == "unknown"
             blockers.append(
                 "closed: dependency closure open — "
-                f"{dependency.get('open_dependency_count')} open dependencies "
-                f"({', '.join(parts)}) (CERTIFIED.md v3)"
+                + ("at least " if seed_only else "")
+                + f"{dependency.get('open_dependency_count')} open dependencies "
+                + ("under seed-only enumeration " if seed_only else "")
+                + f"({', '.join(parts)}) (CERTIFIED.md v3)"
             )
     return blockers
 
@@ -171,9 +219,15 @@ def gate(computed: Any) -> tuple[dict[str, Any], dict[str, Any], bool, list[str]
 
     frontier = instrument_frontier_summary(computed)
     dependency, well_formed = dependency_closure_summary(computed)
+    executable_surface = frontier.get("executable_surface")
+    surface_passes = executable_surface is None or (
+        isinstance(executable_surface, dict)
+        and executable_surface.get("closure_eligible") is True
+    )
     passes = (
         frontier.get("complete") is True
         and well_formed
         and dependency.get("closed") is True
+        and surface_passes
     )
     return frontier, dependency, passes, closure_blockers(frontier, dependency)

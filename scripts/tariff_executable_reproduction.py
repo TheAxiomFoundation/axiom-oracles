@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Build/check the executable receipt for the US tariff witness slice.
 
-The receipt binds an exact rulespec-us commit and pinned engine binary.  It
+The receipt binds an exact rulespec-us commit and hash-identified engine binary. It
 recompiles the witness composition plus every generated chapter schedule
-composition, then reruns ten values already certified by the conformant
+composition, then reruns ten values reviewed as conformant in the
 ``us-tariff-panel`` report: both endpoints of one deterministic Canada-origin
 interval for each of the five covered witness lines.  JSON numeric equality is
 type-aware and exact.
@@ -23,6 +23,8 @@ import tarfile
 import tempfile
 from pathlib import Path
 from typing import Any
+
+import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
@@ -44,6 +46,7 @@ RULESPEC_REPO = "TheAxiomFoundation/rulespec-us"
 GENERATED_BY = "scripts/tariff_executable_reproduction.py"
 SOURCE_PRODUCER_COMMIT = "5402e5bf6"
 SOURCE_REFRESH_COMMIT = "d236e5320"
+PINNED_RULESPEC_SHA = "96d5e7c1e6309dc205b7320bbddaae8dd5d410df"
 PINNED_ENGINE_SHA256 = (
     "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
 )
@@ -62,10 +65,76 @@ REFERENCE_PATHS = (
 WITNESS_SPEC = Path("programs/us/us-tariff-duty/fy-2026.yaml")
 WITNESS_MODULE = Path("us/policies/cbp/us-tariff-duty/composition.yaml")
 SCHEDULE_SPEC_GLOB = "programs/us/us-tariff-schedule/ch*.yaml"
-SCHEDULE_MODULE_TEMPLATE = "us/policies/cbp/us-tariff-schedule/generated/{stem}/{stem}.yaml"
-ORIGIN_CENSUS = "1220"  # Canada: the sole raw-conformant cohort common to all five lines.
+SCHEDULE_MODULE_TEMPLATE = (
+    "us/policies/cbp/us-tariff-schedule/generated/{stem}/{stem}.yaml"
+)
+ORIGIN_CENSUS = (
+    "1220"  # Canada: the sole raw-conformant cohort common to all five lines.
+)
 HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
+PROGRAM_SET = {
+    "id": "us-tariff-schedule-ensemble-v1",
+    "scope_kind": "multi-program-ensemble",
+    "row_contract": "program_spec<TAB>module<TAB>promised_output",
+    "program_count": 101,
+    "rows_sha256": ("c476cb14ac580ff7e8cf92b8f077bbbe58915beca429ee0c18b76e44484c53d3"),
+    "singular_composed_output": False,
+}
+COMPILED_ARTIFACT_ROWS_SHA256 = (
+    "713ee709a7c62841efed1b5d9874f1b04996db7052fe798e5d2de40065742f68"
+)
+EXECUTION_TRACE_ROWS_SHA256 = (
+    "c2542eb7685d4f196cc89922d9f065a62da5ab0feeab96a34f2a2b62b8f6e9fb"
+)
+EXECUTION_COVERAGE_BLOCKER = (
+    "executable: promised-output coverage incomplete — 101 programs compile, "
+    "but only 10 values on one non-promised witness output replay"
+)
+EXECUTION_SCOPE = {
+    "claim": (
+        "compile-bound ensemble; 10 reviewed values replayed on one "
+        "non-promised witness output"
+    ),
+    "compiled_program_count": 101,
+    "replayed_program_count": 1,
+    "replayed_program_spec": str(WITNESS_SPEC),
+    "replayed_module": str(WITNESS_MODULE),
+    "replayed_case_count": 10,
+    "replayed_output": TOTAL,
+    "replayed_output_is_promised": False,
+    "promised_output_case_count": 0,
+    "ensemble_promised_output_coverage_complete": False,
+}
+REPRODUCTION_CONTRACT = {
+    "repo_only": False,
+    "external_rulespec_git_object_required": True,
+    "external_engine_binary_required": True,
+    "source_build_proven": False,
+    "engine_binary_provenance": {
+        "identity": "sha256-only",
+        "published_source_commit": None,
+        "published_release_tag": None,
+        "published_build_recipe": None,
+        "source_build_proven": False,
+        "published_provenance": False,
+        "limitation": (
+            "Within this contract, identity is the tested binary SHA-256 only; "
+            "the contract does not bind a source commit, release tag, or build "
+            "recipe and does not prove a source build. Other artifacts may "
+            "record a source ref without proving its build link to these bytes."
+        ),
+    },
+    "limitation": (
+        "Full reproduction requires external pinned RuleSpec Git objects and the "
+        "hash-identified engine binary; repo-only CI validates the committed "
+        "receipt only."
+    ),
+}
+COMPILE_CONTRACT = (
+    "env AXIOM_RULESPEC_REPO_ROOTS=<parent-of-archived-rulespec-us> "
+    "compile --program <absolute module path> --output <artifact>"
+)
 
 
 def _canonical_json(value: Any) -> str:
@@ -115,7 +184,13 @@ def _materialize(repo: Path, sha: str, destination: Path) -> Path:
 
 
 def _programs(root: Path) -> list[dict[str, str]]:
-    rows = [{"program_spec": str(WITNESS_SPEC), "module": str(WITNESS_MODULE)}]
+    rows = [
+        {
+            "program_spec": str(WITNESS_SPEC),
+            "module": str(WITNESS_MODULE),
+            "promised_output": "us_tariff_duty",
+        }
+    ]
     specs = sorted(root.glob(SCHEDULE_SPEC_GLOB))
     _require(len(specs) == 100, f"expected 100 schedule specs, found {len(specs)}")
     for spec in specs:
@@ -124,12 +199,66 @@ def _programs(root: Path) -> list[dict[str, str]]:
             {
                 "program_spec": str(relative),
                 "module": SCHEDULE_MODULE_TEMPLATE.format(stem=spec.stem),
+                "promised_output": "schedule_statutory_stack",
             }
         )
     for row in rows:
-        _require((root / row["program_spec"]).is_file(), f"missing {row['program_spec']}")
+        _require(
+            (root / row["program_spec"]).is_file(), f"missing {row['program_spec']}"
+        )
         _require((root / row["module"]).is_file(), f"missing {row['module']}")
+        program_spec = yaml.safe_load((root / row["program_spec"]).read_text())
+        outputs = (
+            program_spec.get("outputs") if isinstance(program_spec, dict) else None
+        )
+        _require(
+            outputs == [row["promised_output"]],
+            f"promised output drifted for {row['program_spec']}",
+        )
     return rows
+
+
+def _program_set(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    identities = [
+        (
+            row.get("program_spec"),
+            row.get("module"),
+            row.get("promised_output"),
+        )
+        for row in rows
+    ]
+    _require(
+        all(
+            all(isinstance(value, str) and value for value in row) for row in identities
+        ),
+        "program-set identities must be nonempty strings",
+    )
+    _require(len(identities) == len(set(identities)), "program-set identities repeat")
+    lines = ["\t".join(row) for row in sorted(identities)]
+    return {
+        "id": PROGRAM_SET["id"],
+        "scope_kind": PROGRAM_SET["scope_kind"],
+        "row_contract": PROGRAM_SET["row_contract"],
+        "program_count": len(rows),
+        "rows_sha256": hashlib.sha256(("\n".join(lines) + "\n").encode()).hexdigest(),
+        "singular_composed_output": False,
+    }
+
+
+def _rows_sha256(rows: list[dict[str, Any]], *, sort_programs: bool) -> str:
+    payload = (
+        sorted(
+            rows,
+            key=lambda row: (
+                row.get("program_spec", ""),
+                row.get("module", ""),
+                row.get("promised_output", ""),
+            ),
+        )
+        if sort_programs
+        else rows
+    )
+    return hashlib.sha256(_canonical_json(payload).encode()).hexdigest()
 
 
 def _compile_all(root: Path, engine: Path, work: Path) -> list[dict[str, Any]]:
@@ -141,7 +270,14 @@ def _compile_all(root: Path, engine: Path, work: Path) -> list[dict[str, Any]]:
     for index, row in enumerate(_programs(root)):
         artifact = work / f"compiled-{index:03d}.json"
         subprocess.run(
-            [str(engine), "compile", "--program", str(root / row["module"]), "--output", str(artifact)],
+            [
+                str(engine),
+                "compile",
+                "--program",
+                str(root / row["module"]),
+                "--output",
+                str(artifact),
+            ],
             check=True,
             capture_output=True,
             text=True,
@@ -154,7 +290,7 @@ def _compile_all(root: Path, engine: Path, work: Path) -> list[dict[str, Any]]:
                 "source_sha256": _sha256(root / row["module"]),
                 "sha256": _sha256(artifact),
                 "byte_count": artifact.stat().st_size,
-                "compile_contract": "compile --program <absolute module path> --output <artifact>",
+                "compile_contract": COMPILE_CONTRACT,
             }
         )
     return compiled
@@ -169,43 +305,58 @@ def _expected_vector(interval: Any) -> dict[str, float]:
     return vector
 
 
-def _certified_cases(repo_root: Path) -> list[dict[str, Any]]:
+def _reviewed_conformant_cases(repo_root: Path) -> list[dict[str, Any]]:
     intervals, unbridged = load_reference(repo_root / REFERENCE_DIRNAME)
     _require(not unbridged, f"reference contains unbridged origins: {unbridged}")
     report = json.loads((repo_root / REPORT_PATH).read_text())
     families = report.get("cases")
-    _require(report.get("suite") == "us-tariff-panel" and isinstance(families, list), "bad tariff report")
+    _require(
+        report.get("suite") == "us-tariff-panel" and isinstance(families, list),
+        "bad tariff report",
+    )
     lines = sorted(
         line.strip()
-        for line in (repo_root / "reference/us-tariff-panel/covered_lines.txt").read_text().splitlines()
+        for line in (repo_root / "reference/us-tariff-panel/covered_lines.txt")
+        .read_text()
+        .splitlines()
         if line.strip() and not line.startswith("#")
     )
     _require(len(lines) == 5, f"expected five witness lines, found {len(lines)}")
     selected = []
     for line in lines:
         candidates = [
-            interval for interval in intervals
+            interval
+            for interval in intervals
             if interval.hts10 == line
             and interval.country_census == ORIGIN_CENSUS
             and len(interval.covered_dates) == 2
         ]
-        _require(candidates, f"no two-endpoint China interval for {line}")
+        _require(candidates, f"no two-endpoint Canada interval for {line}")
         interval = None
         family = None
-        for candidate in sorted(candidates, key=lambda item: (item.valid_from, item.valid_until)):
+        for candidate in sorted(
+            candidates, key=lambda item: (item.valid_from, item.valid_until)
+        ):
             expected = _expected_vector(candidate)
             family_matches = [
-                row for row in families
+                row
+                for row in families
                 if row.get("hts_number") == line
                 and row.get("expected") == expected
                 and row.get("match") is True
                 and ORIGIN_CENSUS in row.get("countries", [])
-                and all(day.isoformat() in row.get("probe_dates", []) for day in candidate.covered_dates)
+                and all(
+                    day.isoformat() in row.get("probe_dates", [])
+                    for day in candidate.covered_dates
+                )
             ]
             if len(family_matches) == 1:
                 interval, family = candidate, family_matches[0]
                 break
-        _require(interval is not None and family is not None, f"no conformant two-endpoint Canada family for {line}")
+        _require(
+            interval is not None and family is not None,
+            f"no conformant two-endpoint Canada family for {line}",
+        )
         for probe in interval.covered_dates:
             case = panel_case(interval, probe)
             selected.append(
@@ -219,10 +370,15 @@ def _certified_cases(repo_root: Path) -> list[dict[str, Any]]:
                     "source_family": family["case_id"],
                     "output": TOTAL,
                     "committed_value": family["axiom"]["total"],
-                    "input_sha256": hashlib.sha256(_canonical_json(case.metadata).encode()).hexdigest(),
+                    "input_sha256": hashlib.sha256(
+                        _canonical_json(case.metadata).encode()
+                    ).hexdigest(),
                 }
             )
-    _require(len(selected) == 10, f"expected ten certified values, found {len(selected)}")
+    _require(
+        len(selected) == 10,
+        f"expected ten reviewed conformant values, found {len(selected)}",
+    )
     return selected
 
 
@@ -236,8 +392,12 @@ def build_reproduction(
     rulespec_repo = rulespec_repo.expanduser().resolve()
     engine_binary = engine_binary.expanduser().resolve()
     sha = _git_commit(rulespec_repo, rulespec_ref)
+    _require(
+        sha == PINNED_RULESPEC_SHA,
+        f"rulespec commit must equal reviewed pin {PINNED_RULESPEC_SHA}",
+    )
     binary_sha = _sha256(engine_binary)
-    expected = _certified_cases(repo_root)
+    expected = _reviewed_conformant_cases(repo_root)
     with tempfile.TemporaryDirectory(prefix="tariff-executable-") as raw:
         work = Path(raw)
         archived = _materialize(rulespec_repo, sha, work)
@@ -257,50 +417,239 @@ def build_reproduction(
         result = actual_by_id[row["case_id"]]
         reproduced = result.values.get(TOTAL)
         errors = list(result.errors)
-        match = not errors and _canonical_json(reproduced) == _canonical_json(row["committed_value"])
-        cases.append({key: value for key, value in row.items() if key != "case"} | {"reproduced_value": reproduced, "errors": errors, "match": match})
-    sources = [{"path": str(path), "sha256": _sha256(repo_root / path)} for path in REFERENCE_PATHS]
+        match = not errors and _canonical_json(reproduced) == _canonical_json(
+            row["committed_value"]
+        )
+        cases.append(
+            {key: value for key, value in row.items() if key != "case"}
+            | {"reproduced_value": reproduced, "errors": errors, "match": match}
+        )
+    sources = [
+        {"path": str(path), "sha256": _sha256(repo_root / path)}
+        for path in REFERENCE_PATHS
+    ]
     matched = sum(row["match"] for row in cases)
     return {
         "schema": SCHEMA,
         "program": PROGRAM,
         "generated_by": GENERATED_BY,
-        "producer_source": {"introduced_commit": SOURCE_PRODUCER_COMMIT, "adopted_refresh_commit": SOURCE_REFRESH_COMMIT},
+        "producer_source": {
+            "introduced_commit": SOURCE_PRODUCER_COMMIT,
+            "adopted_refresh_commit": SOURCE_REFRESH_COMMIT,
+        },
         "rulespec": {"repo": RULESPEC_REPO, "ref": sha, "sha": sha},
-        "engine": {"binary_sha256": binary_sha, "configured_sha256": PINNED_ENGINE_SHA256, "matches_config_pin": binary_sha == PINNED_ENGINE_SHA256},
+        "engine": {
+            "binary_sha256": binary_sha,
+            "configured_sha256": PINNED_ENGINE_SHA256,
+            "matches_config_pin": binary_sha == PINNED_ENGINE_SHA256,
+            "provenance": REPRODUCTION_CONTRACT["engine_binary_provenance"],
+        },
         "source_reports": sources,
-        "selection": {"convention": "dk-sized deterministic witness subset", "covered_lines": sorted({row["hts_number"] for row in cases}), "origin_census": ORIGIN_CENSUS, "interval_rule": "earliest conformant in-domain interval having two endpoints per line", "values_per_line": 2},
+        "selection": {
+            "convention": "dk-sized deterministic witness subset",
+            "covered_lines": sorted({row["hts_number"] for row in cases}),
+            "origin_census": ORIGIN_CENSUS,
+            "interval_rule": "earliest conformant in-domain interval having two endpoints per line",
+            "values_per_line": 2,
+        },
+        "execution_scope": EXECUTION_SCOPE,
+        "reproduction_contract": REPRODUCTION_CONTRACT,
+        "program_set": _program_set(compiled),
+        "compiled_artifact_rows_sha256": _rows_sha256(compiled, sort_programs=True),
         "compiled_artifacts": compiled,
+        "execution_trace_rows_sha256": _rows_sha256(cases, sort_programs=False),
         "cases": cases,
-        "summary": {"program_count": len(compiled), "case_count": len(cases), "matched_case_count": matched, "all_cases_reproduced": matched == len(cases), "engine_binary_matches_pin": binary_sha == PINNED_ENGINE_SHA256, "executable": matched == len(cases) and binary_sha == PINNED_ENGINE_SHA256},
+        "summary": {
+            "program_count": len(compiled),
+            "case_count": len(cases),
+            "matched_case_count": matched,
+            "all_cases_reproduced": matched == len(cases),
+            "engine_binary_matches_pin": binary_sha == PINNED_ENGINE_SHA256,
+            "compile_replay_reproduced": (
+                matched == len(cases) and binary_sha == PINNED_ENGINE_SHA256
+            ),
+            "promised_output_coverage_complete": False,
+            "executable": False,
+            "blockers": [EXECUTION_COVERAGE_BLOCKER],
+        },
     }
 
 
-def validate_artifact(document: dict[str, Any], repo_root: Path = REPO_ROOT) -> dict[str, Any]:
+def validate_artifact(
+    document: dict[str, Any], repo_root: Path = REPO_ROOT
+) -> dict[str, Any]:
     _require(document.get("schema") == SCHEMA, "wrong schema")
-    rulespec = document.get("rulespec", {})
-    _require(isinstance(rulespec.get("sha"), str) and HEX_40.fullmatch(rulespec["sha"]) is not None, "rulespec.sha must be a lowercase 40-character Git SHA")
-    _require(rulespec.get("ref") == rulespec["sha"], "rulespec.ref must equal the recorded rulespec.sha commit")
-    engine = document.get("engine", {})
-    _require(engine.get("configured_sha256") == PINNED_ENGINE_SHA256, "configured engine hash drifted")
-    _require(engine.get("binary_sha256") == PINNED_ENGINE_SHA256, "engine binary does not match the pinned hash")
-    expected = _certified_cases(repo_root)
+    _require(
+        document.get("program") == PROGRAM,
+        "program identity drifted",
+    )
+    _require(
+        document.get("generated_by") == GENERATED_BY,
+        "generator identity drifted",
+    )
+    _require(
+        document.get("producer_source")
+        == {
+            "introduced_commit": SOURCE_PRODUCER_COMMIT,
+            "adopted_refresh_commit": SOURCE_REFRESH_COMMIT,
+        },
+        "producer source metadata drifted",
+    )
+    _require(
+        document.get("rulespec")
+        == {
+            "repo": RULESPEC_REPO,
+            "ref": PINNED_RULESPEC_SHA,
+            "sha": PINNED_RULESPEC_SHA,
+        },
+        "rulespec identity differs from the reviewed pin",
+    )
+    _require(
+        document.get("engine")
+        == {
+            "binary_sha256": PINNED_ENGINE_SHA256,
+            "configured_sha256": PINNED_ENGINE_SHA256,
+            "matches_config_pin": True,
+            "provenance": REPRODUCTION_CONTRACT["engine_binary_provenance"],
+        },
+        "engine identity differs from the reviewed pin",
+    )
+    expected_source_reports = [
+        {"path": str(path), "sha256": _sha256(repo_root / path)}
+        for path in REFERENCE_PATHS
+    ]
+    _require(
+        document.get("source_reports") == expected_source_reports,
+        "source report identity or digest drifted",
+    )
+    expected = _reviewed_conformant_cases(repo_root)
     cases = document.get("cases")
-    _require(isinstance(cases, list) and len(cases) == 10, "cases must contain exactly 10 rows")
+    _require(
+        isinstance(cases, list) and len(cases) == 10,
+        "cases must contain exactly 10 rows",
+    )
     for actual, source in zip(cases, expected, strict=True):
-        for key in ("case_id", "hts_number", "origin_census", "origin_iso2", "probe_date", "source_family", "output", "input_sha256"):
-            _require(actual.get(key) == source[key], f"{source['case_id']}: {key} drifted")
-        _require(_canonical_json(actual.get("committed_value")) == _canonical_json(source["committed_value"]), f"{source['case_id']}: committed_value drifted")
-        derived = not actual.get("errors") and _canonical_json(actual.get("reproduced_value")) == _canonical_json(source["committed_value"])
-        _require(actual.get("match") is derived, f"{source['case_id']}: match is not exact JSON numeric equality")
+        for key in (
+            "case_id",
+            "hts_number",
+            "origin_census",
+            "origin_iso2",
+            "probe_date",
+            "source_family",
+            "output",
+            "input_sha256",
+        ):
+            _require(
+                actual.get(key) == source[key], f"{source['case_id']}: {key} drifted"
+            )
+        _require(
+            _canonical_json(actual.get("committed_value"))
+            == _canonical_json(source["committed_value"]),
+            f"{source['case_id']}: committed_value drifted",
+        )
+        derived = not actual.get("errors") and _canonical_json(
+            actual.get("reproduced_value")
+        ) == _canonical_json(source["committed_value"])
+        _require(
+            actual.get("match") is derived,
+            f"{source['case_id']}: match is not exact JSON numeric equality",
+        )
+    expected_selection = {
+        "convention": "dk-sized deterministic witness subset",
+        "covered_lines": sorted({row["hts_number"] for row in expected}),
+        "origin_census": ORIGIN_CENSUS,
+        "interval_rule": (
+            "earliest conformant in-domain interval having two endpoints per line"
+        ),
+        "values_per_line": 2,
+    }
+    _require(
+        document.get("selection") == expected_selection,
+        "selection metadata drifted",
+    )
+    _require(
+        document.get("execution_scope") == EXECUTION_SCOPE,
+        "execution scope drifted or overstates promised-output coverage",
+    )
+    _require(
+        document.get("reproduction_contract") == REPRODUCTION_CONTRACT,
+        "reproduction contract drifted",
+    )
     compiled = document.get("compiled_artifacts")
-    _require(isinstance(compiled, list) and len(compiled) == 101, "compiled_artifacts must bind 101 programs")
+    _require(
+        isinstance(compiled, list) and len(compiled) == 101,
+        "compiled_artifacts must bind 101 programs",
+    )
+    derived_program_set = _program_set(compiled)
+    _require(derived_program_set == PROGRAM_SET, "compiled program set drifted")
+    _require(document.get("program_set") == PROGRAM_SET, "program_set summary drifted")
+    compiled_rows_sha256 = _rows_sha256(compiled, sort_programs=True)
+    _require(
+        compiled_rows_sha256 == COMPILED_ARTIFACT_ROWS_SHA256,
+        "compiled artifact rows differ from the reviewed producer pin",
+    )
+    _require(
+        document.get("compiled_artifact_rows_sha256") == COMPILED_ARTIFACT_ROWS_SHA256,
+        "compiled artifact row digest drifted",
+    )
     for row in compiled:
+        _require(
+            set(row)
+            == {
+                "program_spec",
+                "module",
+                "promised_output",
+                "program_spec_sha256",
+                "source_sha256",
+                "sha256",
+                "byte_count",
+                "compile_contract",
+            },
+            "compiled artifact row fields drifted",
+        )
         for key in ("program_spec_sha256", "source_sha256", "sha256"):
-            _require(isinstance(row.get(key), str) and HEX_64.fullmatch(row[key]) is not None, f"invalid {key}")
+            _require(
+                isinstance(row.get(key), str)
+                and HEX_64.fullmatch(row[key]) is not None,
+                f"invalid {key}",
+            )
+        _require(
+            isinstance(row.get("byte_count"), int)
+            and not isinstance(row["byte_count"], bool)
+            and row["byte_count"] > 0,
+            "invalid compiled byte_count",
+        )
+        _require(
+            row.get("compile_contract") == COMPILE_CONTRACT,
+            "compile contract drifted",
+        )
+    execution_trace_sha256 = _rows_sha256(cases, sort_programs=False)
+    _require(
+        execution_trace_sha256 == EXECUTION_TRACE_ROWS_SHA256,
+        "execution trace rows differ from the reviewed producer pin",
+    )
+    _require(
+        document.get("execution_trace_rows_sha256") == EXECUTION_TRACE_ROWS_SHA256,
+        "execution trace row digest drifted",
+    )
     summary = document.get("summary", {})
-    _require(summary.get("case_count") == 10 and summary.get("program_count") == 101, "summary counts drifted")
-    _require(summary.get("executable") is True, "receipt is not executable")
+    matched = sum(row.get("match") is True for row in cases)
+    expected_summary = {
+        "program_count": len(compiled),
+        "case_count": len(cases),
+        "matched_case_count": matched,
+        "all_cases_reproduced": matched == len(cases),
+        "engine_binary_matches_pin": True,
+        "compile_replay_reproduced": matched == len(cases),
+        "promised_output_coverage_complete": False,
+        "executable": False,
+        "blockers": [EXECUTION_COVERAGE_BLOCKER],
+    }
+    _require(summary == expected_summary, "summary is not derived")
+    _require(
+        summary["compile_replay_reproduced"] is True,
+        "compile/replay receipt did not reproduce",
+    )
     return summary
 
 
@@ -321,12 +670,19 @@ def main(argv: list[str] | None = None) -> int:
             validate_artifact(committed)
             ref = committed["rulespec"]["sha"]
             if args.rulespec_ref is not None:
-                _require(_git_commit(args.rulespec_root, args.rulespec_ref) == ref, "--rulespec-ref differs from receipt")
+                _require(
+                    _git_commit(args.rulespec_root, args.rulespec_ref) == ref,
+                    "--rulespec-ref differs from receipt",
+                )
         except (OSError, KeyError, ValueError, json.JSONDecodeError) as exc:
             print(f"invalid executable artifact: {exc}", file=sys.stderr)
             return 1
     try:
-        reproduced = build_reproduction(rulespec_repo=args.rulespec_root, rulespec_ref=ref, engine_binary=args.engine_binary)
+        reproduced = build_reproduction(
+            rulespec_repo=args.rulespec_root,
+            rulespec_ref=ref,
+            engine_binary=args.engine_binary,
+        )
         validate_artifact(reproduced)
     except (OSError, subprocess.CalledProcessError, ValueError, RuntimeError) as exc:
         print(f"executable reproduction failed: {exc}", file=sys.stderr)
@@ -336,7 +692,10 @@ def main(argv: list[str] | None = None) -> int:
         if artifact.read_text() != rendered:
             print("executable reproduction drifted", file=sys.stderr)
             return 1
-        print("executable reproduction up to date: 10/10 exact JSON numeric equality, executable=true")
+        print(
+            "compile/replay receipt up to date: 101 programs compiled; 10/10 exact "
+            "JSON numeric equality on one non-promised witness output; executable=false"
+        )
         return 0
     artifact.parent.mkdir(parents=True, exist_ok=True)
     artifact.write_text(rendered)

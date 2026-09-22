@@ -1,8 +1,34 @@
 # GENERATED facts; edit decisions in scripts/us_tariff_closure.py.
-schema: axiom_oracles.closure.ledger.v1
+schema: axiom_oracles.closure.ledger.v3
 program:
   id: us/tariff-duty
+  scope: us-tariff-schedule-ensemble-v1
   rulespec_ref: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
+reproduction_contract:
+  repo_only: false
+  external_corpus_git_object:
+    repository: TheAxiomFoundation/axiom-corpus
+    commit: bef19f24206a9de4ef29d9ba2b5924f3cc6a00c6
+    required: true
+  external_rulespec_git_object:
+    repository: TheAxiomFoundation/rulespec-us
+    commit: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
+    required: true
+  external_engine_binary:
+    sha256: 674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7
+    required: true
+  engine_binary_provenance:
+    identity: sha256-only
+    published_source_commit: null
+    published_release_tag: null
+    published_build_recipe: null
+    source_build_proven: false
+    published_provenance: false
+    limitation: Within this contract, identity is the tested binary SHA-256 only; the contract does not bind a source
+      commit, release tag, or build recipe and does not prove a source build. Other artifacts may record a source
+      ref without proving its build link to these bytes.
+  limitation: Full closure reproduction requires the exact external corpus and RuleSpec Git objects plus the hash-identified
+    engine binary; repo-only validation checks the committed ledger but does not rederive it.
 generated_facts:
   corpus_roots:
     hts-rate-provisions:
@@ -24,65 +50,134 @@ generated_facts:
     commit: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
     module_count: 380
     paths_sha256: 481956d2972610d8fe382d37ee8e651fa8bbeaf29e3550f9b08c06ca656c1a45
+  rate_table_correspondence:
+    partition_kind: statutory-column-disposition
+    partition_limitation: Derived from generated General/column-2 disposition tables plus the 9802 prefix rule;
+      this is not execution coverage.
+    encoded_count_interpretation: Static structural computability within the 100 chapter schedule programs in the
+      multi-program ensemble; not execution coverage or a singular composed output.
+    rulespec_commit: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
+    module_count: 100
+    module_paths_sha256: 0fd13ed87875af2a948eeb954b7cacad5d0823253b934a86eee1c86aa9d007b0
+    corpus_general_rate_count: 13786
+    corpus_column2_only_count: 4
+    corpus_rate_bearing_count: 13790
+    source_citation_count: 13790
+    source_citations_sha256: 448a3b049638a6a08861baaca11508123e4a4562d1a11fb9aee410d60ceb5ed9
+    proof_citation_count: 13790
+    proof_citations_sha256: 448a3b049638a6a08861baaca11508123e4a4562d1a11fb9aee410d60ceb5ed9
+    general_disposition_counts:
+      ad_valorem: 6247
+      free: 5795
+      specific: 777
+      compound: 326
+      component: 93
+      conditional: 548
+      empty: 4
+    column2_disposition_counts:
+      ad_valorem: 8004
+      free: 853
+      specific: 1271
+      compound: 1189
+      component: 84
+      conditional: 2229
+      empty: 160
+    general_rate_cell_count: 12042
+    general_rate_keys_sha256: 06820e14481edbd7033c2a03f5a1f585f358ecb951b7b797789ddf950cbbbd42
+    column2_rate_cell_count: 8857
+    column2_rate_keys_sha256: ab2b904788ca792f4e6c6aaca0006a65725e9cb23f62f2b8c9741e4f2c7755ca
+    unresolved_non_ad_valorem_count: 4955
+    unresolved_non_ad_valorem_paths_sha256: 4be3f417b479a00336e733246a6379f2f997d396abdd50f793577f3a6bbae0a4
+    partial_count: 4956
+    partial_paths_sha256: 58e50a696df9f67a4a1eca060d79d99ac05e7e680ffd07767d74c060c38d152d
+    encoded_count: 8834
+    encoded_paths_sha256: 9cce7e06c23e83fc81c23928b73ba0aaab1d7d1f549237e56cbd3fe16d8de467
+  program_set:
+    id: us-tariff-schedule-ensemble-v1
+    scope_kind: multi-program-ensemble
+    row_contract: program_spec<TAB>module<TAB>promised_output
+    program_count: 101
+    rows_sha256: c476cb14ac580ff7e8cf92b8f077bbbe58915beca429ee0c18b76e44484c53d3
+    singular_composed_output: false
+  input_inventory:
+    rulespec_ref: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
+    engine_sha256: 674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7
+    method: all-version compiled dependency closure of the promised witness and schedule outputs
+    module_scope:
+    - us/policies/cbp/us-tariff-duty/composition.yaml
+    - us/policies/cbp/us-tariff-schedule/generated/ch*/ch*.yaml
+    promised_outputs:
+      witness:
+      - us_tariff_duty
+      schedule:
+      - schedule_statutory_stack
+    schedule_composition_count: 100
+    input_count: 21
+    inputs_sha256: aa2ffb176ce74f8a339fc784afe2f5b09a176d0e7779934d780062d3c9e253c7
+    inputs:
+    - country_of_origin
+    - customs_value
+    - entry_is_brazil_301_listed
+    - entry_is_china_301_2024_action
+    - entry_is_china_301_list123
+    - entry_is_china_301_list4a
+    - entry_is_china_301_solar
+    - entry_is_forced_labor_301_listed
+    - entry_is_line_a
+    - entry_is_line_b
+    - entry_is_line_d
+    - entry_is_section_122_exempt
+    - entry_is_section_201_cspv
+    - entry_is_section_232_aluminum
+    - entry_is_section_232_covered
+    - entry_is_section_232_steel
+    - hts_line
+    - hts_number
+    - is_postal_shipment
+    - resolved_non_ad_valorem_column2_rate
+    - shipment_value
+  instrument_graph:
+    path: conformance/closure/us-tariff-instrument-graph.json
+    sha256: 11ae44adb7e5131e56c0ca93560d0a84e866a488098b474d77be879b84a169ed
+    schema: axiom_oracles.closure.us_tariff_instrument_graph.v1
+    rulespec_ref: 96d5e7c1e6309dc205b7320bbddaae8dd5d410df
+    channel_count: 4
+    enumerated_seed_candidate_count: 16
 committed_decisions:
   ledger:
   - root: hts-rate-provisions
-    family: rated-lines-except-9802
+    family: fully-computable-rate-bearing-lines
     status: encoded
-    reason: B1.2 generated chapter tables supply the Rev-15 column rates.
-    count: 13781
+    reason: Generated chapter tables source-verify and proof-bind these Rev-15 rows, and both General and column-2
+      dispositions are ad valorem or Free, making them statically and structurally computable within their chapter
+      schedule programs in the multi-program ensemble. This classification is not promised-output replay coverage.
+    count: 8834
   - root: hts-rate-provisions
-    family: 9802-partial-value-rated-lines
+    family: non-ad-valorem-or-partial-value-rate-bearing-lines
     status: partially-encoded
-    reason: The rate rows are passthroughs, but dutiable partial value is supplied as an entry input rather than
-      derived.
-    count: 5
+    reason: The generated tables classify and proof-bind these rows, but at least one statutory column is specific,
+      compound, component-valued, conditional, or empty, or the 9802 row requires a partial-value duty base that
+      the promised output neither encodes nor applies; the compiled frontier has no reduced-base input.
+    count: 4956
   - root: hts-rate-provisions
-    family: unrated-structural-rows
+    family: non-rate-structural-rows
     status: excluded-with-reason
-    reason: Headings without a Rates of duty (1-General) field do not themselves supply a rate line.
-    count: 16059
+    reason: Rows without either a Rates of duty (1-General) or Rates of duty (2) field do not themselves supply
+      a statutory-column rate line.
+    count: 16055
   - root: chapter-99-notes
-    family: note-20-section-301-lists
-    status: encoded
-    count: 1
-    membership_rows: 301
-    reason: Incidence membership tables are composed for the original China list overlays.
-  - root: chapter-99-notes
-    family: notes-16-19-section-232-metals
-    status: encoded
-    count: 1
-    membership_rows: 232
-    reason: Steel/aluminum incidence and composed overlays are present.
-  - root: chapter-99-notes
-    family: note-18-section-201
-    status: encoded
-    count: 1
-    membership_rows: 201
-    reason: Section 201 solar incidence and overlay are composed.
-  - root: chapter-99-notes
-    family: note-2aa-section-122
-    status: encoded
-    count: 1
-    membership_rows: 122
-    reason: Section 122 incidence and overlay are composed.
-  - root: chapter-99-notes
-    family: note-51-section-338
-    status: pending
-    count: 1
-    reason: Note 51 pages are absent from the D0 ingest; ingest and encode them before composing section 338.
-  - root: chapter-99-notes
-    family: other-chapter-99-pages
+    family: all-chapter-99-pages
     status: partially-encoded
-    reason: The witness composes many 9903.01/.02/.05 IEEPA and newer 301 headings, but no page-level census proves
-      every other Chapter-99 note covered.
-    count: 800
+    reason: Some Chapter 99 rules are composed, but no exact, disjoint citation-path census yet partitions all 805
+      source pages into encoded, excluded, and pending sets.
+    count: 805
   - root: fr-instrument-families
     family: section-232-metal-instruments
     status: encoded
     count: 1
-    reason: 2018 and 2025 metal actions plus the 2026 annex restructure are represented in the composed aluminum/steel
-      overlays.
+    reason: The 2018 and 2025 metal-action formula paths plus the 2026 annex restructure are represented in composed
+      aluminum/steel overlays; instrument disposition and law-derived membership leaves remain open in the separate
+      dependency frontier.
   - root: fr-instrument-families
     family: section-232-non-metal-annexes
     status: pending
@@ -105,10 +200,11 @@ committed_decisions:
     count: 1
     reason: Membership and headings exist, but the family is not fed into the final composition.
   - root: fr-instrument-families
-    family: forced-labor-301
+    family: note-52-country-tier-action
     status: partially-encoded
     count: 1
-    reason: Membership and country tiers exist, but the family is not fed into the final composition.
+    reason: Membership and country tiers exist under a legacy-named input, but the family is not fed into the final
+      composition; the exact legal label remains open.
   - root: fr-instrument-families
     family: solar-china
     status: partially-encoded
@@ -118,17 +214,20 @@ committed_decisions:
     family: section-201-proclamation-10339
     status: encoded
     count: 1
-    reason: The solar safeguard is encoded and composed.
+    reason: The solar-safeguard formula path is encoded and composed; the defining instrument and law-derived membership
+      leaf remain open in the separate dependency frontier.
   - root: fr-instrument-families
     family: section-122-proclamation-11012
     status: encoded
     count: 1
-    reason: The temporary surcharge and exclusions are encoded and composed.
+    reason: The temporary-surcharge formula and exclusion gate are encoded and composed; the defining instrument
+      and law-derived exemption leaf remain open in the separate dependency frontier.
   - root: fr-instrument-families
     family: ieepa-orders-and-termination
     status: encoded
     count: 1
-    reason: Fentanyl, reciprocal families, exclusions, and termination are composed for the codified Rev-15 state.
+    reason: Fentanyl, reciprocal-family, exclusion, and termination formula paths are composed for the codified
+      Rev-15 state; defining instruments and law-derived leaves remain open in the separate dependency frontier.
   - root: fr-instrument-families
     family: section-338-instruments
     status: pending
@@ -141,122 +240,140 @@ committed_decisions:
     reason: This ledger covers the Rev-15 codified state only; historical schedule/instrument vintages are not a
       reproduced root.
   input_grounding: &id001
-  - input: hts_number
-    grounding: uncaptured
-    uncaptured_scope: HTS classification assigned to the entry
   - input: country_of_origin
-    grounding: uncaptured
-    uncaptured_scope: origin determination for the entry
-  - input: entry_date
-    grounding: uncaptured
-    uncaptured_scope: CBP entry date and effective-time facts
+    leaf_kind: world_fact
+    grounding: runtime_required
+    reason: Country-of-origin determination on the filed or issued entry record.
   - input: customs_value
+    leaf_kind: world_fact
+    grounding: runtime_required
+    reason: Appraised customs value on the filed or issued entry record.
+  - input: entry_is_brazil_301_listed
+    leaf_kind: law_derived
     grounding: uncaptured
-    uncaptured_scope: 19 USC 1401a appraised customs value
-  - input: shipment_value
+    reason: Membership in the HTS Note 50 Brazil Section 301 list.
+    derivation_instrument: us-hts-2026-rev15
+  - input: entry_is_china_301_2024_action
+    leaf_kind: law_derived
     grounding: uncaptured
-    uncaptured_scope: shipment value used by de-minimis/postal rules
+    reason: Membership in the 2024 China Section 301 action.
+    derivation_instrument: fr-2024-21217
+  - input: entry_is_china_301_list123
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Membership in China Section 301 lists 1, 2, or 3.
+    derivation_instrument: us-hts-2026-rev15
+  - input: entry_is_china_301_list4a
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Membership in China Section 301 list 4A.
+    derivation_instrument: us-hts-2026-rev15
+  - input: entry_is_china_301_solar
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Membership in the China solar Section 301 action.
+    derivation_instrument: us-hts-2026-rev15
+  - input: entry_is_forced_labor_301_listed
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Membership in the HTS Note 52 country-tier action; the reachable RuleSpec input retains a legacy label
+      that is not used as a legal description here.
+    derivation_instrument: fr-2026-15181
+  - input: entry_is_line_a
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Qualification for the applicable Chapter 99 line-A treatment.
+    derivation_instrument: us-hts-2026-rev15
+  - input: entry_is_line_b
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Qualification for the applicable Chapter 99 line-B treatment.
+    derivation_instrument: us-hts-2026-rev15
+  - input: entry_is_line_d
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Qualification for the applicable Chapter 99 line-D treatment.
+    derivation_instrument: us-hts-2026-rev15
+  - input: entry_is_section_122_exempt
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Qualification for a Section 122 surcharge exemption.
+    derivation_instrument: fr-2026-03824
+  - input: entry_is_section_201_cspv
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Membership in the Section 201 CSPV safeguard scope.
+    derivation_instrument: fr-2022-02906
+  - input: entry_is_section_232_aluminum
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Membership in the Section 232 aluminum scope.
+    derivation_instrument: us-hts-2026-rev15
+  - input: entry_is_section_232_covered
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Membership in any Section 232 scope used by the composition.
+    derivation_instrument: us-hts-2026-rev15
+  - input: entry_is_section_232_steel
+    leaf_kind: law_derived
+    grounding: uncaptured
+    reason: Membership in the Section 232 steel scope.
+    derivation_instrument: us-hts-2026-rev15
+  - input: hts_line
+    leaf_kind: world_fact
+    grounding: runtime_required
+    reason: Selected HTS line key on the filed or issued entry record.
+  - input: hts_number
+    leaf_kind: world_fact
+    grounding: runtime_required
+    reason: HTS classification assigned on the filed or issued entry record.
   - input: is_postal_shipment
+    leaf_kind: world_fact
+    grounding: runtime_required
+    reason: Postal-channel classification on the filed or issued entry record.
+  - input: resolved_non_ad_valorem_column2_rate
+    leaf_kind: law_derived
     grounding: uncaptured
-    uncaptured_scope: postal-channel classification
-  - input: column_1_general_rate
-    grounding: uncaptured
-    uncaptured_scope: selected Rev-15 HTS general rate line
-  - input: special_rate
-    grounding: uncaptured
-    uncaptured_scope: claimed and qualifying special-program rate
-  - input: column_2_rate
-    grounding: uncaptured
-    uncaptured_scope: column-2 rate selection
-  - input: section_232_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in the applicable 232 annex
-  - input: section_301_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in the applicable 301 list
-  - input: section_201_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in the solar safeguard annex
-  - input: section_122_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in surcharge exclusions
-  - input: ieepa_membership
-    grounding: uncaptured
-    uncaptured_scope: membership in reciprocal/fentanyl annexes
-  - input: section_338_membership
-    grounding: uncaptured
-    uncaptured_scope: membership under HTS note 51
-  - input: is_section_232_article
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 232 article'
-  - input: is_section_232_derivative
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 232 derivative'
-  - input: is_reciprocal_annex_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: reciprocal annex exclusion'
-  - input: is_reciprocal_metals_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: reciprocal metals exclusion'
-  - input: is_section_122_annex_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 122 annex exclusion'
-  - input: is_section_122_232_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 122/232 exclusion'
-  - input: is_brazil_301_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: Brazil-301 exclusion'
-  - input: is_forced_labor_annex_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: forced-labor annex exclusion'
-  - input: is_forced_labor_metals_excluded
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: forced-labor metals exclusion'
-  - input: is_china_2024_action_member
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: 2024 China action membership'
-  - input: is_solar_china_member
-    grounding: uncaptured
-    uncaptured_scope: 'witness boolean: solar-China membership'
-  - input: chapter_98_partial_value_share
-    grounding: uncaptured
-    uncaptured_scope: 9802 dutiable-value share supplied by the declarant
-  - input: section_338_reduced_duty_base_share
-    grounding: uncaptured
-    uncaptured_scope: note-51 partial-value share supplied by the declarant
+    reason: Resolved ad-valorem equivalent for a non-ad-valorem Column 2 rate.
+    derivation_instrument: us-hts-2026-rev15
+  - input: shipment_value
+    leaf_kind: world_fact
+    grounding: runtime_required
+    reason: Shipment value on the filed or issued entry record.
+  - input: entry_date
+    leaf_kind: world_fact
+    role: execution_context
+    grounding: query_period
+    reason: Axiom query period representing the entry date and effective-time context.
 computed:
   counts_by_status_per_root:
     hts-rate-provisions:
-      encoded: 13781
-      partially-encoded: 5
-      excluded-with-reason: 16059
+      encoded: 8834
+      partially-encoded: 4956
+      excluded-with-reason: 16055
       pending: 0
     chapter-99-notes:
-      encoded: 4
-      partially-encoded: 800
+      encoded: 0
+      partially-encoded: 805
       excluded-with-reason: 0
-      pending: 1
+      pending: 0
     fr-instrument-families:
       encoded: 4
       partially-encoded: 4
       excluded-with-reason: 0
       pending: 9
   burndown:
-  - family: 9802-partial-value-rated-lines
+  - family: non-ad-valorem-or-partial-value-rate-bearing-lines
     root: hts-rate-provisions
     status: partially-encoded
-    blocker: The rate rows are passthroughs, but dutiable partial value is supplied as an entry input rather than
-      derived.
-  - family: note-51-section-338
-    root: chapter-99-notes
-    status: pending
-    blocker: Note 51 pages are absent from the D0 ingest; ingest and encode them before composing section 338.
-  - family: other-chapter-99-pages
+    blocker: The generated tables classify and proof-bind these rows, but at least one statutory column is specific,
+      compound, component-valued, conditional, or empty, or the 9802 row requires a partial-value duty base that
+      the promised output neither encodes nor applies; the compiled frontier has no reduced-base input.
+  - family: all-chapter-99-pages
     root: chapter-99-notes
     status: partially-encoded
-    blocker: The witness composes many 9903.01/.02/.05 IEEPA and newer 301 headings, but no page-level census proves
-      every other Chapter-99 note covered.
+    blocker: Some Chapter 99 rules are composed, but no exact, disjoint citation-path census yet partitions all
+      805 source pages into encoded, excluded, and pending sets.
   - family: section-232-non-metal-annexes
     root: fr-instrument-families
     status: pending
@@ -274,10 +391,11 @@ computed:
     root: fr-instrument-families
     status: partially-encoded
     blocker: Membership and headings exist, but the family is not fed into the final composition.
-  - family: forced-labor-301
+  - family: note-52-country-tier-action
     root: fr-instrument-families
     status: partially-encoded
-    blocker: Membership and country tiers exist, but the family is not fed into the final composition.
+    blocker: Membership and country tiers exist under a legacy-named input, but the family is not fed into the final
+      composition; the exact legal label remains open.
   - family: solar-china
     root: fr-instrument-families
     status: partially-encoded
@@ -293,6 +411,214 @@ computed:
       a reproduced root.
   boundary_frontier:
     complete: true
-    input_count: 28
+    compiled_input_count: 21
+    execution_context_input_count: 1
+    input_count: 22
+    inputs_sha256: aa2ffb176ce74f8a339fc784afe2f5b09a176d0e7779934d780062d3c9e253c7
     inputs: *id001
+  instrument_frontier:
+    enumeration_scope: seed-only-v1
+    enumerated_seed_candidate_count: 16
+    enumerated_seed_counts_by_status:
+      encoded: 0
+      classified-with-reason: 0
+      excluded-with-reason: 0
+      pending: 16
+    pending_enumerated_seed_candidates:
+    - fr-2022-02906
+    - fr-2024-21217
+    - fr-2025-06063
+    - fr-2025-23316
+    - fr-2026-03824
+    - fr-2026-03829
+    - fr-2026-03832
+    - fr-2026-06960
+    - fr-2026-12669
+    - fr-2026-12670
+    - fr-2026-14542
+    - fr-2026-14991
+    - fr-2026-15181
+    - fr-2026-15274
+    - us-code-19-1321-a-2-c
+    - us-hts-2026-rev15
+    discovery_channel_count: 4
+    pending_discovery_channels:
+    - corpus-bidirectional-citation-scan
+    - federal-register-authority-and-subject-search
+    - hts-chapter-99-page-census
+    - rulespec-source-verification-citations
+    additional_known_families_open: true
+    denominator_status: unknown
+    executable_surface:
+      id: us-tariff-schedule-ensemble-v1
+      scope_kind: multi-program-ensemble
+      row_contract: program_spec<TAB>module<TAB>promised_output
+      program_count: 101
+      rows_sha256: c476cb14ac580ff7e8cf92b8f077bbbe58915beca429ee0c18b76e44484c53d3
+      singular_composed_output: false
+      composition_identity_complete: false
+      closure_eligible: false
+      reason: The audited surface is one witness output plus 100 separate chapter schedule outputs; those outputs
+        are not composed into one us_tariff_duty output.
+    complete: false
+    discovery_channels:
+    - id: rulespec-source-verification-citations
+      state: pending
+      reason: The seed list was enumerated from current source_verification blocks, but no committed, hash-bound
+        scan result yet proves the complete reachable citation union.
+    - id: federal-register-authority-and-subject-search
+      state: pending
+      reason: No complete agency, authority, and subject-matter search has yet bounded uncited tariff-bearing Federal
+        Register instruments.
+    - id: hts-chapter-99-page-census
+      state: pending
+      reason: The complete Chapter 99 page and historical-vintage instrument census remains open.
+    - id: corpus-bidirectional-citation-scan
+      state: pending
+      reason: The corpus text-cites-program versus captured-link-graph cross-check required by oracles#491 has not
+        run to closure.
+    ledger:
+    - id: us-hts-2026-rev15
+      citation: Harmonized Tariff Schedule of the United States (2026), Revision 15
+      relation: rates_publication
+      status: pending
+      reason: The pinned schedule is captured, but its complete Chapter 99 and historical-vintage disposition is
+        not closed.
+      bears_on_computed_surface: true
+    - id: us-code-19-1321-a-2-c
+      citation: 19 U.S.C. 1321(a)(2)(C)
+      relation: bears_on
+      status: pending
+      reason: The statutory de minimis threshold is cited, but its complete regulatory and amendment dependency
+        chain is not dispositioned.
+      bears_on_computed_surface: true
+    - id: fr-2022-02906
+      citation: 87 FR 7357, document 2022-02906
+      relation: bears_on
+      status: pending
+      reason: The Section 201 solar safeguard instrument is cited but not yet independently dispositioned in this
+        frontier.
+      bears_on_computed_surface: true
+    - id: fr-2024-21217
+      citation: Federal Register document 2024-21217
+      relation: bears_on
+      status: pending
+      reason: The 2024 China Section 301 action is cited but its complete dependency and membership disposition
+        remains open.
+      bears_on_computed_surface: true
+    - id: fr-2025-06063
+      citation: Federal Register document 2025-06063
+      relation: bears_on
+      status: pending
+      reason: The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.
+      bears_on_computed_surface: true
+    - id: fr-2025-23316
+      citation: Federal Register document 2025-23316
+      relation: bears_on
+      status: pending
+      reason: The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.
+      bears_on_computed_surface: true
+    - id: fr-2026-03824
+      citation: Federal Register document 2026-03824
+      relation: bears_on
+      status: pending
+      reason: The temporary Section 122 import surcharge instrument is cited but its exact-time and dependency disposition
+        remains open.
+      bears_on_computed_surface: true
+    - id: fr-2026-03829
+      citation: Federal Register document 2026-03829
+      relation: bears_on
+      status: pending
+      reason: The de minimis suspension instrument is cited but its complete regulatory dependency chain remains
+        open.
+      bears_on_computed_surface: true
+    - id: fr-2026-03832
+      citation: Federal Register document 2026-03832
+      relation: bears_on
+      status: pending
+      reason: The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.
+      bears_on_computed_surface: true
+    - id: fr-2026-06960
+      citation: Federal Register document 2026-06960
+      relation: bears_on
+      status: pending
+      reason: The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.
+      bears_on_computed_surface: true
+    - id: fr-2026-12669
+      citation: Federal Register document 2026-12669
+      relation: bears_on
+      status: pending
+      reason: The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.
+      bears_on_computed_surface: true
+    - id: fr-2026-12670
+      citation: Federal Register document 2026-12670
+      relation: bears_on
+      status: pending
+      reason: The nonpostal de minimis rule is cited but its complete authority and successor-notice chain remains
+        open.
+      bears_on_computed_surface: true
+    - id: fr-2026-14542
+      citation: Federal Register document 2026-14542
+      relation: bears_on
+      status: pending
+      reason: The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.
+      bears_on_computed_surface: true
+    - id: fr-2026-14991
+      citation: Federal Register document 2026-14991 and annexes
+      relation: bears_on
+      status: pending
+      reason: The instrument and cited annex pages are captured, but complete annex and dependency disposition remains
+        open.
+      bears_on_computed_surface: true
+    - id: fr-2026-15181
+      citation: Federal Register document 2026-15181
+      relation: bears_on
+      status: pending
+      reason: The forced-labor tariff action is cited but its complete incidence and exception dependency chain
+        remains open.
+      bears_on_computed_surface: true
+    - id: fr-2026-15274
+      citation: Federal Register document 2026-15274
+      relation: bears_on
+      status: pending
+      reason: The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.
+      bears_on_computed_surface: true
+  dependency_closure:
+    law_derived_inputs:
+    - entry_is_brazil_301_listed
+    - entry_is_china_301_2024_action
+    - entry_is_china_301_list123
+    - entry_is_china_301_list4a
+    - entry_is_china_301_solar
+    - entry_is_forced_labor_301_listed
+    - entry_is_line_a
+    - entry_is_line_b
+    - entry_is_line_d
+    - entry_is_section_122_exempt
+    - entry_is_section_201_cspv
+    - entry_is_section_232_aluminum
+    - entry_is_section_232_covered
+    - entry_is_section_232_steel
+    - resolved_non_ad_valorem_column2_rate
+    unclassified_inputs: []
+    instruments_bearing_on_computed:
+    - fr-2022-02906
+    - fr-2024-21217
+    - fr-2025-06063
+    - fr-2025-23316
+    - fr-2026-03824
+    - fr-2026-03829
+    - fr-2026-03832
+    - fr-2026-06960
+    - fr-2026-12669
+    - fr-2026-12670
+    - fr-2026-14542
+    - fr-2026-14991
+    - fr-2026-15181
+    - fr-2026-15274
+    - us-code-19-1321-a-2-c
+    - us-hts-2026-rev15
+    open_dependency_count: 31
+    closed: false
+  non_encoded_reasons_complete: true
   closed: false

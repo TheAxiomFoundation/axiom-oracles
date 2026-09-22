@@ -54,6 +54,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 #: shape from delta-audit #8). Shared shape with closure_ledger/_HEX_GIT_SHA and
 #: executable_reproduction/HEX_40.
 GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
+SHA256 = re.compile(r"^[0-9a-f]{64}$")
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
@@ -182,6 +183,7 @@ PROGRAMS: dict[str, dict] = {
     },
     "us/tariff-duty": {
         "period": "2026",
+        "require_program_set_binding": True,
         "suites": [
             {
                 "suite": "us-tariff-schedule",
@@ -199,7 +201,7 @@ PROGRAMS: dict[str, dict] = {
             "closed": {
                 "artifact": "conformance/closure/us-tariff-duty.yaml",
                 "producer": "scripts/us_tariff_closure.py",
-                "contract": "us_tariff_closure_v1",
+                "contract": "us_tariff_closure_v3",
                 "include_burndown": True,
             },
             "executable": {
@@ -314,8 +316,7 @@ for _de_pending_program in (
         "computed": {
             "closed": {
                 "artifact": (
-                    "conformance/closure/"
-                    f"{_de_pending_program.replace('/', '-')}.yaml"
+                    f"conformance/closure/{_de_pending_program.replace('/', '-')}.yaml"
                 ),
                 "producer": "scripts/de_closure_ledger.py",
                 "external_verification": "hermetic_program_scoped",
@@ -1204,6 +1205,19 @@ def _producer_closed_verdict(
     if not isinstance(document, dict):
         raise ValueError(f"{artifact_ref} closure artifact must contain an object")
     producer = _producer_module(str(config.get("producer") or ""))
+    declared_contract = config.get("contract")
+    if declared_contract is not None:
+        # A registry that names a closure contract binds itself to the
+        # producer's own declaration: a stale or forged contract string
+        # (e.g. a v1 label over a v3 ledger) fails closed here rather than
+        # silently describing a ledger the producer no longer emits.
+        producer_contract = getattr(producer, "CONTRACT", None)
+        if producer_contract != declared_contract:
+            raise ValueError(
+                f"{artifact_ref} closure contract mismatch: the certificate "
+                f"registry declares {declared_contract!r} but the producer "
+                f"declares {producer_contract!r}"
+            )
     try:
         summary = (
             producer.validate_artifact(document, repo_root=REPO_ROOT)
@@ -1295,13 +1309,23 @@ def _producer_closed_verdict(
         raise ValueError(f"{artifact_ref} has no computed closure block")
     facts = document.get("generated_facts") or {}
     ledger_rulespec = facts.get("rulespec") if isinstance(facts, dict) else None
-    return {
+    result = {
         "mode": "computed",
         "value": value,
         "status": "computed_closed" if value else "computed_open",
         "artifact": str(artifact_ref),
         "rulespec_commit": (
             ledger_rulespec.get("commit") if isinstance(ledger_rulespec, dict) else None
+        ),
+        **(
+            {"program_set": facts.get("program_set")}
+            if isinstance(facts, dict) and "program_set" in facts
+            else {}
+        ),
+        **(
+            {"reproduction_contract": document.get("reproduction_contract")}
+            if "reproduction_contract" in document
+            else {}
         ),
         "provision_counts": computed.get("provision_counts"),
         "boundary_frontier": computed.get("boundary_frontier"),
@@ -1317,6 +1341,7 @@ def _producer_closed_verdict(
             summary, "non_encoded_reasons_complete", None
         ),
     }
+    return result
 
 
 def _producer_executable_verdict(
@@ -1418,7 +1443,7 @@ def _producer_executable_verdict(
             "transcript": document.get("transcript"),
             "summary": scoped,
         }
-    return {
+    result = {
         "mode": "computed",
         "value": value,
         "status": "computed_pass" if value else "computed_fail",
@@ -1429,16 +1454,66 @@ def _producer_executable_verdict(
         "configured_engine_sha256": (document.get("engine") or {}).get(
             "configured_sha256"
         ),
-        "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
-        "compiled_artifacts": [
+        **(
             {
-                "program": row.get("program"),
-                "sha256": row.get("sha256"),
+                "engine_binary_provenance": (document.get("engine") or {}).get(
+                    "provenance"
+                )
             }
+            if "provenance" in (document.get("engine") or {})
+            else {}
+        ),
+        "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
+        **(
+            {"program_set": document.get("program_set")}
+            if "program_set" in document
+            else {}
+        ),
+        **(
+            {
+                "compiled_artifact_rows_sha256": document.get(
+                    "compiled_artifact_rows_sha256"
+                )
+            }
+            if "compiled_artifact_rows_sha256" in document
+            else {}
+        ),
+        **(
+            {"execution_trace_rows_sha256": document.get("execution_trace_rows_sha256")}
+            if "execution_trace_rows_sha256" in document
+            else {}
+        ),
+        "compiled_artifacts": [
+            (
+                {
+                    "program_spec": row.get("program_spec"),
+                    "module": row.get("module"),
+                    "promised_output": row.get("promised_output"),
+                    "sha256": row.get("sha256"),
+                }
+                if "program_spec" in row
+                else {
+                    "program": row.get("program"),
+                    "sha256": row.get("sha256"),
+                }
+            )
             for row in document.get("compiled_artifacts") or []
             if isinstance(row, dict)
         ],
     }
+    if "execution_scope" in document:
+        summary_blockers = summary.get("blockers")
+        if not isinstance(summary_blockers, list) or any(
+            not isinstance(blocker, str) or not blocker for blocker in summary_blockers
+        ):
+            raise ValueError(f"{artifact_ref} has malformed execution blockers")
+        result.update(
+            execution_scope=document.get("execution_scope"),
+            reproduction_contract=document.get("reproduction_contract"),
+            compile_replay_reproduced=summary.get("compile_replay_reproduced"),
+            blockers=list(summary_blockers),
+        )
+    return result
 
 
 def _closed_verdict(
@@ -2489,6 +2564,35 @@ def build_certificate(
                 "regenerate both at one commit"
             )
 
+        if spec.get("require_program_set_binding"):
+            closed_program_set = closed_block.get("program_set")
+            executable_program_set = executable_block.get("program_set")
+            comparable_program_set = (
+                isinstance(closed_program_set, dict)
+                and isinstance(executable_program_set, dict)
+                and isinstance(closed_program_set.get("rows_sha256"), str)
+                and SHA256.fullmatch(closed_program_set["rows_sha256"])
+                and isinstance(executable_program_set.get("rows_sha256"), str)
+                and SHA256.fullmatch(executable_program_set["rows_sha256"])
+                and isinstance(closed_program_set.get("program_count"), int)
+                and not isinstance(closed_program_set.get("program_count"), bool)
+                and isinstance(executable_program_set.get("program_count"), int)
+                and not isinstance(executable_program_set.get("program_count"), bool)
+            )
+            if not comparable_program_set:
+                blockers.append(
+                    "producers' program-set provenance is not comparable: closure "
+                    "and executable receipts must bind hash-identified program "
+                    "spec/module/promised-output rows"
+                )
+            elif closed_program_set != executable_program_set:
+                blockers.append(
+                    "producers disagree on the exact program set: closure ledger "
+                    f"{closed_program_set['rows_sha256'][:12]} vs executable receipt "
+                    f"{executable_program_set['rows_sha256'][:12]}; regenerate both "
+                    "against one program surface"
+                )
+
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
     # in computed mode with no open defects. A certificate resting on attested
@@ -2621,9 +2725,14 @@ def _out_path(program: str) -> Path:
     return OUT_DIR / f"{program.replace('/', '-')}.json"
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
+    parser.add_argument(
+        "--program",
+        choices=sorted(PROGRAMS),
+        help="generate or check one certificate without evaluating unrelated programs",
+    )
     parser.add_argument(
         "--verify-producers",
         action="store_true",
@@ -2633,15 +2742,25 @@ def main() -> int:
             "reproductions before certifying"
         ),
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
-    certificates = build_all(verify_producers=args.verify_producers)
+    certificates = (
+        {
+            args.program: build_certificate(
+                args.program,
+                PROGRAMS[args.program],
+                verify_producers=args.verify_producers,
+            )
+        }
+        if args.program
+        else build_all(verify_producers=args.verify_producers)
+    )
     if args.check:
         # An unexpected certificate is a defect, not a curiosity: certificates/
         # is inside the bot's derived_paths, so a retired or stray file there is
         # restored and committed by a refresh (round-3 audit finding 7).
         expected = {_out_path(program).name for program in certificates}
-        if OUT_DIR.exists():
+        if args.program is None and OUT_DIR.exists():
             stray = sorted(
                 p.name for p in OUT_DIR.glob("*.json") if p.name not in expected
             )
