@@ -118,6 +118,9 @@ jobs:
       - name: Program certificates recompute clean
         run: uv run python scripts/certify.py --check
 
+      - name: Tariff evidence captures match every recorded digest
+        run: uv run python scripts/us_tariff_capture_integrity.py
+
       - name: Validate served SNAP case-explorer parity
         run: |
           uv run scripts/emit_case_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps

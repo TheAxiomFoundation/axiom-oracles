@@ -3366,6 +3366,119 @@ def test_tariff_certificate_rejects_program_set_mismatch(monkeypatch):
     )
 
 
+_UNCOMPARABLE_PROGRAM_SETS = {
+    "missing": None,
+    "not-an-object": "us-tariff-schedule-ensemble-v1",
+    "digest-not-hex": {"rows_sha256": "not-a-sha256", "program_count": 101},
+    "digest-not-a-string": {"rows_sha256": 101, "program_count": 101},
+    "count-is-bool": {"rows_sha256": "0" * 64, "program_count": True},
+    "count-is-string": {"rows_sha256": "0" * 64, "program_count": "101"},
+}
+
+
+@pytest.mark.parametrize(
+    "sides,forgery",
+    [
+        (side, forgery)
+        for side in ("both", "closed", "executable")
+        for forgery in sorted(_UNCOMPARABLE_PROGRAM_SETS)
+    ],
+)
+def test_tariff_certificate_blocks_uncomparable_program_set_provenance(
+    monkeypatch, sides, forgery
+):
+    """A program set that is not a hash-identified row binding is a blocker,
+    never a silent skip or a crash. "both" forges the two premises
+    identically, so plain equality alone would wave them through."""
+
+    certify = _load("certify")
+    value = _UNCOMPARABLE_PROGRAM_SETS[forgery]
+
+    def forge(real):
+        def forged(*args, **kwargs):
+            block = real(*args, **kwargs)
+            if value is None:
+                block.pop("program_set", None)
+            else:
+                block["program_set"] = copy.deepcopy(value)
+            return block
+
+        return forged
+
+    if sides in ("closed", "both"):
+        monkeypatch.setattr(certify, "_closed_verdict", forge(certify._closed_verdict))
+    if sides in ("executable", "both"):
+        monkeypatch.setattr(
+            certify, "_executable_verdict", forge(certify._executable_verdict)
+        )
+    certificate = certify.build_certificate(
+        "us/tariff-duty", certify.PROGRAMS["us/tariff-duty"]
+    )
+    assert certificate["certified"]["value"] is False
+    assert (
+        sum(
+            "program-set provenance is not comparable" in blocker
+            for blocker in certificate["blockers"]
+        )
+        == 1
+    ), certificate["blockers"]
+    assert not any(
+        "disagree on the exact program set" in blocker
+        for blocker in certificate["blockers"]
+    )
+
+
+def _tariff_executable_verdict_with_blockers(monkeypatch, blockers):
+    """Run the tariff executable producer verdict with the validator's
+    summary blockers replaced (``None`` removes the key)."""
+
+    certify = _load("certify")
+    spec = certify.PROGRAMS["us/tariff-duty"]
+    producer_path = spec["computed"]["executable"]["producer"]
+    real_producer_module = certify._producer_module
+
+    def producer_module(relative):
+        module = real_producer_module(relative)
+        if relative != producer_path:
+            return module
+        real_validate = module.validate_artifact
+
+        def validate_artifact(document, **kwargs):
+            summary = dict(real_validate(document, **kwargs))
+            if blockers is None:
+                summary.pop("blockers", None)
+            else:
+                summary["blockers"] = blockers
+            return summary
+
+        monkeypatch.setattr(module, "validate_artifact", validate_artifact)
+        return module
+
+    monkeypatch.setattr(certify, "_producer_module", producer_module)
+    return certify._producer_executable_verdict("us/tariff-duty", spec, [])
+
+
+def test_tariff_executable_verdict_carries_the_validated_blockers(monkeypatch):
+    # Control for the malformed cases below.
+    verdict = _tariff_executable_verdict_with_blockers(
+        monkeypatch, ["closed: composition identity remains open"]
+    )
+    assert "execution_scope" in verdict
+    assert verdict["blockers"] == ["closed: composition identity remains open"]
+
+
+@pytest.mark.parametrize(
+    "blockers",
+    [None, "one blocker as a bare string", [1], [""], ["valid", None]],
+    ids=["missing", "string", "non-string-item", "empty-item", "none-item"],
+)
+def test_tariff_executable_verdict_rejects_malformed_execution_blockers(
+    monkeypatch, blockers
+):
+    with pytest.raises(ValueError, match="has malformed execution blockers"):
+        _tariff_executable_verdict_with_blockers(monkeypatch, blockers)
+
+
 def test_tariff_certificate_declares_the_v3_closure_contract():
     """The registry's contract string, the producer's declared contract, the
     producer's ledger schema version, and the committed ledger's schema must
@@ -5874,6 +5987,151 @@ def test_closure_gate_counts_unclassified_inputs_as_open():
     assert blockers == [
         "closed: " + closure_gate.FRONTIER_MISSING_REQUIREMENT,
         "closed: " + closure_gate.DEPENDENCY_MISSING_REQUIREMENT,
+    ]
+
+
+# ---------------------------------------------------------------------------
+# Seed-only instrument frontiers (the US tariff ledger's shape): a producer's
+# complete=true cannot outvote the frontier's own open disclosures.
+# ---------------------------------------------------------------------------
+
+
+def _seed_only_closed_computed() -> dict:
+    """A seed-only frontier whose own disclosures are all resolved."""
+
+    return {
+        "instrument_frontier": {
+            "enumeration_scope": "seed-only-v1",
+            "enumerated_seed_candidate_count": 2,
+            "enumerated_seed_counts_by_status": {"encoded": 2, "pending": 0},
+            "pending_enumerated_seed_candidates": [],
+            "discovery_channel_count": 1,
+            "pending_discovery_channels": [],
+            "additional_known_families_open": False,
+            "denominator_status": "known",
+            "executable_surface": {"program_count": 1, "closure_eligible": True},
+            "complete": True,
+        },
+        "dependency_closure": {
+            "open_dependency_count": 0,
+            "law_derived_inputs": [],
+            "instruments_bearing_on_computed": [],
+            "closed": True,
+        },
+    }
+
+
+def test_seed_only_frontier_with_resolved_disclosures_passes_the_gate():
+    """Control for the forged cases below: every refusal is caused by the
+    one field each case changes."""
+
+    closure_gate = _load("closure_gate")
+    frontier, _d, passes, blockers = closure_gate.gate(_seed_only_closed_computed())
+    assert frontier["complete"] is True
+    assert (passes, blockers) == (True, [])
+
+
+_ABSENT = object()
+_SEED_FRONTIER = "closed: instrument frontier incomplete — "
+_SURFACE_NOT_ELIGIBLE = _SEED_FRONTIER + "executable surface not closure-eligible"
+
+
+@pytest.mark.parametrize(
+    "field,value,expected_blockers",
+    [
+        (
+            "denominator_status",
+            "unknown",
+            [
+                _SEED_FRONTIER + "0 enumerated seed candidates pending; additional "
+                "known families and 0 discovery channels open; denominator unknown "
+                "(oracles#491)"
+            ],
+        ),
+        (
+            "denominator_status",
+            _ABSENT,
+            [_SEED_FRONTIER + "denominator status undeclared (oracles#491)"],
+        ),
+        (
+            "pending_enumerated_seed_candidates",
+            ["instrument-a"],
+            [_SEED_FRONTIER + "1 enumerated seed candidates pending (oracles#491)"],
+        ),
+        (
+            "pending_enumerated_seed_candidates",
+            _ABSENT,
+            [
+                _SEED_FRONTIER
+                + "pending_enumerated_seed_candidates undeclared (oracles#491)"
+            ],
+        ),
+        (
+            "pending_discovery_channels",
+            ["channel-a", "channel-b"],
+            [_SEED_FRONTIER + "2 discovery channels open (oracles#491)"],
+        ),
+        (
+            "additional_known_families_open",
+            True,
+            [_SEED_FRONTIER + "additional known families open (oracles#491)"],
+        ),
+        (
+            "executable_surface",
+            {"program_count": 1, "closure_eligible": False},
+            [
+                _SURFACE_NOT_ELIGIBLE + " (oracles#491)",
+                "closed: executable surface is not a singular composed program — 1 "
+                "separately compiled program/output rows are bound, but "
+                "composition identity remains open",
+            ],
+        ),
+        (
+            "executable_surface",
+            _ABSENT,
+            [
+                _SURFACE_NOT_ELIGIBLE + " (oracles#491)",
+                "closed: executable surface block is missing and cannot satisfy "
+                "composition identity",
+            ],
+        ),
+    ],
+)
+def test_forged_seed_only_complete_claim_fails_the_gate(
+    field, value, expected_blockers
+):
+    closure_gate = _load("closure_gate")
+    computed = _seed_only_closed_computed()
+    if value is _ABSENT:
+        del computed["instrument_frontier"][field]
+    else:
+        computed["instrument_frontier"][field] = value
+    assert computed["instrument_frontier"]["complete"] is True
+    frontier, _d, passes, blockers = closure_gate.gate(computed)
+    assert frontier["complete"] is False
+    assert passes is False
+    assert blockers == expected_blockers
+
+
+def test_missing_surface_fails_a_seed_only_frontier_even_without_complete_claim(
+    monkeypatch,
+):
+    """The surface requirement is enforced by gate() itself, not only through
+    the summary's complete flag."""
+
+    closure_gate = _load("closure_gate")
+    computed = _seed_only_closed_computed()
+    del computed["instrument_frontier"]["executable_surface"]
+    # Even a summary that kept complete=true cannot pass without a surface.
+    monkeypatch.setattr(
+        closure_gate, "_seed_only_disclosures_resolved", lambda frontier: True
+    )
+    frontier, _d, passes, blockers = closure_gate.gate(computed)
+    assert frontier["complete"] is True
+    assert passes is False
+    assert blockers == [
+        "closed: executable surface block is missing and cannot satisfy "
+        "composition identity"
     ]
 
 
