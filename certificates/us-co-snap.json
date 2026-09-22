@@ -13,7 +13,7 @@
       "artifact": "conformance/exercise-census.json",
       "claim": "exercise census",
       "mode": "computed",
-      "sha256": "db0503880be114c47607b06709f6c9773f981182e5ba4d22fe5670989601de22"
+      "sha256": "109b78b19a7b407a795420c181b493899e6240eb6b0e61f5f895f2f17e62501d"
     },
     {
       "artifact": "dashboard/public/data/axiom-policyengine-co-snap-ecps.json",
