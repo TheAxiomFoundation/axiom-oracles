@@ -545,6 +545,85 @@ def test_instrument_frontier_discloses_an_unknown_denominator():
     assert frontier["denominator_status"] == "unknown"
 
 
+def _resolved_instrument_graph(module):
+    """The committed graph with every seed disposed and every channel run."""
+    graph, _facts = module._load_instrument_graph()
+    graph = copy.deepcopy(graph)
+    for row in graph["instruments"]:
+        row["status"] = "encoded"
+    for row in graph["channels"]:
+        row["state"] = "complete"
+    return graph
+
+
+def _closure_eligible_surface(module, monkeypatch):
+    monkeypatch.setattr(
+        module,
+        "EXECUTABLE_SURFACE",
+        {**module.EXECUTABLE_SURFACE, "closure_eligible": True},
+    )
+
+
+def test_resolved_seed_only_frontier_completes_only_when_its_disclosures_do(
+    monkeypatch,
+):
+    # Control for the three cases below: with the graph resolved, the surface
+    # eligible, the denominator known and no known family open, complete=true.
+    module = _module()
+    _closure_eligible_surface(module, monkeypatch)
+    monkeypatch.setattr(module, "SEED_ONLY_DENOMINATOR_STATUS", "known")
+    monkeypatch.setattr(module, "SEED_ONLY_ADDITIONAL_KNOWN_FAMILIES_OPEN", False)
+    frontier = module._derive_instrument_frontier(_resolved_instrument_graph(module))
+    assert frontier["pending_enumerated_seed_candidates"] == []
+    assert frontier["pending_discovery_channels"] == []
+    assert frontier["complete"] is True
+
+
+def test_unknown_denominator_keeps_a_resolved_seed_only_frontier_incomplete(
+    monkeypatch,
+):
+    module = _module()
+    _closure_eligible_surface(module, monkeypatch)
+    monkeypatch.setattr(module, "SEED_ONLY_ADDITIONAL_KNOWN_FAMILIES_OPEN", False)
+    frontier = module._derive_instrument_frontier(_resolved_instrument_graph(module))
+    assert frontier["denominator_status"] == "unknown"
+    assert frontier["complete"] is False
+
+
+def test_open_known_families_keep_a_resolved_seed_only_frontier_incomplete(
+    monkeypatch,
+):
+    module = _module()
+    _closure_eligible_surface(module, monkeypatch)
+    monkeypatch.setattr(module, "SEED_ONLY_DENOMINATOR_STATUS", "known")
+    frontier = module._derive_instrument_frontier(_resolved_instrument_graph(module))
+    assert frontier["additional_known_families_open"] is True
+    assert frontier["complete"] is False
+
+
+def test_ineligible_surface_keeps_a_resolved_seed_only_frontier_incomplete(
+    monkeypatch,
+):
+    module = _module()
+    monkeypatch.setattr(module, "SEED_ONLY_DENOMINATOR_STATUS", "known")
+    monkeypatch.setattr(module, "SEED_ONLY_ADDITIONAL_KNOWN_FAMILIES_OPEN", False)
+    frontier = module._derive_instrument_frontier(_resolved_instrument_graph(module))
+    assert frontier["executable_surface"]["closure_eligible"] is False
+    assert frontier["complete"] is False
+
+
+def test_committed_frontier_is_the_hard_coded_disclosures():
+    module = _module()
+    frontier = _document(module)["computed"]["instrument_frontier"]
+    assert frontier["executable_surface"] == module.EXECUTABLE_SURFACE
+    assert frontier["denominator_status"] == module.SEED_ONLY_DENOMINATOR_STATUS
+    assert (
+        frontier["additional_known_families_open"]
+        is module.SEED_ONLY_ADDITIONAL_KNOWN_FAMILIES_OPEN
+    )
+    assert frontier["complete"] is False
+
+
 def test_forged_dependency_count_cannot_flip_closure():
     module = _module()
     document = _document(module)

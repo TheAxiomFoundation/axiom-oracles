@@ -109,6 +109,22 @@ EXPECTED_PROGRAM_SET = {
     "rows_sha256": PROGRAM_SET_ROWS_SHA256,
     "singular_composed_output": False,
 }
+# What the seed-only instrument frontier discloses about itself. Its complete
+# flag requires each of these to be resolved (a closure-eligible surface, a
+# known denominator, no known family left open) in addition to an all-resolved
+# instrument graph, so no graph edit alone can flip it.
+EXECUTABLE_SURFACE = {
+    **EXPECTED_PROGRAM_SET,
+    "composition_identity_complete": False,
+    "closure_eligible": False,
+    "reason": (
+        "The audited surface is one witness output plus 100 separate "
+        "chapter schedule outputs; those outputs are not composed into one "
+        "us_tariff_duty output."
+    ),
+}
+SEED_ONLY_DENOMINATOR_STATUS = "unknown"
+SEED_ONLY_ADDITIONAL_KNOWN_FAMILIES_OPEN = True
 INSTRUMENT_GRAPH = ROOT / "conformance/closure/us-tariff-instrument-graph.json"
 INSTRUMENT_GRAPH_SCHEMA = "axiom_oracles.closure.us_tariff_instrument_graph.v1"
 INSTRUMENT_GRAPH_SHA256 = (
@@ -1274,21 +1290,16 @@ def _derive_instrument_frontier(graph: Mapping[str, Any]) -> dict[str, Any]:
     pending_channels = sorted(
         row["id"] for row in channels if row.get("state") != "complete"
     )
-    executable_surface = {
-        **EXPECTED_PROGRAM_SET,
-        "composition_identity_complete": False,
-        "closure_eligible": False,
-        "reason": (
-            "The audited surface is one witness output plus 100 separate "
-            "chapter schedule outputs; those outputs are not composed into one "
-            "us_tariff_duty output."
-        ),
-    }
+    executable_surface = dict(EXECUTABLE_SURFACE)
+    denominator_status = SEED_ONLY_DENOMINATOR_STATUS
+    additional_known_families_open = SEED_ONLY_ADDITIONAL_KNOWN_FAMILIES_OPEN
     complete = (
         bool(instruments)
         and not pending
         and all(row.get("state") == "complete" for row in channels)
-        and executable_surface["closure_eligible"]
+        and executable_surface["closure_eligible"] is True
+        and denominator_status != "unknown"
+        and not additional_known_families_open
     )
     return {
         "enumeration_scope": "seed-only-v1",
@@ -1297,8 +1308,8 @@ def _derive_instrument_frontier(graph: Mapping[str, Any]) -> dict[str, Any]:
         "pending_enumerated_seed_candidates": pending,
         "discovery_channel_count": len(channels),
         "pending_discovery_channels": pending_channels,
-        "additional_known_families_open": True,
-        "denominator_status": "unknown",
+        "additional_known_families_open": additional_known_families_open,
+        "denominator_status": denominator_status,
         "executable_surface": executable_surface,
         "complete": complete,
         "discovery_channels": channels,

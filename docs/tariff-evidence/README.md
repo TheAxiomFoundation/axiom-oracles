@@ -11,8 +11,11 @@ the live closure ledger, and does not authorize release.
 - Corpus: `cc18c703741425a3ebf994a2975cae158bd305d1`
 - Axiom engine source: `ffd8213271947b0189a9dd61a055c1e0e78908a0`
 - Axiom engine SHA-256: `674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7`
-- Repository base used to author this uncommitted package:
-  `c7cd2346ef540801d2c89780420be77dc0654ff9`
+- Repository base the package was authored on, pinned as
+  `repository_base_ref` in `frontier-inventory.json` and both replay
+  manifests: `c7cd2346ef540801d2c89780420be77dc0654ff9`. The package itself
+  is committed: it was added in `edba8400d` and merged to `main` by #545
+  (`6dcf4ecc3`).
 - Canonical historical input inventory: 58 reachable inputs, all with named
   scopes and all still lacking actual-entry grounding
 - Evidence coverage: 21 of those 58 scopes
@@ -78,6 +81,15 @@ uv run python scripts/build_us_tariff_column2_evidence.py
 uv run python scripts/build_us_tariff_metal_evidence.py
 uv run python scripts/us_tariff_evidence_snapshot.py
 ```
+
+None of that configuration is needed to check the committed raw captures.
+`uv run python scripts/us_tariff_capture_integrity.py` recomputes the SHA-256
+(and byte count, where recorded) of every file under
+`reference/us-tariff-schedule/boundary-evidence/` that a committed receipt,
+the frontier inventory or a replay manifest records, and compares it with
+every recorded value. It fails on a mismatch, on a recorded file that is
+missing, and on a capture file that nothing records. The CI workflow runs it
+on pull requests and on pushes to `main`.
 
 The two replay builders write deterministic archives to a caller-selected
 path and write their trusted receipt separately. Extract an archive into an
