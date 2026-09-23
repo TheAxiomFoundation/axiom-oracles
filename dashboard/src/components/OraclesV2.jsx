@@ -80,8 +80,8 @@ const ORACLE_IDENTITY = {
   },
   "snap-qc": {
     org: "USDA Food and Nutrition Service",
-    what: "SNAP Quality Control microdata — the USDA's annual audit sample of real SNAP cases, re-verified case by case by state reviewers. Administrative records of benefits actually issued, not a simulation.",
-    url: "https://snapqcdata.us",
+    what: "SNAP Quality Control public-use file — the USDA's national sample of active SNAP cases, each reviewed by state QC reviewers who reinterview the household. Axiom is compared with FSBEN, the file's final calculated benefit, which Mathematica computes for USDA from each edited case record; the benefit received is a separate field (RAWBEN).",
+    url: "https://snapqcdata.net/datafiles",
   },
   spsm: {
     org: "Statistics Canada",

@@ -1,12 +1,13 @@
 """Validate state SNAP RuleSpec output against the SNAP QC administrative file.
 
 The USDA SNAP Quality Control (QC) public-use file is a monthly sample of
-active-case reviews. Each record carries the case's reported benefit
-(``RAWBEN``) and, more usefully as ground truth, ``FSBEN`` — the benefit that
-FNS/Mathematica *reconstruct* from the edited case inputs and the official
-fiscal-year parameters via the QC Minimodel. Because that reconstruction is a
-faithful re-run of the statutory benefit computation over clean inputs, it is a
-per-case oracle for a benefit engine: project the QC unit's income, size,
+active-case reviews. Each record carries the benefit the review recorded as
+received (``RAWBEN``) and, more usefully as ground truth, ``FSBEN`` — the
+file's "final calculated benefit", which Mathematica computes for USDA from the
+edited case record and the fiscal year's parameters while building the file
+(FY 2024 tech doc editing Step 12, PDF p.32; codebook, PDF p.87). Because that
+calculation runs the benefit formula over edited, internally consistent inputs,
+it is a per-case oracle for a benefit engine: project the QC unit's income, size,
 shelter, utilities, deductions, and resources onto the RuleSpec composition's
 input surface, run the engine, and compare the regular monthly allotment and
 its intermediate stages against the QC constructed values.
@@ -281,10 +282,11 @@ QC_JURISDICTIONS = {
             "telephone_standard_allowance_amount": ("telephone", "rest_of_state"),
         },
         child_support_convention="deduction",
-        # The composition's statutory 2014(e)/2017(a) chain carries cents;
-        # FNS's Minimodel — and New York's own system (QC tech doc footnote
-        # 20) — compute in whole dollars under the 273.10(e)(1)(ii)(A)
-        # election. Since TheAxiomFoundation/rulespec-us#836 the composition
+        # The composition's statutory 2014(e)/2017(a) chain carries cents,
+        # while the QC file records only whole-dollar amounts (FY 2024 tech doc
+        # Table F.3 note a, PDF p.180) and the encoded 273.10 chain computes in
+        # whole dollars under the 273.10(e)(1)(ii)(A) election. Since
+        # TheAxiomFoundation/rulespec-us#836 the composition
         # exposes the issued benefit on the encoded 273.10 chain as
         # snap_benefit (binding the chain's shelter input to New York's
         # 387.12(f)(3)(vi) allowable shelter costs), so the headline compares
@@ -425,7 +427,9 @@ class _Label:
 #: Compared labels in the contract's stage order: the first stage whose axiom
 #: value diverges from the QC value localizes a mismatch. ``expected_attr`` is a
 #: ``QcExpected`` attribute, or ``None`` for the maximum allotment (checked
-#: against the FY 2024 table by size, which the QC file does not store directly).
+#: against the FY 2024 table by certified size; the file's ``BENMAX`` is not
+#: read, and it equals this table for every in-scope FY 2024 unit in the six
+#: replayed states).
 #: The earned-income, medical, dependent-care, and child-support deductions are
 #: not separately bound axiom outputs, so a divergence there first surfaces at
 #: the standard-deduction, shelter-deduction, or net-income stage.

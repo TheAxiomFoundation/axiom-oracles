@@ -9,9 +9,11 @@ import yaml
 
 from axiom_oracles.bridges.rulespec_overlay import (
     OVERLAY_SPEC_SCHEMA_VERSION,
+    OverlayDriftError,
     OverlaySpec,
     ParameterPatch,
     build_overlay,
+    find_unrewritten_importers,
     load_overlay_spec,
     rewrite_output_ids,
 )
@@ -129,6 +131,151 @@ def test_build_overlay_raises_when_rewrite_matches_nothing(tmp_path: Path) -> No
     spec = _spec(rewrite_files=(MODULE_A, COMPOSITION, OTHER_FILE))
     with pytest.raises(ValueError, match="no module-id rewrites matched"):
         build_overlay(spec, root, tmp_path / "dest")
+
+
+# --------------------------------------------------------------------------- #
+# Import-closure drift guard
+# --------------------------------------------------------------------------- #
+
+_OLD_DEDUCTIONS = "us:policies/usda/snap/fy-2026-cola/deductions"
+_OLD_LIMITS = "us:policies/usda/snap/fy-2026-cola/income-eligibility-standards"
+_FULL_ID_REWRITES = {
+    old: old.replace("fy-2026-cola", "fy-2024-cola")
+    for old in (_OLD_DEDUCTIONS, _OLD_LIMITS)
+}
+CLOSURE_PROGRAM = "us-ca/policies/cdss/snap/fy-2026-benefit-calculation.yaml"
+CLOSURE_FEDERAL = "us/policies/usda/snap/state-plan-composition.yaml"
+CLOSURE_MCE = "us-ca/policies/cdss/snap/modified-categorical-eligibility.yaml"
+CLOSURE_SUA = "us-ca/policies/cdss/snap/standard-utility-allowance.yaml"
+CLOSURE_REG = "us/regulations/7-cfr/273/10.yaml"
+
+
+def _closure_tree(root: Path) -> None:
+    """A miniature monorepo shaped like California's closure on rulespec-us
+    main after rulespec-us#1176: the composition imports the federal module
+    and a state module (MCE) that imports an fy-2026-cola module directly,
+    plus a relative import and a ``#fragment`` import to exercise resolution.
+    """
+    for vintage in ("fy-2026-cola", "fy-2024-cola"):
+        for module in ("deductions", "income-eligibility-standards"):
+            _write(
+                root / f"us/policies/usda/snap/{vintage}/{module}.yaml",
+                "rules: []\n",
+            )
+    _write(
+        root / CLOSURE_PROGRAM,
+        "imports:\n"
+        "- us:policies/usda/snap/state-plan-composition\n"
+        "- us-ca:policies/cdss/snap/modified-categorical-eligibility\n"
+        "- ./standard-utility-allowance.yaml\n",
+    )
+    _write(
+        root / CLOSURE_FEDERAL,
+        "imports:\n"
+        f"- {_OLD_DEDUCTIONS}\n"
+        f"- {_OLD_LIMITS}\n"
+        "- 'us:regulations/7-cfr/273/10#snap_net_monthly_income'\n",
+    )
+    _write(
+        root / CLOSURE_MCE,
+        "imports:\n"
+        f"- {_OLD_LIMITS}\n"
+        "- us:policies/usda/snap/state-plan-composition\n",
+    )
+    _write(root / CLOSURE_SUA, "rules: []\n")
+    _write(root / CLOSURE_REG, f"imports:\n- {_OLD_DEDUCTIONS}\n")
+    # Outside the closure: an unrelated importer must never be flagged.
+    _write(
+        root / "us-ca/policies/cdss/unrelated.yaml",
+        f"imports:\n- {_OLD_DEDUCTIONS}\n",
+    )
+
+
+def _closure_spec(rewrite_files: tuple[str, ...]) -> OverlaySpec:
+    return OverlaySpec(
+        name="closure-overlay",
+        program=CLOSURE_PROGRAM,
+        notes="",
+        module_id_rewrites=dict(_FULL_ID_REWRITES),
+        rewrite_files=rewrite_files,
+        parameter_patches=(),
+    )
+
+
+def test_build_overlay_passes_when_every_closure_importer_is_rewritten(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "rulespec-us"
+    _closure_tree(root)
+    spec = _closure_spec((CLOSURE_FEDERAL, CLOSURE_REG, CLOSURE_MCE))
+
+    build = build_overlay(spec, root, tmp_path / "dest")
+
+    assert find_unrewritten_importers(
+        build.overlay_root, spec.program, spec.module_id_rewrites
+    ) == {}
+    assert "fy-2026-cola" not in (build.overlay_root / CLOSURE_MCE).read_text()
+    # The out-of-closure importer is left alone, rewritten or not.
+    assert _OLD_DEDUCTIONS in (
+        build.overlay_root / "us-ca/policies/cdss/unrelated.yaml"
+    ).read_text()
+
+
+def test_build_overlay_names_every_unrewritten_closure_importer(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "rulespec-us"
+    _closure_tree(root)
+    # The committed CA overlay before this guard: MCE (and here 273.10) left out.
+    spec = _closure_spec((CLOSURE_FEDERAL,))
+
+    with pytest.raises(OverlayDriftError) as excinfo:
+        build_overlay(spec, root, tmp_path / "dest")
+
+    message = str(excinfo.value)
+    assert f"{CLOSURE_MCE} imports {_OLD_LIMITS}" in message
+    assert f"{CLOSURE_REG} imports {_OLD_DEDUCTIONS}" in message
+    assert "2 module(s)" in message
+    assert "rewrite_files" in message
+    assert "unrelated.yaml" not in message
+    # Still a ValueError, so existing stale-overlay handling keeps working.
+    assert isinstance(excinfo.value, ValueError)
+
+
+def test_find_unrewritten_importers_resolves_relative_imports(tmp_path: Path) -> None:
+    root = tmp_path / "rulespec-us"
+    _closure_tree(root)
+    # A relative import names the old vintage without its canonical prefix;
+    # resolved from us/regulations/7-cfr/273/ it is the same module id.
+    relative_old = "../../../policies/usda/snap/fy-2026-cola/deductions"
+    _write(root / CLOSURE_REG, f"imports:\n- {relative_old}\n")
+    offenders = find_unrewritten_importers(
+        root, CLOSURE_PROGRAM, dict(_FULL_ID_REWRITES)
+    )
+    assert offenders[CLOSURE_REG] == [relative_old]
+    # The composition's own relative import (./standard-utility-allowance.yaml)
+    # resolves to a clean module and is not flagged.
+    assert CLOSURE_PROGRAM not in offenders
+    assert CLOSURE_SUA not in offenders
+    assert offenders[CLOSURE_MCE] == [_OLD_LIMITS]
+    assert offenders[CLOSURE_FEDERAL] == [_OLD_DEDUCTIONS, _OLD_LIMITS]
+    # Every other module in the fixture closure was visited and is clean.
+    assert set(offenders) == {CLOSURE_FEDERAL, CLOSURE_MCE, CLOSURE_REG}
+
+
+def test_find_unrewritten_importers_follows_extends_and_skips_missing(
+    tmp_path: Path,
+) -> None:
+    root = tmp_path / "rulespec-us"
+    _write(
+        root / "us/program.yaml",
+        "extends: base.yaml\nimports:\n- us:does/not/exist\n",
+    )
+    _write(root / "us/base.yaml", f"imports:\n- {_OLD_DEDUCTIONS}\n")
+    offenders = find_unrewritten_importers(
+        root, "us/program.yaml", dict(_FULL_ID_REWRITES)
+    )
+    assert offenders == {"us/base.yaml": [_OLD_DEDUCTIONS]}
 
 
 def test_rewrite_output_ids_rewrites_only_matching_ids() -> None:

@@ -3,17 +3,23 @@
 The SNAP QC oracle validates Axiom SNAP encodings against real administrative
 microdata rather than against a second engine. It replays the USDA SNAP Quality
 Control public-use file (PUF) through the Axiom RuleSpec SNAP composition and
-checks the file's own recomputed benefit and stage intermediates against Axiom's.
+checks the file's own calculated benefit and stage intermediates against Axiom's.
 This playbook is the standing recipe — the one a future contributor follows to add
-a fiscal year, add a state, or triage a mismatch class. Six jurisdictions run
-for FY2024 — Colorado (the pilot), New York, California, Arizona, Georgia,
-and Maryland:
+a fiscal year, add a state, or triage a mismatch class. Seven FY2024 suites are
+registered. Six of them run against rulespec-us main: Colorado (the pilot), New
+York, California, Arizona, Georgia, and Maryland.
 
 ```bash
-for suite in co ny ca az ga md tx; do
+for suite in co ny ca az ga md; do
   uv run scripts/run_comparison.py "$suite-snap-qc" --summary
 done
 ```
+
+The seventh, `tx-snap-qc`, needs the Texas composition
+(`us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.yaml`),
+which exists only on the unmerged rulespec-us#891 branch. Against main the Texas
+replay stops with `FileNotFoundError` on the composition's test template. Its
+committed report is the July 2026 run against that branch.
 
 That runs the real replay where the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, and the downloaded QC file all exist,
@@ -22,7 +28,13 @@ contract the EUROMOD runner honors). The pins, sha256s, and archive members live
 `axiom_oracles/populations/snap_qc.py::SNAP_QC_PINS`; the loader (`load_qc_units`)
 downloads, verifies, caches, and parses them; the replay harness is
 `axiom_oracles/bridges/snap_qc_compare.py`. Everything below cites the FY2024 QC
-technical documentation by its PDF page (the `qcfy2024_csv.zip` companion doc).
+technical documentation by its PDF page in the May 2026 posting
+(`2026-05/FY-2024-Tech-Doc.pdf`; the overlay specs' `page-183` source citations
+use the same numbering). The August 2026 re-posting
+(`2026-08/FY-2024-Tech-Doc.pdf`) adds a four-page front note on the corrected
+weights, so every cited page is four later there. Apart from the weighting
+material, the cited passages are unchanged except that the agency now reads
+Food and Nutrition Administration (FNA).
 
 ## 1. What the QC public-use file is
 
@@ -32,10 +44,12 @@ technical documentation by its PDF page (the `qcfy2024_csv.zip` companion doc).
   twelve monthly samples into 44,891 unit records for sample months October 2023
   through September 2024 (`YRMONTH` 202310–202409) (tech doc PDF p.15, p.64).
 - The file is nationally representative when weighted by `HWGT`, the monthly sample
-  weight; the documentation warns against within-state tabulations because the
-  per-state sample is not itself representative (tech doc PDF p.64, p.77). Benefit
-  parity does not tabulate by state, so this caveat does not bite — see §7 on
-  replicate weights.
+  weight (tech doc PDF p.64). The documentation's state-level cautions are
+  variable-specific: it recommends caution or against state-level tabulations of
+  `URBRUR` (sample representativeness within a state, PDF p.77), `FSDEPDED` and
+  `DPCOSTi` (small samples and inconsistencies, PDF p.84, p.90), and `ABWDSTi`
+  (PDF p.89). Benefit parity replays each unit rather than tabulating by state, so
+  these cautions do not bite — see §7 on replicate weights.
 - `qc_pub_fy2024.csv` (44,891 rows, ~1,177 columns) is the redacted release of the
   restricted file. Colorado contributes 856 reviews. Person-level facts (`AGE1`–
   `AGE16`, per-source monthly income, relations) and unit-level facts (`CERTHHSZ`,
@@ -44,12 +58,18 @@ technical documentation by its PDF page (the `qcfy2024_csv.zip` companion doc).
 
 ## 2. Ground truth: FSBEN is a constructed benefit
 
-- `FSBEN` is not the benefit the household received. It is FNS/Mathematica's QC
-  Minimodel recomputation of the *correct* benefit from the edited, internally
-  consistent inputs and the official FY parameters (tech doc chapter IV, the QC
-  Minimodel, PDF p.47; the QC-specific portion, PDF p.49). `RAWBEN` is the reported
-  issuance; `STATUS` 1/2/3 = correct/over/under-issuance and `AMTERR` is the dollar
-  error the reviewer recorded.
+- `FSBEN` is not the benefit the household received. The codebook defines it as
+  the "FINAL CALCULATED BENEFIT", a constructed variable computed as `BENMAX`
+  less 30 percent of `FSNETINC` (rounded), floored at the minimum benefit for
+  one- and two-person units and at zero otherwise, with state-specific formulas
+  for MFIP units and standard-benefit SSI-CAP units (PDF p.87).
+  Mathematica computes it for USDA while editing the file ("Step 12. Calculate the
+  benefit", PDF p.32), from the edited case record and the fiscal year's
+  parameters. The QC Minimodel (chapter IV, PDF p.47) reads FSBEN as an input and
+  points to the codebook entry for how it is calculated (PDF p.54, p.61). `RAWBEN` is the
+  "REPORTED SNAP BENEFIT RECEIVED" (PDF p.88); `STATUS` 1/2/3 =
+  correct/over/under-issuance and `AMTERR` is the dollar error the reviewer
+  recorded.
 - Before recomputation the file is edited so that "certain relationships hold for
   all cases" (tech doc chapter III.B, *Obtaining file consistency*; standard editing
   procedures begin PDF p.27). Person-level income is reconciled and de-duplicated
@@ -80,12 +100,35 @@ technical documentation by its PDF page (the `qcfy2024_csv.zip` companion doc).
   member age stays pinned at the template's exempting value while the QC member's
   real age drives `snap_member_is_elderly_or_disabled` — the fact the benefit chain
   actually consumes (shelter cap, medical entitlement, gross-test path) — mirroring
-  the `snap_populace` work-projection convention. The comparison covers only the
-  benefit chain:
-  gross income → each deduction → net income → income screens → maximum allotment →
-  allotment. This mirrors the `snap_populace` convention of comparing
-  `snap_regular_month_allotment` (not the take-up-adjusted `snap`) and is stated
-  explicitly in the bridge module docstring.
+  the `snap_populace` work-projection convention.
+- The comparison covers six values per review, in stage order (`_LABELS` in
+  `bridges/snap_qc_compare.py`): gross income (`FSGRINC`; net of `FSCSDED` in
+  Colorado, a child-support exclusion state), the standard deduction
+  (`FSSTDDED`), the excess-shelter deduction (`FSSLTDED`), net income
+  (`FSNETINC`), the maximum allotment, and the benefit (`FSBEN`). The maximum
+  allotment is checked against the oracle's own FY2024 48-state table by
+  certified size (`FY2024_MAX_ALLOTMENT_48_STATES`), not against the file's
+  `BENMAX`; the two agree for every in-scope FY2024 review in the six states.
+  The earned-income, medical, dependent-care, and child-support deductions and
+  the gross and net income screens are not compared on their own; a divergence
+  there first shows at the standard-deduction, shelter, or net-income stage.
+  This mirrors the `snap_populace` convention of comparing the regular monthly
+  allotment (not the take-up-adjusted `snap`).
+- Several inputs are the file's own amounts rather than values Axiom derives,
+  which bounds what a match proves. The replay feeds the calculated medical
+  deduction `FSMEDDED` as `FSMEDDED + 35` of expenses, so the engine's $35
+  threshold returns exactly `FSMEDDED` (§7). It feeds the dependent-care
+  deduction `FSDEPDED` (a reported field the editors reconciled with the
+  per-person costs, PDF p.84) rather than the costs, and the calculated
+  child-support deduction `FSCSDED` rather than the reported payment `FSCSEXP`.
+  It treats the file's utility amount `UTIL` as authoritative: an amount that
+  matches an encoded standard raises that tier's flags, and any other amount is
+  added to shelter costs (§7). For California,
+  Arizona, Georgia, Maryland, and Texas the homeless shelter deduction is the
+  file's `HOMELESS_DED`, capped by the engine at the indexed maximum. A match
+  therefore shows that Axiom's arithmetic from those amounts onward reproduces
+  FSBEN and the compared stages. It does not show that Axiom would derive those
+  deductions or that utility allowance from raw expenses.
 - An eligibility-side divergence is therefore out of scope *by construction* and is
   dispositioned as such, not scored as a benefit error. The oracle's claim is narrow
   and strong: given the QC unit's edited inputs, does Axiom reproduce FNS's own
@@ -117,10 +160,24 @@ in the public file (tech doc Table II.1, PDF p.18). Demonstration-state componen
 ## 5. Getting the data (pins, caching, the 403)
 
 - `SNAP_QC_PINS` pins each fiscal year to its CSV-zip URL, sha256, and archive
-  member. FY2024: `https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip`,
-  sha256 `0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4`, member
-  `qc_pub_fy2024.csv`. The loader refuses unpinned fiscal years outright — the
-  postings are immutable, so there is no allow-unpinned escape hatch.
+  member. FY2024: `https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip`,
+  sha256 `b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5`, member
+  `qc_pub_fy2024.csv`. The loader refuses unpinned fiscal years outright; there
+  is no allow-unpinned escape hatch.
+- Postings are replaced, not edited. USDA re-posted the FY2024 files on
+  2026-08-18 to correct the `FYWGT` and `HWGT` weighting variables, replacing the
+  May 2026 posting (`2026-05/qcfy2024_csv.zip`, sha256
+  `0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4`) that the
+  July 2026 runs used. A cell-by-cell diff of the two CSVs found the same 1,177
+  columns and 44,891 rows in the same order, with changes only in `HWGT` and
+  `FYWGT` (16,948 rows) and `HWGT_OLD` and `FYWGT_OLD` (10,072 rows); `FSBEN` and
+  every input the replay reads are identical, so the re-pin moves only the
+  HWGT-weighted totals. Re-pin the same way when a posting is replaced: download
+  both, diff every column, and re-pin only if no benefit or input column moved.
+- The loader hashes the zip it downloads, not a CSV it finds already on disk.
+  After a re-pin, delete or replace a cached `qc_pub_fy{YYYY}.csv` from the old
+  posting, or point `AXIOM_SNAP_QC_DATA_DIR` at the new one, or reports will carry
+  the new pin over the old file's weights.
 - The host 403s non-browser user agents. The loader's lazily imported `requests`
   call sends a Chrome UA string and `Referer: https://snapqcdata.net/datafiles`; a
   plain `curl`/`urllib` fetch is rejected. Downloads cache under
@@ -128,12 +185,15 @@ in the public file (tech doc Table II.1, PDF p.18). Demonstration-state componen
   that already holds `qc_pub_fy{YYYY}.csv` to skip the download entirely — that is
   also how the engine-gated live test and a local real run pick up the file. The
   sha256 is verified after download with the populace-style remediation message.
-- Until the fy-2024-cola modules merge to rulespec-us main, a local run also needs
-  `AXIOM_SNAP_QC_RULESPEC_ROOT` pointed at a checkout that carries them (and
+- The fy-2024-cola modules are on rulespec-us main (rulespec-us#760, merged
+  2026-07-09), so any current main checkout serves. Point
+  `AXIOM_SNAP_QC_RULESPEC_ROOT` at it when it is not the workspace default, and
   `AXIOM_SNAP_QC_AXIOM_BINARY` at a built engine when the default debug-path
-  resolution does not apply). The `scripts/run_comparison.py co-snap-qc` runner
-  honors both alongside the yaml parameters; absent any of the three
-  prerequisites it degrades to re-emitting the committed dashboard report.
+  resolution does not apply. The `scripts/run_comparison.py <st>-snap-qc` runner
+  honors both alongside the yaml parameters. Absent any of the three
+  prerequisites it re-emits the committed dashboard report, and that report's
+  provenance carries `reemitted_report: true` and no `rulespecs` entry. A real
+  run's provenance lists the rulespec-us SHA it ran against under `rulespecs`.
 
 ## 6. The fiscal-year gap and the overlay
 
@@ -173,6 +233,14 @@ period `2026-01`:
   overlay root alone: the engine unions module ids across roots rather than
   shadowing, so a sparse overlay in front of the real monorepo would compile both
   COLA years and abort on duplicate rules.
+- The same failure follows when the base repo gains a module that imports a COLA
+  id directly and the spec does not list it in `rewrite_files`. rulespec-us#1176
+  (2026-07-30) added California's modified-categorical-eligibility module, which
+  imports `fy-2026-cola/income-eligibility-standards`, and the CA replay stopped
+  compiling with a duplicate `snap_net_income_limit_*` rule. After rewriting,
+  `build_overlay` now walks the program's import closure inside the overlay root
+  and raises `OverlayDriftError` naming every module that still imports an id the
+  spec rewrites; the fix is to add those files to `rewrite_files`.
 - Caveat, carried in the report provenance and here: the rule *structure* is the
   current-manual snapshot, not the FY2024 manual. The benefit-calculation chain is
   structurally stable FY2024→FY2026 (only parameters moved), but genuine FY2024
@@ -190,11 +258,14 @@ Colorado parameters exactly.
 
 ## 7. Conventions the comparisons must respect
 
-- **Whole dollars.** SNAP allotments and the QC amounts are whole-dollar, so the
-  benefit is compared exactly after rounding to whole dollars (`--tolerance 0`), with
-  stage intermediates at `--stage-tolerance 1` to absorb the file's per-field
-  rounding. The homeless shelter deduction, statutorily $179.66, is recorded as $180
-  in the QC file (whole-dollar rounding; tech doc Table F.3 note, PDF p.180) — the
+- **Whole dollars, zero tolerance.** SNAP allotments and the QC amounts are
+  whole-dollar. The benefit matches when both sides, rounded to whole dollars,
+  differ by no more than `--tolerance` (default 0). A stage matches when the
+  unrounded values differ by no more than `--stage-tolerance`; every registered
+  suite sets `stage_tolerance: 0`, so each compared stage must match exactly (the
+  bridge CLI and the runner fall back to 1 only when a config omits the key).
+  The homeless shelter deduction, statutorily $179.66, is recorded as $180 in
+  the QC file (whole-dollar rounding; tech doc Table F.3 note, PDF p.180) — the
   encoding applies it at its nearest-dollar value under the 273.10(e)(1)(ii)(A)
   rounding election, reproducing the file exactly.
 - **Utility tiers when standard, `UTIL` when not.** The QC `SUA1` code maps to the
@@ -240,26 +311,29 @@ Colorado parameters exactly.
   is not excluded with the other CAP codes: NYSCAP units "went through the
   standard editing process that non-SSI-CAP households undergo" and all SNAP
   deductions apply to them (tech doc, SSI-CAP benefit calculations and the
-  SSI_CAP codebook note), so their FSBEN is an ordinary Minimodel
-  recomputation. The loader keeps `SSI_CAP` 0 and 4 and excludes every other
+  SSI_CAP codebook note), so their FSBEN follows the regular benefit
+  calculation. The loader keeps `SSI_CAP` 0 and 4 and excludes every other
   nonzero code.
 - **Regional SUA schedules are inferred from UTIL.** New York publishes three
   schedules (New York City 992/391/31, Nassau/Suffolk 923/363/31, rest of
   state 819/332/31 in FY 2024) and the public file carries no sub-state
   geography, so the mapper matches the QC-applied `UTIL` amount against the
   encoded schedule to set the region facts. An amount matching no schedule —
-  including New York's handful of off-by-a-dollar auto-generated allowances
-  (footnote 20 of the tech doc's Minimodel chapter) — rides as an incurred
-  shelter cost, which reproduces the file's arithmetic exactly. A tier the
-  jurisdiction does not encode at all (California's limited and telephone
-  allowances; the chain carries only the 596-dollar heating/cooling SUA)
-  falls back the same way.
+  including five in-scope FY2024 New York rows whose `UTIL` is one dollar off a
+  schedule amount — rides as an incurred shelter cost, which reproduces the
+  file's arithmetic exactly. (Tech doc footnote 20, chapter III, PDF p.33, notes
+  that New York's system generates an SUA automatically for certain units, so
+  the editors relax the matching test for New York units coded as using the
+  HCSUA.) A tier the jurisdiction does not encode at all (California's limited
+  and telephone allowances; the chain carries only the 596-dollar
+  heating/cooling SUA) falls back the same way.
 - **New York's headline is the composition's issued benefit.** The New York
-  composition's statutory 2014(e)/2017(a) chain carries cents; FNS's
-  Minimodel — and New York's own system — compute in whole dollars under the
-  273.10(e)(1)(ii)(A) election, which the encoded 273.10 chain implements
-  (rulespec-us#826). First-run finding: 33 of 847 New York reviews diverged
-  by exactly one dollar through the statutory surface (26 low, 7 high —
+  composition's statutory 2014(e)/2017(a) chain carries cents, while the file's
+  constructed values are whole dollars (the QC data record only whole-dollar
+  amounts, Table F.3 note a, PDF p.180). The encoded 273.10 chain computes in
+  whole dollars under the 273.10(e)(1)(ii)(A) election (rulespec-us#826).
+  First-run finding: 33 of 847 New York reviews diverged by exactly one
+  dollar through the statutory surface (26 low, 7 high —
   half-dollar shelter fractions and earned-income-deduction cents), filed as
   rulespec-us#830 and fixed by rulespec-us#836, which exposes the issued
   benefit (`snap_benefit`, initial-month aware) on the 273.10 chain and binds
@@ -293,11 +367,13 @@ Colorado parameters exactly.
   so their flat path rides the flags.
 - **Whole-dollar rounding is encoded.** The encoded chain originally carried
   cents (20 percent earned-income deduction, half-income shelter subtraction)
-  where the FNS Minimodel computes with whole dollars at each step; when the
-  fractional net crossed a dollar boundary the benefit flipped by exactly $1.
+  where the file's constructed values are whole dollars at each step (the
+  editing rules take the earned-income deduction "rounded down", PDF p.19);
+  when the fractional net crossed a dollar boundary the benefit flipped by
+  exactly $1.
   TheAxiomFoundation/rulespec-us#762, fixed by rulespec-us#826: the earned-income
   deduction drops cents and the excess-shelter subtraction rounds to the nearest
-  whole dollar per the 273.10(e)(1)(ii)(A) election, matching the Minimodel's
+  whole dollar per the 273.10(e)(1)(ii)(A) election, matching the file's
   constructed FSERNDED/FSSLTDED/FSNETINC.
 - **Elderly/disabled status is a unit-level fact.** The medical deduction and the
   excess-shelter cap waiver key off `FSNELDER`/`FSNDIS` (the file's constructed
@@ -348,7 +424,7 @@ Colorado parameters exactly.
    `_categorical_inputs`, `_homeless_inputs`, and `_utility_flag_inputs`,
    reusing `snap_populace.project_deduction_inputs`' existing per-state
    deduction dictionaries. Pre-flight the state's QC subset first with the
-   committed reference script — it replicates the Minimodel arithmetic in
+   committed reference script — it replicates the file's benefit arithmetic in
    pandas over the file's own inputs, predicting the replay ceiling and
    profiling `UTIL`/`SUA1`/`HOMEDED`/`CAT_ELIG`/child-support quirks before
    any engine run:
