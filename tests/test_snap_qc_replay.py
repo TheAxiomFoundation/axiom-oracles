@@ -165,11 +165,16 @@ def test_puf_cache_key_changes_with_the_pin(monkeypatch):
     pin = snap_qc.SNAP_QC_PINS[2024]
     repinned = snap_qc.SnapQcPin(
         fiscal_year=2024,
-        url=pin.url.replace("2026-05", "2026-08"),
+        url=pin.url + ".moved",
         sha256="b" * 64,
         archive_member=pin.archive_member,
     )
     monkeypatch.setitem(snap_qc.SNAP_QC_PINS, 2024, repinned)
+    assert replay.puf_cache_key([2024]) != before
+    # Either field alone moves the key.
+    monkeypatch.setitem(
+        snap_qc.SNAP_QC_PINS, 2024, snap_qc.SnapQcPin(2024, pin.url, "c" * 64, pin.archive_member)
+    )
     assert replay.puf_cache_key([2024]) != before
 
 
