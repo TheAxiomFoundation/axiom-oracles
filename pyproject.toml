@@ -93,8 +93,10 @@ pythonpath = ["."]
 # Delete each passing test's tmp_path at teardown, and the whole session
 # basetemp when every test passes; keep only failures for debugging. The
 # commit_refreshed_report tests check out full copies of a ~600 MB seed repo
-# in every test, so the default "all" left 5-15 GB per run in
-# $TMPDIR/pytest-of-$USER and filled the disk on 2026-09-22.
+# in every test, so the default "all" left 4-16 GB per run in
+# $TMPDIR/pytest-of-$USER and filled the disk on 2026-09-22. To keep passing
+# tests' directories while debugging, run with
+# -o tmp_path_retention_policy=all (--basetemp alone does not keep them).
 tmp_path_retention_policy = "failed"
 
 [tool.ruff]
