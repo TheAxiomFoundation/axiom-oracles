@@ -385,6 +385,48 @@ def test_require_live_does_not_affect_a_live_run(monkeypatch, tmp_path):
     assert not report["provenance"].get("reemitted_report")
 
 
+_UK_GRID_RUNNERS = [
+    "_run_uk_council_tax_reduction_grid",
+    "_run_uk_capital_gains_tax_grid",
+    "_run_uk_business_rates_grid",
+    "_run_uk_lbtt_ltt_grid",
+    "_run_uk_winter_fuel_payment_pe_grid",
+    "_run_uk_attendance_allowance_pe_grid",
+    "_run_uk_tax_free_childcare_pe_grid",
+    "_run_uk_vat_grid",
+    "_run_uk_fuel_duty_grid",
+    "_run_uk_tv_licence_grid",
+]
+
+
+@pytest.mark.parametrize("runner_name", _UK_GRID_RUNNERS)
+def test_uk_grid_fallback_is_marked_as_a_reemit(monkeypatch, tmp_path, runner_name):
+    """When a UK grid generator cannot run, the committed report it reuses is
+    a re-emit: it carries the us-tariff grid's marker, so provenance never
+    stamps it fresh and --require-live refuses it."""
+    run_comparison = load_run_comparison_module()
+
+    def unavailable(*_args, **_kwargs):
+        raise FileNotFoundError("uv")
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", unavailable)
+    runner: dict = {}
+    output = tmp_path / "report.json"
+    getattr(run_comparison, runner_name)(runner, output)
+
+    assert runner.get("_reemitted_report") is True
+    assert output.read_text()
+
+
+@pytest.mark.parametrize("runner_name", _UK_GRID_RUNNERS)
+def test_uk_grid_live_generation_is_not_marked(monkeypatch, tmp_path, runner_name):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison.subprocess, "run", lambda *_a, **_k: None)
+    runner: dict = {}
+    getattr(run_comparison, runner_name)(runner, tmp_path / "report.json")
+    assert "_reemitted_report" not in runner
+
+
 def test_snap_qc_runner_writes_v2_shell_when_no_committed_report(monkeypatch, tmp_path):
     """With nothing committed yet, the skip path writes a valid empty v2 report
     recording the skip reason, so the weekly matrix never crashes on a first run."""
