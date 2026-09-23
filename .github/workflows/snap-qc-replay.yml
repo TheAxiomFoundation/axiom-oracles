@@ -1,0 +1,336 @@
+name: SNAP QC live replay
+
+# Replays the SNAP QC suites for real and fails on any mismatch or error.
+#
+# The weekly matrix (comparisons.yml) and the 6-hourly affected rerun
+# (affected-rerun.yml) run the snap-qc suites on bare runners. There
+# scripts/run_comparison.py finds no engine binary, no fiscal-year rulespec-us
+# checkout and no QC public-use file, so it re-emits the committed dashboard
+# report (provenance.reemitted_report: true). Those legs stay green whether or
+# not the replay still works: California's stopped compiling after
+# rulespec-us#1176 (2026-07-30) and nothing failed. This lane provisions all
+# three and runs every suite with --require-live:
+#
+#   engine    axiom-rules-engine built at the axiom_artifact_rules_engine_ref
+#             pin in rulespec-us's .axiom/workflow-toolchain.toml (the recipe
+#             rulespec-us's program-artifacts.yml uses), cached per ref. The
+#             validation pin, axiom_rules_engine_ref, cannot load the SNAP
+#             chain.
+#   rulespec  rulespec-us at one commit, resolved once from main (or from the
+#             dispatch input) and shared by every leg. It is checked out into
+#             a directory named rulespec-us, because the engine serves `us:`
+#             imports only from a root named rulespec-us (or rulespec-us-<x>).
+#   data      the PUF zip pinned in SNAP_QC_PINS
+#             (axiom_oracles/populations/snap_qc.py), cached per pin and
+#             re-verified against the pin's sha256 before every extraction.
+#
+# scripts/snap_qc_replay.py selects the suites: every REQUIRED_SUITES entry,
+# plus each PENDING_SUITES entry once its composition lands on rulespec-us.
+# Its `check` then fails the leg unless the report was computed in this run
+# and is exact: zero benefit mismatches, zero error cases, and every stage
+# concept compared on every case without divergence. The run must also have
+# used the resolved rulespec-us SHA and the pinned engine. The live-tests job
+# runs the engine-gated pytest cases, which skip everywhere else.
+#
+# Reports go up as workflow artifacts and are never committed; the point of
+# this lane is a failing check. See docs/snap-qc-oracle-playbook.md.
+
+on:
+  schedule:
+    # Mondays 07:17 UTC: after the 06:00 weekly matrix, off the hour.
+    - cron: "17 7 * * 1"
+  workflow_dispatch:
+    inputs:
+      suites:
+        description: "Snap-qc suites to replay, comma/space-separated (blank = all)"
+        required: false
+        default: ""
+      rulespec_us_ref:
+        description: "rulespec-us branch, tag, or SHA to replay against"
+        required: false
+        default: main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: snap-qc-replay-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    name: Prepare engine, data, and suites
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      suites: ${{ steps.suites.outputs.suites }}
+      puf_cache_key: ${{ steps.suites.outputs.puf_cache_key }}
+      rulespec_sha: ${{ steps.rulespec.outputs.sha }}
+      engine_ref: ${{ steps.toolchain.outputs.engine_ref }}
+      engine_cache_key: ${{ steps.toolchain.outputs.engine_cache_key }}
+    steps:
+      - name: Checkout axiom-oracles
+        uses: actions/checkout@v4
+        with:
+          path: axiom-oracles
+
+      - name: Checkout rulespec-us
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-us
+          ref: ${{ inputs.rulespec_us_ref || 'main' }}
+          path: rulespec-us
+
+      - name: Resolve rulespec-us commit
+        id: rulespec
+        run: |
+          sha=$(git -C rulespec-us rev-parse HEAD)
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          echo "rulespec-us: $sha"
+
+      - name: Resolve engine pin
+        id: toolchain
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+          import tomllib
+
+          with open("rulespec-us/.axiom/workflow-toolchain.toml", "rb") as fh:
+              pins = tomllib.load(fh)["workflow_toolchain"]
+          ref = str(pins.get("axiom_artifact_rules_engine_ref", ""))
+          if not re.fullmatch(r"[0-9a-f]{40}", ref):
+              raise SystemExit(
+                  f"axiom_artifact_rules_engine_ref is not a 40-hex SHA: {ref!r}"
+              )
+          key = f"axiom-rules-engine-release-{os.environ['RUNNER_OS']}-{ref}"
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"engine_ref={ref}\nengine_cache_key={key}\n")
+          print(f"axiom-rules-engine: {ref}")
+          PY
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: axiom-oracles/uv.lock
+
+      - name: Install axiom-oracles
+        working-directory: axiom-oracles
+        run: uv sync
+
+      - name: Select suites
+        id: suites
+        working-directory: axiom-oracles
+        env:
+          ONLY: ${{ inputs.suites }}
+        run: uv run scripts/snap_qc_replay.py suites --rulespec-root ../rulespec-us --only "$ONLY"
+
+      - name: Restore pinned PUF archive
+        uses: actions/cache@v4
+        with:
+          path: puf-archive
+          key: ${{ steps.suites.outputs.puf_cache_key }}
+
+      - name: Fetch and verify pinned PUF
+        working-directory: axiom-oracles
+        run: >-
+          uv run scripts/snap_qc_replay.py fetch-puf
+          --archive-dir ../puf-archive --data-dir "$RUNNER_TEMP/snap-qc-data"
+
+      - name: Restore engine binary
+        id: engine-cache
+        uses: actions/cache@v4
+        with:
+          path: engine/target/release/axiom-rules-engine
+          key: ${{ steps.toolchain.outputs.engine_cache_key }}
+
+      - name: Checkout axiom-rules-engine
+        if: steps.engine-cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-rules-engine
+          ref: ${{ steps.toolchain.outputs.engine_ref }}
+          path: engine
+
+      - name: Install Rust toolchain
+        if: steps.engine-cache.outputs.cache-hit != 'true'
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build axiom-rules-engine
+        if: steps.engine-cache.outputs.cache-hit != 'true'
+        working-directory: engine
+        run: cargo build --release --locked --bin axiom-rules-engine
+
+      - name: Confirm engine binary
+        run: test -x engine/target/release/axiom-rules-engine
+
+  replay:
+    name: Replay ${{ matrix.suite }}
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: ${{ fromJson(needs.prepare.outputs.suites) }}
+    env:
+      REPORT_DIR: ${{ github.workspace }}/snap-qc-reports
+      ENGINE_BIN: ${{ github.workspace }}/engine/target/release/axiom-rules-engine
+    steps:
+      - name: Checkout axiom-oracles
+        uses: actions/checkout@v4
+        with:
+          path: axiom-oracles
+
+      - name: Checkout rulespec-us
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-us
+          ref: ${{ needs.prepare.outputs.rulespec_sha }}
+          path: rulespec-us
+
+      - name: Restore engine binary
+        uses: actions/cache/restore@v4
+        with:
+          path: engine/target/release/axiom-rules-engine
+          key: ${{ needs.prepare.outputs.engine_cache_key }}
+          fail-on-cache-miss: true
+
+      - name: Restore pinned PUF archive
+        uses: actions/cache/restore@v4
+        with:
+          path: puf-archive
+          key: ${{ needs.prepare.outputs.puf_cache_key }}
+          fail-on-cache-miss: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: axiom-oracles/uv.lock
+
+      - name: Install axiom-oracles
+        working-directory: axiom-oracles
+        run: uv sync
+
+      - name: Verify and extract pinned PUF
+        working-directory: axiom-oracles
+        run: >-
+          uv run scripts/snap_qc_replay.py fetch-puf
+          --archive-dir ../puf-archive --data-dir "$RUNNER_TEMP/snap-qc-data"
+
+      - name: Replay ${{ matrix.suite }}
+        id: replay
+        working-directory: axiom-oracles
+        env:
+          AXIOM_SNAP_QC_RULESPEC_ROOT: ${{ github.workspace }}/rulespec-us
+          AXIOM_SNAP_QC_AXIOM_BINARY: ${{ github.workspace }}/engine/target/release/axiom-rules-engine
+          AXIOM_SNAP_QC_DATA_DIR: ${{ runner.temp }}/snap-qc-data
+          AXIOM_ORACLES_RUN_KIND: ${{ github.event_name == 'schedule' && 'weekly' || 'manual' }}
+          SUITE: ${{ matrix.suite }}
+        run: |
+          set -o pipefail
+          mkdir -p "$REPORT_DIR"
+          uv run scripts/run_comparison.py "$SUITE" --summary --require-live \
+            --output-dir "$REPORT_DIR" 2>&1 | tee "$REPORT_DIR/replay.log"
+
+      - name: Check ${{ matrix.suite }} is live and exact
+        if: ${{ !cancelled() && steps.replay.outcome != 'skipped' }}
+        working-directory: axiom-oracles
+        env:
+          SUITE: ${{ matrix.suite }}
+          RULESPEC_SHA: ${{ needs.prepare.outputs.rulespec_sha }}
+          REPLAY_FAILED: ${{ steps.replay.outcome == 'failure' && '--replay-failed' || '' }}
+        run: >-
+          uv run scripts/snap_qc_replay.py check "$SUITE"
+          --report-dir "$REPORT_DIR" --log "$REPORT_DIR/replay.log"
+          --expect-rulespec-sha "$RULESPEC_SHA"
+          --expect-axiom-binary "$ENGINE_BIN" $REPLAY_FAILED
+
+      - name: Upload report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: snap-qc-replay-${{ matrix.suite }}
+          path: snap-qc-reports/
+          if-no-files-found: warn
+
+  live-tests:
+    name: Engine-gated live tests
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout axiom-oracles
+        uses: actions/checkout@v4
+        with:
+          path: axiom-oracles
+
+      - name: Checkout rulespec-us
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-us
+          ref: ${{ needs.prepare.outputs.rulespec_sha }}
+          path: rulespec-us
+
+      - name: Restore engine binary
+        uses: actions/cache/restore@v4
+        with:
+          path: engine/target/release/axiom-rules-engine
+          key: ${{ needs.prepare.outputs.engine_cache_key }}
+          fail-on-cache-miss: true
+
+      - name: Restore pinned PUF archive
+        uses: actions/cache/restore@v4
+        with:
+          path: puf-archive
+          key: ${{ needs.prepare.outputs.puf_cache_key }}
+          fail-on-cache-miss: true
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: axiom-oracles/uv.lock
+
+      - name: Install axiom-oracles
+        working-directory: axiom-oracles
+        run: uv sync --extra dev
+
+      - name: Verify and extract pinned PUF
+        working-directory: axiom-oracles
+        run: >-
+          uv run scripts/snap_qc_replay.py fetch-puf
+          --archive-dir ../puf-archive --data-dir "$RUNNER_TEMP/snap-qc-data"
+
+      - name: Run engine-gated tests (no skips allowed)
+        working-directory: axiom-oracles
+        env:
+          AXIOM_SNAP_QC_DATA_DIR: ${{ runner.temp }}/snap-qc-data
+          AXIOM_RULES_ENGINE_BIN: ${{ github.workspace }}/engine/target/release/axiom-rules-engine
+          RULESPEC_US_SNAP_FY2024_ROOT: ${{ github.workspace }}/rulespec-us
+        run: |
+          uv run pytest -rs --junitxml="$RUNNER_TEMP/live-tests.xml" \
+            tests/test_snap_qc_population.py::test_live_fy2024_row_counts \
+            tests/test_snap_qc_compare.py::test_live_engine_reproduces_worked_example
+          # A live test that skips proves nothing: fail unless every one ran.
+          python3 - "$RUNNER_TEMP/live-tests.xml" <<'PY'
+          import sys
+          import xml.etree.ElementTree as ET
+
+          suite = ET.parse(sys.argv[1]).getroot().find("testsuite")
+          tests, skipped = int(suite.get("tests")), int(suite.get("skipped"))
+          if tests != 2 or skipped:
+              raise SystemExit(f"expected 2 live tests to run; ran {tests}, skipped {skipped}")
+          print(f"{tests} live tests ran, none skipped")
+          PY

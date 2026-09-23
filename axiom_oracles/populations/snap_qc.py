@@ -579,8 +579,8 @@ def _verify_sha256(data: bytes, *, expected: str, source: str) -> None:
         )
 
 
-def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
-    """Download, verify, and extract a pinned PUF; return the local CSV path.
+def _fetch_verified_archive(pin: SnapQcPin) -> bytes:
+    """Download a pinned PUF zip and return its bytes once they pass the pin.
 
     ``requests`` is imported lazily inside this function so the rest of the
     loader (and its tests) never require the dependency at import time and can
@@ -600,9 +600,13 @@ def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
     response.raise_for_status()
     payload = response.content
     _verify_sha256(payload, expected=pin.sha256, source=pin.url)
+    return payload
 
-    cache_dir.mkdir(parents=True, exist_ok=True)
-    destination = cache_dir / _csv_name(pin.fiscal_year)
+
+def _extract_qc_csv(pin: SnapQcPin, payload: bytes, directory: Path) -> Path:
+    """Write the pinned member of a verified zip to ``directory``; return it."""
+    directory.mkdir(parents=True, exist_ok=True)
+    destination = directory / _csv_name(pin.fiscal_year)
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
         with archive.open(pin.archive_member) as member, open(
             destination, "wb"
@@ -613,13 +617,13 @@ def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
     return destination
 
 
-def _resolve_csv_path(fiscal_year: int, data_dir: str | Path | None) -> Path:
-    """Locate the PUF CSV, downloading into the cache only as a last resort.
+def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
+    """Download, verify, and extract a pinned PUF; return the local CSV path."""
+    return _extract_qc_csv(pin, _fetch_verified_archive(pin), cache_dir)
 
-    Resolution order: an explicit ``data_dir`` that contains the file, then the
-    :data:`DATA_DIR_ENV_VAR` directory that contains it (either short-circuits
-    the download), then the on-disk cache, then a verified download.
-    """
+
+def _pin_for(fiscal_year: int) -> SnapQcPin:
+    """Return the fiscal year's pin, refusing unpinned years outright."""
     pin = SNAP_QC_PINS.get(fiscal_year)
     if pin is None:
         raise ValueError(
@@ -629,6 +633,57 @@ def _resolve_csv_path(fiscal_year: int, data_dir: str | Path | None) -> Path:
             "year — there is no unpinned-load escape hatch, because the PUFs "
             "are immutable postings."
         )
+    return pin
+
+
+def fetch_pinned_puf(
+    fiscal_year: int,
+    data_dir: str | Path,
+    *,
+    archive_dir: str | Path | None = None,
+) -> Path:
+    """Materialize a pinned fiscal year's PUF CSV into ``data_dir``.
+
+    Unlike the loader's lazy cache — which trusts any CSV already on disk —
+    this checks the zip against its pin on every call, so a persisted download
+    (a CI cache restore, a shared directory) can never stand in for an
+    unverified ground truth. With ``archive_dir`` the verified zip is kept
+    there, named by its pinned sha256, and reused by later calls; a kept zip
+    that no longer verifies (a truncated restore, bit rot) is discarded and
+    downloaded afresh, and a fresh download that fails its pin still raises.
+    The CSV is always re-extracted, replacing whatever ``data_dir`` held, so
+    ``data_dir`` then satisfies :data:`DATA_DIR_ENV_VAR` for
+    :func:`load_qc_units` and the comparison runner.
+    """
+    pin = _pin_for(fiscal_year)
+    payload: bytes | None = None
+    archive: Path | None = None
+    if archive_dir is not None:
+        archive = Path(archive_dir) / f"{pin.sha256}.zip"
+        if archive.exists():
+            kept = archive.read_bytes()
+            if hashlib.sha256(kept).hexdigest() == pin.sha256:
+                payload = kept
+            else:
+                archive.unlink()
+    if payload is None:
+        payload = _fetch_verified_archive(pin)
+        if archive is not None:
+            archive.parent.mkdir(parents=True, exist_ok=True)
+            partial = archive.with_name(f".{archive.name}.partial")
+            partial.write_bytes(payload)
+            partial.replace(archive)
+    return _extract_qc_csv(pin, payload, Path(data_dir))
+
+
+def _resolve_csv_path(fiscal_year: int, data_dir: str | Path | None) -> Path:
+    """Locate the PUF CSV, downloading into the cache only as a last resort.
+
+    Resolution order: an explicit ``data_dir`` that contains the file, then the
+    :data:`DATA_DIR_ENV_VAR` directory that contains it (either short-circuits
+    the download), then the on-disk cache, then a verified download.
+    """
+    pin = _pin_for(fiscal_year)
 
     csv_name = _csv_name(fiscal_year)
     for candidate_dir in (data_dir, os.environ.get(DATA_DIR_ENV_VAR)):
@@ -889,5 +944,6 @@ __all__ = [
     "SnapQcPin",
     "UNEARNED_INCOME_SOURCES",
     "UtilityTier",
+    "fetch_pinned_puf",
     "load_qc_units",
 ]

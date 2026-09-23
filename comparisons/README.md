@@ -238,7 +238,13 @@ playbook and TheAxiomFoundation/rulespec-us#759). Suites: `co-snap-qc`,
 `euromod-synthetic-compare` — when the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, or the downloaded QC public-use file
 is absent, or while the bridge is still mid-build. Where all three exist it runs
-for real; the checked-in numbers are regenerated there.
+for real; the checked-in numbers are regenerated there. Because the weekly
+matrix and the affected rerun never have all three, those legs always
+re-emit. The **SNAP QC live replay** workflow
+(`.github/workflows/snap-qc-replay.yml`, weekly and on demand) provisions the
+pinned engine, a rulespec-us checkout, and the pinned PUF. It runs every suite
+with `run_comparison.py --require-live` and fails on any re-emission,
+mismatch, or error (`scripts/snap_qc_replay.py check`). See the playbook's §10.
 
 Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs the
 whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,

@@ -318,6 +318,73 @@ def test_snap_qc_runner_registered_and_reemits_committed_report(monkeypatch, tmp
     assert output.read_text() == committed.read_text()
 
 
+def test_require_live_refuses_a_reemit_and_publishes_nothing(monkeypatch, tmp_path):
+    """--require-live turns a skip-capable runner's graceful re-emit into a hard
+    failure before anything is published: no reports/ file, no dashboard
+    write. The live SNAP QC CI lane depends on this."""
+    run_comparison = load_run_comparison_module()
+    dashboard_dir = tmp_path / "dashboard-data"
+    dashboard_dir.mkdir()
+    committed = dashboard_dir / "axiom-snapqc-ga-snap.json"
+    committed.write_text('{"schema_version": "axiom.comparison_report.v2"}')
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard_dir)
+    monkeypatch.setattr(
+        run_comparison, "_snap_qc_skip_reason", lambda *_a, **_k: "no engine here"
+    )
+    output_dir = tmp_path / "reports"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_comparison.py",
+            "ga-snap-qc",
+            "--require-live",
+            "--output-dir",
+            str(output_dir),
+        ],
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        run_comparison.main()
+
+    assert "ga-snap-qc: --require-live" in str(excinfo.value.code)
+    assert list(output_dir.iterdir()) == []  # staging file dropped, nothing published
+    assert sorted(path.name for path in dashboard_dir.iterdir()) == [committed.name]
+    assert committed.read_text() == '{"schema_version": "axiom.comparison_report.v2"}'
+
+
+def test_require_live_does_not_affect_a_live_run(monkeypatch, tmp_path):
+    """A runner that really executed publishes normally under --require-live."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path / "dashboard")
+    comparisons = tmp_path / "comparisons"
+    comparisons.mkdir()
+    (comparisons / "live-suite.yaml").write_text(
+        "name: live-suite\n"
+        "runner:\n"
+        "  type: fake-live\n"
+        "  parameters: {sample_size: 0}\n"
+        "artifacts:\n"
+        "  report_basename: live-suite\n"
+    )
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", comparisons)
+
+    def fake_live_runner(runner, output):
+        output.write_text(json.dumps({"compared_values": 1, "mismatch_count": 0}))
+
+    monkeypatch.setitem(run_comparison.RUNNERS, "fake-live", fake_live_runner)
+    output_dir = tmp_path / "reports"
+    monkeypatch.setattr(
+        "sys.argv",
+        ["run_comparison.py", "live-suite", "--require-live", "--output-dir", str(output_dir)],
+    )
+
+    assert run_comparison.main() == 0
+    [published] = [p for p in output_dir.iterdir() if not p.name.startswith(".")]
+    report = json.loads(published.read_text())
+    assert report["mismatch_count"] == 0
+    assert not report["provenance"].get("reemitted_report")
+
+
 def test_snap_qc_runner_writes_v2_shell_when_no_committed_report(monkeypatch, tmp_path):
     """With nothing committed yet, the skip path writes a valid empty v2 report
     recording the skip reason, so the weekly matrix never crashes on a first run."""

@@ -539,6 +539,16 @@ def main() -> int:
             "comparison. Non-zero exit if any fixture fails."
         ),
     )
+    parser.add_argument(
+        "--require-live",
+        action="store_true",
+        help=(
+            "Fail instead of re-emitting the committed report when a "
+            "skip-capable runner (snap-qc, euromod, gettsim, ...) cannot "
+            "execute on this host. Nothing is published. For CI lanes that "
+            "provision the runner's dependencies and must prove a real run."
+        ),
+    )
     args = parser.parse_args()
 
     if args.list:
@@ -611,6 +621,15 @@ def main() -> int:
     print(f"Running {config['name']}: {config.get('title', config['name'])}")
     try:
         runner_fn(config["runner"], staging)
+        if args.require_live and config["runner"].get("_reemitted_report"):
+            # The runner already printed why it could not execute. Refuse
+            # before provenance stamping or publication, so neither reports/
+            # nor the dashboard copy is touched (the finally drops staging).
+            raise SystemExit(
+                f"{config['name']}: --require-live: the runner re-emitted the "
+                "committed report instead of executing on this host (skip "
+                "reason above); nothing was published"
+            )
         canonical_record = _canonical_record_path(config)
         producer_native_canonical = (
             staging.read_bytes()
