@@ -187,10 +187,18 @@ class SnapQcPin:
 #: unpinned fiscal year: the PUFs are immutable postings, so an unpinned or
 #: moved file would silently change the oracle's ground truth.
 SNAP_QC_PINS: dict[int, SnapQcPin] = {
+    # FY2024 re-pinned 2026-09-22 to the August 18, 2026 re-posting, which
+    # "replace[s] earlier versions posted in May 2026" with corrections to the
+    # FYWGT and HWGT weighting variables (snapqcdata.net/datafiles). Diffed
+    # against the May posting (zip sha256 0f3230a4...263f4, recorded
+    # 2026-07-08): identical header (1,177 columns) and 44,891 rows in the same
+    # order (STATE/YRMONTH/HHLDNO/CASE keys match position by position); only
+    # HWGT and FYWGT (16,948 rows each) and HWGT_OLD and FYWGT_OLD (10,072 rows
+    # each) changed. FSBEN and every input column are unchanged.
     2024: SnapQcPin(
         fiscal_year=2024,
-        url="https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip",
-        sha256="0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
+        url="https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip",
+        sha256="b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5",
         archive_member="qc_pub_fy2024.csv",
     ),
     2023: SnapQcPin(

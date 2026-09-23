@@ -117,10 +117,24 @@ in the public file (tech doc Table II.1, PDF p.18). Demonstration-state componen
 ## 5. Getting the data (pins, caching, the 403)
 
 - `SNAP_QC_PINS` pins each fiscal year to its CSV-zip URL, sha256, and archive
-  member. FY2024: `https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip`,
-  sha256 `0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4`, member
-  `qc_pub_fy2024.csv`. The loader refuses unpinned fiscal years outright — the
-  postings are immutable, so there is no allow-unpinned escape hatch.
+  member. FY2024: `https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip`,
+  sha256 `b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5`, member
+  `qc_pub_fy2024.csv`. The loader refuses unpinned fiscal years outright; there
+  is no allow-unpinned escape hatch.
+- Postings are replaced, not edited. USDA re-posted the FY2024 files on
+  2026-08-18 to correct the `FYWGT` and `HWGT` weighting variables, replacing the
+  May 2026 posting (`2026-05/qcfy2024_csv.zip`, sha256
+  `0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4`) that the
+  July 2026 runs used. A cell-by-cell diff of the two CSVs found the same 1,177
+  columns and 44,891 rows in the same order, with changes only in `HWGT` and
+  `FYWGT` (16,948 rows) and `HWGT_OLD` and `FYWGT_OLD` (10,072 rows); `FSBEN` and
+  every input the replay reads are identical, so the re-pin moves only the
+  HWGT-weighted totals. Re-pin the same way when a posting is replaced: download
+  both, diff every column, and re-pin only if no benefit or input column moved.
+- The loader hashes the zip it downloads, not a CSV it finds already on disk.
+  After a re-pin, delete or replace a cached `qc_pub_fy{YYYY}.csv` from the old
+  posting, or point `AXIOM_SNAP_QC_DATA_DIR` at the new one, or reports will carry
+  the new pin over the old file's weights.
 - The host 403s non-browser user agents. The loader's lazily imported `requests`
   call sends a Chrome UA string and `Referer: https://snapqcdata.net/datafiles`; a
   plain `curl`/`urllib` fetch is rejected. Downloads cache under
