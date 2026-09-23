@@ -1,7 +1,7 @@
 {
   "schema_version": "axiom_oracles.chunk_index.v1",
   "report_path": "dashboard/public/data/axiom-snapqc-co-snap.json",
-  "report_sha256": "0b28f5f3302c98e14900c930c9a810caadb09e88e56eb8c0594c0c2dc544fd3b",
+  "report_sha256": "4e07e98fedf6468bef7e078f2a7fb5107001e5b43b70072f94048d73baf30a95",
   "suite": "co-snap-qc",
   "count": 856,
   "chunk_size": 500,
@@ -10,7 +10,7 @@
     "right": "axiom"
   },
   "mismatch_concepts": [],
-  "source": "axiom-snapqc-co-snap-0-2026-08-10.json",
+  "source": "run_comparison.py full case corpus",
   "total_cases": 856,
   "chunk_count": 2,
   "chunks": [

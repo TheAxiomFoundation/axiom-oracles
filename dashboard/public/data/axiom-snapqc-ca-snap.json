@@ -4,20 +4,20 @@
       "category": "income",
       "comparison": "amount",
       "comparison_count": 883,
-      "comparison_weight": 37088283.91269,
+      "comparison_weight": 36965635.656925,
       "components": [],
       "concept": "us:regulations/7-cfr/273/10#snap_total_gross_income",
       "description": "gross income",
-      "left_weighted_sum": 42924590095.44218,
+      "left_weighted_sum": 42832151795.95894,
       "match_rate": 100,
-      "match_weight": 37088283.91269,
+      "match_weight": 36965635.656925,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 42924590095.44218,
+      "right_weighted_sum": 42832151795.95894,
       "weighted_difference": 0,
       "weighted_match_rate": 100
     },
@@ -25,20 +25,20 @@
       "category": "deductions",
       "comparison": "amount",
       "comparison_count": 883,
-      "comparison_weight": 37088283.91269,
+      "comparison_weight": 36965635.656925,
       "components": [],
       "concept": "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
       "description": "standard deduction",
-      "left_weighted_sum": 7461906416.669211,
+      "left_weighted_sum": 7436787842.644512,
       "match_rate": 100,
-      "match_weight": 37088283.91269,
+      "match_weight": 36965635.656925,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 7461906416.669211,
+      "right_weighted_sum": 7436787842.644512,
       "weighted_difference": 0,
       "weighted_match_rate": 100
     },
@@ -46,20 +46,20 @@
       "category": "deductions",
       "comparison": "amount",
       "comparison_count": 883,
-      "comparison_weight": 37088283.91269,
+      "comparison_weight": 36965635.656925,
       "components": [],
       "concept": "us-ca:policies/cdss/snap/fy-2026-benefit-calculation#snap_excess_shelter_deduction",
       "description": "shelter deduction",
-      "left_weighted_sum": 16776181239.664637,
+      "left_weighted_sum": 16719477308.412498,
       "match_rate": 100,
-      "match_weight": 37088283.91269,
+      "match_weight": 36965635.656925,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 16776181239.664637,
+      "right_weighted_sum": 16719477308.412498,
       "weighted_difference": 0,
       "weighted_match_rate": 100
     },
@@ -67,20 +67,20 @@
       "category": "income",
       "comparison": "amount",
       "comparison_count": 883,
-      "comparison_weight": 37088283.91269,
+      "comparison_weight": 36965635.656925,
       "components": [],
       "concept": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
       "description": "net income",
-      "left_weighted_sum": 20234376669.308388,
+      "left_weighted_sum": 20200668915.192303,
       "match_rate": 100,
-      "match_weight": 37088283.91269,
+      "match_weight": 36965635.656925,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 20234376669.308388,
+      "right_weighted_sum": 20200668915.192303,
       "weighted_difference": 0,
       "weighted_match_rate": 100
     },
@@ -88,20 +88,20 @@
       "category": "benefits",
       "comparison": "amount",
       "comparison_count": 883,
-      "comparison_weight": 37088283.91269,
+      "comparison_weight": 36965635.656925,
       "components": [],
       "concept": "us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment",
       "description": "maximum allotment",
-      "left_weighted_sum": 16798328328.592709,
+      "left_weighted_sum": 16739523154.122318,
       "match_rate": 100,
-      "match_weight": 37088283.91269,
+      "match_weight": 36965635.656925,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 16798328328.592709,
+      "right_weighted_sum": 16739523154.122318,
       "weighted_difference": 0,
       "weighted_match_rate": 100
     },
@@ -109,20 +109,20 @@
       "category": "benefits",
       "comparison": "amount",
       "comparison_count": 883,
-      "comparison_weight": 37088283.91269,
+      "comparison_weight": 36965635.656925,
       "components": [],
       "concept": "us:policies/usda/snap/state-plan-composition#snap_benefit",
       "description": "benefit",
-      "left_weighted_sum": 11513527595.120758,
+      "left_weighted_sum": 11464817088.407328,
       "match_rate": 100,
-      "match_weight": 37088283.91269,
+      "match_weight": 36965635.656925,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 11513527595.120758,
+      "right_weighted_sum": 11464817088.407328,
       "weighted_difference": 0,
       "weighted_match_rate": 100
     }
@@ -1134,952 +1134,952 @@
       "case_id": "2024-202403-39519",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39520",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39521",
       "matched": true,
       "stage": null,
-      "weight": 45360.636482,
+      "weight": 44821.16067,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39522",
       "matched": true,
       "stage": null,
-      "weight": 42097.905219,
+      "weight": 40890.156827,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39523",
       "matched": true,
       "stage": null,
-      "weight": 44928.811849,
+      "weight": 44506.200348,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39524",
       "matched": true,
       "stage": null,
-      "weight": 17226.269753,
+      "weight": 14993.196074,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39525",
       "matched": true,
       "stage": null,
-      "weight": 26323.544128,
+      "weight": 26282.271224,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39526",
       "matched": true,
       "stage": null,
-      "weight": 35419.833654,
+      "weight": 34468.10297,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39527",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39528",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39529",
       "matched": true,
       "stage": null,
-      "weight": 38078.010427,
+      "weight": 37958.162347,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39530",
       "matched": true,
       "stage": null,
-      "weight": 35411.982297,
+      "weight": 34462.376415,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39531",
       "matched": true,
       "stage": null,
-      "weight": 44198.635647,
+      "weight": 43973.631048,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39532",
       "matched": true,
       "stage": null,
-      "weight": 46255.691183,
+      "weight": 45473.987584,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39533",
       "matched": true,
       "stage": null,
-      "weight": 41006.566595,
+      "weight": 40094.166172,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39534",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39535",
       "matched": true,
       "stage": null,
-      "weight": 46255.691183,
+      "weight": 45473.987584,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39536",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39537",
       "matched": true,
       "stage": null,
-      "weight": 45596.177192,
+      "weight": 44992.957239,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39538",
       "matched": true,
       "stage": null,
-      "weight": 28459.113234,
+      "weight": 27839.89327,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39539",
       "matched": true,
       "stage": null,
-      "weight": 28168.613029,
+      "weight": 27628.010793,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39540",
       "matched": true,
       "stage": null,
-      "weight": 39569.768262,
+      "weight": 39046.207219,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39541",
       "matched": true,
       "stage": null,
-      "weight": 46255.691183,
+      "weight": 45473.987584,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39542",
       "matched": true,
       "stage": null,
-      "weight": 38078.010427,
+      "weight": 37958.162347,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39543",
       "matched": true,
       "stage": null,
-      "weight": 45305.676985,
+      "weight": 44781.074829,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39544",
       "matched": true,
       "stage": null,
-      "weight": 41940.87808,
+      "weight": 40775.625797,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39545",
       "matched": true,
       "stage": null,
-      "weight": 34815.279166,
+      "weight": 34027.158482,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39546",
       "matched": true,
       "stage": null,
-      "weight": 17953.0127,
+      "weight": 17074.523774,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39547",
       "matched": true,
       "stage": null,
-      "weight": 32821.034486,
+      "weight": 32572.614374,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39548",
       "matched": true,
       "stage": null,
-      "weight": 38078.010427,
+      "weight": 37958.162347,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39549",
       "matched": true,
       "stage": null,
-      "weight": 44638.311636,
+      "weight": 44294.317936,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39550",
       "matched": true,
       "stage": null,
-      "weight": 44237.89243,
+      "weight": 44002.263788,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39551",
       "matched": true,
       "stage": null,
-      "weight": 8428.331789,
+      "weight": 7024.973224,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39552",
       "matched": true,
       "stage": null,
-      "weight": 45635.433979,
+      "weight": 45021.590032,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39553",
       "matched": true,
       "stage": null,
-      "weight": 44457.730427,
+      "weight": 44162.607234,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39554",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39555",
       "matched": true,
       "stage": null,
-      "weight": 42097.905219,
+      "weight": 40890.156827,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39556",
       "matched": true,
       "stage": null,
-      "weight": 44975.919992,
+      "weight": 44540.559694,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39557",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39558",
       "matched": true,
       "stage": null,
-      "weight": 44842.446919,
+      "weight": 44443.208287,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39559",
       "matched": true,
       "stage": null,
-      "weight": 20736.811194,
+      "weight": 20656.208114,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39560",
       "matched": true,
       "stage": null,
-      "weight": 35545.455367,
+      "weight": 34559.727832,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39561",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39562",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39563",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39564",
       "matched": true,
       "stage": null,
-      "weight": 44811.041493,
+      "weight": 44420.302049,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39565",
       "matched": true,
       "stage": null,
-      "weight": 40904.498953,
+      "weight": 40019.720953,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39566",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39567",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39568",
       "matched": true,
       "stage": null,
-      "weight": 46255.691183,
+      "weight": 45473.987584,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39569",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39570",
       "matched": true,
       "stage": null,
-      "weight": 34736.765596,
+      "weight": 33969.892958,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39571",
       "matched": true,
       "stage": null,
-      "weight": 38078.010427,
+      "weight": 37958.162402,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39572",
       "matched": true,
       "stage": null,
-      "weight": 45289.97427,
+      "weight": 44769.621759,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39573",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39574",
       "matched": true,
       "stage": null,
-      "weight": 38078.010427,
+      "weight": 37958.162402,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39575",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39576",
       "matched": true,
       "stage": null,
-      "weight": 44151.527502,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39577",
       "matched": true,
       "stage": null,
-      "weight": 3975.174464,
+      "weight": 3924.210689,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39578",
       "matched": true,
       "stage": null,
-      "weight": 35569.009437,
+      "weight": 34576.907422,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39579",
       "matched": true,
       "stage": null,
-      "weight": 44496.987213,
+      "weight": 44191.24003,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39580",
       "matched": true,
       "stage": null,
-      "weight": 44151.527507,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39581",
       "matched": true,
       "stage": null,
-      "weight": 39420.592479,
+      "weight": 38937.402686,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39582",
       "matched": true,
       "stage": null,
-      "weight": 44151.527507,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39583",
       "matched": true,
       "stage": null,
-      "weight": 45509.812271,
+      "weight": 44929.965161,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39584",
       "matched": true,
       "stage": null,
-      "weight": 44151.527507,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39585",
       "matched": true,
       "stage": null,
-      "weight": 46255.691188,
+      "weight": 45473.98763,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39586",
       "matched": true,
       "stage": null,
-      "weight": 39185.051767,
+      "weight": 38765.606124,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-39587",
       "matched": true,
       "stage": null,
-      "weight": 44151.527507,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202404-39588",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39589",
       "matched": true,
       "stage": null,
-      "weight": 38490.187492,
+      "weight": 38212.158727,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39590",
       "matched": true,
       "stage": null,
-      "weight": 40236.583561,
+      "weight": 38257.826903,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39591",
       "matched": true,
       "stage": null,
-      "weight": 41950.727527,
+      "weight": 44756.90941,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39592",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39593",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39594",
       "matched": true,
       "stage": null,
-      "weight": 39553.782026,
+      "weight": 38239.971669,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39595",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39596",
       "matched": true,
       "stage": null,
-      "weight": 54951.366824,
+      "weight": 58005.391013,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39597",
       "matched": true,
       "stage": null,
-      "weight": 38765.934214,
+      "weight": 38219.369459,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39598",
       "matched": true,
       "stage": null,
-      "weight": 54694.741328,
+      "weight": 51544.422564,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39599",
       "matched": true,
       "stage": null,
-      "weight": 41990.119848,
+      "weight": 44757.939517,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39600",
       "matched": true,
       "stage": null,
-      "weight": 38765.934214,
+      "weight": 38219.369459,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39601",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39602",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39603",
       "matched": true,
       "stage": null,
-      "weight": 42764.836929,
+      "weight": 44778.198332,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39604",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39605",
       "matched": true,
       "stage": null,
-      "weight": 37452.854412,
+      "weight": 38185.032487,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39606",
       "matched": true,
       "stage": null,
-      "weight": 41845.681151,
+      "weight": 44754.162444,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39607",
       "matched": true,
       "stage": null,
-      "weight": 39540.651292,
+      "weight": 38239.628274,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39608",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39609",
       "matched": true,
       "stage": null,
-      "weight": 56395.754587,
+      "weight": 58043.16171,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39610",
       "matched": true,
       "stage": null,
-      "weight": 50138.354637,
+      "weight": 51425.273222,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39611",
       "matched": true,
       "stage": null,
-      "weight": 39763.874826,
+      "weight": 38245.465587,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39612",
       "matched": true,
       "stage": null,
-      "weight": 42896.144961,
+      "weight": 44781.632027,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39613",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39614",
       "matched": true,
       "stage": null,
-      "weight": 39895.182838,
+      "weight": 38248.899285,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39615",
       "matched": true,
       "stage": null,
-      "weight": 38056.871147,
+      "weight": 38200.827497,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39616",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39617",
       "matched": true,
       "stage": null,
-      "weight": 37452.854412,
+      "weight": 38185.032487,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39618",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39619",
       "matched": true,
       "stage": null,
-      "weight": 56658.370503,
+      "weight": 58050.029097,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39620",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39621",
       "matched": true,
       "stage": null,
-      "weight": 48568.649456,
+      "weight": 44929.96779,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39622",
       "matched": true,
       "stage": null,
-      "weight": 40092.144738,
+      "weight": 38254.049826,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39623",
       "matched": true,
       "stage": null,
-      "weight": 41845.681151,
+      "weight": 44754.162444,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39624",
       "matched": true,
       "stage": null,
-      "weight": 47951.501959,
+      "weight": 44913.829429,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39625",
       "matched": true,
       "stage": null,
-      "weight": 47728.278426,
+      "weight": 44907.992127,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39626",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39627",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39628",
       "matched": true,
       "stage": null,
-      "weight": 47163.654168,
+      "weight": 44893.227245,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39629",
       "matched": true,
       "stage": null,
-      "weight": 38568.972273,
+      "weight": 38214.218931,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39630",
       "matched": true,
       "stage": null,
-      "weight": 40971.90809,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39631",
       "matched": true,
       "stage": null,
-      "weight": 63105.592025,
+      "weight": 58218.623695,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39632",
       "matched": true,
       "stage": null,
-      "weight": 39369.950974,
+      "weight": 38235.164492,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39633",
       "matched": true,
       "stage": null,
-      "weight": 40971.90809,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39634",
       "matched": true,
       "stage": null,
-      "weight": 40459.807046,
+      "weight": 38263.664196,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39635",
       "matched": true,
       "stage": null,
-      "weight": 37899.301622,
+      "weight": 38196.707049,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39636",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39637",
       "matched": true,
       "stage": null,
-      "weight": 48568.649364,
+      "weight": 44929.96779,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39638",
       "matched": true,
       "stage": null,
-      "weight": 39829.528787,
+      "weight": 38247.182431,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39639",
       "matched": true,
       "stage": null,
-      "weight": 39133.596437,
+      "weight": 38228.983839,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39640",
       "matched": true,
       "stage": null,
-      "weight": 44169.832357,
+      "weight": 44814.938918,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39641",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39642",
       "matched": true,
       "stage": null,
-      "weight": 40341.629855,
+      "weight": 38260.573853,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39643",
       "matched": true,
       "stage": null,
-      "weight": 38201.309904,
+      "weight": 38204.604572,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39644",
       "matched": true,
       "stage": null,
-      "weight": 44077.916726,
+      "weight": 44812.535298,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39645",
       "matched": true,
       "stage": null,
-      "weight": 40971.90809,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39646",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39647",
       "matched": true,
       "stage": null,
-      "weight": 37479.116103,
+      "weight": 38185.71923,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39648",
       "matched": true,
       "stage": null,
-      "weight": 40971.90809,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39649",
       "matched": true,
       "stage": null,
-      "weight": 40971.90809,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39650",
       "matched": true,
       "stage": null,
-      "weight": 41845.681151,
+      "weight": 44754.162444,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39651",
       "matched": true,
       "stage": null,
-      "weight": 38253.833199,
+      "weight": 38205.978067,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39652",
       "matched": true,
       "stage": null,
-      "weight": 40971.90809,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39653",
       "matched": true,
       "stage": null,
-      "weight": 40971.90809,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-39654",
       "matched": true,
       "stage": null,
-      "weight": 79107.193515,
+      "weight": 77999.838079,
       "yrmonth": 202404
     },
     {
@@ -3059,441 +3059,441 @@
       "case_id": "2024-202407-39794",
       "matched": true,
       "stage": null,
-      "weight": 39180.292762,
+      "weight": 39026.24624,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39795",
       "matched": true,
       "stage": null,
-      "weight": 51232.722073,
+      "weight": 51424.245729,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39796",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39797",
       "matched": true,
       "stage": null,
-      "weight": 45153.919945,
+      "weight": 45081.666734,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39798",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39799",
       "matched": true,
       "stage": null,
-      "weight": 35751.625637,
+      "weight": 35541.832908,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39800",
       "matched": true,
       "stage": null,
-      "weight": 19204.972396,
+      "weight": 18439.086652,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39801",
       "matched": true,
       "stage": null,
-      "weight": 24141.542957,
+      "weight": 23541.563319,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39802",
       "matched": true,
       "stage": null,
-      "weight": 20041.491119,
+      "weight": 19482.167487,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39803",
       "matched": true,
       "stage": null,
-      "weight": 35630.721236,
+      "weight": 35297.89921,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39804",
       "matched": true,
       "stage": null,
-      "weight": 48749.693579,
+      "weight": 48798.285637,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39805",
       "matched": true,
       "stage": null,
-      "weight": 47226.060685,
+      "weight": 47223.446971,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39806",
       "matched": true,
       "stage": null,
-      "weight": 32597.212423,
+      "weight": 32340.890451,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39807",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39808",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39809",
       "matched": true,
       "stage": null,
-      "weight": 31988.745518,
+      "weight": 31593.008398,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39810",
       "matched": true,
       "stage": null,
-      "weight": 36666.791605,
+      "weight": 36368.789409,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39811",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39812",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39813",
       "matched": true,
       "stage": null,
-      "weight": 34791.243784,
+      "weight": 34608.657694,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39814",
       "matched": true,
       "stage": null,
-      "weight": 45153.919962,
+      "weight": 45081.666734,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39815",
       "matched": true,
       "stage": null,
-      "weight": 46799.443474,
+      "weight": 46782.492204,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39816",
       "matched": true,
       "stage": null,
-      "weight": 51232.722088,
+      "weight": 51424.245729,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39817",
       "matched": true,
       "stage": null,
-      "weight": 53168.22898,
+      "weight": 53365.31729,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39818",
       "matched": true,
       "stage": null,
-      "weight": 47744.095875,
+      "weight": 47758.892257,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39819",
       "matched": true,
       "stage": null,
-      "weight": 50760.889006,
+      "weight": 50877.072491,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39820",
       "matched": true,
       "stage": null,
-      "weight": 48201.18574,
+      "weight": 48231.343751,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39821",
       "matched": true,
       "stage": null,
-      "weight": 47805.04119,
+      "weight": 47821.88559,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39822",
       "matched": true,
       "stage": null,
-      "weight": 49633.400662,
+      "weight": 49711.691826,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39823",
       "matched": true,
       "stage": null,
-      "weight": 51110.83145,
+      "weight": 51298.258533,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39824",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39825",
       "matched": true,
       "stage": null,
-      "weight": 45153.919962,
+      "weight": 45081.666734,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39826",
       "matched": true,
       "stage": null,
-      "weight": 44772.518604,
+      "weight": 44746.930245,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39827",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39828",
       "matched": true,
       "stage": null,
-      "weight": 52101.685948,
+      "weight": 52262.930215,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39829",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39830",
       "matched": true,
       "stage": null,
-      "weight": 48748.707337,
+      "weight": 48916.232231,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39831",
       "matched": true,
       "stage": null,
-      "weight": 44163.065448,
+      "weight": 44116.994968,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39832",
       "matched": true,
       "stage": null,
-      "weight": 48748.707337,
+      "weight": 48916.232231,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39833",
       "matched": true,
       "stage": null,
-      "weight": 51675.068743,
+      "weight": 51821.975548,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39834",
       "matched": true,
       "stage": null,
-      "weight": 48748.707337,
+      "weight": 48916.232231,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39835",
       "matched": true,
       "stage": null,
-      "weight": 46982.27943,
+      "weight": 46971.472921,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39836",
       "matched": true,
       "stage": null,
-      "weight": 42121.397377,
+      "weight": 42006.711212,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39837",
       "matched": true,
       "stage": null,
-      "weight": 47317.478669,
+      "weight": 47317.937352,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39838",
       "matched": true,
       "stage": null,
-      "weight": 49785.763952,
+      "weight": 49869.175757,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39839",
       "matched": true,
       "stage": null,
-      "weight": 26091.793073,
+      "weight": 25557.356483,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39840",
       "matched": true,
       "stage": null,
-      "weight": 45564.807713,
+      "weight": 45565.846223,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39841",
       "matched": true,
       "stage": null,
-      "weight": 23242.106442,
+      "weight": 22671.381895,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39842",
       "matched": true,
       "stage": null,
-      "weight": 48323.076393,
+      "weight": 48357.330656,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39843",
       "matched": true,
       "stage": null,
-      "weight": 45732.900467,
+      "weight": 45680.105403,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39844",
       "matched": true,
       "stage": null,
-      "weight": 41176.744983,
+      "weight": 41030.311322,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39845",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39846",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39847",
       "matched": true,
       "stage": null,
-      "weight": 49572.455341,
+      "weight": 49648.698414,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39848",
       "matched": true,
       "stage": null,
-      "weight": 39713.071147,
+      "weight": 39636.412894,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39849",
       "matched": true,
       "stage": null,
-      "weight": 48748.707353,
+      "weight": 48916.232231,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39850",
       "matched": true,
       "stage": null,
-      "weight": 45153.919962,
+      "weight": 45081.666514,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39851",
       "matched": true,
       "stage": null,
-      "weight": 48748.707353,
+      "weight": 48916.232231,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39852",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39853",
       "matched": true,
       "stage": null,
-      "weight": 45641.482493,
+      "weight": 45585.6149,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39854",
       "matched": true,
       "stage": null,
-      "weight": 45153.919962,
+      "weight": 45081.666514,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39855",
       "matched": true,
       "stage": null,
-      "weight": 45533.348817,
+      "weight": 45652.296053,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-39856",
       "matched": true,
       "stage": null,
-      "weight": 49084.892823,
+      "weight": 49144.749834,
       "yrmonth": 202407
     },
     {
@@ -3969,511 +3969,511 @@
       "case_id": "2024-202409-39924",
       "matched": true,
       "stage": null,
-      "weight": 41091.204343,
+      "weight": 41034.27442,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39925",
       "matched": true,
       "stage": null,
-      "weight": 41300.024601,
+      "weight": 41428.124715,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39926",
       "matched": true,
       "stage": null,
-      "weight": 41832.430075,
+      "weight": 41834.632102,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39927",
       "matched": true,
       "stage": null,
-      "weight": 37137.094089,
+      "weight": 36933.092604,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39928",
       "matched": true,
       "stage": null,
-      "weight": 42030.664869,
+      "weight": 42048.681248,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39929",
       "matched": true,
       "stage": null,
-      "weight": 42547.799092,
+      "weight": 42607.070361,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39930",
       "matched": true,
       "stage": null,
-      "weight": 41300.024601,
+      "weight": 41428.124715,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39931",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39932",
       "matched": true,
       "stage": null,
-      "weight": 43271.786993,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39933",
       "matched": true,
       "stage": null,
-      "weight": 39498.673716,
+      "weight": 39483.069411,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39934",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39935",
       "matched": true,
       "stage": null,
-      "weight": 43228.692479,
+      "weight": 43342.282659,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39936",
       "matched": true,
       "stage": null,
-      "weight": 43271.786993,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39937",
       "matched": true,
       "stage": null,
-      "weight": 43271.786993,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39938",
       "matched": true,
       "stage": null,
-      "weight": 36887.145862,
+      "weight": 36663.204518,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39939",
       "matched": true,
       "stage": null,
-      "weight": 42392.658811,
+      "weight": 42439.553643,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39940",
       "matched": true,
       "stage": null,
-      "weight": 33805.511431,
+      "weight": 33672.472211,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39941",
       "matched": true,
       "stage": null,
-      "weight": 40912.173917,
+      "weight": 41009.332897,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39942",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39943",
       "matched": true,
       "stage": null,
-      "weight": 42832.222913,
+      "weight": 42914.184369,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39944",
       "matched": true,
       "stage": null,
-      "weight": 42289.231977,
+      "weight": 42327.875795,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39945",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39946",
       "matched": true,
       "stage": null,
-      "weight": 42418.515529,
+      "weight": 42467.473118,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39947",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39948",
       "matched": true,
       "stage": null,
-      "weight": 38998.777293,
+      "weight": 38943.293289,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39949",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39950",
       "matched": true,
       "stage": null,
-      "weight": 41918.619113,
+      "weight": 41927.696963,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39951",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39952",
       "matched": true,
       "stage": null,
-      "weight": 40961.920789,
+      "weight": 40894.677214,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39953",
       "matched": true,
       "stage": null,
-      "weight": 41300.024601,
+      "weight": 41428.124715,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39954",
       "matched": true,
       "stage": null,
-      "weight": 41300.024601,
+      "weight": 41428.124715,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39955",
       "matched": true,
       "stage": null,
-      "weight": 39216.216434,
+      "weight": 39346.449971,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39956",
       "matched": true,
       "stage": null,
-      "weight": 36887.145862,
+      "weight": 36663.204518,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39957",
       "matched": true,
       "stage": null,
-      "weight": 40961.920789,
+      "weight": 40894.677214,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39958",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39959",
       "matched": true,
       "stage": null,
-      "weight": 42858.079615,
+      "weight": 42942.103834,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39960",
       "matched": true,
       "stage": null,
-      "weight": 41858.286781,
+      "weight": 41862.551558,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39961",
       "matched": true,
       "stage": null,
-      "weight": 33898.352819,
+      "weight": 33604.34895,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39962",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39963",
       "matched": true,
       "stage": null,
-      "weight": 37576.658157,
+      "weight": 37407.723345,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39964",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39965",
       "matched": true,
       "stage": null,
-      "weight": 42039.283775,
+      "weight": 42057.987785,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39966",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39967",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39968",
       "matched": true,
       "stage": null,
-      "weight": 30129.172617,
+      "weight": 30039.592508,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39969",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39970",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39971",
       "matched": true,
       "stage": null,
-      "weight": 23936.113942,
+      "weight": 23689.2192,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39972",
       "matched": true,
       "stage": null,
-      "weight": 40961.920789,
+      "weight": 40894.677141,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39973",
       "matched": true,
       "stage": null,
-      "weight": 42513.323472,
+      "weight": 42569.844424,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39974",
       "matched": true,
       "stage": null,
-      "weight": 41815.19226,
+      "weight": 41816.019168,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39975",
       "matched": true,
       "stage": null,
-      "weight": 36072.283103,
+      "weight": 36120.077726,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39976",
       "matched": true,
       "stage": null,
-      "weight": 38931.792605,
+      "weight": 39039.335992,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39977",
       "matched": true,
       "stage": null,
-      "weight": 37121.822821,
+      "weight": 37084.974239,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39978",
       "matched": true,
       "stage": null,
-      "weight": 33805.511431,
+      "weight": 33672.472211,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39979",
       "matched": true,
       "stage": null,
-      "weight": 43271.786993,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39980",
       "matched": true,
       "stage": null,
-      "weight": 24337.269298,
+      "weight": 23785.634838,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39981",
       "matched": true,
       "stage": null,
-      "weight": 41737.622118,
+      "weight": 41732.260728,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39982",
       "matched": true,
       "stage": null,
-      "weight": 41573.862954,
+      "weight": 41555.437608,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39983",
       "matched": true,
       "stage": null,
-      "weight": 29972.065805,
+      "weight": 29701.581153,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39984",
       "matched": true,
       "stage": null,
-      "weight": 36354.740397,
+      "weight": 36256.697056,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39985",
       "matched": true,
       "stage": null,
-      "weight": 40961.920811,
+      "weight": 40894.677141,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39986",
       "matched": true,
       "stage": null,
-      "weight": 25429.903538,
+      "weight": 24797.063709,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39987",
       "matched": true,
       "stage": null,
-      "weight": 40343.326279,
+      "weight": 40395.104821,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39988",
       "matched": true,
       "stage": null,
-      "weight": 42271.994171,
+      "weight": 42309.262777,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39989",
       "matched": true,
       "stage": null,
-      "weight": 40961.920811,
+      "weight": 40894.677141,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39990",
       "matched": true,
       "stage": null,
-      "weight": 42047.902675,
+      "weight": 42067.294227,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39991",
       "matched": true,
       "stage": null,
-      "weight": 40834.603773,
+      "weight": 40925.574504,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39992",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39993",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39994",
       "matched": true,
       "stage": null,
-      "weight": 34960.444548,
+      "weight": 34919.541133,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39995",
       "matched": true,
       "stage": null,
-      "weight": 42651.22592,
+      "weight": 42718.748136,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-39996",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
@@ -5369,448 +5369,448 @@
       "case_id": "2024-202312-40124",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40125",
       "matched": true,
       "stage": null,
-      "weight": 45577.139443,
+      "weight": 45605.151227,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40126",
       "matched": true,
       "stage": null,
-      "weight": 49068.807537,
+      "weight": 48992.939792,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40127",
       "matched": true,
       "stage": null,
-      "weight": 43419.094579,
+      "weight": 43511.309701,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40128",
       "matched": true,
       "stage": null,
-      "weight": 47128.99193,
+      "weight": 47110.835009,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40129",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40130",
       "matched": true,
       "stage": null,
-      "weight": 37801.402435,
+      "weight": 37743.253757,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40131",
       "matched": true,
       "stage": null,
-      "weight": 28967.00413,
+      "weight": 29012.937797,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40132",
       "matched": true,
       "stage": null,
-      "weight": 38795.557934,
+      "weight": 38707.832401,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40133",
       "matched": true,
       "stage": null,
-      "weight": 17933.838691,
+      "weight": 17831.77568,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40134",
       "matched": true,
       "stage": null,
-      "weight": 33145.844976,
+      "weight": 33226.202315,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40135",
       "matched": true,
       "stage": null,
-      "weight": 44340.506993,
+      "weight": 44405.309468,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40136",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40137",
       "matched": true,
       "stage": null,
-      "weight": 37906.630503,
+      "weight": 38004.098216,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40138",
       "matched": true,
       "stage": null,
-      "weight": 46838.019588,
+      "weight": 46828.519324,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40139",
       "matched": true,
       "stage": null,
-      "weight": 44898.20398,
+      "weight": 44946.414576,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40140",
       "matched": true,
       "stage": null,
-      "weight": 39635.989975,
+      "weight": 39364.514045,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40141",
       "matched": true,
       "stage": null,
-      "weight": 37502.192806,
+      "weight": 37294.198756,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40142",
       "matched": true,
       "stage": null,
-      "weight": 44582.983944,
+      "weight": 44640.572537,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40143",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40144",
       "matched": true,
       "stage": null,
-      "weight": 45892.359479,
+      "weight": 45910.993275,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40145",
       "matched": true,
       "stage": null,
-      "weight": 47686.688917,
+      "weight": 47651.940141,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40146",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40147",
       "matched": true,
       "stage": null,
-      "weight": 28991.251825,
+      "weight": 29036.464093,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40148",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40149",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40150",
       "matched": true,
       "stage": null,
-      "weight": 48066.41475,
+      "weight": 47861.62186,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40151",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40152",
       "matched": true,
       "stage": null,
-      "weight": 49408.275269,
+      "weight": 49322.308131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40153",
       "matched": true,
       "stage": null,
-      "weight": 43152.369933,
+      "weight": 43252.520283,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40154",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40155",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40156",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40157",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40158",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40159",
       "matched": true,
       "stage": null,
-      "weight": 45213.424017,
+      "weight": 45252.256552,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40160",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40161",
       "matched": true,
       "stage": null,
-      "weight": 33145.844976,
+      "weight": 33226.202315,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40162",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40163",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40164",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40165",
       "matched": true,
       "stage": null,
-      "weight": 47702.699324,
+      "weight": 47508.727222,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40166",
       "matched": true,
       "stage": null,
-      "weight": 34624.954377,
+      "weight": 34661.307263,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40167",
       "matched": true,
       "stage": null,
-      "weight": 37906.630503,
+      "weight": 38004.098216,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40168",
       "matched": true,
       "stage": null,
-      "weight": 45480.148662,
+      "weight": 45511.046005,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40169",
       "matched": true,
       "stage": null,
-      "weight": 49481.018354,
+      "weight": 49392.887033,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40170",
       "matched": true,
       "stage": null,
-      "weight": 46547.047247,
+      "weight": 46546.203655,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40171",
       "matched": true,
       "stage": null,
-      "weight": 33145.844976,
+      "weight": 33226.202315,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40172",
       "matched": true,
       "stage": null,
-      "weight": 45148.45405,
+      "weight": 44871.725501,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40173",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40174",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40175",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40176",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40177",
       "matched": true,
       "stage": null,
-      "weight": 49481.018354,
+      "weight": 49392.887091,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40178",
       "matched": true,
       "stage": null,
-      "weight": 41972.005992,
+      "weight": 41789.778965,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40179",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40180",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40181",
       "matched": true,
       "stage": null,
-      "weight": 46765.276503,
+      "weight": 46757.940401,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40182",
       "matched": true,
       "stage": null,
-      "weight": 37906.630503,
+      "weight": 38004.098216,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40183",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40184",
       "matched": true,
       "stage": null,
-      "weight": 43410.393122,
+      "weight": 42867.879155,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40185",
       "matched": true,
       "stage": null,
-      "weight": 38852.290612,
+      "weight": 38921.624269,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40186",
       "matched": true,
       "stage": null,
-      "weight": 46635.800739,
+      "weight": 46473.569593,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40187",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
@@ -5894,91 +5894,91 @@
       "case_id": "2024-202403-40199",
       "matched": true,
       "stage": null,
-      "weight": 42097.905225,
+      "weight": 40890.156827,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-40200",
       "matched": true,
       "stage": null,
-      "weight": 42097.905225,
+      "weight": 40890.156827,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-40201",
       "matched": true,
       "stage": null,
-      "weight": 35953.725932,
+      "weight": 34857.508489,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-40202",
       "matched": true,
       "stage": null,
-      "weight": 33904.52175,
+      "weight": 33362.87851,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-40203",
       "matched": true,
       "stage": null,
-      "weight": 39899.525256,
+      "weight": 39286.722338,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-40204",
       "matched": true,
       "stage": null,
-      "weight": 44151.527507,
+      "weight": 43939.271727,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202403-40205",
       "matched": true,
       "stage": null,
-      "weight": 38078.010434,
+      "weight": 37958.162347,
       "yrmonth": 202403
     },
     {
       "case_id": "2024-202404-40206",
       "matched": true,
       "stage": null,
-      "weight": 52593.813786,
+      "weight": 51489.483387,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-40207",
       "matched": true,
       "stage": null,
-      "weight": 37452.854412,
+      "weight": 38185.032515,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-40208",
       "matched": true,
       "stage": null,
-      "weight": 40971.9082,
+      "weight": 38277.055604,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-40209",
       "matched": true,
       "stage": null,
-      "weight": 37452.854412,
+      "weight": 38185.032515,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-40210",
       "matched": true,
       "stage": null,
-      "weight": 45679.87397,
+      "weight": 44854.426427,
       "yrmonth": 202404
     },
     {
       "case_id": "2024-202404-40211",
       "matched": true,
       "stage": null,
-      "weight": 53342.269226,
+      "weight": 51509.055482,
       "yrmonth": 202404
     },
     {
@@ -6069,35 +6069,35 @@
       "case_id": "2024-202407-40224",
       "matched": true,
       "stage": null,
-      "weight": 52254.049249,
+      "weight": 52420.414177,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-40225",
       "matched": true,
       "stage": null,
-      "weight": 44863.936596,
+      "weight": 44841.420537,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-40226",
       "matched": true,
       "stage": null,
-      "weight": 53320.592286,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-40227",
       "matched": true,
       "stage": null,
-      "weight": 53320.592271,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
       "case_id": "2024-202407-40228",
       "matched": true,
       "stage": null,
-      "weight": 53320.592286,
+      "weight": 53522.801159,
       "yrmonth": 202407
     },
     {
@@ -6139,42 +6139,42 @@
       "case_id": "2024-202409-40234",
       "matched": true,
       "stage": null,
-      "weight": 30349.331006,
+      "weight": 29940.571819,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-40235",
       "matched": true,
       "stage": null,
-      "weight": 39955.475617,
+      "weight": 39976.313076,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-40236",
       "matched": true,
       "stage": null,
-      "weight": 42521.942381,
+      "weight": 42579.15086,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-40237",
       "matched": true,
       "stage": null,
-      "weight": 42961.50646,
+      "weight": 43053.781606,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-40238",
       "matched": true,
       "stage": null,
-      "weight": 30290.965242,
+      "weight": 30045.921047,
       "yrmonth": 202409
     },
     {
       "case_id": "2024-202409-40239",
       "matched": true,
       "stage": null,
-      "weight": 43271.787014,
+      "weight": 43388.815053,
       "yrmonth": 202409
     },
     {
@@ -6265,49 +6265,49 @@
       "case_id": "2024-202312-40252",
       "matched": true,
       "stage": null,
-      "weight": 45374.920594,
+      "weight": 45250.20153,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40253",
       "matched": true,
       "stage": null,
-      "weight": 46537.881622,
+      "weight": 45426.081623,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40254",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40255",
       "matched": true,
       "stage": null,
-      "weight": 42982.636067,
+      "weight": 43087.836131,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40256",
       "matched": true,
       "stage": null,
-      "weight": 33145.844976,
+      "weight": 33226.202315,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40257",
       "matched": true,
       "stage": null,
-      "weight": 49481.018354,
+      "weight": 49392.887033,
       "yrmonth": 202312
     },
     {
       "case_id": "2024-202312-40258",
       "matched": true,
       "stage": null,
-      "weight": 39450.245702,
+      "weight": 39343.04281,
       "yrmonth": 202312
     }
   ],
@@ -6391,16 +6391,21 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-09-22T21:37:49Z",
+    "generated_at": "2026-09-23T00:21:48Z",
     "generated_by": "scripts/run_comparison.py::ca-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
       "name": "snap-qc",
-      "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
-      "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
+      "sha256": "b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5",
+      "url": "https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip"
     },
-    "reemitted_report": true,
-    "run_kind": "affected-rerun",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "f43dec520dd392bc5333934f56dad7498363e704"
+      }
+    ],
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -6434,12 +6439,13 @@
     "match_rate": 100,
     "mismatch_count": 0,
     "provenance": {
-      "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine/target/debug/axiom-rules-engine",
+      "axiom_binary": "/Users/maxghenis/TheAxiomFoundation/_worktrees/snapqc-post-engine-ffd8213/target/release/axiom-rules-engine",
       "fiscal_year": 2024,
       "overlay": {
         "file_sha256": {
+          "us-ca/policies/cdss/snap/modified-categorical-eligibility.yaml": "115dcab6d186e16155e77e5012abc81b2991fb86d84dd73c1ba2eb59f9de6824",
           "us-ca/policies/cdss/snap/standard-utility-allowance.yaml": "5aa1ecd9e36b0ae27e4049c20280d1fb73e5ca13484d34f85f9c2718d03151a1",
-          "us/policies/usda/snap/state-plan-composition.yaml": "fe8dcffc9789aff549822d37bb963d8b86c292796d4ea834a97f94e26538740d",
+          "us/policies/usda/snap/state-plan-composition.yaml": "06b8dea0853ff9e5a89a7c62080d3603b3e1a321b70951d1ea0f470fb9cfc163",
           "us/regulations/7-cfr/273/10.yaml": "b30b75666b34a4c625c480b6a243340c40994e37d5cc9334142c9fd3723ddf78",
           "us/regulations/7-cfr/273/8.yaml": "2eb57902785375c837abb8d7a1b7326c20926b1cedd93463c64bbc0ca8981aee",
           "us/regulations/7-cfr/273/9.yaml": "9ce1454e8d41621559d88ac8bff912e7fcf6618a54c9c48feb9de621de2baf36",
@@ -6451,7 +6457,6 @@
           "us:policies/usda/snap/fy-2026-cola/maximum-allotments": "us:policies/usda/snap/fy-2024-cola/maximum-allotments"
         },
         "overlay": "us-ca-snap-fy2024",
-        "overlay_root": "/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/snap-qc-overlay-w7jil4a6/rulespec-us-main-snapqc",
         "patches": [
           {
             "file": "us-ca/policies/cdss/snap/standard-utility-allowance.yaml",
@@ -6463,13 +6468,14 @@
         ],
         "program": "us-ca/policies/cdss/snap/fy-2026-benefit-calculation.yaml",
         "rewrite_counts": {
+          "us-ca/policies/cdss/snap/modified-categorical-eligibility.yaml": 1,
           "us/policies/usda/snap/state-plan-composition.yaml": 3,
           "us/regulations/7-cfr/273/10.yaml": 5,
           "us/regulations/7-cfr/273/8.yaml": 1,
           "us/regulations/7-cfr/273/9.yaml": 1,
           "us/statutes/7/2017/a.yaml": 3
         },
-        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc",
+        "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/snapqc-harness-refresh-rulespec/rulespec-us",
         "schema": "axiom_oracles.rulespec_overlay.v1"
       },
       "period": "2026-01",
@@ -6477,17 +6483,17 @@
       "pins": {
         "archive_member": "qc_pub_fy2024.csv",
         "fiscal_year": 2024,
-        "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
-        "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
+        "sha256": "b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5",
+        "url": "https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip"
       },
-      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/rulespec-us-main-snapqc"
+      "rulespec_root": "/Users/maxghenis/TheAxiomFoundation/_worktrees/snapqc-harness-refresh-rulespec/rulespec-us"
     },
     "stages": [],
     "weighted": {
-      "comparison_weight": 37088283.91269,
+      "comparison_weight": 36965635.656925,
       "error_case_weight": 0,
       "match_rate": 100,
-      "match_weight": 37088283.91269,
+      "match_weight": 36965635.656925,
       "mismatch_weight": 0
     }
   }
