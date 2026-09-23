@@ -13,9 +13,11 @@ name: SNAP QC live replay
 #
 #   engine    axiom-rules-engine built at the axiom_artifact_rules_engine_ref
 #             pin in rulespec-us's .axiom/workflow-toolchain.toml (the recipe
-#             rulespec-us's program-artifacts.yml uses), cached per ref. The
-#             validation pin, axiom_rules_engine_ref, cannot load the SNAP
-#             chain.
+#             rulespec-us's program-artifacts.yml uses), cached per ref and
+#             runner image. The validation pin, axiom_rules_engine_ref,
+#             cannot load the SNAP chain. Every job pins the same image
+#             (not ubuntu-latest), so a cached binary never lands on a
+#             runner with an older glibc than the one it was linked on.
 #   rulespec  rulespec-us at one commit, resolved once from main (or from the
 #             dispatch input) and shared by every leg. It is checked out into
 #             a directory named rulespec-us, because the engine serves `us:`
@@ -60,7 +62,7 @@ concurrency:
 jobs:
   prepare:
     name: Prepare engine, data, and suites
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 45
     outputs:
       suites: ${{ steps.suites.outputs.suites }}
@@ -103,7 +105,8 @@ jobs:
               raise SystemExit(
                   f"axiom_artifact_rules_engine_ref is not a 40-hex SHA: {ref!r}"
               )
-          key = f"axiom-rules-engine-release-{os.environ['RUNNER_OS']}-{ref}"
+          image = os.environ.get("ImageOS") or os.environ["RUNNER_OS"]
+          key = f"axiom-rules-engine-release-{image}-{ref}"
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
               out.write(f"engine_ref={ref}\nengine_cache_key={key}\n")
           print(f"axiom-rules-engine: {ref}")
@@ -171,7 +174,7 @@ jobs:
   replay:
     name: Replay ${{ matrix.suite }}
     needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     strategy:
       fail-fast: false
@@ -265,7 +268,7 @@ jobs:
   live-tests:
     name: Engine-gated live tests
     needs: prepare
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Checkout axiom-oracles

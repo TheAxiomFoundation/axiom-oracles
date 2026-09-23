@@ -416,6 +416,17 @@ def test_engine_is_built_at_the_artifact_pin_and_shared_by_one_key():
     )
 
 
+def test_every_job_runs_on_one_pinned_image():
+    # The engine binary is cached once and restored by every job: a floating
+    # label (ubuntu-latest mid-migration) could restore it onto an image with
+    # an older glibc than the one it was linked on.
+    images = {spec["runs-on"] for spec in _workflow()["jobs"].values()}
+    assert len(images) == 1
+    assert "latest" not in images.pop()
+    prepare = "\n".join(json.dumps(step) for step in _steps("prepare"))
+    assert "ImageOS" in prepare
+
+
 def test_replay_requires_a_live_run_and_checks_even_after_failure():
     steps = {step.get("id") or step.get("name"): step for step in _steps("replay")}
     assert "--require-live" in steps["replay"]["run"]
