@@ -31,6 +31,11 @@ rewrite_files:
   - us/regulations/7-cfr/273/8.yaml
   - us/regulations/7-cfr/273/9.yaml
   - us/regulations/7-cfr/273/10.yaml
+  # CalFresh modified categorical eligibility (rulespec-us#1176, merged
+  # 2026-07-30) imports the income-eligibility-standards COLA module directly;
+  # left unrewritten, the program compiles both COLA vintages and the engine
+  # aborts on a duplicate snap_net_income_limit_* rule.
+  - us-ca/policies/cdss/snap/modified-categorical-eligibility.yaml
 parameter_patches:
   - file: us-ca/policies/cdss/snap/standard-utility-allowance.yaml
     rule: snap_standard_utility_allowance_amount
