@@ -327,6 +327,18 @@ def divergent_cases(report: dict, max_cases: int = DEFAULT_MAX_CASES) -> list[st
 
 
 _EXCEPTION_LINE = re.compile(r"^[A-Za-z_][\w.]*(Error|Exception|Exit)\b.*")
+_REFUSAL = re.compile(r": --require-live: ")
+
+
+def log_shows_failure(log_text: str) -> bool:
+    """Whether a replay log records a raised exception or a --require-live refusal.
+
+    ``check`` uses this so that a report left in a reused directory by an
+    earlier run can never pass for a replay that just failed.
+    """
+    return "Traceback (most recent call last):" in log_text or bool(
+        _REFUSAL.search(log_text)
+    )
 
 
 def failure_excerpt(log_text: str, *, context: int = 4) -> str:
@@ -477,11 +489,13 @@ def cmd_check(args: argparse.Namespace) -> int:
             expect_axiom_binary=args.expect_axiom_binary,
         )
         details = divergent_cases(report, args.max_cases)
-        if args.replay_failed:
-            # Published, then raised (e.g. a versioned case-chunk refresh):
-            # the report alone must not turn a failed replay into a PASS.
+        if args.replay_failed or log_shows_failure(log_text):
+            # Either the replay raised after publishing (e.g. a versioned
+            # case-chunk refresh), or it failed and the report found here was
+            # left by an earlier run. Either way the report alone must not
+            # turn a failed replay into a PASS.
             failures.append(
-                "the replay exited nonzero after publishing its report: "
+                "the replay failed (this report may be from an earlier run): "
                 + (failure_excerpt(log_text).replace("\n", " ") if log_text else "no log")
             )
         summary = report.get("summary") or {}

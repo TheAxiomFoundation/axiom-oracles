@@ -359,7 +359,38 @@ def test_check_fails_a_published_report_when_the_replay_step_failed(tmp_path, ca
     )
     out = capsys.readouterr().out
     assert code == 1
-    assert "exited nonzero after publishing its report: ValueError" in out
+    assert "the replay failed (this report may be from an earlier run): ValueError" in out
+
+
+def test_check_fails_a_stale_report_when_the_log_records_a_failure(tmp_path, capsys):
+    # A reused directory: an earlier run's exact report is still there, and
+    # this run was refused before publishing. The log alone must fail it.
+    report_dir = tmp_path / "reports"
+    _write_report(report_dir, _exact_report())
+    (report_dir / "replay.log").write_text(
+        "Running co-snap-qc: Colorado SNAP\n"
+        "SNAP QC replay not runnable here (no QC file); re-emitting ...\n"
+        "co-snap-qc: --require-live: the runner re-emitted the committed report ...\n"
+    )
+    code = replay.main(
+        ["check", "co-snap-qc", "--report-dir", str(report_dir), "--log", str(report_dir / "replay.log")]
+    )
+    out = capsys.readouterr().out
+    assert code == 1
+    assert "SNAP QC replay not runnable here" in out
+
+
+def test_check_passes_with_a_clean_log(tmp_path, capsys):
+    report_dir = tmp_path / "reports"
+    case_count = replay.committed_case_count(replay.registered_suites()["co-snap-qc"])
+    _write_report(report_dir, _exact_report(case_count=case_count or 3))
+    (report_dir / "replay.log").write_text(
+        "Running co-snap-qc: Colorado SNAP\nWrote: x.json\nCases: 856\nMismatch entries:  0\n"
+    )
+    code = replay.main(
+        ["check", "co-snap-qc", "--report-dir", str(report_dir), "--log", str(report_dir / "replay.log")]
+    )
+    assert code == 0, capsys.readouterr().out
 
 
 # --------------------------------------------------------------------------- #

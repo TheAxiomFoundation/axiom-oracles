@@ -520,17 +520,22 @@ artifacts.
   It fails if either one skips.
 
 To reproduce a leg locally, point the three variables at your checkouts.
-`run_comparison.py` also rewrites the working copy of the suite's dashboard
-report, so restore it afterward.
+Start from an empty report directory and pass `check` the replay log.
+`check` fails whenever the log records a failure, so a report left in the
+directory by an earlier run cannot pass. `run_comparison.py` also rewrites
+the working copy of the suite's dashboard report, so restore it afterward.
 
 ```bash
 uv run scripts/snap_qc_replay.py fetch-puf \
   --archive-dir ~/.cache/axiom-oracles/snap-qc/archives --data-dir /tmp/snap-qc-data
+rm -rf /tmp/snap-qc-reports && mkdir -p /tmp/snap-qc-reports
 AXIOM_SNAP_QC_RULESPEC_ROOT=~/TheAxiomFoundation/rulespec-us \
 AXIOM_SNAP_QC_AXIOM_BINARY=<engine at the artifact pin>/target/release/axiom-rules-engine \
 AXIOM_SNAP_QC_DATA_DIR=/tmp/snap-qc-data \
-  uv run scripts/run_comparison.py ca-snap-qc --summary --require-live --output-dir /tmp/snap-qc-reports
-uv run scripts/snap_qc_replay.py check ca-snap-qc --report-dir /tmp/snap-qc-reports
+  uv run scripts/run_comparison.py ca-snap-qc --summary --require-live \
+    --output-dir /tmp/snap-qc-reports 2>&1 | tee /tmp/snap-qc-reports/replay.log
+uv run scripts/snap_qc_replay.py check ca-snap-qc \
+  --report-dir /tmp/snap-qc-reports --log /tmp/snap-qc-reports/replay.log
 git checkout -- dashboard/
 ```
 
