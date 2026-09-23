@@ -456,8 +456,8 @@ Colorado parameters exactly.
 
 The weekly matrix (`comparisons.yml`) and the 6-hourly affected rerun
 (`affected-rerun.yml`) dispatch the snap-qc suites to bare runners. Those
-runners have none of the three prerequisites, so every leg re-emits the
-committed dashboard report (`provenance.reemitted_report: true`) and passes
+runners have no engine binary and no QC public-use file, so every leg
+re-emits the committed dashboard report (`provenance.reemitted_report: true`) and passes
 whether or not the replay still works. That is how California's replay could
 stop compiling after rulespec-us#1176 (2026-07-30) with nothing failing: the
 new modified-categorical-eligibility module imports `fy-2026-cola`, which the
@@ -473,7 +473,9 @@ artifacts.
 - **Engine.** It builds `axiom-rules-engine` at `axiom_artifact_rules_engine_ref`,
   the pin in rulespec-us `.axiom/workflow-toolchain.toml` that
   `program-artifacts.yml` also builds. The build is
-  `cargo build --release --locked --bin axiom-rules-engine`, cached per ref.
+  `cargo build --release --locked --bin axiom-rules-engine`, cached per ref
+  and runner image. Every job runs on the same pinned image, so a cached
+  binary never lands on a runner older than the one it was linked on.
   The validation pin (`axiom_rules_engine_ref`) cannot load the chain: it
   refuses the `fy-2024-cola` modules' plural `corpus_citation_paths`. The
   artifact pin predates `compile-composed`, so every compile takes the legacy

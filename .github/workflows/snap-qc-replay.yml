@@ -3,10 +3,10 @@ name: SNAP QC live replay
 # Replays the SNAP QC suites for real and fails on any mismatch or error.
 #
 # The weekly matrix (comparisons.yml) and the 6-hourly affected rerun
-# (affected-rerun.yml) run the snap-qc suites on bare runners. There
-# scripts/run_comparison.py finds no engine binary, no fiscal-year rulespec-us
-# checkout and no QC public-use file, so it re-emits the committed dashboard
-# report (provenance.reemitted_report: true). Those legs stay green whether or
+# (affected-rerun.yml) run the snap-qc suites on bare runners. Those runners
+# have no engine binary and no QC public-use file, so
+# scripts/run_comparison.py re-emits the committed dashboard report
+# (provenance.reemitted_report: true). Those legs stay green whether or
 # not the replay still works: California's stopped compiling after
 # rulespec-us#1176 (2026-07-30) and nothing failed. This lane provisions all
 # three and runs every suite with --require-live:

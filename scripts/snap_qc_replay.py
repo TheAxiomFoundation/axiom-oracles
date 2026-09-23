@@ -2,15 +2,15 @@
 """Drive and gate the live SNAP QC replay lane (.github/workflows/snap-qc-replay.yml).
 
 The weekly comparison matrix and the 6-hourly affected rerun run the SNAP QC
-suites on bare runners, where ``scripts/run_comparison.py`` cannot find the
-engine binary, the fiscal-year rulespec checkout, or the QC public-use file,
-and so re-emits the committed dashboard report (``provenance.reemitted_report:
-true``). Those legs stay green whether or not the replay still works: the
-California replay stopped compiling after rulespec-us#1176 (2026-07-30) and
-nothing failed. The live lane provisions all three — the engine built at
-rulespec-us's ``axiom_artifact_rules_engine_ref``, a rulespec-us checkout, and
-the pinned PUF — runs each suite with ``--require-live``, and then ``check``
-accepts only an executed, exact report.
+suites on bare runners. Those runners have no engine binary and no QC
+public-use file, so ``scripts/run_comparison.py`` re-emits the committed
+dashboard report (``provenance.reemitted_report: true``). Those legs stay
+green whether or not the replay still works: the California replay stopped
+compiling after rulespec-us#1176 (2026-07-30) and nothing failed. The live
+lane provisions the engine built at rulespec-us's
+``axiom_artifact_rules_engine_ref``, a rulespec-us checkout, and the pinned
+PUF, runs each suite with ``--require-live``, and then ``check`` accepts only
+an executed, exact report.
 
 Subcommands:
 
