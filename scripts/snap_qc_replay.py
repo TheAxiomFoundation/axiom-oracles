@@ -14,20 +14,24 @@ an executed, exact report.
 
 Subcommands:
 
-* ``suites``: the suites to replay. Every entry in :data:`REQUIRED_SUITES`
-  always runs, so a moved or deleted composition fails its leg instead of
-  dropping out of the matrix. A :data:`PENDING_SUITES` entry joins once its
-  composition exists in the rulespec-us checkout. Every registered
+* ``suites``: the suites to replay. Every :data:`REQUIRED_SUITES` entry is
+  selected unless a dispatch restricts the selection, and a selected
+  required suite stays selected when its composition disappears, so its leg
+  fails instead of dropping out of the matrix. A :data:`PENDING_SUITES`
+  entry joins once its composition exists in the rulespec-us checkout. Every registered
   ``snap-qc-compare`` suite must appear in exactly one of the two, so a new
   suite cannot silently stay out of the lane.
 * ``fetch-puf``: materialize the pinned PUF for each fiscal year the suites
   replay, re-verifying the kept zip against ``SNAP_QC_PINS`` on every call.
 * ``check``: assert that one suite's report was really computed and is
-  exact. That means no re-emission; at least one case, every one compared;
-  zero benefit mismatches, error cases and error rows; every stage concept
-  compared on every case with no mismatch and no missing side; and the
-  expected rulespec-us SHA and engine binary. On failure it names the suite
-  and its first divergent cases.
+  exact. That means no re-emission; given the replay log, the log records
+  writing this report and no failure; at least one case, every one
+  compared; zero benefit mismatches, error cases and error rows; every stage
+  concept compared on every case with no mismatch and no missing side; and
+  the expected rulespec-us SHA and engine binary. On failure it names the
+  suite and every failed check, plus the first benefit-mismatch cases or
+  the replay's exception. The report records no per-case rows for a stage
+  that diverges while the benefit matches, so those fail on counts alone.
 
 Usage:
     uv run scripts/snap_qc_replay.py suites --rulespec-root ../rulespec-us
@@ -65,8 +69,9 @@ RULESPEC_US = "TheAxiomFoundation/rulespec-us"
 BENEFIT_STAGE = "benefit"
 
 #: Suites whose state SNAP composition is merged on rulespec-us main. The live
-#: lane executes every one on every run; a composition that disappears fails
-#: its leg loudly instead of shrinking the matrix.
+#: lane runs every one unless a dispatch restricts the selection; a
+#: composition that disappears fails its leg loudly instead of shrinking the
+#: matrix.
 REQUIRED_SUITES: tuple[str, ...] = (
     "co-snap-qc",
     "ny-snap-qc",
@@ -78,8 +83,8 @@ REQUIRED_SUITES: tuple[str, ...] = (
 
 #: Registered suites whose composition has not landed on rulespec-us main,
 #: with the tracker that lands it. A pending suite joins the matrix as soon
-#: as its composition exists in the checkout, and the run summary then asks
-#: for it to move to REQUIRED_SUITES.
+#: as its composition exists in the checkout, and a warning annotation then
+#: asks for it to move to REQUIRED_SUITES.
 PENDING_SUITES: dict[str, str] = {
     "tx-snap-qc": "TheAxiomFoundation/rulespec-us#888, implemented by PR #891",
 }
@@ -328,6 +333,21 @@ def divergent_cases(report: dict, max_cases: int = DEFAULT_MAX_CASES) -> list[st
 
 _EXCEPTION_LINE = re.compile(r"^[A-Za-z_][\w.]*(Error|Exception|Exit)\b.*")
 _REFUSAL = re.compile(r": --require-live: ")
+_WROTE = re.compile(r"^Wrote: (.+)$", re.MULTILINE)
+
+
+def wrote_report(log_text: str, report_path: Path) -> bool:
+    """Whether the log records ``run_comparison.py`` publishing ``report_path``.
+
+    ``run_comparison.py`` prints ``Wrote: <path>`` when it publishes a report,
+    so this is positive proof that the report came from the logged run and was
+    not left in the directory by an earlier one.
+    """
+    target = report_path.resolve()
+    return any(
+        Path(match.group(1).strip()).resolve() == target
+        for match in _WROTE.finditer(log_text)
+    )
 
 
 def log_shows_failure(log_text: str) -> bool:
@@ -470,9 +490,9 @@ def cmd_check(args: argparse.Namespace) -> int:
 
     details: list[str] = []
     row = {"cases": "-", "benefit": "-", "stages": "-", "errors": "-", "rulespec": "-"}
-    log_text = (
-        args.log.read_text(errors="replace") if args.log and args.log.exists() else ""
-    )
+    if args.log is not None and not args.log.exists():
+        raise SystemExit(f"replay log {args.log} not found")
+    log_text = args.log.read_text(errors="replace") if args.log else ""
     if report_path is None:
         failures = [
             f"no report was published under {args.report_dir}: the replay failed "
@@ -489,6 +509,11 @@ def cmd_check(args: argparse.Namespace) -> int:
             expect_axiom_binary=args.expect_axiom_binary,
         )
         details = divergent_cases(report, args.max_cases)
+        if args.log is not None and not wrote_report(log_text, report_path):
+            failures.append(
+                f"the replay log does not record writing {report_path.name}; "
+                "the report was not produced by the logged run"
+            )
         if args.replay_failed or log_shows_failure(log_text):
             # Either the replay raised after publishing (e.g. a versioned
             # case-chunk refresh), or it failed and the report found here was

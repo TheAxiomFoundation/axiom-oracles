@@ -3,8 +3,8 @@
 ``scripts/snap_qc_replay.py`` decides which suites the weekly live replay runs
 and refuses any report that was not computed on the run or is not exact. These
 tests pin the classification against the registry (so a new SNAP QC suite
-cannot silently stay out of the lane), every failure mode of ``check``, and
-the workflow invariants the replay depends on.
+cannot silently stay out of the lane), each rejection branch of ``check``,
+and the workflow invariants the replay depends on.
 """
 
 from __future__ import annotations
@@ -245,6 +245,24 @@ def test_wrong_suite_fails():
     assert any("not 'co-snap-qc'" in f for f in _check(report))
 
 
+def test_comparison_count_drift_fails():
+    report = _exact_report()
+    report["summary"]["comparison_count"] = 2
+    assert "summary.comparison_count 2 != case_count 3" in _check(report)
+
+
+def test_recorded_first_divergent_stages_fail():
+    report = _exact_report()
+    report["summary"]["stages"] = [{"stage": "net_income", "count": 1}]
+    assert "first divergent stages: net_income=1" in _check(report)
+
+
+def test_missing_qc_side_fails():
+    report = _exact_report()
+    report["aggregates"][2]["missing_left_count"] = 1
+    assert f"stage {_CONCEPTS[2]}: 1 missing_left" in _check(report)
+
+
 def test_divergent_cases_name_the_first_stage_and_the_benefit():
     report = _exact_report()
     report["mismatches"] = [
@@ -380,12 +398,37 @@ def test_check_fails_a_stale_report_when_the_log_records_a_failure(tmp_path, cap
     assert "SNAP QC replay not runnable here" in out
 
 
+def test_check_fails_a_report_the_log_does_not_record_writing(tmp_path, capsys):
+    # A reused directory and a replay that died without a traceback (killed,
+    # or uv failing to start): only the positive "Wrote:" proof catches it.
+    report_dir = tmp_path / "reports"
+    _write_report(report_dir, _exact_report())
+    (report_dir / "replay.log").write_text("Killed: 9\n")
+    code = replay.main(
+        ["check", "co-snap-qc", "--report-dir", str(report_dir), "--log", str(report_dir / "replay.log")]
+    )
+    out = capsys.readouterr().out
+    assert code == 1
+    assert "does not record writing axiom-snapqc-co-snap-0-2026-09-22.json" in out
+
+
+def test_check_refuses_a_missing_log(tmp_path):
+    report_dir = tmp_path / "reports"
+    _write_report(report_dir, _exact_report())
+    with pytest.raises(SystemExit, match="not found"):
+        replay.main(
+            ["check", "co-snap-qc", "--report-dir", str(report_dir), "--log", str(tmp_path / "nope.log")]
+        )
+
+
 def test_check_passes_with_a_clean_log(tmp_path, capsys):
     report_dir = tmp_path / "reports"
     case_count = replay.committed_case_count(replay.registered_suites()["co-snap-qc"])
     _write_report(report_dir, _exact_report(case_count=case_count or 3))
+    report = report_dir / "axiom-snapqc-co-snap-0-2026-09-22.json"
     (report_dir / "replay.log").write_text(
-        "Running co-snap-qc: Colorado SNAP\nWrote: x.json\nCases: 856\nMismatch entries:  0\n"
+        f"Running co-snap-qc: Colorado SNAP\nWrote: {report}\nCases: 856\n"
+        "Mismatch entries:  0\n"
     )
     code = replay.main(
         ["check", "co-snap-qc", "--report-dir", str(report_dir), "--log", str(report_dir / "replay.log")]

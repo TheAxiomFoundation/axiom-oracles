@@ -544,9 +544,12 @@ def main() -> int:
         action="store_true",
         help=(
             "Fail instead of re-emitting the committed report when a "
-            "skip-capable runner (snap-qc, euromod, gettsim, ...) cannot "
-            "execute on this host. Nothing is published. For CI lanes that "
-            "provision the runner's dependencies and must prove a real run."
+            "skip-capable runner (snap-qc, euromod, gettsim, us-tariff, the "
+            "UK grids) cannot execute on this host. run_comparison.py then "
+            "publishes no report and no dashboard copy (a generator that "
+            "writes its own files before failing is not rolled back). For "
+            "CI lanes that provision the runner's dependencies and must "
+            "prove a real run."
         ),
     )
     args = parser.parse_args()
@@ -623,12 +626,13 @@ def main() -> int:
         runner_fn(config["runner"], staging)
         if args.require_live and config["runner"].get("_reemitted_report"):
             # The runner already printed why it could not execute. Refuse
-            # before provenance stamping or publication, so neither reports/
-            # nor the dashboard copy is touched (the finally drops staging).
+            # before provenance stamping or publication, so this script
+            # writes neither reports/ nor the dashboard copy (the finally
+            # drops staging).
             raise SystemExit(
                 f"{config['name']}: --require-live: the runner re-emitted the "
                 "committed report instead of executing on this host (skip "
-                "reason above); nothing was published"
+                "reason above); the staged report was not published"
             )
         canonical_record = _canonical_record_path(config)
         producer_native_canonical = (
@@ -2925,12 +2929,17 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        runner["_reemitted_report"] = True
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"CTR grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -2962,12 +2971,17 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        runner["_reemitted_report"] = True
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"CGT grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -2999,12 +3013,17 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        runner["_reemitted_report"] = True
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Business rates grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3038,12 +3057,17 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        runner["_reemitted_report"] = True
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"LBTT/LTT grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3076,12 +3100,17 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        runner["_reemitted_report"] = True
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Winter Fuel grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3114,12 +3143,17 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        runner["_reemitted_report"] = True
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Attendance Allowance grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3150,12 +3184,17 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        runner["_reemitted_report"] = True
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Tax-Free Childcare grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3188,12 +3227,17 @@ def _run_uk_pe_grid(
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
-        runner["_reemitted_report"] = True
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"{report_basename} grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 

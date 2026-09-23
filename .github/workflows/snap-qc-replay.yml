@@ -14,10 +14,10 @@ name: SNAP QC live replay
 #   engine    axiom-rules-engine built at the axiom_artifact_rules_engine_ref
 #             pin in rulespec-us's .axiom/workflow-toolchain.toml (the recipe
 #             rulespec-us's program-artifacts.yml uses), cached per ref and
-#             runner image. The validation pin, axiom_rules_engine_ref,
-#             cannot load the SNAP chain. Every job pins the same image
-#             (not ubuntu-latest), so a cached binary never lands on a
-#             runner with an older glibc than the one it was linked on.
+#             Ubuntu release (ImageOS). The validation pin,
+#             axiom_rules_engine_ref, cannot load the SNAP chain. Every job
+#             selects ubuntu-24.04 rather than ubuntu-latest, so a binary
+#             cached on one Ubuntu release is never restored on another.
 #   rulespec  rulespec-us at one commit, resolved once from main (or from the
 #             dispatch input) and shared by every leg. It is checked out into
 #             a directory named rulespec-us, because the engine serves `us:`
@@ -27,12 +27,15 @@ name: SNAP QC live replay
 #             re-verified against the pin's sha256 before every extraction.
 #
 # scripts/snap_qc_replay.py selects the suites: every REQUIRED_SUITES entry,
-# plus each PENDING_SUITES entry once its composition lands on rulespec-us.
-# Its `check` then fails the leg unless the report was computed in this run
-# and is exact: zero benefit mismatches, zero error cases, and every stage
+# plus each PENDING_SUITES entry once its composition lands on rulespec-us
+# (a dispatch's `suites` input can narrow this). Its `check` then fails the
+# leg unless the replay log records writing the report and the report is
+# exact: zero benefit mismatches, zero error cases, and every stage
 # concept compared on every case without divergence. The run must also have
 # used the resolved rulespec-us SHA and the pinned engine. The live-tests job
-# runs the engine-gated pytest cases, which skip everywhere else.
+# runs the two live pytest cases (PUF row counts; engine-backed worked
+# example), which skip unless their inputs are provided, and fails if either
+# skips.
 #
 # Reports go up as workflow artifacts and are never committed; the point of
 # this lane is a failing check. See docs/snap-qc-oracle-playbook.md.

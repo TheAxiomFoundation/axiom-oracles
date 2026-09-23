@@ -242,8 +242,8 @@ for real; the checked-in numbers are regenerated there. Because the weekly
 matrix and the affected rerun never have all three, those legs always
 re-emit. The **SNAP QC live replay** workflow
 (`.github/workflows/snap-qc-replay.yml`, weekly and on demand) provisions the
-pinned engine, a rulespec-us checkout, and the pinned PUF. It runs every suite
-with `run_comparison.py --require-live` and fails on any re-emission,
+pinned engine, a rulespec-us checkout, and the pinned PUF. It runs every
+selected suite with `run_comparison.py --require-live` and fails on any re-emission,
 mismatch, or error (`scripts/snap_qc_replay.py check`). See the playbook's §10.
 
 Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs the
