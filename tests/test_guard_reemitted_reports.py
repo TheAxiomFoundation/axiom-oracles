@@ -2,8 +2,9 @@
 
 scripts/commit_refreshed_report.sh runs the guard on every push attempt, after
 restoring the leg's outputs onto the current tip. A re-emitted dashboard report
-must never replace the tip's copy when that copy came from a real run; anything
-else the leg wrote passes through untouched.
+must never replace the tip's copy of that report, whether the copy came from a
+real run or was itself a re-emission; anything else the leg wrote passes
+through untouched.
 """
 
 from __future__ import annotations
@@ -70,12 +71,43 @@ def test_reemission_over_a_real_report_is_put_back(guard, capsys):
     committed = (repo / DATA / "real.json").read_text()
     (repo / DATA / "real.json").write_text(_report("real", REEMITTED, stamp="t1"))
 
-    assert module.downgrades("HEAD") == [f"{DATA}/real.json"]
+    assert module.reemitted_replacements("HEAD") == [f"{DATA}/real.json"]
     assert module.main([]) == 0
 
     assert (repo / DATA / "real.json").read_text() == committed
-    assert "a re-emission never replaces a real run" in capsys.readouterr().out
+    assert "a re-emission never replaces a committed report" in capsys.readouterr().out
     assert _git(repo, "status", "--porcelain") == ""
+
+
+def test_reemission_over_a_reemission_is_put_back(guard):
+    """The churn: a re-emission over an earlier re-emission differs only in
+    generated_at, and the affected rerun committed that diff for 35 EUROMOD,
+    UKMOD and tariff suites sweep after sweep."""
+    module, repo = guard
+    committed = (repo / DATA / "reemitted.json").read_text()
+    (repo / DATA / "reemitted.json").write_text(
+        _report("reemitted", REEMITTED, stamp="t1")
+    )
+
+    assert module.reemitted_replacements("HEAD") == [f"{DATA}/reemitted.json"]
+    assert module.main([]) == 0
+
+    assert (repo / DATA / "reemitted.json").read_text() == committed
+    assert _git(repo, "status", "--porcelain") == ""
+
+
+def test_unparseable_tip_copy_is_still_kept(guard):
+    """Whatever the tip holds is what a re-emission would have copied; the
+    guard does not need to parse it to keep it."""
+    module, repo = guard
+    (repo / DATA / "garbled.json").write_bytes(b"\xff\xfe not json")
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-q", "-m", "garbled report")
+    (repo / DATA / "garbled.json").write_text(_report("garbled", REEMITTED))
+
+    assert module.main([]) == 0
+
+    assert (repo / DATA / "garbled.json").read_bytes() == b"\xff\xfe not json"
 
 
 def test_unstamped_legacy_report_counts_as_real(guard):
@@ -89,12 +121,12 @@ def test_unstamped_legacy_report_counts_as_real(guard):
 
 
 def test_other_changes_pass_through(guard):
-    """Only a real -> re-emitted downgrade is undone: a re-emission over a
-    re-emission, a real run over a real run, a first report, and anything below
-    the top-level data directory are left as the leg wrote them."""
+    """Only a re-emission over a committed copy is undone: a real run over a
+    real run or over a re-emission, a first report, and anything below the
+    top-level data directory are left as the leg wrote them."""
     module, repo = guard
     writes = {
-        f"{DATA}/reemitted.json": _report("reemitted", REEMITTED, stamp="t1"),
+        f"{DATA}/reemitted.json": _report("reemitted", REAL, stamp="t1"),
         f"{DATA}/real.json": _report("real", REAL, stamp="t1"),
         f"{DATA}/new.json": _report("new", REEMITTED, stamp="t1"),
         f"{DATA}/cases/s/chunk-0.json": _report("chunk", REEMITTED, stamp="t1"),
@@ -102,7 +134,7 @@ def test_other_changes_pass_through(guard):
     for path, text in writes.items():
         (repo / path).write_text(text)
 
-    assert module.downgrades("HEAD") == []
+    assert module.reemitted_replacements("HEAD") == []
     assert module.main([]) == 0
 
     for path, text in writes.items():
@@ -114,19 +146,18 @@ def test_judged_against_the_given_revision(guard):
     so what counts is the tip's copy, not the one the leg started from."""
     module, repo = guard
     start = _git(repo, "rev-parse", "HEAD").strip()
-    # A real report lands on the tip while the leg runs.
-    (repo / DATA / "reemitted.json").write_text(_report("reemitted", REAL, stamp="t2"))
-    _git(repo, "commit", "-q", "-am", "real run lands")
-    landed = (repo / DATA / "reemitted.json").read_text()
+    # A suite's first report lands on the tip while the leg runs.
+    (repo / DATA / "landed.json").write_text(_report("landed", REAL, stamp="t2"))
+    _git(repo, "add", "-A")
+    _git(repo, "commit", "-q", "-m", "real run lands")
+    landed = (repo / DATA / "landed.json").read_text()
     # The leg restores its own re-emission onto that tip.
-    (repo / DATA / "reemitted.json").write_text(
-        _report("reemitted", REEMITTED, stamp="t3")
-    )
+    (repo / DATA / "landed.json").write_text(_report("landed", REEMITTED, stamp="t3"))
 
-    assert module.downgrades(start) == []
+    assert module.reemitted_replacements(start) == []
     assert module.main([]) == 0
 
-    assert (repo / DATA / "reemitted.json").read_text() == landed
+    assert (repo / DATA / "landed.json").read_text() == landed
 
 
 def test_github_actions_emits_a_warning_annotation(guard, capsys, monkeypatch):
@@ -148,12 +179,12 @@ def test_unreadable_reports_are_not_reports(guard):
     (repo / DATA / "real.json").write_bytes(b"\xff\xfe not json")
     (repo / DATA / "reemitted.json").write_text("{not json")
 
-    assert module.downgrades("HEAD") == []
+    assert module.reemitted_replacements("HEAD") == []
     assert module.main([]) == 0
     assert (repo / DATA / "real.json").read_bytes() == b"\xff\xfe not json"
 
 
-def test_restore_touches_only_the_downgraded_report(guard):
+def test_restore_touches_only_the_reemitted_report(guard):
     """The checkout uses a literal pathspec, so a report whose name contains
     glob characters cannot revert neighbouring files."""
     module, repo = guard

@@ -401,7 +401,7 @@ def test_reemission_never_replaces_a_real_report(origin, tmp_path):
 
     result = _run_script(clone, "ny-snap-qc")
     assert result.returncode == 0, result.stderr
-    assert "a re-emission never replaces a real run" in result.stdout
+    assert "a re-emission never replaces a committed report" in result.stdout
 
     verify = _assert_origin_tip_green(origin, tmp_path)
     assert (verify / SNAPQC_REPORT).read_bytes() == committed
