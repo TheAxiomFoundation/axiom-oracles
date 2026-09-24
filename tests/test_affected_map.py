@@ -285,12 +285,25 @@ def test_selector_unknown_head_does_not_force_rerun():
 # (null = not CI-runnable) and the selector dispatches exactly those.
 
 
-def test_map_registry_entries_carry_their_registry_name():
+def test_map_registry_entries_carry_their_registry_name(tmp_path, monkeypatch):
+    import yaml
+
     gen = _load("generate_affected_map.py")
-    entries = {e["suite"]: e for e in gen.build_map()["suites"]}
     # Dashboard suite key and registry name differ for the ukmod suites —
     # dispatching the suite key is exactly the "unknown comparison" crash.
-    assert entries["uk-benefit-cap"]["name"] == "uk-benefit-cap-ukmod"
+    # Those suites declare ci: manual (the bare CI legs cannot run UKMOD), so
+    # the property is pinned on a dispatchable copy of one.
+    config = yaml.safe_load(
+        (REPO / "comparisons/uk-benefit-cap-ukmod.yaml").read_text()
+    )
+    config.pop("ci")
+    (tmp_path / "uk-benefit-cap-ukmod.yaml").write_text(yaml.safe_dump(config))
+    monkeypatch.setattr(gen, "COMPARISONS_DIR", tmp_path)
+    (entry,) = gen.build_map()["suites"]
+    assert (entry["suite"], entry["name"]) == ("uk-benefit-cap", "uk-benefit-cap-ukmod")
+
+    monkeypatch.setattr(gen, "COMPARISONS_DIR", REPO / "comparisons")
+    entries = {e["suite"]: e for e in gen.build_map()["suites"]}
     # Parameter suites have no registry runner: run_parameter_comparisons.py
     # (manual lane) owns them, so the map must mark them non-dispatchable.
     assert entries["ssi-parameters"]["name"] is None
@@ -549,8 +562,11 @@ def test_ci_manual_registry_suite_emits_null_name():
     # upstream chain lands.
     assert entries["az-snap-ecps"]["name"] is None
     assert entries["co-snap-ecps"]["name"] is None
-    # A dispatchable registry suite keeps its name (UK lane, unaffected).
-    assert entries["uk-benefit-cap"]["name"] == "uk-benefit-cap-ukmod"
+    # The EUROMOD-platform suites are manual: the bare CI legs cannot run
+    # the model, so their legs could only re-emit.
+    assert entries["uk-benefit-cap"]["name"] is None
+    # A dispatchable registry suite keeps its name.
+    assert entries["us-snap-abawd-grid"]["name"] == "us-snap-abawd-grid"
 
 
 def test_direct_oracle_pair_suites_carry_no_rulespec_dependency():
@@ -804,3 +820,115 @@ def test_selector_never_dispatches_snap_qc_and_leaves_fresh_ones_alone():
         assert decision["name"] is None
         assert config["name"] not in sel.runnable_names(moved)
         assert suite in sel.manual_suites(moved)
+
+
+#: Runner types the bare CI legs (affected-rerun.yml's rerun matrix and the
+#: weekly comparisons.yml matrix) can never execute, so they could only
+#: re-emit or copy the committed report:
+#:
+#: * euromod-synthetic-compare needs the x64 EUROMOD/UKMOD engine, the
+#:   euromod connector under EUROMOD_PYTHON, a .NET runtime and the model
+#:   checkout, none of which either workflow provides.
+#: * the UK PolicyEngine case grids and the us-tariff grid evaluate the rules
+#:   through an engine binary (AXIOM_RULES_ENGINE_BINARY, an
+#:   axiom-rules-engine build, or axiom-rules on PATH) that neither workflow
+#:   exports or builds; their legs fail with "No such file or directory:
+#:   'axiom-rules'" and fall back to the committed report.
+#:
+#: The affected rerun committed those outputs over real runs and then over
+#: each other every six hours. A workflow that starts provisioning one of these
+#: lanes should drop the type from this set and the markers with it.
+BARE_CI_UNRUNNABLE_RUNNER_TYPES = frozenset(
+    {
+        "euromod-synthetic-compare",
+        "uk-attendance-allowance-pe-grid",
+        "uk-business-rates-grid",
+        "uk-capital-gains-tax-grid",
+        "uk-council-tax-reduction-grid",
+        "uk-fuel-duty-grid",
+        "uk-lbtt-ltt-grid",
+        "uk-tax-free-childcare-pe-grid",
+        "uk-tv-licence-grid",
+        "uk-vat-grid",
+        "uk-winter-fuel-payment-pe-grid",
+        "us-tariff-grid",
+    }
+)
+
+
+def _bare_ci_unrunnable_configs() -> list[dict]:
+    import yaml
+
+    configs = []
+    for path in sorted((REPO / "comparisons").glob("*.yaml")):
+        if path.name.endswith(".fixtures.yaml"):
+            continue
+        config = yaml.safe_load(path.read_text())
+        if (
+            isinstance(config, dict)
+            and (config.get("runner") or {}).get("type")
+            in BARE_CI_UNRUNNABLE_RUNNER_TYPES
+        ):
+            configs.append(config)
+    return configs
+
+
+def test_every_suite_the_bare_ci_legs_cannot_run_is_manual():
+    """A suite of a runner type the bare CI legs cannot execute must declare
+    ``ci: manual``, so the affected rerun never dispatches it and the weekly
+    matrix skips it. Without the marker its leg can only re-emit or copy the
+    committed report, which is how 35 suites churned a generated_at-only
+    commit every sweep and ten UK grids were stamped fresh on July numbers."""
+    gam = _load("generate_affected_map.py")
+    entries = {e["name"]: e for e in gam.build_map()["suites"] if e.get("name")}
+    configs = _bare_ci_unrunnable_configs()
+    # Guards the guard: the registry holds 40 EUROMOD-platform suites, ten UK
+    # PolicyEngine grids and the us-tariff grid.
+    assert len(configs) >= 51
+    for config in configs:
+        assert config.get("ci") == "manual", config["name"]
+        assert config["name"] not in entries, config["name"]
+
+
+def test_selector_never_dispatches_a_bare_ci_unrunnable_suite():
+    """Even with every rulespec repo moved past every report, none of these
+    suites reaches the rerun matrix; the stale ones are listed for the manual
+    lane instead."""
+    sel = _load("select_affected_suites.py")
+    affected = json.loads(sel.AFFECTED_MAP.read_text())
+    reports = sel.load_reports(affected)
+    heads = {
+        repo: "b" * 40
+        for entry in affected["suites"]
+        for repo in entry.get("repos", [])
+    }
+    for selected in (
+        sel.select(affected, heads, reports),
+        sel.force_all_selection(affected),
+    ):
+        dispatched = set(sel.runnable_names(selected))
+        manual = set(sel.manual_suites(selected))
+        for config in _bare_ci_unrunnable_configs():
+            assert config["name"] not in dispatched, config["name"]
+            suite = (config.get("dashboard") or {}).get("suite", config["name"])
+            assert suite in manual, suite
+
+
+def test_committed_reports_of_lanes_the_bot_cannot_run_are_real_runs():
+    """No committed report of a suite the bare CI legs cannot run is a
+    re-emission. The bot never dispatches these suites, so their reports
+    change only through a supervised run or a PR, and a re-emission here means
+    one replaced a real run: until 2026-09-24, 35 of them (34 EUROMOD and
+    UKMOD suites and us-tariff) were re-emissions hiding the real run each had
+    replaced. Scoped to these lanes because the publisher still lets a
+    dispatchable suite's first copy be a re-emission."""
+    from axiom_oracles.provenance import is_real_run_report
+
+    reemitted = []
+    for config in _bare_ci_unrunnable_configs():
+        filename = (config.get("dashboard") or {}).get("filename")
+        path = REPO / "dashboard/public/data" / str(filename)
+        if filename and path.exists():
+            if not is_real_run_report(json.loads(path.read_text())):
+                reemitted.append(path.name)
+    assert reemitted == []

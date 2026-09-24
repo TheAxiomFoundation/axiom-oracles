@@ -28,6 +28,18 @@ description: >-
   scripts/regenerate_euromod_uk.sh; on runners without them it re-emits the
   committed dashboard report.
 
+# Not runnable on the CI matrix runners. The EUROMOD-platform runner needs
+# UKMOD's x64 engine (EM_Executable.dll), the euromod connector under
+# EUROMOD_PYTHON, a .NET runtime and the model checkout; the 6-hourly affected
+# rerun and the weekly matrix provide none of them, so there run_comparison.py
+# can only re-emit the committed report. For this lane the affected rerun
+# committed those re-emissions, first over the real runs and then over each
+# other on every sweep. Manual lane only: scripts/regenerate_euromod_uk.sh (or
+# a supervised run_comparison.py run) where the model and runtime exist
+# refreshes the committed report. Drop this marker only once a workflow
+# provisions the model and runtime.
+ci: manual
+
 runner:
   type: euromod-synthetic-compare
   axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine

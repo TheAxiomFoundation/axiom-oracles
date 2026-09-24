@@ -1313,20 +1313,20 @@ def test_skipped_run_preserves_a_real_unversioned_dashboard_report(
     )
 
     assert (target.read_bytes(), (tmp_path / "manifest.json").read_bytes()) == before
-    assert "a re-emission never replaces a real run" in capsys.readouterr().out
+    assert "a re-emission never replaces a committed report" in capsys.readouterr().out
 
 
-def test_skipped_run_still_rewrites_a_committed_reemission_or_first_copy(
-    monkeypatch, tmp_path
-):
-    """The guard protects real reports only: a committed re-emission (or no
-    committed copy at all) is still published, as before."""
+def test_skipped_run_preserves_a_committed_reemission(monkeypatch, tmp_path, capsys):
+    """The churn: a re-emission over an earlier re-emission changed only
+    generated_at, and the affected rerun committed that diff for 35 EUROMOD,
+    UKMOD and tariff suites sweep after sweep. Any committed copy stays."""
     run_comparison = load_run_comparison_module()
     monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
     reemitted = tmp_path / "axiom-euromod-uk-winter-fuel.json"
     reemitted.write_text(
         json.dumps(_unversioned_report("uk-winter-fuel", _REEMITTED_PROVENANCE))
     )
+    before = reemitted.read_bytes()
     newer = dict(_REEMITTED_PROVENANCE, generated_at="2026-09-24T00:00:00Z")
 
     run_comparison._write_dashboard_report(
@@ -1334,17 +1334,27 @@ def test_skipped_run_still_rewrites_a_committed_reemission_or_first_copy(
         reemitted.name,
         preserve_existing_versioned=True,
     )
-    assert (
-        json.loads(reemitted.read_text())["provenance"]["generated_at"]
-        == "2026-09-24T00:00:00Z"
-    )
+
+    assert reemitted.read_bytes() == before
+    assert not (tmp_path / "manifest.json").exists()
+    assert "a re-emission never replaces a committed report" in capsys.readouterr().out
+
+
+def test_skipped_run_still_publishes_a_first_copy(monkeypatch, tmp_path):
+    """With no committed copy there is nothing to preserve: the first report of a
+    skip-capable suite is still published and added to the manifest."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
 
     run_comparison._write_dashboard_report(
-        _unversioned_report("brand-new", newer),
+        _unversioned_report("brand-new", _REEMITTED_PROVENANCE),
         "brand-new.json",
         preserve_existing_versioned=True,
     )
-    assert (tmp_path / "brand-new.json").exists()
+
+    assert json.loads((tmp_path / "brand-new.json").read_text())["provenance"][
+        "reemitted_report"
+    ]
     assert "brand-new.json" in json.loads((tmp_path / "manifest.json").read_text())[
         "reports"
     ]
@@ -1409,11 +1419,68 @@ def test_snap_qc_skip_through_main_leaves_the_real_report_untouched(
     assert "rulespecs" not in provenance
 
 
-def test_preserved_source_pointer_covers_real_unversioned_copies(
+def test_euromod_skip_through_main_leaves_a_committed_reemission_untouched(
     monkeypatch, tmp_path
 ):
-    """A same-day skip must not overwrite the reports/ file a preserved real
-    copy's dispositioned block points at, versioned or not."""
+    """End to end, the churn path: an affected-rerun leg with no EUROMOD model
+    runs ``run_comparison.py uk-winter-fuel-ukmod`` while the committed report
+    is itself a re-emission. The publish used to rewrite generated_at (and the
+    engine label) and the bot committed that diff every sweep; the committed
+    bytes now stay, and the leg's own output names no engine, because none ran."""
+    import yaml
+
+    run_comparison = load_run_comparison_module()
+    config = yaml.safe_load(
+        (run_comparison.COMPARISONS_DIR / "uk-winter-fuel-ukmod.yaml").read_text()
+    )
+    filename = config["dashboard"]["filename"]
+    report = json.loads(
+        (run_comparison.REPO_ROOT / "dashboard/public/data" / filename).read_text()
+    )
+    report["provenance"] = dict(_REEMITTED_PROVENANCE)
+    report.setdefault("engines", {})["versions"] = {"axiom_rules_engine": "0.1.0"}
+    dashboard = tmp_path / "dashboard-data"
+    dashboard.mkdir()
+    target = dashboard / filename
+    target.write_text(json.dumps(report, indent=2, sort_keys=True))
+    (dashboard / "manifest.json").write_text(
+        json.dumps({"reports": [filename]}, indent=2) + "\n"
+    )
+    before = target.read_bytes()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
+    monkeypatch.delenv("EUROMOD_PYTHON", raising=False)
+    monkeypatch.setenv("AXIOM_ORACLES_RUN_KIND", "affected-rerun")
+    # The leg's own engine checkout, which a re-emission must not claim.
+    import axiom_oracles.provenance as provenance_module
+
+    monkeypatch.setattr(
+        provenance_module,
+        "engine_provenance",
+        lambda _repo: {
+            "axiom_rules_engine_sha": "e" * 40,
+            "axiom_rules_engine_version": "0.2.2",
+        },
+    )
+    out_dir = tmp_path / "reports"
+    monkeypatch.setattr(
+        "sys.argv",
+        ["run_comparison.py", "uk-winter-fuel-ukmod", "--output-dir", str(out_dir)],
+    )
+
+    assert run_comparison.main() == 0
+
+    assert target.read_bytes() == before
+    (published,) = out_dir.glob("axiom-euromod-uk-winter-fuel-*.json")
+    output = json.loads(published.read_text())
+    assert output["provenance"]["reemitted_report"] is True
+    assert "engine" not in output["provenance"]
+    assert output["engines"]["versions"] == {"axiom_rules_engine": "0.1.0"}
+
+
+def test_preserved_source_pointer_covers_every_existing_copy(monkeypatch, tmp_path):
+    """A same-day skip must not overwrite the reports/ file a preserved copy's
+    dispositioned block points at, versioned or not, real or re-emitted: the
+    skip preserves every existing copy, so it protects every such pointer."""
     run_comparison = load_run_comparison_module()
     monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
     output = run_comparison.REPO_ROOT / "reports" / "pointer-target-0-2026-09-23.json"
@@ -1425,14 +1492,21 @@ def test_preserved_source_pointer_covers_real_unversioned_copies(
             }
         }
     }
-    for provenance, expected in ((_REAL_PROVENANCE, True), (_REEMITTED_PROVENANCE, False)):
+    for provenance in (_REAL_PROVENANCE, _REEMITTED_PROVENANCE):
         report = _unversioned_report("pointer-suite", provenance)
         report["summary"] = {**report["summary"], **pointer}
         (tmp_path / "pointer.json").write_text(json.dumps(report))
-        assert (
-            run_comparison._preserved_versioned_source_is_output("pointer.json", output)
-            is expected
+        assert run_comparison._preserved_versioned_source_is_output(
+            "pointer.json", output
         )
+    # NEGATIVE: a pointer to another path, or no existing copy, protects nothing.
+    other = output.with_name("pointer-target-0-2026-09-24.json")
+    assert not run_comparison._preserved_versioned_source_is_output(
+        "pointer.json", other
+    )
+    assert not run_comparison._preserved_versioned_source_is_output(
+        "absent.json", output
+    )
 
 
 def test_dataset_label_from_identity_falls_back_without_revision():

@@ -14,6 +14,18 @@ description: >-
   DK_2025, dataset DK_training_data); tintbto_s is bridged only to the earner's
   two § 7-basis input records, while the non-earner's records remain zero.
 
+# Not runnable on the CI matrix runners. The EUROMOD-platform runner needs
+# EUROMOD's x64 engine (EM_Executable.dll), the euromod connector under
+# EUROMOD_PYTHON, a .NET runtime and the model checkout; the 6-hourly affected
+# rerun and the weekly matrix provide none of them, so there run_comparison.py
+# can only re-emit the committed report. For this lane the affected rerun
+# committed those re-emissions, first over the real runs and then over each
+# other on every sweep. Manual lane only: scripts/regenerate_euromod_dk.sh (or
+# a supervised run_comparison.py run) where the model and runtime exist
+# refreshes the committed report. Drop this marker only once a workflow
+# provisions the model and runtime.
+ci: manual
+
 runner:
   type: euromod-synthetic-compare
   # Keep engine parity with the two existing DK witness comparisons.

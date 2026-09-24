@@ -401,7 +401,7 @@ def test_reemission_never_replaces_a_real_report(origin, tmp_path):
 
     result = _run_script(clone, "ny-snap-qc")
     assert result.returncode == 0, result.stderr
-    assert "a re-emission never replaces a real run" in result.stdout
+    assert "a re-emission never replaces a committed report" in result.stdout
 
     verify = _assert_origin_tip_green(origin, tmp_path)
     assert (verify / SNAPQC_REPORT).read_bytes() == committed
@@ -409,6 +409,56 @@ def test_reemission_never_replaces_a_real_report(origin, tmp_path):
     # none of it touched the report.
     pushed = _git(origin, "diff", "--name-only", before, "main").splitlines()
     assert SNAPQC_REPORT not in pushed
+
+
+#: A UKMOD report the bot's legs can only re-emit (no model on the runners).
+EUROMOD_REPORT = "dashboard/public/data/axiom-euromod-uk-winter-fuel.json"
+
+
+def test_reemission_over_a_reemission_pushes_nothing(origin, tmp_path):
+    """The churn: once a re-emission was committed, every later leg re-emitted
+    it again with only generated_at changed, and the bot pushed that diff, plus
+    the census, certificate pins, freshness and overview it moves, for 35
+    EUROMOD, UKMOD and tariff suites every sweep. The tip's copy now stays and
+    nothing is pushed."""
+    # The tip as the churn left it: a committed re-emission, with every derived
+    # artifact regenerated around it (the script's own simulate mode).
+    seed = _clone(origin, tmp_path / "seed-reemitted")
+    _reemit(seed, EUROMOD_REPORT)
+    simulate = subprocess.run(
+        [str(seed / SCRIPT), "uk-winter-fuel-ukmod", "main"],
+        cwd=seed,
+        env={
+            **os.environ,
+            **GIT_ENV,
+            "PYTHONPATH": str(seed),
+            "PYTHON": sys.executable,
+            "SIMULATE_DERIVED_REFRESH": "1",
+        },
+        capture_output=True,
+        text=True,
+    )
+    assert simulate.returncode == 0, simulate.stderr
+    _git(seed, "add", "-A")
+    _git(seed, "commit", "-q", "-m", "committed re-emission")
+    _git(seed, "push", "-q", "origin", "HEAD:main")
+    committed = (seed / EUROMOD_REPORT).read_bytes()
+    before = _git(origin, "rev-parse", "main")
+
+    # The next sweep's leg re-emits it again.
+    clone = _clone(origin, tmp_path / "job-reemit-again")
+    path = clone / EUROMOD_REPORT
+    doc = json.loads(path.read_text())
+    doc["provenance"]["generated_at"] = "2099-01-01T00:00:00Z"
+    path.write_text(json.dumps(doc, indent=2, sort_keys=True))
+
+    result = _run_script(clone, "uk-winter-fuel-ukmod")
+    assert result.returncode == 0, result.stderr
+    assert "a re-emission never replaces a committed report" in result.stdout
+    assert "nothing to commit" in result.stdout
+    assert _git(origin, "rev-parse", "main") == before
+    verify = _clone(origin, tmp_path / "verify-reemit-again")
+    assert (verify / EUROMOD_REPORT).read_bytes() == committed
 
 
 def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
