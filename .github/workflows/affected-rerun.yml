@@ -36,6 +36,10 @@ name: Affected suite rerun
 # See scripts/select_affected_suites.py and comparisons/README.md.
 
 on:
+  # TRIAL ONLY (throwaway branch, never merged): exercise the SNAP QC live
+  # path end to end without pushing to main.
+  push:
+    branches: [ci/snap-qc-affected-live-trial]
   workflow_dispatch:
     inputs:
       force_all:
@@ -123,7 +127,7 @@ jobs:
         # as $GITHUB_OUTPUT lines. Dispatching dashboard suite keys or
         # parameter-lane names crashed ~50 legs/run with "unknown comparison".
         run: |
-          args=(--heads-json heads.json --format github)
+          args=(--heads-json heads.json --format github --force-all)  # TRIAL
           if [ "${{ inputs.force_all }}" = "true" ]; then
             args+=(--force-all)
           fi
@@ -153,7 +157,7 @@ jobs:
 
   rerun:
     needs: select
-    if: needs.select.outputs.count != '0'
+    if: false  # TRIAL: never run (or push) the bare legs
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
@@ -314,7 +318,7 @@ jobs:
           path: axiom-oracles
           # A real branch, not a detached HEAD: the commit script fetches,
           # resets, and pushes it.
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ github.ref }}  # TRIAL: this branch's scripts, never main
 
       - uses: actions/setup-python@v5
         if: steps.bundle.outcome == 'success'
@@ -340,5 +344,20 @@ jobs:
         run: |
           tar -xf "$RUNNER_TEMP/publish/report.tar"
           git status --short -- dashboard/public/data
-          scripts/commit_refreshed_report.sh "${{ matrix.suite }}" \
-            "${{ github.event.repository.default_branch }}"
+          # TRIAL: prove the extracted report is real and survives the guard,
+          # then run the exact regenerate + verify chain, but never push.
+          "$PYTHON" - "${{ matrix.suite }}" <<'PY2'
+          import json, subprocess, sys
+          from pathlib import Path
+          suite = sys.argv[1]
+          changed = subprocess.run(["git", "diff", "--name-only", "HEAD", "--", "dashboard/public/data"], capture_output=True, text=True, check=True).stdout.split()
+          top = [p for p in changed if Path(p).parent.as_posix() == "dashboard/public/data"]
+          assert len(top) == 1, top
+          prov = json.loads(Path(top[0]).read_text())["provenance"]
+          print(top[0], json.dumps({k: prov.get(k) for k in ("run_kind", "rulespecs", "reemitted_report", "generated_at")}))
+          assert prov["run_kind"] == "affected-rerun" and not prov.get("reemitted_report")
+          assert prov["rulespecs"][0]["repo"] == "TheAxiomFoundation/rulespec-us" and len(prov["rulespecs"][0]["sha"]) == 40
+          PY2
+          "$PYTHON" scripts/guard_reemitted_reports.py
+          git diff --quiet HEAD -- dashboard/public/data && { echo "guard dropped a real report"; exit 1; } || true
+          SIMULATE_DERIVED_REFRESH=1 scripts/commit_refreshed_report.sh "${{ matrix.suite }}" "${{ github.ref_name }}"
