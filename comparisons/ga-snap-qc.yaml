@@ -14,9 +14,19 @@ description: >-
   nominal period 2026-01 (TheAxiomFoundation/rulespec-us#759 retires the
   overlay). Runs where the engine binary, a rulespec-us checkout with the
   fy-2024-cola modules and the state's SNAP layer (rulespec-us#842), and the
-  QC file all exist; elsewhere the registry re-emits the committed dashboard
-  report.
+  QC file all exist; a run elsewhere re-emits the committed dashboard report,
+  which never replaces a real run's report.
 documentation: docs/snap-qc-oracle-playbook.md
+
+# Not runnable on the CI matrix runners. The replay needs the
+# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
+# modules, and the QC public-use file. Neither the 6-hourly affected rerun nor
+# the weekly matrix provisions them, so there run_comparison.py can only
+# re-emit the committed report; on 2026-09-23 the affected rerun committed
+# such re-emissions over the real NY, CA, AZ, and MD reports. Manual lane
+# only: a supervised run_comparison.py run refreshes the committed report.
+# Drop this marker only for a CI lane that provisions all three.
+ci: manual
 
 runner:
   type: snap-qc-compare

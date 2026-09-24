@@ -356,6 +356,56 @@ def test_de_refresh_chain_is_ordered_checked_and_staged():
         )
 
 
+#: A committed report from a real SNAP QC replay (no versioned case chunks, so
+#: the only report class the 2026-09-23 affected rerun could overwrite).
+SNAPQC_REPORT = "dashboard/public/data/axiom-snapqc-ny-snap.json"
+
+
+def _reemit(clone: Path, report: str = SNAPQC_REPORT) -> None:
+    """Rewrite a real report the way a skip re-emission publishes it: the same
+    numbers, with provenance saying re-emitted and naming no rulespec SHA."""
+    path = clone / report
+    doc = json.loads(path.read_text())
+    provenance = doc["provenance"]
+    assert provenance.get("rulespecs") and not provenance.get("reemitted_report")
+    provenance.pop("rulespecs")
+    provenance.update(
+        generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        run_kind="affected-rerun",
+        reemitted_report=True,
+    )
+    path.write_text(json.dumps(doc, indent=2, sort_keys=True))
+
+
+def test_reemission_guard_runs_on_every_attempt_before_regeneration():
+    """The guard must see each attempt's freshly reset tip (a real report can
+    land while the leg runs) and must run before derived artifacts are
+    regenerated from the report bytes."""
+    shell = (REPO_ROOT / SCRIPT).read_text()
+    loop = shell.split('for attempt in $(seq 1 "$MAX_ATTEMPTS"); do', 1)[1]
+    guard = loop.index('"$PYTHON" scripts/guard_reemitted_reports.py')
+    assert loop.index("git reset --hard FETCH_HEAD") < guard
+    assert loop.index('cp -p "$stash/$path" "$path"') < guard
+    assert guard < loop.index("regenerate_derived")
+    assert guard < loop.index("git add -A")
+
+
+def test_reemission_never_replaces_a_real_report(origin, tmp_path):
+    """2026-09-23: affected-rerun legs with no engine or QC file committed
+    re-emissions over the real NY/CA/AZ/MD SNAP QC reports. Whatever wrote the
+    leg's dashboard copy, the push keeps the tip's real report."""
+    clone = _clone(origin, tmp_path / "job-reemit")
+    committed = (clone / SNAPQC_REPORT).read_bytes()
+    _reemit(clone)
+
+    result = _run_script(clone, "ny-snap-qc")
+    assert result.returncode == 0, result.stderr
+    assert "a re-emission never replaces a real run" in result.stdout
+
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    assert (verify / SNAPQC_REPORT).read_bytes() == committed
+
+
 def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
     """A report refresh lands together with regenerated scoreboard/detail,
     freshness, and burn-down — the pushed tip passes ci.yml's staleness gates

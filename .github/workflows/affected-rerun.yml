@@ -4,7 +4,10 @@ name: Affected suite rerun
 # was last generated, on a 6-hourly cadence (plus repository_dispatch, so a
 # rulespec repo can trigger it on push). The weekly full matrix
 # (comparisons.yml) stays the backstop; this keeps the reports fresh between
-# weekly runs without paying for the whole matrix every 6 hours.
+# weekly runs without paying for the whole matrix every 6 hours. Suites whose
+# map entry has `name: null` (parameter suites, and suites declaring
+# `ci: manual`, such as the SNAP QC replays, which these runners could only
+# re-emit) are reported as awaiting the manual lane, never dispatched.
 #
 # Selection is deterministic and committed:
 #   comparisons/affected_map.json   suite → affected rulespec repos
@@ -21,7 +24,10 @@ name: Affected suite rerun
 # conflicted. The ratchet (conformance/ratchet.yaml) is never re-pinned from
 # this bot path — re-pinning after a genuine improvement stays a deliberate
 # human action, and a genuine regression is MEANT to fail ci.yml's ratchet
-# gate on main.
+# gate on main. A leg that could only re-emit its committed report never
+# replaces a committed report from a real run: run_comparison.py leaves that
+# copy untouched, and the commit script re-checks every push attempt's tip
+# (scripts/guard_reemitted_reports.py).
 #
 # See scripts/select_affected_suites.py and comparisons/README.md.
 
@@ -31,7 +37,8 @@ on:
       force_all:
         description: >-
           Rerun every CI-runnable mapped suite regardless of freshness
-          (manual parameter suites are reported, not dispatched)
+          (suites without a CI-runnable registry name are reported, not
+          dispatched)
         required: false
         default: "false"
   repository_dispatch:
@@ -131,7 +138,7 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
           if [ "$manual_count" != "0" ]; then
-            echo "::warning::$manual_count stale parameter suite(s) need the manual lane: ${{ steps.select.outputs.manual }}"
+            echo "::warning::$manual_count stale suite(s) with no CI-runnable registry name need the manual lane: ${{ steps.select.outputs.manual }}"
           fi
 
   rerun:

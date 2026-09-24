@@ -86,11 +86,10 @@
     },
     {
       "suite": "az-snap-qc",
-      "name": "az-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-az-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-az"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/az-snap-qc.yaml"
     },
@@ -266,11 +265,10 @@
     },
     {
       "suite": "ca-snap-qc",
-      "name": "ca-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-ca-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ca"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ca-snap-qc.yaml"
     },
@@ -304,11 +302,10 @@
     },
     {
       "suite": "co-snap-qc",
-      "name": "co-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-co-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-co"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/co-snap-qc.yaml"
     },
@@ -541,11 +538,10 @@
     },
     {
       "suite": "ga-snap-qc",
-      "name": "ga-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-ga-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ga"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ga-snap-qc.yaml"
     },
@@ -741,11 +737,10 @@
     },
     {
       "suite": "md-snap-qc",
-      "name": "md-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-md-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-md"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/md-snap-qc.yaml"
     },
@@ -959,11 +954,10 @@
     },
     {
       "suite": "ny-snap-qc",
-      "name": "ny-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-ny-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ny"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ny-snap-qc.yaml"
     },
@@ -1131,11 +1125,10 @@
     },
     {
       "suite": "tx-snap-qc",
-      "name": "tx-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-tx-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-tx"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/tx-snap-qc.yaml"
     },

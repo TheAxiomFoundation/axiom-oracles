@@ -5,7 +5,9 @@ Given the current ``main`` HEAD SHA of each rulespec repo and the committed
 reports' provenance, emit the suites whose affected repos have moved past the
 SHA their report last ran against — i.e. the reports that are now stale because
 the rules underneath them changed. The 6-hourly workflow reruns only these,
-leaving the weekly full matrix as the backstop.
+leaving the weekly full matrix as the backstop (for every suite that does not
+declare ``ci: manual``; those have no CI backstop and refresh only by a
+supervised run).
 
 Inputs:
 
@@ -213,6 +215,7 @@ def select(
             if head is None:
                 # HEAD unknown (repo not queried) — cannot prove staleness, so
                 # do not force a rerun on missing data; the weekly backstop
+                # (or, for a ci: manual suite, the manual lane)
                 # still covers it.
                 continue
             recorded = ran_against.get(repo)
@@ -325,7 +328,9 @@ def main() -> int:
     if manual:
         print(
             f"note: {len(manual)} stale suite(s) have no CI-runnable registry "
-            f"name and are left to the manual parameter lane: "
+            f"name and are left to the manual lane (parameter suites: "
+            f"run_parameter_comparisons.py; ci: manual suites: a supervised "
+            f"run_comparison.py run): "
             + ", ".join(manual),
             file=sys.stderr,
         )
