@@ -24,7 +24,10 @@ committed report is the July 2026 run against that branch.
 That runs the real replay where the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, and the downloaded QC file all exist,
 and re-emits the committed dashboard report everywhere else (the same graceful-skip
-contract the EUROMOD runner honors). The pins, sha256s, and archive members live in
+contract the EUROMOD runner honors). A re-emission never replaces a committed
+report from a real run. The seven suites declare `ci: manual`, so the weekly
+matrix and the 6-hourly affected rerun never dispatch them; a supervised
+`run_comparison.py <st>-snap-qc` run is how the committed reports refresh. The pins, sha256s, and archive members live in
 `axiom_oracles/populations/snap_qc.py::SNAP_QC_PINS`; the loader (`load_qc_units`)
 downloads, verifies, caches, and parses them; the replay harness is
 `axiom_oracles/bridges/snap_qc_compare.py`. Everything below cites the FY2024 QC
@@ -194,6 +197,10 @@ in the public file (tech doc Table II.1, PDF p.18). Demonstration-state componen
   prerequisites it re-emits the committed dashboard report, and that report's
   provenance carries `reemitted_report: true` and no `rulespecs` entry. A real
   run's provenance lists the rulespec-us SHA it ran against under `rulespecs`.
+  A re-emission is never published over a committed report from a real run.
+  The affected map lists only rulespec-us for these suites, because the overlay
+  copies both `us/` and `us-<st>/` out of that one checkout, so staleness is
+  judged against the one SHA a real run records.
 
 ## 6. The fiscal-year gap and the overlay
 
