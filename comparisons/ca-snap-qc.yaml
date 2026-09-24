@@ -31,9 +31,21 @@ description: >-
   (TheAxiomFoundation/rulespec-us#759 inverts the chain and retires the
   overlay). This suite runs where the axiom-rules-engine binary, a rulespec-us
   checkout with the fy-2024-cola modules, and the downloaded QC public-use
-  file all exist; on runners without them the registry re-emits the committed
-  dashboard report.
+  file all exist; a run without them re-emits the committed dashboard report,
+  which never replaces a real run's report.
 documentation: docs/snap-qc-oracle-playbook.md
+
+# Runs only in the SNAP QC live replay lane
+# (.github/workflows/snap-qc-replay.yml), which builds the axiom-rules-engine
+# binary at rulespec-us's artifact pin, checks out rulespec-us, and fetches
+# the pinned QC public-use file; the bare matrix runners never build the
+# engine or fetch the QC file. When rulespec-us moves, the affected rerun
+# hands this suite to that lane and commits its report only if the replay ran
+# live and exact; the weekly matrix skips it, since the lane runs weekly
+# itself. On a bare runner run_comparison.py could only re-emit the committed
+# report, which is how the real NY, CA, AZ, MD, and GA reports were
+# overwritten on 2026-09-23.
+ci: snap-qc-replay
 
 runner:
   type: snap-qc-compare

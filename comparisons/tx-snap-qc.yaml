@@ -13,9 +13,20 @@ description: >-
   the state's Table F.7 utility amount patches) at the nominal period 2026-01
   (TheAxiomFoundation/rulespec-us#759 retires the overlay). Runs where the
   engine binary, a rulespec-us checkout with the fy-2024-cola modules and the
-  state's SNAP layer (rulespec-us#888), and the QC file all exist; elsewhere
-  the registry re-emits the committed dashboard report.
+  state's SNAP layer (rulespec-us#888), and the QC file all exist; a run
+  elsewhere re-emits the committed dashboard report, which never replaces a
+  real run's report.
 documentation: docs/snap-qc-oracle-playbook.md
+
+# Manual lane for now: the Texas composition is not on rulespec-us main
+# (rulespec-us#888, implemented by the open rulespec-us#891), so the live
+# replay lane cannot run it yet. When scripts/snap_qc_replay.py moves
+# tx-snap-qc from PENDING_SUITES to REQUIRED_SUITES, switch this to ci:
+# snap-qc-replay like the other states. On a bare runner run_comparison.py
+# could only re-emit the committed report. The committed report is the July
+# 2026 run (#279) against rulespec-us 53ae9199, a pre-rebase commit of
+# rulespec-us#891, on the May 2026 QC posting's weights.
+ci: manual
 
 runner:
   type: snap-qc-compare

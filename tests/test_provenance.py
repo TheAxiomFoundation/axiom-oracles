@@ -15,6 +15,7 @@ from axiom_oracles.provenance import (
     build_provenance,
     dataset_provenance_from_identity,
     engine_provenance,
+    is_real_run_report,
     repo_slug_from_remote,
     resolve_run_kind,
     rulespec_provenance,
@@ -28,6 +29,28 @@ def _load_run_comparison():
     assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
+
+
+# --- is_real_run_report ------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    ("report", "real"),
+    [
+        ({"provenance": {"run_kind": "manual", "rulespecs": []}}, True),
+        ({"provenance": {"reemitted_report": False}}, True),
+        ({"suite": "unstamped-legacy"}, True),
+        ({"provenance": None}, True),
+        ({"provenance": {"reemitted_report": True}}, False),
+        (None, False),
+        ([{"provenance": {}}], False),
+        ("report", False),
+    ],
+)
+def test_is_real_run_report(report, real):
+    """A re-emission is exactly a report marked reemitted_report; anything
+    else shaped like a report counts as a real (possibly legacy) run."""
+    assert is_real_run_report(report) is real
 
 
 # --- build_provenance -------------------------------------------------------

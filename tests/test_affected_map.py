@@ -661,3 +661,218 @@ def test_selector_pinned_repo_unknown_sha_still_selected():
     }
     reports = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": None}])}
     assert [s["suite"] for s in sel.select(aff, {}, reports)] == ["s1"]
+
+
+# --- SNAP QC replays (2026-09-23) ----------------------------------------------
+#
+# The map listed each snap-qc suite under rulespec-us AND the archived per-state
+# rulespec-us-<st> repo. The replay reads both layers from one rulespec-us
+# checkout, so no report could ever record a state-repo SHA: the selector picked
+# every snap-qc suite on every sweep, bare runners re-emitted, and the commit
+# step overwrote the real NY/MD/AZ/CA/GA reports.
+
+REPO = Path(__file__).parents[1]
+RULESPEC_US = "TheAxiomFoundation/rulespec-us"
+
+
+def _snap_qc_configs() -> list[dict]:
+    import yaml
+
+    configs = []
+    for path in sorted((REPO / "comparisons").glob("*.yaml")):
+        if path.name.endswith(".fixtures.yaml"):
+            continue
+        config = yaml.safe_load(path.read_text())
+        if isinstance(config, dict) and (config.get("runner") or {}).get(
+            "type"
+        ) == "snap-qc-compare":
+            configs.append(config)
+    return configs
+
+
+def test_snap_qc_lane_maps_only_the_root_its_overlay_is_built_from():
+    gam = _load("generate_affected_map.py")
+
+    def config(**parameters):
+        return {
+            "name": "co-snap-qc",
+            "runner": {
+                "type": "snap-qc-compare",
+                "parameters": {"jurisdiction": "us-co", **parameters},
+            },
+        }
+
+    assert gam.repos_for_registry_config(config()) == {RULESPEC_US}
+    # NEGATIVE: neither the jurisdiction nor a state concept id names a repo the
+    # replay reads; the archived state repo must never come back.
+    assert gam.repos_for_registry_config(
+        config(concepts=["us-co:policies/cdhs/snap#co_snap_allotment"])
+    ) == {RULESPEC_US}
+    # An explicit root names the checkout the bridge replays.
+    assert gam.repos_for_registry_config(
+        config(rulespec_root="$HOME/TheAxiomFoundation/rulespec-us")
+    ) == {RULESPEC_US}
+
+
+def test_every_snap_qc_suite_routes_away_from_the_bare_matrix():
+    """Bare CI runners can only re-emit a SNAP QC report, so every snap-qc
+    suite either runs in the live replay lane (keeping its registry name for
+    that lane's workflow) or is manual; none reaches the bare rerun matrix."""
+    gam = _load("generate_affected_map.py")
+    entries = {e["suite"]: e for e in gam.build_map()["suites"]}
+    configs = _snap_qc_configs()
+    assert len(configs) >= 7
+    lane_suites = 0
+    for config in configs:
+        entry = entries[config["dashboard"]["suite"]]
+        assert entry["repos"] == [RULESPEC_US], config["name"]
+        if config.get("ci") == "snap-qc-replay":
+            lane_suites += 1
+            assert entry["name"] == config["name"]
+            assert entry["lane"] == "snap-qc-replay"
+        else:
+            assert config.get("ci") == "manual", config["name"]
+            assert entry["name"] is None and "lane" not in entry
+    assert lane_suites >= 6
+
+
+def test_snap_qc_map_repos_are_exactly_what_a_real_run_records(tmp_path):
+    """The invariant the old map broke: every repo the map lists for a snap-qc
+    suite is one its report's provenance can record a SHA for."""
+    import subprocess
+
+    import yaml
+
+    rc = _load("run_comparison.py")
+    gam = _load("generate_affected_map.py")
+    checkout = tmp_path / "rulespec-us"
+    checkout.mkdir()
+    for args in (
+        ["init", "-q"],
+        ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q",
+         "--allow-empty", "-m", "seed"],
+    ):
+        subprocess.run(["git", *args], cwd=checkout, check=True)
+    sha = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=checkout, check=True,
+        capture_output=True, text=True,
+    ).stdout.strip()
+    config = yaml.safe_load((REPO / "comparisons/ny-snap-qc.yaml").read_text())
+    output = tmp_path / "report.json"
+    output.write_text(
+        json.dumps({"summary": {"provenance": {"rulespec_root": str(checkout)}}})
+    )
+
+    provenance = rc._build_run_provenance(config, "snap-qc-compare", output)
+
+    assert provenance["rulespecs"] == [{"repo": RULESPEC_US, "sha": sha}]
+    entry = next(
+        e for e in gam.build_map()["suites"] if e["suite"] == "ny-snap-qc"
+    )
+    assert {r["repo"] for r in provenance["rulespecs"]} == set(entry["repos"])
+
+
+def test_committed_snap_qc_reports_are_real_runs():
+    """Every committed SNAP QC dashboard report came from a real replay and
+    records the rulespec-us SHA it ran against; a re-emission committed over
+    one (2026-09-23) fails here."""
+    from axiom_oracles.provenance import is_real_run_report
+
+    for config in _snap_qc_configs():
+        path = REPO / "dashboard/public/data" / config["dashboard"]["filename"]
+        if not path.exists():
+            continue
+        report = json.loads(path.read_text())
+        assert is_real_run_report(report), f"{path.name} is a re-emission"
+        shas = [
+            r.get("sha")
+            for r in report["provenance"].get("rulespecs") or []
+            if r.get("repo") == RULESPEC_US
+        ]
+        assert len(shas) == 1 and len(shas[0] or "") == 40, path.name
+
+
+def test_selector_never_dispatches_snap_qc_and_leaves_fresh_ones_alone():
+    sel = _load("select_affected_suites.py")
+    affected = json.loads(sel.AFFECTED_MAP.read_text())
+    reports = sel.load_reports(affected)
+    archived = {
+        f"TheAxiomFoundation/rulespec-us-{st}": "a" * 40
+        for st in ("co", "ny", "ca", "az", "ga", "md", "tx")
+    }
+    for config in _snap_qc_configs():
+        suite = config["dashboard"]["suite"]
+        ran_against = sel._report_ran_against(reports[suite])[RULESPEC_US]
+        # rulespec-us unmoved: fresh, whatever the archived state repos say.
+        fresh = sel.select(affected, {**archived, RULESPEC_US: ran_against}, reports)
+        assert suite not in {d["suite"] for d in fresh}
+        # rulespec-us moved: stale, and routed to the live replay lane (or
+        # the manual lane), never the bare matrix.
+        moved = sel.select(affected, {**archived, RULESPEC_US: "b" * 40}, reports)
+        decision = next(d for d in moved if d["suite"] == suite)
+        assert config["name"] not in sel.runnable_names(moved)
+        if config.get("ci") == "snap-qc-replay":
+            assert decision["lane"] == "snap-qc-replay"
+            assert config["name"] in sel.lane_names(moved, "snap-qc-replay")
+            assert suite not in sel.manual_suites(moved)
+        else:
+            assert decision["name"] is None
+            assert suite in sel.manual_suites(moved)
+
+
+# --- CI lanes (ci: <lane>) ------------------------------------------------------
+
+
+def test_ci_routing_names_lanes_and_rejects_anything_else():
+    gam = _load("generate_affected_map.py")
+
+    def config(**extra):
+        return {"name": "ny-snap-qc", "runner": {"type": "snap-qc-compare"}, **extra}
+
+    assert gam.ci_routing(config()) == ("ny-snap-qc", None)
+    assert gam.ci_routing(config(ci="manual")) == (None, None)
+    assert gam.ci_routing(config(ci="snap-qc-replay")) == (
+        "ny-snap-qc",
+        "snap-qc-replay",
+    )
+    # NEGATIVE: an unknown lane, or a lane for another runner type, fails
+    # loudly rather than silently dropping the suite from every matrix.
+    with pytest.raises(SystemExit, match="unknown ci"):
+        gam.ci_routing(config(ci="snap-qc-live"))
+    with pytest.raises(SystemExit, match="runner type"):
+        gam.ci_routing(
+            {"name": "fiit", "runner": {"type": "axiom-oracles-compare"},
+             "ci": "snap-qc-replay"}
+        )
+
+
+def test_selector_rejects_a_malformed_lane():
+    sel = _load("select_affected_suites.py")
+    for entry in (
+        {"suite": "s", "name": "s", "repos": ["r"], "lane": ""},
+        {"suite": "s", "name": None, "repos": ["r"], "lane": "snap-qc-replay"},
+    ):
+        with pytest.raises(SystemExit, match="malformed lane"):
+            sel.select({"suites": [entry]}, {"r": "x"}, {})
+
+
+def test_lane_suites_leave_the_matrix_for_their_lane_output(monkeypatch, capsys):
+    """force_all (and a normal sweep) put lane suites in lane_<lane>, never in
+    the bare matrix the rerun job dispatches, and never in the manual list."""
+    sel = _load("select_affected_suites.py")
+    monkeypatch.setattr(
+        sel.sys, "argv", ["select_affected_suites.py", "--force-all", "--format", "github"]
+    )
+    assert sel.main() == 0
+    out = dict(
+        line.split("=", 1) for line in capsys.readouterr().out.splitlines() if "=" in line
+    )
+    lane = json.loads(out["lane_snap_qc_replay"])
+    assert int(out["lane_snap_qc_replay_count"]) == len(lane) >= 6
+    matrix = {row["name"] for row in json.loads(out["matrix"])["include"]}
+    assert not matrix & set(lane)
+    assert not set(out["manual"].split()) & set(lane)
+    for config in _snap_qc_configs():
+        if config.get("ci") == "snap-qc-replay":
+            assert config["name"] in lane
+

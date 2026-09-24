@@ -22,6 +22,12 @@ Derivation, per suite, unions three signals (all deterministic):
    ``parameter-oracles.yaml`` names files like ``us-ga/policies/…`` whose top
    path segment maps to a rulespec repo the same way.
 
+A few runner types add their own rules (the encoder SNAP lane's jurisdiction,
+the EUROMOD country). A SNAP QC replay (``snap-qc-compare``) uses only a
+configured ``rulespec_root`` (signal 1), defaulting to rulespec-us, and ignores
+concept prefixes and the jurisdiction: it maps to exactly the one rulespec root
+its overlay is built from (see ``snap_qc_repos``).
+
 The output is sorted and stable; ``--check`` fails if the committed file drifts
 from a fresh regeneration, so CI keeps it honest.
 
@@ -154,10 +160,74 @@ def pinned_repos_for_registry_config(config: dict) -> dict[str, str]:
     return {repos.pop(): sha}
 
 
+def snap_qc_repos(config: dict) -> set[str]:
+    """The one rulespec repo a ``snap-qc-compare`` replay reads.
+
+    The bridge builds its fiscal-year overlay from a single rulespec root:
+    ``build_overlay`` copies both the federal ``us/`` chain and the state's
+    ``us-<st>/`` layer out of that root, and the engine is pointed at the
+    overlay alone (``bridges/snap_qc_compare.run_snap_qc_comparison``). That
+    root's repo is therefore the suite's whole rules dependency, and the only
+    repo whose SHA its report can record (``provenance.rulespecs``). The root is
+    the rulespec-us monorepo unless the config names another one.
+
+    The per-state ``rulespec-us-<st>`` repos are never read: they were archived
+    into ``rulespec-us/us-<st>`` on 2026-06-27. Mapping them anyway meant no
+    report could ever prove it was fresh, so the affected-rerun selector picked
+    every snap-qc suite on every sweep ("rulespec-us-<st>: report ran against
+    unknown SHA").
+    """
+    runner = config.get("runner") or {}
+    params = runner.get("parameters") or {}
+    root = runner.get("rulespec_root") or params.get("rulespec_root")
+    slug = _repo_from_path(str(root)) if root else None
+    return {slug or _slug("rulespec-us")}
+
+
+#: CI lanes a suite can declare with ``ci: <lane>``: a workflow that
+#: provisions what the bare affected-rerun and weekly matrix runners lack, keyed
+#: to the one runner type it knows how to run. The affected rerun hands a stale
+#: lane suite to that workflow instead of its bare matrix.
+CI_LANES = {"snap-qc-replay": "snap-qc-compare"}
+
+
+def ci_routing(config: dict) -> tuple[str | None, str | None]:
+    """``(name, lane)`` for a registry config's affected-map entry.
+
+    No ``ci`` key: dispatched by the bare rerun matrix under its registry name.
+    ``ci: manual``: not CI-runnable, ``name`` null. ``ci: <lane>``: dispatched
+    by that lane's workflow, keeping its registry name. Anything else, or a
+    lane naming another runner type, fails loudly rather than guessing.
+    """
+    ci = config.get("ci")
+    if ci is None:
+        return config["name"], None
+    if ci == "manual":
+        return None, None
+    runner_type = (config.get("runner") or {}).get("type")
+    if ci not in CI_LANES:
+        raise SystemExit(
+            f"suite {config.get('name')!r} declares unknown ci: {ci!r}; "
+            f"expected manual or one of {sorted(CI_LANES)}"
+        )
+    if CI_LANES[ci] != runner_type:
+        raise SystemExit(
+            f"suite {config.get('name')!r} declares ci: {ci} but its runner "
+            f"type is {runner_type!r}, not {CI_LANES[ci]!r}"
+        )
+    return config["name"], ci
+
+
 def repos_for_registry_config(config: dict) -> set[str]:
     repos: set[str] = set()
     runner = config.get("runner") or {}
     params = runner.get("parameters") or {}
+
+    # The SNAP QC administrative-data lane depends on exactly the root its
+    # overlay is built from; no other signal (concept prefixes, the
+    # jurisdiction) names a repo it reads. See snap_qc_repos.
+    if runner.get("type") == "snap-qc-compare":
+        return snap_qc_repos(config)
 
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote:
@@ -211,16 +281,6 @@ def repos_for_registry_config(config: dict) -> set[str]:
     # federal chain.
     jurisdiction = params.get("jurisdiction")
     if runner.get("type") == "axiom-encode-snap-ecps-compare" and jurisdiction:
-        state_slug = _repo_from_prefix(str(jurisdiction))
-        if state_slug:
-            repos.add(state_slug)
-        repos.add(_slug("rulespec-us"))
-
-    # The SNAP QC administrative-data lane (snap-qc-compare) replays USDA QC
-    # public-use cases through the state's composed SNAP program under the
-    # fy-cola overlay; rule changes in the state shard or the federal SNAP
-    # chain both move its results.
-    if runner.get("type") == "snap-qc-compare" and jurisdiction:
         state_slug = _repo_from_prefix(str(jurisdiction))
         if state_slug:
             repos.add(state_slug)
@@ -326,6 +386,7 @@ def build_map() -> dict:
         report = (config.get("selector") or {}).get("report") or (
             config.get("dashboard") or {}
         ).get("filename")
+        name, lane = ci_routing(config)
         entry = {
             "suite": suite,
             # The run_comparison.py registry name — what the CI rerun
@@ -333,15 +394,20 @@ def build_map() -> dict:
             # (e.g. dashboard suite `uk-benefit-cap` runs under registry
             # name `uk-benefit-cap-ukmod`); dispatching the dashboard
             # suite key crashes the leg with "unknown comparison".
-            # A suite declaring `ci: manual` cannot run in CI at all
-            # (e.g. or/ut SNAP: the encoder's snap-populace-compare has no
-            # jurisdiction config for them yet) — emit null so the
+            # A suite declaring `ci: manual` cannot produce a real report
+            # in CI (e.g. or/ut SNAP: the encoder's snap-populace-compare
+            # has no jurisdiction config for them yet) — emit null so the
             # selector and the weekly matrix leave it to the manual lane.
-            "name": None if config.get("ci") == "manual" else config["name"],
+            # A suite declaring `ci: <lane>` (see CI_LANES) keeps its name
+            # and gains `lane`: the selector hands it to that lane's
+            # workflow, never the bare matrix.
+            "name": name,
             "report": report,
             "repos": sorted(repos_for_registry_config(config)),
             "source": f"comparisons/{path.name}",
         }
+        if lane:
+            entry["lane"] = lane
         pinned = pinned_repos_for_registry_config(config)
         if pinned:
             # Freshness for these repos is judged against the pin, not HEAD
@@ -363,7 +429,8 @@ def build_map() -> dict:
             "report; `name` is the run_comparison.py registry name the rerun "
             "matrix dispatches (null = not CI-runnable: parameter suites run "
             "by the manual parameter lane, and registry suites declaring "
-            "`ci: manual` in their YAML)."
+            "`ci: manual` in their YAML). `lane` names the CI workflow that "
+            "runs a suite declaring `ci: <lane>` instead of the bare matrix."
         ),
         "owner": RULESPEC_OWNER,
         "suites": entries,

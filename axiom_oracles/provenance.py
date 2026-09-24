@@ -220,6 +220,24 @@ def canonical_rulespec_slug(name: str) -> str:
     return f"{RULESPEC_OWNER}/{resolved}"
 
 
+def is_real_run_report(report: Any) -> bool:
+    """Whether a parsed report came from a real run rather than a re-emission.
+
+    A skip-capable runner that cannot execute re-emits the committed report and
+    marks it ``provenance.reemitted_report``. Its numbers are the committed
+    ones, so it must never replace a real run's report, whose provenance
+    records what the numbers ran against. Unstamped legacy reports count as
+    real: nothing marks them re-emitted. Anything that is not a JSON object is
+    not a report.
+    """
+    if not isinstance(report, dict):
+        return False
+    provenance = report.get("provenance")
+    if not isinstance(provenance, dict):
+        return True
+    return not provenance.get("reemitted_report")
+
+
 def build_provenance(
     *,
     generated_by: str,

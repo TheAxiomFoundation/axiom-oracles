@@ -3756,10 +3756,10 @@ def _snap_qc_cola_marker_reason(rulespec_root: Path, fiscal_year: int) -> str | 
     The overlay compiles the CO SNAP composition with its COLA module ids
     rewritten from the in-repo fy-2026 vintage to ``fy-<year>-cola``, so the base
     checkout must actually define that vintage under
-    ``us/policies/usda/snap/fy-<year>-cola/``. A plain rulespec-us checkout (or an
-    un-rebased clone) carries only fy-2026 and is skipped — the common CI case.
-    ``fy-2024-cola`` currently lives on the branch tracked by
-    TheAxiomFoundation/rulespec-us#759, which retires the overlay once it lands.
+    ``us/policies/usda/snap/fy-<year>-cola/``. A checkout that predates the
+    target vintage is skipped. ``fy-2024-cola`` is on rulespec-us main
+    (TheAxiomFoundation/rulespec-us#760); the parameter-set inversion tracked by
+    TheAxiomFoundation/rulespec-us#759 retires the overlay once it lands.
     """
     if not rulespec_root.exists():
         return f"rulespec root not found at {rulespec_root}"
@@ -3841,9 +3841,11 @@ def _reemit_snap_qc_committed_report(
     """Re-emit the committed dashboard report as the run output (graceful skip).
 
     Mirrors ``_run_euromod_synthetic_compare``: when the replay cannot run here,
-    reuse the committed dashboard JSON so the weekly matrix stays green and the
-    dashboard copy is idempotent. Falls back to an empty v2 report shell when no
-    committed report exists yet (the first run before numbers are checked in).
+    reuse the committed dashboard JSON as the run output. The publisher then
+    leaves a committed report from a real run byte-for-byte unchanged
+    (``_write_dashboard_report``), so a skip never replaces it. Falls back to
+    an empty v2 report shell when no committed report exists yet (the first
+    run before numbers are checked in).
     """
     dashboard_filename = runner.get("dashboard_filename") or params.get(
         "dashboard_filename", ""
@@ -3893,11 +3895,15 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
     The replay needs three things a shared CI runner does not carry: the built
     ``axiom-rules-engine`` binary, a rulespec-us checkout whose SNAP COLA modules
     are dated for the target fiscal year (the overlay base), and the downloaded
-    QC public-use file. When any is absent — or the bridge is still mid-build —
-    this runner **skips gracefully**, re-emitting the committed dashboard report
-    so the weekly matrix stays green and the dashboard copy is idempotent, exactly
-    like ``_run_euromod_synthetic_compare``. Regenerate the committed numbers
-    locally where all three exist.
+    QC public-use file. The snap-qc suites therefore never run on the bare
+    weekly or affected-rerun matrices: they declare ``ci: snap-qc-replay`` (the
+    live replay lane, which provisions all three) or, while a composition is
+    pending, ``ci: manual``. When any
+    prerequisite is absent — or the bridge is still mid-build — this runner
+    **skips gracefully**, re-emitting the committed dashboard report exactly like
+    ``_run_euromod_synthetic_compare``; that re-emission never replaces a
+    committed real report. Regenerate the committed numbers with a supervised run
+    where all three exist.
     """
     params = runner["parameters"]
     fiscal_year = int(params.get("fiscal_year", 2024))
@@ -5601,7 +5607,8 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
     """Whether a skip publish would overwrite its preserved bound source.
 
     The pointer is read from the existing dashboard copy, because that is the
-    evidence set a versioned skip preserves.  Resolution mirrors
+    evidence set a skip preserves: a versioned copy, or any copy from a real
+    run (see ``_write_dashboard_report``).  Resolution mirrors
     ``apply_dispositions._resolve_source_pointer``: only a repo-relative path
     resolving beneath ``reports/`` is eligible.  Digest and fullness remain
     the consumer's fail-closed responsibility; this helper only prevents the
@@ -5609,13 +5616,15 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
     can verify them.
     """
 
+    from axiom_oracles.provenance import is_real_run_report
+
     target = DASHBOARD_DATA_DIR / filename
     try:
         existing = json.loads(target.read_text())
     except (OSError, json.JSONDecodeError):
         return False
-    if not isinstance(existing, dict) or not _uses_versioned_case_chunks(
-        existing
+    if not isinstance(existing, dict) or not (
+        _uses_versioned_case_chunks(existing) or is_real_run_report(existing)
     ):
         return False
     block = (existing.get("summary") or {}).get("dispositioned")
@@ -5633,6 +5642,21 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
     candidate = (REPO_ROOT / raw_path).resolve()
     reports_dir = (REPO_ROOT / "reports").resolve()
     return reports_dir in candidate.parents and candidate == output.resolve()
+
+
+def committed_report_is_real(path: Path) -> bool:
+    """Whether ``path`` holds a report that was not itself a re-emission.
+
+    See :func:`axiom_oracles.provenance.is_real_run_report`; a missing or
+    unparseable file is not a real report.
+    """
+    from axiom_oracles.provenance import is_real_run_report
+
+    try:
+        report = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return False
+    return is_real_run_report(report)
 
 
 def _write_dashboard_report(
@@ -5657,6 +5681,11 @@ def _write_dashboard_report(
     bytes, so the preserved binding remains checkable while that source stays
     present and unchanged.  The main publisher also protects a same-path,
     same-day skip from replacing those prior source bytes before this return.
+
+    The flag also covers unversioned reports: a skip leaves any committed
+    report from a real run byte-for-byte unchanged (``committed_report_is_real``).
+    It rewrites only a committed report that was itself a re-emission, or
+    publishes the first copy when none is committed.
     """
 
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -5675,6 +5704,18 @@ def _write_dashboard_report(
         )
         return
     target = DASHBOARD_DATA_DIR / filename
+    if preserve_existing_versioned and committed_report_is_real(target):
+        # A re-emission copies the committed numbers, so publishing it can
+        # only overwrite a real run's provenance (the rulespec SHAs it ran
+        # against, its run kind and date) with "re-emitted, SHA unknown", and
+        # once that is committed the affected-rerun selector can never again
+        # prove the suite fresh. On 2026-09-23 that replaced five real SNAP QC
+        # reports.
+        print(
+            f"Preserved real dashboard report {filename} for skipped "
+            f"{report['suite']}: a re-emission never replaces a real run"
+        )
+        return
     dashboard_config = dashboard_config or {}
     slim = _slim_report_for_dashboard(
         strip_heavy_case_metadata(report),
