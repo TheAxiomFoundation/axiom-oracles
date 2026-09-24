@@ -1518,6 +1518,10 @@ def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
     assert "policyengine==4.18.9" in cmd
     assert "policyengine-us==1.767.3" in cmd
     assert "policyengine-core==3.30.3" in cmd
+    # policyengine-us 1.767.3 leaves spm-calculator uncapped, and 1.0.0
+    # removed the spm_calculator.geoadj module 1.767.3 imports; every federal
+    # grid died at import in the 2026-09-14 and 2026-09-21 weekly runs.
+    assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
     assert cmd[cmd.index("--policy") + 1] == "net_investment_income_tax"
     assert cmd[cmd.index("--rulespec-root") + 1] == str(rulespec.resolve())
     assert cmd[cmd.index("--output") + 1] == str(output)

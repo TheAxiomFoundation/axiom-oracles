@@ -1300,6 +1300,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
             f"policyengine-us=={pe_us}",
             "--with",
             f"policyengine-core=={pe_core}",
+            *(arg for pin in _pe_us_transitive_pins(pe_us) for arg in ("--with", pin)),
         ]
         if pinned
         else [
@@ -1634,6 +1635,7 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
             str(axiom_encode_repo),
             "--with",
             "policyengine-us==1.705.1",
+            *(arg for pin in _pe_us_transitive_pins("1.705.1") for arg in ("--with", pin)),
             "--with",
             "numpy",
             "axiom-encode",
@@ -1732,6 +1734,48 @@ def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
         f"policyengine-core=={core}" if core else _PE_ORACLE_PINS[2],
     )
 
+
+# The policyengine-us 1.x wheels this repo pins (1.752.2, 1.764.6, 1.767.3,
+# 1.784.4) import spm_calculator.geoadj and spm_calculator.forecast, and every
+# 1.x release on PyPI before 1.825.1 declares only an uncapped
+# ``spm-calculator>=0.2.0``. spm-calculator 1.0.0 (2026-09-11) removed both
+# modules, so an isolated ``uv run --with policyengine-us==1.767.3`` resolves
+# 1.0.0.post1 and PolicyEngine-US dies at import with ``No module named
+# 'spm_calculator.geoadj'``; the 2026-09-14 and 2026-09-21 weekly runs lost
+# every PolicyEngine-US lane to it. Pin the last 0.x release: uv.lock resolves
+# it, it was the newest 0.x from 2026-04-17 until 1.0.0 shipped, and
+# policyengine-us 1.825.1 pins it itself. policyengine-us 2.x pins
+# spm-calculator 1.x on its own, so only the 1.x line gets this pin. Keep in
+# step with the ``policyengine`` extra in pyproject.toml
+# (tests/test_run_comparison.py checks both).
+_PE_US_1X_SPM_CALCULATOR_PIN = "spm-calculator==0.3.1"
+
+
+def _pe_us_transitive_pins(policyengine_us_version: str | None) -> tuple[str, ...]:
+    """Transitive pins an isolated policyengine-us environment needs to import.
+
+    ``None`` means an unpinned (latest) policyengine-us, whose own metadata
+    already bounds spm-calculator.
+    """
+    if not policyengine_us_version:
+        return ()
+    major = str(policyengine_us_version).split(".", 1)[0]
+    if major == "1":
+        return (_PE_US_1X_SPM_CALCULATOR_PIN,)
+    return ()
+
+
+def _resolve_pe_oracle_install_pins(params: dict) -> tuple[str, ...]:
+    """Every pin an isolated ``uv run --no-project`` PE oracle env installs.
+
+    ``_resolve_pe_oracle_pins`` is the oracle identity that provenance records;
+    this adds the transitive pins that keep that stack importable. Every
+    runner that builds a PE oracle env from the resolved pins must install
+    this set, not the bare identity.
+    """
+    pins = _resolve_pe_oracle_pins(params)
+    return (*pins, *_pe_us_transitive_pins(pins[1].split("==", 1)[-1]))
+
 # The compare and sanity subprocesses share this import shim — extracted to
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
 # need to bypass certification, but the shim keeps policyengine.us import
@@ -1828,7 +1872,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     """
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
-    pe_pins = _resolve_pe_oracle_pins(params)
+    pe_pins = _resolve_pe_oracle_install_pins(params)
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
     # A pure oracle-vs-oracle comparison (e.g. taxcalc vs policyengine) has no
     # Axiom side, so it needs neither a built engine binary nor a composed
@@ -2479,7 +2523,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     params["rulespec_roots"] = [str(rulespec_root)]
     params["axiom_rules_repo"] = str(axiom_rules_repo)
     state = str(params["state"]).lower()
-    pe_pins = _resolve_pe_oracle_pins(params)
+    pe_pins = _resolve_pe_oracle_install_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_state_income_tax_liability.py"
     basename = f"axiom-policyengine-taxsim-{state}-income-tax-liability"
     cmd = [
@@ -2708,7 +2752,7 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         # rather than the missing development-worktree path.
         params["rulespec_roots"] = [str(roots[0])]
     _verify_federal_rulespec_snapshot(params, roots)
-    pins = _resolve_pe_oracle_pins(params)
+    pins = _resolve_pe_oracle_install_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_federal_tax_liability.py"
     cmd = [
         "uv",
@@ -2856,7 +2900,7 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
     # actually came from.
     params["rulespec_roots"] = [str(root) for root in roots]
     _verify_federal_rulespec_snapshot(params, roots)
-    pins = _resolve_pe_oracle_pins(params)
+    pins = _resolve_pe_oracle_install_pins(params)
     generator = REPO_ROOT / "scripts" / "generate_snap_abawd_boundary.py"
     cmd = [
         "uv",
@@ -3982,7 +4026,7 @@ def _run_sanity(name: str) -> int:
         print(f"No fixtures file at {fixtures_path}", file=sys.stderr)
         return 2
     params = config["runner"]["parameters"]
-    pe_pins = _resolve_pe_oracle_pins(params)
+    pe_pins = _resolve_pe_oracle_install_pins(params)
     axiom_rules_repo = _resolve_path(
         config["runner"].get("axiom_rules_repo", "$HOME/axiom-rules"),
         "axiom_rules_repo",

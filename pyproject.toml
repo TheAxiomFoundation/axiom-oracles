@@ -45,6 +45,13 @@ dev = [
 ]
 policyengine = [
   "policyengine[us]==5.0.0",
+  # policyengine[us] 5.0.0 pulls policyengine-us 1.764.6, which imports
+  # spm_calculator.geoadj but declares an uncapped spm-calculator>=0.2.0.
+  # spm-calculator 1.0.0 removed that module, and the comparison workflows'
+  # unlocked `uv pip install -e '.[policyengine]'` resolves 1.0.0.post1,
+  # where policyengine-us fails at import. Keep in step with
+  # _PE_US_1X_SPM_CALCULATOR_PIN in scripts/run_comparison.py.
+  "spm-calculator==0.3.1",
 ]
 taxsim = [
   "policyengine-taxsim==2.30.0",

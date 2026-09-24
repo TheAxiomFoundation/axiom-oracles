@@ -99,6 +99,18 @@ set for a probe that does not belong in the shared grid.
 
 ## Supported runners
 
+Runners that build an isolated PolicyEngine-US environment
+(`uv run --no-project --with policyengine-us==…`) install the resolved oracle
+pins plus the transitive pins that keep that stack importable
+(`_resolve_pe_oracle_install_pins` and `_pe_us_transitive_pins` in
+`scripts/run_comparison.py`). The policyengine-us 1.x releases this repo pins
+import `spm_calculator.geoadj`, and every 1.x release on PyPI before 1.825.1
+declares an uncapped `spm-calculator>=0.2.0`. spm-calculator 1.0.0
+(2026-09-11) removed that module, so every policyengine-us 1.x environment
+also installs `spm-calculator==0.3.1`, the version `uv.lock` resolves. The
+`policyengine` extra in `pyproject.toml` carries the same pin. Report
+provenance still records the three PolicyEngine pins as the oracle identity.
+
 ### `axiom-encode-tax-ecps-compare`
 
 Invokes `axiom-encode tax-populace-compare` (renamed from `tax-ecps-compare`

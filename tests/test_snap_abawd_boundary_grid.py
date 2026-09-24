@@ -12,6 +12,7 @@ zero unexplained).
 from __future__ import annotations
 
 import importlib.util
+import subprocess
 import sys
 from pathlib import Path
 
@@ -422,3 +423,56 @@ def test_runner_rejects_a_different_oracle_stack():
             },
             Path("/nonexistent/output.json"),
         )
+
+
+def test_runner_installs_the_spm_calculator_pin_with_the_oracle_stack(
+    monkeypatch, tmp_path
+):
+    """policyengine-us 1.767.3 imports spm_calculator.geoadj but declares an
+    uncapped spm-calculator>=0.2.0. spm-calculator 1.0.0 removed that module,
+    so the unlocked oracle env resolved 1.0.0.post1 and died at import
+    ("No module named 'spm_calculator.geoadj'") until the runner installed the
+    0.x pin alongside the reviewed trio."""
+    runner = _load_runner()
+    rulespec = tmp_path / "rulespec-us"
+    rulespec.mkdir()
+    output = tmp_path / "report.json"
+    calls: list[list[str]] = []
+    monkeypatch.setattr(
+        runner, "_rulespec_checkout_unclean_reason", lambda _root: None
+    )
+
+    def fake_run(cmd, *, check, cwd):
+        assert check is True
+        assert cwd == runner.REPO_ROOT
+        calls.append(cmd)
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(runner.subprocess, "run", fake_run)
+
+    runner._run_snap_abawd_boundary_grid(
+        {
+            "parameters": {
+                "python": "3.13",
+                "rulespec_roots": [str(rulespec)],
+                "policyengine_version": "4.18.9",
+                "policyengine_us_version": "1.767.3",
+                "policyengine_core_version": "3.30.3",
+            }
+        },
+        output,
+    )
+
+    (cmd,) = calls
+    assert cmd[:6] == ["uv", "run", "--python", "3.13", "--no-project", "--with"]
+    installed = [cmd[i + 1] for i, token in enumerate(cmd) if token == "--with"]
+    assert installed == [
+        "policyengine==4.18.9",
+        "policyengine-us==1.767.3",
+        "policyengine-core==3.30.3",
+        "spm-calculator==0.3.1",
+    ]
+    assert cmd[cmd.index("--rulespec-root") + 1] == str(
+        runner._expand_path(str(rulespec))
+    )
+    assert cmd[cmd.index("--output") + 1] == str(output)

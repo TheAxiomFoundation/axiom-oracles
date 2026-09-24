@@ -102,6 +102,9 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     # the old 1.705.16 pin was below the floor and failed hard.
     assert "policyengine-us==1.729.0" in cmd
     assert "policyengine-core==3.26.11" in cmd
+    # policyengine-us 1.x imports spm_calculator.geoadj, which the uncapped
+    # spm-calculator 1.0.0 removed; the pinned stack must carry the 0.x pin.
+    assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
     assert "--data-folder" not in cmd
     assert "--allow-policyengine-us-version" in cmd
     assert "--allow-uncertified-policyengine-data" in cmd
@@ -248,6 +251,10 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     assert cmd[:3] == ["uv", "run", "--directory"]
     assert str(axiom_encode.resolve()) in cmd
     assert "snap-populace-compare" in cmd
+    assert cmd[cmd.index("policyengine-us==1.705.1") + 1 :][:2] == [
+        "--with",
+        "spm-calculator==0.3.1",
+    ]
     assert "--sample-size" not in cmd
     assert "--axiom-binary" in cmd
 
@@ -1507,6 +1514,164 @@ def test_ri_income_tax_grid_pins_reviewed_policyengine_stack():
     )
 
 
+@pytest.mark.parametrize(
+    ("policyengine_us_version", "expected"),
+    [
+        # The policyengine-us 1.x line imports spm_calculator.geoadj, which
+        # spm-calculator 1.0.0 removed, and leaves it uncapped before 1.825.1.
+        ("1.705.1", ("spm-calculator==0.3.1",)),
+        ("1.729.0", ("spm-calculator==0.3.1",)),
+        ("1.752.2", ("spm-calculator==0.3.1",)),
+        ("1.767.3", ("spm-calculator==0.3.1",)),
+        ("1.784.4", ("spm-calculator==0.3.1",)),
+        # policyengine-us 2.x pins spm-calculator 1.x itself; a 0.x pin would
+        # make the env unresolvable.
+        ("2.0.0", ()),
+        ("2.11.3", ()),
+        # Unpinned (latest) policyengine-us brings its own bound.
+        (None, ()),
+        ("", ()),
+    ],
+)
+def test_pe_us_transitive_pins_hold_spm_calculator_for_the_1x_line(
+    policyengine_us_version, expected
+):
+    run_comparison = load_run_comparison_module()
+
+    assert (
+        run_comparison._pe_us_transitive_pins(policyengine_us_version) == expected
+    )
+
+
+def test_pe_oracle_install_pins_extend_the_identity_with_transitive_pins():
+    run_comparison = load_run_comparison_module()
+    reviewed = {
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+    }
+
+    # The identity provenance records is unchanged...
+    assert run_comparison._resolve_pe_oracle_pins(reviewed) == (
+        "policyengine==4.18.9",
+        "policyengine-us==1.767.3",
+        "policyengine-core==3.30.3",
+    )
+    # ...while the installed set adds the pin that keeps it importable.
+    assert run_comparison._resolve_pe_oracle_install_pins(reviewed) == (
+        "policyengine==4.18.9",
+        "policyengine-us==1.767.3",
+        "policyengine-core==3.30.3",
+        "spm-calculator==0.3.1",
+    )
+    assert run_comparison._resolve_pe_oracle_install_pins({}) == (
+        *run_comparison._PE_ORACLE_PINS,
+        "spm-calculator==0.3.1",
+    )
+    assert run_comparison._resolve_pe_oracle_install_pins(
+        {"policyengine_us_version": "2.11.3"}
+    ) == (
+        run_comparison._PE_ORACLE_PINS[0],
+        "policyengine-us==2.11.3",
+        run_comparison._PE_ORACLE_PINS[2],
+    )
+
+
+def test_sanity_runner_installs_the_pe_oracle_transitive_pins(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_rules.mkdir()
+    (tmp_path / "demo-sanity.yaml").write_text(
+        yaml.safe_dump(
+            {
+                "name": "demo-sanity",
+                "runner": {
+                    "type": "axiom-oracles-compare",
+                    "axiom_rules_repo": str(axiom_rules),
+                    "parameters": {
+                        "left": "axiom",
+                        "right": "policyengine",
+                        "policyengine_version": "4.18.9",
+                        "policyengine_us_version": "1.767.3",
+                        "policyengine_core_version": "3.30.3",
+                    },
+                },
+            }
+        )
+    )
+    (tmp_path / "demo-sanity.fixtures.yaml").write_text("cases: []\n")
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", tmp_path)
+    calls = []
+
+    def fake_run(cmd, *, cwd):
+        assert cwd == run_comparison.REPO_ROOT
+        calls.append(cmd)
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+
+    assert run_comparison._run_sanity("demo-sanity") == 0
+
+    (cmd,) = calls
+    installed = [cmd[i + 1] for i, token in enumerate(cmd) if token == "--with"]
+    assert installed == [
+        "policyengine==4.18.9",
+        "policyengine-us==1.767.3",
+        "policyengine-core==3.30.3",
+        "spm-calculator==0.3.1",
+    ]
+
+
+def test_only_provenance_reads_the_bare_pe_oracle_identity():
+    """Every runner that turns PE oracle pins into `uv run --with` arguments
+    must install ``_resolve_pe_oracle_install_pins``; a new runner that reached
+    for the bare identity would silently reinstate the spm-calculator import
+    break that failed every PolicyEngine-US lane in the 2026-09-14 and
+    2026-09-21 weekly runs."""
+    import ast
+
+    tree = ast.parse((REPO_ROOT / "scripts" / "run_comparison.py").read_text())
+    readers = {
+        function.name
+        for function in ast.walk(tree)
+        if isinstance(function, ast.FunctionDef)
+        for node in ast.walk(function)
+        if isinstance(node, ast.Call)
+        and isinstance(node.func, ast.Name)
+        and node.func.id == "_resolve_pe_oracle_pins"
+    }
+
+    assert readers == {"_build_run_provenance", "_resolve_pe_oracle_install_pins"}
+
+
+def test_policyengine_extra_and_lock_carry_the_runner_spm_calculator_pin():
+    """The comparison workflows install `.[policyengine]` with `uv pip install`,
+    which ignores uv.lock, so the extra itself must carry the pin the isolated
+    runner envs use, and the lock must resolve the same release."""
+    import tomllib
+
+    run_comparison = load_run_comparison_module()
+    pin = run_comparison._PE_US_1X_SPM_CALCULATOR_PIN
+    pyproject = tomllib.loads((REPO_ROOT / "pyproject.toml").read_text())
+    lock = tomllib.loads((REPO_ROOT / "uv.lock").read_text())
+
+    def locked(name: str) -> set[str]:
+        return {
+            package["version"]
+            for package in lock["package"]
+            if package["name"] == name
+        }
+
+    assert pin in pyproject["project"]["optional-dependencies"]["policyengine"]
+    assert locked("spm-calculator") == {pin.split("==", 1)[1]}
+    # The extra's policyengine-us is still a 1.x release, the line that needs
+    # the pin; a bump onto 2.x must drop it (2.x requires spm-calculator 1.x).
+    for version in locked("policyengine-us"):
+        assert run_comparison._pe_us_transitive_pins(version) == (pin,)
+
+
 def _euromod_be_registry_configs() -> list[dict]:
     configs: list[dict] = []
     for path in sorted(COMPARISONS_DIR.glob("*.yaml")):
@@ -1836,6 +2001,14 @@ def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
     cmd = calls[-1]
     assert cmd[:4] == ["uv", "run", "--python", "3.13"]
     assert "taxcalc==6.7.1" in cmd
+    # The default oracle stack (policyengine-us 1.752.2) installs with the
+    # spm-calculator pin; without it the env resolves 1.0.0.post1 and
+    # policyengine-us dies at import (the taxcalc-fiit-ecps weekly failure).
+    installed = [cmd[i + 1] for i, token in enumerate(cmd) if token == "--with"]
+    assert installed[:4] == [
+        *run_comparison._PE_ORACLE_PINS,
+        "spm-calculator==0.3.1",
+    ]
     # The explicit numba floor keeps the resolver off the sdist-only numba
     # 0.53.1 whose build fails on any current Python (#296).
     assert "numba>=0.60" in cmd
@@ -1962,6 +2135,7 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
     assert "policyengine==4.18.9" in cmd
     assert "policyengine-us==1.784.4" in cmd
     assert "policyengine-core==3.30.3" in cmd
+    assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
     assert run_comparison._PE_ORACLE_PINS[1] not in cmd
     assert env["RULESPEC_US_REPO"] == str(rulespec)
     assert env["AXIOM_RULES_REPO"] == str(engine)
