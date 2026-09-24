@@ -1,15 +1,20 @@
-from types import SimpleNamespace
+import sys
+from types import ModuleType, SimpleNamespace
 
 import pytest
 
 from axiom_oracles.adapters.policyengine import PolicyEngineRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_oracles.adapters.policyengine import runner as policyengine_runner_module
+from axiom_oracles.adapters.policyengine import (
+    taxsim_runner as policyengine_taxsim_module,
+)
 from axiom_oracles.adapters.policyengine.runner import (
     _normalize_value_for_requested_period,
 )
 from axiom_oracles.adapters.prd import PrdPackageRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
+from axiom_oracles.adapters.taxsim.pins import pinned_version
 from axiom_oracles.core.case import Case, Concepts, Entity
 
 
@@ -413,6 +418,268 @@ def test_policyengine_taxsim_runner_maps_taxsim_output_to_policyengine_targets()
     assert results[0].engine == "policyengine"
     assert results[0].household_id == "case-1"
     assert results[0].values == {"income_tax": 100, "state_income_tax": 25}
+
+
+def _mfs_case(case_id: str, wages: float) -> Case:
+    return Case(
+        case_id=case_id,
+        period="2026",
+        facts={
+            Concepts.STATE_CODE: "CO",
+            Concepts.MARRIED_FILING_SEPARATELY: True,
+        },
+        entities=(
+            Entity(
+                "filer",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: wages,
+                },
+            ),
+        ),
+    )
+
+
+def _single_case(case_id: str, wages: float) -> Case:
+    return Case(
+        case_id=case_id,
+        period="2026",
+        facts={Concepts.STATE_CODE: "CO"},
+        entities=(
+            Entity(
+                "filer",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.YEARLY_EARNED_INCOME: wages,
+                },
+            ),
+        ),
+    )
+
+
+class _RecordingTaxsimRunner:
+    """Fake TAXSIM-row runner: records each frame, echoes one row per input."""
+
+    frames: list
+
+    def __init__(self, input_frame):
+        type(self).frames.append(input_frame)
+        self.input_frame = input_frame
+
+    def run(self, show_progress=False):
+        del show_progress
+        return [
+            {"taxsimid": row["taxsimid"], "fiitax": 10 * row["pwages"], "siitax": 1}
+            for row in self.input_frame.to_dict(orient="records")
+        ]
+
+
+def _recording_runner() -> type[_RecordingTaxsimRunner]:
+    return type("RecordingTaxsimRunner", (_RecordingTaxsimRunner,), {"frames": []})
+
+
+def test_taxsim_package_runner_sends_separate_return_as_mstat_6() -> None:
+    fake = _recording_runner()
+
+    [result] = TaxsimPackageRunner(runner_factory=fake).run_cases(
+        [_mfs_case("mfs-wages-40000", 40_000)],
+        variables=["fiitax"],
+    )
+
+    [row] = fake.frames[0].to_dict(orient="records")
+    assert row["mstat"] == 6
+    assert row["sage"] == 0
+    assert row["swages"] == 0
+    assert result.household_id == "mfs-wages-40000"
+    assert result.values == {"fiitax": 400_000}
+
+
+def test_taxsim_package_runner_validates_pre_supplied_rows_before_running() -> None:
+    fake = _recording_runner()
+    good = Case(
+        case_id="good",
+        period="2026",
+        metadata={"taxsim_input": {"year": 2026, "state": 6, "mstat": 1}},
+    )
+    bad = Case(
+        case_id="bad-separate-row",
+        period="2026",
+        metadata={
+            "taxsim_input": {
+                "year": 2026,
+                "state": 6,
+                "mstat": 6,
+                "page": 40,
+                "swages": 1_000,
+            }
+        },
+    )
+
+    with pytest.raises(ValueError, match=r"'bad-separate-row'.*swages=1000"):
+        TaxsimPackageRunner(runner_factory=fake).run_cases([good, bad], ["fiitax"])
+
+    # One invalid row would abort the binary's whole batch; nothing runs.
+    assert fake.frames == []
+
+
+def test_taxsim_package_runner_rejects_pre_supplied_row_with_bad_mstat() -> None:
+    fake = _recording_runner()
+    case = Case(
+        case_id="legacy-mstat",
+        period="2026",
+        metadata={"taxsim_input": {"year": 2026, "state": 6, "mstat": 3}},
+    )
+
+    with pytest.raises(ValueError, match="'legacy-mstat'.*documented codes"):
+        TaxsimPackageRunner(runner_factory=fake).run_cases([case], ["fiitax"])
+    assert fake.frames == []
+
+
+def test_policyengine_taxsim_runner_gates_separate_rows_without_capability() -> None:
+    fake = _recording_runner()
+
+    results = PolicyEngineTaxsimRunner(
+        runner_factory=fake,
+        married_separate_supported=False,
+    ).run_cases(
+        [_mfs_case("mfs-a", 40_000), _mfs_case("mfs-b", 150_000)],
+        variables=[Concepts.FEDERAL_INCOME_TAX],
+    )
+
+    # Every row is mstat 6, so the emulator never runs.
+    assert fake.frames == []
+    assert [result.household_id for result in results] == ["mfs-a", "mfs-b"]
+    for result in results:
+        assert result.engine == "policyengine"
+        assert result.values == {}
+        [error] = result.errors
+        assert "MSTAT_MARRIED_SEPARATE" in error
+        assert f"pinned: {pinned_version()} in taxsim_pins.json" in error
+
+
+def test_policyengine_taxsim_runner_passes_separate_rows_with_capability() -> None:
+    fake = _recording_runner()
+    cases = [_mfs_case("mfs-a", 40_000), _mfs_case("mfs-b", 150_000)]
+
+    results = PolicyEngineTaxsimRunner(
+        runner_factory=fake,
+        married_separate_supported=True,
+    ).run_cases(cases, variables=[Concepts.FEDERAL_INCOME_TAX])
+
+    [frame] = fake.frames
+    rows = frame.to_dict(orient="records")
+    # The emulator receives the projected rows unchanged, mstat 6 included.
+    assert [row["mstat"] for row in rows] == [6, 6]
+    assert [row["sage"] for row in rows] == [0, 0]
+    assert [row["swages"] for row in rows] == [0, 0]
+    assert [result.household_id for result in results] == ["mfs-a", "mfs-b"]
+    assert [result.values for result in results] == [
+        {"income_tax": 400_000},
+        {"income_tax": 1_500_000},
+    ]
+    assert all(result.errors == () for result in results)
+
+
+def test_policyengine_taxsim_runner_runs_only_non_separate_rows_in_mixed_batch() -> (
+    None
+):
+    fake = _recording_runner()
+    cases = [
+        _single_case("single-a", 20_000),
+        _mfs_case("mfs-b", 40_000),
+        _single_case("single-c", 60_000),
+    ]
+
+    results = PolicyEngineTaxsimRunner(
+        runner_factory=fake,
+        married_separate_supported=False,
+    ).run_cases(cases, variables=[Concepts.FEDERAL_INCOME_TAX])
+
+    [frame] = fake.frames
+    rows = frame.to_dict(orient="records")
+    assert [row["mstat"] for row in rows] == [1, 1]
+    assert [row["pwages"] for row in rows] == [20_000, 60_000]
+    # Results come back in the callers' case order, the gated case in place.
+    assert [result.household_id for result in results] == [
+        "single-a",
+        "mfs-b",
+        "single-c",
+    ]
+    single_a, mfs_b, single_c = results
+    assert single_a.values == {"income_tax": 200_000}
+    assert single_a.errors == ()
+    assert single_c.values == {"income_tax": 600_000}
+    assert single_c.errors == ()
+    assert mfs_b.values == {}
+    assert len(mfs_b.errors) == 1
+    assert "MSTAT_MARRIED_SEPARATE" in mfs_b.errors[0]
+
+
+def test_policyengine_taxsim_runner_skips_capability_probe_without_separate_rows(
+    monkeypatch,
+) -> None:
+    def fail_if_probed() -> bool:
+        raise AssertionError("capability probed for a batch with no mstat 6 rows")
+
+    monkeypatch.setattr(
+        policyengine_taxsim_module,
+        "emulator_supports_married_separate",
+        fail_if_probed,
+    )
+    fake = _recording_runner()
+
+    [result] = PolicyEngineTaxsimRunner(runner_factory=fake).run_cases(
+        [_single_case("single-a", 20_000)],
+        variables=[Concepts.FEDERAL_INCOME_TAX],
+    )
+
+    assert result.values == {"income_tax": 200_000}
+
+
+@pytest.mark.parametrize(
+    ("marker", "supported"),
+    [(6, True), (None, False), (2, False)],
+    ids=["exported", "absent", "wrong-value"],
+)
+def test_policyengine_taxsim_runner_reads_capability_from_installed_emulator(
+    monkeypatch, marker, supported
+) -> None:
+    input_mapper = ModuleType("policyengine_taxsim.core.input_mapper")
+    if marker is not None:
+        input_mapper.MSTAT_MARRIED_SEPARATE = marker
+    monkeypatch.setitem(
+        sys.modules, "policyengine_taxsim.core.input_mapper", input_mapper
+    )
+    fake = _recording_runner()
+
+    [result] = PolicyEngineTaxsimRunner(runner_factory=fake).run_cases(
+        [_mfs_case("mfs-a", 40_000)],
+        variables=[Concepts.FEDERAL_INCOME_TAX],
+    )
+
+    assert policyengine_taxsim_module.emulator_supports_married_separate() is (
+        supported
+    )
+    if supported:
+        assert len(fake.frames) == 1
+        assert result.values == {"income_tax": 400_000}
+    else:
+        assert fake.frames == []
+        assert result.values == {}
+        assert "MSTAT_MARRIED_SEPARATE" in result.errors[0]
+
+
+def test_policyengine_taxsim_capability_is_absent_without_the_package(
+    monkeypatch,
+) -> None:
+    # A None entry in sys.modules makes the import raise ImportError.
+    monkeypatch.setitem(sys.modules, "policyengine_taxsim.core.input_mapper", None)
+
+    assert policyengine_taxsim_module.emulator_supports_married_separate() is False
 
 
 def test_policyengine_taxsim_pairs_prefer_canonical_concepts_on_shared_columns() -> (

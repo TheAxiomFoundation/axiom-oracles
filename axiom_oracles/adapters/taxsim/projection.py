@@ -2,12 +2,40 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import replace
+from math import isnan
 from typing import Any
 
 from ...core.case import Case, Concepts, Entity
+from ...core.filing import separate_filing
 
 
 TAXSIM_MAX_YEAR = 2026
+
+# TAXSIM-35 marital-status codes, as documented under "4. mstat" at
+# https://taxsim.nber.org/taxsimtest/: 1 single or head of household
+# (unmarried), 2 joint (married), 6 separate (married), 8 dependent taxpayer.
+# TAXSIM itself assigns head of household from the dependent columns.
+TAXSIM_MSTAT_SINGLE = 1
+TAXSIM_MSTAT_JOINT = 2
+TAXSIM_MSTAT_SEPARATE = 6
+TAXSIM_MSTAT_DEPENDENT = 8
+_TAXSIM_MSTAT_CODES = frozenset(
+    {
+        TAXSIM_MSTAT_SINGLE,
+        TAXSIM_MSTAT_JOINT,
+        TAXSIM_MSTAT_SEPARATE,
+        TAXSIM_MSTAT_DEPENDENT,
+    }
+)
+
+# Secondary-taxpayer (spouse) input columns. On the pinned taxsimtest binary
+# (policyengine-taxsim 2.30.0, taxsim_pins.json), a non-zero value in any of
+# them on an mstat 1, 6 or 8 row stops the whole batch with STOP 1 ("Non-joint
+# return with non-zero sage" or "Non-joint return with spousal income"). The
+# binary writes those diagnostics to stdout, which policyengine-taxsim's
+# TaxsimRunner redirects to a temporary file it deletes, raising only the
+# stderr text "STOP 1".
+_TAXSIM_SPOUSE_COLUMNS = ("sage", "swages", "ssemp", "sui", "sbusinc", "sprofinc")
 
 _STATE_FIPS = {
     "AL": 1,
@@ -187,8 +215,24 @@ def taxsim_input_for_case(
     if not people:
         raise RuntimeError("TAXSIM projection requires at least one person entity.")
 
+    filing = separate_filing(case)
     head = _head(people)
     spouse = _spouse(people, head)
+    if filing.married_filing_separately and spouse is not None:
+        raise RuntimeError(
+            f"Case {case.case_id!r} is a married-filing-separately return but "
+            f"carries a spouse entity ({spouse.entity_id!r}); a separate "
+            "return's Case holds the filer and dependents only."
+        )
+    if filing.married_filing_separately:
+        # One spouse's separate return: the Case holds no spouse entity, so
+        # every secondary-taxpayer column below is 0 and every household sum
+        # covers the filer alone.
+        mstat = TAXSIM_MSTAT_SEPARATE
+    elif spouse is not None:
+        mstat = TAXSIM_MSTAT_JOINT
+    else:
+        mstat = TAXSIM_MSTAT_SINGLE
     dependents = [
         person for person in people if person is not head and person is not spouse
     ]
@@ -203,7 +247,7 @@ def taxsim_input_for_case(
         "taxsimid": taxsimid if taxsimid is not None else case.case_id,
         "year": _year(case.period),
         "state": _taxsim_state_for_case(case),
-        "mstat": 2 if spouse is not None else 1,
+        "mstat": mstat,
         "page": _age(head),
         "sage": _age(spouse) if spouse is not None else 0,
         "depx": len(dependents),
@@ -254,7 +298,80 @@ def taxsim_input_for_case(
         row[f"age{index}"] = age
     for column in _ZERO_COLUMNS:
         row.setdefault(column, 0)
+    validate_taxsim_row(row, case_id=case.case_id)
     return row
+
+
+def validate_taxsim_row(row: Mapping[str, Any], *, case_id: int | str) -> None:
+    """Reject a TAXSIM input row that would abort the binary's whole batch.
+
+    ``mstat`` must be one of TAXSIM-35's documented codes (1, 2, 6, 8). A
+    missing ``mstat`` is rejected too: policyengine-taxsim's TaxsimRunner
+    zero-fills absent columns while its emulator's input mapper defaults
+    ``mstat`` to 1, so the two engines would read the row differently.
+
+    Every row that is not a joint return (``mstat`` other than 2) must leave
+    the secondary-taxpayer columns ``sage``, ``swages``, ``ssemp``, ``sui``,
+    ``sbusinc`` and ``sprofinc`` at 0. A missing column, ``None`` or NaN
+    counts as 0, which is what TaxsimRunner writes for them; so does an empty
+    string, which the pinned binary accepts on a separate return.
+
+    Raises ValueError naming ``case_id`` and the offending columns, so one bad
+    row fails before the binary runs rather than as an anonymous STOP 1 for
+    the whole batch.
+    """
+
+    raw_mstat = row.get("mstat")
+    mstat = _mstat_code(raw_mstat)
+    if mstat not in _TAXSIM_MSTAT_CODES:
+        raise ValueError(
+            f"Case {case_id!r}: TAXSIM mstat {raw_mstat!r} is not one of "
+            f"TAXSIM-35's documented codes {sorted(_TAXSIM_MSTAT_CODES)}."
+        )
+    if mstat == TAXSIM_MSTAT_JOINT:
+        return
+    offending = {
+        column: row[column]
+        for column in _TAXSIM_SPOUSE_COLUMNS
+        if _spouse_column_value(row, column, case_id=case_id) != 0
+    }
+    if offending:
+        listed = ", ".join(f"{column}={value!r}" for column, value in offending.items())
+        raise ValueError(
+            f"Case {case_id!r}: a TAXSIM row with mstat {mstat} (not a joint "
+            f"return) must leave the secondary-taxpayer columns at 0, got "
+            f"{listed}. TAXSIM aborts the whole batch on such a row."
+        )
+
+
+def _mstat_code(value: Any) -> int | None:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if not number.is_integer():
+        return None
+    return int(number)
+
+
+def _spouse_column_value(
+    row: Mapping[str, Any],
+    column: str,
+    *,
+    case_id: int | str,
+) -> float:
+    value = row.get(column)
+    if value is None or value == "":
+        return 0.0
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        raise ValueError(
+            f"Case {case_id!r}: TAXSIM column {column} must be numeric, got {value!r}."
+        ) from None
+    return 0.0 if isnan(number) else number
 
 
 def _sum_fact(people: list[Entity], concept: str) -> float:
