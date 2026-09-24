@@ -8,7 +8,7 @@ _comment: PolicyEngine-attributed mismatch explanations and their Axiom side. Ev
   debt + grandfathered) and may only fall, except through an appended debt_raises
   record (append-only). Monotonicity is checked against every committed version of
   this file. Re-pin with `uv run scripts/pe_axiom_standard.py` after an improvement.
-open_max: 94
+open_max: 87
 grandfathered:
 - source: dashboard/public/data/known_causes.json
   id: co-state-supplement|us-co:regulations/9-ccr-2503-5/3.530#oap_total_monthly_grant_standard|amount_difference
@@ -505,48 +505,6 @@ grandfathered:
 - source: dispositions/uk-tax-benefits-efrs.yaml
   id: dla-higher-mobility-under-3-no-age-gate
   concept: uk:policies/govuk/disability-living-allowance#dla_mobility_component_weekly_amount
-  basis: rows
-  pe_issue: present
-  axiom: missing
-- source: dispositions/us-itemized-taxable-income-deductions-grid.yaml
-  id: itemized-section-68-base-uses-agi-proxy
-  concept: us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions
-  basis: rows
-  pe_issue: present
-  axiom: missing
-- source: dispositions/us-itemized-taxable-income-deductions-grid.yaml
-  id: itemized-section-68-rate-truncated-float32
-  concept: us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions
-  basis: rows
-  pe_issue: present
-  axiom: missing
-- source: dispositions/us-qbid-grid.yaml
-  id: qbid-floor-uses-all-qbi-instead-of-active-business-qbi
-  concept: us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction
-  basis: rows
-  pe_issue: present
-  axiom: missing
-- source: dispositions/us-salt-deduction-grid.yaml
-  id: salt-aggregate-omits-personal-property-tax
-  concept: us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
-  basis: rows
-  pe_issue: present
-  axiom: missing
-- source: dispositions/us-salt-deduction-grid.yaml
-  id: salt-low-agi-engine-cap
-  concept: us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
-  basis: rows
-  pe_issue: present
-  axiom: missing
-- source: dispositions/us-salt-deduction-grid.yaml
-  id: salt-magi-omits-section-911-addback
-  concept: us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
-  basis: rows
-  pe_issue: present
-  axiom: missing
-- source: dispositions/us-savers-grid.yaml
-  id: inclusive-tier-ceilings-enter-next-policyengine-bracket-at-equality
-  concept: us:policies/income_tax/savers_credit_pipeline#federal_savers_credit
   basis: rows
   pe_issue: present
   axiom: missing
