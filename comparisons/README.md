@@ -4,8 +4,8 @@ Each `*.yaml` in this directory declares one oracle comparison — a head-to-hea
 between two engines over a validation population. `scripts/run_comparison.py`
 reads a config, dispatches to the right runner type, writes a JSON report, and
 prints a headline summary. `.github/workflows/comparisons.yml` matrix-runs
-every config in the registry that does not declare `ci: manual` on a weekly
-schedule.
+every config in the registry that does not declare `ci:` routing (below) on
+a weekly schedule.
 
 ## How to run one locally
 
@@ -40,12 +40,21 @@ YAML (with a comment saying why and what unblocks it). The affected-map
 generator then emits `name: null`, the 6-hourly selector routes it to the
 manual lane instead of dispatching a doomed leg, and the weekly matrix skips
 it. Its committed report refreshes only via a supervised
-`run_comparison.py` run. The same holds for a skip-capable suite whose CI legs
-could only re-emit its committed report: the seven SNAP QC suites
-(`*-snap-qc`) declare `ci: manual`, because neither matrix provisions the
-engine binary, the fy-2024-cola rulespec-us checkout, or the QC public-use
-file, and the affected rerun committed re-emissions over four real SNAP QC
-reports on 2026-09-23.
+`run_comparison.py` run.
+
+A suite whose real run needs what the bare matrix runners lack can instead
+declare `ci: <lane>`, naming a workflow that provisions it (`CI_LANES` in
+`scripts/generate_affected_map.py`). The map keeps its registry name and adds
+`lane`; the 6-hourly selector hands a stale one to that lane's workflow, never
+the bare matrix; and the weekly matrix skips it. The six SNAP QC suites whose
+compositions are on rulespec-us main declare `ci: snap-qc-replay`: neither
+bare matrix provisions the engine binary, the fy-2024-cola rulespec-us
+checkout, or the QC public-use file, so there a leg could only re-emit (on
+2026-09-23 the affected rerun committed such re-emissions over five real SNAP
+QC reports). The affected rerun replays them live through
+`.github/workflows/snap-qc-replay.yml` and commits a report only when the
+replay is live and exact. `tx-snap-qc` stays `ci: manual` until its
+composition lands.
 
 Reports must carry real rulespec SHAs: `provenance.rulespecs[].sha` is what
 `select_affected_suites.py` diffs against repo HEADs, and a `null` SHA means
@@ -244,19 +253,21 @@ dated `2025-10-01` and true-period FY2024 evaluation is impossible today (see th
 playbook and TheAxiomFoundation/rulespec-us#759). Suites: `co-snap-qc`,
 `ny-snap-qc` (847 reviews including the 107 NYSCAP units), `ca-snap-qc`
 (883 reviews), `az-snap-qc`, `ga-snap-qc`, `md-snap-qc`, and `tx-snap-qc`
-(its composition is not on rulespec-us main yet); all seven declare
-`ci: manual` (see above). The runner **skips gracefully**
+(its composition is not on rulespec-us main yet). The six run in the
+`snap-qc-replay` lane and `tx-snap-qc` is `ci: manual` (see above). The runner
+**skips gracefully**
 — re-emitting the committed dashboard report, exactly like
 `euromod-synthetic-compare` — when the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, or the downloaded QC public-use file
 is absent, or while the bridge is still mid-build. Where all three exist it runs
-for real; the checked-in numbers are regenerated there. Because the weekly
-matrix and the affected rerun never have all three, those legs always
-re-emit. The **SNAP QC live replay** workflow
-(`.github/workflows/snap-qc-replay.yml`, weekly and on demand) provisions the
-pinned engine, a rulespec-us checkout, and the pinned PUF. It runs every
-selected suite with `run_comparison.py --require-live` and fails on any re-emission,
-mismatch, or error (`scripts/snap_qc_replay.py check`). See the playbook's §10.
+for real; the checked-in numbers are regenerated there. Neither bare matrix
+has all three, so neither runs these suites. The **SNAP QC live replay**
+workflow (`.github/workflows/snap-qc-replay.yml`, weekly, on demand, and
+called by the affected rerun) provisions the pinned engine, a rulespec-us
+checkout, and the pinned PUF. It runs every selected suite with
+`run_comparison.py --require-live` and fails on any re-emission, mismatch, or
+error (`scripts/snap_qc_replay.py check`); when the affected rerun calls it,
+each exact report is committed. See the playbook's §10.
 
 Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs the
 whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,
@@ -320,8 +331,9 @@ pushing, and rebuilds the commit from scratch on the current tip on every push
 attempt so concurrent matrix siblings can't strand main stale or conflicted.
 The conformance ratchet is never re-pinned from that bot path. Stale suites
 with `name: null` (parameter suites and `ci: manual` suites) are listed as
-awaiting the manual lane, not rerun. The weekly full matrix (`comparisons.yml`)
-stays the backstop for every suite that does not declare `ci: manual`.
+awaiting the manual lane, not rerun; stale suites with a `lane` go to that
+lane's workflow. The weekly full matrix (`comparisons.yml`) stays the backstop
+for every suite without `ci:` routing.
 Regenerate the map after adding a comparison:
 `uv run scripts/generate_affected_map.py`.
 

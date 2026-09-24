@@ -25,9 +25,11 @@ That runs the real replay where the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, and the downloaded QC file all exist,
 and re-emits the committed dashboard report everywhere else (the same graceful-skip
 contract the EUROMOD runner honors). A re-emission never replaces a committed
-report from a real run. The seven suites declare `ci: manual`, so the weekly
-matrix and the 6-hourly affected rerun never dispatch them; a supervised
-`run_comparison.py <st>-snap-qc` run is how the committed reports refresh. The pins, sha256s, and archive members live in
+report from a real run. The six suites whose compositions are on rulespec-us
+main declare `ci: snap-qc-replay` and run in CI only in the live replay lane
+(§10), which the affected rerun calls when rulespec-us moves. `tx-snap-qc`
+declares `ci: manual`: a supervised `run_comparison.py tx-snap-qc` run is its
+only refresh path. The pins, sha256s, and archive members live in
 `axiom_oracles/populations/snap_qc.py::SNAP_QC_PINS`; the loader (`load_qc_units`)
 downloads, verifies, caches, and parses them; the replay harness is
 `axiom_oracles/bridges/snap_qc_compare.py`. Everything below cites the FY2024 QC
@@ -462,20 +464,32 @@ Colorado parameters exactly.
 ## 10. The live CI replay
 
 The weekly matrix (`comparisons.yml`) and the 6-hourly affected rerun
-(`affected-rerun.yml`) dispatch the snap-qc suites to bare runners. Those
-runners have no engine binary and no QC public-use file, so every leg
-re-emits the committed dashboard report (`provenance.reemitted_report:
-true`) and passes whether or not the replay still works. That is how California's replay could
+(`affected-rerun.yml`) used to dispatch the snap-qc suites to bare runners.
+Those runners have no engine binary and no QC public-use file, so every leg
+re-emitted the committed dashboard report (`provenance.reemitted_report:
+true`) and passed whether or not the replay still worked. That is how California's replay could
 stop compiling after rulespec-us#1176 (2026-07-30) with nothing failing: the
 new modified-categorical-eligibility module imports `fy-2026-cola`, which the
 CA FY2024 overlay did not rewrite, and the engine rejects the duplicate
-derived rule `snap_net_income_limit_100_percent_fpl_48_states_dc`.
+derived rule `snap_net_income_limit_100_percent_fpl_48_states_dc`. The
+suites now declare `ci: snap-qc-replay` (TX, pending, `ci: manual`), which
+keeps them off both bare matrices.
 
 `.github/workflows/snap-qc-replay.yml` actually runs the suites. It fires on
 Mondays at 07:17 UTC and on demand (`workflow_dispatch`, with optional
 `suites` and `rulespec_us_ref` inputs). A failing leg is the output. The lane
 never commits; each report and its replay log are uploaded as workflow
 artifacts.
+
+- **Affected rerun.** When rulespec-us moves, `affected-rerun.yml` calls this
+  workflow (`workflow_call`) for the stale `ci: snap-qc-replay` suites, with
+  `publish: true` and `run_kind: affected-rerun`. Each leg whose report passes
+  `check` uploads the files the run wrote under `dashboard/public/data` as
+  `snap-qc-publish-<suite>`, and the rerun's `snap-qc-commit` job commits them
+  through `scripts/commit_refreshed_report.sh`, which regenerates the derived
+  artifacts as for any refresh. A leg that diverges, errors, or re-emits
+  uploads nothing: its committed report stays as it was, and the failed leg
+  is the alarm.
 
 - **Engine.** It builds `axiom-rules-engine` at `axiom_artifact_rules_engine_ref`,
   the pin in rulespec-us `.axiom/workflow-toolchain.toml` that

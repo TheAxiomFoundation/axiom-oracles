@@ -20,15 +20,16 @@ description: >-
   real run's report.
 documentation: docs/snap-qc-oracle-playbook.md
 
-# Not runnable on the CI matrix runners. The replay needs the
-# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
-# modules, and the QC public-use file. Neither the 6-hourly affected rerun nor
-# the weekly matrix provisions them, so there run_comparison.py can only
-# re-emit the committed report; on 2026-09-23 the affected rerun committed
-# such re-emissions over the real NY, CA, AZ, and MD reports. Manual lane
-# only: a supervised run_comparison.py run refreshes the committed report.
-# Drop this marker only for a CI lane that provisions all three.
-ci: manual
+# Runs only in the SNAP QC live replay lane
+# (.github/workflows/snap-qc-replay.yml), which provisions what the bare
+# matrix runners lack: the axiom-rules-engine binary at rulespec-us's artifact
+# pin, a rulespec-us checkout, and the pinned QC public-use file. When
+# rulespec-us moves, the affected rerun hands this suite to that lane and
+# commits its report only if the replay ran live and exact; the weekly matrix
+# skips it, since the lane runs weekly itself. On a bare runner
+# run_comparison.py could only re-emit the committed report, which is how the
+# real NY, CA, AZ, MD, and GA reports were overwritten on 2026-09-23.
+ci: snap-qc-replay
 
 runner:
   type: snap-qc-compare

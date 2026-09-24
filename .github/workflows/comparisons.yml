@@ -43,9 +43,11 @@ jobs:
         # Registry entries only (#299): skip `*.fixtures.yaml` sanity
         # documents, non-registry kinds (parameter-oracles is a
         # parameter-suite-list with no runner — run_comparison.py crashes on
-        # it), and suites declaring `ci: manual` (not CI-runnable; the
-        # affected-rerun selector leaves those to the manual lane for the
-        # same reason).
+        # it), and suites declaring any `ci:` routing: `ci: manual` (not
+        # CI-runnable; the affected-rerun selector leaves those to the manual
+        # lane for the same reason) or `ci: <lane>` (run by that lane's own
+        # workflow, e.g. snap-qc-replay.yml, which provisions what these bare
+        # runners lack).
         run: |
           python3 - <<'PY'
           import json
@@ -62,7 +64,7 @@ jobs:
                   continue
               if not (config.get("runner") or {}).get("type"):
                   continue
-              if config.get("ci") == "manual":
+              if config.get("ci"):
                   continue
               names.append(path.stem)
           if only:

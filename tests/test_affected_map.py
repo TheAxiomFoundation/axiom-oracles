@@ -714,18 +714,26 @@ def test_snap_qc_lane_maps_only_the_root_its_overlay_is_built_from():
     ) == {RULESPEC_US}
 
 
-def test_every_snap_qc_suite_is_manual_and_maps_only_rulespec_us():
-    """Bare CI runners can only re-emit a SNAP QC report, so no snap-qc suite
-    may be dispatched by the affected rerun or the weekly matrix."""
+def test_every_snap_qc_suite_routes_away_from_the_bare_matrix():
+    """Bare CI runners can only re-emit a SNAP QC report, so every snap-qc
+    suite either runs in the live replay lane (keeping its registry name for
+    that lane's workflow) or is manual; none reaches the bare rerun matrix."""
     gam = _load("generate_affected_map.py")
     entries = {e["suite"]: e for e in gam.build_map()["suites"]}
     configs = _snap_qc_configs()
     assert len(configs) >= 7
+    lane_suites = 0
     for config in configs:
         entry = entries[config["dashboard"]["suite"]]
-        assert config.get("ci") == "manual", config["name"]
-        assert entry["name"] is None, config["name"]
         assert entry["repos"] == [RULESPEC_US], config["name"]
+        if config.get("ci") == "snap-qc-replay":
+            lane_suites += 1
+            assert entry["name"] == config["name"]
+            assert entry["lane"] == "snap-qc-replay"
+        else:
+            assert config.get("ci") == "manual", config["name"]
+            assert entry["name"] is None and "lane" not in entry
+    assert lane_suites >= 6
 
 
 def test_snap_qc_map_repos_are_exactly_what_a_real_run_records(tmp_path):
@@ -798,9 +806,73 @@ def test_selector_never_dispatches_snap_qc_and_leaves_fresh_ones_alone():
         # rulespec-us unmoved: fresh, whatever the archived state repos say.
         fresh = sel.select(affected, {**archived, RULESPEC_US: ran_against}, reports)
         assert suite not in {d["suite"] for d in fresh}
-        # rulespec-us moved: stale, but routed to the manual lane.
+        # rulespec-us moved: stale, and routed to the live replay lane (or
+        # the manual lane), never the bare matrix.
         moved = sel.select(affected, {**archived, RULESPEC_US: "b" * 40}, reports)
         decision = next(d for d in moved if d["suite"] == suite)
-        assert decision["name"] is None
         assert config["name"] not in sel.runnable_names(moved)
-        assert suite in sel.manual_suites(moved)
+        if config.get("ci") == "snap-qc-replay":
+            assert decision["lane"] == "snap-qc-replay"
+            assert config["name"] in sel.lane_names(moved, "snap-qc-replay")
+            assert suite not in sel.manual_suites(moved)
+        else:
+            assert decision["name"] is None
+            assert suite in sel.manual_suites(moved)
+
+
+# --- CI lanes (ci: <lane>) ------------------------------------------------------
+
+
+def test_ci_routing_names_lanes_and_rejects_anything_else():
+    gam = _load("generate_affected_map.py")
+
+    def config(**extra):
+        return {"name": "ny-snap-qc", "runner": {"type": "snap-qc-compare"}, **extra}
+
+    assert gam.ci_routing(config()) == ("ny-snap-qc", None)
+    assert gam.ci_routing(config(ci="manual")) == (None, None)
+    assert gam.ci_routing(config(ci="snap-qc-replay")) == (
+        "ny-snap-qc",
+        "snap-qc-replay",
+    )
+    # NEGATIVE: an unknown lane, or a lane for another runner type, fails
+    # loudly rather than silently dropping the suite from every matrix.
+    with pytest.raises(SystemExit, match="unknown ci"):
+        gam.ci_routing(config(ci="snap-qc-live"))
+    with pytest.raises(SystemExit, match="runner type"):
+        gam.ci_routing(
+            {"name": "fiit", "runner": {"type": "axiom-oracles-compare"},
+             "ci": "snap-qc-replay"}
+        )
+
+
+def test_selector_rejects_a_malformed_lane():
+    sel = _load("select_affected_suites.py")
+    for entry in (
+        {"suite": "s", "name": "s", "repos": ["r"], "lane": ""},
+        {"suite": "s", "name": None, "repos": ["r"], "lane": "snap-qc-replay"},
+    ):
+        with pytest.raises(SystemExit, match="malformed lane"):
+            sel.select({"suites": [entry]}, {"r": "x"}, {})
+
+
+def test_lane_suites_leave_the_matrix_for_their_lane_output(monkeypatch, capsys):
+    """force_all (and a normal sweep) put lane suites in lane_<lane>, never in
+    the bare matrix the rerun job dispatches, and never in the manual list."""
+    sel = _load("select_affected_suites.py")
+    monkeypatch.setattr(
+        sel.sys, "argv", ["select_affected_suites.py", "--force-all", "--format", "github"]
+    )
+    assert sel.main() == 0
+    out = dict(
+        line.split("=", 1) for line in capsys.readouterr().out.splitlines() if "=" in line
+    )
+    lane = json.loads(out["lane_snap_qc_replay"])
+    assert int(out["lane_snap_qc_replay_count"]) == len(lane) >= 6
+    matrix = {row["name"] for row in json.loads(out["matrix"])["include"]}
+    assert not matrix & set(lane)
+    assert not set(out["manual"].split()) & set(lane)
+    for config in _snap_qc_configs():
+        if config.get("ci") == "snap-qc-replay":
+            assert config["name"] in lane
+

@@ -18,14 +18,11 @@ description: >-
   real run's report.
 documentation: docs/snap-qc-oracle-playbook.md
 
-# Not runnable on the CI matrix runners. The replay needs the
-# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
-# modules, and the QC public-use file. Neither the 6-hourly affected rerun nor
-# the weekly matrix provisions them, so there run_comparison.py can only
-# re-emit the committed report; on 2026-09-23 the affected rerun committed
-# such re-emissions over the real NY, CA, AZ, and MD reports. Manual lane
-# only: a supervised run_comparison.py run refreshes the committed report.
-# Drop this marker only for a CI lane that provisions all three.
+# Manual lane for now: the Texas composition is not on rulespec-us main
+# (rulespec-us#888, #891), so the live replay lane cannot run it yet. When
+# scripts/snap_qc_replay.py moves tx-snap-qc from PENDING_SUITES to
+# REQUIRED_SUITES, switch this to ci: snap-qc-replay like the other states.
+# On a bare runner run_comparison.py could only re-emit the committed report.
 ci: manual
 
 runner:

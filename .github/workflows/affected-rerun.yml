@@ -6,8 +6,12 @@ name: Affected suite rerun
 # (comparisons.yml) stays the backstop; this keeps the reports fresh between
 # weekly runs without paying for the whole matrix every 6 hours. Suites whose
 # map entry has `name: null` (parameter suites, and suites declaring
-# `ci: manual`, such as the SNAP QC replays, which these runners could only
-# re-emit) are reported as awaiting the manual lane, never dispatched.
+# `ci: manual`) are reported as awaiting the manual lane, never dispatched.
+# Suites declaring `ci: snap-qc-replay` (the SNAP QC replays, which these bare
+# runners could only re-emit) go to the snap-qc-replay job instead: it calls
+# snap-qc-replay.yml, which provisions the pinned engine, a rulespec-us
+# checkout, and the pinned QC file, and snap-qc-commit commits each report
+# that replay proved live and exact.
 #
 # Selection is deterministic and committed:
 #   comparisons/affected_map.json   suite → affected rulespec repos
@@ -60,6 +64,8 @@ jobs:
     outputs:
       matrix: ${{ steps.select.outputs.matrix }}
       count: ${{ steps.select.outputs.count }}
+      snap_qc: ${{ steps.select.outputs.lane_snap_qc_replay }}
+      snap_qc_count: ${{ steps.select.outputs.lane_snap_qc_replay_count }}
     steps:
       - uses: actions/checkout@v4
 
@@ -131,6 +137,10 @@ jobs:
             echo "Selected $count CI-runnable suite(s) to rerun:"
             python3 -c "import json,sys; [print('-', x['name']) for x in json.loads(sys.argv[1])['include']]" \
               '${{ steps.select.outputs.matrix }}' || true
+            echo ""
+            echo "SNAP QC suites for the live replay lane: ${{ steps.select.outputs.lane_snap_qc_replay_count }}"
+            python3 -c "import json,sys; [print('-', x) for x in json.loads(sys.argv[1] or '[]')]" \
+              '${{ steps.select.outputs.lane_snap_qc_replay }}' || true
             if [ "$manual_count" != "0" ]; then
               echo ""
               echo "$manual_count stale suite(s) have no CI-runnable registry name and await the manual lane (parameter suites: scripts/run_parameter_comparisons.py; ci-manual registry suites: a supervised run_comparison.py run):"
@@ -250,4 +260,85 @@ jobs:
         # Fails loudly if the push never lands.
         run: |
           scripts/commit_refreshed_report.sh "${{ matrix.name }}" \
+            "${{ github.event.repository.default_branch }}"
+
+  # Stale SNAP QC suites (ci: snap-qc-replay) never go to the bare matrix
+  # above: there run_comparison.py could only re-emit the committed report.
+  # The live replay lane provisions what they need, replays them with
+  # --require-live, and uploads each report its `check` accepts as live and
+  # exact (snap-qc-publish-<suite>). It never commits itself.
+  snap-qc-replay:
+    needs: select
+    if: needs.select.outputs.snap_qc_count > 0
+    permissions:
+      contents: read
+    uses: ./.github/workflows/snap-qc-replay.yml
+    with:
+      suites: ${{ join(fromJson(needs.select.outputs.snap_qc), ' ') }}
+      run_kind: affected-rerun
+      publish: true
+
+  # Commits each live, exact SNAP QC report through the same script as the
+  # bare legs. A suite whose replay diverged, errored, or re-emitted uploaded
+  # nothing: its leg only warns (the replay job already failed), and the
+  # committed report stays as it is.
+  snap-qc-commit:
+    needs: [select, snap-qc-replay]
+    if: ${{ !cancelled() && needs.select.outputs.snap_qc_count > 0 }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: ${{ fromJson(needs.select.outputs.snap_qc) }}
+    steps:
+      - name: Download ${{ matrix.suite }}'s live report
+        id: bundle
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: snap-qc-publish-${{ matrix.suite }}
+          path: ${{ runner.temp }}/publish
+
+      - name: No live, exact report for ${{ matrix.suite }}
+        if: steps.bundle.outcome != 'success'
+        run: |
+          echo "::warning title=${{ matrix.suite }} not committed::The live replay produced no exact report for ${{ matrix.suite }} (see the snap-qc-replay job); its committed report is unchanged."
+
+      - name: Checkout axiom-oracles
+        if: steps.bundle.outcome == 'success'
+        uses: actions/checkout@v4
+        with:
+          path: axiom-oracles
+          # A real branch, not a detached HEAD: the commit script fetches,
+          # resets, and pushes it.
+          ref: ${{ github.event.repository.default_branch }}
+
+      - uses: actions/setup-python@v5
+        if: steps.bundle.outcome == 'success'
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+        if: steps.bundle.outcome == 'success'
+        with:
+          enable-cache: true
+          cache-dependency-glob: axiom-oracles/uv.lock
+
+      - name: Install axiom-oracles
+        if: steps.bundle.outcome == 'success'
+        working-directory: axiom-oracles
+        run: uv sync
+
+      - name: Commit ${{ matrix.suite }}'s live report + derived artifacts
+        if: steps.bundle.outcome == 'success'
+        working-directory: axiom-oracles
+        env:
+          PYTHON: ${{ github.workspace }}/axiom-oracles/.venv/bin/python
+        run: |
+          tar -xf "$RUNNER_TEMP/publish/report.tar"
+          git status --short -- dashboard/public/data
+          scripts/commit_refreshed_report.sh "${{ matrix.suite }}" \
             "${{ github.event.repository.default_branch }}"

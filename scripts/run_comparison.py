@@ -3895,8 +3895,10 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
     The replay needs three things a shared CI runner does not carry: the built
     ``axiom-rules-engine`` binary, a rulespec-us checkout whose SNAP COLA modules
     are dated for the target fiscal year (the overlay base), and the downloaded
-    QC public-use file. The snap-qc suites therefore declare ``ci: manual``, so
-    neither the weekly matrix nor the affected rerun dispatches them. When any
+    QC public-use file. The snap-qc suites therefore never run on the bare
+    weekly or affected-rerun matrices: they declare ``ci: snap-qc-replay`` (the
+    live replay lane, which provisions all three) or, while a composition is
+    pending, ``ci: manual``. When any
     prerequisite is absent — or the bridge is still mid-build — this runner
     **skips gracefully**, re-emitting the committed dashboard report exactly like
     ``_run_euromod_synthetic_compare``; that re-emission never replaces a
