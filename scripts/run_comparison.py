@@ -916,6 +916,13 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         engine = {**engine, "binary": str(engine_binary)}
     if engine_binary_sha256:
         engine = {**engine, "binary_sha256": str(engine_binary_sha256)}
+    # A re-emission executed no engine. Recording the leg's own checkout here
+    # labels the copied numbers with an engine that never produced them, and
+    # _stamp_report_provenance then writes that version into the report's
+    # engines.versions: re-emissions of the BE marital-quotient report turned
+    # its real run's axiom_rules_engine 0.1.0 into 0.2.2.
+    if runner.get("_reemitted_report"):
+        engine = {}
 
     # Oracle identity (the side compared to). Derived from the runner type +
     # the pins each runner installs, so the report says which oracle stack ran.
@@ -5547,8 +5554,8 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
     """Whether a skip publish would overwrite its preserved bound source.
 
     The pointer is read from the existing dashboard copy, because that is the
-    evidence set a skip preserves: a versioned copy, or any copy from a real
-    run (see ``_write_dashboard_report``).  Resolution mirrors
+    evidence set a skip preserves: whatever copy is already there (see
+    ``_write_dashboard_report``).  Resolution mirrors
     ``apply_dispositions._resolve_source_pointer``: only a repo-relative path
     resolving beneath ``reports/`` is eligible.  Digest and fullness remain
     the consumer's fail-closed responsibility; this helper only prevents the
@@ -5556,16 +5563,12 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
     can verify them.
     """
 
-    from axiom_oracles.provenance import is_real_run_report
-
     target = DASHBOARD_DATA_DIR / filename
     try:
         existing = json.loads(target.read_text())
     except (OSError, json.JSONDecodeError):
         return False
-    if not isinstance(existing, dict) or not (
-        _uses_versioned_case_chunks(existing) or is_real_run_report(existing)
-    ):
+    if not isinstance(existing, dict):
         return False
     block = (existing.get("summary") or {}).get("dispositioned")
     pointer = block.get("source_report") if isinstance(block, dict) else None
@@ -5582,21 +5585,6 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
     candidate = (REPO_ROOT / raw_path).resolve()
     reports_dir = (REPO_ROOT / "reports").resolve()
     return reports_dir in candidate.parents and candidate == output.resolve()
-
-
-def committed_report_is_real(path: Path) -> bool:
-    """Whether ``path`` holds a report that was not itself a re-emission.
-
-    See :func:`axiom_oracles.provenance.is_real_run_report`; a missing or
-    unparseable file is not a real report.
-    """
-    from axiom_oracles.provenance import is_real_run_report
-
-    try:
-        report = json.loads(path.read_text())
-    except (OSError, ValueError):
-        return False
-    return is_real_run_report(report)
 
 
 def _write_dashboard_report(
@@ -5623,9 +5611,9 @@ def _write_dashboard_report(
     same-day skip from replacing those prior source bytes before this return.
 
     The flag also covers unversioned reports: a skip leaves any committed
-    report from a real run byte-for-byte unchanged (``committed_report_is_real``).
-    It rewrites only a committed report that was itself a re-emission, or
-    publishes the first copy when none is committed.
+    report byte-for-byte unchanged, whether it came from a real run or was
+    itself a re-emission. It publishes only the first copy, when none is
+    committed.
     """
 
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -5644,16 +5632,19 @@ def _write_dashboard_report(
         )
         return
     target = DASHBOARD_DATA_DIR / filename
-    if preserve_existing_versioned and committed_report_is_real(target):
-        # A re-emission copies the committed numbers, so publishing it can
-        # only overwrite a real run's provenance (the rulespec SHAs it ran
+    if preserve_existing_versioned and target.exists():
+        # A re-emission copies the committed numbers, so publishing it over a
+        # committed copy changes labels, never results. Over a real run it
+        # replaces the provenance that run recorded (the rulespec SHAs it ran
         # against, its run kind and date) with "re-emitted, SHA unknown", and
-        # once that is committed the affected-rerun selector can never again
-        # prove the suite fresh. On 2026-09-23 that replaced five real SNAP QC
-        # reports.
+        # the affected-rerun selector can then never again prove the suite
+        # fresh; on 2026-09-23 that replaced five real SNAP QC reports. Over
+        # an earlier re-emission it only moves generated_at, which let the
+        # affected rerun commit a generated_at-only diff for 35 EUROMOD,
+        # UKMOD and tariff suites sweep after sweep.
         print(
-            f"Preserved real dashboard report {filename} for skipped "
-            f"{report['suite']}: a re-emission never replaces a real run"
+            f"Preserved committed dashboard report {filename} for skipped "
+            f"{report['suite']}: a re-emission never replaces a committed report"
         )
         return
     dashboard_config = dashboard_config or {}

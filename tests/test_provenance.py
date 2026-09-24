@@ -503,3 +503,62 @@ def test_reemit_strips_shas_from_explicitly_configured_roots(tmp_path):
     block = run_comparison._build_run_provenance(config, "snap-qc-compare", output)
     for entry in block.get("rulespecs", []):
         assert entry.get("sha") is None, entry
+
+
+def test_reemit_records_no_engine_and_keeps_the_copied_engine_label(
+    tmp_path, monkeypatch
+):
+    """A re-emission executed no engine, so it must not claim the leg's own
+    checkout. Recording it relabeled copied numbers: re-emissions of the BE
+    marital-quotient report turned its real run's axiom_rules_engine 0.1.0
+    into 0.2.2 in the report body (engines.versions)."""
+    run_comparison = _load_run_comparison()
+    import axiom_oracles.provenance as provenance_module
+
+    monkeypatch.setattr(
+        provenance_module,
+        "engine_provenance",
+        lambda _repo: {
+            "axiom_rules_engine_sha": "e" * 40,
+            "axiom_rules_engine_version": "0.2.2",
+        },
+    )
+    output = tmp_path / "r.json"
+    copied = {
+        "suite": "be-marital-quotient",
+        "engines": {
+            "left": "euromod",
+            "right": "axiom",
+            "versions": {"axiom_rules_engine": "0.1.0"},
+        },
+    }
+    output.write_text(json.dumps(copied, indent=2, sort_keys=True))
+    config = {
+        "name": "be-marital-quotient",
+        "runner": {
+            "type": "euromod-synthetic-compare",
+            "_reemitted_report": True,
+            "axiom_rules_repo": str(tmp_path),
+            "parameters": {"euromod_country": "BE"},
+        },
+    }
+
+    block = run_comparison._build_run_provenance(
+        config, "euromod-synthetic-compare", output
+    )
+    assert "engine" not in block
+    run_comparison._stamp_report_provenance(output, block)
+    assert json.loads(output.read_text())["engines"]["versions"] == {
+        "axiom_rules_engine": "0.1.0"
+    }
+
+    # A real run still records, and labels the report with, the engine it ran.
+    config["runner"].pop("_reemitted_report")
+    block = run_comparison._build_run_provenance(
+        config, "euromod-synthetic-compare", output
+    )
+    assert block["engine"]["axiom_rules_engine_version"] == "0.2.2"
+    run_comparison._stamp_report_provenance(output, block)
+    assert json.loads(output.read_text())["engines"]["versions"] == {
+        "axiom_rules_engine": "0.2.2"
+    }
