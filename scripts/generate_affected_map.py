@@ -184,6 +184,40 @@ def snap_qc_repos(config: dict) -> set[str]:
     return {slug or _slug("rulespec-us")}
 
 
+#: CI lanes a suite can declare with ``ci: <lane>``: a workflow that
+#: provisions what the bare affected-rerun and weekly matrix runners lack, keyed
+#: to the one runner type it knows how to run. The affected rerun hands a stale
+#: lane suite to that workflow instead of its bare matrix.
+CI_LANES = {"snap-qc-replay": "snap-qc-compare"}
+
+
+def ci_routing(config: dict) -> tuple[str | None, str | None]:
+    """``(name, lane)`` for a registry config's affected-map entry.
+
+    No ``ci`` key: dispatched by the bare rerun matrix under its registry name.
+    ``ci: manual``: not CI-runnable, ``name`` null. ``ci: <lane>``: dispatched
+    by that lane's workflow, keeping its registry name. Anything else, or a
+    lane naming another runner type, fails loudly rather than guessing.
+    """
+    ci = config.get("ci")
+    if ci is None:
+        return config["name"], None
+    if ci == "manual":
+        return None, None
+    runner_type = (config.get("runner") or {}).get("type")
+    if ci not in CI_LANES:
+        raise SystemExit(
+            f"suite {config.get('name')!r} declares unknown ci: {ci!r}; "
+            f"expected manual or one of {sorted(CI_LANES)}"
+        )
+    if CI_LANES[ci] != runner_type:
+        raise SystemExit(
+            f"suite {config.get('name')!r} declares ci: {ci} but its runner "
+            f"type is {runner_type!r}, not {CI_LANES[ci]!r}"
+        )
+    return config["name"], ci
+
+
 def repos_for_registry_config(config: dict) -> set[str]:
     repos: set[str] = set()
     runner = config.get("runner") or {}
@@ -352,6 +386,7 @@ def build_map() -> dict:
         report = (config.get("selector") or {}).get("report") or (
             config.get("dashboard") or {}
         ).get("filename")
+        name, lane = ci_routing(config)
         entry = {
             "suite": suite,
             # The run_comparison.py registry name — what the CI rerun
@@ -361,15 +396,18 @@ def build_map() -> dict:
             # suite key crashes the leg with "unknown comparison".
             # A suite declaring `ci: manual` cannot produce a real report
             # in CI (e.g. or/ut SNAP: the encoder's snap-populace-compare
-            # has no jurisdiction config for them yet; the SNAP QC replays:
-            # no CI matrix provisions the engine or the QC file, so a leg
-            # could only re-emit) — emit null so the selector and the
-            # weekly matrix leave it to the manual lane.
-            "name": None if config.get("ci") == "manual" else config["name"],
+            # has no jurisdiction config for them yet) — emit null so the
+            # selector and the weekly matrix leave it to the manual lane.
+            # A suite declaring `ci: <lane>` (see CI_LANES) keeps its name
+            # and gains `lane`: the selector hands it to that lane's
+            # workflow, never the bare matrix.
+            "name": name,
             "report": report,
             "repos": sorted(repos_for_registry_config(config)),
             "source": f"comparisons/{path.name}",
         }
+        if lane:
+            entry["lane"] = lane
         pinned = pinned_repos_for_registry_config(config)
         if pinned:
             # Freshness for these repos is judged against the pin, not HEAD
@@ -391,7 +429,8 @@ def build_map() -> dict:
             "report; `name` is the run_comparison.py registry name the rerun "
             "matrix dispatches (null = not CI-runnable: parameter suites run "
             "by the manual parameter lane, and registry suites declaring "
-            "`ci: manual` in their YAML)."
+            "`ci: manual` in their YAML). `lane` names the CI workflow that "
+            "runs a suite declaring `ci: <lane>` instead of the bare matrix."
         ),
         "owner": RULESPEC_OWNER,
         "suites": entries,

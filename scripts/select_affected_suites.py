@@ -6,9 +6,9 @@ reports' provenance, emit the suites whose affected repos have moved past the
 SHA their report last ran against — i.e. the reports that are now stale because
 the rules underneath them changed. The 6-hourly workflow reruns only these;
 the weekly full matrix is a CI signal (it uploads reports as artifacts and never
-commits them) for every suite that does not declare ``ci: manual``. A
-``ci: manual`` suite's committed report refreshes only through a supervised
-run.
+commits them) for every suite without ``ci:`` routing. A ``ci: manual`` suite's
+committed report refreshes only through a supervised run, and a ``ci: <lane>``
+suite is run by that lane's workflow.
 
 Inputs:
 
@@ -17,7 +17,9 @@ Inputs:
   matrix must dispatch (explicit ``null`` = not CI-runnable: parameter suites
   run only under the manual ``run_parameter_comparisons.py`` lane, and
   registry suites declaring ``ci: manual`` in their YAML run only under a
-  supervised ``run_comparison.py`` invocation).
+  supervised ``run_comparison.py`` invocation), and, for a suite declaring
+  ``ci: <lane>``, its ``lane``: the CI workflow that runs it instead of the
+  bare matrix (``lane_<lane>`` in the ``github`` output).
 * ``dashboard/public/data/<report>.json`` — each report's
   ``provenance.rulespecs`` (``[{repo, sha}]``) records the SHA it ran against.
 * current HEADs — a JSON map ``{"owner/repo": "<sha>"}`` passed via
@@ -106,6 +108,37 @@ def _registry_name(entry: dict) -> str | None:
     return name
 
 
+def _lane(entry: dict, name: str | None) -> str | None:
+    """The CI lane that runs this entry instead of the bare matrix, if any.
+
+    A lane entry keeps its registry name (the lane's workflow dispatches it);
+    a lane on a null-name entry, or a non-string lane, is a map-schema error.
+    """
+    if "lane" not in entry:
+        return None
+    lane = entry["lane"]
+    suite = entry.get("suite", "<unnamed>")
+    if not isinstance(lane, str) or not lane.strip() or name is None:
+        raise SystemExit(
+            f"affected map entry {suite!r} has a malformed lane {lane!r}; "
+            "regenerate with `uv run scripts/generate_affected_map.py`"
+        )
+    return lane
+
+
+def _decision(entry: dict, name: str | None, reason: str) -> dict:
+    decision = {
+        "suite": entry["suite"],
+        "name": name,
+        "reason": reason,
+        "repos": entry.get("repos", []),
+    }
+    lane = _lane(entry, name)
+    if lane:
+        decision["lane"] = lane
+    return decision
+
+
 def _report_ran_against(report: dict) -> dict[str, str | None]:
     """{repo: sha-or-None} the report's provenance says it ran against."""
     rulespecs = (report.get("provenance") or {}).get("rulespecs") or []
@@ -169,30 +202,17 @@ def select(
     for entry in affected_map.get("suites", []):
         suite = entry["suite"]
         name = _registry_name(entry)  # validate every entry, selected or not
+        _lane(entry, name)
         repos = entry.get("repos", [])
         if not repos:
             continue
         report = reports_by_suite.get(suite)
         if report is None:
-            selected.append(
-                {
-                    "suite": suite,
-                    "name": name,
-                    "reason": "no committed report",
-                    "repos": repos,
-                }
-            )
+            selected.append(_decision(entry, name, "no committed report"))
             continue
         ran_against = _report_ran_against(report)
         if not ran_against:
-            selected.append(
-                {
-                    "suite": suite,
-                    "name": name,
-                    "reason": "report has no provenance",
-                    "repos": repos,
-                }
-            )
+            selected.append(_decision(entry, name, "report has no provenance"))
             continue
         pinned = entry.get("pinned") or {}
         reasons: list[str] = []
@@ -226,14 +246,7 @@ def select(
                     f"{repo}: {recorded[:12]} → {head[:12]}"
                 )
         if reasons:
-            selected.append(
-                {
-                    "suite": suite,
-                    "name": name,
-                    "reason": "; ".join(reasons),
-                    "repos": repos,
-                }
-            )
+            selected.append(_decision(entry, name, "; ".join(reasons)))
     return selected
 
 
@@ -248,14 +261,7 @@ def force_all_selection(affected_map: dict) -> list[dict]:
         name = _registry_name(entry)
         if not entry.get("repos"):
             continue
-        selected.append(
-            {
-                "suite": entry["suite"],
-                "name": name,
-                "reason": "force_all",
-                "repos": entry["repos"],
-            }
-        )
+        selected.append(_decision(entry, name, "force_all"))
     return selected
 
 
@@ -267,16 +273,32 @@ def runnable_names(selected: list[dict]) -> list[str]:
     registry suites run only under a supervised ``run_comparison.py``
     invocation) are excluded: dispatching a parameter suite crashes the matrix
     leg with "unknown comparison", and a ci-manual suite is one CI cannot
-    execute at all. Malformed names never reach here —
-    ``_registry_name`` fails loudly during selection. Order follows first
-    appearance.
+    execute at all. Decisions carrying a ``lane`` belong to that lane's
+    workflow (see ``lane_names``), never the bare matrix. Malformed names
+    never reach here — ``_registry_name`` fails loudly during selection. Order
+    follows first appearance.
     """
     names: list[str] = []
     for decision in selected:
         name = decision.get("name")
-        if name is not None and name not in names:
+        if name is not None and not decision.get("lane") and name not in names:
             names.append(name)
     return names
+
+
+def lane_names(selected: list[dict], lane: str) -> list[str]:
+    """The deduplicated registry names ``lane``'s workflow must run."""
+    names: list[str] = []
+    for decision in selected:
+        name = decision.get("name")
+        if decision.get("lane") == lane and name not in names:
+            names.append(name)
+    return names
+
+
+def lanes(affected_map: dict) -> list[str]:
+    """Every CI lane the map routes suites to."""
+    return sorted({e["lane"] for e in affected_map.get("suites", []) if e.get("lane")})
 
 
 def manual_suites(selected: list[dict]) -> list[str]:
@@ -304,7 +326,7 @@ def main() -> int:
         help="lines: one registry name per line; json: full decisions "
         "(including non-runnable ones); matrix: GitHub Actions include-list "
         "JSON; github: $GITHUB_OUTPUT lines (matrix, count, manual_count, "
-        "manual).",
+        "manual, and lane_<lane> / lane_<lane>_count per CI lane).",
     )
     args = parser.parse_args()
 
@@ -335,6 +357,15 @@ def main() -> int:
             file=sys.stderr,
         )
 
+    for lane in lanes(affected_map):
+        lane_suites = lane_names(selected, lane)
+        if lane_suites:
+            print(
+                f"note: {len(lane_suites)} stale suite(s) go to the {lane} lane: "
+                + ", ".join(lane_suites),
+                file=sys.stderr,
+            )
+
     if args.format == "json":
         print(json.dumps(selected, indent=2))
     elif args.format == "matrix":
@@ -348,6 +379,13 @@ def main() -> int:
         print(f"count={len(names)}")
         print(f"manual_count={len(manual)}")
         print("manual=" + " ".join(manual))
+        # One JSON list per CI lane the map declares (even when empty), keyed
+        # lane_<lane with - as _>, for that lane's workflow call.
+        for lane in lanes(affected_map):
+            key = "lane_" + lane.replace("-", "_")
+            lane_suites = lane_names(selected, lane)
+            print(f"{key}=" + json.dumps(lane_suites, separators=(",", ":")))
+            print(f"{key}_count={len(lane_suites)}")
     else:
         for name in names:
             print(name)

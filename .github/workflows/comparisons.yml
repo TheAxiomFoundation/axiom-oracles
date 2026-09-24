@@ -43,9 +43,11 @@ jobs:
         # Registry entries only (#299): skip `*.fixtures.yaml` sanity
         # documents, non-registry kinds (parameter-oracles is a
         # parameter-suite-list with no runner — run_comparison.py crashes on
-        # it), and suites declaring `ci: manual` (not CI-runnable; the
-        # affected-rerun selector leaves those to the manual lane for the
-        # same reason).
+        # it), and suites declaring any `ci:` routing: `ci: manual` (not
+        # CI-runnable; the affected-rerun selector leaves those to the manual
+        # lane for the same reason) or `ci: <lane>` (run by that lane's own
+        # workflow, e.g. snap-qc-replay.yml, which provisions what these bare
+        # runners lack).
         run: |
           python3 - <<'PY'
           import json
@@ -54,7 +56,7 @@ jobs:
           import yaml
           only = os.environ.get("ONLY", "").strip()
           names = []
-          manual = []
+          routed = {}
           for path in sorted(Path("comparisons").glob("*.yaml")):
               if path.name.endswith(".fixtures.yaml"):
                   continue
@@ -63,15 +65,20 @@ jobs:
                   continue
               if not (config.get("runner") or {}).get("type"):
                   continue
-              if config.get("ci") == "manual":
-                  manual.append(path.stem)
+              if config.get("ci"):
+                  routed[path.stem] = config["ci"]
                   continue
               names.append(path.stem)
           if only:
-              if only in manual:
-                  raise SystemExit(
-                      f"{only} declares ci: manual (see comparisons/{only}.yaml); "
+              if only in routed:
+                  route = routed[only]
+                  hint = (
                       "run it with a supervised run_comparison.py"
+                      if route == "manual"
+                      else f"run it through the {route} lane workflow"
+                  )
+                  raise SystemExit(
+                      f"{only} declares ci: {route} (see comparisons/{only}.yaml); {hint}"
                   )
               names = [n for n in names if n == only]
               if not names:

@@ -454,12 +454,52 @@ def _steps(job: str) -> list[dict]:
     return _workflow()["jobs"][job]["steps"]
 
 
-def test_workflow_runs_weekly_and_on_demand_only():
+def test_workflow_runs_weekly_on_demand_and_when_called():
     workflow = _workflow()
     triggers = workflow.get("on", workflow.get(True))  # YAML 1.1 reads `on` as True
-    assert set(triggers) == {"schedule", "workflow_dispatch"}
+    assert set(triggers) == {"schedule", "workflow_dispatch", "workflow_call"}
     assert triggers["schedule"][0]["cron"].split()[-1] == "1"  # weekly (Mondays)
     assert workflow["permissions"] == {"contents": "read"}
+    called = triggers["workflow_call"]["inputs"]
+    # Only a caller that commits (the affected rerun) asks for publish bundles.
+    assert called["publish"] == {
+        **called["publish"], "type": "boolean", "default": False
+    }
+    assert called["run_kind"]["type"] == "string"
+    assert set(called) >= set(triggers["workflow_dispatch"]["inputs"])
+
+
+def test_required_suites_run_in_the_live_lane_and_pending_ones_stay_manual():
+    """The replay lane can run exactly REQUIRED_SUITES, so exactly those route
+    the affected rerun to it (ci: snap-qc-replay); a pending suite has no
+    composition on rulespec-us main and stays ci: manual until promoted."""
+    registered = replay.registered_suites()
+    for name in replay.REQUIRED_SUITES:
+        assert registered[name].get("ci") == "snap-qc-replay", name
+    for name in replay.PENDING_SUITES:
+        assert registered[name].get("ci") == "manual", name
+
+
+def test_publish_bundles_only_a_live_exact_report():
+    steps = _steps("replay")
+    names = [step.get("name", "") for step in steps]
+    check = next(i for i, step in enumerate(steps) if "snap_qc_replay.py check" in step.get("run", ""))
+    bundle = next(i for i, name in enumerate(names) if name.startswith("Bundle"))
+    upload = next(i for i, name in enumerate(names) if name.startswith("Upload ${{ matrix.suite }}'s live report"))
+    assert check < bundle < upload
+    for index in (bundle, upload):
+        condition = steps[index]["if"]
+        assert "inputs.publish" in condition and "success()" in condition
+    assert "dashboard/public/data" in steps[bundle]["run"]
+    assert steps[upload]["with"]["name"] == "snap-qc-publish-${{ matrix.suite }}"
+    assert steps[upload]["with"]["if-no-files-found"] == "error"
+    # A publishing call only needs the replays.
+    assert "!inputs.publish" in _workflow()["jobs"]["live-tests"]["if"]
+
+
+def test_run_kind_input_overrides_the_trigger_default():
+    env = next(step for step in _steps("replay") if step.get("id") == "replay")["env"]
+    assert env["AXIOM_ORACLES_RUN_KIND"].startswith("${{ inputs.run_kind ||")
 
 
 def test_every_job_checks_rulespec_us_out_under_its_repo_basename():
