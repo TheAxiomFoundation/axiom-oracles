@@ -805,16 +805,19 @@ def resolve_program_path(
 ) -> Path:
     if override is not None:
         return override.resolve()
-    cwd_program = Path.cwd() / config.program_relative_path
-    if cwd_program.exists():
-        return cwd_program.resolve()
     # The rulespec-us monorepo's jurisdiction directory is the only live copy
     # of a state's rules: every standalone rulespec-us-<st> repo was archived
-    # into rulespec-us/us-<st> on 2026-06-27, and it is the only layout
+    # into rulespec-us/us-<st> in June 2026, and it is the only layout
     # post-hard-cut engines resolve imports from (a state repo is not a valid
-    # engine root). There is no standalone fallback, since an archived clone
-    # can only serve frozen rules; a missing program fails at load, naming
-    # this path.
+    # engine root). Run from inside such a directory (a rulespec-us worktree's
+    # us-co/), its program wins; run from anywhere else, including an archived
+    # standalone clone, the workspace's monorepo copy is read. There is no
+    # standalone fallback, since an archived clone can only serve frozen
+    # rules; a missing program fails at load, naming the monorepo path.
+    cwd = Path.cwd()
+    cwd_program = cwd / config.program_relative_path
+    if cwd.name == config.jurisdiction and cwd_program.exists():
+        return cwd_program.resolve()
     return (
         workspace_root / "rulespec-us" / config.jurisdiction / config.program_relative_path
     ).resolve()

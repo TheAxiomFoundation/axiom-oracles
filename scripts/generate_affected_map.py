@@ -23,7 +23,11 @@ Derivation, per suite, unions three signals (all deterministic):
    monorepo absorbed it, and every harness this map covers reads the state
    layer from ``rulespec-us/us-<st>``.
    ``axiom_oracles.provenance.canonical_rulespec_slug`` folds absorbed names
-   (``ABSORBED_RULESPEC_REPOS``), so no emitted repo is archived.
+   (``ABSORBED_RULESPEC_REPOS``) in the path and prefix signals. A declared
+   ``rulespec_remote`` stays as-is, as the report stamper keeps a git remote:
+   a harness that clones an archived remote really reads it, and
+   ``tests/test_affected_map.py`` fails on any archived or missing repo in
+   the map.
 3. **parameter-suite ``file:`` prefixes** — the non-registry
    ``parameter-oracles.yaml`` names files like ``us-ga/policies/…`` whose top
    path segment maps to a rulespec repo the same way.

@@ -217,9 +217,10 @@ def test_parameter_suite_entries_use_file_prefix():
 
 # --- absorbed state repos: nothing mapped may be archived --------------------
 #
-# Every TheAxiomFoundation/rulespec-us-<st> repo was archived on 2026-06-27
-# ("ARCHIVED: absorbed into rulespec-us/us-<st>"), and ten more state names the
-# map once emitted never existed. An archived repo's HEAD never moves and a
+# Every TheAxiomFoundation/rulespec-us-<st> repo was archived in June 2026
+# (de/id/ma/nh/ok on 2026-06-13, the other 13 on 2026-06-27) as "ARCHIVED:
+# absorbed into rulespec-us/us-<st>", and ten more state names the map once
+# emitted never existed. An archived repo's HEAD never moves and a
 # missing one is never queried, so a suite mapped to either could never go
 # stale, and no report could prove it fresh against the rules the harness
 # reads. These are the rulespec repos GitHub reported archived on 2026-09-24
@@ -304,7 +305,7 @@ def test_every_archived_state_repo_folds_into_the_monorepo():
     for name in ARCHIVED_RULESPEC_REPOS - absorbed:
         assert name not in ABSORBED_RULESPEC_REPOS, name
         assert gam._slug(name) == f"TheAxiomFoundation/{name}"
-    # All 50 states and DC, through every signal the generator reads.
+    # All 50 states and DC, through the prefix and path signals.
     assert len(US_STATE_CODES) == 51
     for code in US_STATE_CODES:
         assert gam._repo_from_prefix(f"us-{code}") == "TheAxiomFoundation/rulespec-us"
@@ -314,6 +315,12 @@ def test_every_archived_state_repo_folds_into_the_monorepo():
     assert gam._repo_from_prefix("uk-kingston-upon-thames") == (
         "TheAxiomFoundation/rulespec-uk"
     )
+    # A declared remote is kept as-is, like the stamper keeps a git remote: a
+    # harness cloning it reads the archived repo, so the map says so and
+    # test_no_mapped_repo_is_archived_or_missing fails the commit.
+    assert gam._repo_from_remote(
+        "https://github.com/TheAxiomFoundation/rulespec-us-co.git"
+    ) == "TheAxiomFoundation/rulespec-us-co"
 
 
 @pytest.mark.parametrize(

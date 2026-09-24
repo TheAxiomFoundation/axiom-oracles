@@ -422,8 +422,9 @@ def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
     rulespec-us/us-<st>, so the program is read from the monorepo's
     jurisdiction directory. NEGATIVE: an archived standalone clone beside it
     (as supervised machines keep) is never a fallback, even when the monorepo
-    copy is missing; the load then fails naming the monorepo path, instead of
-    silently running frozen rules the affected map does not list."""
+    copy is missing or the bridge runs from inside the clone; the load then
+    fails naming the monorepo path, instead of silently running frozen rules
+    the affected map does not list."""
     config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
     workspace = tmp_path / "TheAxiomFoundation"
     standalone = (
@@ -441,6 +442,21 @@ def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
     expected.parent.mkdir(parents=True)
     expected.write_text("monorepo\n")
     assert snap_populace.resolve_program_path(config, workspace, None) == expected
+
+    # Run from inside the archived clone, the monorepo copy still wins.
+    monkeypatch.chdir(workspace / f"rulespec-{jurisdiction}")
+    assert snap_populace.resolve_program_path(config, workspace, None) == expected
+
+    # Run from inside a monorepo jurisdiction directory (e.g. a rulespec-us
+    # worktree's us-co/), that directory's program wins.
+    worktree_dir = tmp_path / "rulespec-us-worktree" / jurisdiction
+    worktree_program = worktree_dir / config.program_relative_path
+    worktree_program.parent.mkdir(parents=True)
+    worktree_program.write_text("worktree\n")
+    monkeypatch.chdir(worktree_dir)
+    assert snap_populace.resolve_program_path(config, workspace, None) == (
+        worktree_program.resolve()
+    )
 
     override = tmp_path / "explicit.yaml"
     assert snap_populace.resolve_program_path(config, workspace, override) == (

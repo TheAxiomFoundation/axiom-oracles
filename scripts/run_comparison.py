@@ -748,11 +748,17 @@ def _complete_rulespecs_from_affected_map(
     Entries that already carry a SHA are untouched, and declared-path entries
     always win over convention lookups. Unresolvable repos keep or gain a
     ``sha: None`` entry so the selector's conservative "cannot prove fresh"
-    reading stays intact. Never raises — provenance must annotate a run,
-    never fail one.
+    reading stays intact. So does a mapped repo that a declared checkout of an
+    absorbed repo folds into (a clone of an archived ``rulespec-us-<st>``,
+    stamped under its own name): that run read frozen rules, not the
+    monorepo, so no monorepo SHA is vouched for and the selector reruns the
+    suite. Never raises — provenance must annotate a run, never fail one.
     """
     try:
-        from axiom_oracles.provenance import resolve_rulespec_checkout
+        from axiom_oracles.provenance import (
+            canonical_rulespec_slug,
+            resolve_rulespec_checkout,
+        )
 
         map_path = COMPARISONS_DIR / "affected_map.json"
         if not map_path.exists():
@@ -769,17 +775,25 @@ def _complete_rulespecs_from_affected_map(
         if not mapped_repos:
             return rulespecs
         by_repo = {e.get("repo"): e for e in rulespecs}
+        read_absorbed_instead = {
+            canonical_rulespec_slug(e["repo"])
+            for e in rulespecs
+            if e.get("repo") and canonical_rulespec_slug(e["repo"]) != e["repo"]
+        }
         completed = list(rulespecs)
         for repo in mapped_repos:
             if by_repo.get(repo, {}).get("sha"):
                 continue
             sha = None
-            if repo == "TheAxiomFoundation/rulespec-us":
-                sha = runner.get("_cloned_rulespec_us_sha")
-            if sha is None:
-                checkout = resolve_rulespec_checkout(repo)
-                if checkout is not None:
-                    sha = _git_head_sha(checkout)
+            # A declared absorbed-repo checkout means the run read frozen
+            # rules in place of this repo: vouch for no SHA of it.
+            if repo not in read_absorbed_instead:
+                if repo == "TheAxiomFoundation/rulespec-us":
+                    sha = runner.get("_cloned_rulespec_us_sha")
+                if sha is None:
+                    checkout = resolve_rulespec_checkout(repo)
+                    if checkout is not None:
+                        sha = _git_head_sha(checkout)
             if repo in by_repo:
                 if sha:
                     by_repo[repo]["sha"] = sha

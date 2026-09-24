@@ -70,9 +70,10 @@ US_STATE_CODES = frozenset(
 )
 
 #: Rulespec repo names whose rules now live in a country monorepo, mapped to
-#: that monorepo. Every standalone ``rulespec-us-<st>`` repo was archived on
-#: 2026-06-27 ("ARCHIVED: absorbed into rulespec-us/us-<st> (full history
-#: preserved)"), and rulespec-uk-kingston-upon-thames the same way into
+#: that monorepo. Every standalone ``rulespec-us-<st>`` repo was archived in
+#: June 2026 (de/id/ma/nh/ok on 2026-06-13, the other 13 on 2026-06-27) as
+#: "ARCHIVED: absorbed into rulespec-us/us-<st> (full history preserved)", and
+#: rulespec-uk-kingston-upon-thames the same way (2026-06-13) into
 #: ``rulespec-uk/uk-kingston-upon-thames``. States that never had a standalone
 #: repo map the same way: ``us-<st>`` names a directory of rulespec-us, not a
 #: repo. An archived repo never moves, so a suite mapped to one could never
@@ -163,7 +164,9 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
     otherwise from the canonicalized directory basename so a report is never
     left with an anonymous rulespec entry. The remote slug is recorded as-is:
     a clone of an archived ``rulespec-us-<st>`` repo is stamped under that
-    name, so the selector sees it did not run against rulespec-us.
+    name, and provenance completion then vouches for no rulespec-us SHA
+    (``scripts/run_comparison.py`` ``_complete_rulespecs_from_affected_map``),
+    so the selector reads "unknown SHA" for rulespec-us and reruns the suite.
     Deduplicated on ``(repo, sha)``, order-stable.
     """
     entries: list[dict[str, Any]] = []

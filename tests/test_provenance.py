@@ -102,19 +102,26 @@ def test_rulespec_provenance_missing_path_records_name_with_null_sha(tmp_path):
     assert entries == [{"repo": "TheAxiomFoundation/rulespec-uk", "sha": None}]
 
 
-def test_rulespec_provenance_folds_an_absorbed_basename(tmp_path):
+@pytest.mark.parametrize("exists", [True, False])
+def test_rulespec_provenance_folds_an_absorbed_basename(tmp_path, exists):
     """A directory named for an absorbed state repo (an rsync of the monorepo's
-    us-co/, with no .git) is keyed under rulespec-us, the repo whose rules it
-    copies, so the stamp and the affected map name the same repo."""
-    entries = rulespec_provenance([tmp_path / "rulespec-us-co"])
+    us-co/, with no .git), present or not, is keyed under rulespec-us, the repo
+    whose rules it copies, so the stamp and the affected map name the same
+    repo."""
+    root = tmp_path / "rulespec-us-co"
+    if exists:
+        root.mkdir()
+    entries = rulespec_provenance([root])
     assert entries == [{"repo": "TheAxiomFoundation/rulespec-us", "sha": None}]
 
 
 def test_rulespec_provenance_stamps_an_archived_clone_under_its_true_name(tmp_path):
     """NEGATIVE: a git checkout whose remote is an archived state repo is
     stamped under that name, never folded. A run that really read frozen
-    archived rules must not look like it ran against rulespec-us; the selector
-    then reads "unknown SHA" for rulespec-us and reruns the suite."""
+    archived rules must not look like it ran against rulespec-us (the
+    end-to-end rerun through provenance completion and the selector is
+    tests/test_run_comparison.py
+    test_archived_clone_run_is_never_stamped_fresh)."""
     repo = tmp_path / "checkout"
     repo.mkdir()
     subprocess.run(["git", "init", "-q", str(repo)], check=True)
