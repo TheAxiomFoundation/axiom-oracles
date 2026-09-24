@@ -1,0 +1,23 @@
+{
+  "description": "Facts extracted from the Tax Foundation's 2026 state individual income tax table, used for personal_income_tax_base in axiom_oracles/data/jurisdictions.v1.json. no_individual_income_tax lists the states whose table row shows 'none' for rates and brackets. capital_gains_only lists the states the page says tax capital gains income only (the table marks Washington with a note that its rates apply to capital gains income of high-earning individuals). Every other state and DC taxes wage and salary income.",
+  "source": {
+    "title": "State Individual Income Tax Rates and Brackets, 2026",
+    "publisher": "Tax Foundation",
+    "url": "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/",
+    "as_of": "2026-01-01",
+    "retrieved": "2026-09-24"
+  },
+  "no_individual_income_tax": [
+    "Alaska",
+    "Florida",
+    "Nevada",
+    "New Hampshire",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Wyoming"
+  ],
+  "capital_gains_only": [
+    "Washington"
+  ]
+}

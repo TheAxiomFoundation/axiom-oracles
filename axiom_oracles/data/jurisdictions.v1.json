@@ -1,0 +1,585 @@
+{
+  "schema": "axiom.jurisdictions.v1",
+  "description": "Canonical registry of the 50 US states and the District of Columbia: USPS code, Census FIPS code, NBER TAXSIM (SOI) state code, name, rulespec-us jurisdiction slug, and personal income tax base, plus TAXSIM's special state codes. Every field is tested against the source recorded for it under sources; consumers read this file (or a copy pinned by sha256) instead of typing their own state tables.",
+  "sources": {
+    "census_fips": {
+      "fields": [
+        "usps",
+        "fips",
+        "name"
+      ],
+      "title": "Census Bureau state FIPS codes (state.txt)",
+      "url": "https://www2.census.gov/geo/docs/reference/state.txt",
+      "retrieved": "2026-09-24",
+      "sha256": "bea4e03f71a1fa0045ae732aabad11fa541e5932b071c2369bb0d325e8cba5a0",
+      "fixture": "tests/fixtures/jurisdictions/census_state.txt",
+      "note": "Rows with FIPS 01-56 (50 states and DC); territories are out of scope."
+    },
+    "taxsim": {
+      "fields": [
+        "taxsim_soi",
+        "taxsim_name",
+        "taxsim"
+      ],
+      "title": "NBER TAXSIM taxsimtest state echo (idtl=5) and idtl=0 probes",
+      "binary": "resources/taxsimtest/taxsimtest-osx.exe in PolicyEngine/policyengine-taxsim",
+      "binary_sha256": "4a17af9c2adbea27b1e6cce240610aede264e008bcdf64b131e0c81220f62b8c",
+      "build": "cd2026081819",
+      "probe": "printf 'taxsimid,year,state,mstat,pwages,idtl\\n1,2024,<code>,1,50000,5\\n' | taxsimtest-osx.exe",
+      "fixture": "tests/fixtures/jurisdictions/taxsim_state_code_probes.json"
+    },
+    "rulespec_slug": {
+      "fields": [
+        "rulespec_slug"
+      ],
+      "title": "rulespec-us jurisdiction root directories",
+      "repository": "TheAxiomFoundation/rulespec-us",
+      "commit": "dcb2e47e0af964be6d59f80688f519d0a6a96a71",
+      "path": ".axiom/repository-structure.yaml",
+      "fixture": "tests/fixtures/jurisdictions/rulespec_us_root_directories.json"
+    },
+    "personal_income_tax_base": {
+      "fields": [
+        "personal_income_tax_base",
+        "has_broad_personal_income_tax"
+      ],
+      "title": "State Individual Income Tax Rates and Brackets, 2026",
+      "publisher": "Tax Foundation",
+      "url": "https://taxfoundation.org/data/all/state/state-income-tax-rates-2026/",
+      "as_of": "2026-01-01",
+      "retrieved": "2026-09-24",
+      "fixture": "tests/fixtures/jurisdictions/income_tax_base_2026.json",
+      "note": "wages_and_salaries: the state taxes wage and salary income (has_broad_personal_income_tax true). capital_gains_only: the state taxes capital gains income only. none: no individual income tax."
+    }
+  },
+  "taxsim": {
+    "missing_state_column_code": 0,
+    "invalid_state_code_behavior": "TAXSIM stops the run with '<code> is not a valid SOI state code'.",
+    "special_state_codes": [
+      {
+        "code": 0,
+        "key": "no_state",
+        "idtl5_label": "State not specified",
+        "meaning": "No state income tax is computed; the output state column echoes 0. A missing state column is read as 0."
+      },
+      {
+        "code": -1,
+        "key": "all_states",
+        "idtl5_label": "State not specified",
+        "meaning": "TAXSIM computes the record once for every state code 1-51 and returns one output row per state."
+      }
+    ]
+  },
+  "states": [
+    {
+      "usps": "AL",
+      "fips": "01",
+      "taxsim_soi": 1,
+      "name": "Alabama",
+      "taxsim_name": "Alabama",
+      "rulespec_slug": "us-al",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "AK",
+      "fips": "02",
+      "taxsim_soi": 2,
+      "name": "Alaska",
+      "taxsim_name": "Alaska",
+      "rulespec_slug": "us-ak",
+      "has_broad_personal_income_tax": false,
+      "personal_income_tax_base": "none"
+    },
+    {
+      "usps": "AZ",
+      "fips": "04",
+      "taxsim_soi": 3,
+      "name": "Arizona",
+      "taxsim_name": "Arizona",
+      "rulespec_slug": "us-az",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "AR",
+      "fips": "05",
+      "taxsim_soi": 4,
+      "name": "Arkansas",
+      "taxsim_name": "Arkansas",
+      "rulespec_slug": "us-ar",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "CA",
+      "fips": "06",
+      "taxsim_soi": 5,
+      "name": "California",
+      "taxsim_name": "California",
+      "rulespec_slug": "us-ca",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "CO",
+      "fips": "08",
+      "taxsim_soi": 6,
+      "name": "Colorado",
+      "taxsim_name": "Colorado",
+      "rulespec_slug": "us-co",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "CT",
+      "fips": "09",
+      "taxsim_soi": 7,
+      "name": "Connecticut",
+      "taxsim_name": "Connecticut",
+      "rulespec_slug": "us-ct",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "DE",
+      "fips": "10",
+      "taxsim_soi": 8,
+      "name": "Delaware",
+      "taxsim_name": "Delaware",
+      "rulespec_slug": "us-de",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "DC",
+      "fips": "11",
+      "taxsim_soi": 9,
+      "name": "District of Columbia",
+      "taxsim_name": "DC",
+      "rulespec_slug": "us-dc",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "FL",
+      "fips": "12",
+      "taxsim_soi": 10,
+      "name": "Florida",
+      "taxsim_name": "Florida",
+      "rulespec_slug": "us-fl",
+      "has_broad_personal_income_tax": false,
+      "personal_income_tax_base": "none"
+    },
+    {
+      "usps": "GA",
+      "fips": "13",
+      "taxsim_soi": 11,
+      "name": "Georgia",
+      "taxsim_name": "Georgia",
+      "rulespec_slug": "us-ga",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "HI",
+      "fips": "15",
+      "taxsim_soi": 12,
+      "name": "Hawaii",
+      "taxsim_name": "Hawaii",
+      "rulespec_slug": "us-hi",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "ID",
+      "fips": "16",
+      "taxsim_soi": 13,
+      "name": "Idaho",
+      "taxsim_name": "Idaho",
+      "rulespec_slug": "us-id",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "IL",
+      "fips": "17",
+      "taxsim_soi": 14,
+      "name": "Illinois",
+      "taxsim_name": "Illinois",
+      "rulespec_slug": "us-il",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "IN",
+      "fips": "18",
+      "taxsim_soi": 15,
+      "name": "Indiana",
+      "taxsim_name": "Indiana",
+      "rulespec_slug": "us-in",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "IA",
+      "fips": "19",
+      "taxsim_soi": 16,
+      "name": "Iowa",
+      "taxsim_name": "Iowa",
+      "rulespec_slug": "us-ia",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "KS",
+      "fips": "20",
+      "taxsim_soi": 17,
+      "name": "Kansas",
+      "taxsim_name": "Kansas",
+      "rulespec_slug": "us-ks",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "KY",
+      "fips": "21",
+      "taxsim_soi": 18,
+      "name": "Kentucky",
+      "taxsim_name": "Kentucky",
+      "rulespec_slug": "us-ky",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "LA",
+      "fips": "22",
+      "taxsim_soi": 19,
+      "name": "Louisiana",
+      "taxsim_name": "Louisiana",
+      "rulespec_slug": "us-la",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "ME",
+      "fips": "23",
+      "taxsim_soi": 20,
+      "name": "Maine",
+      "taxsim_name": "Maine",
+      "rulespec_slug": "us-me",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "MD",
+      "fips": "24",
+      "taxsim_soi": 21,
+      "name": "Maryland",
+      "taxsim_name": "Maryland",
+      "rulespec_slug": "us-md",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "MA",
+      "fips": "25",
+      "taxsim_soi": 22,
+      "name": "Massachusetts",
+      "taxsim_name": "Massachusetts",
+      "rulespec_slug": "us-ma",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "MI",
+      "fips": "26",
+      "taxsim_soi": 23,
+      "name": "Michigan",
+      "taxsim_name": "Michigan",
+      "rulespec_slug": "us-mi",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "MN",
+      "fips": "27",
+      "taxsim_soi": 24,
+      "name": "Minnesota",
+      "taxsim_name": "Minnesota",
+      "rulespec_slug": "us-mn",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "MS",
+      "fips": "28",
+      "taxsim_soi": 25,
+      "name": "Mississippi",
+      "taxsim_name": "Mississippi",
+      "rulespec_slug": "us-ms",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "MO",
+      "fips": "29",
+      "taxsim_soi": 26,
+      "name": "Missouri",
+      "taxsim_name": "Missouri",
+      "rulespec_slug": "us-mo",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "MT",
+      "fips": "30",
+      "taxsim_soi": 27,
+      "name": "Montana",
+      "taxsim_name": "Montana",
+      "rulespec_slug": "us-mt",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "NE",
+      "fips": "31",
+      "taxsim_soi": 28,
+      "name": "Nebraska",
+      "taxsim_name": "Nebraska",
+      "rulespec_slug": "us-ne",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "NV",
+      "fips": "32",
+      "taxsim_soi": 29,
+      "name": "Nevada",
+      "taxsim_name": "Nevada",
+      "rulespec_slug": "us-nv",
+      "has_broad_personal_income_tax": false,
+      "personal_income_tax_base": "none"
+    },
+    {
+      "usps": "NH",
+      "fips": "33",
+      "taxsim_soi": 30,
+      "name": "New Hampshire",
+      "taxsim_name": "New Hampshire",
+      "rulespec_slug": "us-nh",
+      "has_broad_personal_income_tax": false,
+      "personal_income_tax_base": "none"
+    },
+    {
+      "usps": "NJ",
+      "fips": "34",
+      "taxsim_soi": 31,
+      "name": "New Jersey",
+      "taxsim_name": "New Jersey",
+      "rulespec_slug": "us-nj",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "NM",
+      "fips": "35",
+      "taxsim_soi": 32,
+      "name": "New Mexico",
+      "taxsim_name": "New Mexico",
+      "rulespec_slug": "us-nm",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "NY",
+      "fips": "36",
+      "taxsim_soi": 33,
+      "name": "New York",
+      "taxsim_name": "New York",
+      "rulespec_slug": "us-ny",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "NC",
+      "fips": "37",
+      "taxsim_soi": 34,
+      "name": "North Carolina",
+      "taxsim_name": "North Carolina",
+      "rulespec_slug": "us-nc",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "ND",
+      "fips": "38",
+      "taxsim_soi": 35,
+      "name": "North Dakota",
+      "taxsim_name": "North Dakota",
+      "rulespec_slug": "us-nd",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "OH",
+      "fips": "39",
+      "taxsim_soi": 36,
+      "name": "Ohio",
+      "taxsim_name": "Ohio",
+      "rulespec_slug": "us-oh",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "OK",
+      "fips": "40",
+      "taxsim_soi": 37,
+      "name": "Oklahoma",
+      "taxsim_name": "Oklahoma",
+      "rulespec_slug": "us-ok",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "OR",
+      "fips": "41",
+      "taxsim_soi": 38,
+      "name": "Oregon",
+      "taxsim_name": "Oregon",
+      "rulespec_slug": "us-or",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "PA",
+      "fips": "42",
+      "taxsim_soi": 39,
+      "name": "Pennsylvania",
+      "taxsim_name": "Pennsylvania",
+      "rulespec_slug": "us-pa",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "RI",
+      "fips": "44",
+      "taxsim_soi": 40,
+      "name": "Rhode Island",
+      "taxsim_name": "Rhode Island",
+      "rulespec_slug": "us-ri",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "SC",
+      "fips": "45",
+      "taxsim_soi": 41,
+      "name": "South Carolina",
+      "taxsim_name": "South Carolina",
+      "rulespec_slug": "us-sc",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "SD",
+      "fips": "46",
+      "taxsim_soi": 42,
+      "name": "South Dakota",
+      "taxsim_name": "South Dakota",
+      "rulespec_slug": "us-sd",
+      "has_broad_personal_income_tax": false,
+      "personal_income_tax_base": "none"
+    },
+    {
+      "usps": "TN",
+      "fips": "47",
+      "taxsim_soi": 43,
+      "name": "Tennessee",
+      "taxsim_name": "Tennessee",
+      "rulespec_slug": "us-tn",
+      "has_broad_personal_income_tax": false,
+      "personal_income_tax_base": "none"
+    },
+    {
+      "usps": "TX",
+      "fips": "48",
+      "taxsim_soi": 44,
+      "name": "Texas",
+      "taxsim_name": "Texas",
+      "rulespec_slug": "us-tx",
+      "has_broad_personal_income_tax": false,
+      "personal_income_tax_base": "none"
+    },
+    {
+      "usps": "UT",
+      "fips": "49",
+      "taxsim_soi": 45,
+      "name": "Utah",
+      "taxsim_name": "Utah",
+      "rulespec_slug": "us-ut",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "VT",
+      "fips": "50",
+      "taxsim_soi": 46,
+      "name": "Vermont",
+      "taxsim_name": "Vermont",
+      "rulespec_slug": "us-vt",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "VA",
+      "fips": "51",
+      "taxsim_soi": 47,
+      "name": "Virginia",
+      "taxsim_name": "Virginia",
+      "rulespec_slug": "us-va",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "WA",
+      "fips": "53",
+      "taxsim_soi": 48,
+      "name": "Washington",
+      "taxsim_name": "Washington",
+      "rulespec_slug": "us-wa",
+      "has_broad_personal_income_tax": false,
+      "personal_income_tax_base": "capital_gains_only"
+    },
+    {
+      "usps": "WV",
+      "fips": "54",
+      "taxsim_soi": 49,
+      "name": "West Virginia",
+      "taxsim_name": "West Virginia",
+      "rulespec_slug": "us-wv",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "WI",
+      "fips": "55",
+      "taxsim_soi": 50,
+      "name": "Wisconsin",
+      "taxsim_name": "Wisconsin",
+      "rulespec_slug": "us-wi",
+      "has_broad_personal_income_tax": true,
+      "personal_income_tax_base": "wages_and_salaries"
+    },
+    {
+      "usps": "WY",
+      "fips": "56",
+      "taxsim_soi": 51,
+      "name": "Wyoming",
+      "taxsim_name": "Wyoming",
+      "rulespec_slug": "us-wy",
+      "has_broad_personal_income_tax": false,
+      "personal_income_tax_base": "none"
+    }
+  ]
+}

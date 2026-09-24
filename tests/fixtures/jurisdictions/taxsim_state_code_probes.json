@@ -1,0 +1,466 @@
+{
+  "description": "Verbatim state lines from NBER TAXSIM taxsimtest full text output (idtl=5), one run per state code. input_echo is the first line naming the state (the 'Input Data' echo, item 3); output_echo is the second (the 'Basic Output' echo); output_blocks counts 'Basic Output' sections (state -1 computes every state). Captured 2026-09-24 for axiom_oracles/data/jurisdictions.v1.json. csv_probes are idtl=0 runs recording the output state column: a missing state column is read as 0, and state -1 returns one row per state 1-51.",
+  "binary": "resources/taxsimtest/taxsimtest-osx.exe in PolicyEngine/policyengine-taxsim",
+  "binary_sha256": "4a17af9c2adbea27b1e6cce240610aede264e008bcdf64b131e0c81220f62b8c",
+  "build": "cd2026081819",
+  "probe": "printf 'taxsimid,year,state,mstat,pwages,idtl\\n1,2024,<code>,1,50000,5\\n' | taxsimtest-osx.exe",
+  "runs": [
+    {
+      "code": -1,
+      "exit_status": 0,
+      "input_echo": "         3. State not specified",
+      "output_echo": "               State not specified",
+      "output_blocks": 51
+    },
+    {
+      "code": 0,
+      "exit_status": 0,
+      "input_echo": "         3. State not specified",
+      "output_echo": "               State not specified",
+      "output_blocks": 1
+    },
+    {
+      "code": 1,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):                1   Alabama         ",
+      "output_echo": "      3. State (SOI code):                  1        Alabama             ",
+      "output_blocks": 1
+    },
+    {
+      "code": 2,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):                2   Alaska          ",
+      "output_echo": "      3. State (SOI code):                  2        Alaska              ",
+      "output_blocks": 1
+    },
+    {
+      "code": 3,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):                3   Arizona         ",
+      "output_echo": "      3. State (SOI code):                  3        Arizona             ",
+      "output_blocks": 1
+    },
+    {
+      "code": 4,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):                4   Arkansas        ",
+      "output_echo": "      3. State (SOI code):                  4        Arkansas            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 5,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):                5   California      ",
+      "output_echo": "      3. State (SOI code):                  5        California          ",
+      "output_blocks": 1
+    },
+    {
+      "code": 6,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):                6   Colorado        ",
+      "output_echo": "      3. State (SOI code):                  6        Colorado            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 7,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):                7   Connecticut     ",
+      "output_echo": "      3. State (SOI code):                  7        Connecticut         ",
+      "output_blocks": 1
+    },
+    {
+      "code": 8,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):                8   Delaware        ",
+      "output_echo": "      3. State (SOI code):                  8        Delaware            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 9,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):                9   DC              ",
+      "output_echo": "      3. State (SOI code):                  9        DC                  ",
+      "output_blocks": 1
+    },
+    {
+      "code": 10,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               10   Florida         ",
+      "output_echo": "      3. State (SOI code):                 10        Florida             ",
+      "output_blocks": 1
+    },
+    {
+      "code": 11,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               11   Georgia         ",
+      "output_echo": "      3. State (SOI code):                 11        Georgia             ",
+      "output_blocks": 1
+    },
+    {
+      "code": 12,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               12   Hawaii          ",
+      "output_echo": "      3. State (SOI code):                 12        Hawaii              ",
+      "output_blocks": 1
+    },
+    {
+      "code": 13,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               13   Idaho           ",
+      "output_echo": "      3. State (SOI code):                 13        Idaho               ",
+      "output_blocks": 1
+    },
+    {
+      "code": 14,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               14   Illinois        ",
+      "output_echo": "      3. State (SOI code):                 14        Illinois            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 15,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               15   Indiana         ",
+      "output_echo": "      3. State (SOI code):                 15        Indiana             ",
+      "output_blocks": 1
+    },
+    {
+      "code": 16,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               16   Iowa            ",
+      "output_echo": "      3. State (SOI code):                 16        Iowa                ",
+      "output_blocks": 1
+    },
+    {
+      "code": 17,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               17   Kansas          ",
+      "output_echo": "      3. State (SOI code):                 17        Kansas              ",
+      "output_blocks": 1
+    },
+    {
+      "code": 18,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               18   Kentucky        ",
+      "output_echo": "      3. State (SOI code):                 18        Kentucky            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 19,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               19   Louisiana       ",
+      "output_echo": "      3. State (SOI code):                 19        Louisiana           ",
+      "output_blocks": 1
+    },
+    {
+      "code": 20,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               20   Maine           ",
+      "output_echo": "      3. State (SOI code):                 20        Maine               ",
+      "output_blocks": 1
+    },
+    {
+      "code": 21,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               21   Maryland        ",
+      "output_echo": "      3. State (SOI code):                 21        Maryland            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 22,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               22   Massachusetts   ",
+      "output_echo": "      3. State (SOI code):                 22        Massachusetts       ",
+      "output_blocks": 1
+    },
+    {
+      "code": 23,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               23   Michigan        ",
+      "output_echo": "      3. State (SOI code):                 23        Michigan            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 24,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               24   Minnesota       ",
+      "output_echo": "      3. State (SOI code):                 24        Minnesota           ",
+      "output_blocks": 1
+    },
+    {
+      "code": 25,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               25   Mississippi     ",
+      "output_echo": "      3. State (SOI code):                 25        Mississippi         ",
+      "output_blocks": 1
+    },
+    {
+      "code": 26,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               26   Missouri        ",
+      "output_echo": "      3. State (SOI code):                 26        Missouri            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 27,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               27   Montana         ",
+      "output_echo": "      3. State (SOI code):                 27        Montana             ",
+      "output_blocks": 1
+    },
+    {
+      "code": 28,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               28   Nebraska        ",
+      "output_echo": "      3. State (SOI code):                 28        Nebraska            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 29,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               29   Nevada          ",
+      "output_echo": "      3. State (SOI code):                 29        Nevada              ",
+      "output_blocks": 1
+    },
+    {
+      "code": 30,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               30   New Hampshire   ",
+      "output_echo": "      3. State (SOI code):                 30        New Hampshire       ",
+      "output_blocks": 1
+    },
+    {
+      "code": 31,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               31   New Jersey      ",
+      "output_echo": "      3. State (SOI code):                 31        New Jersey          ",
+      "output_blocks": 1
+    },
+    {
+      "code": 32,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               32   New Mexico      ",
+      "output_echo": "      3. State (SOI code):                 32        New Mexico          ",
+      "output_blocks": 1
+    },
+    {
+      "code": 33,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               33   New York        ",
+      "output_echo": "      3. State (SOI code):                 33        New York            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 34,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               34   North Carolina  ",
+      "output_echo": "      3. State (SOI code):                 34        North Carolina      ",
+      "output_blocks": 1
+    },
+    {
+      "code": 35,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               35   North Dakota    ",
+      "output_echo": "      3. State (SOI code):                 35        North Dakota        ",
+      "output_blocks": 1
+    },
+    {
+      "code": 36,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               36   Ohio            ",
+      "output_echo": "      3. State (SOI code):                 36        Ohio                ",
+      "output_blocks": 1
+    },
+    {
+      "code": 37,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               37   Oklahoma        ",
+      "output_echo": "      3. State (SOI code):                 37        Oklahoma            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 38,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               38   Oregon          ",
+      "output_echo": "      3. State (SOI code):                 38        Oregon              ",
+      "output_blocks": 1
+    },
+    {
+      "code": 39,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               39   Pennsylvania    ",
+      "output_echo": "      3. State (SOI code):                 39        Pennsylvania        ",
+      "output_blocks": 1
+    },
+    {
+      "code": 40,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               40   Rhode Island    ",
+      "output_echo": "      3. State (SOI code):                 40        Rhode Island        ",
+      "output_blocks": 1
+    },
+    {
+      "code": 41,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               41   South Carolina  ",
+      "output_echo": "      3. State (SOI code):                 41        South Carolina      ",
+      "output_blocks": 1
+    },
+    {
+      "code": 42,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               42   South Dakota    ",
+      "output_echo": "      3. State (SOI code):                 42        South Dakota        ",
+      "output_blocks": 1
+    },
+    {
+      "code": 43,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               43   Tennessee       ",
+      "output_echo": "      3. State (SOI code):                 43        Tennessee           ",
+      "output_blocks": 1
+    },
+    {
+      "code": 44,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               44   Texas           ",
+      "output_echo": "      3. State (SOI code):                 44        Texas               ",
+      "output_blocks": 1
+    },
+    {
+      "code": 45,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               45   Utah            ",
+      "output_echo": "      3. State (SOI code):                 45        Utah                ",
+      "output_blocks": 1
+    },
+    {
+      "code": 46,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               46   Vermont         ",
+      "output_echo": "      3. State (SOI code):                 46        Vermont             ",
+      "output_blocks": 1
+    },
+    {
+      "code": 47,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               47   Virginia        ",
+      "output_echo": "      3. State (SOI code):                 47        Virginia            ",
+      "output_blocks": 1
+    },
+    {
+      "code": 48,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               48   Washington      ",
+      "output_echo": "      3. State (SOI code):                 48        Washington          ",
+      "output_blocks": 1
+    },
+    {
+      "code": 49,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               49   West Virginia   ",
+      "output_echo": "      3. State (SOI code):                 49        West Virginia       ",
+      "output_blocks": 1
+    },
+    {
+      "code": 50,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               50   Wisconsin       ",
+      "output_echo": "      3. State (SOI code):                 50        Wisconsin           ",
+      "output_blocks": 1
+    },
+    {
+      "code": 51,
+      "exit_status": 0,
+      "input_echo": "  3. State (SOI code):               51   Wyoming         ",
+      "output_echo": "      3. State (SOI code):                 51        Wyoming             ",
+      "output_blocks": 1
+    },
+    {
+      "code": 52,
+      "exit_status": 1,
+      "input_echo": " TAXSIM:    52.000000000000000       is not a valid SOI state code",
+      "output_echo": "  3. State (SOI code):               52                   ",
+      "output_blocks": 0
+    }
+  ],
+  "csv_probes": [
+    {
+      "name": "missing_state_column",
+      "input": "taxsimid,year,mstat,pwages,idtl\n1,2024,1,50000,0\n",
+      "exit_status": 0,
+      "output_header": "taxsimid,year,state,fiitax,siitax,fica,frate,srate,ficar,tfica,\"cd2026081819\"",
+      "output_state_column": [
+        0
+      ]
+    },
+    {
+      "name": "state_0",
+      "input": "taxsimid,year,state,mstat,pwages,idtl\n1,2024,0,1,50000,0\n",
+      "exit_status": 0,
+      "output_header": "taxsimid,year,state,fiitax,siitax,fica,frate,srate,ficar,tfica,\"cd2026081819\"",
+      "output_state_column": [
+        0
+      ]
+    },
+    {
+      "name": "state_minus_1",
+      "input": "taxsimid,year,state,mstat,pwages,idtl\n1,2024,-1,1,50000,0\n",
+      "exit_status": 0,
+      "output_header": "taxsimid,year,state,fiitax,siitax,fica,frate,srate,ficar,tfica,\"cd2026081819\"",
+      "output_state_column": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ]
+    }
+  ]
+}
