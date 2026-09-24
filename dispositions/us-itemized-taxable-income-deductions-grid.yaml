@@ -46,6 +46,11 @@ entries:
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/limitation/obbb/applies.yaml#L1-L5
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/limitation/obbb/rate.yaml#L1-L4
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/income/bracket.yaml#L529-L540
+    axiom_companion:
+      legal_ids:
+        - us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions
+      tests:
+        - rulespec-us@dcb2e47e0af964be6d59f80688f519d0a6a96a71:us/policies/income_tax/itemized_taxable_income_deductions_pipeline.test.yaml#itemized-68-other-deduction-base
     expires_on_source_change: true
     pinned:
       left: 50000
@@ -95,6 +100,11 @@ entries:
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/limitation/obbb/applies.yaml#L1-L5
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/limitation/obbb/rate.yaml#L1-L4
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/income/bracket.yaml#L529-L540
+    axiom_companion:
+      legal_ids:
+        - us:policies/income_tax/itemized_taxable_income_deductions_pipeline#federal_itemized_taxable_income_deductions
+      tests:
+        - rulespec-us@dcb2e47e0af964be6d59f80688f519d0a6a96a71:us/policies/income_tax/itemized_taxable_income_deductions_pipeline.test.yaml#itemized-68-rational-rate
     expires_on_source_change: true
     pinned:
       left: 9459459.45945946
