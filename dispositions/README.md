@@ -68,6 +68,64 @@ entries:
   residual. Non-expiring entries that match nothing are flagged as orphaned —
   delete them when their mismatch clears.
 
+## PolicyEngine attributions carry their Axiom side
+
+Standard (2026-09-24): a PolicyEngine policy bug is not done until Axiom has
+the policy right. An `upstream_engine_gap` entry blames PolicyEngine when
+the rows it annotates in the committed dashboard report have PolicyEngine as
+the counterpart engine. An entry that annotates no rows is also attributed
+when the report's only counterpart is PolicyEngine, or when its `kind` is a
+PolicyEngine-leg kind in a multi-oracle report. An entry is also
+attributed, whatever its rows say, when it links a PolicyEngine issue or pull
+request. Attribution is computed from the data. It does not come from entry
+names: `nd-open-rows-axiom-pe-divergent` annotates TAXSIM rows, so it is not
+attributed. Known causes (`dashboard/public/data/known_causes.json`) whose
+`fix_owner` starts with `policyengine`, or whose `issue_url` is a PolicyEngine
+issue, fall under the same rule.
+
+Every such entry must carry:
+
+- the PolicyEngine issue URL in `linked_issue` or `evidence.upstream_url`
+  (`issue_url` for a known cause), and
+- exactly one of:
+
+```yaml
+    axiom_companion:                  # (i) Axiom asserted correct, pinned by a test
+      legal_ids:
+        - us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
+      tests:
+        - rulespec-us@<40-hex sha on main>:us/policies/income_tax/salt_deduction_pipeline.test.yaml#salt-low-agi-engine-cap
+    # or
+    axiom_encoding_debt: https://github.com/TheAxiomFoundation/rulespec-us/issues/<n>   # (ii) owed
+```
+
+`scripts/pe_axiom_standard.py --check` enforces this in CI against
+`conformance/pe-axiom-standard.yaml`, which is generated and must not be
+hand-edited. The entries that predated the standard are grandfathered there,
+each with its computed status. `open_max` counts attributions without a
+companion (declared debt plus grandfathered). The check compares the file
+with every committed version of itself, the way
+`scripts/closure_universe.py` derives its pending floor, so a pull request or
+a direct push cannot loosen it by editing the file:
+
+- the grandfathered list may only shrink, and a grandfathered entry's status
+  may only rise;
+- `open_max` may only fall. A deliberate raise is
+  `uv run scripts/pe_axiom_standard.py --raise-ceiling "<reason>"`, which
+  appends a dated `debt_raises` record (`from`, `to`, `reason`). That list is
+  append-only.
+
+`--resolve` checks each companion pointer against the RuleSpec repository:
+
+- the file exists at the pinned commit
+- the commit is on main
+- the case asserts each legal id
+- a case named like the disputed case asserts the Axiom value from the
+  comparison
+
+`--suggest --rulespec-checkout rulespec-us=<clone>` lists open attributions
+whose disputed case already exists as a companion case.
+
 ## Where the numbers land
 
 `apply_dispositions` joins these files into the comparison report (bumping it
