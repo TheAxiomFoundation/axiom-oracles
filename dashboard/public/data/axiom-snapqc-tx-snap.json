@@ -6552,16 +6552,21 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-09-23T21:37:37Z",
+    "generated_at": "2026-07-13T23:56:43Z",
     "generated_by": "scripts/run_comparison.py::tx-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
       "name": "snap-qc",
-      "sha256": "b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5",
-      "url": "https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip"
+      "sha256": "0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
+      "url": "https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip"
     },
-    "reemitted_report": true,
-    "run_kind": "affected-rerun",
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "53ae9199149a6deccf4b75b690850c4669b1edb4"
+      }
+    ],
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

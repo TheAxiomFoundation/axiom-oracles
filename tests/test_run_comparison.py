@@ -1267,6 +1267,174 @@ def test_skipped_versioned_run_preserves_existing_bound_artifacts(
     assert after == before
 
 
+def _unversioned_report(suite: str, provenance: dict) -> dict:
+    return {
+        "schema_version": "axiom.comparison_report.v2",
+        "suite": suite,
+        "case_count": 1,
+        "cases": [],
+        "mismatches": [],
+        "summary": {"comparison_count": 1, "match_count": 1, "mismatch_count": 0},
+        "provenance": provenance,
+    }
+
+
+_REAL_PROVENANCE = {
+    "generated_at": "2026-09-23T00:21:17Z",
+    "run_kind": "manual",
+    "rulespecs": [{"repo": "TheAxiomFoundation/rulespec-us", "sha": "f" * 40}],
+}
+_REEMITTED_PROVENANCE = {
+    "generated_at": "2026-09-23T11:56:31Z",
+    "run_kind": "affected-rerun",
+    "reemitted_report": True,
+}
+
+
+def test_skipped_run_preserves_a_real_unversioned_dashboard_report(
+    monkeypatch, tmp_path, capsys
+):
+    """2026-09-23: the affected rerun re-emitted NY/MD/AZ/CA/GA SNAP QC over their
+    real reports. Only suites with versioned case chunks (CO) were preserved; a
+    re-emission must leave ANY committed real report byte-for-byte unchanged."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    target = tmp_path / "axiom-snapqc-ny-snap.json"
+    target.write_text(
+        json.dumps(_unversioned_report("ny-snap-qc", _REAL_PROVENANCE), indent=2)
+    )
+    (tmp_path / "manifest.json").write_text('{"reports": []}\n')
+    before = (target.read_bytes(), (tmp_path / "manifest.json").read_bytes())
+
+    run_comparison._write_dashboard_report(
+        _unversioned_report("ny-snap-qc", _REEMITTED_PROVENANCE),
+        target.name,
+        preserve_existing_versioned=True,
+    )
+
+    assert (target.read_bytes(), (tmp_path / "manifest.json").read_bytes()) == before
+    assert "a re-emission never replaces a real run" in capsys.readouterr().out
+
+
+def test_skipped_run_still_rewrites_a_committed_reemission_or_first_copy(
+    monkeypatch, tmp_path
+):
+    """The guard protects real reports only: a committed re-emission (or no
+    committed copy at all) is still published, as before."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    reemitted = tmp_path / "axiom-euromod-uk-winter-fuel.json"
+    reemitted.write_text(
+        json.dumps(_unversioned_report("uk-winter-fuel", _REEMITTED_PROVENANCE))
+    )
+    newer = dict(_REEMITTED_PROVENANCE, generated_at="2026-09-24T00:00:00Z")
+
+    run_comparison._write_dashboard_report(
+        _unversioned_report("uk-winter-fuel", newer),
+        reemitted.name,
+        preserve_existing_versioned=True,
+    )
+    assert (
+        json.loads(reemitted.read_text())["provenance"]["generated_at"]
+        == "2026-09-24T00:00:00Z"
+    )
+
+    run_comparison._write_dashboard_report(
+        _unversioned_report("brand-new", newer),
+        "brand-new.json",
+        preserve_existing_versioned=True,
+    )
+    assert (tmp_path / "brand-new.json").exists()
+    assert "brand-new.json" in json.loads((tmp_path / "manifest.json").read_text())[
+        "reports"
+    ]
+
+
+def test_real_run_still_replaces_a_real_dashboard_report(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    target = tmp_path / "axiom-snapqc-ny-snap.json"
+    target.write_text(json.dumps(_unversioned_report("ny-snap-qc", _REAL_PROVENANCE)))
+    fresher = dict(_REAL_PROVENANCE, generated_at="2026-10-01T00:00:00Z")
+
+    run_comparison._write_dashboard_report(
+        _unversioned_report("ny-snap-qc", fresher), target.name
+    )
+
+    assert (
+        json.loads(target.read_text())["provenance"]["generated_at"]
+        == "2026-10-01T00:00:00Z"
+    )
+
+
+def test_snap_qc_skip_through_main_leaves_the_real_report_untouched(
+    monkeypatch, tmp_path
+):
+    """End to end, the 2026-09-23 path: an affected-rerun leg with no engine or
+    QC file runs ``run_comparison.py ny-snap-qc``. Its own output says it
+    re-emitted, and the committed real dashboard report is left alone."""
+    run_comparison = load_run_comparison_module()
+    committed = (
+        Path(__file__).parents[1] / "dashboard/public/data/axiom-snapqc-ny-snap.json"
+    )
+    dashboard = tmp_path / "dashboard-data"
+    dashboard.mkdir()
+    target = dashboard / committed.name
+    target.write_bytes(committed.read_bytes())
+    (dashboard / "manifest.json").write_text(
+        json.dumps({"reports": [committed.name]}, indent=2) + "\n"
+    )
+    assert json.loads(target.read_text())["provenance"].get("rulespecs"), (
+        "precondition: the committed NY report is a real run"
+    )
+    before = target.read_bytes()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
+    monkeypatch.setattr(
+        run_comparison, "_snap_qc_skip_reason", lambda *_a, **_k: "no engine here"
+    )
+    monkeypatch.setenv("AXIOM_ORACLES_RUN_KIND", "affected-rerun")
+    out_dir = tmp_path / "reports"
+    monkeypatch.setattr(
+        "sys.argv",
+        ["run_comparison.py", "ny-snap-qc", "--output-dir", str(out_dir)],
+    )
+
+    assert run_comparison.main() == 0
+
+    assert target.read_bytes() == before
+    (published,) = out_dir.glob("axiom-snapqc-ny-snap-*.json")
+    provenance = json.loads(published.read_text())["provenance"]
+    assert provenance["reemitted_report"] is True
+    assert provenance["run_kind"] == "affected-rerun"
+    assert "rulespecs" not in provenance
+
+
+def test_preserved_source_pointer_covers_real_unversioned_copies(
+    monkeypatch, tmp_path
+):
+    """A same-day skip must not overwrite the reports/ file a preserved real
+    copy's dispositioned block points at, versioned or not."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    output = run_comparison.REPO_ROOT / "reports" / "pointer-target-0-2026-09-23.json"
+    pointer = {
+        "dispositioned": {
+            "source_report": {
+                "path": "reports/pointer-target-0-2026-09-23.json",
+                "sha256": "0" * 64,
+            }
+        }
+    }
+    for provenance, expected in ((_REAL_PROVENANCE, True), (_REEMITTED_PROVENANCE, False)):
+        report = _unversioned_report("pointer-suite", provenance)
+        report["summary"] = {**report["summary"], **pointer}
+        (tmp_path / "pointer.json").write_text(json.dumps(report))
+        assert (
+            run_comparison._preserved_versioned_source_is_output("pointer.json", output)
+            is expected
+        )
+
+
 def test_dataset_label_from_identity_falls_back_without_revision():
     run_comparison = load_run_comparison_module()
 

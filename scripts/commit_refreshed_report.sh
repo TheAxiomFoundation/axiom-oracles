@@ -383,6 +383,13 @@ if added:
         manifest.write_text(json.dumps(doc, indent=2) + "\n")
 PY
 
+  # A re-emission never replaces a real report on THIS tip: for any restored
+  # dashboard report that is a re-emission while the tip's copy is a real run,
+  # put back the tip's bytes.
+  # run_comparison.py already declines to publish one; this is the check at
+  # the push, which no CI workflow sees (bot pushes don't trigger ci.yml).
+  "$PYTHON" scripts/guard_reemitted_reports.py
+
   # Recompute every derived artifact against THIS tip, then refuse to push
   # anything ci.yml would call stale.
   regenerate_derived
