@@ -1801,6 +1801,75 @@ def test_completion_tolerates_missing_map(monkeypatch, tmp_path):
     )
 
 
+def test_archived_clone_run_is_never_stamped_fresh(monkeypatch, tmp_path):
+    """NEGATIVE, end to end: a run whose declared checkout is a clone of an
+    archived state repo (remote rulespec-us-co) read frozen rules. Its stamp
+    keeps that name, completion vouches for no rulespec-us SHA (not the
+    runner's clone SHA, not the convention checkout), and the selector reads
+    "unknown SHA" and reruns the suite instead of calling it fresh."""
+    from axiom_oracles import provenance
+    from axiom_oracles.provenance import rulespec_provenance
+
+    clone = tmp_path / "clone"
+    clone.mkdir()
+    for args in (
+        ["init", "-q"],
+        ["config", "user.email", "t@t"],
+        ["config", "user.name", "t"],
+        [
+            "remote", "add", "origin",
+            "https://github.com/TheAxiomFoundation/rulespec-us-co.git",
+        ],
+    ):
+        subprocess.run(["git", "-C", str(clone), *args], check=True)
+    (clone / "f.txt").write_text("x")
+    subprocess.run(["git", "-C", str(clone), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(clone), "commit", "-qm", "init"], check=True)
+
+    rc, config = _completion_fixture(
+        monkeypatch, tmp_path, ["TheAxiomFoundation/rulespec-us"]
+    )
+    monorepo_head = "m" * 40
+    monkeypatch.setattr(
+        provenance, "resolve_rulespec_checkout", lambda slug: tmp_path / "monorepo"
+    )
+    monkeypatch.setattr(rc, "_git_head_sha", lambda repo: monorepo_head)
+
+    stamped = rulespec_provenance([clone])
+    assert [e["repo"] for e in stamped] == ["TheAxiomFoundation/rulespec-us-co"]
+    completed = rc._complete_rulespecs_from_affected_map(
+        config, {"_cloned_rulespec_us_sha": "b" * 40}, stamped
+    )
+    assert {"repo": "TheAxiomFoundation/rulespec-us", "sha": None} in completed
+
+    spec = importlib.util.spec_from_file_location(
+        "select_affected_suites",
+        Path(__file__).parents[1] / "scripts" / "select_affected_suites.py",
+    )
+    sel = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(sel)
+    affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+    report = {"suite": "demo-suite", "provenance": {"rulespecs": completed}}
+    [decision] = sel.select(
+        affected_map,
+        {"TheAxiomFoundation/rulespec-us": monorepo_head},
+        {"demo-suite": report},
+    )
+    assert "rulespec-us: report ran against unknown SHA" in decision["reason"]
+
+    # Control: the same run through a monorepo checkout is completed and fresh.
+    completed = rc._complete_rulespecs_from_affected_map(config, {}, [])
+    assert completed == [
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": monorepo_head}
+    ]
+    report = {"suite": "demo-suite", "provenance": {"rulespecs": completed}}
+    assert sel.select(
+        affected_map,
+        {"TheAxiomFoundation/rulespec-us": monorepo_head},
+        {"demo-suite": report},
+    ) == []
+
+
 def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
     """taxcalc==6.7.1 cannot resolve on 3.14 (no numba wheel); the lane pins
     `python: "3.13"` and the runner must pass it through to uv (#296)."""

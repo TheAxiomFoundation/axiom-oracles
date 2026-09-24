@@ -98,8 +98,78 @@ def test_rulespec_provenance_uses_git_when_available(tmp_path):
 
 
 def test_rulespec_provenance_missing_path_records_name_with_null_sha(tmp_path):
-    entries = rulespec_provenance([tmp_path / "rulespec-us-co"])
-    assert entries == [{"repo": "TheAxiomFoundation/rulespec-us-co", "sha": None}]
+    entries = rulespec_provenance([tmp_path / "rulespec-uk"])
+    assert entries == [{"repo": "TheAxiomFoundation/rulespec-uk", "sha": None}]
+
+
+@pytest.mark.parametrize("exists", [True, False])
+def test_rulespec_provenance_folds_an_absorbed_basename(tmp_path, exists):
+    """A directory named for an absorbed state repo (an rsync of the monorepo's
+    us-co/, with no .git), present or not, is keyed under rulespec-us, the repo
+    whose rules it copies, so the stamp and the affected map name the same
+    repo."""
+    root = tmp_path / "rulespec-us-co"
+    if exists:
+        root.mkdir()
+    entries = rulespec_provenance([root])
+    assert entries == [{"repo": "TheAxiomFoundation/rulespec-us", "sha": None}]
+
+
+def test_rulespec_provenance_stamps_an_archived_clone_under_its_true_name(tmp_path):
+    """NEGATIVE: a git checkout whose remote is an archived state repo is
+    stamped under that name, never folded. A run that really read frozen
+    archived rules must not look like it ran against rulespec-us (the
+    end-to-end rerun through provenance completion and the selector is
+    tests/test_run_comparison.py
+    test_archived_clone_run_is_never_stamped_fresh)."""
+    repo = tmp_path / "checkout"
+    repo.mkdir()
+    subprocess.run(["git", "init", "-q", str(repo)], check=True)
+    subprocess.run(["git", "-C", str(repo), "config", "user.email", "t@t"], check=True)
+    subprocess.run(["git", "-C", str(repo), "config", "user.name", "t"], check=True)
+    subprocess.run(
+        [
+            "git", "-C", str(repo), "remote", "add", "origin",
+            "https://github.com/TheAxiomFoundation/rulespec-us-co.git",
+        ],
+        check=True,
+    )
+    (repo / "f.txt").write_text("x")
+    subprocess.run(["git", "-C", str(repo), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(repo), "commit", "-qm", "init"], check=True)
+
+    [entry] = rulespec_provenance([repo])
+    assert entry["repo"] == "TheAxiomFoundation/rulespec-us-co"
+    assert entry["sha"] and len(entry["sha"]) == 40
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        ("rulespec-us-co", "TheAxiomFoundation/rulespec-us"),
+        ("rulespec-us-dc", "TheAxiomFoundation/rulespec-us"),
+        ("rulespec-us-ak", "TheAxiomFoundation/rulespec-us"),  # never existed
+        ("TheAxiomFoundation/rulespec-us-tx", "TheAxiomFoundation/rulespec-us"),
+        (
+            "rulespec-uk-kingston-upon-thames",
+            "TheAxiomFoundation/rulespec-uk",
+        ),
+        ("rulespec-us", "TheAxiomFoundation/rulespec-us"),
+        ("rulespec-uk-official", "TheAxiomFoundation/rulespec-uk"),
+        # Not absorbed: left alone, never collapsed by a hyphen rule.
+        ("rulespec-us-32d", "TheAxiomFoundation/rulespec-us-32d"),
+        ("rulespec-graph-viewer", "TheAxiomFoundation/rulespec-graph-viewer"),
+        ("rulespec-tz-znz", "TheAxiomFoundation/rulespec-tz-znz"),
+        ("rulespec-nz-pr70", "TheAxiomFoundation/rulespec-nz-pr70"),
+        # Another owner's repo of the same name is not ours to fold.
+        ("someone/rulespec-us-co", "someone/rulespec-us-co"),
+        ("axiom-compose", "axiom-compose"),
+    ],
+)
+def test_canonical_rulespec_slug_folds_absorbed_repos(name, expected):
+    from axiom_oracles.provenance import canonical_rulespec_slug
+
+    assert canonical_rulespec_slug(name) == expected
 
 
 def test_rulespec_provenance_canonicalizes_uk_official_alias(tmp_path):
@@ -400,6 +470,32 @@ def test_resolve_rulespec_checkout_prefers_git_bearing_candidates(
     ) == org_checkout
 
     assert provenance.resolve_rulespec_checkout("TheAxiomFoundation/rulespec-nz") is None
+
+
+def test_resolve_rulespec_checkout_never_lands_on_an_archived_clone(
+    monkeypatch, tmp_path
+):
+    """NEGATIVE: supervised machines keep archived rulespec-us-<st> clones
+    under ~/TheAxiomFoundation. A rulespec-us lookup must not return one, and
+    a lookup by an absorbed name resolves the monorepo that holds its rules,
+    so provenance completion can only stamp a SHA of rulespec-us."""
+    from axiom_oracles import provenance
+
+    home = tmp_path
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: home))
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    archived = home / "TheAxiomFoundation" / "rulespec-us-co"
+    archived.mkdir(parents=True)
+    (home / ".axiom-oracles" / "roots" / "rulespec-us-co").mkdir(parents=True)
+    monkeypatch.setattr(provenance, "_git_sha", lambda path: "a" * 40)
+
+    assert provenance.resolve_rulespec_checkout("TheAxiomFoundation/rulespec-us") is None
+    assert provenance.resolve_rulespec_checkout("TheAxiomFoundation/rulespec-us-co") is None
+
+    monorepo = home / "TheAxiomFoundation" / "rulespec-us"
+    monorepo.mkdir()
+    for slug in ("TheAxiomFoundation/rulespec-us", "TheAxiomFoundation/rulespec-us-co"):
+        assert provenance.resolve_rulespec_checkout(slug) == monorepo
 
 
 def test_resolve_rulespec_checkout_walks_uk_official_alias(monkeypatch, tmp_path):

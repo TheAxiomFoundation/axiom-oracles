@@ -71,7 +71,10 @@ jobs:
           # Union every repo named in the affected map, then ask the GitHub API
           # for each one's default-branch HEAD. Repos the token can't read are
           # simply omitted (the selector treats a missing HEAD as "cannot prove
-          # stale", so the weekly matrix still covers them).
+          # stale", so the weekly matrix still covers them). An archived repo
+          # never moves, so a suite mapped to one can never go stale: flag it
+          # as an error annotation (tests/test_affected_map.py guards the
+          # repos known today; this catches a repo archived later).
           python3 - <<'PY' > repos.txt
           import json
           from pathlib import Path
@@ -86,10 +89,20 @@ jobs:
           heads = {}
           for repo in Path("repos.txt").read_text().split():
               try:
-                  out = subprocess.run(
-                      ["gh", "api", f"repos/{repo}", "--jq", ".default_branch"],
+                  meta = json.loads(subprocess.run(
+                      ["gh", "api", f"repos/{repo}",
+                       "--jq", "{default_branch, archived}"],
                       capture_output=True, text=True, check=True,
-                  ).stdout.strip()
+                  ).stdout)
+                  out = meta["default_branch"]
+                  if meta.get("archived"):
+                      print(
+                          "::error title=Archived rulespec repo in the affected "
+                          f"map::{repo} is archived, so its suites can never "
+                          "go stale. Map them to the repo that absorbed it "
+                          "(axiom_oracles.provenance.ABSORBED_RULESPEC_REPOS) "
+                          "and regenerate comparisons/affected_map.json."
+                      )
                   sha = subprocess.run(
                       ["gh", "api", f"repos/{repo}/commits/{out}", "--jq", ".sha"],
                       capture_output=True, text=True, check=True,
@@ -97,7 +110,13 @@ jobs:
                   if sha:
                       heads[repo] = sha
               except subprocess.CalledProcessError:
-                  print(f"skip {repo}: not readable with this token")
+                  # Every mapped rulespec repo is public today, so an
+                  # unreadable one is usually a missing repo (a name that
+                  # never existed, or was renamed or deleted).
+                  print(
+                      "::warning title=Unreadable rulespec repo::"
+                      f"skip {repo}: not readable with this token"
+                  )
           Path("heads.json").write_text(json.dumps(heads, indent=2))
           print(json.dumps(heads, indent=2))
           PY

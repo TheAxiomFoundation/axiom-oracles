@@ -61,6 +61,29 @@ RULESPEC_OWNER = "TheAxiomFoundation"
 #: Local checkout directory basenames that differ from the upstream repo name.
 _RULESPEC_DIR_ALIASES = {"rulespec-uk-official": "rulespec-uk"}
 
+#: The 50 US states and DC. The rulespec-us monorepo holds each one's rules as
+#: a top-level ``us-<code>/`` directory beside the federal ``us/``.
+US_STATE_CODES = frozenset(
+    "ak al ar az ca co ct dc de fl ga hi ia id il in ks ky la ma md me mi mn mo "
+    "ms mt nc nd ne nh nj nm nv ny oh ok or pa ri sc sd tn tx ut va vt wa wi wv "
+    "wy".split()
+)
+
+#: Rulespec repo names whose rules now live in a country monorepo, mapped to
+#: that monorepo. Every standalone ``rulespec-us-<st>`` repo was archived in
+#: June 2026 (de/id/ma/nh/ok on 2026-06-13, the other 13 on 2026-06-27) as
+#: "ARCHIVED: absorbed into rulespec-us/us-<st> (full history preserved)", and
+#: rulespec-uk-kingston-upon-thames the same way (2026-06-13) into
+#: ``rulespec-uk/uk-kingston-upon-thames``. States that never had a standalone
+#: repo map the same way: ``us-<st>`` names a directory of rulespec-us, not a
+#: repo. An archived repo never moves, so a suite mapped to one could never
+#: go stale, and a report could never prove it fresh against the rules the
+#: harness actually reads.
+ABSORBED_RULESPEC_REPOS: dict[str, str] = {
+    **{f"rulespec-us-{code}": "rulespec-us" for code in sorted(US_STATE_CODES)},
+    "rulespec-uk-kingston-upon-thames": "rulespec-uk",
+}
+
 #: Valid ``run_kind`` values. ``weekly`` = the full backstop matrix,
 #: ``pr-triggered`` = a PR CI run, ``affected-rerun`` = the 6-hourly
 #: stale-suite sweep, ``manual`` = a local/ad-hoc run (the default).
@@ -138,8 +161,13 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
     ``paths`` are local checkout directories (as the runner resolves them from
     ``rulespec_root`` / ``rulespec_roots``). Each is walked up to its enclosing
     git repo; the ``repo`` slug comes from the origin remote when available,
-    otherwise from the directory basename so a report is never left with an
-    anonymous rulespec entry. Deduplicated on ``(repo, sha)``, order-stable.
+    otherwise from the canonicalized directory basename so a report is never
+    left with an anonymous rulespec entry. The remote slug is recorded as-is:
+    a clone of an archived ``rulespec-us-<st>`` repo is stamped under that
+    name, and provenance completion then vouches for no rulespec-us SHA
+    (``scripts/run_comparison.py`` ``_complete_rulespecs_from_affected_map``),
+    so the selector reads "unknown SHA" for rulespec-us and reruns the suite.
+    Deduplicated on ``(repo, sha)``, order-stable.
     """
     entries: list[dict[str, Any]] = []
     seen: set[tuple[str | None, str | None]] = set()
@@ -172,9 +200,12 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
     report's provenance can record the SHA of the checkout the run actually
     resolved. Git-bearing candidates win over bare directories (an rsync'd
     root without `.git` has no SHA to record); returns None when nothing
-    matches.
+    matches. The slug is canonicalized first, and absorbed repo names
+    (:data:`ABSORBED_RULESPEC_REPOS`) are never candidates, so no lookup can
+    land on an archived ``rulespec-us-<st>`` clone left on a supervised
+    machine.
     """
-    name = slug.split("/", 1)[-1]
+    name = canonical_rulespec_slug(slug).split("/", 1)[-1]
     candidate_names = [name] + [
         alias for alias, target in _RULESPEC_DIR_ALIASES.items() if target == name
     ]
@@ -211,10 +242,21 @@ def canonical_rulespec_slug(name: str) -> str:
     and the affected-map's keys are always the *same string* — otherwise the
     rerun selector would silently fail to match a suite to its repo. Accepts a
     bare dir basename (``rulespec-us``), an rsync alias (``rulespec-uk-official``
-    → ``rulespec-uk``), or an already-canonical ``owner/repo`` slug (passthrough).
-    Non-rulespec names pass through unchanged (they are never affected-map keys).
+    → ``rulespec-uk``), an absorbed repo (``rulespec-us-co`` → ``rulespec-us``,
+    see :data:`ABSORBED_RULESPEC_REPOS`), or an ``owner/repo`` slug (passthrough,
+    except that an absorbed repo under :data:`RULESPEC_OWNER` folds the same
+    way). Non-rulespec names pass through unchanged (they are never
+    affected-map keys).
+
+    A checkout's git remote is stamped as-is (:func:`rulespec_provenance` never
+    folds it), so a run that really read an archived clone still says so.
     """
+    owner_prefix = f"{RULESPEC_OWNER}/"
+    if name.startswith(owner_prefix):
+        absorbed = ABSORBED_RULESPEC_REPOS.get(name[len(owner_prefix) :])
+        return f"{owner_prefix}{absorbed}" if absorbed else name
     resolved = _RULESPEC_DIR_ALIASES.get(name, name)
+    resolved = ABSORBED_RULESPEC_REPOS.get(resolved, resolved)
     if "/" in resolved or not resolved.startswith("rulespec-"):
         return resolved
     return f"{RULESPEC_OWNER}/{resolved}"
