@@ -102,6 +102,26 @@ class Concepts:
     RENT_PAID = "axiom:housing/household#rent_paid"
     CHILDCARE_EXPENSES = "axiom:tax/household#childcare_expenses"
 
+    # Married-filing-separately facts (tax-unit level, carried on the Case).
+    # A separate filer's Case holds the filer and their dependents only; the
+    # other spouse files their own return and is never an entity here, so
+    # projections must reject a Case that sets this and also has a spouse.
+    # 26 USC 7703(a): married at the close of the taxable year; no joint
+    # return filed under 26 USC 6013.
+    MARRIED_FILING_SEPARATELY = "axiom:tax/household#married_filing_separately"
+    # 26 USC 86(c)(1)(C)(ii): the zero base amount applies to a separate
+    # filer who does NOT live apart from their spouse at all times during
+    # the taxable year. Absent means False (spouses shared a home).
+    LIVED_APART_FROM_SPOUSE_ALL_YEAR = (
+        "axiom:tax/household#lived_apart_from_spouse_all_year"
+    )
+    # 26 USC 7703(b)(3) and 32(d)(2)(C)(i): the spouse was not a member of
+    # the filer's household during the last 6 months of the taxable year.
+    # Absent means the value of LIVED_APART_FROM_SPOUSE_ALL_YEAR.
+    SPOUSE_ABSENT_LAST_SIX_MONTHS = (
+        "axiom:tax/household#spouse_absent_last_six_months"
+    )
+
     # Program outputs
     SNAP_BENEFIT = "us:statutes/7/2014/u#snap_benefit"
     SNAP_ELIGIBLE = "us:statutes/7/2014/o#snap_eligible"
