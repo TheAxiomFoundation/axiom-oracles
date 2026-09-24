@@ -913,3 +913,22 @@ def test_selector_never_dispatches_a_bare_ci_unrunnable_suite():
             suite = (config.get("dashboard") or {}).get("suite", config["name"])
             assert suite in manual, suite
 
+
+def test_committed_reports_of_lanes_the_bot_cannot_run_are_real_runs():
+    """No committed report of a suite the bare CI legs cannot run is a
+    re-emission. The bot never dispatches these suites, so their reports
+    change only through a supervised run or a PR, and a re-emission here means
+    one replaced a real run: until 2026-09-24, 35 of them (34 EUROMOD and
+    UKMOD suites and us-tariff) were re-emissions hiding the real run each had
+    replaced. Scoped to these lanes because the publisher still lets a
+    dispatchable suite's first copy be a re-emission."""
+    from axiom_oracles.provenance import is_real_run_report
+
+    reemitted = []
+    for config in _bare_ci_unrunnable_configs():
+        filename = (config.get("dashboard") or {}).get("filename")
+        path = REPO / "dashboard/public/data" / str(filename)
+        if filename and path.exists():
+            if not is_real_run_report(json.loads(path.read_text())):
+                reemitted.append(path.name)
+    assert reemitted == []
