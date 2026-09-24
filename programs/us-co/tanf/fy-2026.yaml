@@ -13,7 +13,6 @@ outputs:
 
 acknowledged_incomplete:
   - co_tanf_annual_benefit
-  - tanf_benefit
 
 scope:
   state:
