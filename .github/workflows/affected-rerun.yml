@@ -7,8 +7,10 @@ name: Affected suite rerun
 # never commits them. This workflow is what keeps the committed reports fresh,
 # without paying for the whole matrix every 6 hours. Suites whose
 # map entry has `name: null` (parameter suites, and suites declaring
-# `ci: manual`, such as the SNAP QC replays, which these runners could only
-# re-emit) are reported as awaiting the manual lane, never dispatched.
+# `ci: manual`, such as the SNAP QC replays, the EUROMOD/UKMOD suites, the UK
+# PolicyEngine case grids and the us-tariff grid, which these runners could
+# only re-emit or copy) are reported as awaiting the manual lane, never
+# dispatched.
 #
 # Selection is deterministic and committed:
 #   comparisons/affected_map.json   suite → affected rulespec repos
@@ -26,9 +28,10 @@ name: Affected suite rerun
 # this bot path — re-pinning after a genuine improvement stays a deliberate
 # human action, and a genuine regression is MEANT to fail ci.yml's ratchet
 # gate on main. A leg whose runner marks its output as a re-emission
-# (provenance.reemitted_report) never replaces a committed report from a real
-# run: run_comparison.py leaves that copy untouched, and the commit script
-# re-checks every push attempt's tip (scripts/guard_reemitted_reports.py).
+# (provenance.reemitted_report) never replaces a committed report, real or
+# itself re-emitted: run_comparison.py leaves that copy untouched, and the
+# commit script re-checks every push attempt's tip
+# (scripts/guard_reemitted_reports.py).
 #
 # See scripts/select_affected_suites.py and comparisons/README.md.
 

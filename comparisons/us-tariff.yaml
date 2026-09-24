@@ -34,6 +34,20 @@ description: >-
   gate, with aggregate reconciliation against the Budget Lab at Yale / TPC
   trackers deferred to T1 (axiom-oracles#444).
 
+# Not runnable on the CI matrix runners, for the same reason as
+# us-tariff-panel: scripts/generate_us_tariff.py evaluates the composed
+# pipeline through an axiom rules engine binary (AXIOM_RULES_ENGINE_BINARY,
+# an axiom-rules-engine build, or axiom-rules on PATH), and the 6-hourly
+# affected rerun and the weekly matrix never export or build one there, so
+# each leg fails with "No such file or directory: 'axiom-rules'" and
+# re-emits the committed report. From 2026-08-02 the affected rerun
+# committed those re-emissions over the real 2026-08-01 run (rulespec-us
+# a614dea5, 40/40), then over each other on every sweep. Manual lane only: a
+# supervised run_comparison.py run with a built engine and a rulespec-us
+# checkout carrying the us-tariff-duty spine refreshes the committed report.
+# Drop this marker only once a workflow provisions the engine for this lane.
+ci: manual
+
 runner:
   type: us-tariff-grid
   parameters:
