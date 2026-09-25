@@ -357,10 +357,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "4c9452a6bbe20659c837580ae8ee9bbc3ca9a251",
+      "axiom_rules_engine_sha": "2840b57ecd5712b4672f872a1c2666fdcd28dfb9",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-25T05:08:25Z",
+    "generated_at": "2026-09-25T21:42:33Z",
     "generated_by": "scripts/run_comparison.py::uk-worker-pit-ukmod",
     "oracle": {
       "euromod_country": "UK",
