@@ -32,16 +32,17 @@ Modes::
     uv run python scripts/certify.py --check    # CI: fail on drift
 """
 
-from __future__ import annotations
-
 import argparse
 import copy
 import hashlib
 import importlib.util
 import json
+import math
 import re
 import sys
 from collections import Counter
+from collections.abc import Callable
+from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 from types import ModuleType
@@ -49,11 +50,6 @@ from types import ModuleType
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-#: A git object id: 40 lowercase hex chars with at least one of a-f (a
-#: decimal-only string is not a realistic commit and is the !!str-digit forgery
-#: shape from delta-audit #8). Shared shape with closure_ledger/_HEX_GIT_SHA and
-#: executable_reproduction/HEX_40.
-GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
@@ -67,7 +63,11 @@ from axiom_oracles.conformance.unexplained import (  # noqa: E402
     count_defect,
     load_known_causes,
 )
-from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
+from axiom_oracles.evidence import (  # noqa: E402
+    strict_json_loads,
+    validate_suite_evidence,
+)
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 CENSUS_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
@@ -369,14 +369,7 @@ def _dispositions_suite(path: Path) -> str | None:
     than an unrelated same-suite artifact.
     """
     try:
-        import yaml
-    except ModuleNotFoundError:  # pragma: no cover - environment guard
-        sys.exit(
-            "certify needs PyYAML to suite-bind dispositions files. Run under "
-            "the project env (`uv run python scripts/certify.py`)."
-        )
-    try:
-        payload = yaml.safe_load(path.read_text())
+        payload = _load(path)
     except Exception:
         return None
     errors = validate_dispositions(
@@ -393,8 +386,60 @@ def sha256_of(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _strict_yaml_loads(raw: str) -> object:
+    """Reject ambiguous mappings, cycles and non-finite numbers in YAML evidence."""
+
+    class UniqueLoader(yaml.SafeLoader):
+        pass
+
+    def mapping(loader, node, deep=False):
+        keys = set()
+        for key_node, _ in node.value:
+            if key_node.tag == "tag:yaml.org,2002:merge":
+                continue
+            key = loader.construct_object(key_node, deep=deep)
+            if key in keys:
+                raise ValueError(f"duplicate YAML key {key!r}")
+            keys.add(key)
+        loader.flatten_mapping(node)
+        return loader.construct_mapping(node, deep=deep)
+
+    UniqueLoader.add_constructor(
+        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, mapping
+    )
+    value = yaml.load(raw, Loader=UniqueLoader)
+
+    def finite_tree(item, ancestors):
+        if isinstance(item, float) and not math.isfinite(item):
+            raise ValueError("non-finite YAML number")
+        if isinstance(item, (dict, list, tuple, set)):
+            if id(item) in ancestors:
+                raise ValueError("cyclic YAML evidence")
+            ancestors = ancestors | {id(item)}
+            children = (
+                [part for pair in item.items() for part in pair]
+                if isinstance(item, dict)
+                else item
+            )
+            for child in children:
+                finite_tree(child, ancestors)
+
+    finite_tree(value, set())
+    return value
+
+
 def _load(path: Path) -> dict:
-    return json.loads(path.read_text())
+    """Admit every certificate artifact through the same strict parser."""
+
+    raw = path.read_text()
+    document = (
+        _strict_yaml_loads(raw)
+        if path.suffix in {".yaml", ".yml"}
+        else strict_json_loads(raw)
+    )
+    if not isinstance(document, dict):
+        raise ValueError(f"{path} must contain an object")
+    return document
 
 
 def _rederived_nz_report() -> dict:
@@ -1229,8 +1274,8 @@ def _producer_closed_verdict(
 ) -> dict | None:
     """Computed closure from a committed artifact and its named producer.
 
-    Returns None when the program declares no closed producer (or its artifact
-    is absent) so the caller falls through to the other evidence classes. Both
+    Returns None when the program declares no closed producer or its artifact
+    is absent; a selected producer route treats absence as a hard failure. Both
     object-style producer summaries and program-scoped mapping summaries are
     supported; a mapping that declares ``programs`` must contain this program.
     """
@@ -1247,12 +1292,8 @@ def _producer_closed_verdict(
         return None
 
     try:
-        document = (
-            yaml.safe_load(artifact_path.read_text())
-            if artifact_path.suffix in {".yaml", ".yml"}
-            else json.loads(artifact_path.read_text())
-        )
-    except (OSError, UnicodeError, json.JSONDecodeError, yaml.YAMLError) as exc:
+        document = _load(artifact_path)
+    except (OSError, UnicodeError, ValueError, yaml.YAMLError) as exc:
         raise ValueError(
             f"{artifact_ref} is not readable closure evidence: {exc}"
         ) from exc
@@ -1348,6 +1389,11 @@ def _producer_closed_verdict(
             "artifact": str(artifact_ref),
             "corpus_release": document.get("corpus_release"),
             "rulespec_commit": document.get("rulespec_commit"),
+            **(
+                {"program_set": document["program_set"]}
+                if "program_set" in document
+                else {}
+            ),
             "pending_citations": len(scoped.get("pending_citations") or []),
             "pending_money_atoms": scoped.get("pending_money_atoms"),
             "root_node_count": scoped.get("root_node_count"),
@@ -1425,8 +1471,8 @@ def _producer_executable_verdict(
         return None
 
     try:
-        document = json.loads(artifact_path.read_text())
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        document = _load(artifact_path)
+    except (OSError, UnicodeError, ValueError) as exc:
         raise ValueError(
             f"{artifact_ref} is not readable executable JSON: {exc}"
         ) from exc
@@ -1486,6 +1532,11 @@ def _producer_executable_verdict(
             "value": value,
             "artifact": str(artifact_ref),
             "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
+            **(
+                {"program_set": document["program_set"]}
+                if "program_set" in document
+                else {}
+            ),
             "engine": document.get("engine"),
             "compiled_artifact": document.get("compiled_artifact"),
             "request_set": document.get("request_set"),
@@ -1570,70 +1621,70 @@ def _producer_executable_verdict(
     return result
 
 
-def _closed_verdict(
-    program: str,
-    spec: dict,
-    evidence: list[dict],
-    *,
-    verify_producer: bool = False,
-) -> dict:
-    """One closure verdict for every evidence class, in strength order:
-    NZ attested receipt (attested), DK producer ledger (computed), NZ
-    rederived closure summary (computed), else the registry block (attested,
-    whatever its strings say)."""
-
-    attested_path_string = spec.get("attested_closed_receipt")
-    if attested_path_string:
-        path = REPO_ROOT / attested_path_string
-        closure = _load(path)
-        scoped = (closure.get("programs") or {}).get(program)
-        if not isinstance(scoped, dict):
-            raise ValueError(f"NZ closure receipt has no program scope for {program}")
-        evidence.append(
-            {
-                "claim": f"closure receipt:{program}",
-                "mode": "attested",
-                "artifact": attested_path_string,
-                "sha256": sha256_of(path),
-            }
-        )
-        return {
+def _closed_receipt_verdict(program, spec, evidence, *, verify_producer=False):
+    attested_path_string = spec["attested_closed_receipt"]
+    path = REPO_ROOT / attested_path_string
+    closure = _load(path)
+    scoped = (closure.get("programs") or {}).get(program)
+    if not isinstance(scoped, dict):
+        raise ValueError(f"NZ closure receipt has no program scope for {program}")
+    evidence.append(
+        {
+            "claim": f"closure receipt:{program}",
             "mode": "attested",
-            "status": "attested_receipt",
-            "value": scoped.get("closed") is True,
-            "downgrade_reason": (
-                "Adversarial review S4: no independently emitted requested-output "
-                "trace, root-set bijection, and monotone root/citation denominator "
-                "ratchet are all present; exact-path closure remains evidence only."
-            ),
-            "corpus_release": closure.get("corpus_release"),
-            "rulespec_commit": closure.get("rulespec_commit"),
-            "pending_citations": len(scoped.get("pending_citations") or []),
-            "pending_money_atoms": scoped.get("pending_money_atoms"),
-            "root_node_count": scoped.get("root_node_count"),
-            "root_nodes": scoped.get("root_nodes"),
-            "subgraph_node_count": scoped.get("subgraph_node_count"),
-            "citation_root_count": scoped.get("citation_root_count"),
-            "by_status": scoped.get("by_status"),
+            "artifact": attested_path_string,
+            "sha256": sha256_of(path),
         }
+    )
+    return {
+        "mode": "attested",
+        "status": "attested_receipt",
+        "value": scoped.get("closed") is True,
+        "downgrade_reason": (
+            "Adversarial review S4: no independently emitted requested-output "
+            "trace, root-set bijection, and monotone root/citation denominator "
+            "ratchet are all present; exact-path closure remains evidence only."
+        ),
+        "corpus_release": closure.get("corpus_release"),
+        "rulespec_commit": closure.get("rulespec_commit"),
+        "pending_citations": len(scoped.get("pending_citations") or []),
+        "pending_money_atoms": scoped.get("pending_money_atoms"),
+        "root_node_count": scoped.get("root_node_count"),
+        "root_nodes": scoped.get("root_nodes"),
+        "subgraph_node_count": scoped.get("subgraph_node_count"),
+        "citation_root_count": scoped.get("citation_root_count"),
+        "by_status": scoped.get("by_status"),
+    }
+
+
+def _closed_producer_verdict(program, spec, evidence, *, verify_producer=False):
     produced = _producer_closed_verdict(
         program, spec, evidence, verify_producer=verify_producer
     )
     path_string = spec.get("computed_closed")
-    if produced is not None:
-        if not path_string:
-            return produced
-        # The producer ledger IS the closure verdict. A rederived
-        # exact-citation-path summary contributes only its source-universe
-        # and signature fields; it can never supply the value or the gates.
-        scoped, closure = _rederived_closure_scope(program, path_string, evidence)
-        fields = _exact_path_fields(scoped, closure)
-        merged = {**fields, **produced}
-        if merged.get("rulespec_commit") is None:
-            merged["rulespec_commit"] = fields.get("rulespec_commit")
-        return merged
+    if produced is None:
+        raise ValueError(f"{program} declared closure producer artifact is missing")
     if not path_string:
-        return _attested_verdict(spec, "closed")
+        return produced
+    # The producer ledger IS the closure verdict. A rederived
+    # exact-citation-path summary contributes only its source-universe
+    # and signature fields; it can never supply the value or the gates.
+    scoped, closure = _rederived_closure_scope(program, path_string, evidence)
+    fields = _exact_path_fields(scoped, closure)
+    merged = {**fields, **produced}
+    if (
+        path_string == "closure/de/summary.json"
+        and produced.get("rulespec_commit") is None
+    ):
+        # DE's discovery ledger binds the source manifest rather than exposing
+        # one rulespec commit. Its independently rederived closure summary
+        # supplies the commit that must match the signed executable checkout.
+        merged["rulespec_commit"] = fields["rulespec_commit"]
+    return merged
+
+
+def _closed_summary_verdict(program, spec, evidence, *, verify_producer=False):
+    path_string = spec["computed_closed"]
     scoped, closure = _rederived_closure_scope(program, path_string, evidence)
     # The same central v3 gate that judges producer artifacts: an exact-path
     # summary that declares no instrument frontier or dependency-closure block
@@ -1704,6 +1755,7 @@ def _exact_path_fields(scoped: dict, closure: dict) -> dict:
     return {
         "corpus_release": closure.get("corpus_release"),
         "rulespec_commit": closure.get("rulespec_commit"),
+        **({"program_set": closure["program_set"]} if "program_set" in closure else {}),
         "pending_citations": len(scoped.get("pending_citations") or []),
         "pending_money_atoms": scoped.get("pending_money_atoms"),
         "root_node_count": scoped.get("root_node_count"),
@@ -1762,6 +1814,260 @@ def _single_person_evidence(program: str, spec: dict, evidence: list[dict]) -> N
     )
 
 
+def _de_executable_verdict(program, spec, evidence, *, verify_producer=False):
+    de_status_path = spec["computed_de_executable"]
+    module = _load_generator(
+        "_certificate_de_executable",
+        REPO_ROOT / "scripts" / "de_executable.py",
+    )
+    status = module.build_status()
+    path = REPO_ROOT / de_status_path
+    if _load(path) != status:
+        raise ValueError("DE executable status does not rederive")
+    evidence.extend(
+        [
+            {
+                "claim": "released-engine executable contract",
+                "mode": "computed",
+                "artifact": ("conformance/executable/de-kindergeld-manifest.json"),
+                "sha256": sha256_of(
+                    REPO_ROOT / "conformance/executable/de-kindergeld-manifest.json"
+                ),
+            },
+            {
+                "claim": "released-engine executable verdict",
+                "mode": "computed",
+                "artifact": de_status_path,
+                "sha256": sha256_of(path),
+            },
+        ]
+    )
+    return {
+        **status,
+        "status": status.get("state"),
+    }
+
+
+def _executable_receipt_verdict(program, spec, evidence, *, verify_producer=False):
+    attested_path_string = spec["attested_executable_receipt"]
+    path = REPO_ROOT / attested_path_string
+    report = _load(path)
+    receipt = report.get("compiled_program") or {}
+    evidence.append(
+        {
+            "claim": "compiled-program execution receipt (commit-pinned harness)",
+            "mode": "attested",
+            "artifact": attested_path_string,
+            "sha256": sha256_of(path),
+        }
+    )
+    return {
+        "mode": "attested",
+        "status": "attested_receipt",
+        "value": True,
+        "receipt": receipt,
+        "limitation": (
+            "The generator and comparison harness lineage is commit-pinned, but "
+            "the compiled artifact bytes and an executable transcript are not "
+            "committed; metadata syntax and a digest string are not a computed "
+            "execution check (adversarial review S3)."
+        ),
+    }
+
+
+def _executable_producer_verdict(program, spec, evidence, *, verify_producer=False):
+    produced = _producer_executable_verdict(
+        program, spec, evidence, verify_producer=verify_producer
+    )
+    if produced is None:
+        raise ValueError(f"{program} declared executable producer artifact is missing")
+    return produced
+
+
+def _unsupported_executable_verdict(program, spec, evidence, *, verify_producer=False):
+    raise ValueError(
+        "computed executable verdict requested without a verifier that loads and "
+        "runs committed artifact bytes"
+    )
+
+
+def _pending_de_executable_verdict(program, spec, evidence, *, verify_producer=False):
+    return {
+        "value": False,
+        "mode": "computed",
+        "status": "computed_open",
+        "missing_inputs": ["executable reproduction contract"],
+    }
+
+
+@dataclass(frozen=True)
+class PremiseRoute:
+    """A disjoint dispatch route and the provenance its emitted block exposes."""
+
+    premise: str
+    name: str
+    selects: Callable[[dict], bool]
+    can_emit_computed: bool
+    build: Callable[..., dict]
+    commit_of: Callable[[dict], object]
+    program_set_of: Callable[[dict], object]
+    dispatch_key: str | None
+
+
+def _route_flag(spec: dict, key: str) -> bool:
+    if key.startswith("computed."):
+        computed = spec.get("computed")
+        return isinstance(computed, dict) and isinstance(
+            computed.get(key.split(".", 1)[1]), dict
+        )
+    return bool(spec.get(key))
+
+
+def _route_selector(key: str | None, higher: tuple[str, ...]):
+    return lambda spec: (
+        not any(_route_flag(spec, prior) for prior in higher)
+        and (key is None or _route_flag(spec, key))
+    )
+
+
+def _closed_commit(block: dict) -> object:
+    if "rulespec_commit" in block:
+        return block["rulespec_commit"]
+    universe = block.get("source_universe")
+    return universe.get("rulespec_commit") if isinstance(universe, dict) else None
+
+
+def _de_executable_commit(block: dict) -> object:
+    inputs = block.get("required_inputs")
+    if not isinstance(inputs, list):
+        return None
+    signed = [
+        row
+        for row in inputs
+        if isinstance(row, dict) and row.get("id") == "signed-rulespec-estg-66-2025"
+    ]
+    if len(signed) != 1:
+        return None
+    observation = signed[0].get("checkout_observation")
+    return observation.get("commit") if isinstance(observation, dict) else None
+
+
+def _premise_routes(premise: str, definitions: tuple) -> tuple[PremiseRoute, ...]:
+    routes = []
+    higher = ()
+    for name, key, computed, build, commit_of in definitions:
+        routes.append(
+            PremiseRoute(
+                premise=premise,
+                name=name,
+                selects=_route_selector(key, higher),
+                can_emit_computed=computed,
+                build=build,
+                commit_of=commit_of,
+                program_set_of=lambda block: block.get("program_set"),
+                dispatch_key=key,
+            )
+        )
+        if key is not None:
+            higher += (key,)
+    return tuple(routes)
+
+
+# Priority is declared once. Each predicate excludes every higher-priority
+# flag, including when several legacy flags coexist in the same program spec.
+CLOSED_ROUTES = _premise_routes(
+    "closed",
+    (
+        (
+            "attested_receipt",
+            "attested_closed_receipt",
+            False,
+            _closed_receipt_verdict,
+            _closed_commit,
+        ),
+        ("producer", "computed.closed", True, _closed_producer_verdict, _closed_commit),
+        ("summary", "computed_closed", True, _closed_summary_verdict, _closed_commit),
+        (
+            "attested",
+            None,
+            False,
+            lambda program, spec, evidence, **kwargs: _attested_verdict(spec, "closed"),
+            _closed_commit,
+        ),
+    ),
+)
+EXECUTABLE_ROUTES = _premise_routes(
+    "executable",
+    (
+        (
+            "pending_de",
+            "pending_de_candidate",
+            True,
+            _pending_de_executable_verdict,
+            lambda block: block.get("rulespec_sha"),
+        ),
+        (
+            "de_status",
+            "computed_de_executable",
+            True,
+            _de_executable_verdict,
+            _de_executable_commit,
+        ),
+        (
+            "attested_receipt",
+            "attested_executable_receipt",
+            False,
+            _executable_receipt_verdict,
+            lambda block: None,
+        ),
+        (
+            "producer",
+            "computed.executable",
+            True,
+            _executable_producer_verdict,
+            lambda block: block.get("rulespec_sha"),
+        ),
+        (
+            "unsupported",
+            "computed_executable",
+            False,
+            _unsupported_executable_verdict,
+            lambda block: None,
+        ),
+        (
+            "attested",
+            None,
+            False,
+            lambda program, spec, evidence, **kwargs: _attested_verdict(
+                spec, "executable"
+            ),
+            lambda block: None,
+        ),
+    ),
+)
+
+
+def _select_route(routes: tuple[PremiseRoute, ...], spec: dict) -> PremiseRoute:
+    selected = [route for route in routes if route.selects(spec)]
+    if len(selected) != 1:
+        raise ValueError(
+            f"premise dispatch must select exactly one route, got {len(selected)}"
+        )
+    return selected[0]
+
+
+def _closed_verdict(
+    program: str,
+    spec: dict,
+    evidence: list[dict],
+    *,
+    verify_producer: bool = False,
+) -> dict:
+    return _select_route(CLOSED_ROUTES, spec).build(
+        program, spec, evidence, verify_producer=verify_producer
+    )
+
+
 def _executable_verdict(
     program: str,
     spec: dict,
@@ -1770,85 +2076,76 @@ def _executable_verdict(
     *,
     verify_producer: bool = False,
 ) -> dict:
-    """One execution verdict for every evidence class.
-
-    ``legs`` is retained for the legacy executable dispatcher. The three-arg
-    form added by the shared producer adapter passes evidence in that position,
-    so normalize both call shapes before dispatching.
-    """
-
+    # Retain both public call shapes; premise builders do not consume legs.
     if evidence is None:
         evidence = legs if legs is not None else []
-        legs = []
-
-    de_status_path = spec.get("computed_de_executable")
-    if de_status_path:
-        module = _load_generator(
-            "_certificate_de_executable",
-            REPO_ROOT / "scripts" / "de_executable.py",
-        )
-        status = module.build_status()
-        path = REPO_ROOT / de_status_path
-        if _load(path) != status:
-            raise ValueError("DE executable status does not rederive")
-        evidence.extend(
-            [
-                {
-                    "claim": "released-engine executable contract",
-                    "mode": "computed",
-                    "artifact": ("conformance/executable/de-kindergeld-manifest.json"),
-                    "sha256": sha256_of(
-                        REPO_ROOT / "conformance/executable/de-kindergeld-manifest.json"
-                    ),
-                },
-                {
-                    "claim": "released-engine executable verdict",
-                    "mode": "computed",
-                    "artifact": de_status_path,
-                    "sha256": sha256_of(path),
-                },
-            ]
-        )
-        return {
-            **status,
-            "status": status.get("state"),
-        }
-    attested_path_string = spec.get("attested_executable_receipt")
-    if attested_path_string:
-        path = REPO_ROOT / attested_path_string
-        report = _load(path)
-        receipt = report.get("compiled_program") or {}
-        evidence.append(
-            {
-                "claim": "compiled-program execution receipt (commit-pinned harness)",
-                "mode": "attested",
-                "artifact": attested_path_string,
-                "sha256": sha256_of(path),
-            }
-        )
-        return {
-            "mode": "attested",
-            "status": "attested_receipt",
-            "value": True,
-            "receipt": receipt,
-            "limitation": (
-                "The generator and comparison harness lineage is commit-pinned, but "
-                "the compiled artifact bytes and an executable transcript are not "
-                "committed; metadata syntax and a digest string are not a computed "
-                "execution check (adversarial review S3)."
-            ),
-        }
-    produced = _producer_executable_verdict(
+    return _select_route(EXECUTABLE_ROUTES, spec).build(
         program, spec, evidence, verify_producer=verify_producer
     )
-    if produced is not None:
-        return produced
-    if not spec.get("computed_executable"):
-        return _attested_verdict(spec, "executable")
-    raise ValueError(
-        "computed executable verdict requested without a verifier that loads and "
-        "runs committed artifact bytes"
-    )
+
+
+def _cross_premise_blockers(
+    spec: dict,
+    closed_route: PremiseRoute,
+    closed_block: dict,
+    exec_route: PremiseRoute,
+    exec_block: dict,
+) -> list[str]:
+    """Bind every emitted computed pair, independent of the dispatch flags."""
+
+    if closed_block.get("mode") != "computed" or exec_block.get("mode") != "computed":
+        return []
+    blockers = []
+    closed_commit = closed_route.commit_of(closed_block)
+    executable_commit = exec_route.commit_of(exec_block)
+    if not (
+        isinstance(closed_commit, str)
+        and GIT_SHA.fullmatch(closed_commit)
+        and isinstance(executable_commit, str)
+        and GIT_SHA.fullmatch(executable_commit)
+    ):
+        blockers.append(
+            "producers' rulespec provenance is not comparable: closure ledger "
+            f"commit={closed_commit!r}, executable receipt sha="
+            f"{executable_commit!r}; both must be string SHAs"
+        )
+    elif closed_commit != executable_commit:
+        blockers.append(
+            "producers disagree on the rulespec commit: closure ledger "
+            f"{closed_commit[:12]} vs executable receipt {executable_commit[:12]}; "
+            "regenerate both at one commit"
+        )
+    if (
+        spec.get("require_program_set_binding")
+        or "program_set" in closed_block
+        or "program_set" in exec_block
+    ):
+        closed_set = closed_route.program_set_of(closed_block)
+        executable_set = exec_route.program_set_of(exec_block)
+
+        def comparable(program_set):
+            return (
+                isinstance(program_set, dict)
+                and isinstance(program_set.get("rows_sha256"), str)
+                and SHA256.fullmatch(program_set["rows_sha256"])
+                and isinstance(program_set.get("program_count"), int)
+                and not isinstance(program_set.get("program_count"), bool)
+            )
+
+        if not (comparable(closed_set) and comparable(executable_set)):
+            blockers.append(
+                "producers' program-set provenance is not comparable: closure "
+                "and executable receipts must bind hash-identified program "
+                "spec/module/promised-output rows"
+            )
+        elif closed_set != executable_set:
+            blockers.append(
+                "producers disagree on the exact program set: closure ledger "
+                f"{closed_set['rows_sha256'][:12]} vs executable receipt "
+                f"{executable_set['rows_sha256'][:12]}; regenerate both "
+                "against one program surface"
+            )
+    return blockers
 
 
 def _align_de_closed_signature(closed: dict, executable: dict) -> dict:
@@ -2468,8 +2765,23 @@ def _build_pending_de_certificate(program: str, spec: dict) -> dict:
     evidence: list[dict] = []
     row = _de_census_row(program, evidence)
     closed = _closed_verdict(program, spec, evidence)
+    executable = _executable_verdict(program, spec, evidence)
+    binding_blockers = _cross_premise_blockers(
+        spec,
+        _select_route(CLOSED_ROUTES, spec),
+        closed,
+        _select_route(EXECUTABLE_ROUTES, spec),
+        executable,
+    )
     blockers = list(
-        dict.fromkeys([*(row.get("blockers") or []), *(closed.get("blockers") or [])])
+        dict.fromkeys(
+            [
+                *(row.get("blockers") or []),
+                *(closed.get("blockers") or []),
+                *(executable.get("blockers") or []),
+                *binding_blockers,
+            ]
+        )
     )
     straddle = {
         "mode": "unavailable",
@@ -2507,12 +2819,7 @@ def _build_pending_de_certificate(program: str, spec: dict) -> dict:
                 "threshold_straddle": straddle,
             },
             "closed": closed,
-            "executable": {
-                "value": False,
-                "mode": "computed",
-                "status": "computed_open",
-                "missing_inputs": ["executable reproduction contract"],
-            },
+            "executable": executable,
         },
         "blockers": blockers,
         "evidence": evidence,
@@ -2661,6 +2968,15 @@ def build_certificate(
     executable_block = _executable_verdict(
         program, spec, legs, evidence, verify_producer=verify_producers
     )
+    blockers.extend(
+        _cross_premise_blockers(
+            spec,
+            _select_route(CLOSED_ROUTES, spec),
+            closed_block,
+            _select_route(EXECUTABLE_ROUTES, spec),
+            executable_block,
+        )
+    )
     if program == "de/kindergeld":
         closed_block = _align_de_closed_signature(closed_block, executable_block)
     blockers.extend(closed_block.get("blockers") or [])
@@ -2699,81 +3015,6 @@ def build_certificate(
             "close axiom-attributed-open classes. Those open units independently "
             "make the conformant premise false."
         )
-    # ONE rulespec commit across producer-computed premises. The closure
-    # ledger and the executable receipt each verify their OWN recorded pin
-    # (and the receipt binds the reports' provenance), but a coherently
-    # regenerated ledger at a different commit would pass its own check while
-    # the receipt sat at another — "the encoded law is closed at X" and "the
-    # encoded law executes at Y" is not a certificate about one artifact.
-    # Both blocks are producer-computed for DK and NZ; a mismatch is a blocker
-    # on the certificate (never a crash), so certified cannot be yes on it.
-    closed_commit = closed_block.get("rulespec_commit")
-    executable_commit = executable_block.get("rulespec_sha")
-    computed_config = spec.get("computed")
-    producer_pair = (
-        isinstance(computed_config, dict)
-        and isinstance(computed_config.get("closed"), dict)
-        and isinstance(computed_config.get("executable"), dict)
-    )
-    if (
-        producer_pair
-        and closed_block.get("mode") == "computed"
-        and executable_block.get("mode") == "computed"
-    ):
-        # Fail closed: two computed premises with no comparable provenance is
-        # a blocker, not a silent skip — a 40-DIGIT integer commit slipped
-        # through a str()-coercing validator and would have skipped this
-        # comparison (delta-audit #7); a !!str-tagged digit string then passed
-        # both validators' hex regex and, coordinated on both sides, satisfied
-        # plain equality (delta-audit #8). Equality only counts between values
-        # that are each a real git object id (GIT_SHA: lowercase hex with at
-        # least one a-f).
-        if not (
-            isinstance(closed_commit, str)
-            and isinstance(executable_commit, str)
-            and GIT_SHA.fullmatch(closed_commit)
-            and GIT_SHA.fullmatch(executable_commit)
-        ):
-            blockers.append(
-                "producers' rulespec provenance is not comparable: closure ledger "
-                f"commit={closed_commit!r}, executable receipt sha="
-                f"{executable_commit!r}; both must be string SHAs"
-            )
-        elif closed_commit != executable_commit:
-            blockers.append(
-                "producers disagree on the rulespec commit: closure ledger "
-                f"{closed_commit[:12]} vs executable receipt {executable_commit[:12]}; "
-                "regenerate both at one commit"
-            )
-
-        if spec.get("require_program_set_binding"):
-            closed_program_set = closed_block.get("program_set")
-            executable_program_set = executable_block.get("program_set")
-            comparable_program_set = (
-                isinstance(closed_program_set, dict)
-                and isinstance(executable_program_set, dict)
-                and isinstance(closed_program_set.get("rows_sha256"), str)
-                and SHA256.fullmatch(closed_program_set["rows_sha256"])
-                and isinstance(executable_program_set.get("rows_sha256"), str)
-                and SHA256.fullmatch(executable_program_set["rows_sha256"])
-                and isinstance(closed_program_set.get("program_count"), int)
-                and not isinstance(closed_program_set.get("program_count"), bool)
-                and isinstance(executable_program_set.get("program_count"), int)
-                and not isinstance(executable_program_set.get("program_count"), bool)
-            )
-            if not comparable_program_set:
-                blockers.append(
-                    "producers' program-set provenance is not comparable: closure "
-                    "and executable receipts must bind hash-identified program "
-                    "spec/module/promised-output rows"
-                )
-            elif closed_program_set != executable_program_set:
-                blockers.append(
-                    "producers disagree on the exact program set: closure ledger "
-                    f"{closed_program_set['rows_sha256'][:12]} vs executable receipt "
-                    f"{executable_program_set['rows_sha256'][:12]}; regenerate both "
-                    "against one program surface"
-                )
 
     # The single public predicate (adopted from the 2026-07-26 design review):
     # "certified" is reserved for the conjunction of all four verdicts holding
@@ -2959,7 +3200,7 @@ def main(argv: list[str] | None = None) -> int:
             if not path.exists():
                 print(f"missing {path.relative_to(REPO_ROOT)}", file=sys.stderr)
                 return 1
-            if json.loads(path.read_text()) != certificate:
+            if _load(path) != certificate:
                 print(
                     f"certificate drifted for {program} — regenerate with "
                     "`uv run python scripts/certify.py`",

@@ -13,6 +13,11 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 OUT_DIR = REPO_ROOT / "closure" / "de"
 SOURCE_PATH = OUT_DIR / "source.json"
 SUMMARY_PATH = OUT_DIR / "summary.json"
@@ -404,6 +409,8 @@ def _validate_module_catalog(source: dict, rows: dict[str, dict]) -> dict[str, d
         raise ClosureError("rulespec snapshot must be an object")
     if (
         rulespec.get("repository") != "TheAxiomFoundation/rulespec-de"
+        or not isinstance(rulespec.get("observed_main_commit"), str)
+        or not GIT_SHA.fullmatch(rulespec["observed_main_commit"])
         or rulespec.get("observed_main_commit") != RULESPEC_COMMIT
         or rulespec.get("claim_mode") != "attested"
     ):
@@ -445,7 +452,11 @@ def _validate_module_catalog(source: dict, rows: dict[str, dict]) -> dict[str, d
         if signature_state == "signed":
             if not isinstance(artifact, dict):
                 raise ClosureError(f"signed module {citation} lacks artifact pins")
-            if artifact.get("commit") != RULESPEC_COMMIT:
+            if (
+                not isinstance(artifact.get("commit"), str)
+                or not GIT_SHA.fullmatch(artifact["commit"])
+                or artifact.get("commit") != RULESPEC_COMMIT
+            ):
                 raise ClosureError(f"signed module {citation} is not pinned to main")
             _require_nonempty(artifact.get("path"), f"{citation} artifact path")
             _require_hash(artifact.get("sha256"), f"{citation} artifact sha256")
@@ -596,6 +607,8 @@ def build(source: dict) -> dict:
         raise ClosureError("corpus snapshot must be an object")
     if (
         corpus.get("repository") != "TheAxiomFoundation/axiom-corpus"
+        or not isinstance(corpus.get("commit"), str)
+        or not GIT_SHA.fullmatch(corpus["commit"])
         or corpus.get("commit") != CORPUS_COMMIT
         or corpus.get("release") != RELEASE
         or corpus.get("release_content_sha256") != RELEASE_CONTENT_SHA256

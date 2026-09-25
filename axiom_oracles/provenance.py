@@ -45,10 +45,15 @@ local run is never mislabeled as a scheduled one.
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+# Certification commit identity: exactly 40 lowercase hex characters, including
+# at least one a-f. Digit-only identities are rejected by every premise producer.
+GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 
 PROVENANCE_SCHEMA_VERSION = "axiom_oracles.provenance.v1"
 

@@ -4299,14 +4299,32 @@ def test_exercise_requires_computed_threshold_evidence():
         )
 
 
+def _de_forged_replay_certifier(monkeypatch):
+    """Use the committed census while substituting its executable premise."""
+
+    certify = _load("certify")
+    # Census rederivation independently runs the real executable verifier.
+    # These mutants substitute that premise, including on hosts without the
+    # pinned engine archive, so hold its dependent census at the same baseline.
+    monkeypatch.setattr(
+        certify,
+        "_DE_CENSUS_CACHE",
+        json.loads((REPO / "conformance/de-certificate-census.json").read_text()),
+    )
+    return certify
+
+
 def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     monkeypatch,
 ):
     """MUTANT: keep a hand-maintained final verdict after every gate passes."""
 
-    certify = _load("certify")
-    # The committed evidence is complete and computed; only the executable
-    # verdict is forged here, in both directions.
+    certify = _de_forged_replay_certifier(monkeypatch)
+    # The committed comparison legs are complete and computed; forge the
+    # executable verdict in both directions without changing closure debt.
+    closure_commit = json.loads((REPO / "closure/de/summary.json").read_text())[
+        "rulespec_commit"
+    ]
     signed = {
         "id": "signed-rulespec-estg-66-2025",
         "state": "valid",
@@ -4318,7 +4336,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
         "trusted_key_id": f"sha256:{'5' * 64}",
         "checkout_observation": {
             "repository": "TheAxiomFoundation/rulespec-de",
-            "commit": "6" * 40,
+            "commit": closure_commit,
             "tree": "7" * 40,
             "claim_mode": "attested",
         },
@@ -4345,7 +4363,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     assert certificate["verdicts"]["conformant"]["value"] is True
     assert certificate["verdicts"]["executable"]["value"] is True
     # MUTANT boundary: complete legs plus a computed replay still cannot
-    # certify while the closure's instrument frontier is undeclared.
+    # certify while the closure's instrument frontier remains incomplete.
     assert certificate["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
@@ -4362,6 +4380,93 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
         *DE_KINDERGELD_CLOSURE_BLOCKERS,
         "release replay mismatch",
     ]
+
+
+def _de_passing_computed_binding_baseline(monkeypatch):
+    """Clear closure debt in-process to isolate cross-premise binding failures."""
+
+    certify = _de_forged_replay_certifier(monkeypatch)
+    program = "de/kindergeld"
+    spec = certify.PROGRAMS[program]
+    closed = certify._closed_verdict(program, spec, [])
+    closure_commit = json.loads((REPO / "closure/de/summary.json").read_text())[
+        "rulespec_commit"
+    ]
+    assert closed["rulespec_commit"] == closure_commit
+    closed.update(value=True, status="computed_pass", blockers=[])
+    executable = {
+        "mode": "computed",
+        "state": "computed_pass",
+        "value": True,
+        "blockers": [],
+        "required_inputs": [
+            {
+                "id": "signed-rulespec-estg-66-2025",
+                "state": "valid",
+                "path": "conformance/executable/de-kindergeld-signed-rulespec.json",
+                "sha256": "1" * 64,
+                "checkout_observation": {
+                    "repository": "TheAxiomFoundation/rulespec-de",
+                    "commit": closure_commit,
+                    "tree": "7" * 40,
+                    "claim_mode": "attested",
+                },
+            }
+        ],
+    }
+    monkeypatch.setattr(
+        certify, "_closed_verdict", lambda *_args, **_kwargs: copy.deepcopy(closed)
+    )
+    monkeypatch.setattr(
+        certify,
+        "_executable_verdict",
+        lambda *_args, **_kwargs: copy.deepcopy(executable),
+    )
+    baseline = certify.build_certificate(program, spec)
+    assert baseline["blockers"] == []
+    assert baseline["certified"]["state"] == "yes"
+    assert baseline["certified"]["value"] is True
+    return certify, closed, executable
+
+
+def test_de_certificate_rejects_cross_premise_commit_mismatch(monkeypatch):
+    """DE closure and signed checkout must identify the same rulespec commit."""
+
+    certify, closed, executable = _de_passing_computed_binding_baseline(monkeypatch)
+    other_commit = "abcdef0123456789abcdef0123456789abcdef01"
+    assert other_commit != closed["rulespec_commit"]
+    executable["required_inputs"][0]["checkout_observation"]["commit"] = other_commit
+
+    mutant = certify.build_certificate(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"]
+    )
+    assert mutant["certified"]["state"] == "no"
+    assert mutant["certified"]["value"] is False
+    assert len(mutant["blockers"]) == 1, mutant["blockers"]
+    assert "producers disagree on the rulespec commit" in mutant["blockers"][0]
+    assert (
+        mutant["verdicts"]["closed"]["source_universe"]["rulespec_commit"]
+        == closed["rulespec_commit"]
+    )
+
+
+@pytest.mark.parametrize("sides", ["closed", "executable", "both"])
+def test_de_certificate_rejects_digit_only_commit(monkeypatch, sides):
+    """Even matching digit-only commits cannot bind two computed DE premises."""
+
+    certify, closed, executable = _de_passing_computed_binding_baseline(monkeypatch)
+    if sides in {"closed", "both"}:
+        closed["rulespec_commit"] = "6" * 40
+    if sides in {"executable", "both"}:
+        executable["required_inputs"][0]["checkout_observation"]["commit"] = "6" * 40
+
+    mutant = certify.build_certificate(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"]
+    )
+    assert mutant["certified"]["state"] == "no"
+    assert mutant["certified"]["value"] is False
+    assert len(mutant["blockers"]) == 1, mutant["blockers"]
+    assert "rulespec provenance is not comparable" in mutant["blockers"][0]
 
 
 def test_de_certificate_clears_stale_signature_note_after_computed_validation():

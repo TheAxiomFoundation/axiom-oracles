@@ -40,6 +40,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner  # noqa: E402
 from axiom_oracles.core.case import Case  # noqa: E402
 from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
@@ -115,11 +117,6 @@ REPORT_SPECS = (
     },
 )
 
-#: A git object id: 40 lowercase hex chars with at least one of a-f. A
-#: decimal-only 40-char string is not a realistic commit (P ≈ (10/16)^40)
-#: and is exactly the YAML !!str-digit forgery shape (delta-audit #8), so it
-#: is rejected outright rather than compared.
-HEX_40 = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 BRIDGED_RECORD_KEY = re.compile(
     r"^(?P<entity>[^\[]+)\[(?P<entity_id>[^\]]+)\]::(?P<name>.+)$"
@@ -539,7 +536,7 @@ def _resolve_git_commit(repo: Path, ref: str) -> str:
             f"cannot resolve rulespec ref {ref!r} in {repo}: {detail}"
         ) from exc
     sha = process.stdout.strip()
-    _require(HEX_40.fullmatch(sha) is not None, f"git returned invalid commit {sha!r}")
+    _require(GIT_SHA.fullmatch(sha) is not None, f"git returned invalid commit {sha!r}")
     return sha
 
 
@@ -798,7 +795,7 @@ def validate_artifact(
     )
     _require(
         isinstance(rulespec.get("sha"), str)
-        and HEX_40.fullmatch(rulespec["sha"]) is not None,
+        and GIT_SHA.fullmatch(rulespec["sha"]) is not None,
         "rulespec.sha must be a lowercase 40-character Git SHA",
     )
     rulespec_sha = rulespec["sha"]
@@ -948,7 +945,7 @@ def main(argv: list[str] | None = None) -> int:
             recorded_ref = committed["rulespec"]["sha"]
             _require(
                 isinstance(recorded_ref, str)
-                and HEX_40.fullmatch(recorded_ref) is not None,
+                and GIT_SHA.fullmatch(recorded_ref) is not None,
                 "rulespec.sha must be a lowercase 40-character Git SHA",
             )
             if args.rulespec_ref is not None:

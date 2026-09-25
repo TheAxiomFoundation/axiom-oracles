@@ -1,4 +1,9 @@
-"""Tests for the provenance module (O2) and run_comparison's stamping."""
+"""Tests for provenance and run_comparison's stamping.
+
+Certification commit invariants: every premise producer uses the identical
+GIT_SHA validator; its language is 40 lowercase hex characters with at least
+one a-f. Enumerate every producer importing it so a local regex cannot drift.
+"""
 
 from __future__ import annotations
 
@@ -10,6 +15,7 @@ from pathlib import Path
 import pytest
 
 from axiom_oracles.provenance import (
+    GIT_SHA,
     PROVENANCE_SCHEMA_VERSION,
     RUN_KINDS,
     build_provenance,
@@ -19,6 +25,45 @@ from axiom_oracles.provenance import (
     resolve_run_kind,
     rulespec_provenance,
 )
+
+
+@pytest.mark.parametrize(
+    "producer",
+    (
+        "certify",
+        "closure_ledger",
+        "executable_reproduction",
+        "de_executable",
+        "de_axiom_legs",
+        "tariff_executable_reproduction",
+        "de_closure_ledger",
+        "de_closure",
+        "nz_closure",
+        "nz_executable_reproduction",
+        "us_tariff_closure",
+    ),
+)
+def test_certification_commit_validator_is_shared(producer):
+    module = importlib.import_module(f"scripts.{producer}")
+    assert module.GIT_SHA is GIT_SHA
+
+
+@pytest.mark.parametrize(
+    ("value", "accepted"),
+    (
+        ("d83ba3db30e2f63376aacf822d116687589b8564", True),
+        ("0" * 39 + "a", True),
+        ("f" * 40, True),
+        ("6" * 40, False),
+        ("A" * 40, False),
+        ("g" * 40, False),
+        ("a" * 39, False),
+        ("a" * 41, False),
+        ("a" * 40 + "\n", False),
+    ),
+)
+def test_certification_commit_shape(value, accepted):
+    assert (GIT_SHA.fullmatch(value) is not None) is accepted
 
 
 def _load_run_comparison():
