@@ -553,6 +553,18 @@ def test_ci_manual_registry_suite_emits_null_name():
     assert entries["uk-benefit-cap"]["name"] == "uk-benefit-cap-ukmod"
 
 
+def test_al_income_tax_2025_manual_lane_tracks_stable_report_and_rulespec_us():
+    gen = _load("generate_affected_map.py")
+    entries = {entry["suite"]: entry for entry in gen.build_map()["suites"]}
+    assert entries["al-income-tax-2025-ecps"] == {
+        "suite": "al-income-tax-2025-ecps",
+        "name": None,
+        "report": "reports/al-income-tax-2025-three-way.json",
+        "repos": ["TheAxiomFoundation/rulespec-us"],
+        "source": "comparisons/al-income-tax-2025-ecps.yaml",
+    }
+
+
 def test_direct_oracle_pair_suites_carry_no_rulespec_dependency():
     """An axiom-oracles-compare suite with no `axiom` side executes no
     RuleSpec, so rules movement cannot change its numbers — mapping concept

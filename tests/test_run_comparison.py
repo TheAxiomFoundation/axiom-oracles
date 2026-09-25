@@ -26,6 +26,126 @@ def load_script_module(name: str):
     return module
 
 
+def test_al_income_tax_2025_registry_dispatch_preserves_pending_reference_report(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    config = run_comparison._load_comparison("al-income-tax-2025-ecps")
+    assert config["ci"] == "manual"
+    assert "dashboard" not in config
+    assert config["selector"]["report"] == (
+        "reports/al-income-tax-2025-three-way.json"
+    )
+    runner = config["runner"]
+    runner["parameters"]["rulespec_root"] = str(tmp_path / "absent-rulespec-us")
+    output = tmp_path / ".registry-staging.tmp"
+    payload = {
+        "axiom_legs": {"policyengine": {"status": "pending_module"}},
+        "provenance": {"reference_sha256": "a" * 64, "rulespecs": []},
+    }
+
+    def fake_run(cmd, *, check, cwd):
+        assert check is True
+        assert cwd == run_comparison.REPO_ROOT
+        assert cmd[0] == run_comparison.sys.executable
+        assert cmd[1].endswith("scripts/generate_al_income_tax_2025.py")
+        assert cmd[cmd.index("--rulespec-root") + 1] == str(
+            tmp_path / "absent-rulespec-us"
+        )
+        assert Path(cmd[cmd.index("--reference-dir") + 1]).is_absolute()
+        report = Path(cmd[cmd.index("--output") + 1])
+        assert report == tmp_path / "al-income-tax-2025-three-way.json"
+        report.write_text(json.dumps(payload))
+        Path(cmd[cmd.index("--markdown-output") + 1]).write_text("Pending module.\n")
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    run_comparison.RUNNERS[runner["type"]](runner, output)
+
+    assert json.loads(output.read_text()) == payload
+    assert (tmp_path / "al-income-tax-2025-three-way.md").read_text() == (
+        "Pending module.\n"
+    )
+
+
+def test_al_income_tax_2025_registry_does_not_reuse_report_on_generator_failure(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    config = run_comparison._load_comparison("al-income-tax-2025-ecps")
+    (tmp_path / "al-income-tax-2025-three-way.json").write_text('{"stale": true}')
+    output = tmp_path / ".registry-staging.tmp"
+
+    def fail(cmd, **kwargs):
+        raise subprocess.CalledProcessError(1, cmd)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fail)
+    with pytest.raises(subprocess.CalledProcessError):
+        run_comparison.RUNNERS[config["runner"]["type"]](config["runner"], output)
+    assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    "producer_engine",
+    [
+        {},
+        {
+            "status_by_federal_feed": {
+                "policyengine": "pending_module",
+                "taxsim": "pending_module",
+            }
+        },
+    ],
+)
+def test_al_income_tax_2025_provenance_never_stamps_an_unexecuted_engine(
+    producer_engine, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    output = tmp_path / "al-income-tax-2025-three-way.json"
+    reference_oracle = {
+        "name": "policyengine-taxsim-saved-releases",
+        "policyengine_us": "2.6.17",
+        "taxsim_binary_sha256": "0" * 64,
+    }
+    reference_versions = {"policyengine_us": "2.6.17"}
+    output.write_text(json.dumps({
+        "engines": {
+            "left": "policyengine",
+            "right": "taxsim",
+            "versions": reference_versions,
+        },
+        "provenance": {
+            "engine": producer_engine,
+            "oracle": reference_oracle,
+            "rulespecs": [],
+        },
+    }))
+
+    run_comparison._stamp_report_provenance(
+        output,
+        {
+            "generated_by": "scripts/run_comparison.py::al-income-tax-2025-ecps",
+            "generated_at": "2026-09-24T00:00:00Z",
+            "engine": {"axiom_rules_engine_version": "unrelated-host-build"},
+            "oracle": {"policyengine_us": "unrelated-host-version"},
+            "rulespecs": [
+                {"repo": "TheAxiomFoundation/rulespec-us", "sha": "a" * 40}
+            ],
+        },
+        preserve_runner_provenance=True,
+        engine_from_runner_provenance=True,
+    )
+
+    report = json.loads(output.read_text())
+    assert report["engines"]["versions"] == reference_versions
+    assert report["provenance"]["engine"] == producer_engine
+    assert report["provenance"]["oracle"] == reference_oracle
+    assert report["provenance"]["rulespecs"] == []
+    assert report["provenance"]["registry_run"] == {
+        "generated_by": "scripts/run_comparison.py::al-income-tax-2025-ecps",
+        "generated_at": "2026-09-24T00:00:00Z",
+    }
+
+
 def test_resolve_path_uses_repo_env_override_when_config_path_is_missing(
     monkeypatch, tmp_path
 ):

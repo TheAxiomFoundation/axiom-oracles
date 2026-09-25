@@ -636,7 +636,10 @@ def main() -> int:
                 runner_type == "axiom-oracles-compare"
                 and "policyengine" in compared_engines
             ),
-            preserve_runner_provenance=(runner_type == "de-axiom-oracle-compare"),
+            preserve_runner_provenance=(
+                runner_type in ("de-axiom-oracle-compare", "al-income-tax-2025-ecps")
+            ),
+            engine_from_runner_provenance=(runner_type == "al-income-tax-2025-ecps"),
         )
         dashboard_target = config.get("dashboard", {}).get("filename")
         adapted = None
@@ -1117,6 +1120,7 @@ def _stamp_report_provenance(
     *,
     require_engine_versions: bool = False,
     preserve_runner_provenance: bool = False,
+    engine_from_runner_provenance: bool = False,
 ) -> None:
     """Add ``provenance`` to the reports/ JSON, preserving the file's own format.
 
@@ -1134,9 +1138,10 @@ def _stamp_report_provenance(
         return
     existing_provenance = data.get("provenance")
     if preserve_runner_provenance and isinstance(existing_provenance, dict):
-        # DE's unified pair record carries the evidence-producing execution
-        # receipt in this block.  Keep it while adding the generic affected-
-        # rerun provenance (rulespec pin, engine, oracle, dataset).  Other
+        # DE's unified pair record and the Alabama reference lane carry their
+        # evidence-producing execution receipts in this block. Keep them while
+        # adding generic rerun provenance (rulespec pin, engine, oracle,
+        # dataset). Other
         # runners retain the historical replace behavior so stale producer
         # metadata cannot survive an ordinary rerun accidentally.
         data["provenance"] = {
@@ -1156,7 +1161,13 @@ def _stamp_report_provenance(
         )
     if isinstance(engines, dict):
         versions = dict(engines.get("versions") or {})
-        engine = provenance.get("engine") or {}
+        # The Alabama reference lane stamps the engine its own producer ran
+        # (none while its Axiom legs are pending); every other runner keeps
+        # the generic rerun engine.
+        engine_source = (
+            data["provenance"] if engine_from_runner_provenance else provenance
+        )
+        engine = engine_source.get("engine") or {}
         oracle = provenance.get("oracle") or {}
         axiom_version = engine.get("axiom_rules_engine_version")
         expected_versions = {}
@@ -2457,6 +2468,38 @@ def _resolve_state_income_tax_grid_repos(
             f"{binary}"
         )
     return rulespec_root, axiom_rules_repo
+
+
+def _run_al_income_tax_2025_ecps(runner: dict, output: Path) -> None:
+    """Reconcile pinned Alabama references and evaluate available Axiom legs.
+
+    Use this interpreter: the generator needs no live oracle packages or data
+    downloads. Preserve its stable JSON/Markdown pair alongside the registry's
+    dated report. Missing RuleSpec modules are reported by the generator, so
+    resolving an optional root here must not require the checkout to exist.
+    """
+    params = runner["parameters"]
+    reference = Path(os.path.expandvars(str(params["reference_dir"]))).expanduser()
+    if not reference.is_absolute():
+        reference = REPO_ROOT / reference
+    report = output.parent / "al-income-tax-2025-three-way.json"
+    cmd = [
+        sys.executable,
+        str(REPO_ROOT / "scripts" / "generate_al_income_tax_2025.py"),
+        "--reference-dir",
+        str(reference),
+        "--output",
+        str(report),
+        "--markdown-output",
+        str(report.with_suffix(".md")),
+    ]
+    if params.get("rulespec_root"):
+        cmd.extend([
+            "--rulespec-root",
+            os.path.expandvars(str(params["rulespec_root"])),
+        ])
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+    output.write_bytes(report.read_bytes())
 
 
 def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
@@ -3941,6 +3984,7 @@ def _run_de_axiom_oracle_compare(runner: dict, output: Path) -> None:
         params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = str(pin)
 
 RUNNERS = {
+    "al-income-tax-2025-ecps": _run_al_income_tax_2025_ecps,
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,

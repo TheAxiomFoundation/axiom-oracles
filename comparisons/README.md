@@ -99,6 +99,20 @@ set for a probe that does not belong in the shared grid.
 
 ## Supported runners
 
+### `al-income-tax-2025-ecps`
+
+Runs `scripts/generate_al_income_tax_2025.py` with the current interpreter over
+the hash-verified committed Alabama TY2025 references. It writes the stable
+`reports/al-income-tax-2025-three-way.json` and `.md` pair and a dated registry
+report. The PolicyEngine/TAXSIM baseline needs no live oracle installation.
+The two Axiom legs activate when the composed module exists; missing modules
+remain `pending_module`. Missing federal worksheet inputs remain unavailable.
+The suite is manual while encoding awaits the signed narrow corpus union.
+
+Required `parameters`: `reference_dir`. Optional `parameters`: `rulespec_root`
+(otherwise the generator uses `$RULESPEC_US_REPO` or `../rulespec-us`). The
+generator's reference and execution provenance is retained by the registry.
+
 ### `axiom-encode-tax-ecps-compare`
 
 Invokes `axiom-encode tax-populace-compare` (renamed from `tax-ecps-compare`
