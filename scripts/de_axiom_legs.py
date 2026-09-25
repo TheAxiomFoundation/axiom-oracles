@@ -30,6 +30,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 from axiom_oracles.suites.de_worker import DE_WORKER_OUTPUTS  # noqa: E402
 from scripts import de_unified_comparison  # noqa: E402
 
@@ -62,7 +64,6 @@ PENDING_STATE = "leg-pending"
 PENDING_MARKER = "module-not-on-main"
 RUNNER_TYPE = "de-axiom-oracle-compare"
 PRODUCER = "scripts/de_axiom_legs.py::build"
-SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
@@ -190,9 +191,9 @@ def _load_config(oracle: str, plan: dict[str, Any]) -> dict[str, Any]:
         raise DEAxiomLegError(f"{oracle}: configured concepts differ from the plan")
     commit = params.get("rulespec_upstream_sha")
     tree = params.get("rulespec_upstream_tree")
-    if not isinstance(commit, str) or not SHA1_RE.fullmatch(commit):
+    if not isinstance(commit, str) or not GIT_SHA.fullmatch(commit):
         raise DEAxiomLegError(f"{oracle}: rulespec_upstream_sha must be a full SHA")
-    if not isinstance(tree, str) or not SHA1_RE.fullmatch(tree):
+    if not isinstance(tree, str) or not GIT_SHA.fullmatch(tree):
         raise DEAxiomLegError(f"{oracle}: rulespec_upstream_tree must be a full SHA")
     expected_output = OUTPUT_PATHS[oracle].relative_to(REPO_ROOT).as_posix()
     if (config.get("artifacts") or {}).get("canonical_record") != expected_output:

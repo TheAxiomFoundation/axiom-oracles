@@ -39,6 +39,11 @@ import yaml
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 SOURCE_PATH = REPO_ROOT / "closure" / "de" / "source.json"
 SNAPSHOT_PATH = REPO_ROOT / "conformance" / "closure" / "de-instrument-graph.json"
 CORPUS_ROOT = Path.home() / "TheAxiomFoundation" / "axiom-corpus-de-wave"
@@ -101,7 +106,6 @@ _DECISION_SECTIONS = (
 _SUPPLEMENTAL_ID = re.compile(r"^de-(kg|rv|uhv)-suppl-\d{3}$")
 SUPPLEMENTAL_RELATIONS = ("bears_on", "issued_under", "coordination", "guidance")
 _HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
-_HEX_GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 _IDENTIFIER = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
 _RESERVED = frozenset(
     {
@@ -338,7 +342,7 @@ def _corpus_rows(
     if not isinstance(corpus, Mapping):
         raise _SourceError("source corpus block is missing")
     commit = corpus.get("commit")
-    if not isinstance(commit, str) or not _HEX_GIT_SHA.fullmatch(commit):
+    if not isinstance(commit, str) or not GIT_SHA.fullmatch(commit):
         raise _SourceError("source corpus commit is not a full SHA")
     resolved = _git(corpus_root, "rev-parse", "--verify", f"{commit}^{{commit}}").decode().strip()
     if resolved != commit:
@@ -504,7 +508,7 @@ def _rulespec_facts(
         if not all(isinstance(value, str) for value in (ref, path, expected_sha)):
             raise _SourceError(f"malformed RuleSpec artifact for {citation}")
         resolved = _git(rulespec_root, "rev-parse", "--verify", f"{ref}^{{commit}}").decode().strip()
-        if not _HEX_GIT_SHA.fullmatch(resolved):
+        if not GIT_SHA.fullmatch(resolved):
             raise _SourceError(f"RuleSpec ref did not resolve: {ref}")
         blob = _git_blob(rulespec_root, resolved, path)
         if _sha256(blob) != expected_sha:
@@ -1548,7 +1552,7 @@ def _source_corpus_facts(source: Mapping[str, Any]) -> dict[str, Any]:
     for field in ("repository", "commit", "release", "release_content_sha256"):
         if not isinstance(corpus.get(field), str):
             raise _SourceError(f"source corpus {field} is malformed")
-    if not _HEX_GIT_SHA.fullmatch(corpus["commit"]):
+    if not GIT_SHA.fullmatch(corpus["commit"]):
         raise _SourceError("source corpus commit is not a full SHA")
     if not _HEX_SHA256.fullmatch(corpus["release_content_sha256"]):
         raise _SourceError("source corpus release content hash is malformed")
@@ -1634,7 +1638,7 @@ def _committed_rulespec_facts(
         sha256 = artifact.get("sha256")
         if (
             not isinstance(ref, str)
-            or not _HEX_GIT_SHA.fullmatch(ref)
+            or not GIT_SHA.fullmatch(ref)
             or not isinstance(path, str)
             or not isinstance(sha256, str)
             or not _HEX_SHA256.fullmatch(sha256)
