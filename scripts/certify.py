@@ -1220,8 +1220,8 @@ def _producer_closed_verdict(
 ) -> dict | None:
     """Computed closure from a committed artifact and its named producer.
 
-    Returns None when the program declares no closed producer (or its artifact
-    is absent) so the caller falls through to the other evidence classes. Both
+    Returns None when the program declares no closed producer or its artifact
+    is absent; a selected producer route treats absence as a hard failure. Both
     object-style producer summaries and program-scoped mapping summaries are
     supported; a mapping that declares ``programs`` must contain this program.
     """
@@ -1335,6 +1335,11 @@ def _producer_closed_verdict(
             "artifact": str(artifact_ref),
             "corpus_release": document.get("corpus_release"),
             "rulespec_commit": document.get("rulespec_commit"),
+            **(
+                {"program_set": document["program_set"]}
+                if "program_set" in document
+                else {}
+            ),
             "pending_citations": len(scoped.get("pending_citations") or []),
             "pending_money_atoms": scoped.get("pending_money_atoms"),
             "root_node_count": scoped.get("root_node_count"),
@@ -1473,6 +1478,11 @@ def _producer_executable_verdict(
             "value": value,
             "artifact": str(artifact_ref),
             "rulespec_sha": (document.get("rulespec") or {}).get("sha"),
+            **(
+                {"program_set": document["program_set"]}
+                if "program_set" in document
+                else {}
+            ),
             "engine": document.get("engine"),
             "compiled_artifact": document.get("compiled_artifact"),
             "request_set": document.get("request_set"),
@@ -1608,6 +1618,14 @@ def _closed_producer_verdict(program, spec, evidence, *, verify_producer=False):
     scoped, closure = _rederived_closure_scope(program, path_string, evidence)
     fields = _exact_path_fields(scoped, closure)
     merged = {**fields, **produced}
+    if (
+        path_string == "closure/de/summary.json"
+        and produced.get("rulespec_commit") is None
+    ):
+        # DE's discovery ledger binds the source manifest rather than exposing
+        # one rulespec commit. Its independently rederived closure summary
+        # supplies the commit that must match the signed executable checkout.
+        merged["rulespec_commit"] = fields["rulespec_commit"]
     return merged
 
 
@@ -1683,6 +1701,7 @@ def _exact_path_fields(scoped: dict, closure: dict) -> dict:
     return {
         "corpus_release": closure.get("corpus_release"),
         "rulespec_commit": closure.get("rulespec_commit"),
+        **({"program_set": closure["program_set"]} if "program_set" in closure else {}),
         "pending_citations": len(scoped.get("pending_citations") or []),
         "pending_money_atoms": scoped.get("pending_money_atoms"),
         "root_node_count": scoped.get("root_node_count"),

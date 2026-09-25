@@ -4143,14 +4143,29 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert closed["by_signature_state"]["pending"] == 0
 
 
+def _de_forged_replay_certifier(monkeypatch):
+    """Use the committed census while substituting its executable premise."""
+
+    certify = _load("certify")
+    # Census rederivation independently runs the real executable verifier.
+    # These mutants substitute that premise, including on hosts without the
+    # pinned engine archive, so hold its dependent census at the same baseline.
+    monkeypatch.setattr(
+        certify,
+        "_DE_CENSUS_CACHE",
+        json.loads((REPO / "conformance/de-certificate-census.json").read_text()),
+    )
+    return certify
+
+
 def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     monkeypatch,
 ):
     """MUTANT: keep a hand-maintained final verdict after every gate passes."""
 
-    certify = _load("certify")
-    # The committed evidence is complete and computed; only the executable
-    # verdict is forged here, in both directions.
+    certify = _de_forged_replay_certifier(monkeypatch)
+    # The committed comparison legs are complete and computed; forge the
+    # executable verdict in both directions without changing closure debt.
     closure_commit = json.loads((REPO / "closure/de/summary.json").read_text())[
         "rulespec_commit"
     ]
@@ -4192,7 +4207,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     assert certificate["verdicts"]["conformant"]["value"] is True
     assert certificate["verdicts"]["executable"]["value"] is True
     # MUTANT boundary: complete legs plus a computed replay still cannot
-    # certify while the closure's instrument frontier is undeclared.
+    # certify while the closure's instrument frontier remains incomplete.
     assert certificate["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
@@ -4214,15 +4229,14 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
 def _de_passing_computed_binding_baseline(monkeypatch):
     """Clear closure debt in-process to isolate cross-premise binding failures."""
 
-    certify = _load("certify")
+    certify = _de_forged_replay_certifier(monkeypatch)
     program = "de/kindergeld"
     spec = certify.PROGRAMS[program]
-    monkeypatch.setattr(
-        certify,
-        "_DE_CENSUS_CACHE",
-        json.loads((REPO / "conformance/de-certificate-census.json").read_text()),
-    )
     closed = certify._closed_verdict(program, spec, [])
+    closure_commit = json.loads((REPO / "closure/de/summary.json").read_text())[
+        "rulespec_commit"
+    ]
+    assert closed["rulespec_commit"] == closure_commit
     closed.update(value=True, status="computed_pass", blockers=[])
     executable = {
         "mode": "computed",
@@ -4237,7 +4251,7 @@ def _de_passing_computed_binding_baseline(monkeypatch):
                 "sha256": "1" * 64,
                 "checkout_observation": {
                     "repository": "TheAxiomFoundation/rulespec-de",
-                    "commit": closed["rulespec_commit"],
+                    "commit": closure_commit,
                     "tree": "7" * 40,
                     "claim_mode": "attested",
                 },
@@ -4274,8 +4288,9 @@ def test_de_certificate_rejects_cross_premise_commit_mismatch(monkeypatch):
     assert mutant["certified"]["value"] is False
     assert len(mutant["blockers"]) == 1, mutant["blockers"]
     assert "producers disagree on the rulespec commit" in mutant["blockers"][0]
-    assert mutant["verdicts"]["closed"]["source_universe"]["rulespec_commit"] == (
-        closed["rulespec_commit"]
+    assert (
+        mutant["verdicts"]["closed"]["source_universe"]["rulespec_commit"]
+        == closed["rulespec_commit"]
     )
 
 
