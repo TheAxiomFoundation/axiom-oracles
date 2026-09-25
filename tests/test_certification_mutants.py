@@ -415,6 +415,94 @@ def test_absolute_disposition_path_is_rejected():
         (REPO / "dashboard/public/data" / name).unlink()
 
 
+@pytest.mark.parametrize("declared", [97, 5000])
+def test_inline_certificate_leg_uses_shared_count_and_remains_unvalidated(
+    tmp_path, monkeypatch, declared
+):
+    """Inline producer evidence changes the count, never the validation gate."""
+    certify = _load("certify")
+    report = {
+        "suite": "ca-federal-schedule-tax-spsm",
+        "summary": {
+            "comparison_count": 8702,
+            "match_count": 0,
+            "mismatch_count": 8702,
+            "dispositioned": {
+                "dispositions_file": None,
+                "counts": {"upstream_engine_gap": 8605, "unexplained": 0},
+                "unexplained_count": declared,
+            },
+        },
+        "mismatches": [{"kind": "amount_difference"} for _ in range(50)],
+    }
+    (tmp_path / "report.json").write_text(json.dumps(report))
+    monkeypatch.setattr(certify, "REPO_ROOT", tmp_path)
+    leg, _evidence, defects = certify._suite_verdict(
+        {
+            "suite": report["suite"],
+            "report": "report.json",
+            "oracle_type": "reference",
+            "oracle": "synthetic",
+        }
+    )
+    assert leg["unexplained"] == declared
+    assert not leg["clean"]
+    assert any(
+        "inline classifications present with no dispositions file — unvalidated; "
+        "migrate before they can explain" in defect
+        for defect in defects
+    )
+
+
+def test_certificate_known_cause_labels_reduce_count_but_require_dispositions(
+    tmp_path, monkeypatch
+):
+    certify = _load("certify")
+    report = {
+        "suite": "label-only",
+        "summary": {"comparison_count": 1, "match_count": 0, "mismatch_count": 1},
+        "mismatches": [{"concept": "test#amount", "kind": "amount_difference"}],
+    }
+    (tmp_path / "report.json").write_text(json.dumps(report))
+    monkeypatch.setattr(certify, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(
+        certify,
+        "load_known_causes",
+        lambda _root: [{
+            "suite": "label-only", "concept": "test#amount", "kind": "amount_difference"
+        }],
+    )
+    leg, _evidence, defects = certify._suite_verdict(
+        {
+            "suite": report["suite"],
+            "report": "report.json",
+            "oracle_type": "reference",
+            "oracle": "synthetic",
+        }
+    )
+    assert leg["unexplained"] == 0
+    assert not leg["clean"]
+    assert (
+        "label-only: 1 mismatch(es) explained only by known-cause labels; "
+        "certification requires validated dispositions"
+    ) in defects
+
+
+def test_de_certificate_leg_counts_completed_axiom_mismatches(monkeypatch):
+    """The DE leg must assess Axiom mismatches instead of hardcoding zero."""
+    certify = _load("certify")
+    entry = certify.PROGRAMS["de/kindergeld"]["suites"][0]
+    report = json.loads((REPO / entry["report"]).read_text())
+    axiom_leg = report["views"]["de/kindergeld"]["legs"][1]
+    axiom_leg["match_count"] -= 1
+    axiom_leg["mismatch_count"] += 1
+    monkeypatch.setattr(certify, "_load", lambda _path: report)
+    monkeypatch.setattr(certify, "_rederived_de_report", lambda: report)
+    leg, _evidence, _defects = certify._de_suite_verdict(entry)
+    assert leg["unexplained"] == leg["mismatches"] == 1
+    assert not leg["clean"]
+
+
 def test_long_exact_integers_do_not_merge():
     """Decimal's 28-digit default context merged these."""
     census = _load("exercise_census")
@@ -633,7 +721,15 @@ def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
         assert certificate["certified"]["value"] is False
         assert certificate["certified"]["state"] == "no"
         assert certificate["verdicts"]["exercised"]["mode"] == "computed"
-        assert certificate["verdicts"]["exercised"]["value"] is True
+        straddle = certificate["verdicts"]["exercised"]["suites"][
+            "nz-treasury-incomeexplorer"
+        ]["threshold_straddle"]
+        assert straddle["mode"] == "computed"
+        assert straddle["self_check"]["complete"] is True
+        assert certificate["verdicts"]["exercised"]["value"] == straddle["complete"]
+        if program == "nz/income-tax":
+            assert certificate["verdicts"]["exercised"]["value"] is False
+            assert any("180000" in blocker for blocker in certificate["blockers"])
         assert (
             certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"]
             == "computed"
@@ -852,12 +948,13 @@ def test_certified_cannot_activate_by_flipping_status_alone():
     assert cert["verdicts"]["conformant"]["mode"] == "computed"
     assert cert["verdicts"]["conformant"]["value"] is True
     assert cert["verdicts"]["exercised"]["mode"] == "computed"
-    assert cert["verdicts"]["exercised"]["value"] is True
+    assert cert["verdicts"]["exercised"]["value"] is False
     assert cert["verdicts"]["closed"]["mode"] == "attested"
     assert cert["verdicts"]["closed"]["value"] is True
     assert cert["verdicts"]["executable"]["mode"] == "attested"
     assert cert["verdicts"]["executable"]["value"] is True
-    assert cert["blockers"] == []
+    assert cert["blockers"]
+    assert all(blocker.startswith("exercise:") for blocker in cert["blockers"])
     assert cert["certified"]["value"] is False
     assert cert["certified"]["state"] == "unavailable"
 
@@ -1853,8 +1950,10 @@ def test_census_report_path_and_sha_must_match_the_registry():
     rows, complete = certify._exercise_block(
         [entry], {"suites": {"cardinality-bound": row}}, []
     )
-    assert complete is True
+    # Identity matches, but a conventional row has no computed threshold proof.
+    assert complete is False
     assert rows["cardinality-bound"]["report_identity_matches_registry"] is True
+    assert rows["cardinality-bound"]["threshold_straddle"]["mode"] == "unavailable"
 
     for field, value, marker in (
         (
@@ -2512,7 +2611,7 @@ def test_nz_certificate_path_reopens_the_committed_trace_bytes(monkeypatch):
 
 
 def test_nz_exercise_receipt_is_certificate_scoped():
-    """Adding NZ must not invalidate unrelated certificates via a global hash."""
+    """NZ certificates rederive only their own view of the trace evidence."""
 
     census = _load("exercise_census")
     certify = _load("certify")
@@ -2538,10 +2637,11 @@ def test_nz_exercise_receipt_is_certificate_scoped():
         "dk/boerne-og-ungeydelse",
         certify.PROGRAMS["dk/boerne-og-ungeydelse"],
     )
-    committed = json.loads(
-        (REPO / "certificates/dk-boerne-og-ungeydelse.json").read_text()
+    assert dk["verdicts"]["exercised"]["value"] is False
+    assert all(
+        row["threshold_straddle"]["mode"] == "unavailable"
+        for row in dk["verdicts"]["exercised"]["suites"].values()
     )
-    assert dk == committed
 
 
 @pytest.mark.parametrize(
@@ -4129,6 +4229,11 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert exercise["value"] is True
     assert exercise["fields"]["child_count"]["observed_values"] == [0, 1, 2]
     assert exercise["fields"]["yearly_earned_income_total"]["distinct"] == 10
+    straddle = exercise["threshold_straddle"]
+    assert straddle["mode"] == "computed"
+    assert straddle["complete"] is True
+    assert straddle["sites"] == []
+    assert straddle["unstraddled"] == []
     closed = certificate["verdicts"]["closed"]
     assert closed["value"] is False
     # The v3 discovery ledger is consumed through the central gate: the
@@ -4143,14 +4248,83 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert closed["by_signature_state"]["pending"] == 0
 
 
+def test_de_exercise_rejects_unauthenticated_parameter_only_proof(monkeypatch):
+    certify = _load("certify")
+    load = certify._load
+
+    def tampered_descriptor(path):
+        result = load(path)
+        if path.name == "de-kindergeld-signed-rulespec.json":
+            result["module"]["sha256"] = "0" * 64
+        return result
+
+    monkeypatch.setattr(certify, "_load", tampered_descriptor)
+    exercise, complete = certify._de_exercise_verdict(
+        certify.PROGRAMS["de/kindergeld"]
+    )
+    assert complete is False
+    assert exercise["value"] is False
+    assert exercise["threshold_straddle"]["mode"] == "unavailable"
+    blockers = certify._exercise_threshold_blockers(
+        "de/kindergeld", exercise["threshold_straddle"]
+    )
+    assert len(blockers) == 1
+    assert "threshold straddle not computable" in blockers[0]
+
+
+def test_exercise_requires_computed_threshold_evidence():
+    certify = _load("certify")
+    entry = certify.PROGRAMS["dk/boerne-og-ungeydelse"]["suites"][0]
+    row = {
+        "report": entry["report"],
+        "report_sha256": certify.sha256_of(REPO / entry["report"]),
+        "evidence_fields": {"income": {"distinct": 2, "state": "varied"}},
+        "bridge_audited": True,
+        "cases_scanned": 2,
+    }
+    for straddle in (
+        None,
+        {"mode": "unavailable", "complete": True},
+        {"mode": "attested", "complete": True},
+        {"mode": "computed", "complete": False},
+        {"mode": "computed", "complete": True},
+    ):
+        mutant = {**row, "threshold_straddle": straddle}
+        rows, complete = certify._exercise_block(
+            [entry], {"suites": {entry["suite"]: mutant}}, []
+        )
+        assert complete is False
+        assert certify._exercise_threshold_blockers(
+            "dk/boerne-og-ungeydelse", rows[entry["suite"]]["threshold_straddle"]
+        )
+
+
+def _de_forged_replay_certifier(monkeypatch):
+    """Use the committed census while substituting its executable premise."""
+
+    certify = _load("certify")
+    # Census rederivation independently runs the real executable verifier.
+    # These mutants substitute that premise, including on hosts without the
+    # pinned engine archive, so hold its dependent census at the same baseline.
+    monkeypatch.setattr(
+        certify,
+        "_DE_CENSUS_CACHE",
+        json.loads((REPO / "conformance/de-certificate-census.json").read_text()),
+    )
+    return certify
+
+
 def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     monkeypatch,
 ):
     """MUTANT: keep a hand-maintained final verdict after every gate passes."""
 
-    certify = _load("certify")
-    # The committed evidence is complete and computed; only the executable
-    # verdict is forged here, in both directions.
+    certify = _de_forged_replay_certifier(monkeypatch)
+    # The committed comparison legs are complete and computed; forge the
+    # executable verdict in both directions without changing closure debt.
+    closure_commit = json.loads((REPO / "closure/de/summary.json").read_text())[
+        "rulespec_commit"
+    ]
     signed = {
         "id": "signed-rulespec-estg-66-2025",
         "state": "valid",
@@ -4162,7 +4336,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
         "trusted_key_id": f"sha256:{'5' * 64}",
         "checkout_observation": {
             "repository": "TheAxiomFoundation/rulespec-de",
-            "commit": "6" * 40,
+            "commit": closure_commit,
             "tree": "7" * 40,
             "claim_mode": "attested",
         },
@@ -4189,7 +4363,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     assert certificate["verdicts"]["conformant"]["value"] is True
     assert certificate["verdicts"]["executable"]["value"] is True
     # MUTANT boundary: complete legs plus a computed replay still cannot
-    # certify while the closure's instrument frontier is undeclared.
+    # certify while the closure's instrument frontier remains incomplete.
     assert certificate["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
@@ -4206,6 +4380,93 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
         *DE_KINDERGELD_CLOSURE_BLOCKERS,
         "release replay mismatch",
     ]
+
+
+def _de_passing_computed_binding_baseline(monkeypatch):
+    """Clear closure debt in-process to isolate cross-premise binding failures."""
+
+    certify = _de_forged_replay_certifier(monkeypatch)
+    program = "de/kindergeld"
+    spec = certify.PROGRAMS[program]
+    closed = certify._closed_verdict(program, spec, [])
+    closure_commit = json.loads((REPO / "closure/de/summary.json").read_text())[
+        "rulespec_commit"
+    ]
+    assert closed["rulespec_commit"] == closure_commit
+    closed.update(value=True, status="computed_pass", blockers=[])
+    executable = {
+        "mode": "computed",
+        "state": "computed_pass",
+        "value": True,
+        "blockers": [],
+        "required_inputs": [
+            {
+                "id": "signed-rulespec-estg-66-2025",
+                "state": "valid",
+                "path": "conformance/executable/de-kindergeld-signed-rulespec.json",
+                "sha256": "1" * 64,
+                "checkout_observation": {
+                    "repository": "TheAxiomFoundation/rulespec-de",
+                    "commit": closure_commit,
+                    "tree": "7" * 40,
+                    "claim_mode": "attested",
+                },
+            }
+        ],
+    }
+    monkeypatch.setattr(
+        certify, "_closed_verdict", lambda *_args, **_kwargs: copy.deepcopy(closed)
+    )
+    monkeypatch.setattr(
+        certify,
+        "_executable_verdict",
+        lambda *_args, **_kwargs: copy.deepcopy(executable),
+    )
+    baseline = certify.build_certificate(program, spec)
+    assert baseline["blockers"] == []
+    assert baseline["certified"]["state"] == "yes"
+    assert baseline["certified"]["value"] is True
+    return certify, closed, executable
+
+
+def test_de_certificate_rejects_cross_premise_commit_mismatch(monkeypatch):
+    """DE closure and signed checkout must identify the same rulespec commit."""
+
+    certify, closed, executable = _de_passing_computed_binding_baseline(monkeypatch)
+    other_commit = "abcdef0123456789abcdef0123456789abcdef01"
+    assert other_commit != closed["rulespec_commit"]
+    executable["required_inputs"][0]["checkout_observation"]["commit"] = other_commit
+
+    mutant = certify.build_certificate(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"]
+    )
+    assert mutant["certified"]["state"] == "no"
+    assert mutant["certified"]["value"] is False
+    assert len(mutant["blockers"]) == 1, mutant["blockers"]
+    assert "producers disagree on the rulespec commit" in mutant["blockers"][0]
+    assert (
+        mutant["verdicts"]["closed"]["source_universe"]["rulespec_commit"]
+        == closed["rulespec_commit"]
+    )
+
+
+@pytest.mark.parametrize("sides", ["closed", "executable", "both"])
+def test_de_certificate_rejects_digit_only_commit(monkeypatch, sides):
+    """Even matching digit-only commits cannot bind two computed DE premises."""
+
+    certify, closed, executable = _de_passing_computed_binding_baseline(monkeypatch)
+    if sides in {"closed", "both"}:
+        closed["rulespec_commit"] = "6" * 40
+    if sides in {"executable", "both"}:
+        executable["required_inputs"][0]["checkout_observation"]["commit"] = "6" * 40
+
+    mutant = certify.build_certificate(
+        "de/kindergeld", certify.PROGRAMS["de/kindergeld"]
+    )
+    assert mutant["certified"]["state"] == "no"
+    assert mutant["certified"]["value"] is False
+    assert len(mutant["blockers"]) == 1, mutant["blockers"]
+    assert "rulespec provenance is not comparable" in mutant["blockers"][0]
 
 
 def test_de_certificate_clears_stale_signature_note_after_computed_validation():

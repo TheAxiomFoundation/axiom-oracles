@@ -41,11 +41,15 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from axiom_oracles.conformance.loader import parse as parse_universe  # noqa: E402
+from axiom_oracles.conformance.loader import (  # noqa: E402
+    load_dashboard_reports,
+    parse as parse_universe,
+)
 from axiom_oracles.conformance.scoreboard import (  # noqa: E402
     PolicyScore,
     score_jurisdiction,
 )
+from axiom_oracles.conformance.unexplained import load_known_causes  # noqa: E402
 
 CONFORMANCE_DIR = REPO_ROOT / "conformance"
 DETAIL_DIR = CONFORMANCE_DIR / "detail"
@@ -62,15 +66,7 @@ SCOREBOARD_SCHEMA = "axiom_oracles.conformance_scoreboard.v1"
 
 def _load_reports() -> list[dict]:
     """Load every committed comparison report from the dashboard data dir."""
-    reports: list[dict] = []
-    for path in sorted(DASHBOARD_DATA_DIR.glob("*.json")):
-        try:
-            data = json.loads(path.read_text())
-        except json.JSONDecodeError:
-            continue
-        if isinstance(data, dict) and data.get("suite") and data.get("engines"):
-            reports.append(data)
-    return reports
+    return load_dashboard_reports(DASHBOARD_DATA_DIR)
 
 
 def _universe_paths() -> list[Path]:
@@ -84,12 +80,15 @@ def _universe_paths() -> list[Path]:
 def build_scoreboard() -> tuple[dict, dict[str, list[PolicyScore]]]:
     """Compute the summary scoreboard doc + per-jurisdiction policy detail."""
     reports = _load_reports()
+    known_causes = load_known_causes(REPO_ROOT)
     jurisdictions: list[dict] = []
     details: dict[str, list[PolicyScore]] = {}
 
     for path in _universe_paths():
         universe = parse_universe(path)
-        scoreboard, policy_scores = score_jurisdiction(universe, reports)
+        scoreboard, policy_scores = score_jurisdiction(
+            universe, reports, known_causes=known_causes, repo_root=REPO_ROOT,
+        )
         jurisdictions.append(scoreboard.to_summary())
         details[universe.jurisdiction] = policy_scores
 
@@ -229,7 +228,11 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    document, details = build_scoreboard()
+    try:
+        document, details = build_scoreboard()
+    except (OSError, ValueError) as exc:
+        print(exc, file=sys.stderr)
+        return 1
 
     if args.markdown:
         print(_markdown(document))

@@ -52,11 +52,25 @@ def _finite_json_float(value: str) -> float:
     return parsed
 
 
+def _reject_duplicate_json_keys(pairs: list[tuple[str, object]]) -> dict:
+    keys = [key for key, _value in pairs]
+    duplicates = sorted({key for key in keys if keys.count(key) > 1})
+    if duplicates:
+        raise ValueError(f"duplicate JSON key(s) {duplicates!r}")
+    return dict(pairs)
+
+
 def strict_json_loads(raw: str | bytes) -> object:
-    """Parse standards-compliant JSON and reject every non-finite number."""
+    """Parse standards-compliant JSON: every number finite, every key unique.
+
+    Python's json keeps the last of repeated keys, so bytes that say two
+    things (``"commit": A, "commit": B``) would be read as whichever came
+    last. Strict admission refuses them instead.
+    """
 
     return json.loads(
         raw,
+        object_pairs_hook=_reject_duplicate_json_keys,
         parse_constant=_reject_json_constant,
         parse_float=_finite_json_float,
     )

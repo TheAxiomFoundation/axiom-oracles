@@ -118,8 +118,22 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    summaries = _live_summaries()
+    try:
+        summaries = _live_summaries()
+    except (OSError, ValueError) as exc:
+        print(exc, file=sys.stderr)
+        return 1
     ratchets = _load_ratchets()
+
+    vanished = sorted(set(ratchets) - set(summaries))
+    if vanished:
+        for jurisdiction in vanished:
+            print(
+                f"[{jurisdiction}] pinned jurisdiction has no live scoreboard row; "
+                "retirement requires deliberately deleting its ratchet row.",
+                file=sys.stderr,
+            )
+        return 1
 
     if args.check:
         if not ratchets:

@@ -42,6 +42,7 @@ dev = [
   # _runner.py under this interpreter with a stub engine; the worker itself
   # needs pandas.
   "pandas>=2.2",
+  "hypothesis>=6.168.1",
 ]
 policyengine = [
   "policyengine[us]==5.0.0",

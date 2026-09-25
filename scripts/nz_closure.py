@@ -14,6 +14,11 @@ from pathlib import Path
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -714,12 +719,16 @@ def build(
     corpus = source.get("corpus") or {}
     ledger = source.get("pending_ledger") or {}
     if (
-        rulespec.get("commit") != RULESPEC_SHA
+        not isinstance(rulespec.get("commit"), str)
+        or not GIT_SHA.fullmatch(rulespec["commit"])
+        or rulespec.get("commit") != RULESPEC_SHA
         or tuple(rulespec.get("roots") or ()) != ROOTS
     ):
         raise ClosureError("NZ closure RuleSpec pin or declared roots drifted")
     if (
         corpus.get("release") != "nz-rulespec-2026-07-18"
+        or not isinstance(corpus.get("commit"), str)
+        or not GIT_SHA.fullmatch(corpus["commit"])
         or corpus.get("commit") != CORPUS_RELEASE_SHA
     ):
         raise ClosureError("NZ closure corpus release pin drifted")

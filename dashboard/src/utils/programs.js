@@ -10,7 +10,8 @@ import {
   nearMetric,
   isAxiomPair,
   otherOracle,
-} from "./suites";
+} from "./suites.js";
+import { gatedUnexplainedBySuite } from "./unexplained.js";
 
 export function buildProgramRows(reports) {
   const programs = new Map();
@@ -97,38 +98,17 @@ export function causeFor(knownCauses, report, concept, kind) {
 }
 
 /**
- * The health-signal count: disagreements with no explanation anywhere.
- * A report's own disposition layer (summary.dispositioned) is authoritative
- * only when a dispositions/<suite>.yaml actually backs it — without one the
- * block is a stub whose unexplained_count merely mirrors mismatch_count.
- * Those reports fall back to the gap ledger's mechanism: mismatch buckets
- * with no known-cause entry (counted from the possibly-slimmed mismatch
- * list, so a lower bound — the same one the ledger itself displays).
+ * The unexplained-gate count over these reports: the shared assessment (made
+ * before the loader filters concepts), restricted to the publication gate's
+ * domain and resolved per suite by maximum, exactly as
+ * scripts/unexplained_ratchet.py counts. A report outside the gate counts 0.
  */
 export function countUnexplained(reports, knownCauses) {
-  let total = 0;
-  for (const report of reports || []) {
-    if (!isAxiomPair(report)) continue;
-    if (suiteMeta(report.suite).kind === "diagnostic") continue;
-    const dispositioned = report.summary?.dispositioned;
-    if (
-      dispositioned?.dispositions_file &&
-      dispositioned.unexplained_count != null
-    ) {
-      total += dispositioned.unexplained_count;
-      continue;
-    }
-    const buckets = new Map();
-    for (const m of report.mismatches || []) {
-      const key = `${m.concept}::${m.kind}`;
-      buckets.set(key, (buckets.get(key) || 0) + 1);
-    }
-    for (const [key, count] of buckets) {
-      const [concept, kind] = key.split("::");
-      if (!causeFor(knownCauses, report, concept, kind)) total += count;
-    }
-  }
-  return total;
+  const bySuite = gatedUnexplainedBySuite(reports, {
+    known_causes: knownCauses,
+    isDiagnostic: (suite) => suiteMeta(suite).kind === "diagnostic",
+  });
+  return Object.values(bySuite).reduce((total, count) => total + count, 0);
 }
 
 /** Region bucket for a coverage-overview program entry. */

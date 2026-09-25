@@ -30,6 +30,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner  # noqa: E402
 from axiom_oracles.suites.us_tariff_panel import (  # noqa: E402
     AUTHORITY_SLOTS,
@@ -71,7 +73,6 @@ SCHEDULE_MODULE_TEMPLATE = (
 ORIGIN_CENSUS = (
     "1220"  # Canada: the sole raw-conformant cohort common to all five lines.
 )
-HEX_40 = re.compile(r"^[0-9a-f]{40}$")
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 PROGRAM_SET = {
     "id": "us-tariff-schedule-ensemble-v1",
@@ -166,7 +167,7 @@ def _git_commit(repo: Path, ref: str) -> str:
         text=True,
     )
     sha = process.stdout.strip()
-    _require(HEX_40.fullmatch(sha) is not None, f"invalid rulespec commit {sha!r}")
+    _require(GIT_SHA.fullmatch(sha) is not None, f"invalid rulespec commit {sha!r}")
     return sha
 
 

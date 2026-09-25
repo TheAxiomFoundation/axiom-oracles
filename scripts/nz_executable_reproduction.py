@@ -23,6 +23,11 @@ from pathlib import Path
 from typing import Any, Mapping, Sequence
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -957,6 +962,15 @@ def _receipt_document(summary: Mapping[str, Any]) -> dict[str, Any]:
 
 
 def _validate_source_and_artifact_pins() -> None:
+    for label, commit in (
+        ("RuleSpec", RULESPEC_SHA),
+        ("engine", ENGINE_GIT_SHA),
+        ("source harness", HARNESS_FULL_COMMIT),
+    ):
+        _require(
+            isinstance(commit, str) and GIT_SHA.fullmatch(commit) is not None,
+            f"{label} Git pin must be a full lowercase commit SHA",
+        )
     report = _load(SOURCE_REPORT_PATH)
     provenance = report.get("provenance") or {}
     engine = provenance.get("engine") or {}

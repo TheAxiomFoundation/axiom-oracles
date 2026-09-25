@@ -5,7 +5,9 @@
     "de/statute/uhvorschg/2: final-amount encoding remains partial",
     "executable reproduction receipt pending",
     "closed: instrument frontier incomplete \u2014 23 of 23 subordinate/bearing instruments pending disposition (oracles#491)",
-    "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)"
+    "closed: dependency closure open \u2014 9 open dependencies (0 law-derived inputs, 9 unclassified inputs, 0 bearing instruments) (CERTIFIED.md v3)",
+    "producers' rulespec provenance is not comparable: closure ledger commit='d83ba3db30e2f63376aacf822d116687589b8564', executable receipt sha=None; both must be string SHAs",
+    "exercise: threshold straddle not computable \u2014 no committed, sha-bound compiled IR for this pending DE root set"
   ],
   "certified": {
     "rule": "computed(conformant AND exercised AND closed AND executable) with zero open defects",
@@ -383,6 +385,10 @@
       "missing": "no comparison corpus has been declared",
       "mode": "computed",
       "status": "computed_open",
+      "threshold_straddle": {
+        "mode": "unavailable",
+        "reason": "no committed, sha-bound compiled IR for this pending DE root set"
+      },
       "value": false
     }
   }

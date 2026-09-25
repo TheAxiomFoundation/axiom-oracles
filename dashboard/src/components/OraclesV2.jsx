@@ -719,7 +719,9 @@ export default function OraclesV2() {
     const totals = {
       checks: oracles.reduce((n, o) => n + o.checks, 0),
       mismatches: oracles.reduce((n, o) => n + o.mismatches, 0),
-      unexplained: oracles.reduce((n, o) => n + o.unexplained, 0),
+      // The headline is the publication gate's number: every gated report,
+      // including grid and hidden-oracle reports that have no oracle card.
+      unexplained: countUnexplained(data.reports, data.knownCauses || []),
       households: oracles.reduce((n, o) => n + o.households, 0),
       programs: new Set(oracles.flatMap((o) => [...o.programs])).size,
     };
