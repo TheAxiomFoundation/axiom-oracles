@@ -2583,3 +2583,68 @@ def test_policyengine_data_certification_override_noop_for_populace(monkeypatch)
     tax_populace._install_policyengine_data_certification_override()
 
     assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in tax_populace.os.environ
+
+
+def _partnership_persons(column):
+    persons = [
+        {
+            "age": 44,
+            "ssn_card_type": "CITIZEN",
+            "employment_income_before_lsr": 10_000,
+            "self_employment_income_before_lsr": 1_000,
+            "sstb_self_employment_income_before_lsr": 0,
+            "farm_operations_income": 0,
+        },
+        {
+            "age": 41,
+            "ssn_card_type": "CITIZEN",
+            "employment_income_before_lsr": 0,
+            "self_employment_income_before_lsr": 0,
+            "sstb_self_employment_income_before_lsr": 0,
+            "farm_operations_income": 0,
+        },
+    ]
+    if column is not None:
+        persons[0][column] = 12_000
+        persons[1][column] = 2_500
+    return persons
+
+
+def _self_employment_projections(persons):
+    contexts = tax_populace.project_tax_unit_person_contexts(persons)
+    return (
+        tax_populace.project_section_32_c_2_tax_unit_inputs(
+            persons=persons, contexts=contexts
+        ),
+        tax_populace.project_section_1402_a_tax_unit_inputs(
+            persons=persons, contexts=contexts
+        ),
+    )
+
+
+def test_partnership_se_earnings_project_the_same_under_either_build_column():
+    # The certified populace-us-2024-spm-20260915 build stores K-1 Box 14
+    # partnership net earnings as partnership_self_employment_net_earnings
+    # (policyengine-us >= 2); the f0af251 build stored them as
+    # partnership_se_income. Both must reach Axiom's 1402(a) and 32(c)(2)
+    # inputs identically; a missing column must not.
+    new = _self_employment_projections(
+        _partnership_persons("partnership_self_employment_net_earnings")
+    )
+    old = _self_employment_projections(_partnership_persons("partnership_se_income"))
+    absent = _self_employment_projections(_partnership_persons(None))
+
+    assert new == old
+    assert new != absent
+    assert new[1]["net_earnings_from_self_employment"] == pytest.approx(
+        (1_000 + 12_000 + 2_500) * (1 - 0.5 * 0.153)
+    )
+
+
+def test_partnership_se_earnings_prefer_the_current_column_name():
+    person = {
+        "partnership_self_employment_net_earnings": 700,
+        "partnership_se_income": 5,
+    }
+    assert tax_populace.partnership_self_employment_net_earnings(person) == 700
+    assert tax_populace.partnership_self_employment_net_earnings({}) == 0

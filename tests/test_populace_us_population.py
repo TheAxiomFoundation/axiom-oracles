@@ -324,3 +324,115 @@ class FakeMicrosimulation:
         if variable not in data:
             raise ValueError(variable)
         return FakeSeries(data[variable])
+
+
+# ---------------------------------------------------------------------------
+# Source tax-unit roles in the case loader's own simulation build
+# ---------------------------------------------------------------------------
+def _role_tables():
+    import pandas as pd
+
+    person = pd.DataFrame(
+        {
+            "person_id": [1, 2],
+            "person_tax_unit_id": [10, 10],
+            "age": [40, 70],
+            "tax_unit_role_input": ["HEAD", "DEPENDENT"],
+        }
+    )
+    tax_unit = pd.DataFrame(
+        {"tax_unit_id": [10], "filing_status_input": ["HEAD_OF_HOUSEHOLD"]}
+    )
+    return person, tax_unit
+
+
+def _install_fake_policyengine(monkeypatch, *, managed_sim=None):
+    """Stub policyengine / policyengine_us so the build path runs without them."""
+    built: dict = {}
+
+    class FakeUSSingleYearDataset:
+        def __init__(self, *, file_path):
+            self.file_path = file_path
+            self.person, self.tax_unit = _role_tables()
+
+    class FakeMicrosimulation:
+        def __init__(self, *, dataset):
+            built["dataset"] = dataset
+
+    us_module = types.ModuleType("policyengine_us")
+    us_module.Microsimulation = FakeMicrosimulation
+    data_module = types.ModuleType("policyengine_us.data")
+    data_module.USSingleYearDataset = FakeUSSingleYearDataset
+    pe_module = types.ModuleType("policyengine")
+    pe_module.us = types.SimpleNamespace(
+        managed_microsimulation=lambda **kwargs: managed_sim
+    )
+    modules = __import__("sys").modules
+    monkeypatch.setitem(modules, "policyengine", pe_module)
+    monkeypatch.setitem(modules, "policyengine_us", us_module)
+    monkeypatch.setitem(modules, "policyengine_us.data", data_module)
+    return built
+
+
+@pytest.mark.parametrize("enabled", [True, False])
+def test_populace_build_attaches_the_builds_roles_before_simulating(
+    monkeypatch, enabled
+) -> None:
+    import axiom_oracles.populations.populace_us as populace_us
+
+    if enabled:
+        monkeypatch.delenv("AXIOM_POPULACE_SOURCE_ROLES", raising=False)
+    else:
+        monkeypatch.setenv("AXIOM_POPULACE_SOURCE_ROLES", "0")
+    built = _install_fake_policyengine(monkeypatch)
+    monkeypatch.setattr(populace_us, "_resolve_populace_dataset", lambda _: "/x.h5")
+    monkeypatch.setattr(populace_us, "_require_certified_engine", lambda _: None)
+
+    PopulaceUsCaseLoader()._build_microsimulation(POPULACE_US_DATASET)
+
+    person = built["dataset"].person
+    if enabled:
+        # The build's HEAD (aged 40), not the oldest member, heads the unit.
+        assert person["is_tax_unit_head"].tolist() == [True, False]
+        assert built["dataset"].tax_unit["filing_status"].tolist() == [
+            "HEAD_OF_HOUSEHOLD"
+        ]
+    else:
+        assert "is_tax_unit_head" not in person.columns
+
+
+def test_managed_build_pins_roles_from_a_local_entity_h5(monkeypatch) -> None:
+    import axiom_oracles.populations.populace_us as populace_us
+
+    monkeypatch.delenv("AXIOM_POPULACE_SOURCE_ROLES", raising=False)
+    sim = object()
+    _install_fake_policyengine(monkeypatch, managed_sim=sim)
+    calls = []
+    monkeypatch.setattr(populace_us, "read_source_roles", lambda source: ("roles", source))
+    monkeypatch.setattr(
+        populace_us, "pin_source_roles", lambda s, roles: calls.append((s, roles))
+    )
+
+    result = PopulaceUsCaseLoader()._build_microsimulation("/data/local_populace.h5")
+
+    assert result is sim
+    assert calls == [(sim, ("roles", "/data/local_populace.h5"))]
+
+
+def test_certified_engine_check_applies_only_to_the_certified_revision(
+    monkeypatch,
+) -> None:
+    import axiom_oracles.populations.populace_us as populace_us
+
+    checked = []
+    monkeypatch.setattr(
+        populace_us, "require_policyengine_engine_for_pin", checked.append
+    )
+
+    populace_us._require_certified_engine(POPULACE_US_DATASET)
+    populace_us._require_certified_engine(POPULACE_US_DATASET + "@some-other-rev")
+    populace_us._require_certified_engine("populace://someone/else/file.h5")
+
+    assert [pin.revision for pin in checked] == [
+        "populace-us-2024-spm-20260915"
+    ]
