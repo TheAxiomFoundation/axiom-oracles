@@ -111,7 +111,7 @@ def _dispositioned_block(
     return {
         "schema_version": DISPOSITIONS_SCHEMA_VERSION,
         "dispositions_file": None,
-        "counts": counts,
+        "counts": {**counts, "unexplained": unexplained_count},
         "unexplained_count": unexplained_count,
         "raw_match_rate": round(100.0 * match_count / n, 2) if n else 0,
         "explained_rate": (
@@ -324,6 +324,7 @@ def main() -> int:
         else:
             other.append(
                 {
+                    "concept": OUTPUT_REF,
                     "kind": "axiom_above_spsm"
                     if diff > 0
                     else "spsm_above_axiom",
@@ -385,7 +386,7 @@ def main() -> int:
                     "axiom_encoding_gap": 0,
                     "bridge_artifact": 0,
                     "explained_residual": 0,
-                    "unexplained": 0,
+                    "unexplained": len(other),
                     "upstream_engine_gap": amt_class + split_class,
                 },
                 comparison_count=n,

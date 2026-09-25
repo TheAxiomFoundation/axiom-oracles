@@ -24,9 +24,8 @@ presence-only coverage rule.
 
 Attribution splits the residual mismatches by whose defect they are:
 
-* ``unexplained_total`` — mismatches carrying no explanatory disposition, summed
-  from each covered report's ``summary.dispositioned.unexplained_count`` (or the
-  raw ``mismatch_count`` for a v2 report with no dispositions file).
+* ``unexplained_total`` — shared conservative unexplained assessments, summed
+  once for each distinct covered report. Invalid count signals block conformance.
 * ``axiom_attributed_open`` — the residual that is *Axiom's* to fix: disposition
   rows classed ``axiom_encoding_gap``, plus mismatches whose disposition links an
   **open** ``rulespec-*`` issue. These block conformance; upstream engine gaps and
@@ -38,12 +37,16 @@ Attribution splits the residual mismatches by whose defect they are:
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+import math
+from pathlib import Path
 
 from axiom_oracles.conformance.loader import Universe
-
-#: Disposition kinds that count as *explained* (do not block conformance).
-_EXPLAINED_KINDS = ("explained_residual", "upstream_engine_gap", "bridge_artifact")
-
+from axiom_oracles.conformance.unexplained import (
+    admit_count,
+    assess_unexplained,
+    load_known_causes,
+    resolve_suite_reports,
+)
 
 def _round(value: float, places: int = 4) -> float:
     return round(value, places)
@@ -114,78 +117,72 @@ class JurisdictionScoreboard:
         return asdict(self)
 
 
-def _report_suite_index(reports: list[dict]) -> dict[str, dict]:
-    """Index committed comparison reports by their ``suite`` field.
-
-    When two reports share a suite (e.g. tin_s is compared by uk-worker-pit and
-    the savings/dividend variants under distinct suites), each keeps its own key;
-    a policy's ``suite`` names exactly one. The presence of ANY report for the
-    named suite is what makes a policy covered.
-    """
-    index: dict[str, dict] = {}
-    for report in reports:
-        suite = report.get("suite")
-        if suite:
-            index.setdefault(suite, report)
-    return index
+def _report_suite_index(
+    reports: list[dict], *, known_causes=(), repo_root: Path | None = None,
+) -> dict[str, dict]:
+    """Resolve duplicate reports by the shared maximum-unexplained rule."""
+    return resolve_suite_reports(reports, known_causes=known_causes, repo_root=repo_root)
 
 
-def _is_open_rulespec_issue(url: str) -> bool:
-    """A linked ``rulespec-*`` issue URL. Open-ness is treated conservatively.
-
-    We cannot query GitHub in the scoreboard join (it must run offline in CI), so
-    a linked ``rulespec-*`` *issue* URL is treated as an OPEN Axiom-attributed gap
-    by default — the safe direction: an unresolved encoding gap should block
-    conformance until the disposition is removed (which is what closing the issue
-    prompts). A PR URL or a non-rulespec URL is not counted here.
-    """
-    lowered = url.lower()
-    if "/rulespec-" not in lowered:
-        return False
-    return "/issues/" in lowered
-
-
-def _disposition_signals(report: dict) -> tuple[int, int, int, int]:
-    """Extract (unexplained, axiom_open, oracle_attributed, bridge) from a report.
-
-    Reads ``summary.dispositioned`` (v2.1). For a v2 report with no dispositions,
-    every mismatch is unexplained (nothing has been classified yet).
-    """
+def _disposition_signals(
+    report: dict, *, known_causes=None, repo_root: Path | None = None,
+) -> tuple[int, int, int, int]:
+    """Return shared unexplained/Axiom signals and admitted upstream/bridge counts."""
+    if known_causes is None:
+        known_causes = load_known_causes(repo_root)
+    assessment = assess_unexplained(report, known_causes=known_causes, repo_root=repo_root)
     summary = report.get("summary") or {}
-    dispositioned = summary.get("dispositioned")
-    if not dispositioned:
-        mismatch = summary.get("mismatch_count")
-        if mismatch is None:
-            # Fall back to counting mismatch rows.
-            mismatch = len(report.get("mismatches") or [])
-        return int(mismatch or 0), 0, 0, 0
+    if not isinstance(summary, dict):
+        summary = {}
+    block = summary.get("dispositioned") or {}
+    counts = (block.get("counts") or {}) if isinstance(block, dict) else {}
+    if not isinstance(counts, dict):
+        counts = {}
+    return (
+        assessment.count,
+        assessment.axiom_attributed,
+        admit_count(counts.get("upstream_engine_gap", 0)) or 0,
+        admit_count(counts.get("bridge_artifact", 0)) or 0,
+    )
 
-    counts = dispositioned.get("counts") or {}
-    unexplained = int(dispositioned.get("unexplained_count", 0) or 0)
-    axiom_open = int(counts.get("axiom_encoding_gap", 0) or 0)
-    oracle_attributed = int(counts.get("upstream_engine_gap", 0) or 0)
-    bridge = int(counts.get("bridge_artifact", 0) or 0)
 
-    # Add mismatches whose disposition links an OPEN rulespec issue but were not
-    # already classed axiom_encoding_gap — those are Axiom-attributed too.
-    for mismatch in report.get("mismatches") or []:
-        disposition = mismatch.get("disposition")
-        if not isinstance(disposition, dict):
-            continue
-        if disposition.get("disposition") == "axiom_encoding_gap":
-            continue  # already counted in counts
-        linked = disposition.get("linked_issue")
-        if linked and _is_open_rulespec_issue(str(linked)):
-            axiom_open += 1
-    return unexplained, axiom_open, oracle_attributed, bridge
+def _exposure_number(value: object) -> int | float | None:
+    """Only finite native numbers can witness or support an exclusion."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    if isinstance(value, float) and not math.isfinite(value):
+        return None
+    return value
 
 
 def score_jurisdiction(
     universe: Universe,
     reports: list[dict],
+    *,
+    known_causes=None,
+    repo_root: Path | None = None,
 ) -> tuple[JurisdictionScoreboard, list[PolicyScore]]:
     """Compute the scoreboard + per-policy drill-down for one jurisdiction."""
-    suite_index = _report_suite_index(reports)
+    if known_causes is None:
+        known_causes = load_known_causes(repo_root)
+    universe_suites = {policy.suite for policy in universe.in_scope() if policy.suite}
+    relevant_reports = [r for r in reports if r.get("suite") in universe_suites]
+    suite_index = _report_suite_index(
+        relevant_reports, known_causes=known_causes, repo_root=repo_root,
+    )
+    suite_files: dict[str, list[str]] = {}
+    report_defects: set[str] = set()
+    for report in relevant_reports:
+        suite = report["suite"]
+        filename = report.get("_file") or "<unnamed report>"
+        suite_files.setdefault(suite, []).append(filename)
+        assessment = assess_unexplained(
+            report, known_causes=known_causes, repo_root=repo_root,
+        )
+        report_defects.update(
+            f"[{suite}] {filename}: {defect}" for defect in assessment.defects
+        )
+    contested_suites = {suite for suite, files in suite_files.items() if len(files) > 1}
     #: The raw, uncollapsed report list — exclusion-tripwire scans must see
     #: every report, order-independently (sol closing review r2 finding 1).
     all_reports = list(reports)
@@ -224,8 +221,8 @@ def score_jurisdiction(
                 for report in all_reports:
                     exposure = (report.get("scope") or {}).get("column_exposure")
                     if isinstance(exposure, dict) and any(
-                        (exposure.get(var) or 0) > 0
-                        for var in policy.output_vars
+                        (value := _exposure_number(exposure[var])) is None or value != 0
+                        for var in policy.output_vars if var in exposure
                     ):
                         exclusion_violated = True
                         break
@@ -250,7 +247,7 @@ def score_jurisdiction(
             continue
 
         report = suite_index.get(policy.suite) if policy.suite else None
-        if report is None:
+        if report is None or policy.suite in contested_suites:
             uncovered_policies.append(policy.oracle_policy_name)
             policy_scores.append(
                 PolicyScore(
@@ -261,7 +258,7 @@ def score_jurisdiction(
                     suite=policy.suite,
                     covered=False,
                     note=policy.note,
-                    status="uncovered",
+                    status="contested" if policy.suite in contested_suites else "uncovered",
                 )
             )
             continue
@@ -274,7 +271,8 @@ def score_jurisdiction(
         exposure = (report.get("scope") or {}).get("column_exposure")
         if isinstance(exposure, dict) and policy.output_vars:
             witnessed = any(
-                (exposure.get(var) or 0) > 0 for var in policy.output_vars
+                (value := _exposure_number(exposure.get(var))) is not None and value > 0
+                for var in policy.output_vars
             )
             if not witnessed:
                 uncovered_policies.append(policy.oracle_policy_name)
@@ -297,12 +295,18 @@ def score_jurisdiction(
         covered += 1
         covered_report_suites.add(policy.suite)
         summary = report.get("summary") or {}
+        if not isinstance(summary, dict):
+            summary = {}
         comparisons = int(summary.get("comparison_count", 0) or 0)
         match_count = int(summary.get("match_count", 0) or 0)
         # Per-policy signals for the drill-down row (the report's own numbers).
-        unexplained, axiom_open, oracle_gap, bridge = _disposition_signals(report)
+        unexplained, axiom_open, oracle_gap, bridge = _disposition_signals(
+            report, known_causes=known_causes, repo_root=repo_root,
+        )
 
         dispositioned = summary.get("dispositioned") or {}
+        if not isinstance(dispositioned, dict):
+            dispositioned = {}
         raw_rate = (
             dispositioned.get("raw_match_rate")
             if dispositioned
@@ -311,7 +315,11 @@ def score_jurisdiction(
         explained_rate = dispositioned.get("explained_rate") if dispositioned else None
 
         status = "conformant"
-        if axiom_open > 0:
+        if assess_unexplained(
+            report, known_causes=known_causes, repo_root=repo_root,
+        ).defects:
+            status = "invalid-report"
+        elif axiom_open > 0:
             status = "axiom-gap"
         elif unexplained > 0:
             status = "unexplained"
@@ -347,7 +355,9 @@ def score_jurisdiction(
     temporal_debt: dict | None = None
     for suite in sorted(covered_report_suites):
         report = suite_index[suite]
-        unexplained, axiom_open, oracle_gap, bridge = _disposition_signals(report)
+        unexplained, axiom_open, oracle_gap, bridge = _disposition_signals(
+            report, known_causes=known_causes, repo_root=repo_root,
+        )
         unexplained_total += unexplained
         axiom_attributed_open += axiom_open
         oracle_attributed += oracle_gap
@@ -384,14 +394,20 @@ def score_jurisdiction(
         and unexplained_total == 0
         and axiom_attributed_open == 0
         and not invalid_exclusions
+        and not report_defects
     )
 
-    blocking_reasons: list[str] = []
+    blocking_reasons: list[str] = sorted(report_defects)
+    for suite in sorted(contested_suites):
+        blocking_reasons.append(
+            f"[{suite}] contested coverage: multiple reports: "
+            + ", ".join(sorted(suite_files[suite]))
+        )
     if invalid_exclusions:
         blocking_reasons.append(
             f"{len(invalid_exclusions)} excluded polic"
             f"{'y is' if len(invalid_exclusions) == 1 else 'ies are'} "
-            "invalidated by nonzero live exposure on their output columns "
+            "invalidated by nonzero or invalid live exposure on their output columns "
             "(re-inclusion required): " + ", ".join(sorted(invalid_exclusions))
         )
     if not predicate_covered:

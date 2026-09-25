@@ -2220,3 +2220,78 @@ def test_compositions_check_fails_on_mutated_commit():
     finally:
         path.write_text(original)
     assert rc == 1
+
+
+@pytest.mark.parametrize("exposure", [float("nan"), float("inf"), -float("inf"), "5", None, True, [], {}])
+def test_scoreboard_invalid_exposure_fails_closed(exposure):
+    """Invalid exposure cannot witness coverage or justify an excluded output."""
+    universe = _universe([
+        _in_scope(suite="suite-a"),
+        UniversePolicy(
+            id="tx:excluded", oracle_policy_name="excluded", output_vars=("z_s",),
+            in_scope=False, exclusion_reason="oracle_dataset_lacks_input",
+            note="no activating input",
+        ),
+    ])
+    report = _report("suite-a", comparisons=1, matches=1)
+    report["scope"] = {"column_exposure": {"x_s": exposure, "z_s": exposure}}
+    board, _ = score_jurisdiction(universe, [report])
+    assert board.covered == 0
+    assert board.unwitnessed_policies == ["x_uk"]
+    assert board.invalid_exclusions == ["excluded"]
+    assert board.conformant is False
+
+
+def test_scoreboard_duplicate_coverage_is_contested_in_both_orders():
+    """A conflicting file cannot supply coverage by being first in an index."""
+    universe = _universe([_in_scope(suite="suite-a")])
+    clean = {**_report("suite-a", comparisons=5, matches=5), "_file": "clean.json"}
+    failing = {**_report("suite-a", comparisons=5, matches=2), "_file": "failing.json"}
+    results = []
+    for reports in ([clean, failing], [failing, clean]):
+        board, scores = score_jurisdiction(universe, reports)
+        assert board.covered == 0 and board.conformant is False
+        assert scores[0].status == "contested"
+        assert any("clean.json, failing.json" in reason for reason in board.blocking_reasons)
+        results.append(board.to_summary())
+    assert results[0] == results[1]
+
+
+def test_scoreboard_hard_count_defect_blocks_even_without_positive_unexplained():
+    universe = _universe([_in_scope(suite="suite-a")])
+    report = _report("suite-a", comparisons=1, matches=1)
+    report["summary"]["mismatch_count"] = True
+    board, scores = score_jurisdiction(universe, [report])
+    assert board.unexplained_total == 0
+    assert board.conformant is False
+    assert scores[0].status == "invalid-report"
+    assert any("suite-a" in reason and "boolean" in reason for reason in board.blocking_reasons)
+
+
+def test_scoreboard_duplicate_cannot_hide_count_defects():
+    universe = _universe([_in_scope(suite="suite-a")])
+    bad = {**_report("suite-a", comparisons=1, matches=1), "_file": "bad.json"}
+    bad["summary"]["mismatch_count"] = True
+    large = _report("suite-a", comparisons=5, matches=2)
+    board, _ = score_jurisdiction(universe, [bad, large])
+    assert any("bad.json" in reason and "boolean" in reason for reason in board.blocking_reasons)
+
+
+def test_scoreboard_known_cause_can_explain_but_keeps_axiom_attribution():
+    universe = _universe([_in_scope(suite="suite-a")])
+    report = _report("suite-a", comparisons=1, matches=0)
+    report["mismatches"] = [{"concept": "x", "kind": "amount_difference"}]
+    cause = {"suite": "suite-a", "concept": "x", "kind": "amount_difference", "fix_owner": "rulespec-tx"}
+    board, _ = score_jurisdiction(universe, [report], known_causes=[cause])
+    assert board.unexplained_total == 0 and board.axiom_attributed_open == 1
+    assert board.conformant is False
+
+
+def test_conformance_ratchet_vanished_jurisdiction_fails(tmp_path, monkeypatch, capsys):
+    rt = _load_script("conformance_ratchet.py")
+    monkeypatch.setattr(rt, "_live_summaries", lambda: {})
+    monkeypatch.setattr(rt, "_load_ratchets", lambda: {
+        "tx": RatchetInvariant("tx", 0, 0, 0, 0),
+    })
+    assert _run_check(rt) == 1
+    assert "[tx] pinned jurisdiction has no live scoreboard row" in capsys.readouterr().err

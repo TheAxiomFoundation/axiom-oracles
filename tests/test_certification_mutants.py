@@ -415,6 +415,94 @@ def test_absolute_disposition_path_is_rejected():
         (REPO / "dashboard/public/data" / name).unlink()
 
 
+@pytest.mark.parametrize("declared", [97, 5000])
+def test_inline_certificate_leg_uses_shared_count_and_remains_unvalidated(
+    tmp_path, monkeypatch, declared
+):
+    """Inline producer evidence changes the count, never the validation gate."""
+    certify = _load("certify")
+    report = {
+        "suite": "ca-federal-schedule-tax-spsm",
+        "summary": {
+            "comparison_count": 8702,
+            "match_count": 0,
+            "mismatch_count": 8702,
+            "dispositioned": {
+                "dispositions_file": None,
+                "counts": {"upstream_engine_gap": 8605, "unexplained": 0},
+                "unexplained_count": declared,
+            },
+        },
+        "mismatches": [{"kind": "amount_difference"} for _ in range(50)],
+    }
+    (tmp_path / "report.json").write_text(json.dumps(report))
+    monkeypatch.setattr(certify, "REPO_ROOT", tmp_path)
+    leg, _evidence, defects = certify._suite_verdict(
+        {
+            "suite": report["suite"],
+            "report": "report.json",
+            "oracle_type": "reference",
+            "oracle": "synthetic",
+        }
+    )
+    assert leg["unexplained"] == declared
+    assert not leg["clean"]
+    assert any(
+        "inline classifications present with no dispositions file — unvalidated; "
+        "migrate before they can explain" in defect
+        for defect in defects
+    )
+
+
+def test_certificate_known_cause_labels_reduce_count_but_require_dispositions(
+    tmp_path, monkeypatch
+):
+    certify = _load("certify")
+    report = {
+        "suite": "label-only",
+        "summary": {"comparison_count": 1, "match_count": 0, "mismatch_count": 1},
+        "mismatches": [{"concept": "test#amount", "kind": "amount_difference"}],
+    }
+    (tmp_path / "report.json").write_text(json.dumps(report))
+    monkeypatch.setattr(certify, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(
+        certify,
+        "load_known_causes",
+        lambda _root: [{
+            "suite": "label-only", "concept": "test#amount", "kind": "amount_difference"
+        }],
+    )
+    leg, _evidence, defects = certify._suite_verdict(
+        {
+            "suite": report["suite"],
+            "report": "report.json",
+            "oracle_type": "reference",
+            "oracle": "synthetic",
+        }
+    )
+    assert leg["unexplained"] == 0
+    assert not leg["clean"]
+    assert (
+        "label-only: 1 mismatch(es) explained only by known-cause labels; "
+        "certification requires validated dispositions"
+    ) in defects
+
+
+def test_de_certificate_leg_counts_completed_axiom_mismatches(monkeypatch):
+    """The DE leg must assess Axiom mismatches instead of hardcoding zero."""
+    certify = _load("certify")
+    entry = certify.PROGRAMS["de/kindergeld"]["suites"][0]
+    report = json.loads((REPO / entry["report"]).read_text())
+    axiom_leg = report["views"]["de/kindergeld"]["legs"][1]
+    axiom_leg["match_count"] -= 1
+    axiom_leg["mismatch_count"] += 1
+    monkeypatch.setattr(certify, "_load", lambda _path: report)
+    monkeypatch.setattr(certify, "_rederived_de_report", lambda: report)
+    leg, _evidence, _defects = certify._de_suite_verdict(entry)
+    assert leg["unexplained"] == leg["mismatches"] == 1
+    assert not leg["clean"]
+
+
 def test_long_exact_integers_do_not_merge():
     """Decimal's 28-digit default context merged these."""
     census = _load("exercise_census")
