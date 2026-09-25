@@ -671,7 +671,7 @@ def compare(
     try:
         # taxsim-csv rows carry their own tax year; only an explicit --period
         # overrides it (the resolved default must not).
-        requested_period = period
+        requested_period = period or None
         period = _resolve_period(period, left, right)
         comparison_scope = comparison_scope_for_targets(left, right)
         suite_name = _resolve_suite_name(suite, left, right)

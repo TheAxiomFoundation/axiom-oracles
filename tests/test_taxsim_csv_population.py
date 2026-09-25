@@ -402,6 +402,11 @@ def test_structural_problems_fail_the_load(tmp_path):
     with pytest.raises(TaxsimCsvError, match="repeats header column"):
         read_taxsim_csv(repeated)
 
+    bad_quote = tmp_path / "bad-quote.csv"
+    bad_quote.write_text(",".join(header) + '\n"101,' + ",".join(records[0][1:]) + "\n")
+    with pytest.raises(TaxsimCsvError, match="malformed"):
+        read_taxsim_csv(bad_quote)
+
     empty = tmp_path / "empty.csv"
     empty.write_text("")
     with pytest.raises(TaxsimCsvError, match="no header"):

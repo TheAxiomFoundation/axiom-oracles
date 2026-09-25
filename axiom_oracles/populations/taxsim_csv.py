@@ -17,10 +17,11 @@ Contract
   taxsim_runner.PolicyEngineTaxsimRunner` pass through as-is. A cell whose
   text is an integer literal becomes an ``int``, any other numeric cell a
   ``float`` (Python's correctly rounded ``float()``), and a blank cell is
-  omitted from the row. For every column with at least one non-blank cell, a
-  DataFrame built from the rows has the dtype ``pandas.read_csv`` infers for
-  the file and the values ``pandas.read_csv(float_precision="round_trip")``
-  parses; ``tests/test_taxsim_csv_population.py`` checks both. The
+  omitted from the row. For every column with at least one non-blank cell
+  (integers within int64), a DataFrame built from the rows has the dtype
+  ``pandas.read_csv`` infers for the file and the values
+  ``pandas.read_csv(float_precision="round_trip")`` parses;
+  ``tests/test_taxsim_csv_population.py`` checks both. The
   benchmark's own worker reads its batch CSV with plain ``pd.read_csv``,
   whose default float parser is not correctly rounded: on the September
   benchmark file (sha256 ``ecabc8dd...``) it differs from the cell text in
@@ -268,7 +269,8 @@ def read_taxsim_csv(
     # Decode incrementally from the hashed bytes (no second full-text copy);
     # utf-8-sig drops a leading byte-order mark, as pandas.read_csv does.
     stream = io.TextIOWrapper(io.BytesIO(data), encoding="utf-8-sig", newline="")
-    reader = csv.reader(stream)
+    # strict: malformed quoting raises instead of being silently repaired.
+    reader = csv.reader(stream, strict=True)
     try:
         header = next(reader, None)
         if not header:
@@ -322,6 +324,10 @@ def read_taxsim_csv(
             rows.append(row)
     except UnicodeDecodeError as exc:
         raise TaxsimCsvError(f"TAXSIM CSV {file_path} is not UTF-8: {exc}") from exc
+    except csv.Error as exc:
+        raise TaxsimCsvError(
+            f"TAXSIM CSV {file_path} is malformed near line {reader.line_num}: {exc}"
+        ) from exc
 
     if duplicate_ids:
         shown = ", ".join(str(item) for item in sorted(duplicate_ids)[:10])
