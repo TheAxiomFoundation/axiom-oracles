@@ -6,7 +6,8 @@
  * (e.g., policyengine-taxsim.json).
  */
 
-import { topLevelAggregates } from "./suites";
+import { topLevelAggregates } from "./suites.js";
+import { assessUnexplained } from "./unexplained.js";
 
 /**
  * @typedef {Object} OracleData
@@ -104,6 +105,14 @@ export async function loadOracleData(basePath = "") {
     }
   } catch {
     // continue without cause attribution
+  }
+
+  // Assess the original report before concept filtering can remove mismatch
+  // rows. Both the overview bundle and per-file path retain this evidence.
+  for (const report of reports) {
+    report.unexplained_assessment = assessUnexplained(report, {
+      known_causes: knownCauses,
+    });
   }
 
   // Load coverage context from the local PolicyEngine tracker and the

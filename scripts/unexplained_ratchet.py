@@ -14,13 +14,12 @@ weeks). This ratchet closes that hole with the same monotonic contract:
 * a suite absent from the pin file has ceiling 0 — a NEW suite cannot
   debut with unexplained disagreements: triage first, publish second.
 
-"Unexplained" here is exactly the dashboard hero's number (the
-``countUnexplained`` semantics in dashboard/src/utils/programs.js): a
-report whose disposition merge is backed by ``dispositions/<suite>.yaml``
-contributes its ``summary.dispositioned.unexplained_count``; any other
-report contributes its mismatch buckets minus those labeled in the
-known-causes registry (dashboard/public/data/known_causes.json). The gate
-and the published headline can therefore never disagree.
+"Unexplained" uses the shared conservative assessment in
+``axiom_oracles.conformance.unexplained``. Producer classifications, declared
+counts, and unfiltered mismatch rows all remain visible; concept-less rows are
+never explained by known-cause labels. The dashboard mirrors this definition.
+Hard assessment defects, unreadable dashboard JSON, and vanished pins fail the
+gate. Only the typed dashboard suite table can exempt diagnostics.
 
 Usage:
     uv run scripts/unexplained_ratchet.py --check   # CI gate; exit 1 on rise
@@ -30,13 +29,22 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import json
 import sys
 from pathlib import Path
 
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.conformance.loader import load_dashboard_reports  # noqa: E402
+from axiom_oracles.conformance.unexplained import (  # noqa: E402
+    admit_count,
+    assess_unexplained,
+    load_known_causes,
+    resolve_suite_reports,
+)
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
 # Lives beside conformance/ratchet.yaml (the other monotonic publishing
 # invariant), NOT under dispositions/ — every dispositions/*.yaml is
@@ -53,57 +61,17 @@ _HEADER_COMMENT = (
 )
 
 
-def _known_cause_covers(known_causes: list[dict], report: dict, concept: str, kind: str) -> bool:
-    """Mirror causeFor() in dashboard/src/utils/programs.js."""
-    suite = report.get("suite")
-    engines = report.get("engines") or {}
-    candidates = [
-        c
-        for c in known_causes
-        if c.get("suite") == suite
-        and c.get("concept") == concept
-        and c.get("kind") == kind
-    ]
-    for c in candidates:
-        c_engines = c.get("engines")
-        if c_engines and (
-            c_engines.get("left") == engines.get("left")
-            and c_engines.get("right") == engines.get("right")
-        ):
-            return True
-    return any(not c.get("engines") for c in candidates)
-
-
 def count_unexplained(report: dict, known_causes: list[dict]) -> int:
-    """The dashboard hero's per-report unexplained count, in Python."""
-    dispositioned = (report.get("summary") or {}).get("dispositioned") or {}
-    if (
-        dispositioned.get("dispositions_file")
-        and dispositioned.get("unexplained_count") is not None
-    ):
-        return int(dispositioned["unexplained_count"])
-    buckets: dict[tuple, int] = {}
-    for m in report.get("mismatches") or []:
-        # The dashboard's load pipeline filters mismatch rows to
-        # concept-keyed comparisons; rows with no concept never reach the
-        # hero's count, so they don't gate here either.
-        if not m.get("concept"):
-            continue
-        key = (m.get("concept"), m.get("kind"))
-        buckets[key] = buckets.get(key, 0) + 1
-    total = 0
-    for (concept, kind), count in buckets.items():
-        if not _known_cause_covers(known_causes, report, concept, kind):
-            total += count
-    return total
+    """Return the shared count; full gate validation also checks its defects."""
+    return assess_unexplained(report, known_causes=known_causes).count
 
 
 def diagnostic_suites() -> set[str]:
     """Suites the dashboard marks kind: "diagnostic" (excluded from headlines).
 
     Parsed from the suite table in dashboard/src/utils/suites.js so the gate
-    and the hero can never disagree about scope; the "-diagnostic" name
-    convention is the fallback for suites the table does not list.
+    and the hero share an explicit exemption list. A suite name alone cannot
+    exempt a newly published report.
     """
     suites: set[str] = set()
     table = REPO_ROOT / "dashboard" / "src" / "utils" / "suites.js"
@@ -118,58 +86,59 @@ def diagnostic_suites() -> set[str]:
     return suites
 
 
-def gated_reports() -> dict[str, dict]:
-    """suite -> report for every Axiom-pair, non-diagnostic dashboard report."""
+def _gated_report_rows() -> list[dict]:
+    """Every Axiom-pair report in gate scope, including all duplicate suites."""
     diagnostics = diagnostic_suites()
-    out: dict[str, dict] = {}
-    for path in sorted(DASHBOARD_DATA.glob("*.json")):
-        try:
-            report = json.loads(path.read_text())
-        except (OSError, json.JSONDecodeError):
-            continue
-        if not isinstance(report, dict):
-            continue
-        suite = report.get("suite")
-        if not suite:
-            continue
-        # A comparison report is one that carries graded rows. `aggregates` is
-        # present only on the population lanes; the multi-oracle grid reports
-        # (scripts/generate_state_income_tax_liability.py) publish `summary` +
-        # `mismatches` and no `aggregates`, so requiring it silently dropped
-        # 83 suites — every state income-tax grid among them — out of the
-        # gate entirely. Absent from the pin file means ceiling 0, so those
-        # suites read as governed while nothing actually checked them.
+    reports = []
+    for report in load_dashboard_reports(DASHBOARD_DATA):
+        suite = report["suite"]
+        # Grid lanes have summary + mismatches but no aggregates.
         if "mismatches" not in report or "summary" not in report:
             continue
-        if suite in diagnostics or "diagnostic" in suite:
+        if suite in diagnostics:
             continue
         engines = report.get("engines") or {}
-        # Two shapes in the wild: two-engine lanes use {left, right}; the grid
-        # lanes key each engine by name ({axiom, policyengine, taxsim}).
         if "axiom" not in (engines.get("left"), engines.get("right")) and (
             "axiom" not in engines
         ):
             continue
-        # One report per suite; prefer the one with the larger comparison
-        # surface if a suite ever has two committed copies.
-        if suite in out:
-            old = (out[suite].get("summary") or {}).get("mismatch_count") or 0
-            new = (report.get("summary") or {}).get("mismatch_count") or 0
-            if new <= old:
-                continue
-        out[suite] = report
-    return out
+        reports.append(report)
+    return reports
+
+
+def gated_reports() -> dict[str, dict]:
+    """suite -> report chosen by the shared maximum-unexplained resolver."""
+    return resolve_suite_reports(
+        _gated_report_rows(), known_causes=load_known_causes(REPO_ROOT),
+        repo_root=REPO_ROOT,
+    )
+
+
+def live_assessments() -> tuple[dict[str, int], list[str]]:
+    """Assess every gated report; duplicates cannot hide a hard defect."""
+    known_causes = load_known_causes(REPO_ROOT)
+    reports = _gated_report_rows()
+    selected = resolve_suite_reports(
+        reports, known_causes=known_causes, repo_root=REPO_ROOT,
+    )
+    problems = sorted({
+        f"[{report['suite']}] {report.get('_file', '<unnamed report>')}: {defect}"
+        for report in reports
+        for defect in assess_unexplained(
+            report, known_causes=known_causes, repo_root=REPO_ROOT,
+        ).defects
+    })
+    counts = {
+        suite: assess_unexplained(
+            report, known_causes=known_causes, repo_root=REPO_ROOT,
+        ).count
+        for suite, report in selected.items()
+    }
+    return counts, problems
 
 
 def live_counts() -> dict[str, int]:
-    known_causes = []
-    if KNOWN_CAUSES_PATH.exists():
-        payload = json.loads(KNOWN_CAUSES_PATH.read_text())
-        known_causes = payload.get("entries") or []
-    return {
-        suite: count_unexplained(report, known_causes)
-        for suite, report in gated_reports().items()
-    }
+    return live_assessments()[0]
 
 
 def load_ratchet() -> dict[str, int]:
@@ -178,15 +147,38 @@ def load_ratchet() -> dict[str, int]:
     doc = yaml.safe_load(RATCHET_PATH.read_text()) or {}
     if doc.get("schema") != SCHEMA:
         raise SystemExit(f"{RATCHET_PATH}: unexpected schema {doc.get('schema')!r}")
-    return {row["suite"]: int(row["unexplained_max"]) for row in doc.get("ratchets", [])}
+    ceilings = {}
+    for row in doc.get("ratchets", []):
+        suite = row["suite"]
+        value = admit_count(row["unexplained_max"])
+        if value is None:
+            raise ValueError(f"[{suite}] unexplained_max is not a non-negative count")
+        if suite in ceilings:
+            raise ValueError(f"[{suite}] duplicate ratchet pin")
+        if "note" in row and not isinstance(row["note"], str):
+            raise ValueError(f"[{suite}] ratchet note must be a string")
+        ceilings[suite] = value
+    return ceilings
 
 
-def write_ratchet(ceilings: dict[str, int]) -> None:
+def write_ratchet(ceilings: dict[str, int], *, notes: dict[str, str] | None = None) -> None:
+    """Write ceilings while preserving any existing per-suite correction notes."""
+    preserved_notes = {}
+    if RATCHET_PATH.exists():
+        existing = yaml.safe_load(RATCHET_PATH.read_text()) or {}
+        preserved_notes = {
+            row["suite"]: row["note"] for row in existing.get("ratchets", [])
+            if "note" in row
+        }
+    preserved_notes.update(notes or {})
     doc = {
         "schema": SCHEMA,
         "_comment": _HEADER_COMMENT,
         "ratchets": [
-            {"suite": suite, "unexplained_max": ceilings[suite]}
+            {
+                "suite": suite, "unexplained_max": ceilings[suite],
+                **({"note": preserved_notes[suite]} if suite in preserved_notes else {}),
+            }
             for suite in sorted(ceilings)
         ],
     }
@@ -196,7 +188,11 @@ def write_ratchet(ceilings: dict[str, int]) -> None:
 
 
 def check(counts: dict[str, int], ceilings: dict[str, int]) -> list[str]:
-    problems = []
+    problems = [
+        f"[{suite}] pinned suite has no live gated report; retirement requires "
+        "deliberately deleting its ratchet row."
+        for suite in sorted(set(ceilings) - set(counts))
+    ]
     for suite, count in sorted(counts.items()):
         ceiling = ceilings.get(suite, 0)
         if count > ceiling:
@@ -218,8 +214,21 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    counts = live_counts()
-    ceilings = load_ratchet()
+    try:
+        counts, defects = live_assessments()
+        ceilings = load_ratchet()
+    except (OSError, ValueError) as exc:
+        print(exc, file=sys.stderr)
+        return 1
+
+    vanished = [
+        problem for problem in check(counts, ceilings)
+        if "no live gated report" in problem
+    ]
+    if defects or vanished:
+        for problem in defects + vanished:
+            print(problem, file=sys.stderr)
+        return 1
 
     if args.check:
         problems = check(counts, ceilings)
@@ -241,7 +250,7 @@ def main() -> int:
     # default posture is triage first, publish second).
     next_ceilings: dict[str, int] = {}
     for suite, ceiling in ceilings.items():
-        live = counts.get(suite, 0)
+        live = counts[suite]
         next_ceilings[suite] = min(ceiling, live)
     for suite, live in counts.items():
         if suite not in next_ceilings and live == 0:

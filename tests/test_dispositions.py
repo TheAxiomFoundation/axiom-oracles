@@ -3,6 +3,7 @@ import hashlib
 import importlib.util
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 import yaml
@@ -215,6 +216,81 @@ def test_merge_adds_dispositioned_block_and_annotates_rows() -> None:
     # The original report is untouched (additive merge on a copy).
     assert "dispositioned" not in report["summary"]
     assert "disposition" not in report["mismatches"][0]
+
+
+@pytest.mark.parametrize("field", ["comparison_count", "match_count", "mismatch_count"])
+@pytest.mark.parametrize(
+    "raw", [True, False, -1, -0.5, 1.5, float("nan"), float("inf"), "1", None]
+)
+def test_merge_rejects_invalid_summary_counts(field, raw) -> None:
+    """Malformed summary counts must never be silently changed to zero."""
+    report = _build_report()
+    report["summary"][field] = raw
+    with pytest.raises(ValueError, match=field):
+        apply_dispositions(report, _document([_entry()]))
+
+
+def test_merge_accepts_integral_float_counts() -> None:
+    report = _build_report()
+    for field in ("comparison_count", "match_count", "mismatch_count"):
+        report["summary"][field] = float(report["summary"][field])
+    merged = apply_dispositions(report, _document([_entry()]))
+    assert merged["summary"]["dispositioned"]["unexplained_count"] == 0
+
+
+def test_classified_rows_cannot_exceed_reported_mismatches() -> None:
+    """A contradictory summary cannot hide classified overflow behind a clamp."""
+    report = _build_report()
+    report["summary"]["mismatch_count"] = 0
+    with pytest.raises(ValueError, match="classified_rows.*exceeds mismatch_count"):
+        apply_dispositions(report, _document([_entry()]))
+
+
+def test_spsm_classification_preserves_the_full_unexplained_count() -> None:
+    path = REPO_ROOT / "scripts" / "generate_ca_federal_tax_spsm.py"
+    spec = importlib.util.spec_from_file_location("spsm_count_test", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    block = module._dispositioned_block(
+        counts={"upstream_engine_gap": 8605, "unexplained": 0},
+        comparison_count=8702,
+        match_count=0,
+        unexplained_count=97,
+    )
+    assert block["counts"]["unexplained"] == block["unexplained_count"] == 97
+
+
+def test_spsm_producer_labels_capped_rows_without_losing_full_count(
+    tmp_path, monkeypatch
+) -> None:
+    """Synthetic inputs verify the 50-row cap independently of licensed SPSM."""
+    path = REPO_ROOT / "scripts" / "generate_ca_federal_tax_spsm.py"
+    spec = importlib.util.spec_from_file_location("spsm_report_test", path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    households = [
+        SimpleNamespace(
+            sequence=index,
+            values={"imitax": [1], "imfedtax": [10]},
+            total=lambda _name: 0,
+        )
+        for index in range(97)
+    ]
+    monkeypatch.setattr(module, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(module.sys, "argv", ["spsm", "--extract", "synthetic.prn"])
+    monkeypatch.setattr(module, "parse_case_output", lambda _path: households)
+    monkeypatch.setattr(module, "axiom_schedule_tax", lambda values: [0] * len(values))
+    monkeypatch.setattr(module, "database_fingerprints", lambda: {})
+    monkeypatch.setattr(module, "attribution_provenance", lambda: {})
+    output_dir = tmp_path / "dashboard/public/data"
+    output_dir.mkdir(parents=True)
+    assert module.main() == 0
+    report = json.loads((output_dir / "axiom-spsm-ca-federal-schedule-tax.json").read_text())
+    assert len(report["mismatches"]) == 50
+    assert all(row["concept"] == module.OUTPUT_REF for row in report["mismatches"])
+    assert all(set(row) == {"concept", "kind", "difference"} for row in report["mismatches"])
+    block = report["summary"]["dispositioned"]
+    assert block["counts"]["unexplained"] == block["unexplained_count"] == 97
 
 
 def test_axiom_encoding_gap_counts_as_explained_but_stays_broken_out() -> None:

@@ -61,6 +61,12 @@ if str(REPO_ROOT) not in sys.path:
 from axiom_oracles.comparison.dispositions import (  # noqa: E402
     validate_dispositions,
 )
+from axiom_oracles.conformance.unexplained import (  # noqa: E402
+    admit_count,
+    assess_unexplained,
+    count_defect,
+    load_known_causes,
+)
 from axiom_oracles.evidence import validate_suite_evidence  # noqa: E402
 
 DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
@@ -348,17 +354,10 @@ def _count(raw, field: str, defects: list[str], suite: str) -> int:
     """
     if raw is None:
         return 0
-    if isinstance(raw, bool):
-        defects.append(f"{suite}: {field} is a boolean, not a count")
-        return 0
-    if isinstance(raw, int):
-        if raw < 0:
-            defects.append(f"{suite}: {field} is negative ({raw})")
-            return 0
-        return raw
-    if isinstance(raw, float) and raw.is_integer() and raw >= 0:
-        return int(raw)
-    defects.append(f"{suite}: {field} is not a non-negative integer ({raw!r})")
+    admitted = admit_count(raw)
+    if admitted is not None:
+        return admitted
+    defects.append(count_defect(raw, field, suite))
     return 0
 
 
@@ -461,6 +460,25 @@ def _tariff_schedule_suite_verdict(
         defects.append(f"{entry['suite']}: scale-report counts do not conserve")
     if explained + unexplained != mismatches:
         defects.append(f"{entry['suite']}: classification counts do not conserve")
+    # The scale contract uses aggregate field names. Normalize those names
+    # into the same count assessment used by ordinary suite reports; the
+    # contract's producer/classification validation remains below.
+    assessment = assess_unexplained(
+        report,
+        summary={
+            "mismatch_count": summary.get("mismatches", 0),
+            "dispositioned": {
+                "unexplained_count": summary.get("unexplained", 0),
+                "counts": {"explained_residual": summary.get("explained", 0)},
+            },
+        },
+        rows=[],
+        suite=entry,
+        known_causes=load_known_causes(REPO_ROOT),
+        repo_root=REPO_ROOT,
+    )
+    unexplained = assessment.count
+    defects.extend(defect for defect in assessment.defects if defect not in defects)
     derived_conformant = unexplained == 0 and engine_errors == 0
     scoreboard = report.get("scoreboard")
     if not isinstance(scoreboard, dict):
@@ -647,10 +665,39 @@ def _de_suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     ]:
         raise ValueError("DE Kindergeld missing-leg inventory does not reconcile")
     complete_axiom = [row for row in legs[1:] if row.get("state") == "complete"]
-    clean = not missing and len(complete_axiom) == 2
-    axiom_comparisons = sum(row.get("comparison_count", 0) for row in complete_axiom)
-    axiom_matches = sum(row.get("match_count", 0) for row in complete_axiom)
-    axiom_mismatches = sum(row.get("mismatch_count", 0) for row in complete_axiom)
+    defects: list[str] = []
+    axiom_comparisons = sum(
+        _count(row.get("comparison_count"), "comparison_count", defects, entry["suite"])
+        for row in complete_axiom
+    )
+    axiom_matches = sum(
+        _count(row.get("match_count"), "match_count", defects, entry["suite"])
+        for row in complete_axiom
+    )
+    axiom_mismatches = sum(
+        _count(row.get("mismatch_count"), "mismatch_count", defects, entry["suite"])
+        for row in complete_axiom
+    )
+    assessments = [
+        assess_unexplained(
+            report,
+            summary=row,
+            rows=[],
+            suite=entry,
+            known_causes=load_known_causes(REPO_ROOT),
+            repo_root=REPO_ROOT,
+        )
+        for row in complete_axiom
+    ]
+    axiom_unexplained = sum(assessment.count for assessment in assessments)
+    for assessment in assessments:
+        defects.extend(defect for defect in assessment.defects if defect not in defects)
+        if assessment.mode == "inline":
+            defects.append(
+                f"{entry['suite']}: inline classifications present with no "
+                "dispositions file — unvalidated; migrate before they can explain"
+            )
+    clean = not missing and len(complete_axiom) == 2 and not axiom_unexplained and not defects
     evidence = [
         {
             "claim": "DE unified comparison and required-leg matrix",
@@ -682,7 +729,7 @@ def _de_suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             "comparisons": axiom_comparisons,
             "matches": axiom_matches,
             "mismatches": axiom_mismatches,
-            "unexplained": 0,
+            "unexplained": axiom_unexplained,
             "axiom_attributed_open": 0,
             "binding": "generator-rederived",
             "reconciliation": "aggregate-source-crosscheck",
@@ -690,11 +737,11 @@ def _de_suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             "source_crosscheck": source,
             "required_axiom_legs": legs[1:],
             "missing_required_legs": missing,
-            "report_defects": [],
+            "report_defects": defects,
             "clean": clean,
         },
         evidence,
-        [],
+        defects,
     )
 
 
@@ -876,12 +923,10 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
             f"mass is {weighted_mismatch} — weighted failures hidden"
         )
 
-    # Disposition accounting. Three explicit modes:
-    #   file   — a dispositions file is named; it must exist, be hashed, and
-    #            its counts must conserve against the mismatch count.
-    #   none   — no machinery; every mismatch is unexplained by definition.
-    #   inline — classifications exist with no file (generator-classified);
-    #            unvalidated, so the leg is defective until migrated.
+    # Preserve certificate-specific validation and pinned defect wording.
+    # The shared assessment below supplies the unexplained count, including
+    # producer classifications and known-cause labels; certification can
+    # still block those explanations with stricter validation defects.
     raw_dispositioned = summary.get("dispositioned")
     if raw_dispositioned is None:
         dispositioned = {}
@@ -961,7 +1006,6 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
                     f"{entry['suite']}: dispositions_file {disposition_file!r} "
                     "does not exist in the repository"
                 )
-            unexplained = mismatch_count
         else:
             evidence.append(
                 {
@@ -991,8 +1035,8 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
                 )
             if not authorized:
                 # A same-suite label alone cannot authorize report-provided
-                # disposition counts. Diagnose their internal shape, then
-                # fail closed to the raw mismatch total.
+                # disposition counts. Diagnose their internal shape; the
+                # shared assessment below supplies the fail-closed count.
                 reported_unexplained = _count(
                     dispositioned.get("unexplained_count"),
                     "unexplained_count",
@@ -1011,9 +1055,8 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
                         f"({counted_unexplained}) disagrees with "
                         f"unexplained_count ({reported_unexplained})"
                     )
-                unexplained = mismatch_count
             else:
-                unexplained = _count(
+                reported_unexplained = _count(
                     dispositioned.get("unexplained_count"),
                     "unexplained_count",
                     defects,
@@ -1027,13 +1070,12 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
                     defects,
                     entry["suite"],
                 )
-                if counted_unexplained != unexplained:
+                if counted_unexplained != reported_unexplained:
                     defects.append(
                         f"{entry['suite']}: counts.unexplained "
                         f"({counted_unexplained}) disagrees with "
-                        f"unexplained_count ({unexplained})"
+                        f"unexplained_count ({reported_unexplained})"
                     )
-                    unexplained = max(unexplained, counted_unexplained)
                 unknown = set(counts) - KNOWN_DISPOSITION_KINDS
                 if unknown:
                     defects.append(
@@ -1046,22 +1088,6 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
                         f"{entry['suite']}: disposition counts ({classified}) "
                         f"do not conserve against mismatches ({mismatch_count})"
                     )
-    elif classified:
-        inline_unexplained = _count(
-            dispositioned.get("unexplained_count"),
-            "unexplained_count",
-            defects,
-            entry["suite"],
-        )
-        if classified != inline_unexplained:
-            defects.append(
-                f"{entry['suite']}: inline classifications present with no "
-                "dispositions file — unvalidated; migrate before they can explain"
-            )
-        unexplained = mismatch_count
-    else:
-        unexplained = mismatch_count
-
     # Slim-report guard: when the summary claims mismatches the report body
     # does not carry and no per-case chunks exist, the aggregate cannot be
     # audited from committed evidence.
@@ -1073,6 +1099,34 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     else:
         mismatch_rows = []
         defects.append(f"{entry['suite']}: mismatches must be an array")
+    assessment_rows = mismatch_rows
+    if view_name:
+        roots = set(view.get("root_nodes") or [])
+        assessment_rows = [
+            row for row in mismatch_rows
+            if isinstance(row, dict) and row.get("concept") in roots
+        ]
+    assessment = assess_unexplained(
+        report,
+        summary=summary,
+        rows=assessment_rows,
+        suite=entry,
+        known_causes=load_known_causes(REPO_ROOT),
+        repo_root=REPO_ROOT,
+    )
+    unexplained = assessment.count
+    defects.extend(defect for defect in assessment.defects if defect not in defects)
+    if assessment.mode == "inline":
+        defects.append(
+            f"{entry['suite']}: inline classifications present with no "
+            "dispositions file — unvalidated; migrate before they can explain"
+        )
+    if assessment.known_cause_covered:
+        defects.append(
+            f"{entry['suite']}: {assessment.known_cause_covered} mismatch(es) "
+            "explained only by known-cause labels; certification requires "
+            "validated dispositions"
+        )
     stored = len(mismatch_rows)
     if (
         mismatch_count > stored
