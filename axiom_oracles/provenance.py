@@ -22,8 +22,8 @@ The block shape (``axiom_oracles.provenance.v1``)::
         axiom_rules_engine_version: …  # crate version if resolvable
       oracle:                          # the oracle side it was compared to
         name: policyengine             # or euromod
-        policyengine_package: policyengine==4.11.0
-        policyengine_us: 1.729.0
+        policyengine_package: policyengine==6.1.1
+        policyengine_us: 2.2.1
         # …or, for EUROMOD:
         euromod_release: J2.0
         euromod_system: BE_2025
@@ -33,8 +33,8 @@ The block shape (``axiom_oracles.provenance.v1``)::
         repo_id: policyengine/populace-us
         filename: populace_us_2024.h5
         revision: populace-us-2024-…
-        sha256: 16be6338…              # 12-hex prefix
-        built_with: 1.729.0
+        sha256: 6496cc4393d4…          # 12-hex prefix
+        built_with: 2.2.1
 
 Only ``schema`` and ``generated_at`` are guaranteed present. ``run_kind`` is a
 free-form-but-validated enum (see :data:`RUN_KINDS`) resolved from the

@@ -22,7 +22,8 @@ modules — passing them is the copy-fidelity contract.
 
 | Module | Origin (in axiom-encode) | What it does |
 |---|---|---|
-| `population.py` | `oracles/policyengine/population.py` | Pinned Populace artifact loading (`PopulacePin`, `POPULACE_PINS`, `load_populace_dataset`) — sha256-verified HF downloads, env overrides, unpinned escape hatch |
+| `population.py` | `oracles/policyengine/population.py` | Pinned Populace artifact loading (`PopulacePin`, `POPULACE_PINS`, `load_populace_dataset`) — sha256-verified HF downloads, env overrides, unpinned escape hatch, engine-version guard, source tax-unit roles |
+| `source_roles.py` | new here (2026-09-25) | Pins PolicyEngine's `is_tax_unit_head/spouse/dependent` and `filing_status` to the build's `tax_unit_role_input` / `filing_status_input` (`read_source_roles`, `attach_source_roles`, `pin_source_roles`); mirrors PolicyEngine/policyengine-taxsim#1216 |
 | `tax_populace.py` | `oracles/policyengine/ecps_tax.py` | Federal income tax population comparison (Axiom RuleSpec vs PolicyEngine over pinned Populace). Renamed from `ecps_tax.py` — the data is populace-us, not Enhanced CPS (axiom-oracles#74); `ecps_tax.py` remains as a deprecation-alias shim |
 | `snap_populace.py` | `oracles/policyengine/ecps_snap.py` | SNAP population comparison harness. Renamed from `ecps_snap.py`; `ecps_snap.py` remains as a deprecation-alias shim |
 | `us_populace.py` | `oracles/policyengine/us_populace.py` | Generic US variable population comparison |
@@ -61,10 +62,15 @@ lazy):
   `sys.modules`, so encode's own `ecps_tax` / `ecps_snap` shims keep working);
   they emit a `DeprecationWarning`. Import the new names in new code.
 
-`POPULACE_PINS` in `population.py` is the single certified pin table for
+`POPULACE_PINS` in `population.py` is the certified pin table for
 `populace://` artifacts. `axiom_oracles.populations.populace_us` (formerly
-`enhanced_cps`) derives its `(repo_id, filename)`-keyed pin table from it, so a
-re-pin lands in exactly one place.
+`enhanced_cps`) derives its `(repo_id, filename)`-keyed pin table from it. A US
+re-pin also moves, in lockstep: the state-tax campaign contract
+(`state_tax_populace.py` `CONTRACT_POPULACE_*` and
+`axiom_oracles/data/state_income_tax_populace.yaml`, which CI checks against
+each other), the `policyengine` extra in `pyproject.toml`, and the oracle stack
+pinned by every Populace suite in `comparisons/` (a test enforces that each
+pins the build's `built_with`).
 
 Underscored helpers inside modules (including all of `rulespec_paths.py`) are
 implementation detail shared with the encoder copy, not API.

@@ -49,8 +49,12 @@ and silent zero defaults are forbidden.
 
 ## Population routing
 
-The pinned artifact contains 87,519 tax units, 160,858 people, and 75,112
-households. Tax units do not carry geography directly. The runner assigns a tax
+The pinned artifact (`populace-us-2024-spm-20260915`) contains 79,729 tax
+units, 166,321 people, and 57,240 households. Tax-unit roles and filing
+statuses are the build's own (`tax_unit_role_input`, `filing_status_input`),
+pinned into PolicyEngine by `load_populace_dataset`
+(`axiom_oracles/bridges/source_roles.py`) rather than derived from ages. Tax
+units do not carry geography directly. The runner assigns a tax
 unit to a state by joining `person_tax_unit_id` to `person_household_id` and then
 to household `state_fips`. Conflicting household assignments are errors; they
 are never resolved by picking one state.
@@ -159,7 +163,7 @@ uv run scripts/check_state_tax_populace_contract.py
 uv run scripts/check_state_tax_populace_contract.py --json
 ```
 
-Audit all 87,519 tax units without executing blocked state programs:
+Audit all 79,729 tax units without executing blocked state programs:
 
 ```bash
 uv run --extra policyengine scripts/audit_state_tax_populace.py \

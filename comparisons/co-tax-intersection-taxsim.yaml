@@ -66,6 +66,11 @@ runner:
     left: axiom
     right: taxsim
     population: enhanced-cps
+    # Certified PolicyEngine stack for the pinned Populace build
+    # (bridges/population.py POPULACE_PINS["us"], built_with 2.2.1).
+    policyengine_version: "6.1.1"
+    policyengine_us_version: "2.2.1"
+    policyengine_core_version: "3.32.5"
     # 0 = full population: sampling happens before the Colorado preparation
     # filter, so a small national sample can leave zero Colorado units.
     sample_size: 0

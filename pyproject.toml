@@ -42,9 +42,13 @@ dev = [
   # _runner.py under this interpreter with a stub engine; the worker itself
   # needs pandas.
   "pandas>=2.2",
+  # Property-based tests for load-bearing invariants (source tax-unit roles).
+  "hypothesis>=6.100",
 ]
 policyengine = [
-  "policyengine[us]==5.0.0",
+  # 6.1.1 certifies the pinned Populace US build (populace-us-2024-spm-20260915)
+  # for policyengine-us 2.2.1 / core 3.32.5; move it with POPULACE_PINS.
+  "policyengine[us]==6.1.1",
 ]
 taxsim = [
   "policyengine-taxsim==2.30.0",

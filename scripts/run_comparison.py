@@ -924,12 +924,17 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         oracle = {
             "name": "policyengine",
             "policyengine_package": (
-                f"policyengine=={params.get('policyengine_version', '4.11.0')}"
+                "policyengine=="
+                + params.get(
+                    "policyengine_version", _POPULACE_ORACLE_STACK["policyengine"]
+                )
                 if params.get("pinned", True)
                 else "policyengine"
             ),
             "policyengine_us": (
-                params.get("policyengine_us_version", "1.729.0")
+                params.get(
+                    "policyengine_us_version", _POPULACE_ORACLE_STACK["policyengine_us"]
+                )
                 if params.get("pinned", True)
                 else None
             ),
@@ -1007,7 +1012,12 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "policyengine_taxsim": _taxsim_pin_version(),
         }
     elif runner_type == "axiom-encode-snap-ecps-compare":
-        oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
+        oracle = {
+            "name": "policyengine",
+            "policyengine_us": params.get(
+                "policyengine_us_version", _POPULACE_ORACLE_STACK["policyengine_us"]
+            ),
+        }
     elif runner_type == "euromod-synthetic-compare":
         # EUROMOD/UKMOD identity comes straight from the runner params: the
         # model release is read off the model-root directory name (e.g.
@@ -1251,6 +1261,37 @@ def _print_coverage_warnings(config: dict) -> None:
             print(warning)
 
 
+# The PolicyEngine stack the pinned Populace US build is certified for:
+# policyengine.py 6.1.1 (bundle us-6.1.1) certifies populace-us-2024-spm-20260915
+# for policyengine-us 2.2.1 / core 3.32.5 (bridges/population.py POPULACE_PINS,
+# built_with "2.2.1"). The axiom-encode Populace lanes default to it; model and
+# data move together. Older engines load the build but silently drop columns
+# they do not know (e.g. schedule_d_capital_gain_distributions under 1.752.2).
+_POPULACE_ORACLE_STACK = {
+    "policyengine": "6.1.1",
+    "policyengine_us": "2.2.1",
+    "policyengine_core": "3.32.5",
+}
+
+
+def _bridge_overlay_env() -> dict[str, str]:
+    """Environment that puts THIS checkout's ``axiom_oracles`` first on sys.path.
+
+    The axiom-encode subcommands are thin dispatches to
+    ``axiom_oracles.bridges.*``, but axiom-encode installs axiom-oracles from a
+    git pin that lags this repo. Suite runs here must validate the current
+    bridge code (the Populace pin and source-role pin included), not the
+    encoder's copy. A second ``--with-editable`` cannot express this -- uv
+    rejects two URLs for one package -- so the overlay rides PYTHONPATH, which
+    precedes site-packages on sys.path.
+    """
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(
+        [str(REPO_ROOT)] + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else [])
+    )
+    return env
+
+
 # ---------------------------------------------------------------------------
 # Runners
 # ---------------------------------------------------------------------------
@@ -1274,24 +1315,18 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     runner["_cloned_rulespec_us_sha"] = _git_head_sha(rulespec_root)
     params = runner["parameters"]
     pinned = params.get("pinned", True)
-    # PolicyEngine-US 1.729.0 is the model version the certified pinned Populace
-    # artifact was built with (axiom-encode population.py::POPULACE_PINS, built_with
-    # "1.729.0"), and it clears the tax harness's floor (ecps_tax.py
-    # MIN_POLICYENGINE_US_VERSION = "1.723"). The previously pinned 1.705.16 is
-    # below that floor, so the harness now rejects it — a pinned FIIT run would
-    # fail hard. Keeping the PE meta-package at 4.11.0 (the oracle baseline used
-    # by the other runners) with an explicit newer -us is why the runner passes
-    # --allow-policyengine-us-version to the harness.
-    # Oracle PE stack. The pinned versions default to the model version the
-    # certified Populace artifact was built with (1.729.0), but a comparison can
-    # override them to validate against a newer certified oracle — the us-pe
-    # universe pins policyengine-us 1.767.3, which carries the #8614 partnership
-    # self-employment split absent from 1.729.0's eitc_earned_income. The harness
-    # still runs against the pinned Populace inputs (--allow-policyengine-us-version
-    # bypasses the build_with gate), so only the PE computation vintage moves.
-    pe_meta = params.get("policyengine_version", "4.11.0")
-    pe_us = params.get("policyengine_us_version", "1.729.0")
-    pe_core = params.get("policyengine_core_version", "3.26.11")
+    # Oracle PE stack. The pinned versions default to the stack the certified
+    # Populace artifact is certified for (_POPULACE_ORACLE_STACK: policyengine
+    # 6.1.1 / policyengine-us 2.2.1 / core 3.32.5), so model and data move
+    # together; a comparison can override them in its parameters. It clears the
+    # tax harness's floor (tax_populace.py MIN_POLICYENGINE_US_VERSION).
+    pe_meta = params.get("policyengine_version", _POPULACE_ORACLE_STACK["policyengine"])
+    pe_us = params.get(
+        "policyengine_us_version", _POPULACE_ORACLE_STACK["policyengine_us"]
+    )
+    pe_core = params.get(
+        "policyengine_core_version", _POPULACE_ORACLE_STACK["policyengine_core"]
+    )
     pe_pins = (
         [
             "--with",
@@ -1345,7 +1380,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         cmd.append("--allow-uncertified-policyengine-data")
     try:
         with output.open("w") as f:
-            subprocess.run(cmd, check=True, stdout=f)
+            subprocess.run(cmd, check=True, stdout=f, env=_bridge_overlay_env())
     finally:
         shutil.rmtree(rulespec_root.parent, ignore_errors=True)
 
@@ -1439,18 +1474,8 @@ def _run_axiom_encode_uk_efrs_compare(runner: dict, output: Path) -> None:
         )
         started = time.perf_counter()
         # Overlay THIS checkout's bridge over the encoder's pinned
-        # axiom-oracles dependency: the subcommand is a thin re-export of
-        # axiom_oracles.bridges.efrs_uk, and this repo's suite runs must
-        # validate the current oracle code, not a stale pin (the follow-up
-        # comparisons/README.md's runner section calls out). A second
-        # --with-editable cannot express this — uv rejects two URLs for one
-        # package — so the overlay rides PYTHONPATH, which precedes
-        # site-packages on sys.path.
-        env = os.environ.copy()
-        env["PYTHONPATH"] = os.pathsep.join(
-            [str(REPO_ROOT)]
-            + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else [])
-        )
+        # axiom-oracles dependency (see _bridge_overlay_env).
+        env = _bridge_overlay_env()
         try:
             result = subprocess.run(
                 cmd,
@@ -1633,7 +1658,13 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
             "--directory",
             str(axiom_encode_repo),
             "--with",
-            "policyengine-us==1.705.1",
+            "policyengine-us=="
+            + str(
+                params.get(
+                    "policyengine_us_version",
+                    _POPULACE_ORACLE_STACK["policyengine_us"],
+                )
+            ),
             "--with",
             "numpy",
             "axiom-encode",
@@ -1679,7 +1710,7 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
         if axiom_binary is not None:
             cmd.extend(["--axiom-binary", str(axiom_binary)])
 
-        subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=_bridge_overlay_env())
         with csv_path.open(newline="") as f:
             rows = list(csv.DictReader(f))
 
@@ -1691,9 +1722,11 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
 # Keep the in-repo oracle runner on that certified pair so PE outputs are
 # reproducible across environments; bump both together when refreshing the
 # oracle (stale pins mean we validate against superseded PE tables — the CO
-# TANF grant standards diverged exactly this way at 1.700.0). The
-# axiom-encode subprocess runners above keep their own pins because they are
-# validating the encoder stack.
+# TANF grant standards diverged exactly this way at 1.700.0). These defaults
+# serve the synthetic-situation grids; every suite that loads the Populace US
+# build pins _POPULACE_ORACLE_STACK in its own YAML (policyengine_version /
+# policyengine_us_version / policyengine_core_version), and the axiom-encode
+# Populace lanes default to it.
 _PE_ORACLE_PINS = (
     "policyengine==4.18.9",
     "policyengine-us==1.752.2",

@@ -7,12 +7,12 @@ currently serves as ``latest``. See :data:`POPULACE_PINS` for the certified pins
 and the resolution order documented on :func:`load_populace_dataset`.
 
 Why pinning matters: ``populace.data.load()`` (populace-data 0.1.0) always
-fetches the HF-latest revision with no pin. As of 2026-07-02 HF-latest for the
-US dataset is a *sparse* refit that zeroes untargeted input bases (IRA/HSA/
-self-employed pension/childcare and dozens of other engine inputs) per
-PolicyEngine/populace#278. Comparing an encoder oracle against that artifact
-would silently score against ~$0 bases. The dense certified pin below is the
-last artifact verified to carry those inputs.
+fetches the HF-latest revision with no pin, and HF-latest need not be a
+certified release. On 2026-07-02 it was a *sparse* refit that zeroed untargeted
+input bases (IRA/HSA/self-employed pension/childcare and dozens of other engine
+inputs) per PolicyEngine/populace#278; an oracle compared against it would have
+silently scored against ~$0 bases. The pins below are the releases a
+policyengine.py bundle certifies as its default.
 """
 
 from __future__ import annotations
@@ -22,8 +22,15 @@ import os
 import warnings
 from dataclasses import dataclass
 from importlib import import_module
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
+
+from .source_roles import (
+    SOURCE_ROLES_LABEL,
+    attach_source_roles,
+    source_roles_enabled,
+)
 
 DEFAULT_US_POPULACE_YEAR = 2024
 DEFAULT_UK_POPULACE_YEAR = 2023
@@ -42,8 +49,9 @@ POLICYENGINE_DATASET_CLASSES = {
 
 #: Escape-hatch env var. When set truthy, the loader is allowed to fall back to
 #: the unpinned ``populace.data.load()`` package and the Hugging Face cache scan
-#: (both of which resolve to HF-latest, i.e. the sparse #278 artifact for the US
-#: dataset). Off by default: unpinned data is opt-in, never a silent fallback.
+#: (both of which resolve to HF-latest, which need not be certified -- on
+#: 2026-07-02 it was the sparse #278 artifact for the US dataset). Off by
+#: default: unpinned data is opt-in, never a silent fallback.
 ALLOW_UNPINNED_ENV = "AXIOM_POPULACE_ALLOW_UNPINNED"
 
 #: Provenance ``source`` values recorded for each loaded artifact.
@@ -75,19 +83,33 @@ class PopulacePin:
 # ---------------------------------------------------------------------------
 # UPGRADE NOTE
 # ---------------------------------------------------------------------------
-# These pins are the *dense* certified Populace artifacts (verified 2026-07-02
-# against policyengine.py's certified bundle manifest at bundle 4.18.6 / tag
-# 4.18.0 history: src/policyengine/data/bundle/manifest.json). They intentionally
-# predate the sparse-l0-refit artifact that is currently HF-latest, because that
-# sparse artifact zeroes untargeted engine input bases (PolicyEngine/populace#278,
-# closed 2026-07-02 by pipeline-fix PR #279 — but the rebuilt dense-parity
-# artifact is not yet published/certified).
+# These pins are the Populace artifacts certified as the default in the
+# policyengine.py bundle manifest (src/policyengine/data/bundle/manifest.json,
+# data_releases.<country>.certified_data_artifact).
 #
-# RE-PIN WHEN: a post-#279 sparse (or dense-parity) Populace release is certified
-# as the default in the policyengine.py bundle. At that point, read the new
+# US: populace-us-2024-spm-20260915, certified by policyengine.py 6.0.0-6.1.1
+# (bundle us-6.1.1, main 4dc5959) for policyengine-us 2.2.1 / core 3.32.5; HF
+# commit 8ab57ffc2ca41d8af631ff62ebbce95e966299f3. It replaced (2026-09-25) the
+# f0af251 build pinned on 2026-07-02, which was held back only until a
+# post-#279 dense-parity release was certified as the default: the sparse L0
+# refit that was then HF-latest zeroed untargeted engine input bases
+# (PolicyEngine/populace#278, now microcosm#278). That condition was met on
+# 2026-07-09 (policyengine.py 4.20.1) and still holds: the certified build
+# carries the #278 bases (IRA, HSA, SPM childcare and 81 of #278's 84
+# dead-in-sparse variables; the other 3 are documented source exemptions).
+# The oracle model moves with the data: the ``policyengine`` extra pins
+# policyengine[us]==6.1.1, which brings policyengine-us 2.2.1.
+#
+# This build also records each person's tax-unit role and each unit's filing
+# status; load_populace_dataset pins them into PolicyEngine (source_roles.py).
+#
+# RE-PIN WHEN: policyengine.py certifies a newer default. Read the new
 # (repo_id, filename, revision, sha256, built_with_model_version) out of that
-# bundle's manifest.json certified_data_artifact/datasets block and update the
-# values below. Do NOT bump to HF-latest without going through that certification.
+# bundle's manifest.json data_releases block, move the policyengine extra to the
+# bundle version that certifies it, and update the copies the state-tax campaign
+# contract enforces (state_tax_populace.py CONTRACT_POPULACE_* and
+# data/state_income_tax_populace.yaml). Do NOT bump to HF-latest or to an
+# uncertified tag (e.g. populace-us-2024-spm-receipts-20260923).
 # For a one-off re-pin without a code change, set the env overrides:
 #   AXIOM_POPULACE_US_REVISION / AXIOM_POPULACE_US_SHA256 (and UK equivalents).
 # ---------------------------------------------------------------------------
@@ -96,9 +118,9 @@ POPULACE_PINS: dict[str, PopulacePin] = {
         country="us",
         repo_id="policyengine/populace-us",
         filename="populace_us_2024.h5",
-        revision="populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
-        sha256="16be6338f9d0b3c339883dae59949e995663b64cf145de6728b3dd0f916c5d5f",
-        built_with="1.729.0",
+        revision="populace-us-2024-spm-20260915",
+        sha256="6496cc4393d4d3c6574f76eca231de5898c803b9067645591fd5c4d3e65aee84",
+        built_with="2.2.1",
     ),
     "uk": PopulacePin(
         country="uk",
@@ -117,6 +139,7 @@ def load_populace_dataset(
     year: int | None = None,
     command: str,
     provenance: dict[str, Any] | None = None,
+    source_roles: bool | None = None,
 ) -> Any:
     """Load a published Populace artifact as a PolicyEngine dataset.
 
@@ -128,8 +151,8 @@ def load_populace_dataset(
        does not fail (local overrides are expected to differ from the pin).
        Recorded as ``source="local-override"``.
     2. **Unpinned escape hatch** — only when ``AXIOM_POPULACE_ALLOW_UNPINNED`` is
-       set truthy: ``populace.data.load()`` (and, via the cache scan, HF-latest —
-       the sparse #278 artifact for the US dataset). Checked *before* the pin so
+       set truthy: ``populace.data.load()`` (and, via the cache scan, HF-latest,
+       which need not be certified). Checked *before* the pin so
        an operator can deliberately test a new release; emits a warning naming
        populace#278. Recorded as ``source="unpinned"``. Never reached silently.
     3. **Pinned Hugging Face download** (the default) — ``hf_hub_download`` at the
@@ -139,11 +162,43 @@ def load_populace_dataset(
        pin and the escape hatch, rather than silently resolving to HF-latest.
 
     When ``provenance`` is a dict it is populated in place with
-    ``{source, path, sha256, revision, built_with}`` (``sha256`` truncated to 12
-    hex chars) so callers can thread dataset identity into comparison outputs.
-    Passing ``None`` (the default) keeps every existing call site unchanged.
+    ``{source, path, sha256, revision, built_with, source_roles}`` (``sha256``
+    truncated to 12 hex chars) so callers can thread dataset identity into
+    comparison outputs. Passing ``None`` (the default) keeps every existing call
+    site unchanged.
+
+    **Source roles.** For a US artifact the build's own tax-unit roles and
+    filing statuses (``tax_unit_role_input`` / ``filing_status_input``) are
+    written into the dataset before it is returned, so every simulation built
+    from it uses them instead of policyengine-us's age-based head/spouse rule
+    (see :mod:`axiom_oracles.bridges.source_roles`). ``source_roles=False``, or
+    ``AXIOM_POPULACE_SOURCE_ROLES=0`` when the argument is left at None, skips
+    that step. ``provenance["source_roles"]`` records the columns pinned, or
+    None when nothing was pinned.
     """
     country = country.lower()
+    dataset = _load_populace_artifact(
+        country, year=year, command=command, provenance=provenance
+    )
+    pinned = None
+    if source_roles is None:
+        source_roles = source_roles_enabled()
+    if country == "us" and source_roles:
+        if attach_source_roles(dataset) is not None:
+            pinned = SOURCE_ROLES_LABEL
+    if provenance is not None:
+        provenance["source_roles"] = pinned
+    return dataset
+
+
+def _load_populace_artifact(
+    country: str,
+    *,
+    year: int | None,
+    command: str,
+    provenance: dict[str, Any] | None,
+) -> Any:
+    """Resolve and instantiate the artifact (the resolution order above)."""
     sink = provenance if provenance is not None else None
 
     # (1) Explicit local override — verify against the pin, warn (don't fail).
@@ -187,6 +242,7 @@ def load_populace_dataset(
 
     # (3) Pinned Hugging Face download — the default trusted path.
     if pin is not None:
+        require_policyengine_engine_for_pin(pin)
         pinned_path = pinned_populace_download(pin, command=command)
         _record_provenance(
             sink,
@@ -269,6 +325,48 @@ def pinned_populace_download(pin: PopulacePin, *, command: str) -> Path:
             f"{pin.country.upper()}_SHA256 to the new digest."
         )
     return path
+
+
+POLICYENGINE_MODEL_PACKAGES = {"us": "policyengine-us", "uk": "policyengine-uk"}
+
+
+def require_policyengine_engine_for_pin(
+    pin: PopulacePin, *, installed: str | None = None
+) -> None:
+    """Refuse to read a pinned build with an engine of an older major version.
+
+    An older policyengine-us loads a newer build without error but silently
+    drops every column it has no variable for: 1.752.2 reading the 2.2.1
+    certified build loses ``schedule_d_capital_gain_distributions`` ($106B
+    weighted) among others. Only the certified pin's own ``built_with`` is
+    enforced -- an env re-pin to a different revision keeps the base
+    ``built_with`` label, so it is not checked. A missing engine is left to the
+    dataset loader's install message.
+    """
+    base = POPULACE_PINS.get(pin.country)
+    if base is None or pin.revision != base.revision:
+        return
+    package = POLICYENGINE_MODEL_PACKAGES.get(pin.country)
+    if installed is None and package is not None:
+        try:
+            installed = version(package)
+        except PackageNotFoundError:
+            return
+    if installed is None:
+        return
+    if _major(installed) < _major(pin.built_with):
+        raise SystemExit(
+            f"Pinned Populace {pin.country.upper()} artifact {pin.revision} is "
+            f"certified for {package} {pin.built_with}, but {installed} is "
+            f"installed. An older major version drops the build's newer input "
+            f"columns without warning; install {package}=={pin.built_with} (the "
+            f"'policyengine' extra pins the certified stack)."
+        )
+
+
+def _major(value: str) -> int:
+    head = value.strip().split(".", 1)[0]
+    return int(head) if head.isdigit() else 0
 
 
 def unpinned_fallback_allowed() -> bool:
@@ -381,6 +479,9 @@ def format_dataset_identity(identity: dict[str, Any] | None) -> str:
     built_with = identity.get("built_with")
     if built_with:
         parts.append(f"built_with_pe={built_with}")
+    if "source_roles" in identity:
+        roles = "source" if identity["source_roles"] else "age-derived"
+        parts.append(f"tax_unit_roles={roles}")
     path = identity.get("path")
     if path and source != SOURCE_PINNED:
         parts.append(f"path={path}")
@@ -561,8 +662,9 @@ def unpinned_disallowed_message(country: str, command: str) -> str:
     return (
         f"No pinned Populace {country.upper()} artifact could be loaded and the "
         f"unpinned fallback is disabled. Unpinned loading resolves to HF-latest, "
-        f"which for the US dataset is the sparse artifact that zeroes untargeted "
-        f"engine input bases (PolicyEngine/populace#278). To knowingly load "
+        f"which need not be a certified release (on 2026-07-02 the US HF-latest "
+        f"was a sparse refit that zeroed untargeted engine input bases, "
+        f"PolicyEngine/populace#278). To knowingly load "
         f"unpinned data, re-run with {ALLOW_UNPINNED_ENV}=1." + pin_hint
     )
 
@@ -570,9 +672,9 @@ def unpinned_disallowed_message(country: str, command: str) -> str:
 def unpinned_fallback_warning(country: str) -> str:
     return (
         f"{ALLOW_UNPINNED_ENV} is set: loading UNPINNED Populace {country.upper()} "
-        f"data (HF-latest). For the US dataset this is the sparse refit that "
-        f"zeroes untargeted engine input bases (PolicyEngine/populace#278); oracle "
-        f"comparisons against it may score against ~$0 bases. Prefer the certified "
+        f"data (HF-latest), which need not be a certified release (on 2026-07-02 "
+        f"the US HF-latest was a sparse refit that zeroed untargeted engine input "
+        f"bases, PolicyEngine/populace#278). Prefer the certified "
         f"pin unless you are deliberately testing the latest release."
     )
 

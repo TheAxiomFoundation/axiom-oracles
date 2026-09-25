@@ -329,13 +329,21 @@ The US representative population is the **certified populace-us artifact**
 (`populace://policyengine/populace-us/populace_us_2024.h5`, resolved
 through the Hugging Face dataset repo). The reference is **content-pinned**
 to a specific Hugging Face revision with a verified sha256
-(`axiom_oracles/populations/populace_us.py::POPULACE_PINS`) — it does NOT
-follow HF-latest. Latest currently points at a sparse L0 refit that zeroes
-untargeted input bases (IRA/HSA/self-employed pension/childcare and ~80
-other engine inputs are dead in that artifact, PolicyEngine/populace#278),
-so a comparison run against latest would silently score against ~$0 bases.
-The pin is the dense release certified in PolicyEngine bundle 4.18.6/4.18.7;
-re-pin once the post-#279 rebuilt dense release is published and certified.
+(`axiom_oracles/bridges/population.py::POPULACE_PINS`, re-keyed by
+`populations/populace_us.py`) — it does NOT follow HF-latest, which need not
+be certified (on 2026-07-02 it was a sparse L0 refit that zeroed untargeted
+input bases, PolicyEngine/populace#278). The pin is
+`populace-us-2024-spm-20260915`, the release policyengine.py 6.1.1 certifies
+as its US default for policyengine-us 2.2.1 / core 3.32.5; the `policyengine`
+extra and every Populace suite's oracle stack pin that model with it, and the
+loader refuses to read the build with an older major policyengine-us (which
+would silently drop its newer input columns). Tax-unit roles and filing
+statuses come from the build's own `tax_unit_role_input` /
+`filing_status_input` columns, pinned into PolicyEngine before any
+calculation (`axiom_oracles/bridges/source_roles.py`); policyengine-us would
+otherwise take the two oldest adults as head and spouse.
+`AXIOM_POPULACE_SOURCE_ROLES=0` reproduces the age-derived roles of reports
+generated before 2026-09-25.
 The enhanced CPS is retired for every scope populace can serve; the one
 remaining eCPS-derived path is the NYC per-city file, because populace-us
 carries no place/county geography yet (PolicyEngine/populace#204) — it

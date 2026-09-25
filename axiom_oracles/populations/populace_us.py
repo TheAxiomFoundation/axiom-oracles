@@ -22,6 +22,13 @@ from dataclasses import dataclass
 from typing import Any, Literal
 
 from ..bridges.population import POPULACE_PINS as _CERTIFIED_POPULACE_PINS
+from ..bridges.population import require_policyengine_engine_for_pin
+from ..bridges.source_roles import (
+    attach_source_roles,
+    pin_source_roles,
+    read_source_roles,
+    source_roles_enabled,
+)
 from ..core.case import Case, Concepts, Entity
 from ..core.geography import GeographyScope, normalize_scope, scope_contains
 
@@ -66,17 +73,17 @@ class PopulacePin:
 # Content pins for the ``populace://`` artifacts this repo resolves, keyed by
 # ``(repo_id, filename)``. WITHOUT a pin the resolver falls back to HF-latest
 # (``main``), which is exactly the failure this table exists to prevent:
-# HF-latest for policyengine/populace-us currently points at the sparse L0
-# refit that zeroes untargeted input bases (PolicyEngine/populace#278), so a
-# weekly comparison following latest would silently score Axiom against ~$0
-# bases and report spurious agreement.
+# HF-latest need not be certified (on 2026-07-02 it was the sparse L0 refit
+# that zeroed untargeted input bases, PolicyEngine/populace#278), so a weekly
+# comparison following latest could silently score Axiom against ~$0 bases and
+# report spurious agreement.
 #
 # The certified pin values (revision + sha256) are owned by ONE shared
 # definition: ``axiom_oracles.bridges.population.POPULACE_PINS`` — the same
-# table the axiom-encode harnesses consume. Re-pins (e.g. once the post-#279
-# dense-parity release is published AND certified in a PolicyEngine bundle)
-# happen there; this module just re-keys the shared table by
-# ``(repo_id, filename)`` for the ``populace://`` resolver below.
+# table the axiom-encode harnesses consume. Re-pins (to the release a
+# policyengine.py bundle certifies as its default) happen there; this module
+# just re-keys the shared table by ``(repo_id, filename)`` for the
+# ``populace://`` resolver below.
 POPULACE_PINS: dict[tuple[str, str], PopulacePin] = {
     (pin.repo_id, pin.filename): PopulacePin(
         revision=pin.revision,
@@ -137,6 +144,22 @@ def _resolve_populace_dataset(dataset: str) -> str:
     if pin is not None and pin.sha256:
         _verify_sha256(local_path, expected=pin.sha256, source=f"{repo_id}/{filename}")
     return local_path
+
+
+def _require_certified_engine(dataset: str) -> None:
+    """Fail loudly when the installed engine is too old for the pinned build.
+
+    Applies only when ``dataset`` resolves to a certified pin's revision; see
+    :func:`axiom_oracles.bridges.population.require_policyengine_engine_for_pin`.
+    """
+    reference = dataset.removeprefix("populace://")
+    reference, _, inline_revision = reference.partition("@")
+    repo_id, _, filename = reference.rpartition("/")
+    for pin in _CERTIFIED_POPULACE_PINS.values():
+        if (pin.repo_id, pin.filename) == (repo_id, filename) and (
+            not inline_revision or inline_revision == pin.revision
+        ):
+            require_policyengine_engine_for_pin(pin)
 
 
 def _verify_sha256(path: str, *, expected: str, source: str) -> None:
@@ -287,11 +310,24 @@ class PopulaceUsCaseLoader:
             from policyengine_us.data import USSingleYearDataset
 
             local_path = _resolve_populace_dataset(dataset)
-            return Microsimulation(dataset=USSingleYearDataset(file_path=local_path))
-        return pe.us.managed_microsimulation(
+            _require_certified_engine(dataset)
+            engine_dataset = USSingleYearDataset(file_path=local_path)
+            # Use the build's own tax-unit roles and filing statuses, not
+            # policyengine-us's age-based head/spouse rule. Written into the
+            # dataset so every projected year (and a later subsample) keeps them.
+            if source_roles_enabled():
+                attach_source_roles(engine_dataset)
+            return Microsimulation(dataset=engine_dataset)
+        sim = pe.us.managed_microsimulation(
             dataset=dataset,
             allow_unmanaged=dataset != ENHANCED_CPS_DATASET,
         )
+        # A local entity-table Populace H5 passed as a path gets the same pin,
+        # applied to the built simulation before anything is calculated.
+        # hf:// and managed names (the NYC eCPS file) carry no source roles.
+        if source_roles_enabled():
+            pin_source_roles(sim, read_source_roles(dataset))
+        return sim
 
     def _households(self, sim, period: int) -> list["_HouseholdRow"]:
         household_ids = _values(sim.calculate("household_id", period=period))

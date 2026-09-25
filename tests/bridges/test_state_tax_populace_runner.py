@@ -3354,14 +3354,25 @@ def test_campaign_dataset_identity_requires_the_certified_pin() -> None:
     identity = {
         "source": "pinned",
         "country": "us",
-        "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
-        "sha256": "16be6338f9d0",
-        "built_with": "1.729.0",
+        "revision": "populace-us-2024-spm-20260915",
+        "sha256": "6496cc4393d4",
+        "built_with": "2.2.1",
+        "source_roles": "tax_unit_role_input+filing_status_input",
     }
     validate_campaign_dataset_identity(identity)
 
     with pytest.raises(StateTaxPopulationRoutingError, match="not certified"):
         validate_campaign_dataset_identity({**identity, "source": "local-override"})
+    # The pre-2026-09-25 pin is no longer the contract's certified artifact.
+    with pytest.raises(StateTaxPopulationRoutingError, match="not certified"):
+        validate_campaign_dataset_identity(
+            {
+                **identity,
+                "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+                "sha256": "16be6338f9d0",
+                "built_with": "1.729.0",
+            }
+        )
 
 
 @pytest.mark.parametrize(

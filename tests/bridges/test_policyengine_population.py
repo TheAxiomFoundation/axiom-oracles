@@ -66,11 +66,13 @@ def test_pins_match_certified_bundle_values():
     us = population.POPULACE_PINS["us"]
     assert us.repo_id == "policyengine/populace-us"
     assert us.filename == "populace_us_2024.h5"
-    assert us.revision == "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z"
+    # policyengine.py 6.1.1 bundle manifest (main 4dc5959),
+    # data_releases.us.certified_data_artifact.
+    assert us.revision == "populace-us-2024-spm-20260915"
     assert us.sha256 == (
-        "16be6338f9d0b3c339883dae59949e995663b64cf145de6728b3dd0f916c5d5f"
+        "6496cc4393d4d3c6574f76eca231de5898c803b9067645591fd5c4d3e65aee84"
     )
-    assert us.built_with == "1.729.0"
+    assert us.built_with == "2.2.1"
     assert us.repo_type == "dataset"
 
     uk = population.POPULACE_PINS["uk"]
@@ -492,3 +494,120 @@ def test_format_dataset_identity_local_override_shows_path():
 def test_format_dataset_identity_empty_is_blank():
     assert population.format_dataset_identity(None) == ""
     assert population.format_dataset_identity({}) == ""
+
+
+# ---------------------------------------------------------------------------
+# Source tax-unit roles and the engine-version guard
+# ---------------------------------------------------------------------------
+def _role_dataset():
+    import pandas as pd
+
+    return SimpleNamespace(
+        person=pd.DataFrame(
+            {
+                "person_id": [1, 2],
+                "person_tax_unit_id": [10, 10],
+                "age": [40, 70],
+                "tax_unit_role_input": ["HEAD", "DEPENDENT"],
+            }
+        ),
+        tax_unit=pd.DataFrame(
+            {"tax_unit_id": [10], "filing_status_input": ["HEAD_OF_HOUSEHOLD"]}
+        ),
+    )
+
+
+def _load_with_dataset(monkeypatch, dataset, country="us", **kwargs):
+    _clear_populace_env(monkeypatch)
+    monkeypatch.setattr(
+        population, "pinned_populace_download", lambda pin, command: "/cache/x.h5"
+    )
+    monkeypatch.setattr(
+        population, "_instantiate_dataset", lambda country, path, command: dataset
+    )
+    monkeypatch.setattr(population, "file_sha256", lambda path, **_: "0" * 64)
+    monkeypatch.setattr(
+        population, "require_policyengine_engine_for_pin", lambda pin: None
+    )
+    sink: dict = {}
+    loaded = population.load_populace_dataset(
+        country, command="tax-populace-compare", provenance=sink, **kwargs
+    )
+    return loaded, sink
+
+
+def test_us_load_pins_the_builds_roles_and_records_it(monkeypatch):
+    monkeypatch.delenv("AXIOM_POPULACE_SOURCE_ROLES", raising=False)
+    dataset = _role_dataset()
+
+    loaded, sink = _load_with_dataset(monkeypatch, dataset)
+
+    assert loaded is dataset
+    assert loaded.person["is_tax_unit_head"].tolist() == [True, False]
+    assert loaded.person["is_tax_unit_dependent"].tolist() == [False, True]
+    assert loaded.tax_unit["filing_status"].tolist() == ["HEAD_OF_HOUSEHOLD"]
+    assert sink["source_roles"] == "tax_unit_role_input+filing_status_input"
+    assert sink["revision"] == population.POPULACE_PINS["us"].revision
+    assert "tax_unit_roles=source" in population.format_dataset_identity(sink)
+
+
+@pytest.mark.parametrize("how", ["argument", "env"])
+def test_source_roles_can_be_switched_off(monkeypatch, how):
+    dataset = _role_dataset()
+    kwargs = {}
+    if how == "argument":
+        kwargs["source_roles"] = False
+    else:
+        monkeypatch.setenv("AXIOM_POPULACE_SOURCE_ROLES", "0")
+
+    loaded, sink = _load_with_dataset(monkeypatch, dataset, **kwargs)
+
+    assert "is_tax_unit_head" not in loaded.person.columns
+    assert sink["source_roles"] is None
+    assert "tax_unit_roles=age-derived" in population.format_dataset_identity(sink)
+
+
+def test_uk_load_never_pins_us_roles(monkeypatch):
+    dataset = _role_dataset()
+
+    loaded, sink = _load_with_dataset(monkeypatch, dataset, country="uk")
+
+    assert "is_tax_unit_head" not in loaded.person.columns
+    assert sink["source_roles"] is None
+
+
+def test_datasets_without_role_columns_load_unchanged(monkeypatch):
+    dataset = SimpleNamespace(file_path="/cache/x.h5")
+
+    loaded, sink = _load_with_dataset(monkeypatch, dataset)
+
+    assert loaded is dataset
+    assert sink["source_roles"] is None
+
+
+def test_format_dataset_identity_omits_roles_for_older_identities():
+    line = population.format_dataset_identity({"source": "pinned", "revision": "r"})
+    assert "tax_unit_roles" not in line
+
+
+@pytest.mark.parametrize(
+    ("installed", "refused"),
+    [("1.764.6", True), ("1.729.0", True), ("2.2.1", False), ("2.11.3", False)],
+)
+def test_engine_guard_refuses_an_older_major_version(installed, refused):
+    pin = population.POPULACE_PINS["us"]
+    if refused:
+        with pytest.raises(SystemExit, match="drops the build's newer input"):
+            population.require_policyengine_engine_for_pin(pin, installed=installed)
+    else:
+        population.require_policyengine_engine_for_pin(pin, installed=installed)
+
+
+def test_engine_guard_ignores_env_re_pins_to_other_revisions(monkeypatch):
+    # An env re-pin keeps the base built_with label, so it cannot be checked.
+    monkeypatch.setenv(
+        "AXIOM_POPULACE_US_REVISION",
+        "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+    )
+    pin = population.resolve_populace_pin("us")
+    population.require_policyengine_engine_for_pin(pin, installed="1.729.0")

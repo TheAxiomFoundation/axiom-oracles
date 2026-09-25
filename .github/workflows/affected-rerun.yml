@@ -200,7 +200,7 @@ jobs:
           path: ~/.cache/huggingface
           key: >-
             populace-hf-${{ runner.os }}-${{
-              hashFiles('axiom-oracles/axiom_oracles/populations/enhanced_cps.py')
+              hashFiles('axiom-oracles/axiom_oracles/bridges/population.py')
             }}
           restore-keys: |
             populace-hf-${{ runner.os }}-

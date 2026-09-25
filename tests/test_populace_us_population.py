@@ -55,12 +55,13 @@ def test_nyc_scope_uses_nyc_enhanced_cps_dataset() -> None:
 
 
 def test_certified_populace_us_artifact_is_pinned() -> None:
-    # The default US population must be content-pinned, not HF-latest: latest
-    # follows the sparse L0 refit with dead input bases (populace#278).
+    # The default US population must be content-pinned, not HF-latest:
+    # HF-latest need not be certified (on 2026-07-02 it was the sparse L0
+    # refit with dead input bases, populace#278).
     pin = POPULACE_PINS[("policyengine/populace-us", "populace_us_2024.h5")]
-    assert pin.revision == "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z"
+    assert pin.revision == "populace-us-2024-spm-20260915"
     assert pin.sha256 == (
-        "16be6338f9d0b3c339883dae59949e995663b64cf145de6728b3dd0f916c5d5f"
+        "6496cc4393d4d3c6574f76eca231de5898c803b9067645591fd5c4d3e65aee84"
     )
 
 

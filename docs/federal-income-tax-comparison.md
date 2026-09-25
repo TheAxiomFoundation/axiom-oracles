@@ -3,10 +3,12 @@
 This document covers the canonical recipe for comparing Axiom-encoded RuleSpec
 federal individual income tax (FIIT) outputs against PolicyEngine over the
 certified pinned **Populace US** population. The committed dashboard artifact
-uses the full weighted slice (`--sample-size 0`) and runs against Python 3.13,
-PolicyEngine 4.11.0, PolicyEngine Core 3.26.11, and PolicyEngine-US 1.729.0 —
-the model version the certified pinned Populace artifact was built with, and
-the floor the tax harness now enforces (`>= 1.723`).
+uses the full weighted slice (`--sample-size 0`) and runs against Python 3.13
+and the PolicyEngine stack the certified pinned Populace artifact is certified
+for: PolicyEngine 6.1.1, PolicyEngine Core 3.32.5, and PolicyEngine-US 2.2.1
+(`populace-us-2024-spm-20260915`). The committed report predates the
+2026-09-25 re-pin: it ran PolicyEngine-US 1.729.0 on the `f0af251` build with
+age-derived tax-unit roles, and its provenance block says so.
 
 The comparison is one entry in the [comparisons registry](../comparisons/);
 see [`comparisons/README.md`](../comparisons/README.md) for the registry
@@ -178,9 +180,9 @@ Even at high agreement, a few non-PE-bug categories of mismatch can persist:
 
 - **OASDI 2026 base drift.** Older PolicyEngine-US releases used $186,000 as
   the Social Security contribution-and-benefit base; the encoded SSA 2026
-  automatic determination is $184,500. The pinned PolicyEngine-US 1.729.0 (and
-  every release at or above the runner's 1.723 floor) includes the corrected
-  base.
+  automatic determination is $184,500. PolicyEngine-US 1.729.0, which produced
+  the results above (and every release at or above the runner's 1.723 floor,
+  including the now-pinned 2.2.1), includes the corrected base.
 - **EITC amount residuals.** All 113 `eitc_earned_income` residual tax units
   are joint returns. Axiom's live RuleSpec chain still has 26 USC 1402(a),
   1402(b), and 32(c)(2) shaped around aggregate TaxUnit self-employment and

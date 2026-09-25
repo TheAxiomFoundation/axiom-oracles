@@ -16,6 +16,9 @@ runner:
   axiom_encode_repo: $HOME/axiom-encode
   axiom_rules_repo: $HOME/axiom-rules-engine
   parameters:
+    # Certified PolicyEngine stack for the pinned Populace build
+    # (bridges/population.py POPULACE_PINS["us"], built_with 2.2.1).
+    policyengine_us_version: "2.2.1"
     # Loaded-case count overstates this suite (in-bridge filtering), so
     # the size heuristic under-persists; keep full per-case evidence.
     include_case_inputs: true

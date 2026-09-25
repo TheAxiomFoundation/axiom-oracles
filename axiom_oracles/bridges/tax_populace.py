@@ -2203,6 +2203,25 @@ def project_section_7703_tax_unit_inputs(*, row: Any) -> dict[str, Any]:
     }
 
 
+PARTNERSHIP_SE_NET_EARNINGS_COLUMNS = (
+    # policyengine-us >= 2 (PE-US #8614) and the certified
+    # populace-us-2024-spm-20260915 build: K-1 Box 14 partnership net earnings.
+    "partnership_self_employment_net_earnings",
+    # Pre-#8614 Populace builds (f0af251) stored the same base under this name.
+    "partnership_se_income",
+)
+
+
+def partnership_self_employment_net_earnings(person: Any) -> float:
+    """Partnership net earnings from self-employment for one person.
+
+    Reads the build's column under whichever name it uses, so a re-pin to a
+    build that renamed it cannot silently zero the 26 USC 1402(a)/32(c)(2)
+    partnership input.
+    """
+    return first_available_money(person, PARTNERSHIP_SE_NET_EARNINGS_COLUMNS)
+
+
 def project_section_32_c_2_tax_unit_inputs(
     *,
     persons: list[Any],
@@ -2223,7 +2242,7 @@ def project_section_32_c_2_tax_unit_inputs(
             money(person.get("self_employment_income_before_lsr", 0))
             + money(person.get("sstb_self_employment_income_before_lsr", 0))
             + money(person.get("farm_operations_income", 0))
-            + money(person.get("partnership_se_income", 0)),
+            + partnership_self_employment_net_earnings(person),
         )
         for person, context in zip(persons, contexts, strict=True)
         if context.is_head or context.is_spouse
@@ -2277,7 +2296,7 @@ def project_section_1402_a_tax_unit_inputs(
         if context.is_head or context.is_spouse
     )
     partnership_self_employment_income = sum(
-        money(person.get("partnership_se_income", 0))
+        partnership_self_employment_net_earnings(person)
         for person, context in zip(persons, contexts, strict=True)
         if context.is_head or context.is_spouse
     )

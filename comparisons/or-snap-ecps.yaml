@@ -17,6 +17,9 @@ runner:
   axiom_encode_repo: $HOME/axiom-encode
   axiom_rules_repo: $HOME/axiom-rules-engine
   parameters:
+    # Certified PolicyEngine stack for the pinned Populace build
+    # (bridges/population.py POPULACE_PINS["us"], built_with 2.2.1).
+    policyengine_us_version: "2.2.1"
     jurisdiction: us-or
     sample_size: 0
     year: 2026

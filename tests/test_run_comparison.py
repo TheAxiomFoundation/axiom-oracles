@@ -59,9 +59,14 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
         run_comparison, "_ensure_rulespec_us_checkout", lambda _remote: rulespec
     )
 
-    def fake_run(cmd, *, check, stdout=None, cwd=None, capture_output=False, text=False):
+    envs = []
+
+    def fake_run(
+        cmd, *, check, stdout=None, cwd=None, capture_output=False, text=False, env=None
+    ):
         del check, cwd, capture_output, text
         calls.append(cmd)
+        envs.append(env)
         if stdout is not None:
             stdout.write("{}")
         return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
@@ -96,12 +101,20 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     assert cmd[:4] == ["uv", "run", "--python", "3.13"]
     assert "--with-editable" in cmd
     assert str(axiom_encode.resolve()) in cmd
-    assert "policyengine==4.11.0" in cmd
-    # 1.729.0 is the version the certified pinned Populace artifact was built
-    # with and clears the harness floor (MIN_POLICYENGINE_US_VERSION 1.723);
-    # the old 1.705.16 pin was below the floor and failed hard.
-    assert "policyengine-us==1.729.0" in cmd
-    assert "policyengine-core==3.26.11" in cmd
+    # The default oracle stack is the one the pinned Populace build is
+    # certified for (policyengine.py 6.1.1 -> policyengine-us 2.2.1 / core
+    # 3.32.5), matching POPULACE_PINS["us"].built_with.
+    assert "policyengine==6.1.1" in cmd
+    assert "policyengine-us==2.2.1" in cmd
+    assert "policyengine-core==3.32.5" in cmd
+    from axiom_oracles.bridges.population import POPULACE_PINS
+
+    assert f"policyengine-us=={POPULACE_PINS['us'].built_with}" in cmd
+    # This checkout's bridges overlay axiom-encode's git-pinned copy, so the
+    # run uses this repo's Populace pin and source-role pin.
+    assert envs[-1]["PYTHONPATH"].split(os.pathsep)[0] == str(
+        run_comparison.REPO_ROOT
+    )
     assert "--data-folder" not in cmd
     assert "--allow-policyengine-us-version" in cmd
     assert "--allow-uncertified-policyengine-data" in cmd
@@ -205,9 +218,12 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
         run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
     )
 
-    def fake_run(cmd, *, check, cwd=None):
+    envs = []
+
+    def fake_run(cmd, *, check, cwd=None, env=None):
         del check, cwd
         calls.append(cmd)
+        envs.append(env)
         csv_path = cmd[cmd.index("--write-csv") + 1]
         Path(csv_path).write_text(
             "spm_unit_id,household_id,pe_snap,axiom_snap_allotment,"
@@ -250,6 +266,12 @@ def test_snap_ecps_runner_writes_v2_report_from_csv(monkeypatch, tmp_path):
     assert "snap-populace-compare" in cmd
     assert "--sample-size" not in cmd
     assert "--axiom-binary" in cmd
+    # Default PE-US is the pinned Populace build's certified model, and this
+    # checkout's bridges overlay axiom-encode's git-pinned copy.
+    assert "policyengine-us==2.2.1" in cmd
+    assert envs[-1]["PYTHONPATH"].split(os.pathsep)[0] == str(
+        run_comparison.REPO_ROOT
+    )
 
     report = json.loads(output.read_text())
     assert report["schema_version"] == "axiom.comparison_report.v2"
@@ -1476,21 +1498,65 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 
 
 @pytest.mark.parametrize("state", ["al", "ma", "nc", "sc", "tn"])
-def test_snap_residual_suites_pin_reviewed_policyengine_stack(state):
+def test_snap_residual_suites_keep_full_population_shape(state):
     config = yaml.safe_load(
         (COMPARISONS_DIR / f"{state}-snap-ecps.yaml").read_text()
     )
     params = config["runner"]["parameters"]
-    run_comparison = load_run_comparison_module()
 
     assert params["sample_size"] == 0
     assert params["period"] == "2026-01"
     assert params["python"] == "3.13"
-    assert run_comparison._resolve_pe_oracle_pins(params) == (
-        "policyengine==4.18.9",
-        "policyengine-us==1.767.3",
-        "policyengine-core==3.30.3",
-    )
+
+
+def _populace_suite_configs():
+    """Every registry suite whose PolicyEngine side loads the US Populace build."""
+    suites = []
+    for path in sorted(COMPARISONS_DIR.glob("*.yaml")):
+        config = yaml.safe_load(path.read_text())
+        if not isinstance(config, dict) or "runner" not in config:
+            continue
+        runner = config["runner"]
+        params = runner.get("parameters") or {}
+        if params.get("population") == "enhanced-cps" or runner.get("type") in {
+            "axiom-encode-tax-ecps-compare",
+            "axiom-encode-snap-ecps-compare",
+        }:
+            suites.append(pytest.param(path.stem, runner, id=path.stem))
+    return suites
+
+
+@pytest.mark.parametrize(("suite", "runner"), _populace_suite_configs())
+def test_populace_suites_pin_the_builds_certified_policyengine_us(suite, runner):
+    # Model and data move together: a Populace suite must run the PolicyEngine-US
+    # the pinned build is certified for. An older engine loads the build but
+    # silently drops the input columns it has no variable for.
+    from axiom_oracles.bridges.population import POPULACE_PINS
+
+    built_with = POPULACE_PINS["us"].built_with
+    params = runner.get("parameters") or {}
+    assert params.get("policyengine_us_version") == built_with, suite
+    if runner["type"] == "axiom-oracles-compare":
+        run_comparison = load_run_comparison_module()
+        assert run_comparison._resolve_pe_oracle_pins(params) == (
+            "policyengine==6.1.1",
+            f"policyengine-us=={built_with}",
+            "policyengine-core==3.32.5",
+        )
+
+
+def test_populace_suite_registry_covers_every_known_populace_suite():
+    # Guards the discovery rule above against silently matching nothing.
+    names = {param.values[0] for param in _populace_suite_configs()}
+    assert {
+        "fiit-ecps",
+        "fiit-taxsim-ecps",
+        "co-snap-ecps",
+        "ssi-ecps",
+        "taxcalc-fiit-ecps",
+        "co-state-income-tax-ecps",
+    } <= names
+    assert len(names) == 31
 
 
 def test_ri_income_tax_grid_pins_reviewed_policyengine_stack():
