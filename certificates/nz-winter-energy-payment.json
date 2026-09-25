@@ -248,6 +248,24 @@
               ]
             }
           ],
+          "threshold_straddle": {
+            "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
+            "complete": true,
+            "defects": [],
+            "mode": "computed",
+            "requested_output_roots": [
+              "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period"
+            ],
+            "self_check": {
+              "complete": true,
+              "evaluations": 4,
+              "failures": [],
+              "outputs_checked": 4,
+              "outputs_matched": 4
+            },
+            "sites": [],
+            "unstraddled": []
+          },
           "trace_artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
           "trace_binding": "bound",
           "trace_sha256": "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da",

@@ -134,3 +134,9 @@ is announced anywhere, in any words, without Max's explicit clear.
   sha-bound IR cannot claim exercised; authenticated literal-only parameter
   roots can prove zero reachable sites. The NZ income-tax evidence never
   exceeds the 180000 threshold, so its exercised premise becomes false.
+  The same revision enforces the executable premise's commit binding on
+  every route: whenever closed and executable are both computed, they must
+  name one well-formed rulespec commit (and one program set when either
+  carries one), whichever producers emitted them. Before it, the
+  de/kindergeld route skipped the check and a forged executable commit
+  could certify.

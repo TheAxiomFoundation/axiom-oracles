@@ -797,6 +797,19 @@
       "mode": "computed",
       "source": "canonical de_worker_dual_oracle_cases rebound to the unified record's inline cases",
       "status": "computed_pass",
+      "threshold_straddle": {
+        "basis": "signed-parameter-only-roots",
+        "complete": true,
+        "mode": "computed",
+        "module_sha256": "7c1545d20f21bcdaba0abd7b8af324b3747148f84d7593e4f358ec726a57396b",
+        "requested_output_roots": [
+          "de:statutes/estg/66#monthly_kindergeld_per_child"
+        ],
+        "signed_module_artifact": "conformance/executable/de-kindergeld-signed-rulespec.json",
+        "signed_module_artifact_sha256": "4068585c4d92e2ad1068941fb4dc7383df21cfda01880ca8a2a8505c6b457c00",
+        "sites": [],
+        "unstraddled": []
+      },
       "value": true,
       "view": "de/kindergeld"
     }
