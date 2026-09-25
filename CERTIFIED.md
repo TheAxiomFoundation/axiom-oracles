@@ -33,7 +33,14 @@ adversarially audited.
   dispositioned with a text-grounded explanation, none unexplained.
 - **exercised** — the comparison evidence actually executed: bound case
   corpora, validated bridge manifests with the strict opt-in, a census that
-  binds every manifest sha so no evidence edit is invisible.
+  binds every manifest sha so no evidence edit is invisible, and computed
+  oracle observations strictly below and strictly above every parameter
+  threshold reachable from the certified roots. Only observations on live
+  evaluation paths count; equality alone does not straddle a threshold.
+  The threshold interpreter must reproduce every recorded requested output
+  exactly from the sha-bound compiled IR. Programs without committed IR
+  cannot claim exercised, except when authenticated source bytes prove that
+  all certified roots are literal-valued parameter rules reaching zero sites.
 - **closed** — source completeness (the substance of this document; below).
 - **executable** — a pinned engine binary recompiles the composed programs
   at the recorded commit and reproduces every committed case value exactly;
@@ -111,7 +118,7 @@ is announced anywhere, in any words, without Max's explicit clear.
 - v2 (2026-08-19): + instrument closure (oracles#491, PR#494/#495) after
   the first certified=yes was retracted for never dispositioning the
   regulations under the act.
-- v3 (2026-08-20, this document): + dependency closure with leaf
+- v3 (2026-08-20): + dependency closure with leaf
   discipline, after the second certified=yes was ruled an overclaim for
   case-supplying law-derived inputs (BEK 1563's optjening construction,
   personskatteloven § 7's income basis) and scoping around instruments that
@@ -121,3 +128,9 @@ is announced anywhere, in any words, without Max's explicit clear.
   dependency-closure block computes closed=false, whatever its producer
   reports — and each certificate's closed verdict carries either its
   enumerated worklist or the missing-block marker.
+- v4 (2026-09-24): exercised requires computed evidence on both sides of
+  every parameter threshold reachable from the certified roots, with exact
+  interpreter replay and live-path observations. Programs without committed,
+  sha-bound IR cannot claim exercised; authenticated literal-only parameter
+  roots can prove zero reachable sites. The NZ income-tax evidence never
+  exceeds the 180000 threshold, so its exercised premise becomes false.

@@ -7,6 +7,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 from axiom_oracles.evidence import CHUNK_INDEX_SCHEMA_VERSION
 
 
@@ -82,6 +84,8 @@ def test_census_records_bound_cardinality_without_a_second_strict_pass(
     assert row["reconciliation"] == "cardinality"
     assert row["cases_scanned"] == 2
     assert row["chunk_manifest"][0]["cases"] == 2
+    assert row["threshold_straddle"]["mode"] == "unavailable"
+    assert row["exercised"] is False
 
 
 def test_unbound_or_nonreconciling_chunks_do_not_block_census(tmp_path, monkeypatch):
@@ -219,7 +223,8 @@ def test_committed_tariff_exercise_receipts_are_strict_bound() -> None:
     assert panel["constant_fields"] == 11
     assert panel["bridge_audited"] is True
     assert panel["per_case_evidence_committed"] is True
-    assert panel["exercised"] is True
+    assert panel["threshold_straddle"]["mode"] == "unavailable"
+    assert panel["exercised"] is False
 
     schedule = rows["us-tariff-schedule"]
     assert schedule["cases_scanned"] == 19_118_619
@@ -227,7 +232,8 @@ def test_committed_tariff_exercise_receipts_are_strict_bound() -> None:
     assert schedule["constant_fields"] == 15
     assert schedule["bridge_audited"] is True
     assert schedule["per_case_evidence_committed"] is True
-    assert schedule["exercised"] is True
+    assert schedule["threshold_straddle"]["mode"] == "unavailable"
+    assert schedule["exercised"] is False
     assert schedule["evidence_fields"]["entry_is_china_301_2024_action"] == {
         "distinct": 1,
         "state": "constant",
@@ -266,3 +272,103 @@ def test_committed_exercise_receipt_rejects_artifact_hash_drift(
         assert "evidence artifact drifted" in str(exc)
     else:  # pragma: no cover - mutant guard
         raise AssertionError("artifact hash drift was accepted")
+
+
+def test_global_census_records_separate_nz_view_threshold_verdicts(monkeypatch):
+    """A unified report's views cannot inherit one another's threshold result."""
+    from scripts import threshold_straddle
+
+    census = _load_census()
+    report_path = REPO_ROOT / "dashboard/public/data/nz-treasury-incomeexplorer.json"
+    report = json.loads(report_path.read_text())
+    calls = []
+
+    def compute(compiled, traces, *, view, roots):
+        calls.append((view, roots))
+        assert hashlib.sha256(compiled).hexdigest() == (
+            traces["compiled_program"]["artifact_sha256"]
+        )
+        return {"mode": "computed", "complete": view != "nz/income-tax"}
+
+    monkeypatch.setattr(threshold_straddle, "compute_threshold_straddle", compute)
+    monkeypatch.setattr(
+        census, "_iter_suite_reports", lambda: [(report["suite"], report, report_path)]
+    )
+    monkeypatch.setattr(census, "_committed_exercise_rows", dict)
+
+    result = census.build_census()
+
+    assert result["suites"] == {}
+    views = result["views"][report["suite"]]
+    assert set(views) == set(report["experiment"]["views"])
+    assert len(calls) == len(views)
+    for view, roots in calls:
+        assert roots == report["experiment"]["views"][view]["requested_output_roots"]
+        assert views[view]["exercised"] is (view != "nz/income-tax")
+    assert views["nz/income-tax"]["evaluations_scanned"] == 91
+
+
+@pytest.mark.parametrize(
+    ("relative_path", "marker"),
+    [
+        (
+            "conformance/executable/nz-treasury-incomeexplorer/compiled-program.json",
+            "compiled artifact bytes disagree with executable receipt",
+        ),
+        (
+            "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
+            "evaluation trace bytes changed",
+        ),
+    ],
+)
+def test_threshold_loader_rechecks_artifact_bytes(relative_path, marker, monkeypatch):
+    """A preceding valid receipt cannot hide subsequent byte drift."""
+    from scripts import threshold_straddle
+
+    census = _load_census()
+    report_path = REPO_ROOT / "dashboard/public/data/nz-treasury-incomeexplorer.json"
+    report = json.loads(report_path.read_text())
+    view = "nz/income-tax"
+    receipt = report["experiment"]["views"][view]
+    calls = []
+
+    def compute(*args, **kwargs):
+        calls.append(True)
+        return {"mode": "computed", "complete": True}
+
+    monkeypatch.setattr(threshold_straddle, "compute_threshold_straddle", compute)
+    assert census._threshold_straddle_for_view(report, view, receipt)["complete"] is True
+    original = Path.read_bytes
+    target = (REPO_ROOT / relative_path).resolve()
+
+    def drift(path):
+        raw = original(path)
+        return raw + b"\n" if path.resolve() == target else raw
+
+    monkeypatch.setattr(Path, "read_bytes", drift)
+    result = census._threshold_straddle_for_view(report, view, receipt)
+
+    assert result["mode"] == "unavailable"
+    assert marker in result["reason"]
+    assert len(calls) == 1
+
+
+def test_threshold_loader_rejects_comparison_artifact_substitution(monkeypatch):
+    from scripts import threshold_straddle
+
+    census = _load_census()
+    report_path = REPO_ROOT / "dashboard/public/data/nz-treasury-incomeexplorer.json"
+    report = json.loads(report_path.read_text())
+    report["compiled_program"]["artifact_sha256"] = "0" * 64
+
+    def unexpected(*args, **kwargs):
+        raise AssertionError("an unbound artifact reached the interpreter")
+
+    monkeypatch.setattr(threshold_straddle, "compute_threshold_straddle", unexpected)
+    view = "nz/income-tax"
+    result = census._threshold_straddle_for_view(
+        report, view, report["experiment"]["views"][view]
+    )
+
+    assert result["mode"] == "unavailable"
+    assert "disagree with comparison report" in result["reason"]
