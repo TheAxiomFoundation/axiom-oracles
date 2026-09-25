@@ -173,7 +173,8 @@ def _replace_builders(monkeypatch, closed_block, exec_block):
 def passing_other_premises(monkeypatch):
     """Make a binding failure the only possible new reason to reject a pair."""
     monkeypatch.setattr(certify, "_exercise_census_for", lambda spec: ({}, []))
-    monkeypatch.setattr(certify, "_exercise_block", lambda *args: ([], True))
+    # The real _exercise_block returns (rows: dict, complete: bool).
+    monkeypatch.setattr(certify, "_exercise_block", lambda *args: ({}, True))
     monkeypatch.setattr(certify, "_attested_exercise_catalog", lambda *args: None)
     monkeypatch.setattr(certify, "_single_person_evidence", lambda *args: None)
     monkeypatch.setattr(
@@ -674,6 +675,40 @@ def test_strict_loader_rejects_nonfinite_anywhere(suffix, raw, tmp_path):
     path = tmp_path / f"artifact.{suffix}"
     path.write_text(raw)
     with pytest.raises(ValueError):
+        certify._load(path)
+
+
+@pytest.mark.parametrize(
+    "route", ALL_ROUTES, ids=lambda route: f"{route.premise}/{route.name}"
+)
+def test_every_artifact_route_rejects_duplicate_json_keys(route, tmp_path, monkeypatch):
+    """Bytes that name two commits must not be read as whichever came last.
+
+    Independent review of this change (2026-09-25) reached certified=yes
+    through a premise artifact carrying conflicting duplicate commit keys.
+    """
+    _key, artifact = ROUTE_FIXTURES[(route.premise, route.name)]
+    if artifact is None:
+        assert route.name in {"attested", "unsupported", "pending_de"}
+        return
+    monkeypatch.setattr(certify, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(
+        certify,
+        "_load_generator",
+        lambda *args: SimpleNamespace(build_status=lambda: {}),
+    )
+    path = tmp_path / artifact
+    path.write_text(
+        '{"rulespec": {"sha": "%s", "sha": "%s"}}' % (GOOD_COMMIT, "f" * 40)
+    )
+    with pytest.raises(ValueError, match="duplicate"):
+        route.build("test/bindings", _route_spec(route), [])
+
+
+def test_strict_json_rejects_duplicate_keys(tmp_path):
+    path = tmp_path / "artifact.json"
+    path.write_text('{"commit": "first", "nested": {"commit": 1, "commit": 2}}')
+    with pytest.raises(ValueError, match="duplicate"):
         certify._load(path)
 
 

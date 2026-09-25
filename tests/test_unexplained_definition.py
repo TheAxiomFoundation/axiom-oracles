@@ -4,7 +4,8 @@ Every consumer uses one admitted count; malformed counts always carry a hard
 failure, never silently authorize a clean gate. The count is nonnegative and at
 least every admitted declared unexplained signal, even with capped/concept-less
 rows. Only validated class counts or eligible known-cause rows explain work;
-known causes apply only in mode none and cannot exceed the mismatch total.
+known causes apply only in mode none. The count is at least the number of
+listed mismatch rows: a declared total below them is a hard defect.
 Raising an unexplained signal or removing an explanation without replacing it
 with another explanation cannot lower the count. Duplicate report order cannot
 change the maximum per-suite count. Python and JS assessments must agree.
@@ -88,6 +89,10 @@ def parity_cases():
     report = _report(1, 1)
     report["summary"]["dispositioned"]["counts"]["mystery"] = 1
     cases.append({"report": report, "options": {}})
+    understated = {"suite": "sample", "summary": {"mismatch_count": 0},
+                   "mismatches": [{"concept": "c", "kind": "amount_difference"}] * 3}
+    cases.append({"report": understated, "options": {}})
+    cases.append({"report": understated, "options": {"known_causes": [_cause()]}})
     return cases
 
 
@@ -133,7 +138,8 @@ def test_admission_preserves_nonnegative_integer_values(value):
 def test_inline_conservative_envelope(mismatch, classified, declared):
     """No disagreement can lower the maximum of declared and unclassified totals."""
     actual = assess_unexplained(_report(mismatch, classified, declared))
-    assert actual.count == max(declared, mismatch - classified)
+    # _report lists one row, which floors the mismatch total.
+    assert actual.count == max(declared, max(mismatch, 1) - classified)
     assert actual.count >= 0
     assert actual.declared == declared
     if classified:
@@ -187,11 +193,39 @@ def test_known_causes_only_explain_eligible_rows_in_none_mode():
         assert (actual.count, actual.known_cause_covered) == (2, 0)
 
 
-def test_known_cause_overcoverage_is_hard_defect():
-    """Listed known-cause rows may never exceed the declared mismatch total."""
-    actual = assess_unexplained(_report(0), known_causes=[_cause()])
-    assert actual.count == 0
-    assert any("exceed mismatches" in defect for defect in actual.defects)
+def test_listed_rows_floor_an_understated_mismatch_total():
+    """A listed row with mismatch_count 0 is a hard defect and still counts.
+
+    Independent review of this change (2026-09-25): an unclassified listed row
+    under a declared mismatch_count of 0 read 0 in the ratchet, the scoreboard
+    and the dashboard.
+    """
+    report = _report(0)
+    report["summary"]["dispositioned"] = None
+    del report["summary"]["dispositioned"]
+    actual = assess_unexplained(report)
+    assert actual.count == 1
+    assert actual.mismatch_count == 1
+    assert any("mismatch rows are listed but mismatch_count is 0" in d for d in actual.defects)
+    # A known cause may explain the listed row, but the understated total is
+    # still a hard defect that fails every gate.
+    covered = assess_unexplained(report, known_causes=[_cause()])
+    assert covered.known_cause_covered == 1
+    assert any("mismatch_count is 0" in d for d in covered.defects)
+
+
+@given(st.integers(min_value=0, max_value=50), st.integers(min_value=0, max_value=50))
+def test_count_is_never_below_unexplained_listed_rows(declared_total, listed):
+    """Invariant: count >= listed rows that nothing explains."""
+    report = {
+        "suite": "sample",
+        "summary": {"mismatch_count": declared_total},
+        "mismatches": [{"concept": "c", "kind": "amount_difference"}] * listed,
+    }
+    actual = assess_unexplained(report)
+    assert actual.count >= listed
+    assert actual.count >= declared_total
+    assert bool(actual.defects) == (listed > declared_total)
 
 
 def test_attribution_prefers_engine_specific_cause_and_counts_linked_issues_once():
@@ -235,7 +269,8 @@ def test_duplicate_resolution_is_order_independent_maximum(counts):
     left = resolve_suite_reports(reports)["sample"]
     right = resolve_suite_reports(reversed(reports))["sample"]
     assert left == right
-    assert assess_unexplained(left).count == max(counts)
+    # _report lists one row, which floors each report's mismatch total.
+    assert assess_unexplained(left).count == max(max(count, 1) for count in counts)
 
 
 def test_assessment_is_frozen_and_overrides_scope_the_view():

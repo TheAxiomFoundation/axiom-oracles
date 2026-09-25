@@ -11,7 +11,7 @@ import {
   isAxiomPair,
   otherOracle,
 } from "./suites.js";
-import { assessUnexplained } from "./unexplained.js";
+import { gatedUnexplainedBySuite } from "./unexplained.js";
 
 export function buildProgramRows(reports) {
   const programs = new Map();
@@ -98,20 +98,17 @@ export function causeFor(knownCauses, report, concept, kind) {
 }
 
 /**
- * Sum the shared assessments made before the loader filters concepts. Direct
- * callers can pass unfiltered reports and receive the same assessment here.
+ * The unexplained-gate count over these reports: the shared assessment (made
+ * before the loader filters concepts), restricted to the publication gate's
+ * domain and resolved per suite by maximum, exactly as
+ * scripts/unexplained_ratchet.py counts. A report outside the gate counts 0.
  */
 export function countUnexplained(reports, knownCauses) {
-  let total = 0;
-  for (const report of reports || []) {
-    if (!isAxiomPair(report)) continue;
-    if (suiteMeta(report.suite).kind === "diagnostic") continue;
-    const assessment = report.unexplained_assessment || assessUnexplained(
-      report, { known_causes: knownCauses },
-    );
-    total += assessment.count;
-  }
-  return total;
+  const bySuite = gatedUnexplainedBySuite(reports, {
+    known_causes: knownCauses,
+    isDiagnostic: (suite) => suiteMeta(suite).kind === "diagnostic",
+  });
+  return Object.values(bySuite).reduce((total, count) => total + count, 0);
 }
 
 /** Region bucket for a coverage-overview program entry. */

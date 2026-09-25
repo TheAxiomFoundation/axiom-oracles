@@ -103,6 +103,12 @@ export function assessUnexplained(report, {
     const admitted = read(summary.mismatch_count, "mismatch_count");
     if (admitted !== null) mismatch = admitted;
   }
+  if (rows.length > mismatch) {
+    defects.push(
+      `${suiteLabel}: ${rows.length} mismatch rows are listed but mismatch_count is ${mismatch}`,
+    );
+    mismatch = rows.length;
+  }
   let block = summary.dispositioned;
   if (block == null) block = {};
   else if (!object(block)) {
@@ -175,4 +181,37 @@ export function assessUnexplained(report, {
     count, mode, mismatch_count: mismatch, declared, classified,
     known_cause_covered: covered, axiom_attributed: axiom, defects, notes,
   };
+}
+
+/**
+ * The unexplained publication gate's domain, mirroring
+ * scripts/unexplained_ratchet.py: a report with a suite and engines, carrying
+ * summary and mismatches, not a typed diagnostic suite, with an Axiom leg in
+ * either the {left, right} or the named-engine (grid) shape.
+ */
+export function isUnexplainedGated(report, isDiagnostic = () => false) {
+  if (!object(report) || !truthy(report.suite) || !truthy(report.engines)) return false;
+  if (!has(report, "mismatches") || !has(report, "summary")) return false;
+  if (isDiagnostic(report.suite)) return false;
+  const engines = object(report.engines) ? report.engines : {};
+  return engines.left === "axiom" || engines.right === "axiom" || has(engines, "axiom");
+}
+
+/**
+ * Per-suite gated counts: the maximum over a suite's reports, independent of
+ * order (the ratchet's duplicate-suite resolution). Summing the values gives
+ * the gate's total.
+ */
+export function gatedUnexplainedBySuite(reports, {
+  known_causes = [],
+  isDiagnostic = () => false,
+} = {}) {
+  const bySuite = {};
+  for (const report of reports || []) {
+    if (!isUnexplainedGated(report, isDiagnostic)) continue;
+    const assessment = report.unexplained_assessment
+      || assessUnexplained(report, { known_causes });
+    bySuite[report.suite] = Math.max(bySuite[report.suite] ?? 0, assessment.count);
+  }
+  return bySuite;
 }

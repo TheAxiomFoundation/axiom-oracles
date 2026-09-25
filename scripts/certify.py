@@ -2385,7 +2385,9 @@ def _exercise_block(
     suites: list[dict], census: dict, defects: list[str]
 ) -> tuple[dict, bool]:
     rows = {}
-    complete = True
+    # No suite means no evidence at all, and in particular no threshold
+    # straddle; an empty conjunction must not read as exercised.
+    complete = bool(suites)
     for entry in suites:
         row = (census.get("suites") or {}).get(entry["suite"])
         if row is None:

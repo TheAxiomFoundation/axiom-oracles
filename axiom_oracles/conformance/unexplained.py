@@ -157,6 +157,14 @@ def assess_unexplained(
         admitted = read(summary["mismatch_count"], "mismatch_count")
         if admitted is not None:
             mismatch = admitted
+    if len(rows) > mismatch:
+        # Listed rows are evidence. A total below them understates the
+        # report (a row with mismatch_count 0 read as 0 in every consumer).
+        defects.append(
+            f"{suite}: {len(rows)} mismatch rows are listed but mismatch_count "
+            f"is {mismatch}"
+        )
+        mismatch = len(rows)
     block = summary.get("dispositioned")
     if block is None:
         block = {}

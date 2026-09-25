@@ -542,3 +542,18 @@ def test_de_root_contract_fails_closed(roots, kind):
         parameter_only_straddle(raw, roots=roots, module_id="de:test")["mode"]
         == "unavailable"
     )
+
+
+def test_census_route_without_suites_is_not_exercised():
+    """An empty exercise conjunction must not read as exercised."""
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location(
+        "_straddle_certify", Path(__file__).resolve().parents[1] / "scripts" / "certify.py"
+    )
+    certify = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(certify)
+    rows, complete = certify._exercise_block([], {"suites": {}}, [])
+    assert rows == {}
+    assert complete is False
+
