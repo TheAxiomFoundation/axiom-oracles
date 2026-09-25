@@ -1,3 +1,6 @@
+import hashlib
+import json
+
 import pytest
 
 from axiom_oracles.adapters.axiom.tax_projection import (
@@ -1963,3 +1966,650 @@ def test_axiom_tax_projection_computes_eitc_disqualified_investment_income() -> 
         "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
     )
     ] == 13_500
+
+
+# Married filing separately. The expectations below are projected INPUT
+# values (what the projection hands the engine), fixed by the statute reading
+# documented in tax_projection.py, never engine outputs.
+
+_CO_SCOPE = {"type": "census_state", "geoid": "08"}
+_FIS = "us:tax/federal-income-tax#input."
+
+
+def _person(entity_id: str, relation: str, age: int, **facts) -> Entity:
+    return Entity(
+        entity_id,
+        "person",
+        facts={
+            Concepts.HOUSEHOLD_RELATION: relation,
+            Concepts.PERSON_AGE: age,
+            **facts,
+        },
+    )
+
+
+def _projected(case: Case) -> dict[tuple[str, str], object]:
+    records = attach_axiom_tax_inputs_to_case(case).metadata["axiom_input_records"]
+    by_key: dict[tuple[str, str], object] = {}
+    for record in records:
+        key = (record["entity_id"], record["name"])
+        # One record per (entity, ref): a duplicate would make the dict hide
+        # a conflicting value.
+        assert key not in by_key, key
+        by_key[key] = record["value"]
+    return by_key
+
+
+def _mfs_case(
+    case_id: str,
+    *,
+    filer_age: int = 40,
+    wages: float = 40_000,
+    dependents: tuple[Entity, ...] = (),
+    **facts,
+) -> Case:
+    return Case(
+        case_id=case_id,
+        period="2026",
+        facts={
+            Concepts.STATE_CODE: "CO",
+            Concepts.MARRIED_FILING_SEPARATELY: True,
+            **facts,
+        },
+        metadata={"scope": _CO_SCOPE},
+        entities=(
+            _person(
+                "filer",
+                "HeadOfHousehold",
+                filer_age,
+                **{Concepts.YEARLY_EARNED_INCOME: wages},
+            ),
+            *dependents,
+        ),
+    )
+
+
+def _filing_status_records(by_key, *person_ids: str) -> dict[str, object]:
+    statuses = {
+        "bridge": by_key[("tax_unit", f"{_FIS}filing_status")],
+        "1401": by_key[("tax_unit", "us:statutes/26/1401#input.filing_status")],
+        "151": by_key[("tax_unit", "us:statutes/26/151#input.filing_status")],
+    }
+    for person_id in person_ids:
+        statuses[f"151:{person_id}"] = by_key[
+            (person_id, "us:statutes/26/151#input.filing_status")
+        ]
+    return statuses
+
+
+def _non_separate_regression_cases() -> list[Case]:
+    return [
+        Case(
+            case_id="regression-single",
+            period="2026",
+            metadata={"scope": _CO_SCOPE},
+            entities=(
+                _person(
+                    "p1",
+                    "HeadOfHousehold",
+                    70,
+                    **{
+                        Concepts.YEARLY_EARNED_INCOME: 20_000,
+                        Concepts.SOCIAL_SECURITY_BENEFITS: 24_000,
+                        Concepts.INTEREST_INCOME: 1_500,
+                    },
+                ),
+            ),
+        ),
+        Case(
+            case_id="regression-joint",
+            period="2026",
+            metadata={"scope": _CO_SCOPE},
+            entities=(
+                _person(
+                    "p1",
+                    "HeadOfHousehold",
+                    66,
+                    **{Concepts.YEARLY_EARNED_INCOME: 90_000},
+                ),
+                _person(
+                    "p2",
+                    "Spouse",
+                    60,
+                    **{
+                        Concepts.YEARLY_EARNED_INCOME: 30_000,
+                        Concepts.PENSION_INCOME: 12_000,
+                    },
+                ),
+                _person("p3", "Child", 8),
+                _person("p4", "Child", 15),
+            ),
+        ),
+        Case(
+            case_id="regression-head-of-household",
+            period="2026",
+            metadata={"scope": _CO_SCOPE},
+            entities=(
+                _person(
+                    "p1",
+                    "HeadOfHousehold",
+                    35,
+                    **{Concepts.YEARLY_EARNED_INCOME: 45_000},
+                ),
+                _person("p2", "Child", 8),
+            ),
+        ),
+    ]
+
+
+# SHA-256 of the canonical JSON of {"records": axiom_input_records,
+# "relations": axiom_relations} that the projection at base commit 5420b1923
+# (before married-filing-separately support) produced for each case above.
+_NON_SEPARATE_PRE_MFS_DIGESTS = {
+    "regression-single": (
+        "443d48ca7997c8111be54512fe92980263e918c183d3c80bd1fa71c77c924a54"
+    ),
+    "regression-joint": (
+        "c4f2d5af028510a44fec65fbf69d6439d5231c7a56ced6fb464a87b8956da80d"
+    ),
+    "regression-head-of-household": (
+        "799028b3bfd3ba4cf31de20d6caf2234750c99ee88abc77b7a8b03269ef9cfd8"
+    ),
+}
+
+
+@pytest.mark.parametrize(
+    "case",
+    _non_separate_regression_cases(),
+    ids=lambda case: case.case_id,
+)
+def test_axiom_tax_projection_keeps_non_separate_inputs_byte_identical(
+    case: Case,
+) -> None:
+    metadata = attach_axiom_tax_inputs_to_case(case).metadata
+    payload = {
+        "records": metadata["axiom_input_records"],
+        "relations": metadata["axiom_relations"],
+    }
+    digest = hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+
+    assert digest == _NON_SEPARATE_PRE_MFS_DIGESTS[case.case_id]
+
+
+def test_axiom_tax_projection_projects_married_filing_separately_as_code_2() -> None:
+    by_key = _projected(_mfs_case("mfs-childless"))
+
+    assert set(_filing_status_records(by_key, "filer").values()) == {2}
+    assert (
+        by_key[("tax_unit", "us:statutes/26/21#input.married_at_close_of_taxable_year")]
+        is True
+    )
+    assert (
+        by_key[("tax_unit", "us:statutes/26/21#input.married_filing_separate_return")]
+        is True
+    )
+    assert (
+        by_key[("tax_unit", "us:statutes/26/21#input.married_joint_return_filed")]
+        is False
+    )
+    assert (
+        by_key[("tax_unit", "us:statutes/26/24/h#input.filing_status_is_joint_return")]
+        is False
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:policies/irs/rev-proc-2025-32/standard-deduction"
+                "#input.individual_is_unmarried_and_not_surviving_spouse",
+            )
+        ]
+        is False
+    )
+    assert (
+        by_key[("tax_unit", "us:statutes/26/7703#input.taxpayer_files_separate_return")]
+        is True
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.taxpayer_married_at_close_of_taxable_year",
+            )
+        ]
+        is True
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/32#input.taxpayer_is_married_under_section_7703_a",
+            )
+        ]
+        is True
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/32#input."
+                "spouse_includes_required_social_security_number_on_return",
+            )
+        ]
+        is True
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/63/f#input."
+                "additional_exemption_allowable_for_spouse_under_section_151_b",
+            )
+        ]
+        is False
+    )
+    # Spouses shared a home (LIVED_APART_FROM_SPOUSE_ALL_YEAR defaults False).
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/86#input."
+                "married_taxpayer_lived_apart_from_spouse_at_all_times_during_taxable_year",
+            )
+        ]
+        is False
+    )
+    assert by_key[("tax_unit", f"{_FIS}spouses_lived_apart_all_year")] is False
+    assert by_key[("tax_unit", f"{_FIS}satisfies_eitc_separated_spouse_rules")] is False
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.spouse_not_member_of_household_final_month_count",
+            )
+        ]
+        == 0
+    )
+    # 21(e)(3)-(4) inputs the pinned 21 reads at code 2.
+    assert by_key[("tax_unit", f"{_FIS}legally_separated_under_decree")] is False
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                f"{_FIS}maintains_household_principal_abode_of_qualifying_"
+                "individual_more_than_half_year",
+            )
+        ]
+        is False
+    )
+    assert by_key[("tax_unit", f"{_FIS}furnishes_over_half_cost_of_household")] is False
+    # No spouse entity reaches the program.
+    assert by_key[("filer", "us:statutes/26/151#input.is_spouse_of_taxpayer")] is False
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/63/f#input.spouse_has_attained_age_65_before_close_of_taxable_year",
+            )
+        ]
+        is False
+    )
+
+
+def test_axiom_tax_projection_carries_separate_filer_living_apart_facts() -> None:
+    by_key = _projected(
+        _mfs_case(
+            "mfs-lived-apart",
+            filer_age=70,
+            **{Concepts.LIVED_APART_FROM_SPOUSE_ALL_YEAR: True},
+        )
+    )
+
+    assert set(_filing_status_records(by_key, "filer").values()) == {2}
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/86#input."
+                "married_taxpayer_lived_apart_from_spouse_at_all_times_during_taxable_year",
+            )
+        ]
+        is True
+    )
+    assert by_key[("tax_unit", f"{_FIS}spouses_lived_apart_all_year")] is True
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/21#input.spouse_not_member_of_household_during_last_six_months",
+            )
+        ]
+        is True
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.spouse_not_member_of_household_final_month_count",
+            )
+        ]
+        == 12
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.taxpayer_maintains_household_as_home",
+            )
+        ]
+        is True
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.taxpayer_household_cost_fraction_furnished",
+            )
+        ]
+        == 1
+    )
+    # No child: neither 7703(b) nor 32(d)(2)(B) can apply.
+    assert by_key[("tax_unit", f"{_FIS}satisfies_eitc_separated_spouse_rules")] is False
+    # 63(f): the filer's own age counts once; the married amount comes from
+    # filing_status 2 in the pinned standard-deduction rule.
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:policies/irs/rev-proc-2025-32/standard-deduction#input."
+                "additional_standard_deduction_entitlement_count_under_subsection_f",
+            )
+        ]
+        == 1
+    )
+
+
+@pytest.mark.parametrize(
+    ("residence_facts", "final_month_count", "lived_apart"),
+    [
+        ({Concepts.LIVED_APART_FROM_SPOUSE_ALL_YEAR: True}, 12, True),
+        ({Concepts.SPOUSE_ABSENT_LAST_SIX_MONTHS: True}, 6, False),
+    ],
+    ids=["lived-apart-all-year", "absent-last-six-months"],
+)
+def test_axiom_tax_projection_gives_head_of_household_under_section_7703_b(
+    residence_facts: dict,
+    final_month_count: int,
+    lived_apart: bool,
+) -> None:
+    by_key = _projected(
+        _mfs_case(
+            "mfs-child-absent-spouse",
+            filer_age=35,
+            wages=15_000,
+            dependents=(_person("child", "Child", 8),),
+            **residence_facts,
+        )
+    )
+
+    # 7703(b) makes the filer "not considered as married", so 2(c) and 2(b)
+    # give head of household; every emitted status agrees.
+    assert set(_filing_status_records(by_key, "filer").values()) == {3}
+    assert by_key[("child", "us:statutes/26/151#input.filing_status")] == 0
+    assert (
+        by_key[("tax_unit", "us:statutes/26/21#input.married_at_close_of_taxable_year")]
+        is False
+    )
+    assert (
+        by_key[("tax_unit", "us:statutes/26/21#input.married_filing_separate_return")]
+        is False
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:policies/irs/rev-proc-2025-32/standard-deduction"
+                "#input.individual_is_unmarried_and_not_surviving_spouse",
+            )
+        ]
+        is True
+    )
+    # Still married under 7703(a) and still a separate return.
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.taxpayer_married_at_close_of_taxable_year",
+            )
+        ]
+        is True
+    )
+    assert (
+        by_key[("tax_unit", "us:statutes/26/7703#input.taxpayer_files_separate_return")]
+        is True
+    )
+    assert (
+        by_key[("tax_unit", "us:statutes/26/24/h#input.filing_status_is_joint_return")]
+        is False
+    )
+    # 32(d)(2)(B): qualifying child in the home, spouse absent.
+    assert by_key[("tax_unit", f"{_FIS}satisfies_eitc_separated_spouse_rules")] is True
+    # 7703(b)(1)-(3) household facts the pinned 7703 rule reads.
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.taxpayer_maintains_household_as_home",
+            )
+        ]
+        is True
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.taxpayer_household_cost_fraction_furnished",
+            )
+        ]
+        == 1
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.spouse_not_member_of_household_final_month_count",
+            )
+        ]
+        == final_month_count
+    )
+    assert (
+        by_key[
+            (
+                "child",
+                "us:statutes/26/7703#input.person_is_child_within_federal_tax_child_definition",
+            )
+        ]
+        is True
+    )
+    # 21(e)(4)(A): an 8-year-old dependent is a 21(b)(1)(A) qualifying
+    # individual.
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                f"{_FIS}maintains_household_principal_abode_of_qualifying_"
+                "individual_more_than_half_year",
+            )
+        ]
+        is True
+    )
+    assert by_key[("tax_unit", f"{_FIS}furnishes_over_half_cost_of_household")] is True
+    # 86(c)(1)(C)(ii) keys on living apart ALL year, not the last six months.
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/86#input."
+                "married_taxpayer_lived_apart_from_spouse_at_all_times_during_taxable_year",
+            )
+        ]
+        is lived_apart
+    )
+
+
+def test_axiom_tax_projection_keeps_cohabiting_separate_filer_married() -> None:
+    by_key = _projected(
+        _mfs_case(
+            "mfs-child-cohabiting",
+            filer_age=35,
+            wages=45_000,
+            dependents=(_person("child", "Child", 8),),
+        )
+    )
+
+    assert set(_filing_status_records(by_key, "filer").values()) == {2}
+    assert (
+        by_key[("tax_unit", "us:statutes/26/21#input.married_at_close_of_taxable_year")]
+        is True
+    )
+    assert by_key[("tax_unit", f"{_FIS}satisfies_eitc_separated_spouse_rules")] is False
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/7703#input.taxpayer_maintains_household_as_home",
+            )
+        ]
+        is False
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                f"{_FIS}maintains_household_principal_abode_of_qualifying_"
+                "individual_more_than_half_year",
+            )
+        ]
+        is False
+    )
+
+
+def test_axiom_tax_projection_requires_a_child_for_the_living_apart_rule() -> None:
+    """7703(b)(1) needs a child (152(f)(1)); a sibling dependent is not one.
+
+    The projected 152(c) relationship test also excludes siblings, so the
+    32(d)(2)(B) separated-spouse rule has no qualifying child either.
+    """
+
+    by_key = _projected(
+        _mfs_case(
+            "mfs-sibling-lived-apart",
+            filer_age=35,
+            wages=30_000,
+            dependents=(_person("sibling", "Sibling", 10),),
+            **{Concepts.LIVED_APART_FROM_SPOUSE_ALL_YEAR: True},
+        )
+    )
+
+    assert set(_filing_status_records(by_key, "filer").values()) == {2}
+    assert by_key[("tax_unit", f"{_FIS}satisfies_eitc_separated_spouse_rules")] is False
+    # The sibling is still a 21(b)(1)(A) qualifying individual, so 21(e)(4)
+    # can treat the filer as unmarried for the credit at code 2.
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                f"{_FIS}maintains_household_principal_abode_of_qualifying_"
+                "individual_more_than_half_year",
+            )
+        ]
+        is True
+    )
+
+
+def test_axiom_tax_projection_limits_cdcc_qualifying_individual_to_under_13() -> None:
+    by_key = _projected(
+        _mfs_case(
+            "mfs-teen-lived-apart",
+            filer_age=45,
+            wages=50_000,
+            dependents=(_person("child", "Child", 14),),
+            **{Concepts.LIVED_APART_FROM_SPOUSE_ALL_YEAR: True},
+        )
+    )
+
+    assert set(_filing_status_records(by_key, "filer").values()) == {3}
+    assert by_key[("tax_unit", f"{_FIS}satisfies_eitc_separated_spouse_rules")] is True
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                f"{_FIS}maintains_household_principal_abode_of_qualifying_"
+                "individual_more_than_half_year",
+            )
+        ]
+        is False
+    )
+
+
+@pytest.mark.parametrize(
+    "second_adult",
+    [
+        _person("spouse", "Spouse", 40, **{Concepts.YEARLY_EARNED_INCOME: 30_000}),
+        # No spouse relation: _tax_filers promotes a second non-dependent adult.
+        _person("roommate", "Other", 38, **{Concepts.YEARLY_EARNED_INCOME: 30_000}),
+    ],
+    ids=["explicit-spouse", "promoted-adult"],
+)
+def test_axiom_tax_projection_rejects_separate_return_with_a_spouse_filer(
+    second_adult: Entity,
+) -> None:
+    case = _mfs_case("mfs-with-spouse", dependents=(second_adult,))
+
+    with pytest.raises(RuntimeError, match=r"'mfs-with-spouse'.*spouse filer"):
+        attach_axiom_tax_inputs_to_case(case)
+
+
+def test_axiom_tax_projection_reads_residence_facts_through_separate_filing() -> None:
+    case = Case(
+        case_id="lived-apart-not-mfs",
+        period="2026",
+        facts={Concepts.LIVED_APART_FROM_SPOUSE_ALL_YEAR: True},
+        entities=(_person("filer", "HeadOfHousehold", 40),),
+    )
+
+    with pytest.raises(ValueError, match="without"):
+        attach_axiom_tax_inputs_to_case(case)
+
+
+def test_axiom_tax_projection_gates_senior_deduction_count_on_section_151() -> None:
+    """The bridge count defers to the encoded 151(d)(5)(C)(v) eligibility."""
+
+    generated_rules_by_name = {
+        rule["name"]: rule for rule in US_TAX_ORACLE_PROGRAM_RULES
+    }
+    formula = generated_rules_by_name["additional_senior_deduction_eligible_count"][
+        "versions"
+    ][0]["formula"]
+
+    assert formula.startswith("if senior_deduction_eligible: ")
+    assert formula.endswith(" else: 0")
+
+    by_key = _projected(_mfs_case("mfs-senior", filer_age=70))
+    # The gate reads filing_status 2 and the two inputs the projection sets.
+    assert by_key[("tax_unit", "us:statutes/26/151#input.filing_status")] == 2
+    assert (
+        by_key[("tax_unit", "us:statutes/26/151#input.taxpayer_is_individual")] is True
+    )
+    assert (
+        by_key[
+            (
+                "tax_unit",
+                "us:statutes/26/151#input."
+                "taxable_year_begins_before_senior_deduction_termination",
+            )
+        ]
+        is True
+    )

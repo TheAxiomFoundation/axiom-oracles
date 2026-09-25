@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from typing import Any
 
 from ...core.case import Case, Concepts, Entity
+from ...core.filing import SeparateFiling, separate_filing
 from .runner import (
     AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY,
     AXIOM_INPUT_RECORDS_METADATA_KEY,
@@ -809,14 +810,27 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="Oracle comparison bridge matching PolicyEngine adjusted earnings from leaf income facts",
         formula="taxable_earned_income_under_section_32",
     ),
+    # The age count alone admitted a married-filing-separately filer aged 65+.
+    # 26 USC 151(d)(5)(C)(v) allows the deduction to a married individual
+    # (within the meaning of section 7703) only on a joint return. The encoded
+    # us:statutes/26/151#senior_deduction_eligible applies that test from
+    # filing_status: false at code 2; at codes 0, 1 and 3 it reduces to its
+    # taxpayer_is_individual and taxable_year_begins_before_senior_deduction_
+    # termination inputs, which the projection sets true. The count defers to
+    # it rather than restating the rule.
     _generated_tax_unit_rule(
         "additional_senior_deduction_eligible_count",
         dtype="Integer",
-        source="Oracle composition bridge applying H.R.1 section 70103 age and filing-status eligibility",
+        source=(
+            "Oracle composition bridge applying H.R.1 section 70103 age and "
+            "filing-status eligibility, 26 USC 151(d)(5)(C)(ii) and (v)"
+        ),
         formula=(
+            "if senior_deduction_eligible: "
             "(if taxpayer_has_attained_age_65_before_close_of_taxable_year: 1 else: 0) "
             "+ (if spouse_has_attained_age_65_before_close_of_taxable_year "
-            "and filing_status_is_joint_return: 1 else: 0)"
+            "and filing_status_is_joint_return: 1 else: 0) "
+            "else: 0"
         ),
     ),
     _generated_tax_unit_rule(
@@ -2786,6 +2800,8 @@ US_TAX_ORACLE_PROGRAM_RULES = (
 _TAX_UNIT_ID = "tax_unit"
 _HOH_YOUNG_ADULT_DEPENDENT_AGE_LIMIT = 24
 _HOH_YOUNG_ADULT_DEPENDENT_GROSS_INCOME_LIMIT = 5_500
+# 26 USC 21(b)(1)(A); the pinned us:statutes/26/21 cdcc_child_age_limit is 13.
+_CDCC_QUALIFYING_INDIVIDUAL_AGE_LIMIT = 13
 _AXIOM_TAX_REF_PREFIX = "us:tax/federal-income-tax"
 _TAX_FILER_ADULT_AGE = 18
 _STANDARD_DEDUCTION_OTHER_CASE_2026_AMOUNT = 16_100
@@ -3453,8 +3469,9 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
     if not people:
         raise RuntimeError("Axiom federal tax projection requires at least one person.")
 
-    records = _tax_unit_input_records(case, people)
-    records.extend(_person_input_records(people))
+    filing = _tax_unit_filing(case, people)
+    records = _tax_unit_input_records(case, people, filing)
+    records.extend(_person_input_records(people, filing))
     relations = _relation_records(people)
     metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = records
     metadata[AXIOM_RELATIONS_METADATA_KEY] = [
@@ -3480,9 +3497,12 @@ def _sum_dividends(entities) -> float:
     )
 
 
-def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, Any]]:
-    head, spouse = _tax_filers(people)
-    dependents = _tax_dependents(people, head, spouse)
+def _tax_unit_input_records(
+    case: Case,
+    people: list[Entity],
+    filing: _TaxUnitFiling,
+) -> list[dict[str, Any]]:
+    head, spouse, dependents = filing.head, filing.spouse, filing.dependents
     wages = _earned_income(head) + (_earned_income(spouse) if spouse else 0)
 
     # Investment / unearned income pulled from the Case so Axiom matches what
@@ -3521,9 +3541,15 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     filer_rental = _sum_concept(earners, Concepts.RENTAL_INCOME)
     self_employment = _sum_concept(earners, Concepts.SELF_EMPLOYMENT_INCOME)
 
-    filing_status = _filing_status(spouse=spouse, dependents=dependents)
+    filing_status = filing.filing_status
     taxpayer_is_blind = bool(head.fact(Concepts.BLIND, False))
     spouse_is_blind = bool(spouse.fact(Concepts.BLIND, False)) if spouse else False
+    # Marital facts. A joint return carries the spouse entity; a separate
+    # return (filing.separate) never does. Both are married under 26 USC
+    # 7703(a). Code 3 on a separate return is the 7703(b) case, where the
+    # filer "shall not be considered as married".
+    joint_return = spouse is not None
+    married = joint_return or filing.separate.married_filing_separately
 
     inputs: dict[str, Any] = {
         "additional_standard_deduction_entitlement_count_under_subsection_f": sum(
@@ -3532,8 +3558,11 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
             for person in (head, spouse)
             if person is not None
         ),
-        "additional_exemption_allowable_for_spouse_under_section_151_b": spouse
-        is not None,
+        # 151(b) allows a spouse exemption on a separate return only for a
+        # spouse with no gross income who is not another's dependent. A
+        # separate-return Case has no spouse entity, so no spouse facts, and
+        # this stays False for it.
+        "additional_exemption_allowable_for_spouse_under_section_151_b": joint_return,
         "age_at_close_of_taxable_year": _age(head),
         "childless_taxpayer_or_spouse_age_eligible_for_eitc": (
             any(_eitc_childless_age_eligible(person) for person in people)
@@ -3553,14 +3582,25 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         ),
         "filer_meets_eitc_identification_requirements": True,
         "filing_status": filing_status,
-        "filing_status_is_joint_return": spouse is not None,
-        "individual_is_unmarried_and_not_surviving_spouse": spouse is None,
+        "filing_status_is_joint_return": joint_return,
+        # Mirrors the pinned rev-proc-2025-32 standard-deduction rule of the
+        # same name (filing_status == 0 or filing_status == 3).
+        "individual_is_unmarried_and_not_surviving_spouse": filing_status in (0, 3),
         "is_estate_or_trust": False,
         "is_colorado_tax_unit": _is_colorado_case(case),
         "is_individual": True,
-        "married_at_close_of_taxable_year": spouse is not None,
-        "married_filing_separate_return": False,
-        "married_joint_return_filed": spouse is not None,
+        # Read by 26 USC 21 (cdcc_married_filing_requirement_satisfied,
+        # cdcc_earned_income_limit) and 22 (section_22_married_filing_
+        # requirement_satisfied). 22(e)(2) determines marital status under
+        # 7703, and 21(e)(4) repeats the 7703(b) living-apart test, so a
+        # code-3 separate filer is unmarried here. True at code 3 would also
+        # deny the credit 21(e)(4) allows: the pinned
+        # treated_as_not_married_under_section_21 tests filing_status == 2.
+        # married_filing_separate_return has no reader in the pinned program
+        # and follows the same split.
+        "married_at_close_of_taxable_year": joint_return or filing_status == 2,
+        "married_filing_separate_return": filing_status == 2,
+        "married_joint_return_filed": joint_return,
         "may_be_claimed_as_dependent_by_another_taxpayer": False,
         "tax_exempt_interest_received_or_accrued": 0,
         "spouse_has_attained_age_65_before_close_of_taxable_year": bool(
@@ -3570,19 +3610,26 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
             spouse and _age(spouse) >= 55
         ),
         "spouse_is_blind_as_of_close_of_taxable_year_or_time_of_death": spouse_is_blind,
-        "spouse_includes_required_social_security_number_on_return": spouse is not None,
+        # 32(c)(1)(E)(ii) requires a married individual's return to include
+        # the spouse's TIN; the projection assumes every married return,
+        # joint or separate, does.
+        "spouse_includes_required_social_security_number_on_return": married,
         "spouse_dies_during_taxable_year": False,
         "taxable_year_is_full_12_months": True,
-        "taxpayer_files_separate_return": False,
+        "taxpayer_files_separate_return": filing.separate.married_filing_separately,
         "taxpayer_maintains_household_as_home": False,
         "taxpayer_includes_required_social_security_number_on_return": True,
         "taxpayer_has_attained_age_65_before_close_of_taxable_year": _age(head) >= 65,
         "taxpayer_has_attained_age_55_before_close_of_taxable_year": _age(head) >= 55,
         "taxpayer_is_blind_at_close_of_taxable_year": taxpayer_is_blind,
         "taxpayer_is_dependent_for_section_151_to_another_taxpayer": False,
-        "taxpayer_is_married_under_section_7703_a": spouse is not None,
-        "taxpayer_married_at_close_of_taxable_year": spouse is not None,
-        "taxpayer_married_at_time_of_spouse_death": spouse is not None,
+        # 7703(a) marital status, before the 7703(b) living-apart rule. The
+        # pinned us:statutes/26/7703 derives taxpayer_married_under_general_rule
+        # from it, and 26 USC 32 reads that together with
+        # satisfies_eitc_separated_spouse_rules.
+        "taxpayer_is_married_under_section_7703_a": married,
+        "taxpayer_married_at_close_of_taxable_year": married,
+        "taxpayer_married_at_time_of_spouse_death": married,
         "trust_all_unexpired_interests_devoted_to_section_170_c_2_B_purposes": False,
         "wages": wages,
         "wages_paid_to_individual_for_section_1401_a": wages,
@@ -3638,6 +3685,10 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         inputs.setdefault(name, _boolean_default(name, case))
     for name in _TAX_UNIT_NUMERIC_DEFAULTS:
         inputs.setdefault(name, 0)
+    if filing.separate.married_filing_separately:
+        # Applied only to a separate return, so every other Case keeps its
+        # records and their order unchanged.
+        inputs.update(_separate_return_tax_unit_inputs(filing))
     inputs.update(_case_axiom_tax_unit_inputs(case))
     inputs["deduction_provided_in_section_170_p"] = inputs.get(
         "charitable_deduction_for_non_itemizers",
@@ -3750,10 +3801,12 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     return records
 
 
-def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
-    head, spouse = _tax_filers(people)
-    dependents = _tax_dependents(people, head, spouse)
-    filing_status = _filing_status(spouse=spouse, dependents=dependents)
+def _person_input_records(
+    people: list[Entity],
+    filing: _TaxUnitFiling,
+) -> list[dict[str, Any]]:
+    head, spouse = filing.head, filing.spouse
+    filing_status = filing.filing_status
     records = []
     for person in people:
         age = _age(person)
@@ -3931,17 +3984,42 @@ def _section_7703_person_inputs(
     *,
     is_dependent: bool,
 ) -> dict[str, Any]:
-    age = _age(person)
-    relationship = _relation(person)
-    is_child_or_descendant = is_dependent and relationship in _DEPENDENT_RELATIONS
     return {
-        "person_is_child_within_federal_tax_child_definition": (
-            is_child_or_descendant and age < 19
+        "person_is_child_within_federal_tax_child_definition": _section_7703_child(
+            person,
+            is_dependent=is_dependent,
         ),
         "taxpayer_household_is_child_principal_place_of_abode": is_dependent,
         "child_principal_abode_fraction_of_taxable_year": 1 if is_dependent else 0,
         "would_be_entitled_to_child_deduction_but_for_parent_release_rule": is_dependent,
     }
+
+
+def _section_152_c_qualifying_child(dependent: Entity, *, head: Entity) -> bool:
+    """Whether the pinned us:statutes/26/152/c qualifying_child holds for a
+    dependent on the facts _section_152c_person_inputs projects: a child
+    relation, age under 19 (child_age_limit) and younger than the taxpayer.
+    The remaining projected facts (shared abode all year, no self-support,
+    no joint return, no competing claimant, no student or disability status)
+    never change the result. The same person facts drive the pinned
+    us:statutes/26/32 eitc_qualifying_child."""
+
+    age = _age(dependent)
+    return (
+        _relation(dependent) in _DEPENDENT_RELATIONS and age < 19 and age < _age(head)
+    )
+
+
+def _section_7703_child(person: Entity, *, is_dependent: bool) -> bool:
+    """The projection's 26 USC 7703(b)(1) child: a dependent under 19 with a
+    child relation. _section_7703_person_inputs projects the other 7703(b)(1)
+    person facts (the household is the child's principal abode for the whole
+    year; the 151 deduction, or the 152(e) would-be entitlement) true for
+    every dependent."""
+
+    return (
+        is_dependent and _relation(person) in _DEPENDENT_RELATIONS and _age(person) < 19
+    )
 
 
 def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
@@ -4086,12 +4164,163 @@ def _itemization_overlays() -> list[list[dict[str, Any]]]:
     ]
 
 
-def _filing_status(*, spouse: Entity | None, dependents: list[Entity]) -> int:
+@dataclass(frozen=True)
+class _TaxUnitFiling:
+    """Filers, dependents and the one filing status every record carries.
+
+    Resolved once per Case so the bridge ``filing_status``, the 1401 and 151
+    tax-unit copies and the person-level 151 copy cannot disagree.
+    """
+
+    head: Entity
+    spouse: Entity | None
+    dependents: tuple[Entity, ...]
+    separate: SeparateFiling
+    filing_status: int
+
+
+def _tax_unit_filing(case: Case, people: list[Entity]) -> _TaxUnitFiling:
+    head, spouse = _tax_filers(people)
+    separate = separate_filing(case)
+    if separate.married_filing_separately and spouse is not None:
+        # _tax_filers takes an explicit spouse relation, or else promotes the
+        # second-oldest non-dependent adult, so either would turn a separate
+        # return into a joint one.
+        raise RuntimeError(
+            f"Case {case.case_id!r} sets {Concepts.MARRIED_FILING_SEPARATELY} "
+            f"but the Axiom tax projection finds a spouse filer "
+            f"({spouse.entity_id!r}). A married-filing-separately Case holds "
+            "the filer and dependents only; a second non-dependent adult is "
+            "projected as the spouse."
+        )
+    dependents = tuple(_tax_dependents(people, head, spouse))
+    return _TaxUnitFiling(
+        head=head,
+        spouse=spouse,
+        dependents=dependents,
+        separate=separate,
+        filing_status=_filing_status(
+            spouse=spouse,
+            dependents=dependents,
+            separate=separate,
+        ),
+    )
+
+
+def _filing_status(
+    *,
+    spouse: Entity | None,
+    dependents: tuple[Entity, ...] | list[Entity],
+    separate: SeparateFiling,
+) -> int:
+    """Filing status code: 0 single, 1 joint, 2 separate, 3 head of household.
+
+    The codes are the ones the pinned rev-proc-2025-32 standard-deduction
+    ``basic_standard_deduction_by_filing_status`` matches on (4, surviving
+    spouse, is never projected).
+    """
+
     if spouse is not None:
         return 1
+    if separate.married_filing_separately:
+        # 26 USC 2(c): a filer "not married" under 7703(b) is unmarried for
+        # the head-of-household test in 2(b)(1); otherwise the separate
+        # filer is married and files code 2.
+        if _section_7703_b_applies(separate, dependents) and any(
+            _hoh_qualifying_dependent(dependent) for dependent in dependents
+        ):
+            return 3
+        return 2
     if any(_hoh_qualifying_dependent(dependent) for dependent in dependents):
         return 3
     return 0
+
+
+def _section_7703_b_applies(
+    separate: SeparateFiling,
+    dependents: tuple[Entity, ...] | list[Entity],
+) -> bool:
+    """26 USC 7703(b): a married separate filer who keeps a home for a child
+    is "not considered as married" when the spouse was not a household member
+    during the last 6 months of the year.
+
+    (b)(1) needs a child (_section_7703_child); (b)(3) is
+    ``spouse_absent_last_six_months``. No Case fact records who pays for the
+    household, so (b)(2) (the filer furnishes over half its cost) is assumed
+    whenever the spouse was absent, since the household then holds only the
+    filer and dependents. _separate_return_tax_unit_inputs projects the same
+    assumption, so the pinned us:statutes/26/7703
+    taxpayer_not_considered_married_when_living_apart agrees with this test.
+    """
+
+    return (
+        separate.married_filing_separately
+        and separate.spouse_absent_last_six_months
+        and any(
+            _section_7703_child(dependent, is_dependent=True)
+            for dependent in dependents
+        )
+    )
+
+
+def _separate_return_tax_unit_inputs(filing: _TaxUnitFiling) -> dict[str, Any]:
+    """Tax-unit inputs that only a married-filing-separately Case changes.
+
+    All but the three 26 USC 21(e)(3)-(4) inputs already exist (from the
+    literal or the defaults) with the value a non-separate Case keeps. The
+    21(e) inputs are new: at filing_status 2 with married_at_close_of_taxable_year
+    true, the pinned us:statutes/26/21 cdcc_married_filing_requirement_satisfied
+    evaluates treated_as_not_married_under_section_21, which reads them, and a
+    missing input fails the engine batch. Other statuses never reach them.
+    """
+
+    separate = filing.separate
+    lived_apart = separate.lived_apart_from_spouse_all_year
+    absent = separate.spouse_absent_last_six_months
+    return {
+        # 26 USC 86(c)(1)(C)(ii): the zero base amount applies unless the
+        # filer lived apart from the spouse at all times during the year.
+        "married_taxpayer_lived_apart_from_spouse_at_all_times_during_taxable_year": (
+            lived_apart
+        ),
+        # 26 USC 22(e)(1): the joint-return requirement does not apply to
+        # spouses who live apart at all times during the year.
+        "spouses_lived_apart_all_year": lived_apart,
+        # 26 USC 21(e)(4)(B).
+        "spouse_not_member_of_household_during_last_six_months": absent,
+        # 26 USC 32(d)(2)(B): not treated as married if married under 7703(a)
+        # without a joint return, residing with a qualifying child for over
+        # half the year, and not sharing the spouse's abode for the last 6
+        # months.
+        "satisfies_eitc_separated_spouse_rules": absent
+        and any(
+            _section_152_c_qualifying_child(dependent, head=filing.head)
+            for dependent in filing.dependents
+        ),
+        # 26 USC 7703(b)(2)-(3), read by the pinned 7703
+        # taxpayer_not_considered_married_when_living_apart. The household
+        # facts follow the assumption documented on _section_7703_b_applies.
+        "taxpayer_maintains_household_as_home": absent,
+        "taxpayer_household_cost_fraction_furnished": 1 if absent else 0,
+        "spouse_not_member_of_household_final_month_count": (
+            12 if lived_apart else 6 if absent else 0
+        ),
+        # 26 USC 21(e)(3): MARRIED_FILING_SEPARATELY means married under
+        # 7703(a), which excludes a filer separated under a decree.
+        "legally_separated_under_decree": False,
+        # 26 USC 21(e)(4)(A). A qualifying individual under 21(b)(1)(A) is a
+        # dependent under 13; the projection sets no incapable-of-self-care
+        # fact, so 21(b)(1)(B)-(C) never apply. The household facts follow
+        # the assumption documented on _section_7703_b_applies.
+        "maintains_household_principal_abode_of_qualifying_individual_more_than_half_year": (
+            absent
+            and any(
+                _age(dependent) < _CDCC_QUALIFYING_INDIVIDUAL_AGE_LIMIT
+                for dependent in filing.dependents
+            )
+        ),
+        "furnishes_over_half_cost_of_household": absent,
+    }
 
 
 def _hoh_qualifying_dependent(dependent: Entity) -> bool:
