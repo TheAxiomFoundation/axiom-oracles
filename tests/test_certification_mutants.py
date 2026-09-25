@@ -721,7 +721,15 @@ def test_nz_computed_premises_without_cleared_blockers_do_not_certify():
         assert certificate["certified"]["value"] is False
         assert certificate["certified"]["state"] == "no"
         assert certificate["verdicts"]["exercised"]["mode"] == "computed"
-        assert certificate["verdicts"]["exercised"]["value"] is True
+        straddle = certificate["verdicts"]["exercised"]["suites"][
+            "nz-treasury-incomeexplorer"
+        ]["threshold_straddle"]
+        assert straddle["mode"] == "computed"
+        assert straddle["self_check"]["complete"] is True
+        assert certificate["verdicts"]["exercised"]["value"] == straddle["complete"]
+        if program == "nz/income-tax":
+            assert certificate["verdicts"]["exercised"]["value"] is False
+            assert any("180000" in blocker for blocker in certificate["blockers"])
         assert (
             certificate["verdicts"]["exercised"]["catalog_completeness"]["mode"]
             == "computed"
@@ -940,12 +948,13 @@ def test_certified_cannot_activate_by_flipping_status_alone():
     assert cert["verdicts"]["conformant"]["mode"] == "computed"
     assert cert["verdicts"]["conformant"]["value"] is True
     assert cert["verdicts"]["exercised"]["mode"] == "computed"
-    assert cert["verdicts"]["exercised"]["value"] is True
+    assert cert["verdicts"]["exercised"]["value"] is False
     assert cert["verdicts"]["closed"]["mode"] == "attested"
     assert cert["verdicts"]["closed"]["value"] is True
     assert cert["verdicts"]["executable"]["mode"] == "attested"
     assert cert["verdicts"]["executable"]["value"] is True
-    assert cert["blockers"] == []
+    assert cert["blockers"]
+    assert all(blocker.startswith("exercise:") for blocker in cert["blockers"])
     assert cert["certified"]["value"] is False
     assert cert["certified"]["state"] == "unavailable"
 
@@ -1941,8 +1950,10 @@ def test_census_report_path_and_sha_must_match_the_registry():
     rows, complete = certify._exercise_block(
         [entry], {"suites": {"cardinality-bound": row}}, []
     )
-    assert complete is True
+    # Identity matches, but a conventional row has no computed threshold proof.
+    assert complete is False
     assert rows["cardinality-bound"]["report_identity_matches_registry"] is True
+    assert rows["cardinality-bound"]["threshold_straddle"]["mode"] == "unavailable"
 
     for field, value, marker in (
         (
@@ -2600,7 +2611,7 @@ def test_nz_certificate_path_reopens_the_committed_trace_bytes(monkeypatch):
 
 
 def test_nz_exercise_receipt_is_certificate_scoped():
-    """Adding NZ must not invalidate unrelated certificates via a global hash."""
+    """NZ certificates rederive only their own view of the trace evidence."""
 
     census = _load("exercise_census")
     certify = _load("certify")
@@ -2626,10 +2637,11 @@ def test_nz_exercise_receipt_is_certificate_scoped():
         "dk/boerne-og-ungeydelse",
         certify.PROGRAMS["dk/boerne-og-ungeydelse"],
     )
-    committed = json.loads(
-        (REPO / "certificates/dk-boerne-og-ungeydelse.json").read_text()
+    assert dk["verdicts"]["exercised"]["value"] is False
+    assert all(
+        row["threshold_straddle"]["mode"] == "unavailable"
+        for row in dk["verdicts"]["exercised"]["suites"].values()
     )
-    assert dk == committed
 
 
 @pytest.mark.parametrize(
@@ -4217,6 +4229,11 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert exercise["value"] is True
     assert exercise["fields"]["child_count"]["observed_values"] == [0, 1, 2]
     assert exercise["fields"]["yearly_earned_income_total"]["distinct"] == 10
+    straddle = exercise["threshold_straddle"]
+    assert straddle["mode"] == "computed"
+    assert straddle["complete"] is True
+    assert straddle["sites"] == []
+    assert straddle["unstraddled"] == []
     closed = certificate["verdicts"]["closed"]
     assert closed["value"] is False
     # The v3 discovery ledger is consumed through the central gate: the
@@ -4229,6 +4246,57 @@ def test_de_certificate_exercise_is_measured_and_closure_is_source_scoped():
     assert closed["blockers"] == DE_KINDERGELD_CLOSURE_BLOCKERS
     assert not closed["signature_blockers"]
     assert closed["by_signature_state"]["pending"] == 0
+
+
+def test_de_exercise_rejects_unauthenticated_parameter_only_proof(monkeypatch):
+    certify = _load("certify")
+    load = certify._load
+
+    def tampered_descriptor(path):
+        result = load(path)
+        if path.name == "de-kindergeld-signed-rulespec.json":
+            result["module"]["sha256"] = "0" * 64
+        return result
+
+    monkeypatch.setattr(certify, "_load", tampered_descriptor)
+    exercise, complete = certify._de_exercise_verdict(
+        certify.PROGRAMS["de/kindergeld"]
+    )
+    assert complete is False
+    assert exercise["value"] is False
+    assert exercise["threshold_straddle"]["mode"] == "unavailable"
+    blockers = certify._exercise_threshold_blockers(
+        "de/kindergeld", exercise["threshold_straddle"]
+    )
+    assert len(blockers) == 1
+    assert "threshold straddle not computable" in blockers[0]
+
+
+def test_exercise_requires_computed_threshold_evidence():
+    certify = _load("certify")
+    entry = certify.PROGRAMS["dk/boerne-og-ungeydelse"]["suites"][0]
+    row = {
+        "report": entry["report"],
+        "report_sha256": certify.sha256_of(REPO / entry["report"]),
+        "evidence_fields": {"income": {"distinct": 2, "state": "varied"}},
+        "bridge_audited": True,
+        "cases_scanned": 2,
+    }
+    for straddle in (
+        None,
+        {"mode": "unavailable", "complete": True},
+        {"mode": "attested", "complete": True},
+        {"mode": "computed", "complete": False},
+        {"mode": "computed", "complete": True},
+    ):
+        mutant = {**row, "threshold_straddle": straddle}
+        rows, complete = certify._exercise_block(
+            [entry], {"suites": {entry["suite"]: mutant}}, []
+        )
+        assert complete is False
+        assert certify._exercise_threshold_blockers(
+            "dk/boerne-og-ungeydelse", rows[entry["suite"]]["threshold_straddle"]
+        )
 
 
 def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(

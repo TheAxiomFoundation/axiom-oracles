@@ -1970,7 +1970,11 @@ def _attested_exercise_verdict(spec: dict, evidence: list[dict]) -> dict:
     return {
         "mode": "attested",
         "status": "attested_receipt",
-        "value": True,
+        "value": False,
+        "threshold_straddle": {
+            "mode": "unavailable",
+            "reason": "an attested input catalog supplies no committed, sha-bound IR and evaluation traces",
+        },
         "receipt": {
             "artifact": path_string,
             "sha256": sha256_of(path),
@@ -2088,7 +2092,13 @@ def _exercise_block(
     for entry in suites:
         row = (census.get("suites") or {}).get(entry["suite"])
         if row is None:
-            rows[entry["suite"]] = {"status": "no census row"}
+            rows[entry["suite"]] = {
+                "status": "no census row",
+                "threshold_straddle": {
+                    "mode": "unavailable",
+                    "reason": "no census row or committed, sha-bound compiled IR",
+                },
+            }
             complete = False
             continue
 
@@ -2154,7 +2164,26 @@ def _exercise_block(
             and row.get("root_reconciliation") == "exact"
             and bool(row.get("root_set_receipts"))
         )
+        # Only this route recomputes straddle from authenticated IR and traces
+        # in _exercise_census_for. A hand-edited conventional census row cannot
+        # promote a route with no committed IR into a computed threshold proof.
+        straddle = (
+            row.get("threshold_straddle")
+            if entry["suite"] == "nz-treasury-incomeexplorer"
+            and entry.get("view")
+            and view_scoped_traces
+            else None
+        )
+        if not isinstance(straddle, dict):
+            straddle = {
+                "mode": "unavailable",
+                "reason": "no committed, sha-bound compiled IR for this suite",
+            }
+        complete = complete and (
+            straddle.get("mode") == "computed" and straddle.get("complete") is True
+        )
         rows[entry["suite"]] = {
+            "threshold_straddle": straddle,
             **(
                 {"evaluations": row.get("evaluations_scanned")}
                 if view_scoped_traces
@@ -2222,10 +2251,9 @@ def _exercise_census_for(spec: dict) -> tuple[dict, list[dict]]:
     """Return the exercise rows and evidence relevant to one certificate.
 
     Conventional suites use the committed global census. Unified records
-    carry a complete experiment receipt of their own and are recomputed from
-    that receipt here. This keeps adding an unrelated unified record from
-    invalidating every existing certificate merely by changing the global
-    census artifact's hash.
+    carry view-scoped experiment receipts and are recomputed from their
+    committed IR and traces here. A NZ certificate cites its own trace bytes
+    rather than inheriting another view's coverage from the global census.
     """
 
     census = _load(CENSUS_PATH)
@@ -2316,6 +2344,10 @@ def _de_exercise_verdict(spec: dict) -> tuple[dict, bool]:
             "observations": row["observations"],
         }
         complete = complete and expected_state == "varied"
+    straddle = _de_threshold_straddle()
+    complete = complete and (
+        straddle.get("mode") == "computed" and straddle.get("complete") is True
+    )
     return (
         {
             "value": complete,
@@ -2324,6 +2356,7 @@ def _de_exercise_verdict(spec: dict) -> tuple[dict, bool]:
             "cases": 13,
             "view": "de/kindergeld",
             "fields": fields,
+            "threshold_straddle": straddle,
             "source": (
                 "canonical de_worker_dual_oracle_cases rebound to the unified "
                 "record's inline cases"
@@ -2331,6 +2364,85 @@ def _de_exercise_verdict(spec: dict) -> tuple[dict, bool]:
         },
         complete,
     )
+
+
+def _de_threshold_straddle() -> dict:
+    """Prove zero sites only for the authenticated, parameter-only DE roots."""
+    from threshold_straddle import parameter_only_straddle
+
+    module = _load_generator(
+        "_certificate_de_exercise_signature",
+        REPO_ROOT / "scripts" / "de_executable.py",
+    )
+    try:
+        manifest = module.load_manifest(
+            REPO_ROOT / "conformance/executable/de-kindergeld-manifest.json",
+            repo_root=REPO_ROOT,
+        )
+        path = REPO_ROOT / "conformance/executable/de-kindergeld-signed-rulespec.json"
+        verified = module._validate_signed_descriptor_document(_load(path), manifest)
+        roots = manifest["subgraph"]["root_nodes"]
+        result = parameter_only_straddle(
+            verified["module_bytes"],
+            roots=roots,
+            module_id="de:statutes/estg/66",
+        )
+        return {
+            **result,
+            "signed_module_artifact": str(path.relative_to(REPO_ROOT)),
+            "signed_module_artifact_sha256": sha256_of(path),
+        }
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        return {
+            "mode": "unavailable",
+            "reason": f"DE parameter-only root proof failed: {exc}",
+        }
+
+
+def _exercise_threshold_blockers(program: str, block: dict) -> list[str]:
+    """Explain absent computation, failed replay, and each unstraddled site."""
+    if block.get("mode") != "computed":
+        return [
+            "exercise: threshold straddle not computable — "
+            + str(block.get("reason") or "no committed, sha-bound compiled IR")
+        ]
+    blockers = [
+        f"exercise: {program} threshold straddle invalid — {defect}"
+        for defect in block.get("defects", [])
+    ]
+    self_check = block.get("self_check")
+    if isinstance(self_check, dict) and self_check.get("complete") is not True:
+        blockers.append(
+            f"exercise: {program} threshold interpreter did not exactly reproduce "
+            "every recorded requested output"
+        )
+    for site in block.get("unstraddled", []):
+        refs = ", ".join(
+            f"{ref['parameter']}[{ref.get('index')}] = {ref.get('value')}"
+            for ref in site.get("parameters", [])
+        )
+        direct = (
+            len(site.get("parameters", [])) == 1
+            and site.get("threshold") == site["parameters"][0].get("value")
+        )
+        label = refs if direct else f"{site['id']} ({refs})"
+        missing = []
+        if not site.get("below"):
+            missing.append("below")
+        if not site.get("above"):
+            missing.append("above")
+        detail = ""
+        if direct and missing == ["above"] and site.get("max_observed") is not None:
+            detail = f" (max observed {site['max_observed']})"
+        elif direct and missing == ["below"] and site.get("min_observed") is not None:
+            detail = f" (min observed {site['min_observed']})"
+        blockers.append(
+            f"exercise: {program} threshold {label} has no live oracle evaluation "
+            f"{' or '.join(missing)} it{detail}"
+        )
+    if block.get("complete") is not True and not blockers:
+        blockers.append(f"exercise: {program} threshold straddle is incomplete")
+    return blockers
 
 
 def _de_census_row(program: str, evidence: list[dict]) -> dict:
@@ -2359,6 +2471,11 @@ def _build_pending_de_certificate(program: str, spec: dict) -> dict:
     blockers = list(
         dict.fromkeys([*(row.get("blockers") or []), *(closed.get("blockers") or [])])
     )
+    straddle = {
+        "mode": "unavailable",
+        "reason": "no committed, sha-bound compiled IR for this pending DE root set",
+    }
+    blockers.extend(_exercise_threshold_blockers(program, straddle))
     return {
         "schema": SCHEMA,
         "program": program,
@@ -2387,6 +2504,7 @@ def _build_pending_de_certificate(program: str, spec: dict) -> dict:
                 "mode": "computed",
                 "status": "computed_open",
                 "missing": "no comparison corpus has been declared",
+                "threshold_straddle": straddle,
             },
             "closed": closed,
             "executable": {
@@ -2499,6 +2617,16 @@ def build_certificate(
             else ((de_census_row or {}).get("blockers") or [])
         ),
     ]
+    straddle_blocks = (
+        [exercised_block["threshold_straddle"]]
+        if "threshold_straddle" in exercised_block
+        else [
+            row["threshold_straddle"]
+            for row in exercised_block.get("suites", {}).values()
+        ]
+    )
+    for straddle in straddle_blocks:
+        blockers.extend(_exercise_threshold_blockers(program, straddle))
     for leg in reference_legs:
         for missing in leg.get("missing_required_legs") or []:
             if not spec.get("computed_de_executable"):
@@ -2523,8 +2651,8 @@ def build_certificate(
             )
         else:
             blockers.append(
-                "exercise: census incomplete (missing per-case evidence or "
-                "unaudited bridge) for at least one suite"
+                "exercise: census incomplete (missing per-case evidence, "
+                "unaudited bridge, or incomplete threshold straddle) for at least one suite"
             )
 
     closed_block = _closed_verdict(
