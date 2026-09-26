@@ -113,7 +113,7 @@ the other adapters project from.
   replaces every row's `year`, as pe-taxsim's `scripts/refresh_dashboard.py`
   does with `dict(row, year=args.year)` to run one file for 2021-2025. Without
   it, each case keeps its row's year (the TAXSIM default period of 2026 is not
-  applied). The identity records both `years_in_file` and `year_override`.
+  applied). The identity records `years_in_file`, `year_override` and the boolean `year_override_applied`.
 - **State 0 is kept.** pe-taxsim PR #1204 describes state 0 as the code TAXSIM
   reads as "no state tax", and its `refresh_dashboard.py` rejects state 0 for
   that reason. This loader does not reject or remap it: a state-0 row runs as
@@ -152,7 +152,7 @@ depends only on the ids, not on file order or Python version.
 
 The CLI report gains a top-level `dataset_identity` block: `source`
 (`taxsim-csv`), `path` (`$HOME`-relative when under home), `filename`, the full
-64-hex `sha256`, `bytes`, `rows`, `columns`, `years_in_file`, `year_override`,
+64-hex `sha256`, `bytes`, `rows`, `columns`, `years_in_file`, `year_override`, `year_override_applied`,
 `state_counts` (SOI code to row count, `"0"` included), `origin` when
 `--taxsim-csv-origin REPO@COMMIT:PATH` is given, and `selection` (load scope,
 rows in scope, sample size/seed/method, cases). A `scripts/run_comparison.py`

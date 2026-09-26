@@ -264,6 +264,7 @@ def test_identity_describes_the_file(tmp_path, monkeypatch):
         "columns": header,
         "years_in_file": [2021],
         "year_override": None,
+        "year_override_applied": False,
         "state_counts": {"0": 1, "1": 2, "5": 1, "11": 1, "21": 1},
         "origin": ORIGIN,
     }
@@ -1089,7 +1090,7 @@ def test_run_comparison_records_the_cli_dataset_identity_as_provenance(
     assert dataset["selection"]["cases"] == 6
 
 
-def test_provenance_without_a_year_override_drops_the_null(tmp_path):
+def test_provenance_without_a_year_override_records_the_boolean(tmp_path):
     run_comparison = _load_run_comparison()
     identity = taxsim_csv_identity(FIXTURE)
     assert run_comparison._taxsim_csv_dataset_provenance(identity) == identity
@@ -1099,8 +1100,27 @@ def test_provenance_without_a_year_override_drops_the_null(tmp_path):
         generated_by="test",
         dataset=run_comparison._taxsim_csv_dataset_provenance(identity),
     )
+    # The null year_override is dropped by build_provenance, but the explicit
+    # boolean keeps the "no override applied" fact in provenance.
     assert "year_override" not in block["dataset"]
+    assert block["dataset"]["year_override_applied"] is False
     assert block["dataset"]["sha256"] == FIXTURE_SHA256
+
+
+def test_empty_expected_sha256_is_rejected_not_ignored():
+    with pytest.raises(TaxsimCsvError, match="64 hexadecimal"):
+        load_taxsim_csv_cases(FIXTURE, expected_sha256="")
+
+
+def test_fractional_selector_fact_is_rejected(tmp_path):
+    text = FIXTURE.read_text().splitlines()
+    header = text[0].split(",")
+    row = text[1].split(",")
+    row[header.index("mstat")] = "1.5"
+    bad = tmp_path / "fractional.csv"
+    bad.write_text("\n".join([text[0], ",".join(row)]) + "\n")
+    with pytest.raises(TaxsimCsvError, match="mstat=1.5 is not an integer"):
+        load_taxsim_csv_cases(bad)
 
 
 # ---------------------------------------------------------------------------

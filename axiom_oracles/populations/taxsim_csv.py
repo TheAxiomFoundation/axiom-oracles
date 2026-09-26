@@ -253,7 +253,11 @@ def read_taxsim_csv(
 ) -> TaxsimCsvFile:
     """Read, hash, and validate a TAXSIM-format CSV (see the module contract)."""
     year_override = _year_override(period)
-    expected = _normalize_sha256(expected_sha256) if expected_sha256 else None
+    # ``is not None``, not truthiness: an explicitly empty pin (e.g. an unset
+    # shell variable) must fail validation, never silently disable it.
+    expected = (
+        _normalize_sha256(expected_sha256) if expected_sha256 is not None else None
+    )
     normalized_origin = _normalize_origin(origin) if origin is not None else None
 
     file_path = Path(os.path.expandvars(os.path.expanduser(os.fspath(path))))
@@ -346,6 +350,9 @@ def read_taxsim_csv(
         "columns": list(header),
         "years_in_file": sorted(years_in_file),
         "year_override": year_override,
+        # Explicit boolean so provenance (which drops null fields) still
+        # records that no override was applied.
+        "year_override_applied": year_override is not None,
         "state_counts": {
             str(code): state_counts[code] for code in sorted(state_counts)
         },
@@ -599,7 +606,14 @@ def _case_for_row(row: dict[str, Number], index: int, sha256: str) -> Case:
     for column in SELECTOR_FACT_COLUMNS:
         value = row.get(column)
         integer = _integer(value)
-        facts[column] = integer if integer is not None else value
+        if value is not None and integer is None:
+            # Contract C3: these facts are integers; a fractional value would
+            # silently defeat integer-valued disposition predicates.
+            raise TaxsimCsvError(
+                f"taxsimid {taxsimid}: {column}={value!r} is not an integer; "
+                "selector facts require integer values."
+            )
+        facts[column] = integer
     return Case(
         case_id=f"taxsim-{taxsimid}",
         period=str(year),
