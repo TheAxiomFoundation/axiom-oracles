@@ -6,6 +6,7 @@ from typing import Any
 
 from ...core.engine import EngineAdapter
 from ...core.case import Case, Concepts, Entity
+from ...core.filing import SeparateFiling, separate_filing
 from ...core.geography import pe_inputs_for_scope
 from ...core.household import Household
 from ...core.results import EngineResult
@@ -65,6 +66,11 @@ _SPM_UNIT_CASE_CONCEPT_TO_PE = {
 }
 
 _TAX_FILER_ADULT_AGE = 18
+
+# PolicyEngine inputs for a married-filing-separately return: the filer's
+# person flag and the tax unit's residence flag (see _separate_filing_inputs).
+_SEPARATE_FILER_PERSON_INPUT = "is_separated"
+_SEPARATE_RETURN_TAX_UNIT_INPUT = "cohabitating_spouses"
 
 _SPOUSE_RELATIONS = {
     "spouse",
@@ -352,6 +358,9 @@ class PolicyEngineRunner(EngineAdapter):
         person_names = []
         person_entities = list(case.entities_of_kind("person"))
         head, spouse = _tax_filers(person_entities)
+        head_separate_inputs, tax_unit_separate_inputs = _separate_filing_inputs(
+            _separate_filing(case, head, spouse)
+        )
         for index, entity in enumerate(person_entities):
             person_name = entity.entity_id or f"person_{index}"
             person_names.append(person_name)
@@ -373,6 +382,8 @@ class PolicyEngineRunner(EngineAdapter):
                     value = case.fact(concept)
                     if value is not None:
                         person_inputs[pe_variable] = {year: float(value)}
+                for pe_variable, value in head_separate_inputs.items():
+                    person_inputs[pe_variable] = {year: value}
             people[person_name] = person_inputs
 
         household_inputs = {"members": person_names}
@@ -389,6 +400,8 @@ class PolicyEngineRunner(EngineAdapter):
             value = case.fact(concept)
             if value is not None:
                 tax_unit_inputs[pe_variable] = {year: float(value)}
+        for pe_variable, value in tax_unit_separate_inputs.items():
+            tax_unit_inputs[pe_variable] = {year: value}
 
         spm_unit_inputs: dict[str, Any] = {"members": person_names}
         for concept, pe_variable in _SPM_UNIT_CASE_CONCEPT_TO_PE.items():
@@ -413,6 +426,9 @@ class PolicyEngineRunner(EngineAdapter):
         year = int(str(case.period).split("-", 1)[0])
         person_entities = list(case.entities_of_kind("person"))
         head, spouse = _tax_filers(person_entities)
+        head_separate_inputs, tax_unit_separate_inputs = _separate_filing_inputs(
+            _separate_filing(case, head, spouse)
+        )
         people = []
         for entity in person_entities:
             person_inputs = {
@@ -432,6 +448,7 @@ class PolicyEngineRunner(EngineAdapter):
                     value = case.fact(concept)
                     if value is not None:
                         person_inputs[pe_variable] = float(value)
+                person_inputs.update(head_separate_inputs)
             people.append(person_inputs)
 
         household_inputs: dict[str, Any] = {}
@@ -446,6 +463,7 @@ class PolicyEngineRunner(EngineAdapter):
             value = case.fact(concept)
             if value is not None:
                 tax_unit_inputs[pe_variable] = float(value)
+        tax_unit_inputs.update(tax_unit_separate_inputs)
 
         spm_unit_inputs: dict[str, Any] = {}
         for concept, pe_variable in _SPM_UNIT_CASE_CONCEPT_TO_PE.items():
@@ -809,6 +827,11 @@ class PolicyEngineRunner(EngineAdapter):
                 if value is not None:
                     spm_unit_row[pe_variable] = float(value)
             spm_unit_rows.append(spm_unit_row)
+            person_entities = list(case.entities_of_kind("person"))
+            head, spouse = _tax_filers(person_entities)
+            head_separate_inputs, tax_unit_separate_inputs = _separate_filing_inputs(
+                _separate_filing(case, head, spouse)
+            )
             tax_unit_row: dict[str, Any] = {
                 "tax_unit_id": tax_unit_id,
                 "tax_unit_weight": weight,
@@ -819,11 +842,10 @@ class PolicyEngineRunner(EngineAdapter):
                 value = case.fact(concept)
                 if value is not None:
                     tax_unit_row[pe_variable] = float(value)
+            tax_unit_row.update(tax_unit_separate_inputs)
             tax_unit_rows.append(tax_unit_row)
 
             person_ids = []
-            person_entities = list(case.entities_of_kind("person"))
-            head, spouse = _tax_filers(person_entities)
             for person_index, entity in enumerate(person_entities):
                 person_id = _namespaced_entity_id(
                     prefix,
@@ -868,6 +890,7 @@ class PolicyEngineRunner(EngineAdapter):
                         value = case.fact(concept)
                         if value is not None:
                             person_row[pe_variable] = float(value)
+                    person_row.update(head_separate_inputs)
                 person_rows.append(person_row)
 
             entity_ids_by_case.append(
@@ -880,6 +903,19 @@ class PolicyEngineRunner(EngineAdapter):
                     "tax_unit": [tax_unit_id],
                 }
             )
+
+        # Each input becomes one DataFrame column, and pandas fills a key that
+        # only some rows carry with NaN. When the batch holds a separate
+        # return, give every other row the explicit False that PolicyEngine
+        # would default to anyway (neither variable declares a formula or a
+        # default_value). A batch without one keeps its columns unchanged.
+        for rows, pe_variable in (
+            (person_rows, _SEPARATE_FILER_PERSON_INPUT),
+            (tax_unit_rows, _SEPARATE_RETURN_TAX_UNIT_INPUT),
+        ):
+            if any(pe_variable in row for row in rows):
+                for row in rows:
+                    row.setdefault(pe_variable, False)
 
         return (
             person_rows,
@@ -1262,6 +1298,85 @@ def _tax_filers(people: list[Entity]) -> tuple[Entity | None, Entity | None]:
     head = ranked[0]
     spouse = ranked[1] if len(ranked) > 1 else None
     return head, spouse
+
+
+def _separate_filing(
+    case: Case,
+    head: Entity | None,
+    spouse: Entity | None,
+) -> SeparateFiling:
+    """Resolve a Case's separate-return facts against its tax-unit roles.
+
+    A separate filer's Case holds the filer and their dependents, never the
+    other spouse. PolicyEngine-US 1.752.2 prices a spouse in the tax unit as
+    a joint return: ``tax_unit_married`` is any ``is_tax_unit_spouse``, and
+    ``filing_status`` selects JOINT for a married unit before it reads
+    ``is_separated``. ``_tax_filers`` puts a second non-dependent adult in
+    the spouse role even without a spouse relation, so a separate return with
+    either one is refused instead of being projected as a joint return.
+
+    Every refusal is a RuntimeError, including the resolver's ValueError, so
+    that ``_run_case_batch`` re-raises it instead of bisecting the batch.
+    """
+    try:
+        filing = separate_filing(case)
+    except ValueError as exc:
+        raise RuntimeError(str(exc)) from exc
+    if not filing.married_filing_separately:
+        return filing
+    if head is None:
+        raise RuntimeError(
+            f"Case {case.case_id!r} is a married-filing-separately return "
+            "with no person entity to file it."
+        )
+    if spouse is not None:
+        if _relation(spouse) in _SPOUSE_RELATIONS:
+            reason = f"has spouse entity {spouse.entity_id!r}"
+        else:
+            reason = (
+                f"has two non-dependent adults ({head.entity_id!r} and "
+                f"{spouse.entity_id!r}) and the PolicyEngine projection would "
+                "make the second one the tax-unit spouse"
+            )
+        raise RuntimeError(
+            f"Case {case.case_id!r} is a married-filing-separately return but "
+            f"{reason}, so PolicyEngine would compute a joint return. A "
+            "separate filer's Case holds only the filer and dependents."
+        )
+    return filing
+
+
+def _separate_filing_inputs(
+    filing: SeparateFiling,
+) -> tuple[dict[str, bool], dict[str, bool]]:
+    """PolicyEngine inputs for a separate filer (tax-unit head) and tax unit.
+
+    Both mappings are empty unless the Case is a separate return, so other
+    projections are unchanged. The filing status is not an input; in
+    PolicyEngine-US 1.752.2 it is derived:
+
+    - ``filing_status`` returns SEPARATE for an unmarried tax unit whose head
+      or spouse ``is_separated``, unless it is ``surviving_spouse_eligible``
+      or ``head_of_household_eligible`` (checked first).
+    - ``head_of_household_eligible`` is True for that unit when it has a
+      qualifying child dependent (its 7703(b) path). No PolicyEngine input
+      carries ``spouse_absent_last_six_months``, so this path does not
+      depend on it.
+    - ``cohabitating_spouses`` switches a SEPARATE return to the zero
+      Social Security base and adjusted base amounts
+      (``tax_unit_taxable_social_security``); it is True unless the spouses
+      lived apart all year.
+
+    ``separate_filer_itemizes`` (the other spouse itemizes, which zeroes
+    ``basic_standard_deduction``) has no Case fact and keeps its False
+    default.
+    """
+    if not filing.married_filing_separately:
+        return {}, {}
+    return (
+        {_SEPARATE_FILER_PERSON_INPUT: True},
+        {_SEPARATE_RETURN_TAX_UNIT_INPUT: not filing.lived_apart_from_spouse_all_year},
+    )
 
 
 def _head(people: list[Entity]) -> Entity:

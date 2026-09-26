@@ -1,0 +1,103 @@
+# Married filing separately — PolicyEngine vs NBER TAXSIM (mstat 6), synthetic.
+#
+# GATED: every case errors at the pinned policyengine-taxsim 2.30.0. Do not
+# run this lane until the TAXSIM pin moves.
+#
+# With left: policyengine and right: taxsim, _build_runner in
+# axiom_oracles/cli.py gives the PolicyEngine side PolicyEngineTaxsimRunner
+# (axiom_oracles/adapters/policyengine/taxsim_runner.py), which drives the
+# policyengine-taxsim emulator on the same TAXSIM row the binary receives.
+# The pinned 2.30.0 emulator treats mstat 6 as spouse-present
+# (runners/policyengine_runner.py: `has_spouse = np.isin(mstat, [2, 6])`)
+# and its core/input_mapper.py knows only `mstat == 2`: the design-session
+# probe (2026-09-24, policyengine-us 1.752.2) read fiitax 2,840 for a
+# $60,000 mstat 6 row, the joint-return amount, so at this pin the emulator
+# would report a couple's numbers for every case here. The runner therefore
+# runs an mstat 6 row only when the installed
+# `policyengine_taxsim.core.input_mapper` exports the capability marker
+# `MSTAT_MARRIED_SEPARATE` (MARRIED_SEPARATE_CAPABILITY in the runner;
+# absent in 2.30.0). Otherwise each such case comes back as an EngineResult
+# with no values and an error naming the capability and the pin, and only
+# the remaining rows reach the emulator, so this suite (all mstat 6)
+# yields thirteen errors and no numbers. The marker (`MSTAT_MARRIED_SEPARATE
+# = 6` in core/input_mapper.py) is on policyengine-taxsim branch
+# fix/mstat6-married-filing-separately (the sad-rubin-abba44 worktree;
+# pushed, no PR as of 2026-09-25).
+#
+# To enable: once a policyengine-taxsim release carrying the marker ships,
+# re-pin axiom_oracles/adapters/taxsim/taxsim_pins.json to it (the single
+# source of truth for the TAXSIM identity, docs/taxsim-oracle-playbook.md).
+# That re-pin moves the TAXSIM binary under EVERY TAXSIM lane, not just this
+# one, since the binary ships inside the same distribution.
+#
+# Concepts: the us-mfs-taxsim set plus AGI. Additional Medicare Tax is kept
+# even though the pinned 2.30.0 emulator emits no `addmed` column (its
+# config/variable_mappings.yaml has no entry and runners/policyengine_runner.py
+# only mentions the column in comments, routing the amount through `v44`),
+# because the same re-pin that brings the marker brings the column:
+# policyengine-taxsim #1239 (merged 2026-09-25, a80b8c1) adds
+# `addmed: variable: additional_medicare_tax` to variable_mappings.yaml and
+# the marker branch is built on top of it. _taxsim_to_policyengine_pairs in
+# the runner reads the emulator's `addmed` back as `additional_medicare_tax`.
+# Expect that concept to disagree on the $150k and higher wage rows: the
+# emulator's value is PolicyEngine's Form 8959 total with the $125,000
+# separate-return threshold, while the binary's `addmed` fits
+# 0.009 * max(0, 0.9235 * wages - 200,000) at mstat 6 (see
+# us:tax/payroll#additional_medicare_tax in
+# axiom_oracles/config/concept_mappings.yaml).
+#
+# Dashboard: an oracle-vs-oracle lane is triage tooling, not a graded Axiom
+# lane (docs/taxsim-oracle-playbook.md), so dashboard/src/utils/suites.js
+# marks this suite kind "diagnostic", which keeps it out of headline numbers
+# and out of scripts/unexplained_ratchet.py's gate (its diagnostic_suites()
+# parses that table). A dashboard block with no committed report is allowed
+# (us-tariff-schedule carries one); nothing publishes until a manual run.
+#
+# Run locally (after the re-pin):
+#   uv run scripts/run_comparison.py us-mfs-pe-taxsim --summary
+
+name: us-mfs-pe-taxsim
+title: Married filing separately — PolicyEngine vs TAXSIM
+description: >-
+  Diagnostic oracle-vs-oracle comparison of the policyengine-taxsim emulator
+  against NBER TAXSIM on thirteen synthetic Colorado married-filing-separately
+  returns (TAXSIM mstat 6) at the 2026 law year. Gated until the TAXSIM pin
+  carries emulator support for mstat 6.
+
+# Manual lane: at the current pin every case errors (see the header).
+ci: manual
+
+runner:
+  type: axiom-oracles-compare
+  # No axiom side: the generic comparator runs both Python engines directly.
+  # axiom_rules_repo is still read by the runner, but no engine binary is
+  # built and no rulespec is imported for a PolicyEngine-vs-TAXSIM run.
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    left: policyengine
+    right: taxsim
+    population: synthetic
+    # The registered case suite the CLI loads (`--suite`); `suite` below is
+    # the report label.
+    case_suite: us-mfs
+    sample_size: 0
+    period: "2026"
+    suite: us-mfs-pe-taxsim
+    include_case_inputs: true
+    concepts:
+      - us:tax/federal-income-tax#liability
+      - us:tax/federal-income-tax#agi
+      - us:tax/federal-income-tax#standard_deduction
+      - us:tax/federal-income-tax#taxable_income
+      - us:tax/federal-income-tax#tax_before_credits
+      - us:tax/federal-income-tax#eitc
+      - us:tax/federal-income-tax#ctc
+      - us:tax/payroll#employee_fica
+      - us:tax/payroll#additional_medicare_tax
+
+artifacts:
+  report_basename: policyengine-taxsim-us-mfs
+
+dashboard:
+  filename: policyengine-taxsim-us-mfs.json
+  suite: us-mfs-pe-taxsim

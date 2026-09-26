@@ -1,0 +1,91 @@
+# Married filing separately — Axiom vs NBER TAXSIM (mstat 6), synthetic.
+#
+# Runs the 13-case `us-mfs` suite (axiom_oracles/suites/us_mfs.py): one
+# spouse's separate return per case, Colorado scope, 2026 law year, never a
+# spouse entity; axiom_oracles.core.filing.separate_filing resolves the
+# separate-return facts. Same composed oracle-bridge program and pinned
+# stack as fiit-taxsim-ecps and co-tax-intersection-taxsim.
+#
+# Read the first report against these TAXSIM-side observations. They come
+# from piping this suite's projected rows, with mstat forced to 6 and again
+# at mstat 1 for contrast, through the pinned 2.30.0 macOS binary
+# (cdate-20260521, idtl=2) on 2026-09-25, so they are engine outputs
+# (hypotheses), not evidence:
+# - Brackets: mstat 6 and mstat 1 agree on fiitax up to $250k of wages and
+#   part ways above it ($450k: 120,182.25 vs 119,248.65; $750k: 232,625.25
+#   vs 227,500.25), consistent with the binary applying separate-return
+#   brackets at mstat 6. Standard deduction `v13` reads 16,100 on every
+#   childless row at both codes.
+# - Additional Medicare: `addmed` = 0.009 * max(0, 0.9235 * wages - 200,000)
+#   at mstat 6, the same as mstat 1, so the binary does not apply the
+#   $125,000 separate-return threshold of 26 USC 3101(b)(2) (pinned
+#   rulespec-us us/statutes/26/3101/b/2.yaml). mfs-wages-150000 reads
+#   addmed 0 where the encoded formula gives 0.009 * (150,000 - 125,000) =
+#   225; the $250k/$450k/$750k rows differ by the threshold and the 0.9235
+#   factor. See us:tax/payroll#additional_medicare_tax in
+#   axiom_oracles/config/concept_mappings.yaml.
+# - employee_fica: `tfica` includes `addmed` while the axiom target list
+#   does not, so rows with addmed > 0 carry that residual here as well.
+# - Social Security: the TAXSIM input row has no spouse-residence column
+#   (policyengine-taxsim's TaxsimRunner writes only its REQUIRED, dependent
+#   age, INCOME and OPTION columns), so the lived-apart case gets the same
+#   zero base amount as the cohabiting one (AGI 40,400 = 20,000 + 0.85 *
+#   24,000 on both). The $25,000 86(c)(1)(A) base the lived-apart case
+#   exercises is invisible to TAXSIM.
+# - Child cases: mstat 6 with the 8-year-old returned the same output as
+#   mstat 1 with the child (standard deduction 24,150), and the 2026 law
+#   year's documented qualifying-child credit gap applies (see
+#   TAXSIM_DEFAULT_PERIOD in axiom_oracles/cli.py), so their EITC and CTC
+#   rows are NBER-gap rows.
+# - Childless EITC: 0 at mstat 6 on all three EITC rows (positive at mstat 1).
+#
+# Run locally:
+#   uv run scripts/run_comparison.py us-mfs-taxsim --summary
+
+name: us-mfs-taxsim
+title: Married filing separately — Axiom vs TAXSIM
+description: >-
+  Compares federal liability, standard deduction, taxable income, tax before
+  credits, EITC, CTC, employee-side FICA and Additional Medicare Tax on
+  thirteen synthetic Colorado married-filing-separately returns (TAXSIM mstat
+  6) at the 2026 law year.
+
+# Same pinned engine and rulespec-us snapshot, and so the same manual-lane
+# status, as fiit-taxsim-ecps (see its header; axiom-oracles#455 tracks the
+# flip-back to engine main x rulespec-us main).
+ci: manual
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine-0c39023e
+  # run_comparison verifies the checkouts hold these revisions before running.
+  axiom_rules_repo_revision: 0c39023e
+  parameters:
+    left: axiom
+    right: taxsim
+    population: synthetic
+    # The registered case suite the CLI loads (`--suite`); `suite` below is
+    # the report label.
+    case_suite: us-mfs
+    sample_size: 0
+    period: "2026"
+    suite: us-mfs-taxsim
+    include_case_inputs: true
+    concepts:
+      - us:tax/federal-income-tax#liability
+      - us:tax/federal-income-tax#standard_deduction
+      - us:tax/federal-income-tax#taxable_income
+      - us:tax/federal-income-tax#tax_before_credits
+      - us:tax/federal-income-tax#eitc
+      - us:tax/federal-income-tax#ctc
+      - us:tax/payroll#employee_fica
+      - us:tax/payroll#additional_medicare_tax
+    axiom_rulespec_repo_roots: $HOME/oracle-pins
+    axiom_rulespec_repo_roots_revision: ca2d424f
+
+artifacts:
+  report_basename: axiom-taxsim-us-mfs
+
+dashboard:
+  filename: axiom-taxsim-us-mfs.json
+  suite: us-mfs-taxsim

@@ -1825,9 +1825,28 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     Mirrors the `axiom-encode-tax-ecps-compare` runner's environment; a suite
     whose engine stack needs a different interpreter can pin `python:` in its
     parameters.
+
+    A `population: synthetic` comparison must name its registered case suite
+    in `case_suite:`, forwarded as `--suite`. The CLI's `--suite` defaults to
+    `auto`, which resolves to nyc-synthetic for every engine pair, so an
+    omitted suite would silently compare the wrong cases. `suite:` stays the
+    report label (`--report-suite`).
     """
     axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
+    population = str(params.get("population", "enhanced-cps"))
+    case_suite = params.get("case_suite")
+    if population == "synthetic" and not case_suite:
+        raise SystemExit(
+            "population: synthetic comparisons must declare `case_suite:` "
+            "(the registered axiom_oracles suite to load); without it the "
+            "compare CLI falls back to nyc-synthetic"
+        )
+    if case_suite and population != "synthetic":
+        raise SystemExit(
+            f"`case_suite: {case_suite}` only applies to population: "
+            f"synthetic, not {population!r}"
+        )
     pe_pins = _resolve_pe_oracle_pins(params)
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
     # A pure oracle-vs-oracle comparison (e.g. taxcalc vs policyengine) has no
@@ -1868,7 +1887,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         params["left"],
         params["right"],
         "--population",
-        params.get("population", "enhanced-cps"),
+        population,
+        *(["--suite", str(case_suite)] if case_suite else []),
         "--sample-size",
         str(params.get("sample_size", 1000)),
         "--period",

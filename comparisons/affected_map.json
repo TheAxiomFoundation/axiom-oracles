@@ -1542,6 +1542,31 @@
       }
     },
     {
+      "suite": "us-mfs-pe-taxsim",
+      "name": null,
+      "report": "policyengine-taxsim-us-mfs.json",
+      "repos": [],
+      "source": "comparisons/us-mfs-pe-taxsim.yaml"
+    },
+    {
+      "suite": "us-mfs-policyengine",
+      "name": null,
+      "report": "axiom-policyengine-us-mfs.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-mfs-policyengine.yaml"
+    },
+    {
+      "suite": "us-mfs-taxsim",
+      "name": null,
+      "report": "axiom-taxsim-us-mfs.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-mfs-taxsim.yaml"
+    },
+    {
       "suite": "us-niit-grid",
       "name": "us-niit-grid",
       "report": "axiom-policyengine-us-niit-grid.json",

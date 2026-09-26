@@ -92,6 +92,7 @@ from .uk_worker import (
     uk_worker_nic_cases,
     uk_worker_pit_cases,
 )
+from .us_mfs import us_mfs_cases
 from .us_tariff import us_tariff_cases
 
 
@@ -165,6 +166,7 @@ def available_suites() -> tuple[str, ...]:
         "uk-income-tax-savings",
         "uk-income-tax-dividend",
         "uk-income-tax-mixed",
+        "us-mfs",
         "us-tariff",
     )
 
@@ -306,6 +308,8 @@ def load_suite(name: str):
         return uk_income_tax_dividend_cases()
     if name == "uk-income-tax-mixed":
         return uk_income_tax_mixed_cases()
+    if name == "us-mfs":
+        return us_mfs_cases()
     if name == "us-tariff":
         return us_tariff_cases()
     raise ValueError(f"Unknown suite: {name}")
@@ -378,5 +382,6 @@ __all__ = [
     "uk_universal_credit_cases",
     "uk_worker_nic_cases",
     "uk_worker_pit_cases",
+    "us_mfs_cases",
     "us_tariff_cases",
 ]

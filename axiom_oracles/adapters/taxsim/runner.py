@@ -10,7 +10,7 @@ from ...core.case import Case
 from ...core.engine import EngineAdapter
 from ...core.household import Household
 from ...core.results import EngineResult
-from .projection import taxsim_input_for_case
+from .projection import taxsim_input_for_case, validate_taxsim_row
 
 
 class TaxsimPackageRunner(EngineAdapter):
@@ -18,6 +18,8 @@ class TaxsimPackageRunner(EngineAdapter):
 
     Cases may carry a TAXSIM-format row in ``metadata["taxsim_input"]``. When
     absent, the adapter projects the thin Axiom case into a TAXSIM input row.
+    Every row, projected or supplied, passes :func:`validate_taxsim_row`
+    before any runner is built.
     """
 
     name = "taxsim"
@@ -36,7 +38,14 @@ class TaxsimPackageRunner(EngineAdapter):
         cases: list[Case],
         variables: list[str] | None = None,
     ) -> list[EngineResult]:
-        input_rows = self._input_rows(cases)
+        return self._run_rows(cases, self._input_rows(cases), variables)
+
+    def _run_rows(
+        self,
+        cases: list[Case],
+        input_rows: list[dict[str, Any]],
+        variables: list[str] | None,
+    ) -> list[EngineResult]:
         input_frame = self._frame_from_rows(input_rows)
         runner = self._runner_factory()(input_frame)
         output = self._run_runner(runner)
@@ -104,6 +113,10 @@ class TaxsimPackageRunner(EngineAdapter):
             else:
                 normalized = dict(row)
                 normalized.setdefault(self.id_column, case.case_id)
+            # Pre-supplied rows never pass through the projection's own check.
+            # One invalid row aborts the whole binary batch with its
+            # diagnostics discarded, so fail here, naming the case, first.
+            validate_taxsim_row(normalized, case_id=case.case_id)
             rows.append(normalized)
         return rows
 
@@ -207,11 +220,7 @@ def _selected_values(
     excluded_keys: set[str],
 ) -> dict[str, Any]:
     if variables is None:
-        return {
-            key: value
-            for key, value in record.items()
-            if key not in excluded_keys
-        }
+        return {key: value for key, value in record.items() if key not in excluded_keys}
     return {variable: record[variable] for variable in variables if variable in record}
 
 

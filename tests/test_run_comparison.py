@@ -1841,6 +1841,205 @@ def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
     assert "numba>=0.60" in cmd
 
 
+def _capture_compare_cmd(monkeypatch, run_comparison):
+    """Stub the subprocess and engine build; return the recorded commands."""
+    calls = []
+
+    def fake_run(
+        cmd, *, check, cwd=None, env=None, stdout=None, capture_output=False, text=False
+    ):
+        del check, cwd, env, stdout, capture_output, text
+        calls.append(cmd)
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
+    )
+    return calls
+
+
+def _flag_value(cmd: list[str], flag: str) -> str:
+    assert cmd.count(flag) == 1, f"{flag} must appear exactly once in {cmd}"
+    return cmd[cmd.index(flag) + 1]
+
+
+def test_axiom_oracles_runner_forwards_case_suite_for_synthetic_population(
+    monkeypatch, tmp_path
+):
+    """A synthetic compare must load its declared case suite: without
+    `--suite` the CLI's `auto` default resolves to nyc-synthetic for every
+    engine pair, so the us-mfs lanes would silently compare NYC households."""
+    run_comparison = load_run_comparison_module()
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_rules.mkdir()
+    calls = _capture_compare_cmd(monkeypatch, run_comparison)
+
+    run_comparison._run_axiom_oracles_compare(
+        {
+            "axiom_rules_repo": str(axiom_rules),
+            "parameters": {
+                "left": "axiom",
+                "right": "taxsim",
+                "population": "synthetic",
+                "case_suite": "us-mfs",
+                "sample_size": 0,
+                "period": "2026",
+                "suite": "us-mfs-taxsim",
+                "concepts": ["us:tax/payroll#additional_medicare_tax"],
+            },
+        },
+        tmp_path / "out.json",
+    )
+
+    cmd = calls[-1]
+    assert _flag_value(cmd, "--population") == "synthetic"
+    assert _flag_value(cmd, "--suite") == "us-mfs"
+    # `suite` stays the report label, distinct from the loaded case suite.
+    assert _flag_value(cmd, "--report-suite") == "us-mfs-taxsim"
+    assert _flag_value(cmd, "--concept") == "us:tax/payroll#additional_medicare_tax"
+
+
+def test_axiom_oracles_runner_requires_case_suite_for_synthetic_population(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_rules.mkdir()
+    calls = _capture_compare_cmd(monkeypatch, run_comparison)
+
+    with pytest.raises(SystemExit, match="case_suite"):
+        run_comparison._run_axiom_oracles_compare(
+            {
+                "axiom_rules_repo": str(axiom_rules),
+                "parameters": {
+                    "left": "policyengine",
+                    "right": "taxsim",
+                    "population": "synthetic",
+                    "sample_size": 0,
+                    "period": "2026",
+                    "suite": "us-mfs-pe-taxsim",
+                    "concepts": ["us:tax/federal-income-tax#liability"],
+                },
+            },
+            tmp_path / "out.json",
+        )
+    assert calls == []
+
+
+def test_axiom_oracles_runner_rejects_case_suite_off_synthetic_population(
+    monkeypatch, tmp_path
+):
+    """`case_suite` would be silently ignored by a population-backed run."""
+    run_comparison = load_run_comparison_module()
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_rules.mkdir()
+    calls = _capture_compare_cmd(monkeypatch, run_comparison)
+
+    with pytest.raises(SystemExit, match="only applies to population: synthetic"):
+        run_comparison._run_axiom_oracles_compare(
+            {
+                "axiom_rules_repo": str(axiom_rules),
+                "parameters": {
+                    "left": "axiom",
+                    "right": "taxsim",
+                    "population": "enhanced-cps",
+                    "case_suite": "us-mfs",
+                    "sample_size": 0,
+                    "period": "2026",
+                    "concepts": ["us:tax/federal-income-tax#eitc"],
+                },
+            },
+            tmp_path / "out.json",
+        )
+    assert calls == []
+
+
+def test_axiom_oracles_runner_population_backed_run_passes_no_suite(
+    monkeypatch, tmp_path
+):
+    """Existing enhanced-cps lanes keep their exact command: no `--suite`."""
+    run_comparison = load_run_comparison_module()
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_rules.mkdir()
+    calls = _capture_compare_cmd(monkeypatch, run_comparison)
+
+    run_comparison._run_axiom_oracles_compare(
+        {
+            "axiom_rules_repo": str(axiom_rules),
+            "parameters": {
+                "left": "axiom",
+                "right": "taxsim",
+                "population": "enhanced-cps",
+                "sample_size": 0,
+                "period": "2026",
+                "suite": "fiit-taxsim-ecps",
+                "concepts": ["us:tax/federal-income-tax#eitc"],
+            },
+        },
+        tmp_path / "out.json",
+    )
+
+    cmd = calls[-1]
+    assert _flag_value(cmd, "--population") == "enhanced-cps"
+    assert "--suite" not in cmd
+
+
+@pytest.mark.parametrize(
+    "name,left,right",
+    [
+        ("us-mfs-taxsim", "axiom", "taxsim"),
+        ("us-mfs-policyengine", "axiom", "policyengine"),
+        ("us-mfs-pe-taxsim", "policyengine", "taxsim"),
+    ],
+)
+def test_us_mfs_registry_configs_load_the_us_mfs_case_suite(
+    monkeypatch, tmp_path, name, left, right
+):
+    """The committed us-mfs configs, run through the real runner, load the
+    us-mfs cases and label the report with their own suite key."""
+    run_comparison = load_run_comparison_module()
+    config = run_comparison._load_comparison(name)
+    runner = config["runner"]
+    assert runner["type"] == "axiom-oracles-compare"
+    assert config["ci"] == "manual"
+    params = runner["parameters"]
+    assert (params["left"], params["right"]) == (left, right)
+    assert params["population"] == "synthetic"
+    assert params["case_suite"] == "us-mfs"
+    assert params["sample_size"] == 0
+    assert params["period"] == "2026"
+    assert params["include_case_inputs"] is True
+    assert config["dashboard"]["suite"] == params["suite"] == name
+
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    axiom_rules.mkdir()
+    roots = tmp_path / "oracle-pins"
+    roots.mkdir()
+    # The pinned checkouts live under $HOME; point both path fields at
+    # temporary directories so the command can be built anywhere.
+    monkeypatch.setattr(
+        run_comparison,
+        "_resolve_path",
+        lambda raw, field: {
+            "axiom_rules_repo": axiom_rules,
+            "axiom_rulespec_repo_roots": roots,
+        }[field],
+    )
+    calls = _capture_compare_cmd(monkeypatch, run_comparison)
+
+    run_comparison._run_axiom_oracles_compare(runner, tmp_path / "out.json")
+
+    cmd = calls[-1]
+    assert _flag_value(cmd, "--population") == "synthetic"
+    assert _flag_value(cmd, "--suite") == "us-mfs"
+    assert _flag_value(cmd, "--report-suite") == name
+    assert "--include-case-inputs" in cmd
+    concepts = [cmd[i + 1] for i, tok in enumerate(cmd) if tok == "--concept"]
+    assert concepts == params["concepts"]
+    assert ("--axiom-engine-binary" in cmd) == ("axiom" in (left, right))
+
+
 def test_completion_never_applies_to_skip_capable_lanes(monkeypatch, tmp_path):
     """NEGATIVE: euromod/gettsim/snap-qc re-emit the committed report when
     their model root or data is absent — stamping current rulespec SHAs onto a
