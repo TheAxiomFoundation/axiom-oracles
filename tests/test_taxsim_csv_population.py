@@ -797,11 +797,18 @@ def test_cli_compares_the_csv_rows_and_stamps_dataset_identity(cli_module):
         "sample_method": None,
         "cases": 6,
     }
-    # Both engines saw every row, state 0 included, at the override year.
-    for frame in _EchoRunner.frames:
-        assert sorted(frame["taxsimid"].tolist()) == [101, 102, 103, 104, 105, 106]
-        assert set(frame["year"].tolist()) == {2024}
-        assert 0 in set(frame["state"].tolist())
+    # Both engines saw every row, state 0 included, at the override year. The
+    # pinned TAXSIM runner may split rows across per-binary partitions (GA/MD
+    # 2024 run on the override binary), so check the union of frames: every
+    # taxsimid is seen exactly twice, once per engine.
+    seen = sorted(
+        taxsimid
+        for frame in _EchoRunner.frames
+        for taxsimid in frame["taxsimid"].tolist()
+    )
+    assert seen == sorted([101, 102, 103, 104, 105, 106] * 2)
+    assert all(set(frame["year"].tolist()) == {2024} for frame in _EchoRunner.frames)
+    assert any(0 in set(frame["state"].tolist()) for frame in _EchoRunner.frames)
     # The one engineered disagreement is the MFJ itemizer.
     assert [row["case_id"] for row in report["mismatches"]] == ["taxsim-104"]
     by_case = {case["case_id"]: case for case in report["cases"]}
