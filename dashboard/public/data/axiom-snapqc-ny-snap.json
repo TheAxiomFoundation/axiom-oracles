@@ -6139,7 +6139,7 @@
   "population": "snap-qc-puf",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-09-23T00:21:17Z",
+    "generated_at": "2026-09-26T11:51:33Z",
     "generated_by": "scripts/run_comparison.py::ny-snap-qc",
     "oracle": {
       "fiscal_year": 2024,
@@ -6147,13 +6147,8 @@
       "sha256": "b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5",
       "url": "https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip"
     },
-    "rulespecs": [
-      {
-        "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "f43dec520dd392bc5333934f56dad7498363e704"
-      }
-    ],
-    "run_kind": "manual",
+    "reemitted_report": true,
+    "run_kind": "affected-rerun",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

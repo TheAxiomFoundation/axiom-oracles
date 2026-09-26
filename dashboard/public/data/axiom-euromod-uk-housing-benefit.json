@@ -708,10 +708,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "6e709eb1ca7ea686263293d932c759d9dee48a4a",
+      "axiom_rules_engine_sha": "de4a5faa71dbe454de56cebe81038a691d3cdf4c",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-22T21:31:28Z",
+    "generated_at": "2026-09-26T11:43:59Z",
     "generated_by": "scripts/run_comparison.py::uk-housing-benefit-ukmod",
     "oracle": {
       "euromod_country": "UK",
