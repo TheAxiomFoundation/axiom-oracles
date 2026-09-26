@@ -24,6 +24,11 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.comparison.report_io import unpublished_registered_suites  # noqa: E402
+
 DATA = REPO_ROOT / "dashboard" / "public" / "data"
 OUT = DATA / "overview.json"
 
@@ -32,12 +37,15 @@ def build() -> dict:
     manifest = json.loads((DATA / "manifest.json").read_text())
     reports = []
     sources = {}
+    unpublished = unpublished_registered_suites(REPO_ROOT)
     for name in manifest.get("reports", []):
         path = DATA / name
         if not path.exists():
             continue
         payload = path.read_bytes()
         report = json.loads(payload)
+        if report.get("suite") in unpublished:
+            continue
         report.pop("cases", None)
         report["file"] = name
         reports.append(report)

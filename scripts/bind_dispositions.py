@@ -48,7 +48,6 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import json
 import re
 import sys
 from pathlib import Path
@@ -67,6 +66,10 @@ from axiom_oracles.comparison.dispositions import (  # noqa: E402
     selection_binding,
     suite_context,
 )
+from axiom_oracles.comparison.report_io import (  # noqa: E402
+    load_report,
+    registered_report_paths,
+)
 
 DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
@@ -84,7 +87,7 @@ def resolve_full_report(suite: str, explicit: Path | None) -> tuple[Path, dict]:
 
     if explicit is not None:
         path = explicit if explicit.is_absolute() else REPO_ROOT / explicit
-        report = json.loads(path.read_text())
+        report = load_report(path)
         if report.get("suite") != suite:
             raise SystemExit(f"{path} is not a {suite} report")
         if not _is_full(report):
@@ -92,31 +95,32 @@ def resolve_full_report(suite: str, explicit: Path | None) -> tuple[Path, dict]:
                 f"{path} is not FULL (stored mismatch rows != mismatch_count)"
             )
         return path, report
-    candidates: list[tuple[Path, dict]] = []
-    for path in sorted(DASHBOARD_DATA_DIR.glob("*.json")):
+    candidates: dict[Path, dict] = {}
+    paths = set(DASHBOARD_DATA_DIR.glob("*.json")) | set(registered_report_paths(REPO_ROOT, suites={suite}))
+    for path in sorted(paths):
         try:
-            report = json.loads(path.read_text())
-        except (OSError, json.JSONDecodeError):
+            report = load_report(path)
+        except (OSError, ValueError):
             continue
         if not isinstance(report, dict) or report.get("suite") != suite:
             continue
         if _is_full(report):
-            candidates.append((path, report))
+            candidates[path.resolve()] = report
             continue
         block = (report.get("summary") or {}).get("dispositioned") or {}
         pointer = block.get("source_report") if isinstance(block, dict) else None
         if isinstance(pointer, dict) and isinstance(pointer.get("path"), str):
             source = REPO_ROOT / pointer["path"]
-            source_report = json.loads(source.read_text())
+            source_report = load_report(source)
             if source_report.get("suite") == suite and _is_full(source_report):
-                candidates.append((source, source_report))
+                candidates[source.resolve()] = source_report
     if len(candidates) != 1:
-        found = ", ".join(str(path.relative_to(REPO_ROOT)) for path, _ in candidates)
+        found = ", ".join(str(path.relative_to(REPO_ROOT)) for path in candidates)
         raise SystemExit(
             f"need exactly one FULL {suite} report to bind against; found "
             f"{len(candidates)} ({found or 'none'}). Pass --report PATH."
         )
-    return candidates[0]
+    return next(iter(candidates.items()))
 
 
 def computed_bindings(

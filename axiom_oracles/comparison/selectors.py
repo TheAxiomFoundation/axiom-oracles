@@ -14,15 +14,17 @@ report mismatch rows, so a disposition can select rows by what they are:
   is rejected, and at least one bound beyond the row's concept and kind is
   required (:data:`BOUND_FIELDS`), so no entry can claim a whole concept.
 * :func:`mismatch_signature` — a SHA-256 over the canonical row identity
-  ``{concept, kind, delta, facts, error_signature}``; case ids and the
+  ``{concept, kind, delta, facts, error_signature}`` plus ``aux`` when
+  present; case ids and the
   engines' absolute values are deliberately excluded, so rows that differ
   only in who they are collapse onto one signature.
 * :func:`signature_population_sha256` — a digest over a population's
   ``(signature, multiplicity)`` pairs, usable as a population binding.
 * :func:`evaluate_expression` — the dispositions arithmetic evaluator
   extended with named row variables (``left``, ``right``, ``difference``,
-  and ``facts.<name>``) so evidence can be checked against every selected
-  row instead of against constants typed next to it.
+  ``facts.<name>``, ``left_aux.<name>``, and ``right_aux.<name>``) so evidence
+  can be checked against every selected row instead of against constants
+  typed next to it.
 
 Row fields read here are the ones :mod:`.report` writes: ``concept``,
 ``kind``, ``left``, ``right``, ``difference`` (signed ``left - right``),
@@ -43,7 +45,8 @@ from collections.abc import Iterable, Mapping
 from functools import lru_cache
 from typing import Any
 
-#: Fields a ``match`` selector may bound.
+#: Fields a ``match`` selector may bound. Dotted ``left_aux.<name>`` and
+#: ``right_aux.<name>`` keys also accept the numeric left/right bound schema.
 MATCH_FIELDS = frozenset(
     {
         "kind",
@@ -51,6 +54,8 @@ MATCH_FIELDS = frozenset(
         "delta",
         "left",
         "right",
+        "left_aux",
+        "right_aux",
         "error_signature",
         "error_engine",
     }
@@ -75,9 +80,21 @@ DEFAULT_VALUE_TOLERANCE = 0.005
 
 #: Plain row variables available to row arithmetic, besides ``facts.<name>``.
 ROW_VARIABLES = frozenset({"left", "right", "difference"})
+ROW_NAMESPACES = frozenset({"facts", "left_aux", "right_aux"})
 
 _HEX64 = re.compile(r"[0-9a-f]{64}")
 _FACT_NAME = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
+
+
+def _aux_field(key: object) -> tuple[str, str] | None:
+    """A dotted auxiliary predicate, e.g. ``left_aux.niit``."""
+
+    if not isinstance(key, str) or "." not in key:
+        return None
+    namespace, name = key.split(".", 1)
+    if namespace in {"left_aux", "right_aux"} and _FACT_NAME.fullmatch(name):
+        return namespace.removesuffix("_aux"), name
+    return None
 
 
 class ArithmeticEvaluationError(ValueError):
@@ -209,10 +226,11 @@ def validate_match(match: object, label: str = "match") -> list[str]:
             "(universal selectors are forbidden)"
         ]
     errors: list[str] = []
-    unknown = set(match) - MATCH_FIELDS
+    dotted_aux = {key for key in match if _aux_field(key) is not None}
+    unknown = set(match) - MATCH_FIELDS - dotted_aux
     if unknown:
         errors.append(f"{label} has unknown fields: {sorted(unknown)}")
-    if not set(match) & BOUND_FIELDS:
+    if not (set(match) & BOUND_FIELDS or dotted_aux):
         errors.append(
             f"{label} needs at least one bound beyond concept and kind "
             f"(one of {sorted(BOUND_FIELDS)}); concept/kind-only selectors "
@@ -243,6 +261,21 @@ def validate_match(match: object, label: str = "match") -> list[str]:
             errors.extend(
                 _validate_numeric_bound(match[side], f"{label}.{side}", _VALUE_KEYS)
             )
+        namespace = f"{side}_aux"
+        if namespace in match:
+            outputs = match[namespace]
+            if not isinstance(outputs, dict) or not outputs:
+                errors.append(f"{label}.{namespace} must be a non-empty mapping")
+            else:
+                for name, spec in outputs.items():
+                    if not isinstance(name, str) or not _FACT_NAME.fullmatch(name):
+                        errors.append(f"{label}.{namespace} key {name!r} must be an identifier")
+                        continue
+                    errors.extend(_validate_numeric_bound(
+                        spec, f"{label}.{namespace}.{name}", _VALUE_KEYS
+                    ))
+    for key in dotted_aux:
+        errors.extend(_validate_numeric_bound(match[key], f"{label}.{key}", _VALUE_KEYS))
     for key in ("error_signature", "error_engine"):
         if key in match:
             errors.extend(_validate_string_or_list(match[key], f"{label}.{key}"))
@@ -310,6 +343,17 @@ def match_row(match: Mapping[str, Any], row: Mapping[str, Any]) -> bool:
     for side in ("left", "right"):
         if side in match and not _numeric_bound_matches(row.get(side), match[side]):
             return False
+        namespace = f"{side}_aux"
+        if namespace in match:
+            for name, spec in match[namespace].items():
+                if not _numeric_bound_matches(_aux_value(row, side, name), spec):
+                    return False
+    for key, spec in match.items():
+        field = _aux_field(key)
+        if field is not None and not _numeric_bound_matches(
+            _aux_value(row, *field), spec
+        ):
+            return False
     error_fields = (("error_signature", "signature"), ("error_engine", "engine"))
     if any(key in match for key, _ in error_fields):
         error = row.get("error")
@@ -329,6 +373,12 @@ def match_row(match: Mapping[str, Any], row: Mapping[str, Any]) -> bool:
     return True
 
 
+def _aux_value(row: Mapping[str, Any], side: str, name: str) -> object:
+    aux = row.get("aux")
+    values = aux.get(side) if isinstance(aux, Mapping) else None
+    return values.get(name) if isinstance(values, Mapping) else None
+
+
 # ---------------------------------------------------------------------------
 # Signatures
 # ---------------------------------------------------------------------------
@@ -341,7 +391,8 @@ def _canonical(value: object) -> str:
 def mismatch_signature(row: Mapping[str, Any]) -> str:
     """SHA-256 over a mismatch row's canonical identity.
 
-    The identity is ``{concept, kind, delta, facts, error_signature}``:
+    The identity is ``{concept, kind, delta, facts, error_signature}``, with
+    ``aux`` included only when the row carries it:
     what disagreed, how, by how much, for which kind of household, and —
     for engine-error rows — with which failure. Case ids and the engines'
     absolute values are excluded on purpose (the tariff campaign's
@@ -360,6 +411,8 @@ def mismatch_signature(row: Mapping[str, Any]) -> str:
             error.get("signature") if isinstance(error, Mapping) else None
         ),
     }
+    if "aux" in row:
+        identity["aux"] = row["aux"]
     return hashlib.sha256(_canonical(identity).encode("utf-8")).hexdigest()
 
 
@@ -367,12 +420,17 @@ def row_signature(row: Mapping[str, Any]) -> str:
     """The signature a ``signatures`` selector compares against.
 
     A row that already carries a generator-stamped string ``signature``
-    keeps it (the pre-existing contract); every other row is identified by
-    :func:`mismatch_signature`.
+    keeps it when aux is absent (the pre-existing contract). With aux,
+    its stamp and auxiliary evidence are hashed together so a signature
+    population binding detects drift. Other rows use :func:`mismatch_signature`.
     """
 
     stamped = row.get("signature")
     if isinstance(stamped, str) and stamped:
+        if "aux" in row:
+            return hashlib.sha256(
+                _canonical({"signature": stamped, "aux": row["aux"]}).encode("utf-8")
+            ).hexdigest()
         return stamped
     return mismatch_signature(row)
 
@@ -434,7 +492,8 @@ def evaluate_expression(
     """Evaluate a restricted arithmetic expression.
 
     Grammar: numbers, ``+ - * /``, unary ``+``/``-``, parentheses, and —
-    only when ``variables`` is given — bare names and dotted ``facts.<name>``
+    only when ``variables`` is given — bare names and dotted ``facts.<name>``,
+    ``left_aux.<name>``, or ``right_aux.<name>``
     references, resolved by lookup in ``variables`` (never by Python
     attribute access). Calls, subscripts, comparisons, and every other
     construct raise :class:`ArithmeticEvaluationError`: evidence must be
@@ -467,9 +526,9 @@ def _variable_name(node: ast.AST) -> str | None:
     if (
         isinstance(node, ast.Attribute)
         and isinstance(node.value, ast.Name)
-        and node.value.id == "facts"
+        and node.value.id in ROW_NAMESPACES
     ):
-        return f"facts.{node.attr}"
+        return f"{node.value.id}.{node.attr}"
     return None
 
 
@@ -513,11 +572,14 @@ def _walk(
         return float(node.value)
     name = _variable_name(node)
     if name is not None and (names is not None or variables is not None):
-        if name not in ROW_VARIABLES and not name.startswith("facts."):
+        if name not in ROW_VARIABLES and not (
+            "." in name and name.partition(".")[0] in ROW_NAMESPACES
+        ):
             raise ArithmeticEvaluationError(
                 f"unknown variable {name!r} in arithmetic expression "
                 f"{expression!r}; row arithmetic may reference "
-                f"{sorted(ROW_VARIABLES)} and facts.<name>"
+                f"{sorted(ROW_VARIABLES)}, facts.<name>, left_aux.<name>, "
+                "and right_aux.<name>"
             )
         if names is not None:
             names.add(name)
@@ -532,7 +594,8 @@ def _walk(
         f"unsupported syntax in arithmetic expression {expression!r}; "
         "only numbers, + - * /, and parentheses are allowed"
         + (
-            ", plus the row variables left, right, difference and facts.<name>"
+            ", plus left, right, difference, facts.<name>, left_aux.<name>, "
+            "and right_aux.<name>"
             if names is not None or variables is not None
             else ""
         )
@@ -544,7 +607,9 @@ def row_variables(row: Mapping[str, Any]) -> dict[str, float]:
 
     ``left``, ``right``, and ``difference`` when numeric (booleans count as
     0/1, matching how the comparator scores eligibility values), plus
-    ``facts.<name>`` for every numeric or boolean fact. A non-numeric or
+    ``facts.<name>`` for every numeric or boolean fact, and
+    ``left_aux.<name>``/``right_aux.<name>`` for numeric auxiliary outputs.
+    A non-numeric or
     missing value is simply absent, so an expression that references it
     fails with a clear error instead of silently reading zero.
     """
@@ -563,4 +628,13 @@ def row_variables(row: Mapping[str, Any]) -> dict[str, float]:
                 variables[f"facts.{name}"] = float(value)
             elif _is_number(value):
                 variables[f"facts.{name}"] = float(value)
+    aux = row.get("aux")
+    if isinstance(aux, Mapping):
+        for side in ("left", "right"):
+            values = aux.get(side)
+            if not isinstance(values, Mapping):
+                continue
+            for name, value in values.items():
+                if isinstance(value, bool) or _is_number(value):
+                    variables[f"{side}_aux.{name}"] = float(value)
     return variables

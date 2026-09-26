@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Join dispositions/<suite>.yaml into checked-in dashboard reports.
+"""Join dispositions into dashboard reports and registered report artifacts.
 
 Comparison suites that run outside CI (the EUROMOD Belgium lane, for
 example) commit their dashboard JSON directly, so the disposition merge that
@@ -34,6 +34,7 @@ import argparse
 import hashlib
 import json
 import sys
+from collections.abc import Iterator
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -49,6 +50,12 @@ from axiom_oracles.comparison.dispositions import (  # noqa: E402
     report_is_taxsim_lane,
     report_json_text,
     suite_context,
+)
+from axiom_oracles.comparison.report_io import (  # noqa: E402
+    load_report,
+    read_report_text,
+    registered_report_paths,
+    write_report_text,
 )
 
 DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
@@ -121,10 +128,32 @@ def _dashboard_reports() -> list[tuple[Path, dict]]:
     return reports
 
 
+def _reports(*, suites: set[str] | None = None) -> Iterator[tuple[Path, dict]]:
+    """Published reports plus explicit suite artifacts, never report archives."""
+
+    reports = [
+        (path, report) for path, report in _dashboard_reports()
+        if suites is None or report.get("suite") in suites
+    ]
+    yield from reports
+    seen = {path.resolve() for path, _ in reports}
+    for path in registered_report_paths(REPO_ROOT, suites=suites):
+        if path in seen:
+            continue
+        # Missing or malformed registered artifacts must fail --check rather
+        # than disappearing from the ledger validation surface.
+        report = load_report(path)
+        if "summary" not in report or "suite" not in report:
+            raise ValueError(f"{path}: registered artifact is not a comparison report")
+        yield path, report
+
+
 def _serialize_like(path: Path, original_text: str, report: dict) -> str:
     """Rewrite `report` in the same on-disk format `path` already uses."""
 
     original = json.loads(original_text)
+    if path.suffix == ".gz":
+        return json.dumps(report, sort_keys=True, separators=(",", ":"), allow_nan=False) + "\n"
     if report_json_text(original) == original_text:
         return report_json_text(report)
     plain = json.dumps(original, indent=2, sort_keys=True)
@@ -148,7 +177,7 @@ def _merge_reports(
     problems: list[str] = []
     be_reports: list[dict] = []
     changed = False
-    for path, report in _dashboard_reports():
+    for path, report in _reports():
         suite = report.get("suite")
         dispositions = dispositions_by_suite.get(suite)
         if dispositions is None:
@@ -183,7 +212,7 @@ def _merge_reports(
         )
         if str(suite).startswith("be-"):
             be_reports.append(merged)
-        original_text = path.read_text()
+        original_text = read_report_text(path)
         merged_text = _serialize_like(path, original_text, merged)
         if merged_text == original_text:
             continue
@@ -193,7 +222,7 @@ def _merge_reports(
                 "`uv run scripts/apply_dispositions.py`"
             )
         else:
-            path.write_text(merged_text)
+            write_report_text(path, merged_text)
             print(f"Updated {path.relative_to(REPO_ROOT)}")
             changed = True
     return problems, be_reports, changed
@@ -211,10 +240,11 @@ def _committed_full_reports(suite: str) -> list[tuple[Path, dict]]:
     reports_dir = REPO_ROOT / "reports"
     if not reports_dir.exists():
         return matches
-    for path in sorted(reports_dir.glob("*.json")):
+    paths = set(reports_dir.glob("*.json")) | set(registered_report_paths(REPO_ROOT, suites={suite}))
+    for path in sorted(paths):
         try:
-            data = json.loads(path.read_text())
-        except json.JSONDecodeError:
+            data = load_report(path)
+        except ValueError:
             continue
         if not isinstance(data, dict) or data.get("suite") != suite:
             continue
@@ -392,8 +422,8 @@ def _resolve_source_pointer(
         )
         return None
     try:
-        data = json.loads(payload)
-    except json.JSONDecodeError:
+        data = json.loads(read_report_text(candidate))
+    except (ValueError, OSError, EOFError):
         problems.append(f"{rel} source_report {raw_path!r} is not JSON")
         return None
     if not isinstance(data, dict) or data.get("suite") != suite:
@@ -469,14 +499,14 @@ def _report_orphans(dispositions_by_suite: dict[str, dict]) -> None:
     """Warn about entries that no longer match any live mismatch row."""
 
     reports_by_suite = {
-        report.get("suite"): report for _, report in _dashboard_reports()
+        report.get("suite"): report for _, report in _reports(suites=set(dispositions_by_suite))
     }
     for suite, dispositions in sorted(dispositions_by_suite.items()):
         report = reports_by_suite.get(suite)
         if report is None:
             print(
                 f"note: dispositions/{suite}.yaml has no committed "
-                "dashboard report"
+                "report"
             )
             continue
         if _is_premerged_slim_report(report):
@@ -528,9 +558,13 @@ def main() -> int:
         f"file{'s' if len(dispositions_by_suite) != 1 else ''}"
     )
 
-    problems, be_reports, _ = _merge_reports(
-        dispositions_by_suite, check=args.check
-    )
+    try:
+        problems, be_reports, _ = _merge_reports(
+            dispositions_by_suite, check=args.check
+        )
+    except (OSError, ValueError, EOFError) as exc:
+        print(f"Cannot validate registered report: {exc}", file=sys.stderr)
+        return 1
     rollup_problems, _ = _refresh_be_rollup(be_reports, check=args.check)
     problems.extend(rollup_problems)
     _report_orphans(dispositions_by_suite)
@@ -539,7 +573,7 @@ def main() -> int:
         for problem in problems:
             print(problem, file=sys.stderr)
         return 1
-    print("Dispositions are consistent with the committed dashboard data")
+    print("Dispositions are consistent with the committed reports")
     return 0
 
 

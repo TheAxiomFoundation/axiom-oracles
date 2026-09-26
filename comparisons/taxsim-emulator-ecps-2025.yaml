@@ -1,0 +1,85 @@
+# Recorded PolicyEngine TAXSIM emulator dashboard benchmark; pending d229.
+name: taxsim-emulator-ecps-2025
+title: PolicyEngine TAXSIM emulator ECPS 2025
+description: Verified recorded federal and state liability outputs, absolute $15 agreement.
+ci: manual
+runner:
+  type: axiom-oracles-compare
+  parameters:
+    left: policyengine
+    right: taxsim
+    population: taxsim-csv
+    taxsim_csv:
+      path: $AXIOM_TAXSIM_CSV
+      sha256: ecabc8dd33e8b570fad21650745b9d94f6b51fc9780d9c59bb033ede7d16a689
+      origin:
+        repo: PolicyEngine/policyengine-taxsim
+        commit: 2b69146bfb2e16f83e1c021d72c4258d67872190
+        path: cps_households.csv
+    sample_size: 0
+    report_include_cases: false
+    period: "2025"
+    suite: taxsim-emulator-ecps-2025
+    taxsim_pin_profile: dashboard-2026-09
+    recorded_release:
+      repo: PolicyEngine/policyengine-taxsim
+      tag: full-ecps-comparison-run-35953332152
+      path_env: AXIOM_TAXSIM_RECORDED_RELEASE
+      sha256_by_year:
+        "2025": 22d6d4b2b40e5b3d8e81636e98ace2791de5416b5d6c1f5abf24487a51125a14
+    concepts:
+      - us:tax/federal-income-tax#liability
+      - us:tax/state-income-tax#liability
+    tolerance: 15
+    relative_tolerance: 0
+    # v32 = state AGI, v36 = state taxable income: pe-taxsim README.md
+    # at a80b8c1dca088b147e36f9c770ed92d403d747f6, idtl=2 output table.
+    row_aux_outputs:
+      - niit
+      - addmed
+      - srebate
+      - staxbc
+      - fica
+      - tfica
+      - sctc
+      - samt
+      - qbid
+      - actc
+      - senergy
+      - sptcr
+      - v10
+      - v11
+      - v12
+      - v13
+      - v14
+      - v15
+      - v16
+      - v17
+      - v18
+      - v19
+      - v20
+      - v21
+      - v22
+      - v23
+      - v24
+      - v25
+      - v26
+      - v27
+      - v28
+      - v29
+      - v30
+      - v31
+      - v32
+      - v33
+      - v34
+      - v35
+      - v36
+      - v37
+      - v38
+      - v39
+      - v40
+      - v41
+
+artifacts:
+  report_basename: taxsim-emulator-ecps-2025
+  report_path: reports/taxsim-emulator/taxsim-emulator-ecps-2025.json.gz

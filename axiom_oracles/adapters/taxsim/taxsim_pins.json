@@ -364,6 +364,15 @@
         }
       ]
     },
+    "september-2026-09-no-fallback": {
+      "description": "September 2026 builds for every state and year, with no dashboard fallback; used to observe the Maryland batch-crash reproducers from policyengine-taxsim #1214.",
+      "binaries": {
+        "linux": "8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059",
+        "darwin": "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d",
+        "windows": "b8696133cc9d7b0ce7f81f69a38cbb4dcdbad196a386f55f17846b9c9806d0d0"
+      },
+      "overrides": []
+    },
     "pe-taxsim-main-2026-08": {
       "description": "The August 18 builds bundled on policyengine-taxsim main (resources/taxsimtest, introduced by PR #1150) and in the policyengine-taxsim 2.31.7 wheel, for every state and year.",
       "binaries": {

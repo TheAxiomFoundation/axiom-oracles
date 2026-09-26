@@ -405,6 +405,8 @@ def _mismatch_rows(
                 row["facts"] = dict(facts)
             if error is not None:
                 row["error"] = error
+            if item.aux is not None:
+                row["aux"] = {side: dict(values) for side, values in item.aux.items()}
             rows.append(row)
     return rows
 

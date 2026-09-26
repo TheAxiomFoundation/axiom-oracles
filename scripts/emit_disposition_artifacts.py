@@ -24,6 +24,11 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from axiom_oracles.comparison.report_io import unpublished_registered_suites  # noqa: E402
+
 DISPOSITIONS = ROOT / "dispositions"
 OUT = ROOT / "dashboard" / "public" / "data" / "dispositions"
 SUITE_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]*$")
@@ -56,17 +61,25 @@ def compact_entry(entry: dict) -> dict:
 def _selected_paths(suites: list[str]) -> tuple[list[Path], list[str]]:
     """Resolve requested suite slugs without allowing path traversal."""
 
+    unpublished = unpublished_registered_suites(ROOT)
     if not suites:
         paths = sorted(DISPOSITIONS.glob("*.yaml"))
         if not paths:
             return [], [f"no disposition YAML files found under {DISPOSITIONS}"]
-        return paths, []
+        leaked = [
+            f"{suite}: unpublished ledger has a dashboard disposition artifact"
+            for suite in sorted(unpublished) if (OUT / f"{suite}.json").exists()
+        ]
+        return [path for path in paths if path.stem not in unpublished], leaked
 
     paths: list[Path] = []
     problems: list[str] = []
     for suite in dict.fromkeys(suites):
         if not SUITE_RE.fullmatch(suite):
             problems.append(f"invalid suite slug {suite!r}")
+            continue
+        if suite in unpublished:
+            problems.append(f"{suite}: not a published dashboard suite")
             continue
         path = DISPOSITIONS / f"{suite}.yaml"
         if not path.is_file():
@@ -164,7 +177,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "suite",
         nargs="*",
-        help="Suite slug(s) to emit or check; defaults to every YAML source.",
+        help="Suite slug(s) to emit or check; defaults to dashboard-eligible YAML sources.",
     )
     args = parser.parse_args(argv)
 
@@ -201,7 +214,8 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0
 
-    OUT.mkdir(parents=True, exist_ok=True)
+    if artifacts:
+        OUT.mkdir(parents=True, exist_ok=True)
     for suite, text, _ in artifacts:
         (OUT / f"{suite}.json").write_text(text)
     print(f"emitted {len(artifacts)} disposition artifacts -> {OUT}")

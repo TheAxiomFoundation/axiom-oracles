@@ -127,3 +127,29 @@ def test_invalid_suite_slug_cannot_escape_dispositions_directory(
     assert module.main(["--check", "../outside"]) == 1
     assert not output.exists()
     assert "invalid suite slug '../outside'" in capsys.readouterr().err
+
+
+def test_unpublished_ledger_dispositions_cannot_publish_implicitly_or_explicitly(
+    tmp_path, monkeypatch, capsys
+):
+    module, dispositions, output = _isolated_module(tmp_path, monkeypatch)
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+    suite = "taxsim-emulator-ecps-2024"
+    configs = tmp_path / "comparisons"
+    configs.mkdir()
+    (configs / f"{suite}.yaml").write_text(
+        f"name: {suite}\nci: manual\nartifacts:\n"
+        f"  report_path: reports/taxsim-emulator/{suite}.json.gz\n"
+    )
+    _write_disposition(dispositions, suite, mechanism="Recorded auxiliary reconciliation")
+    _write_disposition(dispositions, "legacy", mechanism="Legacy published disposition")
+    assert module.main([]) == 0
+    assert (output / "legacy.json").exists()
+    assert not (output / f"{suite}.json").exists()
+    assert module.main(["--check"]) == 0
+    assert module.main([suite]) == 1
+    assert "not a published dashboard suite" in capsys.readouterr().err
+    assert not (output / f"{suite}.json").exists()
+    (output / f"{suite}.json").write_text("{}")
+    assert module.main(["--check"]) == 1
+    assert "unpublished ledger has a dashboard" in capsys.readouterr().err

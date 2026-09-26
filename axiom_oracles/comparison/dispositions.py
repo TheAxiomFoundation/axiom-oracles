@@ -958,7 +958,9 @@ def selected_rows_sha256(rows: list[dict]) -> str:
     Sorted by case id; each row contributes its identity plus the exact
     ``left``/``right``/signed ``difference`` values, so any value movement —
     sign flips, balanced multi-row swaps, anything that preserves aggregates —
-    changes the digest (sol closing review r2 finding 2).
+    changes the digest (sol closing review r2 finding 2). Auxiliary output
+    evidence extends the row encoding only when ``aux`` is present, keeping
+    pre-existing population bindings unchanged when it is absent.
     """
     canonical = sorted(
         [
@@ -968,6 +970,7 @@ def selected_rows_sha256(rows: list[dict]) -> str:
             json.dumps(row.get("right"), sort_keys=True),
             json.dumps(row.get("difference"), sort_keys=True),
         ]
+        + ([json.dumps(row["aux"], sort_keys=True)] if "aux" in row else [])
         for row in rows
     )
     return hashlib.sha256(

@@ -47,6 +47,7 @@ from axiom_oracles.evidence import (  # noqa: E402
     dashboard_delta,
     dashboard_match_rate,
 )
+from axiom_oracles.comparison.report_io import unpublished_registered_suites  # noqa: E402
 
 REPORTS = REPO_ROOT / "reports"
 DASHBOARD_DATA = REPO_ROOT / "dashboard" / "public" / "data"
@@ -473,11 +474,12 @@ def dashboard_suites() -> dict[str, dict]:
     nyc-synthetic) — those emit from the dashboard report's own embedded
     rows when complete."""
     out = {}
+    unpublished = unpublished_registered_suites(REPO_ROOT)
     for path in glob.glob(str(REPO_ROOT / "comparisons" / "*.yaml")):
         text = Path(path).read_text()
         suite = re.search(r'^\s*suite:\s*([\w-]+)', text, re.M)
         base = re.search(r'^\s*report_basename:\s*([\w-]+)', text, re.M)
-        if suite and base:
+        if suite and base and suite.group(1) not in unpublished:
             out[suite.group(1)] = {"basename": base.group(1)}
     manifest = DASHBOARD_DATA / "manifest.json"
     if manifest.exists():
@@ -490,7 +492,7 @@ def dashboard_suites() -> dict[str, dict]:
             except (OSError, json.JSONDecodeError):
                 continue
             suite = report.get("suite")
-            if suite and suite not in out:
+            if suite and suite not in out and suite not in unpublished:
                 out[suite] = {"basename": name[: -len(".json")]}
     return out
 

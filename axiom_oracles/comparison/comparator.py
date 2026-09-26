@@ -36,6 +36,9 @@ class HouseholdComparison:
     # say which binary failed and how.
     left_error_detail: Mapping[str, Any] | None = None
     right_error_detail: Mapping[str, Any] | None = None
+    # Requested raw output columns, retained for row-level reconciliation.
+    # None preserves the shape of every report that does not request them.
+    aux: Mapping[str, Mapping[str, Value]] | None = None
 
     def __post_init__(self) -> None:
         if self.has_engine_errors:
@@ -78,8 +81,15 @@ class Comparator:
         right_results: list[EngineResult],
         *,
         outputs_by_case: Mapping[int | str, Sequence[str]] | None = None,
+        row_aux_outputs: Sequence[str] = (),
     ) -> list[HouseholdComparison]:
         """Compare selected mappings, optionally scoped to each case's outputs."""
+        if isinstance(row_aux_outputs, str) or any(
+            not isinstance(name, str) or not name.isidentifier()
+            for name in row_aux_outputs
+        ):
+            raise ValueError("row_aux_outputs must be a sequence of output identifiers")
+        require_unique_ids(row_aux_outputs, "auxiliary output names")
         left_ids = [result.household_id for result in left_results]
         right_ids = [result.household_id for result in right_results]
         require_unique_ids(left_ids, "left result household IDs")
@@ -133,6 +143,13 @@ class Comparator:
                     right_errors=right.errors,
                     left_error_detail=_error_detail(left),
                     right_error_detail=_error_detail(right),
+                    aux=(
+                        {
+                            "left": _aux_outputs(left, row_aux_outputs),
+                            "right": _aux_outputs(right, row_aux_outputs),
+                        }
+                        if row_aux_outputs else None
+                    ),
                 )
             )
 
@@ -233,6 +250,17 @@ class Comparator:
         if isinstance(value, bool):
             return float(value)
         return float(value)
+
+
+def _aux_outputs(result: EngineResult, names: Sequence[str]) -> dict[str, Value]:
+    """Read original output columns before falling back to normalized values.
+
+    An unavailable output stays null, so row arithmetic cannot mistake it for
+    a computed zero. TAXSIM's raw output record uses the original column names.
+    """
+
+    raw = result.raw if isinstance(result.raw, Mapping) else {}
+    return {name: raw[name] if name in raw else result.get(name) for name in names}
 
 
 def _error_detail(result: EngineResult) -> Mapping[str, Any] | None:

@@ -36,6 +36,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+  "hypothesis>=6.0",
   "pytest>=8.0",
   "ruff>=0.14",
   # The euromod worker's per-household isolation test drives the real

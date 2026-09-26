@@ -1121,6 +1121,62 @@
       "source": "comparisons/taxcalc-fiit-ecps.yaml"
     },
     {
+      "suite": "taxsim-crash-probes-2024",
+      "name": null,
+      "report": null,
+      "repos": [],
+      "source": "comparisons/taxsim-crash-probes-2024.yaml"
+    },
+    {
+      "suite": "taxsim-crash-probes-2025",
+      "name": null,
+      "report": null,
+      "repos": [],
+      "source": "comparisons/taxsim-crash-probes-2025.yaml"
+    },
+    {
+      "suite": "taxsim-emulator-ecps-2021",
+      "name": null,
+      "report": null,
+      "repos": [],
+      "source": "comparisons/taxsim-emulator-ecps-2021.yaml"
+    },
+    {
+      "suite": "taxsim-emulator-ecps-2022",
+      "name": null,
+      "report": null,
+      "repos": [],
+      "source": "comparisons/taxsim-emulator-ecps-2022.yaml"
+    },
+    {
+      "suite": "taxsim-emulator-ecps-2023",
+      "name": null,
+      "report": null,
+      "repos": [],
+      "source": "comparisons/taxsim-emulator-ecps-2023.yaml"
+    },
+    {
+      "suite": "taxsim-emulator-ecps-2024",
+      "name": null,
+      "report": null,
+      "repos": [],
+      "source": "comparisons/taxsim-emulator-ecps-2024.yaml"
+    },
+    {
+      "suite": "taxsim-emulator-ecps-2025",
+      "name": null,
+      "report": null,
+      "repos": [],
+      "source": "comparisons/taxsim-emulator-ecps-2025.yaml"
+    },
+    {
+      "suite": "taxsim-emulator-probes",
+      "name": null,
+      "report": null,
+      "repos": [],
+      "source": "comparisons/taxsim-emulator-probes.yaml"
+    },
+    {
       "suite": "tn-snap-ecps",
       "name": null,
       "report": "axiom-policyengine-tn-snap-ecps.json",

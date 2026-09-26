@@ -182,14 +182,15 @@ def repos_for_registry_config(config: dict) -> set[str]:
     # rerun (and merely re-emit) the baseline whenever rulespec-de moves, while
     # its report correctly carries no rulespec provenance. The same holds for
     # an axiom-oracles-compare suite with no `axiom` side (e.g. the
-    # Tax-Calculator-vs-PolicyEngine triangulation): no rulespec executes, so
-    # rules movement cannot change its numbers (#296).
+    # Tax-Calculator-vs-PolicyEngine triangulation) and TAXSIM executable
+    # probes: no rulespec executes, so rules movement cannot change their
+    # numbers (#296).
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
     # Both sides must be declared to qualify — a config missing left/right
     # keeps its concept-derived dependencies (over-rerunning is safe; silently
     # unmapping a suite is not).
     direct_oracle_pair = (
-        runner.get("type") == "axiom-oracles-compare"
+        runner.get("type") in {"axiom-oracles-compare", "taxsim-probes"}
         and bool(params.get("left"))
         and bool(params.get("right"))
         and "axiom" not in engines

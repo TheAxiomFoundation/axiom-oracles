@@ -1,0 +1,647 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [
+        "us:tax/federal-income-tax#agi",
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#taxable_income",
+        "us:tax/federal-income-tax#tax_before_credits",
+        "us:tax/federal-income-tax#nonrefundable_credits",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#cdcc",
+        "us:tax/federal-income-tax#aotc",
+        "us:tax/federal-income-tax#amt",
+        "us:tax/federal-income-tax#capital_gain",
+        "us:tax/payroll#employee_oasdi",
+        "us:tax/payroll#employee_medicare",
+        "us:tax/payroll#employer_oasdi",
+        "us:tax/payroll#employer_medicare",
+        "us:tax/payroll#employee_fica"
+      ],
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "left_weighted_sum": 98631.703125,
+      "match_rate": 0,
+      "match_weight": 0,
+      "mismatch_count": 2,
+      "mismatch_weight": 2,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 99783.3,
+      "weighted_difference": -1151.596875,
+      "weighted_match_rate": 0
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "us:tax/state-income-tax#liability",
+      "description": "State income tax liability",
+      "left_weighted_sum": 0,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 0,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 2,
+  "cases": [
+    {
+      "case_id": "taxsim-77",
+      "left_engine": "policyengine",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:tax/state-income-tax#liability",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "dataset_sha256": "a16fd5d9220e649059b23af0e7f54712ca2121303f95df51ae4dfe3515fd5099",
+        "locale": "US",
+        "population": "taxsim-csv",
+        "scope": {
+          "geoid": "US",
+          "type": "country"
+        },
+        "selector_facts": {
+          "depx": 0,
+          "idtl": 2,
+          "mstat": 2,
+          "page": 45,
+          "sage": 45,
+          "state": null,
+          "taxsim_state": 0,
+          "year": 2024
+        },
+        "source_row": 1,
+        "taxsim_input": {
+          "depx": 0,
+          "idtl": 2,
+          "mortgage": 30000,
+          "mstat": 2,
+          "page": 45,
+          "proptax": 3000,
+          "pwages": 300000,
+          "sage": 45,
+          "state": 0,
+          "taxsimid": 77,
+          "year": 2024
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": -849.1484375,
+          "facts": {
+            "depx": 0,
+            "idtl": 2,
+            "mstat": 2,
+            "page": 45,
+            "sage": 45,
+            "state": null,
+            "taxsim_state": 0,
+            "year": 2024
+          },
+          "kind": "amount_difference",
+          "left": 49315.8515625,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 50165.0,
+          "tolerance": 15
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "taxsim-78",
+      "left_engine": "policyengine",
+      "left_errors": [],
+      "match_rate": 50.0,
+      "matches": [
+        {
+          "concept": "us:tax/state-income-tax#liability",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "dataset_sha256": "a16fd5d9220e649059b23af0e7f54712ca2121303f95df51ae4dfe3515fd5099",
+        "locale": "US-TX",
+        "population": "taxsim-csv",
+        "scope": {
+          "geoid": "48",
+          "type": "census_state"
+        },
+        "selector_facts": {
+          "depx": 0,
+          "idtl": 2,
+          "mstat": 2,
+          "page": 45,
+          "sage": 45,
+          "state": "TX",
+          "taxsim_state": 44,
+          "year": 2024
+        },
+        "source_row": 2,
+        "taxsim_input": {
+          "depx": 0,
+          "idtl": 2,
+          "mortgage": 30000,
+          "mstat": 2,
+          "page": 45,
+          "proptax": 3000,
+          "pwages": 300000,
+          "sage": 45,
+          "state": 44,
+          "taxsimid": 78,
+          "year": 2024
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": -302.4484375000029,
+          "facts": {
+            "depx": 0,
+            "idtl": 2,
+            "mstat": 2,
+            "page": 45,
+            "sage": 45,
+            "state": "TX",
+            "taxsim_state": 44,
+            "year": 2024
+          },
+          "kind": "amount_difference",
+          "left": 49315.8515625,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 49618.3,
+          "tolerance": 15
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [
+        "us:tax/federal-income-tax#agi",
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#taxable_income",
+        "us:tax/federal-income-tax#tax_before_credits",
+        "us:tax/federal-income-tax#nonrefundable_credits",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#cdcc",
+        "us:tax/federal-income-tax#aotc",
+        "us:tax/federal-income-tax#amt",
+        "us:tax/federal-income-tax#capital_gain",
+        "us:tax/payroll#employee_oasdi",
+        "us:tax/payroll#employee_medicare",
+        "us:tax/payroll#employer_oasdi",
+        "us:tax/payroll#employer_medicare",
+        "us:tax/payroll#employee_fica"
+      ],
+      "description": "Federal income tax liability",
+      "id": "us:tax/federal-income-tax#liability",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 15
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "State income tax liability",
+      "id": "us:tax/state-income-tax#liability",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 15
+    }
+  ],
+  "dataset_identity": {
+    "bytes": 151,
+    "columns": [
+      "taxsimid",
+      "year",
+      "state",
+      "mstat",
+      "page",
+      "sage",
+      "depx",
+      "pwages",
+      "proptax",
+      "mortgage",
+      "idtl"
+    ],
+    "filename": "mfj-itemizer-2024.csv",
+    "path": "$HOME/TheAxiomFoundation/_axiom-worktrees/taxsim-ledger-4/tests/fixtures/taxsim_probes/mfj-itemizer-2024.csv",
+    "rows": 2,
+    "sha256": "a16fd5d9220e649059b23af0e7f54712ca2121303f95df51ae4dfe3515fd5099",
+    "source": "taxsim-csv",
+    "state_counts": {
+      "0": 1,
+      "44": 1
+    },
+    "year_override": null,
+    "year_override_applied": false,
+    "years_in_file": [
+      2024
+    ]
+  },
+  "engine_identity": {
+    "policyengine": {
+      "assume_w2_wages": false,
+      "disable_salt": false,
+      "output_detail": 2,
+      "policyengine_core": "3.32.7",
+      "policyengine_taxsim": "2.31.7",
+      "policyengine_us": "2.15.1",
+      "runner": "PolicyEngineTaxsimRunner"
+    },
+    "taxsim": {
+      "binaries": [
+        {
+          "build": "cd2026090910",
+          "build_observed": "cd2026090910",
+          "bytes": 2083216,
+          "platform": "darwin",
+          "rows": 2,
+          "scope": "default",
+          "sha256": "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d"
+        }
+      ],
+      "pin_profile": "dashboard-2026-09"
+    }
+  },
+  "engines": {
+    "left": "policyengine",
+    "right": "taxsim"
+  },
+  "errors": [],
+  "locales": [
+    "US",
+    "US-TX"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "taxsim-77",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": -849.1484375,
+      "facts": {
+        "depx": 0,
+        "idtl": 2,
+        "mstat": 2,
+        "page": 45,
+        "sage": 45,
+        "state": null,
+        "taxsim_state": 0,
+        "year": 2024
+      },
+      "kind": "amount_difference",
+      "left": 49315.8515625,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 50165.0,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "taxsim-78",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": -302.4484375000029,
+      "facts": {
+        "depx": 0,
+        "idtl": 2,
+        "mstat": 2,
+        "page": 45,
+        "sage": 45,
+        "state": "TX",
+        "taxsim_state": 44,
+        "year": 2024
+      },
+      "kind": "amount_difference",
+      "left": 49315.8515625,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 49618.3,
+      "scenario": null,
+      "tolerance": 15,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "taxsim-csv",
+  "probe_observations": {
+    "crash_log": [],
+    "left": [
+      {
+        "case_id": "taxsim-77",
+        "engine": "policyengine",
+        "errors": [],
+        "raw": {
+          "actc": 0.0,
+          "cares": 0.0,
+          "fica": 30056.400390625,
+          "fiitax": 49315.8515625,
+          "frate": 24.0,
+          "niit": 0.0,
+          "qbid": 0.0,
+          "siitax": 0.0,
+          "srate": 0.0,
+          "srebate": 0.0,
+          "state": 44,
+          "taxsimid": 77,
+          "tfica": 15253.2001953125,
+          "v10": 300000.0,
+          "v11": 0.0,
+          "v12": 0.0,
+          "v13": 29200.0,
+          "v14": 0.0,
+          "v17": 36538.140625,
+          "v18": 263461.875,
+          "v19": 49315.8515625,
+          "v22": 0.0,
+          "v24": 0.0,
+          "v25": 0.0,
+          "v26": 270000.0,
+          "v27": 0.0,
+          "v28": 49315.85,
+          "v29": 15253.2001953125,
+          "v32": 0.0,
+          "v34": 0.0,
+          "v35": 0.0,
+          "v36": 0.0,
+          "v37": 0.0,
+          "v38": 0.0,
+          "v39": 0.0,
+          "v40": 0.0,
+          "v42": 0.0,
+          "v43": 0.0,
+          "v44": 4800.0,
+          "year": 2024
+        },
+        "values": {
+          "income_tax": 49315.8515625,
+          "state_income_tax": 0.0
+        }
+      },
+      {
+        "case_id": "taxsim-78",
+        "engine": "policyengine",
+        "errors": [],
+        "raw": {
+          "actc": 0.0,
+          "cares": 0.0,
+          "fica": 30056.400390625,
+          "fiitax": 49315.8515625,
+          "frate": 24.0,
+          "niit": 0.0,
+          "qbid": 0.0,
+          "siitax": 0.0,
+          "srate": 0.0,
+          "srebate": 0.0,
+          "state": 44,
+          "taxsimid": 78,
+          "tfica": 15253.2001953125,
+          "v10": 300000.0,
+          "v11": 0.0,
+          "v12": 0.0,
+          "v13": 29200.0,
+          "v14": 0.0,
+          "v17": 36538.140625,
+          "v18": 263461.875,
+          "v19": 49315.8515625,
+          "v22": 0.0,
+          "v24": 0.0,
+          "v25": 0.0,
+          "v26": 270000.0,
+          "v27": 0.0,
+          "v28": 49315.85,
+          "v29": 15253.2001953125,
+          "v32": 0.0,
+          "v34": 0.0,
+          "v35": 0.0,
+          "v36": 0.0,
+          "v37": 0.0,
+          "v38": 0.0,
+          "v39": 0.0,
+          "v40": 0.0,
+          "v42": 0.0,
+          "v43": 0.0,
+          "v44": 4800.0,
+          "year": 2024
+        },
+        "values": {
+          "income_tax": 49315.8515625,
+          "state_income_tax": 0.0
+        }
+      }
+    ],
+    "machine": "arm64",
+    "outcome": "completed",
+    "platform": "darwin",
+    "python": "3.14.4",
+    "right": [
+      {
+        "case_id": "taxsim-77",
+        "engine": "taxsim",
+        "errors": [],
+        "raw": {
+          "actc": 0.0,
+          "addmed": 450.0,
+          "cares": 0.0,
+          "cd2026090910": 0,
+          "fica": 38203.2,
+          "ficar": 0.0,
+          "fiitax": 50165.0,
+          "frate": 0.0,
+          "niit": 0.0,
+          "qbid": 0.0,
+          "samt": 0.0,
+          "sctc": 0.0,
+          "senergy": 0.0,
+          "siitax": 0.0,
+          "sptcr": 0.0,
+          "srate": 0.0,
+          "srebate": 0.0,
+          "state": 0,
+          "staxbc": 0.0,
+          "taxsim_binary_sha256": "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d",
+          "taxsimid": 77.0,
+          "tfica": 15253.2,
+          "v10": 300000.0,
+          "v11": 0.0,
+          "v12": 0.0,
+          "v13": 29200.0,
+          "v14": 0.0,
+          "v15": 0.0,
+          "v16": 0.0,
+          "v17": 33000.0,
+          "v18": 267000.0,
+          "v19": 50165.0,
+          "v20": 0.0,
+          "v21": 0.0,
+          "v22": 0.0,
+          "v23": 0.0,
+          "v24": 0.0,
+          "v25": 0.0,
+          "v26": 270000.0,
+          "v27": 0.0,
+          "v28": 50165.0,
+          "v29": 38203.2,
+          "v30": 300000.0,
+          "v31": 0.0,
+          "v32": 0.0,
+          "v33": 0.0,
+          "v34": 0.0,
+          "v35": 0.0,
+          "v36": 0.0,
+          "v37": 0.0,
+          "v38": 0.0,
+          "v39": 0.0,
+          "v40": 0.0,
+          "v41": 0.0,
+          "year": 2024
+        },
+        "values": {
+          "fiitax": 50165.0,
+          "siitax": 0.0
+        }
+      },
+      {
+        "case_id": "taxsim-78",
+        "engine": "taxsim",
+        "errors": [],
+        "raw": {
+          "actc": 0.0,
+          "addmed": 450.0,
+          "cares": 0.0,
+          "cd2026090910": 0,
+          "fica": 38203.2,
+          "ficar": 0.0,
+          "fiitax": 49618.3,
+          "frate": 0.0,
+          "niit": 0.0,
+          "qbid": 0.0,
+          "samt": 0.0,
+          "sctc": 0.0,
+          "senergy": 0.0,
+          "siitax": 0.0,
+          "sptcr": 0.0,
+          "srate": 0.0,
+          "srebate": 0.0,
+          "state": 44,
+          "staxbc": 0.0,
+          "taxsim_binary_sha256": "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d",
+          "taxsimid": 78.0,
+          "tfica": 15253.2,
+          "v10": 300000.0,
+          "v11": 0.0,
+          "v12": 0.0,
+          "v13": 29200.0,
+          "v14": 0.0,
+          "v15": 0.0,
+          "v16": 0.0,
+          "v17": 35277.92,
+          "v18": 264722.08,
+          "v19": 49618.3,
+          "v20": 0.0,
+          "v21": 0.0,
+          "v22": 0.0,
+          "v23": 0.0,
+          "v24": 0.0,
+          "v25": 0.0,
+          "v26": 270000.0,
+          "v27": 0.0,
+          "v28": 49618.3,
+          "v29": 38203.2,
+          "v30": 300001.0,
+          "v31": 0.0,
+          "v32": 0.0,
+          "v33": 0.0,
+          "v34": 0.0,
+          "v35": 0.0,
+          "v36": 0.0,
+          "v37": 0.0,
+          "v38": 0.0,
+          "v39": 0.0,
+          "v40": 0.0,
+          "v41": 0.0,
+          "year": 2024
+        },
+        "values": {
+          "fiitax": 49618.3,
+          "siitax": 0.0
+        }
+      }
+    ]
+  },
+  "schema_version": "axiom.comparison_report.v2",
+  "scope": null,
+  "suite": "taxsim-emulator-probes",
+  "summary": {
+    "comparison_count": 4,
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 2,
+    "mismatch_count": 2,
+    "mismatches_by_concept": [
+      {
+        "count": 2,
+        "value": "us:tax/federal-income-tax#liability"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 2,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 2,
+        "value": null
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 4,
+      "match_rate": 50,
+      "match_weight": 2,
+      "mismatch_weight": 2
+    }
+  }
+}

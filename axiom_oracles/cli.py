@@ -511,6 +511,18 @@ def sanity_check(
         "verbatim instead of failing the load."
     ),
 )
+@click.option("--recorded-release", type=click.Path(exists=True, file_okay=False, path_type=Path),
+              help="Replay verified pe-taxsim release outputs for taxsim-csv cases.")
+@click.option("--recorded-release-repo", default="PolicyEngine/policyengine-taxsim", show_default=True)
+@click.option("--recorded-release-tag", default=None)
+@click.option("--recorded-release-sha256", default=None,
+              help="Expected comparison CSV hash; required for an unregistered release.")
+@click.option("--row-aux-output", "row_aux_outputs", multiple=True,
+              help="Copy this raw output from both engines onto mismatch rows; repeatable.")
+@click.option("--tolerance", type=click.FloatRange(min=0), default=None,
+              help="Override selected amount concepts' absolute tolerance for this run.")
+@click.option("--relative-tolerance", type=click.FloatRange(min=0), default=None,
+              help="Override selected amount concepts' relative tolerance for this run.")
 @click.option(
     "--concept",
     "concepts",
@@ -645,6 +657,13 @@ def compare(
     taxsim_csv_sha256: str | None,
     taxsim_csv_origin: str | None,
     taxsim_csv_allow_unknown_columns: bool,
+    recorded_release: Path | None,
+    recorded_release_repo: str,
+    recorded_release_tag: str | None,
+    recorded_release_sha256: str | None,
+    row_aux_outputs: tuple[str, ...],
+    tolerance: float | None,
+    relative_tolerance: float | None,
     concepts: tuple[str, ...],
     categories: tuple[str, ...],
     include_components: bool,
@@ -681,6 +700,16 @@ def compare(
         taxsim_csv_origin=taxsim_csv_origin,
         taxsim_csv_allow_unknown_columns=taxsim_csv_allow_unknown_columns,
     )
+
+    if recorded_release is not None:
+        if population != "taxsim-csv" or {left, right} != {"policyengine", "taxsim"}:
+            raise click.ClickException(
+                "--recorded-release requires population taxsim-csv and engines policyengine/taxsim"
+            )
+        if not recorded_release_tag or not period:
+            raise click.ClickException("--recorded-release requires --recorded-release-tag and --period")
+    elif recorded_release_tag or recorded_release_sha256:
+        raise click.ClickException("Recorded release options require --recorded-release")
 
     gc_was_enabled = gc.isenabled()
     if gc_was_enabled:
@@ -747,6 +776,15 @@ def compare(
                 "No comparable concepts found for those engines, locales, and filters."
             )
 
+        mappings = [
+            replace(
+                mapping,
+                tolerance=mapping.tolerance if tolerance is None else tolerance,
+                relative_tolerance=(mapping.relative_tolerance
+                                    if relative_tolerance is None else relative_tolerance),
+            ) if mapping.comparison == "amount" else mapping
+            for mapping in mappings
+        ]
         concept_ids = tuple(mapping.concept_id for mapping in mappings)
         suite_declares_outputs = any(case.outputs for case in cases)
         if concepts or categories or include_components or not suite_declares_outputs:
@@ -802,36 +840,57 @@ def compare(
             else len(cases) <= FULL_CASE_INPUT_LIMIT
         )
 
-        left_runner = _build_runner(
-            left,
-            accessnyc_mode,
-            accessnyc_rules_dir,
-            accessnyc_python_path,
-            concept_ids,
-            axiom_program=axiom_program,
-            axiom_compiled_program=axiom_compiled_program,
-            axiom_engine_binary=axiom_engine_binary,
-            axiom_entity_id=axiom_entity_id,
-            axiom_batch_size=axiom_batch_size,
-            axiom_record_all_outputs=full_evidence,
-            paired_engine=right,
-            taxsim_pin_profile=taxsim_pin_profile,
-        )
-        right_runner = _build_runner(
-            right,
-            accessnyc_mode,
-            accessnyc_rules_dir,
-            accessnyc_python_path,
-            concept_ids,
-            axiom_program=axiom_program,
-            axiom_compiled_program=axiom_compiled_program,
-            axiom_engine_binary=axiom_engine_binary,
-            axiom_entity_id=axiom_entity_id,
-            axiom_batch_size=axiom_batch_size,
-            axiom_record_all_outputs=full_evidence,
-            paired_engine=left,
-            taxsim_pin_profile=taxsim_pin_profile,
-        )
+        release = None
+        if recorded_release is not None:
+            from .adapters.taxsim.recorded import (
+                RecordedReleaseError, load_recorded_release, release_sha256_by_year,
+            )
+
+            try:
+                expected_sha = recorded_release_sha256 or release_sha256_by_year(
+                    recorded_release_repo, recorded_release_tag
+                )[int(period)]
+                release = load_recorded_release(
+                    recorded_release, cases=cases, dataset_identity=dataset_identity,
+                    year=int(period), expected_sha256=expected_sha,
+                    repo=recorded_release_repo, tag=recorded_release_tag,
+                    pin_profile=taxsim_pin_profile,
+                )
+            except (RecordedReleaseError, ValueError, KeyError, OSError) as exc:
+                raise click.ClickException(str(exc)) from exc
+            left_runner = release.adapter(left)
+            right_runner = release.adapter(right)
+        else:
+            left_runner = _build_runner(
+                left,
+                accessnyc_mode,
+                accessnyc_rules_dir,
+                accessnyc_python_path,
+                concept_ids,
+                axiom_program=axiom_program,
+                axiom_compiled_program=axiom_compiled_program,
+                axiom_engine_binary=axiom_engine_binary,
+                axiom_entity_id=axiom_entity_id,
+                axiom_batch_size=axiom_batch_size,
+                axiom_record_all_outputs=full_evidence,
+                paired_engine=right,
+                taxsim_pin_profile=taxsim_pin_profile,
+            )
+            right_runner = _build_runner(
+                right,
+                accessnyc_mode,
+                accessnyc_rules_dir,
+                accessnyc_python_path,
+                concept_ids,
+                axiom_program=axiom_program,
+                axiom_compiled_program=axiom_compiled_program,
+                axiom_engine_binary=axiom_engine_binary,
+                axiom_entity_id=axiom_entity_id,
+                axiom_batch_size=axiom_batch_size,
+                axiom_record_all_outputs=full_evidence,
+                paired_engine=left,
+                taxsim_pin_profile=taxsim_pin_profile,
+            )
 
         comparator = Comparator(mappings)
         stream_case_rows = output_path is not None or not json_output
@@ -906,6 +965,7 @@ def compare(
                         comparator.compare(
                             left_results,
                             right_results,
+                            row_aux_outputs=row_aux_outputs,
                             outputs_by_case={
                                 case.case_id: case.outputs for case in accumulator_cases
                             },
@@ -922,6 +982,12 @@ def compare(
                 )
 
             accumulator.engine_identity = _engine_identity(left_runner, right_runner)
+            if release is not None:
+                accumulator.engine_identity = {
+                    "taxsim": release.taxsim_identity(),
+                    "policyengine": release.policyengine_identity(),
+                }
+                accumulator.recorded_release = release.identity
             _echo_taxsim_identity(accumulator.engine_identity)
 
             if output_path:
@@ -1838,11 +1904,19 @@ class _IdentifiedReportAccumulator(ComparisonReportAccumulator):
     """
 
     engine_identity: dict | None = None
+    recorded_release: dict | None = None
 
     def to_dict(self, *, include_cases: bool = True) -> dict:
         report = super().to_dict(include_cases=include_cases)
         if self.engine_identity:
             report["engine_identity"] = self.engine_identity
+        if self.recorded_release is not None:
+            report["recorded_release"] = self.recorded_release
+            pe = self.engine_identity["policyengine"]
+            report["engines"]["versions"] = {
+                "policyengine_us": pe["policyengineUsVersion"],
+                "policyengine_core": pe["policyengineCoreVersion"],
+            }
         return report
 
 
@@ -1893,6 +1967,21 @@ def _selected_profiles(profile: str | None, all_profiles: bool) -> list[str]:
             raise click.ClickException("Pass --profile or --all-profiles, not both.")
         return taxsim_pins.profile_names()
     return [taxsim_pins.active_profile_name(profile)]
+
+
+@taxsim.command("fetch-release")
+@click.option("--repo", default="PolicyEngine/policyengine-taxsim", show_default=True)
+@click.option("--tag", required=True)
+@click.option("--dir", "directory", required=True, type=click.Path(path_type=Path))
+def taxsim_fetch_release(repo: str, tag: str, directory: Path) -> None:
+    """Download pinned comparison CSVs and provenance, keeping only verified assets."""
+    from .adapters.taxsim.recorded import RecordedReleaseError, fetch_release
+
+    try:
+        result = fetch_release(repo, tag, directory)
+    except (RecordedReleaseError, OSError, ValueError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    click.echo(json.dumps(result, indent=2, sort_keys=True))
 
 
 @taxsim.command("fetch-binaries")

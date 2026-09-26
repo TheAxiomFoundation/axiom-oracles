@@ -589,7 +589,15 @@ def main() -> int:
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     basename = config["artifacts"]["report_basename"]
     sample = config["runner"]["parameters"].get("sample_size", "all")
-    output = args.output_dir / f"{basename}-{sample}-{today}.json"
+    report_path = (config.get("artifacts") or {}).get("report_path")
+    if report_path:
+        output = (REPO_ROOT / report_path).resolve()
+        if (REPO_ROOT / "reports").resolve() not in output.parents:
+            raise SystemExit("artifacts.report_path must stay under reports/")
+        if config.get("dashboard"):
+            raise SystemExit("artifacts.report_path lanes must not publish to the dashboard")
+    else:
+        output = args.output_dir / f"{basename}-{sample}-{today}.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     # Run-private staging file in the SAME directory (same filesystem, so the
     # final publish is an atomic rename): the report stays private through
@@ -635,6 +643,7 @@ def main() -> int:
             require_engine_versions=(
                 runner_type == "axiom-oracles-compare"
                 and "policyengine" in compared_engines
+                and "recorded_release" not in config["runner"]["parameters"]
             ),
             preserve_runner_provenance=(runner_type == "de-axiom-oracle-compare"),
         )
@@ -685,7 +694,17 @@ def main() -> int:
                     f"Preserved prior full report for skipped run: {output}"
                 )
             else:
-                os.replace(staging, output)
+                if output.suffix == ".gz":
+                    from axiom_oracles.comparison.report_io import write_report
+
+                    compact_report = json.loads(staging.read_text())
+                    if config["runner"]["parameters"].get("report_include_cases") is False:
+                        compact_report.pop("cases", None)
+                        compact_report["case_rows_omitted"] = True
+                    write_report(staging.with_suffix(".json.gz"), compact_report)
+                    os.replace(staging.with_suffix(".json.gz"), output)
+                else:
+                    os.replace(staging, output)
                 print(f"Wrote: {output}")
             if canonical_record is not None:
                 if producer_native_canonical is not None:
@@ -705,6 +724,7 @@ def main() -> int:
                 )
     finally:
         staging.unlink(missing_ok=True)
+        staging.with_suffix(".json.gz").unlink(missing_ok=True)
 
     if args.summary:
         _print_summary(output)
@@ -974,6 +994,24 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
+    elif runner_type == "axiom-oracles-compare" and "recorded_release" in params:
+        report = json.loads(output.read_text())
+        recorded = report["recorded_release"]
+        pe = report["engine_identity"]["policyengine"]
+        taxsim = report["engine_identity"]["taxsim"]
+        oracle = {
+            "name": "taxsim",
+            "policyengine_us": pe["policyengineUsVersion"],
+            "policyengine_core": pe["policyengineCoreVersion"],
+            "emulator_commit": pe["emulatorCommit"],
+            "taxsim_pin_profile": taxsim["pin_profile"],
+            "taxsim_binaries": taxsim["binaries"],
+            "recorded_release": recorded,
+        }
+    elif runner_type == "taxsim-probes":
+        report = json.loads(output.read_text())
+        oracle = {"name": "taxsim", **_taxsim_oracle_identity(output)}
+        oracle["probe_observations"] = report.get("probe_observations")
     elif runner_type == "axiom-oracles-compare":
         engines = {str(params.get("left", "")), str(params.get("right", ""))}
         pins = _resolve_pe_oracle_pins(params)
@@ -1873,8 +1911,14 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     whose engine stack needs a different interpreter can pin `python:` in its
     parameters.
     """
-    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
+    if "recorded_release" in params:
+        _run_recorded_release_compare(params, output)
+        return
+    axiom_rules_repo = (
+        _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
+        if "axiom" in {params.get("left"), params.get("right")} else REPO_ROOT
+    )
     pe_pins = _resolve_pe_oracle_pins(params)
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
     # A pure oracle-vs-oracle comparison (e.g. taxcalc vs policyengine) has no
@@ -1943,6 +1987,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
+    cmd.extend(_comparison_options(params))
     if "taxsim" in engines:
         cmd.extend(["--taxsim-pin-profile", _taxsim_pin_profile(params)])
     if params.get("include_case_inputs"):
@@ -1988,6 +2033,74 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         # suite's declared roots. The suite pin is authoritative here.
         env.pop("AXIOM_RULESPEC_ROOT", None)
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
+
+
+def _comparison_options(params: dict) -> list[str]:
+    args = []
+    for key in ("tolerance", "relative_tolerance"):
+        if key in params:
+            args.extend(["--" + key.replace("_", "-"), str(params[key])])
+    for name in params.get("row_aux_outputs", []):
+        args.extend(["--row-aux-output", str(name)])
+    return args
+
+
+def _recorded_release_cli_args(params: dict) -> list[str]:
+    block = params.get("recorded_release")
+    if not isinstance(block, dict):
+        raise SystemExit("recorded_release must be a mapping")
+    unknown = set(block) - {"repo", "tag", "path", "path_env", "sha256_by_year"}
+    if unknown:
+        raise SystemExit(f"unknown recorded_release keys: {sorted(unknown)}")
+    if bool(block.get("path")) == bool(block.get("path_env")):
+        raise SystemExit("recorded_release requires exactly one of path or path_env")
+    raw_path = block.get("path")
+    if block.get("path_env"):
+        raw_path = os.environ.get(block["path_env"])
+        if not raw_path:
+            raise SystemExit(f"Set ${block['path_env']} to the verified release directory")
+    year = str(params.get("period", ""))
+    hashes = block.get("sha256_by_year") or {}
+    sha = hashes.get(year) or (hashes.get(int(year)) if year.isdigit() else None)
+    if not sha or not block.get("repo") or not block.get("tag"):
+        raise SystemExit("recorded_release requires repo, tag and sha256_by_year for period")
+    return [
+        "--recorded-release", str(_expand_path(raw_path)),
+        "--recorded-release-repo", str(block["repo"]),
+        "--recorded-release-tag", str(block["tag"]),
+        "--recorded-release-sha256", str(sha),
+    ]
+
+
+def _run_recorded_release_compare(params: dict, output: Path) -> None:
+    if params.get("population") != "taxsim-csv" or {
+        params.get("left"), params.get("right")
+    } != {"policyengine", "taxsim"}:
+        raise SystemExit("recorded_release requires taxsim-csv and policyengine/taxsim")
+    # Replay has no PolicyEngine runtime dependency. Use this interpreter and
+    # the verified release's versions, never the live runner's package pins.
+    cmd = [
+        sys.executable, "-m", "axiom_oracles.cli", "compare",
+        params["left"], params["right"], "--population", "taxsim-csv",
+        *_taxsim_csv_cli_args(params, "taxsim-csv"),
+        *_recorded_release_cli_args(params),
+        "--period", str(params["period"]),
+        "--sample-size", str(params.get("sample_size", 0)),
+        "--report-suite", params["suite"],
+        "--taxsim-pin-profile", _taxsim_pin_profile(params),
+        *_concept_args(params), *_comparison_options(params),
+        "--output", str(output),
+    ]
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+
+
+def _run_taxsim_probes(runner: dict, output: Path) -> None:
+    subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts/taxsim_probes.py"),
+         runner["parameters"]["kind"], "--year", str(runner["parameters"]["period"]),
+         "--output", str(output)],
+        check=True, cwd=REPO_ROOT,
+    )
 
 
 def _taxsim_csv_cli_args(params: dict, population: str) -> list[str]:
@@ -4060,6 +4173,7 @@ def _run_de_axiom_oracle_compare(runner: dict, output: Path) -> None:
         params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = str(pin)
 
 RUNNERS = {
+    "taxsim-probes": _run_taxsim_probes,
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
@@ -4419,7 +4533,9 @@ def _git_head_sha(repo: Path) -> str | None:
 
 
 def _print_summary(output: Path) -> None:
-    data = json.loads(output.read_text())
+    from axiom_oracles.comparison.report_io import load_report
+
+    data = load_report(output)
     print()
     if "compared_values" in data:
         cv = data["compared_values"]
