@@ -183,15 +183,24 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     # classified instrument may bear on a computed surface. The dk ledger
     # honestly declares 55 law-derived leaves and 26 bearing instruments,
     # so closed computes false and certified reads no with the encoding
-    # worklist in the verdict.
+    # worklist in the verdict. Under v4, exercised also requires computed
+    # evidence on both sides of every reachable parameter threshold; the DK
+    # compiled programs are not committed, so no straddle can be computed
+    # and exercised reads false with that reason.
     assert {
         name: (block["mode"], block["value"]) for name, block in verdicts.items()
     } == {
         "conformant": ("computed", True),
-        "exercised": ("computed", True),
+        "exercised": ("computed", False),
         "closed": ("computed", False),
         "executable": ("computed", True),
     }
+    for row in verdicts["exercised"]["suites"].values():
+        assert row["threshold_straddle"]["mode"] == "unavailable"
+    assert any(
+        "threshold straddle not computable" in blocker
+        for blocker in certificate["blockers"]
+    )
     closed_verdict = verdicts["closed"]
     # The launch audit's official-source search found bearing instruments
     # outside the act's ELI graph, and the 2026-08-22 citation scan over
@@ -210,9 +219,18 @@ def test_dk_all_four_computed_premises_flow_to_certificate() -> None:
     assert dependency["open_dependency_count"] == 81
     assert len(dependency["law_derived_inputs"]) == 55
     assert len(dependency["instruments_bearing_on_computed"]) == 26
-    assert not any(
-        blocker.startswith("exercise:") for blocker in certificate["blockers"]
-    )
+    # The only exercise blockers are the v4 straddle ones: bridges, census
+    # rows and per-case evidence are complete.
+    exercise_blockers = [
+        blocker for blocker in certificate["blockers"]
+        if blocker.startswith("exercise:")
+    ]
+    assert exercise_blockers == [
+        "exercise: threshold straddle not computable — no committed, sha-bound "
+        "compiled IR for this suite",
+        "exercise: census incomplete (missing per-case evidence, unaudited "
+        "bridge, or incomplete threshold straddle) for at least one suite",
+    ]
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
 
