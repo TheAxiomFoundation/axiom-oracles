@@ -3,6 +3,7 @@ population bindings, row arithmetic, engine-error rows, facts plumbing, and
 the TAXSIM-lane migration's row-assignment invariance."""
 
 import copy
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
@@ -1087,6 +1088,85 @@ def test_taxsim_migration_preserves_row_assignment(suite: str) -> None:
 def test_selected_rows_digest_is_order_independent() -> None:
     rows = [_row("b", 2, 1), _row("a", 1, 0)]
     assert selected_rows_sha256(rows) == selected_rows_sha256(list(reversed(rows)))
+
+
+@pytest.mark.parametrize("location", ["provenance", "engine_identity"])
+def test_premerged_fiit_rejects_oracle_identity_drift(location: str) -> None:
+    module = _load_script("apply_dispositions")
+    path = REPO_ROOT / "dashboard/public/data/axiom-taxsim-fiit-ecps.json"
+    slim = json.loads(path.read_text())
+    document = load_dispositions(
+        REPO_ROOT / "dispositions/fiit-taxsim-ecps.yaml", repo_root=REPO_ROOT
+    )
+    assert module._premerged_block_problems(path, slim, document) == []
+    retained = [row["disposition"] for row in slim["mismatches"]]
+    assert len(retained) == 1000
+
+    binaries = [{
+        "sha256": SHA_A, "build": "2026-09-25", "build_observed": True,
+        "platform": "linux-x86_64", "bytes": 1024,
+        "rows": slim["summary"]["comparison_count"], "scope": "default",
+    }]
+    if location == "provenance":
+        slim.setdefault("provenance", {}).setdefault("oracle", {}).update({
+            "taxsim_pin_profile": "test-profile", "taxsim_binaries": binaries,
+        })
+    else:
+        slim["engine_identity"] = {
+            "taxsim": {"pin_profile": "test-profile", "binaries": binaries}
+        }
+
+    direct = apply_dispositions(slim, document)
+    assert all(
+        _block(direct)["expired_reasons"][annotation["id"]] == "oracle_identity_changed"
+        for annotation in retained
+    )
+    assert all("disposition" not in row for row in direct["mismatches"])
+    problems = module._premerged_block_problems(path, slim, document)
+    assert any("oracle identity" in problem for problem in problems)
+    # Validation must reject the stale annotations without mutating the input.
+    assert [row["disposition"] for row in slim["mismatches"]] == retained
+
+
+@pytest.mark.parametrize("identity_state", ["matching", "missing", "malformed"])
+def test_premerged_taxsim_compares_identity_across_c1_locations(
+    tmp_path: Path, identity_state: str,
+) -> None:
+    module = _load_script("apply_dispositions")
+    module.REPO_ROOT = tmp_path
+    rows = [_row("case-1", 100, 0), _row("case-2", 200, 0)]
+    entry = _bound(_entry(oracle_binding={"taxsim_binary_sha256": [SHA_A, SHA_B]}), rows)
+    document = _doc([entry])
+    assert validate_dispositions(document, suite_engines=TAXSIM) == []
+    full = _report(rows, engine_identity={
+        "taxsim": {"binaries": [{"sha256": SHA_A}, {"sha256": SHA_B}]}
+    })
+    slim = apply_dispositions(full, document, dispositions_file="dispositions/example-suite.yaml")
+    slim["mismatches"] = slim["mismatches"][:1]
+    del slim["engine_identity"]
+    if identity_state == "matching":
+        # Equivalent C1 identity at the other location, in a different order.
+        slim["provenance"] = {"oracle": {
+            "taxsim_binaries": [{"sha256": SHA_B}, {"sha256": SHA_A}]
+        }}
+    elif identity_state == "malformed":
+        # Even matching invalid records cannot validate a source's assignments.
+        full["engine_identity"]["taxsim"]["binaries"] = [{"sha256": "invalid"}]
+        slim["engine_identity"] = copy.deepcopy(full["engine_identity"])
+    source_path = tmp_path / "reports/example-suite.json"
+    source_path.parent.mkdir()
+    source_path.write_text(json.dumps(full))
+    block = slim["summary"]["dispositioned"]
+    block["source_report"] = {
+        "path": "reports/example-suite.json",
+        "sha256": hashlib.sha256(source_path.read_bytes()).hexdigest(),
+    }
+    block["assignment_sha256"] = assignment_digest(apply_dispositions(full, document))
+    problems = module._premerged_block_problems(tmp_path / "slim.json", slim, document)
+    if identity_state == "matching":
+        assert problems == []
+    else:
+        assert any("oracle identity" in problem for problem in problems)
 
 
 # ---------------------------------------------------------------------------

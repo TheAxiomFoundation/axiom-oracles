@@ -48,6 +48,7 @@ from axiom_oracles.comparison.dispositions import (  # noqa: E402
     load_dispositions,
     report_is_taxsim_lane,
     report_json_text,
+    report_oracle_identity,
     suite_context,
 )
 
@@ -243,8 +244,9 @@ def _premerged_block_problems(
        unavailable or edited source can never silently fall back to
        trusting the block.
     2. Against the resolved source (pointer, or every committed full
-       report when the block predates pointers — itself flagged), a fresh
-       dispositions merge must reproduce (a) the aggregate block, (b) the
+       report when the block predates pointers — itself flagged), the
+       TAXSIM oracle identities must agree before a fresh dispositions
+       merge can reproduce (a) the aggregate block, (b) the
        complete row-level assignment digest, and (c) every retained
        mismatch row's disposition annotation. Aggregate counts alone
        cannot see two equal-cardinality entries swapping classes; the
@@ -293,6 +295,25 @@ def _premerged_block_problems(
     ]
     for full_path, full in sources:
         full_rel = full_path.relative_to(REPO_ROOT)
+        if _taxsim_lane(report) or _taxsim_lane(full):
+            slim_identity = report_oracle_identity(report)
+            full_identity = report_oracle_identity(full)
+            # C1 permits either metadata location. Compare the identities
+            # used by bindings, not the location or binary record order.
+            if (
+                slim_identity["malformed"]
+                or full_identity["malformed"]
+                or any(
+                    slim_identity[key] != full_identity[key]
+                    for key in ("taxsim_binary_sha256", "policyengine_taxsim")
+                )
+            ):
+                problems.append(
+                    f"{rel} TAXSIM oracle identity does not match the verified "
+                    f"source {full_rel} or is malformed — refresh the report "
+                    "before trusting source-derived dispositions"
+                )
+                continue
         try:
             merged = apply_dispositions(
                 full,
@@ -345,7 +366,12 @@ def _premerged_block_problems(
 
 
 def _resolve_source_pointer(
-    rel: Path, suite: str, pointer: object, problems: list[str]
+    rel: Path,
+    suite: str,
+    pointer: object,
+    problems: list[str],
+    *,
+    repo_root: Path | None = None,
 ) -> tuple[Path, dict] | None:
     """Resolve and verify a block's source_report pointer, fail closed.
 
@@ -369,8 +395,9 @@ def _resolve_source_pointer(
             f"{rel} source_report path {raw_path!r} must be repo-relative"
         )
         return None
-    candidate = (REPO_ROOT / raw_path).resolve()
-    reports_dir = (REPO_ROOT / "reports").resolve()
+    root = REPO_ROOT if repo_root is None else repo_root
+    candidate = (root / raw_path).resolve()
+    reports_dir = (root / "reports").resolve()
     if reports_dir not in candidate.parents:
         problems.append(
             f"{rel} source_report path {raw_path!r} is outside reports/"
