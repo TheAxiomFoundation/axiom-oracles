@@ -10,11 +10,20 @@ from typing import Any
 import yaml
 
 
-def read_report_text(path: Path) -> str:
-    payload = path.read_bytes()
+def decode_report_bytes(path: Path, payload: bytes) -> str:
+    """Decode already-read report bytes (gunzip when ``path`` is ``.gz``).
+
+    Callers that hash a file first must parse those same bytes through this,
+    never re-read the path: a concurrent write could otherwise swap the
+    content between verification and parsing.
+    """
     if path.suffix == ".gz":
         payload = gzip.decompress(payload)
     return payload.decode("utf-8")
+
+
+def read_report_text(path: Path) -> str:
+    return decode_report_bytes(path, path.read_bytes())
 
 
 def load_report(path: Path) -> dict[str, Any]:
@@ -49,7 +58,20 @@ def registered_report_paths(repo_root: Path, *, suites: set[str] | None = None) 
     ``artifacts.report_path``. Paths must remain inside the repository.
     """
 
-    paths: set[Path] = set()
+    return sorted(registered_report_suites(repo_root, suites=suites))
+
+
+def registered_report_suites(
+    repo_root: Path, *, suites: set[str] | None = None
+) -> dict[Path, str]:
+    """Registered report path -> the suite that registers it.
+
+    Callers must check a loaded report's ``suite`` header against this, so a
+    report whose header names another suite cannot silently skip that
+    suite's dispositions.
+    """
+
+    registered: dict[Path, str] = {}
     root = repo_root.resolve()
     for suite_path in sorted((root / "comparisons").glob("*.yaml")):
         doc = yaml.safe_load(suite_path.read_text()) or {}
@@ -66,8 +88,13 @@ def registered_report_paths(repo_root: Path, *, suites: set[str] | None = None) 
             raise ValueError(f"{suite_path}: artifacts.report_path must stay inside the repository")
         if not (path.name.endswith(".json") or path.name.endswith(".json.gz")):
             raise ValueError(f"{suite_path}: artifacts.report_path must end in .json or .json.gz")
-        paths.add(path)
-    return sorted(paths)
+        suite = str(doc.get("name", suite_path.stem))
+        if registered.get(path, suite) != suite:
+            raise ValueError(
+                f"{path} is registered by two suites: {registered[path]} and {suite}"
+            )
+        registered[path] = suite
+    return registered
 
 
 def unpublished_registered_suites(repo_root: Path) -> set[str]:

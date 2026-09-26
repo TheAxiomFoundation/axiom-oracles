@@ -28,6 +28,8 @@ runner:
       path_env: AXIOM_TAXSIM_RECORDED_RELEASE
       sha256_by_year:
         "2021": 04e23f1fe3c3cf46011fa75e0ee5fcbab86d10ec60fb44015776e1bba734d2c0
+      provenance_sha256_by_year:
+        "2021": 989a4259fad39270695411ed1a81c9e774a68b96408c846833f7fa5b545cff4e
     concepts:
       - us:tax/federal-income-tax#liability
       - us:tax/state-income-tax#liability

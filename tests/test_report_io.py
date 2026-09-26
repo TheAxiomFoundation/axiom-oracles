@@ -175,3 +175,68 @@ def test_explicit_dashboard_target_preserves_publishing_opt_in(tmp_path):
     doc["dashboard"] = {"filename": "manual.json"}
     config.write_text(yaml.safe_dump(doc))
     assert unpublished_registered_suites(tmp_path) == set()
+
+
+def _registered_repo(tmp_path, *, header_suite):
+    repo = tmp_path / "repo"
+    (repo / "comparisons").mkdir(parents=True)
+    (repo / "dashboard" / "public" / "data").mkdir(parents=True)
+    (repo / "comparisons" / "ledger-suite.yaml").write_text(
+        yaml.safe_dump(
+            {"name": "ledger-suite", "artifacts": {"report_path": "reports/ledger.json.gz"}}
+        )
+    )
+    write_report(
+        repo / "reports" / "ledger.json.gz",
+        {"suite": header_suite, "summary": {"mismatch_count": 0}, "mismatches": []},
+    )
+    return repo
+
+
+def test_registered_report_with_another_suites_header_fails(tmp_path):
+    """A wrong header must not route around its suite's dispositions (review F2)."""
+    script = _script("apply_dispositions")
+    script.REPO_ROOT = _registered_repo(tmp_path, header_suite="unregistered-suite")
+    script.DASHBOARD_DATA_DIR = script.REPO_ROOT / "dashboard" / "public" / "data"
+    with pytest.raises(ValueError, match="differs from the registering suite 'ledger-suite'"):
+        list(script._reports())
+
+
+def test_registered_report_with_matching_header_loads(tmp_path):
+    script = _script("apply_dispositions")
+    script.REPO_ROOT = _registered_repo(tmp_path, header_suite="ledger-suite")
+    script.DASHBOARD_DATA_DIR = script.REPO_ROOT / "dashboard" / "public" / "data"
+    assert [report["suite"] for _, report in script._reports()] == ["ledger-suite"]
+
+
+def test_source_pointer_parses_the_verified_bytes(tmp_path, monkeypatch):
+    """A file swapped after hashing must not be what gets parsed (review F3)."""
+    script = _script("apply_dispositions")
+    repo = tmp_path / "repo"
+    source = repo / "reports" / "full.json"
+    original = {
+        "suite": "s", "summary": {"mismatch_count": 1},
+        "mismatches": [{"case_id": "c", "left": 1.0, "right": 0.0, "difference": 1.0}],
+    }
+    write_report(source, original)
+    payload = source.read_bytes()
+    swapped = json.dumps({**original, "mismatches": [{**original["mismatches"][0], "left": 2.0}]})
+    real_read_bytes = Path.read_bytes
+
+    def read_bytes_then_swap(self):
+        data = real_read_bytes(self)
+        if self == source.resolve():
+            # Concurrent refresh: the next read of this path sees new bytes.
+            self.write_text(swapped)
+        return data
+
+    monkeypatch.setattr(Path, "read_bytes", read_bytes_then_swap)
+    problems: list[str] = []
+    resolved = script._resolve_source_pointer(
+        Path("dashboard/x.json"), "s",
+        {"path": "reports/full.json", "sha256": hashlib.sha256(payload).hexdigest()},
+        problems, repo_root=repo,
+    )
+    assert problems == []
+    _, data = resolved
+    assert data == original

@@ -81,10 +81,15 @@ def _write_release(directory, rows, population, **updates):
     return _sha(data)
 
 
-def _load(directory, cases, population, sha):
+def _load(directory, cases, population, sha, provenance_sha=None):
+    # Synthetic releases pin the provenance file as written (a suite would
+    # pin it in recorded_release.provenance_sha256_by_year).
+    if provenance_sha is None:
+        provenance_sha = _sha((Path(directory) / f"provenance_{YEAR}.json").read_bytes())
     return load_recorded_release(
         directory, cases=cases, dataset_identity=population.identity,
         year=YEAR, expected_sha256=sha, pin_profile=PROFILE,
+        expected_provenance_sha256=provenance_sha,
     )
 
 
@@ -318,3 +323,40 @@ def test_known_release_has_pins_for_both_assets():
     assert set(SHA256_BY_YEAR) == set(PROVENANCE_SHA256_BY_YEAR) == set(range(2021, 2026))
     with pytest.raises(RecordedReleaseError, match="No built-in"):
         release_sha256_by_year("Example/release", "untrusted")
+
+
+def test_edited_provenance_fails_its_pin_even_when_csv_hashes_hold(tmp_path):
+    """Provenance carries engine identity; editing it must not load (review F1)."""
+    population, cases = _inputs()
+    sha = _write_release(tmp_path, _rows(cases), population)
+    path = tmp_path / f"provenance_{YEAR}.json"
+    pinned = _sha(path.read_bytes())
+    provenance = json.loads(path.read_text())
+    provenance["emulatorCommit"] = "b" * 40
+    provenance["disableSalt"] = True
+    path.write_text(json.dumps(provenance))
+    with pytest.raises(RecordedReleaseError, match="provenance_2024.json pin sha256 mismatch"):
+        _load(tmp_path, cases, population, sha, provenance_sha=pinned)
+
+
+def test_known_release_uses_builtin_provenance_pin(tmp_path):
+    population, cases = _inputs()
+    sha = _write_release(tmp_path, _rows(cases), population)
+    # No explicit pin: the built-in pin for the known release applies, and a
+    # synthetic provenance file cannot match it.
+    with pytest.raises(RecordedReleaseError, match="provenance_2024.json pin sha256 mismatch"):
+        load_recorded_release(
+            tmp_path, cases=cases, dataset_identity=population.identity,
+            year=YEAR, expected_sha256=sha, pin_profile=PROFILE,
+        )
+
+
+def test_custom_release_without_provenance_pin_fails_closed(tmp_path):
+    population, cases = _inputs()
+    sha = _write_release(tmp_path, _rows(cases), population)
+    with pytest.raises(RecordedReleaseError, match="No built-in recorded-release provenance pins"):
+        load_recorded_release(
+            tmp_path, cases=cases, dataset_identity=population.identity,
+            year=YEAR, expected_sha256=sha, pin_profile=PROFILE,
+            repo="someone/fork", tag="custom",
+        )

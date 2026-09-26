@@ -77,6 +77,17 @@ def release_sha256_by_year(repo: str = DEFAULT_REPO, tag: str = DEFAULT_TAG) -> 
     return dict(SHA256_BY_YEAR)
 
 
+def release_provenance_sha256_by_year(
+    repo: str = DEFAULT_REPO, tag: str = DEFAULT_TAG
+) -> dict[int, str]:
+    """Return built-in provenance pins, or fail rather than trusting a file."""
+    if (repo, tag) != (DEFAULT_REPO, DEFAULT_TAG):
+        raise RecordedReleaseError(
+            f"No built-in recorded-release provenance pins for {repo}@{tag}"
+        )
+    return dict(PROVENANCE_SHA256_BY_YEAR)
+
+
 @dataclass
 class RecordedRelease:
     """A complete, validated release year and adapters over its paired rows."""
@@ -228,7 +239,7 @@ def load_recorded_release(
     directory: str | os.PathLike[str], *, cases: list[Case],
     dataset_identity: Mapping[str, Any], year: int | str,
     expected_sha256: str, repo: str = DEFAULT_REPO, tag: str = DEFAULT_TAG,
-    pin_profile: str | None = None,
+    pin_profile: str | None = None, expected_provenance_sha256: str | None = None,
 ) -> RecordedRelease:
     """Validate a release year against its suite, population and Linux pins.
 
@@ -245,6 +256,18 @@ def load_recorded_release(
         data = (directory / filename).read_bytes()
     except OSError as exc:
         raise RecordedReleaseError(f"Cannot read recorded release {directory}: {exc}") from exc
+    # The provenance file carries the engine identities, binary hashes and
+    # the source-file hash; it must be pinned like the CSV, never trusted.
+    if expected_provenance_sha256 is None:
+        try:
+            expected_provenance_sha256 = release_provenance_sha256_by_year(repo, tag)[year]
+        except KeyError as exc:
+            raise RecordedReleaseError(
+                f"No provenance pin for {repo}@{tag} year {year}"
+            ) from exc
+    _verify_bytes(
+        provenance_bytes, expected_provenance_sha256, f"{provenance_filename} pin"
+    )
     provenance = _provenance(provenance_bytes, year)
     observed = _verify_bytes(data, expected_sha256, f"{filename} suite pin")
     _verify_bytes(data, provenance["outputSha256"], f"{filename} provenance outputSha256")

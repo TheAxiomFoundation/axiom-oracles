@@ -521,6 +521,8 @@ def sanity_check(
 @click.option("--recorded-release-tag", default=None)
 @click.option("--recorded-release-sha256", default=None,
               help="Expected comparison CSV hash; required for an unregistered release.")
+@click.option("--recorded-release-provenance-sha256", default=None,
+              help="Expected provenance JSON hash; required for an unregistered release.")
 @click.option("--row-aux-output", "row_aux_outputs", multiple=True,
               help="Copy this raw output from both engines onto mismatch rows; repeatable.")
 @click.option("--tolerance", type=click.FloatRange(min=0), default=None,
@@ -666,6 +668,7 @@ def compare(
     recorded_release_repo: str,
     recorded_release_tag: str | None,
     recorded_release_sha256: str | None,
+    recorded_release_provenance_sha256: str | None,
     row_aux_outputs: tuple[str, ...],
     tolerance: float | None,
     relative_tolerance: float | None,
@@ -714,7 +717,7 @@ def compare(
             )
         if not recorded_release_tag or not period:
             raise click.ClickException("--recorded-release requires --recorded-release-tag and --period")
-    elif recorded_release_tag or recorded_release_sha256:
+    elif recorded_release_tag or recorded_release_sha256 or recorded_release_provenance_sha256:
         raise click.ClickException("Recorded release options require --recorded-release")
 
     gc_was_enabled = gc.isenabled()
@@ -862,6 +865,7 @@ def compare(
                     year=int(period), expected_sha256=expected_sha,
                     repo=recorded_release_repo, tag=recorded_release_tag,
                     pin_profile=taxsim_pin_profile,
+                    expected_provenance_sha256=recorded_release_provenance_sha256,
                 )
             except (RecordedReleaseError, ValueError, KeyError, OSError) as exc:
                 raise click.ClickException(str(exc)) from exc

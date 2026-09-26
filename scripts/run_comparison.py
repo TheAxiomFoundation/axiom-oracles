@@ -2053,7 +2053,9 @@ def _recorded_release_cli_args(params: dict) -> list[str]:
     block = params.get("recorded_release")
     if not isinstance(block, dict):
         raise SystemExit("recorded_release must be a mapping")
-    unknown = set(block) - {"repo", "tag", "path", "path_env", "sha256_by_year"}
+    unknown = set(block) - {
+        "repo", "tag", "path", "path_env", "sha256_by_year", "provenance_sha256_by_year",
+    }
     if unknown:
         raise SystemExit(f"unknown recorded_release keys: {sorted(unknown)}")
     if bool(block.get("path")) == bool(block.get("path_env")):
@@ -2068,12 +2070,19 @@ def _recorded_release_cli_args(params: dict) -> list[str]:
     sha = hashes.get(year) or (hashes.get(int(year)) if year.isdigit() else None)
     if not sha or not block.get("repo") or not block.get("tag"):
         raise SystemExit("recorded_release requires repo, tag and sha256_by_year for period")
-    return [
+    args = [
         "--recorded-release", str(_expand_path(raw_path)),
         "--recorded-release-repo", str(block["repo"]),
         "--recorded-release-tag", str(block["tag"]),
         "--recorded-release-sha256", str(sha),
     ]
+    provenance_hashes = block.get("provenance_sha256_by_year") or {}
+    provenance_sha = provenance_hashes.get(year) or (
+        provenance_hashes.get(int(year)) if year.isdigit() else None
+    )
+    if provenance_sha:
+        args += ["--recorded-release-provenance-sha256", str(provenance_sha)]
+    return args
 
 
 def _run_recorded_release_compare(params: dict, output: Path) -> None:

@@ -64,6 +64,8 @@ def test_recorded_cli_maps_emulator_columns_and_scopes_tolerance(tmp_path):
         "--period", "2024", "--sample-size", "0", "--report-suite", "replay-test",
         "--recorded-release", str(tmp_path), "--recorded-release-tag", "test-fixture",
         "--recorded-release-sha256", sha,
+        "--recorded-release-provenance-sha256",
+        hashlib.sha256((tmp_path / "provenance_2024.json").read_bytes()).hexdigest(),
         "--concept", FEDERAL, "--concept", STATE,
         "--tolerance", "15", "--relative-tolerance", "0", "--row-aux-output", "niit",
         "--output", str(output),
@@ -103,6 +105,8 @@ def test_registry_replay_does_not_require_live_engine_packages(monkeypatch, tmp_
     assert "--with" not in command
     assert command[command.index("--relative-tolerance") + 1] == "0"
     assert command[command.index("--recorded-release-sha256") + 1].startswith("6e1692")
+    # The suite pins the provenance file too, and the runner passes it on.
+    assert command[command.index("--recorded-release-provenance-sha256") + 1].startswith("d43b4b")
     assert command[command.index("--taxsim-csv-selector-fact") + 1] == "scorp"
 
 

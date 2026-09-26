@@ -54,8 +54,10 @@ from axiom_oracles.comparison.dispositions import (  # noqa: E402
 )
 from axiom_oracles.comparison.report_io import (  # noqa: E402
     load_report,
+    decode_report_bytes,
     read_report_text,
     registered_report_paths,
+    registered_report_suites,
     write_report_text,
 )
 
@@ -138,7 +140,8 @@ def _reports(*, suites: set[str] | None = None) -> Iterator[tuple[Path, dict]]:
     ]
     yield from reports
     seen = {path.resolve() for path, _ in reports}
-    for path in registered_report_paths(REPO_ROOT, suites=suites):
+    registered = registered_report_suites(REPO_ROOT, suites=suites)
+    for path in sorted(registered):
         if path in seen:
             continue
         # Missing or malformed registered artifacts must fail --check rather
@@ -146,6 +149,13 @@ def _reports(*, suites: set[str] | None = None) -> Iterator[tuple[Path, dict]]:
         report = load_report(path)
         if "summary" not in report or "suite" not in report:
             raise ValueError(f"{path}: registered artifact is not a comparison report")
+        # A header naming another suite would look up the wrong dispositions
+        # (or none) and pass silently; the registering suite must match.
+        if report.get("suite") != registered[path]:
+            raise ValueError(
+                f"{path}: report suite {report.get('suite')!r} differs from the "
+                f"registering suite {registered[path]!r}"
+            )
         yield path, report
 
 
@@ -449,7 +459,8 @@ def _resolve_source_pointer(
         )
         return None
     try:
-        data = json.loads(read_report_text(candidate))
+        # Parse exactly the bytes whose sha256 was just verified.
+        data = json.loads(decode_report_bytes(candidate, payload))
     except (ValueError, OSError, EOFError):
         problems.append(f"{rel} source_report {raw_path!r} is not JSON")
         return None
