@@ -30,6 +30,7 @@ from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
 from .adapters.taxcalc import TaxCalcPackageRunner, attach_taxcalc_inputs
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
+from .adapters.taxsim import pins as taxsim_pins
 from .audit.accessnyc_rules import audit_accessnyc_rules
 from .comparison.comparator import Comparator, HouseholdComparison
 from .comparison.mappings import (
@@ -60,15 +61,16 @@ NYC_BENEFITS_DATASET_URL = (
     "$select=program_code&$limit=5000"
 )
 DEFAULT_PERIOD = "2026-05"
-# The pinned policyengine-taxsim 2.30.0 binary (see adapters/taxsim/
-# taxsim_pins.json) models law year 2026 rate schedules, the OBBBA standard
-# deduction, childless EITC, and FICA/SECA, so TAXSIM comparisons default to
-# the same 2026 validation year as every other lane. Known 2026 gap, verified
-# empirically against the pinned binary: the qualifying-child credit machinery
-# is absent at 2026 — CTC collapses to the $500 ODC path, and ACTC, CDCC, and
-# EITC-with-children return zero (2025 models all of them, including the OBBBA
-# $2,200 CTC). Comparisons of child-credit concepts at 2026 must treat TAXSIM
-# zeros as an NBER gap, not evidence.
+# The policyengine-taxsim 2.30.0 binary (the v1 pin; profile
+# policyengine-taxsim-2.30.0 in adapters/taxsim/taxsim_pins.json) models law
+# year 2026 rate schedules, the OBBBA standard deduction, childless EITC, and
+# FICA/SECA, so TAXSIM comparisons default to the same 2026 validation year as
+# every other lane. Known 2026 gap, verified empirically against that binary:
+# the qualifying-child credit machinery is absent at 2026 — CTC collapses to
+# the $500 ODC path, and ACTC, CDCC, and EITC-with-children return zero (2025
+# models all of them, including the OBBBA $2,200 CTC). Comparisons of
+# child-credit concepts at 2026 must treat TAXSIM zeros as an NBER gap, not
+# evidence. Later pinned builds have not been re-checked for this gap.
 TAXSIM_DEFAULT_PERIOD = "2026"
 MAX_CONSOLE_MISMATCHES = 50
 EUROMOD_TO_AXIOM_INPUT_BRIDGE_METADATA_KEY = "euromod_to_axiom_input_bridge"
@@ -568,6 +570,15 @@ def sanity_check(
     type=click.Path(dir_okay=False, path_type=Path),
     help="Write the JSON comparison report to this path.",
 )
+@click.option(
+    "--taxsim-pin-profile",
+    default=None,
+    help=(
+        "TAXSIM binary pin profile (adapters/taxsim/taxsim_pins.json). "
+        "Overrides $AXIOM_TAXSIM_PIN_PROFILE and the pin file's "
+        "default_profile; see `axiom-oracles taxsim pin-status`."
+    ),
+)
 @click.option("--json-output", "--json", is_flag=True, help="Emit JSON.")
 def compare(
     left: str,
@@ -595,12 +606,18 @@ def compare(
     case_shard: str | None,
     comparison_batch_size: int,
     output_path: Path | None,
+    taxsim_pin_profile: str | None,
     json_output: bool,
 ) -> None:
     """Compare two executable program systems over a validation population."""
 
     if left == right:
         raise click.ClickException("Choose two different systems to compare.")
+    if "taxsim" in (left, right):
+        try:
+            taxsim_pin_profile = taxsim_pins.active_profile_name(taxsim_pin_profile)
+        except taxsim_pins.TaxsimPinError as exc:
+            raise click.ClickException(str(exc)) from exc
 
     gc_was_enabled = gc.isenabled()
     if gc_was_enabled:
@@ -726,6 +743,7 @@ def compare(
             axiom_batch_size=axiom_batch_size,
             axiom_record_all_outputs=full_evidence,
             paired_engine=right,
+            taxsim_pin_profile=taxsim_pin_profile,
         )
         right_runner = _build_runner(
             right,
@@ -740,12 +758,13 @@ def compare(
             axiom_batch_size=axiom_batch_size,
             axiom_record_all_outputs=full_evidence,
             paired_engine=left,
+            taxsim_pin_profile=taxsim_pin_profile,
         )
 
         comparator = Comparator(mappings)
         stream_case_rows = output_path is not None or not json_output
         with tempfile.TemporaryDirectory(prefix="axiom-oracles-report-") as report_dir:
-            accumulator = ComparisonReportAccumulator(
+            accumulator = _IdentifiedReportAccumulator(
                 suite_name=report_suite or suite_name,
                 population=population,
                 locales=case_locales,
@@ -828,6 +847,9 @@ def compare(
                 raise click.ClickException(
                     "No cases remain after engine-specific preparation filters."
                 )
+
+            accumulator.engine_identity = _engine_identity(left_runner, right_runner)
+            _echo_taxsim_identity(accumulator.engine_identity)
 
             if output_path:
                 accumulator.write_json(output_path)
@@ -1354,6 +1376,7 @@ def _build_runner(
     axiom_batch_size: int = 5_000,
     axiom_record_all_outputs: bool = False,
     paired_engine: str | None = None,
+    taxsim_pin_profile: str | None = None,
 ) -> EngineAdapter:
     if engine == "accessnyc":
         if accessnyc_mode == "drools":
@@ -1421,7 +1444,7 @@ def _build_runner(
             record_all_outputs=axiom_record_all_outputs,
         )
     if engine == "taxsim":
-        return TaxsimPackageRunner()
+        return TaxsimPackageRunner(pin_profile=taxsim_pin_profile)
     if engine == "taxcalc":
         return TaxCalcPackageRunner()
     if engine == "prd":
@@ -1581,6 +1604,252 @@ def _filter_for_accessnyc_mode(
         for mapping in mappings
         if mapping.target_for_engine("accessnyc") in available_codes
     ]
+
+
+class _IdentifiedReportAccumulator(ComparisonReportAccumulator):
+    """Report accumulator that also records the engines' binary identity.
+
+    ``engine_identity`` (e.g. ``{"taxsim": {"pin_profile", "binaries"}}``) is
+    emitted as the report's top-level ``engine_identity`` key when set.
+    """
+
+    engine_identity: dict | None = None
+
+    def to_dict(self, *, include_cases: bool = True) -> dict:
+        report = super().to_dict(include_cases=include_cases)
+        if self.engine_identity:
+            report["engine_identity"] = self.engine_identity
+        return report
+
+
+def _engine_identity(*runners: EngineAdapter) -> dict | None:
+    """Binary identity of the runners that executed pinned binaries."""
+
+    identity: dict = {}
+    for runner in runners:
+        # PolicyEngineTaxsimRunner subclasses TaxsimPackageRunner but never
+        # runs a pinned binary, so its identity is always None.
+        if isinstance(runner, TaxsimPackageRunner):
+            taxsim = runner.taxsim_identity()
+            if taxsim is not None:
+                identity["taxsim"] = taxsim
+    return identity or None
+
+
+def _echo_taxsim_identity(identity: dict | None) -> None:
+    taxsim = (identity or {}).get("taxsim")
+    if not taxsim:
+        return
+    click.echo(f"TAXSIM pin profile: {taxsim['pin_profile']}", err=True)
+    for binary in taxsim["binaries"]:
+        click.echo(
+            f"  {binary['sha256'][:12]} {binary['platform']} build "
+            f"{binary['build']} ({binary['scope']}): {binary['rows']} row(s)",
+            err=True,
+        )
+
+
+@cli.group()
+def taxsim() -> None:
+    """Pinned TAXSIM binary commands (profiles, fetch, status)."""
+
+
+_PLATFORM_CHOICES = click.Choice(["linux", "darwin", "windows", "current", "all"])
+
+
+def _selected_platforms(platform_choice: str) -> list[str]:
+    if platform_choice == "all":
+        return list(taxsim_pins.PLATFORMS)
+    return [taxsim_pins.normalize_platform(platform_choice)]
+
+
+def _selected_profiles(profile: str | None, all_profiles: bool) -> list[str]:
+    if all_profiles:
+        if profile:
+            raise click.ClickException("Pass --profile or --all-profiles, not both.")
+        return taxsim_pins.profile_names()
+    return [taxsim_pins.active_profile_name(profile)]
+
+
+@taxsim.command("fetch-binaries")
+@click.option("--profile", default=None, help="Pin profile (default: active).")
+@click.option(
+    "--all-profiles", is_flag=True, help="Fetch the binaries of every profile."
+)
+@click.option(
+    "--platform",
+    "platform_choice",
+    type=_PLATFORM_CHOICES,
+    default="current",
+    show_default=True,
+    help="Binary platform to fetch.",
+)
+@click.option(
+    "--from-git-repo",
+    type=click.Path(exists=True, file_okay=False, path_type=Path),
+    default=None,
+    help=(
+        "Local PolicyEngine/policyengine-taxsim clone to read pinned git "
+        "blobs from before trying the network."
+    ),
+)
+def taxsim_fetch_binaries(
+    profile: str | None,
+    all_profiles: bool,
+    platform_choice: str,
+    from_git_repo: Path | None,
+) -> None:
+    """Download pinned TAXSIM binaries into the verified cache.
+
+    Every download is checked against the pinned SHA-256 and size before it
+    is written to $AXIOM_TAXSIM_CACHE_DIR (default
+    ~/.cache/axiom-oracles/taxsim-binaries/<sha256>/<filename>).
+    """
+
+    try:
+        profiles = _selected_profiles(profile, all_profiles)
+        platforms = _selected_platforms(platform_choice)
+        shas: list[str] = []
+        for name in profiles:
+            for system in platforms:
+                for sha in taxsim_pins.get_profile(name).binary_shas(system):
+                    if sha not in shas:
+                        shas.append(sha)
+        failures = []
+        for sha in shas:
+            binary = taxsim_pins.pinned_binary(sha)
+            try:
+                result = taxsim_pins.fetch_binary(sha, from_git_repo=from_git_repo)
+            except taxsim_pins.TaxsimPinError as exc:
+                failures.append(str(exc))
+                continue
+            click.echo(
+                f"{result.status:8s} {sha[:12]} {binary.platform:7s} "
+                f"{binary.build:14s} {result.path} ({result.source})"
+            )
+    except taxsim_pins.TaxsimPinError as exc:
+        raise click.ClickException(str(exc)) from exc
+    if failures:
+        raise click.ClickException("\n".join(failures))
+
+
+@taxsim.command("pin-status")
+@click.option("--profile", default=None, help="Pin profile (default: active).")
+@click.option("--all-profiles", is_flag=True, help="Report every profile.")
+@click.option(
+    "--platform",
+    "platform_choice",
+    type=_PLATFORM_CHOICES,
+    default="current",
+    show_default=True,
+)
+@click.option("--json-output", "--json", is_flag=True, help="Emit JSON.")
+def taxsim_pin_status(
+    profile: str | None,
+    all_profiles: bool,
+    platform_choice: str,
+    json_output: bool,
+) -> None:
+    """Show the active pin profile, its resolution table, and binary status."""
+
+    try:
+        active, origin = taxsim_pins.active_profile(profile)
+        names = taxsim_pins.profile_names() if all_profiles else [active]
+        platforms = _selected_platforms(platform_choice)
+        status = {
+            "active_profile": active,
+            "active_profile_source": origin,
+            "default_profile": taxsim_pins.pin_document().default_profile,
+            "policyengine_taxsim": taxsim_pins.pinned_version(),
+            "profiles": [
+                _profile_status(taxsim_pins.get_profile(name), platforms)
+                for name in names
+            ],
+        }
+    except taxsim_pins.TaxsimPinError as exc:
+        raise click.ClickException(str(exc)) from exc
+    if json_output:
+        click.echo(json.dumps(status, indent=2, sort_keys=True))
+        return
+    click.echo(
+        f"Active profile: {active} (from {origin}); default_profile: "
+        f"{status['default_profile']}; policyengine-taxsim "
+        f"{status['policyengine_taxsim']}"
+    )
+    for item in status["profiles"]:
+        click.echo(f"\nProfile {item['name']}: {item['description']}")
+        for row in item["resolution"]:
+            click.echo(
+                f"  {row['cells']:40s} {row['platform']:7s} -> "
+                f"{row['sha256'][:12]} build {row['build']}"
+            )
+        for binary in item["binaries"]:
+            where = binary["path"] or "not found"
+            click.echo(
+                f"  [{binary['status']:8s}] {binary['sha256'][:12]} "
+                f"{binary['platform']:7s} {binary['build']:14s} {where}"
+            )
+
+
+def _profile_status(profile, platforms: list[str]) -> dict:
+    resolution = []
+    for system in platforms:
+        if system not in profile.binaries:
+            continue
+        default_sha = profile.binaries[system]
+        resolution.append(
+            {
+                "cells": "default (all other cells, incl. state 0)",
+                "scope": taxsim_pins.DEFAULT_SCOPE,
+                "platform": system,
+                "sha256": default_sha,
+                "build": taxsim_pins.pinned_binary(default_sha).build,
+            }
+        )
+        for override in profile.overrides:
+            sha = override.binaries[system]
+            states = ",".join(
+                f"{taxsim_pins.taxsim_state_postal(code)}({code})"
+                for code in sorted(override.states)
+            )
+            years = ",".join(str(year) for year in sorted(override.years))
+            resolution.append(
+                {
+                    "cells": f"{states} x {years}",
+                    "scope": override.scope,
+                    "platform": system,
+                    "sha256": sha,
+                    "build": taxsim_pins.pinned_binary(sha).build,
+                }
+            )
+    binaries = []
+    for system in platforms:
+        for sha in profile.binary_shas(system):
+            binary = taxsim_pins.pinned_binary(sha)
+            candidates = taxsim_pins.inspect_candidates(sha)
+            verified = [c for c in candidates if c.status == "verified"]
+            mismatched = [c for c in candidates if c.status == "mismatch"]
+            if verified:
+                status, path = "verified", verified[0].path
+            elif mismatched:
+                status, path = "mismatch", mismatched[0].path
+            else:
+                status, path = "missing", None
+            binaries.append(
+                {
+                    "sha256": sha,
+                    "platform": binary.platform,
+                    "build": binary.build,
+                    "status": status,
+                    "path": str(path) if path is not None else None,
+                }
+            )
+    return {
+        "name": profile.name,
+        "description": profile.description,
+        "resolution": resolution,
+        "binaries": binaries,
+    }
 
 
 def _comparison_report(
