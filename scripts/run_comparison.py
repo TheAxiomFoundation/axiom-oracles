@@ -1079,7 +1079,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         identity = _normalize_dataset_identity(raw_report) if isinstance(
             raw_report, dict
         ) else None
-        dataset = dataset_provenance_from_identity(identity)
+        if identity is not None and identity.get("source") == "taxsim-csv":
+            # The taxsim-csv loader's identity is the whole provenance: the
+            # file's full sha256, size, rows, year override, per-state row
+            # counts, and origin — dataset_provenance_from_identity keeps only
+            # the populace-shaped fields.
+            dataset = _taxsim_csv_dataset_provenance(identity)
+        else:
+            dataset = dataset_provenance_from_identity(identity)
     except (OSError, json.JSONDecodeError):
         dataset = None
     if dataset is None:
@@ -1850,6 +1857,15 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         if "taxsim" in engines
         else ()
     )
+    population = str(params.get("population", "enhanced-cps"))
+    taxsim_csv_args = _taxsim_csv_cli_args(params, population)
+    # A taxsim-csv suite without `period` keeps each row's own tax year; with
+    # it, the CLI overrides every row's year (one file, one law year per run).
+    period_args = (
+        []
+        if population == "taxsim-csv" and params.get("period") is None
+        else ["--period", str(params["period"])]
+    )
     cmd = [
         "uv",
         "run",
@@ -1868,11 +1884,11 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         params["left"],
         params["right"],
         "--population",
-        params.get("population", "enhanced-cps"),
+        population,
+        *taxsim_csv_args,
         "--sample-size",
         str(params.get("sample_size", 1000)),
-        "--period",
-        str(params["period"]),
+        *period_args,
         *(["--report-suite", str(params["suite"])] if params.get("suite") else []),
         *(["--include-components"] if params.get("include_components") else []),
         *_concept_args(params),
@@ -1930,6 +1946,67 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         # suite's declared roots. The suite pin is authoritative here.
         env.pop("AXIOM_RULESPEC_ROOT", None)
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
+
+
+def _taxsim_csv_cli_args(params: dict, population: str) -> list[str]:
+    """``--taxsim-csv*`` flags for a suite's ``taxsim_csv`` parameter block.
+
+    A ``population: taxsim-csv`` suite must declare::
+
+        taxsim_csv:
+          path: $HOME/.../cps_households.csv   # env/~ expanded
+          sha256: <64 hex>                     # the CLI fails closed on mismatch
+          origin:                              # optional provenance
+            repo: PolicyEngine/policyengine-taxsim
+            commit: <git sha>
+            path: cps_households.csv
+          allow_unknown_columns: false         # optional
+
+    The sha256 is mandatory for registered suites: a committed report must name
+    the exact file it scored. The block is rejected on any other population.
+    """
+    block = params.get("taxsim_csv")
+    if population != "taxsim-csv":
+        if block is not None:
+            raise SystemExit(
+                "`taxsim_csv` parameters apply only to `population: taxsim-csv`"
+            )
+        return []
+    if not isinstance(block, dict) or not block.get("path"):
+        raise SystemExit(
+            "`population: taxsim-csv` comparisons must declare "
+            "`taxsim_csv: {path, sha256}` under runner.parameters"
+        )
+    unknown = set(block) - {"path", "sha256", "origin", "allow_unknown_columns"}
+    if unknown:
+        raise SystemExit(f"unknown `taxsim_csv` keys: {sorted(unknown)}")
+    if not block.get("sha256"):
+        raise SystemExit(
+            "`taxsim_csv.sha256` is required: a registered suite must pin the "
+            "exact TAXSIM input file it scores"
+        )
+    args = [
+        "--taxsim-csv",
+        str(_expand_path(block["path"])),
+        "--taxsim-csv-sha256",
+        str(block["sha256"]),
+    ]
+    origin = block.get("origin")
+    if origin is not None:
+        if not isinstance(origin, dict) or set(origin) != {"repo", "commit", "path"}:
+            raise SystemExit(
+                "`taxsim_csv.origin` must be a mapping with exactly repo, commit, "
+                "and path"
+            )
+        args.extend(
+            [
+                "--taxsim-csv-origin",
+                f"{origin['repo']}@{origin['commit']}:{origin['path']}",
+            ]
+        )
+    if block.get("allow_unknown_columns"):
+        args.append("--taxsim-csv-allow-unknown-columns")
+    return args
 
 
 def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None:
@@ -4703,6 +4780,16 @@ def _limit_rows_by_output(rows: list[dict], *, limit_per_output: int) -> list[di
         counts[output] += 1
         selected.append(row)
     return selected
+
+
+def _taxsim_csv_dataset_provenance(identity: dict) -> dict:
+    """provenance.dataset for a ``population: taxsim-csv`` CLI report.
+
+    The CLI writes the loader's file identity (plus a ``selection`` summary of
+    scope and sampling) as the report's top-level ``dataset_identity``; it is
+    recorded whole so the provenance names the exact TAXSIM input file.
+    """
+    return dict(identity)
 
 
 def _normalize_dataset_identity(raw: dict) -> dict | None:
