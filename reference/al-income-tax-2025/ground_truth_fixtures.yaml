@@ -1,0 +1,157 @@
+schema_version: 1
+tax_year: 2025
+conventions:
+  tax_input_order: [at_least, but_less_than]
+  tax_expected_order: [single_mfs_hof, mfj]
+  standard_status_order: [mfj, mfs, hof, single]
+  standard_inputs: inclusive_AGI_intervals_in_status_order
+  null_upper_bound: unbounded
+templates:
+  tax: &tax {component: income_tax_table, document: us-al/form/ador/ty2025/form-40-tax-table/document-1, page: 1}
+  std: &std {component: standard_deduction_chart, document: us-al/form/ador/ty2025/form-40-standard-deduction-chart/document-1, page: 1}
+  book: &book {document: us-al/form/ador/ty2025/form-40-instructions/document-1}
+  fed: &fed {component: federal_deduction_worksheet, document: us-al/form/ador/ty2025/form-40-instructions/document-1, page: 31}
+  vehicle: &vehicle {component: vehicle_interest_worksheet, document: us-al/form/ador/ty2025/form-40-instructions/document-1, page: 31}
+fixtures:
+  - {<<: *tax, id: tax_0, inputs: [0,50], expected: [0,0], verbatim_evidence: "0         50           0          0"}
+  - {<<: *tax, id: tax_50, inputs: [50,100], expected: [1,1], verbatim_evidence: "50        100           1          1"}
+  - {<<: *tax, id: tax_100, inputs: [100,200], expected: [3,3], verbatim_evidence: "100        200           3          3"}
+  - {<<: *tax, id: tax_400, inputs: [400,500], expected: [9,9], verbatim_evidence: "400        500           9          9"}
+  - {<<: *tax, id: tax_500, inputs: [500,600], expected: [12,11], verbatim_evidence: "500        600        12          11"}
+  - {<<: *tax, id: tax_600, inputs: [600,700], expected: [16,13], verbatim_evidence: "600        700        16          13"}
+  - {<<: *tax, id: tax_900, inputs: [900,1000], expected: [28,19], verbatim_evidence: "900      1,000        28          19"}
+  - {<<: *tax, id: tax_1000, inputs: [1000,1100], expected: [32,22], verbatim_evidence: "1,000      1,100        32          22"}
+  - {<<: *tax, id: tax_1100, inputs: [1100,1200], expected: [36,26], verbatim_evidence: "1,100      1,200        36          26"}
+  - {<<: *tax, id: tax_2900, inputs: [2900,3000], expected: [108,98], verbatim_evidence: "2,900      3,000       108          98"}
+  - {<<: *tax, id: tax_3000, inputs: [3000,3100], expected: [113,102], verbatim_evidence: "3,000      3,100       113         102"}
+  - {<<: *tax, id: tax_3100, inputs: [3100,3200], expected: [118,106], verbatim_evidence: "3,100      3,200       118         106"}
+  - {<<: *tax, id: tax_5900, inputs: [5900,6000], expected: [258,218], verbatim_evidence: "5,900      6,000         258        218"}
+  - {<<: *tax, id: tax_6000, inputs: [6000,6100], expected: [263,223], verbatim_evidence: "6,000      6,100         263         223"}
+  - {<<: *tax, id: tax_6100, inputs: [6100,6200], expected: [268,228], verbatim_evidence: "6,100      6,200         268         228"}
+  - {<<: *tax, id: tax_9900, inputs: [9900,10000], expected: [458,418], verbatim_evidence: "9,900    10,000          458        418"}
+  - {<<: *tax, id: tax_10000, inputs: [10000,10100], expected: [463,423], verbatim_evidence: "10,000    10,100          463         423"}
+  - {<<: *tax, id: tax_15900, inputs: [15900,16000], expected: [758,718], verbatim_evidence: "15,900     16,000           758       718"}
+  - {<<: *tax, id: tax_16000, page: 2, inputs: [16000,16100], expected: [763,723], verbatim_evidence: "16,000    16,100      763        723"}
+  - {<<: *tax, id: tax_23300, page: 2, inputs: [23300,23400], expected: [1128,1088], verbatim_evidence: "23,300    23,400     1,128     1,088"}
+  - {<<: *tax, id: tax_25900, page: 2, inputs: [25900,26000], expected: [1258,1218], verbatim_evidence: "25,900    26,000     1,258     1,218"}
+  - {<<: *tax, id: tax_26000, page: 2, inputs: [26000,26100], expected: [1263,1223], verbatim_evidence: "26,000    26,100     1,263     1,223"}
+  - {<<: *tax, id: tax_35900, page: 2, inputs: [35900,36000], expected: [1758,1718], verbatim_evidence: "35,900    36,000     1,758     1,718"}
+  - {<<: *tax, id: tax_36000, page: 3, inputs: [36000,36100], expected: [1763,1723], verbatim_evidence: "36,000    36,100     1,763     1,723"}
+  - {<<: *tax, id: tax_50000, page: 3, inputs: [50000,50100], expected: [2463,2423], verbatim_evidence: "50,000    50,100     2,463     2,423"}
+  - {<<: *tax, id: tax_56000, page: 4, inputs: [56000,56100], expected: [2763,2723], verbatim_evidence: "56,000    56,100     2,763     2,723"}
+  - {<<: *tax, id: tax_75000, page: 4, inputs: [75000,75100], expected: [3713,3673], verbatim_evidence: "75,000    75,100     3,713     3,673"}
+  - {<<: *tax, id: tax_76000, page: 5, inputs: [76000,76100], expected: [3763,3723], verbatim_evidence: "76,000    76,100     3,763     3,723"}
+  - {<<: *tax, id: tax_96000, page: 6, inputs: [96000,96100], expected: [4763,4723], verbatim_evidence: "96,000    96,100               4,763           4,723"}
+  - {<<: *tax, id: tax_99900, page: 6, inputs: [99900,100000], expected: [4958,4918], verbatim_evidence: "99,900   100,000     4,958     4,918"}
+  - {<<: *std, id: std_01, inputs: [[0,25999],[0,12999],[0,25999],[0,25999]], expected: [8500,4250,5200,3000], verbatim_evidence: ["$ 0 – $25,999  $8,500","$ 0 – $12,999   $4,250","$ 0 – $25,999  $5,200","$ 0 – $25,999   $3,000"]}
+  - {<<: *std, id: std_02, inputs: [[26000,26499],[13000,13249],[26000,26499],[26000,26499]], expected: [8325,4162,5065,2975], verbatim_evidence: ["$26,000 – $26,499   $8,325","$13,000 – $13,249   $4,162","$26,000 – $26,499   $5,065","$26,000 – $26,499    $2,975"]}
+  - {<<: *std, id: std_03, inputs: [[25500,26999],[13250,13499],[26500,26999],[26500,26999]], expected: [8150,4074,4930,2950], verbatim_evidence: ["$25,500 – $26,999   $8,150","$13,250 – $13,499   $4,074","$26,500 – $26,999   $4,930","$26,500 – $26,999    $2,950"], flags: [mfj_printed_overlap], ambiguous_mfj_interval: [25500,26499], inferred_corrected_mfj_lower_bound: 26500}
+  - {<<: *std, id: std_04, inputs: [[27000,27499],[13500,13749],[27000,27499],[27000,27499]], expected: [7975,3986,4795,2925], verbatim_evidence: ["$27,000 – $27,499   $7,975","$13,500 – $13,749   $3,986","$27,000 – $27,499   $4,795","$27,000 – $27,499    $2,925"]}
+  - {<<: *std, id: std_05, inputs: [[27500,27999],[13750,13999],[27500,27999],[27500,27999]], expected: [7800,3898,4660,2900], verbatim_evidence: ["$27,500 – $27,999   $7,800","$13,750 – $13,999   $3,898","$27,500 – $27,999   $4,660","$27,500 – $27,999    $2,900"]}
+  - {<<: *std, id: std_06, inputs: [[28000,28499],[14000,14249],[28000,28499],[28000,28499]], expected: [7625,3810,4525,2875], verbatim_evidence: ["$28,000 – $28,499   $7,625","$14,000 – $14,249   $3,810","$28,000 – $28,499   $4,525","$28,000 – $28,499    $2,875"]}
+  - {<<: *std, id: std_07, inputs: [[28500,28999],[14250,14499],[28500,28999],[28500,28999]], expected: [7450,3722,4390,2850], verbatim_evidence: ["$28,500 – $28,999   $7,450","$14,250 – $14,499   $3,722","$28,500 – $28,499   $4,390","$28,500 – $28,499    $2,850"]}
+  - {<<: *std, id: std_08, inputs: [[29000,29499],[14500,14749],[29000,29499],[29000,29499]], expected: [7275,3634,4255,2825], verbatim_evidence: ["$29,000 – $29,499   $7,275","$14,500 – $14,749   $3,634","$29,000 – $29,499   $4,255","$29,000 – $29,499    $2,825"]}
+  - {<<: *std, id: std_09, inputs: [[29500,29999],[14750,14999],[29500,29999],[29500,29999]], expected: [7100,3546,4120,2800], verbatim_evidence: ["$29,500 – $29,999   $7,100","$14,750 – $14,999   $3,546","$29,500 – $29,999   $4,120","$29,500 – $29,999    $2,800"]}
+  - {<<: *std, id: std_10, inputs: [[30000,30499],[15000,15249],[30000,30499],[30000,30499]], expected: [6925,3458,3985,2775], verbatim_evidence: ["$30,000 – $30,499   $6,925","$15,000 – $15,249   $3,458","$30,000 – $30,499   $3,985","$30,000 – $30,499    $2,775"]}
+  - {<<: *std, id: std_11, inputs: [[30500,30999],[15250,15499],[30500,30999],[30500,30999]], expected: [6750,3370,3850,2750], verbatim_evidence: ["$30,500 – $30,999   $6,750","$15,250 – $15,499   $3,370","$30,500 – $30,999   $3,850","$30,500 – $30,999    $2,750"]}
+  - {<<: *std, id: std_12, inputs: [[31000,31499],[15500,15749],[31000,31499],[31000,31499]], expected: [6575,3282,3715,2725], verbatim_evidence: ["$31,000 – $31,499   $6,575","$15,500 – $15,749   $3,282","$31,000 – $31,499   $3,715","$31,000 – $31,499    $2,725"]}
+  - {<<: *std, id: std_13, inputs: [[31500,31999],[15750,15999],[31500,31999],[31500,31999]], expected: [6400,3194,3580,2700], verbatim_evidence: ["$31,500 – $31,999   $6,400","$15,750 – $15,999   $3,194","$31,500 – $31,999   $3,580","$31,500 – $31,999    $2,700"]}
+  - {<<: *std, id: std_14, inputs: [[32000,32499],[16000,16249],[32000,32499],[32000,32499]], expected: [6225,3106,3445,2675], verbatim_evidence: ["$32,000 – $32,499   $6,225","$16,000 – $16,249   $3,106","$32,000 – $32,499   $3,445","$32,000 – $32,499    $2,675"]}
+  - {<<: *std, id: std_15, inputs: [[32500,32999],[16250,16499],[32500,32999],[32500,32999]], expected: [6050,3018,3310,2650], verbatim_evidence: ["$32,500 – $32,999   $6,050","$16,250 – $16,499   $3,018","$32,500 – $32,999   $3,310","$32,500 – $32,999    $2,650"]}
+  - {<<: *std, id: std_16, inputs: [[33000,33499],[16500,16749],[33000,33499],[33000,33499]], expected: [5875,2930,3175,2625], verbatim_evidence: ["$33,000 – $33,499   $5,875","$16,500 – $16,749   $2,930","$33,000 – $33,499   $3,175","$33,000 – $33,499    $2,625"]}
+  - {<<: *std, id: std_17, inputs: [[33500,33999],[16750,16999],[33500,33999],[33500,33999]], expected: [5700,2842,3040,2600], verbatim_evidence: ["$33,500 – $33,999   $5,700","$16,750 – $16,999   $2,842","$33,500 – $33,999   $3,040","$33,500 – $33,999    $2,600"]}
+  - {<<: *std, id: std_18, inputs: [[34000,34499],[17000,17249],[34000,34499],[34000,34499]], expected: [5525,2754,2905,2575], verbatim_evidence: ["$34,000 – $34,499   $5,525","$17,000 – $17,249   $2,754","$34,000 – $34,499   $2,905","$34,000 – $34,499    $2,575"]}
+  - {<<: *std, id: std_19, inputs: [[34500,34999],[17250,17499],[34500,34999],[34500,34999]], expected: [5350,2666,2770,2550], verbatim_evidence: ["$34,500 – $34,999   $5,350","$17,250 – $17,499   $2,666","$34,500 – $34,499   $2,770","$34,500 – $34,499    $2,550"]}
+  - {<<: *std, id: std_20, inputs: [[35000,35499],[17500,17749],[35000,35499],[35000,35499]], expected: [5175,2578,2635,2525], verbatim_evidence: ["$35,000 – $35,499   $5,175","$17,500 – $17,749   $2,578","$35,000 – $35,499   $2,635","$35,000 – $35,499    $2,525"]}
+  - {<<: *std, id: std_21, inputs: [[35500,null],[17750,null],[35500,null],[35500,null]], expected: [5000,2500,2500,2500], verbatim_evidence: ["$35,500 and above   $5,000","$17,750 and above   $2,500","$35,500 and above   $2,500","$35,500 and above    $2,500"]}
+  - <<: *book
+    id: over100k_nonjoint
+    component: over100k_worksheet
+    page: 30
+    inputs: {filing_status: [single,mfs,hof], taxable_income_gt: 100000}
+    expected: {subtrahend: 100000, multiplier: 0.05, additive_constant: 4958}
+    verbatim_evidence: ["If taxable income is over $100,000, use the following worksheet to figure your tax.","Single","Married filing separately","Head of family","Enter taxable income","– 100,000.00","Subtract line 2 from line 1","Multiply line 3 by .05","Enter result here","4,958.00","Add lines 5 and 6. Your tax is"]
+  - <<: *book
+    id: over100k_joint
+    component: over100k_worksheet
+    page: 30
+    inputs: {filing_status: mfj, taxable_income_gt: 100000}
+    expected: {subtrahend: 100000, multiplier: 0.05, additive_constant: 4918}
+    verbatim_evidence: ["Married filing jointly","Enter taxable income","– 100,000.00","Subtract line 2 from line 1","Multiply line 3 by .05","Enter result here","4,918.00","Add lines 5 and 6. Your tax is"]
+  - {id: personal_exemptions, component: personal_exemption, document: us-al/form/ador/ty2025/form-40/document-1, page: 1, inputs: [single,mfj,mfs,hof], expected: [1500,3000,1500,3000], verbatim_evidence: ["$1,500 Single","$3,000 Married filing joint","$1,500 Married filing separate.","$3,000 Head of Family (with qualifying person).Complete Schedule HOF"]}
+  - {<<: *book, id: dependent_low, component: exemption_per_dependent, page: 10, inputs: {al_agi_inclusive: [0,50000]}, expected: 1000, verbatim_evidence: "0 - 50,000               1,000"}
+  - {<<: *book, id: dependent_mid, component: exemption_per_dependent, page: 10, inputs: {al_agi_inclusive: [50001,100000]}, expected: 500, verbatim_evidence: "50,001 - 100,000                 500"}
+  - {<<: *book, id: dependent_high, component: exemption_per_dependent, page: 10, inputs: {al_agi_gt: 100000}, expected: 300, verbatim_evidence: "Over 100,000                  300"}
+  - {<<: *fed, id: fed_l1, inputs: {line: "1"}, expected: {source: form1040_line22}, verbatim_evidence: "Enter the tax as shown on line 22 on 2025 Form 1040/Form 1040-SR/Form 1040NR."}
+  - {<<: *fed, id: fed_l2, inputs: {line: "2"}, expected: {source: form8960_line17}, verbatim_evidence: "Net Investment Income Tax. Enter amount from line 17, 2025 Form 8960."}
+  - {<<: *fed, id: fed_l3, inputs: {line: "3"}, expected: {formula: "L1 + L2"}, verbatim_evidence: "Federal Tax. Add Lines 1 and 2."}
+  - {<<: *fed, id: fed_l4a, inputs: {line: "4a"}, expected: {source: form1040_line27a}, verbatim_evidence: "Earned Income Credit (EIC). Enter the amount from line 27a of 2025 Form 1040/Form 1040-SR."}
+  - {<<: *fed, id: fed_l4b, inputs: {line: "4b"}, expected: {source: form1040_line28}, verbatim_evidence: "Additional Child Tax Credit. Enter the amount from Line 28 of 2025 Form 1040/Form 1040-SR/1040-NR."}
+  - {<<: *fed, id: fed_l4c, inputs: {line: "4c"}, expected: {source: form1040_line29}, verbatim_evidence: "American Opportunity Credit. Enter the amount from line 29 of 2025 Form 1040/Form 1040-SR."}
+  - {<<: *fed, id: fed_l4d, inputs: {line: "4d"}, expected: {source: form1040_line30}, verbatim_evidence: "Refundable Adoption Credit. Enter the amount from line 30 of 2025 Form 1040/Form 1040-SR/1040-NR."}
+  - {<<: *fed, id: fed_l4e, inputs: {line: "4e"}, expected: {source: schedule3_partII_line13a}, verbatim_evidence: "Credits from Forms 2439. Enter the amount from Schedule 3, Part II, line 13a of 2025 Form 1040/Form 1040-SR/Form1040NR."}
+  - {<<: *fed, id: fed_l5, inputs: {line: "5"}, expected: {formula: "L4a + L4b + L4c + L4d + L4e"}, verbatim_evidence: "Add lines 4a, b, c, d and e."}
+  - {<<: *fed, id: fed_l6, inputs: {line: "6"}, expected: {formula: "max(0, L3 - L5)", destination: form40_line12}, verbatim_evidence: "Subtract line 5 from line 3. If amount is negative enter zero also enter on line 12 of Form 40, line 9 of Form 40A or page 2, Part IV, line 4 of Form 40NR."}
+  - {<<: *vehicle, id: vehicle_l1, inputs: {line: 1}, expected: {formula: "ScheduleA11a + ScheduleA11b or vehicle_spreadsheet_total"}, verbatim_evidence: "Enter the sum of Schedule A, Lines 11a and 11b or total from vehicle loan spreadsheet."}
+  - {<<: *vehicle, id: vehicle_l2, inputs: {line: 2}, expected: {formula: "min(L1, 10000)"}, verbatim_evidence: "Enter the smaller of the amount on line 1 or $10,000."}
+  - {<<: *vehicle, id: vehicle_l3, inputs: {line: 3}, expected: {source: form40_line10}, verbatim_evidence: "Enter the amount from Form 40, line 10."}
+  - {<<: *vehicle, id: vehicle_l4, inputs: {line: 4}, expected: {mfj: 200000, otherwise: 100000}, verbatim_evidence: "Enter $100,000 ($200,000 if married filing jointly)."}
+  - {<<: *vehicle, id: vehicle_l5, inputs: {line: 5}, expected: {formula: "L3 - L4", if_nonpositive: "L8 = L2"}, verbatim_evidence: "Subtract line 4 from line 3. If zero or less, enter the amount from line 2 on line 8."}
+  - {<<: *vehicle, id: vehicle_l6, inputs: {line: 6, branch: positive_L5}, expected: {formula: "ceil(L5 / 1000)"}, verbatim_evidence: "Divide line 5 by $1,000. If the resulting number isn’t a whole number, increase the result to the next higher whole number. (For example, increase 1.5 to 2, and increase 0.05 to 1.)"}
+  - {<<: *vehicle, id: vehicle_l7, inputs: {line: 7}, expected: {formula: "L6 * 200"}, verbatim_evidence: "Multiply line 6 by $200."}
+  - {<<: *vehicle, id: vehicle_l8, inputs: {line: 8, branch: positive_L5}, expected: {formula: "max(0, L2 - L7)", destination: form40_scheduleA_line11c}, verbatim_evidence: "Qualified vehicle loan interest deduction. Subtract line 7 from line 2. If zero or less, enter -0-. Enter this amount on Form 40, Schedule A, line 11c."}
+  - {<<: *vehicle, id: vehicle_roundup_15, inputs: {line6_unrounded_quotient: 1.5}, expected: 2, verbatim_evidence: "increase 1.5 to 2"}
+  - {<<: *vehicle, id: vehicle_roundup_005, inputs: {line6_unrounded_quotient: 0.05}, expected: 1, verbatim_evidence: "increase 0.05 to 1"}
+  - {<<: *book, id: round_139, component: whole_dollar_rounding, page: 7, inputs: 1.39, expected: 1.00, verbatim_evidence: "$1.39 becomes $1.00"}
+  - {<<: *book, id: round_269, component: whole_dollar_rounding, page: 7, inputs: 2.69, expected: 3.00, verbatim_evidence: "$2.69 becomes $3.00"}
+  - <<: *book
+    id: brown_mfj
+    component: worked_tax_table_example
+    page: 25
+    inputs: {filing_status: mfj, taxable_income: 23360}
+    expected: {row: [23300,23400], form40_line17: 1088}
+    verbatim_evidence: "Mr. and Mrs. Brown are filing a joint return and checked box 2 on their return. Their taxable income on line 16 of Form 40 is $23,360. First, they find the $23,300 - $23,400 income line. Next, they find the column for married filing jointly and read down the column. The amount shown where the income line and the filing status column meet is $1,088. This is the amount they must write on line 17 of Form 40."
+  - <<: *book
+    id: charitable_dinner
+    component: charitable_contribution_worked_example
+    page: 20
+    inputs: {payment: 100, benefit: 40}
+    expected: {deduction: 60}
+    verbatim_evidence: "Example. You paid $100 to a charitable organization to attend a fund-raising dinner. To figure the amount of your deductible charitable contribution, subtract the value of the dinner from the total amount you paid. If the value of the dinner was $40, your deductible contribution is $60."
+  - <<: *book
+    id: schedule_cr_gambling
+    component: booklet_worked_credit_result
+    page: 22
+    inputs: {filing_status: single, wages: 66666.67, other_state_gambling_winnings: 100000, al_allowed_losses: 50000, other_state_allowed_losses: 30000}
+    expected: {same_income_base: 50000, printed_credit: 2463}
+    flags: [other_state_actual_tax_not_specified, not_a_complete_general_credit_algorithm]
+    verbatim_evidence: ["The taxpayer is a single filing resident of Alabama and has income from wages of $66,666.67. The taxpayer has gambling winnings of $100,000.00. The taxpayer has substantiated gambling losses of $50,000.00 of which only $30,000.00 is allowed as a deduction on the other state’s return.","Income from other state under Alabama Law (subtract line 3 from 1 to get the same income taxed by Alabama)","$ 50,000.00","(c) If there is an entry on line 2 above, compute the Alabama tax on the amount on line 4 using the tax tables on pages 25-30. In this example, the tax credit would be $2,463.00."]
+  - <<: *book
+    id: foreign_exclusion_sign
+    component: illustrative_reporting_entry
+    page: 15
+    inputs: {eligible_exclusion: 30000}
+    expected: {form40_page2_partI_line7_entry: -30000}
+    verbatim_evidence: "If you are entitled to a foreign income exclusion, please attach a copy of your Federal Form 2555 to your return and report the amount of your exclusion as a credit with a negative sign (Example: -30,000) on line 7 Other Income on page 2 of your return. All foreign income must be reported on your return in order to receive any foreign income exclusion."
+  - <<: *book
+    id: civil_service_reporting
+    component: general_information_example
+    page: 17
+    inputs: {income_type: us_civil_service_retirement}
+    expected: {al_exempt: true, reporting_line: form40_page2_partIV_line5}
+    verbatim_evidence: "EXAMPLE: U.S. Civil Service Retirement is exempt for Alabama purposes and therefore should be shown on line 5."
+  - <<: *book
+    id: pension_simplified_divisors
+    component: federal_simplified_general_rule_worksheet_line3
+    page: 15
+    inputs: {eligible_for_this_worksheet: true, age_at_annuity_start_inclusive: [[0,55],[56,60],[61,65],[66,70],[71,null]]}
+    expected: [300,260,240,170,120]
+    verbatim_evidence: ["Age at annuity starting date:","55 and under","300","56-60","260","61-65","240","66-70","170","71 and older","120"]
+  - id: retirement_exemption_parameters
+    component: resident_taxable_retirement_exemption
+    document: us-al/statute/40-18-19
+    page: null
+    scope: "(a)(13)"
+    inputs: {tax_year: 2025}
+    expected: {minimum_age: 65, maximum_exemption: 6000}
+    verbatim_evidence: ["a. Beginning January 1, 2023, the first six thousand dollars ($6,000) of taxable retirement income.","b. This exemption may only be claimed by individual taxpayers who are 65 years of age or older."]
