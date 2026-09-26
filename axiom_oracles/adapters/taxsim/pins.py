@@ -696,6 +696,11 @@ def inspect_candidates(sha256: str) -> list[Candidate]:
     binary = pinned_binary(sha256)
     results = []
     for origin, path in binary_candidates(sha256):
+        # Hash and return the absolute, symlink-resolved path. A relative
+        # path (e.g. AXIOM_TAXSIM_BINARY_DIR=.) would otherwise be verified
+        # here but looked up on PATH when executed, so a different
+        # same-named executable could run under this binary's identity.
+        path = path.resolve()
         if not path.is_file():
             results.append(Candidate(origin, path, "missing"))
             continue

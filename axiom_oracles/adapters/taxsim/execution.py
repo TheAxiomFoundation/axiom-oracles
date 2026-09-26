@@ -91,6 +91,10 @@ def execute_taxsim_binary(
     creationflags = 0
     if system == "windows":
         creationflags = getattr(subprocess, "CREATE_NO_WINDOW", 0x08000000)
+    if not Path(binary).is_absolute():
+        # subprocess resolves a bare name on PATH, which would run bytes the
+        # pin check never saw. Only verified absolute paths may execute.
+        raise ValueError(f"refusing to execute non-absolute TAXSIM path {binary!s}")
     payload = Path(input_file).read_bytes()
     with Path(output_file).open("wb") as stdout:
         process = subprocess.run(

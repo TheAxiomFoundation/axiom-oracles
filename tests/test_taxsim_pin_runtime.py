@@ -646,3 +646,35 @@ def test_run_comparison_passes_the_resolved_profile_to_the_cli(
         "pe-taxsim-main-2026-08"
     )
     assert f"policyengine-taxsim=={pins.pinned_version()}" in calls[-1]
+
+
+def test_relative_binary_dir_returns_absolute_verified_path(
+    monkeypatch, tmp_path
+) -> None:
+    """A relative AXIOM_TAXSIM_BINARY_DIR must not yield a bare filename.
+
+    subprocess looks a bare name up on PATH, so a verified relative path
+    could execute a different same-named file under the pinned identity.
+    """
+    binaries = fake_binaries()
+    doc, shas = fake_doc(binaries)
+    install_doc(monkeypatch, doc)
+    sha_new = shas["new"]["linux"]
+    (tmp_path / "fake-linux.exe").write_bytes(binaries["new"]["linux"])
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv(pins.BINARY_DIR_ENV, ".")
+
+    located = pins.locate_binary(sha_new)
+    assert located.is_absolute()
+    assert located == (tmp_path / "fake-linux.exe").resolve()
+
+
+def test_execution_refuses_non_absolute_binary(tmp_path) -> None:
+    from axiom_oracles.adapters.taxsim import execution
+
+    source = tmp_path / "in.txt"
+    source.write_text("taxsimid year state\n")
+    with pytest.raises(ValueError, match="non-absolute"):
+        execution.execute_taxsim_binary(
+            "taxsimtest-linux.exe", source, tmp_path / "out.txt"
+        )
