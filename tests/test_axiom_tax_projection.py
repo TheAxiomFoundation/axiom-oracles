@@ -1925,7 +1925,9 @@ def test_axiom_tax_projection_computes_eitc_disqualified_investment_income() -> 
     Leaving eitc_relevant_investment_income to _TAX_UNIT_NUMERIC_DEFAULTS
     zeroed the disqualified-income gate and granted EITC to units above the
     $12,200 limit (the ecps-projection-defaults-eitc-investment-income
-    class): interest + dividends + rent + positive net capital gain.
+    class). The value follows IRS Pub. 596 Worksheet 1: interest and
+    dividends + max(0, net capital gain) + max(0, passive rental income);
+    tests/test_eitc_investment_income_worksheet1.py covers the loss cases.
     """
     case = Case(
         case_id="eitc-invest",
@@ -1954,9 +1956,10 @@ def test_axiom_tax_projection_computes_eitc_disqualified_investment_income() -> 
         for record in projected.metadata["axiom_input_records"]
     }
 
-    # 1,000 + 2,000 + 500 + max(0, 12,000 - 2,000) = 13,500 — over the
-    # $12,200 Rev. Proc. 2025-32 maximum, so the composed 32(i) gate must
-    # actually see it.
+    # Worksheet 1: lines 1-3 = 1,000 + 2,000; line 7 = max(0, 12,000 -
+    # 2,000) = 10,000; line 13 = max(0, 500) = 500; line 14 = 13,500 — over
+    # the $12,200 Rev. Proc. 2025-32 maximum, so the composed 32(i) gate
+    # must actually see it.
     assert by_key[
         (
         "tax_unit",

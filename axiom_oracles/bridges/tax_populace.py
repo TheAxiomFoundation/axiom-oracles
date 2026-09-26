@@ -84,6 +84,19 @@ LONG_TERM_CAPITAL_GAINS_COLUMNS = (
     "long_term_capital_gains_before_response",
     "long_term_capital_gains",
 )
+# IRS Pub. 596 Worksheet 1 ("Investment Income") baskets for the 26 USC
+# 32(i)(2) disqualified-income input; see project_eitc_relevant_investment_income.
+EITC_INTEREST_AND_DIVIDEND_COLUMNS = (
+    "taxable_interest_income",  # line 1: Form 1040 line 2b
+    "tax_exempt_interest_income",  # line 2: Form 1040 line 2a
+    "qualified_dividend_income",  # line 3: Form 1040 line 3b, ordinary
+    "non_qualified_dividend_income",  # dividends (qualified + non-qualified)
+)
+EITC_PASSIVE_INCOME_COLUMNS = (
+    "rental_income",  # lines 11-12: Schedule E line 26
+    "passive_partnership_s_corp_income",  # Schedule E lines 29a/29b
+    "farm_rent_income",  # Schedule E line 40 (Form 4835)
+)
 TAX_BEFORE_CREDITS_PROGRAM_PATH = Path("statutes/26/1/j.yaml")
 TAX_BEFORE_CREDITS_BASE = "us:statutes/26/1/j"
 EITC_PROGRAM_PATH = Path("statutes/26/32.yaml")
@@ -482,6 +495,7 @@ PE_PERSON_VARIABLES = tuple(
             "employment_income_before_lsr",
             "irs_employment_income",
             "farm_operations_income",
+            "farm_rent_income",
             "has_american_opportunity_credit_1098_t_or_exception",
             "has_american_opportunity_credit_institution_ein",
             "has_completed_first_four_years_of_postsecondary_education",
@@ -497,6 +511,7 @@ PE_PERSON_VARIABLES = tuple(
             "long_term_capital_gains_on_collectibles",
             "long_term_capital_gains_on_small_business_stock",
             "non_qualified_dividend_income",
+            "non_sch_d_capital_gains",
             "payroll_tax_gross_wages",
             "pre_tax_health_insurance_premiums",
             "qualified_tuition_expenses",
@@ -2161,7 +2176,7 @@ def project_eitc_tax_unit_inputs(row: Any, persons: list[Any]) -> dict[str, Any]
         "adjusted_gross_income": money(row["adjusted_gross_income"]),
         "eitc_relevant_investment_income": project_eitc_relevant_investment_income(
             row=row,
-            persons=persons,
+            persons=tax_unit_filers(persons),
         ),
         "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": True,
         "childless_taxpayer_or_spouse_age_eligible_for_eitc": any(
@@ -2335,17 +2350,48 @@ def project_section_1401_tax_unit_inputs(
 
 
 def project_eitc_relevant_investment_income(row: Any, persons: list[Any]) -> float:
-    net_capital_gains = person_money_sum(
-        persons,
-        LONG_TERM_CAPITAL_GAINS_COLUMNS,
-    ) + person_money_sum(persons, "short_term_capital_gains")
+    """26 USC 32(i)(2) disqualified income, basketed as in Pub. 596 Worksheet 1.
+
+    ``persons`` must be the filers (head and spouse): Worksheet 1 lines 1-3
+    read the filer's own Form 1040, and a dependent's interest and dividends
+    enter only through Form 8814, which this surface does not model.
+    ``project_eitc_tax_unit_inputs`` passes ``tax_unit_filers(persons)``.
+
+    Each basket is netted across the filers, and the capital and passive
+    baskets are floored at zero before the baskets are added, so a loss in
+    one basket never offsets income in another:
+
+    - interest and dividends (lines 1-3): taxable interest, tax-exempt
+      interest, and ordinary dividends (qualified plus non-qualified);
+    - capital gain net income (lines 5-7): max(0, net short- and long-term
+      gains plus capital gain distributions reported without Schedule D);
+    - passive activities (lines 11-13): max(0, rental income plus passive
+      partnership/S-corp income plus farm rental income).
+
+    ``rental_income`` does not separate royalties (lines 8-10) from rental
+    real estate, so it is treated as passive rental income, as
+    PolicyEngine-US does after PolicyEngine/policyengine-us#9572. Only the
+    passive subset of partnership/S-corp income belongs in lines 11-13, so
+    the undifferentiated ``partnership_income`` column is not read;
+    ``passive_partnership_s_corp_income`` counts only when the row carries
+    it (the pinned Populace artifact and PolicyEngine-US 1.764.6 do not).
+    """
+    interest_and_dividends = sum(
+        person_money_sum(persons, column)
+        for column in EITC_INTEREST_AND_DIVIDEND_COLUMNS
+    )
+    capital_gain_net_income = (
+        person_money_sum(persons, LONG_TERM_CAPITAL_GAINS_COLUMNS)
+        + person_money_sum(persons, "short_term_capital_gains")
+        + person_money_sum(persons, "non_sch_d_capital_gains")
+    )
+    passive_activity_income = sum(
+        person_money_sum(persons, column) for column in EITC_PASSIVE_INCOME_COLUMNS
+    )
     return (
-        person_money_sum(persons, "taxable_interest_income")
-        + person_money_sum(persons, "tax_exempt_interest_income")
-        + person_money_sum(persons, "qualified_dividend_income")
-        + person_money_sum(persons, "non_qualified_dividend_income")
-        + person_money_sum(persons, "rental_income")
-        + max(0.0, net_capital_gains)
+        interest_and_dividends
+        + max(0.0, capital_gain_net_income)
+        + max(0.0, passive_activity_income)
     )
 
 
@@ -2551,6 +2597,12 @@ def tax_unit_head_spouse_indices(persons: list[Any]) -> tuple[int | None, int | 
         else None
     )
     return head_index, spouse_index
+
+
+def tax_unit_filers(persons: list[Any]) -> list[Any]:
+    """The tax unit's head and spouse, in that order; dependents are dropped."""
+    head_index, spouse_index = tax_unit_head_spouse_indices(persons)
+    return [persons[index] for index in (head_index, spouse_index) if index is not None]
 
 
 def filer_meets_eitc_identification_requirements(persons: list[Any]) -> bool:
