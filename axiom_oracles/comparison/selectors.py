@@ -394,7 +394,10 @@ def mismatch_signature(row: Mapping[str, Any]) -> str:
     The identity is ``{concept, kind, delta, facts, error_signature}``, with
     ``aux`` included only when the row carries it:
     what disagreed, how, by how much, for which kind of household, and —
-    for engine-error rows — with which failure. Case ids and the engines'
+    for engine-error rows — with which failures. When both engines fail,
+    ``error_signature`` records each engine, side, and failure signature
+    in canonical order. Single-failure rows keep the historical scalar
+    signature, preserving existing population bindings. Case ids and the engines'
     absolute values are excluded on purpose (the tariff campaign's
     aggregation identity), so two households with the same facts and the
     same delta share a signature and a signatures-based entry binds the
@@ -402,14 +405,24 @@ def mismatch_signature(row: Mapping[str, Any]) -> str:
     """
 
     error = row.get("error")
+    error_signature = error.get("signature") if isinstance(error, Mapping) else None
+    if isinstance(error, Mapping) and isinstance(error.get("other_side"), Mapping):
+        # A disposition may explain the secondary failure. Binding only the
+        # primary signature would let a changed secondary failure retain that
+        # explanation. Canonicalize both sides independently of which was first.
+        error_signature = sorted(
+            (
+                {key: detail.get(key) for key in ("engine", "side", "signature")}
+                for detail in (error, error["other_side"])
+            ),
+            key=_canonical,
+        )
     identity = {
         "concept": row.get("concept"),
         "kind": row.get("kind"),
         "delta": row.get("difference"),
         "facts": dict(row.get("facts") or {}),
-        "error_signature": (
-            error.get("signature") if isinstance(error, Mapping) else None
-        ),
+        "error_signature": error_signature,
     }
     if "aux" in row:
         identity["aux"] = row["aux"]

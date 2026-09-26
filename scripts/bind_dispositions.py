@@ -30,7 +30,8 @@ against the refreshed report, in the same commit as that report.
 
 The report is the suite's committed FULL report: ``--report PATH``, else
 the dashboard copy when it stores every mismatch row, else the file its
-``summary.dispositioned.source_report`` pointer names. Selection uses the
+``summary.dispositioned.source_report`` pointer names. A pointer's path and
+SHA256 must verify before its source can supply binding evidence. Selection uses the
 merge's own selector (:func:`select_rows`); in a TAXSIM lane a row claimed
 by two entries aborts (classification conservation). Entries that select no
 row are reported and left untouched.
@@ -70,6 +71,7 @@ from axiom_oracles.comparison.report_io import (  # noqa: E402
     load_report,
     registered_report_paths,
 )
+from scripts.apply_dispositions import _resolve_source_pointer  # noqa: E402
 
 DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
@@ -109,11 +111,21 @@ def resolve_full_report(suite: str, explicit: Path | None) -> tuple[Path, dict]:
             continue
         block = (report.get("summary") or {}).get("dispositioned") or {}
         pointer = block.get("source_report") if isinstance(block, dict) else None
-        if isinstance(pointer, dict) and isinstance(pointer.get("path"), str):
-            source = REPO_ROOT / pointer["path"]
-            source_report = load_report(source)
-            if source_report.get("suite") == suite and _is_full(source_report):
-                candidates[source.resolve()] = source_report
+        if pointer is not None:
+            # Verify the pointer (repo-relative, inside reports/, sha256
+            # match, FULL report for this suite) before binding against it.
+            problems: list[str] = []
+            resolved = _resolve_source_pointer(
+                path.resolve().relative_to(REPO_ROOT.resolve()),
+                suite,
+                pointer,
+                problems,
+                repo_root=REPO_ROOT,
+            )
+            if resolved is None:
+                raise SystemExit("\n".join(problems))
+            source, source_report = resolved
+            candidates[source.resolve()] = source_report
     if len(candidates) != 1:
         found = ", ".join(str(path.relative_to(REPO_ROOT)) for path in candidates)
         raise SystemExit(
