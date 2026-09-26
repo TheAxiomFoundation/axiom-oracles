@@ -112,6 +112,34 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 202,
   },
+  // Married filing separately (TAXSIM mstat 6): 13 synthetic Colorado
+  // returns (axiom_oracles/suites/us_mfs.py). The PolicyEngine-vs-TAXSIM leg
+  // is oracle-vs-oracle triage tooling (docs/taxsim-oracle-playbook.md), so
+  // it is diagnostic and stays out of headline numbers.
+  "us-mfs-taxsim": {
+    family: "federal_income_tax",
+    jurisdiction: "US",
+    label: "Married filing separately (vs TAXSIM)",
+    region: "us",
+    kind: "household",
+    order: 13,
+  },
+  "us-mfs-policyengine": {
+    family: "federal_income_tax",
+    jurisdiction: "US",
+    label: "Married filing separately",
+    region: "us",
+    kind: "household",
+    order: 14,
+  },
+  "us-mfs-pe-taxsim": {
+    family: "federal_income_tax",
+    jurisdiction: "US",
+    label: "Married filing separately (PolicyEngine vs TAXSIM)",
+    region: "us",
+    kind: "diagnostic",
+    order: 15,
+  },
   "taxcalc-fiit-ecps": {
     family: "federal_income_tax",
     jurisdiction: "US",
