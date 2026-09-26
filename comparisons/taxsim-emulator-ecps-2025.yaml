@@ -10,6 +10,7 @@ runner:
     right: taxsim
     population: taxsim-csv
     taxsim_csv:
+      selector_fact_columns: [scorp]
       path: $AXIOM_TAXSIM_CSV
       sha256: ecabc8dd33e8b570fad21650745b9d94f6b51fc9780d9c59bb033ede7d16a689
       origin:

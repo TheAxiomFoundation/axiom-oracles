@@ -1072,12 +1072,17 @@ def report_oracle_identity(report: Mapping[str, Any]) -> dict[str, Any]:
 def row_binary_sha256(row: Mapping[str, Any]) -> str | None:
     """Per-row TAXSIM binary digest, when the row records one.
 
-    Only engine-error rows carry it today, on the detail whose engine is
-    ``taxsim`` (``row["error"]`` or its ``other_side`` detail, from the
-    failing run's ``raw.taxsim_error``). Value rows do not, so a population
-    of value rows falls back to the report-wide binary set.
+    Successful results carry ``taxsim_binary_sha256`` directly. Legacy
+    engine-error rows carry it on the detail whose engine is ``taxsim``.
+    Legacy value rows without this field use the report-wide binary set.
+    Conflicting recorded digests raise ``ValueError``; neither location may
+    override a different canonical TAXSIM identity.
     """
 
+    digests = set()
+    sha = row.get("taxsim_binary_sha256")
+    if isinstance(sha, str) and _HEX64.fullmatch(sha):
+        digests.add(sha)
     error = row.get("error")
     if isinstance(error, Mapping):
         for detail in (error, error.get("other_side")):
@@ -1085,8 +1090,10 @@ def row_binary_sha256(row: Mapping[str, Any]) -> str | None:
                 continue
             sha = detail.get("binary_sha256")
             if isinstance(sha, str) and _HEX64.fullmatch(sha):
-                return sha
-    return None
+                digests.add(sha)
+    if len(digests) > 1:
+        raise ValueError("conflicting per-row TAXSIM binary digests")
+    return next(iter(digests), None)
 
 
 def oracle_binding_mismatch(
@@ -1101,7 +1108,7 @@ def oracle_binding_mismatch(
     1. Recorded TAXSIM binaries: the binding must list
        ``taxsim_binary_sha256``, and the binaries that actually ran on the
        entry's selected rows must be a subset of it. Per-row digests are
-       used when EVERY selected row records one (engine-error rows);
+       used when EVERY selected row records one;
        otherwise the report's whole recorded set must be a subset — a
        report that ran two binaries (e.g. a per-state fallback) therefore
        needs both listed unless the rows say which one they ran on.
@@ -1114,12 +1121,24 @@ def oracle_binding_mismatch(
 
     if identity.get("malformed"):
         return "oracle_identity_malformed"
+    if any(
+        "taxsim_binary_sha256" in row
+        and not (
+            isinstance(row["taxsim_binary_sha256"], str)
+            and _HEX64.fullmatch(row["taxsim_binary_sha256"])
+        )
+        for row in rows
+    ):
+        return "oracle_identity_malformed"
+    try:
+        per_row = [row_binary_sha256(row) for row in rows]
+    except ValueError:
+        return "oracle_identity_malformed"
     recorded_shas = identity.get("taxsim_binary_sha256")
     if recorded_shas is not None:
         allowed = binding.get("taxsim_binary_sha256")
         if not allowed:
             return "oracle_identity_changed"
-        per_row = [row_binary_sha256(row) for row in rows]
         if per_row and all(per_row):
             relevant = set(per_row)
             if not relevant <= set(recorded_shas):

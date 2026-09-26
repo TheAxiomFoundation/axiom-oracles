@@ -1,0 +1,58 @@
+schema: axiom_oracles.dispositions.v1
+suite: taxsim-emulator-probes
+updated: '2026-09-25'
+entries:
+- id: state-zero-sales-tax
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_id: taxsim-77
+  disposition: unexplained
+  attribution: two_sided
+  evidence:
+    mechanism: 'Observed native-SALT macOS probe from PR #1204. TAXSIM fiitax is 50165.00 at state 0 and
+      49618.30 at Texas, while the emulator is 49315.8515625 on both records. These observations suggest
+      a sales-tax-deduction/proxy interaction, but do not establish the legally correct deduction or isolate
+      the mechanism. PR #1204 describes the CE suppressed-state Texas proxy. This is bound to the observed
+      macOS binary, not the Linux release, and expires on changes to either output.'
+    row_arithmetic:
+    - expression: difference
+      equals: -849.1484375
+      tolerance: 1.0e-06
+    sources:
+    - https://github.com/PolicyEngine/policyengine-taxsim/pull/1204
+    - https://github.com/PolicyEngine/policyengine-taxsim/pull/1219
+  linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/pull/1204
+  expires_on_source_change: true
+  pinned:
+    left: 49315.8515625
+    right: 50165.0
+  oracle_binding:
+    taxsim_binary_sha256:
+    - 02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d
+- id: texas-sales-tax-proxy
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_id: taxsim-78
+  disposition: unexplained
+  attribution: two_sided
+  evidence:
+    mechanism: 'Observed native-SALT macOS probe from PR #1204. TAXSIM fiitax is 50165.00 at state 0 and
+      49618.30 at Texas, while the emulator is 49315.8515625 on both records. These observations suggest
+      a sales-tax-deduction/proxy interaction, but do not establish the legally correct deduction or isolate
+      the mechanism. PR #1204 describes the CE suppressed-state Texas proxy. This is bound to the observed
+      macOS binary, not the Linux release, and expires on changes to either output.'
+    row_arithmetic:
+    - expression: difference
+      equals: -302.4484375000029
+      tolerance: 1.0e-06
+    sources:
+    - https://github.com/PolicyEngine/policyengine-taxsim/pull/1204
+    - https://github.com/PolicyEngine/policyengine-taxsim/pull/1219
+  linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/pull/1204
+  expires_on_source_change: true
+  pinned:
+    left: 49315.8515625
+    right: 49618.3
+  oracle_binding:
+    taxsim_binary_sha256:
+    - 02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d

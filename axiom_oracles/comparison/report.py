@@ -407,6 +407,8 @@ def _mismatch_rows(
                 row["error"] = error
             if item.aux is not None:
                 row["aux"] = {side: dict(values) for side, values in item.aux.items()}
+            if item.taxsim_binary_sha256 is not None:
+                row["taxsim_binary_sha256"] = item.taxsim_binary_sha256
             rows.append(row)
     return rows
 

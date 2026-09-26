@@ -317,6 +317,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -849.1484375,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "state-zero-sales-tax",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-taxsim/pull/1204"
+      },
       "facts": {
         "depx": 0,
         "idtl": 2,
@@ -343,6 +348,11 @@
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
       "difference": -302.4484375000029,
+      "disposition": {
+        "disposition": "unexplained",
+        "id": "texas-sales-tax-proxy",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-taxsim/pull/1204"
+      },
       "facts": {
         "depx": 0,
         "idtl": 2,
@@ -610,11 +620,27 @@
       }
     ]
   },
-  "schema_version": "axiom.comparison_report.v2",
+  "schema_version": "axiom.comparison_report.v2.1",
   "scope": null,
   "suite": "taxsim-emulator-probes",
   "summary": {
     "comparison_count": 4,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 2,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": "dispositions/taxsim-emulator-probes.yaml",
+      "expired_entries": [],
+      "explained_rate": 50,
+      "orphaned_entries": [],
+      "raw_match_rate": 50,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 2
+    },
     "error_count": 0,
     "errors_by_engine": {},
     "match_count": 2,

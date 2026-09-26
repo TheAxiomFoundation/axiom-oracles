@@ -206,9 +206,12 @@ def computed_bindings(
 def _oracle_binding(
     identity: dict, rows: list[dict], legacy_version: str | None
 ) -> dict:
+    try:
+        per_row = [row_binary_sha256(row) for row in rows]
+    except ValueError as exc:
+        raise SystemExit(f"the report's per-row TAXSIM identity is malformed: {exc}") from exc
     shas = identity["taxsim_binary_sha256"]
     if shas is not None:
-        per_row = [row_binary_sha256(row) for row in rows]
         relevant = set(per_row) if per_row and all(per_row) else set(shas)
         if not relevant <= set(shas):
             raise SystemExit("per-row TAXSIM binaries are absent from report identity")

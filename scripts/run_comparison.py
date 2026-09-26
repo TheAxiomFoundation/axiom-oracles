@@ -940,6 +940,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # Oracle identity (the side compared to). Derived from the runner type +
     # the pins each runner installs, so the report says which oracle stack ran.
     oracle: dict = {}
+    raw_report = None
     if runner_type == "axiom-encode-tax-ecps-compare":
         oracle = {
             "name": "policyengine",
@@ -995,10 +996,12 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
     elif runner_type == "axiom-oracles-compare" and "recorded_release" in params:
-        report = json.loads(output.read_text())
-        recorded = report["recorded_release"]
-        pe = report["engine_identity"]["policyengine"]
-        taxsim = report["engine_identity"]["taxsim"]
+        # Reuse this parsed report for dataset identity below. Recorded ECPS
+        # reports are large, and keeping two full copies adds no evidence.
+        raw_report = json.loads(output.read_text())
+        recorded = raw_report["recorded_release"]
+        pe = raw_report["engine_identity"]["policyengine"]
+        taxsim = raw_report["engine_identity"]["taxsim"]
         oracle = {
             "name": "taxsim",
             "policyengine_us": pe["policyengineUsVersion"],
@@ -1115,7 +1118,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # report carries one.
     dataset = None
     try:
-        raw_report = json.loads(output.read_text())
+        if raw_report is None:
+            raw_report = json.loads(output.read_text())
         identity = _normalize_dataset_identity(raw_report) if isinstance(
             raw_report, dict
         ) else None
@@ -2116,6 +2120,7 @@ def _taxsim_csv_cli_args(params: dict, population: str) -> list[str]:
             commit: <git sha>
             path: cps_households.csv
           allow_unknown_columns: false         # optional
+          selector_fact_columns: [scorp]        # optional additional input facts
 
     The sha256 is mandatory for registered suites: a committed report must name
     the exact file it scored. The block is rejected on any other population.
@@ -2132,7 +2137,9 @@ def _taxsim_csv_cli_args(params: dict, population: str) -> list[str]:
             "`population: taxsim-csv` comparisons must declare "
             "`taxsim_csv: {path, sha256}` under runner.parameters"
         )
-    unknown = set(block) - {"path", "sha256", "origin", "allow_unknown_columns"}
+    unknown = set(block) - {
+        "path", "sha256", "origin", "allow_unknown_columns", "selector_fact_columns",
+    }
     if unknown:
         raise SystemExit(f"unknown `taxsim_csv` keys: {sorted(unknown)}")
     if not block.get("sha256"):
@@ -2161,6 +2168,13 @@ def _taxsim_csv_cli_args(params: dict, population: str) -> list[str]:
         )
     if block.get("allow_unknown_columns"):
         args.append("--taxsim-csv-allow-unknown-columns")
+    selector_fact_columns = block.get("selector_fact_columns", [])
+    if not isinstance(selector_fact_columns, list) or any(
+        not isinstance(name, str) for name in selector_fact_columns
+    ):
+        raise SystemExit("`taxsim_csv.selector_fact_columns` must be a list of input column names")
+    for name in selector_fact_columns:
+        args.extend(["--taxsim-csv-selector-fact", name])
     return args
 
 

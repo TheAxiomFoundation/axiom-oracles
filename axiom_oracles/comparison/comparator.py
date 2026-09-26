@@ -39,6 +39,8 @@ class HouseholdComparison:
     # Requested raw output columns, retained for row-level reconciliation.
     # None preserves the shape of every report that does not request them.
     aux: Mapping[str, Mapping[str, Value]] | None = None
+    # Exact binary used for this case, including successful TAXSIM results.
+    taxsim_binary_sha256: str | None = None
 
     def __post_init__(self) -> None:
         if self.has_engine_errors:
@@ -149,6 +151,16 @@ class Comparator:
                             "right": _aux_outputs(right, row_aux_outputs),
                         }
                         if row_aux_outputs else None
+                    ),
+                    taxsim_binary_sha256=next(
+                        (
+                            result.raw["taxsim_binary_sha256"]
+                            for result in (left, right)
+                            if result.engine == "taxsim"
+                            and isinstance(result.raw, Mapping)
+                            and isinstance(result.raw.get("taxsim_binary_sha256"), str)
+                        ),
+                        None,
                     ),
                 )
             )

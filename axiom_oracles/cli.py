@@ -511,6 +511,10 @@ def sanity_check(
         "verbatim instead of failing the load."
     ),
 )
+@click.option(
+    "--taxsim-csv-selector-fact", "taxsim_csv_selector_fact_columns", multiple=True,
+    help="Copy an additional TAXSIM input column into row selector facts; repeatable.",
+)
 @click.option("--recorded-release", type=click.Path(exists=True, file_okay=False, path_type=Path),
               help="Replay verified pe-taxsim release outputs for taxsim-csv cases.")
 @click.option("--recorded-release-repo", default="PolicyEngine/policyengine-taxsim", show_default=True)
@@ -657,6 +661,7 @@ def compare(
     taxsim_csv_sha256: str | None,
     taxsim_csv_origin: str | None,
     taxsim_csv_allow_unknown_columns: bool,
+    taxsim_csv_selector_fact_columns: tuple[str, ...],
     recorded_release: Path | None,
     recorded_release_repo: str,
     recorded_release_tag: str | None,
@@ -699,6 +704,7 @@ def compare(
         taxsim_csv_sha256=taxsim_csv_sha256,
         taxsim_csv_origin=taxsim_csv_origin,
         taxsim_csv_allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+        taxsim_csv_selector_fact_columns=taxsim_csv_selector_fact_columns,
     )
 
     if recorded_release is not None:
@@ -739,6 +745,7 @@ def compare(
             taxsim_csv_sha256=taxsim_csv_sha256,
             taxsim_csv_origin=taxsim_csv_origin,
             taxsim_csv_allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+            taxsim_csv_selector_fact_columns=taxsim_csv_selector_fact_columns,
         )
         if jurisdiction_fips and _wants_snap(concepts):
             cases = [
@@ -1354,6 +1361,7 @@ def _load_population(
     taxsim_csv_sha256: str | None = None,
     taxsim_csv_origin: str | None = None,
     taxsim_csv_allow_unknown_columns: bool = False,
+    taxsim_csv_selector_fact_columns: tuple[str, ...] = (),
 ) -> tuple[list[Case], dict | None]:
     """Load the population's cases plus its dataset identity, when it has one.
 
@@ -1369,6 +1377,7 @@ def _load_population(
             expected_sha256=taxsim_csv_sha256,
             origin=taxsim_csv_origin,
             allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+            selector_fact_columns=taxsim_csv_selector_fact_columns,
             scope=scope,
             jurisdiction_fips=jurisdiction_fips,
             period=requested_period,
@@ -1401,6 +1410,7 @@ def _load_population_cases(
     taxsim_csv_sha256: str | None = None,
     taxsim_csv_origin: str | None = None,
     taxsim_csv_allow_unknown_columns: bool = False,
+    taxsim_csv_selector_fact_columns: tuple[str, ...] = (),
 ) -> list[Case]:
     if population == TAXSIM_CSV_SOURCE:
         # A direct caller's period is explicit, so it overrides row years.
@@ -1409,6 +1419,7 @@ def _load_population_cases(
             expected_sha256=taxsim_csv_sha256,
             origin=taxsim_csv_origin,
             allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+            selector_fact_columns=taxsim_csv_selector_fact_columns,
             scope=scope,
             jurisdiction_fips=None,
             period=period,
@@ -1444,6 +1455,7 @@ def _load_taxsim_csv_population(
     jurisdiction_fips: str | None,
     period: str | None,
     sample_size: int,
+    selector_fact_columns: tuple[str, ...] = (),
 ) -> tuple[list[Case], dict]:
     if not path:
         raise click.ClickException(
@@ -1459,7 +1471,10 @@ def _load_taxsim_csv_population(
             origin=parse_taxsim_csv_origin(origin) if origin else None,
             allow_unknown_columns=allow_unknown_columns,
         )
-        selection = data.select(scope=load_scope, sample_size=sample_size or None)
+        selection = data.select(
+            scope=load_scope, sample_size=sample_size or None,
+            selector_fact_columns=selector_fact_columns,
+        )
     except (OSError, TaxsimCsvError) as exc:
         raise click.ClickException(str(exc)) from exc
     return selection.cases, {**data.identity, "selection": selection.summary}
@@ -1495,6 +1510,7 @@ def _check_taxsim_csv_options(
     taxsim_csv_sha256: str | None,
     taxsim_csv_origin: str | None,
     taxsim_csv_allow_unknown_columns: bool,
+    taxsim_csv_selector_fact_columns: tuple[str, ...] = (),
 ) -> None:
     """Reject taxsim-csv flags that would be silently ignored.
 
@@ -1504,10 +1520,14 @@ def _check_taxsim_csv_options(
     carry.
     """
     if population != TAXSIM_CSV_SOURCE:
-        if taxsim_csv_sha256 or taxsim_csv_origin or taxsim_csv_allow_unknown_columns:
+        if (
+            taxsim_csv_sha256 or taxsim_csv_origin or taxsim_csv_allow_unknown_columns
+            or taxsim_csv_selector_fact_columns
+        ):
             raise click.ClickException(
-                "--taxsim-csv-sha256, --taxsim-csv-origin, and "
-                "--taxsim-csv-allow-unknown-columns apply only to "
+                "--taxsim-csv-sha256, --taxsim-csv-origin, "
+                "--taxsim-csv-allow-unknown-columns, and "
+                "--taxsim-csv-selector-fact apply only to "
                 "--population taxsim-csv."
             )
         return

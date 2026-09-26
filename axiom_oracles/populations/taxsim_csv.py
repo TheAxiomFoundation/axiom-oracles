@@ -69,7 +69,7 @@ import math
 import os
 import re
 from collections import Counter
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -201,6 +201,7 @@ class TaxsimCsvFile:
         scope: GeographyScope | Mapping[str, Any] | None = None,
         sample_size: int | None = None,
         sample_seed: int = DEFAULT_SAMPLE_SEED,
+        selector_fact_columns: Sequence[str] = (),
     ) -> TaxsimCsvSelection:
         """Build cases for the rows inside ``scope``, optionally sampled.
 
@@ -213,7 +214,29 @@ class TaxsimCsvFile:
         lowest, returned in file order. That choice depends only on the seed
         and each row's ``taxsimid`` — not on file order or the Python
         version — so a sample is reproducible from the report alone.
+
+        ``selector_fact_columns`` copies additional numeric input columns into
+        each case's selector facts. Missing cells remain ``None``. Existing
+        derived/demographic facts cannot be replaced.
         """
+        # Additional input facts are opt-in so existing reports and bindings
+        # keep their original shape. Never replace derived/default facts.
+        if not isinstance(selector_fact_columns, Sequence) or isinstance(
+            selector_fact_columns, str
+        ) or any(
+            not isinstance(name, str) for name in selector_fact_columns
+        ):
+            raise TaxsimCsvError("selector_fact_columns must be a sequence of input column names.")
+        extra_facts = tuple(selector_fact_columns)
+        if len(set(extra_facts)) != len(extra_facts):
+            raise TaxsimCsvError("selector_fact_columns must not repeat column names.")
+        invalid = set(extra_facts) - TAXSIM_INPUT_COLUMNS
+        reserved = set(extra_facts) & {"state", "year", *SELECTOR_FACT_COLUMNS}
+        if invalid or reserved:
+            raise TaxsimCsvError(
+                "selector_fact_columns must name additional TAXSIM input columns; "
+                f"invalid or already present: {sorted(invalid | reserved)}."
+            )
         normalized_scope = normalize_scope(scope)
         if sample_size is not None and sample_size < 0:
             raise ValueError("sample_size must be a non-negative integer.")
@@ -231,7 +254,7 @@ class TaxsimCsvFile:
             )
             chosen = sorted(ranked[:sample_size], key=lambda item: item[0])
         sha256 = self.identity["sha256"]
-        cases = [_case_for_row(row, index, sha256) for index, row in chosen]
+        cases = [_case_for_row(row, index, sha256, extra_facts) for index, row in chosen]
         summary = {
             "scope": normalized_scope.as_dict() if normalized_scope else None,
             "rows_in_scope": len(in_scope),
@@ -240,6 +263,8 @@ class TaxsimCsvFile:
             "sample_method": SAMPLE_METHOD if sample_size else None,
             "cases": len(cases),
         }
+        if extra_facts:
+            summary["selector_fact_columns"] = list(extra_facts)
         return TaxsimCsvSelection(cases=cases, summary=summary)
 
 
@@ -401,6 +426,7 @@ def load_taxsim_csv_cases(
     origin: Mapping[str, Any] | None = None,
     allow_unknown_columns: bool = False,
     sample_seed: int = DEFAULT_SAMPLE_SEED,
+    selector_fact_columns: Sequence[str] = (),
 ) -> list[Case]:
     """Load a TAXSIM-format CSV as cases (see the module contract)."""
     return (
@@ -411,7 +437,10 @@ def load_taxsim_csv_cases(
             origin=origin,
             allow_unknown_columns=allow_unknown_columns,
         )
-        .select(scope=scope, sample_size=sample_size, sample_seed=sample_seed)
+        .select(
+            scope=scope, sample_size=sample_size, sample_seed=sample_seed,
+            selector_fact_columns=selector_fact_columns,
+        )
         .cases
     )
 
@@ -593,7 +622,10 @@ def _sample_rank(seed: int, taxsimid: Number) -> bytes:
     return hashlib.sha256(f"{seed}:{_integer(taxsimid)}".encode()).digest()
 
 
-def _case_for_row(row: dict[str, Number], index: int, sha256: str) -> Case:
+def _case_for_row(
+    row: dict[str, Number], index: int, sha256: str,
+    selector_fact_columns: Sequence[str] = (),
+) -> Case:
     taxsimid = _integer(row["taxsimid"])
     state = _integer(row["state"])
     usps = taxsim_state_usps(state)
@@ -614,6 +646,10 @@ def _case_for_row(row: dict[str, Number], index: int, sha256: str) -> Case:
                 "selector facts require integer values."
             )
         facts[column] = integer
+    for column in selector_fact_columns:
+        # Unlike the default demographic facts, input amounts can be fractional
+        # or negative. Missing is null, never a manufactured zero.
+        facts[column] = row.get(column)
     return Case(
         case_id=f"taxsim-{taxsimid}",
         period=str(year),

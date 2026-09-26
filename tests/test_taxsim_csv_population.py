@@ -218,6 +218,33 @@ def test_cases_are_unweighted():
         assert "household_weight" not in case.metadata
 
 
+def test_additional_selector_facts_are_opt_in_and_preserve_input_amounts(tmp_path):
+    path = _write_csv(
+        tmp_path / "scorp.csv", ["taxsimid", "year", "state", "scorp"],
+        [["1", "2024", "1", "-12.75"], ["2", "2024", "1", "0"],
+         ["3", "2024", "1", ""]],
+    )
+    data = read_taxsim_csv(path)
+    baseline = data.select()
+    assert all("scorp" not in case.metadata["selector_facts"] for case in baseline.cases)
+    assert "selector_fact_columns" not in baseline.summary
+    selection = data.select(selector_fact_columns=["scorp"])
+    assert selection.summary["selector_fact_columns"] == ["scorp"]
+    assert [case.metadata["selector_facts"]["scorp"] for case in selection.cases] == [
+        -12.75, 0, None,
+    ]
+    assert [case.metadata["taxsim_input"] for case in selection.cases] == [
+        case.metadata["taxsim_input"] for case in baseline.cases
+    ]
+    assert load_taxsim_csv_cases(path, selector_fact_columns=["scorp"]) == selection.cases
+
+
+@pytest.mark.parametrize("columns", [None, 1, "scorp", [1], ["scorp", "scorp"], ["unknown"], ["state"]])
+def test_additional_selector_facts_reject_invalid_or_reserved_names(columns):
+    with pytest.raises(TaxsimCsvError, match="selector_fact_columns"):
+        read_taxsim_csv(FIXTURE).select(selector_fact_columns=columns)
+
+
 # ---------------------------------------------------------------------------
 # Year override and identity
 # ---------------------------------------------------------------------------
@@ -902,15 +929,17 @@ def test_cli_rejects_engines_that_cannot_read_taxsim_rows(cli_module):
     assert "only `compare policyengine taxsim`" in run.output
 
 
-def test_cli_rejects_taxsim_csv_flags_on_other_populations(cli_module):
+@pytest.mark.parametrize(
+    "option", [["--taxsim-csv-sha256", FIXTURE_SHA256], ["--taxsim-csv-selector-fact", "scorp"]]
+)
+def test_cli_rejects_taxsim_csv_flags_on_other_populations(cli_module, option):
     run = CliRunner().invoke(
         cli_module.cli,
         [
             "compare",
             "policyengine",
             "taxsim",
-            "--taxsim-csv-sha256",
-            FIXTURE_SHA256,
+            *option,
         ],
     )
     assert run.exit_code != 0
@@ -1010,6 +1039,23 @@ def test_run_comparison_omits_period_to_keep_row_years(monkeypatch, tmp_path):
     cmd = _captured_compare_cmd(run_comparison, monkeypatch, tmp_path, params)
 
     assert "--period" not in cmd
+
+
+def test_run_comparison_passes_additional_selector_fact_columns(monkeypatch, tmp_path):
+    module = _load_run_comparison()
+    params = _taxsim_csv_params()
+    params["taxsim_csv"]["selector_fact_columns"] = ["scorp"]
+    cmd = _captured_compare_cmd(module, monkeypatch, tmp_path, params)
+    assert _flag(cmd, "--taxsim-csv-selector-fact") == "scorp"
+
+
+@pytest.mark.parametrize("columns", ["scorp", None, [1]])
+def test_registry_rejects_non_list_selector_fact_columns(columns):
+    module = _load_run_comparison()
+    params = _taxsim_csv_params()
+    params["taxsim_csv"]["selector_fact_columns"] = columns
+    with pytest.raises(SystemExit, match="must be a list of input column names"):
+        module._taxsim_csv_cli_args(params, "taxsim-csv")
 
 
 @pytest.mark.parametrize(
