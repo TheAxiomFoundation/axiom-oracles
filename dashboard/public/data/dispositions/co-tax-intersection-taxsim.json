@@ -1,6 +1,6 @@
 {
  "suite": "co-tax-intersection-taxsim",
- "updated": "2026-08-23",
+ "updated": "2026-09-25",
  "entries": [
   {
    "id": "taxsim-2026-ctc-child-credit-machinery-absent",
@@ -2478,6 +2478,946 @@
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/439"
+  },
+  {
+   "id": "taxsim-qbid-rental-convention-tax-before-credits",
+   "concept": "us:tax/federal-income-tax#tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Downstream shadow of taxsim-qbid-rental-convention-taxable-income at the\nunit's ordinary marginal rate. On every selected row (a) the taxable-income\nrow is dispositioned to that entry - axiom grants 26 USC 199A QBID on\nrental/SE income (H.R.1 section 70105 $400 minimum deduction on the floor\nrows, 20% of QBI in the phase region) while TAXSIM's otherprop column is\nnon-QBI by definition and grants zero - and (b) the hand-computed statutory\nQDCGT worksheet (Rev. Proc. 2025-32 brackets and capital-gains thresholds,\nvalidated against TAXSIM's own v19 ordinary-tax column, 147/147 joint and\n60/63 single exact) reproduces axiom's tax_before_credits to the dollar\nFROM AXIOM'S OWN TAXABLE INCOME. The tax_before_credits residual is\ntherefore exactly the taxable-income convention gap times the marginal\nrate: -400.00 x 0.37 = -148.00 on the top-bracket rows (the -148 cluster),\n-639.13 x 0.22 = -140.61 and -721.49 x 0.22 = -158.73 on the 22%-bracket\nrows. Same bridge convention, not a rules disagreement; resolves with the\nparent entry when the projection surface gains a QBI-capable column.",
+   "cases": [
+    "ecps-tax-unit-135571",
+    "ecps-tax-unit-135602",
+    "ecps-tax-unit-135620",
+    "ecps-tax-unit-135809",
+    "ecps-tax-unit-135881",
+    "ecps-tax-unit-136038",
+    "ecps-tax-unit-136291",
+    "ecps-tax-unit-136428",
+    "ecps-tax-unit-136446",
+    "ecps-tax-unit-136461",
+    "ecps-tax-unit-136470",
+    "ecps-tax-unit-154437",
+    "ecps-tax-unit-154577",
+    "ecps-tax-unit-154579",
+    "ecps-tax-unit-155073",
+    "ecps-tax-unit-155340",
+    "ecps-tax-unit-155531",
+    "ecps-tax-unit-155678",
+    "ecps-tax-unit-155799",
+    "ecps-tax-unit-156032",
+    "ecps-tax-unit-156148",
+    "ecps-tax-unit-156747",
+    "ecps-tax-unit-157428",
+    "ecps-tax-unit-157637",
+    "ecps-tax-unit-157802",
+    "ecps-tax-unit-157930",
+    "ecps-tax-unit-158100",
+    "ecps-tax-unit-158127",
+    "ecps-tax-unit-158513",
+    "ecps-tax-unit-158573",
+    "ecps-tax-unit-158697",
+    "ecps-tax-unit-158735",
+    "ecps-tax-unit-158993",
+    "ecps-tax-unit-159082",
+    "ecps-tax-unit-159126",
+    "ecps-tax-unit-159138",
+    "ecps-tax-unit-159315",
+    "ecps-tax-unit-159366",
+    "ecps-tax-unit-159502",
+    "ecps-tax-unit-159609",
+    "ecps-tax-unit-159616",
+    "ecps-tax-unit-159739",
+    "ecps-tax-unit-159952",
+    "ecps-tax-unit-160042",
+    "ecps-tax-unit-160518",
+    "ecps-tax-unit-160988",
+    "ecps-tax-unit-161153",
+    "ecps-tax-unit-161684",
+    "ecps-tax-unit-161737",
+    "ecps-tax-unit-161791",
+    "ecps-tax-unit-161974",
+    "ecps-tax-unit-162175",
+    "ecps-tax-unit-162193",
+    "ecps-tax-unit-162241",
+    "ecps-tax-unit-162668",
+    "ecps-tax-unit-162837",
+    "ecps-tax-unit-163010",
+    "ecps-tax-unit-163041",
+    "ecps-tax-unit-163066",
+    "ecps-tax-unit-163227",
+    "ecps-tax-unit-163427",
+    "ecps-tax-unit-163548",
+    "ecps-tax-unit-163639",
+    "ecps-tax-unit-163672",
+    "ecps-tax-unit-163755",
+    "ecps-tax-unit-163861",
+    "ecps-tax-unit-164248",
+    "ecps-tax-unit-58339",
+    "ecps-tax-unit-58509",
+    "ecps-tax-unit-58658",
+    "ecps-tax-unit-58697",
+    "ecps-tax-unit-58784",
+    "ecps-tax-unit-58790",
+    "ecps-tax-unit-58809",
+    "ecps-tax-unit-58890",
+    "ecps-tax-unit-58903",
+    "ecps-tax-unit-59070",
+    "ecps-tax-unit-59074",
+    "ecps-tax-unit-59091",
+    "ecps-tax-unit-59131",
+    "ecps-tax-unit-59145",
+    "ecps-tax-unit-59166",
+    "ecps-tax-unit-59203",
+    "ecps-tax-unit-59214"
+   ],
+   "arithmetic": [
+    {
+     "expression": "-400.00 * 0.37",
+     "equals": -148.0
+    },
+    {
+     "expression": "-639.13 * 0.22",
+     "equals": -140.61
+    },
+    {
+     "expression": "-721.49 * 0.22",
+     "equals": -158.73
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "taxsim-2026-capgains-zero-threshold-vintage",
+   "concept": "us:tax/federal-income-tax#tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Triangulated to TAXSIM's capital-gains bracket vintage by hand-computing\nthe statutory QDCGT worksheet from TAXSIM's OWN taxable income (v18) with\nRev. Proc. 2025-32 parameters, brackets first validated against TAXSIM's\nown v19 ordinary-tax column (147/147 joint, 60/63 single exact). The\nworksheet exceeds TAXSIM's v28 by a flat 134.79 on joint rows and 67.40 on\nsingle rows across all income levels: TAXSIM's 2026-05-21 module projects\nthe 0% capital-gains threshold forward from the 2025 value (96,700 MFJ) at\nits own inflation assumption (implied threshold 99,798.61) instead of the\npublished 98,900, sheltering 898.61 more gain at 0% - 898.61 x 0.15 =\n134.79, halved for single filers (449.31 x 0.15 = 67.40). Rows between 2\nand the fingerprint straddle the threshold partially. Axiom matches the\npublished Rev. Proc. values; a TAXSIM-side parameter vintage, resolved\nwhen NBER re-bases the 2026 thresholds.",
+   "cases": [
+    "ecps-tax-unit-135586",
+    "ecps-tax-unit-135903",
+    "ecps-tax-unit-135966",
+    "ecps-tax-unit-136056",
+    "ecps-tax-unit-136364",
+    "ecps-tax-unit-162440",
+    "ecps-tax-unit-58335",
+    "ecps-tax-unit-58480",
+    "ecps-tax-unit-58842",
+    "ecps-tax-unit-59100",
+    "ecps-tax-unit-59117",
+    "ecps-tax-unit-59127",
+    "ecps-tax-unit-59151",
+    "ecps-tax-unit-59205",
+    "ecps-tax-unit-59316"
+   ],
+   "arithmetic": [
+    {
+     "expression": "99798.61 - 98900",
+     "equals": 898.61
+    },
+    {
+     "expression": "898.61 * 0.15",
+     "equals": 134.79
+    },
+    {
+     "expression": "449.31 * 0.15",
+     "equals": 67.4
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "liability-composite-of-member-classes-and-niit-scope-r2",
+   "concept": "us:tax/federal-income-tax#liability",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Composite/de-duplication face of the unit's own component classes, the\nsame contract as liability-composite-of-member-classes-and-niit-addmed-scope:\non every selected row the federal liability residual reproduces within the\nconcept's $15 tolerance (178 of 181 within $1) as\n\n  d(tax_before_credits) + d(amt) - d(ctc) - d(eitc) - d(cdcc) - niit\n\nwhere the component deltas are this same report's own rows and niit is the\npinned binary's idtl=2 niit column (the documented \u00a71411 carve-out,\naxiom-encode#1213). fiitax carries NO addmed term - verified against the\npinned binary: fiitax equals v28 + v27 - v22 - v25 + niit exactly on these\nrows (e.g. 73,767.02 + 159.83 = 73,926.85 on ecps-tax-unit-135629). The\nliability face therefore adds no information beyond the component rows; its\nmismatch mass is already counted once at the concept where each mechanism\noriginates (QBID rental-convention bridge shadow, TAXSIM capital-gains\nthreshold vintage, CTC/EITC 2026 machinery gaps, AMT class, NIIT scope),\nand those root-cause rows retain their own dispositions or remain openly\nunexplained rather than being laundered through this composite.",
+   "cases": [
+    "ecps-tax-unit-135571",
+    "ecps-tax-unit-135586",
+    "ecps-tax-unit-135602",
+    "ecps-tax-unit-135620",
+    "ecps-tax-unit-135629",
+    "ecps-tax-unit-135698",
+    "ecps-tax-unit-135801",
+    "ecps-tax-unit-135809",
+    "ecps-tax-unit-135881",
+    "ecps-tax-unit-135903",
+    "ecps-tax-unit-135959",
+    "ecps-tax-unit-135966",
+    "ecps-tax-unit-136038",
+    "ecps-tax-unit-136056",
+    "ecps-tax-unit-136279",
+    "ecps-tax-unit-136364",
+    "ecps-tax-unit-136446",
+    "ecps-tax-unit-136461",
+    "ecps-tax-unit-154437",
+    "ecps-tax-unit-154451",
+    "ecps-tax-unit-154461",
+    "ecps-tax-unit-154480",
+    "ecps-tax-unit-154504",
+    "ecps-tax-unit-154519",
+    "ecps-tax-unit-154577",
+    "ecps-tax-unit-154579",
+    "ecps-tax-unit-154724",
+    "ecps-tax-unit-154841",
+    "ecps-tax-unit-154897",
+    "ecps-tax-unit-154917",
+    "ecps-tax-unit-154973",
+    "ecps-tax-unit-155073",
+    "ecps-tax-unit-155152",
+    "ecps-tax-unit-155272",
+    "ecps-tax-unit-155340",
+    "ecps-tax-unit-155406",
+    "ecps-tax-unit-155431",
+    "ecps-tax-unit-155531",
+    "ecps-tax-unit-155624",
+    "ecps-tax-unit-155678",
+    "ecps-tax-unit-155799",
+    "ecps-tax-unit-155918",
+    "ecps-tax-unit-156032",
+    "ecps-tax-unit-156147",
+    "ecps-tax-unit-156148",
+    "ecps-tax-unit-156218",
+    "ecps-tax-unit-156221",
+    "ecps-tax-unit-156423",
+    "ecps-tax-unit-156467",
+    "ecps-tax-unit-156651",
+    "ecps-tax-unit-156747",
+    "ecps-tax-unit-156922",
+    "ecps-tax-unit-156945",
+    "ecps-tax-unit-157006",
+    "ecps-tax-unit-157013",
+    "ecps-tax-unit-157251",
+    "ecps-tax-unit-157259",
+    "ecps-tax-unit-157317",
+    "ecps-tax-unit-157428",
+    "ecps-tax-unit-157637",
+    "ecps-tax-unit-157643",
+    "ecps-tax-unit-157701",
+    "ecps-tax-unit-157802",
+    "ecps-tax-unit-157868",
+    "ecps-tax-unit-157930",
+    "ecps-tax-unit-157956",
+    "ecps-tax-unit-158100",
+    "ecps-tax-unit-158127",
+    "ecps-tax-unit-158158",
+    "ecps-tax-unit-158219",
+    "ecps-tax-unit-158285",
+    "ecps-tax-unit-158403",
+    "ecps-tax-unit-158513",
+    "ecps-tax-unit-158573",
+    "ecps-tax-unit-158697",
+    "ecps-tax-unit-158735",
+    "ecps-tax-unit-158759",
+    "ecps-tax-unit-158820",
+    "ecps-tax-unit-158883",
+    "ecps-tax-unit-158993",
+    "ecps-tax-unit-159082",
+    "ecps-tax-unit-159126",
+    "ecps-tax-unit-159138",
+    "ecps-tax-unit-159140",
+    "ecps-tax-unit-159167",
+    "ecps-tax-unit-159221",
+    "ecps-tax-unit-159237",
+    "ecps-tax-unit-159302",
+    "ecps-tax-unit-159315",
+    "ecps-tax-unit-159366",
+    "ecps-tax-unit-159502",
+    "ecps-tax-unit-159609",
+    "ecps-tax-unit-159616",
+    "ecps-tax-unit-159739",
+    "ecps-tax-unit-159952",
+    "ecps-tax-unit-160010",
+    "ecps-tax-unit-160042",
+    "ecps-tax-unit-160120",
+    "ecps-tax-unit-160186",
+    "ecps-tax-unit-160319",
+    "ecps-tax-unit-160366",
+    "ecps-tax-unit-160387",
+    "ecps-tax-unit-160400",
+    "ecps-tax-unit-160413",
+    "ecps-tax-unit-160518",
+    "ecps-tax-unit-160520",
+    "ecps-tax-unit-160690",
+    "ecps-tax-unit-160751",
+    "ecps-tax-unit-160988",
+    "ecps-tax-unit-161153",
+    "ecps-tax-unit-161684",
+    "ecps-tax-unit-161737",
+    "ecps-tax-unit-161791",
+    "ecps-tax-unit-161870",
+    "ecps-tax-unit-161974",
+    "ecps-tax-unit-161979",
+    "ecps-tax-unit-162171",
+    "ecps-tax-unit-162175",
+    "ecps-tax-unit-162193",
+    "ecps-tax-unit-162241",
+    "ecps-tax-unit-162276",
+    "ecps-tax-unit-162440",
+    "ecps-tax-unit-162668",
+    "ecps-tax-unit-162837",
+    "ecps-tax-unit-163010",
+    "ecps-tax-unit-163020",
+    "ecps-tax-unit-163041",
+    "ecps-tax-unit-163066",
+    "ecps-tax-unit-163227",
+    "ecps-tax-unit-163427",
+    "ecps-tax-unit-163548",
+    "ecps-tax-unit-163639",
+    "ecps-tax-unit-163672",
+    "ecps-tax-unit-163755",
+    "ecps-tax-unit-163861",
+    "ecps-tax-unit-164175",
+    "ecps-tax-unit-164195",
+    "ecps-tax-unit-164227",
+    "ecps-tax-unit-164248",
+    "ecps-tax-unit-164548",
+    "ecps-tax-unit-164633",
+    "ecps-tax-unit-164636",
+    "ecps-tax-unit-58335",
+    "ecps-tax-unit-58339",
+    "ecps-tax-unit-58480",
+    "ecps-tax-unit-58501",
+    "ecps-tax-unit-58509",
+    "ecps-tax-unit-58555",
+    "ecps-tax-unit-58620",
+    "ecps-tax-unit-58643",
+    "ecps-tax-unit-58652",
+    "ecps-tax-unit-58658",
+    "ecps-tax-unit-58687",
+    "ecps-tax-unit-58697",
+    "ecps-tax-unit-58784",
+    "ecps-tax-unit-58790",
+    "ecps-tax-unit-58809",
+    "ecps-tax-unit-58842",
+    "ecps-tax-unit-58890",
+    "ecps-tax-unit-58897",
+    "ecps-tax-unit-58903",
+    "ecps-tax-unit-58942",
+    "ecps-tax-unit-58950",
+    "ecps-tax-unit-59063",
+    "ecps-tax-unit-59070",
+    "ecps-tax-unit-59074",
+    "ecps-tax-unit-59100",
+    "ecps-tax-unit-59117",
+    "ecps-tax-unit-59122",
+    "ecps-tax-unit-59127",
+    "ecps-tax-unit-59138",
+    "ecps-tax-unit-59151",
+    "ecps-tax-unit-59166",
+    "ecps-tax-unit-59182",
+    "ecps-tax-unit-59203",
+    "ecps-tax-unit-59205",
+    "ecps-tax-unit-59214",
+    "ecps-tax-unit-59245",
+    "ecps-tax-unit-59264",
+    "ecps-tax-unit-59284",
+    "ecps-tax-unit-59316"
+   ],
+   "arithmetic": [
+    {
+     "expression": "98.27 + 0.00 - 1700.00 - 0.00 - 0.00 - 0.00",
+     "equals": -1601.73
+    },
+    {
+     "expression": "17.83 + 0.00 - 0.00 - 0.00 - 0.00 - 159.83",
+     "equals": -142.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-encode/issues/1213"
+  },
+  {
+   "id": "taxsim-co-credit-stack-vintage-intersection-lane",
+   "concept": "us:tax/state-income-tax#liability",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Triangulated TAXSIM-side divergence in Colorado's credit stack, the same\nmechanism and proof standard as taxsim-co-refundable-credit-vintage in\nco-state-income-tax-taxsim: on every selected row axiom and PolicyEngine\nagree on Colorado liability (the tax unit is absent from the complete\n31-row axiom-vs-PE mismatch set of\ndashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json over\nthe same 1,201-unit population), while TAXSIM departs. The pinned binary's\nidtl=2 decomposition locates the divergence in TAXSIM's state credit\ncolumns (sctc family-affordability/CTC and sptcr; e.g. sctc 2,528.67 on\necps-tax-unit-58696) plus a before-credits component on units whose federal\ntaxable income carries the dispositioned QBID rental-convention gap\n(Colorado starts from federal taxable income, so -400.00 x 0.044 = -17.60\nflows through). Deltas are heterogeneous because the credit stack varies\nper household; the per-row proof is the axiom==PolicyEngine agreement. The\nseven units where that triangulation FAILS (the documented\nco-state-open-rows-axiom-pe-divergent class) are excluded and stay raw.",
+   "cases": [
+    "ecps-tax-unit-135519",
+    "ecps-tax-unit-135614",
+    "ecps-tax-unit-135698",
+    "ecps-tax-unit-135881",
+    "ecps-tax-unit-136212",
+    "ecps-tax-unit-136279",
+    "ecps-tax-unit-136327",
+    "ecps-tax-unit-136384",
+    "ecps-tax-unit-136390",
+    "ecps-tax-unit-136399",
+    "ecps-tax-unit-136428",
+    "ecps-tax-unit-136429",
+    "ecps-tax-unit-136461",
+    "ecps-tax-unit-136463",
+    "ecps-tax-unit-136470",
+    "ecps-tax-unit-154480",
+    "ecps-tax-unit-154504",
+    "ecps-tax-unit-154519",
+    "ecps-tax-unit-154577",
+    "ecps-tax-unit-154579",
+    "ecps-tax-unit-154724",
+    "ecps-tax-unit-154973",
+    "ecps-tax-unit-155073",
+    "ecps-tax-unit-155340",
+    "ecps-tax-unit-155406",
+    "ecps-tax-unit-155431",
+    "ecps-tax-unit-155678",
+    "ecps-tax-unit-156147",
+    "ecps-tax-unit-156467",
+    "ecps-tax-unit-156651",
+    "ecps-tax-unit-156922",
+    "ecps-tax-unit-157013",
+    "ecps-tax-unit-157317",
+    "ecps-tax-unit-157637",
+    "ecps-tax-unit-157868",
+    "ecps-tax-unit-157956",
+    "ecps-tax-unit-158219",
+    "ecps-tax-unit-158403",
+    "ecps-tax-unit-158573",
+    "ecps-tax-unit-158993",
+    "ecps-tax-unit-159221",
+    "ecps-tax-unit-159366",
+    "ecps-tax-unit-160366",
+    "ecps-tax-unit-161153",
+    "ecps-tax-unit-161870",
+    "ecps-tax-unit-161979",
+    "ecps-tax-unit-162440",
+    "ecps-tax-unit-163020",
+    "ecps-tax-unit-163066",
+    "ecps-tax-unit-164195",
+    "ecps-tax-unit-164248",
+    "ecps-tax-unit-164548",
+    "ecps-tax-unit-164633",
+    "ecps-tax-unit-58423",
+    "ecps-tax-unit-58645",
+    "ecps-tax-unit-58658",
+    "ecps-tax-unit-58697",
+    "ecps-tax-unit-58712",
+    "ecps-tax-unit-58784",
+    "ecps-tax-unit-58790",
+    "ecps-tax-unit-58903",
+    "ecps-tax-unit-58942",
+    "ecps-tax-unit-58950",
+    "ecps-tax-unit-59063",
+    "ecps-tax-unit-59070",
+    "ecps-tax-unit-59074",
+    "ecps-tax-unit-59089",
+    "ecps-tax-unit-59091",
+    "ecps-tax-unit-59131",
+    "ecps-tax-unit-59145",
+    "ecps-tax-unit-59151",
+    "ecps-tax-unit-59166",
+    "ecps-tax-unit-59203",
+    "ecps-tax-unit-59214",
+    "ecps-tax-unit-59247",
+    "ecps-tax-unit-59264",
+    "ecps-tax-unit-59316"
+   ],
+   "arithmetic": [
+    {
+     "expression": "-400.00 * 0.044",
+     "equals": -17.6
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "co-intersection-state-open-rows-axiom-pe-divergent",
+   "concept": "us:tax/state-income-tax#liability",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Formerly the open-investigation rows blocked on triangulation; both\nblockers are now closed. (1) The axiom-vs-PolicyEngine divergence on all\nseven units is dispositioned bridge_artifact per row in\naxiom-policyengine-co-state-income-tax-ecps (the PE-leg input-projection\ndifferences), so the axiom Colorado value stands as the attributed\nreference. (2) A fresh idtl=2 rerun of the pinned binary now reproduces\nALL SEVEN TAXSIM values to the cent from freshly projected input rows -\nincluding 135552, which previously failed from the persisted row - and\neach decomposes exactly as siitax = staxbc - sctc - sptcr - 0.5 x v25:\n135552: 0 - 2,528.67 - 41.20 = -2,569.87; 135799: 974.42 - 1,657.50 -\n20.60 = -703.68; 135880: -20.60 - 0.5 x 351.40 = -196.30; 136208:\n10,317.46 - 37.82 = 10,279.64; 136404: 237.16 - 2,134.82 - 20.60 =\n-1,918.26; 58696: -2,528.67 - 41.20 - 0.5 x 664 = -2,901.87; 59285:\n18,429.21 - 63.86 = 18,365.35. The members are the catalogued\nTAXSIM-side ingredients: the Colorado EITC coupling of the 2026\nchildless-schedule federal EITC (dispositioned\ntaxsim-2026-eitc-childless-schedule-applied; 58696: 0.5 x 664 = 332 vs\naxiom 0.5 x 6,997.18), the CO child-credit and family-affordability\nvintage (dispositioned taxsim-co-refundable-credit-vintage), the\nmstat=1-with-dependents auto-HoH standard deduction (136208), and\nTAXSIM's automatic itemization of its own computed state income tax\n(59285). Axiom's Colorado value is the attributed reference here\nbecause the PE divergence is dispositioned, not because it was\nindependently hand-verified against statute on these units.",
+   "cases": [
+    "ecps-tax-unit-135552",
+    "ecps-tax-unit-135799",
+    "ecps-tax-unit-135880",
+    "ecps-tax-unit-136208",
+    "ecps-tax-unit-136404",
+    "ecps-tax-unit-58696",
+    "ecps-tax-unit-59285"
+   ],
+   "arithmetic": [
+    {
+     "expression": "974.42 - 1657.50 - 20.60",
+     "equals": -703.68
+    },
+    {
+     "expression": "0 - 2528.67 - 41.20",
+     "equals": -2569.87
+    },
+    {
+     "expression": "-20.60 - 0.5 * 351.40",
+     "equals": -196.3
+    },
+    {
+     "expression": "0.5 * 664.0",
+     "equals": 332.0
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-2026-amt-parameter-vintage",
+   "concept": "us:tax/federal-income-tax#amt",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Triangulated to TAXSIM's AMT parameter vintage by hand-computing Form 6251\nfrom the published parameters: Rev. Proc. 2025-32 exemptions (90,100\nunmarried / 140,200 joint), the H.R.1 section 70107 phaseout (50% rate from\n500,000 / 1,000,000), the 244,500 28%-rate threshold, and the section\n55(b)(3) Part III worksheet at the regular 0/15/20 breakpoints. On every\nselected row axiom's AMT reproduces that statutory computation within $5 \u2014\ntwo independent implementations (the composed bridge worksheet and the\nverifier's model, built separately from the same published parameters)\nagreeing \u2014 while TAXSIM's v27 departs (it matches the same statutory model\non only 3 of 39 rows; its 2026-05-21 module carries pre-OBBBA\nexemption-phaseout geometry, consistent with the capital-gains threshold\nvintage dispositioned as taxsim-2026-capgains-zero-threshold-vintage).\nDeltas are heterogeneous because the exemption phaseout interacts per\nhousehold; the per-row proof is the axiom==statute agreement. Rows where\naxiom itself is not yet on statute stay raw.",
+   "cases": [
+    "ecps-tax-unit-154480",
+    "ecps-tax-unit-155272",
+    "ecps-tax-unit-155918",
+    "ecps-tax-unit-156221",
+    "ecps-tax-unit-156945",
+    "ecps-tax-unit-157006",
+    "ecps-tax-unit-157259",
+    "ecps-tax-unit-157868",
+    "ecps-tax-unit-157956",
+    "ecps-tax-unit-158158",
+    "ecps-tax-unit-158219",
+    "ecps-tax-unit-158285",
+    "ecps-tax-unit-158820",
+    "ecps-tax-unit-159167",
+    "ecps-tax-unit-159237",
+    "ecps-tax-unit-160010",
+    "ecps-tax-unit-160186",
+    "ecps-tax-unit-160400",
+    "ecps-tax-unit-160413",
+    "ecps-tax-unit-160520",
+    "ecps-tax-unit-160690",
+    "ecps-tax-unit-160751",
+    "ecps-tax-unit-162171",
+    "ecps-tax-unit-162276",
+    "ecps-tax-unit-164175",
+    "ecps-tax-unit-164195",
+    "ecps-tax-unit-59063",
+    "ecps-tax-unit-59122",
+    "ecps-tax-unit-59138"
+   ],
+   "arithmetic": [
+    {
+     "expression": "90100 - 0.50 * (909547.89 - 500000)",
+     "equals": -114673.945
+    },
+    {
+     "expression": "0.26 * 244500",
+     "equals": 63570
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-qbid-wage-limit-and-floor-vintage-taxable-income",
+   "concept": "us:tax/federal-income-tax#taxable_income",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Triangulated TAXSIM-side QBID machinery gap. On every selected row\nTAXSIM's own identity v18 = v10 - v13 - qbid holds within $1, so the entire\ntaxable-income residual is the QBID difference \u2014 the two AGIs agree. The\nimplied axiom deduction (taxsim qbid minus the residual) lands exactly on\nthe H.R.1 section 70105 $400 minimum deduction or on zero. These units sit\nfar above the section 199A(b)(3) phase-in ceiling, where the deduction is\nlimited to 50% of W-2 wages / UBIA; the activity carries no W-2 wages, so\nthe statutory regular deduction is extinguished and only the $400 floor\nsurvives \u2014 which is what axiom grants. TAXSIM's qbid column shows roughly\n20% of (psemp minus half SE tax): its 2026-05-21 module applies the 20%\nrate without the wage/UBIA limitation (and, on rows where its qbid is\nbelow 400, without the section 70105 minimum). Axiom matches statute;\nTAXSIM's QBID machinery vintage does not.",
+   "cases": [
+    "ecps-tax-unit-135698",
+    "ecps-tax-unit-136220",
+    "ecps-tax-unit-136384",
+    "ecps-tax-unit-136390",
+    "ecps-tax-unit-154973",
+    "ecps-tax-unit-157956",
+    "ecps-tax-unit-158403",
+    "ecps-tax-unit-160366",
+    "ecps-tax-unit-164636"
+   ],
+   "arithmetic": [
+    {
+     "expression": "251.44 - 400.00",
+     "equals": -148.56
+    },
+    {
+     "expression": "223.78 - 400.01",
+     "equals": -176.23
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-2026-capgains-bracket-set-vintage",
+   "concept": "us:tax/federal-income-tax#tax_before_credits",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Extension of taxsim-2026-capgains-zero-threshold-vintage to the full\ncapital-gains bracket set. Modeling TAXSIM with BOTH 2026 thresholds\nprojected from the 2025 values at its own ~3.204% inflation assumption\n(0% rate: 96,700 -> 99,798.61 joint / 48,350 -> 49,899.31 single; 15% rate:\n600,050 -> 619,283 joint / 533,400 -> 550,494 single) reproduces its v28\nwithin $1.50 on every selected row, while the same worksheet at the\npublished Rev. Proc. 2025-32 values reproduces axiom's tax_before_credits\nfrom axiom's own taxable income within $5. The compound fingerprints\nconfirm it in closed form: rows straddling both thresholds show exactly the\nsum of the two effects (134.79 + 280.53 = 415.32 joint; 67.40 + 249.29 =\n316.69 single, where 280.53 = (619,283 - 613,700) x 0.05 and 249.29 =\n(550,494 - 545,500) x 0.05 within rounding of the projection factor).\nA TAXSIM-side parameter vintage across its 2026 capital-gains bracket set;\naxiom matches the published values. Resolves when NBER re-bases.",
+   "cases": [
+    "ecps-tax-unit-135698",
+    "ecps-tax-unit-135801",
+    "ecps-tax-unit-135959",
+    "ecps-tax-unit-136114",
+    "ecps-tax-unit-136220",
+    "ecps-tax-unit-136279",
+    "ecps-tax-unit-136327",
+    "ecps-tax-unit-136384",
+    "ecps-tax-unit-136390",
+    "ecps-tax-unit-136399",
+    "ecps-tax-unit-136429",
+    "ecps-tax-unit-154504",
+    "ecps-tax-unit-154973",
+    "ecps-tax-unit-155272",
+    "ecps-tax-unit-155406",
+    "ecps-tax-unit-155431",
+    "ecps-tax-unit-155918",
+    "ecps-tax-unit-156147",
+    "ecps-tax-unit-156221",
+    "ecps-tax-unit-156651",
+    "ecps-tax-unit-156945",
+    "ecps-tax-unit-157013",
+    "ecps-tax-unit-157251",
+    "ecps-tax-unit-157259",
+    "ecps-tax-unit-157317",
+    "ecps-tax-unit-157956",
+    "ecps-tax-unit-158158",
+    "ecps-tax-unit-158219",
+    "ecps-tax-unit-158285",
+    "ecps-tax-unit-158403",
+    "ecps-tax-unit-158883",
+    "ecps-tax-unit-159237",
+    "ecps-tax-unit-160010",
+    "ecps-tax-unit-160366",
+    "ecps-tax-unit-160400",
+    "ecps-tax-unit-160413",
+    "ecps-tax-unit-160690",
+    "ecps-tax-unit-161870",
+    "ecps-tax-unit-161979",
+    "ecps-tax-unit-162171",
+    "ecps-tax-unit-163020",
+    "ecps-tax-unit-164195",
+    "ecps-tax-unit-164227",
+    "ecps-tax-unit-164548",
+    "ecps-tax-unit-164633",
+    "ecps-tax-unit-164636",
+    "ecps-tax-unit-58555",
+    "ecps-tax-unit-58620",
+    "ecps-tax-unit-58643",
+    "ecps-tax-unit-58645",
+    "ecps-tax-unit-58687",
+    "ecps-tax-unit-58942",
+    "ecps-tax-unit-58950",
+    "ecps-tax-unit-59011",
+    "ecps-tax-unit-59122",
+    "ecps-tax-unit-59138",
+    "ecps-tax-unit-59284"
+   ],
+   "arithmetic": [
+    {
+     "expression": "(619283 - 613700) * 0.05",
+     "equals": 279.15
+    },
+    {
+     "expression": "(550494 - 545500) * 0.05",
+     "equals": 249.7
+    },
+    {
+     "expression": "134.79 + 280.53",
+     "equals": 415.32
+    },
+    {
+     "expression": "67.40 + 249.29",
+     "equals": 316.69
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "se-loss-461l-cap-vintage-two-sided",
+   "concept": "us:tax/federal-income-tax#taxable_income",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Dual parameter-vintage defect on the section 461(l) excess-business-loss\nlimitation, fully characterized and favoring neither engine. On every\nselected row the taxable-income residual reproduces to the dollar as the\nunit's aggregate business loss (negative SE income net of positive rental)\nminus a 461(l)-shaped cap that the axiom leg applies and TAXSIM does not:\n\n  ecps-tax-unit-155431: 32,912,356.00 - 610,000 = 32,302,356.00\n  ecps-tax-unit-156922:  1,010,637.94 - 610,000 =    400,637.94\n  ecps-tax-unit-154480: (710,192.62 - 13,201 rental) - 305,000 = 391,991.67\n\nNeither side matches 2026 statute: TAXSIM deducts the FULL loss (its module\ncarries no 461(l) limitation at all), while the caps the axiom leg applies\n- 305,000 single / 610,000 joint - are the 2024 inflation-adjusted values,\nnot 2026's (no 461 encoding exists in the pinned rulespec-us checkout to\ncarry the current amounts; the cap arrives through the projection surface).\nThe residual is therefore a fully named two-sided vintage artifact: it\nresolves when TAXSIM adds the limitation and the axiom-side cap is sourced\nfrom a 2026-vintage 461(l) encoding. Until then the arithmetic above is the\ncomplete accounting of each row.",
+   "cases": [
+    "ecps-tax-unit-154480",
+    "ecps-tax-unit-155431",
+    "ecps-tax-unit-156922"
+   ],
+   "arithmetic": [
+    {
+     "expression": "32912356.00 - 610000",
+     "equals": 32302356.0
+    },
+    {
+     "expression": "1010637.94 - 610000",
+     "equals": 400637.94
+    },
+    {
+     "expression": "710192.62 - 13201 - 305000",
+     "equals": 391991.62
+    }
+   ],
+   "linked_issue": null
+  },
+  {
+   "id": "taxsim-qbid-seca-member-composite-taxable-income",
+   "concept": "us:tax/federal-income-tax#taxable_income",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Full-evidence member decomposition: on every selected row the\ntaxable-income residual equals, to the cent, the sum of exactly two named\nmembers (per-row table in the receipt). (1) QBID member - TAXSIM's\n2026-05-21 module takes 20% of (psemp+ssemp net of its SE ALD) with no\nsection 199A(b)(3) wage/UBIA limitation and no H.R.1 section 70105 $400\nminimum, while axiom applies the statutory phase-in\npr = clamp((TI_before_QBID - 403,500 joint / 201,750 single) / (150,000\n/ 75,000)) and the $400 floor - e.g. ecps-tax-unit-58620: axiom 0.2 x\n9,312.44 x (1 - 0.690530) = 576.38 with pr = (507,079.43 - 403,500) /\n150,000, TAXSIM 1,862.49 = 0.2 x 9,312.45; rows where the QBI bases\ndiffer additionally carry the dispositioned rental-in-QBI bridge\nconvention (taxsim-qbid-rental-convention-taxable-income). (2) SECA-ALD\nmember - reproduced per row by isolated wages+SE synthetic probes of the\npinned binary: TAXSIM deducts half of the section 1401(b)(2) additional\nMedicare tax, which section 164(f)(1) excludes (probe w=0, se=810,431:\nALD 24,759.23 = 22,291.28 statutory + 0.5 x 0.009 x (748,433 - 200,000)),\nand the deliberate PolicyEngine-matching bridge OASDI base 186,000 vs\nthe official 184,500 (rulespec-us us/policies/ssa/contribution-and-\nbenefit-base/2026) yields exactly 0.5 x 0.124 x 1,500 = 93.00 on\nwage-straddling rows. Axiom's ALD equals the statutory formula at the\nbridge base on every row. Fully characterized, favoring neither engine\noverall.",
+   "cases": [
+    "ecps-tax-unit-135586",
+    "ecps-tax-unit-58620",
+    "ecps-tax-unit-58643",
+    "ecps-tax-unit-58645",
+    "ecps-tax-unit-58942",
+    "ecps-tax-unit-59264",
+    "ecps-tax-unit-136114",
+    "ecps-tax-unit-136327",
+    "ecps-tax-unit-136399",
+    "ecps-tax-unit-136429",
+    "ecps-tax-unit-154724",
+    "ecps-tax-unit-155406",
+    "ecps-tax-unit-156147",
+    "ecps-tax-unit-156467",
+    "ecps-tax-unit-156651",
+    "ecps-tax-unit-157013",
+    "ecps-tax-unit-157251",
+    "ecps-tax-unit-157317",
+    "ecps-tax-unit-157868",
+    "ecps-tax-unit-161870",
+    "ecps-tax-unit-161979",
+    "ecps-tax-unit-163020",
+    "ecps-tax-unit-164227",
+    "ecps-tax-unit-164548",
+    "ecps-tax-unit-164633"
+   ],
+   "arithmetic": [
+    {
+     "expression": "0.2 * 9312.44 * (1 - 0.690530)",
+     "equals": 576.38
+    },
+    {
+     "expression": "22291.28 + 0.5 * 0.009 * (748433 - 200000)",
+     "equals": 24759.23
+    },
+    {
+     "expression": "0.5 * 0.124 * 1500",
+     "equals": 93.0
+    },
+    {
+     "expression": "400 - 0.2 * 1096.33",
+     "equals": 180.73
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-input-gssi-earners-scope-taxable-income",
+   "concept": "us:tax/federal-income-tax#taxable_income",
+   "kind": "amount_difference",
+   "disposition": "bridge_artifact",
+   "mechanism": "Harness input-scope difference, reconciled to the cent per row: the\nTAXSIM projection sums gssi over head+spouse only\n(axiom_oracles/adapters/taxsim/projection.py, earners = [head] +\n[spouse]), while the axiom projection sums social-security benefits over\nevery unit member. Each unit has a third member receiving benefits that\nTAXSIM never sees; both engines then apply the identical section 86\n85%-cap inclusion, so the AGI member is exactly 0.85 x (missing\nbenefits): 58950 0.85 x 14,771.48 = 12,555.75; 59011 0.85 x 17,868.72 =\n15,188.41 (gssi sent was 0 - all benefits belong to the non-earner);\n59151 0.85 x 23,091.88 = 19,628.10. The residual closes with the H.R.1\nsection 70103 senior-deduction phaseout knock-on of the shifted MAGI\n(58950: 0.06 x 158.32 = 9.50 - only axiom's MAGI crosses 150,000;\n59151: two eligible seniors phase at 6% each, 2 x 0.06 x 19,628.10 =\n2,355.37). Not an engine defect on either side.",
+   "cases": [
+    "ecps-tax-unit-58950",
+    "ecps-tax-unit-59011",
+    "ecps-tax-unit-59151"
+   ],
+   "arithmetic": [
+    {
+     "expression": "0.85 * 14771.48",
+     "equals": 12555.76
+    },
+    {
+     "expression": "0.85 * 17868.72",
+     "equals": 15188.41
+    },
+    {
+     "expression": "0.85 * 23091.88 + 2 * 0.06 * 19628.10",
+     "equals": 21983.47
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "se-loss-461l-cap-vintage-two-sided-extension",
+   "concept": "us:tax/federal-income-tax#taxable_income",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Completes se-loss-461l-cap-vintage-two-sided: synthetic probes of the\npinned binary establish that TAXSIM does apply a section 461(l)-shaped\ncap - at its own projected 332,389.95 single / 664,779.90 joint,\ntreating net positive capital gain as business gross income\n(dollar-for-dollar allowance increase) - while the axiom leg caps the\naggregate business loss (negative SE net of positive rental) at the\n2024-vintage 305,000/610,000 with no capital-gain offset. Neither cap\nmatches 2026 statute; the members reconcile each row to the dollar:\n162440 (single, net gain 211,350.64): TAXSIM allows 332,389.95 +\n211,350.64 = 543,740.59 vs axiom 305,000 -> AGI member 238,740.59, and\nthe row closes with the itemize-choice member (axiom itemizes SALT\n17,415.41 > std 16,100 while TAXSIM takes the standard deduction):\n238,740.60 - 1,315.41 = 237,425.19. 154504 (single, net capital LOSS\ncapped -3,000 on both sides): 332,389.95 - 3,000 - 305,000 = 24,389.95.\n159221 (joint): axiom disallows (646,072.38 - 33,808.42 rental) -\n610,000 = 2,263.96; TAXSIM's 664,779.90 cap exceeds the loss so it\nallows it in full.",
+   "cases": [
+    "ecps-tax-unit-154504",
+    "ecps-tax-unit-159221",
+    "ecps-tax-unit-162440"
+   ],
+   "arithmetic": [
+    {
+     "expression": "332389.95 + 211350.64 - 305000 - 1315.41",
+     "equals": 237425.18
+    },
+    {
+     "expression": "332389.95 - 3000 - 305000",
+     "equals": 24389.95
+    },
+    {
+     "expression": "646072.38 - 33808.42 - 610000",
+     "equals": 2263.96
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-blindness-63f-and-qbid-composite-taxable-income",
+   "concept": "us:tax/federal-income-tax#taxable_income",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Composite of two dispositioned member classes, reconciling to the\ncent: the section 63(f) blindness increment the TAXSIM input format\ncannot carry (taxsim-input-lacks-blindness-column-63f-increments: axiom\nstandard deduction 37,150 = 35,500 aged-joint + 1,650 blindness vs\nTAXSIM v13 35,500) plus the QBID machinery member (TAXSIM qbid 0 vs\naxiom's 6,731.31 = 0.2 x 33,656.56 on a QBI base its module excludes,\nthe dispositioned rental-in-QBI convention): 6,731.31 + 1,650.00 =\n8,381.31 = the committed residual.",
+   "cases": [
+    "ecps-tax-unit-135959"
+   ],
+   "arithmetic": [
+    {
+     "expression": "6731.31 + 1650.0",
+     "equals": 8381.31
+    },
+    {
+     "expression": "37150 - 35500",
+     "equals": 1650
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-auto-hoh-and-qbid-composite-taxable-income",
+   "concept": "us:tax/federal-income-tax#taxable_income",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Composite of two named members reconciling to the cent: TAXSIM\npromotes mstat=1-with-dependents to head-of-household (v13 24,150 vs the\nsingle 16,100 the harness's filing-status projection encodes - the same\nauto-HoH ingredient catalogued in the state-lane entries), a standard-\ndeduction member of +8,050 toward axiom, minus the QBID floor member\n(axiom grants the H.R.1 section 70105 minimum-anchored 474.66 that\nTAXSIM's module lacks): 8,050.00 - 474.66 = 7,575.34 = the committed\nresidual.",
+   "cases": [
+    "ecps-tax-unit-136208"
+   ],
+   "arithmetic": [
+    {
+     "expression": "24150 - 16100",
+     "equals": 8050
+    },
+    {
+     "expression": "8050.0 - 474.66",
+     "equals": 7575.34
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-auto-itemized-salt-contents-taxable-income",
+   "concept": "us:tax/federal-income-tax#taxable_income",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Itemized-deduction contents convention, reconciled to the cent: both\nengines itemize (each side's itemized total exceeds the 16,100 single\nstandard deduction), but TAXSIM auto-includes its own computed state\nincome tax in the SALT deduction (v17 18,352.57) while the bridge feeds\naxiom the unit's withheld state income tax (itemized 17,457.14). The\nresidual is exactly the contents difference: 18,352.57 - 17,457.14 =\n895.43. The same auto-itemized-state-tax ingredient catalogued in the\nstate-lane entries.",
+   "cases": [
+    "ecps-tax-unit-59285"
+   ],
+   "arithmetic": [
+    {
+     "expression": "18352.57 - 17457.14",
+     "equals": 895.43
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "amt-partiii-routing-vs-taxsim-amt-vintage",
+   "concept": "us:tax/federal-income-tax#amt",
+   "kind": "amount_difference",
+   "disposition": "explained_residual",
+   "mechanism": "Two-sided composite of established classes, with the axiom side\nreproduced exactly on every row from its own audited full-evidence\nworksheet: axiom AMT = max(0, Part III tentative tax - (section 1(h) +\n1(j) regular tax)), where the bridge's Part III grants the\ncapital-gain stack the full 0%/15% brackets - the dispositioned\ncapgains-worksheet-bucket-routing convention, which cancels between TMT\nand regular tax except on the ordinary-income slice (e.g. 158759:\n11,931,443.35 - 11,924,224.62 = 7,218.73; 158883: 11,890,305.10 -\n11,858,887.59 = 31,417.51; identity holds within $0.01 on all ten\nrows, receipt attached). The engines agree on AMTI to the cent\n(amti_axiom == v26 on every captured row). TAXSIM's v27 departs per\nits dispositioned pre-OBBBA AMT parameter vintage\n(taxsim-2026-amt-parameter-vintage) compounded with its capital-gains\nbracket vintage (taxsim-2026-capgains-bracket-set-vintage); on\n156992 that vintage's exemption-phaseout geometry zeroes the AMT\nentirely (v27 = 0 vs axiom 2,020.68). Fully characterized, favoring\nneither engine.",
+   "cases": [
+    "ecps-tax-unit-58555",
+    "ecps-tax-unit-58687",
+    "ecps-tax-unit-156467",
+    "ecps-tax-unit-156922",
+    "ecps-tax-unit-156992",
+    "ecps-tax-unit-157643",
+    "ecps-tax-unit-158759",
+    "ecps-tax-unit-158883",
+    "ecps-tax-unit-159302",
+    "ecps-tax-unit-160366"
+   ],
+   "arithmetic": [
+    {
+     "expression": "11931443.35 - 11924224.62",
+     "equals": 7218.73
+    },
+    {
+     "expression": "11890305.10 - 11858887.59",
+     "equals": 31417.51
+    },
+    {
+     "expression": "170034.91 - 155338.13",
+     "equals": 14696.78
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-2026-credit-machinery-liability-composite-eitc-refundable-ctc",
+   "concept": "us:tax/federal-income-tax#liability",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Liability faces of the dispositioned TAXSIM 2026 credit-machinery\nclasses, reconciled member-by-member from the full-evidence chain: on\neach row tax-before-credits and the nonrefundable-CTC-used member agree\nwith TAXSIM to the cent, and the residual is exactly the EITC-with-\nchildren member (taxsim-2026-eitc-with-children-absent; TAXSIM v25 = 0\non all three) plus the refundable-CTC member\n(taxsim-2026-ctc-machinery-absent-refundable-arm; TAXSIM actc = 0):\n136212: 206.25 - 206.25 - 7,469.02 - 4,829.72 = -12,298.74 (refundable\narm = 0.15 x (34,698.15 - 2,500) = 4,829.72, four qualifying children);\n136408: -7,848.92 - 4,571.13 = -12,420.06 (tbc 77.42 fully absorbed by\nthe nonrefundable arm on both sides); 136417: 126.86 - 126.86 -\n4,034.39 - 1,700.00 = -5,734.39 (refundable arm at the section\n24(d)(1)(A) 1,700 per-child cap, one qualifying child). TAXSIM fiitax\n= 0.00 on all three.",
+   "cases": [
+    "ecps-tax-unit-136212",
+    "ecps-tax-unit-136408",
+    "ecps-tax-unit-136417"
+   ],
+   "arithmetic": [
+    {
+     "expression": "206.25 - 206.25 - 7469.02 - 4829.72",
+     "equals": -12298.74
+    },
+    {
+     "expression": "0.15 * (34698.15 - 2500)",
+     "equals": 4829.72
+    },
+    {
+     "expression": "126.86 - 126.86 - 4034.39 - 1700.0",
+     "equals": -5734.39
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "taxsim-2026-ctc-machinery-absent-extension",
+   "concept": "us:tax/federal-income-tax#ctc",
+   "kind": "amount_difference",
+   "disposition": "upstream_engine_gap",
+   "mechanism": "Extension of the dispositioned TAXSIM 2026 child-credit machinery\nclasses to two remaining rows, axiom reproducing 2026 statute exactly:\n59182 - two qualifying children with AGI 406,139.54 over the 400,000\nsection 24(h) threshold, 2 x 2,200 - 50 x ceil(6,139.54 / 1,000) =\n4,400 - 350 = 4,050.00 vs TAXSIM v22 386.05 (pre-TCJA-vintage\nmachinery); 136212 - refundable arm with four qualifying children,\n0.15 x (34,698.15 - 2,500) = 4,829.72 under the 4 x 1,700 refundable\ncap, vs TAXSIM v22 206.25, actc 0.",
+   "cases": [
+    "ecps-tax-unit-59182",
+    "ecps-tax-unit-136212"
+   ],
+   "arithmetic": [
+    {
+     "expression": "2 * 2200 - 7 * 50",
+     "equals": 4050
+    },
+    {
+     "expression": "0.15 * (34698.15 - 2500)",
+     "equals": 4829.72
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+  },
+  {
+   "id": "axiom-eitc-phaseout-income-se-loss-not-netted",
+   "concept": "us:tax/federal-income-tax#eitc",
+   "kind": "amount_difference",
+   "disposition": "axiom_encoding_gap",
+   "mechanism": "Axiom-side earned-income measure defect, reconciled to the cent:\nboth engines apply the identical childless schedule (7.65% phase-in,\n664 maximum, phase-out from 10,860), but the bridge's earned_income\ninput feeding section 32(a)(2)(B) phase-out income does not net the\nunit's 1,122.78 self-employment loss (pwages 16,011.53, psemp\n-1,122.78), while section 32(c)(2)(A)(ii) defines earned income\nthrough net earnings from self-employment - a loss nets. Axiom phases\nout on max(AGI, 16,011.53) = 16,011.53; TAXSIM on max(14,946.30,\n14,888.75) = 14,946.30. Credit difference = 0.0765 x (16,011.53 -\n14,946.30) = 81.49 = the committed residual (269.91 vs 351.40).\nClassified as our own bridge defect; visible until the projection nets\nSE losses into the section 32 earned-income input.",
+   "cases": [
+    "ecps-tax-unit-135880"
+   ],
+   "arithmetic": [
+    {
+     "expression": "0.0765 * (16011.53 - 14946.30)",
+     "equals": 81.49
+    },
+    {
+     "expression": "664 - 0.0765 * (16011.53 - 10860)",
+     "equals": 269.91
+    },
+    {
+     "expression": "664 - 0.0765 * (14946.30 - 10860)",
+     "equals": 351.4
+    }
+   ],
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
   }
  ]
 }

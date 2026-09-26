@@ -13,9 +13,13 @@ Usage:
     uv run scripts/apply_dispositions.py --check    # validate; exit 1 on drift
 
 `--check` fails when a dispositions file is schema-invalid (missing evidence,
-arithmetic that does not reconcile, dangling source paths) or when a
-checked-in report or coverage rollup no longer matches what the merge would
-produce. Reports whose suite has no dispositions file are left untouched.
+arithmetic that does not reconcile, dangling source paths, TAXSIM-lane
+entries without attribution / oracle binding / population binding), when a
+TAXSIM-lane mismatch row is claimed by two entries (classification
+conservation), when an entry's `evidence.row_arithmetic` fails on a
+checked-in report's rows, or when a checked-in report or coverage rollup no
+longer matches what the merge would produce. Reports whose suite has no
+dispositions file are left untouched.
 Reports that merged dispositions before trimming stored mismatch examples
 (premerged-slim) are validated against their bound source full report —
 aggregate block, row-level assignment digest, and retained-row annotations,
@@ -42,15 +46,16 @@ from axiom_oracles.comparison.dispositions import (  # noqa: E402
     assignment_digest,
     dispositioned_rollup,
     load_dispositions,
+    report_is_taxsim_lane,
     report_json_text,
+    suite_context,
 )
 
 DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 # This ledger is consumed and validated by us_tariff_schedule_campaign.py.
-# Its structured ``match`` selectors are intentionally outside the shared
-# case-id/case-selector dispositions schema, so the shared merge must not
-# attempt to load it.
+# Its campaign-unit selectors include slots and instrument fields outside
+# the shared mismatch-row schema, so the shared merge must not load it.
 CAMPAIGN_LOCAL_DISPOSITIONS_FILES = frozenset({"us-tariff-schedule.yaml"})
 BE_COVERAGE_SOURCES = (
     REPO_ROOT / "axiom_oracles" / "data" / "euromod_be_coverage.json",
@@ -62,6 +67,31 @@ BE_ROLLUP_NOTE = (
     "disposition (explained residuals, upstream engine gaps, bridge "
     "artifacts) from dispositions/<suite>.yaml."
 )
+
+
+#: An expiry reason that means the ledger's own evidence is contradicted by
+#: the committed report's rows — a hard --check failure, not a soft expiry.
+_EVIDENCE_FAILURE_REASONS = frozenset({"row_arithmetic_failed"})
+
+
+def _evidence_failures(rel: object, block: dict) -> list[str]:
+    """Problems for entries whose row arithmetic fails on committed rows."""
+
+    reasons = block.get("expired_reasons") or {}
+    return [
+        f"{rel}: dispositions entry {entry_id!r} fails its "
+        f"evidence.row_arithmetic on the committed rows ({reason}) — the "
+        "classification's own evidence is contradicted; fix or remove it"
+        for entry_id, reason in sorted(reasons.items())
+        if reason in _EVIDENCE_FAILURE_REASONS
+    ]
+
+
+def _taxsim_lane(report: dict) -> bool:
+    return (
+        report_is_taxsim_lane(report)
+        or suite_context(report.get("suite"), REPO_ROOT).taxsim_lane
+    )
 
 
 def _load_dispositions_files() -> tuple[dict[str, dict], list[str]]:
@@ -136,10 +166,20 @@ def _merge_reports(
             if str(suite).startswith("be-"):
                 be_reports.append(report)
             continue
-        merged = apply_dispositions(
-            report,
-            dispositions,
-            dispositions_file=f"dispositions/{suite}.yaml",
+        try:
+            merged = apply_dispositions(
+                report,
+                dispositions,
+                dispositions_file=f"dispositions/{suite}.yaml",
+                taxsim_lane=_taxsim_lane(report),
+            )
+        except DispositionError as exc:
+            problems.append(f"{path.relative_to(REPO_ROOT)}: {exc}")
+            continue
+        problems.extend(
+            _evidence_failures(
+                path.relative_to(REPO_ROOT), merged["summary"]["dispositioned"]
+            )
         )
         if str(suite).startswith("be-"):
             be_reports.append(merged)
@@ -252,12 +292,20 @@ def _premerged_block_problems(
         for row in report.get("mismatches") or []
     ]
     for full_path, full in sources:
-        merged = apply_dispositions(
-            full,
-            dispositions,
-            dispositions_file=f"dispositions/{suite}.yaml",
-        )
         full_rel = full_path.relative_to(REPO_ROOT)
+        try:
+            merged = apply_dispositions(
+                full,
+                dispositions,
+                dispositions_file=f"dispositions/{suite}.yaml",
+                taxsim_lane=_taxsim_lane(full),
+            )
+        except DispositionError as exc:
+            problems.append(f"{full_rel}: {exc}")
+            continue
+        problems.extend(
+            _evidence_failures(full_rel, merged["summary"]["dispositioned"])
+        )
         if embedded_core != merged["summary"]["dispositioned"]:
             problems.append(
                 f"{rel} embeds a summary.dispositioned block that does not "
@@ -437,8 +485,14 @@ def _report_orphans(dispositions_by_suite: dict[str, dict]) -> None:
             # generator already computed the full-run block.
             block = report["summary"]["dispositioned"]
         else:
-            merged = apply_dispositions(report, dispositions)
+            try:
+                merged = apply_dispositions(
+                    report, dispositions, taxsim_lane=_taxsim_lane(report)
+                )
+            except DispositionError:
+                continue  # already reported as a problem by _merge_reports
             block = merged["summary"]["dispositioned"]
+        reasons = block.get("expired_reasons") or {}
         for entry_id in block["orphaned_entries"]:
             print(
                 f"warning: dispositions/{suite}.yaml entry {entry_id!r} "
@@ -446,9 +500,12 @@ def _report_orphans(dispositions_by_suite: dict[str, dict]) -> None:
                 "expires_on_source_change"
             )
         for entry_id in block["expired_entries"]:
+            reason = reasons.get(entry_id)
             print(
                 f"note: dispositions/{suite}.yaml entry {entry_id!r} is "
-                "expired (source values changed or mismatch cleared)"
+                "expired ("
+                + (reason or "source values changed or mismatch cleared")
+                + ")"
             )
 
 

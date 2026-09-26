@@ -37,6 +37,14 @@ class HouseholdComparison:
     left_error_detail: Mapping[str, Any] | None = None
     right_error_detail: Mapping[str, Any] | None = None
 
+    def __post_init__(self) -> None:
+        if self.has_engine_errors:
+            object.__setattr__(
+                self,
+                "comparisons",
+                [replace(item, matches=False) for item in self.comparisons],
+            )
+
     @property
     def has_engine_errors(self) -> bool:
         return bool(self.left_errors or self.right_errors)
@@ -110,15 +118,6 @@ class Comparator:
             variable_comparisons = [
                 self.compare_mapping(mapping, left, right) for mapping in mappings
             ]
-            if left.errors or right.errors:
-                # An engine run that reported errors is not a trustworthy
-                # agreement: every output of the case is a mismatch (the
-                # report classifies it ``engine_error``), even a value that
-                # happens to coincide with the other engine's.
-                variable_comparisons = [
-                    replace(comparison, matches=False)
-                    for comparison in variable_comparisons
-                ]
             if not variable_comparisons:
                 raise ValueError(
                     f"No comparable mappings for household {left.household_id!r} "
@@ -189,7 +188,7 @@ class Comparator:
             variable=mapping.standard,
             left_value=left_value,
             right_value=right_value,
-            matches=matches,
+            matches=matches and not (left.errors or right.errors),
             difference=difference,
             tolerance=mapping.tolerance,
             relative_tolerance=mapping.relative_tolerance,

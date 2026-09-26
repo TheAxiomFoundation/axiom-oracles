@@ -41,7 +41,7 @@ class MismatchKind:
 #: ``row["error"]["signature"]`` for an engine error whose messages carry no
 #: ``<engine>-crash:<signature>`` prefix.
 UNCLASSIFIED_ERROR_SIGNATURE = "unclassified"
-_CRASH_MESSAGE = re.compile(r"^[A-Za-z0-9_.]+-crash:(?P<signature>.+)$")
+_CRASH_MESSAGE = re.compile(r"^[A-Za-z0-9_.-]+-crash:(?P<signature>.+)$")
 
 
 # Below this case count a suite is small enough to carry full evidence —
@@ -491,6 +491,9 @@ def _case_rows(
 ) -> list[dict]:
     rows = []
     for item in comparisons:
+        case = cases_by_id.get(item.household_id)
+        facts = case.metadata.get("selector_facts") if case is not None else None
+        error = _engine_error_record(item) if item.has_engine_errors else None
         row = {
             "case_id": item.household_id,
             "left_engine": item.left_engine,
@@ -498,7 +501,7 @@ def _case_rows(
             "left_errors": list(item.left_errors),
             "right_errors": list(item.right_errors),
             "metadata": _case_report_metadata(
-                cases_by_id.get(item.household_id),
+                case,
                 include_inputs=include_inputs,
             ),
             "match_rate": item.match_rate,
@@ -507,6 +510,8 @@ def _case_rows(
                     mismatch,
                     mappings_by_id,
                     engine_error=item.has_engine_errors,
+                    facts=facts,
+                    error=error,
                 )
                 for mismatch in item.mismatches()
             ],
@@ -532,9 +537,11 @@ def _case_mismatch_row(
     mappings_by_id: dict[str, ProgramMapping],
     *,
     engine_error: bool = False,
+    facts: Mapping | None = None,
+    error: dict | None = None,
 ) -> dict:
     mapping = mappings_by_id.get(mismatch.variable)
-    return {
+    row = {
         "concept": mismatch.variable,
         "description": mismatch.description,
         "kind": classify_mismatch(mismatch, mapping, engine_error=engine_error),
@@ -545,6 +552,11 @@ def _case_mismatch_row(
         "relative_tolerance": mismatch.relative_tolerance,
         "parent": mapping.parent if mapping is not None else None,
     }
+    if isinstance(facts, Mapping):
+        row["facts"] = dict(facts)
+    if error is not None:
+        row["error"] = error
+    return row
 
 
 def _case_report_metadata(
