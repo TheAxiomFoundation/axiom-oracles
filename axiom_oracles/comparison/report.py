@@ -88,8 +88,13 @@ class ComparisonReportAccumulator:
         mappings: list[ProgramMapping],
         case_rows_path: Path | None = None,
         include_inputs: bool = False,
+        dataset_identity: dict[str, Any] | None = None,
     ) -> None:
         self.include_inputs = include_inputs
+        # File-level identity of the population's source dataset (e.g. the
+        # taxsim-csv loader's sha256/rows/year override), emitted as the
+        # report's top-level ``dataset_identity`` block when present.
+        self.dataset_identity = dataset_identity
         self.suite_name = suite_name
         self.population = population
         self.locales = set(locales)
@@ -215,7 +220,7 @@ class ComparisonReportAccumulator:
         )
 
     def to_dict(self, *, include_cases: bool = True) -> dict:
-        return {
+        report = {
             "schema_version": COMPARISON_REPORT_SCHEMA_VERSION,
             "suite": self.suite_name,
             "population": self.population,
@@ -253,6 +258,9 @@ class ComparisonReportAccumulator:
             "errors": list(self._error_rows),
             "cases": self._stored_case_rows() if include_cases else [],
         }
+        if self.dataset_identity is not None:
+            report["dataset_identity"] = self.dataset_identity
+        return report
 
     def write_json(self, path: Path) -> None:
         """Write the final report JSON, streaming per-case rows when possible."""
