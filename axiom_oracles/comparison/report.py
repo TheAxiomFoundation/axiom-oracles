@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
+from collections.abc import Mapping
 import json
 from pathlib import Path
+import re
 from typing import Any
 
 from .comparator import (
@@ -30,6 +32,16 @@ class MismatchKind:
     MISSING_RIGHT = "missing_right"
     MISSING_BOTH = "missing_both"
     VALUE_MISMATCH = "value_mismatch"
+    # Either engine reported errors for the case: the row is a mismatch
+    # whatever the values, and ``row["error"]`` says which engine failed and
+    # how (interface contract C2).
+    ENGINE_ERROR = "engine_error"
+
+
+#: ``row["error"]["signature"]`` for an engine error whose messages carry no
+#: ``<engine>-crash:<signature>`` prefix.
+UNCLASSIFIED_ERROR_SIGNATURE = "unclassified"
+_CRASH_MESSAGE = re.compile(r"^[A-Za-z0-9_.-]+-crash:(?P<signature>.+)$")
 
 
 # Below this case count a suite is small enough to carry full evidence —
@@ -220,6 +232,36 @@ class ComparisonReportAccumulator:
         )
 
     def to_dict(self, *, include_cases: bool = True) -> dict:
+        summary = {
+            "match_count": self._match_count,
+            "mismatch_count": self._mismatch_count,
+            "comparison_count": self._comparison_count,
+            "weighted": _weighted_summary_from_totals(
+                self._comparison_weight,
+                self._match_weight,
+                self._mismatch_weight,
+            ),
+            "mismatches_by_concept": _count_rows(
+                self._mismatch_rows,
+                "concept",
+            ),
+            "mismatches_by_kind": _count_rows(self._mismatch_rows, "kind"),
+            "mismatches_by_scenario": _count_rows(
+                self._mismatch_rows,
+                "scenario",
+            ),
+            "error_count": len(self._error_rows),
+            "errors_by_engine": _count_object(self._error_rows, "engine"),
+        }
+        engine_error_count = sum(
+            1
+            for row in self._mismatch_rows
+            if row.get("kind") == MismatchKind.ENGINE_ERROR
+        )
+        # Present only when a case errored, so reports without engine
+        # errors keep their exact pre-existing summary shape.
+        if engine_error_count:
+            summary["engine_error_count"] = engine_error_count
         report = {
             "schema_version": COMPARISON_REPORT_SCHEMA_VERSION,
             "suite": self.suite_name,
@@ -229,27 +271,7 @@ class ComparisonReportAccumulator:
             "scope": self.scope.as_dict() if self.scope is not None else None,
             "concepts": _concept_rows(self.mappings),
             "case_count": self._case_count,
-            "summary": {
-                "match_count": self._match_count,
-                "mismatch_count": self._mismatch_count,
-                "comparison_count": self._comparison_count,
-                "weighted": _weighted_summary_from_totals(
-                    self._comparison_weight,
-                    self._match_weight,
-                    self._mismatch_weight,
-                ),
-                "mismatches_by_concept": _count_rows(
-                    self._mismatch_rows,
-                    "concept",
-                ),
-                "mismatches_by_kind": _count_rows(self._mismatch_rows, "kind"),
-                "mismatches_by_scenario": _count_rows(
-                    self._mismatch_rows,
-                    "scenario",
-                ),
-                "error_count": len(self._error_rows),
-                "errors_by_engine": _count_object(self._error_rows, "engine"),
-            },
+            "summary": summary,
             "aggregates": _aggregate_rows_from_buckets(
                 self._aggregate_buckets,
                 self.mappings,
@@ -308,7 +330,11 @@ class ComparisonReportAccumulator:
 def classify_mismatch(
     comparison: VariableComparison,
     mapping: ProgramMapping | None = None,
+    *,
+    engine_error: bool = False,
 ) -> str:
+    if engine_error:
+        return MismatchKind.ENGINE_ERROR
     if comparison.left_value is None and comparison.right_value is None:
         return MismatchKind.MISSING_BOTH
     if comparison.left_value is None:
@@ -349,27 +375,95 @@ def _mismatch_rows(
     for item in comparisons:
         case = cases_by_id.get(item.household_id)
         metadata = dict(case.metadata) if case is not None else {}
+        engine_error = item.has_engine_errors
+        error = _engine_error_record(item) if engine_error else None
+        facts = metadata.get("selector_facts")
         for mismatch in item.mismatches():
             mapping = mappings_by_id.get(mismatch.variable)
-            rows.append(
-                {
-                    "case_id": item.household_id,
-                    "scenario": metadata.get("scenario"),
-                    "yearly_earned_income": metadata.get("yearly_earned_income"),
-                    "ages": metadata.get("ages"),
-                    "pregnant_head": metadata.get("pregnant_head"),
-                    "concept": mismatch.variable,
-                    "description": mismatch.description,
-                    "kind": classify_mismatch(mismatch, mapping),
-                    "left": mismatch.left_value,
-                    "right": mismatch.right_value,
-                    "difference": mismatch.difference,
-                    "tolerance": mismatch.tolerance,
-                    "relative_tolerance": mismatch.relative_tolerance,
-                    "parent": mapping.parent if mapping is not None else None,
-                }
-            )
+            row = {
+                "case_id": item.household_id,
+                "scenario": metadata.get("scenario"),
+                "yearly_earned_income": metadata.get("yearly_earned_income"),
+                "ages": metadata.get("ages"),
+                "pregnant_head": metadata.get("pregnant_head"),
+                "concept": mismatch.variable,
+                "description": mismatch.description,
+                "kind": classify_mismatch(
+                    mismatch, mapping, engine_error=engine_error
+                ),
+                "left": mismatch.left_value,
+                "right": mismatch.right_value,
+                "difference": mismatch.difference,
+                "tolerance": mismatch.tolerance,
+                "relative_tolerance": mismatch.relative_tolerance,
+                "parent": mapping.parent if mapping is not None else None,
+            }
+            # Interface contract C3: a population's flat selector facts ride
+            # verbatim on each of its mismatch rows, only when it sets them,
+            # so structured disposition selectors can bound on them.
+            if isinstance(facts, Mapping):
+                row["facts"] = dict(facts)
+            if error is not None:
+                row["error"] = error
+            rows.append(row)
     return rows
+
+
+def engine_error_signature(
+    messages: tuple[str, ...] | list[str],
+    detail: Mapping | None = None,
+) -> str:
+    """Stable failure signature for an errored engine run.
+
+    ``<engine>-crash:<signature>`` messages (contract C2, e.g.
+    ``taxsim-crash:SIGFPE`` or ``taxsim-crash:rc=139``) yield their
+    signature; otherwise a structured ``detail["signature"]`` is used; any
+    other error is :data:`UNCLASSIFIED_ERROR_SIGNATURE`.
+    """
+
+    for message in messages:
+        found = _CRASH_MESSAGE.match(str(message).strip())
+        if found:
+            return found.group("signature").strip()
+    if isinstance(detail, Mapping):
+        signature = detail.get("signature")
+        if isinstance(signature, str) and signature.strip():
+            return signature.strip()
+    return UNCLASSIFIED_ERROR_SIGNATURE
+
+
+def _engine_error_record(item: HouseholdComparison) -> dict:
+    """``row["error"]`` for an errored case: which engine failed, and how.
+
+    Describes the first errored side (left before right); when both sides
+    errored the right side rides along under ``other_side``. A structured
+    failure detail contributes the failing binary's sha256 and return code.
+    """
+
+    records = []
+    for side, engine, errors, detail in (
+        ("left", item.left_engine, item.left_errors, item.left_error_detail),
+        ("right", item.right_engine, item.right_errors, item.right_error_detail),
+    ):
+        if not errors:
+            continue
+        record: dict[str, Any] = {
+            "engine": engine,
+            "side": side,
+            "signature": engine_error_signature(errors, detail),
+            "messages": [str(message) for message in errors],
+        }
+        if isinstance(detail, Mapping):
+            if isinstance(detail.get("binary_sha256"), str):
+                record["binary_sha256"] = detail["binary_sha256"]
+            returncode = detail.get("returncode")
+            if isinstance(returncode, int) and not isinstance(returncode, bool):
+                record["returncode"] = returncode
+        records.append(record)
+    error = dict(records[0])
+    if len(records) > 1:
+        error["other_side"] = records[1]
+    return error
 
 
 def _error_rows(comparisons: list[HouseholdComparison]) -> list[dict]:
@@ -405,6 +499,9 @@ def _case_rows(
 ) -> list[dict]:
     rows = []
     for item in comparisons:
+        case = cases_by_id.get(item.household_id)
+        facts = case.metadata.get("selector_facts") if case is not None else None
+        error = _engine_error_record(item) if item.has_engine_errors else None
         row = {
             "case_id": item.household_id,
             "left_engine": item.left_engine,
@@ -412,12 +509,18 @@ def _case_rows(
             "left_errors": list(item.left_errors),
             "right_errors": list(item.right_errors),
             "metadata": _case_report_metadata(
-                cases_by_id.get(item.household_id),
+                case,
                 include_inputs=include_inputs,
             ),
             "match_rate": item.match_rate,
             "mismatches": [
-                _case_mismatch_row(mismatch, mappings_by_id)
+                _case_mismatch_row(
+                    mismatch,
+                    mappings_by_id,
+                    engine_error=item.has_engine_errors,
+                    facts=facts,
+                    error=error,
+                )
                 for mismatch in item.mismatches()
             ],
         }
@@ -440,12 +543,16 @@ def _case_rows(
 def _case_mismatch_row(
     mismatch: VariableComparison,
     mappings_by_id: dict[str, ProgramMapping],
+    *,
+    engine_error: bool = False,
+    facts: Mapping | None = None,
+    error: dict | None = None,
 ) -> dict:
     mapping = mappings_by_id.get(mismatch.variable)
-    return {
+    row = {
         "concept": mismatch.variable,
         "description": mismatch.description,
-        "kind": classify_mismatch(mismatch, mapping),
+        "kind": classify_mismatch(mismatch, mapping, engine_error=engine_error),
         "left": mismatch.left_value,
         "right": mismatch.right_value,
         "difference": mismatch.difference,
@@ -453,6 +560,11 @@ def _case_mismatch_row(
         "relative_tolerance": mismatch.relative_tolerance,
         "parent": mapping.parent if mapping is not None else None,
     }
+    if isinstance(facts, Mapping):
+        row["facts"] = dict(facts)
+    if error is not None:
+        row["error"] = error
+    return row
 
 
 def _case_report_metadata(

@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: fiit-taxsim-ecps
-updated: '2026-08-28'
+updated: '2026-09-25'
 entries:
 - id: taxsim-2026-eitc-child-machinery-absent
   concept: us:tax/federal-income-tax#eitc
@@ -4086,7 +4086,12 @@ entries:
     - ecps-tax-unit-99938
     - ecps-tax-unit-99939
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
+    row_arithmetic:
+    - expression: right
+      equals: 0
+      tolerance: 0
     mechanism: 'The pinned TAXSIM 2.30.0 binary''s 2026 law year does not model
       the
 
@@ -4106,6 +4111,11 @@ entries:
       equals: 0.0
       tolerance: 0.0
   expires_on_source_change: true
+  selector_binding:
+    units: 4010
+    rows_sha256: 31c2d698b8782a3782c5de4e0634034bc8ab934cb559f5d6b272eedc6bf403b9
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: taxsim-input-lacks-blindness-column-63f-increments
   concept: us:tax/federal-income-tax#standard_deduction
@@ -6158,6 +6168,7 @@ entries:
     - ecps-tax-unit-99797
     - ecps-tax-unit-99848
   disposition: explained_residual
+  attribution: input
   evidence:
     mechanism: 'Every residual is an exact whole multiple of the 2026 section 63(f)
 
@@ -6180,6 +6191,11 @@ entries:
       equals: 3300.0
       tolerance: 0.0
   expires_on_source_change: true
+  selector_binding:
+    units: 2045
+    rows_sha256: 4d0e5b667c3c0a034184ac240b8af872c44f0560d9cdb33f4c565ddccbc8b50c
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: axiom-uncapped-oasdi-flat-765-wage-only
   concept: us:tax/payroll#employee_fica
@@ -17331,6 +17347,7 @@ entries:
     - ecps-tax-unit-99942
     - ecps-tax-unit-99959
   disposition: axiom_encoding_gap
+  attribution: axiom
   evidence:
     mechanism: 'The encoded 26 USC 3101 employee payroll taxes apply no 3121(a)(1)
 
@@ -17352,6 +17369,11 @@ entries:
       equals: 14194.0
       tolerance: 0.01
   expires_on_source_change: true
+  selector_binding:
+    units: 11144
+    rows_sha256: 2954da2760e33accd78487b853c84fc4212acde4e347d5c1067b1cd81970ccf7
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1214
 - id: axiom-uncapped-oasdi-flat-765-with-uncapped-seca
   concept: us:tax/payroll#employee_fica
@@ -18205,6 +18227,7 @@ entries:
     - ecps-tax-unit-99541
     - ecps-tax-unit-99636
   disposition: axiom_encoding_gap
+  attribution: axiom
   evidence:
     mechanism: 'Self-employment variant of the uncapped-3101 class: the axiom value
 
@@ -18226,6 +18249,11 @@ entries:
       equals: 0.14129
       tolerance: 1.0e-05
   expires_on_source_change: true
+  selector_binding:
+    units: 846
+    rows_sha256: ef238fff1a5540cca8efed066750cc1b2b9ff216d98aa903b8ce89deeca39cc8
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1214
 - id: taxsim-2026-eitc-childless-schedule-applied-to-units-with-children
   concept: us:tax/federal-income-tax#eitc
@@ -19606,6 +19634,7 @@ entries:
     - ecps-tax-unit-99945
     - ecps-tax-unit-99968
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
     mechanism: 'Second face of the pinned binary''s 2026 child-credit gap: on
 
@@ -19631,6 +19660,11 @@ entries:
       equals: 0.0
       tolerance: 0.0
   expires_on_source_change: true
+  selector_binding:
+    units: 1373
+    rows_sha256: 74708fd0c269050960fd4c77e6ba42ec5b7a040cb959bd19b3613cc06baa4b73
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: axiom-seca-medicare-rate-only
   concept: us:tax/payroll#employee_fica
@@ -25880,6 +25914,7 @@ entries:
     - ecps-tax-unit-99985
     - ecps-tax-unit-99987
   disposition: axiom_encoding_gap
+  attribution: axiom
   evidence:
     mechanism: 'The encoded self-employment tax applies only the 26 USC 1401(b)
 
@@ -25903,6 +25938,11 @@ entries:
       equals: 0.0267815
       tolerance: 1.0e-07
   expires_on_source_change: true
+  selector_binding:
+    units: 6242
+    rows_sha256: 80b9372fa69d7612aa549b49895b0b17e32e431aeaffc2ead24e33d375408bd1
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1537
 - id: axiom-seca-medicare-rate-only-1402b2-gate
   concept: us:tax/payroll#employee_fica
@@ -26127,6 +26167,7 @@ entries:
     - ecps-tax-unit-98919
     - ecps-tax-unit-99538
   disposition: axiom_encoding_gap
+  attribution: two_sided
   evidence:
     mechanism: 'Variant of axiom-seca-medicare-rate-only for filers whose 92.35
 
@@ -26144,6 +26185,11 @@ entries:
       equals: 369.4
       tolerance: 0.01
   expires_on_source_change: true
+  selector_binding:
+    units: 217
+    rows_sha256: a90f35e0eea8bda964ac60a79527e7562f685e1a932d06eb2a280731dd054dfc
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-encode/issues/1537
 - id: taxsim-auto-itemized-standard-deduction-zeroed
   concept: us:tax/federal-income-tax#standard_deduction
@@ -26395,7 +26441,12 @@ entries:
     - ecps-tax-unit-8534
     - ecps-tax-unit-85848
   disposition: explained_residual
+  attribution: convention
   evidence:
+    row_arithmetic:
+    - expression: right
+      equals: 0
+      tolerance: 0
     mechanism: 'TAXSIM-35 itemizes on its own whenever its computed deductions beat
 
       the standard deduction and reports v13 = 0 for the unit; the axiom
@@ -26416,6 +26467,11 @@ entries:
       equals: 0.0
       tolerance: 0.0
   expires_on_source_change: true
+  selector_binding:
+    units: 244
+    rows_sha256: 1e424522f04cbe50be7b40a50ed1f1d1c30ce9351a4e1790a6883689cf92c985
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
 - id: taxsim-auto-hoh-standard-deduction
   concept: us:tax/federal-income-tax#standard_deduction
@@ -26452,7 +26508,14 @@ entries:
     - ecps-tax-unit-98474
     - ecps-tax-unit-98795
   disposition: explained_residual
+  attribution: convention
   evidence:
+    row_arithmetic:
+    - expression: right
+      equals:
+      - 24150
+      - 26200
+      - 28250
     mechanism: 'TAXSIM-35 elects head-of-household on its own for mstat=1 units
 
       carrying dependents: solo replay on 2026-08-24 shows v13 = 24,150
@@ -26474,6 +26537,11 @@ entries:
       equals: 26200.0
       tolerance: 0.0
   expires_on_source_change: true
+  selector_binding:
+    units: 29
+    rows_sha256: c741e3d19fa1c91360ab53cd61c88aef60f04a6bc49a13c8214a21a5a55b42bd
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/439
 - id: taxsim-childless-eitc-parameter-vintage
   concept: us:tax/federal-income-tax#eitc
@@ -26512,6 +26580,7 @@ entries:
     - ecps-tax-unit-92527
     - ecps-tax-unit-98842
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
     mechanism: 'Childless-unit rows where the axiom value reproduces exactly (to
 
@@ -26544,6 +26613,11 @@ entries:
       equals: 19540.0
       tolerance: 1.0
   expires_on_source_change: true
+  selector_binding:
+    units: 26
+    rows_sha256: 584abee8355ad95b07786ed497530c5c1ff8f9612ae58f80b18a80848e3e7434
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: taxsim-input-format-lacks-alaska-pfd-eitc
   concept: us:tax/federal-income-tax#eitc
@@ -26566,6 +26640,7 @@ entries:
     - ecps-tax-unit-75261
     - ecps-tax-unit-75448
   disposition: bridge_artifact
+  attribution: input
   evidence:
     mechanism: 'The TAXSIM input format carries no column for the Alaska
 
@@ -26587,6 +26662,11 @@ entries:
       equals: 0.0
       tolerance: 0.0
   expires_on_source_change: true
+  selector_binding:
+    units: 15
+    rows_sha256: fbc0c8f6bf6a44f12d248a7f080ab5c032a41e437561fb29974130b70ffed3ff
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: taxsim-binary-2025-parameter-fallback
   concept: us:tax/federal-income-tax#standard_deduction
@@ -26597,7 +26677,13 @@ entries:
     - ecps-tax-unit-139980
     - ecps-tax-unit-62801
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
+    row_arithmetic:
+    - expression: right
+      equals:
+      - 15750
+      - 17750
     mechanism: 'The pinned 2.30.0 binary computes these year=2026 units with
 
       2025-law parameters: solo replay reproduces the reported values
@@ -26616,6 +26702,11 @@ entries:
       equals: 17750.0
       tolerance: 0.0
   expires_on_source_change: true
+  selector_binding:
+    units: 3
+    rows_sha256: 491e7b5c27d360e6568f7067ad0887b8523a0df99e34fe4dde1f71cb22d2fb6e
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
 - id: ecps-projection-dependent-se-income-fica
   concept: us:tax/payroll#employee_fica
@@ -26638,7 +26729,10 @@ entries:
     - ecps-tax-unit-64210
     - ecps-tax-unit-66228
   disposition: bridge_artifact
+  attribution: input
   evidence:
+    sources:
+    - docs/taxsim-oracle-playbook.md
     mechanism: 'Dependent-held (unprojected) self-employment income: TAXSIM-35 has
       no dependent-income input, so the shared projection sums SE income over head
       and spouse only (docs/taxsim-oracle-playbook.md), while the axiom leg computes
@@ -26652,6 +26746,11 @@ entries:
       equals: 134.18
       tolerance: 0.02
   expires_on_source_change: true
+  selector_binding:
+    units: 15
+    rows_sha256: 8c016df4a638057795379e6ffba627c60b9792c3877396e9b7c8b00383bf2e20
+  oracle_binding:
+    identity_unrecorded: true
 - id: axiom-seca-medicare-rate-only-r2-leftovers
   concept: us:tax/payroll#employee_fica
   kind: amount_difference
@@ -26669,7 +26768,9 @@ entries:
     - ecps-tax-unit-65027
     - ecps-tax-unit-74939
   disposition: axiom_encoding_gap
+  attribution: axiom
   evidence:
+    upstream_url: https://github.com/TheAxiomFoundation/axiom-encode/issues/1537
     mechanism: 'Leftover rows of the dispositioned axiom-seca-medicare-rate-only
       class whose mixed dependent-SE composition kept them outside the original
       selector: on every selected row axiom''s employee_fica equals 7.65% of wages
@@ -26685,6 +26786,11 @@ entries:
       equals: 11326.79
       tolerance: 0.5
   expires_on_source_change: true
+  selector_binding:
+    units: 11
+    rows_sha256: 08c3b8ea86f0794d2a9343c51c9163082576366fb53da2ec2a400ef6a6646fe8
+  oracle_binding:
+    identity_unrecorded: true
 - id: taxsim-binary-2025-parameter-fallback-r2-standard-deduction
   concept: us:tax/federal-income-tax#standard_deduction
   kind: amount_difference
@@ -26694,7 +26800,13 @@ entries:
     - ecps-tax-unit-62434
     - ecps-tax-unit-62911
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
+    row_arithmetic:
+    - expression: right
+      equals:
+      - 15750
+      - 17750
     mechanism: 'More rows of the dispositioned taxsim-binary-2025-parameter-fallback
       class: TAXSIM''s v13 returns the 2025 standard deduction (15,750 single; 17,750
       single aged) where the 2026 law year requires 16,100 / 18,150 (Rev. Proc.
@@ -26707,6 +26819,11 @@ entries:
       equals: 400
       tolerance: 0
   expires_on_source_change: true
+  selector_binding:
+    units: 3
+    rows_sha256: 3c9cb736580749965aec7e34ebacab360b2c8789fa1accbc1b74ebe86919b849
+  oracle_binding:
+    identity_unrecorded: true
 - id: taxsim-auto-itemized-standard-deduction-zeroed-r2
   concept: us:tax/federal-income-tax#standard_deduction
   kind: amount_difference
@@ -26714,7 +26831,14 @@ entries:
     case_ids:
     - ecps-tax-unit-62276
   disposition: explained_residual
+  attribution: convention
   evidence:
+    row_arithmetic:
+    - expression: right
+      equals: 0
+      tolerance: 0
+    - expression: left
+      equals: 35500
     mechanism: 'One more row of the dispositioned taxsim-auto-itemized-standard-deduction-zeroed
       class: TAXSIM itemizes on its own when computed deductions beat the standard
       deduction and reports v13 = 0, while axiom reports the statutory standard
@@ -26725,6 +26849,11 @@ entries:
       equals: 35500
       tolerance: 0
   expires_on_source_change: true
+  selector_binding:
+    units: 1
+    rows_sha256: a8a7b578372f4f60a95aca99283eb7fcad20e5fcb4027a108c53006f1735a027
+  oracle_binding:
+    identity_unrecorded: true
 - id: taxsim-childless-eitc-parameter-vintage-r2
   concept: us:tax/federal-income-tax#eitc
   kind: amount_difference
@@ -26732,7 +26861,12 @@ entries:
     case_ids:
     - ecps-tax-unit-152588
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
+    row_arithmetic:
+    - expression: right - left
+      equals: 87.81
+      tolerance: 0.01
     mechanism: 'One more row of the dispositioned taxsim-childless-eitc-parameter-vintage
       class: a childless unit qualifying through the 58-year-old spouse where TAXSIM''s
       2025-projected phaseout parameters yield 507.49 against axiom''s 419.68 from
@@ -26742,12 +26876,22 @@ entries:
       equals: 87.81
       tolerance: 0.01
   expires_on_source_change: true
+  selector_binding:
+    units: 1
+    rows_sha256: 8b69a2171c76c805fd109105d170a44b9f539514ec11c1486c21ca5ff8c8195e
+  oracle_binding:
+    identity_unrecorded: true
 - id: taxsim-2026-eitc-investment-limit-vintage
   concept: us:tax/federal-income-tax#eitc
   kind: amount_difference
   case_id: ecps-tax-unit-67900
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
+    row_arithmetic:
+    - expression: left
+      equals: 0
+      tolerance: 0
     mechanism: TAXSIM's 32(i) disqualified-investment-income limit is 2025-projected
       upward, so it grants the childless credit to a unit whose investment income
       of 12,214 exceeds the published Rev. Proc. 2025-32 maximum of 12,200. Axiom
@@ -26761,6 +26905,11 @@ entries:
       equals: 14
       tolerance: 0
   expires_on_source_change: true
+  pinned:
+    left: 0.0
+    right: 194.68
+  oracle_binding:
+    identity_unrecorded: true
 - id: taxsim-childless-schedule-and-axiom-earned-netting-composite-eitc
   concept: us:tax/federal-income-tax#eitc
   kind: amount_difference
@@ -26769,7 +26918,12 @@ entries:
     - ecps-tax-unit-134692
     - ecps-tax-unit-85537
   disposition: explained_residual
+  attribution: two_sided
   evidence:
+    row_arithmetic:
+    - expression: left
+      equals: 0
+      tolerance: 0
     mechanism: 'Two-sided composite reproduced to the cent from a fresh idtl=2 rerun
 
       of the pinned binary plus the full-evidence axiom chain, on units with a
@@ -26813,6 +26967,11 @@ entries:
       tolerance: 0.05
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
+  selector_binding:
+    units: 2
+    rows_sha256: 58da8eac50c8f1c3c67dee0ab5d50978d0fb2edf092f866eface232e19a8e539
+  oracle_binding:
+    identity_unrecorded: true
 - id: axiom-eitc-earned-income-se-loss-not-netted
   concept: us:tax/federal-income-tax#eitc
   kind: amount_difference
@@ -26820,7 +26979,12 @@ entries:
     case_ids:
     - ecps-tax-unit-132330
   disposition: axiom_encoding_gap
+  attribution: axiom
   evidence:
+    row_arithmetic:
+    - expression: right
+      equals: 0
+      tolerance: 0
     mechanism: 'Axiom-side earned-income measure defect, both sides reproduced
 
       exactly: the unit has wages 1,998.41 and a self-employment loss of
@@ -26853,3 +27017,8 @@ entries:
       tolerance: 0.01
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
+  selector_binding:
+    units: 1
+    rows_sha256: 1fa5e92eb9e7cc517835ff75795f5dd0e1c4069e096711f1bd3eaf5fd954416f
+  oracle_binding:
+    identity_unrecorded: true

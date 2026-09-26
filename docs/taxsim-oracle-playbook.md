@@ -291,3 +291,39 @@ TAXSIM suites persist **every** mismatch row in the committed dashboard copy
 unexplained rows were once physically untriageable behind the default
 1,000-row cap). If a TAXSIM suite's mismatch count approaches its cap, raise
 the cap in the same change that regenerates the suite.
+
+## Disposition ledger discipline
+
+A suite with `taxsim` on either side is a TAXSIM lane, and its
+`dispositions/<suite>.yaml` is held to the hardened rules in
+[`dispositions/README.md`](../dispositions/README.md#taxsim-lanes): every
+entry names its `attribution` (`taxsim`, the other side's engine,
+`convention`, `input`, or `two_sided`), binds the TAXSIM identity it was
+classified against (`oracle_binding`), binds its selected population
+(`selector_binding`, or `pinned` values for a single row), and reconciles
+per row (`evidence.row_arithmetic`) or cites an upstream record. A row
+claimed by two entries fails the merge.
+
+Consequences for a re-pin or a refresh:
+
+- **Re-pinning TAXSIM expires every classification** bound to the previous
+  identity: the merge compares each entry's `oracle_binding` with the
+  binaries the new report records, and a mismatch returns the entry's rows
+  to unexplained (`expired_reasons: oracle_identity_changed`), which the
+  unexplained ratchet then gates. The reports committed before binaries
+  were recorded carry `identity_unrecorded: true` bindings: their committed
+  provenance contains neither binary digests nor a TAXSIM package version.
+  This explicit legacy exception preserves the existing assignments without
+  asserting an unrecorded identity. It expires the first time a report records
+  any C1 identity. An unrecorded binary change with identical rows remains
+  undetectable; refreshed reports must record their actual binary identity.
+- **Re-verify, then re-bind.** After re-checking a class against the
+  refreshed report, stamp its bindings from the committed FULL report with
+  `uv run scripts/bind_dispositions.py <suite>` (`--check` reports drift
+  without writing) in the same commit as the report. Never re-bind a class
+  that was not re-verified: the binding is the claim that it was.
+- **Engine crashes are rows, not gaps in the report.** A case whose TAXSIM
+  run fails becomes `engine_error` mismatch rows carrying the crash
+  signature and failing binary (`row["error"]`); disposition them with
+  `kind: engine_error` and `match.error_signature`, bound to that binary's
+  sha256.

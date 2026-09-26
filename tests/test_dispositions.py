@@ -61,12 +61,12 @@ def _build_report(*, right_values=(125, 50)) -> dict:
         category="tax",
         comparison="amount",
         tolerance=5,
-        targets={"taxsim": "fiitax", "policyengine": "fiitax"},
+        targets={"axiom": "fiitax", "policyengine": "fiitax"},
     )
     comparisons = Comparator([mapping]).compare(
         [
-            EngineResult("taxsim", "case-1", {"fiitax": 100}),
-            EngineResult("taxsim", "case-2", {"fiitax": 50}),
+            EngineResult("axiom", "case-1", {"fiitax": 100}),
+            EngineResult("axiom", "case-2", {"fiitax": 50}),
         ],
         [
             EngineResult("policyengine", "case-1", {"fiitax": right_values[0]}),
@@ -153,11 +153,13 @@ def test_entry_requires_exactly_one_case_reference() -> None:
 
 
 def test_shared_validator_rejects_campaign_match_selector() -> None:
+    # The shared schema now has its own structured `match` selector over
+    # mismatch-row fields; the tariff campaign's slot-based matcher is still
+    # rejected, field by field.
     entry = _entry(match={"slot": "base", "delta": {"sign": "pos"}})
     del entry["case_id"]
     errors = validate_dispositions(_document([entry]))
-    assert any("unknown keys: ['match']" in error for error in errors)
-    assert any("exactly one of" in error for error in errors)
+    assert any("match has unknown fields: ['slot']" in error for error in errors)
 
 
 def test_expires_on_source_change_is_required() -> None:
@@ -398,7 +400,7 @@ def test_shared_apply_loader_skips_only_tariff_campaign_ledger(
     assert loaded == {"example-suite": _document([_entry()])}
     assert len(errors) == 1
     assert "other-campaign.yaml" in errors[0]
-    assert "unknown keys: ['match']" in errors[0]
+    assert "match has unknown fields" in errors[0]
 
 
 def _premerged_fixture(tmp_path: Path) -> tuple[object, Path, dict, dict]:
@@ -696,7 +698,7 @@ def _premerged_multi_concept_fixture(
         category="tax",
         comparison="amount",
         tolerance=5,
-        targets={"taxsim": "fiitax", "policyengine": "fiitax"},
+        targets={"axiom": "fiitax", "policyengine": "fiitax"},
     )
     payroll = ProgramMapping(
         standard="us:test#payroll_tax",
@@ -704,12 +706,12 @@ def _premerged_multi_concept_fixture(
         category="tax",
         comparison="amount",
         tolerance=5,
-        targets={"taxsim": "tfica", "policyengine": "tfica"},
+        targets={"axiom": "tfica", "policyengine": "tfica"},
     )
     comparisons = Comparator([income, payroll]).compare(
         [
-            EngineResult("taxsim", "case-1", {"fiitax": 100, "tfica": 10}),
-            EngineResult("taxsim", "case-2", {"fiitax": 50, "tfica": 20}),
+            EngineResult("axiom", "case-1", {"fiitax": 100, "tfica": 10}),
+            EngineResult("axiom", "case-2", {"fiitax": 50, "tfica": 20}),
         ],
         [
             EngineResult(

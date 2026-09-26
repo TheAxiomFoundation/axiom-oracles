@@ -75,6 +75,15 @@ def merge(shards: list[dict]) -> dict:
         summary[key] = sum(
             int((s.get("summary") or {}).get(key) or 0) for s in shards
         )
+    # Present only when some shard had engine-error rows (the accumulator
+    # omits it at zero), so error-free merges keep their summary shape.
+    engine_errors = sum(
+        int((s.get("summary") or {}).get("engine_error_count") or 0)
+        for s in shards
+    )
+    summary.pop("engine_error_count", None)
+    if engine_errors:
+        summary["engine_error_count"] = engine_errors
     for key in (
         "mismatches_by_concept",
         "mismatches_by_kind",

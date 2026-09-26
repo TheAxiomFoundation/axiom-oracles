@@ -170,6 +170,9 @@
       "expired_entries": [
         "dataset-uprating-bridge-artifact-resolved"
       ],
+      "expired_reasons": {
+        "dataset-uprating-bridge-artifact-resolved": "no_live_rows"
+      },
       "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 66.666667,

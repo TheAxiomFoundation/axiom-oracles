@@ -1,0 +1,547 @@
+{
+  "baseline_ref": "origin/main",
+  "baseline_commit": "69d6e1b121b76b1406dfd8c73a5d45cc12d932cc",
+  "baseline_module_sha256": "bc1548e356c4aefd0588bc8aa841a95eba407eb0fd82f0e02c66b3cbb8152969",
+  "reports": [
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-az-income-tax-liability.json",
+      "suite": "az-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "ce5f27bb0cc9c96f56d89d7795966904fdf097fdf2299f25a399d62c7424d8c1",
+      "after_assignment_digest": "ce5f27bb0cc9c96f56d89d7795966904fdf097fdf2299f25a399d62c7424d8c1",
+      "before_report_sha256": "090f7bc6d4ceb132bd2c09e7f814b35320ed6fb1ac179ebc4e1b71e0a183d17b",
+      "after_report_sha256": "090f7bc6d4ceb132bd2c09e7f814b35320ed6fb1ac179ebc4e1b71e0a183d17b",
+      "dispositions_file": "dispositions/az-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ca-income-tax-liability.json",
+      "suite": "ca-income-tax-liability",
+      "stored_rows": 2,
+      "mismatch_count": 2,
+      "before_assignment_digest": "e282bab62ac1cc65aecbc71833dcd84012d39fc4b1c3a535b4d63017d7a1d842",
+      "after_assignment_digest": "e282bab62ac1cc65aecbc71833dcd84012d39fc4b1c3a535b4d63017d7a1d842",
+      "before_report_sha256": "2e3b5ddf7f49c4e8be68ec6ac17635e254777cd23efc06560c66d9e90c97dce7",
+      "after_report_sha256": "2e3b5ddf7f49c4e8be68ec6ac17635e254777cd23efc06560c66d9e90c97dce7",
+      "dispositions_file": "dispositions/ca-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-co-income-tax-liability.json",
+      "suite": "co-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "7bb724f12638007fd87972491e30319fee1260ff50a66d02d0c07e9849fbdc34",
+      "after_assignment_digest": "7bb724f12638007fd87972491e30319fee1260ff50a66d02d0c07e9849fbdc34",
+      "before_report_sha256": "179128e2aa9cfd3e47af91bbcec6148502d43346d07441058c0e10d8b5a737c7",
+      "after_report_sha256": "179128e2aa9cfd3e47af91bbcec6148502d43346d07441058c0e10d8b5a737c7",
+      "dispositions_file": "dispositions/co-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-dc-income-tax-liability.json",
+      "suite": "dc-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "50b49cfb75f2360779b9f6b4ab3e9e9eabe48286b53e1c0d14692280e1ef9d26",
+      "after_assignment_digest": "50b49cfb75f2360779b9f6b4ab3e9e9eabe48286b53e1c0d14692280e1ef9d26",
+      "before_report_sha256": "30a0192791aa9253d375c74205714223e9e25617786606aa6d54f4c8b4b3f623",
+      "after_report_sha256": "30a0192791aa9253d375c74205714223e9e25617786606aa6d54f4c8b4b3f623",
+      "dispositions_file": "dispositions/dc-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ga-income-tax-liability.json",
+      "suite": "ga-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "d50479b46428a5fb81e7b933645dd6029fa5e678cdca22bf954332b37beca024",
+      "after_assignment_digest": "d50479b46428a5fb81e7b933645dd6029fa5e678cdca22bf954332b37beca024",
+      "before_report_sha256": "e1cd99fce1af3d274b82005cf6e0018b32f0299ee66126a25c99276508c8d9d0",
+      "after_report_sha256": "e1cd99fce1af3d274b82005cf6e0018b32f0299ee66126a25c99276508c8d9d0",
+      "dispositions_file": "dispositions/ga-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-hi-income-tax-liability.json",
+      "suite": "hi-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "c193bd929bc82fc567e985aea6b9648deadc908b98a3c49c839e306d55acd523",
+      "after_assignment_digest": "c193bd929bc82fc567e985aea6b9648deadc908b98a3c49c839e306d55acd523",
+      "before_report_sha256": "80bcfb3f84947d093c0f4cf08ce0f98fe8f0b0d987965375f807e1a3fff6db99",
+      "after_report_sha256": "80bcfb3f84947d093c0f4cf08ce0f98fe8f0b0d987965375f807e1a3fff6db99",
+      "dispositions_file": "dispositions/hi-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ia-income-tax-liability.json",
+      "suite": "ia-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "1012d359405e079879626fd286d1a7263efd41bd2a56350752bb6e864c1a3f03",
+      "after_assignment_digest": "1012d359405e079879626fd286d1a7263efd41bd2a56350752bb6e864c1a3f03",
+      "before_report_sha256": "fa9039812d75339f107c9b59770645f010eb75219680dd1c81bd4dcde8cdfb90",
+      "after_report_sha256": "fa9039812d75339f107c9b59770645f010eb75219680dd1c81bd4dcde8cdfb90",
+      "dispositions_file": "dispositions/ia-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-id-income-tax-liability.json",
+      "suite": "id-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "6f846c4e5fa1ebd5c9ef860de8ed0d2fd2a44a1970fd669f3f816d26fc46c396",
+      "after_assignment_digest": "6f846c4e5fa1ebd5c9ef860de8ed0d2fd2a44a1970fd669f3f816d26fc46c396",
+      "before_report_sha256": "4ef018cb303047356c7ff8a806a7b383fd4899296741072d6d795751d6f71508",
+      "after_report_sha256": "4ef018cb303047356c7ff8a806a7b383fd4899296741072d6d795751d6f71508",
+      "dispositions_file": "dispositions/id-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-il-income-tax-liability.json",
+      "suite": "il-income-tax-liability",
+      "stored_rows": 0,
+      "mismatch_count": 0,
+      "before_assignment_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "after_assignment_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "before_report_sha256": "ba665b830f8a8a90e57076089876ff7533170d2caf646c04662bcbe5d52f29e3",
+      "after_report_sha256": "ba665b830f8a8a90e57076089876ff7533170d2caf646c04662bcbe5d52f29e3",
+      "dispositions_file": null
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-in-income-tax-liability.json",
+      "suite": "in-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "582b1f8e19cf3e42c1b8d2c3f6069f8cfc291dd2e96fbf9bf43b65bc76f482e9",
+      "after_assignment_digest": "582b1f8e19cf3e42c1b8d2c3f6069f8cfc291dd2e96fbf9bf43b65bc76f482e9",
+      "before_report_sha256": "9fba76f6f1a2127f27a2f94e3556d0f3f2b4f883b185bc4a5f01d43cdb6ee17b",
+      "after_report_sha256": "9fba76f6f1a2127f27a2f94e3556d0f3f2b4f883b185bc4a5f01d43cdb6ee17b",
+      "dispositions_file": "dispositions/in-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ks-income-tax-liability.json",
+      "suite": "ks-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "7a49e5f7cce6b2180f5ff3a696d5218975a8e9f9ccb4b7c6bc5fe92b26d59902",
+      "after_assignment_digest": "7a49e5f7cce6b2180f5ff3a696d5218975a8e9f9ccb4b7c6bc5fe92b26d59902",
+      "before_report_sha256": "a1defec58f8116c844441d4b36d4f2a92d2862b66843266ce0dd5be1b2f38cfe",
+      "after_report_sha256": "a1defec58f8116c844441d4b36d4f2a92d2862b66843266ce0dd5be1b2f38cfe",
+      "dispositions_file": "dispositions/ks-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ky-income-tax-liability.json",
+      "suite": "ky-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "e3e1b47c76e24b6a8a9f44981c4d5cb60a0fa29d65b4046ec19b942e660f6584",
+      "after_assignment_digest": "e3e1b47c76e24b6a8a9f44981c4d5cb60a0fa29d65b4046ec19b942e660f6584",
+      "before_report_sha256": "89224402f7012d7d595b6152cd0f86070dd0748ef951eb5797067bb4f5454168",
+      "after_report_sha256": "89224402f7012d7d595b6152cd0f86070dd0748ef951eb5797067bb4f5454168",
+      "dispositions_file": "dispositions/ky-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-la-income-tax-liability.json",
+      "suite": "la-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "bd30e5d45eb3bac557792ef5bd9d5c09a17b996c5f48d5da4221cb5d99be738a",
+      "after_assignment_digest": "bd30e5d45eb3bac557792ef5bd9d5c09a17b996c5f48d5da4221cb5d99be738a",
+      "before_report_sha256": "868978675b63a1ce853c8916ad8dbee55dd92a0ce8747cee9870f8abc0592014",
+      "after_report_sha256": "868978675b63a1ce853c8916ad8dbee55dd92a0ce8747cee9870f8abc0592014",
+      "dispositions_file": "dispositions/la-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ma-income-tax-liability.json",
+      "suite": "ma-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "f9e16337986d4a172e627c50c0b5b611d6812e90179ad93bd2487b472c2a3117",
+      "after_assignment_digest": "f9e16337986d4a172e627c50c0b5b611d6812e90179ad93bd2487b472c2a3117",
+      "before_report_sha256": "744bf6b9abdee8b4f3a4f0afd832a71c81fefe02de3ca9bd324345c230c53459",
+      "after_report_sha256": "744bf6b9abdee8b4f3a4f0afd832a71c81fefe02de3ca9bd324345c230c53459",
+      "dispositions_file": "dispositions/ma-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-md-income-tax-liability.json",
+      "suite": "md-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "4cee0f5d6d495caeb27d55ac682b2667b09113f03820c701b9f142c6c0e24ee2",
+      "after_assignment_digest": "4cee0f5d6d495caeb27d55ac682b2667b09113f03820c701b9f142c6c0e24ee2",
+      "before_report_sha256": "36678b3d70f4a3e855f8545f9e3eec7912d5428e7e778cb5d93fba2c27efc557",
+      "after_report_sha256": "36678b3d70f4a3e855f8545f9e3eec7912d5428e7e778cb5d93fba2c27efc557",
+      "dispositions_file": "dispositions/md-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-me-income-tax-liability.json",
+      "suite": "me-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "d95a70c264294840134a94873656ef8ca83d2d5f2d6e44af084bdfecc2e624f2",
+      "after_assignment_digest": "d95a70c264294840134a94873656ef8ca83d2d5f2d6e44af084bdfecc2e624f2",
+      "before_report_sha256": "a4b50f868d742ce25df43b011b15d9580c40e103e57bad129cd9a3de7a6938ca",
+      "after_report_sha256": "a4b50f868d742ce25df43b011b15d9580c40e103e57bad129cd9a3de7a6938ca",
+      "dispositions_file": "dispositions/me-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-mi-income-tax-liability.json",
+      "suite": "mi-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "c4feec2fa4da198428c4b65a38c7527db68838f19ed11aef40ede124f7ec8c91",
+      "after_assignment_digest": "c4feec2fa4da198428c4b65a38c7527db68838f19ed11aef40ede124f7ec8c91",
+      "before_report_sha256": "2cbc83f2731c3d1be773be854e9e925ab67c312f29dca8a73720d9d102dbb764",
+      "after_report_sha256": "2cbc83f2731c3d1be773be854e9e925ab67c312f29dca8a73720d9d102dbb764",
+      "dispositions_file": "dispositions/mi-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-mn-income-tax-liability.json",
+      "suite": "mn-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "a63673f09f6327c0a3dfcd68139f5b95a3f33fa596827dbd61614de126745ef6",
+      "after_assignment_digest": "a63673f09f6327c0a3dfcd68139f5b95a3f33fa596827dbd61614de126745ef6",
+      "before_report_sha256": "da30de5d1539f0c369d35deab33ebad6ef83979e7f3308f872a738e0feece05a",
+      "after_report_sha256": "da30de5d1539f0c369d35deab33ebad6ef83979e7f3308f872a738e0feece05a",
+      "dispositions_file": "dispositions/mn-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-mo-income-tax-liability.json",
+      "suite": "mo-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "a2efda708e746c393b3f39c860b4333ac942b9a63c7beefcdde3faefbe72b876",
+      "after_assignment_digest": "a2efda708e746c393b3f39c860b4333ac942b9a63c7beefcdde3faefbe72b876",
+      "before_report_sha256": "52ff9fda0ff75c5e92bc8991c9071c45ae224b3583b8161e5b4f3fec312e6ded",
+      "after_report_sha256": "52ff9fda0ff75c5e92bc8991c9071c45ae224b3583b8161e5b4f3fec312e6ded",
+      "dispositions_file": "dispositions/mo-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ms-income-tax-liability.json",
+      "suite": "ms-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "e8f95d1118799e5800a04a311d86cab5becccf73f5a8e2088c21abcf18b39942",
+      "after_assignment_digest": "e8f95d1118799e5800a04a311d86cab5becccf73f5a8e2088c21abcf18b39942",
+      "before_report_sha256": "1d164b0b548b030dd30fa51cfbb4f8f482b6eb76b01bebf53656dc7ae5e2e4b4",
+      "after_report_sha256": "1d164b0b548b030dd30fa51cfbb4f8f482b6eb76b01bebf53656dc7ae5e2e4b4",
+      "dispositions_file": "dispositions/ms-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-mt-income-tax-liability.json",
+      "suite": "mt-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "ba9fcf2d93ac912dc8136f955f8d759aaf6df3cfc86f42b31a9d1a6132001571",
+      "after_assignment_digest": "ba9fcf2d93ac912dc8136f955f8d759aaf6df3cfc86f42b31a9d1a6132001571",
+      "before_report_sha256": "bbf19652a11bfed5296f224faaac03c679b055f647a52390bdc74752721884d5",
+      "after_report_sha256": "bbf19652a11bfed5296f224faaac03c679b055f647a52390bdc74752721884d5",
+      "dispositions_file": "dispositions/mt-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-nc-income-tax-liability.json",
+      "suite": "nc-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "f9c9a099df7ae360782e558f2c61af9c6eccab90bf908785b710cc3e3c20aa2c",
+      "after_assignment_digest": "f9c9a099df7ae360782e558f2c61af9c6eccab90bf908785b710cc3e3c20aa2c",
+      "before_report_sha256": "7ac3300e14a95c66002c901625d7c8e64b16a778da6158b3f8aabf0c63902c2d",
+      "after_report_sha256": "7ac3300e14a95c66002c901625d7c8e64b16a778da6158b3f8aabf0c63902c2d",
+      "dispositions_file": "dispositions/nc-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-nd-income-tax-liability.json",
+      "suite": "nd-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "87649b2414d0f6a77054c3d7f2c941a46f3cd552cc9ef9383f9d9e928d13f70e",
+      "after_assignment_digest": "87649b2414d0f6a77054c3d7f2c941a46f3cd552cc9ef9383f9d9e928d13f70e",
+      "before_report_sha256": "29b6a28c8916c422c77e85db011f11fa0c6c41acd4dd65cbdcaf72eb637adf5c",
+      "after_report_sha256": "29b6a28c8916c422c77e85db011f11fa0c6c41acd4dd65cbdcaf72eb637adf5c",
+      "dispositions_file": "dispositions/nd-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ne-income-tax-liability.json",
+      "suite": "ne-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "77549bd7f59e976be3159d1ce9f44c0c77a07a474eb45c179e814a48ddb8600d",
+      "after_assignment_digest": "77549bd7f59e976be3159d1ce9f44c0c77a07a474eb45c179e814a48ddb8600d",
+      "before_report_sha256": "f9bdd6a211636218f2f8c78759b07061281e8855cc786f3e56450ca2855fc77a",
+      "after_report_sha256": "f9bdd6a211636218f2f8c78759b07061281e8855cc786f3e56450ca2855fc77a",
+      "dispositions_file": "dispositions/ne-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-nj-income-tax-liability.json",
+      "suite": "nj-income-tax-liability",
+      "stored_rows": 0,
+      "mismatch_count": 0,
+      "before_assignment_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "after_assignment_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "before_report_sha256": "8710130241bce313f85ff5219a5b1ce243ad943549702ca3c237e883c643ddb8",
+      "after_report_sha256": "8710130241bce313f85ff5219a5b1ce243ad943549702ca3c237e883c643ddb8",
+      "dispositions_file": null
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-nm-income-tax-liability.json",
+      "suite": "nm-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "12d7d5a26efdb6cbf4b1da480e2c64832c1c27c5c297aa7bb4bae063341fdae1",
+      "after_assignment_digest": "12d7d5a26efdb6cbf4b1da480e2c64832c1c27c5c297aa7bb4bae063341fdae1",
+      "before_report_sha256": "5e4ca469ae2be1ca78bda735139784b9ea5b2bbe3a95f16932f344368d8d4789",
+      "after_report_sha256": "5e4ca469ae2be1ca78bda735139784b9ea5b2bbe3a95f16932f344368d8d4789",
+      "dispositions_file": "dispositions/nm-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ny-income-tax-liability.json",
+      "suite": "ny-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "3ccf8b2ae4484a45d34815082023bce219cef52d1db9cf4c039271b0f380581c",
+      "after_assignment_digest": "3ccf8b2ae4484a45d34815082023bce219cef52d1db9cf4c039271b0f380581c",
+      "before_report_sha256": "df78efa400663397fe9034e022e175664c39dbec82902203d7e1c925bb65b9ba",
+      "after_report_sha256": "df78efa400663397fe9034e022e175664c39dbec82902203d7e1c925bb65b9ba",
+      "dispositions_file": "dispositions/ny-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-oh-income-tax-liability.json",
+      "suite": "oh-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "f9c334c3d8cceffd45acae6ef8e28465736ba3d032a81a5fe208a924fc2d1818",
+      "after_assignment_digest": "f9c334c3d8cceffd45acae6ef8e28465736ba3d032a81a5fe208a924fc2d1818",
+      "before_report_sha256": "67f7ee79be5fa01aeb52bff60f66aec3b6fa9721b81a1ca0e50b9a9966515fbe",
+      "after_report_sha256": "67f7ee79be5fa01aeb52bff60f66aec3b6fa9721b81a1ca0e50b9a9966515fbe",
+      "dispositions_file": "dispositions/oh-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ok-income-tax-liability.json",
+      "suite": "ok-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "f39f3f5f8f938da0558b30b8c075cad60fd8f30f2afa65781a2688f6e00a0dad",
+      "after_assignment_digest": "f39f3f5f8f938da0558b30b8c075cad60fd8f30f2afa65781a2688f6e00a0dad",
+      "before_report_sha256": "b1518eb35eac67ac5236b557515758e3983ffda1b06cf3e55a26ffa466a14d3f",
+      "after_report_sha256": "b1518eb35eac67ac5236b557515758e3983ffda1b06cf3e55a26ffa466a14d3f",
+      "dispositions_file": "dispositions/ok-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-or-income-tax-liability.json",
+      "suite": "or-income-tax-liability",
+      "stored_rows": 12,
+      "mismatch_count": 12,
+      "before_assignment_digest": "b0b4215dd365a9e2add788e7a0a1e272e2ff4235bafbf0af12d2d296fe4e394b",
+      "after_assignment_digest": "b0b4215dd365a9e2add788e7a0a1e272e2ff4235bafbf0af12d2d296fe4e394b",
+      "before_report_sha256": "bfcf1b3298199cec4080316430677137d05551e75833b6312aff581884a9d759",
+      "after_report_sha256": "bfcf1b3298199cec4080316430677137d05551e75833b6312aff581884a9d759",
+      "dispositions_file": "dispositions/or-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-pa-income-tax-liability.json",
+      "suite": "pa-income-tax-liability",
+      "stored_rows": 0,
+      "mismatch_count": 0,
+      "before_assignment_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "after_assignment_digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "before_report_sha256": "e21b9885b18badf394b3167f4ff54b5ce39b7e6a2207f3491250e6d4dd717dc3",
+      "after_report_sha256": "e21b9885b18badf394b3167f4ff54b5ce39b7e6a2207f3491250e6d4dd717dc3",
+      "dispositions_file": null
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ri-income-tax-liability.json",
+      "suite": "ri-income-tax-liability",
+      "stored_rows": 12,
+      "mismatch_count": 12,
+      "before_assignment_digest": "b195eb8d56a66b26bf72b81d4cec80ecbcb887d14e709f78aa2d0b316415e3ad",
+      "after_assignment_digest": "b195eb8d56a66b26bf72b81d4cec80ecbcb887d14e709f78aa2d0b316415e3ad",
+      "before_report_sha256": "a391c1d08c06fed291b446bb16d9b64a821bed8bc9880f72800d09801fcc871e",
+      "after_report_sha256": "a391c1d08c06fed291b446bb16d9b64a821bed8bc9880f72800d09801fcc871e",
+      "dispositions_file": "dispositions/ri-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-sc-income-tax-liability.json",
+      "suite": "sc-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "26536a4f4b3dc293a65a24abc3534e80a0666eb8ecadf483a80da2818042c1e2",
+      "after_assignment_digest": "26536a4f4b3dc293a65a24abc3534e80a0666eb8ecadf483a80da2818042c1e2",
+      "before_report_sha256": "7a3defb62e668f076dd9e540061ee473aa6ebf2e9b8840a9e560fae877ec7934",
+      "after_report_sha256": "7a3defb62e668f076dd9e540061ee473aa6ebf2e9b8840a9e560fae877ec7934",
+      "dispositions_file": "dispositions/sc-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-ut-income-tax-liability.json",
+      "suite": "ut-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "6a2e49e923218701e9a4ef0211c04d81720d7e10ce3e66bb0777c71386a1f87c",
+      "after_assignment_digest": "6a2e49e923218701e9a4ef0211c04d81720d7e10ce3e66bb0777c71386a1f87c",
+      "before_report_sha256": "fd70af9f274f513a820ab99601f9317b1a34d56d570728e6d2ca3d4161bef4a6",
+      "after_report_sha256": "fd70af9f274f513a820ab99601f9317b1a34d56d570728e6d2ca3d4161bef4a6",
+      "dispositions_file": "dispositions/ut-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-va-income-tax-liability.json",
+      "suite": "va-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "b5b4d810499e00d974c90aa564a211dfa07183b2322c9e67a2c34d5e8642ee5e",
+      "after_assignment_digest": "b5b4d810499e00d974c90aa564a211dfa07183b2322c9e67a2c34d5e8642ee5e",
+      "before_report_sha256": "4e567064f2c824a5dba73ce54fcd30312cb7ff509b30291d770fb3050acc940b",
+      "after_report_sha256": "4e567064f2c824a5dba73ce54fcd30312cb7ff509b30291d770fb3050acc940b",
+      "dispositions_file": "dispositions/va-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-vt-income-tax-liability.json",
+      "suite": "vt-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "1fbe4ef5acecb4b6b8178531dc413e8791e79e5166173a2a59c6fac23248745e",
+      "after_assignment_digest": "1fbe4ef5acecb4b6b8178531dc413e8791e79e5166173a2a59c6fac23248745e",
+      "before_report_sha256": "2ce67f80fcfcf99f43e365a71f450733feef7cc8f0c522fb69aa4b35927cc06b",
+      "after_report_sha256": "2ce67f80fcfcf99f43e365a71f450733feef7cc8f0c522fb69aa4b35927cc06b",
+      "dispositions_file": "dispositions/vt-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-wa-income-tax-liability.json",
+      "suite": "wa-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "2c9141d4acc6dc6b26faac3a9c56ea40de6e05232f2da85e2c3ed2e721660615",
+      "after_assignment_digest": "2c9141d4acc6dc6b26faac3a9c56ea40de6e05232f2da85e2c3ed2e721660615",
+      "before_report_sha256": "72b6bbb763790b1baf584eca27e080c42ede001b64615e895c2d3705abb1321f",
+      "after_report_sha256": "72b6bbb763790b1baf584eca27e080c42ede001b64615e895c2d3705abb1321f",
+      "dispositions_file": "dispositions/wa-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-wi-income-tax-liability.json",
+      "suite": "wi-income-tax-liability",
+      "stored_rows": 10,
+      "mismatch_count": 10,
+      "before_assignment_digest": "bf00db6bb42182b5e08947e14cba9248ce85c3905483a5ec0a111dc046f759fc",
+      "after_assignment_digest": "bf00db6bb42182b5e08947e14cba9248ce85c3905483a5ec0a111dc046f759fc",
+      "before_report_sha256": "1924038d6006e59e95e7a702766879747732462326273cca258ac8561dd7580b",
+      "after_report_sha256": "1924038d6006e59e95e7a702766879747732462326273cca258ac8561dd7580b",
+      "dispositions_file": "dispositions/wi-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-policyengine-taxsim-wv-income-tax-liability.json",
+      "suite": "wv-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "29cb93a077c8216239ffd9b81cedf685fd27f4f476be5f611bbef7eca9a805ca",
+      "after_assignment_digest": "29cb93a077c8216239ffd9b81cedf685fd27f4f476be5f611bbef7eca9a805ca",
+      "before_report_sha256": "3cb64d46f4c79314bd58df4033b29855ddf4b543c2c3dee76b3e9443944891f7",
+      "after_report_sha256": "3cb64d46f4c79314bd58df4033b29855ddf4b543c2c3dee76b3e9443944891f7",
+      "dispositions_file": "dispositions/wv-income-tax-liability.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-taxsim-co-state-income-tax-ecps.json",
+      "suite": "co-state-income-tax-taxsim",
+      "stored_rows": 530,
+      "mismatch_count": 530,
+      "before_assignment_digest": "0cc14e9c2027b1f9397174836cfeab1157ab93a986866b7c9f5150008684069f",
+      "after_assignment_digest": "0cc14e9c2027b1f9397174836cfeab1157ab93a986866b7c9f5150008684069f",
+      "before_report_sha256": "2e86416e2e17462c7c409b2f6368ada1e6a7c88910ba11657e037a107a9e2aa0",
+      "after_report_sha256": "2e86416e2e17462c7c409b2f6368ada1e6a7c88910ba11657e037a107a9e2aa0",
+      "dispositions_file": "dispositions/co-state-income-tax-taxsim.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-taxsim-co-tax-intersection-ecps.json",
+      "suite": "co-tax-intersection-taxsim",
+      "stored_rows": 2117,
+      "mismatch_count": 2117,
+      "before_assignment_digest": "ecfa30855fc9130c7ae192b0d7b5cbaf43231d4b2d3437b665e08d78ff87e47c",
+      "after_assignment_digest": "ecfa30855fc9130c7ae192b0d7b5cbaf43231d4b2d3437b665e08d78ff87e47c",
+      "before_report_sha256": "2bfe4e557e1fb461b747b836635b9f7c1e9ee2e64a283911b3b22e3f4bd0d09a",
+      "after_report_sha256": "2bfe4e557e1fb461b747b836635b9f7c1e9ee2e64a283911b3b22e3f4bd0d09a",
+      "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml"
+    },
+    {
+      "path": "dashboard/public/data/axiom-taxsim-fiit-ecps.json",
+      "suite": "fiit-taxsim-ecps",
+      "stored_rows": 1000,
+      "mismatch_count": 26229,
+      "before_assignment_digest": "6f9a3b8b88c919451f1165b54ddd817d85ad4c940fa8f9f8afffb88a39f8ed22",
+      "after_assignment_digest": "6f9a3b8b88c919451f1165b54ddd817d85ad4c940fa8f9f8afffb88a39f8ed22",
+      "before_report_sha256": "00ba24a179c5a22de241ad79ab2c7915b598e7b3c260cf31ccb7cdb978c9d660",
+      "after_report_sha256": "00ba24a179c5a22de241ad79ab2c7915b598e7b3c260cf31ccb7cdb978c9d660",
+      "dispositions_file": "dispositions/fiit-taxsim-ecps.yaml",
+      "source_report": {
+        "path": "reports/axiom-taxsim-fiit-ecps-verify-2026-08-28.json",
+        "sha256": "7a5cf2ff0e2f9901f376be915a0120591f86c2eae3b97d879e09a1793a1d0ddb"
+      },
+      "full_assignment_digest": "2a144e710e3875c3e247abea5861c5c5eca3b6a9b3d81054e5b19a8ac80299dc"
+    },
+    {
+      "path": "dashboard/public/data/policyengine-taxsim.json",
+      "suite": "nyc-synthetic",
+      "stored_rows": 7,
+      "mismatch_count": 7,
+      "before_assignment_digest": "b6c6557481bc5c7e70a9566ca3d13958b6f3ac81661f5057dcffae51f85e9578",
+      "after_assignment_digest": "b6c6557481bc5c7e70a9566ca3d13958b6f3ac81661f5057dcffae51f85e9578",
+      "before_report_sha256": "9d74ebb1aff476c794e9b999abe113c14724a0b7ca28f8918e37eea6b3746a0a",
+      "after_report_sha256": "9d74ebb1aff476c794e9b999abe113c14724a0b7ca28f8918e37eea6b3746a0a",
+      "dispositions_file": null
+    },
+    {
+      "path": "reports/axiom-policyengine-taxsim-ut-income-tax-liability-all-2026-07-27.json",
+      "suite": "ut-income-tax-liability",
+      "stored_rows": 6,
+      "mismatch_count": 6,
+      "before_assignment_digest": "6a2e49e923218701e9a4ef0211c04d81720d7e10ce3e66bb0777c71386a1f87c",
+      "after_assignment_digest": "6a2e49e923218701e9a4ef0211c04d81720d7e10ce3e66bb0777c71386a1f87c",
+      "before_report_sha256": "3c194c58061d931fbbc9137db44bb330d37e6e17c85d0f1800ad9e462ba0fdc0",
+      "after_report_sha256": "3c194c58061d931fbbc9137db44bb330d37e6e17c85d0f1800ad9e462ba0fdc0",
+      "dispositions_file": "dispositions/ut-income-tax-liability.yaml"
+    },
+    {
+      "path": "reports/axiom-taxsim-fiit-ecps-verify-2026-08-28.json",
+      "suite": "fiit-taxsim-ecps",
+      "stored_rows": 26229,
+      "mismatch_count": 26229,
+      "before_assignment_digest": "2a144e710e3875c3e247abea5861c5c5eca3b6a9b3d81054e5b19a8ac80299dc",
+      "after_assignment_digest": "2a144e710e3875c3e247abea5861c5c5eca3b6a9b3d81054e5b19a8ac80299dc",
+      "before_report_sha256": "7a5cf2ff0e2f9901f376be915a0120591f86c2eae3b97d879e09a1793a1d0ddb",
+      "after_report_sha256": "7a5cf2ff0e2f9901f376be915a0120591f86c2eae3b97d879e09a1793a1d0ddb",
+      "dispositions_file": "dispositions/fiit-taxsim-ecps.yaml"
+    }
+  ],
+  "unchanged_case_artifacts": [
+    {
+      "path": "dashboard/public/data/cases/co-state-income-tax-taxsim/chunk-0.json",
+      "sha256": "f5f7c9a15a6c2726cde2abc1a716a4f23f9b98fa3c3242e5dec5678d38c5a91c"
+    },
+    {
+      "path": "dashboard/public/data/cases/co-state-income-tax-taxsim/chunk-1.json",
+      "sha256": "d2b7e69dc7ac6641721b11c2849473e1a161aef8f95b4cc891aa2455dda45287"
+    },
+    {
+      "path": "dashboard/public/data/cases/co-state-income-tax-taxsim/chunk-2.json",
+      "sha256": "52630500dd4bd57dfc7f1b39a75bdcd51b2e4caddde51571fc9f0e76e841e9b3"
+    },
+    {
+      "path": "dashboard/public/data/cases/co-state-income-tax-taxsim/index.json",
+      "sha256": "e0973ac10ede0f53e490dca11a917e27bd104cfef279e55a6d018edc2dbf1e3b"
+    },
+    {
+      "path": "dashboard/public/data/cases/co-tax-intersection-taxsim/chunk-0.json",
+      "sha256": "a03e8296e8a0e1bd3b8d7e520a83e89c5f8a335d0f204296240471498584811d"
+    },
+    {
+      "path": "dashboard/public/data/cases/co-tax-intersection-taxsim/chunk-1.json",
+      "sha256": "f5aa74018aea8bfb8166b155ff27755f399cee792c8f8e9873d9fde02776f869"
+    },
+    {
+      "path": "dashboard/public/data/cases/co-tax-intersection-taxsim/chunk-2.json",
+      "sha256": "027e1cf30ad9f7302affa79dece66211daa6fd241baf0ecf2ccfbea1e3eb2f04"
+    },
+    {
+      "path": "dashboard/public/data/cases/co-tax-intersection-taxsim/index.json",
+      "sha256": "3486acc2514c7c0d232ca46946be387a67f1c833c4914b9cf5a8d3a75606f1de"
+    }
+  ],
+  "non_taxsim_metadata_only_change": {
+    "path": "dashboard/public/data/axiom-euromod-be-worker-ssc.json",
+    "expired_reasons": {
+      "dataset-uprating-bridge-artifact-resolved": "no_live_rows"
+    }
+  }
+}
