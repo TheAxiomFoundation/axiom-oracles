@@ -452,6 +452,102 @@ Colorado parameters exactly.
    standardizes shelter for SSI-CAP (Table F.23, PDF p.192) has those
    deductions coded missing and must not be scored on them.
 
+## 10. The live CI replay
+
+The weekly matrix (`comparisons.yml`) and the 6-hourly affected rerun
+(`affected-rerun.yml`) dispatch the snap-qc suites to bare runners. Those
+runners have no engine binary and no QC public-use file, so every leg
+re-emits the committed dashboard report (`provenance.reemitted_report:
+true`) and passes whether or not the replay still works. That is how California's replay could
+stop compiling after rulespec-us#1176 (2026-07-30) with nothing failing: the
+new modified-categorical-eligibility module imports `fy-2026-cola`, which the
+CA FY2024 overlay did not rewrite, and the engine rejects the duplicate
+derived rule `snap_net_income_limit_100_percent_fpl_48_states_dc`.
+
+`.github/workflows/snap-qc-replay.yml` actually runs the suites. It fires on
+Mondays at 07:17 UTC and on demand (`workflow_dispatch`, with optional
+`suites` and `rulespec_us_ref` inputs). A failing leg is the output. The lane
+never commits; each report and its replay log are uploaded as workflow
+artifacts.
+
+- **Engine.** It builds `axiom-rules-engine` at `axiom_artifact_rules_engine_ref`,
+  the pin in rulespec-us `.axiom/workflow-toolchain.toml` that
+  `program-artifacts.yml` also builds. The build is
+  `cargo build --release --locked --bin axiom-rules-engine`, cached per ref
+  and Ubuntu release (`ImageOS`). Every job selects `ubuntu-24.04` rather
+  than `ubuntu-latest`, so a binary cached on one Ubuntu release is never
+  restored on another.
+  The validation pin (`axiom_rules_engine_ref`) cannot load the chain: it
+  refuses the `fy-2024-cola` modules' plural `corpus_citation_paths`. The
+  artifact pin predates `compile-composed`, so every compile takes the legacy
+  `compile --program` fallback in `axiom_oracles/engine_compat.py`.
+- **rulespec-us.** The `prepare` job resolves one commit (`main` unless
+  dispatched otherwise), and every leg checks it out into a directory named
+  `rulespec-us`. The name matters. The overlay copies the tree under the
+  checkout's basename, and the engine resolves `us:` imports only from a root
+  named `rulespec-us` (or `rulespec-us-<suffix>`). Under another name the
+  staged copy cannot serve its own `us:` imports: the compile fails, as it
+  did locally with a differently named checkout, or it could resolve against
+  some other discoverable rulespec-us tree.
+- **Data.** `scripts/snap_qc_replay.py fetch-puf` calls
+  `populations/snap_qc.fetch_pinned_puf`. It keeps the pinned zip in a cache
+  keyed on the pin and re-verifies it against `SNAP_QC_PINS` before every
+  extraction, so a restored cache is never trusted unverified. A re-pin
+  changes the key.
+- **Run.** Each leg runs
+  `run_comparison.py <suite> --summary --require-live --output-dir <dir>`
+  with `AXIOM_SNAP_QC_RULESPEC_ROOT`, `AXIOM_SNAP_QC_AXIOM_BINARY`, and
+  `AXIOM_SNAP_QC_DATA_DIR` set. With `--require-live`, a runner that would
+  have re-emitted exits nonzero, and `run_comparison.py` publishes no report
+  and no dashboard copy. The skip reason is printed just above the exit.
+- **Gate.** `scripts/snap_qc_replay.py check <suite>` then fails the leg
+  unless:
+  - the report was computed in this run: not re-emitted, and the replay log
+    records writing it and records no failure;
+  - it has at least one case;
+  - benefit mismatches, error cases, and error rows are all zero;
+  - every stage concept was compared on every case, with no divergence and no
+    missing side (a stage can diverge while the benefit still matches);
+  - it ran against the resolved rulespec-us SHA and the pinned engine binary.
+
+  A failing leg carries an `::error` annotation that names the suite and
+  every failed check. It then adds either the first benefit-mismatch cases
+  (case id, first divergent stage, QC versus Axiom values) or the exception
+  the replay raised. The report keeps no per-case rows for a stage that
+  diverges while the benefit matches, so that failure shows as counts.
+- **Suites.** `REQUIRED_SUITES` in `scripts/snap_qc_replay.py` lists the six
+  states whose compositions are on rulespec-us main (CO, NY, CA, AZ, GA,
+  MD). They run unless a dispatch restricts the selection, and a selected
+  suite whose composition moved fails its leg instead of leaving the
+  matrix. `PENDING_SUITES` holds TX (rulespec-us#888), which joins
+  automatically, with a warning to promote it, once its composition exists in
+  the checkout. `tests/test_snap_qc_replay.py` fails CI if a registered
+  snap-qc suite appears in neither list.
+- **Live tests.** A parallel job runs the two live pytest cases, which skip
+  unless their inputs are provided. `test_live_fy2024_row_counts` needs the
+  PUF, and `test_live_engine_reproduces_worked_example` needs the engine and
+  a rulespec-us checkout. The job fails if either one skips.
+
+To reproduce a leg locally, point the three variables at your checkouts.
+Start from an empty report directory and pass `check` the replay log.
+`check` then requires the log to record writing the report it checks, so a
+report left in the directory by an earlier run cannot pass. `run_comparison.py` also rewrites
+the working copy of the suite's dashboard report, so restore it afterward.
+
+```bash
+uv run scripts/snap_qc_replay.py fetch-puf \
+  --archive-dir ~/.cache/axiom-oracles/snap-qc/archives --data-dir /tmp/snap-qc-data
+rm -rf /tmp/snap-qc-reports && mkdir -p /tmp/snap-qc-reports
+AXIOM_SNAP_QC_RULESPEC_ROOT=~/TheAxiomFoundation/rulespec-us \
+AXIOM_SNAP_QC_AXIOM_BINARY=<engine at the artifact pin>/target/release/axiom-rules-engine \
+AXIOM_SNAP_QC_DATA_DIR=/tmp/snap-qc-data \
+  uv run scripts/run_comparison.py ca-snap-qc --summary --require-live \
+    --output-dir /tmp/snap-qc-reports 2>&1 | tee /tmp/snap-qc-reports/replay.log
+uv run scripts/snap_qc_replay.py check ca-snap-qc \
+  --report-dir /tmp/snap-qc-reports --log /tmp/snap-qc-reports/replay.log
+git checkout -- dashboard/
+```
+
 ## Track record
 
 Colorado FY2024 is the pilot. The overlay compiles the existing

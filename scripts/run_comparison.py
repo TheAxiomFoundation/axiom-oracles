@@ -539,6 +539,19 @@ def main() -> int:
             "comparison. Non-zero exit if any fixture fails."
         ),
     )
+    parser.add_argument(
+        "--require-live",
+        action="store_true",
+        help=(
+            "Fail instead of re-emitting the committed report when a "
+            "skip-capable runner (snap-qc, euromod, gettsim, us-tariff, the "
+            "UK grids) cannot execute on this host. run_comparison.py then "
+            "publishes no report and no dashboard copy (a generator that "
+            "writes its own files before failing is not rolled back). For "
+            "CI lanes that provision the runner's dependencies and must "
+            "prove a real run."
+        ),
+    )
     args = parser.parse_args()
 
     if args.list:
@@ -611,6 +624,16 @@ def main() -> int:
     print(f"Running {config['name']}: {config.get('title', config['name'])}")
     try:
         runner_fn(config["runner"], staging)
+        if args.require_live and config["runner"].get("_reemitted_report"):
+            # The runner already printed why it could not execute. Refuse
+            # before provenance stamping or publication, so this script
+            # writes neither reports/ nor the dashboard copy (the finally
+            # drops staging).
+            raise SystemExit(
+                f"{config['name']}: --require-live: the runner re-emitted the "
+                "committed report instead of executing on this host (skip "
+                "reason above); the staged report was not published"
+            )
         canonical_record = _canonical_record_path(config)
         producer_native_canonical = (
             staging.read_bytes()
@@ -2890,7 +2913,6 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
     built axiom rules engine, the committed dashboard report is reused, exactly
     like the state income-tax grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_council_tax_reduction.py"
     basename = "axiom-policyengine-uk-council-tax-reduction"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -2907,11 +2929,17 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"CTR grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -2927,7 +2955,6 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
     environment or a built axiom rules engine, the committed dashboard report is
     reused, exactly like the Council Tax Reduction grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_capital_gains_tax.py"
     basename = "axiom-policyengine-uk-capital-gains-tax"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -2944,11 +2971,17 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"CGT grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -2964,7 +2997,6 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
     PolicyEngine-UK environment or a built axiom rules engine, the committed
     dashboard report is reused, exactly like the Council Tax Reduction grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_business_rates.py"
     basename = "axiom-policyengine-uk-business-rates"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -2981,11 +3013,17 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Business rates grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3003,7 +3041,6 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
     rules engine, the committed dashboard report is reused, exactly like the
     Capital Gains Tax grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_lbtt_ltt.py"
     basename = "axiom-policyengine-uk-lbtt-ltt"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -3020,11 +3057,17 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"LBTT/LTT grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3041,7 +3084,6 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
     or a built axiom rules engine, the committed dashboard report is reused,
     exactly like the Council Tax Reduction grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_winter_fuel_payment_pe.py"
     basename = "axiom-policyengine-uk-winter-fuel-payment-pe"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -3058,11 +3100,17 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Winter Fuel grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3079,7 +3127,6 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
     the committed dashboard report is reused, exactly like the Council Tax Reduction
     and Winter Fuel Payment grids.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_attendance_allowance_pe.py"
     basename = "axiom-policyengine-uk-attendance-allowance-pe"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -3096,11 +3143,17 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Attendance Allowance grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3115,7 +3168,6 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
     without a PolicyEngine-UK environment or a built axiom rules engine, the
     committed dashboard report is reused, exactly like the other UK case grids.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_tax_free_childcare_pe.py"
     basename = "axiom-policyengine-uk-tax-free-childcare-pe"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -3132,17 +3184,23 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Tax-Free Childcare grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
 
 def _run_uk_pe_grid(
-    generator_basename: str, report_basename: str, output: Path
+    runner: dict, generator_basename: str, report_basename: str, output: Path
 ) -> None:
     """Shared runner for the UK PolicyEngine case-grid comparisons.
 
@@ -3151,7 +3209,8 @@ def _run_uk_pe_grid(
     through the axiom rules engine) and writes one v2 report. On a runner
     without a PolicyEngine-UK environment or a built axiom rules engine, the
     committed dashboard report is reused, exactly like the council-tax-reduction
-    grid.
+    grid, and marked as a re-emit so provenance never stamps it fresh (the
+    us-tariff grid's contract) and ``--require-live`` refuses it.
     """
     generator = REPO_ROOT / "scripts" / generator_basename
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{report_basename}.json"
@@ -3168,32 +3227,31 @@ def _run_uk_pe_grid(
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"{report_basename} grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
 
 def _run_uk_vat_grid(runner: dict, output: Path) -> None:
-    del runner
-    _run_uk_pe_grid("generate_uk_vat.py", "axiom-policyengine-uk-vat", output)
+    _run_uk_pe_grid(runner, "generate_uk_vat.py", "axiom-policyengine-uk-vat", output)
 
 
 def _run_uk_fuel_duty_grid(runner: dict, output: Path) -> None:
-    del runner
-    _run_uk_pe_grid(
-        "generate_uk_fuel_duty.py", "axiom-policyengine-uk-fuel-duty", output
-    )
+    _run_uk_pe_grid(runner, "generate_uk_fuel_duty.py", "axiom-policyengine-uk-fuel-duty", output)
 
 
 def _run_uk_tv_licence_grid(runner: dict, output: Path) -> None:
-    del runner
-    _run_uk_pe_grid(
-        "generate_uk_tv_licence.py", "axiom-policyengine-uk-tv-licence", output
-    )
+    _run_uk_pe_grid(runner, "generate_uk_tv_licence.py", "axiom-policyengine-uk-tv-licence", output)
 
 
 def _run_us_tariff_grid(runner: dict, output: Path) -> None:
