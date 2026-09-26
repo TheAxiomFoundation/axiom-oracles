@@ -989,6 +989,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
+        if "taxsim" in engines:
+            oracle.update(_taxsim_oracle_identity(output))
     elif runner_type in ("federal-tax-liability-grid", "snap-abawd-boundary-grid"):
         pins = _resolve_pe_oracle_pins(params)
         oracle = {
@@ -1714,6 +1716,44 @@ def _taxsim_pin_version() -> str:
     return pins.pinned_version()
 
 
+def _taxsim_pin_profile(params: dict) -> str:
+    """The TAXSIM binary pin profile for a suite run.
+
+    Precedence (axiom_oracles.adapters.taxsim.pins.active_profile):
+    $AXIOM_TAXSIM_PIN_PROFILE > the suite's
+    ``runner.parameters.taxsim_pin_profile`` > the pin file's
+    ``default_profile``. The resolved name is passed to the CLI explicitly.
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    return pins.active_profile_name(suite_parameters=params)
+
+
+def _taxsim_oracle_identity(output: Path) -> dict:
+    """TAXSIM oracle keys for provenance.oracle, lifted from the report.
+
+    ``policyengine_taxsim`` is the pinned package version (legacy key). The
+    CLI report's ``engine_identity.taxsim`` block — written by the adapter
+    from the binaries it verified and ran — becomes ``taxsim_pin_profile``
+    and ``taxsim_binaries``; a report without that block (older CLI) keeps
+    only the version.
+    """
+    identity: dict = {"policyengine_taxsim": _taxsim_pin_version()}
+    try:
+        report = json.loads(output.read_text())
+    except (OSError, json.JSONDecodeError):
+        return identity
+    taxsim = (
+        (report.get("engine_identity") or {}).get("taxsim")
+        if isinstance(report, dict)
+        else None
+    )
+    if isinstance(taxsim, dict) and taxsim.get("binaries"):
+        identity["taxsim_pin_profile"] = taxsim.get("pin_profile")
+        identity["taxsim_binaries"] = [dict(item) for item in taxsim["binaries"]]
+    return identity
+
+
 def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
     """PE oracle pins for an in-repo compare, honoring per-comparison overrides.
 
@@ -1887,6 +1927,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
+    if "taxsim" in engines:
+        cmd.extend(["--taxsim-pin-profile", _taxsim_pin_profile(params)])
     if params.get("include_case_inputs"):
         cmd.append("--include-case-inputs")
     if params.get("comparison_batch_size"):

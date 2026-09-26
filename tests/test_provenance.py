@@ -323,7 +323,7 @@ def test_state_income_tax_provenance_uses_suite_local_oracle_pins(tmp_path):
         "policyengine_package": "policyengine==4.18.9",
         "policyengine_us": "1.784.4",
         "policyengine_core": "3.30.3",
-        "policyengine_taxsim": "2.30.0",
+        "policyengine_taxsim": "2.31.7",
     }
 
 

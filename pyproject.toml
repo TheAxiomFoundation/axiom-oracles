@@ -47,7 +47,7 @@ policyengine = [
   "policyengine[us]==5.0.0",
 ]
 taxsim = [
-  "policyengine-taxsim==2.30.0",
+  "policyengine-taxsim==2.31.7",
 ]
 taxcalc = [
   "taxcalc==6.7.1",
