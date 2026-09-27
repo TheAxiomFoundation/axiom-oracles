@@ -1320,6 +1320,15 @@
       "source": "comparisons/uk-maternity-allowance-ukmod.yaml"
     },
     {
+      "suite": "uk-national-insurance-pe",
+      "name": "uk-national-insurance-pe",
+      "report": "axiom-policyengine-uk-national-insurance.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-uk"
+      ],
+      "source": "comparisons/uk-national-insurance-pe.yaml"
+    },
+    {
       "suite": "uk-pension-credit",
       "name": "uk-pension-credit-ukmod",
       "report": "axiom-euromod-uk-pension-credit.json",
