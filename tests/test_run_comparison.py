@@ -8,6 +8,12 @@ from types import SimpleNamespace
 import pytest
 
 
+def assert_pe_companion_pinned(cmd):
+    """A `uv run` that installs PolicyEngine-US must also pin spm-calculator."""
+    assert any(arg.startswith("policyengine-us==") for arg in cmd), cmd
+    assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with", cmd
+
+
 def load_run_comparison_module():
     module_path = Path(__file__).parents[1] / "scripts" / "run_comparison.py"
     spec = importlib.util.spec_from_file_location("run_comparison", module_path)
@@ -102,6 +108,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     # the old 1.705.16 pin was below the floor and failed hard.
     assert "policyengine-us==1.729.0" in cmd
     assert "policyengine-core==3.26.11" in cmd
+    assert_pe_companion_pinned(cmd)
     assert "--data-folder" not in cmd
     assert "--allow-policyengine-us-version" in cmd
     assert "--allow-uncertified-policyengine-data" in cmd
@@ -1979,6 +1986,126 @@ def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
     # The explicit numba floor keeps the resolver off the sdist-only numba
     # 0.53.1 whose build fails on any current Python (#296).
     assert "numba>=0.60" in cmd
+    # spm-calculator 1.0.0 removed spm_calculator.geoadj, which every pinned
+    # PolicyEngine-US imports; the isolated env must pin the companion.
+    assert_pe_companion_pinned(cmd)
+
+
+def test_pe_us_companion_pins_match_uv_lock():
+    """Every place that pins spm-calculator agrees with uv.lock."""
+    run_comparison = load_run_comparison_module()
+    root = Path(__file__).resolve().parents[1]
+    lock = (root / "uv.lock").read_text()
+    debug = load_script_module("debug_policyengine_env")
+    for pin in run_comparison._PE_US_COMPANION_PINS:
+        name, version = pin.split("==")
+        assert f'name = "{name}"\nversion = "{version}"\n' in lock, pin
+        assert pin in debug.PE_ORACLE_PINS
+    # CI installs the extra with `uv pip install -e '.[policyengine]'`, which
+    # ignores uv.lock, so the extra itself must exclude spm-calculator 1.x.
+    pyproject = (root / "pyproject.toml").read_text()
+    assert '"spm-calculator>=0.2.0,<1",' in pyproject
+
+
+def test_pe_oracle_with_args_appends_the_companion_pins():
+    run_comparison = load_run_comparison_module()
+    assert run_comparison._pe_oracle_with_args(
+        run_comparison._resolve_pe_oracle_pins({})
+    ) == [
+        "--with",
+        "policyengine==4.18.9",
+        "--with",
+        "policyengine-us==1.752.2",
+        "--with",
+        "policyengine-core==3.28.0",
+        "--with",
+        "spm-calculator==0.3.1",
+    ]
+
+
+def test_snap_ecps_compare_pins_the_companion(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_encode = tmp_path / "axiom-encode"
+    axiom_encode.mkdir()
+    calls = []
+
+    def fake_run(cmd, *, check, cwd):
+        del check, cwd
+        calls.append(cmd)
+        csv_path = Path(cmd[cmd.index("--write-csv") + 1])
+        csv_path.write_text("")
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        run_comparison, "_adapt_snap_ecps_csv_to_v2", lambda rows, runner: {}
+    )
+    run_comparison._run_axiom_encode_snap_ecps_compare(
+        {"axiom_encode_repo": str(axiom_encode), "parameters": {}},
+        tmp_path / "out.json",
+    )
+    assert "snap-populace-compare" in calls[-1]
+    assert_pe_companion_pinned(calls[-1])
+
+
+def test_sanity_pins_the_companion(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    (tmp_path / "demo.fixtures.yaml").write_text("fixtures: []\n")
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", tmp_path)
+    monkeypatch.setattr(
+        run_comparison,
+        "_load_comparison",
+        lambda name: {
+            "runner": {
+                "axiom_rules_repo": str(tmp_path),
+                "parameters": {"left": "axiom", "right": "policyengine"},
+            }
+        },
+    )
+    calls = []
+
+    def fake_run(cmd, *, cwd):
+        del cwd
+        calls.append(cmd)
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    assert run_comparison._run_sanity("demo") == 0
+    assert "sanity" in calls[-1]
+    assert_pe_companion_pinned(calls[-1])
+
+
+def test_snap_abawd_boundary_grid_pins_the_companion(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    rulespec = tmp_path / "rulespec-us"
+    rulespec.mkdir()
+    monkeypatch.setattr(
+        run_comparison, "_rulespec_checkout_unclean_reason", lambda _path: None
+    )
+    monkeypatch.setattr(
+        run_comparison, "_verify_federal_rulespec_snapshot", lambda *_args: None
+    )
+    calls = []
+
+    def fake_run(cmd, *, check, cwd):
+        del check, cwd
+        calls.append(cmd)
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    run_comparison._run_snap_abawd_boundary_grid(
+        {
+            "parameters": {
+                "policyengine_version": "4.18.9",
+                "policyengine_us_version": "1.767.3",
+                "policyengine_core_version": "3.30.3",
+                "rulespec_roots": [str(rulespec)],
+            }
+        },
+        tmp_path / "out.json",
+    )
+    assert "policyengine-us==1.767.3" in calls[-1]
+    assert_pe_companion_pinned(calls[-1])
 
 
 def test_completion_never_applies_to_skip_capable_lanes(monkeypatch, tmp_path):
@@ -2102,6 +2229,7 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
     assert "policyengine==4.18.9" in cmd
     assert "policyengine-us==1.784.4" in cmd
     assert "policyengine-core==3.30.3" in cmd
+    assert_pe_companion_pinned(cmd)
     assert run_comparison._PE_ORACLE_PINS[1] not in cmd
     assert env["RULESPEC_US_REPO"] == str(rulespec)
     assert env["AXIOM_RULES_REPO"] == str(engine)

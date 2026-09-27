@@ -46,6 +46,10 @@ dev = [
 ]
 policyengine = [
   "policyengine[us]==5.0.0",
+  # policyengine-us declares spm-calculator>=0.2.0 but imports
+  # spm_calculator.geoadj, which spm-calculator 1.0.0 removed. CI installs this
+  # extra with `uv pip install -e '.[policyengine]'`, which ignores uv.lock.
+  "spm-calculator>=0.2.0,<1",
 ]
 taxsim = [
   "policyengine-taxsim==2.30.0",
