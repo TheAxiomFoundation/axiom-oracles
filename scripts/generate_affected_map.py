@@ -129,7 +129,20 @@ def pinned_repos_for_registry_config(config: dict) -> dict[str, str]:
     params = runner.get("parameters") or {}
     sha = str(params.get("rulespec_upstream_sha") or "").strip()
     if not sha:
-        return {}
+        # An axiom-oracles-compare suite pins its snapshot through the roots
+        # its engine compiles against: run_comparison's _verify_declared_pins
+        # refuses to run unless every rulespec checkout under
+        # axiom_rulespec_repo_roots holds this revision, so each repo the
+        # suite exercises is pinned to it. The declared value may be a SHA
+        # prefix; the selector matches recorded SHAs by prefix.
+        revision = str(
+            params.get("axiom_rulespec_repo_roots_revision")
+            or runner.get("axiom_rulespec_repo_roots_revision")
+            or ""
+        ).strip()
+        if not revision:
+            return {}
+        return {repo: revision for repo in sorted(repos_for_registry_config(config))}
     repos: set[str] = set()
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote:

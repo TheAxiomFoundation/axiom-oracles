@@ -385,6 +385,31 @@ def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch)
     ]
 
 
+def test_a_root_naming_a_rulespec_checkout_is_lifted_to_its_parent(
+    tmp_path, monkeypatch
+):
+    """The engine treats a root that is itself a rulespec-* checkout as its
+    parent (``_default_rulespec_repo_roots``); provenance must too."""
+    run_comparison = _load_run_comparison()
+    import axiom_oracles.provenance as provenance
+
+    pinned_sha = _git_checkout(tmp_path / "pins" / "rulespec-us", "pin")
+    monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: None)
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "co-tax-intersection-taxsim"}))
+
+    block = run_comparison._build_run_provenance(
+        _pinned_roots_config(tmp_path / "pins" / "rulespec-us"),
+        "axiom-oracles-compare",
+        output,
+    )
+
+    assert block["rulespecs"] == [
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pinned_sha}
+    ]
+
+
 def test_absent_pinned_roots_fall_back_to_the_convention_checkout(
     tmp_path, monkeypatch
 ):

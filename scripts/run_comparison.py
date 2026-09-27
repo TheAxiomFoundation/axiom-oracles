@@ -773,24 +773,33 @@ def _declared_repo_root_checkouts(config: dict, params: dict) -> list[str]:
     """Checkouts an ``axiom_rulespec_repo_roots`` suite actually compiled against.
 
     ``_run_axiom_oracles_compare`` exports the suite's roots as
-    AXIOM_RULESPEC_REPO_ROOTS (with AXIOM_RULESPEC_US_ROOT's parent first when
-    that override is set), so each mapped repo resolves to ``<root>/<name>``.
-    Recording those paths keeps a pinned suite (e.g. ``$HOME/oracle-pins`` at
-    ``axiom_rulespec_repo_roots_revision``) from being stamped with whatever
-    the developer's convention-path checkout happens to be on.
+    AXIOM_RULESPEC_REPO_ROOTS, with AXIOM_RULESPEC_US_ROOT's parent first when
+    that override is set (``_rulespec_repo_roots_env``). The engine lifts a
+    root that is itself a ``rulespec-*`` checkout to its parent and resolves
+    each repo as ``<root>/<name>`` (``_default_rulespec_repo_roots`` in
+    adapters/axiom/runner.py). Mirroring that order keeps a pinned suite (e.g.
+    ``$HOME/oracle-pins`` at ``axiom_rulespec_repo_roots_revision``) from being
+    stamped with whatever the developer's convention-path checkout is on.
     """
-    roots = params.get("axiom_rulespec_repo_roots")
-    if not roots:
+    declared = params.get("axiom_rulespec_repo_roots")
+    if not declared:
         return []
+    roots: list[Path] = []
     override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
+    if override:
+        roots.append(Path(override).resolve().parent)
+    for part in str(declared).split(os.pathsep):
+        if not part:
+            continue
+        root = _expand_path(part)
+        if root.name.startswith("rulespec-"):
+            root = root.parent
+        roots.append(root)
     paths: list[str] = []
     for repo in _affected_map_repos(config):
         name = repo.split("/", 1)[-1]
-        if override and name == "rulespec-us":
-            paths.append(str(Path(override)))
-            continue
-        for root in str(roots).split(os.pathsep):
-            candidate = _expand_path(root) / name
+        for root in roots:
+            candidate = root / name
             if candidate.exists():
                 paths.append(str(candidate))
                 break
