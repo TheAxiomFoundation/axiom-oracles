@@ -613,6 +613,14 @@ def test_roots_revision_pins_every_exercised_repo():
     assert gen.pinned_repos_for_registry_config(config) == {
         "TheAxiomFoundation/rulespec-us": "ca2d424f"
     }
+    for bad in ("ca2", "CA2D424F", "not-a-sha"):
+        config["runner"]["parameters"]["axiom_rulespec_repo_roots_revision"] = bad
+        with pytest.raises(SystemExit, match="7-40 lowercase hex"):
+            gen.pinned_repos_for_registry_config(config)
+    config["runner"]["parameters"]["axiom_rulespec_repo_roots_revision"] = "ca2d424f"
+    config["runner"]["parameters"]["concepts"].append("us-co:tax/income#liability")
+    with pytest.raises(SystemExit, match="a pin needs exactly one"):
+        gen.pinned_repos_for_registry_config(config)
     config["runner"]["parameters"].pop("axiom_rulespec_repo_roots_revision")
     assert gen.pinned_repos_for_registry_config(config) == {}
 

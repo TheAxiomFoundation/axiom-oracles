@@ -368,10 +368,14 @@ def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch)
     import axiom_oracles.provenance as provenance
 
     _git_checkout(tmp_path / "oracle-pins" / "rulespec-us", "pin")
-    override_sha = _git_checkout(tmp_path / "override" / "rulespec-us", "override")
+    # The engine reaches the override only as <parent>/rulespec-us (the
+    # override's parent is prepended to the exported roots), so an override
+    # directory with another name is NOT what compiles.
+    _git_checkout(tmp_path / "snapshot" / "rulespec-us-worktree", "override dir")
+    override_sha = _git_checkout(tmp_path / "snapshot" / "rulespec-us", "sibling")
     monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: None)
     monkeypatch.setenv(
-        "AXIOM_RULESPEC_US_ROOT", str(tmp_path / "override" / "rulespec-us")
+        "AXIOM_RULESPEC_US_ROOT", str(tmp_path / "snapshot" / "rulespec-us-worktree")
     )
     output = tmp_path / "r.json"
     output.write_text(json.dumps({"suite": "co-tax-intersection-taxsim"}))
