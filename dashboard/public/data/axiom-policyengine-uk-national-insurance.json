@@ -5079,8 +5079,8 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 83.66413574218751,
-        "match": false
+        "difference": 1.2207031261368684e-05,
+        "match": true
       },
       "case_id": "nic-2026-dual-30000-20000-c4-main",
       "compared_employment_income": 30000.0,
@@ -5090,8 +5090,7 @@
       "income": 20000,
       "income_kind": "self_employment_income",
       "measure": "c4-main",
-      "pe_mechanism": "class_1_deducted_from_class_4_profits",
-      "policyengine": 362.1358642578125,
+      "policyengine": 445.79998779296875,
       "policyengine_class_1_primary": 1394.4033203125,
       "policyengine_class_1_total": 1394.4033203125,
       "policyengine_variable": "ni_class_4_main",
@@ -5134,8 +5133,8 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 83.66413574218751,
-        "match": false
+        "difference": 1.2207031261368684e-05,
+        "match": true
       },
       "case_id": "nic-2026-dual-30000-20000-c4-total",
       "compared_employment_income": 30000.0,
@@ -5145,8 +5144,7 @@
       "income": 20000,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "class_1_deducted_from_class_4_profits",
-      "policyengine": 362.1358642578125,
+      "policyengine": 445.79998779296875,
       "policyengine_class_1_primary": 1394.4033203125,
       "policyengine_class_1_total": 1394.4033203125,
       "policyengine_variable": "ni_class_4",
@@ -5162,8 +5160,8 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 155.66413574218745,
-        "match": false
+        "difference": 7.324218745452526e-05,
+        "match": true
       },
       "case_id": "nic-2026-dual-45000-30000-c4-main",
       "compared_employment_income": 45000.0,
@@ -5173,8 +5171,7 @@
       "income": 30000,
       "income_kind": "self_employment_income",
       "measure": "c4-main",
-      "pe_mechanism": "class_1_deducted_from_class_4_profits",
-      "policyengine": 890.1358642578125,
+      "policyengine": 1045.7999267578125,
       "policyengine_class_1_primary": 2594.4033203125,
       "policyengine_class_1_total": 2594.4033203125,
       "policyengine_variable": "ni_class_4_main",
@@ -5244,8 +5241,8 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 192.6361206054687,
-        "match": false
+        "difference": 1.2207031204525265e-05,
+        "match": true
       },
       "case_id": "nic-2026-dual-60000-25000-c4-main",
       "compared_employment_income": 60000.0,
@@ -5255,8 +5252,7 @@
       "income": 25000,
       "income_kind": "self_employment_income",
       "measure": "c4-main",
-      "pe_mechanism": "class_1_deducted_from_class_4_profits",
-      "policyengine": 553.1638793945312,
+      "policyengine": 745.7999877929688,
       "policyengine_class_1_primary": 3016.0,
       "policyengine_class_1_total": 3210.600830078125,
       "policyengine_variable": "ni_class_4_main",
@@ -9137,164 +9133,16 @@
       "right": 3981.60546875,
       "right_engine": "policyengine",
       "validation_year": 2030
-    },
-    {
-      "axiom_class_1_main": 1394.4,
-      "case_id": "nic-2026-dual-30000-20000-c4-main",
-      "compared_employment_income": 30000.0,
-      "compared_income": 20000,
-      "concept": "uk:statutes/ukpga/1992/4/15#main_class_4_contribution",
-      "difference": 83.66413574218751,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2026-c4-main-class-1-deducted-from-class-4-profits",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1885"
-      },
-      "employment_income": 30000,
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 20000,
-      "kind": "amount_difference",
-      "left": 445.8,
-      "left_engine": "axiom",
-      "measure": "c4-main",
-      "pe_mechanism": "class_1_deducted_from_class_4_profits",
-      "policyengine_class_1_primary": 1394.4033203125,
-      "policyengine_class_1_total": 1394.4033203125,
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 12570.0,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 241.73,
-        "upper_earnings_limit_weekly": 966.73,
-        "upper_profits_limit": 50270.0
-      },
-      "right": 362.1358642578125,
-      "right_engine": "policyengine",
-      "validation_year": 2026
-    },
-    {
-      "axiom_class_1_main": 1394.4,
-      "case_id": "nic-2026-dual-30000-20000-c4-total",
-      "compared_employment_income": 30000.0,
-      "compared_income": 20000,
-      "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 83.66413574218751,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2026-c4-total-class-1-deducted-from-class-4-profits",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1885"
-      },
-      "employment_income": 30000,
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 20000,
-      "kind": "amount_difference",
-      "left": 445.8,
-      "left_engine": "axiom",
-      "measure": "c4-total",
-      "pe_mechanism": "class_1_deducted_from_class_4_profits",
-      "policyengine_class_1_primary": 1394.4033203125,
-      "policyengine_class_1_total": 1394.4033203125,
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 12570.0,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 241.73,
-        "upper_earnings_limit_weekly": 966.73,
-        "upper_profits_limit": 50270.0
-      },
-      "right": 362.1358642578125,
-      "right_engine": "policyengine",
-      "validation_year": 2026
-    },
-    {
-      "axiom_class_1_main": 2594.4,
-      "case_id": "nic-2026-dual-45000-30000-c4-main",
-      "compared_employment_income": 45000.0,
-      "compared_income": 30000,
-      "concept": "uk:statutes/ukpga/1992/4/15#main_class_4_contribution",
-      "difference": 155.66413574218745,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2026-c4-main-class-1-deducted-from-class-4-profits",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1885"
-      },
-      "employment_income": 45000,
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 30000,
-      "kind": "amount_difference",
-      "left": 1045.8,
-      "left_engine": "axiom",
-      "measure": "c4-main",
-      "pe_mechanism": "class_1_deducted_from_class_4_profits",
-      "policyengine_class_1_primary": 2594.4033203125,
-      "policyengine_class_1_total": 2594.4033203125,
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 12570.0,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 241.73,
-        "upper_earnings_limit_weekly": 966.73,
-        "upper_profits_limit": 50270.0
-      },
-      "right": 890.1358642578125,
-      "right_engine": "policyengine",
-      "validation_year": 2026
-    },
-    {
-      "axiom_class_1_main": 3016.0,
-      "case_id": "nic-2026-dual-60000-25000-c4-main",
-      "compared_employment_income": 60000.0,
-      "compared_income": 25000,
-      "concept": "uk:statutes/ukpga/1992/4/15#main_class_4_contribution",
-      "difference": 192.6361206054687,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2026-c4-main-class-1-deducted-from-class-4-profits",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1885"
-      },
-      "employment_income": 60000,
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 25000,
-      "kind": "amount_difference",
-      "left": 745.8,
-      "left_engine": "axiom",
-      "measure": "c4-main",
-      "pe_mechanism": "class_1_deducted_from_class_4_profits",
-      "policyengine_class_1_primary": 3016.0,
-      "policyengine_class_1_total": 3210.600830078125,
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 12570.0,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 241.73,
-        "upper_earnings_limit_weekly": 966.73,
-        "upper_profits_limit": 50270.0
-      },
-      "right": 553.1638793945312,
-      "right_engine": "policyengine",
-      "validation_year": 2026
     }
   ],
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-09-27T13:10:43Z",
+    "generated_at": "2026-09-27T13:41:47Z",
     "generated_by": "scripts/run_comparison.py::uk-national-insurance-pe",
     "oracle": {
       "name": "policyengine",
-      "policyengine_uk": "2.102.1"
+      "policyengine_uk": "2.102.2"
     },
     "rulespecs": [
       {
@@ -9312,7 +9160,7 @@
   },
   "suite": "uk-national-insurance-pe",
   "summary": {
-    "axiom_vs_policyengine_match_rate": 56.153846,
+    "axiom_vs_policyengine_match_rate": 57.692308,
     "comparison_count": 260,
     "dispositioned": {
       "counts": {
@@ -9320,27 +9168,27 @@
         "bridge_artifact": 0,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 114
+        "upstream_engine_gap": 110
       },
       "dispositions_file": "dispositions/uk-national-insurance-pe.yaml",
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 56.153846,
+      "raw_match_rate": 57.692308,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 146,
-    "mismatch_count": 114,
+    "match_count": 150,
+    "mismatch_count": 110,
     "mismatches_by_concept": [
       {
         "count": 32,
         "value": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum"
       },
       {
-        "count": 25,
+        "count": 24,
         "value": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum"
       },
       {
@@ -9352,21 +9200,17 @@
         "value": "uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline#uk_nic_pilot_main_primary_contribution"
       },
       {
-        "count": 27,
+        "count": 24,
         "value": "uk:statutes/ukpga/1992/4/15#main_class_4_contribution"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 114,
+        "count": 110,
         "value": "amount_difference"
       }
     ],
     "mismatches_by_mechanism": [
-      {
-        "count": 4,
-        "value": "class_1_deducted_from_class_4_profits"
-      },
       {
         "count": 110,
         "value": "cpi_uprated_thresholds"
@@ -9404,18 +9248,14 @@
       {
         "count": 12,
         "value": "class-4-between-limits"
-      },
-      {
-        "count": 4,
-        "value": "class-4-dual-earner"
       }
     ],
-    "policyengine_matches": 146,
+    "policyengine_matches": 150,
     "weighted": {
       "comparison_weight": 260,
-      "match_rate": 56.153846,
-      "match_weight": 146,
-      "mismatch_weight": 114
+      "match_rate": 57.692308,
+      "match_weight": 150,
+      "mismatch_weight": 110
     }
   },
   "tolerance": {

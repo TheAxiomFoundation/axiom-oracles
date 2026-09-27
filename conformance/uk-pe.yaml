@@ -272,11 +272,11 @@ policies:
       ni_class_4_main, into the Axiom modules, so they cannot detect a threshold defect). Here every
       Axiom threshold comes from Axiom modules; SSCBA 1992 s.15 limits and the regulation 100 maximum
       for Class 4, and the Class 1 pipeline's PT/UEL from the frozen personal allowance and basic rate
-      limit. Pinned to PolicyEngine-UK 2.102.1, the first release with the PolicyEngine-UK#1878 float32
-      fix (PolicyEngine-UK PR 1884), whose isolation cases now match. The 2026-27 control year matches;
-      2027-28 onward diverges on PolicyEngine-UK#1879 (CPI-uprated thresholds), and 2026-27 dual earners
-      on PolicyEngine-UK#1885 (Class 4 on profits less Class 1), every row reconciled to the penny and
-      dispositioned as upstream_engine_gap.
+      limit. Pinned to PolicyEngine-UK 2.102.2, the first release with both the PolicyEngine-UK#1878
+      float32 fix (PolicyEngine-UK PR 1884) and the PolicyEngine-UK#1885 dual-earner fix
+      (PolicyEngine-UK PR 1886); the float32-isolation and dual-earner cases now match. The 2026-27
+      control year matches; 2027-28 onward diverges on PolicyEngine-UK#1879 (CPI-uprated thresholds),
+      every row reconciled to the penny and dispositioned as upstream_engine_gap.
   - id: uk-pe:pension_credit
     oracle_policy_name: pension_credit
     oracle_policy_type: rules

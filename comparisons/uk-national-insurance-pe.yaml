@@ -5,8 +5,9 @@
 # Class 1 earnings base, so both engines charge the same earnings).
 #
 # The oracle pin below is what the dispositions are bound to. It is
-# PolicyEngine-UK 2.102.1, the first release with the #1878 fix (PR #1884, merge
-# 06f36f92). Filed defects, expected upstream_engine_gap rows while open
+# PolicyEngine-UK 2.102.2, the first release with both the #1878 fix (PR #1884,
+# merge 06f36f92, first in 2.102.1) and the #1885 fix (PR #1886, merge 6393f1e9).
+# Filed defects, expected upstream_engine_gap rows while open
 # (dispositions/uk-national-insurance-pe.yaml):
 #   * PolicyEngine-UK#1879: CPI-uprated Class 4 limits (from 2027) and Class 1
 #     thresholds (from 2028), frozen to April 2031.
@@ -14,7 +15,8 @@
 #     additional band from ni_class_4_maximum / ni_class_4. FIXED in 2.102.1:
 #     the isolation cases now match.
 #   * PolicyEngine-UK#1885: Class 4 charged on profits less Class 1 (dual
-#     earners), which SSCBA 1992 s.15 / Schedule 2 do not deduct.
+#     earners), which SSCBA 1992 s.15 / Schedule 2 do not deduct. FIXED in
+#     2.102.2: the dual-earner cases now match.
 # When a fix merges, set policyengine_uk_version to the first release containing
 # it, record the PR, merge commit and release under oracle_fixes, rerun, and
 # rebuild the dispositions (the fixed rows' entries expire).
@@ -43,7 +45,7 @@ runner:
   type: uk-national-insurance-pe-grid
   parameters:
     validation_years: [2026, 2027, 2028, 2029, 2030]
-    policyengine_uk_version: "2.102.1"
+    policyengine_uk_version: "2.102.2"
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-uk
 
@@ -61,9 +63,9 @@ oracle_fixes:
     first_release: "2.102.1"
   - issue: https://github.com/PolicyEngine/policyengine-uk/issues/1885
     defect: Class 4 charged on profits less Class 1 contributions
-    pr: null
-    merge_commit: null
-    first_release: null
+    pr: https://github.com/PolicyEngine/policyengine-uk/pull/1886
+    merge_commit: 6393f1e93a13484d6523c456b1c32a1641046537
+    first_release: "2.102.2"
 
 artifacts:
   report_basename: axiom-policyengine-uk-national-insurance
