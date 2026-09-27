@@ -1979,6 +1979,51 @@ def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
     # The explicit numba floor keeps the resolver off the sdist-only numba
     # 0.53.1 whose build fails on any current Python (#296).
     assert "numba>=0.60" in cmd
+    # spm-calculator 1.0.0 removed spm_calculator.geoadj, which every pinned
+    # PolicyEngine-US imports; the isolated env must pin the companion.
+    assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
+
+
+def test_pe_us_companion_pins_match_uv_lock():
+    """The isolated oracle envs pin the same spm-calculator the project locks."""
+    run_comparison = load_run_comparison_module()
+    lock = (Path(__file__).resolve().parents[1] / "uv.lock").read_text()
+    for pin in run_comparison._PE_US_COMPANION_PINS:
+        name, version = pin.split("==")
+        assert f'name = "{name}"\nversion = "{version}"\n' in lock, pin
+
+
+def test_every_pe_oracle_uv_run_carries_the_companion_pins():
+    """Each in-repo `uv run` that installs a PolicyEngine-US pin goes through
+    `_pe_oracle_with_args`, so none can resolve a floating spm-calculator."""
+    run_comparison = load_run_comparison_module()
+    args = run_comparison._pe_oracle_with_args(
+        run_comparison._resolve_pe_oracle_pins({})
+    )
+    assert args == [
+        "--with",
+        "policyengine==4.18.9",
+        "--with",
+        "policyengine-us==1.752.2",
+        "--with",
+        "policyengine-core==3.28.0",
+        "--with",
+        "spm-calculator==0.3.1",
+    ]
+    source = (
+        Path(__file__).resolve().parents[1] / "scripts" / "run_comparison.py"
+    ).read_text()
+    raw_expansions = sorted(
+        line.strip()
+        for line in source.splitlines()
+        if line.strip().startswith("*(arg for pin in")
+    )
+    # Only the non-PolicyEngine extras expand their pins inline.
+    assert raw_expansions == [
+        '*(arg for pin in taxcalc_pins for arg in ("--with", pin)),',
+        '*(arg for pin in taxsim_pins for arg in ("--with", pin)),',
+    ]
+    assert source.count("*_pe_oracle_with_args(") == 5
 
 
 def test_completion_never_applies_to_skip_capable_lanes(monkeypatch, tmp_path):
