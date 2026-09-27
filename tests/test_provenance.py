@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import subprocess
 from pathlib import Path
 
@@ -316,6 +317,146 @@ def test_build_run_provenance_threads_rulespecs_and_oracle(tmp_path, monkeypatch
     ]
     # dataset falls back to the config population when no identity is present.
     assert block["dataset"]["population"] == "enhanced-cps"
+
+
+def _git_checkout(path, message):
+    path.mkdir(parents=True)
+    env = {
+        **os.environ,
+        "GIT_AUTHOR_NAME": "t",
+        "GIT_AUTHOR_EMAIL": "t@example.test",
+        "GIT_COMMITTER_NAME": "t",
+        "GIT_COMMITTER_EMAIL": "t@example.test",
+    }
+    subprocess.run(["git", "init", "-q", str(path)], check=True)
+    subprocess.run(
+        ["git", "-C", str(path), "commit", "-q", "--allow-empty", "-m", message],
+        check=True,
+        env=env,
+    )
+    return subprocess.run(
+        ["git", "-C", str(path), "rev-parse", "HEAD"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+
+def _pinned_roots_config(roots):
+    # co-tax-intersection-taxsim is a real affected-map suite mapped to
+    # rulespec-us that pins its snapshot through axiom_rulespec_repo_roots.
+    return {
+        "name": "co-tax-intersection-taxsim",
+        "dashboard": {"suite": "co-tax-intersection-taxsim"},
+        "runner": {
+            "type": "axiom-oracles-compare",
+            "parameters": {
+                "left": "axiom",
+                "right": "taxsim",
+                "axiom_rulespec_repo_roots": str(roots),
+            },
+        },
+    }
+
+
+def test_pinned_repo_roots_win_over_the_convention_checkout(tmp_path, monkeypatch):
+    """A suite that compiles against ``axiom_rulespec_repo_roots`` must be
+    stamped with the checkout under those roots, not the developer's
+    ``~/TheAxiomFoundation/rulespec-us`` (which the affected-map completion
+    would otherwise resolve)."""
+    run_comparison = _load_run_comparison()
+    import axiom_oracles.provenance as provenance
+
+    pinned_sha = _git_checkout(tmp_path / "oracle-pins" / "rulespec-us", "pin")
+    convention = tmp_path / "convention" / "rulespec-us"
+    _git_checkout(convention, "moving main")
+    monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: convention)
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "co-tax-intersection-taxsim"}))
+
+    block = run_comparison._build_run_provenance(
+        _pinned_roots_config(tmp_path / "oracle-pins"), "axiom-oracles-compare", output
+    )
+
+    assert block["rulespecs"] == [
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pinned_sha}
+    ]
+
+
+def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch):
+    """AXIOM_RULESPEC_US_ROOT's parent is prepended to the exported roots, so
+    the run resolves rulespec-us there; provenance must follow it."""
+    run_comparison = _load_run_comparison()
+    import axiom_oracles.provenance as provenance
+
+    _git_checkout(tmp_path / "oracle-pins" / "rulespec-us", "pin")
+    # The engine reaches the override only as <parent>/rulespec-us (the
+    # override's parent is prepended to the exported roots), so an override
+    # directory with another name is NOT what compiles.
+    _git_checkout(tmp_path / "snapshot" / "rulespec-us-worktree", "override dir")
+    override_sha = _git_checkout(tmp_path / "snapshot" / "rulespec-us", "sibling")
+    monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: None)
+    monkeypatch.setenv(
+        "AXIOM_RULESPEC_US_ROOT", str(tmp_path / "snapshot" / "rulespec-us-worktree")
+    )
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "co-tax-intersection-taxsim"}))
+
+    block = run_comparison._build_run_provenance(
+        _pinned_roots_config(tmp_path / "oracle-pins"), "axiom-oracles-compare", output
+    )
+
+    assert block["rulespecs"] == [
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": override_sha}
+    ]
+
+
+def test_a_root_naming_a_rulespec_checkout_is_lifted_to_its_parent(
+    tmp_path, monkeypatch
+):
+    """The engine treats a root that is itself a rulespec-* checkout as its
+    parent (``_default_rulespec_repo_roots``); provenance must too."""
+    run_comparison = _load_run_comparison()
+    import axiom_oracles.provenance as provenance
+
+    pinned_sha = _git_checkout(tmp_path / "pins" / "rulespec-us", "pin")
+    monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: None)
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "co-tax-intersection-taxsim"}))
+
+    block = run_comparison._build_run_provenance(
+        _pinned_roots_config(tmp_path / "pins" / "rulespec-us"),
+        "axiom-oracles-compare",
+        output,
+    )
+
+    assert block["rulespecs"] == [
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pinned_sha}
+    ]
+
+
+def test_absent_pinned_roots_fall_back_to_the_convention_checkout(
+    tmp_path, monkeypatch
+):
+    run_comparison = _load_run_comparison()
+    import axiom_oracles.provenance as provenance
+
+    convention = tmp_path / "convention" / "rulespec-us"
+    convention_sha = _git_checkout(convention, "main")
+    monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: convention)
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "co-tax-intersection-taxsim"}))
+
+    block = run_comparison._build_run_provenance(
+        _pinned_roots_config(tmp_path / "missing-roots"), "axiom-oracles-compare", output
+    )
+
+    assert block["rulespecs"] == [
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": convention_sha}
+    ]
 
 
 def test_state_income_tax_provenance_uses_suite_local_oracle_pins(tmp_path):
