@@ -34,6 +34,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import os
 import sys
 from pathlib import Path
@@ -129,7 +130,34 @@ def pinned_repos_for_registry_config(config: dict) -> dict[str, str]:
     params = runner.get("parameters") or {}
     sha = str(params.get("rulespec_upstream_sha") or "").strip()
     if not sha:
-        return {}
+        # An axiom-oracles-compare suite pins its snapshot through the roots
+        # its engine compiles against: run_comparison's _verify_declared_pins
+        # refuses to run unless every rulespec checkout under
+        # axiom_rulespec_repo_roots holds this revision. One revision can pin
+        # only one repo (two repos never share a commit), so the suite must
+        # exercise exactly one. The declared value may be a SHA prefix; the
+        # selector matches recorded SHAs by prefix, so require a real one.
+        revision = str(
+            params.get("axiom_rulespec_repo_roots_revision")
+            or runner.get("axiom_rulespec_repo_roots_revision")
+            or ""
+        ).strip()
+        if not revision:
+            return {}
+        if not re.fullmatch(r"[0-9a-f]{7,40}", revision):
+            raise SystemExit(
+                f"suite {config.get('name')!r} declares "
+                f"axiom_rulespec_repo_roots_revision {revision!r}; a pin must be "
+                "7-40 lowercase hex characters"
+            )
+        exercised = sorted(repos_for_registry_config(config))
+        if len(exercised) != 1:
+            raise SystemExit(
+                f"suite {config.get('name')!r} declares "
+                "axiom_rulespec_repo_roots_revision but exercises "
+                f"{exercised or 'no'} rulespec repos; a pin needs exactly one"
+            )
+        return {exercised[0]: revision}
     repos: set[str] = set()
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote:

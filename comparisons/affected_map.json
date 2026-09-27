@@ -355,7 +355,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/co-tax-intersection-taxsim.yaml"
+      "source": "comparisons/co-tax-intersection-taxsim.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+      }
     },
     {
       "suite": "csfp-parameters",
@@ -483,7 +486,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/fiit-taxsim-ecps.yaml"
+      "source": "comparisons/fiit-taxsim-ecps.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+      }
     },
     {
       "suite": "fl-snap-ecps",
@@ -1555,7 +1561,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-mfs-policyengine.yaml"
+      "source": "comparisons/us-mfs-policyengine.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+      }
     },
     {
       "suite": "us-mfs-taxsim",
@@ -1564,7 +1573,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-mfs-taxsim.yaml"
+      "source": "comparisons/us-mfs-taxsim.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+      }
     },
     {
       "suite": "us-niit-grid",
