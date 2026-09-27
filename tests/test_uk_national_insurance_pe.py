@@ -232,3 +232,124 @@ def test_classifier_attributes_only_what_reconciles(income, lower, upper, seed) 
             if abs(correct - expected["main_only"]) > 0.01:
                 assert income > upper
                 assert flipped == "float32_drops_additional_band"
+
+
+# --- Review round 1: attribution must require the Axiom side to be statutory. ---
+
+_PE_2027 = {
+    "primary_threshold_weekly": 241.73,
+    "upper_earnings_limit_weekly": 966.73,
+    "lower_profits_limit": 12821.380164235901,
+    "upper_profits_limit": 51275.32067272385,
+    "main_class_4_percentage": 0.06,
+    "additional_class_4_percentage": 0.02,
+}
+_PE_STATUTORY = {**_PE_2027, "lower_profits_limit": 12570.0, "upper_profits_limit": 50270.0}
+
+
+@pytest.mark.parametrize("error", [54.2, -0.5, 100.0])
+def test_an_axiom_error_is_never_attributed_to_policyengine(error) -> None:
+    case = generator.NICase("t", 2027, "class_4", 30000, "t")
+    for key in ("c4-main", "c4-maximum", "c4-total"):
+        statute = generator.statutory_value(case, key, 30000)
+        pe_correct = generator._pe_expected(case, key, _PE_2027, 30000)["correct"]
+        assert (
+            generator.classify_mechanism(case, key, statute, pe_correct, _PE_2027, 30000)
+            == "cpi_uprated_thresholds"
+        )
+        wrong = statute + error
+        assert (
+            generator.classify_mechanism(case, key, wrong, pe_correct, _PE_2027, 30000)
+            == "unreconciled"
+        )
+
+
+def test_no_threshold_attribution_when_policyengine_uses_the_statutory_limits() -> None:
+    # The reviewer's case: unchanged limits, correct PE 1,045.80, wrong Axiom 1,100.
+    case = generator.NICase("t", 2026, "class_4", 30000, "t")
+    assert (
+        generator.classify_mechanism(case, "c4-main", 1100.0, 1045.8, _PE_STATUTORY, 30000)
+        == "unreconciled"
+    )
+    # A wrong Axiom Class 2 amount is never a PolicyEngine threshold defect.
+    assert (
+        generator.classify_mechanism(case, "c2", 12.5, 0.0, _PE_2027, 30000) == "unreconciled"
+    )
+
+
+def test_dual_attribution_requires_statutory_axiom() -> None:
+    case = generator.NICase("t", 2026, "dual", 20000, "t", employment=30000)
+    pe_model = generator._pe_dual_model(20000, 1394.4, 1394.4, _PE_STATUTORY)["c4-main"]
+    statute = generator.statutory_value(case, "c4-main", 20000, 1394.4)
+    assert (
+        generator.classify_dual_mechanism(
+            case, "c4-main", statute, pe_model, _PE_STATUTORY, 1394.4, 1394.4, 1394.4
+        )
+        == "class_1_deducted_from_class_4_profits"
+    )
+    assert (
+        generator.classify_dual_mechanism(
+            case, "c4-main", statute + 20, pe_model, _PE_STATUTORY, 1394.4, 1394.4, 1394.4
+        )
+        == "unreconciled"
+    )
+
+
+def test_builder_refuses_a_corrupted_non_representative_row(tmp_path, monkeypatch) -> None:
+    report = json.loads(REPORT.read_text())
+    groups = defaultdict(list)
+    for row in report["mismatches"]:
+        groups[(row["validation_year"], row["measure"], row["pe_mechanism"])].append(row)
+    rows = next(g for g in groups.values() if len(g) > 1)
+    victim = sorted(rows, key=lambda r: r["case_id"])[-1]
+    victim["right"] = float(victim["right"]) + 3.0
+    corrupted = tmp_path / "report.json"
+    corrupted.write_text(json.dumps(report))
+    monkeypatch.setattr(builder, "REPORT", corrupted)
+    with pytest.raises(SystemExit, match=victim["case_id"]):
+        builder.build()
+
+
+def test_module_parameters_honour_effective_to(tmp_path, monkeypatch) -> None:
+    module = tmp_path / "uk" / "m.yaml"
+    module.parent.mkdir(parents=True)
+    module.write_text(
+        yaml.safe_dump(
+            {
+                "rules": [
+                    {
+                        "name": "limit",
+                        "kind": "parameter",
+                        "versions": [
+                            {"effective_from": "2026-04-06", "formula": "100"},
+                            {
+                                "effective_from": "2027-04-06",
+                                "effective_to": "2028-04-05",
+                                "formula": "200",
+                            },
+                        ],
+                    },
+                    {
+                        "name": "expired",
+                        "kind": "parameter",
+                        "versions": [
+                            {
+                                "effective_from": "2026-04-06",
+                                "effective_to": "2027-04-05",
+                                "formula": "1",
+                            }
+                        ],
+                    },
+                ]
+            }
+        )
+    )
+    monkeypatch.setattr(generator, "RULESPEC_UK", tmp_path)
+    with pytest.raises(SystemExit, match="expired"):
+        generator._module_parameters("uk/m.yaml", "2028-04-06")
+    module_doc = yaml.safe_load(module.read_text())
+    module_doc["rules"] = module_doc["rules"][:1]
+    module.write_text(yaml.safe_dump(module_doc))
+    assert generator._module_parameters("uk/m.yaml", "2027-04-06")["limit"] == 200
+    # After the temporary version expires, the open-ended one applies again.
+    assert generator._module_parameters("uk/m.yaml", "2028-04-06")["limit"] == 100

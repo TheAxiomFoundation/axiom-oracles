@@ -56,6 +56,8 @@ SOURCES = [
     AXIOM_ENCODING_ISSUE,
 ]
 
+TOLERANCE = 0.00005
+
 KIND = {
     "superseded_schedule_calendar_average": "upstream_engine_gap",
     "rpi_indexation_not_enacted": "explained_residual",
@@ -86,13 +88,53 @@ def _mechanism_text(year: str, mechanism: str) -> str:
     )
 
 
+def _check_row(row: dict, schedule: dict) -> None:
+    """Refuse to disposition a row that does not reconcile on both sides.
+
+    The statutory rate is re-derived from the schedule file (not trusted from
+    the report); the Axiom value must be that rate less any supplied relief, the
+    PolicyEngine value its own parameter less the same relief, the parameter
+    must differ from the statute, and the mechanism must match the month.
+    """
+    from datetime import date
+
+    from generate_uk_fuel_duty import RPI_FORECAST_FROM, statutory_rate
+
+    month = date.fromisoformat(row["month"] + "-01")
+    statutory = statutory_rate(schedule, month)
+    relief = float(row.get("rural_relief") or 0.0)
+    parameter = float(row["policyengine_petrol_and_diesel"])
+    problems = []
+    if abs(float(row["statutory_rate"]) - statutory) > TOLERANCE:
+        problems.append(f"report statutory_rate {row['statutory_rate']} != schedule {statutory}")
+    if abs(float(row["left"]) - (statutory - relief)) > TOLERANCE:
+        problems.append(f"Axiom {row['left']} != statutory {statutory} - relief {relief}")
+    if abs(float(row["right"]) - (parameter - relief)) > TOLERANCE:
+        problems.append(f"PolicyEngine {row['right']} != its parameter {parameter} - relief {relief}")
+    if abs(parameter - statutory) <= TOLERANCE:
+        problems.append("PolicyEngine's parameter equals the statutory rate")
+    expected = (
+        "rpi_indexation_not_enacted" if month >= RPI_FORECAST_FROM else
+        "superseded_schedule_calendar_average"
+    )
+    if row["pe_mechanism"] != expected:
+        problems.append(f"mechanism {row['pe_mechanism']} != {expected} for {row['month']}")
+    if problems:
+        raise SystemExit(f"{row['case_id']}: " + "; ".join(problems))
+
+
 def build() -> dict:
+    sys.path.insert(0, str(REPO_ROOT / "scripts"))
+    from generate_uk_fuel_duty import load_schedule
+
+    schedule = load_schedule()
     report = json.loads(REPORT.read_text())
     groups: dict[tuple, list[dict]] = defaultdict(list)
     for row in report.get("mismatches") or []:
         mechanism = row.get("pe_mechanism")
         if mechanism not in KIND:
             continue
+        _check_row(row, schedule)
         groups[(row["month"][:4], mechanism, row["concept"])].append(row)
 
     entries = []

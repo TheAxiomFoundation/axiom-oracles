@@ -412,11 +412,19 @@ def _module_parameters(program: str, period_start: str) -> dict[str, float]:
     for rule in doc.get("rules") or []:
         if rule.get("kind") != "parameter":
             continue
+        # Inclusive [effective_from, effective_to] interval, as the engine
+        # selects versions; a parameter with no version in force is an error,
+        # never a silent fallback to an expired one.
         versions = [
-            v for v in rule.get("versions") or [] if str(v["effective_from"]) <= period_start
+            v
+            for v in rule.get("versions") or []
+            if str(v["effective_from"]) <= period_start
+            and (v.get("effective_to") is None or period_start <= str(v["effective_to"]))
         ]
         if not versions:
-            continue
+            raise SystemExit(
+                f"{program}#{rule['name']}: no parameter version in force on {period_start}"
+            )
         formula = str(max(versions, key=lambda v: str(v["effective_from"]))["formula"])
         values[rule["name"]] = float(formula.strip())
     return values
@@ -645,9 +653,91 @@ def _pe_dual_model(
     }
 
 
+# The statute's figures, independent of any module: SSCBA 1992 s.15(3) for
+# Class 4; for Class 1, the PA and BRL that FA 2021 s.5 (as amended by FA 2026
+# s.10) fixes, from which the Axiom pipeline derives PT = 12,570 and UEL =
+# 12,570 + 37,700.
+STATUTORY_CLASS_4_LIMITS = (12570.0, 50270.0)
+STATUTORY_CLASS_1_THRESHOLDS = (12570.0, 50270.0)
+
+
+def statutory_value(
+    case: NICase, key: str, income: float, class_1_main: float = 0.0
+) -> float:
+    """The statutory amount, computed from the statute's figures by plain arithmetic.
+
+    A mismatch is only ever attributed to PolicyEngine when the Axiom value
+    equals this: an Axiom error is never explained away as a PolicyEngine one.
+    """
+
+    if key.startswith("c1-"):
+        pt, uel = STATUTORY_CLASS_1_THRESHOLDS
+        if key == "c1-main":
+            return MAIN_PRIMARY_PERCENTAGE * max(0.0, min(income, uel) - pt)
+        return ADDITIONAL_PRIMARY_PERCENTAGE * max(0.0, income - uel)
+    if key == "c2":
+        # s.11(5B): at or above the small profits threshold (6,845; every grid
+        # profit exceeds it) Class 2 is treated as paid with nothing payable.
+        return 0.0
+    lower, upper = (
+        (case.lower_limit, case.upper_limit)
+        if case.kind == "isolation"
+        else STATUTORY_CLASS_4_LIMITS
+    )
+    main = 0.06 * max(0.0, min(income, upper) - lower)
+    before_maximum = main + 0.02 * max(0.0, income - upper)
+    if key == "c4-main":
+        return main
+    # Regulation 100 (no Class 2): step four is the main-band amount at the
+    # limits less primary Class 1 at the main percentage; case 1 when it
+    # exceeds that Class 1 plus the main-rate Class 4, else steps 4 + 8 + 9.
+    step_four_value = 0.06 * (upper - lower) - class_1_main
+    step_four = max(0.0, step_four_value)
+    if step_four_value > 0 and step_four_value > class_1_main + main:
+        maximum = step_four
+    else:
+        step_seven = max(0.0, (min(upper, income) - lower) - step_four / 0.06)
+        maximum = step_four + 0.02 * step_seven + 0.02 * max(0.0, income - upper)
+    if key == "c4-maximum":
+        return maximum
+    return min(before_maximum, maximum)
+
+
+def _parameters_differ_from_statute(case: NICase, key: str, p: dict[str, float]) -> bool:
+    if key.startswith("c1-"):
+        pt, uel = STATUTORY_CLASS_1_THRESHOLDS
+        # PolicyEngine stores weekly figures; 241.73 x 52 = 12,569.96 is the
+        # statutory annual figure to within its own weekly rounding.
+        return (
+            abs(p["primary_threshold_weekly"] * WEEKS_IN_YEAR - pt) > 1.0
+            or abs(p["upper_earnings_limit_weekly"] * WEEKS_IN_YEAR - uel) > 1.0
+        )
+    if key == "c2":
+        return False
+    lower, upper = (
+        (case.lower_limit, case.upper_limit)
+        if case.kind == "isolation"
+        else STATUTORY_CLASS_4_LIMITS
+    )
+    return (
+        abs(p["lower_profits_limit"] - lower) > _TOLERANCE
+        or abs(p["upper_profits_limit"] - upper) > _TOLERANCE
+    )
+
+
 def classify_mechanism(
     case: NICase, key: str, axiom: float, pe: float, p: dict[str, float], income: float
 ) -> str:
+    """Name the PolicyEngine mechanism a mismatch reconciles to, or ``unreconciled``.
+
+    Attribution needs all of: the Axiom value equals the statutory computation;
+    the PolicyEngine value equals the named mechanism under PolicyEngine's own
+    parameters; and that mechanism actually departs from the statute (for the
+    threshold mechanism, PolicyEngine's parameters themselves differ).
+    """
+
+    if abs(axiom - statutory_value(case, key, income)) > _TOLERANCE:
+        return "unreconciled"
     expected = _pe_expected(case, key, p, income)
     correct = expected["correct"]
     main_only = expected.get("main_only")
@@ -657,8 +747,38 @@ def classify_mechanism(
         and abs(pe - main_only) <= _RECONCILE_TOLERANCE
     ):
         return "float32_drops_additional_band"
-    if abs(pe - correct) <= _RECONCILE_TOLERANCE and abs(axiom - correct) > _TOLERANCE:
+    if (
+        abs(pe - correct) <= _RECONCILE_TOLERANCE
+        and abs(correct - axiom) > _TOLERANCE
+        and _parameters_differ_from_statute(case, key, p)
+    ):
         return "cpi_uprated_thresholds"
+    return "unreconciled"
+
+
+def classify_dual_mechanism(
+    case: NICase,
+    key: str,
+    axiom: float,
+    pe: float,
+    p: dict[str, float],
+    axiom_class_1_main: float,
+    pe_class_1_primary: float,
+    pe_class_1_total: float,
+) -> str:
+    """Attribute a dual-earner mismatch to PolicyEngine-UK#1885 only when it reconciles.
+
+    The Axiom value must equal the statute (s.15 on the full profits, regulation
+    100 with the Axiom Class 1 main amount) and the PolicyEngine value its own
+    formula with the Class 4 profits reduced by its Class 1.
+    """
+
+    statute = statutory_value(case, key, case.amount, axiom_class_1_main)
+    if abs(axiom - statute) > _TOLERANCE:
+        return "unreconciled"
+    modelled = _pe_dual_model(case.amount, pe_class_1_primary, pe_class_1_total, p)[key]
+    if abs(pe - modelled) <= _RECONCILE_TOLERANCE and abs(modelled - statute) > _TOLERANCE:
+        return "class_1_deducted_from_class_4_profits"
     return "unreconciled"
 
 
@@ -739,16 +859,15 @@ def build_report(
             if ok:
                 continue
             if case.kind == "dual":
-                modelled = _pe_dual_model(
-                    case.amount,
+                mechanism = classify_dual_mechanism(
+                    case,
+                    key,
+                    ax_val,
+                    pe_val,
+                    params,
+                    dual["axiom_class_1_main"],
                     dual["policyengine_class_1_primary"],
                     dual["policyengine_class_1_total"],
-                    params,
-                )[key]
-                mechanism = (
-                    "class_1_deducted_from_class_4_profits"
-                    if abs(pe_val - modelled) <= _RECONCILE_TOLERANCE
-                    else "unreconciled"
                 )
             else:
                 mechanism = classify_mechanism(case, key, ax_val, pe_val, params, income)

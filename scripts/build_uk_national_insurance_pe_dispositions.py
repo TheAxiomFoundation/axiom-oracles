@@ -242,6 +242,20 @@ def build() -> dict:
     entries = []
     for (year, measure, mechanism, isolation, concept), rows in sorted(groups.items()):
         rows = sorted(rows, key=lambda r: str(r["case_id"]))
+        # Every selected row, not just the representative, must reproduce
+        # both values from its mechanism's arithmetic before it is explained.
+        for row in rows:
+            row_axiom, row_pe = _expressions(row)
+            for label, expression, value in (
+                ("Axiom", row_axiom, row["left"]),
+                ("PolicyEngine", row_pe, row["right"]),
+            ):
+                got = evaluate_arithmetic(expression)
+                if abs(got - float(value)) > 0.005:
+                    raise SystemExit(
+                        f"{row['case_id']}: {label} {value} does not reconcile "
+                        f"({expression} = {got})"
+                    )
         representative = rows[0]
         axiom_expr, pe_expr = _expressions(representative)
         left = float(representative["left"])

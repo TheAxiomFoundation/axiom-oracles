@@ -226,16 +226,21 @@ def _axiom_values(cases: list[FDCase], pe_rows: dict, schedule: dict) -> dict[st
     return values
 
 
-def classify_mechanism(case: FDCase, pe_row: dict, statutory: float) -> str:
+def classify_mechanism(case: FDCase, pe_row: dict, statutory: float, axiom: float) -> str:
     """Name the PolicyEngine behaviour a mismatching month reconciles to.
 
-    Both mechanisms require the PolicyEngine value to be exactly its own
-    parameter read at the month start (less any relief), so a row is only
-    attributed when PolicyEngine is doing what its parameter says.
+    Attribution needs all of: the Axiom value is the dated statutory rate less
+    any supplied relief (so an Axiom error is never explained away); the
+    PolicyEngine value is exactly its own parameter read at the month start less
+    the same relief; and that parameter differs from the statutory rate.
     """
 
     relief = pe_row["rural_relief"] if case.rural else 0.0
+    if abs(axiom - (statutory - relief)) > _TOLERANCE:
+        return "unreconciled"
     if abs(pe_row["fuel_duty"] - (pe_row["petrol_and_diesel_parameter"] - relief)) > _TOLERANCE:
+        return "unreconciled"
+    if abs(pe_row["petrol_and_diesel_parameter"] - statutory) <= _TOLERANCE:
         return "unreconciled"
     if case.month < RPI_FORECAST_FROM:
         return "superseded_schedule_calendar_average"
@@ -283,7 +288,7 @@ def build_report(cases: list[FDCase], pe_rows: dict, axiom: dict, schedule: dict
         report_cases.append(row)
         if ok:
             continue
-        mechanism = classify_mechanism(case, pe_row, statutory)
+        mechanism = classify_mechanism(case, pe_row, statutory, ax_val)
         row["pe_mechanism"] = mechanism
         mismatches.append(
             {

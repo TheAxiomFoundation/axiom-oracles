@@ -114,3 +114,32 @@ def test_dispositions_file_is_the_builder_output() -> None:
         builder.build(), sort_keys=False, width=100, allow_unicode=True
     )
     assert DISPOSITIONS.read_text() == rebuilt
+
+
+# --- Review round 1: attribution must require the Axiom side to be statutory. ---
+
+
+def test_an_axiom_error_is_never_attributed_to_policyengine() -> None:
+    generator = _load("generate_uk_fuel_duty")
+    case = generator.FDCase("fd-2026-02", date(2026, 2, 1), False, "2026-schedule")
+    pe_row = {"fuel_duty": 0.5345, "petrol_and_diesel_parameter": 0.5345, "rural_relief": 0.05}
+    assert (
+        generator.classify_mechanism(case, pe_row, 0.5295, 0.5295)
+        == "superseded_schedule_calendar_average"
+    )
+    # The reviewer's case: correct PE 0.5295, erroneous Axiom 0.6295.
+    correct_pe = {"fuel_duty": 0.5295, "petrol_and_diesel_parameter": 0.5295, "rural_relief": 0.05}
+    assert generator.classify_mechanism(case, correct_pe, 0.5295, 0.6295) == "unreconciled"
+    assert generator.classify_mechanism(case, pe_row, 0.5295, 0.6295) == "unreconciled"
+
+
+def test_builder_refuses_a_corrupted_non_representative_row(tmp_path, monkeypatch) -> None:
+    builder = _load("build_uk_fuel_duty_dispositions")
+    report = json.loads(REPORT.read_text())
+    victim = next(m for m in report["mismatches"] if m["month"] == "2026-02")
+    victim["left"] = float(victim["left"]) + 0.1
+    corrupted = tmp_path / "report.json"
+    corrupted.write_text(json.dumps(report))
+    monkeypatch.setattr(builder, "REPORT", corrupted)
+    with pytest.raises(SystemExit, match="fd-2026-02"):
+        builder.build()
