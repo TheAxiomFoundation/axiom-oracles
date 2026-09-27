@@ -1801,6 +1801,38 @@ def test_completion_tolerates_missing_map(monkeypatch, tmp_path):
     )
 
 
+def test_pe_oracle_with_args_constrains_spm_calculator_for_policyengine_us_1x():
+    """policyengine-us 1.x imports spm_calculator.geoadj, which spm-calculator
+    1.0.0 removed; a --no-project resolve must keep spm-calculator below 1."""
+    run_comparison = load_run_comparison_module()
+
+    args = run_comparison._pe_oracle_with_args(run_comparison._PE_ORACLE_PINS)
+
+    assert args == [
+        "--with",
+        "policyengine==4.18.9",
+        "--with",
+        "policyengine-us==1.752.2",
+        "--with",
+        "policyengine-core==3.28.0",
+        "--with",
+        "spm-calculator<1",
+    ]
+    # The constraint rides on the --with args only; the recorded pins stay the
+    # three certified oracle packages.
+    assert run_comparison._resolve_pe_oracle_pins({}) == run_comparison._PE_ORACLE_PINS
+
+
+def test_pe_oracle_with_args_leaves_policyengine_us_2x_unconstrained():
+    run_comparison = load_run_comparison_module()
+
+    args = run_comparison._pe_oracle_with_args(
+        ("policyengine==5.0.0", "policyengine-us==2.11.2", "policyengine-core==3.30.3")
+    )
+
+    assert "spm-calculator<1" not in args
+
+
 def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
     """taxcalc==6.7.1 cannot resolve on 3.14 (no numba wheel); the lane pins
     `python: "3.13"` and the runner must pass it through to uv (#296)."""
@@ -2009,7 +2041,9 @@ def test_us_mfs_registry_configs_load_the_us_mfs_case_suite(
     assert params["case_suite"] == "us-mfs"
     assert params["sample_size"] == 0
     assert params["period"] == "2026"
-    assert params["include_case_inputs"] is True
+    # Ordinary evidence: full evidence queries 26 USC 21 closure rules whose
+    # inputs the tax projection never supplies (see the config comment).
+    assert params["include_case_inputs"] is False
     assert config["dashboard"]["suite"] == params["suite"] == name
 
     axiom_rules = tmp_path / "axiom-rules-engine"
@@ -2034,7 +2068,8 @@ def test_us_mfs_registry_configs_load_the_us_mfs_case_suite(
     assert _flag_value(cmd, "--population") == "synthetic"
     assert _flag_value(cmd, "--suite") == "us-mfs"
     assert _flag_value(cmd, "--report-suite") == name
-    assert "--include-case-inputs" in cmd
+    assert "--no-include-case-inputs" in cmd
+    assert "--include-case-inputs" not in cmd
     concepts = [cmd[i + 1] for i, tok in enumerate(cmd) if tok == "--concept"]
     assert concepts == params["concepts"]
     assert ("--axiom-engine-binary" in cmd) == ("axiom" in (left, right))

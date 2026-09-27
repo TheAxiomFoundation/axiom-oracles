@@ -1714,6 +1714,26 @@ def _taxsim_pin_version() -> str:
     return pins.pinned_version()
 
 
+# policyengine-us 1.x imports spm_calculator.geoadj, which spm-calculator
+# 1.0.0 removed (0.5.0 still ships geoadj.py). policyengine-us does not cap
+# the dependency, so a fresh `uv run --no-project` resolve now installs 1.x
+# and importing policyengine_us fails (every pinned 1.x oracle lane died on
+# ModuleNotFoundError: spm_calculator.geoadj, 2026-09-26). The constraint
+# rides only on the `--with` args, never on the recorded provenance pins.
+_PE_US_1X_TRANSITIVE_CONSTRAINTS = ("spm-calculator<1",)
+
+
+def _pe_oracle_with_args(pins: tuple[str, ...]) -> list[str]:
+    """`--with` args for the PE oracle pins plus their transitive constraints."""
+
+    constraints = (
+        _PE_US_1X_TRANSITIVE_CONSTRAINTS
+        if any(pin.startswith("policyengine-us==1.") for pin in pins)
+        else ()
+    )
+    return [arg for pin in (*pins, *constraints) for arg in ("--with", pin)]
+
+
 def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
     """PE oracle pins for an in-repo compare, honoring per-comparison overrides.
 
@@ -1877,7 +1897,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pe_pins),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
         *(arg for pin in taxsim_pins for arg in ("--with", pin)),
         "python",
@@ -1907,8 +1927,13 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
-    if params.get("include_case_inputs"):
+    # Tri-state: absent keeps the CLI's case-count default; an explicit false
+    # must reach the CLI, or a small synthetic suite silently gets full
+    # evidence anyway.
+    if params.get("include_case_inputs") is True:
         cmd.append("--include-case-inputs")
+    elif params.get("include_case_inputs") is False:
+        cmd.append("--no-include-case-inputs")
     if params.get("comparison_batch_size"):
         comparison_batch_size = params["comparison_batch_size"]
     elif any(
@@ -2510,7 +2535,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pe_pins),
         "--with",
         f"policyengine-taxsim=={_taxsim_pin_version()}",
         "python",
@@ -2736,7 +2761,7 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
-        *(arg for pin in pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pins),
         "python",
         str(generator),
         "--policy",
@@ -2884,7 +2909,7 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
-        *(arg for pin in pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pins),
         "python",
         str(generator),
         *(
@@ -4015,7 +4040,7 @@ def _run_sanity(name: str) -> int:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pe_pins),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,

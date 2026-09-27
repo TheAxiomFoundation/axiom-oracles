@@ -83,7 +83,14 @@ runner:
     sample_size: 0
     period: "2026"
     suite: us-mfs-pe-taxsim
-    include_case_inputs: true
+    # Ordinary evidence, as on every other TAXSIM lane. Full evidence (the
+    # CLI default for a suite this small) queries every derived rule in the
+    # oracle bridge's dependency closure, which reaches 26 USC 21 rules whose
+    # inputs the tax projection never supplies (e.g.
+    # employment_related_expense_requirements_satisfied,
+    # cdcc_temporary_expansion_applies); ordinary lazy evaluation never reads
+    # them, but full evidence aborts the whole engine batch on the first one.
+    include_case_inputs: false
     concepts:
       - us:tax/federal-income-tax#liability
       - us:tax/federal-income-tax#agi
