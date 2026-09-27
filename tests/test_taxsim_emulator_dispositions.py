@@ -24,66 +24,81 @@ DARWIN_SHA = "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d"
 # explicitly reviewing its coverage changes here.
 EXPECTED = {
     2021: {
-        "matched": 168094, "explained": 17204, "unexplained": 37396,
+        "matched": 168094, "explained": 16922, "unexplained": 37678,
         "entries": {
-            "addmed-in-fiitax": 539,
-            "niit-scorp": 1793,
-            "niit-addmed-scorp": 8559,
-            "niit-no-scorp": 83,
-            "niit-addmed-no-scorp": 3443,
             "rebate-timing": 14872,
-            "al-federal-residual": 134,
+            "niit-addmed-no-scorp": 3443,
+            "addmed-in-fiitax": 539,
+            "niit-no-scorp": 83,
+            "niit-addmed-scorp": 8559,
+            "niit-scorp-at-cap-single": 305,
+            "niit-scorp-at-cap-joint": 1203,
+            "niit-scorp-unreconciled": 282,
             "al-state-residual": 595,
+            "al-federal-residual": 134,
+            "niit-scorp": 3,
         },
     },
     2022: {
-        "matched": 175546, "explained": 17211, "unexplained": 29937,
+        "matched": 175546, "explained": 16923, "unexplained": 30225,
         "entries": {
-            "addmed-in-fiitax": 478,
-            "niit-scorp": 1618,
-            "niit-addmed-scorp": 6996,
-            "niit-no-scorp": 84,
-            "niit-addmed-no-scorp": 3332,
             "rebate-timing": 15115,
+            "niit-addmed-no-scorp": 3332,
+            "addmed-in-fiitax": 478,
+            "niit-no-scorp": 84,
+            "niit-addmed-scorp": 6996,
+            "niit-scorp-at-cap-joint": 1188,
+            "niit-scorp-unreconciled": 288,
+            "niit-scorp-at-cap-single": 139,
             "al-federal-residual": 160,
             "al-state-residual": 391,
+            "niit-scorp": 3,
         },
     },
     2023: {
-        "matched": 183593, "explained": 6677, "unexplained": 32424,
+        "matched": 183593, "explained": 6384, "unexplained": 32717,
         "entries": {
-            "addmed-in-fiitax": 506,
-            "niit-scorp": 1784,
-            "niit-addmed-scorp": 8464,
-            "niit-no-scorp": 84,
             "niit-addmed-no-scorp": 3455,
+            "addmed-in-fiitax": 506,
+            "niit-no-scorp": 84,
             "rebate-timing": 4387,
-            "al-federal-residual": 121,
+            "niit-addmed-scorp": 8464,
+            "niit-scorp-at-cap-joint": 1185,
+            "niit-scorp-at-cap-single": 303,
+            "niit-scorp-unreconciled": 293,
             "al-state-residual": 388,
+            "al-federal-residual": 121,
+            "niit-scorp": 3,
         },
     },
     2024: {
-        "matched": 188026, "explained": 12603, "unexplained": 22065,
+        "matched": 188026, "explained": 4433, "unexplained": 30235,
         "entries": {
-            "niit-scorp": 9669,
             "niit-no-scorp": 1152,
-            "rebate-timing": 2934,
             "md-august-county-signature": 739,
-            "al-federal-residual": 128,
+            "rebate-timing": 2934,
+            "niit-scorp-unreconciled": 8170,
+            "niit-scorp-at-cap-joint": 1184,
+            "niit-scorp-at-cap-single": 222,
+            "niit-scorp": 93,
             "al-state-residual": 375,
+            "al-federal-residual": 128,
         },
     },
     2025: {
-        "matched": 188070, "explained": 11818, "unexplained": 22806,
+        "matched": 188070, "explained": 4082, "unexplained": 30542,
         "entries": {
-            "niit-scorp": 9127,
             "niit-no-scorp": 1003,
-            "rebate-timing": 1261,
             "md-august-county-signature": 742,
-            "al-federal-residual": 154,
-            "al-state-residual": 378,
+            "rebate-timing": 1261,
             "la-standard-deduction-omission": 1430,
             "la-other-state-residual": 481,
+            "niit-scorp-unreconciled": 7736,
+            "niit-scorp-at-cap-joint": 1015,
+            "niit-scorp": 174,
+            "niit-scorp-at-cap-single": 202,
+            "al-federal-residual": 154,
+            "al-state-residual": 378,
         },
     },
 }
@@ -155,8 +170,10 @@ def test_emulator_ledger_coverage_and_evidence(year):
         arithmetic = entry["evidence"].get("row_arithmetic", [])
         if entry["disposition"] != "unexplained":
             assert arithmetic, entry["id"]
-        if entry["id"] in {"niit-scorp", "niit-addmed-scorp"}:
+        if entry["id"].startswith("niit-scorp") or entry["id"] == "niit-addmed-scorp":
             assert all(row["facts"]["scorp"] != 0 for row in rows)
+        if entry["id"] == "niit-scorp-unreconciled":
+            assert entry["disposition"] == "unexplained"
         if entry["id"] in {"niit-no-scorp", "niit-addmed-no-scorp"}:
             assert all(row["facts"]["scorp"] == 0 for row in rows)
             assert entry["disposition"] == "unexplained"
@@ -189,8 +206,12 @@ def test_sales_tax_probes_preserve_observations_without_claiming_resolution():
     assert report["summary"]["dispositioned"] == block
     assert block["expired_entries"] == []
     assert block["orphaned_entries"] == []
-    assert block["unexplained_count"] == block["counts"]["unexplained"] == 2
-    assert block["raw_match_rate"] == block["explained_rate"] == 50
+    # state 0 is attributed to the emulator (fixed in pe-taxsim #1249); the
+    # Texas proxy difference stays open.
+    assert block["unexplained_count"] == block["counts"]["unexplained"] == 1
+    assert block["counts"]["upstream_engine_gap"] == 1
+    assert block["raw_match_rate"] == 50
+    assert block["explained_rate"] == 75
     assert merged["summary"]["comparison_count"] == 4
     assert merged["summary"]["error_count"] == 0
     assert merged["summary"]["match_count"] == 2
@@ -213,8 +234,13 @@ def test_sales_tax_probes_preserve_observations_without_claiming_resolution():
         assert row["right"] == right
         assert row["difference"] == pytest.approx(49315.8515625 - right, abs=1e-9)
         assert row["disposition"]["id"] == entry["id"] == entry_id
-        assert entry["disposition"] == "unexplained"
-        assert entry["attribution"] == "two_sided"
+        if state == 0:
+            assert entry["disposition"] == "upstream_engine_gap"
+            assert entry["attribution"] == "policyengine"
+            assert entry["linked_issue"].endswith("/pull/1249")
+        else:
+            assert entry["disposition"] == "unexplained"
+            assert entry["attribution"] == "two_sided"
         assert entry["oracle_binding"]["taxsim_binary_sha256"] == [DARWIN_SHA]
         assert entry["pinned"] == {"left": row["left"], "right": row["right"]}
         assert entry["evidence"]["row_arithmetic"]
@@ -233,3 +259,39 @@ def test_successful_macos_crash_probe_has_no_speculative_error_disposition(year)
     assert binary["platform"] == "darwin"
     assert binary["sha256"] == DARWIN_SHA
     assert not (ROOT / f"dispositions/{suite}.yaml").exists()
+
+
+NIIT_THRESHOLD = {1: 200000, 2: 250000, 6: 125000, 8: 200000}
+
+
+@pytest.mark.parametrize("year", range(2021, 2026))
+def test_scorp_niit_explanations_reconcile_the_passive_treatment(year):
+    """Explained S-corp NIIT rows must show the convention's own effect.
+
+    Uncapped: TAXSIM NIIT - emulator NIIT = 3.8% of scorp. At the 1411(a)(1)(B)
+    limit: TAXSIM NIIT = 3.8% of (AGI - threshold), the emulator is below it,
+    and its implied net investment income plus scorp reaches it.
+    """
+    suite = f"taxsim-emulator-ecps-{year}"
+    report = load_report(ROOT / f"reports/taxsim-emulator/{suite}.json.gz")
+    checked = 0
+    for row in report["mismatches"]:
+        entry_id = (row.get("disposition") or {}).get("id", "")
+        if not entry_id.startswith("niit-scorp") or entry_id == "niit-scorp-unreconciled":
+            continue
+        left, right, scorp = row["aux"]["left"], row["aux"]["right"], row["facts"]["scorp"]
+        gap = right["niit"] - left["niit"]
+        assert abs(row["difference"] + gap) <= 1
+        if entry_id == "niit-scorp":
+            assert abs(gap - 0.038 * scorp) <= 1
+        else:
+            limit = 0.038 * (right["v10"] - NIIT_THRESHOLD[row["facts"]["mstat"]])
+            assert abs(left["v10"] - right["v10"]) <= 1
+            assert abs(right["niit"] - limit) <= 1
+            assert left["niit"] < limit - 0.5
+            assert left["niit"] + 0.038 * scorp >= limit - 1
+        checked += 1
+    assert checked == sum(
+        count for entry_id, count in EXPECTED[year]["entries"].items()
+        if entry_id.startswith("niit-scorp") and entry_id != "niit-scorp-unreconciled"
+    )

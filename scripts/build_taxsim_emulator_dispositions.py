@@ -59,6 +59,15 @@ REBATE_EVIDENCE = (
     "documented timing convention, not a finding about either engine's law."
 )
 NIIT = "difference + right_aux.niit - left_aux.niit"
+# Treating scorp as passive adds it to net investment income. 26 U.S.C.
+# 1411(a)(1) (LII, "(a) In general", individuals): "a tax equal to 3.8
+# percent of the lesser of— (A) net investment income for such taxable year,
+# or (B) the excess (if any) of— (i) the modified adjusted gross income for
+# such taxable year, over (ii) the threshold amount". While neither engine's
+# NIIT is at the (B) limit, the passive treatment raises NIIT by exactly
+# 3.8 percent of scorp; this checks that per row.
+SCORP_PASSIVE_NIIT = "right_aux.niit - left_aux.niit - 0.038 * facts.scorp"
+NIIT_1411_URL = "https://www.law.cornell.edu/uscode/text/26/1411"
 COMBINED = NIIT + " + right_aux.addmed"
 REBATE = "difference + left_aux.srebate - right_aux.srebate"
 COUNTY = "difference + 0.032 * (right_aux.v36 - right_aux.v25)"
@@ -108,30 +117,88 @@ def document(year: int) -> dict:
              arithmetic("difference + right_aux.addmed")],
             [ADDMED_URL, UPSTREAM + "pull/1239"])
 
+    def pure_niit(r, scorp):
+        return ((r["facts"]["scorp"] != 0) == scorp
+                and abs(niit_gap(r)) > .005 and abs(r["difference"] + niit_gap(r)) <= 1
+                and (year >= 2024 or r["aux"]["right"]["addmed"] == 0))
+
     for scorp in (True, False):
         suffix = "scorp" if scorp else "no-scorp"
         scorp_check = arithmetic("facts.scorp / facts.scorp", 0, 1) if scorp else arithmetic("facts.scorp", 0)
         pure_checks = [arithmetic(NIIT), scorp_check]
         if year <= 2023:
             pure_checks.append(arithmetic("right_aux.addmed", 0))
-        add(f"niit-{suffix}", FEDERAL,
-            lambda r, scorp=scorp: (r["facts"]["scorp"] != 0) == scorp
-            and abs(niit_gap(r)) > .005 and abs(r["difference"] + niit_gap(r)) <= 1
-            and (year >= 2024 or r["aux"]["right"]["addmed"] == 0),
-            "explained_residual" if scorp else "unexplained",
-            "input" if scorp else "two_sided",
-            "issues/1053" if scorp else "issues/1226",
-            (SCORP_EVIDENCE + "The liability gap lies in NIIT within $1, and scorp "
-             "is nonzero. This class records the documented active/passive input "
-             "ambiguity; the identity does not adjudicate legal correctness or "
-             "prove that every NIIT dollar is caused by scorp."
-             if scorp else
-             "The liability gap lies in NIIT within $1 despite scorp being zero. "
-             "#1226 records a non-itemizer state-tax allocation error acknowledged "
-             "by Feenberg, but these rows have not individually been shown to "
-             "share that cause. Allocation is a hypothesis; engine outputs do "
-             "not establish which amount is legally correct."),
-            pure_checks, SCORP_SOURCES if scorp else [UPSTREAM + "issues/1226"])
+        if scorp:
+            # Explained only where the convention's own effect reconciles:
+            # TAXSIM's NIIT exceeds PE's by exactly 3.8% of scorp.
+            add("niit-scorp", FEDERAL,
+                lambda r: pure_niit(r, True)
+                and abs(niit_gap(r) - .038 * r["facts"]["scorp"]) <= 1,
+                "explained_residual", "input", "issues/1053",
+                SCORP_EVIDENCE + "On every selected row the liability gap lies in "
+                "NIIT within $1, and TAXSIM's NIIT exceeds the emulator's by 3.8% of "
+                "scorp within $1: the effect of counting scorp as passive net "
+                "investment income under 26 U.S.C. 1411(a)(1) while neither NIIT is "
+                "at the MAGI limit. This records the documented active/passive input "
+                "ambiguity; it does not adjudicate which treatment is legally correct.",
+                [*pure_checks, arithmetic(SCORP_PASSIVE_NIIT)],
+                [*SCORP_SOURCES, NIIT_1411_URL])
+            # At the 1411(a)(1)(B) limit: TAXSIM's NIIT equals 3.8% of AGI over
+            # the 1411(b) threshold, the emulator's NIIT is below it, and adding
+            # scorp to the emulator's implied net investment income reaches it.
+            # 26 U.S.C. 1411(b) (LII, "(b) Threshold amount"): "$250,000" for a
+            # joint return or surviving spouse, "½ of the dollar amount
+            # determined under paragraph (1)" for married filing separately, and
+            # "$200,000" "in any other case". MAGI is AGI plus the section 911
+            # exclusion (1411(d)); these inputs carry no foreign earned income.
+            # TAXSIM35 mstat: 1 single/head of household, 2 joint, 6 separate,
+            # 8 dependent taxpayer. Surviving-spouse returns are not
+            # distinguishable in these inputs and fall to the $200,000 case.
+            for label, mstat, threshold in (("single", 1, 200000), ("joint", 2, 250000),
+                                            ("separate", 6, 125000), ("dependent", 8, 200000)):
+                def at_cap(r, mstat=mstat, threshold=threshold):
+                    left, right = r["aux"]["left"], r["aux"]["right"]
+                    limit = .038 * (right["v10"] - threshold)
+                    return (pure_niit(r, True) and r["facts"]["mstat"] == mstat
+                            and abs(left["v10"] - right["v10"]) <= 1 and limit > 0
+                            and abs(right["niit"] - limit) <= 1
+                            and left["niit"] < limit - .5
+                            and left["niit"] + .038 * r["facts"]["scorp"] >= limit - 1)
+                add(f"niit-scorp-at-cap-{label}", FEDERAL, at_cap,
+                    "explained_residual", "input", "issues/1053",
+                    SCORP_EVIDENCE + "On every selected row the liability gap lies in NIIT "
+                    "within $1; AGI agrees within $1; TAXSIM's NIIT equals 3.8% of AGI "
+                    f"over the ${threshold:,} threshold for mstat {mstat} within $1 (the "
+                    "26 U.S.C. 1411(a)(1)(B) limit); and the emulator's NIIT is below that "
+                    "limit while its implied net investment income plus scorp reaches it "
+                    "(checked by the recipe and tests/test_taxsim_emulator_dispositions.py). "
+                    "Counting scorp as passive therefore moves NIIT to the limit. This "
+                    "assumes the engines agree on the other net investment income; it "
+                    "records the documented input ambiguity, not which treatment is right.",
+                    [*pure_checks, arithmetic("facts.mstat", 0, mstat),
+                     arithmetic("left_aux.v10 - right_aux.v10"),
+                     arithmetic(f"right_aux.niit - 0.038 * (right_aux.v10 - {threshold})")],
+                    [*SCORP_SOURCES, NIIT_1411_URL])
+            add("niit-scorp-unreconciled", FEDERAL,
+                lambda r: pure_niit(r, True),
+                "unexplained", "two_sided", "issues/1053",
+                "The liability gap lies in NIIT within $1 and scorp is nonzero, but "
+                "neither the uncapped (3.8% of scorp) nor the at-limit reconciliation "
+                "holds, so the active/passive convention alone does not account for "
+                "it. Possible causes, unverified: the engines' AGI differs, or their "
+                "other net investment income differs (e.g. a state-tax allocation, "
+                "#1226). Open; engine outputs do not establish the cause.",
+                pure_checks, [*SCORP_SOURCES, NIIT_1411_URL])
+        else:
+            add("niit-no-scorp", FEDERAL,
+                lambda r: pure_niit(r, False),
+                "unexplained", "two_sided", "issues/1226",
+                "The liability gap lies in NIIT within $1 despite scorp being zero. "
+                "#1226 records a non-itemizer state-tax allocation error acknowledged "
+                "by Feenberg, but these rows have not individually been shown to "
+                "share that cause. Allocation is a hypothesis; engine outputs do "
+                "not establish which amount is legally correct.",
+                pure_checks, [UPSTREAM + "issues/1226"])
 
         if year <= 2023:
             add(f"niit-addmed-{suffix}", FEDERAL,
@@ -223,21 +290,41 @@ def probe_document():
         assert row["concept"] == FEDERAL
         state = row["facts"]["taxsim_state"]
         assert state in (0, 44)
+        if state == 0:
+            # The emulator side acknowledged and fixed this (merged 2026-09-26),
+            # after this probe ran on policyengine-taxsim 2.31.7. A rerun on an
+            # emulator release that includes #1249 changes the left value, so
+            # this pinned entry expires and the row should then match.
+            entries.append({
+                "id": "state-zero-sales-tax",
+                "concept": FEDERAL, "kind": "amount_difference", "case_id": row["case_id"],
+                "disposition": "upstream_engine_gap", "attribution": "policyengine",
+                "evidence": {
+                    "mechanism": "The emulator simulated TAXSIM state 0 in Texas, taking a "
+                    "sales-tax deduction that TAXSIM's state 0 does not take. PolicyEngine/"
+                    "policyengine-taxsim PR #1249 (merged 2026-09-26) states: \"TAXSIM state 0 "
+                    "means 'no state tax': `taxsimtest` runs no state calculation for the "
+                    "record, so its federal return deducts no state or local income or sales "
+                    "tax.\" It fixes the emulator to match (TAXSIM fiitax 50165.00 on this "
+                    "record). This probe ran before the fix, on the observed macOS binary.",
+                    "row_arithmetic": [arithmetic("difference", .000001, row["difference"])],
+                    "sources": [UPSTREAM + "pull/1249", UPSTREAM + "pull/1204"],
+                },
+                "linked_issue": UPSTREAM + "pull/1249", "expires_on_source_change": True,
+            })
+            continue
         entries.append({
-            "id": "state-zero-sales-tax" if state == 0 else "texas-sales-tax-proxy",
+            "id": "texas-sales-tax-proxy",
             "concept": FEDERAL, "kind": "amount_difference", "case_id": row["case_id"],
             "disposition": "unexplained", "attribution": "two_sided",
             "evidence": {
-                "mechanism": "Observed native-SALT macOS probe from PR #1204. "
-                "TAXSIM fiitax is 50165.00 at state 0 and 49618.30 at Texas, "
-                "while the emulator is 49315.8515625 on both records. These "
-                "observations suggest a sales-tax-deduction/proxy interaction, "
-                "but do not establish the legally correct deduction or isolate "
-                "the mechanism. PR #1204 describes the CE suppressed-state "
-                "Texas proxy. This is bound to the observed macOS binary, not "
-                "the Linux release, and expires on changes to either output.",
+                "mechanism": "Observed native-SALT macOS probe from PR #1204 at state 44 "
+                "(Texas): TAXSIM fiitax 49618.30, emulator 49315.8515625. Both engines take "
+                "a sales-tax deduction here, in different amounts; PR #1249 fixed only the "
+                "state-0 case. The cause of this difference is not established. Bound to "
+                "the observed macOS binary; expires on changes to either output.",
                 "row_arithmetic": [arithmetic("difference", .000001, row["difference"])],
-                "sources": [UPSTREAM + "pull/1204", UPSTREAM + "pull/1219"],
+                "sources": [UPSTREAM + "pull/1204", UPSTREAM + "pull/1249"],
             },
             "linked_issue": UPSTREAM + "pull/1204", "expires_on_source_change": True,
         })

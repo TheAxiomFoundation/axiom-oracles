@@ -545,11 +545,404 @@ entries:
   kind: amount_difference
   case_selector:
     case_ids:
+    - taxsim-111170
+    - taxsim-111367
+    - taxsim-111446
+  disposition: explained_residual
+  attribution: input
+  evidence:
+    mechanism: 'NBER taxsimtest input 25 documents "scorp Passive business income not subject to FICA,
+      SSTB, SECA or QBID phaseout but subject to the passive loss limitation." NBER taxsim35 input 31
+      instead documents "scorp Active S-Corp income (is SSTB)." Both pages were checked 2026-09-25. Pavel
+      Makarchuk (@PavelMakarchuk), 2026-07-05, #1053: "This depends on what `taxsimtest` assumes about
+      material participation for S-corp income." #1053 documents the open NIIT question; draft PR #1199
+      is not a settled correction. On every selected row the liability gap lies in NIIT within $1, and
+      TAXSIM''s NIIT exceeds the emulator''s by 3.8% of scorp within $1: the effect of counting scorp
+      as passive net investment income under 26 U.S.C. 1411(a)(1) while neither NIIT is at the MAGI limit.
+      This records the documented active/passive input ambiguity; it does not adjudicate which treatment
+      is legally correct.'
+    row_arithmetic:
+    - &id001
+      expression: difference + right_aux.niit - left_aux.niit
+      equals: 0
+      tolerance: 1
+    - &id002
+      expression: facts.scorp / facts.scorp
+      equals: 1
+      tolerance: 0
+    - &id003
+      expression: right_aux.addmed
+      equals: 0
+      tolerance: 0
+    - expression: right_aux.niit - left_aux.niit - 0.038 * facts.scorp
+      equals: 0
+      tolerance: 1
+    sources:
+    - https://taxsim.nber.org/taxsimtest/
+    - https://taxsim.nber.org/taxsim35/
+    - https://www.law.cornell.edu/uscode/text/26/1411
+  linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/issues/1053
+  expires_on_source_change: true
+  selector_binding:
+    units: 3
+    rows_sha256: 4a4f29199597a4f5de2102795ee4b5b00355ad11382eced77a6c2b1096455a6f
+  oracle_binding:
+    taxsim_binary_sha256:
+    - 8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059
+- id: niit-scorp-at-cap-single
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
     - taxsim-100007
+    - taxsim-100072
+    - taxsim-100335
+    - taxsim-100347
+    - taxsim-100579
+    - taxsim-100634
+    - taxsim-100702
+    - taxsim-101472
+    - taxsim-101490
+    - taxsim-101706
+    - taxsim-101924
+    - taxsim-102086
+    - taxsim-102377
+    - taxsim-103421
+    - taxsim-103486
+    - taxsim-103576
+    - taxsim-103908
+    - taxsim-103909
+    - taxsim-103972
+    - taxsim-104039
+    - taxsim-104328
+    - taxsim-104331
+    - taxsim-104697
+    - taxsim-104730
+    - taxsim-105328
+    - taxsim-105358
+    - taxsim-105480
+    - taxsim-105933
+    - taxsim-105959
+    - taxsim-106155
+    - taxsim-106500
+    - taxsim-106701
+    - taxsim-106718
+    - taxsim-106867
+    - taxsim-107256
+    - taxsim-107499
+    - taxsim-107517
+    - taxsim-107791
+    - taxsim-107800
+    - taxsim-107861
+    - taxsim-108001
+    - taxsim-108174
+    - taxsim-108476
+    - taxsim-108740
+    - taxsim-108865
+    - taxsim-109122
+    - taxsim-109450
+    - taxsim-109575
+    - taxsim-109714
+    - taxsim-109721
+    - taxsim-109785
+    - taxsim-109892
+    - taxsim-110376
+    - taxsim-110718
+    - taxsim-111062
+    - taxsim-111211
+    - taxsim-111606
+    - taxsim-111616
+    - taxsim-111668
+    - taxsim-112172
+    - taxsim-112347
+    - taxsim-56306
+    - taxsim-56459
+    - taxsim-56704
+    - taxsim-56744
+    - taxsim-56991
+    - taxsim-57015
+    - taxsim-57120
+    - taxsim-57773
+    - taxsim-58718
+    - taxsim-58745
+    - taxsim-58771
+    - taxsim-59000
+    - taxsim-59093
+    - taxsim-59101
+    - taxsim-59294
+    - taxsim-59382
+    - taxsim-60035
+    - taxsim-60296
+    - taxsim-60559
+    - taxsim-60584
+    - taxsim-60754
+    - taxsim-60918
+    - taxsim-61056
+    - taxsim-61092
+    - taxsim-61248
+    - taxsim-61312
+    - taxsim-61396
+    - taxsim-61630
+    - taxsim-61819
+    - taxsim-62038
+    - taxsim-62585
+    - taxsim-62703
+    - taxsim-62739
+    - taxsim-63408
+    - taxsim-63653
+    - taxsim-63857
+    - taxsim-63862
+    - taxsim-64514
+    - taxsim-64578
+    - taxsim-64644
+    - taxsim-64690
+    - taxsim-64705
+    - taxsim-64870
+    - taxsim-64925
+    - taxsim-64984
+    - taxsim-65147
+    - taxsim-65695
+    - taxsim-65715
+    - taxsim-65919
+    - taxsim-66481
+    - taxsim-66516
+    - taxsim-66574
+    - taxsim-66627
+    - taxsim-66642
+    - taxsim-66814
+    - taxsim-66912
+    - taxsim-66982
+    - taxsim-67016
+    - taxsim-67069
+    - taxsim-67444
+    - taxsim-67520
+    - taxsim-67756
+    - taxsim-68089
+    - taxsim-68450
+    - taxsim-68465
+    - taxsim-68875
+    - taxsim-69032
+    - taxsim-69142
+    - taxsim-69199
+    - taxsim-69408
+    - taxsim-69561
+    - taxsim-69806
+    - taxsim-70224
+    - taxsim-70256
+    - taxsim-70305
+    - taxsim-70417
+    - taxsim-70525
+    - taxsim-70648
+    - taxsim-70721
+    - taxsim-70887
+    - taxsim-70928
+    - taxsim-70966
+    - taxsim-71207
+    - taxsim-71326
+    - taxsim-71510
+    - taxsim-71577
+    - taxsim-71627
+    - taxsim-71722
+    - taxsim-71963
+    - taxsim-71971
+    - taxsim-72212
+    - taxsim-72457
+    - taxsim-72736
+    - taxsim-73019
+    - taxsim-73026
+    - taxsim-73198
+    - taxsim-73292
+    - taxsim-74039
+    - taxsim-74203
+    - taxsim-74436
+    - taxsim-74785
+    - taxsim-74868
+    - taxsim-74960
+    - taxsim-74973
+    - taxsim-75101
+    - taxsim-75260
+    - taxsim-75373
+    - taxsim-75644
+    - taxsim-75881
+    - taxsim-75884
+    - taxsim-76074
+    - taxsim-76218
+    - taxsim-76916
+    - taxsim-76933
+    - taxsim-76972
+    - taxsim-77057
+    - taxsim-77206
+    - taxsim-77342
+    - taxsim-77479
+    - taxsim-77511
+    - taxsim-77960
+    - taxsim-78013
+    - taxsim-78434
+    - taxsim-78463
+    - taxsim-78893
+    - taxsim-79155
+    - taxsim-79196
+    - taxsim-79241
+    - taxsim-79351
+    - taxsim-79604
+    - taxsim-79987
+    - taxsim-80123
+    - taxsim-80951
+    - taxsim-81001
+    - taxsim-81092
+    - taxsim-81202
+    - taxsim-81218
+    - taxsim-81477
+    - taxsim-81602
+    - taxsim-81637
+    - taxsim-81748
+    - taxsim-81811
+    - taxsim-82172
+    - taxsim-82201
+    - taxsim-82365
+    - taxsim-82420
+    - taxsim-82793
+    - taxsim-82862
+    - taxsim-82973
+    - taxsim-83116
+    - taxsim-83317
+    - taxsim-83385
+    - taxsim-83761
+    - taxsim-84101
+    - taxsim-84319
+    - taxsim-84793
+    - taxsim-84804
+    - taxsim-85019
+    - taxsim-85137
+    - taxsim-85259
+    - taxsim-85302
+    - taxsim-85417
+    - taxsim-85557
+    - taxsim-85602
+    - taxsim-85694
+    - taxsim-86193
+    - taxsim-86359
+    - taxsim-86420
+    - taxsim-86630
+    - taxsim-86725
+    - taxsim-86974
+    - taxsim-87233
+    - taxsim-87522
+    - taxsim-87743
+    - taxsim-87935
+    - taxsim-87997
+    - taxsim-88375
+    - taxsim-88461
+    - taxsim-88750
+    - taxsim-88966
+    - taxsim-89171
+    - taxsim-89247
+    - taxsim-89332
+    - taxsim-89460
+    - taxsim-89597
+    - taxsim-89678
+    - taxsim-89711
+    - taxsim-89770
+    - taxsim-89794
+    - taxsim-90006
+    - taxsim-90293
+    - taxsim-90421
+    - taxsim-90592
+    - taxsim-90644
+    - taxsim-91002
+    - taxsim-91435
+    - taxsim-91463
+    - taxsim-91735
+    - taxsim-91762
+    - taxsim-91997
+    - taxsim-92282
+    - taxsim-92469
+    - taxsim-92499
+    - taxsim-92558
+    - taxsim-93046
+    - taxsim-93402
+    - taxsim-93673
+    - taxsim-94091
+    - taxsim-94246
+    - taxsim-94831
+    - taxsim-95019
+    - taxsim-95072
+    - taxsim-95077
+    - taxsim-95266
+    - taxsim-95455
+    - taxsim-95652
+    - taxsim-95839
+    - taxsim-95856
+    - taxsim-95983
+    - taxsim-96032
+    - taxsim-96181
+    - taxsim-96392
+    - taxsim-96497
+    - taxsim-96605
+    - taxsim-96697
+    - taxsim-97028
+    - taxsim-97125
+    - taxsim-97137
+    - taxsim-97676
+    - taxsim-97695
+    - taxsim-97891
+    - taxsim-98035
+    - taxsim-98688
+    - taxsim-99098
+    - taxsim-99215
+    - taxsim-99219
+    - taxsim-99377
+    - taxsim-99383
+    - taxsim-99833
+    - taxsim-99841
+    - taxsim-99922
+    - taxsim-99997
+  disposition: explained_residual
+  attribution: input
+  evidence:
+    mechanism: 'NBER taxsimtest input 25 documents "scorp Passive business income not subject to FICA,
+      SSTB, SECA or QBID phaseout but subject to the passive loss limitation." NBER taxsim35 input 31
+      instead documents "scorp Active S-Corp income (is SSTB)." Both pages were checked 2026-09-25. Pavel
+      Makarchuk (@PavelMakarchuk), 2026-07-05, #1053: "This depends on what `taxsimtest` assumes about
+      material participation for S-corp income." #1053 documents the open NIIT question; draft PR #1199
+      is not a settled correction. On every selected row the liability gap lies in NIIT within $1; AGI
+      agrees within $1; TAXSIM''s NIIT equals 3.8% of AGI over the $200,000 threshold for mstat 1 within
+      $1 (the 26 U.S.C. 1411(a)(1)(B) limit); and the emulator''s NIIT is below that limit while its implied
+      net investment income plus scorp reaches it (checked by the recipe and tests/test_taxsim_emulator_dispositions.py).
+      Counting scorp as passive therefore moves NIIT to the limit. This assumes the engines agree on the
+      other net investment income; it records the documented input ambiguity, not which treatment is right.'
+    row_arithmetic:
+    - *id001
+    - *id002
+    - *id003
+    - expression: facts.mstat
+      equals: 1
+      tolerance: 0
+    - expression: left_aux.v10 - right_aux.v10
+      equals: 0
+      tolerance: 1
+    - expression: right_aux.niit - 0.038 * (right_aux.v10 - 200000)
+      equals: 0
+      tolerance: 1
+    sources:
+    - https://taxsim.nber.org/taxsimtest/
+    - https://taxsim.nber.org/taxsim35/
+    - https://www.law.cornell.edu/uscode/text/26/1411
+  linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/issues/1053
+  expires_on_source_change: true
+  selector_binding:
+    units: 303
+    rows_sha256: f260efdf8c917ccedd53e16e89c42591c433d3eb40bd1b39f8fcfa2ffc1323db
+  oracle_binding:
+    taxsim_binary_sha256:
+    - 8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059
+- id: niit-scorp-at-cap-joint
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
     - taxsim-100025
     - taxsim-100061
-    - taxsim-100068
-    - taxsim-100072
     - taxsim-100104
     - taxsim-100149
     - taxsim-100167
@@ -557,8 +950,6 @@ entries:
     - taxsim-100227
     - taxsim-100266
     - taxsim-100287
-    - taxsim-100335
-    - taxsim-100347
     - taxsim-100360
     - taxsim-100390
     - taxsim-100479
@@ -566,57 +957,34 @@ entries:
     - taxsim-100515
     - taxsim-100532
     - taxsim-100571
-    - taxsim-100579
     - taxsim-100608
-    - taxsim-100610
-    - taxsim-100634
     - taxsim-100699
-    - taxsim-100702
-    - taxsim-100715
     - taxsim-100725
     - taxsim-100732
     - taxsim-100803
     - taxsim-100908
-    - taxsim-100943
     - taxsim-101026
     - taxsim-101053
     - taxsim-101055
-    - taxsim-101061
     - taxsim-101098
-    - taxsim-101119
     - taxsim-101148
-    - taxsim-101155
-    - taxsim-101189
     - taxsim-101252
     - taxsim-101279
     - taxsim-101327
     - taxsim-101396
     - taxsim-101432
     - taxsim-101467
-    - taxsim-101472
-    - taxsim-101490
     - taxsim-101501
-    - taxsim-101504
-    - taxsim-101617
     - taxsim-101655
-    - taxsim-101706
-    - taxsim-101776
     - taxsim-101823
-    - taxsim-101892
-    - taxsim-101924
     - taxsim-102003
-    - taxsim-102066
     - taxsim-102077
-    - taxsim-102086
-    - taxsim-102090
     - taxsim-102171
     - taxsim-102180
     - taxsim-102250
     - taxsim-102308
     - taxsim-102310
-    - taxsim-102312
     - taxsim-102373
-    - taxsim-102377
     - taxsim-102414
     - taxsim-102472
     - taxsim-102498
@@ -636,15 +1004,11 @@ entries:
     - taxsim-102865
     - taxsim-102900
     - taxsim-102902
-    - taxsim-103033
     - taxsim-103040
     - taxsim-103061
     - taxsim-103075
-    - taxsim-103097
     - taxsim-103112
     - taxsim-103115
-    - taxsim-103121
-    - taxsim-103135
     - taxsim-103150
     - taxsim-103161
     - taxsim-103194
@@ -652,78 +1016,51 @@ entries:
     - taxsim-103216
     - taxsim-103227
     - taxsim-103259
-    - taxsim-103305
     - taxsim-103321
-    - taxsim-103360
     - taxsim-103380
-    - taxsim-103421
     - taxsim-103423
     - taxsim-103465
-    - taxsim-103486
     - taxsim-103512
     - taxsim-103529
     - taxsim-103543
-    - taxsim-103576
     - taxsim-103608
     - taxsim-103612
     - taxsim-103620
     - taxsim-103623
-    - taxsim-103632
     - taxsim-103646
     - taxsim-103648
     - taxsim-103687
-    - taxsim-103713
-    - taxsim-103722
     - taxsim-103728
     - taxsim-103740
     - taxsim-103757
     - taxsim-103829
     - taxsim-103842
     - taxsim-103887
-    - taxsim-103908
-    - taxsim-103909
-    - taxsim-103972
     - taxsim-104018
-    - taxsim-104039
     - taxsim-104107
-    - taxsim-104226
-    - taxsim-104248
-    - taxsim-104328
-    - taxsim-104331
     - taxsim-104366
     - taxsim-104441
-    - taxsim-104517
     - taxsim-104552
     - taxsim-104571
     - taxsim-104587
     - taxsim-104613
     - taxsim-104650
     - taxsim-104673
-    - taxsim-104691
-    - taxsim-104697
-    - taxsim-104730
     - taxsim-104761
     - taxsim-104762
     - taxsim-104830
     - taxsim-104889
-    - taxsim-104965
     - taxsim-104977
     - taxsim-105010
     - taxsim-105027
-    - taxsim-105080
     - taxsim-105095
     - taxsim-105136
     - taxsim-105180
     - taxsim-105200
-    - taxsim-105328
-    - taxsim-105358
-    - taxsim-105376
     - taxsim-105381
-    - taxsim-105413
     - taxsim-105415
     - taxsim-105436
     - taxsim-105446
-    - taxsim-105480
     - taxsim-105485
     - taxsim-105490
     - taxsim-105528
@@ -731,55 +1068,36 @@ entries:
     - taxsim-105642
     - taxsim-105662
     - taxsim-105671
-    - taxsim-105707
     - taxsim-105725
     - taxsim-105854
     - taxsim-105863
     - taxsim-105888
     - taxsim-105928
-    - taxsim-105933
-    - taxsim-105959
     - taxsim-105998
-    - taxsim-106043
     - taxsim-106094
     - taxsim-106095
     - taxsim-106131
-    - taxsim-106155
     - taxsim-106175
     - taxsim-106210
-    - taxsim-106276
     - taxsim-106346
-    - taxsim-106384
     - taxsim-106405
-    - taxsim-106482
-    - taxsim-106500
     - taxsim-106533
     - taxsim-106547
-    - taxsim-106552
     - taxsim-106595
     - taxsim-106600
     - taxsim-106639
-    - taxsim-106701
-    - taxsim-106718
     - taxsim-106725
     - taxsim-106736
-    - taxsim-106746
     - taxsim-106782
     - taxsim-106821
-    - taxsim-106867
     - taxsim-106976
     - taxsim-106999
     - taxsim-107011
     - taxsim-107067
     - taxsim-107166
     - taxsim-107170
-    - taxsim-107214
-    - taxsim-107256
     - taxsim-107312
     - taxsim-107323
-    - taxsim-107497
-    - taxsim-107499
-    - taxsim-107517
     - taxsim-107578
     - taxsim-107608
     - taxsim-107615
@@ -788,55 +1106,35 @@ entries:
     - taxsim-107655
     - taxsim-107657
     - taxsim-107713
-    - taxsim-107791
-    - taxsim-107800
     - taxsim-107817
     - taxsim-107842
     - taxsim-107850
-    - taxsim-107861
     - taxsim-107873
     - taxsim-107883
     - taxsim-107899
     - taxsim-107916
-    - taxsim-107969
-    - taxsim-108001
-    - taxsim-108014
     - taxsim-108020
     - taxsim-108075
     - taxsim-108113
     - taxsim-108137
     - taxsim-108140
-    - taxsim-108174
     - taxsim-108263
-    - taxsim-108476
-    - taxsim-108511
     - taxsim-108549
-    - taxsim-108580
     - taxsim-108612
     - taxsim-108657
-    - taxsim-108671
     - taxsim-108702
     - taxsim-108708
     - taxsim-108718
-    - taxsim-108740
     - taxsim-108757
     - taxsim-108773
     - taxsim-108790
-    - taxsim-108832
-    - taxsim-108844
-    - taxsim-108865
-    - taxsim-108871
     - taxsim-108889
-    - taxsim-108901
     - taxsim-108953
     - taxsim-109000
     - taxsim-109108
-    - taxsim-109109
-    - taxsim-109122
     - taxsim-109162
     - taxsim-109177
     - taxsim-109186
-    - taxsim-109227
     - taxsim-109236
     - taxsim-109258
     - taxsim-109324
@@ -844,80 +1142,56 @@ entries:
     - taxsim-109442
     - taxsim-109443
     - taxsim-109448
-    - taxsim-109450
     - taxsim-109489
     - taxsim-109522
-    - taxsim-109575
     - taxsim-109685
     - taxsim-109693
     - taxsim-109695
-    - taxsim-109714
-    - taxsim-109721
     - taxsim-109746
     - taxsim-109767
-    - taxsim-109785
     - taxsim-109878
-    - taxsim-109892
     - taxsim-109907
-    - taxsim-109938
     - taxsim-109949
     - taxsim-109962
     - taxsim-109968
     - taxsim-109983
-    - taxsim-110010
     - taxsim-110015
-    - taxsim-110080
     - taxsim-110113
     - taxsim-110268
     - taxsim-110355
-    - taxsim-110366
-    - taxsim-110376
     - taxsim-110389
     - taxsim-110393
     - taxsim-110404
     - taxsim-110411
-    - taxsim-110413
     - taxsim-110447
     - taxsim-110471
-    - taxsim-110510
     - taxsim-110543
     - taxsim-110660
-    - taxsim-110718
     - taxsim-110734
     - taxsim-110762
-    - taxsim-110766
     - taxsim-110827
-    - taxsim-110855
     - taxsim-110904
     - taxsim-110951
     - taxsim-111037
     - taxsim-111054
     - taxsim-111058
     - taxsim-111060
-    - taxsim-111062
     - taxsim-111143
-    - taxsim-111170
     - taxsim-111207
-    - taxsim-111211
     - taxsim-111218
     - taxsim-111268
     - taxsim-111281
     - taxsim-111326
     - taxsim-111353
     - taxsim-111366
-    - taxsim-111367
     - taxsim-111385
     - taxsim-111406
     - taxsim-111410
-    - taxsim-111446
     - taxsim-111506
     - taxsim-111519
-    - taxsim-111606
     - taxsim-111609
-    - taxsim-111616
     - taxsim-111624
     - taxsim-111632
-    - taxsim-111668
     - taxsim-111692
     - taxsim-111760
     - taxsim-111800
@@ -928,14 +1202,8 @@ entries:
     - taxsim-111941
     - taxsim-111952
     - taxsim-111973
-    - taxsim-111995
-    - taxsim-112093
     - taxsim-112094
-    - taxsim-112122
-    - taxsim-112145
     - taxsim-112155
-    - taxsim-112172
-    - taxsim-112173
     - taxsim-112177
     - taxsim-112191
     - taxsim-112193
@@ -944,18 +1212,11 @@ entries:
     - taxsim-112256
     - taxsim-112301
     - taxsim-112316
-    - taxsim-112339
-    - taxsim-112347
     - taxsim-112351
     - taxsim-112436
-    - taxsim-112477
-    - taxsim-112482
     - taxsim-56299
-    - taxsim-56306
     - taxsim-56341
     - taxsim-56382
-    - taxsim-56388
-    - taxsim-56459
     - taxsim-56503
     - taxsim-56521
     - taxsim-56539
@@ -967,10 +1228,8 @@ entries:
     - taxsim-56639
     - taxsim-56658
     - taxsim-56700
-    - taxsim-56704
     - taxsim-56732
     - taxsim-56735
-    - taxsim-56744
     - taxsim-56758
     - taxsim-56843
     - taxsim-56856
@@ -980,48 +1239,33 @@ entries:
     - taxsim-56928
     - taxsim-56948
     - taxsim-56984
-    - taxsim-56991
-    - taxsim-57015
-    - taxsim-57025
     - taxsim-57049
     - taxsim-57064
-    - taxsim-57120
     - taxsim-57253
     - taxsim-57268
     - taxsim-57275
     - taxsim-57304
-    - taxsim-57360
     - taxsim-57420
     - taxsim-57520
-    - taxsim-57522
     - taxsim-57548
     - taxsim-57590
     - taxsim-57651
     - taxsim-57665
     - taxsim-57701
-    - taxsim-57773
     - taxsim-57779
     - taxsim-57819
-    - taxsim-57846
     - taxsim-57902
     - taxsim-57931
     - taxsim-57980
-    - taxsim-57996
-    - taxsim-58006
     - taxsim-58012
     - taxsim-58063
-    - taxsim-58098
     - taxsim-58102
     - taxsim-58274
-    - taxsim-58299
     - taxsim-58322
     - taxsim-58357
-    - taxsim-58363
     - taxsim-58384
     - taxsim-58474
-    - taxsim-58475
     - taxsim-58507
-    - taxsim-58521
     - taxsim-58558
     - taxsim-58602
     - taxsim-58632
@@ -1031,28 +1275,16 @@ entries:
     - taxsim-58666
     - taxsim-58694
     - taxsim-58704
-    - taxsim-58718
-    - taxsim-58745
     - taxsim-58765
-    - taxsim-58771
-    - taxsim-58914
     - taxsim-58939
-    - taxsim-58980
-    - taxsim-59000
     - taxsim-59018
     - taxsim-59022
-    - taxsim-59068
-    - taxsim-59093
-    - taxsim-59101
     - taxsim-59114
     - taxsim-59176
     - taxsim-59224
-    - taxsim-59294
     - taxsim-59305
     - taxsim-59322
     - taxsim-59335
-    - taxsim-59359
-    - taxsim-59382
     - taxsim-59418
     - taxsim-59535
     - taxsim-59537
@@ -1068,61 +1300,37 @@ entries:
     - taxsim-59856
     - taxsim-60010
     - taxsim-60014
-    - taxsim-60035
-    - taxsim-60130
     - taxsim-60288
     - taxsim-60290
-    - taxsim-60296
     - taxsim-60381
-    - taxsim-60397
     - taxsim-60406
-    - taxsim-60435
     - taxsim-60473
-    - taxsim-60559
-    - taxsim-60584
-    - taxsim-60591
-    - taxsim-60607
     - taxsim-60638
-    - taxsim-60754
-    - taxsim-60796
     - taxsim-60827
     - taxsim-60833
     - taxsim-60874
-    - taxsim-60918
     - taxsim-60956
     - taxsim-61043
-    - taxsim-61056
-    - taxsim-61092
     - taxsim-61185
     - taxsim-61192
     - taxsim-61205
     - taxsim-61217
-    - taxsim-61248
     - taxsim-61269
     - taxsim-61310
-    - taxsim-61312
     - taxsim-61353
-    - taxsim-61396
     - taxsim-61522
     - taxsim-61530
     - taxsim-61555
-    - taxsim-61574
     - taxsim-61575
-    - taxsim-61630
     - taxsim-61634
     - taxsim-61665
     - taxsim-61688
     - taxsim-61740
     - taxsim-61753
     - taxsim-61764
-    - taxsim-61819
     - taxsim-61835
-    - taxsim-61870
     - taxsim-61901
-    - taxsim-61959
     - taxsim-61962
-    - taxsim-62036
-    - taxsim-62038
     - taxsim-62069
     - taxsim-62085
     - taxsim-62096
@@ -1130,8 +1338,6 @@ entries:
     - taxsim-62132
     - taxsim-62155
     - taxsim-62170
-    - taxsim-62243
-    - taxsim-62271
     - taxsim-62274
     - taxsim-62306
     - taxsim-62344
@@ -1142,48 +1348,24 @@ entries:
     - taxsim-62534
     - taxsim-62546
     - taxsim-62570
-    - taxsim-62571
-    - taxsim-62585
-    - taxsim-62640
-    - taxsim-62703
-    - taxsim-62739
     - taxsim-62756
-    - taxsim-62805
     - taxsim-62811
     - taxsim-62860
     - taxsim-62869
-    - taxsim-62951
-    - taxsim-62958
-    - taxsim-62972
     - taxsim-62979
     - taxsim-62980
     - taxsim-63003
-    - taxsim-63062
-    - taxsim-63098
     - taxsim-63107
     - taxsim-63150
     - taxsim-63184
     - taxsim-63207
-    - taxsim-63255
     - taxsim-63301
     - taxsim-63390
-    - taxsim-63408
-    - taxsim-63418
     - taxsim-63443
-    - taxsim-63458
-    - taxsim-63479
     - taxsim-63484
-    - taxsim-63552
     - taxsim-63577
-    - taxsim-63578
-    - taxsim-63582
-    - taxsim-63602
-    - taxsim-63653
     - taxsim-63658
-    - taxsim-63684
     - taxsim-63837
-    - taxsim-63857
-    - taxsim-63862
     - taxsim-63886
     - taxsim-63912
     - taxsim-63914
@@ -1192,50 +1374,32 @@ entries:
     - taxsim-63968
     - taxsim-63985
     - taxsim-63995
-    - taxsim-64021
     - taxsim-64071
-    - taxsim-64097
     - taxsim-64130
-    - taxsim-64182
     - taxsim-64243
     - taxsim-64367
-    - taxsim-64446
     - taxsim-64458
     - taxsim-64476
     - taxsim-64504
     - taxsim-64511
-    - taxsim-64514
     - taxsim-64519
     - taxsim-64568
-    - taxsim-64578
-    - taxsim-64644
     - taxsim-64646
     - taxsim-64664
-    - taxsim-64690
-    - taxsim-64705
     - taxsim-64792
     - taxsim-64799
-    - taxsim-64861
-    - taxsim-64870
-    - taxsim-64883
-    - taxsim-64925
     - taxsim-64927
     - taxsim-64982
-    - taxsim-64984
-    - taxsim-65080
     - taxsim-65096
     - taxsim-65114
-    - taxsim-65147
     - taxsim-65163
     - taxsim-65189
-    - taxsim-65267
     - taxsim-65291
     - taxsim-65295
     - taxsim-65299
     - taxsim-65330
     - taxsim-65332
     - taxsim-65363
-    - taxsim-65373
     - taxsim-65394
     - taxsim-65430
     - taxsim-65473
@@ -1245,16 +1409,12 @@ entries:
     - taxsim-65582
     - taxsim-65657
     - taxsim-65661
-    - taxsim-65675
     - taxsim-65678
-    - taxsim-65695
-    - taxsim-65715
     - taxsim-65750
     - taxsim-65769
     - taxsim-65865
     - taxsim-65868
     - taxsim-65871
-    - taxsim-65919
     - taxsim-65950
     - taxsim-65978
     - taxsim-66014
@@ -1264,26 +1424,19 @@ entries:
     - taxsim-66143
     - taxsim-66185
     - taxsim-66254
-    - taxsim-66276
     - taxsim-66315
     - taxsim-66320
-    - taxsim-66349
     - taxsim-66361
     - taxsim-66367
     - taxsim-66375
     - taxsim-66402
     - taxsim-66433
-    - taxsim-66481
-    - taxsim-66516
     - taxsim-66518
     - taxsim-66544
     - taxsim-66551
     - taxsim-66554
     - taxsim-66555
-    - taxsim-66574
-    - taxsim-66627
     - taxsim-66632
-    - taxsim-66642
     - taxsim-66672
     - taxsim-66680
     - taxsim-66709
@@ -1292,36 +1445,22 @@ entries:
     - taxsim-66752
     - taxsim-66759
     - taxsim-66795
-    - taxsim-66814
     - taxsim-66821
     - taxsim-66833
     - taxsim-66862
-    - taxsim-66912
-    - taxsim-66957
-    - taxsim-66982
     - taxsim-66991
     - taxsim-66998
-    - taxsim-67016
-    - taxsim-67069
-    - taxsim-67084
     - taxsim-67196
     - taxsim-67198
-    - taxsim-67234
     - taxsim-67302
     - taxsim-67310
     - taxsim-67362
     - taxsim-67385
     - taxsim-67401
     - taxsim-67431
-    - taxsim-67444
-    - taxsim-67479
-    - taxsim-67520
-    - taxsim-67562
     - taxsim-67582
     - taxsim-67651
     - taxsim-67712
-    - taxsim-67714
-    - taxsim-67756
     - taxsim-67811
     - taxsim-67848
     - taxsim-67856
@@ -1329,70 +1468,47 @@ entries:
     - taxsim-67973
     - taxsim-68037
     - taxsim-68038
-    - taxsim-68047
-    - taxsim-68089
     - taxsim-68100
     - taxsim-68102
     - taxsim-68136
-    - taxsim-68181
     - taxsim-68183
     - taxsim-68200
     - taxsim-68204
     - taxsim-68239
-    - taxsim-68307
     - taxsim-68399
     - taxsim-68446
-    - taxsim-68450
-    - taxsim-68465
     - taxsim-68524
     - taxsim-68552
     - taxsim-68557
     - taxsim-68613
     - taxsim-68616
     - taxsim-68654
-    - taxsim-68744
-    - taxsim-68745
     - taxsim-68770
     - taxsim-68780
-    - taxsim-68811
     - taxsim-68819
-    - taxsim-68859
-    - taxsim-68875
-    - taxsim-68887
-    - taxsim-68929
     - taxsim-68944
     - taxsim-68957
     - taxsim-69010
     - taxsim-69016
-    - taxsim-69032
     - taxsim-69080
     - taxsim-69094
     - taxsim-69121
-    - taxsim-69142
     - taxsim-69193
-    - taxsim-69199
     - taxsim-69204
-    - taxsim-69329
     - taxsim-69399
-    - taxsim-69408
     - taxsim-69410
-    - taxsim-69461
     - taxsim-69509
     - taxsim-69522
     - taxsim-69538
-    - taxsim-69561
     - taxsim-69611
     - taxsim-69642
     - taxsim-69656
     - taxsim-69698
     - taxsim-69702
-    - taxsim-69773
     - taxsim-69775
-    - taxsim-69806
     - taxsim-69831
     - taxsim-69922
     - taxsim-69980
-    - taxsim-69983
     - taxsim-70003
     - taxsim-70040
     - taxsim-70069
@@ -1402,70 +1518,40 @@ entries:
     - taxsim-70133
     - taxsim-70197
     - taxsim-70204
-    - taxsim-70224
-    - taxsim-70256
     - taxsim-70272
     - taxsim-70299
-    - taxsim-70305
     - taxsim-70313
-    - taxsim-70417
-    - taxsim-70525
     - taxsim-70532
     - taxsim-70574
     - taxsim-70592
-    - taxsim-70612
     - taxsim-70616
-    - taxsim-70648
     - taxsim-70683
     - taxsim-70709
-    - taxsim-70721
-    - taxsim-70773
     - taxsim-70774
     - taxsim-70813
     - taxsim-70843
-    - taxsim-70873
-    - taxsim-70887
-    - taxsim-70897
     - taxsim-70920
     - taxsim-70922
     - taxsim-70924
-    - taxsim-70928
-    - taxsim-70966
     - taxsim-70982
     - taxsim-71032
     - taxsim-71054
     - taxsim-71079
-    - taxsim-71084
-    - taxsim-71089
     - taxsim-71107
     - taxsim-71115
-    - taxsim-71207
-    - taxsim-71326
     - taxsim-71346
     - taxsim-71373
     - taxsim-71401
-    - taxsim-71453
-    - taxsim-71484
-    - taxsim-71486
-    - taxsim-71510
-    - taxsim-71577
     - taxsim-71581
-    - taxsim-71627
-    - taxsim-71642
     - taxsim-71673
-    - taxsim-71722
     - taxsim-71771
     - taxsim-71786
     - taxsim-71798
-    - taxsim-71837
-    - taxsim-71863
     - taxsim-71886
     - taxsim-71890
     - taxsim-71896
     - taxsim-71903
     - taxsim-71912
-    - taxsim-71963
-    - taxsim-71971
     - taxsim-71989
     - taxsim-71996
     - taxsim-72010
@@ -1474,12 +1560,9 @@ entries:
     - taxsim-72109
     - taxsim-72165
     - taxsim-72192
-    - taxsim-72212
     - taxsim-72297
     - taxsim-72386
     - taxsim-72439
-    - taxsim-72447
-    - taxsim-72457
     - taxsim-72476
     - taxsim-72549
     - taxsim-72598
@@ -1488,32 +1571,22 @@ entries:
     - taxsim-72653
     - taxsim-72658
     - taxsim-72704
-    - taxsim-72736
     - taxsim-72763
     - taxsim-72797
     - taxsim-72811
     - taxsim-72902
     - taxsim-72950
-    - taxsim-72960
     - taxsim-72962
     - taxsim-72966
     - taxsim-72977
     - taxsim-73000
-    - taxsim-73019
-    - taxsim-73026
     - taxsim-73031
-    - taxsim-73085
     - taxsim-73177
     - taxsim-73179
-    - taxsim-73198
-    - taxsim-73266
-    - taxsim-73292
     - taxsim-73358
     - taxsim-73487
-    - taxsim-73490
     - taxsim-73493
     - taxsim-73523
-    - taxsim-73552
     - taxsim-73603
     - taxsim-73621
     - taxsim-73671
@@ -1522,19 +1595,14 @@ entries:
     - taxsim-73780
     - taxsim-73849
     - taxsim-73930
-    - taxsim-73933
     - taxsim-73980
-    - taxsim-74039
     - taxsim-74118
-    - taxsim-74203
     - taxsim-74208
     - taxsim-74222
     - taxsim-74233
     - taxsim-74300
     - taxsim-74318
     - taxsim-74354
-    - taxsim-74370
-    - taxsim-74436
     - taxsim-74481
     - taxsim-74500
     - taxsim-74530
@@ -1542,64 +1610,42 @@ entries:
     - taxsim-74617
     - taxsim-74723
     - taxsim-74743
-    - taxsim-74785
     - taxsim-74787
     - taxsim-74841
-    - taxsim-74861
-    - taxsim-74868
     - taxsim-74914
     - taxsim-74956
-    - taxsim-74960
-    - taxsim-74973
-    - taxsim-74997
     - taxsim-75008
     - taxsim-75041
     - taxsim-75052
-    - taxsim-75101
-    - taxsim-75145
     - taxsim-75221
     - taxsim-75250
-    - taxsim-75260
     - taxsim-75301
     - taxsim-75351
-    - taxsim-75373
     - taxsim-75387
     - taxsim-75393
-    - taxsim-75415
     - taxsim-75429
     - taxsim-75447
     - taxsim-75460
     - taxsim-75485
-    - taxsim-75526
     - taxsim-75547
-    - taxsim-75556
     - taxsim-75565
-    - taxsim-75644
     - taxsim-75753
     - taxsim-75757
     - taxsim-75807
     - taxsim-75869
-    - taxsim-75881
-    - taxsim-75884
     - taxsim-75913
-    - taxsim-75951
     - taxsim-75964
     - taxsim-75993
     - taxsim-76073
-    - taxsim-76074
     - taxsim-76079
     - taxsim-76100
     - taxsim-76137
     - taxsim-76140
     - taxsim-76150
-    - taxsim-76218
     - taxsim-76231
     - taxsim-76288
     - taxsim-76293
-    - taxsim-76320
     - taxsim-76325
-    - taxsim-76377
-    - taxsim-76397
     - taxsim-76432
     - taxsim-76450
     - taxsim-76451
@@ -1608,43 +1654,27 @@ entries:
     - taxsim-76621
     - taxsim-76753
     - taxsim-76784
-    - taxsim-76789
-    - taxsim-76916
-    - taxsim-76933
-    - taxsim-76972
-    - taxsim-77057
     - taxsim-77205
-    - taxsim-77206
     - taxsim-77215
-    - taxsim-77342
     - taxsim-77343
     - taxsim-77453
     - taxsim-77464
-    - taxsim-77479
-    - taxsim-77511
     - taxsim-77519
-    - taxsim-77529
     - taxsim-77605
     - taxsim-77645
     - taxsim-77665
     - taxsim-77782
     - taxsim-77830
-    - taxsim-77837
     - taxsim-77860
     - taxsim-77862
-    - taxsim-77960
     - taxsim-77983
     - taxsim-77991
-    - taxsim-78013
     - taxsim-78103
     - taxsim-78140
     - taxsim-78144
     - taxsim-78361
     - taxsim-78416
-    - taxsim-78434
-    - taxsim-78463
     - taxsim-78626
-    - taxsim-78721
     - taxsim-78737
     - taxsim-78743
     - taxsim-78747
@@ -1652,39 +1682,25 @@ entries:
     - taxsim-78815
     - taxsim-78819
     - taxsim-78829
-    - taxsim-78837
     - taxsim-78840
-    - taxsim-78893
-    - taxsim-78898
     - taxsim-79023
-    - taxsim-79053
     - taxsim-79060
     - taxsim-79111
-    - taxsim-79155
-    - taxsim-79196
     - taxsim-79204
-    - taxsim-79241
     - taxsim-79315
-    - taxsim-79351
-    - taxsim-79429
     - taxsim-79471
-    - taxsim-79604
     - taxsim-79706
     - taxsim-79712
     - taxsim-79714
     - taxsim-79715
-    - taxsim-79743
     - taxsim-79834
-    - taxsim-79845
     - taxsim-79869
     - taxsim-79895
     - taxsim-79902
     - taxsim-79964
     - taxsim-79979
-    - taxsim-79987
     - taxsim-80000
     - taxsim-80051
-    - taxsim-80123
     - taxsim-80159
     - taxsim-80193
     - taxsim-80194
@@ -1695,127 +1711,80 @@ entries:
     - taxsim-80313
     - taxsim-80322
     - taxsim-80335
-    - taxsim-80465
     - taxsim-80472
     - taxsim-80515
-    - taxsim-80561
     - taxsim-80646
     - taxsim-80674
     - taxsim-80677
     - taxsim-80778
     - taxsim-80793
-    - taxsim-80801
-    - taxsim-80811
     - taxsim-80838
     - taxsim-80872
     - taxsim-80878
     - taxsim-80887
     - taxsim-80933
-    - taxsim-80951
-    - taxsim-80984
-    - taxsim-81001
     - taxsim-81011
-    - taxsim-81092
     - taxsim-81134
     - taxsim-81174
     - taxsim-81194
     - taxsim-81197
-    - taxsim-81202
-    - taxsim-81218
-    - taxsim-81263
     - taxsim-81313
     - taxsim-81402
     - taxsim-81428
-    - taxsim-81477
     - taxsim-81524
     - taxsim-81562
-    - taxsim-81602
     - taxsim-81626
-    - taxsim-81637
-    - taxsim-81642
     - taxsim-81654
-    - taxsim-81748
     - taxsim-81764
     - taxsim-81791
-    - taxsim-81811
-    - taxsim-81821
     - taxsim-81824
-    - taxsim-81896
     - taxsim-81928
     - taxsim-81935
     - taxsim-81964
     - taxsim-81996
-    - taxsim-82049
     - taxsim-82054
     - taxsim-82094
-    - taxsim-82107
     - taxsim-82121
     - taxsim-82124
-    - taxsim-82137
-    - taxsim-82172
-    - taxsim-82201
     - taxsim-82213
-    - taxsim-82236
-    - taxsim-82243
     - taxsim-82259
     - taxsim-82355
-    - taxsim-82365
-    - taxsim-82379
     - taxsim-82387
-    - taxsim-82420
     - taxsim-82440
     - taxsim-82451
     - taxsim-82597
     - taxsim-82609
-    - taxsim-82675
-    - taxsim-82720
     - taxsim-82747
     - taxsim-82779
-    - taxsim-82786
-    - taxsim-82793
     - taxsim-82835
-    - taxsim-82862
     - taxsim-82863
     - taxsim-82929
     - taxsim-82932
     - taxsim-82937
-    - taxsim-82973
     - taxsim-83002
     - taxsim-83069
-    - taxsim-83079
-    - taxsim-83116
     - taxsim-83133
     - taxsim-83195
-    - taxsim-83222
     - taxsim-83237
     - taxsim-83240
     - taxsim-83301
-    - taxsim-83317
     - taxsim-83362
-    - taxsim-83385
     - taxsim-83438
     - taxsim-83569
     - taxsim-83584
-    - taxsim-83761
-    - taxsim-83800
     - taxsim-83862
     - taxsim-83957
     - taxsim-83967
     - taxsim-84012
     - taxsim-84033
     - taxsim-84070
-    - taxsim-84101
     - taxsim-84114
     - taxsim-84151
     - taxsim-84196
     - taxsim-84205
-    - taxsim-84248
     - taxsim-84251
-    - taxsim-84260
     - taxsim-84268
     - taxsim-84304
-    - taxsim-84313
-    - taxsim-84319
     - taxsim-84383
     - taxsim-84385
     - taxsim-84412
@@ -1833,247 +1802,160 @@ entries:
     - taxsim-84643
     - taxsim-84753
     - taxsim-84774
-    - taxsim-84793
-    - taxsim-84804
     - taxsim-84894
     - taxsim-84914
-    - taxsim-84924
-    - taxsim-84954
     - taxsim-84957
     - taxsim-84989
     - taxsim-84990
     - taxsim-85006
-    - taxsim-85019
     - taxsim-85023
     - taxsim-85102
-    - taxsim-85137
     - taxsim-85151
-    - taxsim-85236
-    - taxsim-85259
     - taxsim-85269
     - taxsim-85292
     - taxsim-85296
-    - taxsim-85302
     - taxsim-85374
     - taxsim-85384
     - taxsim-85389
-    - taxsim-85417
     - taxsim-85457
     - taxsim-85483
     - taxsim-85493
     - taxsim-85524
-    - taxsim-85557
-    - taxsim-85560
     - taxsim-85572
     - taxsim-85580
-    - taxsim-85602
     - taxsim-85640
     - taxsim-85647
-    - taxsim-85694
     - taxsim-85734
     - taxsim-85735
     - taxsim-85736
     - taxsim-85764
     - taxsim-85804
-    - taxsim-85811
     - taxsim-85828
     - taxsim-85850
-    - taxsim-85865
     - taxsim-85877
     - taxsim-85889
     - taxsim-85928
     - taxsim-85941
-    - taxsim-86010
-    - taxsim-86016
     - taxsim-86027
     - taxsim-86075
     - taxsim-86081
-    - taxsim-86100
     - taxsim-86165
-    - taxsim-86193
-    - taxsim-86247
     - taxsim-86265
     - taxsim-86266
-    - taxsim-86359
-    - taxsim-86420
     - taxsim-86430
     - taxsim-86439
     - taxsim-86444
     - taxsim-86558
     - taxsim-86559
     - taxsim-86582
-    - taxsim-86588
     - taxsim-86603
-    - taxsim-86630
-    - taxsim-86725
     - taxsim-86738
     - taxsim-86742
-    - taxsim-86787
-    - taxsim-86816
-    - taxsim-86817
     - taxsim-86851
-    - taxsim-86865
     - taxsim-86867
-    - taxsim-86974
     - taxsim-86999
     - taxsim-87010
-    - taxsim-87126
     - taxsim-87135
     - taxsim-87165
-    - taxsim-87181
     - taxsim-87187
-    - taxsim-87233
-    - taxsim-87240
     - taxsim-87284
     - taxsim-87306
     - taxsim-87335
-    - taxsim-87359
     - taxsim-87381
     - taxsim-87414
     - taxsim-87420
-    - taxsim-87440
     - taxsim-87451
     - taxsim-87477
     - taxsim-87496
-    - taxsim-87522
     - taxsim-87584
     - taxsim-87672
     - taxsim-87682
     - taxsim-87688
-    - taxsim-87718
-    - taxsim-87743
     - taxsim-87780
     - taxsim-87795
     - taxsim-87829
     - taxsim-87922
-    - taxsim-87935
     - taxsim-87969
     - taxsim-87984
     - taxsim-87990
-    - taxsim-87997
     - taxsim-88004
     - taxsim-88094
     - taxsim-88117
     - taxsim-88271
-    - taxsim-88330
-    - taxsim-88375
-    - taxsim-88385
     - taxsim-88396
-    - taxsim-88461
     - taxsim-88486
     - taxsim-88492
     - taxsim-88515
     - taxsim-88516
     - taxsim-88527
-    - taxsim-88535
-    - taxsim-88600
     - taxsim-88663
     - taxsim-88669
     - taxsim-88727
-    - taxsim-88750
     - taxsim-88762
     - taxsim-88807
     - taxsim-88811
-    - taxsim-88887
     - taxsim-88908
-    - taxsim-88966
     - taxsim-88977
-    - taxsim-89008
-    - taxsim-89034
     - taxsim-89151
-    - taxsim-89165
     - taxsim-89170
-    - taxsim-89171
     - taxsim-89176
-    - taxsim-89247
     - taxsim-89248
     - taxsim-89326
     - taxsim-89327
-    - taxsim-89332
     - taxsim-89354
-    - taxsim-89368
     - taxsim-89403
     - taxsim-89434
     - taxsim-89435
     - taxsim-89456
-    - taxsim-89460
     - taxsim-89463
     - taxsim-89473
     - taxsim-89478
-    - taxsim-89511
     - taxsim-89515
-    - taxsim-89597
     - taxsim-89606
     - taxsim-89644
-    - taxsim-89678
-    - taxsim-89711
     - taxsim-89728
-    - taxsim-89735
     - taxsim-89759
-    - taxsim-89770
-    - taxsim-89782
     - taxsim-89793
-    - taxsim-89794
     - taxsim-89803
     - taxsim-89837
     - taxsim-89845
     - taxsim-89932
     - taxsim-89960
     - taxsim-89970
-    - taxsim-90006
     - taxsim-90120
     - taxsim-90122
     - taxsim-90206
-    - taxsim-90227
-    - taxsim-90245
-    - taxsim-90293
     - taxsim-90323
     - taxsim-90355
     - taxsim-90381
     - taxsim-90401
-    - taxsim-90421
     - taxsim-90428
     - taxsim-90465
     - taxsim-90486
     - taxsim-90547
     - taxsim-90549
     - taxsim-90553
-    - taxsim-90578
-    - taxsim-90592
     - taxsim-90606
-    - taxsim-90614
-    - taxsim-90620
     - taxsim-90639
-    - taxsim-90644
     - taxsim-90690
     - taxsim-90717
     - taxsim-90718
     - taxsim-90743
     - taxsim-90829
     - taxsim-90850
-    - taxsim-91002
     - taxsim-91005
     - taxsim-91093
     - taxsim-91109
     - taxsim-91119
     - taxsim-91160
-    - taxsim-91164
     - taxsim-91186
     - taxsim-91221
-    - taxsim-91263
-    - taxsim-91291
     - taxsim-91324
     - taxsim-91380
-    - taxsim-91435
-    - taxsim-91463
     - taxsim-91554
-    - taxsim-91589
     - taxsim-91668
-    - taxsim-91676
     - taxsim-91692
     - taxsim-91727
-    - taxsim-91735
-    - taxsim-91762
     - taxsim-91785
     - taxsim-91830
     - taxsim-91875
@@ -2081,55 +1963,35 @@ entries:
     - taxsim-91947
     - taxsim-91952
     - taxsim-91953
-    - taxsim-91997
-    - taxsim-92014
     - taxsim-92056
-    - taxsim-92102
-    - taxsim-92193
     - taxsim-92211
     - taxsim-92258
     - taxsim-92278
-    - taxsim-92282
     - taxsim-92419
     - taxsim-92445
-    - taxsim-92469
-    - taxsim-92499
-    - taxsim-92558
     - taxsim-92581
     - taxsim-92636
-    - taxsim-92730
-    - taxsim-92772
-    - taxsim-92783
     - taxsim-92801
     - taxsim-92839
-    - taxsim-92841
     - taxsim-93025
-    - taxsim-93046
-    - taxsim-93181
     - taxsim-93276
     - taxsim-93284
     - taxsim-93289
-    - taxsim-93295
     - taxsim-93298
     - taxsim-93299
-    - taxsim-93306
     - taxsim-93346
     - taxsim-93358
     - taxsim-93380
-    - taxsim-93402
     - taxsim-93430
     - taxsim-93655
     - taxsim-93664
-    - taxsim-93673
     - taxsim-93705
     - taxsim-93780
     - taxsim-93785
     - taxsim-93870
     - taxsim-93884
-    - taxsim-93968
     - taxsim-93989
     - taxsim-94013
-    - taxsim-94091
     - taxsim-94092
     - taxsim-94103
     - taxsim-94104
@@ -2138,7 +2000,6 @@ entries:
     - taxsim-94168
     - taxsim-94169
     - taxsim-94172
-    - taxsim-94246
     - taxsim-94270
     - taxsim-94296
     - taxsim-94317
@@ -2155,180 +2016,116 @@ entries:
     - taxsim-94639
     - taxsim-94662
     - taxsim-94676
-    - taxsim-94704
     - taxsim-94719
     - taxsim-94731
     - taxsim-94740
     - taxsim-94747
-    - taxsim-94831
     - taxsim-94890
     - taxsim-94911
     - taxsim-94960
-    - taxsim-94970
     - taxsim-94974
     - taxsim-94996
-    - taxsim-95019
     - taxsim-95069
     - taxsim-95071
-    - taxsim-95072
-    - taxsim-95077
-    - taxsim-95102
-    - taxsim-95226
-    - taxsim-95266
-    - taxsim-95307
     - taxsim-95342
     - taxsim-95362
     - taxsim-95393
     - taxsim-95401
-    - taxsim-95455
-    - taxsim-95456
     - taxsim-95610
     - taxsim-95640
-    - taxsim-95652
     - taxsim-95729
     - taxsim-95767
-    - taxsim-95791
-    - taxsim-95839
     - taxsim-95847
-    - taxsim-95856
     - taxsim-95874
     - taxsim-95913
-    - taxsim-95983
     - taxsim-95995
     - taxsim-95997
     - taxsim-96012
     - taxsim-96013
     - taxsim-96027
-    - taxsim-96032
     - taxsim-96033
     - taxsim-96081
-    - taxsim-96181
     - taxsim-96215
     - taxsim-96312
     - taxsim-96314
     - taxsim-96368
     - taxsim-96391
-    - taxsim-96392
     - taxsim-96402
     - taxsim-96405
     - taxsim-96475
     - taxsim-96480
-    - taxsim-96497
     - taxsim-96501
     - taxsim-96518
     - taxsim-96530
-    - taxsim-96605
-    - taxsim-96697
     - taxsim-96795
     - taxsim-96824
-    - taxsim-96856
     - taxsim-96997
     - taxsim-97006
     - taxsim-97018
-    - taxsim-97028
     - taxsim-97108
-    - taxsim-97125
-    - taxsim-97137
     - taxsim-97187
     - taxsim-97221
     - taxsim-97276
     - taxsim-97341
     - taxsim-97423
-    - taxsim-97476
     - taxsim-97477
     - taxsim-97494
-    - taxsim-97502
     - taxsim-97570
     - taxsim-97619
     - taxsim-97633
-    - taxsim-97676
-    - taxsim-97686
-    - taxsim-97695
-    - taxsim-97696
-    - taxsim-97719
-    - taxsim-97726
     - taxsim-97763
     - taxsim-97781
-    - taxsim-97807
     - taxsim-97837
     - taxsim-97840
-    - taxsim-97891
-    - taxsim-97898
     - taxsim-97919
     - taxsim-97996
     - taxsim-97998
     - taxsim-98014
     - taxsim-98021
-    - taxsim-98035
-    - taxsim-98068
     - taxsim-98077
-    - taxsim-98079
     - taxsim-98129
     - taxsim-98135
     - taxsim-98140
     - taxsim-98141
-    - taxsim-98197
-    - taxsim-98217
     - taxsim-98344
     - taxsim-98372
-    - taxsim-98424
-    - taxsim-98451
-    - taxsim-98503
-    - taxsim-98510
     - taxsim-98515
     - taxsim-98524
     - taxsim-98553
     - taxsim-98581
     - taxsim-98630
     - taxsim-98646
-    - taxsim-98688
     - taxsim-98756
     - taxsim-98798
     - taxsim-98912
-    - taxsim-98926
     - taxsim-98935
     - taxsim-98987
     - taxsim-99003
     - taxsim-99064
-    - taxsim-99098
     - taxsim-99104
     - taxsim-99114
     - taxsim-99125
     - taxsim-99129
-    - taxsim-99149
     - taxsim-99158
     - taxsim-99192
     - taxsim-99198
-    - taxsim-99205
-    - taxsim-99215
-    - taxsim-99219
     - taxsim-99241
-    - taxsim-99294
-    - taxsim-99298
     - taxsim-99305
     - taxsim-99315
     - taxsim-99363
-    - taxsim-99377
-    - taxsim-99383
     - taxsim-99386
     - taxsim-99570
     - taxsim-99598
     - taxsim-99601
-    - taxsim-99607
     - taxsim-99614
     - taxsim-99621
     - taxsim-99648
     - taxsim-99651
     - taxsim-99756
     - taxsim-99803
-    - taxsim-99833
-    - taxsim-99841
     - taxsim-99860
     - taxsim-99865
-    - taxsim-99922
-    - taxsim-99962
     - taxsim-99989
-    - taxsim-99997
   disposition: explained_residual
   attribution: input
   evidence:
@@ -2337,28 +2134,355 @@ entries:
       instead documents "scorp Active S-Corp income (is SSTB)." Both pages were checked 2026-09-25. Pavel
       Makarchuk (@PavelMakarchuk), 2026-07-05, #1053: "This depends on what `taxsimtest` assumes about
       material participation for S-corp income." #1053 documents the open NIIT question; draft PR #1199
-      is not a settled correction. The liability gap lies in NIIT within $1, and scorp is nonzero. This
-      class records the documented active/passive input ambiguity; the identity does not adjudicate legal
-      correctness or prove that every NIIT dollar is caused by scorp.'
+      is not a settled correction. On every selected row the liability gap lies in NIIT within $1; AGI
+      agrees within $1; TAXSIM''s NIIT equals 3.8% of AGI over the $250,000 threshold for mstat 2 within
+      $1 (the 26 U.S.C. 1411(a)(1)(B) limit); and the emulator''s NIIT is below that limit while its implied
+      net investment income plus scorp reaches it (checked by the recipe and tests/test_taxsim_emulator_dispositions.py).
+      Counting scorp as passive therefore moves NIIT to the limit. This assumes the engines agree on the
+      other net investment income; it records the documented input ambiguity, not which treatment is right.'
     row_arithmetic:
-    - expression: difference + right_aux.niit - left_aux.niit
+    - *id001
+    - *id002
+    - *id003
+    - expression: facts.mstat
+      equals: 2
+      tolerance: 0
+    - expression: left_aux.v10 - right_aux.v10
       equals: 0
       tolerance: 1
-    - &id001
-      expression: facts.scorp / facts.scorp
-      equals: 1
-      tolerance: 0
-    - expression: right_aux.addmed
+    - expression: right_aux.niit - 0.038 * (right_aux.v10 - 250000)
       equals: 0
-      tolerance: 0
+      tolerance: 1
     sources:
     - https://taxsim.nber.org/taxsimtest/
     - https://taxsim.nber.org/taxsim35/
+    - https://www.law.cornell.edu/uscode/text/26/1411
   linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/issues/1053
   expires_on_source_change: true
   selector_binding:
-    units: 1784
-    rows_sha256: 67fd5eafcc4eea193cdfd6e0290402f2ae48735460e65afa3a6c480f548d1eed
+    units: 1185
+    rows_sha256: aad994557ed0a42e3050129fb41a21213aa457b1095c235ea024d18dc5c5fa6a
+  oracle_binding:
+    taxsim_binary_sha256:
+    - 8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059
+- id: niit-scorp-unreconciled
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - taxsim-100068
+    - taxsim-100610
+    - taxsim-100715
+    - taxsim-100943
+    - taxsim-101061
+    - taxsim-101119
+    - taxsim-101155
+    - taxsim-101189
+    - taxsim-101504
+    - taxsim-101617
+    - taxsim-101776
+    - taxsim-101892
+    - taxsim-102066
+    - taxsim-102090
+    - taxsim-102312
+    - taxsim-103033
+    - taxsim-103097
+    - taxsim-103121
+    - taxsim-103135
+    - taxsim-103305
+    - taxsim-103360
+    - taxsim-103632
+    - taxsim-103713
+    - taxsim-103722
+    - taxsim-104226
+    - taxsim-104248
+    - taxsim-104517
+    - taxsim-104691
+    - taxsim-104965
+    - taxsim-105080
+    - taxsim-105376
+    - taxsim-105413
+    - taxsim-105707
+    - taxsim-106043
+    - taxsim-106276
+    - taxsim-106384
+    - taxsim-106482
+    - taxsim-106552
+    - taxsim-106746
+    - taxsim-107214
+    - taxsim-107497
+    - taxsim-107969
+    - taxsim-108014
+    - taxsim-108511
+    - taxsim-108580
+    - taxsim-108671
+    - taxsim-108832
+    - taxsim-108844
+    - taxsim-108871
+    - taxsim-108901
+    - taxsim-109109
+    - taxsim-109227
+    - taxsim-109938
+    - taxsim-110010
+    - taxsim-110080
+    - taxsim-110366
+    - taxsim-110413
+    - taxsim-110510
+    - taxsim-110766
+    - taxsim-110855
+    - taxsim-111995
+    - taxsim-112093
+    - taxsim-112122
+    - taxsim-112145
+    - taxsim-112173
+    - taxsim-112339
+    - taxsim-112477
+    - taxsim-112482
+    - taxsim-56388
+    - taxsim-57025
+    - taxsim-57360
+    - taxsim-57522
+    - taxsim-57846
+    - taxsim-57996
+    - taxsim-58006
+    - taxsim-58098
+    - taxsim-58299
+    - taxsim-58363
+    - taxsim-58475
+    - taxsim-58521
+    - taxsim-58914
+    - taxsim-58980
+    - taxsim-59068
+    - taxsim-59359
+    - taxsim-60130
+    - taxsim-60397
+    - taxsim-60435
+    - taxsim-60591
+    - taxsim-60607
+    - taxsim-60796
+    - taxsim-61574
+    - taxsim-61870
+    - taxsim-61959
+    - taxsim-62036
+    - taxsim-62243
+    - taxsim-62271
+    - taxsim-62571
+    - taxsim-62640
+    - taxsim-62805
+    - taxsim-62951
+    - taxsim-62958
+    - taxsim-62972
+    - taxsim-63062
+    - taxsim-63098
+    - taxsim-63255
+    - taxsim-63418
+    - taxsim-63458
+    - taxsim-63479
+    - taxsim-63552
+    - taxsim-63578
+    - taxsim-63582
+    - taxsim-63602
+    - taxsim-63684
+    - taxsim-64021
+    - taxsim-64097
+    - taxsim-64182
+    - taxsim-64446
+    - taxsim-64861
+    - taxsim-64883
+    - taxsim-65080
+    - taxsim-65267
+    - taxsim-65373
+    - taxsim-65675
+    - taxsim-66276
+    - taxsim-66349
+    - taxsim-66957
+    - taxsim-67084
+    - taxsim-67234
+    - taxsim-67479
+    - taxsim-67562
+    - taxsim-67714
+    - taxsim-68047
+    - taxsim-68181
+    - taxsim-68307
+    - taxsim-68744
+    - taxsim-68745
+    - taxsim-68811
+    - taxsim-68859
+    - taxsim-68887
+    - taxsim-68929
+    - taxsim-69329
+    - taxsim-69461
+    - taxsim-69773
+    - taxsim-69983
+    - taxsim-70612
+    - taxsim-70773
+    - taxsim-70873
+    - taxsim-70897
+    - taxsim-71084
+    - taxsim-71089
+    - taxsim-71453
+    - taxsim-71484
+    - taxsim-71486
+    - taxsim-71642
+    - taxsim-71837
+    - taxsim-71863
+    - taxsim-72447
+    - taxsim-72960
+    - taxsim-73085
+    - taxsim-73266
+    - taxsim-73490
+    - taxsim-73552
+    - taxsim-73933
+    - taxsim-74370
+    - taxsim-74861
+    - taxsim-74997
+    - taxsim-75145
+    - taxsim-75415
+    - taxsim-75526
+    - taxsim-75556
+    - taxsim-75951
+    - taxsim-76320
+    - taxsim-76377
+    - taxsim-76397
+    - taxsim-76789
+    - taxsim-77529
+    - taxsim-77837
+    - taxsim-78721
+    - taxsim-78837
+    - taxsim-78898
+    - taxsim-79053
+    - taxsim-79429
+    - taxsim-79743
+    - taxsim-79845
+    - taxsim-80465
+    - taxsim-80561
+    - taxsim-80801
+    - taxsim-80811
+    - taxsim-80984
+    - taxsim-81263
+    - taxsim-81642
+    - taxsim-81821
+    - taxsim-81896
+    - taxsim-82049
+    - taxsim-82107
+    - taxsim-82137
+    - taxsim-82236
+    - taxsim-82243
+    - taxsim-82379
+    - taxsim-82675
+    - taxsim-82720
+    - taxsim-82786
+    - taxsim-83079
+    - taxsim-83222
+    - taxsim-83800
+    - taxsim-84248
+    - taxsim-84260
+    - taxsim-84313
+    - taxsim-84924
+    - taxsim-84954
+    - taxsim-85236
+    - taxsim-85560
+    - taxsim-85811
+    - taxsim-85865
+    - taxsim-86010
+    - taxsim-86016
+    - taxsim-86100
+    - taxsim-86247
+    - taxsim-86588
+    - taxsim-86787
+    - taxsim-86816
+    - taxsim-86817
+    - taxsim-86865
+    - taxsim-87126
+    - taxsim-87181
+    - taxsim-87240
+    - taxsim-87359
+    - taxsim-87440
+    - taxsim-87718
+    - taxsim-88330
+    - taxsim-88385
+    - taxsim-88535
+    - taxsim-88600
+    - taxsim-88887
+    - taxsim-89008
+    - taxsim-89034
+    - taxsim-89165
+    - taxsim-89368
+    - taxsim-89511
+    - taxsim-89735
+    - taxsim-89782
+    - taxsim-90227
+    - taxsim-90245
+    - taxsim-90578
+    - taxsim-90614
+    - taxsim-90620
+    - taxsim-91164
+    - taxsim-91263
+    - taxsim-91291
+    - taxsim-91589
+    - taxsim-91676
+    - taxsim-92014
+    - taxsim-92102
+    - taxsim-92193
+    - taxsim-92730
+    - taxsim-92772
+    - taxsim-92783
+    - taxsim-92841
+    - taxsim-93181
+    - taxsim-93295
+    - taxsim-93306
+    - taxsim-93968
+    - taxsim-94704
+    - taxsim-94970
+    - taxsim-95102
+    - taxsim-95226
+    - taxsim-95307
+    - taxsim-95456
+    - taxsim-95791
+    - taxsim-96856
+    - taxsim-97476
+    - taxsim-97502
+    - taxsim-97686
+    - taxsim-97696
+    - taxsim-97719
+    - taxsim-97726
+    - taxsim-97807
+    - taxsim-97898
+    - taxsim-98068
+    - taxsim-98079
+    - taxsim-98197
+    - taxsim-98217
+    - taxsim-98424
+    - taxsim-98451
+    - taxsim-98503
+    - taxsim-98510
+    - taxsim-98926
+    - taxsim-99149
+    - taxsim-99205
+    - taxsim-99294
+    - taxsim-99298
+    - taxsim-99607
+    - taxsim-99962
+  disposition: unexplained
+  attribution: two_sided
+  evidence:
+    mechanism: 'The liability gap lies in NIIT within $1 and scorp is nonzero, but neither the uncapped
+      (3.8% of scorp) nor the at-limit reconciliation holds, so the active/passive convention alone does
+      not account for it. Possible causes, unverified: the engines'' AGI differs, or their other net investment
+      income differs (e.g. a state-tax allocation, #1226). Open; engine outputs do not establish the cause.'
+    row_arithmetic:
+    - *id001
+    - *id002
+    - *id003
+    sources:
+    - https://taxsim.nber.org/taxsimtest/
+    - https://taxsim.nber.org/taxsim35/
+    - https://www.law.cornell.edu/uscode/text/26/1411
+  linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/issues/1053
+  expires_on_source_change: true
+  selector_binding:
+    units: 293
+    rows_sha256: b1076df7f3b6b8db84837d0bea6f63a84e67136235b68d94080985209375fa01
   oracle_binding:
     taxsim_binary_sha256:
     - 8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059
@@ -10850,7 +10974,7 @@ entries:
     - expression: difference + right_aux.niit - left_aux.niit + right_aux.addmed
       equals: 0
       tolerance: 1
-    - *id001
+    - *id002
     sources:
     - https://github.com/PolicyEngine/policyengine-taxsim/issues/1225#issuecomment-5820033668
     - https://github.com/PolicyEngine/policyengine-taxsim/issues/1226
@@ -10964,7 +11088,7 @@ entries:
     - expression: difference + right_aux.niit - left_aux.niit
       equals: 0
       tolerance: 1
-    - &id002
+    - &id004
       expression: facts.scorp
       equals: 0
       tolerance: 0
@@ -14455,7 +14579,7 @@ entries:
     - expression: difference + right_aux.niit - left_aux.niit + right_aux.addmed
       equals: 0
       tolerance: 1
-    - *id002
+    - *id004
     sources:
     - https://github.com/PolicyEngine/policyengine-taxsim/issues/1225#issuecomment-5820033668
     - https://github.com/PolicyEngine/policyengine-taxsim/issues/1226

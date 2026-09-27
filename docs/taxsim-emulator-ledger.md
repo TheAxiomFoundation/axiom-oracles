@@ -256,11 +256,11 @@ unexplained mechanisms. The fixed count regression is
 <!-- BEGIN LEDGER COUNTS -->
 | Year | Comparisons | Raw match rate | Explained rate | Explained mismatches | Unexplained |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 2021 | 222,694 | 75.4821% | 83.2075% | 17,204 | 37,396 |
-| 2022 | 222,694 | 78.8283% | 86.5569% | 17,211 | 29,937 |
-| 2023 | 222,694 | 82.4418% | 85.4401% | 6,677 | 32,424 |
-| 2024 | 222,694 | 84.4324% | 90.0918% | 12,603 | 22,065 |
-| 2025 | 222,694 | 84.4522% | 89.7590% | 11,818 | 22,806 |
+| 2021 | 222,694 | 75.4821% | 83.0808% | 16,922 | 37,678 |
+| 2022 | 222,694 | 78.8283% | 86.4276% | 16,923 | 30,225 |
+| 2023 | 222,694 | 82.4418% | 85.3085% | 6,384 | 32,717 |
+| 2024 | 222,694 | 84.4325% | 86.4231% | 4,433 | 30,235 |
+| 2025 | 222,694 | 84.4522% | 86.2852% | 4,082 | 30,542 |
 <!-- END LEDGER COUNTS -->
 
 The following counts use the same entry IDs in each
@@ -269,7 +269,10 @@ The following counts use the same entry IDs in each
 | Entry ID | 2021 | 2022 | 2023 | 2024 | 2025 | Disposition / attribution |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | `addmed-in-fiitax` | 539 | 478 | 506 | — | — | upstream_engine_gap / taxsim |
-| `niit-scorp` | 1,793 | 1,618 | 1,784 | 9,669 | 9,127 | explained_residual / input |
+| `niit-scorp` | 3 | 3 | 3 | 93 | 174 | explained_residual / input |
+| `niit-scorp-at-cap-joint` | 1,203 | 1,188 | 1,185 | 1,184 | 1,015 | explained_residual / input |
+| `niit-scorp-at-cap-single` | 305 | 139 | 303 | 222 | 202 | explained_residual / input |
+| `niit-scorp-unreconciled` | 282 | 288 | 293 | 8,170 | 7,736 | unexplained / two_sided |
 | `niit-addmed-scorp` | 8,559 | 6,996 | 8,464 | — | — | unexplained / two_sided |
 | `niit-no-scorp` | 83 | 84 | 84 | 1,152 | 1,003 | unexplained / two_sided |
 | `niit-addmed-no-scorp` | 3,443 | 3,332 | 3,455 | — | — | unexplained / two_sided |
@@ -289,7 +292,9 @@ fiitax inclusion/exclusion convention. Amounts are dollars.
 | Entry ID | Selector recipe and checked row arithmetic |
 | --- | --- |
 | `addmed-in-fiitax` | Federal, 2021–23; `abs(N) <= .005`, `abs(D + A) <= 1`; both checked on every selected row. |
-| `niit-scorp` | Federal, nonzero `facts.scorp`, nonzero N, `abs(D + N) <= 1`; for 2021–23 also `A == 0`. `facts.scorp / facts.scorp == 1` checks nonzero input. |
+| `niit-scorp` | Federal, nonzero `facts.scorp`, nonzero N, `abs(D + N) <= 1`; for 2021–23 also `A == 0`; and `abs(N - .038*facts.scorp) <= 1`, the passive treatment's effect while neither NIIT is at the 26 U.S.C. 1411(a)(1)(B) limit. |
+| `niit-scorp-at-cap-<status>` | Same NIIT identity; `facts.mstat` fixed per entry; AGI (`v10`) agrees within $1; `right_aux.niit - .038*(right_aux.v10 - threshold)` within $1 (TAXSIM at the 1411(a)(1)(B) limit, thresholds $250,000 joint, $125,000 separate, $200,000 otherwise under 1411(b)); the emulator's NIIT is below that limit and its implied net investment income plus scorp reaches it (recipe-enforced, re-derived per row in `tests/test_taxsim_emulator_dispositions.py`). |
+| `niit-scorp-unreconciled` | Remaining nonzero-scorp rows with the NIIT identity where neither reconciliation holds; unexplained. |
 | `niit-no-scorp` | Same NIIT identity, `facts.scorp == 0`; for 2021–23 `A == 0`. |
 | `niit-addmed-scorp` | Remaining federal rows, nonzero scorp and N, `abs(D + N + A) <= 1`; mixed cause stays unexplained. |
 | `niit-addmed-no-scorp` | Same combined identity on remaining federal rows with scorp zero and N nonzero. |
@@ -299,12 +304,19 @@ fiitax inclusion/exclusion convention. Amounts are dollars.
 | `la-standard-deduction-omission` | Louisiana state 2025, left v34 in {12,500, 25,000}, state AGI gap within $1, `(right v36-left v36)-left v34` within $1, `D+.03*(right v36-left v36)` within $1. All four checks apply to every row. |
 | `la-other-state-residual` | Remaining Louisiana state 2025 rows; no shared reconciliation asserted. |
 
-The two `taxsim-emulator-probes` entries are `state-zero-sales-tax`
-(`case_id: taxsim-77`, one row, `D = -849.1484375`) and
-`texas-sales-tax-proxy` (`case_id: taxsim-78`, one row,
-`D = -302.4484375000029`). Both are `unexplained / two_sided`, pin left and
-right amounts, and check D within $0.000001. The constant difference checks
-preserve observations; they do not prove a sales-tax mechanism.
+The two `taxsim-emulator-probes` entries pin left and right amounts and
+check D within $0.000001:
+
+* `state-zero-sales-tax` (`case_id: taxsim-77`, `D = -849.1484375`) is
+  `upstream_engine_gap / policyengine`. The emulator simulated state 0 in
+  Texas and took a sales-tax deduction that TAXSIM's state 0 does not;
+  [pe-taxsim PR #1249](https://github.com/PolicyEngine/policyengine-taxsim/pull/1249)
+  (merged 2026-09-26) fixes the emulator to match. The probe ran before that
+  fix, so rerunning it on an emulator release that includes #1249 changes the
+  left value and expires this entry.
+* `texas-sales-tax-proxy` (`case_id: taxsim-78`, `D = -302.4484375000029`)
+  stays `unexplained / two_sided`: both engines take a sales-tax deduction at
+  Texas, in different amounts, and #1249 does not address it.
 
 Binary bindings use the exact selected-row union:
 
@@ -328,9 +340,15 @@ phaseout but subject to the passive loss limitation.” Its
 Active S-Corp income (is SSTB).” These are incompatible documented meanings.
 Pavel Makarchuk, July 5, 2026: “This depends on what `taxsimtest` assumes about
 material participation for S-corp income.” [Issue #1053](https://github.com/PolicyEngine/policyengine-taxsim/issues/1053).
-`niit-scorp` records an input-contract ambiguity, not a finding that either
-engine is legally right. Nonzero scorp and the NIIT identity do **not** prove
-that every NIIT dollar comes from that ambiguity. Keeping this class as
+The `niit-scorp` entries record an input-contract ambiguity, not a finding that
+either engine is legally right. A row counts as explained only when the
+passive treatment's own effect reconciles: TAXSIM's NIIT exceeds the emulator's
+by exactly 3.8% of scorp (neither at the limit), or TAXSIM sits exactly at the
+26 U.S.C. 1411(a)(1)(B) limit that adding scorp reaches. Both assume the engines
+agree on the other net investment income. Rows where the NIIT identity holds
+but neither reconciliation does stay `niit-scorp-unreconciled` (unexplained);
+in 2024–25 that is most of them, consistent with (but not shown to be) the
+state-tax allocation change in #1226. Keeping the reconciled classes as
 explained/input is a judgment call for the lane owner to confirm; mixed
 NIIT/AddMed classes remain unexplained. [Draft #1199](https://github.com/PolicyEngine/policyengine-taxsim/pull/1199)
 documents regressions and is not treated as a settled correction.
@@ -408,11 +426,11 @@ an explanation.
 <!-- BEGIN REMAINING CLUSTERS -->
 | Year | Bound unexplained | No ledger entry | Largest unbound state/concept populations | Largest rounded dollar clusters |
 | --- | ---: | ---: | --- | --- |
-| 2021 | 12,814 | 24,582 | NY state 2,775; CA state 2,191; AR state 1,445 | MI +$175: 250; MT -$2,477: 234; NY +$75: 161 |
-| 2022 | 10,963 | 18,974 | AR state 1,369; HI state 1,134; CA federal 791 | MI +$164: 258; WA +$700: 194; NY +$100: 156 |
-| 2023 | 12,512 | 19,912 | NY state 3,688; AR state 1,358; HI state 1,177 | NY -$200: 1,425; NY -$400: 654; MI +$111: 270 |
-| 2024 | 2,394 | 19,671 | AR state 1,384; SC state 1,015; HI state 939 | SC +$20: 950; OK -$22: 753; OR +$44: 435 |
-| 2025 | 2,758 | 20,048 | AR state 1,389; MI state 1,129; CA federal 936 | OK -$22: 753; KS +$16: 406; OH -$19: 313 |
+| 2021 | 13,096 | 24,582 | NY state 2,775; CA state 2,191; AR state 1,445 | MI +$175: 250; MT -$2,477: 234; NY +$75: 161 |
+| 2022 | 11,251 | 18,974 | AR state 1,369; HI state 1,134; CA federal 791 | MI +$164: 258; WA +$700: 194; NY +$100: 156 |
+| 2023 | 12,805 | 19,912 | NY state 3,688; AR state 1,358; HI state 1,177 | NY -$200: 1,425; NY -$400: 654; MI +$111: 270 |
+| 2024 | 10,564 | 19,671 | AR state 1,384; SC state 1,015; HI state 939 | SC +$20: 950; OK -$22: 753; OR +$44: 435 |
+| 2025 | 10,494 | 20,048 | AR state 1,389; MI state 1,129; CA federal 936 | OK -$22: 753; KS +$16: 406; OH -$19: 313 |
 
 All listed dollar clusters are state-liability differences, rounded to the
 nearest dollar for descriptive grouping only. Their selectors were not
@@ -423,10 +441,10 @@ in 2024/2025, after the county signature; they do not share its $1 identity.
 There are still substantial clusters as well as heterogeneous residuals.
 This is a seed ledger, not full closure: engine-output patterns alone do not
 justify expanding the explained numerator. The lane owner should confirm
-the input-ambiguity treatment of `niit-scorp`, seek the missing paired
-Alabama/state-zero evidence, and obtain observed Linux crash outcomes. The
+the input-ambiguity treatment of the reconciled `niit-scorp` classes, seek the missing paired
+Alabama state-0/state-1 evidence, and obtain observed Linux crash outcomes. The
 Maryland source/build hypothesis and no-S-corp allocation classes need
 independent evidence before any stronger attribution.
-The exact 9,847 suppressed-state CE count could not be verified in the cached
-#1219 body; #1204 says approximately 9,800. Neither number is used in a ledger
-selector or evidence arithmetic.
+pe-taxsim PR #1219's `docs/ce-pumd-comparison.md` counts 9,847
+suppressed-state CE records, and a #1204 comment rounds this to about 9,800.
+Neither number is used in a ledger selector or evidence arithmetic.
