@@ -10,6 +10,7 @@ and the workflow invariants the replay depends on.
 from __future__ import annotations
 
 import importlib.util
+import itertools
 import json
 from pathlib import Path
 
@@ -32,12 +33,17 @@ def _load_script():
 
 replay = _load_script()
 
-_CONCEPTS = [
-    "us:regulations/7-cfr/273/10#snap_total_gross_income",
-    "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
-    "us:regulations/7-cfr/273/10#snap_net_monthly_income",
-    "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
-]
+#: Colorado's six compared stages and their concept ids, as the committed
+#: co-snap-qc report lists them.
+_CO_STAGE_CONCEPTS = {
+    "gross_income": "us:regulations/7-cfr/273/10#snap_total_gross_income",
+    "standard_deduction": "us:policies/usda/snap/fy-2024-cola/deductions#snap_standard_deduction",
+    "shelter_deduction": "us:regulations/7-cfr/273/10#snap_excess_shelter_deduction_for_net_income",
+    "net_income": "us:regulations/7-cfr/273/10#snap_net_monthly_income",
+    "maximum_allotment": "us:policies/usda/snap/fy-2024-cola/maximum-allotments#snap_maximum_allotment",
+    "benefit": "us-co:regulations/10-ccr-2506-1/4.207.2#snap_allotment",
+}
+_CONCEPTS = list(_CO_STAGE_CONCEPTS.values())
 
 
 def _exact_report(case_count: int = 3, *, binary: str = "/engine/bin") -> dict:
@@ -184,6 +190,7 @@ def test_puf_cache_key_changes_with_the_pin(monkeypatch):
 
 
 def _check(report: dict, **kwargs) -> list[str]:
+    kwargs.setdefault("expect_concepts", _CO_STAGE_CONCEPTS)
     kwargs.setdefault("expect_rulespec_sha", SHA)
     kwargs.setdefault("expect_axiom_binary", Path("/engine/bin"))
     return replay.check_report(report, suite="co-snap-qc", **kwargs)
@@ -235,6 +242,64 @@ def test_uncompared_or_partially_compared_stage_fails():
 def test_empty_report_fails():
     failures = _check(_exact_report(case_count=0))
     assert "no cases were compared" in failures
+
+
+def test_report_without_concepts_or_aggregates_fails():
+    # Every case counted and none mismatched, but no stage was ever compared:
+    # "every stage compared on every case" must not pass vacuously.
+    report = _exact_report(case_count=856)
+    report["concepts"] = []
+    report["aggregates"] = []
+    failures = _check(report)
+    assert failures[0] == "the report lists no stage concepts, so no stage was compared"
+    assert failures[1:] == [
+        f"stage {stage} ({concept}) is not among the report's concepts"
+        for stage, concept in _CO_STAGE_CONCEPTS.items()
+    ]
+
+
+def test_report_without_concepts_fails_even_with_no_expectations():
+    report = _exact_report()
+    report["concepts"] = []
+    report["aggregates"] = []
+    failures = _check(report, expect_concepts={})
+    assert "the report lists no stage concepts, so no stage was compared" in failures
+    assert any("no expected benefit concept to require" in f for f in failures)
+
+
+def test_report_missing_the_benefit_concept_fails():
+    report = _exact_report()
+    benefit = _CO_STAGE_CONCEPTS["benefit"]
+    report["concepts"] = [row for row in report["concepts"] if row["id"] != benefit]
+    report["aggregates"] = [row for row in report["aggregates"] if row["concept"] != benefit]
+    assert _check(report) == [f"stage benefit ({benefit}) is not among the report's concepts"]
+
+
+def test_a_report_passes_only_when_it_compares_every_expected_stage():
+    # Exhaustive over all 64 subsets of Colorado's six stages: a report that
+    # lists and exactly compares only some of them never passes.
+    stages = list(_CO_STAGE_CONCEPTS)
+    for size in range(len(stages) + 1):
+        for kept in itertools.combinations(stages, size):
+            ids = {_CO_STAGE_CONCEPTS[stage] for stage in kept}
+            report = _exact_report()
+            report["concepts"] = [row for row in report["concepts"] if row["id"] in ids]
+            report["aggregates"] = [row for row in report["aggregates"] if row["concept"] in ids]
+            failures = _check(report)
+            assert (failures == []) == (len(kept) == len(stages)), (kept, failures)
+            assert len(failures) == (len(stages) - len(kept)) + (not kept), (kept, failures)
+
+
+def test_expected_stage_concepts_match_every_committed_report():
+    # Differential: the ids check requires, computed without running the
+    # replay, against the ids real replays wrote into the committed reports.
+    for name, config in replay.registered_suites().items():
+        expected = replay.expected_stage_concepts(config)
+        assert replay.BENEFIT_STAGE in expected, name
+        committed = json.loads(
+            (replay.DASHBOARD_DATA_DIR / config["dashboard"]["filename"]).read_text()
+        )
+        assert [row["id"] for row in committed["concepts"]] == list(expected.values()), name
 
 
 def test_wrong_rulespec_sha_or_engine_fails():
@@ -415,6 +480,31 @@ def test_check_fails_a_report_the_log_does_not_record_writing(tmp_path, capsys):
     out = capsys.readouterr().out
     assert code == 1
     assert "does not record writing axiom-snapqc-co-snap-0-2026-09-22.json" in out
+
+
+def test_check_command_fails_a_report_that_compared_no_stage(tmp_path, capsys):
+    report_dir = tmp_path / "reports"
+    report = _exact_report(case_count=856)
+    report["concepts"] = []
+    report["aggregates"] = []
+    _write_report(report_dir, report)
+    code = replay.main(
+        [
+            "check",
+            "co-snap-qc",
+            "--report-dir",
+            str(report_dir),
+            "--expect-rulespec-sha",
+            SHA,
+            "--expect-axiom-binary",
+            "/engine/bin",
+        ]
+    )
+    out = capsys.readouterr().out
+    assert code == 1
+    assert "co-snap-qc: FAIL" in out
+    assert "the report lists no stage concepts" in out
+    assert f"stage benefit ({_CO_STAGE_CONCEPTS['benefit']}) is not among" in out
 
 
 def test_check_refuses_a_missing_log(tmp_path):
