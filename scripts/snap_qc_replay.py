@@ -27,8 +27,8 @@ Subcommands:
   exact. That means no re-emission; given the replay log, the log records
   writing this report and no failure; at least one case, every one
   compared; zero benefit mismatches, error cases and error rows; every stage
-  concept the suite's replay compares (benefit included) listed, and each
-  compared on every case with no mismatch and no missing side; and the
+  concept the suite's replay compares (benefit included) listed once, and
+  each compared on every case with no mismatch and no missing side; and the
   expected rulespec-us SHA and engine binary. On failure it names the
   suite and every failed check, plus the first benefit-mismatch cases or
   the replay's exception. The report records no per-case rows for a stage
