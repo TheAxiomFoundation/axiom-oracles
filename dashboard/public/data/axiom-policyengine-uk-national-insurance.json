@@ -1853,7 +1853,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 924.6722718750002,
+        "difference": -25.129974218749794,
         "match": false
       },
       "case_id": "nic-2027-class4-98765p43-c4-maximum",
@@ -1862,8 +1862,8 @@
       "income": 98765.43,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2307.236328125,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3257.03857421875,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2027-28",
@@ -1876,7 +1876,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 924.6722718750002,
+        "difference": -25.129730078124794,
         "match": false
       },
       "case_id": "nic-2027-class4-98765p43-c4-total",
@@ -1885,8 +1885,8 @@
       "income": 98765.43,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2307.236328125,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3257.038330078125,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2027-28",
@@ -1944,7 +1944,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 1570.791071875,
+        "difference": -25.129826562500057,
         "match": false
       },
       "case_id": "nic-2027-class4-131071p37-c4-maximum",
@@ -1953,8 +1953,8 @@
       "income": 131071.37,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2307.236328125,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3903.1572265625,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2027-28",
@@ -1967,7 +1967,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 1570.791071875,
+        "difference": -25.129582421875057,
         "match": false
       },
       "case_id": "nic-2027-class4-131071p37-c4-total",
@@ -1976,8 +1976,8 @@
       "income": 131071.37,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2307.236328125,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3903.156982421875,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2027-28",
@@ -2693,7 +2693,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": -50.75890625000011,
+        "difference": -50.76330078125011,
         "match": false
       },
       "case_id": "nic-2028-class4-52301-c4-maximum",
@@ -2703,7 +2703,7 @@
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
       "pe_mechanism": "cpi_uprated_thresholds",
-      "policyengine": 2353.37890625,
+      "policyengine": 2353.38330078125,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2028-29",
@@ -2716,7 +2716,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": -50.75890625000011,
+        "difference": -50.76305664062511,
         "match": false
       },
       "case_id": "nic-2028-class4-52301-c4-total",
@@ -2726,7 +2726,7 @@
       "income_kind": "self_employment_income",
       "measure": "c4-total",
       "pe_mechanism": "cpi_uprated_thresholds",
-      "policyengine": 2353.37890625,
+      "policyengine": 2353.383056640625,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2028-29",
@@ -2784,7 +2784,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 211.86109374999978,
+        "difference": -50.76341796875022,
         "match": false
       },
       "case_id": "nic-2028-class4-65432-c4-maximum",
@@ -2793,8 +2793,8 @@
       "income": 65432,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2353.37890625,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 2616.00341796875,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2028-29",
@@ -2807,7 +2807,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 211.86109374999978,
+        "difference": -50.76317382812522,
         "match": false
       },
       "case_id": "nic-2028-class4-65432-c4-total",
@@ -2816,8 +2816,8 @@
       "income": 65432,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2353.37890625,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 2616.003173828125,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2028-29",
@@ -2875,7 +2875,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 878.5296937500002,
+        "difference": -50.763274999999794,
         "match": false
       },
       "case_id": "nic-2028-class4-98765p43-c4-maximum",
@@ -2884,8 +2884,8 @@
       "income": 98765.43,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2353.37890625,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3282.671875,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2028-29",
@@ -2898,7 +2898,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 878.5296937500002,
+        "difference": -50.763030859374794,
         "match": false
       },
       "case_id": "nic-2028-class4-98765p43-c4-total",
@@ -2907,8 +2907,8 @@
       "income": 98765.43,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2353.37890625,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3282.671630859375,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2028-29",
@@ -2966,7 +2966,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 1524.64849375,
+        "difference": -50.76337148437506,
         "match": false
       },
       "case_id": "nic-2028-class4-131071p37-c4-maximum",
@@ -2975,8 +2975,8 @@
       "income": 131071.37,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2353.37890625,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3928.790771484375,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2028-29",
@@ -2989,7 +2989,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 1524.64849375,
+        "difference": -50.76312734375006,
         "match": false
       },
       "case_id": "nic-2028-class4-131071p37-c4-total",
@@ -2998,8 +2998,8 @@
       "income": 131071.37,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2353.37890625,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3928.79052734375,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2028-29",
@@ -4919,7 +4919,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 783.4576722656252,
+        "difference": -103.5782164062498,
         "match": false
       },
       "case_id": "nic-2030-class4-98765p43-c4-maximum",
@@ -4928,8 +4928,8 @@
       "income": 98765.43,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2448.450927734375,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3335.48681640625,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2030-31",
@@ -4942,7 +4942,7 @@
         50270.0
       ],
       "axiom_vs_policyengine": {
-        "difference": 783.4576722656252,
+        "difference": -103.5782164062498,
         "match": false
       },
       "case_id": "nic-2030-class4-98765p43-c4-total",
@@ -4951,8 +4951,8 @@
       "income": 98765.43,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2448.450927734375,
+      "pe_mechanism": "cpi_uprated_thresholds",
+      "policyengine": 3335.48681640625,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-above-upper-limit",
       "tax_year": "2030-31",
@@ -5406,8 +5406,8 @@
         51275.32
       ],
       "axiom_vs_policyengine": {
-        "difference": 974.493671875,
-        "match": false
+        "difference": 1.9531250018189894e-05,
+        "match": true
       },
       "case_id": "nic-2027-float32-isolation-100000-c4-maximum",
       "compared_income": 100000,
@@ -5415,8 +5415,7 @@
       "income": 100000,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2307.236328125,
+      "policyengine": 3281.72998046875,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-float32-isolation",
       "supplied_profits_limits": [
@@ -5433,8 +5432,8 @@
         51275.32
       ],
       "axiom_vs_policyengine": {
-        "difference": 974.493671875,
-        "match": false
+        "difference": 0.0002636718750181899,
+        "match": true
       },
       "case_id": "nic-2027-float32-isolation-100000-c4-total",
       "compared_income": 100000,
@@ -5442,8 +5441,7 @@
       "income": 100000,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2307.236328125,
+      "policyengine": 3281.729736328125,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-float32-isolation",
       "supplied_profits_limits": [
@@ -5460,8 +5458,8 @@
         52300.78
       ],
       "axiom_vs_policyengine": {
-        "difference": 262.6242937500001,
-        "match": false
+        "difference": 2.617187510622898e-05,
+        "match": true
       },
       "case_id": "nic-2028-float32-isolation-65432-c4-maximum",
       "compared_income": 65432,
@@ -5469,8 +5467,7 @@
       "income": 65432,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2353.37890625,
+      "policyengine": 2616.003173828125,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-float32-isolation",
       "supplied_profits_limits": [
@@ -5487,8 +5484,8 @@
         52300.78
       ],
       "axiom_vs_policyengine": {
-        "difference": 262.6242937500001,
-        "match": false
+        "difference": 0.000270312500106229,
+        "match": true
       },
       "case_id": "nic-2028-float32-isolation-65432-c4-total",
       "compared_income": 65432,
@@ -5496,8 +5493,7 @@
       "income": 65432,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2353.37890625,
+      "policyengine": 2616.0029296875,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-float32-isolation",
       "supplied_profits_limits": [
@@ -5514,8 +5510,8 @@
         53346.68
       ],
       "axiom_vs_policyengine": {
-        "difference": 686.152749609375,
-        "match": false
+        "difference": -8.242187504947651e-05,
+        "match": true
       },
       "case_id": "nic-2029-float32-isolation-87654p32-c4-maximum",
       "compared_income": 87654.32,
@@ -5523,8 +5519,7 @@
       "income": 87654.32,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2400.441650390625,
+      "policyengine": 3086.594482421875,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-float32-isolation",
       "supplied_profits_limits": [
@@ -5541,8 +5536,8 @@
         53346.68
       ],
       "axiom_vs_policyengine": {
-        "difference": 686.152749609375,
-        "match": false
+        "difference": 0.0001617187499505235,
+        "match": true
       },
       "case_id": "nic-2029-float32-isolation-87654p32-c4-total",
       "compared_income": 87654.32,
@@ -5550,8 +5545,7 @@
       "income": 87654.32,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2400.441650390625,
+      "policyengine": 3086.59423828125,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-float32-isolation",
       "supplied_profits_limits": [
@@ -5568,8 +5562,8 @@
         54413.63
       ],
       "axiom_vs_policyengine": {
-        "difference": 4911.727428125,
-        "match": false
+        "difference": -0.0001109374998122803,
+        "match": true
       },
       "case_id": "nic-2030-float32-isolation-300000-c4-maximum",
       "compared_income": 300000,
@@ -5577,8 +5571,7 @@
       "income": 300000,
       "income_kind": "self_employment_income",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2448.451171875,
+      "policyengine": 7360.1787109375,
       "policyengine_variable": "ni_class_4_maximum",
       "scenario": "class-4-float32-isolation",
       "supplied_profits_limits": [
@@ -5595,8 +5588,8 @@
         54413.63
       ],
       "axiom_vs_policyengine": {
-        "difference": 4911.727428125,
-        "match": false
+        "difference": 0.0008656250001877197,
+        "match": true
       },
       "case_id": "nic-2030-float32-isolation-300000-c4-total",
       "compared_income": 300000,
@@ -5604,8 +5597,7 @@
       "income": 300000,
       "income_kind": "self_employment_income",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine": 2448.451171875,
+      "policyengine": 7360.177734375,
       "policyengine_variable": "ni_class_4",
       "scenario": "class-4-float32-isolation",
       "supplied_profits_limits": [
@@ -6110,11 +6102,11 @@
       "case_id": "nic-2027-class4-98765p43-c4-maximum",
       "compared_income": 98765.43,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 924.6722718750002,
+      "difference": -25.129974218749794,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2027-c4-maximum-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2027-c4-maximum-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -6125,7 +6117,7 @@
       "left": 3231.9086,
       "left_engine": "axiom",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 12821.380164235901,
@@ -6134,7 +6126,7 @@
         "upper_earnings_limit_weekly": 966.73,
         "upper_profits_limit": 51275.32067272385
       },
-      "right": 2307.236328125,
+      "right": 3257.03857421875,
       "right_engine": "policyengine",
       "validation_year": 2027
     },
@@ -6142,11 +6134,11 @@
       "case_id": "nic-2027-class4-98765p43-c4-total",
       "compared_income": 98765.43,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 924.6722718750002,
+      "difference": -25.129730078124794,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2027-c4-total-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2027-c4-total-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -6157,7 +6149,7 @@
       "left": 3231.9086,
       "left_engine": "axiom",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 12821.380164235901,
@@ -6166,7 +6158,7 @@
         "upper_earnings_limit_weekly": 966.73,
         "upper_profits_limit": 51275.32067272385
       },
-      "right": 2307.236328125,
+      "right": 3257.038330078125,
       "right_engine": "policyengine",
       "validation_year": 2027
     },
@@ -6206,11 +6198,11 @@
       "case_id": "nic-2027-class4-131071p37-c4-maximum",
       "compared_income": 131071.37,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 1570.791071875,
+      "difference": -25.129826562500057,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2027-c4-maximum-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2027-c4-maximum-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -6221,7 +6213,7 @@
       "left": 3878.0274,
       "left_engine": "axiom",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 12821.380164235901,
@@ -6230,7 +6222,7 @@
         "upper_earnings_limit_weekly": 966.73,
         "upper_profits_limit": 51275.32067272385
       },
-      "right": 2307.236328125,
+      "right": 3903.1572265625,
       "right_engine": "policyengine",
       "validation_year": 2027
     },
@@ -6238,11 +6230,11 @@
       "case_id": "nic-2027-class4-131071p37-c4-total",
       "compared_income": 131071.37,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 1570.791071875,
+      "difference": -25.129582421875057,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2027-c4-total-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2027-c4-total-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -6253,7 +6245,7 @@
       "left": 3878.0274,
       "left_engine": "axiom",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 12821.380164235901,
@@ -6262,7 +6254,7 @@
         "upper_earnings_limit_weekly": 966.73,
         "upper_profits_limit": 51275.32067272385
       },
-      "right": 2307.236328125,
+      "right": 3903.156982421875,
       "right_engine": "policyengine",
       "validation_year": 2027
     },
@@ -6878,7 +6870,7 @@
       "case_id": "nic-2028-class4-52301-c4-maximum",
       "compared_income": 52301,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": -50.75890625000011,
+      "difference": -50.76330078125011,
       "disposition": {
         "disposition": "upstream_engine_gap",
         "id": "nic-2028-c4-maximum-cpi-uprated-thresholds",
@@ -6902,7 +6894,7 @@
         "upper_earnings_limit_weekly": 986.0636796225112,
         "upper_profits_limit": 52300.77826939301
       },
-      "right": 2353.37890625,
+      "right": 2353.38330078125,
       "right_engine": "policyengine",
       "validation_year": 2028
     },
@@ -6910,7 +6902,7 @@
       "case_id": "nic-2028-class4-52301-c4-total",
       "compared_income": 52301,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": -50.75890625000011,
+      "difference": -50.76305664062511,
       "disposition": {
         "disposition": "upstream_engine_gap",
         "id": "nic-2028-c4-total-cpi-uprated-thresholds",
@@ -6934,7 +6926,7 @@
         "upper_earnings_limit_weekly": 986.0636796225112,
         "upper_profits_limit": 52300.77826939301
       },
-      "right": 2353.37890625,
+      "right": 2353.383056640625,
       "right_engine": "policyengine",
       "validation_year": 2028
     },
@@ -6974,11 +6966,11 @@
       "case_id": "nic-2028-class4-65432-c4-maximum",
       "compared_income": 65432,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 211.86109374999978,
+      "difference": -50.76341796875022,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2028-c4-maximum-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2028-c4-maximum-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -6989,7 +6981,7 @@
       "left": 2565.24,
       "left_engine": "axiom",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 13077.795560896562,
@@ -6998,7 +6990,7 @@
         "upper_earnings_limit_weekly": 986.0636796225112,
         "upper_profits_limit": 52300.77826939301
       },
-      "right": 2353.37890625,
+      "right": 2616.00341796875,
       "right_engine": "policyengine",
       "validation_year": 2028
     },
@@ -7006,11 +6998,11 @@
       "case_id": "nic-2028-class4-65432-c4-total",
       "compared_income": 65432,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 211.86109374999978,
+      "difference": -50.76317382812522,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2028-c4-total-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2028-c4-total-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -7021,7 +7013,7 @@
       "left": 2565.24,
       "left_engine": "axiom",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 13077.795560896562,
@@ -7030,7 +7022,7 @@
         "upper_earnings_limit_weekly": 986.0636796225112,
         "upper_profits_limit": 52300.77826939301
       },
-      "right": 2353.37890625,
+      "right": 2616.003173828125,
       "right_engine": "policyengine",
       "validation_year": 2028
     },
@@ -7070,11 +7062,11 @@
       "case_id": "nic-2028-class4-98765p43-c4-maximum",
       "compared_income": 98765.43,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 878.5296937500002,
+      "difference": -50.763274999999794,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2028-c4-maximum-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2028-c4-maximum-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -7085,7 +7077,7 @@
       "left": 3231.9086,
       "left_engine": "axiom",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 13077.795560896562,
@@ -7094,7 +7086,7 @@
         "upper_earnings_limit_weekly": 986.0636796225112,
         "upper_profits_limit": 52300.77826939301
       },
-      "right": 2353.37890625,
+      "right": 3282.671875,
       "right_engine": "policyengine",
       "validation_year": 2028
     },
@@ -7102,11 +7094,11 @@
       "case_id": "nic-2028-class4-98765p43-c4-total",
       "compared_income": 98765.43,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 878.5296937500002,
+      "difference": -50.763030859374794,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2028-c4-total-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2028-c4-total-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -7117,7 +7109,7 @@
       "left": 3231.9086,
       "left_engine": "axiom",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 13077.795560896562,
@@ -7126,7 +7118,7 @@
         "upper_earnings_limit_weekly": 986.0636796225112,
         "upper_profits_limit": 52300.77826939301
       },
-      "right": 2353.37890625,
+      "right": 3282.671630859375,
       "right_engine": "policyengine",
       "validation_year": 2028
     },
@@ -7166,11 +7158,11 @@
       "case_id": "nic-2028-class4-131071p37-c4-maximum",
       "compared_income": 131071.37,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 1524.64849375,
+      "difference": -50.76337148437506,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2028-c4-maximum-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2028-c4-maximum-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -7181,7 +7173,7 @@
       "left": 3878.0274,
       "left_engine": "axiom",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 13077.795560896562,
@@ -7190,7 +7182,7 @@
         "upper_earnings_limit_weekly": 986.0636796225112,
         "upper_profits_limit": 52300.77826939301
       },
-      "right": 2353.37890625,
+      "right": 3928.790771484375,
       "right_engine": "policyengine",
       "validation_year": 2028
     },
@@ -7198,11 +7190,11 @@
       "case_id": "nic-2028-class4-131071p37-c4-total",
       "compared_income": 131071.37,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 1524.64849375,
+      "difference": -50.76312734375006,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2028-c4-total-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2028-c4-total-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -7213,7 +7205,7 @@
       "left": 3878.0274,
       "left_engine": "axiom",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 13077.795560896562,
@@ -7222,7 +7214,7 @@
         "upper_earnings_limit_weekly": 986.0636796225112,
         "upper_profits_limit": 52300.77826939301
       },
-      "right": 2353.37890625,
+      "right": 3928.79052734375,
       "right_engine": "policyengine",
       "validation_year": 2028
     },
@@ -8990,11 +8982,11 @@
       "case_id": "nic-2030-class4-98765p43-c4-maximum",
       "compared_income": 98765.43,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 783.4576722656252,
+      "difference": -103.5782164062498,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2030-c4-maximum-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2030-c4-maximum-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -9005,7 +8997,7 @@
       "left": 3231.9086,
       "left_engine": "axiom",
       "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 13606.113508494018,
@@ -9014,7 +9006,7 @@
         "upper_earnings_limit_weekly": 1025.8987678063527,
         "upper_profits_limit": 54413.62975910853
       },
-      "right": 2448.450927734375,
+      "right": 3335.48681640625,
       "right_engine": "policyengine",
       "validation_year": 2030
     },
@@ -9022,11 +9014,11 @@
       "case_id": "nic-2030-class4-98765p43-c4-total",
       "compared_income": 98765.43,
       "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 783.4576722656252,
+      "difference": -103.5782164062498,
       "disposition": {
         "disposition": "upstream_engine_gap",
-        "id": "nic-2030-c4-total-float32-drops-additional-band",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
+        "id": "nic-2030-c4-total-cpi-uprated-thresholds",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1879"
       },
       "engines": [
         "axiom",
@@ -9037,7 +9029,7 @@
       "left": 3231.9086,
       "left_engine": "axiom",
       "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
+      "pe_mechanism": "cpi_uprated_thresholds",
       "policyengine_parameters": {
         "additional_class_4_percentage": 0.02,
         "lower_profits_limit": 13606.113508494018,
@@ -9046,7 +9038,7 @@
         "upper_earnings_limit_weekly": 1025.8987678063527,
         "upper_profits_limit": 54413.62975910853
       },
-      "right": 2448.450927734375,
+      "right": 3335.48681640625,
       "right_engine": "policyengine",
       "validation_year": 2030
     },
@@ -9293,309 +9285,21 @@
       "right": 553.1638793945312,
       "right_engine": "policyengine",
       "validation_year": 2026
-    },
-    {
-      "case_id": "nic-2027-float32-isolation-100000-c4-maximum",
-      "compared_income": 100000,
-      "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 974.493671875,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2027-c4-maximum-float32-isolation",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 100000,
-      "kind": "amount_difference",
-      "left": 3281.73,
-      "left_engine": "axiom",
-      "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 12821.38,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 241.73,
-        "upper_earnings_limit_weekly": 966.73,
-        "upper_profits_limit": 51275.32
-      },
-      "right": 2307.236328125,
-      "right_engine": "policyengine",
-      "supplied_profits_limits": [
-        12821.38,
-        51275.32
-      ],
-      "validation_year": 2027
-    },
-    {
-      "case_id": "nic-2027-float32-isolation-100000-c4-total",
-      "compared_income": 100000,
-      "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 974.493671875,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2027-c4-total-float32-isolation",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 100000,
-      "kind": "amount_difference",
-      "left": 3281.73,
-      "left_engine": "axiom",
-      "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 12821.38,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 241.73,
-        "upper_earnings_limit_weekly": 966.73,
-        "upper_profits_limit": 51275.32
-      },
-      "right": 2307.236328125,
-      "right_engine": "policyengine",
-      "supplied_profits_limits": [
-        12821.38,
-        51275.32
-      ],
-      "validation_year": 2027
-    },
-    {
-      "case_id": "nic-2028-float32-isolation-65432-c4-maximum",
-      "compared_income": 65432,
-      "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 262.6242937500001,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2028-c4-maximum-float32-isolation",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 65432,
-      "kind": "amount_difference",
-      "left": 2616.0032,
-      "left_engine": "axiom",
-      "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 13077.8,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 246.56436986040532,
-        "upper_earnings_limit_weekly": 986.0636796225112,
-        "upper_profits_limit": 52300.78
-      },
-      "right": 2353.37890625,
-      "right_engine": "policyengine",
-      "supplied_profits_limits": [
-        13077.8,
-        52300.78
-      ],
-      "validation_year": 2028
-    },
-    {
-      "case_id": "nic-2028-float32-isolation-65432-c4-total",
-      "compared_income": 65432,
-      "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 262.6242937500001,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2028-c4-total-float32-isolation",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 65432,
-      "kind": "amount_difference",
-      "left": 2616.0032,
-      "left_engine": "axiom",
-      "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 13077.8,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 246.56436986040532,
-        "upper_earnings_limit_weekly": 986.0636796225112,
-        "upper_profits_limit": 52300.78
-      },
-      "right": 2353.37890625,
-      "right_engine": "policyengine",
-      "supplied_profits_limits": [
-        13077.8,
-        52300.78
-      ],
-      "validation_year": 2028
-    },
-    {
-      "case_id": "nic-2029-float32-isolation-87654p32-c4-maximum",
-      "compared_income": 87654.32,
-      "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 686.152749609375,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2029-c4-maximum-float32-isolation",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 87654.32,
-      "kind": "amount_difference",
-      "left": 3086.5944,
-      "left_engine": "axiom",
-      "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 13339.32,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 251.49511067607608,
-        "upper_earnings_limit_weekly": 1005.7827673184257,
-        "upper_profits_limit": 53346.68
-      },
-      "right": 2400.441650390625,
-      "right_engine": "policyengine",
-      "supplied_profits_limits": [
-        13339.32,
-        53346.68
-      ],
-      "validation_year": 2029
-    },
-    {
-      "case_id": "nic-2029-float32-isolation-87654p32-c4-total",
-      "compared_income": 87654.32,
-      "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 686.152749609375,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2029-c4-total-float32-isolation",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 87654.32,
-      "kind": "amount_difference",
-      "left": 3086.5944,
-      "left_engine": "axiom",
-      "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 13339.32,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 251.49511067607608,
-        "upper_earnings_limit_weekly": 1005.7827673184257,
-        "upper_profits_limit": 53346.68
-      },
-      "right": 2400.441650390625,
-      "right_engine": "policyengine",
-      "supplied_profits_limits": [
-        13339.32,
-        53346.68
-      ],
-      "validation_year": 2029
-    },
-    {
-      "case_id": "nic-2030-float32-isolation-300000-c4-maximum",
-      "compared_income": 300000,
-      "concept": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum",
-      "difference": 4911.727428125,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2030-c4-maximum-float32-isolation",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 300000,
-      "kind": "amount_difference",
-      "left": 7360.1786,
-      "left_engine": "axiom",
-      "measure": "c4-maximum",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 13606.11,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 256.5250991919456,
-        "upper_earnings_limit_weekly": 1025.8987678063527,
-        "upper_profits_limit": 54413.63
-      },
-      "right": 2448.451171875,
-      "right_engine": "policyengine",
-      "supplied_profits_limits": [
-        13606.11,
-        54413.63
-      ],
-      "validation_year": 2030
-    },
-    {
-      "case_id": "nic-2030-float32-isolation-300000-c4-total",
-      "compared_income": 300000,
-      "concept": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum",
-      "difference": 4911.727428125,
-      "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "nic-2030-c4-total-float32-isolation",
-        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1878"
-      },
-      "engines": [
-        "axiom",
-        "policyengine"
-      ],
-      "income": 300000,
-      "kind": "amount_difference",
-      "left": 7360.1786,
-      "left_engine": "axiom",
-      "measure": "c4-total",
-      "pe_mechanism": "float32_drops_additional_band",
-      "policyengine_parameters": {
-        "additional_class_4_percentage": 0.02,
-        "lower_profits_limit": 13606.11,
-        "main_class_4_percentage": 0.06,
-        "primary_threshold_weekly": 256.5250991919456,
-        "upper_earnings_limit_weekly": 1025.8987678063527,
-        "upper_profits_limit": 54413.63
-      },
-      "right": 2448.451171875,
-      "right_engine": "policyengine",
-      "supplied_profits_limits": [
-        13606.11,
-        54413.63
-      ],
-      "validation_year": 2030
     }
   ],
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-09-27T12:23:40Z",
+    "generated_at": "2026-09-27T13:10:43Z",
     "generated_by": "scripts/run_comparison.py::uk-national-insurance-pe",
     "oracle": {
       "name": "policyengine",
-      "policyengine_uk": "2.102.0"
+      "policyengine_uk": "2.102.1"
     },
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "2e94aca579c6b6a445e9daf3f07cc887059a57a7"
+        "sha": "932390fa793d473cfdb0ff1b52a0b038cabeda41"
       }
     ],
     "run_kind": "manual",
@@ -9608,7 +9312,7 @@
   },
   "suite": "uk-national-insurance-pe",
   "summary": {
-    "axiom_vs_policyengine_match_rate": 53.076923,
+    "axiom_vs_policyengine_match_rate": 56.153846,
     "comparison_count": 260,
     "dispositioned": {
       "counts": {
@@ -9616,27 +9320,27 @@
         "bridge_artifact": 0,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 122
+        "upstream_engine_gap": 114
       },
       "dispositions_file": "dispositions/uk-national-insurance-pe.yaml",
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 53.076923,
+      "raw_match_rate": 56.153846,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 138,
-    "mismatch_count": 122,
+    "match_count": 146,
+    "mismatch_count": 114,
     "mismatches_by_concept": [
       {
-        "count": 36,
+        "count": 32,
         "value": "uk:regulations/uksi/2001/1004/100#class_4_annual_maximum"
       },
       {
-        "count": 29,
+        "count": 25,
         "value": "uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum"
       },
       {
@@ -9654,7 +9358,7 @@
     ],
     "mismatches_by_kind": [
       {
-        "count": 122,
+        "count": 114,
         "value": "amount_difference"
       }
     ],
@@ -9664,12 +9368,8 @@
         "value": "class_1_deducted_from_class_4_profits"
       },
       {
-        "count": 98,
+        "count": 110,
         "value": "cpi_uprated_thresholds"
-      },
-      {
-        "count": 20,
-        "value": "float32_drops_additional_band"
       }
     ],
     "mismatches_by_scenario": [
@@ -9708,18 +9408,14 @@
       {
         "count": 4,
         "value": "class-4-dual-earner"
-      },
-      {
-        "count": 8,
-        "value": "class-4-float32-isolation"
       }
     ],
-    "policyengine_matches": 138,
+    "policyengine_matches": 146,
     "weighted": {
       "comparison_weight": 260,
-      "match_rate": 53.076923,
-      "match_weight": 138,
-      "mismatch_weight": 122
+      "match_rate": 56.153846,
+      "match_weight": 146,
+      "mismatch_weight": 114
     }
   },
   "tolerance": {

@@ -353,14 +353,14 @@
       "suite": "uk-national-insurance-pe",
       "covered": true,
       "comparisons": 260,
-      "matches": 138,
-      "raw_match_rate": 53.076923,
+      "matches": 146,
+      "raw_match_rate": 56.153846,
       "explained_rate": 100,
       "unexplained": 0,
       "axiom_attributed_open": 0,
-      "oracle_attributed": 122,
+      "oracle_attributed": 114,
       "bridge_artifacts": 0,
-      "note": "Covered by the uk-national-insurance-pe case-grid suite for 2026-27 to 2030-31 (moved from uk-tax-benefits-efrs, whose NICs surfaces feed PolicyEngine's own thresholds, and for Class 4 its ni_class_4_main, into the Axiom modules, so they cannot detect a threshold defect). Here every Axiom threshold comes from Axiom modules; SSCBA 1992 s.15 limits and the regulation 100 maximum for Class 4, and the Class 1 pipeline's PT/UEL from the frozen personal allowance and basic rate limit. Against PolicyEngine-UK 2.102.0 the 2026-27 control year matches; 2027-28 onward diverges on PolicyEngine-UK#1879 (CPI-uprated thresholds) and PolicyEngine-UK#1878 (float32 drops the Class 4 additional band), and 2026-27 dual earners on PolicyEngine-UK#1885 (Class 4 on profits less Class 1), every row reconciled to the penny and dispositioned as upstream_engine_gap.",
+      "note": "Covered by the uk-national-insurance-pe case-grid suite for 2026-27 to 2030-31 (moved from uk-tax-benefits-efrs, whose NICs surfaces feed PolicyEngine's own thresholds, and for Class 4 its ni_class_4_main, into the Axiom modules, so they cannot detect a threshold defect). Here every Axiom threshold comes from Axiom modules; SSCBA 1992 s.15 limits and the regulation 100 maximum for Class 4, and the Class 1 pipeline's PT/UEL from the frozen personal allowance and basic rate limit. Pinned to PolicyEngine-UK 2.102.1, the first release with the PolicyEngine-UK#1878 float32 fix (PolicyEngine-UK PR 1884), whose isolation cases now match. The 2026-27 control year matches; 2027-28 onward diverges on PolicyEngine-UK#1879 (CPI-uprated thresholds), and 2026-27 dual earners on PolicyEngine-UK#1885 (Class 4 on profits less Class 1), every row reconciled to the penny and dispositioned as upstream_engine_gap.",
       "status": "conformant"
     },
     {

@@ -126,13 +126,15 @@ entries:
     case_ids:
     - nic-2027-class4-10000-c4-maximum
     - nic-2027-class4-12570-c4-maximum
+    - nic-2027-class4-131071p37-c4-maximum
     - nic-2027-class4-30000-c4-maximum
     - nic-2027-class4-50270-c4-maximum
     - nic-2027-class4-52301-c4-maximum
     - nic-2027-class4-65432-c4-maximum
+    - nic-2027-class4-98765p43-c4-maximum
   selector_binding:
-    units: 6
-    rows_sha256: 94f5ebcfb1d32f099a54deea8ddeffa7dd83da4e8ceba839d6dae950bf7e435b
+    units: 8
+    rows_sha256: baf408ddb5fe35e97a590ec33959882cc5b65a034f5945be200ac7f18771cbee
   kind: amount_difference
   disposition: upstream_engine_gap
   evidence:
@@ -160,92 +162,19 @@ entries:
     - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
   linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1879
   expires_on_source_change: true
-- id: nic-2027-c4-maximum-float32-drops-additional-band
-  concept: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2027-class4-131071p37-c4-maximum
-    - nic-2027-class4-98765p43-c4-maximum
-  selector_binding:
-    units: 2
-    rows_sha256: 840c66b093a39711870012e1147cd363209fa6979a094de81db552fb8dd80905
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: '2027-28: PolicyEngine CPI-uprates the Class 4 limits to non-round values (PolicyEngine-UK#1879),
-      and with those limits its float32 regulation 100 comparison takes case 1 for profits above the upper
-      limit. It returns step four (the main-band amount) alone, dropping the 2% additional band (PolicyEngine-UK#1878).
-      Axiom applies SSCBA 1992 s.15(3) at the unaltered 12,570 / 50,270 limits and regulation 100 case
-      2. The PolicyEngine value reproduces 0.06 x (its upper - lower limit) exactly.'
-    arithmetic:
-    - expression: 0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)
-      equals: 3878.0274
-      tolerance: 0.005
-    - expression: 0.06 * (51275.32067272385 - 12821.380164235901)
-      equals: 2307.236328
-      tolerance: 0.005
-    - expression: (0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)) - (0.06 * (51275.32067272385
-        - 12821.380164235901))
-      equals: 1570.791072
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
-    - https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
-- id: nic-2027-c4-maximum-float32-isolation
-  concept: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2027-float32-isolation-100000-c4-maximum
-  selector_binding:
-    units: 1
-    rows_sha256: af017b2e92f88e02fafa78e4ffc16ef701f3991b3786cace0f11285a64907496
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: 'Isolation case: both engines receive the same non-round Class 4 limits (PolicyEngine''s
-      own CPI-uprated 2027 values, supplied to PolicyEngine as a parameter reform and to the Axiom regulation
-      100 module as its limit inputs). With profits above the upper limit, regulation 100 case 2 applies
-      and the maximum is the full main-plus-additional amount, as Axiom returns. PolicyEngine''s ni_class_4_maximum
-      compares step four with the main-rate Class 4 in float32. Rounding makes the two equal amounts differ,
-      so it takes case 1 and returns step four (the main-band amount) alone, dropping the 2% additional
-      band from ni_class_4_maximum and ni_class_4.'
-    arithmetic:
-    - expression: 0.06 * (51275.32 - 12821.38) + 0.02 * (100000.0 - 51275.32)
-      equals: 3281.73
-      tolerance: 0.005
-    - expression: 0.06 * (51275.32 - 12821.38)
-      equals: 2307.236328
-      tolerance: 0.005
-    - expression: (0.06 * (51275.32 - 12821.38) + 0.02 * (100000.0 - 51275.32)) - (0.06 * (51275.32 -
-        12821.38))
-      equals: 974.493672
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
 - id: nic-2027-c4-total-cpi-uprated-thresholds
   concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
   case_selector:
     case_ids:
+    - nic-2027-class4-131071p37-c4-total
     - nic-2027-class4-30000-c4-total
     - nic-2027-class4-50270-c4-total
     - nic-2027-class4-52301-c4-total
     - nic-2027-class4-65432-c4-total
+    - nic-2027-class4-98765p43-c4-total
   selector_binding:
-    units: 4
-    rows_sha256: c8e16b7ca23651d3747512d30f2589a93736e064b8622fb403efae4ffdf507c4
+    units: 6
+    rows_sha256: 2c98505965f0e949e075d9461753cf431c8510ba33a1d5706bd74174fe8680a7
   kind: amount_difference
   disposition: upstream_engine_gap
   evidence:
@@ -255,14 +184,15 @@ entries:
       such order has been made, so Axiom applies the unaltered limits. The PolicyEngine value reproduces
       the statutory percentages and regulation 100 steps at its uprated limits.'
     arithmetic:
-    - expression: 0.06 * (30000.0 - 12570.0)
-      equals: 1045.8
+    - expression: 0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)
+      equals: 3878.0274
       tolerance: 0.005
-    - expression: 0.06 * (30000.0 - 12821.380164235901)
-      equals: 1030.717285
+    - expression: 0.06 * (51275.32067272385 - 12821.380164235901) + 0.02 * (131071.37 - 51275.32067272385)
+      equals: 3903.156982
       tolerance: 0.005
-    - expression: (0.06 * (30000.0 - 12570.0)) - (0.06 * (30000.0 - 12821.380164235901))
-      equals: 15.082715
+    - expression: (0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)) - (0.06 * (51275.32067272385
+        - 12821.380164235901) + 0.02 * (131071.37 - 51275.32067272385))
+      equals: -25.129582
       tolerance: 0.01
     upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1879
     sources:
@@ -272,81 +202,6 @@ entries:
     - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
     - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
   linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  expires_on_source_change: true
-- id: nic-2027-c4-total-float32-drops-additional-band
-  concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2027-class4-131071p37-c4-total
-    - nic-2027-class4-98765p43-c4-total
-  selector_binding:
-    units: 2
-    rows_sha256: 6e519bfc13392d7b3ac8226818b1f6c4b6719f0a0b40a293eab9afd7bcfc7e9b
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: '2027-28: PolicyEngine CPI-uprates the Class 4 limits to non-round values (PolicyEngine-UK#1879),
-      and with those limits its float32 regulation 100 comparison takes case 1 for profits above the upper
-      limit. It returns step four (the main-band amount) alone, dropping the 2% additional band (PolicyEngine-UK#1878).
-      Axiom applies SSCBA 1992 s.15(3) at the unaltered 12,570 / 50,270 limits and regulation 100 case
-      2. The PolicyEngine value reproduces 0.06 x (its upper - lower limit) exactly.'
-    arithmetic:
-    - expression: 0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)
-      equals: 3878.0274
-      tolerance: 0.005
-    - expression: 0.06 * (51275.32067272385 - 12821.380164235901)
-      equals: 2307.236328
-      tolerance: 0.005
-    - expression: (0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)) - (0.06 * (51275.32067272385
-        - 12821.380164235901))
-      equals: 1570.791072
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
-    - https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
-- id: nic-2027-c4-total-float32-isolation
-  concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2027-float32-isolation-100000-c4-total
-  selector_binding:
-    units: 1
-    rows_sha256: 2ccec832809a44c41845c820da40040356199cac0b18b1ac98af8033e5dd1277
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: 'Isolation case: both engines receive the same non-round Class 4 limits (PolicyEngine''s
-      own CPI-uprated 2027 values, supplied to PolicyEngine as a parameter reform and to the Axiom regulation
-      100 module as its limit inputs). With profits above the upper limit, regulation 100 case 2 applies
-      and the maximum is the full main-plus-additional amount, as Axiom returns. PolicyEngine''s ni_class_4_maximum
-      compares step four with the main-rate Class 4 in float32. Rounding makes the two equal amounts differ,
-      so it takes case 1 and returns step four (the main-band amount) alone, dropping the 2% additional
-      band from ni_class_4_maximum and ni_class_4.'
-    arithmetic:
-    - expression: 0.06 * (51275.32 - 12821.38) + 0.02 * (100000.0 - 51275.32)
-      equals: 3281.73
-      tolerance: 0.005
-    - expression: 0.06 * (51275.32 - 12821.38)
-      equals: 2307.236328
-      tolerance: 0.005
-    - expression: (0.06 * (51275.32 - 12821.38) + 0.02 * (100000.0 - 51275.32)) - (0.06 * (51275.32 -
-        12821.38))
-      equals: 974.493672
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
   expires_on_source_change: true
 - id: nic-2028-c1-additional-cpi-uprated-thresholds
   concept: uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline#uk_nic_pilot_additional_primary_contribution
@@ -477,12 +332,15 @@ entries:
     case_ids:
     - nic-2028-class4-10000-c4-maximum
     - nic-2028-class4-12570-c4-maximum
+    - nic-2028-class4-131071p37-c4-maximum
     - nic-2028-class4-30000-c4-maximum
     - nic-2028-class4-50270-c4-maximum
     - nic-2028-class4-52301-c4-maximum
+    - nic-2028-class4-65432-c4-maximum
+    - nic-2028-class4-98765p43-c4-maximum
   selector_binding:
-    units: 5
-    rows_sha256: fa7b8f624f659aa1d6a50a6e1dec61c98319719f6e6fd4039e84fe44f188c687
+    units: 8
+    rows_sha256: f815cce7213092f8d26c204e3f521eb2143bfefa5601050b4019cbf6c409361d
   kind: amount_difference
   disposition: upstream_engine_gap
   evidence:
@@ -510,91 +368,19 @@ entries:
     - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
   linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1879
   expires_on_source_change: true
-- id: nic-2028-c4-maximum-float32-drops-additional-band
-  concept: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2028-class4-131071p37-c4-maximum
-    - nic-2028-class4-65432-c4-maximum
-    - nic-2028-class4-98765p43-c4-maximum
-  selector_binding:
-    units: 3
-    rows_sha256: b418a1a8511b99e4e20cdb34d9b60d2a031192154a162a7515896070568473ec
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: '2028-29: PolicyEngine CPI-uprates the Class 4 limits to non-round values (PolicyEngine-UK#1879),
-      and with those limits its float32 regulation 100 comparison takes case 1 for profits above the upper
-      limit. It returns step four (the main-band amount) alone, dropping the 2% additional band (PolicyEngine-UK#1878).
-      Axiom applies SSCBA 1992 s.15(3) at the unaltered 12,570 / 50,270 limits and regulation 100 case
-      2. The PolicyEngine value reproduces 0.06 x (its upper - lower limit) exactly.'
-    arithmetic:
-    - expression: 0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)
-      equals: 3878.0274
-      tolerance: 0.005
-    - expression: 0.06 * (52300.77826939301 - 13077.795560896562)
-      equals: 2353.378906
-      tolerance: 0.005
-    - expression: (0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)) - (0.06 * (52300.77826939301
-        - 13077.795560896562))
-      equals: 1524.648494
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
-    - https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
-- id: nic-2028-c4-maximum-float32-isolation
-  concept: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2028-float32-isolation-65432-c4-maximum
-  selector_binding:
-    units: 1
-    rows_sha256: 25008ed5e89556a4508012c3f66f68882557bb2e0fdedae86844af845b2b54ac
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: 'Isolation case: both engines receive the same non-round Class 4 limits (PolicyEngine''s
-      own CPI-uprated 2028 values, supplied to PolicyEngine as a parameter reform and to the Axiom regulation
-      100 module as its limit inputs). With profits above the upper limit, regulation 100 case 2 applies
-      and the maximum is the full main-plus-additional amount, as Axiom returns. PolicyEngine''s ni_class_4_maximum
-      compares step four with the main-rate Class 4 in float32. Rounding makes the two equal amounts differ,
-      so it takes case 1 and returns step four (the main-band amount) alone, dropping the 2% additional
-      band from ni_class_4_maximum and ni_class_4.'
-    arithmetic:
-    - expression: 0.06 * (52300.78 - 13077.8) + 0.02 * (65432.0 - 52300.78)
-      equals: 2616.0032
-      tolerance: 0.005
-    - expression: 0.06 * (52300.78 - 13077.8)
-      equals: 2353.378906
-      tolerance: 0.005
-    - expression: (0.06 * (52300.78 - 13077.8) + 0.02 * (65432.0 - 52300.78)) - (0.06 * (52300.78 - 13077.8))
-      equals: 262.624294
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
 - id: nic-2028-c4-total-cpi-uprated-thresholds
   concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
   case_selector:
     case_ids:
+    - nic-2028-class4-131071p37-c4-total
     - nic-2028-class4-30000-c4-total
     - nic-2028-class4-50270-c4-total
     - nic-2028-class4-52301-c4-total
+    - nic-2028-class4-65432-c4-total
+    - nic-2028-class4-98765p43-c4-total
   selector_binding:
-    units: 3
-    rows_sha256: 5065ccd66dd469c4fa37019afc4162f697ddc09e628ab73aa6db7f311720240e
+    units: 6
+    rows_sha256: c3cbc51e2ba2a200602ba1f5cadad15691bf60d71e7956444c42f17fd1f48272
   kind: amount_difference
   disposition: upstream_engine_gap
   evidence:
@@ -604,14 +390,15 @@ entries:
       such order has been made, so Axiom applies the unaltered limits. The PolicyEngine value reproduces
       the statutory percentages and regulation 100 steps at its uprated limits.'
     arithmetic:
-    - expression: 0.06 * (30000.0 - 12570.0)
-      equals: 1045.8
+    - expression: 0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)
+      equals: 3878.0274
       tolerance: 0.005
-    - expression: 0.06 * (30000.0 - 13077.795560896562)
-      equals: 1015.332153
+    - expression: 0.06 * (52300.77826939301 - 13077.795560896562) + 0.02 * (131071.37 - 52300.77826939301)
+      equals: 3928.790527
       tolerance: 0.005
-    - expression: (0.06 * (30000.0 - 12570.0)) - (0.06 * (30000.0 - 13077.795560896562))
-      equals: 30.467847
+    - expression: (0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)) - (0.06 * (52300.77826939301
+        - 13077.795560896562) + 0.02 * (131071.37 - 52300.77826939301))
+      equals: -50.763127
       tolerance: 0.01
     upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1879
     sources:
@@ -621,81 +408,6 @@ entries:
     - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
     - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
   linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  expires_on_source_change: true
-- id: nic-2028-c4-total-float32-drops-additional-band
-  concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2028-class4-131071p37-c4-total
-    - nic-2028-class4-65432-c4-total
-    - nic-2028-class4-98765p43-c4-total
-  selector_binding:
-    units: 3
-    rows_sha256: 714b2d8bdd56116908bddc0b1a19ef997659bb1f0d0f612c153b5b67307d0eec
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: '2028-29: PolicyEngine CPI-uprates the Class 4 limits to non-round values (PolicyEngine-UK#1879),
-      and with those limits its float32 regulation 100 comparison takes case 1 for profits above the upper
-      limit. It returns step four (the main-band amount) alone, dropping the 2% additional band (PolicyEngine-UK#1878).
-      Axiom applies SSCBA 1992 s.15(3) at the unaltered 12,570 / 50,270 limits and regulation 100 case
-      2. The PolicyEngine value reproduces 0.06 x (its upper - lower limit) exactly.'
-    arithmetic:
-    - expression: 0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)
-      equals: 3878.0274
-      tolerance: 0.005
-    - expression: 0.06 * (52300.77826939301 - 13077.795560896562)
-      equals: 2353.378906
-      tolerance: 0.005
-    - expression: (0.06 * (50270.0 - 12570.0) + 0.02 * (131071.37 - 50270.0)) - (0.06 * (52300.77826939301
-        - 13077.795560896562))
-      equals: 1524.648494
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
-    - https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
-- id: nic-2028-c4-total-float32-isolation
-  concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2028-float32-isolation-65432-c4-total
-  selector_binding:
-    units: 1
-    rows_sha256: 4dbea2938bd2160abccdd3914d1ea98cd488f31f8dc3b51c8426502917b28d76
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: 'Isolation case: both engines receive the same non-round Class 4 limits (PolicyEngine''s
-      own CPI-uprated 2028 values, supplied to PolicyEngine as a parameter reform and to the Axiom regulation
-      100 module as its limit inputs). With profits above the upper limit, regulation 100 case 2 applies
-      and the maximum is the full main-plus-additional amount, as Axiom returns. PolicyEngine''s ni_class_4_maximum
-      compares step four with the main-rate Class 4 in float32. Rounding makes the two equal amounts differ,
-      so it takes case 1 and returns step four (the main-band amount) alone, dropping the 2% additional
-      band from ni_class_4_maximum and ni_class_4.'
-    arithmetic:
-    - expression: 0.06 * (52300.78 - 13077.8) + 0.02 * (65432.0 - 52300.78)
-      equals: 2616.0032
-      tolerance: 0.005
-    - expression: 0.06 * (52300.78 - 13077.8)
-      equals: 2353.378906
-      tolerance: 0.005
-    - expression: (0.06 * (52300.78 - 13077.8) + 0.02 * (65432.0 - 52300.78)) - (0.06 * (52300.78 - 13077.8))
-      equals: 262.624294
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
   expires_on_source_change: true
 - id: nic-2029-c1-additional-cpi-uprated-thresholds
   concept: uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline#uk_nic_pilot_additional_primary_contribution
@@ -862,43 +574,6 @@ entries:
     - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
   linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1879
   expires_on_source_change: true
-- id: nic-2029-c4-maximum-float32-isolation
-  concept: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2029-float32-isolation-87654p32-c4-maximum
-  selector_binding:
-    units: 1
-    rows_sha256: 45c1ed4862f973e753b4024b32e58f59a8c5b939c724b6c78a8135a261334df0
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: 'Isolation case: both engines receive the same non-round Class 4 limits (PolicyEngine''s
-      own CPI-uprated 2029 values, supplied to PolicyEngine as a parameter reform and to the Axiom regulation
-      100 module as its limit inputs). With profits above the upper limit, regulation 100 case 2 applies
-      and the maximum is the full main-plus-additional amount, as Axiom returns. PolicyEngine''s ni_class_4_maximum
-      compares step four with the main-rate Class 4 in float32. Rounding makes the two equal amounts differ,
-      so it takes case 1 and returns step four (the main-band amount) alone, dropping the 2% additional
-      band from ni_class_4_maximum and ni_class_4.'
-    arithmetic:
-    - expression: 0.06 * (53346.68 - 13339.32) + 0.02 * (87654.32 - 53346.68)
-      equals: 3086.5944
-      tolerance: 0.005
-    - expression: 0.06 * (53346.68 - 13339.32)
-      equals: 2400.44165
-      tolerance: 0.005
-    - expression: (0.06 * (53346.68 - 13339.32) + 0.02 * (87654.32 - 53346.68)) - (0.06 * (53346.68 -
-        13339.32))
-      equals: 686.15275
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
 - id: nic-2029-c4-total-cpi-uprated-thresholds
   concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
   case_selector:
@@ -939,43 +614,6 @@ entries:
     - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
     - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
   linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  expires_on_source_change: true
-- id: nic-2029-c4-total-float32-isolation
-  concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2029-float32-isolation-87654p32-c4-total
-  selector_binding:
-    units: 1
-    rows_sha256: 11e7d5042357678832c5144e1bdcd307a3fea2f5991c34e28bca54fa3e1c3413
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: 'Isolation case: both engines receive the same non-round Class 4 limits (PolicyEngine''s
-      own CPI-uprated 2029 values, supplied to PolicyEngine as a parameter reform and to the Axiom regulation
-      100 module as its limit inputs). With profits above the upper limit, regulation 100 case 2 applies
-      and the maximum is the full main-plus-additional amount, as Axiom returns. PolicyEngine''s ni_class_4_maximum
-      compares step four with the main-rate Class 4 in float32. Rounding makes the two equal amounts differ,
-      so it takes case 1 and returns step four (the main-band amount) alone, dropping the 2% additional
-      band from ni_class_4_maximum and ni_class_4.'
-    arithmetic:
-    - expression: 0.06 * (53346.68 - 13339.32) + 0.02 * (87654.32 - 53346.68)
-      equals: 3086.5944
-      tolerance: 0.005
-    - expression: 0.06 * (53346.68 - 13339.32)
-      equals: 2400.44165
-      tolerance: 0.005
-    - expression: (0.06 * (53346.68 - 13339.32) + 0.02 * (87654.32 - 53346.68)) - (0.06 * (53346.68 -
-        13339.32))
-      equals: 686.15275
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
   expires_on_source_change: true
 - id: nic-2030-c1-additional-cpi-uprated-thresholds
   concept: uk:statutes/social_security/workers/pilot_worker_class_1_nic_pipeline#uk_nic_pilot_additional_primary_contribution
@@ -1111,9 +749,10 @@ entries:
     - nic-2030-class4-50270-c4-maximum
     - nic-2030-class4-52301-c4-maximum
     - nic-2030-class4-65432-c4-maximum
+    - nic-2030-class4-98765p43-c4-maximum
   selector_binding:
-    units: 7
-    rows_sha256: eb5a1e614b944f2382015d9da9d9b4211ffc71e5eb421a4d4d6dde1a66b6242a
+    units: 8
+    rows_sha256: aacc6afd6ba5be83c0c545e299f3c4770f91b2dc37cc5b526b77673b0f9e448d
   kind: amount_difference
   disposition: upstream_engine_gap
   evidence:
@@ -1141,80 +780,6 @@ entries:
     - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
   linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1879
   expires_on_source_change: true
-- id: nic-2030-c4-maximum-float32-drops-additional-band
-  concept: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2030-class4-98765p43-c4-maximum
-  selector_binding:
-    units: 1
-    rows_sha256: 7dab021cc37f0a5f681518e6b8635b8db81728d3f0e69dc0f080c80a25815fe7
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: '2030-31: PolicyEngine CPI-uprates the Class 4 limits to non-round values (PolicyEngine-UK#1879),
-      and with those limits its float32 regulation 100 comparison takes case 1 for profits above the upper
-      limit. It returns step four (the main-band amount) alone, dropping the 2% additional band (PolicyEngine-UK#1878).
-      Axiom applies SSCBA 1992 s.15(3) at the unaltered 12,570 / 50,270 limits and regulation 100 case
-      2. The PolicyEngine value reproduces 0.06 x (its upper - lower limit) exactly.'
-    arithmetic:
-    - expression: 0.06 * (50270.0 - 12570.0) + 0.02 * (98765.43 - 50270.0)
-      equals: 3231.9086
-      tolerance: 0.005
-    - expression: 0.06 * (54413.62975910853 - 13606.113508494018)
-      equals: 2448.450928
-      tolerance: 0.005
-    - expression: (0.06 * (50270.0 - 12570.0) + 0.02 * (98765.43 - 50270.0)) - (0.06 * (54413.62975910853
-        - 13606.113508494018))
-      equals: 783.457672
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
-    - https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
-- id: nic-2030-c4-maximum-float32-isolation
-  concept: uk:regulations/uksi/2001/1004/100#class_4_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2030-float32-isolation-300000-c4-maximum
-  selector_binding:
-    units: 1
-    rows_sha256: 3ece3340dceb3bf8eece34cb0ced4730865a5e1cf689ff7417ba846a8c004605
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: 'Isolation case: both engines receive the same non-round Class 4 limits (PolicyEngine''s
-      own CPI-uprated 2030 values, supplied to PolicyEngine as a parameter reform and to the Axiom regulation
-      100 module as its limit inputs). With profits above the upper limit, regulation 100 case 2 applies
-      and the maximum is the full main-plus-additional amount, as Axiom returns. PolicyEngine''s ni_class_4_maximum
-      compares step four with the main-rate Class 4 in float32. Rounding makes the two equal amounts differ,
-      so it takes case 1 and returns step four (the main-band amount) alone, dropping the 2% additional
-      band from ni_class_4_maximum and ni_class_4.'
-    arithmetic:
-    - expression: 0.06 * (54413.63 - 13606.11) + 0.02 * (300000.0 - 54413.63)
-      equals: 7360.1786
-      tolerance: 0.005
-    - expression: 0.06 * (54413.63 - 13606.11)
-      equals: 2448.451172
-      tolerance: 0.005
-    - expression: (0.06 * (54413.63 - 13606.11) + 0.02 * (300000.0 - 54413.63)) - (0.06 * (54413.63 -
-        13606.11))
-      equals: 4911.727428
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
 - id: nic-2030-c4-total-cpi-uprated-thresholds
   concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
   case_selector:
@@ -1224,9 +789,10 @@ entries:
     - nic-2030-class4-50270-c4-total
     - nic-2030-class4-52301-c4-total
     - nic-2030-class4-65432-c4-total
+    - nic-2030-class4-98765p43-c4-total
   selector_binding:
-    units: 5
-    rows_sha256: 3fc33352574520f5f8b509f1b559dee15fdce4a656092877e598d814c43a6b52
+    units: 6
+    rows_sha256: aadc89aaf0d757bd2c40811afcfdf789ec2da7afdcc3e60782ba01e9552ef3ec
   kind: amount_difference
   disposition: upstream_engine_gap
   evidence:
@@ -1254,78 +820,4 @@ entries:
     - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
     - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
   linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  expires_on_source_change: true
-- id: nic-2030-c4-total-float32-drops-additional-band
-  concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2030-class4-98765p43-c4-total
-  selector_binding:
-    units: 1
-    rows_sha256: 20ac0d0972fed320cd709f068cb1fe0ddfbf09ef28f04c8adc17eb141334a10d
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: '2030-31: PolicyEngine CPI-uprates the Class 4 limits to non-round values (PolicyEngine-UK#1879),
-      and with those limits its float32 regulation 100 comparison takes case 1 for profits above the upper
-      limit. It returns step four (the main-band amount) alone, dropping the 2% additional band (PolicyEngine-UK#1878).
-      Axiom applies SSCBA 1992 s.15(3) at the unaltered 12,570 / 50,270 limits and regulation 100 case
-      2. The PolicyEngine value reproduces 0.06 x (its upper - lower limit) exactly.'
-    arithmetic:
-    - expression: 0.06 * (50270.0 - 12570.0) + 0.02 * (98765.43 - 50270.0)
-      equals: 3231.9086
-      tolerance: 0.005
-    - expression: 0.06 * (54413.62975910853 - 13606.113508494018)
-      equals: 2448.450928
-      tolerance: 0.005
-    - expression: (0.06 * (50270.0 - 12570.0) + 0.02 * (98765.43 - 50270.0)) - (0.06 * (54413.62975910853
-        - 13606.113508494018))
-      equals: 783.457672
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/pull/350
-    - https://github.com/PolicyEngine/policyengine-uk/issues/1879
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-  expires_on_source_change: true
-- id: nic-2030-c4-total-float32-isolation
-  concept: uk:regulations/uksi/2001/1004/100#class_4_contribution_after_annual_maximum
-  case_selector:
-    case_ids:
-    - nic-2030-float32-isolation-300000-c4-total
-  selector_binding:
-    units: 1
-    rows_sha256: d3cea68fb03ecd3d194e2e80e4292b435d32010aa0d339f2aecea8027a4c931b
-  kind: amount_difference
-  disposition: upstream_engine_gap
-  evidence:
-    mechanism: 'Isolation case: both engines receive the same non-round Class 4 limits (PolicyEngine''s
-      own CPI-uprated 2030 values, supplied to PolicyEngine as a parameter reform and to the Axiom regulation
-      100 module as its limit inputs). With profits above the upper limit, regulation 100 case 2 applies
-      and the maximum is the full main-plus-additional amount, as Axiom returns. PolicyEngine''s ni_class_4_maximum
-      compares step four with the main-rate Class 4 in float32. Rounding makes the two equal amounts differ,
-      so it takes case 1 and returns step four (the main-band amount) alone, dropping the 2% additional
-      band from ni_class_4_maximum and ni_class_4.'
-    arithmetic:
-    - expression: 0.06 * (54413.63 - 13606.11) + 0.02 * (300000.0 - 54413.63)
-      equals: 7360.1786
-      tolerance: 0.005
-    - expression: 0.06 * (54413.63 - 13606.11)
-      equals: 2448.451172
-      tolerance: 0.005
-    - expression: (0.06 * (54413.63 - 13606.11) + 0.02 * (300000.0 - 54413.63)) - (0.06 * (54413.63 -
-        13606.11))
-      equals: 4911.727428
-      tolerance: 0.01
-    upstream_url: https://github.com/PolicyEngine/policyengine-uk/issues/1878
-    sources:
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/statutes/ukpga/1992/4/15.test.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.yaml
-    - https://github.com/TheAxiomFoundation/rulespec-uk/blob/main/uk/regulations/uksi/2001/1004/100.test.yaml
-  linked_issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
   expires_on_source_change: true

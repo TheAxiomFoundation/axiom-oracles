@@ -4,13 +4,15 @@
 # PolicyEngine threshold or Class 4 amount is fed in (only PolicyEngine's own
 # Class 1 earnings base, so both engines charge the same earnings).
 #
-# The oracle pin below is what the dispositions are bound to. PolicyEngine-UK
-# 2.102.0 diverges from the statute on three filed defects, recorded as expected
-# upstream_engine_gap rows (dispositions/uk-national-insurance-pe.yaml):
+# The oracle pin below is what the dispositions are bound to. It is
+# PolicyEngine-UK 2.102.1, the first release with the #1878 fix (PR #1884, merge
+# 06f36f92). Filed defects, expected upstream_engine_gap rows while open
+# (dispositions/uk-national-insurance-pe.yaml):
 #   * PolicyEngine-UK#1879: CPI-uprated Class 4 limits (from 2027) and Class 1
 #     thresholds (from 2028), frozen to April 2031.
-#   * PolicyEngine-UK#1878: float32 regulation 100 comparison drops the 2%
-#     additional band from ni_class_4_maximum / ni_class_4.
+#   * PolicyEngine-UK#1878: float32 regulation 100 comparison dropped the 2%
+#     additional band from ni_class_4_maximum / ni_class_4. FIXED in 2.102.1:
+#     the isolation cases now match.
 #   * PolicyEngine-UK#1885: Class 4 charged on profits less Class 1 (dual
 #     earners), which SSCBA 1992 s.15 / Schedule 2 do not deduct.
 # When a fix merges, set policyengine_uk_version to the first release containing
@@ -41,7 +43,7 @@ runner:
   type: uk-national-insurance-pe-grid
   parameters:
     validation_years: [2026, 2027, 2028, 2029, 2030]
-    policyengine_uk_version: "2.102.0"
+    policyengine_uk_version: "2.102.1"
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-uk
 
@@ -55,8 +57,8 @@ oracle_fixes:
   - issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
     defect: float32 regulation 100 comparison drops the Class 4 additional band
     pr: https://github.com/PolicyEngine/policyengine-uk/pull/1884
-    merge_commit: null
-    first_release: null
+    merge_commit: 06f36f929b7ffdad3e4e592fa125824a66a1103f
+    first_release: "2.102.1"
   - issue: https://github.com/PolicyEngine/policyengine-uk/issues/1885
     defect: Class 4 charged on profits less Class 1 contributions
     pr: null
