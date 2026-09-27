@@ -282,8 +282,18 @@ def check_report(
         rendered = ", ".join(f"{row.get('stage')}={row.get('count')}" for row in stages)
         failures.append(f"first divergent stages: {rendered}")
 
-    concepts = {row.get("id") for row in report.get("concepts") or []}
-    aggregates = {row.get("concept"): row for row in report.get("aggregates") or []}
+    concept_ids = [row.get("id") for row in report.get("concepts") or []]
+    aggregate_rows = report.get("aggregates") or []
+    concepts = set(concept_ids)
+    aggregates = {row.get("concept"): row for row in aggregate_rows}
+    # A repeated id would let a later clean row shadow a divergent one.
+    for field, ids in (
+        ("concepts", concept_ids),
+        ("aggregates", [row.get("concept") for row in aggregate_rows]),
+    ):
+        repeated = sorted({str(i) for i in ids if ids.count(i) > 1})
+        if repeated:
+            failures.append(f"{field} repeats {', '.join(repeated)}")
     if not concepts:
         failures.append("the report lists no stage concepts, so no stage was compared")
     if BENEFIT_STAGE not in expect_concepts:

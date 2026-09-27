@@ -267,6 +267,16 @@ def test_report_without_concepts_fails_even_with_no_expectations():
     assert any("no expected benefit concept to require" in f for f in failures)
 
 
+def test_a_repeated_concept_cannot_shadow_a_divergent_stage():
+    report = _exact_report()
+    shelter = dict(report["aggregates"][2], mismatch_count=40)
+    report["aggregates"].insert(2, shelter)  # the clean row now comes last
+    report["concepts"].append({"id": _CONCEPTS[2]})
+    failures = _check(report)
+    assert f"concepts repeats {_CONCEPTS[2]}" in failures
+    assert f"aggregates repeats {_CONCEPTS[2]}" in failures
+
+
 def test_report_missing_the_benefit_concept_fails():
     report = _exact_report()
     benefit = _CO_STAGE_CONCEPTS["benefit"]
@@ -622,4 +632,3 @@ def test_workflow_never_commits():
     text = WORKFLOW.read_text()
     assert "git push" not in text
     assert "contents: write" not in text
-
