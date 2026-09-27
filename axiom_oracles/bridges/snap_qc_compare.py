@@ -1195,9 +1195,10 @@ def stage_concepts(jurisdiction: str) -> dict[str, str]:
     """Stage -> the concept id a ``jurisdiction`` replay compares it under.
 
     In stage order, overlay-rewritten exactly as ``run_snap_qc_comparison``
-    rewrites them: the ids its report lists under ``concepts`` and
-    ``aggregates``. Needs no engine, rulespec-us checkout, or QC file, so a
-    gate can require every stage without running the replay.
+    rewrites them: the ids its report lists under ``concepts`` (and under
+    ``aggregates`` for each stage compared at least once). Needs no engine,
+    rulespec-us checkout, or QC file, so a gate can require every stage
+    without running the replay.
     """
     config = QC_JURISDICTIONS[jurisdiction]
     by_label = _output_id_by_label(

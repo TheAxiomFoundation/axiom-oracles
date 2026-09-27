@@ -575,6 +575,7 @@ def test_stage_concepts_are_the_ids_a_replay_report_lists(jurisdiction) -> None:
     stages = sc.stage_concepts(jurisdiction)
     assert list(stages) == [label.stage for label in sc._LABELS]
     assert sc._benefit_stage() in stages
+    assert len(set(stages.values())) == len(stages)
     assert list(stages.values()) == [
         row["id"] for row in sc._concept_rows(output_id_by_label, 0.0, 1.0)
     ]
