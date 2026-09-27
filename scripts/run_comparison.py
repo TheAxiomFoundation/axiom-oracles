@@ -1755,6 +1755,25 @@ def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
         f"policyengine-core=={core}" if core else _PE_ORACLE_PINS[2],
     )
 
+
+# Transitive dependencies the pinned PolicyEngine-US wheels leave floating.
+# Every oracle pin (1.752.2 through 1.784.4) declares ``spm-calculator>=0.2.0``
+# but imports ``spm_calculator.geoadj``, which spm-calculator 1.0.0
+# (2026-09-11) removed. Unpinned, ``uv run --with`` resolves 1.0.x,
+# PolicyEngine-US fails to import, and the populace loader reports "Install the
+# US PolicyEngine extra". Pin the version uv.lock resolves; a test keeps the two
+# in step.
+_PE_US_COMPANION_PINS = ("spm-calculator==0.3.1",)
+
+
+def _pe_oracle_with_args(pins) -> list[str]:
+    """``uv run --with`` arguments for PE oracle pins plus their companions."""
+    return [
+        arg
+        for pin in (*pins, *_PE_US_COMPANION_PINS)
+        for arg in ("--with", pin)
+    ]
+
 # The compare and sanity subprocesses share this import shim — extracted to
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
 # need to bypass certification, but the shim keeps policyengine.us import
@@ -1881,7 +1900,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pe_pins),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
         *(arg for pin in taxsim_pins for arg in ("--with", pin)),
         "python",
@@ -2513,7 +2532,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pe_pins),
         "--with",
         f"policyengine-taxsim=={_taxsim_pin_version()}",
         "python",
@@ -2739,7 +2758,7 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
-        *(arg for pin in pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pins),
         "python",
         str(generator),
         "--policy",
@@ -2887,7 +2906,7 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
-        *(arg for pin in pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pins),
         "python",
         str(generator),
         *(
@@ -4053,7 +4072,7 @@ def _run_sanity(name: str) -> int:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pe_pins),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,
