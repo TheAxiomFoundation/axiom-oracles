@@ -318,6 +318,146 @@ def test_snap_qc_runner_registered_and_reemits_committed_report(monkeypatch, tmp
     assert output.read_text() == committed.read_text()
 
 
+def test_require_live_refuses_a_reemit_and_publishes_nothing(monkeypatch, tmp_path):
+    """--require-live turns a skip-capable runner's graceful re-emit into a hard
+    failure before anything is published: no reports/ file, no dashboard
+    write. The live SNAP QC CI lane depends on this."""
+    run_comparison = load_run_comparison_module()
+    dashboard_dir = tmp_path / "dashboard-data"
+    dashboard_dir.mkdir()
+    committed = dashboard_dir / "axiom-snapqc-ga-snap.json"
+    committed.write_text('{"schema_version": "axiom.comparison_report.v2"}')
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard_dir)
+    monkeypatch.setattr(
+        run_comparison, "_snap_qc_skip_reason", lambda *_a, **_k: "no engine here"
+    )
+    output_dir = tmp_path / "reports"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_comparison.py",
+            "ga-snap-qc",
+            "--require-live",
+            "--output-dir",
+            str(output_dir),
+        ],
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        run_comparison.main()
+
+    assert "ga-snap-qc: --require-live" in str(excinfo.value.code)
+    assert list(output_dir.iterdir()) == []  # staging file dropped, nothing published
+    assert sorted(path.name for path in dashboard_dir.iterdir()) == [committed.name]
+    assert committed.read_text() == '{"schema_version": "axiom.comparison_report.v2"}'
+
+
+def test_require_live_does_not_affect_a_live_run(monkeypatch, tmp_path):
+    """A runner that really executed publishes normally under --require-live."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path / "dashboard")
+    comparisons = tmp_path / "comparisons"
+    comparisons.mkdir()
+    (comparisons / "live-suite.yaml").write_text(
+        "name: live-suite\n"
+        "runner:\n"
+        "  type: fake-live\n"
+        "  parameters: {sample_size: 0}\n"
+        "artifacts:\n"
+        "  report_basename: live-suite\n"
+    )
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", comparisons)
+
+    def fake_live_runner(runner, output):
+        output.write_text(json.dumps({"compared_values": 1, "mismatch_count": 0}))
+
+    monkeypatch.setitem(run_comparison.RUNNERS, "fake-live", fake_live_runner)
+    output_dir = tmp_path / "reports"
+    monkeypatch.setattr(
+        "sys.argv",
+        ["run_comparison.py", "live-suite", "--require-live", "--output-dir", str(output_dir)],
+    )
+
+    assert run_comparison.main() == 0
+    [published] = [p for p in output_dir.iterdir() if not p.name.startswith(".")]
+    report = json.loads(published.read_text())
+    assert report["mismatch_count"] == 0
+    assert not report["provenance"].get("reemitted_report")
+
+
+_UK_GRID_RUNNERS = {
+    "_run_uk_council_tax_reduction_grid": "axiom-policyengine-uk-council-tax-reduction",
+    "_run_uk_capital_gains_tax_grid": "axiom-policyengine-uk-capital-gains-tax",
+    "_run_uk_business_rates_grid": "axiom-policyengine-uk-business-rates",
+    "_run_uk_lbtt_ltt_grid": "axiom-policyengine-uk-lbtt-ltt",
+    "_run_uk_winter_fuel_payment_pe_grid": "axiom-policyengine-uk-winter-fuel-payment-pe",
+    "_run_uk_attendance_allowance_pe_grid": "axiom-policyengine-uk-attendance-allowance-pe",
+    "_run_uk_tax_free_childcare_pe_grid": "axiom-policyengine-uk-tax-free-childcare-pe",
+    "_run_uk_vat_grid": "axiom-policyengine-uk-vat",
+    "_run_uk_fuel_duty_grid": "axiom-policyengine-uk-fuel-duty",
+    "_run_uk_tv_licence_grid": "axiom-policyengine-uk-tv-licence",
+}
+
+
+def _uk_grid_sandbox(monkeypatch, tmp_path, basename):
+    """A throwaway repo root holding one committed UK grid report."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", tmp_path)
+    committed = tmp_path / "dashboard" / "public" / "data" / f"{basename}.json"
+    committed.parent.mkdir(parents=True)
+    committed.write_text('{"committed": true}')
+    return run_comparison, committed
+
+
+@pytest.mark.parametrize("runner_name,basename", _UK_GRID_RUNNERS.items())
+def test_uk_grid_fallback_is_marked_as_a_reemit(monkeypatch, tmp_path, runner_name, basename):
+    """When a UK grid generator cannot run, the committed report it reuses is
+    a re-emit: it carries the us-tariff grid's marker, so provenance never
+    stamps it fresh and --require-live refuses it."""
+    run_comparison, committed = _uk_grid_sandbox(monkeypatch, tmp_path, basename)
+
+    def unavailable(*_args, **_kwargs):
+        raise FileNotFoundError("uv")
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", unavailable)
+    runner: dict = {}
+    output = tmp_path / "report.json"
+    getattr(run_comparison, runner_name)(runner, output)
+
+    assert runner.get("_reemitted_report") is True
+    assert output.read_text() == '{"committed": true}'
+
+
+@pytest.mark.parametrize("runner_name,basename", _UK_GRID_RUNNERS.items())
+def test_uk_grid_fresh_report_with_mismatches_is_not_a_reemit(
+    monkeypatch, tmp_path, runner_name, basename
+):
+    """Some generators write fresh artifacts and then exit 1 on mismatches;
+    those numbers are new, so they must not be labeled re-emitted."""
+    run_comparison, committed = _uk_grid_sandbox(monkeypatch, tmp_path, basename)
+
+    def wrote_then_failed(cmd, **_kwargs):
+        committed.write_text('{"fresh": true, "mismatch_count": 2}')
+        raise run_comparison.subprocess.CalledProcessError(1, cmd)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", wrote_then_failed)
+    runner: dict = {}
+    output = tmp_path / "report.json"
+    getattr(run_comparison, runner_name)(runner, output)
+
+    assert "_reemitted_report" not in runner
+    assert output.read_text() == '{"fresh": true, "mismatch_count": 2}'
+
+
+@pytest.mark.parametrize("runner_name,basename", _UK_GRID_RUNNERS.items())
+def test_uk_grid_live_generation_is_not_marked(monkeypatch, tmp_path, runner_name, basename):
+    run_comparison, _ = _uk_grid_sandbox(monkeypatch, tmp_path, basename)
+    monkeypatch.setattr(run_comparison.subprocess, "run", lambda *_a, **_k: None)
+    runner: dict = {}
+    getattr(run_comparison, runner_name)(runner, tmp_path / "report.json")
+    assert "_reemitted_report" not in runner
+
+
 def test_snap_qc_runner_writes_v2_shell_when_no_committed_report(monkeypatch, tmp_path):
     """With nothing committed yet, the skip path writes a valid empty v2 report
     recording the skip reason, so the weekly matrix never crashes on a first run."""
