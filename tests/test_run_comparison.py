@@ -396,6 +396,7 @@ _UK_GRID_RUNNERS = {
     "_run_uk_vat_grid": "axiom-policyengine-uk-vat",
     "_run_uk_fuel_duty_grid": "axiom-policyengine-uk-fuel-duty",
     "_run_uk_tv_licence_grid": "axiom-policyengine-uk-tv-licence",
+    "_run_uk_national_insurance_pe_grid": "axiom-policyengine-uk-national-insurance",
 }
 
 

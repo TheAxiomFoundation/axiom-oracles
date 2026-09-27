@@ -3258,6 +3258,10 @@ def _run_uk_fuel_duty_grid(runner: dict, output: Path) -> None:
     )
 
 
+# Fallback only: each pinned suite's comparison config names its release.
+PINNED_UK_GRID_PE_VERSION = "2.102.0"
+
+
 def _run_pinned_uk_pe_grid(
     runner: dict, generator_basename: str, report_basename: str, output: Path
 ) -> None:
@@ -3273,7 +3277,7 @@ def _run_pinned_uk_pe_grid(
     dashboard report is reused.
     """
     params = runner.get("parameters") or {}
-    version = str(params["policyengine_uk_version"])
+    version = str(params.get("policyengine_uk_version") or PINNED_UK_GRID_PE_VERSION)
     generator = REPO_ROOT / "scripts" / generator_basename
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{report_basename}.json"
     env = {**os.environ, "POLICYENGINE_UK_VERSION": version}
