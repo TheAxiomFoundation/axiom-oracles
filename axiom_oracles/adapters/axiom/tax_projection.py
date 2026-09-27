@@ -3497,7 +3497,8 @@ def _eitc_relevant_investment_income(
     Case has no tax-exempt interest concept; capital gain net income is
     short- plus long-term gains; and passive activity income is rental
     income, since the Case has no partnership/S-corp or farm-rental
-    concept.
+    concept. Form 4797 amounts, royalties, and estate/trust passive income
+    are not modeled either.
     """
     return (
         interest_and_dividends

@@ -2375,6 +2375,8 @@ def project_eitc_relevant_investment_income(row: Any, persons: list[Any]) -> flo
     the undifferentiated ``partnership_income`` column is not read;
     ``passive_partnership_s_corp_income`` counts only when the row carries
     it (the pinned Populace artifact and PolicyEngine-US 1.764.6 do not).
+    Form 4797 amounts (lines 6 and 11-12) and estate/trust passive income
+    (Schedule E line 34) have no source column and are not modeled.
     """
     interest_and_dividends = sum(
         person_money_sum(persons, column)
@@ -2600,9 +2602,29 @@ def tax_unit_head_spouse_indices(persons: list[Any]) -> tuple[int | None, int | 
 
 
 def tax_unit_filers(persons: list[Any]) -> list[Any]:
-    """The tax unit's head and spouse, in that order; dependents are dropped."""
+    """The tax unit's head and spouse, in that order; dependents are dropped.
+
+    Every tax unit files a return, so when neither the role flags nor the
+    adult-age fallback name a head (a 17-year-old filing alone, whose
+    PolicyEngine role flags are all false), the source ``tax_unit_role_input``
+    HEAD/SPOUSE rows are the filers, and failing that the oldest member is.
+    """
     head_index, spouse_index = tax_unit_head_spouse_indices(persons)
-    return [persons[index] for index in (head_index, spouse_index) if index is not None]
+    if head_index is not None:
+        return [
+            persons[index] for index in (head_index, spouse_index) if index is not None
+        ]
+    source_filers = [
+        person
+        for person in persons
+        if str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
+        in {"HEAD", "SPOUSE"}
+    ]
+    if source_filers:
+        return source_filers
+    if not persons:
+        return []
+    return [max(persons, key=lambda person: money(row_value(person, "age", 0)))]
 
 
 def filer_meets_eitc_identification_requirements(persons: list[Any]) -> bool:

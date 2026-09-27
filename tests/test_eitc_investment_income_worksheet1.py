@@ -244,6 +244,57 @@ def test_bridge_excludes_dependent_income(explicit_roles, dependent_income, expe
     assert projected["eitc_relevant_investment_income"] == expected
 
 
+@pytest.mark.parametrize(
+    "persons",
+    [
+        pytest.param(
+            [
+                {
+                    "age": 17,
+                    "tax_unit_role_input": "HEAD",
+                    "is_tax_unit_head": False,
+                    "is_tax_unit_spouse": False,
+                    "taxable_interest_income": 12_500,
+                }
+            ],
+            id="minor-head-with-all-false-role-flags",
+        ),
+        pytest.param(
+            [{"age": 17, "taxable_interest_income": 12_500}],
+            id="minor-alone-without-role-columns",
+        ),
+        pytest.param(
+            [
+                {
+                    "age": 17,
+                    "tax_unit_role_input": "HEAD",
+                    "is_tax_unit_head": False,
+                    "is_tax_unit_spouse": False,
+                    "taxable_interest_income": 12_500,
+                },
+                {
+                    "age": 15,
+                    "tax_unit_role_input": "DEPENDENT",
+                    "is_tax_unit_head": False,
+                    "is_tax_unit_spouse": False,
+                    "taxable_interest_income": 9_000,
+                },
+            ],
+            id="minor-head-and-minor-dependent-by-source-role",
+        ),
+    ],
+)
+def test_bridge_keeps_a_minor_filer(persons):
+    """Worksheet 1 line 1 is "any amount from Form 1040 or 1040-SR, line
+    2b", with no age limit: a 17-year-old filing their own return reports
+    their own 12,500 of interest (a dependent's 9,000 stays off it)."""
+    projected = project_eitc_tax_unit_inputs(
+        row={"filing_status": "SINGLE", "adjusted_gross_income": 12_500},
+        persons=persons,
+    )
+    assert projected["eitc_relevant_investment_income"] == 12_500
+
+
 def test_bridge_keeps_both_spouses_and_drops_an_adult_dependent():
     """A joint return's line 1 is both spouses' interest (1,000 + 2,000);
     an adult dependent's 40,000 is on that dependent's own return."""
