@@ -91,6 +91,7 @@ gettsim = [
 ]
 policyengine = [
     { name = "policyengine", extra = ["us"], marker = "extra == 'extra-13-axiom-oracles-policyengine' or (extra == 'extra-13-axiom-oracles-gettsim' and extra == 'extra-13-axiom-oracles-taxsim')" },
+    { name = "spm-calculator" },
 ]
 taxcalc = [
     { name = "taxcalc" },
@@ -113,6 +114,7 @@ requires-dist = [
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "requests", specifier = ">=2.31" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.14" },
+    { name = "spm-calculator", marker = "extra == 'policyengine'", specifier = ">=0.2.0,<1" },
     { name = "taxcalc", marker = "extra == 'taxcalc'", specifier = "==6.7.1" },
 ]
 provides-extras = ["dev", "policyengine", "taxsim", "taxcalc", "accessnyc-python", "gettsim"]

@@ -1316,14 +1316,13 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     pe_us = params.get("policyengine_us_version", "1.729.0")
     pe_core = params.get("policyengine_core_version", "3.26.11")
     pe_pins = (
-        [
-            "--with",
-            f"policyengine=={pe_meta}",
-            "--with",
-            f"policyengine-us=={pe_us}",
-            "--with",
-            f"policyengine-core=={pe_core}",
-        ]
+        _pe_oracle_with_args(
+            (
+                f"policyengine=={pe_meta}",
+                f"policyengine-us=={pe_us}",
+                f"policyengine-core=={pe_core}",
+            )
+        )
         if pinned
         else [
             "--with",
@@ -1655,8 +1654,7 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
             "run",
             "--directory",
             str(axiom_encode_repo),
-            "--with",
-            "policyengine-us==1.705.1",
+            *_pe_oracle_with_args(("policyengine-us==1.705.1",)),
             "--with",
             "numpy",
             "axiom-encode",
@@ -1757,12 +1755,12 @@ def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
 
 
 # Transitive dependencies the pinned PolicyEngine-US wheels leave floating.
-# Every oracle pin (1.752.2 through 1.784.4) declares ``spm-calculator>=0.2.0``
+# Every oracle pin (1.700.0 through 1.784.4) declares ``spm-calculator>=0.2.0``
 # but imports ``spm_calculator.geoadj``, which spm-calculator 1.0.0
 # (2026-09-11) removed. Unpinned, ``uv run --with`` resolves 1.0.x,
 # PolicyEngine-US fails to import, and the populace loader reports "Install the
-# US PolicyEngine extra". Pin the version uv.lock resolves; a test keeps the two
-# in step.
+# US PolicyEngine extra". Pin the version uv.lock resolves; tests keep this,
+# the ``policyengine`` extra and scripts/debug_policyengine_env.py in step.
 _PE_US_COMPANION_PINS = ("spm-calculator==0.3.1",)
 
 
