@@ -506,6 +506,8 @@ artifacts.
     records writing it and records no failure;
   - it has at least one case;
   - benefit mismatches, error cases, and error rows are all zero;
+  - the report lists every stage concept the suite's replay compares, the
+    benefit included, so an empty or partial concept list cannot pass;
   - every stage concept was compared on every case, with no divergence and no
     missing side (a stage can diverge while the benefit still matches);
   - it ran against the resolved rulespec-us SHA and the pinned engine binary.
