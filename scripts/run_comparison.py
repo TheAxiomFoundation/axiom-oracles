@@ -752,6 +752,60 @@ def _euromod_release_from_model_root(model_root: str | None) -> str | None:
     return None
 
 
+def _affected_map_repos(config: dict) -> list[str]:
+    """The rulespec repos ``comparisons/affected_map.json`` maps to a suite."""
+    map_path = COMPARISONS_DIR / "affected_map.json"
+    if not map_path.exists():
+        return []
+    affected_map = json.loads(map_path.read_text())
+    suite = (config.get("dashboard") or {}).get("suite", config.get("name"))
+    registry_name = config.get("name")
+    mapped_repos: list[str] = []
+    for entry in affected_map.get("suites", []):
+        if entry.get("suite") == suite or entry.get("name") == registry_name:
+            for repo in entry.get("repos", []):
+                if repo not in mapped_repos:
+                    mapped_repos.append(repo)
+    return mapped_repos
+
+
+def _declared_repo_root_checkouts(config: dict, params: dict) -> list[str]:
+    """Checkouts an ``axiom_rulespec_repo_roots`` suite actually compiled against.
+
+    ``_run_axiom_oracles_compare`` exports the suite's roots as
+    AXIOM_RULESPEC_REPO_ROOTS, with AXIOM_RULESPEC_US_ROOT's parent first when
+    that override is set (``_rulespec_repo_roots_env``). The engine lifts a
+    root that is itself a ``rulespec-*`` checkout to its parent and resolves
+    each repo as ``<root>/<name>`` (``_default_rulespec_repo_roots`` in
+    adapters/axiom/runner.py). Mirroring that order keeps a pinned suite (e.g.
+    ``$HOME/oracle-pins`` at ``axiom_rulespec_repo_roots_revision``) from being
+    stamped with whatever the developer's convention-path checkout is on.
+    """
+    declared = params.get("axiom_rulespec_repo_roots")
+    if not declared:
+        return []
+    roots: list[Path] = []
+    override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
+    if override:
+        roots.append(Path(override).resolve().parent)
+    for part in str(declared).split(os.pathsep):
+        if not part:
+            continue
+        root = _expand_path(part)
+        if root.name.startswith("rulespec-"):
+            root = root.parent
+        roots.append(root)
+    paths: list[str] = []
+    for repo in _affected_map_repos(config):
+        name = repo.split("/", 1)[-1]
+        for root in roots:
+            candidate = root / name
+            if candidate.exists():
+                paths.append(str(candidate))
+                break
+    return paths
+
+
 def _complete_rulespecs_from_affected_map(
     config: dict, runner: dict, rulespecs: list[dict]
 ) -> list[dict]:
@@ -777,18 +831,7 @@ def _complete_rulespecs_from_affected_map(
     try:
         from axiom_oracles.provenance import resolve_rulespec_checkout
 
-        map_path = COMPARISONS_DIR / "affected_map.json"
-        if not map_path.exists():
-            return rulespecs
-        affected_map = json.loads(map_path.read_text())
-        suite = (config.get("dashboard") or {}).get("suite", config.get("name"))
-        registry_name = config.get("name")
-        mapped_repos: list[str] = []
-        for entry in affected_map.get("suites", []):
-            if entry.get("suite") == suite or entry.get("name") == registry_name:
-                for repo in entry.get("repos", []):
-                    if repo not in mapped_repos:
-                        mapped_repos.append(repo)
+        mapped_repos = _affected_map_repos(config)
         if not mapped_repos:
             return rulespecs
         by_repo = {e.get("repo"): e for e in rulespecs}
@@ -846,6 +889,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         val = runner.get(key) or params.get(key)
         if val:
             rulespec_paths.append(str(_expand_path(val)))
+    if runner_type == "axiom-oracles-compare" and not rulespec_paths:
+        rulespec_paths.extend(_declared_repo_root_checkouts(config, params))
     # The EUROMOD/UKMOD synthetic lane points `axiom_rulespec_repo_roots` at the
     # whole org directory and names the model country; the encoded rules live in
     # that country's `rulespec-<cc>` repo under the roots dir, so resolve it
