@@ -295,6 +295,83 @@ def test_bridge_keeps_a_minor_filer(persons):
     assert projected["eitc_relevant_investment_income"] == 12_500
 
 
+@pytest.mark.parametrize(
+    ("persons", "expected"),
+    [
+        pytest.param(
+            [
+                {"age": 40, "taxable_interest_income": 12_500},
+                {
+                    "age": 70,
+                    "tax_unit_role_input": "DEPENDENT",
+                    "is_tax_unit_head": False,
+                    "is_tax_unit_spouse": False,
+                    "taxable_interest_income": 3_000,
+                },
+            ],
+            12_500,
+            id="fallback-never-picks-a-source-dependent",
+            # line 1 is the 40-year-old filer's 12,500; the dependent's 3,000
+            # is not on the return
+        ),
+        pytest.param(
+            [
+                {
+                    "age": 17,
+                    "tax_unit_role_input": "HEAD",
+                    "is_tax_unit_head": False,
+                    "is_tax_unit_spouse": False,
+                    "taxable_interest_income": 12_500,
+                },
+                {
+                    "age": 16,
+                    "is_tax_unit_head": False,
+                    "is_tax_unit_spouse": True,
+                    "taxable_interest_income": 2_000,
+                },
+            ],
+            14_500,
+            id="source-head-keeps-the-flagged-spouse",
+            # joint return: line 1 = 12,500 + 2,000
+        ),
+        pytest.param(
+            [
+                {
+                    "age": 17,
+                    "tax_unit_role_input": "HEAD",
+                    "is_tax_unit_head": False,
+                    "is_tax_unit_spouse": False,
+                    "taxable_interest_income": 12_500,
+                },
+                {
+                    "age": 17,
+                    "tax_unit_role_input": "SPOUSE",
+                    "is_tax_unit_head": False,
+                    "is_tax_unit_spouse": False,
+                    "taxable_interest_income": 1_000,
+                },
+                {
+                    "age": 1,
+                    "tax_unit_role_input": "DEPENDENT",
+                    "is_tax_unit_head": False,
+                    "is_tax_unit_spouse": False,
+                    "taxable_interest_income": 5_000,
+                },
+            ],
+            13_500,
+            id="source-head-and-source-spouse-without-flags",
+            # joint return: line 1 = 12,500 + 1,000; the child's 5,000 is off it
+        ),
+    ],
+)
+def test_bridge_fallback_filers_respect_known_roles(persons, expected):
+    projected = project_eitc_tax_unit_inputs(
+        row={"filing_status": "JOINT", "adjusted_gross_income": 20_000},
+        persons=persons,
+    )
+    assert projected["eitc_relevant_investment_income"] == expected
+
+
 def test_bridge_keeps_both_spouses_and_drops_an_adult_dependent():
     """A joint return's line 1 is both spouses' interest (1,000 + 2,000);
     an adult dependent's 40,000 is on that dependent's own return."""

@@ -2606,25 +2606,37 @@ def tax_unit_filers(persons: list[Any]) -> list[Any]:
 
     Every tax unit files a return, so when neither the role flags nor the
     adult-age fallback name a head (a 17-year-old filing alone, whose
-    PolicyEngine role flags are all false), the source ``tax_unit_role_input``
-    HEAD/SPOUSE rows are the filers, and failing that the oldest member is.
+    PolicyEngine role flags are all false), the head is the source
+    ``tax_unit_role_input`` HEAD row, and failing that the oldest member not
+    already known to be the spouse or a source DEPENDENT. A spouse the flags
+    already identify is kept; otherwise a source SPOUSE row is the spouse.
     """
     head_index, spouse_index = tax_unit_head_spouse_indices(persons)
-    if head_index is not None:
-        return [
-            persons[index] for index in (head_index, spouse_index) if index is not None
+    if head_index is None:
+        roles = [
+            str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
+            for person in persons
         ]
-    source_filers = [
-        person
-        for person in persons
-        if str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
-        in {"HEAD", "SPOUSE"}
-    ]
-    if source_filers:
-        return source_filers
-    if not persons:
-        return []
-    return [max(persons, key=lambda person: money(row_value(person, "age", 0)))]
+        candidates = [
+            index
+            for index in range(len(persons))
+            if index != spouse_index and roles[index] != "DEPENDENT"
+        ]
+        pool = [index for index in candidates if roles[index] == "HEAD"] or candidates
+        if pool:
+            head_index = max(
+                pool, key=lambda index: money(row_value(persons[index], "age", 0))
+            )
+        if spouse_index is None:
+            spouse_index = next(
+                (
+                    index
+                    for index, role in enumerate(roles)
+                    if role == "SPOUSE" and index != head_index
+                ),
+                None,
+            )
+    return [persons[index] for index in (head_index, spouse_index) if index is not None]
 
 
 def filer_meets_eitc_identification_requirements(persons: list[Any]) -> bool:
