@@ -1,0 +1,71 @@
+# National Insurance: rulespec-uk Class 1 primary, Class 4 and Class 2 vs
+# PolicyEngine-UK on a synthetic earnings/profits grid for 2026-27 to 2030-31.
+# Every Axiom figure comes from Axiom modules; unlike the EFRS NICs surfaces, no
+# PolicyEngine threshold or Class 4 amount is fed in (only PolicyEngine's own
+# Class 1 earnings base, so both engines charge the same earnings).
+#
+# The oracle pin below is what the dispositions are bound to. PolicyEngine-UK
+# 2.102.0 diverges from the statute on three filed defects, recorded as expected
+# upstream_engine_gap rows (dispositions/uk-national-insurance-pe.yaml):
+#   * PolicyEngine-UK#1879: CPI-uprated Class 4 limits (from 2027) and Class 1
+#     thresholds (from 2028), frozen to April 2031.
+#   * PolicyEngine-UK#1878: float32 regulation 100 comparison drops the 2%
+#     additional band from ni_class_4_maximum / ni_class_4.
+#   * PolicyEngine-UK#1885: Class 4 charged on profits less Class 1 (dual
+#     earners), which SSCBA 1992 s.15 / Schedule 2 do not deduct.
+# When a fix merges, set policyengine_uk_version to the first release containing
+# it, record the PR, merge commit and release under oracle_fixes, rerun, and
+# rebuild the dispositions (the fixed rows' entries expire).
+#
+# Run locally (needs the pinned PolicyEngine-UK, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-national-insurance-pe
+#   uv run python scripts/build_uk_national_insurance_pe_dispositions.py
+#   uv run scripts/apply_dispositions.py
+
+name: uk-national-insurance-pe
+title: UK National Insurance 2026-27 to 2030-31 — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded Class 1 primary pipeline (annual PT/UEL from the frozen
+  personal allowance and basic rate limit), SSCBA 1992 s.15 Class 4 with the SI
+  2001/1004 regulation 100 annual maximum, and the self-employed Class 2 amount
+  payable against PolicyEngine-UK's ni_class_1_employee_primary,
+  ni_class_1_employee_additional, ni_class_4_main, ni_class_4_maximum, ni_class_4
+  and ni_class_2. The grid runs 2026-27 (control) to 2030-31, with non-round
+  earnings and profits above the upper limits, four float32-isolation cases that
+  supply the same non-round Class 4 limits to both engines, and four 2026-27
+  dual-earner cases (employment plus self-employment).
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-national-insurance-pe-grid
+  parameters:
+    validation_years: [2026, 2027, 2028, 2029, 2030]
+    policyengine_uk_version: "2.102.0"
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+# Fixed PolicyEngine-UK releases, cited as the oracle once each fix merges.
+oracle_fixes:
+  - issue: https://github.com/PolicyEngine/policyengine-uk/issues/1879
+    defect: NICs thresholds CPI-uprated although frozen to April 2031
+    pr: null
+    merge_commit: null
+    first_release: null
+  - issue: https://github.com/PolicyEngine/policyengine-uk/issues/1878
+    defect: float32 regulation 100 comparison drops the Class 4 additional band
+    pr: https://github.com/PolicyEngine/policyengine-uk/pull/1884
+    merge_commit: null
+    first_release: null
+  - issue: https://github.com/PolicyEngine/policyengine-uk/issues/1885
+    defect: Class 4 charged on profits less Class 1 contributions
+    pr: null
+    merge_commit: null
+    first_release: null
+
+artifacts:
+  report_basename: axiom-policyengine-uk-national-insurance
+
+dashboard:
+  filename: axiom-policyengine-uk-national-insurance.json
+  suite: uk-national-insurance-pe

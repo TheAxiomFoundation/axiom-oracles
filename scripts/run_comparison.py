@@ -997,6 +997,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
+    elif runner_type in ("uk-national-insurance-pe-grid", "uk-fuel-duty-grid"):
+        oracle = {
+            "name": "policyengine",
+            "policyengine_uk": params.get("policyengine_uk_version"),
+        }
     elif runner_type == "axiom-oracles-compare":
         engines = {str(params.get("left", "")), str(params.get("right", ""))}
         pins = _resolve_pe_oracle_pins(params)
@@ -3247,7 +3252,69 @@ def _run_uk_vat_grid(runner: dict, output: Path) -> None:
 
 
 def _run_uk_fuel_duty_grid(runner: dict, output: Path) -> None:
-    _run_uk_pe_grid(runner, "generate_uk_fuel_duty.py", "axiom-policyengine-uk-fuel-duty", output)
+    """Fuel duty dated-schedule grid, 2025 to 2028, under the pinned PolicyEngine-UK."""
+    _run_pinned_uk_pe_grid(
+        runner, "generate_uk_fuel_duty.py", "axiom-policyengine-uk-fuel-duty", output
+    )
+
+
+def _run_pinned_uk_pe_grid(
+    runner: dict, generator_basename: str, report_basename: str, output: Path
+) -> None:
+    """Run a UK case-grid generator under the PolicyEngine-UK release its config pins.
+
+    ``runner.parameters.policyengine_uk_version`` is the oracle identity the
+    suite's dispositions are bound to, so moving it is a deliberate config
+    change, never an ambient upgrade; the generator refuses to run under any
+    other installed version. The rulespec checkout is the config's first
+    ``rulespec_roots`` entry (``AXIOM_RULESPEC_UK_ROOT`` reroutes it, so the
+    checkout the generator reads is the one provenance records). Without a
+    PolicyEngine-UK environment or a built axiom rules engine, the committed
+    dashboard report is reused.
+    """
+    params = runner.get("parameters") or {}
+    version = str(params["policyengine_uk_version"])
+    generator = REPO_ROOT / "scripts" / generator_basename
+    committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{report_basename}.json"
+    env = {**os.environ, "POLICYENGINE_UK_VERSION": version}
+    roots = params.get("rulespec_roots") or []
+    if roots:
+        env["RULESPEC_UK_CHECKOUT"] = str(_expand_path(roots[0]))
+    cmd = [
+        "uv",
+        "run",
+        "--python",
+        "3.13",
+        "--no-project",
+        "--with-editable",
+        str(REPO_ROOT),
+        "--with",
+        f"policyengine-uk=={version}",
+        "python",
+        str(generator),
+    ]
+    before = committed.read_bytes() if committed.exists() else None
+    try:
+        subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
+    except (subprocess.CalledProcessError, FileNotFoundError) as exc:
+        if not committed.exists():
+            raise
+        if committed.read_bytes() == before:
+            # Untouched by this run: the committed numbers are being reused,
+            # so mark a re-emit (see _run_uk_pe_grid).
+            runner["_reemitted_report"] = True
+        print(f"{report_basename} grid generation unavailable ({exc}); reusing {committed}.")
+    output.write_text(committed.read_text())
+
+
+def _run_uk_national_insurance_pe_grid(runner: dict, output: Path) -> None:
+    """NICs grid: rulespec-uk Class 1/Class 4 vs PolicyEngine-UK, 2026-27 to 2030-31."""
+    _run_pinned_uk_pe_grid(
+        runner,
+        "generate_uk_national_insurance_pe.py",
+        "axiom-policyengine-uk-national-insurance",
+        output,
+    )
 
 
 def _run_uk_tv_licence_grid(runner: dict, output: Path) -> None:
@@ -4021,6 +4088,7 @@ RUNNERS = {
     "uk-vat-grid": _run_uk_vat_grid,
     "uk-fuel-duty-grid": _run_uk_fuel_duty_grid,
     "uk-tv-licence-grid": _run_uk_tv_licence_grid,
+    "uk-national-insurance-pe-grid": _run_uk_national_insurance_pe_grid,
     "us-tariff-grid": _run_us_tariff_grid,
     "us-tariff-panel": _run_us_tariff_panel,
     "us-tariff-schedule": _run_us_tariff_schedule,
@@ -4298,6 +4366,15 @@ def _expand_path(raw: str | Path) -> Path:
         canonical = os.path.join(os.path.expanduser("~"), "rulespec-us")
         if expanded == canonical or expanded.startswith(canonical + os.sep):
             expanded = override + expanded[len(canonical):]
+    # AXIOM_RULESPEC_UK_ROOT does the same for the UK case-grid suites'
+    # canonical `$HOME/TheAxiomFoundation/rulespec-uk` checkout.
+    uk_override = os.environ.get("AXIOM_RULESPEC_UK_ROOT")
+    if uk_override:
+        canonical = os.path.join(
+            os.path.expanduser("~"), "TheAxiomFoundation", "rulespec-uk"
+        )
+        if expanded == canonical or expanded.startswith(canonical + os.sep):
+            expanded = uk_override + expanded[len(canonical):]
     return Path(expanded).resolve()
 
 

@@ -577,6 +577,7 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
         "uk-fuel-duty",
         "uk-tv-licence",
         "uk-lbtt-ltt",
+        "uk-national-insurance-pe",
     }
     covered_suites = {
         p.suite for p in universe.in_scope() if p.suite is not None
@@ -586,7 +587,6 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
     by_name = universe.by_name()
     for program in (
         "income_tax",
-        "national_insurance",
         "universal_credit",
         "housing_benefit",
         "pip",
@@ -599,6 +599,9 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
             "uk-tax-benefits-efrs",
             "uk-universal-credit-efrs",
         }, program
+    # National Insurance is covered by its 2026-27 to 2030-31 case-grid suite,
+    # whose Axiom thresholds come from Axiom modules rather than PolicyEngine.
+    assert by_name["national_insurance"].suite == "uk-national-insurance-pe"
     # Council Tax Reduction is covered by its case-grid suite.
     assert by_name["council_tax_reduction"].suite == "uk-council-tax-reduction"
     # Winter Fuel Payment is covered by its case-grid suite.
