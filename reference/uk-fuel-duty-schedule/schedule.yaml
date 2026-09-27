@@ -1,0 +1,128 @@
+# Main road fuel duty on unleaded petrol and heavy oil (diesel), 1 Jan 2025 to
+# 31 Dec 2028, from the legislation itself. Reviewed constants are pinned in
+# tests/test_uk_fuel_duty_schedule_reference.py.
+#
+# The Hydrocarbon Oil Duties Act 1979 s.6(1A) standing rate is £0.5795 a litre
+# for both products. Since 23 March 2022 the liability has been reduced by
+# orders under the Excise Duties (Surcharges or Rebates) Act 1979 s.1(2):
+# "the deduction from the amount payable of the percentages specified in
+# column (C)". Column (D) of each table is "only for ease of reference and
+# comprehension of effect". The operative per-litre charge is therefore
+# 0.5795 x (1 - pct/100), which differs from the column (D) figure by at most
+# £0.0000109 a litre. HMRC publishes the column (D) figures as the rates
+# (TIIN "Amended Fuel Duty rates: 2026 to 2027", 22 May 2026), and the uk-fuel-duty
+# comparison uses them, so this sub-hundredth-of-a-penny gap never decides a
+# row.
+#
+# After 28 February 2027 no reduction order is in force and nothing enacted
+# changes s.6(1A), so the standing rate applies. Budget 2025 announced RPI
+# uprating "from April 2027"; that is policy, not law, until a Finance Act or
+# order implements it.
+schema: axiom_oracles.reference.uk_fuel_duty_schedule.v1
+standing_rate:
+  rate: 0.5795
+  instrument: Hydrocarbon Oil Duties Act 1979 s.6(1A)(a) and (c)
+  url: https://www.legislation.gov.uk/ukpga/1979/5/section/6
+  corpus_citation_path: uk/statute/ukpga/1979/5/6
+  excerpt: "£0.5795 a litre in the case of unleaded petrol"
+periods:
+  - id: 2022-order-continued-to-22-mar-2025
+    effective_from: "2025-01-01"
+    effective_to: "2025-03-22"
+    percentage_deduction: 8.63
+    reference_rate: 0.5295
+    instruments:
+      - instrument: SI 2022/365 art. 3, Table A rows (a) and (c)
+        url: https://www.legislation.gov.uk/uksi/2022/365/article/3/made
+        table_rows:
+          - {product: Unleaded petrol, before: 0.5795, percentage_deduction: 8.63, after: 0.5295}
+          - {product: Heavy oil, before: 0.5795, percentage_deduction: 8.63, after: 0.5295}
+      - instrument: SI 2024/300 art. 2
+        url: https://www.legislation.gov.uk/uksi/2024/300/article/2/made
+        excerpt: "continues in force until the end of 22nd March 2025"
+  - id: 2022-order-continued-to-22-mar-2026
+    effective_from: "2025-03-23"
+    effective_to: "2026-03-22"
+    percentage_deduction: 8.63
+    reference_rate: 0.5295
+    instruments:
+      - instrument: SI 2022/365 art. 3, Table A rows (a) and (c)
+        url: https://www.legislation.gov.uk/uksi/2022/365/article/3/made
+        table_rows:
+          - {product: Unleaded petrol, before: 0.5795, percentage_deduction: 8.63, after: 0.5295}
+          - {product: Heavy oil, before: 0.5795, percentage_deduction: 8.63, after: 0.5295}
+      - instrument: SI 2025/228 art. 2
+        url: https://www.legislation.gov.uk/uksi/2025/228/article/2/made
+        excerpt: "continues in force until the end of 22nd March 2026"
+  - id: 2022-order-continued-to-31-dec-2026
+    effective_from: "2026-03-23"
+    effective_to: "2026-12-31"
+    percentage_deduction: 8.63
+    reference_rate: 0.5295
+    instruments:
+      - instrument: SI 2022/365 art. 3, Table A rows (a) and (c)
+        url: https://www.legislation.gov.uk/uksi/2022/365/article/3/made
+        table_rows:
+          - {product: Unleaded petrol, before: 0.5795, percentage_deduction: 8.63, after: 0.5295}
+          - {product: Heavy oil, before: 0.5795, percentage_deduction: 8.63, after: 0.5295}
+      - instrument: SI 2026/164 art. 3
+        url: https://www.legislation.gov.uk/uksi/2026/164/article/3/made
+        excerpt: "continues in force until the end of 31st August 2026"
+      - instrument: SI 2026/555 art. 2(3), in force 15 June 2026
+        url: https://www.legislation.gov.uk/uksi/2026/555/article/2/made
+        excerpt: "In article 3, for “31st August 2026” substitute “31st December 2026”."
+      - instrument: SI 2026/555 art. 2(2)(b) and 2(4)
+        url: https://www.legislation.gov.uk/uksi/2026/555/article/2/made
+        excerpt: "Omit articles 4 to 7."
+        note: >-
+          Removes the 1 September to 30 November 2026 6.90% step (SI 2026/164
+          arts. 1(3), 4-7) before it took effect.
+  - id: 2026-order-art-8-to-28-feb-2027
+    effective_from: "2027-01-01"
+    effective_to: "2027-02-28"
+    percentage_deduction: 3.45
+    reference_rate: 0.5595
+    instruments:
+      - instrument: SI 2026/164 art. 8, Table D rows (a) and (c)
+        url: https://www.legislation.gov.uk/uksi/2026/164/article/8/made
+        table_rows:
+          - {product: Unleaded petrol, before: 0.5795, percentage_deduction: 3.45, after: 0.5595}
+          - {product: Heavy oil, before: 0.5795, percentage_deduction: 3.45, after: 0.5595}
+      - instrument: SI 2026/555 art. 2(2)(c)
+        url: https://www.legislation.gov.uk/uksi/2026/555/article/2/made
+        excerpt: "in paragraph (4), for “1st December 2026” substitute “1st January 2027”"
+  - id: standing-rate-from-1-mar-2027
+    effective_from: "2027-03-01"
+    effective_to: "2028-12-31"
+    percentage_deduction: 0
+    reference_rate: 0.5795
+    instruments:
+      - instrument: Hydrocarbon Oil Duties Act 1979 s.6(1A)(a) and (c)
+        url: https://www.legislation.gov.uk/ukpga/1979/5/section/6
+        excerpt: "£0.5795 a litre in the case of unleaded petrol"
+        note: >-
+          SI 2026/164 art. 1(4) (as amended) ends the last reduction with 28
+          February 2027. No later order or enacted indexation was in force when
+          this schedule was compiled (2026-09-27).
+provenance:
+  compiled: "2026-09-27"
+  fetched: "2026-09-26"
+  sources:
+    - url: https://www.legislation.gov.uk/uksi/2022/365/made/data.xml
+      sha256: fab301db5765fa38561b1755afebdf4c2c6395db72f30a50f35b8d1a08f04987
+    - url: https://www.legislation.gov.uk/uksi/2023/329/made/data.xml
+      sha256: 120eb46ef88dfdaf5642279c981c7d8d1e4d9bf29b50d429022ff971b0cc7bdd
+    - url: https://www.legislation.gov.uk/uksi/2024/300/made/data.xml
+      sha256: 3683052df042fbff53293a78d432f29214ae09732da2449328f2c78c61dcc448
+    - url: https://www.legislation.gov.uk/uksi/2025/228/made/data.xml
+      sha256: 0c3fa7d10fc7a5d4bf146f1adbb2d4938020a42c0880bbbc83a56b4a49e9bf85
+    - url: https://www.legislation.gov.uk/uksi/2026/164/made/data.xml
+      sha256: 0b70c60b3bb7d9d508b62d18306a743592e3d429ed4ea9a5dad2d1122f08ecd3
+    - url: https://www.legislation.gov.uk/uksi/2026/555/made/data.xml
+      sha256: 0f82dc323942ff446530464944b478fd53eaf97ad80127af99d17e3c48ddc183
+    - url: https://www.gov.uk/government/publications/amended-fuel-duty-rates-for-2026-to-2027/amended-fuel-duty-rates-2026-to-2027
+      note: HMRC TIIN, first published 22 May 2026; guidance, not law.
+  encoding: >-
+    Not yet encoded in rulespec-uk. rulespec-uk#349 tracks encoding this schedule
+    (corpus ingest of the orders, release cut, toolchain rebind, signed encode);
+    until then uk-fuel-duty supplies the reduction from this file.

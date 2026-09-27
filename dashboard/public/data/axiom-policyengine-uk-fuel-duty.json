@@ -1,131 +1,980 @@
 {
-  "case_count": 9,
+  "case_count": 52,
   "cases": [
     {
-      "axiom": 427.59999999999997,
+      "axiom": 0.5295,
       "axiom_vs_policyengine": {
-        "difference": 2.441406246589395e-05,
+        "difference": -7.629394560559888e-09,
         "match": true
       },
-      "case_id": "fd-petrol-only-small",
+      "case_id": "fd-2025-01",
       "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
-      "diesel_litres": 0.0,
-      "petrol_litres": 800.0,
-      "policyengine": 427.5999755859375,
+      "litres": 1.0,
+      "month": "2025-01",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
       "rural": false,
-      "scenario": "petrol-only"
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2025",
+      "statutory_rate": 0.5295
     },
     {
-      "axiom": 1336.25,
+      "axiom": 0.5295,
       "axiom_vs_policyengine": {
-        "difference": 0.0,
+        "difference": -7.629394560559888e-09,
         "match": true
       },
-      "case_id": "fd-petrol-only-large",
+      "case_id": "fd-2025-02",
       "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
-      "diesel_litres": 0.0,
-      "petrol_litres": 2500.0,
-      "policyengine": 1336.25,
+      "litres": 1.0,
+      "month": "2025-02",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
       "rural": false,
-      "scenario": "petrol-only"
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2025",
+      "statutory_rate": 0.5295
     },
     {
-      "axiom": 641.4,
+      "axiom": 0.5295,
       "axiom_vs_policyengine": {
-        "difference": -8.544921877273737e-05,
+        "difference": -7.629394560559888e-09,
         "match": true
       },
-      "case_id": "fd-diesel-only",
+      "case_id": "fd-2025-03",
       "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
-      "diesel_litres": 1200.0,
-      "petrol_litres": 0.0,
-      "policyengine": 641.4000854492188,
+      "litres": 1.0,
+      "month": "2025-03",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
       "rural": false,
-      "scenario": "diesel-only"
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2025",
+      "statutory_rate": 0.5295
     },
     {
-      "axiom": 694.8499999999999,
+      "axiom": 0.5295,
       "axiom_vs_policyengine": {
-        "difference": -3.662109384094947e-05,
+        "difference": -7.629394560559888e-09,
         "match": true
       },
-      "case_id": "fd-petrol-and-diesel",
+      "case_id": "fd-2025-04",
       "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
-      "diesel_litres": 400.0,
-      "petrol_litres": 900.0,
-      "policyengine": 694.8500366210938,
+      "litres": 1.0,
+      "month": "2025-04",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
       "rural": false,
-      "scenario": "petrol-and-diesel"
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
     },
     {
-      "axiom": 2138.0,
+      "axiom": 0.5295,
       "axiom_vs_policyengine": {
-        "difference": 0.000244140625,
+        "difference": -7.629394560559888e-09,
         "match": true
       },
-      "case_id": "fd-heavy-driver",
+      "case_id": "fd-2025-05",
       "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
-      "diesel_litres": 1000.0,
-      "petrol_litres": 3000.0,
-      "policyengine": 2137.999755859375,
+      "litres": 1.0,
+      "month": "2025-05",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
       "rural": false,
-      "scenario": "petrol-and-diesel"
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
     },
     {
-      "axiom": 484.49999999999994,
+      "axiom": 0.5295,
       "axiom_vs_policyengine": {
-        "difference": -5.684341886080802e-14,
+        "difference": -7.629394560559888e-09,
         "match": true
       },
-      "case_id": "fd-rural-relief-petrol",
+      "case_id": "fd-2025-06",
       "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
-      "diesel_litres": 0.0,
-      "petrol_litres": 1000.0,
-      "policyengine": 484.5,
+      "litres": 1.0,
+      "month": "2025-06",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -7.629394560559888e-09,
+        "match": true
+      },
+      "case_id": "fd-2025-07",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2025-07",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -7.629394560559888e-09,
+        "match": true
+      },
+      "case_id": "fd-2025-08",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2025-08",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -7.629394560559888e-09,
+        "match": true
+      },
+      "case_id": "fd-2025-09",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2025-09",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -7.629394560559888e-09,
+        "match": true
+      },
+      "case_id": "fd-2025-10",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2025-10",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -7.629394560559888e-09,
+        "match": true
+      },
+      "case_id": "fd-2025-11",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2025-11",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -7.629394560559888e-09,
+        "match": true
+      },
+      "case_id": "fd-2025-12",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2025-12",
+      "policyengine": 0.5295000076293945,
+      "policyengine_petrol_and_diesel": 0.5295,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2025-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.4795,
+      "axiom_vs_policyengine": {
+        "difference": 4.291534405620467e-09,
+        "match": true
+      },
+      "case_id": "fd-2025-06-rural",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2025-06",
+      "policyengine": 0.4794999957084656,
+      "policyengine_petrol_and_diesel": 0.5295,
       "rural": true,
-      "scenario": "rural-relief"
+      "rural_relief": 0.05,
+      "scenario": "2025-rural-relief",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
     },
     {
-      "axiom": 484.49999999999994,
+      "axiom": 0.5295,
       "axiom_vs_policyengine": {
-        "difference": 3.051757806815658e-05,
-        "match": true
+        "difference": -0.0050000028610229785,
+        "match": false
       },
-      "case_id": "fd-rural-relief-both",
+      "case_id": "fd-2026-01",
       "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
-      "diesel_litres": 300.0,
-      "petrol_litres": 700.0,
-      "policyengine": 484.4999694824219,
-      "rural": true,
-      "scenario": "rural-relief"
-    },
-    {
-      "axiom": 726.7499999999999,
-      "axiom_vs_policyengine": {
-        "difference": -1.1368683772161603e-13,
-        "match": true
-      },
-      "case_id": "fd-rural-relief-diesel",
-      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
-      "diesel_litres": 1500.0,
-      "petrol_litres": 0.0,
-      "policyengine": 726.75,
-      "rural": true,
-      "scenario": "rural-relief"
-    },
-    {
-      "axiom": 0.0,
-      "axiom_vs_policyengine": {
-        "difference": 0.0,
-        "match": true
-      },
-      "case_id": "fd-no-fuel",
-      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
-      "diesel_litres": 0.0,
-      "petrol_litres": 0.0,
-      "policyengine": 0.0,
+      "litres": 1.0,
+      "month": "2026-01",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
       "rural": false,
-      "scenario": "no-fuel"
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-02",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-02",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-03",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-03",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-04",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-04",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-05",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-05",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-06",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-06",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-07",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-07",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-08",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-08",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-09",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-09",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-10",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-10",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-11",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-11",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.0050000028610229785,
+        "match": false
+      },
+      "case_id": "fd-2026-12",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-12",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.534500002861023,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.4795,
+      "axiom_vs_policyengine": {
+        "difference": -0.004999990940094012,
+        "match": false
+      },
+      "case_id": "fd-2026-06-rural",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2026-06",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.484499990940094,
+      "policyengine_petrol_and_diesel": 0.5345,
+      "rural": true,
+      "rural_relief": 0.05,
+      "scenario": "2026-rural-relief",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "axiom": 0.5595,
+      "axiom_vs_policyengine": {
+        "difference": -0.03299997138977051,
+        "match": false
+      },
+      "case_id": "fd-2027-01",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-01",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "2026-order-art-8-to-28-feb-2027",
+      "statutory_rate": 0.5595
+    },
+    {
+      "axiom": 0.5595,
+      "axiom_vs_policyengine": {
+        "difference": -0.03299997138977051,
+        "match": false
+      },
+      "case_id": "fd-2027-02",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-02",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "2026-order-art-8-to-28-feb-2027",
+      "statutory_rate": 0.5595
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-03",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-03",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-04",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-04",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-05",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-05",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-06",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-06",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-07",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-07",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-08",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-08",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-09",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-09",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-10",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-10",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-11",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-11",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.012999971389770493,
+        "match": false
+      },
+      "case_id": "fd-2027-12",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-12",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5924999713897705,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.013000019073486357,
+        "match": false
+      },
+      "case_id": "fd-2027-06-rural",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2027-06",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5425000190734863,
+      "policyengine_petrol_and_diesel": 0.5925,
+      "rural": true,
+      "rural_relief": 0.05,
+      "scenario": "2027-rural-relief",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-01",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-01",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-02",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-02",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-03",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-03",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-04",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-04",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-05",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-05",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-06",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-06",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-07",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-07",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-08",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-08",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-09",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-09",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-10",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-10",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-11",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-11",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5795,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600026130676254,
+        "match": false
+      },
+      "case_id": "fd-2028-12",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-12",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.6151000261306763,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "axiom": 0.5295,
+      "axiom_vs_policyengine": {
+        "difference": -0.035600014209747344,
+        "match": false
+      },
+      "case_id": "fd-2028-06-rural",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "litres": 1.0,
+      "month": "2028-06",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine": 0.5651000142097473,
+      "policyengine_petrol_and_diesel": 0.6151,
+      "rural": true,
+      "rural_relief": 0.05,
+      "scenario": "2028-rural-relief",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
     }
   ],
   "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
@@ -137,19 +986,1054 @@
   "locales": [
     "UK"
   ],
-  "mismatches": [],
+  "mismatches": [
+    {
+      "case_id": "fd-2026-01",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-01",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-02",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-02",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-03",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-03",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-22-mar-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-04",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-04",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-05",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-05",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-06",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-06",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-07",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-07",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-08",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-08",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-09",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-09",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-10",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-10",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-11",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-11",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-12",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.0050000028610229785,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2026-12",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.534500002861023,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2026-schedule",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2026-06-rural",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.004999990940094012,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2026-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.4795,
+      "left_engine": "axiom",
+      "month": "2026-06",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5345,
+      "right": 0.484499990940094,
+      "right_engine": "policyengine",
+      "rural": true,
+      "rural_relief": 0.05,
+      "scenario": "2026-rural-relief",
+      "schedule_period": "2022-order-continued-to-31-dec-2026",
+      "statutory_rate": 0.5295
+    },
+    {
+      "case_id": "fd-2027-01",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.03299997138977051,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2027-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5595,
+      "left_engine": "axiom",
+      "month": "2027-01",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "2026-order-art-8-to-28-feb-2027",
+      "statutory_rate": 0.5595
+    },
+    {
+      "case_id": "fd-2027-02",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.03299997138977051,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2027-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5595,
+      "left_engine": "axiom",
+      "month": "2027-02",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "2026-order-art-8-to-28-feb-2027",
+      "statutory_rate": 0.5595
+    },
+    {
+      "case_id": "fd-2027-03",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "fd-2027-superseded-schedule-calendar-average",
+        "linked_issue": "https://github.com/PolicyEngine/policyengine-uk/issues/1882"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-03",
+      "pe_mechanism": "superseded_schedule_calendar_average",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-04",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-04",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-05",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-05",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-06",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-06",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-07",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-07",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-08",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-08",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-09",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-09",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-10",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-10",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-11",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-11",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-12",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.012999971389770493,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2027-12",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5924999713897705,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2027-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2027-06-rural",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.013000019073486357,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2027-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2027-06",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.5925,
+      "right": 0.5425000190734863,
+      "right_engine": "policyengine",
+      "rural": true,
+      "rural_relief": 0.05,
+      "scenario": "2027-rural-relief",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-01",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-01",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-02",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-02",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-03",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-03",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-04",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-04",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-05",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-05",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-06",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-06",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-07",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-07",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-08",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-08",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-09",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-09",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-10",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-10",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-11",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-11",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-12",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600026130676254,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5795,
+      "left_engine": "axiom",
+      "month": "2028-12",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.6151000261306763,
+      "right_engine": "policyengine",
+      "rural": false,
+      "rural_relief": 0.0,
+      "scenario": "2028-schedule",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    },
+    {
+      "case_id": "fd-2028-06-rural",
+      "concept": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount",
+      "difference": -0.035600014209747344,
+      "disposition": {
+        "disposition": "explained_residual",
+        "id": "fd-2028-rpi-indexation-not-enacted"
+      },
+      "engines": [
+        "axiom",
+        "policyengine"
+      ],
+      "kind": "amount_difference",
+      "left": 0.5295,
+      "left_engine": "axiom",
+      "month": "2028-06",
+      "pe_mechanism": "rpi_indexation_not_enacted",
+      "policyengine_petrol_and_diesel": 0.6151,
+      "right": 0.5651000142097473,
+      "right_engine": "policyengine",
+      "rural": true,
+      "rural_relief": 0.05,
+      "scenario": "2028-rural-relief",
+      "schedule_period": "standing-rate-from-1-mar-2027",
+      "statutory_rate": 0.5795
+    }
+  ],
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-09-25T12:11:25Z",
+    "generated_at": "2026-09-27T12:00:13Z",
     "generated_by": "scripts/run_comparison.py::uk-fuel-duty",
+    "oracle": {
+      "name": "policyengine",
+      "policyengine_uk": "2.102.0"
+    },
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": "94fa587531d05d18b969e9087672f51e5710fe5b"
+        "sha": "2e94aca579c6b6a445e9daf3f07cc887059a57a7"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
@@ -159,42 +2043,93 @@
   },
   "suite": "uk-fuel-duty",
   "summary": {
-    "axiom_vs_policyengine_match_rate": 100.0,
-    "comparison_count": 9,
+    "axiom_vs_policyengine_match_rate": 25.0,
+    "comparison_count": 52,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 0,
+        "explained_residual": 23,
         "unexplained": 0,
-        "upstream_engine_gap": 0
+        "upstream_engine_gap": 16
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/uk-fuel-duty.yaml",
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 100,
+      "raw_match_rate": 25,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 9,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
-    "policyengine_matches": 9,
+    "match_count": 13,
+    "mismatch_count": 39,
+    "mismatches_by_concept": [
+      {
+        "count": 39,
+        "value": "uk:policies/govuk/fuel-duty#fuel_duty_annual_amount"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 39,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_mechanism": [
+      {
+        "count": 23,
+        "value": "rpi_indexation_not_enacted"
+      },
+      {
+        "count": 16,
+        "value": "superseded_schedule_calendar_average"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 1,
+        "value": "2026-rural-relief"
+      },
+      {
+        "count": 12,
+        "value": "2026-schedule"
+      },
+      {
+        "count": 1,
+        "value": "2027-rural-relief"
+      },
+      {
+        "count": 12,
+        "value": "2027-schedule"
+      },
+      {
+        "count": 1,
+        "value": "2028-rural-relief"
+      },
+      {
+        "count": 12,
+        "value": "2028-schedule"
+      }
+    ],
+    "policyengine_matches": 13,
     "weighted": {
-      "comparison_weight": 9,
-      "match_rate": 100.0,
-      "match_weight": 9,
-      "mismatch_weight": 0
+      "comparison_weight": 52,
+      "match_rate": 25.0,
+      "match_weight": 13,
+      "mismatch_weight": 39
     }
   },
   "tolerance": {
-    "absolute": 0.01,
-    "relative": 2e-07
+    "absolute": 5e-05,
+    "relative": 0.0
   },
-  "validation_year": 2026
+  "validation_year": 2025,
+  "validation_years": [
+    2025,
+    2026,
+    2027,
+    2028
+  ]
 }
