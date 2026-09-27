@@ -169,7 +169,7 @@
       "axiom_rules_engine_sha": "de4a5faa71dbe454de56cebe81038a691d3cdf4c",
       "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-09-26T05:11:55Z",
+    "generated_at": "2026-09-26T11:51:54Z",
     "generated_by": "scripts/run_comparison.py::uk-scottish-carer-supplement-ukmod",
     "oracle": {
       "euromod_country": "UK",
