@@ -113,7 +113,9 @@ a direct push cannot loosen it by editing the file:
 - `open_max` may only fall. A deliberate raise is
   `uv run scripts/pe_axiom_standard.py --raise-ceiling "<reason>"`, which
   appends a dated `debt_raises` record (`from`, `to`, `reason`). That list is
-  append-only.
+  append-only. The record binds the raise: `open_max` may not exceed the
+  latest `to`, and `from` may not exceed the committed ceiling it replaces,
+  so the record states the whole increase.
 
 `--resolve` checks each companion pointer against the RuleSpec repository:
 

@@ -26,8 +26,10 @@ PolicyEngine leg of a comparison. This module makes the standard structural:
   shrink, a grandfathered entry's recorded status may only rise, and
   ``open_max`` — PolicyEngine attributions without a companion (declared
   debt plus grandfathered) — may only fall. The one deliberate exception is
-  an appended ``debt_raises`` record, which starts a new epoch; the
-  ``debt_raises`` list itself is append-only. Monotonicity is derived from
+  an appended ``debt_raises`` record, which starts a new epoch and bounds
+  it (``open_max`` <= the record's ``to``; its ``from`` <= the ceiling it
+  replaces); the ``debt_raises`` list itself is append-only. Monotonicity is
+  derived from
   Git history, as ``scripts/closure_universe.py`` derives its pending floor,
   so it bites on pull requests and on direct pushes alike and cannot be
   defeated by editing the ratchet file in the same change.
@@ -517,6 +519,10 @@ class RatchetDocumentError(ValueError):
     """The ratchet file is malformed."""
 
 
+def _is_count(value: object) -> bool:
+    return isinstance(value, int) and not isinstance(value, bool) and value >= 0
+
+
 @dataclass
 class Ratchet:
     open_max: int
@@ -538,7 +544,7 @@ class Ratchet:
                 f"ratchet document has unknown keys: {sorted(unknown)}"
             )
         open_max = document.get("open_max")
-        if not isinstance(open_max, int) or isinstance(open_max, bool) or open_max < 0:
+        if not _is_count(open_max):
             raise RatchetDocumentError("open_max must be a non-negative integer")
         raises = document.get("debt_raises") or []
         if not isinstance(raises, list):
@@ -553,6 +559,28 @@ class Ratchet:
                 raise RatchetDocumentError(
                     f"debt_raises[{index}] needs a non-empty reason"
                 )
+            if not (_is_count(item["from"]) and _is_count(item["to"])):
+                raise RatchetDocumentError(
+                    f"debt_raises[{index}] from/to must be non-negative integers"
+                )
+            if item["to"] <= item["from"]:
+                raise RatchetDocumentError(
+                    f"debt_raises[{index}] must raise the ceiling (to > from)"
+                )
+            # A raise starts from the ceiling of the epoch it closes, which
+            # the previous raise bounds.
+            if index and item["from"] > raises[index - 1]["to"]:
+                raise RatchetDocumentError(
+                    f"debt_raises[{index}] starts from {item['from']}, above "
+                    f"the previous raise's ceiling {raises[index - 1]['to']}"
+                )
+        # The latest raise is the ceiling of the current epoch: a raise record
+        # cannot authorize more debt than it names.
+        if raises and open_max > raises[-1]["to"]:
+            raise RatchetDocumentError(
+                f"open_max {open_max} exceeds the latest debt_raises ceiling "
+                f"{raises[-1]['to']}"
+            )
         rows = document.get("grandfathered") or []
         if not isinstance(rows, list):
             raise RatchetDocumentError("grandfathered must be a list")
@@ -801,14 +829,17 @@ def check_history(
     * every committed ``debt_raises`` list must be a prefix of the current
       one (append-only);
     * ``open_max`` may not exceed any committed value in the same epoch
-      (versions carrying the same number of ``debt_raises`` records).
+      (versions carrying the same number of ``debt_raises`` records);
+    * each raise starts from at most the committed floor of the epoch it
+      closes, so the record states the full increase it authorizes (the
+      document itself bounds ``open_max`` by the latest raise's ``to``).
     """
 
     problems: list[str] = []
     grown: dict[tuple[str, str, str], str] = {}
     lowered: dict[tuple[str, str, str], str] = {}
-    epoch = len(current.debt_raises)
-    floor: tuple[int, str] | None = None
+    # epoch (number of debt_raises records) -> lowest committed open_max.
+    floors: dict[int, tuple[int, str]] = {}
     for commit, version in versions:
         short = commit[:12]
         for key in set(current.grandfathered) - set(version.grandfathered):
@@ -827,10 +858,9 @@ def check_history(
                 f"debt_raises was rewritten relative to {short}: the list is "
                 "append-only"
             )
-        if len(version.debt_raises) == epoch and (
-            floor is None or version.open_max < floor[0]
-        ):
-            floor = (version.open_max, short)
+        epoch = len(version.debt_raises)
+        if epoch not in floors or version.open_max < floors[epoch][0]:
+            floors[epoch] = (version.open_max, short)
     for key, short in sorted(grown.items()):
         problems.append(
             f"grandfathered list grew relative to {short}: {key[0]} "
@@ -842,6 +872,15 @@ def check_history(
             f"grandfathered status of {key[0]} [{key[1]}] fell below the "
             f"status recorded at {short}"
         )
+    for index, item in enumerate(current.debt_raises):
+        closed = floors.get(index)
+        if closed is not None and item["from"] > closed[0]:
+            problems.append(
+                f"debt_raises[{index}] raises from {item['from']}, but the "
+                f"committed ceiling it replaces was {closed[0]} (at "
+                f"{closed[1]}); a raise must record the full increase"
+            )
+    floor = floors.get(len(current.debt_raises))
     if floor is not None and current.open_max > floor[0]:
         problems.append(
             f"open_max {current.open_max} exceeds the committed floor "

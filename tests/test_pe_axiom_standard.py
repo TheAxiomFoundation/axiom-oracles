@@ -568,11 +568,25 @@ def test_ratchet_document_is_validated() -> None:
         lambda d: d.update(schema="other"),
         lambda d: d.update(debt_raises=[{"date": "x", "from": 0, "to": 1, "reason": ""}]),
         lambda d: d.update(grandfathered=[{"source": "s", "id": "i"}]),
+        # A raise record must be numeric, must raise, must chain from the
+        # previous raise's ceiling, and bounds open_max.
+        lambda d: d.update(debt_raises=[_raise("0", 1)]),
+        lambda d: d.update(debt_raises=[_raise(0, True)]),
+        lambda d: d.update(debt_raises=[_raise(1, 1)]),
+        lambda d: d.update(debt_raises=[_raise(0, 1), _raise(2, 3)]),
+        lambda d: d.update(open_max=5, debt_raises=[_raise(0, 1)]),
     ):
         document = copy.deepcopy(good)
         mutate(document)
         with pytest.raises(RatchetDocumentError):
             Ratchet.from_document(document)
+    raised = dict(copy.deepcopy(good), open_max=3)
+    raised["debt_raises"] = [_raise(0, 2), _raise(1, 4)]
+    assert Ratchet.from_document(raised).open_max == 3
+
+
+def _raise(start, end) -> dict:
+    return {"date": "2026-09-27", "from": start, "to": end, "reason": "r"}
 
 
 def _git_repo(tmp_path: Path):
@@ -651,6 +665,34 @@ def test_a_committed_raise_passes_and_later_versions_ratchet_from_it(
     capsys.readouterr()
     assert _run(tmp_path, "--check") == 1
     assert "exceeds the committed floor 1" in capsys.readouterr().err
+
+
+def test_a_hand_edited_raise_is_bound_by_its_record(tmp_path: Path, capsys) -> None:
+    git = _git_repo(tmp_path)
+    _write_repo(tmp_path, [_gap("old-bug", linked_issue=PE_ISSUE)])
+    assert _run(tmp_path, "--init") == 0
+    git("add", "-A")
+    git("commit", "-q", "-m", "introduce")
+    path = tmp_path / RATCHET_RELATIVE_PATH
+    document = yaml.safe_load(path.read_text())
+    assert document["open_max"] == 1
+    # One raise record naming a ceiling of 2 cannot carry open_max to 500.
+    document["debt_raises"] = [_raise(1, 2)]
+    document["open_max"] = 500
+    path.write_text(serialize_ratchet(document))
+    capsys.readouterr()
+    assert _run(tmp_path, "--check") == 1
+    assert "exceeds the latest debt_raises ceiling 2" in capsys.readouterr().err
+    # Nor may the record understate the increase by starting above the
+    # committed ceiling it replaces.
+    document["debt_raises"] = [_raise(400, 500)]
+    path.write_text(serialize_ratchet(document))
+    assert _run(tmp_path, "--check") == 1
+    assert "committed ceiling it replaces was 1" in capsys.readouterr().err
+    # The honest record of the same raise passes the history check.
+    document["debt_raises"] = [_raise(1, 500)]
+    path.write_text(serialize_ratchet(document))
+    assert _run(tmp_path, "--check") == 0
 
 
 def test_shallow_checkout_is_refused(tmp_path: Path) -> None:
