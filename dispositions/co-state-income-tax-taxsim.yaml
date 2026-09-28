@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: co-state-income-tax-taxsim
-updated: '2026-07-30'
+updated: '2026-09-25'
 entries:
 - id: taxsim-co-flat-30-8-filing-status-offset
   concept: us:tax/state-income-tax#liability
@@ -138,7 +138,12 @@ entries:
     - ecps-tax-unit-59218
     - ecps-tax-unit-59332
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
+    row_arithmetic:
+    - expression: difference
+      equals: 30.8
+      tolerance: 0.055
     mechanism: 'Triangulated TAXSIM-side divergence: on every selected row axiom
       and
 
@@ -161,6 +166,11 @@ entries:
       tolerance: 0.05
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/315
   expires_on_source_change: true
+  selector_binding:
+    units: 130
+    rows_sha256: 8e1bd36aa6fa1788a62bfb7c1e4741bbf7901ddb4d050a3884227fa5f892f15d
+  oracle_binding:
+    identity_unrecorded: true
 - id: taxsim-co-flat-20-7-filing-status-offset
   concept: us:tax/state-income-tax#liability
   kind: amount_difference
@@ -199,7 +209,12 @@ entries:
     - ecps-tax-unit-59122
     - ecps-tax-unit-59138
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
+    row_arithmetic:
+    - expression: difference
+      equals: 20.7
+      tolerance: 0.055
     mechanism: 'Triangulated TAXSIM-side divergence: on every selected row axiom
       and
 
@@ -222,6 +237,11 @@ entries:
       tolerance: 0.05
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/315
   expires_on_source_change: true
+  selector_binding:
+    units: 32
+    rows_sha256: 5953d676c1a2ee22183ec47520b99e26210821362b1a3551958d97d6fd18b9fc
+  oracle_binding:
+    identity_unrecorded: true
 - id: taxsim-co-refundable-credit-vintage
   concept: us:tax/state-income-tax#liability
   kind: amount_difference
@@ -589,6 +609,7 @@ entries:
     - ecps-tax-unit-59338
     - ecps-tax-unit-59341
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
     mechanism: 'Triangulated TAXSIM-side divergence in Colorado''s refundable credit
 
@@ -619,6 +640,11 @@ entries:
       tolerance: 0.05
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
   expires_on_source_change: true
+  selector_binding:
+    units: 361
+    rows_sha256: 884121bbe4b18a55f363063089931ab24c240520c85317d2c7636dab30cf111a
+  oracle_binding:
+    identity_unrecorded: true
 - id: co-state-open-rows-axiom-pe-divergent
   concept: us:tax/state-income-tax#liability
   kind: amount_difference
@@ -632,6 +658,7 @@ entries:
     - ecps-tax-unit-58696
     - ecps-tax-unit-59285
   disposition: upstream_engine_gap
+  attribution: taxsim
   evidence:
     mechanism: 'Formerly the open-investigation rows blocked on triangulation; both
       blockers are now closed. (1) The axiom-vs-PE divergence on all seven
@@ -667,4 +694,9 @@ entries:
     - dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json
     - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
   expires_on_source_change: true
+  selector_binding:
+    units: 7
+    rows_sha256: 5658a831a71b5171b215b2affe79c2b86380a920481e1400661f9c6a6376452d
+  oracle_binding:
+    identity_unrecorded: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
