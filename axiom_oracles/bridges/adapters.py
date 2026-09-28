@@ -92,6 +92,19 @@ class PolicyEngineUSVarAdapter:
                 )
 
 
+def boolean_parameter_reading(
+    parameters, parameter_path: str, value_mode: str, state: str
+) -> bool:
+    """Read a state-keyed PolicyEngine parameter under a boolean value mode."""
+    if value_mode not in BOOLEAN_PARAMETER_VALUE_MODES:
+        raise ValueError(f"unsupported boolean parameter value mode {value_mode!r}")
+    node = parameters
+    for part in parameter_path.split("."):
+        node = getattr(node, part)
+    value = bool(node[state])
+    return not value if value_mode == "inverted_bool" else value
+
+
 def normalize_state_code_from_utility_region(region: str) -> str:
     """Map sub-state SNAP utility region codes back to their parent state code."""
     match = re.match(r"^([A-Z]{2})_", region)

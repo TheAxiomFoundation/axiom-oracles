@@ -41,6 +41,7 @@ from axiom_oracles.bridges.adapters import (
     SNAP_CHILD_SUPPORT_PAYMENTS_INPUT,
     SNAP_CHILD_SUPPORT_TREATMENT_PARAMETER,
     PolicyEngineUSVarAdapter,
+    boolean_parameter_reading,
     get_pe_us_var_adapter,
 )
 from axiom_oracles.bridges.registry import load_policyengine_registry
@@ -152,6 +153,21 @@ def test_every_child_support_election_read_is_inverted() -> None:
             SNAP_CHILD_SUPPORT_EXCLUSION_STATE,
         )
         assert adapter.default_state_code is None
+
+
+def test_boolean_parameter_reading_follows_the_mode() -> None:
+    parameters = {"flag": {"TX": False, "CA": True}}
+
+    class Node(dict):
+        def __getattr__(self, name):
+            return Node(self[name]) if isinstance(self[name], dict) else self[name]
+
+    root = Node(parameters)
+    assert boolean_parameter_reading(root, "flag", "bool", "CA") is True
+    assert boolean_parameter_reading(root, "flag", "inverted_bool", "CA") is False
+    assert boolean_parameter_reading(root, "flag", "inverted_bool", "TX") is True
+    with pytest.raises(ValueError, match="unsupported"):
+        boolean_parameter_reading(root, "flag", "float", "TX")
 
 
 @pytest.mark.parametrize(
@@ -303,6 +319,13 @@ def test_replay_states_hold_their_election_at_every_dated_value(
     values = [entry.value for entry in node.children[state].values_list]
     assert values
     assert all(bool(value) is excludes for value in values)
+    # The population replay projects the election with this reading.
+    assert boolean_parameter_reading(
+        pe.parameters(PERIOD),
+        SNAP_CHILD_SUPPORT_TREATMENT_PARAMETER,
+        "inverted_bool",
+        state,
+    ) is (not excludes)
 
 
 @pytest.mark.parametrize(
