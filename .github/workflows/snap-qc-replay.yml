@@ -31,8 +31,9 @@ name: SNAP QC live replay
 # (a dispatch's `suites` input can narrow this). Its `check` then fails the
 # leg unless the replay log records writing the report and the report is
 # exact: zero benefit mismatches, zero error cases, and every stage
-# concept compared on every case without divergence. The run must also have
-# used the resolved rulespec-us SHA and the pinned engine. The live-tests job
+# concept the suite compares (benefit included) listed and compared on every
+# case without divergence. The run must also have used the resolved
+# rulespec-us SHA and the pinned engine. The live-tests job
 # runs the two live pytest cases (PUF row counts; engine-backed worked
 # example), which skip unless their inputs are provided, and fails if either
 # skips.
