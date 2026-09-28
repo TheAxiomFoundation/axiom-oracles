@@ -451,6 +451,78 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ug-dispy",
+      "report": "axiom-euromod-ug-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-dispy.yaml"
+    },
+    {
+      "suite": "ug-fuel-excise",
+      "report": "axiom-euromod-ug-fuel-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-fuel-excise.yaml"
+    },
+    {
+      "suite": "ug-lst",
+      "report": "axiom-euromod-ug-lst.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-lst.yaml"
+    },
+    {
+      "suite": "ug-nssf-contributions",
+      "report": "axiom-euromod-ug-nssf-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-nssf-contributions.yaml"
+    },
+    {
+      "suite": "ug-paye-rate-schedule",
+      "report": "axiom-euromod-ug-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "ug-presumptive",
+      "report": "axiom-euromod-ug-presumptive.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-presumptive.yaml"
+    },
+    {
+      "suite": "ug-rental",
+      "report": "axiom-euromod-ug-rental.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-rental.yaml"
+    },
+    {
+      "suite": "ug-scg",
+      "report": "axiom-euromod-ug-scg.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-scg.yaml"
+    },
+    {
+      "suite": "ug-vat",
+      "report": "axiom-euromod-ug-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-vat.yaml"
+    },
+    {
       "suite": "uk-benefit-cap",
       "report": "axiom-euromod-uk-benefit-cap.json",
       "repos": [
