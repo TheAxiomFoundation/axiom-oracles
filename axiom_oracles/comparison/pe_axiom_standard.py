@@ -691,8 +691,11 @@ def derive_ratchet(
 
 
 def serialize_ratchet(document: dict) -> str:
+    # Escaped, not allow_unicode: PyYAML writes U+0085 raw and reads it back
+    # as a line break, so an id containing it would not round-trip and its
+    # grandfathered row would stop matching (found by the round-trip property).
     return _HEADER + yaml.safe_dump(
-        document, sort_keys=False, allow_unicode=True, width=79
+        document, sort_keys=False, allow_unicode=False, width=79
     )
 
 
