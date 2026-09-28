@@ -201,3 +201,31 @@ jobs:
 
       - name: GETTSIM live oracle tests
         run: uv run pytest -q tests/test_gettsim_adapter.py
+
+  # The SNAP child support adapter tests replay PolicyEngine-US and skip when
+  # it is absent. The policyengine extra pins policyengine[us]==5.0.0, whose
+  # policyengine-us 1.764.6 predates PolicyEngine/policyengine-us#9586 and
+  # gives the state child support election the opposite sense. This job
+  # installs a policyengine-us with the fix and turns any skip into a failure.
+  policyengine-live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package with a policyengine-us that has #9586
+        run: |
+          uv sync --extra dev
+          uv pip install "policyengine-us==2.15.13"
+
+      - name: PolicyEngine live adapter tests
+        env:
+          AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE: "1"
+        run: uv run --no-sync pytest -q tests/bridges/test_snap_child_support_adapters.py
