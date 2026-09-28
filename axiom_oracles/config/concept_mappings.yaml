@@ -2420,6 +2420,36 @@ concepts:
           type: country
           geoid: UG
 
+  # Uganda composed single-employee disposable income (rulespec-ug
+  # pipeline: Act 4 of 2012 Third Schedule tax on chargeable income,
+  # Cap. 230 s.11 employee 5% share), compared to UGAMOD ils_dispy on
+  # the full PAYE grid — no shared-nil restriction: the Ugandan ITA has
+  # no employee NSSF deduction and UGAMOD agrees (ttb_s = yem), so the
+  # engines share the tax base at every income (contrast Ghana
+  # finding #13).
+  ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Uganda composed single-employee disposable income (gross + benefits - income tax - employee NSSF share)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: UG
+
+
   gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
     description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
     category: tax

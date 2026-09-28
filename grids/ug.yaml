@@ -9,6 +9,123 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  ug-dispy:
+    locale: UG
+    entity: Person
+    entity_id: head
+    outputs:
+    - ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    cases:
+    - id: ug-dispy-2m-nil-interior
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 2000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 2000000.0
+    - id: ug-dispy-2820000-nil-band-top
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 2820000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 2820000.0
+    - id: ug-dispy-3420000-10pct-interior
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 3420000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 3420000.0
+    - id: ug-dispy-4020000-10pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 4020000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4020000.0
+    - id: ug-dispy-4500000-20pct-interior
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 4500000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4500000.0
+    - id: ug-dispy-4920000-20pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 4920000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4920000.0
+    - id: ug-dispy-6m-30pct-interior
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 6000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 6000000.0
+    - id: ug-dispy-probe-income-30pct
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 6225375.6
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 6225375.6
+    - id: ug-dispy-120m-additional-rate-boundary
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 120000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000000.0
+    - id: ug-dispy-150m-additional-rate-interior
+      period: '2026'
+      scenario: single-formal-employee-disposable-income
+      parameters:
+        yearly_earned_income: 150000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 150000000.0
   ug-fuel-excise:
     locale: UG
     entity: Person
