@@ -360,6 +360,8 @@ ratchets:
   unexplained_max: 0
 - suite: uk-maternity-allowance
   unexplained_max: 0
+- suite: uk-national-insurance-pe
+  unexplained_max: 0
 - suite: uk-pension-credit
   unexplained_max: 0
 - suite: uk-personal-allowance

@@ -8505,7 +8505,7 @@
       "bridge_declared": false,
       "bridge_manifest_sha256": null,
       "bridged_through": {},
-      "cases_scanned": 9,
+      "cases_scanned": 52,
       "chunk_manifest": [],
       "constant_fields": 0,
       "evidence_fields": {},
@@ -8513,7 +8513,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-policyengine-uk-fuel-duty.json",
-      "report_sha256": "2208da51c6738d827c88d159784b7054acb4f9425db947312f399eed7bc65dcc",
+      "report_sha256": "531bbb03d40abaa06ca0dc4847c267866514e1c4d681a7abd1f27b96f2838a4a",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -8822,6 +8822,27 @@
       "report": "dashboard/public/data/axiom-euromod-uk-maternity-allowance.json",
       "report_sha256": "29a98309afceafa3c1309ca797d7121a37bd0caac3dbf873967be00cd925283d",
       "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "uk-national-insurance-pe": {
+      "binding": "unbound",
+      "binding_defects": [
+        "uk-national-insurance-pe: chunk index dashboard/public/data/cases/uk-national-insurance-pe/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 260,
+      "chunk_manifest": [],
+      "constant_fields": 0,
+      "evidence_fields": {},
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-policyengine-uk-national-insurance.json",
+      "report_sha256": "1a7cc7a8c1a1c845f52aaa2aa182011b31aaad8b10776a240f46db44c08c7e8c",
+      "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-pension-credit": {
