@@ -721,11 +721,13 @@ def test_fake_monorepo_produces_no_malformed_country_doubled_ids(tmp_path):
 
 
 def test_multi_checkout_symlink_layout_matches_ci(tmp_path):
-    """Mirror CI: the workspace root holds a real consumer monorepo checkout
-    plus a sibling-checkout symlink to a nested second monorepo. Both walk
-    correctly, output IDs are not doubled, and the symlinked checkout's outputs
-    are not double-counted (the resolved-path dedup collapses the symlink and
-    the nested checkout)."""
+    """Mirror the parent-workspace CI layout: the workspace root
+    (``$GITHUB_WORKSPACE/..``, passed by the shared workflow before
+    TheAxiomFoundation/.github#25 and by the legacy pending-safe workflow)
+    holds a real consumer monorepo checkout plus a sibling-checkout symlink to
+    a nested second monorepo. Both walk correctly, output IDs are not doubled,
+    and the symlinked checkout's outputs are not double-counted (the
+    resolved-path dedup collapses the symlink and the nested checkout)."""
     workspace = tmp_path / "work"
     workspace.mkdir()
     consumer = workspace / "rulespec-uk"
@@ -769,8 +771,11 @@ def test_multi_checkout_symlink_layout_matches_ci(tmp_path):
     assert len(ids) == len(set(ids))
     assert _malformed_doubled_ids(report) == []
 
-    # The reported file path keeps the symlink-name prefix (``rulespec-us/...``)
-    # so CI's changed-file matching against ``<consumer-repo>/<path>`` works.
+    # Under this parent-workspace root the reported file path keeps the
+    # symlink-name prefix (``rulespec-us/...``). The shared workflow now passes
+    # the exact checkout, where paths are repo-relative, so changed-file
+    # consumers map through the report's ``root``
+    # (TheAxiomFoundation/.github#115).
     files_by_id = {item["legal_id"]: item["file"] for item in report["items"]}
     assert (
         files_by_id["us-al:policies/dhr/poe#brand_new_state_helper_xyz"]

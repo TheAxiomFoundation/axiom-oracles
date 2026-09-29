@@ -1891,12 +1891,21 @@ def _country_from_rulespec_prefix(prefix: str) -> str:
 
 
 def _display_file_path(rulespec_file: Path, root: Path) -> str:
-    """Return a file path relative to the workspace ``root`` for reporting.
+    """Return a file path relative to the classifier ``root`` for reporting.
 
-    Prefers the unresolved path so a file reached through a sibling-checkout
-    symlink keeps its symlink-name prefix (``rulespec-us/us-al/...`` rather
-    than ``_axiom/rulespec-us/us-al/...``); CI matches changed files against
-    ``<consumer-repo-name>/<path>`` keys built from that symlink name.
+    ``root`` is the resolved ``--root`` the classifier was given, which the
+    report also records as its ``root`` field. Paths are therefore
+    repo-relative (``us-al/policies/X.yaml``) for the exact checkout that the
+    shared ``validate-rulespec`` workflow now passes (``$GITHUB_WORKSPACE``),
+    and ``<repo>/...`` only for a parent-workspace root that holds the
+    checkout alongside sibling checkouts. Consumers matching items to changed
+    files must map through the report's ``root`` rather than assume either
+    layout (TheAxiomFoundation/.github#115).
+
+    Prefers the unresolved path so, under a parent-workspace root, a file
+    reached through a sibling-checkout symlink keeps its symlink-name prefix
+    (``rulespec-us/us-al/...`` rather than
+    ``<repo>/_axiom/rulespec-us/us-al/...``).
     """
     for candidate in (rulespec_file, rulespec_file.resolve()):
         try:
