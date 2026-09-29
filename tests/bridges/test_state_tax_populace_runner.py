@@ -2961,14 +2961,14 @@ def test_mississippi_request_emits_canonical_person_schedule_without_relation() 
     assert request["dataset"]["inputs"] == [
         {
             "name": slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-11",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},
         },
         {
             "name": slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-12",
             "interval": interval,
             "value": {"kind": "decimal", "value": "20000.0"},
@@ -3007,6 +3007,72 @@ def test_dc_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None:
         )
 
 
+@pytest.mark.parametrize("current_slot", [0, 1])
+@pytest.mark.parametrize("typed", [False, True])
+def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
+    current_slot: int,
+    typed: bool,
+) -> None:
+    from axiom_oracles.bridges.relation_binding import bind_request_relations
+
+    prefix = "us-dc:policies/income_tax/pilot_liability_pipeline"
+    relation = f"{prefix}#relation.dc_pit_pilot_taxpayer_of_tax_unit"
+    request = state_tax_runner._state_request(
+        state="DC",
+        routes=(TaxUnitRoute(1, 1, "DC", "11", 1, DISPOSITION_READY),),
+        year=2026,
+        output=f"{prefix}#tax",
+        projected_inputs={
+            f"{prefix}#input.dc_pit_pilot_supplied_separate_taxable_income": {
+                11: 30_000.0,
+                12: 20_000.0,
+            },
+            f"{prefix}#input.dc_pit_pilot_taxpayer_is_included": {11: True, 12: True},
+            f"{prefix}#input.dc_pit_pilot_supplied_joint_taxable_income": {1: 50_000.0},
+        },
+        declared_relations=(relation,),
+        raw_persons=pd.DataFrame(
+            {"person_id": [11, 12], "person_tax_unit_id": [1, 1]}
+        ),
+    )
+    kinds = {
+        record["entity_id"]: record["entity"]
+        for record in request["dataset"]["inputs"]
+    }
+    assert kinds == {
+        "state-tax-unit-1": "TaxUnit",
+        "state-tax-person-11": "Person",
+        "state-tax-person-12": "Person",
+    }
+    artifact = {
+        "program": {
+            "relations": [
+                {
+                    "name": relation,
+                    "arity": 2,
+                    **({"slot_entities": ["TaxUnit", "Person"]} if typed else {}),
+                }
+            ],
+            "derived": [
+                {
+                    "name": "tax",
+                    "entity": "TaxUnit",
+                    "expr": {
+                        "kind": "sum_related",
+                        "relation": relation,
+                        "current_slot": current_slot,
+                        "related_slot": 1 - current_slot,
+                    },
+                }
+            ],
+        }
+    }
+    runtime_request = bind_request_relations(request, artifact)
+    for record in runtime_request["dataset"]["relations"]:
+        assert kinds[record["tuple"][current_slot]] == "TaxUnit"
+        assert kinds[record["tuple"][1 - current_slot]] == "Person"
+
+
 def test_delaware_request_emits_canonical_person_schedule_without_relation() -> None:
     prefix = "us-de:policies/income_tax/pilot_liability_pipeline"
     separate_slot = f"{prefix}#input.de_pit_pilot_supplied_separate_taxable_income"
@@ -3037,14 +3103,14 @@ def test_delaware_request_emits_canonical_person_schedule_without_relation() -> 
     assert request["dataset"]["inputs"] == [
         {
             "name": separate_slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-21",
             "interval": interval,
             "value": {"kind": "decimal", "value": "20000.0"},
         },
         {
             "name": separate_slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-22",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},

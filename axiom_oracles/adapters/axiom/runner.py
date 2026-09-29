@@ -14,6 +14,7 @@ from typing import Any
 
 import yaml
 
+from ...bridges.relation_binding import bind_request_relations
 from ...comparison.mappings import engine_targets_for_concepts
 from ...core.engine import EngineAdapter
 from ...core.household import Household
@@ -462,6 +463,10 @@ class AxiomRulesRunner(EngineAdapter):
             allowed_program_refs=allowed_program_refs,
             input_record_overlays=input_record_overlays,
         )
+        if request["dataset"]["relations"]:
+            request = bind_request_relations(
+                request, json.loads(artifact_path.read_text())
+            )
         process = self._subprocess_run(
             [
                 str(self.binary_path),
@@ -549,6 +554,10 @@ class AxiomRulesRunner(EngineAdapter):
             allowed_program_refs=allowed_program_refs,
             input_record_overlay=input_record_overlay,
         )
+        if request["dataset"]["relations"]:
+            request = bind_request_relations(
+                request, json.loads(artifact_path.read_text())
+            )
         process = self._subprocess_run(
             [
                 str(self.binary_path),

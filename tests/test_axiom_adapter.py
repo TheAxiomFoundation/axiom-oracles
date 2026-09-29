@@ -349,6 +349,97 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
     assert result.errors == ()
 
 
+@pytest.mark.parametrize(
+    ("typed", "member_inputs"), [(False, False), (False, True), (True, True)]
+)
+@pytest.mark.parametrize("batched", [False, True])
+def test_axiom_runner_binds_relations_against_the_executed_artifact(
+    tmp_path: Path, typed: bool, member_inputs: bool, batched: bool
+) -> None:
+    artifact = tmp_path / "program.compiled.json"
+    artifact.write_text(
+        json.dumps(
+            {
+                "program": {
+                    "relations": [
+                        {
+                            "name": "child_of_unit",
+                            "arity": 2,
+                            **({"slot_entities": ["TaxUnit", "Person"]} if typed else {}),
+                        }
+                    ],
+                    "derived": [
+                        {
+                            "name": "child_count",
+                            "entity": "TaxUnit",
+                            "expr": {
+                                "kind": "count_related",
+                                "relation": "child_of_unit",
+                                "current_slot": 0 if typed else 1,
+                                "related_slot": 1 if typed else 0,
+                            },
+                        }
+                    ],
+                }
+            }
+        )
+    )
+    requests = []
+
+    def capture_request(args, **kwargs):
+        assert args[args.index("--artifact") + 1] == str(artifact)
+        request = json.loads(kwargs["input"])
+        requests.append(request)
+        return subprocess.CompletedProcess(
+            args,
+            0,
+            stdout=json.dumps({"results": [{"outputs": {}}]}),
+            stderr="",
+        )
+
+    runner = AxiomRulesRunner(
+        compiled_artifact_path=artifact,
+        binary_path=tmp_path / "axiom-rules",
+        subprocess_run=capture_request,
+    )
+    case = Case(
+        case_id="case-1",
+        period="2026",
+        metadata={
+            "axiom_input_records": [
+                {
+                    "name": "income",
+                    "entity": "TaxUnit",
+                    "entity_id": "tax_unit",
+                    "value": 0,
+                },
+                *(
+                    [{"name": "age", "entity": "Person", "entity_id": "child", "value": 5}]
+                    if member_inputs
+                    else []
+                ),
+            ],
+            "axiom_relations": [
+                {"name": "child_of_unit", "tuple": ["child", "tax_unit"]}
+            ],
+        },
+    )
+    if batched:
+        [result] = runner._run_case_batch_once([case], ["child_count"], artifact)
+    else:
+        result = runner._run_case_once(case, ["child_count"], artifact)
+    assert result.errors == ()
+    [request] = requests
+    namespace = "case-0::" if batched else ""
+    ids = [f"{namespace}tax_unit", f"{namespace}child"]
+    assert request["dataset"]["relations"][0]["tuple"] == (ids if typed else ids[::-1])
+    assert "relation_binding" not in request
+    if not member_inputs:
+        assert [record["entity_id"] for record in request["dataset"]["inputs"]] == [
+            f"{namespace}tax_unit"
+        ]
+
+
 def test_snap_co_projection_uses_repaired_colorado_income_surface() -> None:
     [case] = attach_axiom_snap_co_inputs(
         [
