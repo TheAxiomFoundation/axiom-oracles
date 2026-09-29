@@ -8,7 +8,7 @@ _comment: PolicyEngine-attributed mismatch explanations and their Axiom side. Ev
   debt + grandfathered) and may only fall, except through an appended debt_raises
   record (append-only). Monotonicity is checked against every committed version of
   this file. Re-pin with `uv run scripts/pe_axiom_standard.py` after an improvement.
-open_max: 87
+open_max: 81
 grandfathered:
 - source: dashboard/public/data/known_causes.json
   id: co-state-supplement|us-co:regulations/9-ccr-2503-5/3.530#oap_total_monthly_grant_standard|amount_difference
@@ -31,42 +31,6 @@ grandfathered:
 - source: dashboard/public/data/known_causes.json
   id: ny-tanf-ecps|us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit|amount_difference
   concept: us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit
-  basis: fix_owner
-  pe_issue: present
-  axiom: missing
-- source: dashboard/public/data/known_causes.json
-  id: ssa-parameters|us:policies/ssa/contribution-and-benefit-base/2026#contribution_and_benefit_base_under_section_230_of_social_security_act|amount_difference
-  concept: us:policies/ssa/contribution-and-benefit-base/2026#contribution_and_benefit_base_under_section_230_of_social_security_act
-  basis: fix_owner
-  pe_issue: present
-  axiom: missing
-- source: dashboard/public/data/known_causes.json
-  id: ssa-parameters|us:policies/ssa/pia-bend-points/2026#first_pia_bend_point|amount_difference
-  concept: us:policies/ssa/pia-bend-points/2026#first_pia_bend_point
-  basis: fix_owner
-  pe_issue: present
-  axiom: missing
-- source: dashboard/public/data/known_causes.json
-  id: ssa-parameters|us:policies/ssa/pia-bend-points/2026#second_pia_bend_point|amount_difference
-  concept: us:policies/ssa/pia-bend-points/2026#second_pia_bend_point
-  basis: fix_owner
-  pe_issue: present
-  axiom: missing
-- source: dashboard/public/data/known_causes.json
-  id: ssa-parameters|us:policies/ssa/quarter-of-coverage/2026#quarter_of_coverage_amount|amount_difference
-  concept: us:policies/ssa/quarter-of-coverage/2026#quarter_of_coverage_amount
-  basis: fix_owner
-  pe_issue: present
-  axiom: missing
-- source: dashboard/public/data/known_causes.json
-  id: ssa-parameters|us:policies/ssa/retirement-earnings-test/2026#retirement_earnings_test_higher_annual_exempt_amount|amount_difference
-  concept: us:policies/ssa/retirement-earnings-test/2026#retirement_earnings_test_higher_annual_exempt_amount
-  basis: fix_owner
-  pe_issue: present
-  axiom: missing
-- source: dashboard/public/data/known_causes.json
-  id: ssa-parameters|us:policies/ssa/retirement-earnings-test/2026#retirement_earnings_test_lower_annual_exempt_amount|amount_difference
-  concept: us:policies/ssa/retirement-earnings-test/2026#retirement_earnings_test_lower_annual_exempt_amount
   basis: fix_owner
   pe_issue: present
   axiom: missing
