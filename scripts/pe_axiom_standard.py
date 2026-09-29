@@ -7,28 +7,32 @@ PolicyEngine (or that links a PolicyEngine issue), or a known cause owned by
 PolicyEngine — must carry:
 
 * the PolicyEngine issue URL (``linked_issue`` or ``evidence.upstream_url``
-  for dispositions, ``issue_url`` for known causes), and
+  for dispositions, ``issue_url`` for known causes; a pull request does not
+  count), and
 * either ``axiom_companion: {legal_ids: [...], tests: [rulespec-us@<sha>:
   <path>.test.yaml#<case>]}`` or ``axiom_encoding_debt: <rulespec issue URL>``.
 
 Explanations that predate the standard are grandfathered in
 ``conformance/pe-axiom-standard.yaml`` with their computed status. Checked
 against every committed version of that file: the grandfathered list may only
-shrink, and ``open_max`` (attributions without a companion: declared debt plus
-grandfathered) may only fall, except through an appended ``debt_raises``
-record.
+shrink, the ``debt_raises`` log only grows, and ``open_max`` (attributions
+without a companion: declared debt plus grandfathered) may only fall, except
+by the increment of a recorded raise.
 
 Usage:
     uv run scripts/pe_axiom_standard.py --check
         CI gate (offline; needs full Git history for the monotonic floor).
     uv run scripts/pe_axiom_standard.py --resolve [--rulespec-checkout rulespec-us=PATH]
-        Resolve every companion pointer: test file at the pinned commit, the
-        commit on main, the case present and asserting each legal id, and the
-        disputed Axiom value when the case is the disputed case. Uses local
-        clones when given, else raw.githubusercontent.com + the GitHub API.
+        Resolve every companion pointer (test file at the pinned commit, the
+        commit on main, the case asserting each legal id, the disputed
+        concept and value, and the same values on main) and every encoding
+        debt (an open rulespec issue). Uses local clones for test files when
+        given, else raw.githubusercontent.com; issues always come from the
+        GitHub API.
     uv run scripts/pe_axiom_standard.py
         Re-pin: drop grandfathered entries that became compliant or vanished
-        and tighten open_max. Never loosens.
+        and tighten open_max, starting from what committed history enforces
+        (so it also repairs a merge or revert). Never loosens.
     uv run scripts/pe_axiom_standard.py --raise-ceiling "<reason>"
         Deliberately raise open_max to the live count and append a
         debt_raises record (date, from, to, reason). Maintainer decision.
@@ -67,6 +71,7 @@ from axiom_oracles.comparison.pe_axiom_standard import (  # noqa: E402
     collect_records,
     committed_versions,
     derive_ratchet,
+    effective_ratchet,
     serialize_ratchet,
     suggest_companions,
     summarize,
@@ -89,9 +94,11 @@ def _source(args: argparse.Namespace):
         checkouts[name] = Path(path).expanduser()
     if checkouts:
         return LocalGitSource(checkouts, main_ref=args.rulespec_main_ref)
-    return GitHubSource(
-        token=os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
-    )
+    return GitHubSource(token=_token())
+
+
+def _token() -> str | None:
+    return os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
 
 
 def _fail(problems: list[str]) -> int:
@@ -134,18 +141,25 @@ def main(argv: list[str] | None = None, repo_root: Path = REPO_ROOT) -> int:
         return 0
 
     if args.resolve:
+        # Issues live only on GitHub, so debt is checked there even when the
+        # RuleSpec test files come from local clones.
         resolver = CompanionResolver(
-            _source(args), require_merged=not args.no_require_merged
+            _source(args),
+            require_merged=not args.no_require_merged,
+            issue_source=GitHubSource(token=_token()),
         )
         problems = list(syntax_errors)
         companions = [r for r in records if r.axiom_status == "companion"]
+        debts = [r for r in records if r.axiom_status == "debt"]
         for record in companions:
             problems.extend(resolver.resolve(record))
+        for record in debts:
+            problems.extend(resolver.resolve_debt(record))
         if problems:
             return _fail(problems)
         print(
             f"pe-axiom companions OK: {len(companions)} companion-backed "
-            "attributions resolved"
+            f"attributions resolved; {len(debts)} encoding-debt issues open"
         )
         return 0
 
@@ -232,21 +246,26 @@ def main(argv: list[str] | None = None, repo_root: Path = REPO_ROOT) -> int:
     reason = args.raise_ceiling
     if reason is not None and not reason.strip():
         return _fail(["--raise-ceiling needs a non-empty reason"])
-    document = derive_ratchet(records, committed, raise_reason=reason)
+    # Ratchet from what --check enforces, not only from the working file:
+    # after a revert or a merge resolution the file can sit above the
+    # committed history's ceiling, or grandfather rows history has closed.
+    versions, _ = committed_versions(repo_root)
+    effective = effective_ratchet(committed, versions or [])
+    document = derive_ratchet(records, effective, raise_reason=reason)
     # Re-pinning never absorbs a violation: new or regressed attributions are
-    # judged against the COMMITTED grandfathered rows, and the open count
-    # against the new ceiling (which only a --raise-ceiling can lift).
+    # judged against the grandfathered rows history allows, and the open
+    # count against the new ceiling (which only a --raise-ceiling can lift).
     problems = check_records(
         records,
         Ratchet(
             open_max=document["open_max"],
-            grandfathered=committed.grandfathered,
+            grandfathered=effective.grandfathered,
         ),
     )
     if problems:
         return _fail(problems)
     ratchet_path.write_text(serialize_ratchet(document))
-    raised = len(document.get("debt_raises") or []) > len(committed.debt_raises)
+    raised = len(document.get("debt_raises") or []) > len(effective.debt_raises)
     print(
         f"Wrote {RATCHET_RELATIVE_PATH}: {len(document['grandfathered'])} "
         f"grandfathered, open_max {document['open_max']}"

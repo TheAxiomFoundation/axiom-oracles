@@ -20,13 +20,17 @@ I6  Differential: the grandfathered entries check_records reports as
 I7  Replay: any sequence of re-pins and deliberate raises, each taken only
     when the gate allows it, passes check_history against every earlier
     committed version.
-I8  A raise binds: an accepted document's open_max never exceeds the
-    committed ceiling or its latest raise's ``to``, and an appended raise's
-    ``from`` never exceeds the committed ceiling it replaces.
+I8  A raise binds: an accepted document's open_max never exceeds a committed
+    version's open_max plus the increments (to - from) of the raise records
+    it adds, and it keeps every committed raise record.
 I9  Accounting: companion + debt + missing = attributed; open = debt + missing.
 I10 Attribution is order-independent, and only upstream_engine_gap entries
     attribute.
 I11 Companion pointers round-trip through str and parse.
+I12 Merge: two branches that each moved only as the gate allowed can always
+    be merged. Re-pinning either side's ratchet file (plus a raise when the
+    merged open count rose) passes check_history against every version on
+    both branches, unless the merged data itself regresses an entry.
 """
 
 from __future__ import annotations
@@ -39,6 +43,7 @@ from hypothesis import strategies as st
 
 from axiom_oracles.comparison.pe_axiom_standard import (
     UPSTREAM_ENGINE_GAP,
+    effective_ratchet,
     CompanionPointer,
     Ratchet,
     RatchetDocumentError,
@@ -126,20 +131,87 @@ def _only_the_ceiling(problems: list[str]) -> bool:
     return bool(problems) and all(p.startswith("RATCHET regressed") for p in problems)
 
 
+NEW_IDS = "ghij"
+MOVES = ("keep", "keep", "keep", "issue", "side", "drop", "regress")
+
+
+@st.composite
+def evolved(draw, records: list[Record]) -> list[Record]:
+    """The next data state: existing records persist, improve, regress or go,
+    and new attributions appear (mostly with declared debt, which needs a
+    raise, so raises are common rather than rare)."""
+
+    out: list[Record] = []
+    for record in records:
+        move = draw(st.sampled_from(MOVES))
+        if move == "drop":
+            continue
+        pe = record.pe_issue is not None
+        rank = AXIOM_SIDES.index(record.axiom_status)
+        if move == "issue":
+            pe = True
+        elif move == "side":
+            rank = min(rank + 1, 2)
+        elif move == "regress":
+            pe, rank = (False, rank) if pe else (pe, max(rank - 1, 0))
+        out.append(_record(record.source, record.id, record.concept, pe, AXIOM_SIDES[rank]))
+    taken = {(r.source, r.id) for r in out}
+    for new_id in draw(st.lists(st.sampled_from(NEW_IDS), max_size=2, unique=True)):
+        source = draw(st.sampled_from(SOURCES))
+        if (source, new_id) in taken:
+            continue
+        side = draw(st.sampled_from(("debt", "debt", "companion", "missing")))
+        out.append(_record(source, new_id, CONCEPTS[0], True, side))
+        taken.add((source, new_id))
+    return out
+
+
+def _commit(
+    records: list[Record],
+    current: Ratchet,
+    *,
+    raise_allowed: bool,
+    versions=(),
+    reason: str = "r",
+):
+    """What a contributor can commit: a re-pin, or a raise when only the
+    ceiling blocks. ``None`` when the gate refuses the data change."""
+
+    effective = effective_ratchet(current, versions)
+    problems = check_records(records, effective)
+    if not problems:
+        return _parse(derive_ratchet(records, effective))
+    if raise_allowed and _only_the_ceiling(problems):
+        return _parse(
+            derive_ratchet(records, effective, raise_reason=reason, today=TODAY)
+        )
+    return None
+
+
+@st.composite
+def branch(draw, records: list[Record], ratchet: Ratchet, name: str, steps: int = 3):
+    """A line of commits from (records, ratchet) that the gate allowed."""
+
+    versions: list[tuple[str, Ratchet]] = []
+    for step in range(draw(st.integers(0, steps))):
+        candidate = draw(evolved(records))
+        following = _commit(
+            candidate, ratchet, raise_allowed=draw(st.booleans()), reason=f"{name}{step}"
+        )
+        if following is None:
+            continue  # refused; the data change is not committed
+        records, ratchet = candidate, following
+        versions.append((f"{name}{step}", ratchet))
+    return records, ratchet, versions
+
+
 @st.composite
 def committed_ratchets(draw) -> tuple[list[Record], Ratchet]:
     """A ratchet the script could have committed, and the records it saw."""
 
     records = draw(overlapping_records)
     ratchet = _parse(derive_ratchet(records, None))
-    for later in draw(st.lists(overlapping_records, max_size=3)):
-        problems = check_records(later, ratchet)
-        if not problems:
-            ratchet = _parse(derive_ratchet(later, ratchet))
-        elif _only_the_ceiling(problems):
-            ratchet = _parse(
-                derive_ratchet(later, ratchet, raise_reason="r", today=TODAY)
-            )
+    records, ratchet, _ = draw(branch(records, ratchet, "c"))
     return records, ratchet
 
 
@@ -245,26 +317,19 @@ def test_regression_checks_agree(records, current) -> None:
 
 
 @PROPERTY_SETTINGS
-@given(
-    states=st.lists(overlapping_records, min_size=1, max_size=6),
-    raise_when_allowed=st.lists(st.booleans(), min_size=6, max_size=6),
-)
-def test_replayed_repins_and_raises_pass_history(states, raise_when_allowed) -> None:
-    current = _parse(derive_ratchet(states[0], None))
-    versions = [("v0", current)]
-    for step, records in enumerate(states[1:], start=1):
-        problems = check_records(records, current)
-        if not problems:
-            document = derive_ratchet(records, current)
-        elif _only_the_ceiling(problems) and raise_when_allowed[step - 1]:
-            document = derive_ratchet(records, current, raise_reason="r", today=TODAY)
-        else:
+@given(start=overlapping_records, data=st.data())
+def test_replayed_repins_and_raises_pass_history(start, data) -> None:
+    current = _parse(derive_ratchet(start, None))
+    records, versions = start, [("v0", current)]
+    for step in range(1, 7):
+        candidate = data.draw(evolved(records), label=f"state{step}")
+        following = _commit(candidate, current, raise_allowed=data.draw(st.booleans()))
+        if following is None:
             continue  # the gate refuses this change; nothing is committed
-        following = _parse(document)
-        assert check_records(records, following) == []
+        assert check_records(candidate, following) == []
         assert check_history(following, versions) == []
+        records, current = candidate, following
         versions.append((f"v{step}", following))
-        current = following
 
 
 # --------------------------------------------------------------------------
@@ -306,11 +371,73 @@ def test_an_accepted_document_is_bound_by_its_raise(current, data) -> None:
         return  # refused as malformed
     if check_history(edited, [("committed", committed)]):
         return  # refused as a loosening
-    if append_raise:
-        assert raise_from <= committed.open_max
-        assert open_max <= raise_to
-    else:
-        assert open_max <= committed.open_max
+    increment = raise_to - raise_from if append_raise else 0
+    assert open_max <= committed.open_max + increment
+
+
+# --------------------------------------------------------------------------
+# I12: parallel branches always merge
+# --------------------------------------------------------------------------
+
+
+@PROPERTY_SETTINGS
+@given(start=overlapping_records, data=st.data())
+def test_parallel_branches_always_merge(start, data) -> None:
+    base = _parse(derive_ratchet(start, None))
+    base_records, base, trunk = data.draw(branch(start, base, "m"), label="trunk")
+    history = [("m", base)] + trunk
+    a_records, a, a_versions = data.draw(branch(base_records, base, "a"), label="a")
+    b_records, b, b_versions = data.draw(branch(base_records, base, "b"), label="b")
+    versions = history + a_versions + b_versions
+    # The merged data: one side's records plus the other side's new ones, or a
+    # further evolution of that.
+    keys = {(r.source, r.id) for r in a_records}
+    merged_records = a_records + [r for r in b_records if (r.source, r.id) not in keys]
+    merged_records = data.draw(st.sampled_from([merged_records, b_records, a_records]))
+    # The merge takes one side's ratchet file as-is and re-pins it.
+    side = data.draw(st.sampled_from([a, b]), label="file taken")
+    merged = _commit(merged_records, side, raise_allowed=True, versions=versions)
+    if merged is None:
+        # Refused only for a genuine violation in the merged data: a new
+        # attribution without its Axiom side, or a regressed grandfathered
+        # entry, judged against what history allows.
+        problems = check_records(merged_records, effective_ratchet(side, versions))
+        assert problems and not _only_the_ceiling(problems)
+        return
+    assert check_records(merged_records, merged) == []
+    assert check_history(merged, versions) == []
+
+
+@PROPERTY_SETTINGS
+@given(start=overlapping_records, data=st.data())
+def test_parallel_raises_merge(start, data) -> None:
+    # Each branch adds its own new debt-backed attribution and raises for it,
+    # possibly after other gate-allowed commits; the merge keeps both.
+    base = _parse(derive_ratchet(start, None))
+    versions = [("m", base)]
+    tips = []
+    for name, new_id in (("a", "g"), ("b", "h")):
+        records, ratchet, line = data.draw(branch(start, base, name, steps=2), label=name)
+        records = [r for r in records if r.id not in "gh"] + [
+            _record(SOURCES[0], new_id, CONCEPTS[0], True, "debt")
+        ]
+        raised = _commit(records, ratchet, raise_allowed=True, reason=f"{name} raise")
+        if raised is None:
+            return  # this branch's data is refused for another reason
+        versions += line + [(f"{name}-raise", raised)]
+        tips.append((records, raised))
+    (a_records, a), (b_records, b) = tips
+    merged_records = a_records + [r for r in b_records if r.id == "h"]
+    side = data.draw(st.sampled_from([a, b]), label="file taken")
+    merged = _commit(merged_records, side, raise_allowed=True, versions=versions)
+    if merged is None:
+        problems = check_records(merged_records, effective_ratchet(side, versions))
+        assert problems and not _only_the_ceiling(problems)
+        return
+    # check_history also proves every raise record either branch committed
+    # survived the merge (the log only grows).
+    assert check_records(merged_records, merged) == []
+    assert check_history(merged, versions) == []
 
 
 # --------------------------------------------------------------------------

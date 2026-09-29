@@ -167,18 +167,20 @@ jobs:
         run: uv run scripts/unexplained_ratchet.py --check
 
       - name: PolicyEngine attributions carry their Axiom side (grandfathered list only shrinks; open debt only falls)
-        # A mismatch blamed on PolicyEngine must link the PolicyEngine issue
+        # A mismatch blamed on PolicyEngine must cite the PolicyEngine issue
         # and declare axiom_companion or axiom_encoding_debt. Monotonicity is
         # derived from every committed version of the ratchet file (needs
         # fetch-depth: 0, set above), so it holds on pushes as well as PRs.
         run: uv run scripts/pe_axiom_standard.py --check
 
-      - name: PolicyEngine-attribution companions resolve in RuleSpec
+      - name: PolicyEngine-attribution companions and debt resolve in RuleSpec
         # Every axiom_companion test pointer: the file exists at the pinned
         # commit, the commit is on the RuleSpec repo's main, the case asserts
-        # each declared legal id (and the disputed Axiom value when the case
-        # is the disputed case). Public repos: raw fetch + compare API. A
-        # no-op (no network) while no entry declares a companion.
+        # each declared legal id (the disputed concept included when it is a
+        # RuleSpec output) and the disputed Axiom value when it is the
+        # disputed case, and it still does on main. Every axiom_encoding_debt
+        # is an open rulespec-* issue. Public repos: raw fetch + REST API,
+        # with retries; a transient failure says "re-run".
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: uv run scripts/pe_axiom_standard.py --resolve

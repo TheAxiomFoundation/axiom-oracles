@@ -71,22 +71,44 @@ entries:
 ## PolicyEngine attributions carry their Axiom side
 
 Standard (2026-09-24): a PolicyEngine policy bug is not done until Axiom has
-the policy right. An `upstream_engine_gap` entry blames PolicyEngine when
-the rows it annotates in the committed dashboard report have PolicyEngine as
-the counterpart engine. An entry that annotates no rows is also attributed
-when the report's only counterpart is PolicyEngine, or when its `kind` is a
-PolicyEngine-leg kind in a multi-oracle report. An entry is also
-attributed, whatever its rows say, when it links a PolicyEngine issue or pull
-request. Attribution is computed from the data. It does not come from entry
-names: `nd-open-rows-axiom-pe-divergent` annotates TAXSIM rows, so it is not
-attributed. Known causes (`dashboard/public/data/known_causes.json`) whose
-`fix_owner` starts with `policyengine`, or whose `issue_url` is a PolicyEngine
-issue, fall under the same rule.
+the policy right.
+
+**Which entries blame PolicyEngine.** Attribution is computed from the
+committed data. It does not come from entry names: for example,
+`nd-open-rows-axiom-pe-divergent` annotates TAXSIM rows, so it is not
+attributed. Only `upstream_engine_gap` entries can be attributed, in one of
+four ways:
+
+- The rows the entry annotates in the committed dashboard report compare
+  Axiom with PolicyEngine. A row that compares two oracles (PolicyEngine vs
+  TAXSIM, Tax-Calculator vs PolicyEngine) has no Axiom leg, so it does not
+  say which side is wrong and attributes nothing on its own.
+- The entry annotates no rows, and PolicyEngine is the report's only
+  counterpart.
+- The entry annotates no rows, the report has several oracles, and the
+  entry's `kind` is a PolicyEngine-leg kind.
+- The entry links a PolicyEngine issue or pull request, whatever its rows
+  say.
+
+A known cause (`dashboard/public/data/known_causes.json`) falls under the
+same rule when two things hold:
+
+- Its `fix_owner` names `policyengine` as one of its hyphenated parts, or its
+  `issue_url` links PolicyEngine.
+- It explains a live bucket: the dashboard's `causeFor()` picks it for some
+  (concept, kind) bucket of mismatch rows in a committed report. When a
+  report publishes only a sample of its rows, a nonzero per-concept count
+  also keeps the cause live.
+
+A cause whose mismatch cleared attributes nothing. Of two causes for one
+bucket, only the one the dashboard shows attributes.
 
 Every such entry must carry:
 
-- the PolicyEngine issue URL in `linked_issue` or `evidence.upstream_url`
-  (`issue_url` for a known cause), and
+- a PolicyEngine **issue** URL, in `linked_issue` or `evidence.upstream_url`
+  (`issue_url` for a known cause). A pull request attributes the entry but
+  does not count as the issue; cite the issue it closes. Comment anchors,
+  query strings and a lowercase org are accepted.
 - exactly one of:
 
 ```yaml
@@ -99,31 +121,63 @@ Every such entry must carry:
     axiom_encoding_debt: https://github.com/TheAxiomFoundation/rulespec-us/issues/<n>   # (ii) owed
 ```
 
-`scripts/pe_axiom_standard.py --check` enforces this in CI against
-`conformance/pe-axiom-standard.yaml`, which is generated and must not be
-hand-edited. The entries that predated the standard are grandfathered there,
-each with its computed status. `open_max` counts attributions without a
-companion (declared debt plus grandfathered). The check compares the file
-with every committed version of itself, the way
-`scripts/closure_universe.py` derives its pending floor, so a pull request or
-a direct push cannot loosen it by editing the file:
+A companion must be about the disputed concept.
 
-- the grandfathered list may only shrink, and a grandfathered entry's status
-  may only rise;
-- `open_max` may only fall. A deliberate raise is
-  `uv run scripts/pe_axiom_standard.py --raise-ceiling "<reason>"`, which
-  appends a dated `debt_raises` record (`from`, `to`, `reason`). That list is
-  append-only. The record binds the raise: `open_max` may not exceed the
-  latest `to`, and `from` may not exceed the committed ceiling it replaces,
-  so the record states the whole increase.
+- When the concept is a RuleSpec output (its module's companion test asserts
+  it), the concept itself must be among `legal_ids`, and `--resolve` refuses
+  a companion that leaves it out.
+- A comparison-surface concept (such as `us:tax/federal-income-tax#eitc`) has
+  no module of its own. For those, every legal id and test must at least be
+  in the concept's country (`us` → `rulespec-us` or `rulespec-us-*`).
 
-`--resolve` checks each companion pointer against the RuleSpec repository:
+**The ratchet.** `scripts/pe_axiom_standard.py --check` enforces all of this
+in CI against `conformance/pe-axiom-standard.yaml`. That file is generated;
+do not hand-edit it. The entries that predated the standard are grandfathered
+there, each with its computed status. `open_max` counts attributions without
+a companion (declared debt plus grandfathered).
 
-- the file exists at the pinned commit
-- the commit is on main
-- the case asserts each legal id
-- a case named like the disputed case asserts the Axiom value from the
-  comparison
+The check compares the file with every committed version of itself, the way
+`scripts/closure_universe.py` derives its pending floor, so neither a pull
+request nor a direct push can loosen it by editing the file:
+
+- The grandfathered list may only shrink, and a grandfathered entry's status
+  may only rise.
+- The `debt_raises` log only grows. No committed record may be removed or
+  edited.
+- `open_max` may not exceed any committed version's `open_max` plus the
+  increments (`to - from`) of the raise records added since that version.
+  Only a deliberate raise lifts the ceiling:
+  `uv run scripts/pe_axiom_standard.py --raise-ceiling "<reason>"` appends a
+  dated record (`from`, `to`, `reason`) and raises by exactly `to - from`.
+
+Because each version is charged only for the raises it has not seen,
+parallel branches merge. After a merge or a revert, re-pin with
+`uv run scripts/pe_axiom_standard.py`, adding `--raise-ceiling` when the open
+count rose. The re-pin starts from what history enforces, not from the
+working file alone:
+
+- it restores every committed raise record
+- it drops grandfathered rows any version closed
+- it lowers `open_max` to the committed ceiling
+
+`--resolve` checks each declared Axiom side against GitHub (the RuleSpec test
+files can come from local clones instead):
+
+- **Companion tests:**
+  - The test file exists at the pinned commit, and that commit is on main.
+  - The case asserts each legal id.
+  - A case named like the disputed case asserts the Axiom value from the
+    comparison. Judgments compare as holds/not_holds, numbers within
+    0.005, and a one-row tables case by its row. A value that cannot be
+    compared fails.
+  - The case is still on main and asserts the same values there, because
+    RuleSpec CI runs main.
+- **Encoding debt** must be an open issue, not a pull request, in a
+  TheAxiomFoundation `rulespec-*` repository. A closed debt issue means the
+  encoding landed: replace the debt with `axiom_companion`, or reopen it.
+
+Transient GitHub failures are retried and reported as "re-run", never as
+"not found".
 
 `--suggest --rulespec-checkout rulespec-us=<clone>` lists open attributions
 whose disputed case already exists as a companion case.

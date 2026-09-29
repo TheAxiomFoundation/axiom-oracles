@@ -13,7 +13,10 @@ PolicyEngine leg of a comparison. This module makes the standard structural:
   ``axiom_companion``
       ``{legal_ids: [...], tests: ["rulespec-us@<sha>:<path>.test.yaml#<case>"]}``
       — the Axiom legal id(s) asserted correct and a committed RuleSpec
-      companion test case that exercises the disputed case.
+      companion test case that exercises the disputed case. When the disputed
+      concept is itself a RuleSpec output it must be among the legal ids;
+      otherwise every legal id and test must be in the concept's country
+      (:func:`companion_scope_problems`, and ``--resolve``).
   ``axiom_encoding_debt``
       ``https://github.com/TheAxiomFoundation/rulespec-<jur>/issues/<n>`` —
       the Axiom encoding (or its companion case) is owed and tracked; counted
@@ -23,59 +26,66 @@ PolicyEngine leg of a comparison. This module makes the standard structural:
   :func:`check_history`). Explanations that predate the standard are
   grandfathered with their status computed at freeze time. Across every
   committed version of the ratchet file the grandfathered set may only
-  shrink, a grandfathered entry's recorded status may only rise, and
-  ``open_max`` — PolicyEngine attributions without a companion (declared
-  debt plus grandfathered) — may only fall. The one deliberate exception is
-  an appended ``debt_raises`` record, which starts a new epoch and bounds
-  it (``open_max`` <= the record's ``to``; its ``from`` <= the ceiling it
-  replaces); the ``debt_raises`` list itself is append-only. Monotonicity is
-  derived from
-  Git history, as ``scripts/closure_universe.py`` derives its pending floor,
-  so it bites on pull requests and on direct pushes alike and cannot be
-  defeated by editing the ratchet file in the same change.
-* Optionally it resolves each companion pointer against the RuleSpec
-  repository (:class:`CompanionResolver`): the test file must exist at the
-  pinned commit, that commit must be on the repository's main line, the named
-  case must assert every declared legal id, and a case that shares the
-  disputed case's id must assert the Axiom value the comparison produced.
+  shrink, a grandfathered entry's recorded status may only rise, the
+  ``debt_raises`` log only grows, and ``open_max`` — PolicyEngine
+  attributions without a companion (declared debt plus grandfathered) — may
+  not exceed any committed version's ``open_max`` plus the increments
+  (``to - from``) of the raises recorded since (:func:`history_ceiling`).
+  Charging each version only for the raises it has not seen keeps parallel
+  branches mergeable; re-pinning starts from :func:`effective_ratchet`, what
+  history enforces. Monotonicity is derived from Git history, as
+  ``scripts/closure_universe.py`` derives its pending floor, so it bites on
+  pull requests and on direct pushes alike and cannot be defeated by editing
+  the ratchet file in the same change.
+* Optionally it resolves each declared Axiom side against GitHub or local
+  clones (:class:`CompanionResolver`). A companion test file must exist at
+  the pinned commit, which must be on the repository's main line; the named
+  case must assert every declared legal id, the Axiom value the comparison
+  produced when it shares the disputed case's id, and the same values on
+  main today. Encoding debt must be an open issue.
 
 Attribution rule (``upstream_engine_gap`` dispositions only — the one kind
 that says the counterpart engine is wrong):
 
 1. Rows: the committed dashboard report rows this entry annotates name their
    counterpart engine (``left_engine``/``right_engine``, a row ``engines``
-   list, or the report's two-engine ``engines``). Any PolicyEngine
-   counterpart makes the entry PolicyEngine-attributed.
+   list, or the report's two-engine ``engines``). A PolicyEngine counterpart
+   of Axiom makes the entry PolicyEngine-attributed; a row between two
+   oracles (no Axiom leg) attributes nothing by itself.
 2. Report: an entry that annotates no row (expired, or a sampled report) is
    attributed from the report's engine set when PolicyEngine is the only
    counterpart, or — in a multi-oracle report — when its mismatch ``kind``
    is a PolicyEngine-leg kind (``policyengine_amount_difference``).
-3. URL: an entry whose ``linked_issue`` or ``evidence.upstream_url`` is a
-   PolicyEngine GitHub issue or pull request is PolicyEngine-attributed
-   whatever the rows say.
+3. URL: an entry whose ``linked_issue`` or ``evidence.upstream_url`` links a
+   PolicyEngine issue or pull request is PolicyEngine-attributed whatever
+   the rows say. Only an issue satisfies the requirement to cite one.
 
 Known causes (``dashboard/public/data/known_causes.json``) are the second
-place a mismatch bucket can be explained; a cause whose ``fix_owner`` starts
-with ``policyengine`` or whose ``issue_url`` is a PolicyEngine issue is
-PolicyEngine-attributed and carries the same two fields.
+place a mismatch bucket can be explained. A cause whose ``fix_owner`` names
+``policyengine`` or whose ``issue_url`` links PolicyEngine is attributed when
+it is live: the dashboard's ``causeFor()`` picks it for a mismatch bucket in
+a committed report (:func:`_known_cause_live`).
 """
-
 from __future__ import annotations
 
 import datetime as _dt
+import http.client
 import json
 import math
 import re
 import subprocess
+import time
 import urllib.error
 import urllib.request
+from collections import Counter
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
 
 import yaml
 
-RATCHET_SCHEMA = "axiom_oracles.pe_axiom_standard.v1"
+_SCHEMA_FAMILY = "axiom_oracles.pe_axiom_standard.v"
+RATCHET_SCHEMA = f"{_SCHEMA_FAMILY}1"
 RATCHET_RELATIVE_PATH = Path("conformance") / "pe-axiom-standard.yaml"
 KNOWN_CAUSES_RELATIVE_PATH = (
     Path("dashboard") / "public" / "data" / "known_causes.json"
@@ -88,11 +98,16 @@ CAMPAIGN_LOCAL_DISPOSITIONS_FILES = frozenset({"us-tariff-schedule.yaml"})
 UPSTREAM_ENGINE_GAP = "upstream_engine_gap"
 AXIOM_ENGINE = "axiom"
 
-PE_ISSUE_URL_RE = re.compile(
-    r"^https://github\.com/PolicyEngine/[A-Za-z0-9._-]+/(?:issues|pull)/\d+/?$"
+# A PolicyEngine issue or pull request (any casing of the org, optionally
+# with a comment anchor or query). Either one attributes a mismatch to
+# PolicyEngine; only an issue satisfies the standard's "cite the PE issue".
+PE_LINK_URL_RE = re.compile(
+    r"^https://github\.com/(?i:policyengine)/[A-Za-z0-9._-]+/"
+    r"(?P<kind>issues|pull)/(?P<number>[1-9]\d*)/?(?:[?#]\S*)?$"
 )
 RULESPEC_ISSUE_URL_RE = re.compile(
-    r"^https://github\.com/TheAxiomFoundation/rulespec-[a-z0-9-]+/issues/\d+/?$"
+    r"^https://github\.com/TheAxiomFoundation/(?P<repo>rulespec-[a-z0-9-]+)/"
+    r"issues/(?P<number>[1-9]\d*)/?$"
 )
 COMPANION_POINTER_RE = re.compile(
     r"^(?P<repo>rulespec-[a-z0-9-]+)@(?P<sha>[0-9a-f]{40}):"
@@ -249,8 +264,24 @@ def is_pe_engine(name: object) -> bool:
     )
 
 
+def is_pe_link_url(value: object) -> bool:
+    """A PolicyEngine issue or pull request: enough to attribute."""
+
+    return isinstance(value, str) and PE_LINK_URL_RE.match(value) is not None
+
+
 def is_pe_issue_url(value: object) -> bool:
-    return isinstance(value, str) and PE_ISSUE_URL_RE.match(value) is not None
+    """A PolicyEngine issue: what the standard requires an entry to cite."""
+
+    match = PE_LINK_URL_RE.match(value) if isinstance(value, str) else None
+    return match is not None and match.group("kind") == "issues"
+
+
+def is_pe_owner(owner: object) -> bool:
+    """A known cause's ``fix_owner`` names PolicyEngine as one of its tokens
+    (``policyengine``, ``policyengine-data``, ``upstream-policyengine``)."""
+
+    return "policyengine" in re.split(r"[^a-z0-9]+", str(owner or "").lower())
 
 
 # --------------------------------------------------------------------------
@@ -345,6 +376,11 @@ def _row_counterparts(report: dict, row: dict) -> set[str]:
     left, right = _row_sides(report, row)
     if left is None and right is None:
         return _report_counterparts(report)
+    if AXIOM_ENGINE not in (left, right):
+        # Oracle vs oracle (PolicyEngine vs TAXSIM, Tax-Calculator vs
+        # PolicyEngine): the row does not say which side is wrong, so it
+        # attributes nothing; a linked PolicyEngine issue still does.
+        return set()
     return {str(e) for e in (left, right) if e and e != AXIOM_ENGINE}
 
 
@@ -357,15 +393,24 @@ def _row_axiom_value(report: dict, row: dict):
     return None
 
 
-def _pe_issue_of_disposition(entry: dict) -> str | None:
+def _disposition_links(entry: dict) -> tuple[object, ...]:
     evidence = entry.get("evidence") or {}
-    for candidate in (
+    return (
         entry.get("linked_issue"),
         evidence.get("upstream_url") if isinstance(evidence, dict) else None,
-    ):
-        if is_pe_issue_url(candidate):
-            return candidate
-    return None
+    )
+
+
+def _pe_issue_of_disposition(entry: dict) -> str | None:
+    """The PolicyEngine issue an entry cites (a pull request does not count)."""
+
+    return next(
+        (url for url in _disposition_links(entry) if is_pe_issue_url(url)), None
+    )
+
+
+def _links_pe(entry: dict) -> bool:
+    return any(is_pe_link_url(url) for url in _disposition_links(entry))
 
 
 def attribute_disposition(
@@ -416,7 +461,7 @@ def attribute_disposition(
             entry.get("kind")
         ):
             basis = "kind"
-    if basis is None and _pe_issue_of_disposition(entry):
+    if basis is None and _links_pe(entry):
         basis = "url"
     return (
         basis,
@@ -444,6 +489,64 @@ def known_cause_id(cause: dict) -> str:
     if isinstance(engines, dict) and engines:
         parts.append(f"{engines.get('left')}-{engines.get('right')}")
     return "|".join(parts)
+
+
+def _cause_for(
+    known_causes: list[dict], report: dict, concept: object, kind: object
+) -> dict | None:
+    """Mirror ``causeFor()`` in dashboard/src/utils/programs.js."""
+
+    candidates = [
+        c
+        for c in known_causes
+        if c.get("suite") == report.get("suite")
+        and c.get("concept") == concept
+        and c.get("kind") == kind
+    ]
+    engines = report.get("engines") or {}
+    for cause in candidates:
+        own = cause.get("engines")
+        if isinstance(own, dict) and own and (
+            own.get("left") == engines.get("left")
+            and own.get("right") == engines.get("right")
+        ):
+            return cause
+    return next((c for c in candidates if not c.get("engines")), None)
+
+
+def _known_cause_live(
+    cause: dict, known_causes: list[dict], reports: list[dict]
+) -> bool:
+    """The cause explains a mismatch bucket in a committed report.
+
+    A cause is live when the dashboard would pick it (``causeFor``) for some
+    (concept, kind) bucket of mismatch rows. When a report publishes only a
+    sample of its rows, a nonzero ``mismatches_by_concept`` count for the
+    cause's concept keeps it live (fail closed: attributed).
+    """
+
+    concept, kind = cause.get("concept"), cause.get("kind")
+    for report in reports:
+        # Only the cause the dashboard would show for this bucket is live, so
+        # two causes for one bucket never both attribute.
+        if _cause_for(known_causes, report, concept, kind) is not cause:
+            continue
+        rows = report.get("mismatches") or []
+        if any(
+            row.get("concept") == concept and row.get("kind") == kind
+            for row in rows
+        ):
+            return True
+        summary = report.get("summary") or {}
+        if (summary.get("mismatch_count") or 0) > len(rows):
+            for bucket in summary.get("mismatches_by_concept") or []:
+                if (
+                    isinstance(bucket, dict)
+                    and concept in (bucket.get("concept"), bucket.get("value"))
+                    and bucket.get("count")
+                ):
+                    return True
+    return False
 
 
 def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
@@ -484,17 +587,21 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
     if known_causes_path.exists():
         payload = json.loads(known_causes_path.read_text())
         source = KNOWN_CAUSES_RELATIVE_PATH.as_posix()
-        for cause in payload.get("entries") or []:
-            if not isinstance(cause, dict):
-                continue
+        causes = [c for c in payload.get("entries") or [] if isinstance(c, dict)]
+        for cause in causes:
             cause_id = known_cause_id(cause)
             errors.extend(
                 validate_axiom_side_fields(cause, f"{source} [{cause_id}]")
             )
             issue = cause.get("issue_url")
-            owner = str(cause.get("fix_owner") or "").lower()
-            owned = owner.startswith("policyengine")
-            if not (owned or is_pe_issue_url(issue)):
+            owned = is_pe_owner(cause.get("fix_owner"))
+            if not (owned or is_pe_link_url(issue)):
+                continue
+            # A cause that explains no mismatch in the committed reports
+            # attributes nothing (PolicyEngine fixed it, or the rows moved).
+            if not _known_cause_live(
+                cause, causes, reports.get(str(cause.get("suite")), [])
+            ):
                 continue
             records.append(
                 Record(
@@ -507,6 +614,17 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
                     entry=cause,
                 )
             )
+    # Grandfathering and the presence rule are keyed by (source, id,
+    # concept); two explanations sharing a key would share one baseline.
+    seen: set[tuple[str, str, str]] = set()
+    for record in records:
+        if record.key in seen:
+            errors.append(
+                f"{record.label()}: two PolicyEngine attributions share the key "
+                f"{record.key}; known causes must be unique per suite, concept, "
+                "kind and engines"
+            )
+        seen.add(record.key)
     return records, errors
 
 
@@ -530,16 +648,26 @@ class Ratchet:
     debt_raises: list[dict] = field(default_factory=list)
 
     @classmethod
-    def from_document(cls, document: object) -> Ratchet:
+    def from_document(cls, document: object, *, strict: bool = True) -> Ratchet:
+        """Parse a ratchet document.
+
+        ``strict`` (the working file) requires exactly this schema's keys.
+        Committed versions are parsed leniently: a later schema may add keys,
+        so only the fields the monotonic rules read must be present and well
+        formed there.
+        """
+
         if not isinstance(document, Mapping):
             raise RatchetDocumentError("ratchet document must be a mapping")
-        if document.get("schema") != RATCHET_SCHEMA:
+        schema = document.get("schema")
+        if schema != RATCHET_SCHEMA and (
+            strict or not str(schema).startswith(_SCHEMA_FAMILY)
+        ):
             raise RatchetDocumentError(
-                f"unexpected ratchet schema {document.get('schema')!r}; "
-                f"expected {RATCHET_SCHEMA!r}"
+                f"unexpected ratchet schema {schema!r}; expected {RATCHET_SCHEMA!r}"
             )
         unknown = set(document) - _DOCUMENT_KEYS
-        if unknown:
+        if strict and unknown:
             raise RatchetDocumentError(
                 f"ratchet document has unknown keys: {sorted(unknown)}"
             )
@@ -550,7 +678,7 @@ class Ratchet:
         if not isinstance(raises, list):
             raise RatchetDocumentError("debt_raises must be a list")
         for index, item in enumerate(raises):
-            if not isinstance(item, Mapping) or set(item) != _RAISE_KEYS:
+            if not _has_keys(item, _RAISE_KEYS, strict):
                 raise RatchetDocumentError(
                     f"debt_raises[{index}] must have exactly the keys "
                     f"{sorted(_RAISE_KEYS)}"
@@ -567,26 +695,12 @@ class Ratchet:
                 raise RatchetDocumentError(
                     f"debt_raises[{index}] must raise the ceiling (to > from)"
                 )
-            # A raise starts from the ceiling of the epoch it closes, which
-            # the previous raise bounds.
-            if index and item["from"] > raises[index - 1]["to"]:
-                raise RatchetDocumentError(
-                    f"debt_raises[{index}] starts from {item['from']}, above "
-                    f"the previous raise's ceiling {raises[index - 1]['to']}"
-                )
-        # The latest raise is the ceiling of the current epoch: a raise record
-        # cannot authorize more debt than it names.
-        if raises and open_max > raises[-1]["to"]:
-            raise RatchetDocumentError(
-                f"open_max {open_max} exceeds the latest debt_raises ceiling "
-                f"{raises[-1]['to']}"
-            )
         rows = document.get("grandfathered") or []
         if not isinstance(rows, list):
             raise RatchetDocumentError("grandfathered must be a list")
         grandfathered: dict[tuple[str, str, str], dict] = {}
         for index, row in enumerate(rows):
-            if not isinstance(row, Mapping) or set(row) != _GRANDFATHERED_KEYS:
+            if not _has_keys(row, _GRANDFATHERED_KEYS, strict):
                 raise RatchetDocumentError(
                     f"grandfathered[{index}] must have exactly the keys "
                     f"{sorted(_GRANDFATHERED_KEYS)}"
@@ -600,12 +714,18 @@ class Ratchet:
                 raise RatchetDocumentError(
                     f"grandfathered[{index}] duplicates {key[0]} [{key[1]}]"
                 )
-            grandfathered[key] = dict(row)
+            grandfathered[key] = {k: row[k] for k in _GRANDFATHERED_KEYS}
         return cls(
             open_max=open_max,
             grandfathered=grandfathered,
-            debt_raises=[dict(item) for item in raises],
+            debt_raises=[{k: item[k] for k in _RAISE_KEYS} for item in raises],
         )
+
+
+def _has_keys(item: object, keys: set[str], strict: bool) -> bool:
+    if not isinstance(item, Mapping):
+        return False
+    return set(item) == keys if strict else keys <= set(item)
 
 
 def _row_for(record: Record) -> dict:
@@ -714,6 +834,7 @@ def check_records(records: list[Record], ratchet: Ratchet | None) -> list[str]:
     problems: list[str] = []
     grandfathered = ratchet.grandfathered if ratchet else {}
     for record in records:
+        problems.extend(companion_scope_problems(record))
         if record.compliant:
             continue
         missing = []
@@ -811,7 +932,12 @@ def committed_versions(
             continue  # the commit deleted the file
         try:
             versions.append(
-                (commit, Ratchet.from_document(yaml.safe_load(shown.stdout)))
+                (
+                    commit,
+                    Ratchet.from_document(
+                        yaml.safe_load(shown.stdout), strict=False
+                    ),
+                )
             )
         except (yaml.YAMLError, RatchetDocumentError) as exc:
             errors.append(
@@ -819,6 +945,87 @@ def committed_versions(
                 "a committed version cannot be skipped when deriving the floor"
             )
     return versions, errors
+
+
+def _raise_key(item: Mapping) -> tuple[str, int, int, str]:
+    return (str(item["date"]), item["from"], item["to"], str(item["reason"]))
+
+
+def _raise_log(ratchet: Ratchet) -> Counter:
+    return Counter(_raise_key(item) for item in ratchet.debt_raises)
+
+
+def history_ceiling(
+    current: Ratchet, versions: Iterable[tuple[str, Ratchet]]
+) -> tuple[int, str] | None:
+    """The highest ``open_max`` every committed version allows ``current``.
+
+    A committed version allows its own ``open_max`` plus the increments
+    (``to - from``) of the raise records ``current`` carries that the version
+    does not. The ceiling is the least of those allowances, with the commit
+    that sets it; ``None`` without history. Because each version is charged
+    only for the raises it has not seen, parallel branches merge: a pay-down
+    on one branch and a raise on another combine to the pay-down plus the
+    raise, and two raises combine to both increments.
+    """
+
+    ceiling: tuple[int, str] | None = None
+    log = _raise_log(current)
+    for commit, version in versions:
+        unseen = log - _raise_log(version)
+        allowed = version.open_max + sum(
+            (to - start) * count for (_, start, to, _), count in unseen.items()
+        )
+        if ceiling is None or allowed < ceiling[0]:
+            ceiling = (allowed, commit[:12])
+    return ceiling
+
+
+def effective_ratchet(
+    current: Ratchet, versions: Iterable[tuple[str, Ratchet]]
+) -> Ratchet:
+    """The working ratchet tightened to what :func:`check_history` enforces.
+
+    Re-pinning starts from this, not from the working file alone, so that
+    after a revert or a merge (where the file may be one side's version) the
+    result passes history whenever the live data allows it:
+
+    * the raise log is the union of every committed log and the file's;
+    * a grandfathered row survives only if every committed version still
+      grandfathers it, at the highest status any of them recorded (so a
+      regression against either side of a merge is judged, not absorbed);
+    * ``open_max`` is at most :func:`history_ceiling`.
+    """
+
+    versions = list(versions)
+    if not versions:
+        return current
+    log = _raise_log(current)
+    for _, version in versions:
+        log |= _raise_log(version)
+    raises = [
+        {"date": date, "from": start, "to": to, "reason": reason}
+        for (date, start, to, reason) in sorted(log.elements())
+    ]
+    merged = Ratchet(open_max=current.open_max, debt_raises=raises)
+    ceiling = history_ceiling(merged, versions)
+    rows: dict[tuple[str, str, str], dict] = {}
+    for key, row in current.grandfathered.items():
+        if not all(key in version.grandfathered for _, version in versions):
+            continue
+        best = dict(row)
+        for _, version in versions:
+            then = version.grandfathered[key]
+            if _PE_ISSUE_RANK[then["pe_issue"]] > _PE_ISSUE_RANK[best["pe_issue"]]:
+                best["pe_issue"] = then["pe_issue"]
+            if _AXIOM_RANK[then["axiom"]] > _AXIOM_RANK[best["axiom"]]:
+                best["axiom"] = then["axiom"]
+        rows[key] = best
+    return Ratchet(
+        open_max=min(current.open_max, ceiling[0]),
+        grandfathered=rows,
+        debt_raises=raises,
+    )
 
 
 def check_history(
@@ -829,20 +1036,17 @@ def check_history(
     * ``grandfathered`` keys must be a subset of every committed version's
       keys, and each key's recorded status may not fall below any committed
       status (the grandfather door stays closed);
-    * every committed ``debt_raises`` list must be a prefix of the current
-      one (append-only);
-    * ``open_max`` may not exceed any committed value in the same epoch
-      (versions carrying the same number of ``debt_raises`` records);
-    * each raise starts from at most the committed floor of the epoch it
-      closes, so the record states the full increase it authorizes (the
-      document itself bounds ``open_max`` by the latest raise's ``to``).
+    * the ``debt_raises`` log only grows: every committed record is still
+      present, unedited;
+    * ``open_max`` may not exceed :func:`history_ceiling`: every committed
+      version's ``open_max`` plus the increments of the raises recorded since.
     """
 
+    versions = list(versions)
     problems: list[str] = []
     grown: dict[tuple[str, str, str], str] = {}
     lowered: dict[tuple[str, str, str], str] = {}
-    # epoch (number of debt_raises records) -> lowest committed open_max.
-    floors: dict[int, tuple[int, str]] = {}
+    log = _raise_log(current)
     for commit, version in versions:
         short = commit[:12]
         for key in set(current.grandfathered) - set(version.grandfathered):
@@ -855,15 +1059,12 @@ def check_history(
                 or _AXIOM_RANK[now["axiom"]] < _AXIOM_RANK[then["axiom"]]
             ):
                 lowered.setdefault(key, short)
-        prefix = current.debt_raises[: len(version.debt_raises)]
-        if prefix != version.debt_raises:
+        dropped = _raise_log(version) - log
+        if dropped:
             problems.append(
-                f"debt_raises was rewritten relative to {short}: the list is "
-                "append-only"
+                f"debt_raises records committed at {short} were removed or "
+                f"edited ({sorted(dropped)}): the log only grows"
             )
-        epoch = len(version.debt_raises)
-        if epoch not in floors or version.open_max < floors[epoch][0]:
-            floors[epoch] = (version.open_max, short)
     for key, short in sorted(grown.items()):
         problems.append(
             f"grandfathered list grew relative to {short}: {key[0]} "
@@ -875,20 +1076,13 @@ def check_history(
             f"grandfathered status of {key[0]} [{key[1]}] fell below the "
             f"status recorded at {short}"
         )
-    for index, item in enumerate(current.debt_raises):
-        closed = floors.get(index)
-        if closed is not None and item["from"] > closed[0]:
-            problems.append(
-                f"debt_raises[{index}] raises from {item['from']}, but the "
-                f"committed ceiling it replaces was {closed[0]} (at "
-                f"{closed[1]}); a raise must record the full increase"
-            )
-    floor = floors.get(len(current.debt_raises))
-    if floor is not None and current.open_max > floor[0]:
+    ceiling = history_ceiling(current, versions)
+    if ceiling is not None and current.open_max > ceiling[0]:
         problems.append(
             f"open_max {current.open_max} exceeds the committed floor "
-            f"{floor[0]} (at {floor[1]}). open_max may only fall; a deliberate "
-            "raise must append a debt_raises record via `--raise-ceiling`."
+            f"{ceiling[0]} (at {ceiling[1]}, plus the increments of the raises "
+            "recorded since). open_max may only fall; a deliberate raise must "
+            "append a debt_raises record via `--raise-ceiling`."
         )
     return problems
 
@@ -933,12 +1127,34 @@ class LocalGitSource:
         return result.stdout.strip()
 
 
-class GitHubSource:
-    """Read public RuleSpec repositories over HTTPS (content-addressed)."""
+class SourceUnavailable(RuntimeError):
+    """A remote read failed for a reason other than absence; re-run."""
 
-    def __init__(self, owner: str = "TheAxiomFoundation", token: str | None = None):
+
+# HTTP statuses (0: no response) worth retrying before giving up.
+_TRANSIENT_STATUSES = frozenset({0, 429, 500, 502, 503, 504})
+
+
+class GitHubSource:
+    """Read public RuleSpec repositories over HTTPS (content-addressed).
+
+    Transient failures (no response, 429, 5xx) are retried with backoff.
+    Absence (404) is an answer; any other failure is reported as
+    "cannot verify", never as "not found".
+    """
+
+    def __init__(
+        self,
+        owner: str = "TheAxiomFoundation",
+        token: str | None = None,
+        *,
+        attempts: int = 3,
+        backoff: float = 2.0,
+    ):
         self.owner = owner
         self.token = token
+        self.attempts = attempts
+        self.backoff = backoff
 
     def _get(self, url: str, *, api: bool = False) -> tuple[int, bytes]:
         request = urllib.request.Request(url)
@@ -946,42 +1162,75 @@ class GitHubSource:
             request.add_header("Accept", "application/vnd.github+json")
             if self.token:
                 request.add_header("Authorization", f"Bearer {self.token}")
+        status = 0
+        for attempt in range(self.attempts):
+            if attempt:
+                time.sleep(self.backoff * 2 ** (attempt - 1))
+            try:
+                with urllib.request.urlopen(request, timeout=30) as response:
+                    return response.status, response.read()
+            except urllib.error.HTTPError as exc:
+                status = exc.code
+            except (OSError, http.client.HTTPException):
+                status = 0  # reset, timeout, refused, truncated response
+            if status not in _TRANSIENT_STATUSES:
+                break
+        return status, b""
+
+    def _json(self, url: str) -> tuple[int, object]:
+        status, body = self._get(url, api=True)
+        if status != 200:
+            return status, None
         try:
-            with urllib.request.urlopen(request, timeout=30) as response:
-                return response.status, response.read()
-        except urllib.error.HTTPError as exc:
-            return exc.code, b""
-        except urllib.error.URLError:
-            return 0, b""
+            return status, json.loads(body)
+        except ValueError:
+            return 0, None
 
     def read(self, repo: str, sha: str, path: str) -> str | None:
         status, body = self._get(
             f"https://raw.githubusercontent.com/{self.owner}/{repo}/{sha}/{path}"
         )
-        return body.decode("utf-8") if status == 200 else None
+        if status == 200:
+            return body.decode("utf-8")
+        if status == 404:
+            return None
+        raise SourceUnavailable(
+            f"could not fetch {repo}@{sha[:12]}:{path} (HTTP {status or 'no response'})"
+        )
 
     def is_merged(self, repo: str, sha: str) -> bool | None:
-        status, body = self._get(
-            f"https://api.github.com/repos/{self.owner}/{repo}/compare/{sha}...main",
-            api=True,
+        status, payload = self._json(
+            f"https://api.github.com/repos/{self.owner}/{repo}/compare/{sha}...main"
         )
-        if status != 200:
+        if status == 404:
+            return False  # the commit (or the repository) is unknown to GitHub
+        if not isinstance(payload, dict):
             return None
-        return json.loads(body).get("status") in {"ahead", "identical"}
+        return payload.get("status") in {"ahead", "identical"}
 
     def main_sha(self, repo: str) -> str | None:
-        status, body = self._get(
-            f"https://api.github.com/repos/{self.owner}/{repo}/commits/main",
-            api=True,
+        _, payload = self._json(
+            f"https://api.github.com/repos/{self.owner}/{repo}/commits/main"
         )
-        return json.loads(body).get("sha") if status == 200 else None
+        return payload.get("sha") if isinstance(payload, dict) else None
+
+    def issue(self, repo: str, number: int) -> dict | None:
+        """The issue payload; ``{}`` when it does not exist; ``None`` when
+        GitHub could not be asked."""
+
+        status, payload = self._json(
+            f"https://api.github.com/repos/{self.owner}/{repo}/issues/{number}"
+        )
+        if status in (404, 410):
+            return {}
+        return payload if isinstance(payload, dict) else None
 
 
 def _numeric(value) -> float | None:
     if isinstance(value, bool):
         return None
     if isinstance(value, int | float):
-        return float(value)
+        return float(value) if math.isfinite(value) else None
     if isinstance(value, str):
         try:
             number = float(value)
@@ -989,6 +1238,42 @@ def _numeric(value) -> float | None:
             return None
         return number if math.isfinite(number) else None
     return None
+
+
+# RuleSpec encodes judgments as holds / not_holds; comparisons carry booleans.
+_JUDGMENTS = {"holds": True, "not_holds": False}
+
+
+def _comparable(value) -> tuple[str, object] | None:
+    """A value normalized for comparison: ("judgment", bool) or ("number",
+    float); ``None`` when it cannot be read as either. A one-row tables-style
+    list is its row; a longer list cannot stand for one disputed value."""
+
+    if isinstance(value, list):
+        return _comparable(value[0]) if len(value) == 1 else None
+    if isinstance(value, bool):
+        return ("judgment", value)
+    if isinstance(value, str) and value.strip() in _JUDGMENTS:
+        return ("judgment", _JUDGMENTS[value.strip()])
+    number = _numeric(value)
+    return None if number is None else ("number", number)
+
+
+def _same(left: tuple[str, object], right: tuple[str, object]) -> bool:
+    if left[0] == right[0] == "number":
+        return math.isclose(left[1], right[1], rel_tol=1e-9, abs_tol=0.005)
+    if left[0] == right[0]:
+        return left[1] == right[1]
+    # A judgment against a 0/1 number (an eligibility flag carried as a number).
+    judgment, number = (left, right) if left[0] == "judgment" else (right, left)
+    return number[1] in (0.0, 1.0) and bool(number[1]) == judgment[1]
+
+
+def _same_assertion(left, right) -> bool:
+    if left == right:
+        return True
+    a, b = _comparable(left), _comparable(right)
+    return a is not None and b is not None and _same(a, b)
 
 
 def _find_case(document: object, name: str) -> dict | None:
@@ -1001,21 +1286,100 @@ def _find_case(document: object, name: str) -> dict | None:
     return None
 
 
+def _asserts(document: object, legal_id: str) -> bool:
+    cases = document if isinstance(document, list) else (
+        document.get("cases") if isinstance(document, dict) else None
+    )
+    return any(
+        isinstance(case, dict)
+        and isinstance(case.get("output"), Mapping)
+        and legal_id in case["output"]
+        for case in cases or []
+    )
+
+
+def _country(legal_id: object) -> str | None:
+    match = LEGAL_ID_RE.match(legal_id) if isinstance(legal_id, str) else None
+    return match.group("jurisdiction").split("-", 1)[0] if match else None
+
+
+def companion_scope_problems(record: Record) -> list[str]:
+    """A companion must be about the disputed concept (offline part).
+
+    When the concept is not among ``legal_ids`` (a comparison-surface concept
+    such as ``us:tax/federal-income-tax#eitc`` has no RuleSpec module of its
+    own), every legal id and test must at least be in the concept's country.
+    ``--resolve`` additionally requires the concept itself whenever it is a
+    RuleSpec output at the pinned commit.
+    """
+
+    companion = record.entry.get("axiom_companion")
+    if not isinstance(companion, Mapping):
+        return []
+    legal_ids = companion.get("legal_ids")
+    if not isinstance(legal_ids, list) or record.concept in legal_ids:
+        return []
+    country = _country(record.concept)
+    if country is None:
+        return []
+    problems = [
+        f"{record.label()}: companion legal id {legal_id} is outside the "
+        f"disputed concept's country ({record.concept})"
+        for legal_id in legal_ids
+        if _country(legal_id) not in (None, country)
+    ]
+    for raw in companion.get("tests") or []:
+        pointer = CompanionPointer.parse(raw)
+        if pointer is not None and not (
+            pointer.repo == f"rulespec-{country}"
+            or pointer.repo.startswith(f"rulespec-{country}-")
+        ):
+            problems.append(
+                f"{record.label()}: companion test {pointer} is outside "
+                f"rulespec-{country} (the disputed concept's country)"
+            )
+    return problems
+
+
+_UNAVAILABLE = object()
+
+
 class CompanionResolver:
-    def __init__(self, source, *, require_merged: bool = True):
+    """Resolve an entry's Axiom side against the RuleSpec repositories."""
+
+    def __init__(self, source, *, require_merged: bool = True, issue_source=None):
         self.source = source
         self.require_merged = require_merged
+        if issue_source is None and hasattr(source, "issue"):
+            issue_source = source
+        self.issue_source = issue_source
         self._cache: dict[tuple[str, str, str], object] = {}
+        self._merged: dict[tuple[str, str], bool | None] = {}
+        self._main: dict[str, str | None] = {}
 
-    def _document(self, pointer: CompanionPointer):
-        key = (pointer.repo, pointer.sha, pointer.path)
+    def _document(self, repo: str, sha: str, path: str):
+        key = (repo, sha, path)
         if key not in self._cache:
-            text = self.source.read(pointer.repo, pointer.sha, pointer.path)
             try:
-                self._cache[key] = None if text is None else yaml.safe_load(text)
-            except yaml.YAMLError:
-                self._cache[key] = None
+                text = self.source.read(repo, sha, path)
+            except SourceUnavailable:
+                self._cache[key] = _UNAVAILABLE
+            else:
+                try:
+                    self._cache[key] = None if text is None else yaml.safe_load(text)
+                except yaml.YAMLError:
+                    self._cache[key] = None
         return self._cache[key]
+
+    def _is_merged(self, repo: str, sha: str) -> bool | None:
+        if (repo, sha) not in self._merged:
+            self._merged[(repo, sha)] = self.source.is_merged(repo, sha)
+        return self._merged[(repo, sha)]
+
+    def _main_sha(self, repo: str) -> str | None:
+        if repo not in self._main:
+            self._main[repo] = self.source.main_sha(repo)
+        return self._main[repo]
 
     def resolve(self, record: Record) -> list[str]:
         companion = record.entry.get("axiom_companion")
@@ -1023,23 +1387,29 @@ class CompanionResolver:
             return []
         problems: list[str] = []
         legal_ids = [str(x) for x in companion.get("legal_ids") or []]
+        concept_module = legal_id_companion_path(record.concept)
         for raw in companion.get("tests") or []:
             pointer = CompanionPointer.parse(raw)
             if pointer is None:
                 continue  # syntax already reported
             label = f"{record.label()} companion {pointer}"
             if self.require_merged:
-                merged = self.source.is_merged(pointer.repo, pointer.sha)
+                merged = self._is_merged(pointer.repo, pointer.sha)
                 if merged is None:
                     problems.append(
                         f"{label}: cannot verify the commit is on "
-                        f"{pointer.repo} main"
+                        f"{pointer.repo} main (GitHub unavailable; re-run)"
                     )
                 elif not merged:
                     problems.append(
                         f"{label}: commit is not on {pointer.repo} main"
                     )
-            document = self._document(pointer)
+            document = self._document(pointer.repo, pointer.sha, pointer.path)
+            if document is _UNAVAILABLE:
+                problems.append(
+                    f"{label}: could not fetch the test file (transient; re-run)"
+                )
+                continue
             if document is None:
                 problems.append(
                     f"{label}: test file not found (or not YAML) at the "
@@ -1054,30 +1424,128 @@ class CompanionResolver:
             if not isinstance(outputs, Mapping):
                 problems.append(f"{label}: case has no output mapping")
                 continue
+            # When the disputed concept is itself a RuleSpec output, the
+            # companion must declare it, which brings in the value check.
+            if (
+                record.concept not in legal_ids
+                and concept_module is not None
+                and concept_module[0] == pointer.repo
+            ):
+                module = self._document(pointer.repo, pointer.sha, concept_module[1])
+                if module is _UNAVAILABLE:
+                    problems.append(
+                        f"{label}: could not fetch {concept_module[1]} "
+                        "(transient; re-run)"
+                    )
+                elif module is not None and _asserts(module, record.concept):
+                    problems.append(
+                        f"{label}: the disputed concept {record.concept} is a "
+                        f"RuleSpec output ({concept_module[1]} asserts it at "
+                        "the pinned commit); declare it among legal_ids"
+                    )
             for legal_id in legal_ids:
                 if legal_id not in outputs:
-                    problems.append(
-                        f"{label}: case does not assert {legal_id}"
+                    problems.append(f"{label}: case does not assert {legal_id}")
+            if record.concept in legal_ids and record.concept in outputs:
+                problems.extend(
+                    self._value_problems(
+                        label, record, pointer.case, outputs[record.concept]
                     )
-                    continue
-                # A companion case that IS the disputed case must assert the
-                # value Axiom produced in the comparison — the dispute is then
-                # pinned in RuleSpec CI, not just described.
-                axiom_numbers = {
-                    _numeric(value)
-                    for value in record.axiom_values.get(pointer.case, ())
-                } - {None}
-                if legal_id == record.concept and len(axiom_numbers) == 1:
-                    expected = _numeric(outputs[legal_id])
-                    (actual,) = axiom_numbers
-                    if expected is not None and not math.isclose(
-                        expected, actual, rel_tol=1e-9, abs_tol=0.005
-                    ):
-                        problems.append(
-                            f"{label}: case asserts {legal_id} = {expected} "
-                            f"but the disputed Axiom value is {actual}"
-                        )
+                )
+            if self.require_merged:
+                problems.extend(
+                    self._main_problems(label, pointer, legal_ids, outputs)
+                )
         return problems
+
+    def _value_problems(
+        self, label: str, record: Record, case_name: str, asserted
+    ) -> list[str]:
+        """A companion case that IS the disputed case must assert the value
+        Axiom produced in the comparison, so the dispute is pinned in RuleSpec
+        CI, not just described."""
+
+        actual = {
+            _comparable(value) for value in record.axiom_values.get(case_name, ())
+        } - {None}
+        if len(actual) != 1:
+            return []  # not a disputed case, or its rows disagree
+        (value,) = actual
+        expected = _comparable(asserted)
+        if expected is None:
+            return [
+                f"{label}: cannot compare {record.concept} = {asserted!r} with "
+                f"the disputed Axiom value {value[1]!r}; pin it with a scalar "
+                "(or one-row) case"
+            ]
+        if not _same(expected, value):
+            return [
+                f"{label}: case asserts {record.concept} = {expected[1]!r} but "
+                f"the disputed Axiom value is {value[1]!r}"
+            ]
+        return []
+
+    def _main_problems(
+        self, label: str, pointer: CompanionPointer, legal_ids, outputs
+    ) -> list[str]:
+        """The pinned case must still be on main, asserting the same values:
+        RuleSpec CI runs main, so a case deleted or changed there no longer
+        pins anything."""
+
+        head = self._main_sha(pointer.repo)
+        if head is None:
+            return [
+                f"{label}: cannot read {pointer.repo} main to confirm the case "
+                "is still there (re-run)"
+            ]
+        if head == pointer.sha:
+            return []
+        document = self._document(pointer.repo, head, pointer.path)
+        if document is _UNAVAILABLE:
+            return [f"{label}: could not fetch the test file on main (transient; re-run)"]
+        case = _find_case(document, pointer.case) if document is not None else None
+        if case is None:
+            return [
+                f"{label}: the case is gone from {pointer.repo} main "
+                f"({head[:12]}); re-pin the companion or replace it"
+            ]
+        head_outputs = case.get("output")
+        if not isinstance(head_outputs, Mapping):
+            head_outputs = {}
+        return [
+            f"{label}: {pointer.repo} main ({head[:12]}) no longer asserts "
+            f"{legal_id} = {outputs[legal_id]!r}; re-pin the companion"
+            for legal_id in legal_ids
+            if legal_id in outputs
+            and not (
+                legal_id in head_outputs
+                and _same_assertion(head_outputs[legal_id], outputs[legal_id])
+            )
+        ]
+
+    def resolve_debt(self, record: Record) -> list[str]:
+        """``axiom_encoding_debt`` must name an open issue in a rulespec repo."""
+
+        url = record.entry.get("axiom_encoding_debt")
+        match = RULESPEC_ISSUE_URL_RE.match(url) if isinstance(url, str) else None
+        if match is None:
+            return []  # syntax already reported
+        label = f"{record.label()} axiom_encoding_debt {url}"
+        if self.issue_source is None:
+            return [f"{label}: no GitHub source to verify the issue"]
+        payload = self.issue_source.issue(match.group("repo"), int(match.group("number")))
+        if payload is None:
+            return [f"{label}: cannot verify the issue (GitHub unavailable; re-run)"]
+        if not payload:
+            return [f"{label}: no such issue"]
+        if payload.get("pull_request") is not None:
+            return [f"{label}: is a pull request, not an issue"]
+        if payload.get("state") != "open":
+            return [
+                f"{label}: the issue is closed. If the encoding landed, replace "
+                "the debt with axiom_companion; otherwise reopen the issue."
+            ]
+        return []
 
 
 def legal_id_companion_path(legal_id: str) -> tuple[str, str] | None:
