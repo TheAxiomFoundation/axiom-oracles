@@ -31,6 +31,8 @@ dependencies = [
   # replaying the pinned engine; keep that load-bearing verifier in the base env.
   "cryptography>=44.0",
   "pyyaml>=6.0",
+  # US PolicyEngine mappings: the shared Axiom <-> PolicyEngine map (bridges/registry.py).
+  "axiom-mappings @ git+https://github.com/TheAxiomFoundation/axiom-mappings@161bb14dd2af9f981ac8639145a4144a5353cf0d",
   "requests>=2.31",
 ]
 
@@ -106,3 +108,7 @@ tmp_path_retention_policy = "failed"
 
 [tool.ruff]
 target-version = "py313"
+
+[tool.hatch.metadata]
+# axiom-mappings is pinned by git commit until it is published.
+allow-direct-references = true

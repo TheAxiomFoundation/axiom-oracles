@@ -385,6 +385,32 @@ def _cms_chip_composition_mapping(legal_id: str) -> PolicyEngineMapping | None:
     return None
 
 
+# Countries whose PolicyEngine mappings live in the shared Axiom <-> PolicyEngine map
+# (TheAxiomFoundation/axiom-mappings), which policyengine-axiom and axiom-api also read.
+SHARED_MAP_COUNTRIES = ("us",)
+
+
+def _registry_payloads() -> list[tuple[str, dict[str, Any]]]:
+    """Every country's mapping payload, in file-name order (the order the registry was built in before)."""
+    mapping_dir = Path(__file__).with_name("mappings")
+    payloads = {
+        mapping_path.name: yaml.load(mapping_path.read_text(), Loader=_YamlLoader) or {}
+        for mapping_path in mapping_dir.glob("*.yaml")
+    }
+    if SHARED_MAP_COUNTRIES:
+        from axiom_mappings import load as load_shared_map
+        from axiom_mappings.export import oracles_registry
+
+        for country in SHARED_MAP_COUNTRIES:
+            name = f"{country}.yaml"
+            if name in payloads:
+                raise ValueError(
+                    f"{name} is served by axiom-mappings; remove the packaged copy"
+                )
+            payloads[name] = oracles_registry(load_shared_map(country))
+    return sorted(payloads.items())
+
+
 @lru_cache(maxsize=1)
 def load_policyengine_registry() -> PolicyEngineOracleRegistry:
     """Load packaged PolicyEngine mappings.
@@ -394,9 +420,7 @@ def load_policyengine_registry() -> PolicyEngineOracleRegistry:
     """
     mappings: dict[str, PolicyEngineMapping] = {}
     prefix_mappings: list[PolicyEngineMapping] = []
-    mapping_dir = Path(__file__).with_name("mappings")
-    for mapping_path in sorted(mapping_dir.glob("*.yaml")):
-        payload = yaml.load(mapping_path.read_text(), Loader=_YamlLoader) or {}
+    for mapping_path, payload in _registry_payloads():
         raw_mappings = payload.get("mappings", [])
         if not isinstance(raw_mappings, list):
             raise ValueError(f"{mapping_path} mappings must be a list")

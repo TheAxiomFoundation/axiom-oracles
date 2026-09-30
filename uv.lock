@@ -66,10 +66,20 @@ wheels = [
 ]
 
 [[package]]
+name = "axiom-mappings"
+version = "0.1.0"
+source = { git = "https://github.com/TheAxiomFoundation/axiom-mappings?rev=161bb14dd2af9f981ac8639145a4144a5353cf0d#161bb14dd2af9f981ac8639145a4144a5353cf0d" }
+dependencies = [
+    { name = "jsonschema" },
+    { name = "pyyaml" },
+]
+
+[[package]]
 name = "axiom-oracles"
 version = "0.2.1"
 source = { editable = "." }
 dependencies = [
+    { name = "axiom-mappings" },
     { name = "click" },
     { name = "cryptography" },
     { name = "pyyaml" },
@@ -102,6 +112,7 @@ taxsim = [
 
 [package.metadata]
 requires-dist = [
+    { name = "axiom-mappings", git = "https://github.com/TheAxiomFoundation/axiom-mappings?rev=161bb14dd2af9f981ac8639145a4144a5353cf0d" },
     { name = "click", specifier = ">=8.1" },
     { name = "cryptography", specifier = ">=44.0" },
     { name = "gettsim", marker = "extra == 'gettsim'", specifier = "==1.2" },
