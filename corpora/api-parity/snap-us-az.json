@@ -54,8 +54,8 @@
     "amount": 0.01
   },
   "known_deviation": {
-    "issue": "https://github.com/TheAxiomFoundation/axiom-api/issues/85",
-    "note": "AZ package applies the earned income deduction differently than the USDA-truth expectations: net income comes out 1231 vs 1442 and the allotment 398.70 vs 335.40. Expected values remain the legal truth; this pin records current artifact behavior so monitors alarm on change, not on the known gap.",
+    "issue": "https://github.com/TheAxiomFoundation/axiom-api/issues/243",
+    "note": "The hosted package path does not apply derived-rule pins (axiom-api#243), so the caller's na_net_income of 1442 is dropped and the engine computes net income from the other supplied facts: 1231, giving an allotment of 398.70 instead of 335.40. Expected values are the outputs with the caller's na_net_income applied, which the local executors produce. This pin records current hosted behavior so monitors alarm on change, not on the known gap.",
     "pinned_outputs": {
       "snap_benefit_amount": 398.7,
       "snap_net_income": 1231,
