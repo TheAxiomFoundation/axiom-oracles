@@ -1,6 +1,6 @@
 {
   "id": "snap-us-az-family-1",
-  "description": "Arizona SNAP canonical three-person household using package-native compiled inputs.",
+  "description": "Arizona SNAP canonical three-person household in the package's native fact names, including values for two derived rules.",
   "axiom_request": {
     "program_id": "snap",
     "jurisdiction": "us-az",
@@ -47,8 +47,8 @@
     "snap_benefit_amount"
   ],
   "notes": [
-    "Canonical values are monthly. Eight of the household facts are input slots of the admitted DES artifact; na_net_income and snap_excess_shelter_deduction_for_net_income name derived rules, which apply only where the executor pins derived rules (see known_deviation).",
-    "The Arizona package takes its package-native slot names rather than the broader generic SNAP household fact contract."
+    "Canonical values are monthly. Eight of the household facts are input slots of the admitted DES artifact; na_net_income and snap_excess_shelter_deduction_for_net_income name derived rules, which the API's package path pins only when it executes locally (see known_deviation).",
+    "This case uses the package's native slot names; the package also accepts the shared SNAP fact vocabulary (household_size, snap_gross_monthly_income, shelter_costs)."
   ],
   "tolerance": {
     "amount": 0.01
