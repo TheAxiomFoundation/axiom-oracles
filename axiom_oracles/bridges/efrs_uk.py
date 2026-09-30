@@ -2243,7 +2243,9 @@ def compare_uk_efrs(
         ):
             program = universal_credit_program.resolve()
             if not program.exists():
-                raise SystemExit(f"{selected_surface} RuleSpec not found: {program}")
+                raise SystemExit(
+                    f"{selected_surface} RuleSpec not found: {program}"
+                )
         else:
             # rulespec-uk moved its content under a top-level ``uk/``
             # jurisdiction directory (canonical-layout cut, 2026-06-12).
@@ -4964,9 +4966,7 @@ def build_housing_benefit_applicable_amount_request(
     queries: list[dict[str, Any]] = []
     for row in rows_for_surface(pe_data, "housing-benefit-applicable-amount"):
         entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
-        for name, value in project_housing_benefit_applicable_amount_inputs(
-            row
-        ).items():
+        for name, value in project_housing_benefit_applicable_amount_inputs(row).items():
             inputs.append(
                 input_record(
                     f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
@@ -5881,8 +5881,9 @@ def policyengine_uk_exact_age(row: Any, state_pension_age: float) -> float:
     From PolicyEngine/policyengine-uk#1899, state_pension_age is the person's
     own State Pension age from their date of birth, and is_SP_age holds when
     12 * floor(age) + months_since_last_birthday - 12 * state_pension_age,
-    rounded to a thousandth of a month, is at least zero. The exact age is
-    floor(age) + months_since_last_birthday / 12. Where that rounds to the
+    rounded to a thousandth of a month, is at least zero, with months since the
+    last birthday clipped to [0, 12 - 1e-4]. The exact age is floor(age) +
+    months_since_last_birthday / 12 with the same clip. Where that rounds to the
     State Pension age, the State Pension age is returned itself, so a person
     who attains it at the commencement of 6 October stays an exact tie instead
     of landing either side of it by float32 storage error. Earlier releases
@@ -6578,7 +6579,9 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
         ]
     if surface == "marriage-allowance":
         return [
-            row for row in persons if money(row_value(row, "marriage_allowance", 0)) > 0
+            row
+            for row in persons
+            if money(row_value(row, "marriage_allowance", 0)) > 0
         ]
     if SURFACE_SPECS[surface].entity == "benunit":
         return benunits
@@ -6737,16 +6740,26 @@ def compare_outputs(
             "State Pension Credit Act section 1 qualifying-age comparison "
             "queries RuleSpec's day-level qualifying_age on 6 October of the "
             "fiscal year, the day PolicyEngine UK reads State Pension age "
-            "status on, and supplies PolicyEngine's state_pension_age for "
+            "status on from policyengine-uk#1899 (the day does not change "
+            "RuleSpec's result, which takes pensionable age as an input), "
+            "and supplies PolicyEngine's state_pension_age for "
             "both the pensionable-age leaf and the woman-born-same-day leaf. "
             "From policyengine-uk#1899 that is each person's own State "
             "Pension age from their date of birth (66 years and 1 month for "
             "someone born 6 April 1960), not one age per year. The attained-age "
             "judgment is compared against PolicyEngine's is_SP_age, which "
             "tests exact age on 6 October, so claimant_age is the exact age "
-            "floor(age) + months_since_last_birthday / 12, not the whole age; "
-            "whole age would put people born 6 April 1960 to 5 March 1961 "
-            "below a State Pension age that PolicyEngine has them over. Where "
+            "floor(age) + months_since_last_birthday / 12, with months capped "
+            "at 12 - 1e-4 as in PolicyEngine, not the whole age. Whole age "
+            "would put people below a State Pension age they have reached "
+            "whenever it exceeds their whole age: 66-year-olds past a State "
+            "Pension age of 66 and some months (born 6 April to 5 July 1960 "
+            "in 2026-27, 7 October 1960 to 5 January 1961 in 2027-28), and, "
+            "in simulations built from data, almost everyone in the year of "
+            "age in which they reach a State Pension age of 66 or 67, because "
+            "PolicyEngine then places each birth within a day and its "
+            "state_pension_age includes the rest of that day (for example "
+            "66.0013 rather than 66). Where "
             "the exact age rounds to the State Pension age at PolicyEngine's "
             "thousandth-of-a-month resolution, claimant_age is the State "
             "Pension age itself, so attaining it at the commencement of 6 "

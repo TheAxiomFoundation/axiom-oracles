@@ -18,7 +18,9 @@ Invariants (property-tested below):
    claimant_age is the age itself, matching that release's age >= threshold.
 """
 
+import os
 from decimal import Decimal
+from pathlib import Path
 from types import SimpleNamespace
 
 import numpy as np
@@ -27,12 +29,14 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from axiom_oracles.bridges.efrs_uk import (
+    STATE_PENSION_CREDIT_QUALIFYING_AGE_OUTPUTS,
     STATE_PENSION_CREDIT_SECTION_1_BASE,
+    STATE_PENSION_CREDIT_SECTION_1_PROGRAM_PATH,
     add_policyengine_uk_person_outputs,
     build_state_pension_credit_qualifying_age_request,
     project_state_pension_credit_qualifying_age_inputs,
 )
-from axiom_oracles.bridges.tax_populace import decimal_literal
+from axiom_oracles.bridges.tax_populace import decimal_literal, run_axiom_program
 
 ROUNDING_BAND_YEARS = 0.0005 / 12
 
@@ -184,6 +188,7 @@ def test_fractional_age_is_the_exact_age():
 
     assert inputs["claimant_age"] == 66.25
     assert rulespec_has_attained_qualifying_age(inputs) is False
+    assert policyengine_is_sp_age(66.25, 3.0, 66.33333587646484) is False
 
 
 def test_request_queries_6_october():
@@ -424,3 +429,81 @@ def test_differential_against_policyengine_uk(year):
             disagreements.append(row)
 
     assert disagreements == []
+
+
+def rules_engine_and_rulespec_uk():
+    """An axiom-rules-engine checkout with a release build and a rulespec-uk
+    root, from AXIOM_RULES_ENGINE_PATH / AXIOM_RULESPEC_ROOT or sibling
+    checkouts; the test skips without them."""
+    repo_root = Path(__file__).resolve().parents[2]
+    engine = Path(
+        os.environ.get(
+            "AXIOM_RULES_ENGINE_PATH", repo_root.parent / "axiom-rules-engine"
+        )
+    ).expanduser()
+    roots = [repo_root.parent / "rulespec-uk" / "uk"]
+    if os.environ.get("AXIOM_RULESPEC_ROOT"):
+        configured = Path(os.environ["AXIOM_RULESPEC_ROOT"]).expanduser()
+        roots = [
+            configured,
+            configured / "uk",
+            configured / "rulespec-uk" / "uk",
+            *roots,
+        ]
+    root = next(
+        (
+            candidate
+            for candidate in roots
+            if (candidate / STATE_PENSION_CREDIT_SECTION_1_PROGRAM_PATH).is_file()
+        ),
+        None,
+    )
+    if (
+        not (engine / "target" / "release" / "axiom-rules-engine").exists()
+        or root is None
+    ):
+        pytest.skip("needs an axiom-rules-engine release build and rulespec-uk")
+    return engine, root
+
+
+def test_engine_judges_projected_rows_as_policyengine_does():
+    """The real SPCA 2002 s.1 module on the engine: fractional State Pension
+    ages come back as decimals, and float32 ties hold."""
+    engine, root = rules_engine_and_rulespec_uk()
+    rows = [
+        (months, state_pension_age, is_sp_age, "FEMALE")
+        for months, state_pension_age, is_sp_age in SPLIT_2026_66_YEAR_OLDS
+    ] + [
+        (months, state_pension_age, True, "MALE")
+        for _, _, months, state_pension_age in FLOAT32_TIES
+    ]
+    ages = [66] * len(SPLIT_2026_66_YEAR_OLDS) + [age for _, age, _, _ in FLOAT32_TIES]
+    request = build_state_pension_credit_qualifying_age_request(
+        pe_data={
+            "persons": [
+                {"person_id": index, **policyengine_row(age, months, spa, gender)}
+                for index, (age, (months, spa, _, gender)) in enumerate(zip(ages, rows))
+            ],
+            "person_ids": list(range(len(rows))),
+            "benunits": [],
+            "benunit_ids": [],
+        },
+        year=2026,
+    )
+
+    results = run_axiom_program(
+        program=root / STATE_PENSION_CREDIT_SECTION_1_PROGRAM_PATH,
+        request=request,
+        rulespec_root=root.parent,
+        axiom_rules_path=engine,
+    )
+
+    outputs = STATE_PENSION_CREDIT_QUALIFYING_AGE_OUTPUTS
+    for result, (months, state_pension_age, is_sp_age, _) in zip(results, rows):
+        values = result["outputs"]
+        judgment = values[outputs["claimant_has_attained_qualifying_age"]["axiom"]]
+        qualifying_age = values[outputs["qualifying_age"]["axiom"]]["value"]
+        assert judgment["outcome"] == ("holds" if is_sp_age else "not_holds"), months
+        assert Decimal(qualifying_age["value"]) == Decimal(
+            decimal_literal(float(np.float32(state_pension_age)))
+        )
