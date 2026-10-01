@@ -340,14 +340,22 @@ from (rulespec-us), since both the federal `us/` chain and the state's
 are never read. The **affected-rerun** workflow
 (`.github/workflows/affected-rerun.yml`, every 6h + `repository_dispatch`)
 resolves each mapped repo's `main` HEAD, and `scripts/select_affected_suites.py`
-selects only the suites whose report ran against an older SHA — those get rerun
-and their refreshed reports committed via `scripts/commit_refreshed_report.sh`,
-which regenerates every derived, CI-validated artifact in the same commit
-(the dispositions merge + EUROMOD-BE coverage rollup, freshness, conformance
-scoreboard + detail, the daily history snapshot, and
-the burn-down), self-checks the tree against ci.yml's staleness gates before
-pushing, and rebuilds the commit from scratch on the current tip on every push
-attempt so concurrent matrix siblings can't strand main stale or conflicted.
+selects only the suites whose report ran against an older SHA — those get
+rerun. Each matrix leg then packs its refresh
+(`scripts/commit_refreshed_report.sh --pack`): it collects the run's private
+outputs, vets them once on its own checkout (the re-emission guard,
+regenerating and verifying every derived artifact, the unexplained ratchet)
+and uploads the bundle as the `refreshed-<suite>` artifact. Legs only read the
+repository. One `publish` job then runs `--publish` over every bundle: it
+regenerates every derived, CI-validated artifact once, in the same commit as
+the reports (the dispositions merge + EUROMOD-BE coverage rollup, freshness,
+conformance scoreboard + detail, the daily history snapshot, the burn-down,
+census and certificates), self-checks the tree against ci.yml's staleness
+gates and the unexplained ratchet before pushing, and rebuilds the commit from
+scratch on the current tip whenever a push is rejected, so a concurrent push
+can't strand main stale or conflicted. Run by hand,
+`scripts/commit_refreshed_report.sh <suite> <branch>` still commits one suite
+(pack, then publish that one bundle).
 The conformance ratchet is never re-pinned from that bot path. Stale suites
 with `name: null` (parameter suites and `ci: manual` suites) are listed as
 awaiting the manual lane, not rerun. The weekly full matrix (`comparisons.yml`)
@@ -361,12 +369,18 @@ they are *derived* from the committed reports, so a report refresh that skips
 them leaves `conformance/scoreboard.json` + `conformance/detail/<jur>.json`
 stale and reds `conformance_scoreboard.py --check` on **every open PR** until
 someone regenerates by hand (the 2026-07-14 il/ky/oh/va income-tax incident,
-fixed reactively in #282). Regeneration happens per matrix leg, inside the
+fixed reactively in #282). Regeneration happens inside the publish job's
 push-retry loop, because each attempt rebuilds on the current tip: an
 aggregate recomputed there is consistent with every report committed so far,
-so every intermediate push is gate-green — there is no post-matrix red window
-and nothing for a separate reconcile pass to repair (#283's post-matrix job,
-briefly on main, is superseded by this; see `tests/test_commit_refreshed_report.py`).
+so every push is gate-green — there is no red window and nothing for a
+separate reconcile pass to repair (#283's post-matrix job, briefly on main, is
+superseded by this; see `tests/test_commit_refreshed_report.py`). It used to
+happen in every matrix leg, each racing its siblings to push: with ~47 legs,
+each successful push invalidated every other leg's ~4-minute attempt, and runs
+36239293795 and 35958364304 lost 7 and 11 legs to the 90-minute timeout inside
+that loop. Publishing once removes the race; the legs still vet their own
+refresh so that a refused one fails its own leg (`tests/test_affected_rerun_publisher.py`
+pins the wiring).
 
 ## Vacuous-verification gate (O3)
 

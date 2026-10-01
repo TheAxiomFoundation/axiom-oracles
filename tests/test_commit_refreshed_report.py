@@ -473,6 +473,9 @@ def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
     verify = _assert_origin_tip_green(origin, tmp_path)
     pushed = json.loads((verify / REPORT).read_text())
     assert pushed["provenance"]["generated_at"] == sentinel
+    # Single-suite mode (pack + publish of one bundle) keeps its commit shape.
+    subject = _git(origin, "log", "-1", "--format=%s", "main")
+    assert subject.startswith("data: refresh nc-income-tax-liability (affected rerun ")
 
 
 def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
@@ -914,4 +917,400 @@ def test_no_changes_second_run_is_a_noop(origin, tmp_path):
     result = _run_script(second)
     assert result.returncode == 0, result.stderr
     assert "no report or derived-artifact changes" in result.stdout
+    assert _git(origin, "rev-parse", "main") == tip
+
+
+# ---------------------------------------------------------------------------
+# Pack in the legs, publish once (the affected rerun's single publisher).
+#
+# Run 36239293795 (2026-09-26) lost 7 legs, and run 35958364304 lost 11, to
+# the 90-minute job timeout inside the per-leg push loop: ~47 legs each
+# regenerated every derived artifact (~4 minutes) and pushed, so every
+# successful push invalidated every other leg's attempt. Legs now `--pack`
+# (collect + vet, never touching a remote) and one job `--publish`es every
+# bundle in one commit, retrying only a rejected push.
+# ---------------------------------------------------------------------------
+
+#: The git subcommands that move a branch, the worktree's HEAD, or a remote.
+#: Pack must never run one.
+_REMOTE_OR_HISTORY_SUBCOMMANDS = frozenset(
+    {"fetch", "pull", "push", "reset", "commit", "clean", "rebase", "merge"}
+)
+
+
+def _mode_env(attempts: str = "4", **extra: str) -> dict[str, str]:
+    return {
+        **os.environ,
+        **GIT_ENV,
+        "PYTHON": sys.executable,
+        "MAX_ATTEMPTS": attempts,
+        "PUSH_RETRY_DELAY": "0",
+        **extra,
+    }
+
+
+def _pack(
+    clone: Path, bundles: Path, suite: str, **extra: str
+) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [str(clone / SCRIPT), "--pack", str(bundles), suite],
+        cwd=clone,
+        env=_mode_env(PYTHONPATH=str(clone), **extra),
+        capture_output=True,
+        text=True,
+    )
+
+
+def _publish(
+    clone: Path, bundles: Path, attempts: str = "4", **extra: str
+) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [str(clone / SCRIPT), "--publish", str(bundles), "main"],
+        cwd=clone,
+        env=_mode_env(attempts, PYTHONPATH=str(clone), **extra),
+        capture_output=True,
+        text=True,
+    )
+
+
+def _git_subcommands(trace: Path) -> list[str]:
+    """Every git subcommand a GIT_TRACE log records (scripts and Python)."""
+    if not trace.exists():
+        return []
+    found = []
+    for line in trace.read_text().splitlines():
+        marker = "trace: built-in: git "
+        if marker in line:
+            found.append(line.split(marker, 1)[1].split()[0])
+        elif "upload-pack" in line or "receive-pack" in line:
+            found.append("fetch-or-push")
+    return found
+
+
+def _write_bundle(
+    bundles: Path,
+    suite: str,
+    files: dict[str, bytes],
+    deletions: tuple[str, ...] = (),
+    manifest_added: tuple[str, ...] = (),
+    directory: str | None = None,
+) -> Path:
+    """A bundle exactly as --pack lays one out (the pack/publish contract)."""
+    root = bundles / (directory or suite)
+    for path, content in files.items():
+        (root / "files" / path).parent.mkdir(parents=True, exist_ok=True)
+        (root / "files" / path).write_bytes(content)
+    root.mkdir(parents=True, exist_ok=True)
+    (root / "bundle.json").write_text(
+        json.dumps(
+            {
+                "schema": "axiom_oracles.refreshed_report_bundle.v1",
+                "suite": suite,
+                "private": sorted(files),
+                "deletions": list(deletions),
+                "manifest_added": list(manifest_added),
+            }
+        )
+    )
+    return root
+
+
+def _pin_ratchet_at_live(origin: Path, tmp_path: Path, suite: str) -> None:
+    """Land a ratchet whose ceiling for ``suite`` is its live count on the tip,
+    so one more unexplained disagreement in that suite is refused. (The seed
+    grants the perturbed suites one row of headroom; this takes it back.)"""
+    setup = _clone(origin, tmp_path / f"pin-{suite}")
+    live = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            "import json, sys; sys.path.insert(0, 'scripts');"
+            "import unexplained_ratchet as u; print(json.dumps(u.live_counts()))",
+        ],
+        cwd=setup,
+        env={**os.environ, **GIT_ENV, "PYTHONPATH": str(setup)},
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    count = json.loads(live.stdout)[suite]
+    path = setup / "conformance" / "unexplained-ratchet.yaml"
+    doc = yaml.safe_load(path.read_text())
+    for row in doc["ratchets"]:
+        if row["suite"] == suite:
+            row["unexplained_max"] = count
+    path.write_text(yaml.safe_dump(doc, sort_keys=False, width=100))
+    _git(setup, "commit", "-q", "-am", f"pin {suite} at its live count")
+    _git(setup, "push", "-q", "origin", "HEAD:main")
+
+
+def test_pack_never_fetches_resets_commits_or_pushes():
+    """Structural: the pack path has no remote or history operation at all."""
+    shell = (REPO_ROOT / SCRIPT).read_text()
+    pack = shell.split("\npack() {", 1)[1].split("\n}\n", 1)[0]
+    for command in ("git fetch", "git reset", "git commit", "git push", "git clean"):
+        assert command not in pack, f"pack must never run `{command}`"
+    for step in (
+        '"$PYTHON" scripts/guard_reemitted_reports.py',
+        "regenerate_derived",
+        "verify_derived",
+        '"$PYTHON" scripts/unexplained_ratchet.py --check',
+    ):
+        assert step in pack, f"pack must vet with {step}"
+    # The bundle appears only after the ratchet passed.
+    assert pack.index("unexplained_ratchet.py --check") < pack.index('mv "$staging"')
+
+
+def test_pack_writes_a_bundle_and_never_touches_git_remotes(origin, tmp_path):
+    """A leg's pack writes a self-contained bundle of its pre-regeneration
+    private outputs and leaves the remote, HEAD and history alone. The remote
+    URL is broken on purpose: any fetch or push would fail the pack."""
+    clone = _clone(origin, tmp_path / "leg")
+    _git(clone, "remote", "set-url", "origin", str(tmp_path / "no-such-remote"))
+    head = _git(clone, "rev-parse", "HEAD")
+    tip = _git(origin, "rev-parse", "main")
+    sentinel = _perturb_report(clone)
+    leg_output = (clone / REPORT).read_bytes()
+    filename = _add_first_time_report(clone, "zz-fake-pack")
+    trace = tmp_path / "git-trace.log"
+
+    bundles = tmp_path / "refreshed"
+    result = _pack(clone, bundles, "nc-income-tax-liability", GIT_TRACE=str(trace))
+    assert result.returncode == 0, result.stderr
+
+    used = _git_subcommands(trace)
+    assert used, "GIT_TRACE recorded nothing; the assertion below would be vacuous"
+    assert not set(used) & (_REMOTE_OR_HISTORY_SUBCOMMANDS | {"fetch-or-push"}), used
+    assert _git(clone, "rev-parse", "HEAD") == head
+    assert _git(origin, "rev-parse", "main") == tip
+    assert not (clone / ".git" / "FETCH_HEAD").exists()
+
+    bundle = bundles / "nc-income-tax-liability"
+    assert sorted(p.name for p in bundles.iterdir()) == ["nc-income-tax-liability"]
+    doc = json.loads((bundle / "bundle.json").read_text())
+    assert doc["schema"] == "axiom_oracles.refreshed_report_bundle.v1"
+    assert doc["suite"] == "nc-income-tax-liability"
+    new_report = f"{SEED_DATA}/{filename}"
+    assert sorted(doc["private"]) == sorted([REPORT, new_report])
+    assert doc["deletions"] == []
+    assert doc["manifest_added"] == [filename]
+    # The bundle holds what the comparison wrote, before any regeneration
+    # rewrote the worktree copy.
+    assert (bundle / "files" / REPORT).read_bytes() == leg_output
+    bundled = json.loads((bundle / "files" / REPORT).read_text())
+    assert bundled["provenance"]["generated_at"] == sentinel
+    # Only private outputs: nothing derived and never the shared manifest.
+    assert not (bundle / "files" / SEED_DATA / "manifest.json").exists()
+    assert not (bundle / "files" / "conformance").exists()
+
+
+def test_pack_with_nothing_changed_packs_nothing(origin, tmp_path):
+    """The fast no-op path survives the split: no bundle, nothing to upload."""
+    clone = _clone(origin, tmp_path / "idle-leg")
+    bundles = tmp_path / "refreshed"
+    result = _pack(clone, bundles, "nc-income-tax-liability")
+    assert result.returncode == 0, result.stderr
+    assert "no report or derived-artifact changes" in result.stdout
+    assert [p for p in bundles.iterdir() if not p.name.startswith(".")] == []
+
+
+def test_pack_ratchet_refusal_packs_nothing_and_fails(origin, tmp_path):
+    """A refresh that raises an unexplained-mismatch ceiling fails its own leg
+    loudly and leaves no bundle, so the publish job never sees it."""
+    _pin_ratchet_at_live(origin, tmp_path, "nc-income-tax-liability")
+    tip = _git(origin, "rev-parse", "main")
+    clone = _clone(origin, tmp_path / "regressing-leg")
+    _perturb_report(clone)
+
+    bundles = tmp_path / "refreshed"
+    result = _pack(clone, bundles, "nc-income-tax-liability")
+    assert result.returncode != 0
+    assert "REFUSED" in result.stderr
+    assert "[nc-income-tax-liability] RATCHET regressed" in result.stderr
+    assert [p for p in bundles.iterdir() if not p.name.startswith(".")] == []
+    assert _git(origin, "rev-parse", "main") == tip
+
+
+def test_publish_two_bundles_makes_one_commit(origin, tmp_path):
+    """Two legs pack from the same starting tip; the publisher applies both
+    bundles and pushes ONE commit holding both suites' files, the union of
+    their manifest additions, and a deletion one leg's refresh made — and the
+    tip passes every ci.yml gate. The bundle directories carry
+    download-artifact names, not suite names."""
+    retired = "dashboard/public/data/zz-retired-note.txt"
+    setup = _clone(origin, tmp_path / "setup-retired")
+    (setup / retired).write_text("deleted by leg b's refresh\n")
+    _git(setup, "add", "--", retired)
+    _git(setup, "commit", "-q", "-m", "seed a file leg b's refresh deletes")
+    _git(setup, "push", "-q", "origin", "HEAD:main")
+
+    leg_a = _clone(origin, tmp_path / "leg-a")
+    leg_b = _clone(origin, tmp_path / "leg-b")
+    sentinel_a = _perturb_report(leg_a, REPORT)
+    sentinel_b = _perturb_report(leg_b, SIBLING_REPORT)
+    file_a = _add_first_time_report(leg_a, "zz-fake-a")
+    file_b = _add_first_time_report(leg_b, "zz-fake-b")
+    (leg_b / retired).unlink()
+
+    bundles = tmp_path / "refreshed"
+    bundles.mkdir()
+    for leg, suite in (
+        (leg_a, "nc-income-tax-liability"),
+        (leg_b, "mi-income-tax-liability"),
+    ):
+        packed = tmp_path / f"packed-{suite}"
+        result = _pack(leg, packed, suite)
+        assert result.returncode == 0, result.stderr
+        shutil.move(packed / suite, bundles / f"refreshed-{suite}")
+    leg_b_bundle = bundles / "refreshed-mi-income-tax-liability" / "bundle.json"
+    assert json.loads(leg_b_bundle.read_text())["deletions"] == [retired]
+
+    before = _git(origin, "rev-parse", "main")
+    publisher = _clone(origin, tmp_path / "publisher")
+    result = _publish(publisher, bundles)
+    assert result.returncode == 0, result.stderr
+
+    commits = _git(origin, "rev-list", f"{before}..main").splitlines()
+    assert len(commits) == 1, "both refreshes must land in exactly one commit"
+    subject = _git(origin, "log", "-1", "--format=%s", "main")
+    assert subject.startswith("data: refresh 2 suites (affected rerun ")
+    body = _git(origin, "log", "-1", "--format=%b", "main")
+    assert "mi-income-tax-liability" in body and "nc-income-tax-liability" in body
+
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    for report, sentinel in ((REPORT, sentinel_a), (SIBLING_REPORT, sentinel_b)):
+        doc = json.loads((verify / report).read_text())
+        assert doc["provenance"]["generated_at"] == sentinel, report
+    manifest = json.loads((verify / SEED_DATA / "manifest.json").read_text())
+    for filename in (file_a, file_b):
+        assert filename in manifest["reports"], filename
+        assert (verify / SEED_DATA / filename).exists()
+    assert not (verify / retired).exists(), "the bundled deletion was not applied"
+    changed = _git(origin, "diff", "--name-only", before, "main").splitlines()
+    for path in (
+        REPORT,
+        SIBLING_REPORT,
+        f"{SEED_DATA}/{file_a}",
+        f"{SEED_DATA}/{file_b}",
+        retired,
+    ):
+        assert path in changed, path
+
+
+def test_publish_retries_after_a_rejected_push(origin, tmp_path):
+    """The publisher retries only a rejected push, rebuilding from scratch on
+    the tip each time. A human commit that landed after the publisher checked
+    out survives, and the second attempt lands."""
+    human = _clone(origin, tmp_path / "human")
+    (human / "HUMAN_NOTE.md").write_text("a human pushed while the bot ran\n")
+    _git(human, "add", "--", "HUMAN_NOTE.md")
+    _git(human, "commit", "-q", "-m", "human commit")
+    human_sha = _git(human, "rev-parse", "HEAD")
+
+    racing = origin / "racing"
+    hook = origin / "hooks" / "pre-receive"
+    hook.write_text(
+        "#!/bin/sh\n"
+        f'racing="{racing}"\n'
+        "while read old new ref; do\n"
+        '  if [ "$ref" = "refs/heads/main" ] && [ ! -f "$racing" ]; then\n'
+        '    touch "$racing"\n'
+        '    echo "simulated concurrent push" >&2\n'
+        "    exit 1\n"
+        "  fi\n"
+        "done\n"
+        "exit 0\n"
+    )
+    hook.chmod(0o755)
+
+    publisher = _clone(origin, tmp_path / "publisher-retry")
+    leg = _clone(origin, tmp_path / "leg-retry")
+    sentinel = _perturb_report(leg)
+    bundles = tmp_path / "refreshed"
+    _write_bundle(
+        bundles,
+        "nc-income-tax-liability",
+        {REPORT: (leg / REPORT).read_bytes()},
+        directory="refreshed-nc-income-tax-liability",
+    )
+    # The human commit lands first (the hook only rejects the bot's push), so
+    # the publisher's clone is behind before it even starts.
+    racing.touch()
+    _git(human, "push", "-q", "origin", "HEAD:main")
+    racing.unlink()
+
+    result = _publish(publisher, bundles)
+    assert result.returncode == 0, result.stderr
+    assert "push rejected (attempt 1" in result.stderr
+    assert "push rejected (attempt 2" not in result.stderr
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    assert human_sha in _git(verify, "rev-list", "HEAD")
+    assert (verify / "HUMAN_NOTE.md").exists()
+    doc = json.loads((verify / REPORT).read_text())
+    assert doc["provenance"]["generated_at"] == sentinel
+
+
+def test_publish_ratchet_refusal_names_every_suite_and_pushes_nothing(
+    origin, tmp_path
+):
+    """Each bundle passed the ratchet where it ran, but the tip moved: the
+    combined tree is over a ceiling. The publisher refuses the whole publish
+    loudly, naming every suite in it, rather than dropping any silently."""
+    leg = _clone(origin, tmp_path / "leg-refuse")
+    _perturb_report(leg, REPORT)
+    _perturb_report(leg, SIBLING_REPORT)
+    bundles = tmp_path / "refreshed"
+    _write_bundle(bundles, "nc-income-tax-liability", {REPORT: (leg / REPORT).read_bytes()})
+    _write_bundle(
+        bundles, "mi-income-tax-liability", {SIBLING_REPORT: (leg / SIBLING_REPORT).read_bytes()}
+    )
+    _pin_ratchet_at_live(origin, tmp_path, "nc-income-tax-liability")
+    tip = _git(origin, "rev-parse", "main")
+
+    publisher = _clone(origin, tmp_path / "publisher-refuse")
+    result = _publish(publisher, bundles)
+    assert result.returncode == 1
+    assert "REFUSED" in result.stderr
+    assert "nc-income-tax-liability" in result.stderr
+    assert "mi-income-tax-liability" in result.stderr
+    assert "push rejected" not in result.stderr
+    assert _git(origin, "rev-parse", "main") == tip
+
+
+def test_publish_with_zero_bundles_is_a_noop(origin, tmp_path):
+    """No bundles (every leg was a no-op, or failed) publishes nothing and
+    never even fetches; a missing bundles directory is the same."""
+    publisher = _clone(origin, tmp_path / "publisher-idle")
+    head = _git(publisher, "rev-parse", "HEAD")
+    tip = _git(origin, "rev-parse", "main")
+    empty = tmp_path / "refreshed"
+    empty.mkdir()
+    (empty / ".pack.leftover").mkdir()  # a half-written pack is not a bundle
+    for bundles in (empty, tmp_path / "never-downloaded"):
+        trace = tmp_path / f"trace-{bundles.name}.log"
+        result = _publish(publisher, bundles, GIT_TRACE=str(trace))
+        assert result.returncode == 0, result.stderr
+        assert "nothing to publish" in result.stdout
+        assert not set(_git_subcommands(trace)) & (
+            _REMOTE_OR_HISTORY_SUBCOMMANDS | {"fetch-or-push"}
+        )
+    assert _git(publisher, "rev-parse", "HEAD") == head
+    assert _git(origin, "rev-parse", "main") == tip
+
+
+def test_publish_rejects_a_bundle_path_outside_the_derived_trees(origin, tmp_path):
+    """A bundle may only carry what pack collects: paths under the derived
+    trees, never the shared manifest. Anything else fails before the checkout
+    is touched."""
+    publisher = _clone(origin, tmp_path / "publisher-bad")
+    tip = _git(origin, "rev-parse", "main")
+    for bad in ("scripts/certify.py", f"{SEED_DATA}/manifest.json", "../escape.json"):
+        bundles = tmp_path / f"bad-{len(list(tmp_path.iterdir()))}"
+        root = _write_bundle(bundles, "nc-income-tax-liability", {})
+        doc = json.loads((root / "bundle.json").read_text())
+        doc["deletions"] = [bad]
+        (root / "bundle.json").write_text(json.dumps(doc))
+        result = _publish(publisher, bundles)
+        assert result.returncode != 0, bad
+        assert "outside the derived paths" in result.stderr, result.stderr
     assert _git(origin, "rev-parse", "main") == tip

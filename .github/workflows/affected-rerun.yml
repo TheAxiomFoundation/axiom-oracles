@@ -17,20 +17,27 @@ name: Affected suite rerun
 #   report provenance.rulespecs     the SHA each report last ran against
 #   scripts/select_affected_suites  diffs current repo HEADs vs those SHAs
 #
-# Each matrix job commits its refreshed report via
-# scripts/commit_refreshed_report.sh, which atomically regenerates every
-# derived, CI-validated artifact (dispositioned reports + the EUROMOD-BE
-# coverage rollup, conformance scoreboard + detail + history snapshot,
-# burn-down, freshness), self-checks the tree against ci.yml's
-# staleness gates, and rebuilds the commit from scratch on the current tip on
-# every push attempt so concurrent sibling pushes can't leave main stale or
-# conflicted. The ratchet (conformance/ratchet.yaml) is never re-pinned from
-# this bot path — re-pinning after a genuine improvement stays a deliberate
-# human action, and a genuine regression is MEANT to fail ci.yml's ratchet
-# gate on main. A leg whose runner marks its output as a re-emission
+# Each matrix leg runs its comparison and PACKS the result
+# (scripts/commit_refreshed_report.sh --pack): it collects the run's private
+# outputs, vets them once on its own checkout — the re-emission guard,
+# regenerating every derived, CI-validated artifact (dispositioned reports +
+# the EUROMOD-BE coverage rollup, conformance scoreboard + detail + history
+# snapshot, burn-down, freshness, census, certificates) and checking the tree
+# against ci.yml's staleness gates, then the unexplained ratchet — and uploads
+# the bundle as the `refreshed-<suite>` artifact. Legs only read the
+# repository. One `publish` job then downloads every bundle and runs
+# `--publish` once: it rebuilds on the current tip, applies every bundle,
+# regenerates the derived artifacts once, re-runs every gate, and pushes ONE
+# commit, retrying only a rejected push (never rebasing). Until 2026-09-26 each
+# leg pushed on its own, and ~47 legs regenerating and racing for main lost
+# 7-11 legs a sweep to the 90-minute timeout (runs 36239293795, 35958364304).
+# The ratchet (conformance/ratchet.yaml) is never re-pinned from this bot
+# path — re-pinning after a genuine improvement stays a deliberate human
+# action, and a genuine regression is MEANT to fail ci.yml's ratchet gate on
+# main. A leg whose runner marks its output as a re-emission
 # (provenance.reemitted_report) never replaces a committed report, real or
 # itself re-emitted: run_comparison.py leaves that copy untouched, and the
-# commit script re-checks every push attempt's tip
+# publisher re-checks every push attempt's tip
 # (scripts/guard_reemitted_reports.py).
 #
 # See scripts/select_affected_suites.py and comparisons/README.md.
@@ -150,8 +157,9 @@ jobs:
     if: needs.select.outputs.count != '0'
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    # Read-only: legs pack and upload; only the publish job writes.
     permissions:
-      contents: write
+      contents: read
     strategy:
       fail-fast: false
       matrix: ${{ fromJson(needs.select.outputs.matrix) }}
@@ -160,9 +168,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: axiom-oracles
-          # Pin the default branch explicitly so the commit step pushes to a
-          # real branch (schedule/repository_dispatch would otherwise leave a
-          # detached HEAD, breaking the fetch/reset/push in the commit script).
+          # The default branch's tip, explicitly (schedule/repository_dispatch
+          # would otherwise leave a detached HEAD): pack diffs the run's
+          # outputs against it and vets the refresh on it.
           ref: ${{ github.event.repository.default_branch }}
 
       - name: Checkout axiom-encode
@@ -246,12 +254,96 @@ jobs:
           ln -sfn "$AXIOM_RULES_REPO" "$HOME/axiom-rules"
           python3 scripts/run_comparison.py ${{ matrix.name }} --summary
 
-      - name: Commit refreshed report + derived conformance artifacts
+      - name: Pack refreshed report for the publish job
+        id: pack
         working-directory: axiom-oracles
-        # Regenerates freshness + scoreboard/detail/history/burn-down with the
-        # report, self-checks against ci.yml's staleness gates, and retries by
-        # rebuilding on the current tip (never rebasing) across sibling pushes.
-        # Fails loudly if the push never lands.
+        # Collects this run's private outputs and vets them once here (the
+        # re-emission guard, regenerate + verify every derived artifact, the
+        # unexplained ratchet), then writes $RUNNER_TEMP/refreshed/<suite>/.
+        # Never fetches, commits or pushes. A refresh that fails the vet fails
+        # this leg and packs nothing; an unchanged run packs nothing.
         run: |
-          scripts/commit_refreshed_report.sh "${{ matrix.name }}" \
-            "${{ github.event.repository.default_branch }}"
+          scripts/commit_refreshed_report.sh --pack \
+            "$RUNNER_TEMP/refreshed" "${{ matrix.name }}"
+          if [ -d "$RUNNER_TEMP/refreshed/${{ matrix.name }}" ]; then
+            echo "bundle=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload refreshed-report bundle
+        if: steps.pack.outputs.bundle == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: refreshed-${{ matrix.name }}
+          path: ${{ runner.temp }}/refreshed/${{ matrix.name }}/
+          if-no-files-found: error
+          include-hidden-files: true
+          # A "re-run all jobs" re-packs under the same name.
+          overwrite: true
+          retention-days: 7
+
+  publish:
+    # The ONLY job that writes to the default branch. It commits every bundle
+    # the legs uploaded in ONE commit, so there is no sibling to race: a push
+    # is retried only when another workflow or a human moved the branch.
+    # Runs when some legs failed (their bundles simply are not there, and the
+    # run still ends red for them), but never after a cancellation.
+    needs: [select, rerun]
+    if: ${{ !cancelled() && needs.select.outputs.count != '0' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: write
+    steps:
+      - name: Download refreshed-report bundles
+        uses: actions/download-artifact@v4
+        with:
+          pattern: refreshed-*
+          # One directory per bundle (refreshed-<suite>/); publish reads each
+          # bundle's suite from its bundle.json.
+          merge-multiple: false
+          path: ${{ runner.temp }}/refreshed
+
+      - name: Count bundles
+        id: bundles
+        run: |
+          count=0
+          if [ -d "$RUNNER_TEMP/refreshed" ]; then
+            count=$(find "$RUNNER_TEMP/refreshed" -mindepth 1 -maxdepth 1 -type d | wc -l)
+          fi
+          echo "count=$count" >> "$GITHUB_OUTPUT"
+          echo "$count refreshed-report bundle(s) to publish" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Checkout axiom-oracles
+        if: steps.bundles.outputs.count != '0'
+        uses: actions/checkout@v4
+        with:
+          # The branch publish fetches, rebuilds on and pushes to.
+          ref: ${{ github.event.repository.default_branch }}
+
+      # The legs' interpreter setup. Derived regeneration needs only this
+      # repository: it runs on a bare clone exactly as ci.yml's gates do (no
+      # rulespec, engine or Rust checkout; the DE pair legs keep the bundled
+      # record when no rulespec-de checkout is present).
+      - uses: actions/setup-python@v5
+        if: steps.bundles.outputs.count != '0'
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+        if: steps.bundles.outputs.count != '0'
+        with:
+          enable-cache: true
+
+      - name: Install orchestrator deps + axiom-oracles
+        if: steps.bundles.outputs.count != '0'
+        run: uv pip install --system -e '.[policyengine]'
+
+      - name: Publish every refreshed report + derived conformance artifacts
+        if: steps.bundles.outputs.count != '0'
+        # Rebuilds on the current tip, applies every bundle, regenerates the
+        # derived artifacts once, self-checks against ci.yml's staleness gates
+        # and the unexplained ratchet, and pushes one commit. Fails loudly if
+        # the gates refuse (naming every suite) or the push never lands.
+        run: |
+          scripts/commit_refreshed_report.sh --publish \
+            "$RUNNER_TEMP/refreshed" "${{ github.event.repository.default_branch }}"
