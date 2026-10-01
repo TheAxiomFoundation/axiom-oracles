@@ -824,7 +824,7 @@ def test_selector_never_dispatches_snap_qc_and_leaves_fresh_ones_alone():
 
 #: Runner types the bare CI legs (affected-rerun.yml's rerun matrix and the
 #: weekly comparisons.yml matrix) can never execute, so they could only
-#: re-emit or copy the committed report:
+#: re-emit or copy the committed report, or fail:
 #:
 #: * euromod-synthetic-compare needs the x64 EUROMOD/UKMOD engine, the
 #:   euromod connector under EUROMOD_PYTHON, a .NET runtime and the model
@@ -834,13 +834,19 @@ def test_selector_never_dispatches_snap_qc_and_leaves_fresh_ones_alone():
 #:   axiom-rules-engine build, or axiom-rules on PATH) that neither workflow
 #:   exports or builds; their legs fail with "No such file or directory:
 #:   'axiom-rules'" and fall back to the committed report.
+#: * spsm-ca-compare needs a licensed SPSD/M install (SPSM_HOME), which is
+#:   never vendored and which no runner can hold. Its generator hard-fails
+#:   instead of re-emitting ("No SPSD/M installation found"), so its weekly
+#:   leg was red every week (run 36426573617 on 2026-09-28).
 #:
-#: The affected rerun committed those outputs over real runs and then over
-#: each other every six hours. A workflow that starts provisioning one of these
-#: lanes should drop the type from this set and the markers with it.
+#: The affected rerun committed the re-emitting lanes' outputs over real runs
+#: and then over each other every six hours. A workflow that starts
+#: provisioning one of these lanes should drop the type from this set and the
+#: markers with it.
 BARE_CI_UNRUNNABLE_RUNNER_TYPES = frozenset(
     {
         "euromod-synthetic-compare",
+        "spsm-ca-compare",
         "uk-attendance-allowance-pe-grid",
         "uk-business-rates-grid",
         "uk-capital-gains-tax-grid",
@@ -878,13 +884,14 @@ def test_every_suite_the_bare_ci_legs_cannot_run_is_manual():
     ``ci: manual``, so the affected rerun never dispatches it and the weekly
     matrix skips it. Without the marker its leg can only re-emit or copy the
     committed report, which is how 35 suites churned a generated_at-only
-    commit every sweep and ten UK grids were stamped fresh on July numbers."""
+    commit every sweep and ten UK grids were stamped fresh on July numbers,
+    or fail outright, as the SPSD/M leg did every week."""
     gam = _load("generate_affected_map.py")
     entries = {e["name"]: e for e in gam.build_map()["suites"] if e.get("name")}
     configs = _bare_ci_unrunnable_configs()
     # Guards the guard: the registry holds 40 EUROMOD-platform suites, ten UK
-    # PolicyEngine grids and the us-tariff grid.
-    assert len(configs) >= 51
+    # PolicyEngine grids, the us-tariff grid and the SPSD/M suite.
+    assert len(configs) >= 52
     for config in configs:
         assert config.get("ci") == "manual", config["name"]
         assert config["name"] not in entries, config["name"]
@@ -893,9 +900,11 @@ def test_every_suite_the_bare_ci_legs_cannot_run_is_manual():
 def test_selector_never_dispatches_a_bare_ci_unrunnable_suite():
     """Even with every rulespec repo moved past every report, none of these
     suites reaches the rerun matrix; the stale ones are listed for the manual
-    lane instead."""
+    lane instead. A suite that maps to no rulespec repo (the SPSD/M suite runs
+    no RuleSpec checkout) is never selected at all, so it is never listed."""
     sel = _load("select_affected_suites.py")
     affected = json.loads(sel.AFFECTED_MAP.read_text())
+    repos = {entry["suite"]: entry.get("repos") for entry in affected["suites"]}
     reports = sel.load_reports(affected)
     heads = {
         repo: "b" * 40
@@ -911,7 +920,10 @@ def test_selector_never_dispatches_a_bare_ci_unrunnable_suite():
         for config in _bare_ci_unrunnable_configs():
             assert config["name"] not in dispatched, config["name"]
             suite = (config.get("dashboard") or {}).get("suite", config["name"])
-            assert suite in manual, suite
+            if repos[suite]:
+                assert suite in manual, suite
+            else:
+                assert suite not in {d["suite"] for d in selected}, suite
 
 
 def test_committed_reports_of_lanes_the_bot_cannot_run_are_real_runs():

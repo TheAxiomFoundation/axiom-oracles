@@ -231,7 +231,7 @@
     },
     {
       "suite": "ca-federal-schedule-tax-spsm",
-      "name": "ca-federal-schedule-tax-spsm",
+      "name": null,
       "report": "axiom-spsm-ca-federal-schedule-tax.json",
       "repos": [],
       "source": "comparisons/ca-federal-schedule-tax-spsm.yaml"

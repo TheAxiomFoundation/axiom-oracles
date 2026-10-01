@@ -57,6 +57,12 @@ same holds, and the same marker applies, for:
   `axiom-rules-engine` build, or `axiom-rules` on `PATH`) that neither workflow
   exports or builds, so their legs fail with "No such file or directory:
   'axiom-rules'" and fall back to the committed report.
+- the SPSD/M suite (`ca-federal-schedule-tax-spsm`, `spsm-ca-compare`).
+  SPSD/M is licensed and never vendored (`docs/spsdm-oracle-design.md`), so no
+  runner can hold an install. Its generator hard-fails rather than re-emitting
+  ("No SPSD/M installation found"), and it was the weekly matrix's only red leg
+  (run 36426573617). It maps to no rulespec repo, so the affected rerun never
+  selected it; the marker takes it out of the weekly matrix.
 
 Before these suites were marked, the affected rerun committed their legs' output
 over 45 of their reports (34 EUROMOD/UKMOD suites, `us-tariff`, and the ten UK
