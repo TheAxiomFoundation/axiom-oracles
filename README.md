@@ -235,6 +235,50 @@ See [docs/policyengine-taxsim.md](docs/policyengine-taxsim.md) for the
 PolicyEngine/TAXSIM comparison path, state-code handling, residual smoke-test
 mismatches, and upstream triage workflow.
 
+### Population source: taxsim-csv (TAXSIM-format input files)
+
+`--population taxsim-csv` loads a TAXSIM-35 input CSV — for example
+policyengine-taxsim's `cps_households.csv`, the file its PolicyEngine-vs-TAXSIM
+dashboard scores — and hands each row to both engines unchanged in
+`metadata["taxsim_input"]`, so `compare policyengine taxsim` runs exactly the
+rows the benchmark ran (the only engine pair that reads TAXSIM rows; other
+pairs are refused).
+
+```bash
+git -C ~/PolicyEngine/pe-taxsim show \
+  2b69146bfb2e16f83e1c021d72c4258d67872190:cps_households.csv \
+  > /path/to/cps_households.csv
+
+axiom-oracles compare policyengine taxsim \
+  --population taxsim-csv \
+  --taxsim-csv /path/to/cps_households.csv \
+  --taxsim-csv-sha256 ecabc8dd33e8b570fad21650745b9d94f6b51fc9780d9c59bb033ede7d16a689 \
+  --taxsim-csv-origin PolicyEngine/policyengine-taxsim@2b69146bfb2e16f83e1c021d72c4258d67872190:cps_households.csv \
+  --period 2024 --sample-size 0 --output reports/pe-taxsim-cps-2024.json
+```
+
+- `--taxsim-csv` defaults to `$AXIOM_TAXSIM_CSV`; the run fails if neither is
+  set. A `--taxsim-csv-sha256` mismatch fails before any case is built.
+- An explicit `--period YYYY` overrides every row's `year` (the dashboard runs
+  one file per law year this way); without it each case keeps its row's year.
+- TAXSIM state 0 is passed through as 0 and only appears in national-scope
+  runs; `--jurisdiction-fips 01` keeps only that state's rows.
+- `--sample-size N` keeps the N rows whose `sha256("<seed>:<taxsimid>")`
+  digests sort lowest (seed 0), so a sample is reproducible from its ids;
+  `0` loads every row. Cases are unweighted.
+- Column names must be TAXSIM-35 inputs unless
+  `--taxsim-csv-allow-unknown-columns` is passed; `taxsimid` must be unique.
+- The JSON report carries a top-level `dataset_identity` block (path, full
+  sha256, bytes, rows, columns, years, year override, per-state row counts,
+  origin, and a `selection` summary). `scripts/run_comparison.py` suites
+  declare `population: taxsim-csv` with a `taxsim_csv: {path, sha256,
+  origin?}` parameter block and record that identity as `provenance.dataset`.
+
+The Python entry points are
+`axiom_oracles.populations.taxsim_csv.load_taxsim_csv_cases` and
+`taxsim_csv_identity`; [docs/policyengine-taxsim.md](docs/policyengine-taxsim.md#taxsim-format-csv-population)
+has the full contract.
+
 ## Axiom RuleSpec Oracle
 
 The Axiom adapter executes a RuleSpec program through the local `axiom-rules`

@@ -1,0 +1,41 @@
+{
+  "repo": "PolicyEngine/policyengine-taxsim",
+  "commit": "a80b8c1dca088b147e36f9c770ed92d403d747f6",
+  "rule_source": {
+    "commit": "9538f802068ffd81d3b039722069e9dde3350f01",
+    "path": "scripts/refresh_dashboard.py",
+    "function": "match_flags"
+  },
+  "years": {
+    "2021": {
+      "path": "dashboard/public/data/2021/summary_2021.json",
+      "federalMatchPct": 78.8,
+      "stateMatchPct": 72.1,
+      "totalRecords": 111347
+    },
+    "2022": {
+      "path": "dashboard/public/data/2022/summary_2022.json",
+      "federalMatchPct": 81.1,
+      "stateMatchPct": 76.5,
+      "totalRecords": 111347
+    },
+    "2023": {
+      "path": "dashboard/public/data/2023/summary_2023.json",
+      "federalMatchPct": 81.1,
+      "stateMatchPct": 83.8,
+      "totalRecords": 111347
+    },
+    "2024": {
+      "path": "dashboard/public/data/2024/summary_2024.json",
+      "federalMatchPct": 83.8,
+      "stateMatchPct": 85.1,
+      "totalRecords": 111347
+    },
+    "2025": {
+      "path": "dashboard/public/data/2025/summary_2025.json",
+      "federalMatchPct": 83.0,
+      "stateMatchPct": 85.9,
+      "totalRecords": 111347
+    }
+  }
+}

@@ -13,3 +13,6 @@ reports/.*.tmp
 data/.cache/
 data/county_fips_2020.csv.gz
 .claude/
+
+# Report-writer lock files for the emulator ledger reports.
+reports/taxsim-emulator/.*.lock

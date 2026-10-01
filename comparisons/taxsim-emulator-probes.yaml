@@ -1,0 +1,27 @@
+name: taxsim-emulator-probes
+title: TAXSIM emulator two-record itemizer probe
+description: >-
+  Observes the native-SALT emulator and pinned TAXSIM on the 2024 joint-filer
+  itemizer at state 0 and Texas (44), using the inputs described in pe-taxsim
+  PR 1204 and its follow-up state-zero-federal-salt tests. Outputs are
+  executable observations, not legal evidence.
+ci: manual
+runner:
+  type: taxsim-probes
+  parameters:
+    kind: emulator
+    left: policyengine
+    right: taxsim
+    period: "2024"
+    population: taxsim-csv
+    sample_size: 0
+    taxsim_csv:
+      path: tests/fixtures/taxsim_probes/mfj-itemizer-2024.csv
+      sha256: a16fd5d9220e649059b23af0e7f54712ca2121303f95df51ae4dfe3515fd5099
+    taxsim_pin_profile: dashboard-2026-09
+    concepts:
+      - us:tax/federal-income-tax#liability
+      - us:tax/state-income-tax#liability
+artifacts:
+  report_path: reports/taxsim-emulator/taxsim-emulator-probes.json
+  report_basename: taxsim-emulator-probes

@@ -765,7 +765,7 @@ def test_campaign_ledger_uses_only_campaign_local_matcher(
     assert any(entry.get("match") for entry in entries)
     assert validate_dispositions(entries, {}) == entries
     shared_errors = validate_shared(ledger)
-    assert any("unknown keys: ['match']" in error for error in shared_errors)
+    assert any("match has unknown fields" in error for error in shared_errors)
 
 
 def _selector_unit() -> dict:

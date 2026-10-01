@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Join dispositions/<suite>.yaml into checked-in dashboard reports.
+"""Join dispositions into dashboard reports and registered report artifacts.
 
 Comparison suites that run outside CI (the EUROMOD Belgium lane, for
 example) commit their dashboard JSON directly, so the disposition merge that
@@ -13,9 +13,13 @@ Usage:
     uv run scripts/apply_dispositions.py --check    # validate; exit 1 on drift
 
 `--check` fails when a dispositions file is schema-invalid (missing evidence,
-arithmetic that does not reconcile, dangling source paths) or when a
-checked-in report or coverage rollup no longer matches what the merge would
-produce. Reports whose suite has no dispositions file are left untouched.
+arithmetic that does not reconcile, dangling source paths, TAXSIM-lane
+entries without attribution / oracle binding / population binding), when a
+TAXSIM-lane mismatch row is claimed by two entries (classification
+conservation), when an entry's `evidence.row_arithmetic` fails on a
+checked-in report's rows, or when a checked-in report or coverage rollup no
+longer matches what the merge would produce. Reports whose suite has no
+dispositions file are left untouched.
 Reports that merged dispositions before trimming stored mismatch examples
 (premerged-slim) are validated against their bound source full report —
 aggregate block, row-level assignment digest, and retained-row annotations,
@@ -30,6 +34,7 @@ import argparse
 import hashlib
 import json
 import sys
+from collections.abc import Iterator
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -42,15 +47,25 @@ from axiom_oracles.comparison.dispositions import (  # noqa: E402
     assignment_digest,
     dispositioned_rollup,
     load_dispositions,
+    report_is_taxsim_lane,
     report_json_text,
+    report_oracle_identity,
+    suite_context,
+)
+from axiom_oracles.comparison.report_io import (  # noqa: E402
+    load_report,
+    decode_report_bytes,
+    read_report_text,
+    registered_report_paths,
+    registered_report_suites,
+    write_report_text,
 )
 
 DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 # This ledger is consumed and validated by us_tariff_schedule_campaign.py.
-# Its structured ``match`` selectors are intentionally outside the shared
-# case-id/case-selector dispositions schema, so the shared merge must not
-# attempt to load it.
+# Its campaign-unit selectors include slots and instrument fields outside
+# the shared mismatch-row schema, so the shared merge must not load it.
 CAMPAIGN_LOCAL_DISPOSITIONS_FILES = frozenset({"us-tariff-schedule.yaml"})
 BE_COVERAGE_SOURCES = (
     REPO_ROOT / "axiom_oracles" / "data" / "euromod_be_coverage.json",
@@ -62,6 +77,31 @@ BE_ROLLUP_NOTE = (
     "disposition (explained residuals, upstream engine gaps, bridge "
     "artifacts) from dispositions/<suite>.yaml."
 )
+
+
+#: An expiry reason that means the ledger's own evidence is contradicted by
+#: the committed report's rows — a hard --check failure, not a soft expiry.
+_EVIDENCE_FAILURE_REASONS = frozenset({"row_arithmetic_failed"})
+
+
+def _evidence_failures(rel: object, block: dict) -> list[str]:
+    """Problems for entries whose row arithmetic fails on committed rows."""
+
+    reasons = block.get("expired_reasons") or {}
+    return [
+        f"{rel}: dispositions entry {entry_id!r} fails its "
+        f"evidence.row_arithmetic on the committed rows ({reason}) — the "
+        "classification's own evidence is contradicted; fix or remove it"
+        for entry_id, reason in sorted(reasons.items())
+        if reason in _EVIDENCE_FAILURE_REASONS
+    ]
+
+
+def _taxsim_lane(report: dict) -> bool:
+    return (
+        report_is_taxsim_lane(report)
+        or suite_context(report.get("suite"), REPO_ROOT).taxsim_lane
+    )
 
 
 def _load_dispositions_files() -> tuple[dict[str, dict], list[str]]:
@@ -91,10 +131,40 @@ def _dashboard_reports() -> list[tuple[Path, dict]]:
     return reports
 
 
+def _reports(*, suites: set[str] | None = None) -> Iterator[tuple[Path, dict]]:
+    """Published reports plus explicit suite artifacts, never report archives."""
+
+    reports = [
+        (path, report) for path, report in _dashboard_reports()
+        if suites is None or report.get("suite") in suites
+    ]
+    yield from reports
+    seen = {path.resolve() for path, _ in reports}
+    registered = registered_report_suites(REPO_ROOT, suites=suites)
+    for path in sorted(registered):
+        if path in seen:
+            continue
+        # Missing or malformed registered artifacts must fail --check rather
+        # than disappearing from the ledger validation surface.
+        report = load_report(path)
+        if "summary" not in report or "suite" not in report:
+            raise ValueError(f"{path}: registered artifact is not a comparison report")
+        # A header naming another suite would look up the wrong dispositions
+        # (or none) and pass silently; the registering suite must match.
+        if report.get("suite") != registered[path]:
+            raise ValueError(
+                f"{path}: report suite {report.get('suite')!r} differs from the "
+                f"registering suite {registered[path]!r}"
+            )
+        yield path, report
+
+
 def _serialize_like(path: Path, original_text: str, report: dict) -> str:
     """Rewrite `report` in the same on-disk format `path` already uses."""
 
     original = json.loads(original_text)
+    if path.suffix == ".gz":
+        return json.dumps(report, sort_keys=True, separators=(",", ":"), allow_nan=False) + "\n"
     if report_json_text(original) == original_text:
         return report_json_text(report)
     plain = json.dumps(original, indent=2, sort_keys=True)
@@ -118,7 +188,7 @@ def _merge_reports(
     problems: list[str] = []
     be_reports: list[dict] = []
     changed = False
-    for path, report in _dashboard_reports():
+    for path, report in _reports():
         suite = report.get("suite")
         dispositions = dispositions_by_suite.get(suite)
         if dispositions is None:
@@ -136,14 +206,24 @@ def _merge_reports(
             if str(suite).startswith("be-"):
                 be_reports.append(report)
             continue
-        merged = apply_dispositions(
-            report,
-            dispositions,
-            dispositions_file=f"dispositions/{suite}.yaml",
+        try:
+            merged = apply_dispositions(
+                report,
+                dispositions,
+                dispositions_file=f"dispositions/{suite}.yaml",
+                taxsim_lane=_taxsim_lane(report),
+            )
+        except DispositionError as exc:
+            problems.append(f"{path.relative_to(REPO_ROOT)}: {exc}")
+            continue
+        problems.extend(
+            _evidence_failures(
+                path.relative_to(REPO_ROOT), merged["summary"]["dispositioned"]
+            )
         )
         if str(suite).startswith("be-"):
             be_reports.append(merged)
-        original_text = path.read_text()
+        original_text = read_report_text(path)
         merged_text = _serialize_like(path, original_text, merged)
         if merged_text == original_text:
             continue
@@ -153,7 +233,7 @@ def _merge_reports(
                 "`uv run scripts/apply_dispositions.py`"
             )
         else:
-            path.write_text(merged_text)
+            write_report_text(path, merged_text)
             print(f"Updated {path.relative_to(REPO_ROOT)}")
             changed = True
     return problems, be_reports, changed
@@ -171,10 +251,11 @@ def _committed_full_reports(suite: str) -> list[tuple[Path, dict]]:
     reports_dir = REPO_ROOT / "reports"
     if not reports_dir.exists():
         return matches
-    for path in sorted(reports_dir.glob("*.json")):
+    paths = set(reports_dir.glob("*.json")) | set(registered_report_paths(REPO_ROOT, suites={suite}))
+    for path in sorted(paths):
         try:
-            data = json.loads(path.read_text())
-        except json.JSONDecodeError:
+            data = load_report(path)
+        except ValueError:
             continue
         if not isinstance(data, dict) or data.get("suite") != suite:
             continue
@@ -203,8 +284,9 @@ def _premerged_block_problems(
        unavailable or edited source can never silently fall back to
        trusting the block.
     2. Against the resolved source (pointer, or every committed full
-       report when the block predates pointers — itself flagged), a fresh
-       dispositions merge must reproduce (a) the aggregate block, (b) the
+       report when the block predates pointers — itself flagged), the
+       TAXSIM oracle identities must agree before a fresh dispositions
+       merge can reproduce (a) the aggregate block, (b) the
        complete row-level assignment digest, and (c) every retained
        mismatch row's disposition annotation. Aggregate counts alone
        cannot see two equal-cardinality entries swapping classes; the
@@ -252,12 +334,39 @@ def _premerged_block_problems(
         for row in report.get("mismatches") or []
     ]
     for full_path, full in sources:
-        merged = apply_dispositions(
-            full,
-            dispositions,
-            dispositions_file=f"dispositions/{suite}.yaml",
-        )
         full_rel = full_path.relative_to(REPO_ROOT)
+        if _taxsim_lane(report) or _taxsim_lane(full):
+            slim_identity = report_oracle_identity(report)
+            full_identity = report_oracle_identity(full)
+            # C1 permits either metadata location. Compare the identities
+            # used by bindings, not the location or binary record order.
+            if (
+                slim_identity["malformed"]
+                or full_identity["malformed"]
+                or any(
+                    slim_identity[key] != full_identity[key]
+                    for key in ("taxsim_binary_sha256", "policyengine_taxsim")
+                )
+            ):
+                problems.append(
+                    f"{rel} TAXSIM oracle identity does not match the verified "
+                    f"source {full_rel} or is malformed — refresh the report "
+                    "before trusting source-derived dispositions"
+                )
+                continue
+        try:
+            merged = apply_dispositions(
+                full,
+                dispositions,
+                dispositions_file=f"dispositions/{suite}.yaml",
+                taxsim_lane=_taxsim_lane(full),
+            )
+        except DispositionError as exc:
+            problems.append(f"{full_rel}: {exc}")
+            continue
+        problems.extend(
+            _evidence_failures(full_rel, merged["summary"]["dispositioned"])
+        )
         if embedded_core != merged["summary"]["dispositioned"]:
             problems.append(
                 f"{rel} embeds a summary.dispositioned block that does not "
@@ -297,7 +406,12 @@ def _premerged_block_problems(
 
 
 def _resolve_source_pointer(
-    rel: Path, suite: str, pointer: object, problems: list[str]
+    rel: Path,
+    suite: str,
+    pointer: object,
+    problems: list[str],
+    *,
+    repo_root: Path | None = None,
 ) -> tuple[Path, dict] | None:
     """Resolve and verify a block's source_report pointer, fail closed.
 
@@ -321,8 +435,9 @@ def _resolve_source_pointer(
             f"{rel} source_report path {raw_path!r} must be repo-relative"
         )
         return None
-    candidate = (REPO_ROOT / raw_path).resolve()
-    reports_dir = (REPO_ROOT / "reports").resolve()
+    root = REPO_ROOT if repo_root is None else repo_root
+    candidate = (root / raw_path).resolve()
+    reports_dir = (root / "reports").resolve()
     if reports_dir not in candidate.parents:
         problems.append(
             f"{rel} source_report path {raw_path!r} is outside reports/"
@@ -344,8 +459,9 @@ def _resolve_source_pointer(
         )
         return None
     try:
-        data = json.loads(payload)
-    except json.JSONDecodeError:
+        # Parse exactly the bytes whose sha256 was just verified.
+        data = json.loads(decode_report_bytes(candidate, payload))
+    except (ValueError, OSError, EOFError):
         problems.append(f"{rel} source_report {raw_path!r} is not JSON")
         return None
     if not isinstance(data, dict) or data.get("suite") != suite:
@@ -421,14 +537,14 @@ def _report_orphans(dispositions_by_suite: dict[str, dict]) -> None:
     """Warn about entries that no longer match any live mismatch row."""
 
     reports_by_suite = {
-        report.get("suite"): report for _, report in _dashboard_reports()
+        report.get("suite"): report for _, report in _reports(suites=set(dispositions_by_suite))
     }
     for suite, dispositions in sorted(dispositions_by_suite.items()):
         report = reports_by_suite.get(suite)
         if report is None:
             print(
                 f"note: dispositions/{suite}.yaml has no committed "
-                "dashboard report"
+                "report"
             )
             continue
         if _is_premerged_slim_report(report):
@@ -437,8 +553,14 @@ def _report_orphans(dispositions_by_suite: dict[str, dict]) -> None:
             # generator already computed the full-run block.
             block = report["summary"]["dispositioned"]
         else:
-            merged = apply_dispositions(report, dispositions)
+            try:
+                merged = apply_dispositions(
+                    report, dispositions, taxsim_lane=_taxsim_lane(report)
+                )
+            except DispositionError:
+                continue  # already reported as a problem by _merge_reports
             block = merged["summary"]["dispositioned"]
+        reasons = block.get("expired_reasons") or {}
         for entry_id in block["orphaned_entries"]:
             print(
                 f"warning: dispositions/{suite}.yaml entry {entry_id!r} "
@@ -446,9 +568,12 @@ def _report_orphans(dispositions_by_suite: dict[str, dict]) -> None:
                 "expires_on_source_change"
             )
         for entry_id in block["expired_entries"]:
+            reason = reasons.get(entry_id)
             print(
                 f"note: dispositions/{suite}.yaml entry {entry_id!r} is "
-                "expired (source values changed or mismatch cleared)"
+                "expired ("
+                + (reason or "source values changed or mismatch cleared")
+                + ")"
             )
 
 
@@ -471,9 +596,13 @@ def main() -> int:
         f"file{'s' if len(dispositions_by_suite) != 1 else ''}"
     )
 
-    problems, be_reports, _ = _merge_reports(
-        dispositions_by_suite, check=args.check
-    )
+    try:
+        problems, be_reports, _ = _merge_reports(
+            dispositions_by_suite, check=args.check
+        )
+    except (OSError, ValueError, EOFError) as exc:
+        print(f"Cannot validate registered report: {exc}", file=sys.stderr)
+        return 1
     rollup_problems, _ = _refresh_be_rollup(be_reports, check=args.check)
     problems.extend(rollup_problems)
     _report_orphans(dispositions_by_suite)
@@ -482,7 +611,7 @@ def main() -> int:
         for problem in problems:
             print(problem, file=sys.stderr)
         return 1
-    print("Dispositions are consistent with the committed dashboard data")
+    print("Dispositions are consistent with the committed reports")
     return 0
 
 

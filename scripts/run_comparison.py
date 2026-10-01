@@ -602,7 +602,15 @@ def main() -> int:
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     basename = config["artifacts"]["report_basename"]
     sample = config["runner"]["parameters"].get("sample_size", "all")
-    output = args.output_dir / f"{basename}-{sample}-{today}.json"
+    report_path = (config.get("artifacts") or {}).get("report_path")
+    if report_path:
+        output = (REPO_ROOT / report_path).resolve()
+        if (REPO_ROOT / "reports").resolve() not in output.parents:
+            raise SystemExit("artifacts.report_path must stay under reports/")
+        if config.get("dashboard"):
+            raise SystemExit("artifacts.report_path lanes must not publish to the dashboard")
+    else:
+        output = args.output_dir / f"{basename}-{sample}-{today}.json"
     output.parent.mkdir(parents=True, exist_ok=True)
     # Run-private staging file in the SAME directory (same filesystem, so the
     # final publish is an atomic rename): the report stays private through
@@ -658,6 +666,7 @@ def main() -> int:
             require_engine_versions=(
                 runner_type == "axiom-oracles-compare"
                 and "policyengine" in compared_engines
+                and "recorded_release" not in config["runner"]["parameters"]
             ),
             preserve_runner_provenance=(runner_type == "de-axiom-oracle-compare"),
         )
@@ -708,7 +717,17 @@ def main() -> int:
                     f"Preserved prior full report for skipped run: {output}"
                 )
             else:
-                os.replace(staging, output)
+                if output.suffix == ".gz":
+                    from axiom_oracles.comparison.report_io import write_report
+
+                    compact_report = json.loads(staging.read_text())
+                    if config["runner"]["parameters"].get("report_include_cases") is False:
+                        compact_report.pop("cases", None)
+                        compact_report["case_rows_omitted"] = True
+                    write_report(staging.with_suffix(".json.gz"), compact_report)
+                    os.replace(staging.with_suffix(".json.gz"), output)
+                else:
+                    os.replace(staging, output)
                 print(f"Wrote: {output}")
             if canonical_record is not None:
                 if producer_native_canonical is not None:
@@ -728,6 +747,7 @@ def main() -> int:
                 )
     finally:
         staging.unlink(missing_ok=True)
+        staging.with_suffix(".json.gz").unlink(missing_ok=True)
 
     if args.summary:
         _print_summary(output)
@@ -988,6 +1008,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # Oracle identity (the side compared to). Derived from the runner type +
     # the pins each runner installs, so the report says which oracle stack ran.
     oracle: dict = {}
+    raw_report = None
     if runner_type == "axiom-encode-tax-ecps-compare":
         oracle = {
             "name": "policyengine",
@@ -1042,6 +1063,26 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "name": "policyengine",
             "policyengine_uk": params.get("policyengine_uk_version", "2.89.2"),
         }
+    elif runner_type == "axiom-oracles-compare" and "recorded_release" in params:
+        # Reuse this parsed report for dataset identity below. Recorded ECPS
+        # reports are large, and keeping two full copies adds no evidence.
+        raw_report = json.loads(output.read_text())
+        recorded = raw_report["recorded_release"]
+        pe = raw_report["engine_identity"]["policyengine"]
+        taxsim = raw_report["engine_identity"]["taxsim"]
+        oracle = {
+            "name": "taxsim",
+            "policyengine_us": pe["policyengineUsVersion"],
+            "policyengine_core": pe["policyengineCoreVersion"],
+            "emulator_commit": pe["emulatorCommit"],
+            "taxsim_pin_profile": taxsim["pin_profile"],
+            "taxsim_binaries": taxsim["binaries"],
+            "recorded_release": recorded,
+        }
+    elif runner_type == "taxsim-probes":
+        report = json.loads(output.read_text())
+        oracle = {"name": "taxsim", **_taxsim_oracle_identity(output)}
+        oracle["probe_observations"] = report.get("probe_observations")
     elif runner_type == "axiom-oracles-compare":
         engines = {str(params.get("left", "")), str(params.get("right", ""))}
         pins = _resolve_pe_oracle_pins(params)
@@ -1057,6 +1098,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
+        if "taxsim" in engines:
+            oracle.update(_taxsim_oracle_identity(output))
     elif runner_type in ("federal-tax-liability-grid", "snap-abawd-boundary-grid"):
         pins = _resolve_pe_oracle_pins(params)
         oracle = {
@@ -1143,11 +1186,19 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # report carries one.
     dataset = None
     try:
-        raw_report = json.loads(output.read_text())
+        if raw_report is None:
+            raw_report = json.loads(output.read_text())
         identity = _normalize_dataset_identity(raw_report) if isinstance(
             raw_report, dict
         ) else None
-        dataset = dataset_provenance_from_identity(identity)
+        if identity is not None and identity.get("source") == "taxsim-csv":
+            # The taxsim-csv loader's identity is the whole provenance: the
+            # file's full sha256, size, rows, year override, per-state row
+            # counts, and origin — dataset_provenance_from_identity keeps only
+            # the populace-shaped fields.
+            dataset = _taxsim_csv_dataset_provenance(identity)
+        else:
+            dataset = dataset_provenance_from_identity(identity)
     except (OSError, json.JSONDecodeError):
         dataset = None
     if dataset is None:
@@ -1780,6 +1831,44 @@ def _taxsim_pin_version() -> str:
     return pins.pinned_version()
 
 
+def _taxsim_pin_profile(params: dict) -> str:
+    """The TAXSIM binary pin profile for a suite run.
+
+    Precedence (axiom_oracles.adapters.taxsim.pins.active_profile):
+    $AXIOM_TAXSIM_PIN_PROFILE > the suite's
+    ``runner.parameters.taxsim_pin_profile`` > the pin file's
+    ``default_profile``. The resolved name is passed to the CLI explicitly.
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    return pins.active_profile_name(suite_parameters=params)
+
+
+def _taxsim_oracle_identity(output: Path) -> dict:
+    """TAXSIM oracle keys for provenance.oracle, lifted from the report.
+
+    ``policyengine_taxsim`` is the pinned package version (legacy key). The
+    CLI report's ``engine_identity.taxsim`` block — written by the adapter
+    from the binaries it verified and ran — becomes ``taxsim_pin_profile``
+    and ``taxsim_binaries``; a report without that block (older CLI) keeps
+    only the version.
+    """
+    identity: dict = {"policyengine_taxsim": _taxsim_pin_version()}
+    try:
+        report = json.loads(output.read_text())
+    except (OSError, json.JSONDecodeError):
+        return identity
+    taxsim = (
+        (report.get("engine_identity") or {}).get("taxsim")
+        if isinstance(report, dict)
+        else None
+    )
+    if isinstance(taxsim, dict) and taxsim.get("binaries"):
+        identity["taxsim_pin_profile"] = taxsim.get("pin_profile")
+        identity["taxsim_binaries"] = [dict(item) for item in taxsim["binaries"]]
+    return identity
+
+
 def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
     """PE oracle pins for an in-repo compare, honoring per-comparison overrides.
 
@@ -1911,8 +2000,14 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     whose engine stack needs a different interpreter can pin `python:` in its
     parameters.
     """
-    axiom_rules_repo = _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
     params = runner["parameters"]
+    if "recorded_release" in params:
+        _run_recorded_release_compare(params, output)
+        return
+    axiom_rules_repo = (
+        _resolve_path(runner["axiom_rules_repo"], "axiom_rules_repo")
+        if "axiom" in {params.get("left"), params.get("right")} else REPO_ROOT
+    )
     pe_pins = _resolve_pe_oracle_pins(params)
     engines = {str(params.get("left", "")), str(params.get("right", ""))}
     # A pure oracle-vs-oracle comparison (e.g. taxcalc vs policyengine) has no
@@ -1935,6 +2030,15 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         if "taxsim" in engines
         else ()
     )
+    population = str(params.get("population", "enhanced-cps"))
+    taxsim_csv_args = _taxsim_csv_cli_args(params, population)
+    # A taxsim-csv suite without `period` keeps each row's own tax year; with
+    # it, the CLI overrides every row's year (one file, one law year per run).
+    period_args = (
+        []
+        if population == "taxsim-csv" and params.get("period") is None
+        else ["--period", str(params["period"])]
+    )
     cmd = [
         "uv",
         "run",
@@ -1953,11 +2057,11 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         params["left"],
         params["right"],
         "--population",
-        params.get("population", "enhanced-cps"),
+        population,
+        *taxsim_csv_args,
         "--sample-size",
         str(params.get("sample_size", 1000)),
-        "--period",
-        str(params["period"]),
+        *period_args,
         *(["--report-suite", str(params["suite"])] if params.get("suite") else []),
         *(["--include-components"] if params.get("include_components") else []),
         *_concept_args(params),
@@ -1972,6 +2076,9 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--output",
         str(output),
     ]
+    cmd.extend(_comparison_options(params))
+    if "taxsim" in engines:
+        cmd.extend(["--taxsim-pin-profile", _taxsim_pin_profile(params)])
     if params.get("include_case_inputs"):
         cmd.append("--include-case-inputs")
     if params.get("comparison_batch_size"):
@@ -2015,6 +2122,154 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         # suite's declared roots. The suite pin is authoritative here.
         env.pop("AXIOM_RULESPEC_ROOT", None)
     subprocess.run(cmd, check=True, cwd=REPO_ROOT, env=env)
+
+
+def _comparison_options(params: dict) -> list[str]:
+    args = []
+    for key in ("tolerance", "relative_tolerance"):
+        if key in params:
+            args.extend(["--" + key.replace("_", "-"), str(params[key])])
+    for name in params.get("row_aux_outputs", []):
+        args.extend(["--row-aux-output", str(name)])
+    return args
+
+
+def _recorded_release_cli_args(params: dict) -> list[str]:
+    block = params.get("recorded_release")
+    if not isinstance(block, dict):
+        raise SystemExit("recorded_release must be a mapping")
+    unknown = set(block) - {
+        "repo", "tag", "path", "path_env", "sha256_by_year", "provenance_sha256_by_year",
+    }
+    if unknown:
+        raise SystemExit(f"unknown recorded_release keys: {sorted(unknown)}")
+    if bool(block.get("path")) == bool(block.get("path_env")):
+        raise SystemExit("recorded_release requires exactly one of path or path_env")
+    raw_path = block.get("path")
+    if block.get("path_env"):
+        raw_path = os.environ.get(block["path_env"])
+        if not raw_path:
+            raise SystemExit(f"Set ${block['path_env']} to the verified release directory")
+    year = str(params.get("period", ""))
+    hashes = block.get("sha256_by_year") or {}
+    sha = hashes.get(year) or (hashes.get(int(year)) if year.isdigit() else None)
+    if not sha or not block.get("repo") or not block.get("tag"):
+        raise SystemExit("recorded_release requires repo, tag and sha256_by_year for period")
+    args = [
+        "--recorded-release", str(_expand_path(raw_path)),
+        "--recorded-release-repo", str(block["repo"]),
+        "--recorded-release-tag", str(block["tag"]),
+        "--recorded-release-sha256", str(sha),
+    ]
+    provenance_hashes = block.get("provenance_sha256_by_year") or {}
+    provenance_sha = provenance_hashes.get(year) or (
+        provenance_hashes.get(int(year)) if year.isdigit() else None
+    )
+    if provenance_sha:
+        args += ["--recorded-release-provenance-sha256", str(provenance_sha)]
+    return args
+
+
+def _run_recorded_release_compare(params: dict, output: Path) -> None:
+    if params.get("population") != "taxsim-csv" or {
+        params.get("left"), params.get("right")
+    } != {"policyengine", "taxsim"}:
+        raise SystemExit("recorded_release requires taxsim-csv and policyengine/taxsim")
+    # Replay has no PolicyEngine runtime dependency. Use this interpreter and
+    # the verified release's versions, never the live runner's package pins.
+    cmd = [
+        sys.executable, "-m", "axiom_oracles.cli", "compare",
+        params["left"], params["right"], "--population", "taxsim-csv",
+        *_taxsim_csv_cli_args(params, "taxsim-csv"),
+        *_recorded_release_cli_args(params),
+        "--period", str(params["period"]),
+        "--sample-size", str(params.get("sample_size", 0)),
+        "--report-suite", params["suite"],
+        "--taxsim-pin-profile", _taxsim_pin_profile(params),
+        *_concept_args(params), *_comparison_options(params),
+        "--output", str(output),
+    ]
+    subprocess.run(cmd, check=True, cwd=REPO_ROOT)
+
+
+def _run_taxsim_probes(runner: dict, output: Path) -> None:
+    subprocess.run(
+        [sys.executable, str(REPO_ROOT / "scripts/taxsim_probes.py"),
+         runner["parameters"]["kind"], "--year", str(runner["parameters"]["period"]),
+         "--output", str(output)],
+        check=True, cwd=REPO_ROOT,
+    )
+
+
+def _taxsim_csv_cli_args(params: dict, population: str) -> list[str]:
+    """``--taxsim-csv*`` flags for a suite's ``taxsim_csv`` parameter block.
+
+    A ``population: taxsim-csv`` suite must declare::
+
+        taxsim_csv:
+          path: $HOME/.../cps_households.csv   # env/~ expanded
+          sha256: <64 hex>                     # the CLI fails closed on mismatch
+          origin:                              # optional provenance
+            repo: PolicyEngine/policyengine-taxsim
+            commit: <git sha>
+            path: cps_households.csv
+          allow_unknown_columns: false         # optional
+          selector_fact_columns: [scorp]        # optional additional input facts
+
+    The sha256 is mandatory for registered suites: a committed report must name
+    the exact file it scored. The block is rejected on any other population.
+    """
+    block = params.get("taxsim_csv")
+    if population != "taxsim-csv":
+        if block is not None:
+            raise SystemExit(
+                "`taxsim_csv` parameters apply only to `population: taxsim-csv`"
+            )
+        return []
+    if not isinstance(block, dict) or not block.get("path"):
+        raise SystemExit(
+            "`population: taxsim-csv` comparisons must declare "
+            "`taxsim_csv: {path, sha256}` under runner.parameters"
+        )
+    unknown = set(block) - {
+        "path", "sha256", "origin", "allow_unknown_columns", "selector_fact_columns",
+    }
+    if unknown:
+        raise SystemExit(f"unknown `taxsim_csv` keys: {sorted(unknown)}")
+    if not block.get("sha256"):
+        raise SystemExit(
+            "`taxsim_csv.sha256` is required: a registered suite must pin the "
+            "exact TAXSIM input file it scores"
+        )
+    args = [
+        "--taxsim-csv",
+        str(_expand_path(block["path"])),
+        "--taxsim-csv-sha256",
+        str(block["sha256"]),
+    ]
+    origin = block.get("origin")
+    if origin is not None:
+        if not isinstance(origin, dict) or set(origin) != {"repo", "commit", "path"}:
+            raise SystemExit(
+                "`taxsim_csv.origin` must be a mapping with exactly repo, commit, "
+                "and path"
+            )
+        args.extend(
+            [
+                "--taxsim-csv-origin",
+                f"{origin['repo']}@{origin['commit']}:{origin['path']}",
+            ]
+        )
+    if block.get("allow_unknown_columns"):
+        args.append("--taxsim-csv-allow-unknown-columns")
+    selector_fact_columns = block.get("selector_fact_columns", [])
+    if not isinstance(selector_fact_columns, list) or any(
+        not isinstance(name, str) for name in selector_fact_columns
+    ):
+        raise SystemExit("`taxsim_csv.selector_fact_columns` must be a list of input column names")
+    for name in selector_fact_columns:
+        args.extend(["--taxsim-csv-selector-fact", name])
+    return args
 
 
 def _ensure_composed_axiom_program(params: dict, axiom_rules_repo: Path) -> None:
@@ -4061,6 +4316,7 @@ def _run_de_axiom_oracle_compare(runner: dict, output: Path) -> None:
         params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = str(pin)
 
 RUNNERS = {
+    "taxsim-probes": _run_taxsim_probes,
     "axiom-encode-snap-ecps-compare": _run_axiom_encode_snap_ecps_compare,
     "axiom-encode-tax-ecps-compare": _run_axiom_encode_tax_ecps_compare,
     "axiom-encode-uk-efrs-compare": _run_axiom_encode_uk_efrs_compare,
@@ -4420,7 +4676,9 @@ def _git_head_sha(repo: Path) -> str | None:
 
 
 def _print_summary(output: Path) -> None:
-    data = json.loads(output.read_text())
+    from axiom_oracles.comparison.report_io import load_report
+
+    data = load_report(output)
     print()
     if "compared_values" in data:
         cv = data["compared_values"]
@@ -4823,6 +5081,16 @@ def _limit_rows_by_output(rows: list[dict], *, limit_per_output: int) -> list[di
         counts[output] += 1
         selected.append(row)
     return selected
+
+
+def _taxsim_csv_dataset_provenance(identity: dict) -> dict:
+    """provenance.dataset for a ``population: taxsim-csv`` CLI report.
+
+    The CLI writes the loader's file identity (plus a ``selection`` summary of
+    scope and sampling) as the report's top-level ``dataset_identity``; it is
+    recorded whole so the provenance names the exact TAXSIM input file.
+    """
+    return dict(identity)
 
 
 def _normalize_dataset_identity(raw: dict) -> dict | None:

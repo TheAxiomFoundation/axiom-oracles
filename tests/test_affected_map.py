@@ -561,6 +561,13 @@ def test_direct_oracle_pair_suites_carry_no_rulespec_dependency():
     gen = _load("generate_affected_map.py")
     entries = {e["suite"]: e for e in gen.build_map()["suites"]}
     assert entries["taxcalc-fiit-ecps"]["repos"] == []
+    for name in (
+        "taxsim-emulator-probes", "taxsim-crash-probes-2024",
+        "taxsim-crash-probes-2025", *(f"taxsim-emulator-ecps-{year}" for year in range(2021, 2026)),
+    ):
+        assert entries[name]["repos"] == []
+        assert entries[name]["name"] is None
+        assert entries[name]["report"] is None
     # An axiom-sided compare over the same concept space keeps its mapping.
     assert (
         "TheAxiomFoundation/rulespec-us"

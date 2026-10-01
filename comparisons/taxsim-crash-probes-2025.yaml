@@ -1,0 +1,31 @@
+name: taxsim-crash-probes-2025
+title: September TAXSIM Maryland crash probe (2025)
+description: >-
+  Replays the exact two-record pension-only Maryland reproducer from pe-taxsim
+  commit 3a58992ad6330920a1dc93bc6d83efe5de954d13, comparing the September build
+  without fallback to the pinned August reference. Also records the zero-rerun
+  budget outcome to check engine_error reporting for a failing batch.
+ci: manual
+runner:
+  type: taxsim-probes
+  parameters:
+    kind: crash
+    left: taxsim-reference
+    right: taxsim
+    period: "2025"
+    population: taxsim-csv
+    sample_size: 0
+    taxsim_csv:
+      path: tests/fixtures/taxsim_probes/pension-only-2025.csv
+      sha256: df8dda59bd189b763db894de9d951b4dd8ef29d007a88afe59a7280bd0f75ec6
+      origin:
+        repo: PolicyEngine/policyengine-taxsim
+        commit: 3a58992ad6330920a1dc93bc6d83efe5de954d13
+        path: tests/fixtures/maryland_taxsim_crash/pension-only-2025.csv
+    taxsim_pin_profile: september-2026-09-no-fallback
+    concepts:
+      - us:tax/federal-income-tax#liability
+      - us:tax/state-income-tax#liability
+artifacts:
+  report_path: reports/taxsim-emulator/taxsim-crash-probes-2025.json
+  report_basename: taxsim-crash-probes-2025

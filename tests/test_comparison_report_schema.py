@@ -104,9 +104,18 @@ def test_missing_output_mismatch_kind_and_engine_errors_are_reported() -> None:
         comparisons=comparisons,
     )
 
+    # An errored engine run classifies its rows engine_error (the value is
+    # missing BECAUSE the engine failed), with the failure on the row.
     assert report["summary"]["mismatches_by_kind"] == [
-        {"value": MismatchKind.MISSING_LEFT, "count": 1}
+        {"value": MismatchKind.ENGINE_ERROR, "count": 1}
     ]
+    assert report["summary"]["engine_error_count"] == 1
+    assert report["mismatches"][0]["error"] == {
+        "engine": "policyengine",
+        "side": "left",
+        "signature": "unclassified",
+        "messages": ["income_tax: invalid state"],
+    }
     assert report["summary"]["error_count"] == 1
     assert report["summary"]["errors_by_engine"] == {"policyengine": 1}
     assert report["mismatches"][0]["difference"] is None
