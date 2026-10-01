@@ -121,8 +121,22 @@ def _build_mapper(slot: InputSlot, rule: dict) -> Callable[..., Any]:
     return lambda case_facts, person_facts: None
 
 
+# Every transform ``_build_derived_mapper`` implements. An entry naming another one fails when the
+# table loads, rather than yielding None for its slot on every case.
+TRANSFORMS = frozenset({
+    "abd_adult_with_abd_adult_partner", "adult_table_plus_per_child", "age_at_least_and_not_flags",
+    "age_at_least_or_flags", "age_below", "all_people_any_positive", "annual_flat_plus_rate_of_remainder",
+    "any_age_below_or_flags", "count_age_at_least", "count_age_below", "elderly_or_disabled",
+    "flag_and_not_flags", "fpl_ratio", "hh_size", "monthly", "monthly_countable_after_exclusion",
+    "monthly_flat_then_rate", "monthly_rate_plus_flat", "positive", "positive_to_constant", "scope_geoid_in",
+    "ssi_couple_countable_income", "sum", "sum_is_zero", "sum_positive_and_zero", "table_by_hh_size", "weekly",
+})
+
+
 def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
     transform = source.get("transform")
+    if transform not in TRANSFORMS:
+        raise ValueError(f"populace input table: unknown transform {transform!r}")
     # from_facts entries are either a bare concept name or
     # {fact: NAME, scale: <float>} for facts that enter the slot scaled
     # (e.g. self-employment income netted of production costs).

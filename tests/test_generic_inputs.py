@@ -390,3 +390,22 @@ def test_generic_input_record_coerces_bool_into_decimal_slot() -> None:
     )
     assert absent.to_dict(interval)["value"] == {"kind": "decimal", "value": "0"}
     assert present.to_dict(interval)["value"] == {"kind": "decimal", "value": "1"}
+
+
+def test_a_table_that_fails_to_load_stops_the_projection(tmp_path, monkeypatch):
+    """It used to be swallowed, leaving every slot at its default: a silent data difference."""
+    import json
+
+    import pytest
+
+    from axiom_oracles.adapters.axiom import generic_inputs, populace_mapping_loader
+
+    compiled = tmp_path / "program.compiled.json"
+    compiled.write_text(json.dumps({"program": {}}))
+
+    def broken(program):
+        raise ValueError("populace input table: unknown transform 'astrology'")
+
+    monkeypatch.setattr(populace_mapping_loader, "load_populace_mapping_for_program", broken)
+    with pytest.raises(ValueError, match="astrology"):
+        generic_inputs.attach_generic_inputs([], compiled_program_path=compiled)

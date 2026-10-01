@@ -42,6 +42,14 @@ jobs:
       - name: Validate mismatch dispositions
         run: uv run scripts/apply_dispositions.py --check
 
+      # The populace input table is generated from axiom-mappings (the shared map) at the commit in
+      # axiom_oracles/data/AXIOM_MAPPINGS_REF: fail when it drifts from that export.
+      - name: Populace input table matches the shared map
+        run: |
+          uv run --with "axiom-mappings @ git+https://github.com/TheAxiomFoundation/axiom-mappings@$(cat axiom_oracles/data/AXIOM_MAPPINGS_REF)" \
+            python -m axiom_mappings export oracles-populace --out "$RUNNER_TEMP/populace_input_mapping.yaml"
+          diff -u "$RUNNER_TEMP/populace_input_mapping.yaml" axiom_oracles/data/populace_input_mapping.yaml
+
       - name: Validate NZ IncomeExplorer report, traces, and bound cases
         run: uv run python scripts/nz_incomeexplorer.py --check
 
