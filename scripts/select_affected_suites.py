@@ -207,7 +207,9 @@ def select(
                 recorded = ran_against.get(repo)
                 if recorded is None:
                     reasons.append(f"{repo}: report ran against unknown SHA")
-                elif recorded != pin:
+                # A roots-revision pin may be a SHA prefix (e.g. ca2d424f);
+                # reports always record the full SHA.
+                elif not (pin and recorded.startswith(pin)):
                     reasons.append(
                         f"{repo}: {recorded[:12]} → pin {pin[:12]}"
                     )

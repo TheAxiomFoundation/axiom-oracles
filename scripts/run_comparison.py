@@ -539,6 +539,19 @@ def main() -> int:
             "comparison. Non-zero exit if any fixture fails."
         ),
     )
+    parser.add_argument(
+        "--require-live",
+        action="store_true",
+        help=(
+            "Fail instead of re-emitting the committed report when a "
+            "skip-capable runner (snap-qc, euromod, gettsim, us-tariff, the "
+            "UK grids) cannot execute on this host. run_comparison.py then "
+            "publishes no report and no dashboard copy (a generator that "
+            "writes its own files before failing is not rolled back). For "
+            "CI lanes that provision the runner's dependencies and must "
+            "prove a real run."
+        ),
+    )
     args = parser.parse_args()
 
     if args.list:
@@ -611,6 +624,16 @@ def main() -> int:
     print(f"Running {config['name']}: {config.get('title', config['name'])}")
     try:
         runner_fn(config["runner"], staging)
+        if args.require_live and config["runner"].get("_reemitted_report"):
+            # The runner already printed why it could not execute. Refuse
+            # before provenance stamping or publication, so this script
+            # writes neither reports/ nor the dashboard copy (the finally
+            # drops staging).
+            raise SystemExit(
+                f"{config['name']}: --require-live: the runner re-emitted the "
+                "committed report instead of executing on this host (skip "
+                "reason above); the staged report was not published"
+            )
         canonical_record = _canonical_record_path(config)
         producer_native_canonical = (
             staging.read_bytes()
@@ -729,6 +752,60 @@ def _euromod_release_from_model_root(model_root: str | None) -> str | None:
     return None
 
 
+def _affected_map_repos(config: dict) -> list[str]:
+    """The rulespec repos ``comparisons/affected_map.json`` maps to a suite."""
+    map_path = COMPARISONS_DIR / "affected_map.json"
+    if not map_path.exists():
+        return []
+    affected_map = json.loads(map_path.read_text())
+    suite = (config.get("dashboard") or {}).get("suite", config.get("name"))
+    registry_name = config.get("name")
+    mapped_repos: list[str] = []
+    for entry in affected_map.get("suites", []):
+        if entry.get("suite") == suite or entry.get("name") == registry_name:
+            for repo in entry.get("repos", []):
+                if repo not in mapped_repos:
+                    mapped_repos.append(repo)
+    return mapped_repos
+
+
+def _declared_repo_root_checkouts(config: dict, params: dict) -> list[str]:
+    """Checkouts an ``axiom_rulespec_repo_roots`` suite actually compiled against.
+
+    ``_run_axiom_oracles_compare`` exports the suite's roots as
+    AXIOM_RULESPEC_REPO_ROOTS, with AXIOM_RULESPEC_US_ROOT's parent first when
+    that override is set (``_rulespec_repo_roots_env``). The engine lifts a
+    root that is itself a ``rulespec-*`` checkout to its parent and resolves
+    each repo as ``<root>/<name>`` (``_default_rulespec_repo_roots`` in
+    adapters/axiom/runner.py). Mirroring that order keeps a pinned suite (e.g.
+    ``$HOME/oracle-pins`` at ``axiom_rulespec_repo_roots_revision``) from being
+    stamped with whatever the developer's convention-path checkout is on.
+    """
+    declared = params.get("axiom_rulespec_repo_roots")
+    if not declared:
+        return []
+    roots: list[Path] = []
+    override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
+    if override:
+        roots.append(Path(override).resolve().parent)
+    for part in str(declared).split(os.pathsep):
+        if not part:
+            continue
+        root = _expand_path(part)
+        if root.name.startswith("rulespec-"):
+            root = root.parent
+        roots.append(root)
+    paths: list[str] = []
+    for repo in _affected_map_repos(config):
+        name = repo.split("/", 1)[-1]
+        for root in roots:
+            candidate = root / name
+            if candidate.exists():
+                paths.append(str(candidate))
+                break
+    return paths
+
+
 def _complete_rulespecs_from_affected_map(
     config: dict, runner: dict, rulespecs: list[dict]
 ) -> list[dict]:
@@ -754,18 +831,7 @@ def _complete_rulespecs_from_affected_map(
     try:
         from axiom_oracles.provenance import resolve_rulespec_checkout
 
-        map_path = COMPARISONS_DIR / "affected_map.json"
-        if not map_path.exists():
-            return rulespecs
-        affected_map = json.loads(map_path.read_text())
-        suite = (config.get("dashboard") or {}).get("suite", config.get("name"))
-        registry_name = config.get("name")
-        mapped_repos: list[str] = []
-        for entry in affected_map.get("suites", []):
-            if entry.get("suite") == suite or entry.get("name") == registry_name:
-                for repo in entry.get("repos", []):
-                    if repo not in mapped_repos:
-                        mapped_repos.append(repo)
+        mapped_repos = _affected_map_repos(config)
         if not mapped_repos:
             return rulespecs
         by_repo = {e.get("repo"): e for e in rulespecs}
@@ -823,6 +889,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         val = runner.get(key) or params.get(key)
         if val:
             rulespec_paths.append(str(_expand_path(val)))
+    if runner_type == "axiom-oracles-compare" and not rulespec_paths:
+        rulespec_paths.extend(_declared_repo_root_checkouts(config, params))
     # The EUROMOD/UKMOD synthetic lane points `axiom_rulespec_repo_roots` at the
     # whole org directory and names the model country; the encoded rules live in
     # that country's `rulespec-<cc>` repo under the roots dir, so resolve it
@@ -1300,14 +1368,13 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     pe_us = params.get("policyengine_us_version", "1.729.0")
     pe_core = params.get("policyengine_core_version", "3.26.11")
     pe_pins = (
-        [
-            "--with",
-            f"policyengine=={pe_meta}",
-            "--with",
-            f"policyengine-us=={pe_us}",
-            "--with",
-            f"policyengine-core=={pe_core}",
-        ]
+        _pe_oracle_with_args(
+            (
+                f"policyengine=={pe_meta}",
+                f"policyengine-us=={pe_us}",
+                f"policyengine-core=={pe_core}",
+            )
+        )
         if pinned
         else [
             "--with",
@@ -1639,8 +1706,7 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
             "run",
             "--directory",
             str(axiom_encode_repo),
-            "--with",
-            "policyengine-us==1.705.1",
+            *_pe_oracle_with_args(("policyengine-us==1.705.1",)),
             "--with",
             "numpy",
             "axiom-encode",
@@ -1738,6 +1804,25 @@ def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
         f"policyengine-us=={us}" if us else _PE_ORACLE_PINS[1],
         f"policyengine-core=={core}" if core else _PE_ORACLE_PINS[2],
     )
+
+
+# Transitive dependencies the pinned PolicyEngine-US wheels leave floating.
+# Every oracle pin (1.700.0 through 1.784.4) declares ``spm-calculator>=0.2.0``
+# but imports ``spm_calculator.geoadj``, which spm-calculator 1.0.0
+# (2026-09-11) removed. Unpinned, ``uv run --with`` resolves 1.0.x,
+# PolicyEngine-US fails to import, and the populace loader reports "Install the
+# US PolicyEngine extra". Pin the version uv.lock resolves; tests keep this,
+# the ``policyengine`` extra and scripts/debug_policyengine_env.py in step.
+_PE_US_COMPANION_PINS = ("spm-calculator==0.3.1",)
+
+
+def _pe_oracle_with_args(pins) -> list[str]:
+    """``uv run --with`` arguments for PE oracle pins plus their companions."""
+    return [
+        arg
+        for pin in (*pins, *_PE_US_COMPANION_PINS)
+        for arg in ("--with", pin)
+    ]
 
 # The compare and sanity subprocesses share this import shim — extracted to
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
@@ -1865,7 +1950,7 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pe_pins),
         *(arg for pin in taxcalc_pins for arg in ("--with", pin)),
         *(arg for pin in taxsim_pins for arg in ("--with", pin)),
         "python",
@@ -2500,7 +2585,7 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pe_pins),
         "--with",
         f"policyengine-taxsim=={_taxsim_pin_version()}",
         "python",
@@ -2726,7 +2811,7 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
-        *(arg for pin in pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pins),
         "python",
         str(generator),
         "--policy",
@@ -2874,7 +2959,7 @@ def _run_snap_abawd_boundary_grid(runner: dict, output: Path) -> None:
         "--python",
         str(params.get("python", "3.13")),
         "--no-project",
-        *(arg for pin in pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pins),
         "python",
         str(generator),
         *(
@@ -2900,7 +2985,6 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
     built axiom rules engine, the committed dashboard report is reused, exactly
     like the state income-tax grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_council_tax_reduction.py"
     basename = "axiom-policyengine-uk-council-tax-reduction"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -2917,11 +3001,17 @@ def _run_uk_council_tax_reduction_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"CTR grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -2937,7 +3027,6 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
     environment or a built axiom rules engine, the committed dashboard report is
     reused, exactly like the Council Tax Reduction grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_capital_gains_tax.py"
     basename = "axiom-policyengine-uk-capital-gains-tax"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -2954,11 +3043,17 @@ def _run_uk_capital_gains_tax_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"CGT grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -2974,7 +3069,6 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
     PolicyEngine-UK environment or a built axiom rules engine, the committed
     dashboard report is reused, exactly like the Council Tax Reduction grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_business_rates.py"
     basename = "axiom-policyengine-uk-business-rates"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -2991,11 +3085,17 @@ def _run_uk_business_rates_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Business rates grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3013,7 +3113,6 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
     rules engine, the committed dashboard report is reused, exactly like the
     Capital Gains Tax grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_lbtt_ltt.py"
     basename = "axiom-policyengine-uk-lbtt-ltt"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -3030,11 +3129,17 @@ def _run_uk_lbtt_ltt_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"LBTT/LTT grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3051,7 +3156,6 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
     or a built axiom rules engine, the committed dashboard report is reused,
     exactly like the Council Tax Reduction grid.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_winter_fuel_payment_pe.py"
     basename = "axiom-policyengine-uk-winter-fuel-payment-pe"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -3068,11 +3172,17 @@ def _run_uk_winter_fuel_payment_pe_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Winter Fuel grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3089,7 +3199,6 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
     the committed dashboard report is reused, exactly like the Council Tax Reduction
     and Winter Fuel Payment grids.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_attendance_allowance_pe.py"
     basename = "axiom-policyengine-uk-attendance-allowance-pe"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -3106,11 +3215,17 @@ def _run_uk_attendance_allowance_pe_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Attendance Allowance grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
@@ -3125,7 +3240,6 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
     without a PolicyEngine-UK environment or a built axiom rules engine, the
     committed dashboard report is reused, exactly like the other UK case grids.
     """
-    del runner
     generator = REPO_ROOT / "scripts" / "generate_uk_tax_free_childcare_pe.py"
     basename = "axiom-policyengine-uk-tax-free-childcare-pe"
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{basename}.json"
@@ -3142,17 +3256,23 @@ def _run_uk_tax_free_childcare_pe_grid(runner: dict, output: Path) -> None:
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"Tax-Free Childcare grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
 
 def _run_uk_pe_grid(
-    generator_basename: str, report_basename: str, output: Path
+    runner: dict, generator_basename: str, report_basename: str, output: Path
 ) -> None:
     """Shared runner for the UK PolicyEngine case-grid comparisons.
 
@@ -3161,7 +3281,8 @@ def _run_uk_pe_grid(
     through the axiom rules engine) and writes one v2 report. On a runner
     without a PolicyEngine-UK environment or a built axiom rules engine, the
     committed dashboard report is reused, exactly like the council-tax-reduction
-    grid.
+    grid, and marked as a re-emit so provenance never stamps it fresh (the
+    us-tariff grid's contract) and ``--require-live`` refuses it.
     """
     generator = REPO_ROOT / "scripts" / generator_basename
     committed = REPO_ROOT / "dashboard" / "public" / "data" / f"{report_basename}.json"
@@ -3178,32 +3299,31 @@ def _run_uk_pe_grid(
         "python",
         str(generator),
     ]
+    before = committed.read_bytes() if committed.exists() else None
     try:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
     except (subprocess.CalledProcessError, FileNotFoundError) as exc:
         if not committed.exists():
             raise
+        if committed.read_bytes() == before:
+            # Untouched by this run, so the committed numbers are being
+            # reused. A generator that wrote fresh artifacts and then
+            # exited nonzero on mismatches is not a re-emit.
+            runner["_reemitted_report"] = True
         print(f"{report_basename} grid generation unavailable ({exc}); reusing {committed}.")
     output.write_text(committed.read_text())
 
 
 def _run_uk_vat_grid(runner: dict, output: Path) -> None:
-    del runner
-    _run_uk_pe_grid("generate_uk_vat.py", "axiom-policyengine-uk-vat", output)
+    _run_uk_pe_grid(runner, "generate_uk_vat.py", "axiom-policyengine-uk-vat", output)
 
 
 def _run_uk_fuel_duty_grid(runner: dict, output: Path) -> None:
-    del runner
-    _run_uk_pe_grid(
-        "generate_uk_fuel_duty.py", "axiom-policyengine-uk-fuel-duty", output
-    )
+    _run_uk_pe_grid(runner, "generate_uk_fuel_duty.py", "axiom-policyengine-uk-fuel-duty", output)
 
 
 def _run_uk_tv_licence_grid(runner: dict, output: Path) -> None:
-    del runner
-    _run_uk_pe_grid(
-        "generate_uk_tv_licence.py", "axiom-policyengine-uk-tv-licence", output
-    )
+    _run_uk_pe_grid(runner, "generate_uk_tv_licence.py", "axiom-policyengine-uk-tv-licence", output)
 
 
 def _run_us_tariff_grid(runner: dict, output: Path) -> None:
@@ -4009,7 +4129,7 @@ def _run_sanity(name: str) -> int:
         "--no-project",
         "--with-editable",
         str(REPO_ROOT),
-        *(arg for pin in pe_pins for arg in ("--with", pin)),
+        *_pe_oracle_with_args(pe_pins),
         "python",
         "-c",
         _PE_CERT_OVERRIDE,
