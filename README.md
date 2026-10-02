@@ -470,7 +470,10 @@ The comparison bridge (`axiom_oracles.bridges.snap_qc_compare`) downloads and
 sha256-verifies the pinned public-use file, materializes a patched FY2024 rule overlay,
 and evaluates at a nominal period; the run skips gracefully and re-emits the
 committed dashboard report on any machine that lacks the engine binary, the dated
-rulespec checkout, or the QC file. The standing recipe — the FY-gap overlay
+rulespec checkout, or the QC file, and that re-emission never replaces a
+committed report from a real run. The suites declare `ci: manual`: the weekly
+matrix and the 6-hourly affected rerun never dispatch them, and a supervised run
+refreshes the committed reports. The standing recipe — the FY-gap overlay
 mechanism, the exclusion table, and how to add a fiscal year or a second state —
 is in [docs/snap-qc-oracle-playbook.md](docs/snap-qc-oracle-playbook.md).
 
