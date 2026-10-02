@@ -27,8 +27,9 @@ Subcommands:
   exact. That means no re-emission; given the replay log, the log records
   writing this report and no failure; at least one case, every one
   compared; zero benefit mismatches, error cases and error rows; every stage
-  concept compared on every case with no mismatch and no missing side; and
-  the expected rulespec-us SHA and engine binary. On failure it names the
+  concept the suite's replay compares (benefit included) listed once, and
+  each compared on every case with no mismatch and no missing side; and the
+  expected rulespec-us SHA and engine binary. On failure it names the
   suite and every failed check, plus the first benefit-mismatch cases or
   the replay's exception. The report records no per-case rows for a stage
   that diverges while the benefit matches, so those fail on counts alone.
@@ -53,7 +54,7 @@ import os
 import re
 import subprocess
 import sys
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from pathlib import Path
 
 import yaml
@@ -140,6 +141,13 @@ def composition_path(config: dict) -> Path:
     return QC_JURISDICTIONS[jurisdiction].program
 
 
+def expected_stage_concepts(config: dict) -> dict[str, str]:
+    """Stage -> the concept id the suite's replay compares it under."""
+    from axiom_oracles.bridges.snap_qc_compare import stage_concepts
+
+    return stage_concepts(str(config["runner"]["parameters"]["jurisdiction"]))
+
+
 def fiscal_year(config: dict) -> int:
     # Mirrors run_comparison._run_snap_qc_compare's default.
     return int(config["runner"]["parameters"].get("fiscal_year", 2024))
@@ -223,10 +231,17 @@ def check_report(
     report: dict,
     *,
     suite: str,
+    expect_concepts: Mapping[str, str],
     expect_rulespec_sha: str | None = None,
     expect_axiom_binary: Path | None = None,
 ) -> list[str]:
-    """Every reason ``report`` is not a live, exact run of ``suite``."""
+    """Every reason ``report`` is not a live, exact run of ``suite``.
+
+    ``expect_concepts`` maps each stage the replay compares to its concept id
+    (:func:`expected_stage_concepts`). Every one, the benefit included, must
+    be listed under ``concepts`` and then compared on every case, so a report
+    with an empty or partial ``concepts`` list cannot pass vacuously.
+    """
     failures: list[str] = []
     provenance = report.get("provenance") or {}
     summary = report.get("summary") or {}
@@ -267,8 +282,28 @@ def check_report(
         rendered = ", ".join(f"{row.get('stage')}={row.get('count')}" for row in stages)
         failures.append(f"first divergent stages: {rendered}")
 
-    concepts = {row.get("id") for row in report.get("concepts") or []}
-    aggregates = {row.get("concept"): row for row in report.get("aggregates") or []}
+    concept_ids = [row.get("id") for row in report.get("concepts") or []]
+    aggregate_rows = report.get("aggregates") or []
+    concepts = set(concept_ids)
+    aggregates = {row.get("concept"): row for row in aggregate_rows}
+    # A repeated id would let a later clean row shadow a divergent one.
+    for field, ids in (
+        ("concepts", concept_ids),
+        ("aggregates", [row.get("concept") for row in aggregate_rows]),
+    ):
+        repeated = sorted({str(i) for i in ids if ids.count(i) > 1})
+        if repeated:
+            failures.append(f"{field} repeats {', '.join(repeated)}")
+    if not concepts:
+        failures.append("the report lists no stage concepts, so no stage was compared")
+    if BENEFIT_STAGE not in expect_concepts:
+        failures.append(
+            f"no expected {BENEFIT_STAGE} concept to require "
+            f"(expected stages: {', '.join(expect_concepts) or 'none'})"
+        )
+    for stage, concept in expect_concepts.items():
+        if concept not in concepts:
+            failures.append(f"stage {stage} ({concept}) is not among the report's concepts")
     for concept in sorted(concepts - set(aggregates), key=str):
         failures.append(f"stage {concept} was never compared")
     for concept in sorted(aggregates, key=str):
@@ -505,6 +540,7 @@ def cmd_check(args: argparse.Namespace) -> int:
         failures = check_report(
             report,
             suite=args.suite,
+            expect_concepts=expected_stage_concepts(config),
             expect_rulespec_sha=args.expect_rulespec_sha,
             expect_axiom_binary=args.expect_axiom_binary,
         )
