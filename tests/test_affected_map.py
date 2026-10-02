@@ -610,6 +610,53 @@ def test_pinned_repos_for_registry_config():
     assert gen.pinned_repos_for_registry_config(config) == {}
 
 
+def test_roots_revision_pins_every_exercised_repo():
+    """An axiom-oracles-compare suite pinned through axiom_rulespec_repo_roots
+    (run_comparison._verify_declared_pins makes every checkout under the roots
+    hold the revision) is judged against that revision, not main's HEAD."""
+    gen = _load("generate_affected_map.py")
+    config = {
+        "name": "co-x-taxsim",
+        "runner": {
+            "type": "axiom-oracles-compare",
+            "parameters": {
+                "concepts": ["us:tax/federal-income-tax#eitc"],
+                "axiom_rulespec_repo_roots": "$HOME/oracle-pins",
+                "axiom_rulespec_repo_roots_revision": "ca2d424f",
+            },
+        },
+    }
+    assert gen.pinned_repos_for_registry_config(config) == {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+    }
+    for bad in ("ca2", "CA2D424F", "not-a-sha"):
+        config["runner"]["parameters"]["axiom_rulespec_repo_roots_revision"] = bad
+        with pytest.raises(SystemExit, match="7-40 lowercase hex"):
+            gen.pinned_repos_for_registry_config(config)
+    config["runner"]["parameters"]["axiom_rulespec_repo_roots_revision"] = "ca2d424f"
+    config["runner"]["parameters"]["concepts"].append("us-co:tax/income#liability")
+    with pytest.raises(SystemExit, match="a pin needs exactly one"):
+        gen.pinned_repos_for_registry_config(config)
+    config["runner"]["parameters"].pop("axiom_rulespec_repo_roots_revision")
+    assert gen.pinned_repos_for_registry_config(config) == {}
+
+
+def test_committed_roots_pinned_suites_carry_their_pin():
+    affected = json.loads(
+        (Path(__file__).resolve().parents[1] / "comparisons" / "affected_map.json")
+        .read_text()
+    )
+    pins = {
+        entry["suite"]: entry.get("pinned")
+        for entry in affected["suites"]
+        if entry["suite"] in {"fiit-taxsim-ecps", "co-tax-intersection-taxsim"}
+    }
+    assert pins == {
+        "fiit-taxsim-ecps": {"TheAxiomFoundation/rulespec-us": "ca2d424f"},
+        "co-tax-intersection-taxsim": {"TheAxiomFoundation/rulespec-us": "ca2d424f"},
+    }
+
+
 def test_pinned_repos_ambiguity_fails_loudly():
     gen = _load("generate_affected_map.py")
     config = {
@@ -661,6 +708,26 @@ def test_selector_pinned_repo_stale_when_pin_changes():
     selected = sel.select(aff, heads, reports)
     assert [s["suite"] for s in selected] == ["s1"]
     assert "pin" in selected[0]["reason"]
+
+
+def test_selector_matches_a_short_pin_by_prefix():
+    """Roots-revision pins may be SHA prefixes; reports record full SHAs."""
+    sel = _load("select_affected_suites.py")
+    aff = {
+        "suites": [
+            {
+                "suite": "s1",
+                "name": "s1",
+                "repos": ["owner/rulespec-us"],
+                "pinned": {"owner/rulespec-us": "ca2d424f"},
+            }
+        ]
+    }
+    heads = {"owner/rulespec-us": "9" * 40}
+    fresh = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": "ca2d424f" + "0" * 32}])}
+    assert sel.select(aff, heads, fresh) == []
+    stale = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": "9" * 40}])}
+    assert [s["suite"] for s in sel.select(aff, heads, stale)] == ["s1"]
 
 
 def test_selector_pinned_repo_unknown_sha_still_selected():

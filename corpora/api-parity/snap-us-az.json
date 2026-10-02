@@ -1,6 +1,6 @@
 {
   "id": "snap-us-az-family-1",
-  "description": "Arizona SNAP canonical three-person household using package-native compiled inputs.",
+  "description": "Arizona SNAP canonical three-person household in the package's native fact names, including values for two derived rules.",
   "axiom_request": {
     "program_id": "snap",
     "jurisdiction": "us-az",
@@ -47,15 +47,15 @@
     "snap_benefit_amount"
   ],
   "notes": [
-    "Canonical values are monthly. This Arizona SNAP case exercises the DES compiled package inputs exposed by the admitted artifact.",
-    "The Arizona package currently exposes package-native inputs rather than the broader generic SNAP household fact contract."
+    "Canonical values are monthly. This Arizona SNAP case supplies eight input slots of the admitted DES artifact; na_net_income and snap_excess_shelter_deduction_for_net_income name derived rules, which the API's package path pins only when it executes locally (see known_deviation).",
+    "This case uses the package's native fact names, including thrifty_food_plan_amount_for_budgetary_unit_size (768). The shared SNAP fact vocabulary (household_size, snap_gross_monthly_income, shelter_costs) also reaches this package's input slots, but it does not set the thrifty food plan amount, which otherwise takes the registry's 292 presumption for any household size (axiom-api#248)."
   ],
   "tolerance": {
     "amount": 0.01
   },
   "known_deviation": {
-    "issue": "https://github.com/TheAxiomFoundation/axiom-api/issues/85",
-    "note": "AZ package applies the earned income deduction differently than the USDA-truth expectations: net income comes out 1231 vs 1442 and the allotment 398.70 vs 335.40. Expected values remain the legal truth; this pin records current artifact behavior so monitors alarm on change, not on the known gap.",
+    "issue": "https://github.com/TheAxiomFoundation/axiom-api/issues/243",
+    "note": "The hosted package path does not apply derived-rule pins (axiom-api#243), so the caller's na_net_income of 1442 is dropped and the engine computes net income from the other supplied facts: 1231, giving an allotment of 398.70 instead of 335.40. Expected values are the outputs with the caller's na_net_income applied, which the API's package path produces when it executes locally on the service's engine (c8e8db1). This pin records current hosted behavior so monitors alarm on change, not on the known gap.",
     "pinned_outputs": {
       "snap_benefit_amount": 398.7,
       "snap_net_income": 1231,

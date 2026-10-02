@@ -1518,6 +1518,8 @@ def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
     assert "policyengine==4.18.9" in cmd
     assert "policyengine-us==1.767.3" in cmd
     assert "policyengine-core==3.30.3" in cmd
+    # spm-calculator 1.0.0 removed spm_calculator.geoadj, which PE-US imports.
+    assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
     assert cmd[cmd.index("--policy") + 1] == "net_investment_income_tax"
     assert cmd[cmd.index("--rulespec-root") + 1] == str(rulespec.resolve())
     assert cmd[cmd.index("--output") + 1] == str(output)
