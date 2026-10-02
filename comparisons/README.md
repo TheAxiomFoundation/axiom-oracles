@@ -44,24 +44,49 @@ it. Its committed report refreshes only via a supervised
 `ci: manual` for that reason: both workflows clone rulespec-us main but never
 build the engine binary or download the QC public-use file, so their legs
 could only re-emit the committed report, and on 2026-09-23 the affected rerun
-committed such re-emissions over the five real reports #548 had landed. (The
-EUROMOD, UKMOD, and GETTSIM synthetic suites also only re-emit on those
-runners and are still dispatched; the rule below keeps their re-emissions off
-real reports.)
+committed such re-emissions over the five real reports #548 had landed. The
+same holds, and the same marker applies, for:
+
+- the 40 EUROMOD-platform suites (`euromod-synthetic-compare`: the BE and DK
+  EUROMOD suites and the `*-ukmod` UKMOD suites). Neither workflow provides the
+  x64 engine, the `euromod` connector under `EUROMOD_PYTHON`, a .NET runtime,
+  or the model checkout. They refresh through `scripts/regenerate_euromod_uk.sh`,
+  `scripts/regenerate_euromod_dk.sh`, or a supervised run.
+- the ten UK PolicyEngine case grids and the `us-tariff` grid. Their generators
+  evaluate the rules through an engine binary (`AXIOM_RULES_ENGINE_BINARY`, an
+  `axiom-rules-engine` build, or `axiom-rules` on `PATH`) that neither workflow
+  exports or builds, so their legs fail with "No such file or directory:
+  'axiom-rules'" and fall back to the committed report.
+
+Before these suites were marked, the affected rerun committed their legs' output
+over 45 of their reports (34 EUROMOD/UKMOD suites, `us-tariff`, and the ten UK
+grids): first over the real runs, then over each other on every sweep, often
+changing nothing but `generated_at`. The UK grid fallback is not even marked as
+a re-emission, so those commits stamped the July numbers with each later
+rulespec-uk SHA as if they had run. `tests/test_affected_map.py` fails if a
+suite of any of these runner types lacks `ci: manual`. (The two DE GETTSIM
+suites also only re-emit here, but they map to no rulespec repo, so the affected
+rerun never selects them, and the DE lane is left as it is.)
 
 Reports must carry real rulespec SHAs: `provenance.rulespecs[].sha` is what
 `select_affected_suites.py` diffs against repo HEADs, and a `null` SHA means
 "cannot prove fresh" — re-selected every sweep. The always-real runner lanes
 complete missing SHAs from the affected map plus the checkout the run actually
-resolved; skip-capable lanes (euromod/gettsim/snap-qc) are deliberately
-excluded so a re-emitted report is never stamped fresh. A re-emission also
-never replaces a committed report from a real run: `run_comparison.py` leaves
-that dashboard copy byte-for-byte unchanged, and
-`scripts/commit_refreshed_report.sh` puts back the tip's copy
-(`scripts/guard_reemitted_reports.py`) before it commits. Both rely on the
-runner marking its re-emission (`provenance.reemitted_report`); the UK
-PolicyEngine case-grid runners' fallbacks do not mark theirs yet (#549 adds the
-marker), so their re-emissions still publish as fresh runs.
+resolved; skip-capable lanes (euromod/gettsim/snap-qc) are deliberately excluded
+so a re-emitted report is never stamped fresh. A re-emission never replaces a
+committed report, whether that report came from a real run or was itself a
+re-emission: it copies the committed numbers, so publishing it could only change
+labels. `run_comparison.py` leaves any existing dashboard copy byte-for-byte
+unchanged, and `scripts/commit_refreshed_report.sh` puts back the tip's copy
+(`scripts/guard_reemitted_reports.py`) before it commits. Only a suite's first
+report may be a re-emission. A re-emission also records no engine in its
+provenance, because none ran, and it leaves the copied report's
+`engines.versions` alone. Both guards rely on the runner marking its re-emission
+(`provenance.reemitted_report`). The UK PolicyEngine case-grid runners'
+fallbacks do not mark theirs yet (#549 adds the marker): `ci: manual` keeps
+those suites off the bot, but until #549 lands a manual run of one of them on a
+machine without the engine still copies the committed report under fresh
+provenance and replaces it.
 
 A suite that pins one reviewed rulespec snapshot
 (`rulespec_upstream_sha`/`rulespec_upstream_tree` in its parameters — the

@@ -1,19 +1,23 @@
 #!/usr/bin/env python3
-"""Keep a re-emission from replacing a real committed dashboard report.
+"""Keep a re-emission from replacing a committed dashboard report.
 
 ``scripts/commit_refreshed_report.sh`` runs this on every push attempt, after
 it has reset to the current tip and restored the leg's own outputs. For each
 top-level dashboard report (``dashboard/public/data/*.json``) that differs from
-the tip, a working copy marked ``provenance.reemitted_report`` is put back to
-the tip's bytes when the tip's copy came from a real run
-(:func:`axiom_oracles.provenance.is_real_run_report`).
+the tip, a working copy marked ``provenance.reemitted_report`` (see
+:func:`axiom_oracles.provenance.is_real_run_report`) is put back to the tip's
+bytes whenever the tip has a copy of that report.
 
-A re-emission copies the committed numbers, so committing it can only replace
-the real run's provenance (the rulespec SHAs it ran against, its run kind and
-date) with "re-emitted, SHA unknown". ``run_comparison.py`` already declines to
-publish one over a real report; this is the check at the bot's push, which no
-CI workflow sees. It runs against each attempt's tip, not the leg's starting
-commit, so a real report that lands while the leg runs is protected too.
+A re-emission copies the committed numbers, so committing it changes labels,
+never results. Over a real run it replaces the provenance that run recorded
+(the rulespec SHAs it ran against, its run kind and date) with "re-emitted,
+SHA unknown". Over an earlier re-emission it only moves ``generated_at``; the
+affected rerun committed such timestamp-only diffs for 35 EUROMOD, UKMOD and
+tariff suites sweep after sweep. ``run_comparison.py`` already declines to
+publish a re-emission over any existing copy; this is the check at the bot's
+push, which no CI workflow sees. It runs against each attempt's tip, not the
+leg's starting commit, so a report that lands while the leg runs is protected
+too. Only a first report (the tip has no copy) may be a re-emission.
 
 Usage:
     python3 scripts/guard_reemitted_reports.py [--rev REV]
@@ -68,8 +72,8 @@ def _load(text: str) -> object:
         return None
 
 
-def downgrades(rev: str) -> list[str]:
-    """Reports whose working copy is a re-emission and whose ``rev`` copy is real."""
+def reemitted_replacements(rev: str) -> list[str]:
+    """Reports whose working copy is a re-emission and that ``rev`` already has."""
     found = []
     for path in changed_reports(rev):
         working = REPO_ROOT / path
@@ -78,10 +82,8 @@ def downgrades(rev: str) -> list[str]:
         report = _load(working.read_bytes().decode("utf-8", errors="replace"))
         if not isinstance(report, dict) or is_real_run_report(report):
             continue
-        committed = _git("show", f"{rev}:{path}", check=False)
-        if committed.returncode != 0:
-            continue
-        if is_real_run_report(_load(committed.stdout)):
+        committed = _git("cat-file", "-e", f"{rev}:{path}", check=False)
+        if committed.returncode == 0:
             found.append(path)
     return found
 
@@ -91,18 +93,18 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--rev",
         default="HEAD",
-        help="Commit whose real reports to protect (default: HEAD).",
+        help="Commit whose reports to protect (default: HEAD).",
     )
     args = parser.parse_args(argv)
 
-    restored = downgrades(args.rev)
+    restored = reemitted_replacements(args.rev)
     for path in restored:
         # Literal pathspec: a report name containing glob characters must not
         # match (and revert) any neighbouring file.
         _git("--literal-pathspecs", "checkout", args.rev, "--", path)
         message = (
-            f"kept the real report {path}: this leg re-emitted it, and a "
-            "re-emission never replaces a real run"
+            f"kept the committed report {path}: this leg re-emitted it, and a "
+            "re-emission never replaces a committed report"
         )
         if os.environ.get("GITHUB_ACTIONS") == "true":
             print(f"::warning title=Re-emission not committed::{message}")

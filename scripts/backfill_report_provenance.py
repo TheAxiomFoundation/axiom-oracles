@@ -61,7 +61,29 @@ _PE_ORACLE_PINS = (
 
 
 def _git_commit_date(path: Path) -> str | None:
+    """Commit date of the oldest commit that introduced the file's current bytes.
+
+    The last commit touching the file is not its age: a commit that puts back
+    an earlier report (a real run restored over later re-emissions) would
+    date a July run to the day of the restore. Content with no commit yet
+    falls back to the last commit touching the path.
+    """
     try:
+        blob = subprocess.run(
+            ["git", "-C", str(REPO_ROOT), "hash-object", str(path)],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.strip()
+        introduced = subprocess.run(
+            [
+                "git", "-C", str(REPO_ROOT), "log", "--reverse", "--format=%cI",
+                f"--find-object={blob}", "--", str(path),
+            ],
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout.split()
         result = subprocess.run(
             ["git", "-C", str(REPO_ROOT), "log", "-1", "--format=%cI", "--", str(path)],
             capture_output=True,
@@ -70,7 +92,7 @@ def _git_commit_date(path: Path) -> str | None:
         )
     except (subprocess.CalledProcessError, FileNotFoundError, OSError):
         return None
-    iso = result.stdout.strip()
+    iso = introduced[0] if introduced else result.stdout.strip()
     if not iso:
         return None
     # Normalize `2026-06-02T00:00:40-04:00` → UTC `…Z` to match run_comparison.
