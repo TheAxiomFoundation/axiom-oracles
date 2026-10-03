@@ -77,6 +77,39 @@ its 2026 model, verified empirically against the binary:
   3.99%, GA 5.19% vs 4.99%). The state income-tax liability suites
   disposition each such residual per case.
 
+## Diagnostic Lines In TAXSIM Stdout
+
+The binary writes Fortran diagnostics to the same stdout stream as its CSV
+table. The pinned macOS build prints six copies of a line such as
+`" d2      105822       25000        2020           0"` immediately before the
+CSV row of every Utah (TAXSIM state 45) record whose primary filer is 73 or
+older, and with `idtl=0` those lines precede the header itself (verified
+2026-09-27 by running each affected batch-13 record of `fiit-taxsim-ecps`
+alone and their complement together; fixtures in `tests/fixtures/taxsim/`).
+policyengine-taxsim's `TaxsimRunner.run()` reads the stream with
+`pandas.read_csv` and coerces every column to numeric, so each diagnostic line
+became a phantom row with a NaN `taxsimid` and the comparator failed with
+`unexpected [nan, nan, ...]`.
+
+`TaxsimPackageRunner` therefore uses policyengine-taxsim only to format the
+input file and locate the binary, runs the binary itself, and parses stdout
+with `axiom_oracles.adapters.taxsim.output.parse_taxsim_stdout`:
+
+- a line is a record when it has the header's field count and a numeric first
+  field; every other non-blank line is a diagnostic attributed to the record
+  whose row follows it, kept on `EngineResult.raw["taxsim_stdout_diagnostics"]`
+  and summarized in one `WARNING` log line per batch;
+- a submitted case with no output row gets an `errors` entry naming its
+  `taxsimid` (plus stderr and any trailing stdout), so it surfaces in the
+  report's `errors` rows instead of vanishing;
+- an output row matching no submitted case, a duplicate row, a nonzero exit,
+  or trailing diagnostics that no missing case can own abort the batch with
+  the offending ids or lines in the message.
+
+The pinned Linux build (`taxsimtest-linux.exe`) refuses law year 2026
+outright (`TAXSIM: Federal tax calculator available 1960 - 2024 only.`,
+`STOP 1`), so 2026 TAXSIM suites currently run only with the macOS build.
+
 ## Reproduce The Smoke Test
 
 ```bash
