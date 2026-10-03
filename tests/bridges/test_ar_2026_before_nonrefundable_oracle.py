@@ -1,4 +1,5 @@
 import hashlib
+import json
 import os
 from pathlib import Path
 
@@ -25,10 +26,10 @@ RULESPEC_TEST_SHA256 = (
     "53305b1547e1a132a78480f6c7703cbde0c2887f52850cd1782606a99595f57a"
 )
 HELD_BLOCK_SHA256 = (
-    "f87efa7d69f023c9ea9a3d6c17a2365d0259dd3926ae9bcb325ac65c30e2ce6f"
+    "eca7c6609b5543e586afa5ad2d081e6ac564e80e050c963746d2ac38408bb721"
 )
 FALLBACK_BLOCK_SHA256 = (
-    "ddd27d33e34c93be2750aae0ff47afb6ccec7bf291737f3bfcb58ed07e55ca7b"
+    "3d1603f3a9074f5ff9675a1a62c16405cd9ad63064b375cdd87916e8c986ff29"
 )
 FALLBACK_RATIONALE = (
     "PolicyEngine-US does not model AR agency policy manuals or state "
@@ -171,32 +172,31 @@ def test_arkansas_exact_mapping_precedes_unchanged_jurisdiction_fallback() -> No
 
 
 def test_arkansas_held_and_fallback_blocks_remain_byte_identical() -> None:
-    source = (
-        REPO_ROOT / "axiom_oracles/bridges/mappings/us.yaml"
-    ).read_text()
-    held_start = source.index(
-        "  # Arkansas's TY2026 resident annual-return interface is fully "
-        "source held."
-    )
-    held_end = source.index(
-        "  # Connecticut's TY2026 resident annual-return interface exposes "
-        "one bounded",
-        held_start,
-    )
-    fallback_start = source.index('  - legal_id_prefix: "us-ar:"')
-    fallback_end = source.index(
-        "\n\n  - legal_id_prefix:",
-        fallback_start + 1,
-    )
+    """The held and fallback Arkansas mappings are frozen.
 
-    assert (
-        hashlib.sha256(source[held_start:held_end].encode()).hexdigest()
-        == HELD_BLOCK_SHA256
+    The US registry now lives in axiom-mappings, so the guard hashes the exported entries (and the
+    held block's documenting comment) instead of a span of the old us.yaml text.
+    """
+    import axiom_mappings
+    from axiom_mappings.export import oracles_registry
+
+    shared = axiom_mappings.load("us")
+    exported = oracles_registry(shared)
+    held_prefix = "us-ar:policies/income_tax/2026_resident_liability_source_hold#"
+    held = [e for e in exported["mappings"] if str(e.get("legal_id", "")).startswith(held_prefix)]
+    comment = next(
+        r["comment"]
+        for r in [*shared.outputs, *shared.parameters]
+        if str(r.get("axiom", "")).startswith(held_prefix) and r.get("comment")
     )
-    assert (
-        hashlib.sha256(source[fallback_start:fallback_end].encode()).hexdigest()
-        == FALLBACK_BLOCK_SHA256
-    )
+    fallback = [e for e in exported["prefixes"] if e.get("legal_id_prefix") == "us-ar:"]
+
+    def digest(obj) -> str:
+        return hashlib.sha256(json.dumps(obj, sort_keys=True).encode()).hexdigest()
+
+    assert len(held) == 13 and len(fallback) == 1
+    assert digest({"comment": comment, "entries": held}) == HELD_BLOCK_SHA256
+    assert digest(fallback) == FALLBACK_BLOCK_SHA256
 
 
 @pytest.mark.parametrize("program", [None, "tax"])

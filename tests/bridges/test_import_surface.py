@@ -162,7 +162,9 @@ def test_packaged_data_files_present() -> None:
     registry = importlib.import_module("axiom_oracles.bridges.registry")
     package_dir = Path(registry.__file__).parent
     mapping_files = sorted(p.name for p in (package_dir / "mappings").glob("*.yaml"))
-    assert "us.yaml" in mapping_files and "uk.yaml" in mapping_files
+    assert "uk.yaml" in mapping_files
+    # US mappings are served by the shared axiom-mappings package, not a packaged copy.
+    assert "us" in registry.SHARED_MAP_COUNTRIES and "us.yaml" not in mapping_files
     assert (package_dir / "program_surfaces" / "us.yaml").is_file()
 
 
