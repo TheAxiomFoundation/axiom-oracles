@@ -3,7 +3,7 @@
 ## Status and scope
 
 `de-worker-dual-oracle` is the realized direct EUROMOD↔GETTSIM baseline for
-Germany. It runs 13 synthetic households through both independent engines and
+Germany. It runs 13 synthetic households through both engines and
 compares six household amounts at an absolute tolerance of EUR 0.01. Because
 neither side is Axiom, the dashboard presents it as an oracle cross-check and
 the affected map has `repos: []`.
@@ -164,7 +164,7 @@ All other grid comparisons match to the cent.
 
 ## Rule: encode before filing oracle findings (Max, 2026-08-19)
 
-Never file an issue against an external oracle until we have encoded the
+Never file an issue against another oracle until we have encoded the
 provision ourselves. A divergence discovered before our signed encoding exists
 is recorded in dispositions as `unexplained` (or a neutral divergence record),
 never as a filed upstream finding. File upstream only when our encoding exists

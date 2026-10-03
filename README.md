@@ -12,10 +12,17 @@ This repo is the home for executable program comparisons across:
 - entitledto (recorded per-council UK Council Tax Reduction reference)
 - Axiom RuleSpec/runtime programs
 
-The core idea is to keep each external system behind an adapter, then compare
-them through thin, concept-keyed cases and normalized program outputs. ACCESS NYC
-is the first implemented external adapter because its public Drools rules and
-Screening API make it a useful oracle for NYC benefit eligibility.
+Two of the systems above are tied to Axiom.
+Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages.
+The TAXSIM adapter calls the binary bundled in
+`policyengine-taxsim` 2.30.0; `axiom_oracles/adapters/taxsim/taxsim_pins.json`
+records that release and each binary's SHA-256.
+
+The core idea is to keep each engine or dataset, Axiom's runtime included,
+behind an adapter, then compare them through thin, concept-keyed cases and
+normalized program outputs. ACCESS NYC's public Drools rules and Screening API
+make it a useful oracle for NYC benefit eligibility.
 
 This repo should stay a library/CLI boundary, not a product UI. Axiom apps can
 render comparison reports, but adapters, concept bindings, and mismatch JSON live
@@ -221,8 +228,11 @@ TAXSIM and PRD are exposed as package adapters rather than separate comparison
 systems. The TAXSIM adapter projects thin `Case` objects to TAXSIM rows from
 period, geography, age, relation, and earned-income facts, while still accepting
 explicit `metadata["taxsim_input"]` rows for hand-authored fixtures. The bundled
-TAXSIM executable currently supports tax years through 2024, so comparisons
-involving TAXSIM default to tax year 2024 unless `--period` is supplied. PRD
+TAXSIM executable supports tax years through 2026, so comparisons involving
+TAXSIM default to tax year 2026 unless `--period` is supplied. At 2026 it returns
+zero for the ACTC, CDCC, and EITC with children, so a TAXSIM zero on those
+credits is a gap in TAXSIM (see the `TAXSIM_DEFAULT_PERIOD` comment in
+`axiom_oracles/cli.py`). PRD
 cases carry an external PRD household object in `metadata["prd_household"]` or
 use a mapper. The adapters normalize those package outputs to the same
 `EngineResult` shape consumed by the comparator. `compare policyengine taxsim`
@@ -396,7 +406,7 @@ the auto-run matrix until then).
 
 ## GETTSIM oracle (Germany)
 
-`GettsimRunner` is the **second, independent** German comparison oracle in the
+`GettsimRunner` is the second German comparison oracle in the
 dual-oracle lane (`rulespec-de#1`), running alongside `EuromodPlatformRunner`.
 GETTSIM (the German Taxes and Transfers SIMulator, IZA and an academic
 consortium) is pure Python with an explicit policy DAG, date-parameterized,
@@ -436,8 +446,9 @@ long-term care 96.00 / income tax 6,433, and a one-child household pays
 SteFeG stages, executed as tests). GETTSIM is an optional heavy dependency,
 imported lazily; the `gettsim-live` CI job runs the live tests with the locked
 fork installed. See `docs/gettsim-oracle-playbook.md` for the full API-gotcha
-notes and the DE comparison-suite wiring (a follow-up, once `rulespec-de` has
-encodings).
+notes, and `docs/de-dual-oracle-playbook.md` for the DE comparison suite
+(`comparisons/de-worker-dual-oracle-axiom-gettsim.yaml`, which runs a pinned
+rulespec-de snapshot over a 13-household worker grid).
 
 ## SNAP QC administrative data oracle
 
@@ -453,7 +464,7 @@ for USDA from each edited case record; the benefit received is a separate field
 (`RAWBEN`). The replay takes the medical, dependent-care, and child-support
 deduction amounts and the utility amount from the file, so a match shows that
 Axiom's arithmetic from those amounts reproduces the file's benefit. The oracle
-scores the benefit calculation, not the eligibility screening: the public file
+scores the benefit calculation and leaves eligibility untested: the public file
 already dropped every incomplete or ineligible review, so the replay feeds
 eligibility gates passing values.
 
@@ -522,9 +533,15 @@ us:statutes/7/2014/o#snap_eligible:
 Convenience objects like `Household` remain useful for specific adapters, but
 they are projection targets rather than the canonical interface.
 
-## Why This Belongs In Axiom
+## Why this belongs in Axiom
 
 TAXSIM and PRD comparisons are useful validation artifacts, but Axiom's broader
-product claim is source-linked, executable law with external oracle checks. This
-repo gives those checks a single thin interface instead of letting every oracle
-become its own custom comparator or UI.
+aim is source-linked, executable law compared with other calculators and
+datasets. This repo gives all of those comparisons one thin interface, so no
+oracle needs its own comparator or UI.
+
+In September 2026, 20,780 of the 34,810 rules in rulespec-us had no comparison
+with another calculator or dataset
+(`dashboard/public/data/rule_verification_summary.json`). The other 14,030 sit
+in programs that at least one comparison covers, and a comparison of a program
+need not exercise every rule in it.
