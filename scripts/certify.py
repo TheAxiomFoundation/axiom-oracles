@@ -22,9 +22,10 @@ Two evidence modes, stated per claim:
 
 Oracle types matter to the verdict. ``reference`` oracles (another
 implementation) can be wrong in code, so their unexplained mismatches block
-the conformant verdict. ``reality`` oracles (recorded administrative outcomes)
-cannot have bugs filed against them; their disagreements are reported as
-leads and do not block, but are never hidden.
+the conformant verdict. ``reality`` oracles (values built from administrative
+case records; for SNAP QC, ``FSBEN``, the benefit Mathematica calculates for
+USDA from each edited review) cannot have bugs filed against them; their
+disagreements are reported as leads and do not block, but are never hidden.
 
 Modes::
 

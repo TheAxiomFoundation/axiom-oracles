@@ -1,14 +1,17 @@
 """SNAP Quality Control public-use-file loader for administrative-grade parity.
 
-The USDA SNAP Quality Control (QC) public-use file (PUF) is a stratified
-sample of active SNAP case reviews for a fiscal year. For every retained
-review the file carries a **constructed** benefit computation: FNS's contractor
-(Mathematica) recomputes the allotment from edited, internally consistent
-inputs and the official fiscal-year parameters (the "QC Minimodel"), so
-``FSBEN`` is the benefit the rules *should* produce for those inputs — the US
-analogue of a full-admin-returns oracle. Replaying each unit's inputs through
-an Axiom SNAP composition and comparing allotments (and stage intermediates)
-against the QC-constructed values is therefore ground-truth parity.
+The USDA SNAP Quality Control (QC) public-use file (PUF) holds a fiscal year's
+monthly samples of active SNAP case reviews (no state had a stratified sample
+in FY 2024; tech doc editing Step 7). For every retained review the file
+carries a **constructed** benefit computation: Mathematica, under contract to
+USDA, calculates the allotment ``FSBEN`` from the edited case record and the
+fiscal year's parameters while editing the file (Step 12). The QC Minimodel
+reads ``FSBEN`` as an input. ``FSBEN`` need not equal the benefit issued: in
+the August 2026 FY 2024 file it is within $5 of the error-adjusted issued
+benefit (``BENFIX``) for 797 of 856 Colorado units. Replaying each unit's
+inputs through an Axiom SNAP composition and comparing allotments (and stage
+intermediates) against the QC-constructed values therefore tests whether Axiom
+reproduces Mathematica's calculation from the edited inputs.
 
 This module is the loader: it pins each fiscal year's PUF (URL + sha256 +
 archive member), downloads and verifies it on demand, streams the CSV with the
@@ -34,7 +37,8 @@ Codebook citations
 Every mapped variable is cited to a page of the FY 2024 SNAP QC Technical
 Documentation detailed codebook (Chapter V.B). Page numbers below are PDF pages
 of that document (the ``===== PDF PAGE N =====`` markers in the archived
-``tech-doc-full.txt``); they equal the printed page plus ten.
+``tech-doc-full.txt``) in the May 2026 posting, where they equal the printed
+page plus ten; in the August 2026 posting each is four pages later.
 
 Case control and identification
     ``YRMONTH`` sample year+month (p74) -> ``yrmonth``;
@@ -382,10 +386,12 @@ class QcMember:
 
 @dataclass(frozen=True)
 class QcExpected:
-    """The QC-constructed benefit computation for a unit — the ground truth.
+    """The QC-constructed benefit computation the replay scores a unit against.
 
-    Every field is a QC Minimodel output (or the reported error finding for
-    ``status``/``error_amount``). A value is ``None`` when the source column is
+    Every field is a variable Mathematica constructs while editing the file,
+    except ``dependent_care_deduction`` (``FSDEPDED``, a reported deduction the
+    editing adjusts) and the reviewer's error finding in
+    ``status``/``error_amount``. A value is ``None`` when the source column is
     coded missing for the unit; for the loaded (non-excluded) population these
     are populated.
     """
@@ -411,7 +417,7 @@ class QcExpected:
 
 @dataclass(frozen=True)
 class QcUnit:
-    """A single SNAP QC case review projected into oracle inputs + ground truth."""
+    """A single SNAP QC case review projected into oracle inputs + QC values."""
 
     case_id: str
     fiscal_year: int
@@ -464,9 +470,10 @@ EXCLUSION_MFIP = "mfip"
 #: Unit uses an SSI Combined Application Project benefit procedure. NYSCAP
 #: (``SSI_CAP = 4``) is *not* excluded: unlike the standard-benefit and
 #: standardized-shelter CAPs, NYSCAP units "went through the standard editing
-#: process that non-SSI-CAP households undergo" and "all SNAP deductions apply"
-#: (FY 2024 tech doc, SSI-CAP benefit calculations and the SSI_CAP codebook
-#: note), so their FSBEN is an ordinary Minimodel recomputation.
+#: process that non-SSI-CAP households undergo" (FY 2024 tech doc chapter III,
+#: SSI-CAP benefit calculations, PDF p.42) and "all SNAP deductions apply" to
+#: them (chapter IV footnote 36, PDF p.50), so their FSBEN comes from the same
+#: file-editing benefit calculation as non-CAP units.
 EXCLUSION_SSI_CAP = "ssi_cap"
 #: Data-quality guard: no constructed benefit to replay (FSBEN missing or 0).
 EXCLUSION_MISSING_BENEFIT = "missing_benefit"

@@ -441,9 +441,9 @@ encodings).
 
 ## SNAP QC administrative data oracle
 
-The SNAP QC oracle validates Axiom SNAP encodings against real administrative
-microdata rather than another engine. It replays the USDA SNAP Quality Control
-public-use file — a nationally representative sample of completed active-case
+The SNAP QC oracle validates Axiom SNAP encodings against administrative
+microdata. It replays the USDA SNAP Quality Control public-use file — a
+nationally representative sample of completed active-case
 reviews, 44,891 units in FY2024 — through the Axiom RuleSpec SNAP composition and
 compares six values per review: the benefit against `FSBEN`, and gross income,
 the standard deduction, the excess-shelter deduction, and net income against the
