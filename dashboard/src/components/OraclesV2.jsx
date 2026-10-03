@@ -46,12 +46,12 @@ const AXIOM_APP_URL = "https://axiom-foundation.org";
 const ORACLE_IDENTITY = {
   policyengine: {
     org: "PolicyEngine",
-    what: "Open-source tax–benefit microsimulation of US and UK law. Max Ghenis, Axiom's CEO, co-founded PolicyEngine and is also its CEO, and PSL Foundation fiscally sponsors both organizations.",
+    what: "Open-source tax–benefit microsimulation of US and UK law. Max Ghenis is CEO of both Axiom and PolicyEngine, which he co-founded, and PSL Foundation fiscally sponsors both organizations.",
     url: "https://policyengine.org",
   },
   taxsim: {
     org: "NBER",
-    what: "TAXSIM-35 — the National Bureau of Economic Research's federal and state income-tax calculator, the reference model of empirical tax research. PolicyEngine is building its successor with NBER, and Axiom's runs use the TAXSIM binary bundled in PolicyEngine's policyengine-taxsim package.",
+    what: "TAXSIM-35 — the National Bureau of Economic Research's federal and state income-tax calculator, the reference model of empirical tax research. PolicyEngine is building TAXSIM's successor with its author's cooperation, and Axiom's runs use the TAXSIM executable that PolicyEngine packages (policyengine-taxsim).",
     url: "https://taxsim.nber.org/",
   },
   taxcalc: {
