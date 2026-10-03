@@ -201,3 +201,61 @@ jobs:
 
       - name: GETTSIM live oracle tests
         run: uv run pytest -q tests/test_gettsim_adapter.py
+
+  # The TAXSIM pin tests skip in the dev-only `test` job: it installs neither
+  # policyengine-taxsim nor any pinned TAXSIM executable. This job syncs the
+  # locked taxsim extra, fetches every profile's pinned Linux binaries into the
+  # verified cache (sha256 + size checked before anything is written), and
+  # runs the pin/runtime/golden-probe tests with skips turned into failures,
+  # so a stale pin, a moved blob, or a changed binary cannot pass by skipping.
+  taxsim-pin:
+    runs-on: ubuntu-latest
+    env:
+      AXIOM_TAXSIM_CACHE_DIR: ${{ github.workspace }}/.ci/taxsim-binaries
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package with the locked taxsim extra
+        run: uv sync --extra taxsim --extra dev
+
+      - name: Ensure policyengine-taxsim imports
+        run: uv run python -c "import importlib.metadata as m, policyengine_taxsim; print('policyengine-taxsim', m.version('policyengine-taxsim'))"
+
+      - name: Cache verified TAXSIM binaries
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.AXIOM_TAXSIM_CACHE_DIR }}
+          key: taxsim-binaries-${{ hashFiles('axiom_oracles/adapters/taxsim/taxsim_pins.json') }}
+
+      - name: Ensure the gfortran runtime the pinned Linux builds link against
+        # The August/September 2026 Linux builds are dynamically linked against
+        # libgfortran.so.5 and libquadmath.so.0 (the 2.30.0 build needs only libc).
+        run: |
+          ldconfig -p | grep -q 'libgfortran.so.5' && ldconfig -p | grep -q 'libquadmath.so.0' \
+            || (sudo apt-get update && sudo apt-get install -y libgfortran5)
+
+      - name: Fetch every profile's pinned Linux TAXSIM binaries
+        run: uv run axiom-oracles taxsim fetch-binaries --all-profiles --platform linux
+
+      - name: Show pin status
+        run: uv run axiom-oracles taxsim pin-status --all-profiles --platform linux
+
+      - name: Download the pinned policyengine-taxsim wheel
+        run: |
+          set -euo pipefail
+          url=$(uv run python -c "from axiom_oracles.adapters.taxsim import pins; print(pins.load_pins()['distribution']['wheel']['url'])")
+          curl -sSfL "$url" -o "$RUNNER_TEMP/policyengine_taxsim-pinned.whl"
+          echo "AXIOM_TAXSIM_WHEEL=$RUNNER_TEMP/policyengine_taxsim-pinned.whl" >> "$GITHUB_ENV"
+
+      - name: TAXSIM pin, runtime, and golden-probe tests (skips fail)
+        env:
+          AXIOM_TAXSIM_REQUIRE_BINARIES: "1"
+        run: uv run pytest -q -rs tests/test_taxsim_pin.py tests/test_taxsim_pin_runtime.py tests/test_taxsim_runner_pinned.py

@@ -58,11 +58,15 @@ intersection from `axiom_oracles/config/concept_mappings.yaml`:
 
 ## Law-Year Support Of The Pinned Binary
 
-The pinned policyengine-taxsim 2.30.0 binary (see
-`axiom_oracles/adapters/taxsim/taxsim_pins.json`; `cdate-20260521`) accepts
-law years through 2026, and TAXSIM comparisons now default to the 2026
-validation year (`TAXSIM_DEFAULT_PERIOD` in `axiom_oracles/cli.py`). Scope of
-its 2026 model, verified empirically against the binary:
+The policyengine-taxsim 2.30.0 binaries (the v1 pin, now pin profile
+`policyengine-taxsim-2.30.0` in
+`axiom_oracles/adapters/taxsim/taxsim_pins.json`; the macOS build stamps
+`cdate-20260521`) accept law years through 2026, and TAXSIM comparisons
+default to the 2026 validation year (`TAXSIM_DEFAULT_PERIOD` in
+`axiom_oracles/cli.py`). Scope of their 2026 model, verified empirically
+against those binaries (the later builds in the `dashboard-2026-09` and
+`pe-taxsim-main-2026-08` profiles have not been re-checked against this
+list):
 
 - **Modeled at 2026**: the OBBBA federal rate schedule and standard
   deduction, childless EITC, FICA/SECA (`tfica`), AGI (`v10`).
@@ -79,7 +83,14 @@ its 2026 model, verified empirically against the binary:
 
 ## Reproduce The Smoke Test
 
+The TAXSIM side runs a pinned, hash-verified binary from the active pin
+profile (see the Identity section of
+[taxsim-oracle-playbook.md](taxsim-oracle-playbook.md)); fetch it first, and
+pass `--taxsim-pin-profile` to choose a profile other than the default. The
+expected counts below predate the v2 pin.
+
 ```bash
+uv run --extra taxsim axiom-oracles taxsim fetch-binaries
 uv run --extra policyengine --extra taxsim axiom-oracles compare \
   policyengine taxsim \
   --period 2024 \
@@ -158,7 +169,12 @@ PY
 - `axiom_oracles/adapters/taxsim/projection.py`
   projects thin Axiom cases into TAXSIM rows.
 - `axiom_oracles/adapters/taxsim/runner.py`
-  wraps policyengine-taxsim's TAXSIM runner.
+  wraps policyengine-taxsim's TAXSIM runner: partitions rows by pinned binary,
+  runs each partition on verified bytes, and isolates executable crashes.
+- `axiom_oracles/adapters/taxsim/pins.py` and `taxsim_pins.json`
+  pin every TAXSIM executable by SHA-256 and resolve (state, year) to one
+  through the active pin profile; `execution.py` runs it without a shell so
+  failures keep their exit status.
 - `axiom_oracles/adapters/policyengine/taxsim_runner.py`
   wraps policyengine-taxsim's PolicyEngine runner so PE is driven from the same
   TAXSIM row.

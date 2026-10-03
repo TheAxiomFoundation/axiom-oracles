@@ -1,49 +1,386 @@
 {
-  "schema_version": "axiom-oracles/taxsim-pin/v1",
-  "description": "Pinned identity of the TAXSIM executable used by the axiom-oracles TAXSIM adapter. The adapter shells out to a TAXSIM binary bundled inside the policyengine-taxsim distribution (imported dynamically as TaxsimRunner); the binary itself is not vendored in this repo. This file pins the reproducible provenance of that binary: the exact policyengine-taxsim release, its PyPI sdist/wheel SHA-256 (the source of truth for the bundled binary), and the SHA-256 + byte size of each bundled executable extracted from that wheel. Without this pin no oracle number produced against TAXSIM is reproducible (Phase-A item A2).",
+  "schema_version": "axiom-oracles/taxsim-pin/v2",
+  "description": "Pinned identity of every NBER TAXSIM (taxsimtest) executable the axiom-oracles TAXSIM adapter may run. `binaries` pins each executable by SHA-256 and byte size, with the NBER build stamp read from its bytes and the sources it can be fetched from (pinned git blobs, NBER URLs, PyPI wheels). `profiles` map every (TAXSIM SOI state, tax year) to one pinned binary per platform: a profile default plus declarative overrides. `default_profile` is the one field to change when the benchmark moves to a different binary vintage. The adapter hashes each binary before executing it and refuses any bytes that do not match (axiom_oracles/adapters/taxsim/pins.py). `distribution` pins the policyengine-taxsim package that supplies the Python wrapper (input formatting, output parsing) and the PolicyEngine emulator; its bundled executables are recorded for the callers that still run them directly.",
+  "default_profile": "dashboard-2026-09",
   "distribution": {
     "package": "policyengine-taxsim",
-    "version": "2.30.0",
-    "pypi_upload_time": "2026-07-06T21:36:11Z",
+    "version": "2.31.7",
+    "pypi_upload_time": "2026-09-25T13:23:41Z",
     "sdist": {
-      "filename": "policyengine_taxsim-2.30.0.tar.gz",
-      "sha256": "842ca58b5e0a6a623a37957d561ecd728a5f50292f137c307f30d5dee403d3b8",
-      "bytes": 14655585,
-      "url": "https://files.pythonhosted.org/packages/93/f6/8e163daadc61bb37f297bbe27a6fe5ef155fc13e1d13822ab087439c6840/policyengine_taxsim-2.30.0.tar.gz"
+      "filename": "policyengine_taxsim-2.31.7.tar.gz",
+      "sha256": "2556eaf7c061ce7ed8629cef14a8e01452c0289dcd629c53c8ba717fdbbed4ef",
+      "bytes": 13385798,
+      "url": "https://files.pythonhosted.org/packages/7c/a4/3e42f474c1a766552ec7176a27ecb6278771050845647ce2a3dc0badea3a/policyengine_taxsim-2.31.7.tar.gz"
     },
     "wheel": {
-      "filename": "policyengine_taxsim-2.30.0-py3-none-any.whl",
-      "sha256": "2897300fbcd0596791ca8f8528f579b90c605ff3a918bfef4d1b3ad272152ad1",
-      "bytes": 5922424,
-      "url": "https://files.pythonhosted.org/packages/bd/b7/48f91f6950876ad562898a3ed0c9f1e65d77ec5ad7c5b5b9f1c8f84ebb56/policyengine_taxsim-2.30.0-py3-none-any.whl"
+      "filename": "policyengine_taxsim-2.31.7-py3-none-any.whl",
+      "sha256": "d8835f60b9f970dfd2a62d3d44fb5e86aaad201f77526dd1a5e24f5b9ba1e3ba",
+      "bytes": 4573010,
+      "url": "https://files.pythonhosted.org/packages/e0/a5/df024c4b1f4cead56b65eb9f029428733a19b67b30624e860a181f7ae611/policyengine_taxsim-2.31.7-py3-none-any.whl"
+    },
+    "install_subdir": "share/policyengine_taxsim/taxsimtest",
+    "bundled_binaries": {
+      "taxsimtest/taxsimtest-linux.exe": {
+        "sha256": "00a321d2467ba011992f8b83c6e485a9b710c48fca4262a23fec1de26942a89b",
+        "bytes": 2129624
+      },
+      "taxsimtest/taxsimtest-osx.exe": {
+        "sha256": "4a17af9c2adbea27b1e6cce240610aede264e008bcdf64b131e0c81220f62b8c",
+        "bytes": 2070264
+      },
+      "taxsimtest/taxsimtest-windows.exe": {
+        "sha256": "a8207e7cf207ee9ce066eedc51cc5dd531c956de0a8b567fca1933ca0fa0e9c3",
+        "bytes": 3035784
+      }
     }
   },
-  "runtime_binary": {
-    "note": "policyengine-taxsim's TaxsimRunner selects the binary by platform.system() and searches {sys.prefix}/share/policyengine_taxsim/taxsimtest/<name>. taxsimtest-linux.exe is the binary exercised in CI and on Modal (Linux). max_tax_year is enforced separately by the adapter (TAXSIM_MAX_YEAR).",
-    "install_subdir": "share/policyengine_taxsim/taxsimtest",
-    "by_platform": {
-      "linux": "taxsimtest/taxsimtest-linux.exe",
-      "darwin": "taxsimtest/taxsimtest-osx.exe",
-      "windows": "taxsimtest/taxsimtest-windows.exe"
-    },
-    "primary": "taxsimtest/taxsimtest-linux.exe"
+  "probes": {
+    "va-2021-opt30": {
+      "description": "pe-taxsim's canonical binary probe: a Virginia 2021 joint filer with $60,000 wages under opt(30)=1. Documented expectation for current builds is siitax=2068.05, srebate=500; stale builds give siitax=2568.05, srebate=0.",
+      "columns": ["taxsimid", "year", "state", "mstat", "page", "sage", "depx", "pwages", "idtl", "opt1", "opt1v"],
+      "values": [1, 2021, 47, 2, 45, 45, 0, 60000, 2, 30, 1],
+      "source": "https://github.com/PolicyEngine/policyengine-taxsim/blob/997311aad2ee883d5ebf0d10c9082a902ab17e03/resources/taxsimtest/README.md"
+    }
   },
-  "bundled_binaries": {
-    "taxsimtest/taxsimtest-linux.exe": {
-      "sha256": "0d934f202541f43a7999907b523e5431183a1258dadef4ddc6121d3f31120442",
-      "bytes": 3737960
+  "binaries": {
+    "8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059": {
+      "platform": "linux",
+      "build": "cd2026090910",
+      "bytes": 2153328,
+      "filename": "taxsimtest-linux.exe",
+      "sources": [
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "997311aad2ee883d5ebf0d10c9082a902ab17e03",
+          "path": "resources/taxsimtest/taxsimtest-linux.exe",
+          "ref": "refs/pull/1206/head"
+        },
+        {
+          "kind": "url",
+          "url": "https://taxsim.nber.org/out2psl/linux",
+          "last_modified": "Wed, 09 Sep 2026 14:56:57 GMT",
+          "retrieved_on": "2026-09-23"
+        }
+      ],
+      "probe_results": [
+        {
+          "probe": "va-2021-opt30",
+          "expect": {"siitax": 2068.05, "srebate": 500.0},
+          "evidence": {
+            "kind": "documented",
+            "ref": "https://github.com/PolicyEngine/policyengine-taxsim/blob/997311aad2ee883d5ebf0d10c9082a902ab17e03/resources/taxsimtest/README.md (probe expectation for the builds bundled at this commit); https://github.com/PolicyEngine/policyengine-taxsim/pull/1206"
+          }
+        }
+      ]
     },
-    "taxsimtest/taxsimtest-osx-new.exe": {
-      "sha256": "8371718c4728604be595a6bfd3dd16a62a2830b85084557b2aaa0c74b342b679",
-      "bytes": 1712528
+    "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d": {
+      "platform": "darwin",
+      "build": "cd2026090910",
+      "bytes": 2083216,
+      "filename": "taxsimtest-osx.exe",
+      "sources": [
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "997311aad2ee883d5ebf0d10c9082a902ab17e03",
+          "path": "resources/taxsimtest/taxsimtest-osx.exe",
+          "ref": "refs/pull/1206/head"
+        },
+        {
+          "kind": "url",
+          "url": "https://taxsim.nber.org/out2psl/osx",
+          "last_modified": "Wed, 09 Sep 2026 14:56:55 GMT",
+          "retrieved_on": "2026-09-23"
+        }
+      ],
+      "probe_results": [
+        {
+          "probe": "va-2021-opt30",
+          "expect": {"siitax": 2068.05, "srebate": 500.0},
+          "evidence": {
+            "kind": "documented",
+            "ref": "https://github.com/PolicyEngine/policyengine-taxsim/pull/1206 (native macOS validation: the Virginia 2021 opt(30) probe remains siitax=2,068.05 and srebate=500)"
+          }
+        }
+      ]
     },
-    "taxsimtest/taxsimtest-osx.exe": {
-      "sha256": "0d9e43a983055d44eec9e5de7edfc933fa061b2a336716d760fe98abf4336319",
-      "bytes": 1961912
+    "b8696133cc9d7b0ce7f81f69a38cbb4dcdbad196a386f55f17846b9c9806d0d0": {
+      "platform": "windows",
+      "build": "cd2026090110",
+      "bytes": 3054345,
+      "filename": "taxsimtest-windows.exe",
+      "sources": [
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "997311aad2ee883d5ebf0d10c9082a902ab17e03",
+          "path": "resources/taxsimtest/taxsimtest-windows.exe",
+          "ref": "refs/pull/1206/head"
+        },
+        {
+          "kind": "url",
+          "url": "https://taxsim.nber.org/taxsimtest/taxsimtest.exe",
+          "last_modified": "Tue, 01 Sep 2026 14:51:25 GMT",
+          "retrieved_on": "2026-09-23"
+        }
+      ]
     },
-    "taxsimtest/taxsimtest-windows.exe": {
-      "sha256": "92e011693cbfd45634fe57a041e31099926246bddaad20b5143485ffac9297cb",
-      "bytes": 1921383
+    "00a321d2467ba011992f8b83c6e485a9b710c48fca4262a23fec1de26942a89b": {
+      "platform": "linux",
+      "build": "cd2026081819",
+      "bytes": 2129624,
+      "filename": "taxsimtest-linux.exe",
+      "sources": [
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "29da68f49681b3e659bf2a3106256669c398dd40",
+          "path": "resources/taxsimtest/taxsimtest-linux.exe",
+          "ref": "refs/heads/main"
+        },
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "2b69146bfb2e16f83e1c021d72c4258d67872190",
+          "path": "resources/taxsimtest/taxsimtest-linux.exe",
+          "ref": "dashboard taxsimFallback.sourceCommit"
+        },
+        {
+          "kind": "wheel",
+          "package": "policyengine-taxsim",
+          "version": "2.31.7",
+          "filename": "policyengine_taxsim-2.31.7-py3-none-any.whl",
+          "sha256": "d8835f60b9f970dfd2a62d3d44fb5e86aaad201f77526dd1a5e24f5b9ba1e3ba",
+          "bytes": 4573010,
+          "url": "https://files.pythonhosted.org/packages/e0/a5/df024c4b1f4cead56b65eb9f029428733a19b67b30624e860a181f7ae611/policyengine_taxsim-2.31.7-py3-none-any.whl",
+          "member": "policyengine_taxsim-2.31.7.data/data/share/policyengine_taxsim/taxsimtest/taxsimtest-linux.exe"
+        }
+      ],
+      "probe_results": [
+        {
+          "probe": "va-2021-opt30",
+          "expect": {"siitax": 2068.05, "srebate": 500.0},
+          "evidence": {
+            "kind": "documented",
+            "ref": "https://github.com/PolicyEngine/policyengine-taxsim/blob/29da68f49681b3e659bf2a3106256669c398dd40/resources/taxsimtest/README.md (probe expectation for the builds bundled at this commit)"
+          }
+        }
+      ]
+    },
+    "4a17af9c2adbea27b1e6cce240610aede264e008bcdf64b131e0c81220f62b8c": {
+      "platform": "darwin",
+      "build": "cd2026081819",
+      "bytes": 2070264,
+      "filename": "taxsimtest-osx.exe",
+      "sources": [
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "29da68f49681b3e659bf2a3106256669c398dd40",
+          "path": "resources/taxsimtest/taxsimtest-osx.exe",
+          "ref": "refs/heads/main"
+        },
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "2b69146bfb2e16f83e1c021d72c4258d67872190",
+          "path": "resources/taxsimtest/taxsimtest-osx.exe",
+          "ref": "dashboard taxsimFallback.sourceCommit"
+        },
+        {
+          "kind": "wheel",
+          "package": "policyengine-taxsim",
+          "version": "2.31.7",
+          "filename": "policyengine_taxsim-2.31.7-py3-none-any.whl",
+          "sha256": "d8835f60b9f970dfd2a62d3d44fb5e86aaad201f77526dd1a5e24f5b9ba1e3ba",
+          "bytes": 4573010,
+          "url": "https://files.pythonhosted.org/packages/e0/a5/df024c4b1f4cead56b65eb9f029428733a19b67b30624e860a181f7ae611/policyengine_taxsim-2.31.7-py3-none-any.whl",
+          "member": "policyengine_taxsim-2.31.7.data/data/share/policyengine_taxsim/taxsimtest/taxsimtest-osx.exe"
+        }
+      ],
+      "probe_results": [
+        {
+          "probe": "va-2021-opt30",
+          "expect": {"siitax": 2068.05, "srebate": 500.0},
+          "evidence": {
+            "kind": "documented",
+            "ref": "https://github.com/PolicyEngine/policyengine-taxsim/blob/29da68f49681b3e659bf2a3106256669c398dd40/resources/taxsimtest/README.md (probe expectation for the builds bundled at this commit)"
+          }
+        }
+      ]
+    },
+    "a8207e7cf207ee9ce066eedc51cc5dd531c956de0a8b567fca1933ca0fa0e9c3": {
+      "platform": "windows",
+      "build": "cd2026081318",
+      "bytes": 3035784,
+      "filename": "taxsimtest-windows.exe",
+      "sources": [
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "29da68f49681b3e659bf2a3106256669c398dd40",
+          "path": "resources/taxsimtest/taxsimtest-windows.exe",
+          "ref": "refs/heads/main"
+        },
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "2b69146bfb2e16f83e1c021d72c4258d67872190",
+          "path": "resources/taxsimtest/taxsimtest-windows.exe",
+          "ref": "dashboard taxsimFallback.sourceCommit"
+        },
+        {
+          "kind": "wheel",
+          "package": "policyengine-taxsim",
+          "version": "2.31.7",
+          "filename": "policyengine_taxsim-2.31.7-py3-none-any.whl",
+          "sha256": "d8835f60b9f970dfd2a62d3d44fb5e86aaad201f77526dd1a5e24f5b9ba1e3ba",
+          "bytes": 4573010,
+          "url": "https://files.pythonhosted.org/packages/e0/a5/df024c4b1f4cead56b65eb9f029428733a19b67b30624e860a181f7ae611/policyengine_taxsim-2.31.7-py3-none-any.whl",
+          "member": "policyengine_taxsim-2.31.7.data/data/share/policyengine_taxsim/taxsimtest/taxsimtest-windows.exe"
+        }
+      ]
+    },
+    "0d934f202541f43a7999907b523e5431183a1258dadef4ddc6121d3f31120442": {
+      "platform": "linux",
+      "build": "compdate",
+      "build_note": "The executable embeds the literal header stamp \"cdate-compdate\" (an unexpanded placeholder), so its bytes carry no build date. policyengine-taxsim PR #1095 describes it as the stale August 2025 Linux build it replaced.",
+      "bytes": 3737960,
+      "filename": "taxsimtest-linux.exe",
+      "sources": [
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "d40a7632e17e528871bf52896a0a69319b75f687",
+          "path": "resources/taxsimtest/taxsimtest-linux.exe",
+          "ref": "refs/heads/main"
+        },
+        {
+          "kind": "wheel",
+          "package": "policyengine-taxsim",
+          "version": "2.30.0",
+          "filename": "policyengine_taxsim-2.30.0-py3-none-any.whl",
+          "sha256": "2897300fbcd0596791ca8f8528f579b90c605ff3a918bfef4d1b3ad272152ad1",
+          "bytes": 5922424,
+          "url": "https://files.pythonhosted.org/packages/bd/b7/48f91f6950876ad562898a3ed0c9f1e65d77ec5ad7c5b5b9f1c8f84ebb56/policyengine_taxsim-2.30.0-py3-none-any.whl",
+          "member": "policyengine_taxsim-2.30.0.data/data/share/policyengine_taxsim/taxsimtest/taxsimtest-linux.exe"
+        }
+      ],
+      "probe_results": [
+        {
+          "probe": "va-2021-opt30",
+          "expect": {"siitax": 2568.05, "srebate": 0.0},
+          "evidence": {
+            "kind": "documented",
+            "ref": "https://github.com/PolicyEngine/policyengine-taxsim/pull/1095 (\"The old binary returned 2568.05 / 0\"; the binary that PR replaced is this blob at d40a7632)"
+          }
+        }
+      ]
+    },
+    "0d9e43a983055d44eec9e5de7edfc933fa061b2a336716d760fe98abf4336319": {
+      "platform": "darwin",
+      "build": "20260521",
+      "bytes": 1961912,
+      "filename": "taxsimtest-osx.exe",
+      "sources": [
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "d40a7632e17e528871bf52896a0a69319b75f687",
+          "path": "resources/taxsimtest/taxsimtest-osx.exe",
+          "ref": "refs/heads/main"
+        },
+        {
+          "kind": "wheel",
+          "package": "policyengine-taxsim",
+          "version": "2.30.0",
+          "filename": "policyengine_taxsim-2.30.0-py3-none-any.whl",
+          "sha256": "2897300fbcd0596791ca8f8528f579b90c605ff3a918bfef4d1b3ad272152ad1",
+          "bytes": 5922424,
+          "url": "https://files.pythonhosted.org/packages/bd/b7/48f91f6950876ad562898a3ed0c9f1e65d77ec5ad7c5b5b9f1c8f84ebb56/policyengine_taxsim-2.30.0-py3-none-any.whl",
+          "member": "policyengine_taxsim-2.30.0.data/data/share/policyengine_taxsim/taxsimtest/taxsimtest-osx.exe"
+        }
+      ],
+      "probe_results": [
+        {
+          "probe": "va-2021-opt30",
+          "expect": {"siitax": 2068.05, "srebate": 500.0},
+          "evidence": {
+            "kind": "computed",
+            "ref": "Executed 2026-09-25 on macOS arm64 (Rosetta 2) by the axiom-oracles taxsim-ledger PR 1 session; not asserted in CI (CI runs Linux)."
+          }
+        }
+      ]
+    },
+    "92e011693cbfd45634fe57a041e31099926246bddaad20b5143485ffac9297cb": {
+      "platform": "windows",
+      "build": "2025Aug20",
+      "bytes": 1921383,
+      "filename": "taxsimtest-windows.exe",
+      "sources": [
+        {
+          "kind": "git",
+          "repo": "PolicyEngine/policyengine-taxsim",
+          "commit": "d40a7632e17e528871bf52896a0a69319b75f687",
+          "path": "resources/taxsimtest/taxsimtest-windows.exe",
+          "ref": "refs/heads/main"
+        },
+        {
+          "kind": "wheel",
+          "package": "policyengine-taxsim",
+          "version": "2.30.0",
+          "filename": "policyengine_taxsim-2.30.0-py3-none-any.whl",
+          "sha256": "2897300fbcd0596791ca8f8528f579b90c605ff3a918bfef4d1b3ad272152ad1",
+          "bytes": 5922424,
+          "url": "https://files.pythonhosted.org/packages/bd/b7/48f91f6950876ad562898a3ed0c9f1e65d77ec5ad7c5b5b9f1c8f84ebb56/policyengine_taxsim-2.30.0-py3-none-any.whl",
+          "member": "policyengine_taxsim-2.30.0.data/data/share/policyengine_taxsim/taxsimtest/taxsimtest-windows.exe"
+        }
+      ]
+    }
+  },
+  "profiles": {
+    "dashboard-2026-09": {
+      "description": "The binaries the PolicyEngine TAXSIM emulator dashboard ran for its September 2026 refresh (dashboard/public/data/<year>/summary_<year>.json metadata in PolicyEngine/policyengine-taxsim): the September 9 builds everywhere, except Georgia and Maryland in 2024 and 2025, where the September Linux build crashes and the dashboard used the previous (August) binary.",
+      "binaries": {
+        "linux": "8aa880aeea33fd501f669d42125615e3b2a0ab19c17d93a76457e9de16615059",
+        "darwin": "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d",
+        "windows": "b8696133cc9d7b0ce7f81f69a38cbb4dcdbad196a386f55f17846b9c9806d0d0"
+      },
+      "overrides": [
+        {
+          "id": "ga-md-2024-2025-sigfpe",
+          "states": [11, 21],
+          "state_postal": ["GA", "MD"],
+          "years": [2024, 2025],
+          "binaries": {
+            "linux": "00a321d2467ba011992f8b83c6e485a9b710c48fca4262a23fec1de26942a89b",
+            "darwin": "4a17af9c2adbea27b1e6cce240610aede264e008bcdf64b131e0c81220f62b8c",
+            "windows": "a8207e7cf207ee9ce066eedc51cc5dd531c956de0a8b567fca1933ca0fa0e9c3"
+          },
+          "reason": "The dashboard metadata records taxsimFallback {states: [GA, MD], years: [2024, 2025], sha256: 00a321d2..., sourceCommit: 2b69146b...}: the September Linux build raises SIGFPE in gatax24 and mdtax22, so those cells ran the previous Linux binary. The crash was observed on Linux; the override names the matching August build on every platform so a profile resolves the same vintage per (state, year) on any host.",
+          "linked_issue": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1214",
+          "source": "https://github.com/PolicyEngine/policyengine-taxsim/pull/1215"
+        }
+      ]
+    },
+    "pe-taxsim-main-2026-08": {
+      "description": "The August 18 builds bundled on policyengine-taxsim main (resources/taxsimtest, introduced by PR #1150) and in the policyengine-taxsim 2.31.7 wheel, for every state and year.",
+      "binaries": {
+        "linux": "00a321d2467ba011992f8b83c6e485a9b710c48fca4262a23fec1de26942a89b",
+        "darwin": "4a17af9c2adbea27b1e6cce240610aede264e008bcdf64b131e0c81220f62b8c",
+        "windows": "a8207e7cf207ee9ce066eedc51cc5dd531c956de0a8b567fca1933ca0fa0e9c3"
+      },
+      "overrides": []
+    },
+    "policyengine-taxsim-2.30.0": {
+      "description": "The binaries bundled in the policyengine-taxsim 2.30.0 wheel, the executables the v1 pin (axiom-oracles/taxsim-pin/v1) identified. Selecting it reruns reports generated under the v1 pin on the same bytes.",
+      "binaries": {
+        "linux": "0d934f202541f43a7999907b523e5431183a1258dadef4ddc6121d3f31120442",
+        "darwin": "0d9e43a983055d44eec9e5de7edfc933fa061b2a336716d760fe98abf4336319",
+        "windows": "92e011693cbfd45634fe57a041e31099926246bddaad20b5143485ffac9297cb"
+      },
+      "overrides": []
     }
   }
 }
