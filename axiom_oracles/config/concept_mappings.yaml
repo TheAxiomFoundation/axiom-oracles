@@ -1886,6 +1886,7 @@ concepts:
       - us:tax/payroll#employer_oasdi
       - us:tax/payroll#employer_medicare
       - us:tax/payroll#employee_fica
+      - us:tax/payroll#additional_medicare_tax
     targets:
       axiom: us:statutes/26/6401#income_tax
       policyengine: income_tax
@@ -2096,13 +2097,22 @@ concepts:
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     # TAXSIM's `tfica` is the taxpayer's own payroll burden: the employee half
-    # of wage FICA (6.2 OASDI + 1.45 HI; the 0.9 additional Medicare tax is
-    # reported separately in `addmed`) PLUS the full section 1401 SECA on
+    # of wage FICA (6.2 OASDI + 1.45 HI) PLUS the full section 1401 SECA on
     # self-employment income (a self-employed filer pays both halves).
     # Verified empirically against the pinned TAXSIM-35 2.30.0 binary:
-    # wages-only units return 7.65 per cent of wages, mixed units return
-    # employee wage FICA + 15.3 per cent of 92.35 per cent of SE income.
-    # Both engine targets are summed lists mirroring exactly that scope.
+    # wages-only units below the OASDI wage base and the additional-Medicare
+    # threshold return 7.65 per cent of wages, mixed units return employee
+    # wage FICA + 15.3 per cent of 92.35 per cent of SE income.
+    # `tfica` ALSO INCLUDES the 0.9 per cent additional Medicare tax that the
+    # binary reports in `addmed`. Observed on the pinned 2.30.0 macOS binary
+    # (cdate-20260521) on wage-only mstat 1 and mstat 6 rows at 2026:
+    # tfica - (0.062 * min(wages, 184500) + 0.0145 * wages) equals `addmed`
+    # exactly at $250k, $450k and $750k of wages (277.87, 1940.17, 4433.62),
+    # and both are 0 at $40k and $150k. The axiom and policyengine lists below
+    # exclude the additional tax, so on units above the additional-Medicare
+    # threshold this concept carries a residual equal to TAXSIM's `addmed`;
+    # us:tax/payroll#additional_medicare_tax compares that piece on its own.
+    # Both engine targets are summed lists mirroring the rest of that scope.
     targets:
       axiom:
         - us:statutes/26/3101/a#oasdi_wage_tax
@@ -2114,6 +2124,39 @@ concepts:
         - employee_medicare_tax
         - self_employment_tax
       taxsim: tfica
+
+  us:tax/payroll#additional_medicare_tax:
+    description: Additional Medicare Tax on wages, 26 USC 3101(b)(2)
+    category: tax
+    comparison: amount
+    tolerance: 5
+    parent: us:tax/federal-income-tax#liability
+    # Comparable only on WAGE-ONLY units. The three targets differ in scope:
+    # - axiom: the section 3101(b)(2) wage leg alone. Pinned rulespec-us
+    #   us/statutes/26/3101/b/2.yaml: additional_medicare_tax =
+    #   max(0, wages - threshold) * 0.009 on the TaxUnit, threshold $250,000
+    #   joint, $125,000 separate, $200,000 otherwise. It has no section
+    #   1401(b)(2) self-employment leg. us:statutes/26/3101/b/2 is already in
+    #   US_TAX_ORACLE_IMPORTS (adapters/axiom/tax_projection.py).
+    # - policyengine: the Form 8959 total. policyengine-us 1.752.2
+    #   variables/gov/irs/tax/federal_income/additional_medicare_tax.py
+    #   applies 0.009 to payroll_tax_gross_wages PLUS
+    #   taxable_self_employment_income over one filing-status exclusion
+    #   ($125,000 SEPARATE), so it includes the SE leg.
+    # - taxsim: `addmed`, a column of the pinned 2.30.0 binary's idtl=2
+    #   output (read back by policyengine-taxsim's TaxsimRunner, which parses
+    #   the binary's CSV header as-is). Observed 2026-09-25 on the pinned
+    #   macOS binary (cdate-20260521) at 2026 (engine output, a hypothesis):
+    #   addmed = 0.009 * max(0, 0.9235 * (wages + SE income) - 200,000) for
+    #   BOTH mstat 1 and mstat 6 (e.g. $250k wages -> 277.87, $220k mstat 6
+    #   wages -> 28.53, $300k SE only -> 693.45, and $150k wages + $150k SE
+    #   -> 693.45 too), so it includes the SE leg, scales wages by 0.9235 and
+    #   does not apply the $125,000 separate threshold. `tfica` already
+    #   includes `addmed` (see employee_fica).
+    targets:
+      axiom: us:statutes/26/3101/b/2#additional_medicare_tax
+      policyengine: additional_medicare_tax
+      taxsim: addmed
 
   us:tax/state-income-tax#liability:
     description: State income tax liability
