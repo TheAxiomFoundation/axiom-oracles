@@ -233,7 +233,7 @@
       },
       "known_difference": {
         "issue": "https://github.com/TheAxiomFoundation/axiom-api/issues/257",
-        "note": "Measured 2026-10-03 at household.api.policyengine.org/us/calculate_demo (policyengine_bundle model_version 2.9.0) for January 2026: PolicyEngine applies a $594 standard utility allowance on top of the $900 housing cost, so its excess shelter deduction is 744 against 525 here, net income 7 against 226, and the benefit 543 against 478. This case treats shelter_costs as total shelter costs with no utility allowance. With PolicyEngine's utility allowance set to 0, a $1 gap remains (477 / 227 against 478 / 226): Axiom rounds the excess shelter deduction to 525 where PolicyEngine returns 524.5 (rulespec-us#1167).",
+        "note": "Measured 2026-10-03 at household.api.policyengine.org/us/calculate_demo (policyengine_bundle model_version 2.9.0) for January 2026: PolicyEngine applies a $594 standard utility allowance on top of the $900 housing cost, which raises its excess shelter cost to 1,118.5 (900 + 594 - 751 / 2); its 744 cap for the contiguous US from 2025-10-01 then limits the deduction to 744, against 525 here, so net income is 7 against 226 and the benefit 543 against 478. This case treats shelter_costs as total shelter costs with no utility allowance. With PolicyEngine's utility allowance set to 0, a $1 gap remains (477 / 227 against 478 / 226): Axiom rounds the excess shelter deduction to 525 where PolicyEngine returns 524.5 (rulespec-us#1167).",
         "pinned_engine_outputs": {
           "snap_benefit_amount": 543,
           "snap_net_income": 7

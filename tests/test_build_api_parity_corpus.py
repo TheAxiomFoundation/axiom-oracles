@@ -123,13 +123,91 @@ def test_rejects_malformed_comparisons(value: dict, message: str) -> None:
     assert any(message in error for error in errors(value)), errors(value)
 
 
-def test_an_annual_mapping_is_fine_when_the_case_names_no_month() -> None:
+def test_an_annual_mapping_is_fine_when_the_case_names_a_year() -> None:
     annual = comparison(
-        mappings=[{"axiom_variable": "benefit", "external_path": "result.benefit.2026", "transform": "annual_to_monthly"}]
+        mappings=[
+            {"axiom_variable": "benefit", "external_path": "result.benefit.2026", "transform": "annual_to_monthly"},
+            {"axiom_variable": "net_income", "external_path": "result.net_income.2026", "transform": "annual_to_monthly"},
+        ]
     )
     value = case(annual)
+    value["axiom_request"]["household"] = {"period": "2026"}
+    assert errors(value) == []
+
+
+@pytest.mark.parametrize("household", [{}, {"period": "Jan 2026"}, {"period": "2026-13"}, {"period": 2026}])
+def test_a_case_with_a_comparison_must_name_the_period_it_computes(household: dict) -> None:
+    # Without it the runtime computes its package's default period, which
+    # the comparison cannot see (axiom-api src/runtime-compiled.ts).
+    value = case(comparison())
+    value["axiom_request"]["household"] = household
+    assert any("must name the period it computes" in error for error in errors(value))
+
+
+def test_a_case_without_comparisons_needs_no_period() -> None:
+    value = case()
     value["axiom_request"]["household"] = {}
     assert errors(value) == []
+
+
+TRACE = {
+    "label": "Utility allowance",
+    "axiom_variable": "u",
+    "external_variable": "snap_utility_allowance",
+    "external_paths": ["result.u.2026-01"],
+}
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        # Each shape axiom-api's validateParityCase rejects at boot
+        # (src/parity.ts), so a release the API cannot load is never cut.
+        (lambda c: c["external_comparisons"][0].update(trace_mappings="x"), "trace_mappings must be an array"),
+        (lambda c: c["external_comparisons"][0].update(trace_mappings=[{**TRACE, "transform": "weekly"}]), "transform is unsupported"),
+        (lambda c: c["external_comparisons"][0].update(trace_mappings=[{**TRACE, "label": " "}]), "label must be a string"),
+        (lambda c: c["external_comparisons"][0].update(trace_mappings=[{**TRACE, "axiom_variable": ""}]), "axiom_variable must be a string"),
+        (lambda c: c["external_comparisons"][0].update(trace_mappings=[{**TRACE, "external_variable": None}]), "external_variable must be a string"),
+        (lambda c: c["external_comparisons"][0].update(trace_mappings=[{**TRACE, "external_paths": []}]), "external_paths must be non-empty strings"),
+        (lambda c: c["external_comparisons"][0].update(trace_mappings=[{**TRACE, "external_paths": [" "]}]), "external_paths must be non-empty strings"),
+        (lambda c: c["external_comparisons"][0].update(trace_mappings=["x"]), "must be an object"),
+        (lambda c: c["external_comparisons"][0].update(notes="x"), "notes must be strings"),
+        (lambda c: c.update(notes="x"), "notes must be strings"),
+        (lambda c: c.update(trace_variables=[1]), "trace_variables must be strings"),
+        # An explicit null is not an absent field to axiom-api.
+        (lambda c: c.update(tolerance=None), "tolerance must be an object"),
+        (lambda c: c["external_comparisons"][0].update(tolerance=None), "tolerance must be an object"),
+        (lambda c: c.update(external_comparisons=None), "external_comparisons must be an array"),
+        (lambda c: c.update(known_deviation=None), "known_deviation must be an object"),
+        (lambda c: c["external_comparisons"][0]["mappings"][0].update(transform=None), "transform is unsupported"),
+    ],
+)
+def test_rejects_what_axiom_api_rejects(mutate, message: str) -> None:
+    value = case(comparison())
+    mutate(value)
+    assert any(message in error for error in errors(value)), errors(value)
+
+
+def test_accepts_valid_trace_mappings_and_notes() -> None:
+    value = case(
+        comparison(
+            trace_mappings=[TRACE, {**TRACE, "transform": "annual_to_monthly_sum", "external_paths": ["a", "b"]}],
+            notes=["Inputs are annual."],
+        ),
+        notes=["Monthly values."],
+        trace_variables=["u"],
+    )
+    assert errors(value) == []
+
+
+def test_the_release_refuses_values_json_cannot_carry(tmp_path, monkeypatch) -> None:
+    source = tmp_path / "corpus"
+    source.mkdir()
+    (source / "case.json").write_text('{"id": "x", "axiom_request": {}, "expected_axiom_outputs": {"v": NaN}}')
+    monkeypatch.setattr(builder, "CORPUS_DIR", source)
+    monkeypatch.setattr(sys, "argv", ["build", "--out", str(tmp_path / "out.json")])
+    with pytest.raises(ValueError):
+        builder.main()
 
 
 numbers = st.one_of(
