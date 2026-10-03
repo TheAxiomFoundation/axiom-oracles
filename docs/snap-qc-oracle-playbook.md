@@ -39,9 +39,11 @@ use the same numbering). The August 2026 re-posting
 note on the corrected weights on its title page and adds four blank pages to
 the front matter, so from Chapter I on (May p.11, August p.15) every cited page
 is four later there. The one front-matter citation, the disclaimer, is p.2 in
-May and p.3 in August. Apart from the weighting
-material, the cited passages are unchanged except that the agency now reads
-Food and Nutrition Administration (FNA).
+May and p.3 in August. The August posting also revises the weighting material,
+reads Food and Nutrition Administration (FNA) for the agency, and adds records
+with unknown eligibility status (`STATUS` missing) to the preliminary-processing
+drop list (August p.21); the May posting lists that drop only under editing
+Step 1 (May p.28).
 
 ## 1. What the QC public-use file is
 
@@ -192,7 +194,7 @@ it documents them. The loader's own exclusions are each counted by reason in
 | listed-in-error actives | — | outside the active case universe before sampling (already absent) | not participating in the sample month (tech doc PDF p.16) |
 | incomplete or deselected reviews | `REVDISP = 3` or `4` | Mathematica, preliminary processing (already absent) | not a completed benefit computation (PDF p.17–18) |
 | not subject to review | `REVDISP = 2` | Mathematica, preliminary processing (already absent) | outside the active QC universe (PDF p.16–17) |
-| ineligible / non-compliance findings | `STATUS = 4` or `5`; `STATUS = 2` with `RAWBEN <= AMTERR` | Mathematica, preliminary processing (already absent) | no positive benefit to reproduce (PDF p.17–18) |
+| ineligible, non-compliance, or unknown-eligibility findings | `STATUS = 4` or `5`; `STATUS = 2` with `RAWBEN <= AMTERR`; `STATUS` missing | Mathematica, preliminary processing and editing Step 1 (already absent) | no positive benefit to reproduce (PDF p.17–18, p.27–28) |
 | empty or inconsistent records | `CERTHHSZ = 0`; unresolved inconsistencies | Mathematica (already absent) | no case members, or inconsistencies the editing could not resolve (the latter 84 FY2024 units; PDF p.18) |
 | MFIP units | `MN_FIP` | loader (counted) | the Minnesota Family Investment Program uses a separate benefit procedure — only a 50% earnings deduction, all other deductions coded missing (Table F.3 note, PDF p.180; MFIP benefits Table F.8, PDF p.186) |
 | SSI-CAP units | SSI-CAP participation flag | loader (counted) | Combined Application Projects use separate procedures; standard-benefit units have deductions coded missing (Table F.3 note, PDF p.180; SSI-CAP shelter Table F.23, PDF p.192) |
