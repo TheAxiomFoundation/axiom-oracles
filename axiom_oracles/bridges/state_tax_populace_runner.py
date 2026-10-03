@@ -213,9 +213,9 @@ _REVIEWED_PERSON_INPUT_SLOTS_BY_STATE = {
 }
 
 # A relation is emitted only when its complete state/legal ID is declared and
-# reviewed here. Runtime tuple order is explicit because the pinned engine's
-# aggregation lowering currently uses slot 1 as the current TaxUnit and slot 0
-# as the related Person; it does not preserve RuleSpec argument labels.
+# reviewed here. These reviewed argument orders preserve the projection
+# contract; run_axiom_program binds tuples to the actual compiled artifact
+# before execution, including artifacts with older aggregation directions.
 _REVIEWED_PERSON_TAX_UNIT_RELATIONS_BY_STATE = {
     "DC": {
         "us-dc:policies/income_tax/pilot_liability_pipeline#relation."
@@ -2890,6 +2890,7 @@ def _state_request(
                         _tax_unit_entity_id(route.tax_unit_id),
                         interval,
                         value,
+                        entity="TaxUnit",
                     )
                 )
             for person_id in persons_by_tax_unit.get(route.tax_unit_id, ()):
@@ -2909,6 +2910,7 @@ def _state_request(
                             _person_entity_id(person_id),
                             interval,
                             value,
+                            entity="Person",
                         )
                     )
 

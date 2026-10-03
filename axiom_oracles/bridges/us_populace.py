@@ -409,7 +409,13 @@ def build_variable_request(
                     continue
                 base = input_bases[name]
                 inputs.append(
-                    input_record(f"{base}#input.{name}", entity_id, interval, value)
+                    input_record(
+                        f"{base}#input.{name}",
+                        entity_id,
+                        interval,
+                        value,
+                        entity="Person",
+                    )
                 )
     return {
         "mode": "explain",

@@ -166,8 +166,9 @@ def test_california_projectors_use_california_snap_input_surface():
     assert snap_populace.medical_expenses_for_deduction(150) == 185
 
 
-def test_run_axiom_cases_uses_configured_california_member_entity(
-    monkeypatch, tmp_path
+@pytest.mark.parametrize("typed", [False, True])
+def test_run_axiom_cases_uses_artifact_order_and_configured_member_entity(
+    monkeypatch, tmp_path, typed
 ):
     runtime_requests = []
 
@@ -190,10 +191,41 @@ def test_run_axiom_cases_uses_configured_california_member_entity(
         end=date(2026, 1, 31),
     )
     config = JURISDICTION_CONFIGS["us-ca"]
+    relation_ids = (config.relation_id, *config.additional_relation_ids)
+    artifact = tmp_path / "program.json"
+    artifact.write_text(
+        snap_populace.json.dumps(
+            {
+                "program": {
+                    "relations": [
+                        {
+                            "name": name,
+                            "arity": 2,
+                            **({"slot_entities": ["Household", "Person"]} if typed else {}),
+                        }
+                        for name in relation_ids
+                    ],
+                    "derived": [
+                        {
+                            "name": f"count-{index}",
+                            "entity": "Household",
+                            "expr": {
+                                "kind": "count_related",
+                                "relation": name,
+                                "current_slot": 0 if typed else 1,
+                                "related_slot": 1 if typed else 0,
+                            },
+                        }
+                        for index, name in enumerate(relation_ids)
+                    ],
+                }
+            }
+        )
+    )
 
     run_axiom_cases(
         binary=tmp_path / "axiom-rules-engine",
-        artifact=tmp_path / "program.json",
+        artifact=artifact,
         cases=[
             ProjectedCase(
                 spm_unit_id=42,
@@ -213,15 +245,20 @@ def test_run_axiom_cases_uses_configured_california_member_entity(
 
     assert config.member_entity_type == "Person"
     request = runtime_requests[0]
+    expected_tuple = (
+        ["spm-42", "spm-42-member-1"]
+        if typed
+        else ["spm-42-member-1", "spm-42"]
+    )
     assert request["dataset"]["relations"] == [
         {
             "name": config.relation_id,
-            "tuple": ["spm-42-member-1", "spm-42"],
+            "tuple": expected_tuple,
             "interval": {"start": "2026-01-01", "end": "2026-01-31"},
         },
         {
             "name": "us:statutes/7/2012/j#relation.member_of_household",
-            "tuple": ["spm-42-member-1", "spm-42"],
+            "tuple": expected_tuple,
             "interval": {"start": "2026-01-01", "end": "2026-01-31"},
         },
     ]
