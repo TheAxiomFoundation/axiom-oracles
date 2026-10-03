@@ -278,6 +278,14 @@ def test_co_snap_known_difference_rests_on_committed_evidence() -> None:
     assert evidence["excess_shelter_cap"]["values"]["2025-10-01"] == 744
     assert (zero["snap"]["2026-01"], zero["snap_net_income"]["2026-01"]) == (477, 227)
     assert zero["snap_excess_shelter_expense_deduction"]["2026-01"] == 524.5
+    # The January run is this corpus's own declared request, and the
+    # allowance-0 run differs from it only by that override.
+    assert evidence["runs"]["january"]["request"]["household"] == declared["request"]["household"]
+    zero_request = copy.deepcopy(evidence["runs"]["january_utility_allowance_zero"]["request"]["household"])
+    assert zero_request["spm_units"]["spm_unit"].pop("snap_utility_allowance") == {"2026-01": 0}
+    expected = copy.deepcopy(declared["request"]["household"])
+    expected["spm_units"]["spm_unit"].pop("snap_utility_allowance")
+    assert zero_request == expected
     note = declared["known_difference"]["note"]
     for figure in ["$594", "1,118.5", "744", "543", "477 / 227", "524.5", "2.9.0"]:
         assert figure in note
