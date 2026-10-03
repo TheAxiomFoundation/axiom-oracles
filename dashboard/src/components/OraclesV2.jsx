@@ -30,7 +30,8 @@ import {
  *
  * The oracle is the first-class object: trust comes from WHO checked the
  * work. The page is one argument, top to bottom:
- *   1. Thesis — every encoding is checked against independent engines.
+ *   1. Thesis — encodings are checked against other engines and datasets
+ *      where a comparison exists.
  *   2. The roster — one card per oracle: identity, scope, verdict, and
  *      validation state. A card opens into the oracle's full record, where
  *      every discrepancy class ends in an action — a filed issue, a
@@ -41,16 +42,16 @@ import {
 
 const AXIOM_APP_URL = "https://axiom-foundation.org";
 
-/** Who each oracle IS — the identity that makes the check independent. */
+/** Who each oracle IS, and any tie it has to Axiom. */
 const ORACLE_IDENTITY = {
   policyengine: {
     org: "PolicyEngine",
-    what: "Open-source tax–benefit microsimulation of US and UK law, maintained independently of Axiom.",
+    what: "Open-source tax–benefit microsimulation of US and UK law. Max Ghenis, Axiom's CEO, co-founded PolicyEngine and is also its CEO, and PSL Foundation fiscally sponsors both organizations.",
     url: "https://policyengine.org",
   },
   taxsim: {
     org: "NBER",
-    what: "TAXSIM-35 — the National Bureau of Economic Research's federal and state income-tax calculator, the reference model of empirical tax research.",
+    what: "TAXSIM-35 — the National Bureau of Economic Research's federal and state income-tax calculator, the reference model of empirical tax research. PolicyEngine is building its successor with NBER, and Axiom's runs use the TAXSIM binary bundled in PolicyEngine's policyengine-taxsim package.",
     url: "https://taxsim.nber.org/",
   },
   taxcalc: {
@@ -80,7 +81,7 @@ const ORACLE_IDENTITY = {
   },
   "snap-qc": {
     org: "USDA Food and Nutrition Service",
-    what: "SNAP Quality Control public-use file — the USDA's national sample of active SNAP cases, each reviewed by state QC reviewers who reinterview the household. Axiom is compared with FSBEN, the file's final calculated benefit, which Mathematica computes for USDA from each edited case record; the benefit received is a separate field (RAWBEN).",
+    what: "SNAP Quality Control public-use file — the USDA's national sample of active SNAP cases, each reviewed by state QC reviewers who reinterview the household. Axiom is compared with FSBEN, the file's final calculated benefit, which Mathematica computes for USDA from each edited case record; the benefit received is a separate field (RAWBEN). The file keeps only eligible households and the replay takes income and several deductions as given, so it checks benefit arithmetic and leaves eligibility untested.",
     url: "https://snapqcdata.net/datafiles",
   },
   spsm: {
@@ -355,7 +356,7 @@ function OracleCard({ oracle, selected, onSelect }) {
       aria-expanded={selected}
     >
       <div className="mono v2-card-eyebrow">
-        {id.org || "Independent engine"}
+        {id.org || "Oracle"}
         <span className="v2-card-regions">
           {[...oracle.regions].map((r) => (
             <span key={r} className="mono v2-region">
@@ -932,7 +933,7 @@ export default function OraclesV2() {
                 <span className="mono pp-where">
                   {" "}
                   · {(ORACLE_IDENTITY[routeOracle.id] || {}).org ||
-                    "independent engine"}
+                    "oracle"}
                 </span>
               </h1>
               <p className="v2-oracle-what">
@@ -973,10 +974,9 @@ export default function OraclesV2() {
                 className="v2-thesis"
                 title={`${compactCount(totals.checks)} concept-level checks behind these figures${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
               >
-                Axiom never grades its own work —{" "}
                 <em>{compactCount(totals.households)}</em> households checked
-                against <em>{oracles.length}</em> independent engines, every
-                disagreement tracked in the open.
+                against <em>{oracles.length}</em> other engines and datasets,
+                with disagreements tracked in the open.
               </h1>
             </section>
 
