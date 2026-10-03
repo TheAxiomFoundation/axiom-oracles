@@ -155,15 +155,30 @@ committed_decisions:
   - root: hts-rate-provisions
     family: non-ad-valorem-or-partial-value-rate-bearing-lines
     status: partially-encoded
-    reason: The generated tables classify and proof-bind these rows, but at least one statutory column is specific,
-      compound, component-valued, conditional, or empty, or the 9802 row requires a partial-value duty base that
-      the promised output neither encodes nor applies; the compiled frontier has no reduced-base input.
+    reason: 'The generated chapter line tables classify and proof-bind all of these rows. In all but one, the General
+      or column-2 disposition is specific, compound, component, conditional, or empty, so that column has no generated
+      rate cell; these include the four 9802 rows whose rate text sets a partial-value duty base (9802.00.40, 9802.00.50,
+      9802.00.60.00, and 9802.00.80), all conditional in both columns. No promised output applies a reduced duty
+      base: every schedule_statutory_stack is a sum of rate components with no value term, us_tariff_duty multiplies
+      a rate by customs_value or, for postal shipments from 2026-02-24 through 2026-07-23, by shipment_value, and
+      the compiled frontier has no reduced-base input. The 9802 partial-value rules RuleSpec does contain set the
+      base of chapter 99 additional duties, not of the General or column-2 rate, and feed no promised output: the
+      partial_value_share rules in the U.S. note 20 and note 2(aa) incidence modules, and section_338_reduced_duty_base_applies.
+      The remaining row, 9802.00.20.00, is Free in both columns with generated rate cells of 0 and no partial-value
+      text; it is in this family only because the producer''s 9802 prefix rule adds every rate-bearing 9802 row.'
     count: 4956
   - root: hts-rate-provisions
     family: non-rate-structural-rows
     status: excluded-with-reason
-    reason: Rows without either a Rates of duty (1-General) or Rates of duty (2) field do not themselves supply
-      a statutory-column rate line.
+    reason: 'These rows have neither a Rates of duty (1-General) nor a Rates of duty (2) field, and the generated
+      rate-table modules hold no entry for them. 14,949 carry no duty field: 11,835 are 10-digit statistical lines
+      whose 8-digit row is rate-bearing, and 3,114 are 4-digit, 6-digit, or heading 9903 8-digit quota rows. The
+      other 1,106 carry a duty field that no rule reads. 595 chapter 98 and 99 rows have only a Rates of duty (1-Special)
+      value, which General Note 3(a)(iii) applies to goods that meet all legal requirements for eligibility; no
+      chapter composition reads a Special rate, and the witness reads one only for HTS 7202.11.10.00 and 7601.10.30.00
+      of Korean origin. 511 heading 9904 rows have only an Additional duties field (461 rates, 50 reading No additional
+      duty), which chapter 99 subchapter IV U.S. note 1 makes cumulative with other duties; no RuleSpec file references
+      them.'
     count: 16055
   - root: chapter-99-notes
     family: all-chapter-99-pages
@@ -175,9 +190,23 @@ committed_decisions:
     family: section-232-metal-instruments
     status: encoded
     count: 1
-    reason: The 2018 and 2025 metal-action formula paths plus the 2026 annex restructure are represented in composed
-      aluminum/steel overlays; instrument disposition and law-derived membership leaves remain open in the separate
-      dependency frontier.
+    reason: 'No 2018 or 2025 metal-action path is encoded: no Section 232 overlay parameter or duty component has
+      a version before 2026-02-15, each encoded rate cites an HTS heading rather than a Federal Register instrument,
+      and no rule cites the 2018 or 2025 metal proclamations in the corpus (FR 2018-05477, 2018-05478, 2025-02832,
+      2025-02833, 2025-10524). Aluminum is composed from imported overlays: section_232_aluminum_component_rate
+      applies headings 9903.85.02 (50 percent) and 9903.85.12 (United Kingdom, 25 percent) through 2026-07-20, headings
+      9903.82.02 (50 percent) and 9903.82.04 (United Kingdom, 25 percent) from 2026-07-21, and heading 9903.85.67
+      (200 percent) whenever origin_is_russia holds; the witness applies it only to HTS 7601.10.30.00, and every
+      generated chapter composition applies it when entry_is_section_232_aluminum holds and, through 2026-04-05,
+      the heading 9903.85.08 beer judgment does not. Steel reads no overlay: every generated chapter composition
+      sums section_232_steel_component_rate, a composition-local heading 9903.82.02 rate of 50 percent (one version,
+      from 2026-02-15, no origin branch) gated on entry_is_section_232_steel, and the witness has no steel component.
+      Of FR 2026-06960 only the 2026-04-06 end of the heading 9903.85.08 beer aluminum-content judgment is encoded.
+      No Section 232 duty component applies the remaining Rev-15 headings 9903.82.01, 9903.82.03, 9903.82.05 through
+      9903.82.26, or 9903.85.68 (the generated ch99c line table holds five of their General rates only as base-rate
+      cells keyed to the heading number), no rule defines the three Section 232 membership inputs, and no program
+      imports the generated U.S. note 16 and note 19 membership tables, so the law-derived membership leaves remain
+      open in the separate dependency frontier.'
   - root: fr-instrument-families
     family: section-232-non-metal-annexes
     status: pending
@@ -188,7 +217,20 @@ committed_decisions:
     family: china-301-original-2018-actions
     status: pending
     count: 1
-    reason: Original 2018 instruments are absent from the D0 corpus.
+    reason: 'The original 2018 and 2019 USTR list actions are not in the pinned corpus: Rev-15 U.S. note 20 cites
+      them (for example 83 FR 28710 and 84 FR 43304) and the 2024 USTR notices 2024-11904, 2024-21217, and 2024-29462
+      cite some of them, but no retained document carries their text. Their Rev-15 codification is partly encoded
+      and composed: every generated chapter composition sums china_section_301_component_rate into schedule_statutory_stack,
+      and from 2026-02-15 that component adds the heading 9903.88.03 overlay rate (25 percent) when entry_is_china_301_list123
+      and origin_is_china hold and the heading 9903.88.15 overlay rate (7.5 percent) when entry_is_china_301_list4a
+      and origin_is_china hold. In the same chapter component, a term copied from the witness (which has no list123
+      term and counts the rate once) adds the 9903.88.03 rate a second time when entry_is_line_d and origin_is_china
+      hold, and entry preparation sets both entry_is_line_d and entry_is_china_301_list123 for HTS 2203.00.00.30.
+      No rule defines either list input: entry preparation derives them from the generated U.S. note 20(b), (d),
+      (f), and (s) membership tables, ignoring those tables'' single 2026-08-03 effective date, and no program imports
+      the tables. Headings 9903.88.01 and 9903.88.02 have no overlay of their own, heading 9903.88.04 (U.S. note
+      20(g), 25 percent) has no overlay or membership table, and no rule or entry-preparation step applies the 51
+      USTR exclusion headings that the list headings except.'
   - root: fr-instrument-families
     family: china-301-2024-action
     status: partially-encoded
@@ -214,8 +256,19 @@ committed_decisions:
     family: section-201-proclamation-10339
     status: encoded
     count: 1
-    reason: The solar-safeguard formula path is encoded and composed; the defining instrument and law-derived membership
-      leaf remain open in the separate dependency frontier.
+    reason: The Section 201 component is composed only as a post-expiry zero. The witness sums section_201_component_rate
+      into us_tariff_total_ad_valorem_rate and every generated chapter composition sums it into schedule_statutory_stack,
+      but its only version, from 2026-02-15 with no end date, returns 0 whether the condition it tests holds or
+      not (entry_is_line_e, a derived HTS 8541.42.00.10 identity, in the witness; the caller input entry_is_section_201_cspv
+      in the chapters). No version covers the staged rates FR 2022-02906 sets for subheading 9903.45.22 and heading
+      9903.45.25 (14.75 percent stepping down to 14 percent, the last period ending 2026-02-06); they appear only
+      as proof excerpts, and the compiler's note to Rev-15 U.S. note 18(a) records the note and headings 9903.45.21
+      through 9903.45.29 as expired. entry_is_section_201_cspv cannot change any output, because that constant-zero
+      rule is its only consumer; no rule defines it and no program imports the generated U.S. note 18(c)(i) membership
+      table. The defining instrument and that leaf remain open in the separate dependency frontier. Separately,
+      the generated ch99c line table carries the printed Rev-15 rates of the expired 9903.45.22 and 9903.45.25 lines
+      (30 percent General; 65 and 30 percent column 2) from 2025-01-01, and the ch99c program composes them into
+      schedule_statutory_stack as its base rate.
   - root: fr-instrument-families
     family: section-122-proclamation-11012
     status: encoded
@@ -232,7 +285,19 @@ committed_decisions:
     family: section-338-instruments
     status: pending
     count: 1
-    reason: Blocked on the missing note-51 ingest.
+    reason: 'U.S. note 51 is ingested and its heading 9903.03.12 rate is encoded and composed. The White House text
+      rendition of Annex II to Proclamation 11046 (FR 2026-14991) inserts note 51 and headings 9903.03.12 (+50 percent),
+      9903.03.15, and 9903.03.16 effective 2026-08-19; the Rev-15 notes root, revised effective 2026-08-03, has
+      no note 51. The witness sums section_338_component_rate into us_tariff_total_ad_valorem_rate and every generated
+      chapter composition sums it into schedule_statutory_stack; from 2026-08-19 that component applies 0.50 when
+      entry_is_line_d and origin_is_canada hold. entry_is_line_d is not note 51 membership but identity with HTS
+      2203.00.00.30, so of the 63 eight-digit provisions note 51(b)(1) lists, the gate reaches only that one statistical
+      line, not even the other two under 2203.00.00 (2203.00.00.60 and 2203.00.00.90): no note 51 membership table
+      exists. No formula applies the note 51(c) and (d) exceptions (headings 9903.03.15 and 9903.03.16), and the
+      note 51(a) accompanied-baggage and chapter 98 exclusions are applied only by section_338_entry_component_rate,
+      which no program output consumes. The dairy and motor-vehicle Section 338 Proclamations 11047 and 11048 (FR
+      2026-14992 and 2026-14997) are in the corpus with graphics-only annexes; no RuleSpec module cites them, and
+      the ledger''s instrument graph does not list them.'
   - root: fr-instrument-families
     family: historical-vintages
     status: pending
@@ -282,17 +347,25 @@ committed_decisions:
   - input: entry_is_line_a
     leaf_kind: law_derived
     grounding: uncaptured
-    reason: Qualification for the applicable Chapter 99 line-A treatment.
+    reason: Whether the entry's HTS number is 7202.11.10.00, the witness's line-A exemplar; the witness derives
+      it by that equality and entry preparation sets it the same way, while the generated chapter compositions define
+      no rule for it and read it only in the heading 9903.01.32 reciprocal annex exclusion.
     derivation_instrument: us-hts-2026-rev15
   - input: entry_is_line_b
     leaf_kind: law_derived
     grounding: uncaptured
-    reason: Qualification for the applicable Chapter 99 line-B treatment.
+    reason: Whether the entry's HTS number is 7601.10.30.00, the witness's line-B exemplar; the witness derives
+      it by that equality and entry preparation sets it the same way, while the generated chapter compositions define
+      no rule for it and read it only in the heading 9903.01.33 reciprocal metals exclusion and, in chapter 76,
+      the heading 9903.90.09 Russia branch of the base rate.
     derivation_instrument: us-hts-2026-rev15
   - input: entry_is_line_d
     leaf_kind: law_derived
     grounding: uncaptured
-    reason: Qualification for the applicable Chapter 99 line-D treatment.
+    reason: Whether the entry's HTS number is 2203.00.00.30, the witness's line-D exemplar; the witness derives
+      it by that equality and entry preparation sets it the same way, while the generated chapter compositions define
+      no rule for it and read it only in the historical heading 9903.85.08 beer aluminum-content judgment, the heading
+      9903.03.12 Section 338 rules, and a heading 9903.88.03 clause of china_section_301_component_rate.
     derivation_instrument: us-hts-2026-rev15
   - input: entry_is_section_122_exempt
     leaf_kind: law_derived
@@ -312,7 +385,12 @@ committed_decisions:
   - input: entry_is_section_232_covered
     leaf_kind: law_derived
     grounding: uncaptured
-    reason: Membership in any Section 232 scope used by the composition.
+    reason: 'Subjection to a Section 232 tariff, which Proclamation 11012 clause (4) excludes from the Section 122
+      surcharge for the part of the import that tariff covers, so the scope is not limited to the aluminum and steel
+      tariffs the compositions encode: heading 9903.03.06 in HTS U.S. note 2(aa)(v), in every notes revision in
+      force while the surcharge applied (Rev-4 through Rev-12; later revisions keep the list), also names copper,
+      vehicle, vehicle-part, wood, and semiconductor articles. Its only consumer, section_122_component_rate, zeroes
+      the whole surcharge when it holds.'
     derivation_instrument: us-hts-2026-rev15
   - input: entry_is_section_232_steel
     leaf_kind: law_derived
@@ -366,9 +444,17 @@ computed:
   - family: non-ad-valorem-or-partial-value-rate-bearing-lines
     root: hts-rate-provisions
     status: partially-encoded
-    blocker: The generated tables classify and proof-bind these rows, but at least one statutory column is specific,
-      compound, component-valued, conditional, or empty, or the 9802 row requires a partial-value duty base that
-      the promised output neither encodes nor applies; the compiled frontier has no reduced-base input.
+    blocker: 'The generated chapter line tables classify and proof-bind all of these rows. In all but one, the General
+      or column-2 disposition is specific, compound, component, conditional, or empty, so that column has no generated
+      rate cell; these include the four 9802 rows whose rate text sets a partial-value duty base (9802.00.40, 9802.00.50,
+      9802.00.60.00, and 9802.00.80), all conditional in both columns. No promised output applies a reduced duty
+      base: every schedule_statutory_stack is a sum of rate components with no value term, us_tariff_duty multiplies
+      a rate by customs_value or, for postal shipments from 2026-02-24 through 2026-07-23, by shipment_value, and
+      the compiled frontier has no reduced-base input. The 9802 partial-value rules RuleSpec does contain set the
+      base of chapter 99 additional duties, not of the General or column-2 rate, and feed no promised output: the
+      partial_value_share rules in the U.S. note 20 and note 2(aa) incidence modules, and section_338_reduced_duty_base_applies.
+      The remaining row, 9802.00.20.00, is Free in both columns with generated rate cells of 0 and no partial-value
+      text; it is in this family only because the producer''s 9802 prefix rule adds every rate-bearing 9802 row.'
   - family: all-chapter-99-pages
     root: chapter-99-notes
     status: partially-encoded
@@ -382,7 +468,20 @@ computed:
   - family: china-301-original-2018-actions
     root: fr-instrument-families
     status: pending
-    blocker: Original 2018 instruments are absent from the D0 corpus.
+    blocker: 'The original 2018 and 2019 USTR list actions are not in the pinned corpus: Rev-15 U.S. note 20 cites
+      them (for example 83 FR 28710 and 84 FR 43304) and the 2024 USTR notices 2024-11904, 2024-21217, and 2024-29462
+      cite some of them, but no retained document carries their text. Their Rev-15 codification is partly encoded
+      and composed: every generated chapter composition sums china_section_301_component_rate into schedule_statutory_stack,
+      and from 2026-02-15 that component adds the heading 9903.88.03 overlay rate (25 percent) when entry_is_china_301_list123
+      and origin_is_china hold and the heading 9903.88.15 overlay rate (7.5 percent) when entry_is_china_301_list4a
+      and origin_is_china hold. In the same chapter component, a term copied from the witness (which has no list123
+      term and counts the rate once) adds the 9903.88.03 rate a second time when entry_is_line_d and origin_is_china
+      hold, and entry preparation sets both entry_is_line_d and entry_is_china_301_list123 for HTS 2203.00.00.30.
+      No rule defines either list input: entry preparation derives them from the generated U.S. note 20(b), (d),
+      (f), and (s) membership tables, ignoring those tables'' single 2026-08-03 effective date, and no program imports
+      the tables. Headings 9903.88.01 and 9903.88.02 have no overlay of their own, heading 9903.88.04 (U.S. note
+      20(g), 25 percent) has no overlay or membership table, and no rule or entry-preparation step applies the 51
+      USTR exclusion headings that the list headings except.'
   - family: china-301-2024-action
     root: fr-instrument-families
     status: partially-encoded
@@ -403,7 +502,19 @@ computed:
   - family: section-338-instruments
     root: fr-instrument-families
     status: pending
-    blocker: Blocked on the missing note-51 ingest.
+    blocker: 'U.S. note 51 is ingested and its heading 9903.03.12 rate is encoded and composed. The White House
+      text rendition of Annex II to Proclamation 11046 (FR 2026-14991) inserts note 51 and headings 9903.03.12 (+50
+      percent), 9903.03.15, and 9903.03.16 effective 2026-08-19; the Rev-15 notes root, revised effective 2026-08-03,
+      has no note 51. The witness sums section_338_component_rate into us_tariff_total_ad_valorem_rate and every
+      generated chapter composition sums it into schedule_statutory_stack; from 2026-08-19 that component applies
+      0.50 when entry_is_line_d and origin_is_canada hold. entry_is_line_d is not note 51 membership but identity
+      with HTS 2203.00.00.30, so of the 63 eight-digit provisions note 51(b)(1) lists, the gate reaches only that
+      one statistical line, not even the other two under 2203.00.00 (2203.00.00.60 and 2203.00.00.90): no note 51
+      membership table exists. No formula applies the note 51(c) and (d) exceptions (headings 9903.03.15 and 9903.03.16),
+      and the note 51(a) accompanied-baggage and chapter 98 exclusions are applied only by section_338_entry_component_rate,
+      which no program output consumes. The dairy and motor-vehicle Section 338 Proclamations 11047 and 11048 (FR
+      2026-14992 and 2026-14997) are in the corpus with graphics-only annexes; no RuleSpec module cites them, and
+      the ledger''s instrument graph does not list them.'
   - family: historical-vintages
     root: fr-instrument-families
     status: pending
