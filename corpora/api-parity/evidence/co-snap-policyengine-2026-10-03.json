@@ -1,0 +1,175 @@
+{
+  "_about": "PolicyEngine responses behind co-snap-us-co.json's known_difference note, observed 2026-10-03. Each run POSTs the co-snap-policyengine-current household to the endpoint; only the output periods and one override differ, as each run's request_change says. Values are PolicyEngine's, trimmed to the spm_unit the comparison reads. response_headers is null where the run's headers were not captured.",
+  "endpoint": "https://household.api.policyengine.org/us/calculate_demo",
+  "runs": {
+    "annual_as_declared_in_v2": {
+      "request_change": "outputs requested for 2026 (annual), as api-parity-corpus-v2 declared",
+      "status": "ok",
+      "policyengine_bundle": {
+        "model_version": "2.9.0",
+        "data_version": null,
+        "dataset": null
+      },
+      "spm_unit": {
+        "snap": {
+          "2026": 6582.845
+        },
+        "snap_net_income": {
+          "2026": 63.0
+        },
+        "snap_assets": {
+          "2026": 0
+        },
+        "housing_cost": {
+          "2026": 10800
+        },
+        "snap_standard_utility_allowance": {
+          "2026": 7128.0
+        },
+        "snap_utility_allowance": {
+          "2026": 7128.0
+        },
+        "snap_gross_income": {
+          "2026": 14400.0
+        },
+        "snap_standard_deduction": {
+          "2026": 2530.1418
+        },
+        "snap_earned_income_deduction": {
+          "2026": 2880.0
+        },
+        "snap_net_income_pre_shelter": {
+          "2026": 8989.857
+        },
+        "snap_excess_shelter_expense_deduction": {
+          "2026": 9006.821
+        },
+        "snap_max_allotment": {
+          "2026": 6609.845
+        },
+        "snap_expected_contribution": {
+          "2026": 27.0
+        }
+      },
+      "response_headers": {
+        "x-policyengine-route-channel": "current",
+        "x-policyengine-backend": "modal"
+      }
+    },
+    "january": {
+      "request_change": "outputs requested for 2026-01, as this corpus declares",
+      "status": "ok",
+      "policyengine_bundle": {
+        "model_version": "2.9.0",
+        "data_version": null,
+        "dataset": null
+      },
+      "spm_unit": {
+        "snap": {
+          "2026-01": 543.0
+        },
+        "snap_net_income": {
+          "2026-01": 7.0
+        },
+        "snap_assets": {
+          "2026": 0
+        },
+        "housing_cost": {
+          "2026": 10800
+        },
+        "snap_standard_utility_allowance": {
+          "2026-01": 594.0
+        },
+        "snap_utility_allowance": {
+          "2026-01": 594.0
+        },
+        "snap_gross_income": {
+          "2026-01": 1200.0
+        },
+        "snap_standard_deduction": {
+          "2026-01": 209.0
+        },
+        "snap_earned_income_deduction": {
+          "2026-01": 240.0
+        },
+        "snap_net_income_pre_shelter": {
+          "2026-01": 751.0
+        },
+        "snap_excess_shelter_expense_deduction": {
+          "2026-01": 744.0
+        },
+        "snap_max_allotment": {
+          "2026-01": 546.0
+        },
+        "snap_expected_contribution": {
+          "2026-01": 3.0
+        }
+      },
+      "response_headers": {
+        "x-policyengine-route-channel": "current",
+        "x-policyengine-backend": "modal"
+      }
+    },
+    "january_utility_allowance_zero": {
+      "request_change": "outputs requested for 2026-01, and snap_utility_allowance set to 0 for 2026-01",
+      "status": "ok",
+      "policyengine_bundle": {
+        "model_version": "2.9.0",
+        "data_version": null,
+        "dataset": null
+      },
+      "spm_unit": {
+        "snap": {
+          "2026-01": 477.0
+        },
+        "snap_net_income": {
+          "2026-01": 227.0
+        },
+        "snap_assets": {
+          "2026": 0
+        },
+        "housing_cost": {
+          "2026": 10800
+        },
+        "snap_standard_utility_allowance": {
+          "2026-01": 594.0
+        },
+        "snap_utility_allowance": {
+          "2026-01": 0
+        },
+        "snap_gross_income": {
+          "2026-01": 1200.0
+        },
+        "snap_standard_deduction": {
+          "2026-01": 209.0
+        },
+        "snap_earned_income_deduction": {
+          "2026-01": 240.0
+        },
+        "snap_net_income_pre_shelter": {
+          "2026-01": 751.0
+        },
+        "snap_excess_shelter_expense_deduction": {
+          "2026-01": 524.5
+        },
+        "snap_max_allotment": {
+          "2026-01": 546.0
+        },
+        "snap_expected_contribution": {
+          "2026-01": 69.0
+        }
+      },
+      "response_headers": null
+    }
+  },
+  "excess_shelter_cap": {
+    "source": "https://api.policyengine.org/us/metadata",
+    "metadata_version": "1.764.6",
+    "parameter": "gov.usda.snap.income.deductions.excess_shelter_expense.cap.CONTIGUOUS_US",
+    "values": {
+      "2024-10-01": 712,
+      "2025-10-01": 744,
+      "2026-10-01": 760.6774595267744
+    }
+  }
+}

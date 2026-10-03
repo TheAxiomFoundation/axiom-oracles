@@ -252,3 +252,41 @@ def test_validation_never_mutates_the_case(mapped: list[str]) -> None:
     before = copy.deepcopy(value)
     errors(value)
     assert value == before
+
+
+EVIDENCE = CORPUS / "evidence" / "co-snap-policyengine-2026-10-03.json"
+
+
+def test_co_snap_known_difference_rests_on_committed_evidence() -> None:
+    """Every figure the public note states comes from the committed
+    PolicyEngine responses, and the pins are the January run's values."""
+    evidence = json.loads(EVIDENCE.read_text())
+    january = evidence["runs"]["january"]["spm_unit"]
+    zero = evidence["runs"]["january_utility_allowance_zero"]["spm_unit"]
+    annual = evidence["runs"]["annual_as_declared_in_v2"]["spm_unit"]
+    [declared] = json.loads((CORPUS / "co-snap-us-co.json").read_text())["external_comparisons"]
+    pins = declared["known_difference"]["pinned_engine_outputs"]
+    assert pins == {
+        "snap_benefit_amount": january["snap"]["2026-01"],
+        "snap_net_income": january["snap_net_income"]["2026-01"],
+    }
+    assert evidence["runs"]["january"]["policyengine_bundle"]["model_version"] == "2.9.0"
+    assert january["snap_utility_allowance"]["2026-01"] == 594
+    assert january["snap_excess_shelter_expense_deduction"]["2026-01"] == 744
+    housing_monthly = annual["housing_cost"]["2026"] / 12
+    assert housing_monthly + 594 - january["snap_net_income_pre_shelter"]["2026-01"] / 2 == 1118.5
+    assert evidence["excess_shelter_cap"]["values"]["2025-10-01"] == 744
+    assert (zero["snap"]["2026-01"], zero["snap_net_income"]["2026-01"]) == (477, 227)
+    assert zero["snap_excess_shelter_expense_deduction"]["2026-01"] == 524.5
+    note = declared["known_difference"]["note"]
+    for figure in ["$594", "1,118.5", "744", "543", "477 / 227", "524.5", "2.9.0"]:
+        assert figure in note
+
+
+def test_evidence_files_are_not_corpus_cases(tmp_path, monkeypatch) -> None:
+    # The builder reads only the top-level case files; evidence/ never
+    # enters the release.
+    out = tmp_path / "corpus.json"
+    monkeypatch.setattr(sys, "argv", ["build", "--out", str(out)])
+    assert builder.main() == 0
+    assert len(json.loads(out.read_text())) == len(list(CORPUS.glob("*.json")))
