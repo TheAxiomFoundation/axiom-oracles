@@ -33,6 +33,11 @@ entries:
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt_deduction.py#L15-L23
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/simulation/limit_itemized_deductions_to_taxable_income.yaml#L1-L3
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/cap.yaml#L53-L64
+    axiom_companion:
+      legal_ids:
+        - us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
+      tests:
+        - rulespec-us@dcb2e47e0af964be6d59f80688f519d0a6a96a71:us/policies/income_tax/salt_deduction_pipeline.test.yaml#salt-low-agi-engine-cap
     expires_on_source_change: true
     pinned:
       left: 10000
@@ -77,6 +82,11 @@ entries:
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/cap.yaml#L53-L64
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/phase_out/threshold.yaml#L12-L14
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/phase_out/rate.yaml#L1-L4
+    axiom_companion:
+      legal_ids:
+        - us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
+      tests:
+        - rulespec-us@dcb2e47e0af964be6d59f80688f519d0a6a96a71:us/policies/income_tax/salt_deduction_pipeline.test.yaml#salt-magi-911-addback
     expires_on_source_change: true
     pinned:
       left: 38900
@@ -113,6 +123,11 @@ entries:
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt_cap.py#L12-L24
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/itemizing/salt_deduction.py#L15-L23
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/deductions/itemized/salt_and_real_estate/sources.yaml#L1-L5
+    axiom_companion:
+      legal_ids:
+        - us:policies/income_tax/salt_deduction_pipeline#federal_salt_deduction
+      tests:
+        - rulespec-us@dcb2e47e0af964be6d59f80688f519d0a6a96a71:us/policies/income_tax/salt_deduction_pipeline.test.yaml#salt-personal-property-tax-probe
     expires_on_source_change: true
     pinned:
       left: 4000
