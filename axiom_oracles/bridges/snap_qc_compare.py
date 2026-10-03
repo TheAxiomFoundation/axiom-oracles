@@ -8,19 +8,21 @@ year's parameters while building the file (FY 2024 tech doc editing Step 12 and
 the codebook; PDF p.32 and p.87 in the May 2026 posting, p.36 and p.91 in the
 August 2026 posting). The editing aims to make the constructed variables
 satisfy the benefit identities (net income is gross income less deductions; the
-benefit is the maximum allotment less 30 percent of net income) and drops units
-with unresolved inconsistencies (May PDF p.18-19), so FSBEN is a per-case
-target for a benefit engine: project the QC unit's income, size, shelter,
+benefit is the maximum allotment less 30 percent of net income, or the minimum
+benefit) and drops units with unresolved inconsistencies (May PDF p.18-19), so
+FSBEN is a per-case target for a benefit engine: project the QC unit's income, size, shelter,
 utilities, deductions, and resources onto the RuleSpec composition's input
 surface, run the engine, and compare the regular monthly allotment and its
 intermediate stages against the QC constructed values.
 
-FSBEN need not equal the benefit issued. Editing Step 13 adjusts a deduction
-only when that brings the calculated benefit within $5 of the raw benefit
-(error-adjusted when the reviewer recorded an error), and Step 14 drops only
-calculated benefits under $1. In the August 2026 FY 2024 file, FSBEN is within
-$5 of ``BENFIX`` (the error-adjusted issued benefit) for 797 of 856 Colorado
-units. A match here means Axiom reproduces Mathematica's calculation from the
+FSBEN need not equal the benefit on the case record. Editing Step 13 keeps a
+deduction adjustment only when it meets that step's conditions, mainly a
+calculated benefit within $5 of the raw benefit (error-adjusted when the
+reviewer recorded an error); the utility step also accepts a shelter-deduction
+match (May PDF p.32-33). Step 14 drops only calculated benefits under $1. In
+the FY 2024 file, FSBEN is within $5 of the issued benefit (``RAWBEN``) for
+556 of 856 Colorado units and of the reviewer-corrected benefit (``BENFIX``)
+for 797. A match here means Axiom reproduces Mathematica's calculation from the
 edited inputs (docs/snap-qc-oracle-playbook.md, sections 2 and 3).
 
 This oracle validates the *benefit computation*; eligibility screening is out

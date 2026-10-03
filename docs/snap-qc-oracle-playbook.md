@@ -51,7 +51,8 @@ Food and Nutrition Administration (FNA).
   its case file, reinterview the participants, and determine whether the unit
   received the correct benefit; FNS regional offices re-review a subsample of each
   state's sample (tech doc PDF p.15). No state had a stratified sample in FY 2024
-  (editing Step 7, PDF p.26). FY2024 pools the twelve monthly samples into 44,891
+  (chapter III.A, *Developing the SNAP QC file*, Step 7, PDF p.26). FY2024 pools
+  the twelve monthly samples into 44,891
   unit records for sample months October 2023 through September 2024 (`YRMONTH`
   202310–202409) (tech doc PDF p.15, p.64).
 - The file is nationally representative when weighted by `HWGT`, the monthly sample
@@ -80,7 +81,9 @@ Food and Nutrition Administration (FNA).
   "should not be construed to represent any official USDA or U.S. Government
   determination or policy" (disclaimer, PDF p.2; p.3 in the August posting). The
   QC Minimodel (chapter IV, PDF p.47) reads FSBEN as an input and
-  points to the codebook entry for how it is calculated (PDF p.54, p.61). `RAWBEN` is the
+  points to the codebook entry for how it is calculated (PDF p.54, p.61); the
+  tech doc notes that the results of the file-editing algorithms match those of
+  the Minimodel's FSTAMP algorithms exactly (PDF p.53). `RAWBEN` is the
   "REPORTED SNAP BENEFIT RECEIVED" (PDF p.88); `STATUS` 1/2/3 =
   correct/over/under-issuance and `AMTERR` is the dollar error the reviewer
   recorded. `BENFIX` is the benefit adjusted for that error (PDF p.72); in every
@@ -98,17 +101,24 @@ Food and Nutrition Administration (FNA).
   calculate the benefit (Step 12). When the calculated benefit fails the Step 13a
   match test (within $5 of the raw benefit or, when the reviewer recorded a
   payment error, of the error-adjusted raw benefit, under the conditions Step 13a
-  lists), the editors try, in order, the dependent-care deduction, the utility
-  amount in the excess-shelter deduction, and, for
-  standard-medical-deduction-demonstration participants, the medical deduction,
-  and keep an adjustment only if it produces a match (Steps 13b–13d, PDF
-  p.32–33). Step 14 drops only units whose calculated benefit is under $1 (PDF
-  p.34). A unit that still does not match stays in the file.
-- FSBEN therefore need not equal the benefit the household was issued.
-  Recomputed from the August 2026 `qc_pub_fy2024.csv`, FSBEN is within $5 of
-  `BENFIX` for 797 of 856 Colorado units (743 to the dollar) and 41,729 of 44,891
-  units nationally. Of the 59 Colorado units outside $5, 31 have no recorded
-  error (`STATUS` 1). What the editing provides is a benefit computed by formula
+  lists), the editors try, in order, the dependent-care deduction (when it is
+  inconsistent with dependent-care costs), the utility amount in the
+  excess-shelter deduction, and, for standard-medical-deduction-demonstration
+  participants, the medical deduction, and keep an adjustment only if it meets
+  that step's conditions (Steps 13b–13d, PDF p.32–33). Each step accepts a
+  benefit match; the utility step (13c) also accepts two cases with no recorded
+  payment error: a calculated shelter deduction within $5 of the raw one, and a
+  New York unit coded as using the HCSUA whose utilities equal it. Step 14
+  drops only units whose calculated benefit is under $1 (PDF p.34), and the
+  file keeps units that still do not match (next bullet).
+- FSBEN therefore need not equal the benefit on the case record. Recomputed
+  from `qc_pub_fy2024.csv` (`FSBEN`, `RAWBEN`, and `BENFIX` are identical in
+  the May and August 2026 postings), FSBEN is within $5 of the issued benefit
+  `RAWBEN` for 556 of 856 Colorado units and 27,868 of 44,891 nationally, and
+  within $5 of `BENFIX`, the issued benefit corrected by the reviewer's error
+  amount, for 797 Colorado units (743 to the dollar) and 41,729 nationally. Of
+  the 59 Colorado units more than $5 from `BENFIX`, 31 have no recorded error
+  (`STATUS` 1). What the editing provides is a benefit computed by formula
   from each edited record, and the replay reproduces FSBEN for all 856 Colorado
   units from the file's own amounts under the conventions in §3 and §7 (track
   record below). Constructed intermediates travel with it
@@ -164,8 +174,9 @@ Food and Nutrition Administration (FNA).
   one question: given a QC unit's edited inputs, does Axiom reproduce FSBEN, the
   benefit Mathematica calculates for USDA from those inputs (§2)? A match shows
   agreement with that documented calculation over administrative case records.
-  It says nothing about agreement with the benefit the household was issued,
-  which FSBEN misses by more than $5 for 59 of 856 Colorado units (§2), and the
+  It says nothing about agreement with the benefit on the case record: FSBEN
+  is more than $5 from the issued benefit for 300 of 856 Colorado units and
+  from the reviewer-corrected benefit (`BENFIX`) for 59 (§2), and the
   tech doc disclaims official status for its findings (PDF p.2; p.3 in the August
   posting).
 
@@ -182,7 +193,7 @@ it documents them. The loader's own exclusions are each counted by reason in
 | incomplete or deselected reviews | `REVDISP = 3` or `4` | Mathematica, preliminary processing (already absent) | not a completed benefit computation (PDF p.17–18) |
 | not subject to review | `REVDISP = 2` | Mathematica, preliminary processing (already absent) | outside the active QC universe (PDF p.16–17) |
 | ineligible / non-compliance findings | `STATUS = 4` or `5`; `STATUS = 2` with `RAWBEN <= AMTERR` | Mathematica, preliminary processing (already absent) | no positive benefit to reproduce (PDF p.17–18) |
-| empty or inconsistent records | `CERTHHSZ = 0`; unresolved inconsistencies | Mathematica (already absent) | no case members, or inconsistencies the editing could not resolve (84 FY2024 units; PDF p.18) |
+| empty or inconsistent records | `CERTHHSZ = 0`; unresolved inconsistencies | Mathematica (already absent) | no case members, or inconsistencies the editing could not resolve (the latter 84 FY2024 units; PDF p.18) |
 | MFIP units | `MN_FIP` | loader (counted) | the Minnesota Family Investment Program uses a separate benefit procedure — only a 50% earnings deduction, all other deductions coded missing (Table F.3 note, PDF p.180; MFIP benefits Table F.8, PDF p.186) |
 | SSI-CAP units | SSI-CAP participation flag | loader (counted) | Combined Application Projects use separate procedures; standard-benefit units have deductions coded missing (Table F.3 note, PDF p.180; SSI-CAP shelter Table F.23, PDF p.192) |
 | missing benefit | `FSBEN` missing or 0 | loader (counted) | no constructed benefit to replay (the file's minimum is $1) |

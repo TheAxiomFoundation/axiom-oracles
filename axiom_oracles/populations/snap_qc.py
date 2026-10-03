@@ -2,13 +2,15 @@
 
 The USDA SNAP Quality Control (QC) public-use file (PUF) holds a fiscal year's
 monthly samples of active SNAP case reviews (no state had a stratified sample
-in FY 2024; tech doc editing Step 7). For every retained review the file
+in FY 2024; tech doc chapter III.A, Step 7, May PDF p.26). For every retained
+review the file
 carries a **constructed** benefit computation: Mathematica, under contract to
 USDA, calculates the allotment ``FSBEN`` from the edited case record and the
 fiscal year's parameters while editing the file (Step 12). The QC Minimodel
-reads ``FSBEN`` as an input. ``FSBEN`` need not equal the benefit issued: in
-the August 2026 FY 2024 file it is within $5 of the error-adjusted issued
-benefit (``BENFIX``) for 797 of 856 Colorado units. Replaying each unit's
+reads ``FSBEN`` as an input. ``FSBEN`` need not equal the benefit on the case
+record: in the FY 2024 file it is within $5 of the issued benefit
+(``RAWBEN``) for 556 of 856 Colorado units and of the reviewer-corrected
+benefit (``BENFIX``) for 797. Replaying each unit's
 inputs through an Axiom SNAP composition and comparing allotments (and stage
 intermediates) against the QC-constructed values therefore tests whether Axiom
 reproduces Mathematica's calculation from the edited inputs.
