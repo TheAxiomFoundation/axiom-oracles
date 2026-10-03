@@ -50,8 +50,15 @@ from .conformance.compositions import (
 )
 from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
-from .core.geography import GeographyScope, scope_contains
+from .core.geography import GeographyScope, scope_contains, scope_intersection
 from .populations import load_populace_us_cases
+from .populations.taxsim_csv import (
+    TAXSIM_CSV_ENV_VAR,
+    TAXSIM_CSV_SOURCE,
+    TaxsimCsvError,
+    parse_taxsim_csv_origin,
+    read_taxsim_csv,
+)
 from .suites import available_suites, load_suite
 
 
@@ -418,10 +425,13 @@ def sanity_check(
 )
 @click.option(
     "--population",
-    type=click.Choice(["enhanced-cps", "synthetic"]),
+    type=click.Choice(["enhanced-cps", "synthetic", TAXSIM_CSV_SOURCE]),
     default="enhanced-cps",
     show_default=True,
-    help="Validation population source.",
+    help=(
+        "Validation population source. taxsim-csv loads a TAXSIM-35 input CSV "
+        "(see --taxsim-csv) verbatim for policyengine-vs-taxsim comparisons."
+    ),
 )
 @click.option(
     "--case-shard",
@@ -457,6 +467,46 @@ def sanity_check(
         "dataset-repo reference). Defaults to the certified populace-us "
         "artifact; NYC scopes keep their dedicated file until populace "
         "grows place geography."
+    ),
+)
+@click.option(
+    "--taxsim-csv",
+    "taxsim_csv",
+    type=click.Path(dir_okay=False),
+    envvar=TAXSIM_CSV_ENV_VAR,
+    help=(
+        "TAXSIM-format input CSV for --population taxsim-csv (for example "
+        "policyengine-taxsim's cps_households.csv). Defaults to "
+        f"${TAXSIM_CSV_ENV_VAR}. An explicit --period overrides every row's "
+        "year; without it each case keeps its row's year."
+    ),
+)
+@click.option(
+    "--taxsim-csv-sha256",
+    "taxsim_csv_sha256",
+    default=None,
+    help=(
+        "Expected sha256 of the --taxsim-csv file. A mismatch fails the run "
+        "before any case is built."
+    ),
+)
+@click.option(
+    "--taxsim-csv-origin",
+    "taxsim_csv_origin",
+    default=None,
+    help=(
+        "Where the --taxsim-csv file came from, as REPO@COMMIT:PATH (e.g. "
+        "PolicyEngine/policyengine-taxsim@<sha>:cps_households.csv); recorded "
+        "in the report's dataset_identity."
+    ),
+)
+@click.option(
+    "--taxsim-csv-allow-unknown-columns",
+    "taxsim_csv_allow_unknown_columns",
+    is_flag=True,
+    help=(
+        "Pass --taxsim-csv columns outside the TAXSIM-35 input set through "
+        "verbatim instead of failing the load."
     ),
 )
 @click.option(
@@ -541,7 +591,9 @@ def sanity_check(
     help=(
         "Two-digit FIPS prefix used to filter ECPS households for this "
         "comparison (e.g. `06` for California, `08` for Colorado). When "
-        "unset, the harness applies its legacy Colorado-only SNAP filter."
+        "unset, the harness applies its legacy Colorado-only SNAP filter. "
+        "With --population taxsim-csv it narrows the load to that state's "
+        "rows (state-0 rows drop out)."
     ),
 )
 @click.option(
@@ -578,6 +630,10 @@ def compare(
     sample_size: int,
     period: str | None,
     ecps_dataset: str | None,
+    taxsim_csv: str | None,
+    taxsim_csv_sha256: str | None,
+    taxsim_csv_origin: str | None,
+    taxsim_csv_allow_unknown_columns: bool,
     concepts: tuple[str, ...],
     categories: tuple[str, ...],
     include_components: bool,
@@ -601,18 +657,28 @@ def compare(
 
     if left == right:
         raise click.ClickException("Choose two different systems to compare.")
+    _check_taxsim_csv_options(
+        population,
+        {left, right},
+        taxsim_csv_sha256=taxsim_csv_sha256,
+        taxsim_csv_origin=taxsim_csv_origin,
+        taxsim_csv_allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+    )
 
     gc_was_enabled = gc.isenabled()
     if gc_was_enabled:
         gc.disable()
     try:
+        # taxsim-csv rows carry their own tax year; only an explicit --period
+        # overrides it (the resolved default must not).
+        requested_period = period or None
         period = _resolve_period(period, left, right)
         comparison_scope = comparison_scope_for_targets(left, right)
         suite_name = _resolve_suite_name(suite, left, right)
         _echo_resolved_axiom_composition(
             report_suite or suite_name, {left, right}, axiom_program
         )
-        cases = _load_population_cases(
+        cases, dataset_identity = _load_population(
             population=population,
             suite_name=suite_name,
             scope=comparison_scope,
@@ -621,6 +687,12 @@ def compare(
             ecps_dataset=ecps_dataset,
             categories=categories,
             concepts=concepts,
+            requested_period=requested_period,
+            jurisdiction_fips=jurisdiction_fips,
+            taxsim_csv=taxsim_csv,
+            taxsim_csv_sha256=taxsim_csv_sha256,
+            taxsim_csv_origin=taxsim_csv_origin,
+            taxsim_csv_allow_unknown_columns=taxsim_csv_allow_unknown_columns,
         )
         if jurisdiction_fips and _wants_snap(concepts):
             cases = [
@@ -760,6 +832,7 @@ def compare(
                 # filter runs inside the bridge (state tax slices), so an
                 # explicit --include-case-inputs wins over the heuristic.
                 include_inputs=full_evidence,
+                dataset_identity=dataset_identity,
             )
             total_batches = (
                 len(cases) + comparison_batch_size - 1
@@ -1177,7 +1250,7 @@ def _batched(cases: list[Case], batch_size: int):
         yield cases[start : start + batch_size]
 
 
-def _load_population_cases(
+def _load_population(
     *,
     population: str,
     suite_name: str,
@@ -1187,7 +1260,73 @@ def _load_population_cases(
     ecps_dataset: str | None,
     categories: tuple[str, ...] = (),
     concepts: tuple[str, ...] = (),
+    requested_period: str | None = None,
+    jurisdiction_fips: str | None = None,
+    taxsim_csv: str | None = None,
+    taxsim_csv_sha256: str | None = None,
+    taxsim_csv_origin: str | None = None,
+    taxsim_csv_allow_unknown_columns: bool = False,
+) -> tuple[list[Case], dict | None]:
+    """Load the population's cases plus its dataset identity, when it has one.
+
+    Only ``taxsim-csv`` reports a dataset identity today (the file's sha256,
+    size, rows, and year override, plus how cases were selected); every other
+    population loads through :func:`_load_population_cases` and returns
+    ``None``. ``requested_period`` is the user's explicit ``--period`` (not the
+    resolved default), because it overrides every taxsim-csv row's year.
+    """
+    if population == TAXSIM_CSV_SOURCE:
+        return _load_taxsim_csv_population(
+            path=taxsim_csv,
+            expected_sha256=taxsim_csv_sha256,
+            origin=taxsim_csv_origin,
+            allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+            scope=scope,
+            jurisdiction_fips=jurisdiction_fips,
+            period=requested_period,
+            sample_size=sample_size,
+        )
+    cases = _load_population_cases(
+        population=population,
+        suite_name=suite_name,
+        scope=scope,
+        period=period,
+        sample_size=sample_size,
+        ecps_dataset=ecps_dataset,
+        categories=categories,
+        concepts=concepts,
+    )
+    return cases, None
+
+
+def _load_population_cases(
+    *,
+    population: str,
+    suite_name: str,
+    scope: GeographyScope | None,
+    period: str | None,
+    sample_size: int,
+    ecps_dataset: str | None,
+    categories: tuple[str, ...] = (),
+    concepts: tuple[str, ...] = (),
+    taxsim_csv: str | None = None,
+    taxsim_csv_sha256: str | None = None,
+    taxsim_csv_origin: str | None = None,
+    taxsim_csv_allow_unknown_columns: bool = False,
 ) -> list[Case]:
+    if population == TAXSIM_CSV_SOURCE:
+        # A direct caller's period is explicit, so it overrides row years.
+        cases, _identity = _load_taxsim_csv_population(
+            path=taxsim_csv,
+            expected_sha256=taxsim_csv_sha256,
+            origin=taxsim_csv_origin,
+            allow_unknown_columns=taxsim_csv_allow_unknown_columns,
+            scope=scope,
+            jurisdiction_fips=None,
+            period=period,
+            sample_size=sample_size,
+        )
+        return cases
     if population == "enhanced-cps":
         return load_populace_us_cases(
             scope=scope,
@@ -1205,6 +1344,91 @@ def _load_population_cases(
             return cases[:sample_size]
         return cases
     raise click.ClickException(f"Unknown population '{population}'.")
+
+
+def _load_taxsim_csv_population(
+    *,
+    path: str | None,
+    expected_sha256: str | None,
+    origin: str | None,
+    allow_unknown_columns: bool,
+    scope: GeographyScope | None,
+    jurisdiction_fips: str | None,
+    period: str | None,
+    sample_size: int,
+) -> tuple[list[Case], dict]:
+    if not path:
+        raise click.ClickException(
+            "--population taxsim-csv needs --taxsim-csv PATH (or "
+            f"${TAXSIM_CSV_ENV_VAR})."
+        )
+    try:
+        load_scope = _taxsim_csv_load_scope(scope, jurisdiction_fips)
+        data = read_taxsim_csv(
+            path,
+            period=period,
+            expected_sha256=expected_sha256,
+            origin=parse_taxsim_csv_origin(origin) if origin else None,
+            allow_unknown_columns=allow_unknown_columns,
+        )
+        selection = data.select(scope=load_scope, sample_size=sample_size or None)
+    except (OSError, TaxsimCsvError) as exc:
+        raise click.ClickException(str(exc)) from exc
+    return selection.cases, {**data.identity, "selection": selection.summary}
+
+
+def _taxsim_csv_load_scope(
+    scope: GeographyScope | None,
+    jurisdiction_fips: str | None,
+) -> GeographyScope | None:
+    """The comparison scope, narrowed to ``--jurisdiction-fips`` when given."""
+    if not jurisdiction_fips:
+        return scope
+    try:
+        state = GeographyScope(type="census_state", geoid=jurisdiction_fips)
+    except ValueError as exc:
+        raise TaxsimCsvError(
+            f"--jurisdiction-fips must be a two-digit state FIPS code for "
+            f"--population taxsim-csv; got {jurisdiction_fips!r}."
+        ) from exc
+    narrowed = scope_intersection(scope, state)
+    if narrowed is None:
+        raise TaxsimCsvError(
+            f"--jurisdiction-fips {jurisdiction_fips} lies outside the "
+            f"comparison scope {scope.as_dict() if scope else None}."
+        )
+    return narrowed
+
+
+def _check_taxsim_csv_options(
+    population: str,
+    engines: set[str],
+    *,
+    taxsim_csv_sha256: str | None,
+    taxsim_csv_origin: str | None,
+    taxsim_csv_allow_unknown_columns: bool,
+) -> None:
+    """Reject taxsim-csv flags that would be silently ignored.
+
+    Only the TAXSIM runner and the TAXSIM-row PolicyEngine runner (used when
+    PolicyEngine is paired with TAXSIM) read ``metadata["taxsim_input"]``;
+    every other engine needs projected case facts that a TAXSIM CSV does not
+    carry.
+    """
+    if population != TAXSIM_CSV_SOURCE:
+        if taxsim_csv_sha256 or taxsim_csv_origin or taxsim_csv_allow_unknown_columns:
+            raise click.ClickException(
+                "--taxsim-csv-sha256, --taxsim-csv-origin, and "
+                "--taxsim-csv-allow-unknown-columns apply only to "
+                "--population taxsim-csv."
+            )
+        return
+    if engines != {"policyengine", "taxsim"}:
+        raise click.ClickException(
+            "--population taxsim-csv feeds TAXSIM input rows verbatim, which "
+            "only `compare policyengine taxsim` (either order) consumes; got "
+            f"{' and '.join(sorted(engines))}."
+        )
 
 
 def _populace_us_case_unit(
@@ -1610,6 +1834,15 @@ def _echo_comparison_report(report: dict) -> None:
         f"Population {report['population']} / suite {report['suite']} "
         f"({report['case_count']} cases, locales: {', '.join(report['locales'])})"
     )
+    dataset = report.get("dataset_identity")
+    if dataset:
+        year_override = dataset.get("year_override")
+        click.echo(
+            f"Dataset {dataset.get('filename')} sha256 {dataset.get('sha256')} "
+            f"({dataset.get('rows')} rows"
+            + (f"; year override {year_override}" if year_override else "")
+            + ")"
+        )
     click.echo(
         f"Concepts: {len(report['concepts'])}; "
         f"comparisons: {summary['comparison_count']}; "
