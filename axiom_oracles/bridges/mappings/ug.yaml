@@ -65,6 +65,66 @@ mappings:
       percent). Validated against UGAMOD tscer_s by the
       ug-nssf-contributions suite, run live exact. PolicyEngine has no
       Uganda model; the household oracle is UGAMOD.
+  - legal_id: ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Salaried-employee Local Service Tax (Act 8 of 2008, regulation 3 table:
+      ten graduated bands by monthly take-home income, 5,000 to 100,000
+      shillings per year). Validated against UGAMOD tgv_s by the ug-lst
+      suite (formal employees, loc01=1) in every band, run live exact
+      with the same gross monthly income fed to both engines. UGAMOD
+      bands on gross pay; whether the statute's take-home base means
+      gross or net pay is an open methodology question the suite does
+      not decide. PolicyEngine has no Uganda model; the household
+      oracle is UGAMOD.
+  - legal_id: ug:policies/mglsd-scg/sage-handbook#senior_citizens_grant_per_year
+    country: ug
+    program: benefits
+    mapping_type: not_comparable
+    rationale: >-
+      Senior Citizens Grant national rule (MGLSD SAGE Handbook: Shs
+      25,000 per month at age 80 and above). Validated against UGAMOD
+      boa_s by the ug-scg suite (run live exact at 80/85; zero at 79
+      outside the rollout districts, whose lower-age lists are deferred
+      in the module). PolicyEngine has no Uganda model; the household
+      oracle is UGAMOD.
+  - legal_id: ug:regulations/vat-rate-of-tax-order-2006/rate-of-tax-order-2006#vat_amount
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      The 18% standard VAT rate (Value Added Tax (Rate of Tax) Order,
+      2006, in force 1 July 2005 and unchanged). Validated against
+      UGAMOD tva_s by the ug-vat suite on a single standard-rated item,
+      with taxable_value bridged from UGAMOD's post-uprating
+      il_exp_vat01 base. PolicyEngine has no Uganda model; the household
+      oracle is UGAMOD.
+  - legal_id: ug:statutes/act-2024-excise/excise-duty-amendment-2024#fuel_excise_duty
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Fuel excise duty (Excise Duty (Amendment) Act 2024 Schedule 2 items 8(a) and (b): motor
+      spirit Shs 1550 per litre, gas oil Shs 1230 per litre). Validated
+      against UGAMOD tex10_s by the ug-fuel-excise suite - run live
+      exact (litres pass unuprated). The FY2025/26 amendment print is an
+      open vintage question (rulespec-ug#1): the match shows both engines
+      price the 2024 rows, not that those rows are FY2025/26 law.
+      PolicyEngine has no Uganda model; the household oracle is UGAMOD.
+  - legal_id: ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    country: ug
+    program: income
+    mapping_type: not_comparable
+    rationale: >-
+      Composed single-employee disposable income (Act 4 of 2012 Third
+      Schedule resident income tax, Cap. 230 s.11 employee 5% share,
+      gross + benefits - tax - share). Validated against UGAMOD
+      ils_dispy by the ug-dispy suite on the full PAYE grid, run live
+      exact to within 0.4 UGX/yr. Local Service Tax is excluded on both
+      sides (loc01=0 on the UGAMOD rows; no LST stage in the pipeline).
+      PolicyEngine has no Uganda model; the household oracle is UGAMOD.
 prefixes:
   - legal_id_prefix: "ug:"
     country: ug

@@ -690,6 +690,45 @@ class Concepts:
         "section-10-payment-of-standard-contribution-by-employers"
         "#nssf_employer_net_share"
     )
+    # Uganda salaried-employee Local Service Tax (Act 8 of 2008 Fifth
+    # Schedule graduated table), compared to UGAMOD ``tgv_s`` for formal
+    # employees (loc01=1) in every band, with the same gross monthly
+    # income fed to both engines (UGAMOD bands on gross; the statute's
+    # "take-home" base is an open reading).
+    UG_LOCAL_SERVICE_TAX = (
+        "ug:statutes/act-2008-8/local-governments-amendment-no2-2008"
+        "#local_service_tax"
+    )
+    # Uganda Senior Citizens Grant national rule (SAGE Handbook: Shs
+    # 25,000/month at 80+), compared to UGAMOD ``boa_s``.
+    UG_SENIOR_CITIZENS_GRANT = (
+        "ug:policies/mglsd-scg/sage-handbook"
+        "#senior_citizens_grant_per_year"
+    )
+    # Uganda 18% standard VAT (Rate of Tax Order 2006), compared to
+    # UGAMOD ``tva_s`` on a single standard-rated item, with the base
+    # bridged from UGAMOD's post-uprating ``il_exp_vat01`` output.
+    UG_VAT_AMOUNT = (
+        "ug:regulations/vat-rate-of-tax-order-2006/rate-of-tax-order-2006"
+        "#vat_amount"
+    )
+    # Uganda fuel excise (2024 amendment item 8: petrol 1550/l, diesel
+    # 1230/l), compared to UGAMOD ``tex10_s`` (FY2025/26 vintage open).
+    UG_FUEL_EXCISE_DUTY = (
+        "ug:statutes/act-2024-excise/excise-duty-amendment-2024"
+        "#fuel_excise_duty"
+    )
+    # Uganda composed single-employee disposable income (Act 4 of 2012
+    # Third Schedule tax on chargeable income = gross, Cap. 230 s.11
+    # employee 5% share), compared to UGAMOD ``ils_dispy`` on the full
+    # PAYE grid — the engines share the tax base at every income (no
+    # Ghana-finding-#13 equivalent; probed ``ttb_s = yem``). Local
+    # Service Tax is excluded on both sides (loc01=0 on the UGAMOD rows;
+    # no LST stage in the pipeline).
+    UG_PILOT_DISPOSABLE_INCOME = (
+        "ug:statutes/composed/pilot-worker-disposable-income-pipeline"
+        "#pilot_worker_disposable_income"
+    )
 
     # Composed Denmark børne- og ungeydelse pipelines (rulespec-dk). The
     # original surface pays one recipient and the couple surface applies § 4,

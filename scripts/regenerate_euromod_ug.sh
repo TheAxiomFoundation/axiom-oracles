@@ -36,7 +36,12 @@ for name in \
   ug-paye-rate-schedule \
   ug-rental \
   ug-presumptive \
-  ug-nssf-contributions; do
+  ug-nssf-contributions \
+  ug-lst \
+  ug-scg \
+  ug-vat \
+  ug-fuel-excise \
+  ug-dispy; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done
