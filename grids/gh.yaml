@@ -1,0 +1,234 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: gh
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  gh-income-tax-rate-schedule:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax
+    cases:
+    - id: gh-rate-5k-below-threshold
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 5000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 5000.0
+    - id: gh-rate-5880-nil-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 5880.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 5880.0
+    - id: gh-rate-7200-5pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 7200.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 7200.0
+    - id: gh-rate-8760-10pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 8760.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 8760.0
+    - id: gh-rate-10k-17p5-interior
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 10000.0
+    - id: gh-rate-46760-17p5-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 46760.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 46760.0
+    - id: gh-rate-50k-25pct-interior
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 50000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 50000.0
+    - id: gh-rate-238760-25pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 238760.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 238760.0
+    - id: gh-rate-250k-30pct-interior
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 250000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 250000.0
+    - id: gh-rate-605000-30pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 605000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 605000.0
+    - id: gh-rate-700k-35pct-band
+      period: '2026'
+      scenario: single-formal-employee-rate-schedule
+      parameters:
+        yearly_earned_income: 700000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 700000.0
+  gh-personal-reliefs:
+    locale: GH
+    entity: Person
+    entity_id: head
+    cases:
+    - id: gh-relief-old-age
+      period: '2026'
+      scenario: working-elderly-old-age-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 65
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-disability
+      period: '2026'
+      scenario: disabled-worker-disability-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#disability_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-child-education-2
+      period: '2026'
+      scenario: sponsored-children-education-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-child-education-4-cap
+      period: '2026'
+      scenario: sponsored-children-education-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-aged-dependant-1
+      period: '2026'
+      scenario: aged-dependant-relative-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-aged-dependant-3-cap
+      period: '2026'
+      scenario: aged-dependant-relative-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-dependant-spouse
+      period: '2026'
+      scenario: married-worker-dependent-spouse-relief
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0
+    - id: gh-relief-combined
+      period: '2026'
+      scenario: combined-multi-relief-household
+      outputs:
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief
+      - gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+        yearly_earned_income: 100000.0

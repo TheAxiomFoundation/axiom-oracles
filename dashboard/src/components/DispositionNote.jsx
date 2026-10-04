@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { loadSuiteDispositions } from "../utils/caseData";
 import { engineLabel } from "../utils/format";
+import { southmodModel } from "../utils/suites";
 
 const DISPOSITION_LABELS = {
   explained_residual: "explained residual",
@@ -11,13 +12,16 @@ const DISPOSITION_LABELS = {
 };
 
 /** Name the actual engine behind a gap — UK suites run EUROMOD's UK
- *  descendant UKMOD, so say that instead of the engine id's brand. */
+ *  descendant UKMOD and SOUTHMOD suites a UNU-WIDER country model (GHAMOD,
+ *  …), so say that instead of the engine id's brand. */
 export function dispositionTag(disposition, row) {
   if (disposition === "upstream_engine_gap") {
     const name =
       row.region === "uk" && row.oracle === "euromod"
         ? "UKMOD"
-        : engineLabel(row.oracle);
+        : row.oracle === "southmod"
+          ? southmodModel(row.suite) || "SOUTHMOD"
+          : engineLabel(row.oracle);
     return `${name} gap`;
   }
   return DISPOSITION_LABELS[disposition] || disposition;

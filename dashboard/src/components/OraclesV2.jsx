@@ -23,6 +23,8 @@ import {
   isAxiomPair,
   otherOracle,
   JURISDICTION_LABELS,
+  SOUTHMOD_MODELS,
+  southmodAcknowledgement,
 } from "../utils/suites";
 
 /**
@@ -68,6 +70,12 @@ const ORACLE_IDENTITY = {
     what: "UKMOD — the UK's tax–benefit microsimulation model, EUROMOD's UK descendant.",
     url: "https://www.microsimulation.ac.uk/ukmod/",
   },
+  southmod: {
+    org: "UNU-WIDER",
+    what: "SOUTHMOD — UNU-WIDER's tax–benefit microsimulation models for countries in the Global South, run on the EUROMOD software under the SOUTHMOD_A4.0 licence. The model and its input data stay on Axiom's licensed machine; the comparison households are synthetic.",
+    url: "https://www.wider.unu.edu/project/southmod-simulating-tax-and-benefit-policies-development-phase-3",
+    acknowledgement: southmodAcknowledgement(),
+  },
   accessnyc: {
     org: "NYC Opportunity",
     what: "ACCESS NYC — New York City's official benefits screening service.",
@@ -90,7 +98,17 @@ const ORACLE_IDENTITY = {
   },
 };
 
-const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE", dk: "DK" };
+const REGION_LABELS = {
+  us: "US",
+  ca: "CA",
+  uk: "UK",
+  be: "BE",
+  de: "DE",
+  dk: "DK",
+  ...Object.fromEntries(
+    Object.keys(SOUTHMOD_MODELS).map((region) => [region, region.toUpperCase()]),
+  ),
+};
 
 /**
  * Oracles hidden from every dashboard surface (roster, hero totals, program
@@ -954,6 +972,11 @@ export default function OraclesV2() {
                   </>
                 )}
               </p>
+              {(ORACLE_IDENTITY[routeOracle.id] || {}).acknowledgement && (
+                <p className="v2-oracle-what v2-oracle-ack">
+                  {ORACLE_IDENTITY[routeOracle.id].acknowledgement}
+                </p>
+              )}
             </div>
             <OracleRecord
               key={routeOracle.id}

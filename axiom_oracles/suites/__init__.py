@@ -47,6 +47,10 @@ from .be_worker import (
     be_worker_ssc_cases,
     be_worker_tax_income_list_cases,
 )
+from .gh_income_tax import (
+    gh_income_tax_rate_schedule_cases,
+    gh_personal_reliefs_cases,
+)
 from .dk_child_youth_benefit import (
     dk_child_youth_benefit_2023_cases,
     dk_child_youth_benefit_cases,
@@ -165,6 +169,8 @@ def available_suites() -> tuple[str, ...]:
         "uk-income-tax-savings",
         "uk-income-tax-dividend",
         "uk-income-tax-mixed",
+        "gh-income-tax-rate-schedule",
+        "gh-personal-reliefs",
         "us-tariff",
     )
 
@@ -306,6 +312,10 @@ def load_suite(name: str):
         return uk_income_tax_dividend_cases()
     if name == "uk-income-tax-mixed":
         return uk_income_tax_mixed_cases()
+    if name == "gh-income-tax-rate-schedule":
+        return gh_income_tax_rate_schedule_cases()
+    if name == "gh-personal-reliefs":
+        return gh_personal_reliefs_cases()
     if name == "us-tariff":
         return us_tariff_cases()
     raise ValueError(f"Unknown suite: {name}")
@@ -347,6 +357,8 @@ __all__ = [
     "be_worker_pit_cases",
     "be_worker_ssc_cases",
     "be_worker_tax_income_list_cases",
+    "gh_income_tax_rate_schedule_cases",
+    "gh_personal_reliefs_cases",
     "dk_child_youth_benefit_cases",
     "de_worker_dual_oracle_cases",
     "load_suite",
