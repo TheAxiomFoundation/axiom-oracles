@@ -173,9 +173,12 @@ function southmodSuiteMeta(slug) {
   const entry = SOUTHMOD_MODELS[prefix];
   if (!entry) return null;
   const words = rest.map((w) => SOUTHMOD_WORDS[w] || w).join(" ");
+  // One program per suite: the dashboard groups reports by family and
+  // labels the group with its first suite, so a shared country family would
+  // file every Ghana comparison under "Ghana income tax rate schedule".
   return {
     suite: slug,
-    family: `${prefix}_taxes_transfers`,
+    family: `southmod_${slug.replaceAll("-", "_")}`,
     jurisdiction: entry.jurisdiction,
     label: `${entry.country} ${words} (${entry.model})`,
     region: prefix,
@@ -186,12 +189,6 @@ function southmodSuiteMeta(slug) {
 
 const SOUTHMOD_JURISDICTION_LABELS = Object.fromEntries(
   Object.values(SOUTHMOD_MODELS).map((m) => [m.jurisdiction, m.country]),
-);
-const SOUTHMOD_FAMILY_LABELS = Object.fromEntries(
-  Object.entries(SOUTHMOD_MODELS).map(([prefix, m]) => [
-    `${prefix}_taxes_transfers`,
-    `${m.country} taxes and transfers`,
-  ]),
 );
 
 const SUITE_OVERRIDES = {
@@ -1298,7 +1295,6 @@ export function rateStatus(rate) {
   return "attention";
 }
 
-// SOUTHMOD tables are derived from SOUTHMOD_MODELS (declared after the label
-// tables), so merge them in once the registry exists.
+// SOUTHMOD jurisdiction labels are derived from SOUTHMOD_MODELS (declared
+// after the label tables), so merge them in once the registry exists.
 Object.assign(JURISDICTION_LABELS, SOUTHMOD_JURISDICTION_LABELS);
-Object.assign(FAMILY_LABELS, SOUTHMOD_FAMILY_LABELS);
