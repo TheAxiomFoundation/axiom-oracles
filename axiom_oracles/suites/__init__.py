@@ -47,6 +47,7 @@ from .be_worker import (
     be_worker_ssc_cases,
     be_worker_tax_income_list_cases,
 )
+from .et_dispy import et_dispy_cases
 from .et_core import (
     et_business_mat_cases,
     et_paye_rate_schedule_cases,
@@ -235,6 +236,7 @@ def available_suites() -> tuple[str, ...]:
         "et-business-mat",
         "et-pension-contributions",
         "et-vat",
+        "et-dispy",
         "us-tariff",
     )
 
@@ -438,6 +440,8 @@ def load_suite(name: str):
         return et_pension_contributions_cases()
     if name == "et-vat":
         return et_vat_cases()
+    if name == "et-dispy":
+        return et_dispy_cases()
     if name == "us-tariff":
         return us_tariff_cases()
     raise ValueError(f"Unknown suite: {name}")
@@ -483,6 +487,7 @@ __all__ = [
     "gh_capital_income_cases",
     "gh_dispy_cases",
     "et_business_mat_cases",
+    "et_dispy_cases",
     "et_paye_rate_schedule_cases",
     "et_pension_contributions_cases",
     "et_presumptive_cases",

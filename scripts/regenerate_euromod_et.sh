@@ -41,7 +41,8 @@ for name in \
   et-presumptive \
   et-business-mat \
   et-pension-contributions \
-  et-vat; do
+  et-vat \
+  et-dispy; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

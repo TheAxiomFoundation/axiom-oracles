@@ -1,0 +1,470 @@
+{
+  "aggregates": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "comparison_count": 5,
+      "comparison_weight": 5,
+      "components": [],
+      "concept": "et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+      "description": "Ethiopia composed single-employee monthly disposable income (gross + benefits - income tax - employee pension)",
+      "left_weighted_sum": 32205,
+      "match_rate": 100,
+      "match_weight": 5,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 32205,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 5,
+  "cases": [
+    {
+      "case_id": "et-dispy-1500-nil-zone",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 1395.0,
+          "right": 1395.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 3,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 1500.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 1500.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc": 1,
+            "yem": 880.5113488129401
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income",
+            "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 1500.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 1500.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            18000.0
+          ],
+          "yearly_earned_income_total": 18000.0
+        },
+        "locale": "ET",
+        "monthly_employment_income": 1500.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-dispy-3000-band2",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 2640.0,
+          "right": 2640.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 3,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 3000.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 3000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc": 1,
+            "yem": 1761.0226976258803
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income",
+            "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 3000.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 3000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            36000.0
+          ],
+          "yearly_earned_income_total": 36000.0
+        },
+        "locale": "ET",
+        "monthly_employment_income": 3000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-dispy-7000-band3-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 5610.0,
+          "right": 5610.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 3,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 7000.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 7000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc": 1,
+            "yem": 4109.052961127054
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income",
+            "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 7000.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 7000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            84000.0
+          ],
+          "yearly_earned_income_total": 84000.0
+        },
+        "locale": "ET",
+        "monthly_employment_income": 7000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-dispy-12000-band5",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 8910.0,
+          "right": 8910.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 3,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 12000.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 12000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc": 1,
+            "yem": 7044.090790503521
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income",
+            "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 12000.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 12000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            144000.0
+          ],
+          "yearly_earned_income_total": 144000.0
+        },
+        "locale": "ET",
+        "monthly_employment_income": 12000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "et-dispy-20000-top-band",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 13650.0,
+          "right": 13650.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 3,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "et:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0,
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 20000.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 20000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc": 1,
+            "yem": 11740.15131750587
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income",
+            "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "et:statutes/proc-1395-2025/income-tax-amendment-2025#input.monthly_employment_income": 20000.0,
+          "et:statutes/proc-715-2011/private-organization-employees-pension#input.monthly_salary": 20000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            240000.0
+          ],
+          "yearly_earned_income_total": 240000.0
+        },
+        "locale": "ET",
+        "monthly_employment_income": 20000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "ET",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ethiopia composed single-employee monthly disposable income (gross + benefits - income tax - employee pension)",
+      "id": "et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "ET"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:32:30Z",
+    "generated_by": "scripts/run_comparison.py::et-dispy",
+    "oracle": {
+      "euromod_country": "ET",
+      "euromod_dataset": "et_2022_a2",
+      "euromod_system": "ET_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-et",
+        "sha": "98dfbac2eeba864ee6b881a0319065a50027562e"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "et-dispy",
+  "summary": {
+    "comparison_count": 5,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 5,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 5,
+      "match_rate": 100,
+      "match_weight": 5,
+      "mismatch_weight": 0
+    }
+  }
+}

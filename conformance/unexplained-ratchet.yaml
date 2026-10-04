@@ -152,6 +152,8 @@ ratchets:
   unexplained_max: 0
 - suite: et-business-mat
   unexplained_max: 0
+- suite: et-dispy
+  unexplained_max: 0
 - suite: et-paye-rate-schedule
   unexplained_max: 0
 - suite: et-pension-contributions

@@ -3826,6 +3826,52 @@
       "varied_fields": 3,
       "verdict_concepts": {}
     },
+    "et-dispy": {
+      "binding": "unbound",
+      "binding_defects": [
+        "et-dispy: chunk index dashboard/public/data/cases/et-dispy/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 5,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "monthly_employment_income": {
+          "distinct": 5,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-et-dispy.json",
+      "report_sha256": "9731ab0663d96d8e35638a3448e5d75882c8c2a0244afd5ceae26c77ce339c73",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "et-paye-rate-schedule": {
       "binding": "unbound",
       "binding_defects": [
