@@ -9,6 +9,59 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  zm-excise-ad-valorem:
+    locale: ZM
+    entity: Person
+    entity_id: head
+    cases:
+    - id: zm-excise-wine-1200
+      period: '2025'
+      scenario: household-ad-valorem-excise
+      outputs:
+      - zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty
+      parameters:
+        yearly_expenditure_raw: 1200.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: zm-excise-wine-24000
+      period: '2025'
+      scenario: household-ad-valorem-excise
+      outputs:
+      - zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty
+      parameters:
+        yearly_expenditure_raw: 24000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: zm-excise-spirits-1200
+      period: '2025'
+      scenario: household-ad-valorem-excise
+      outputs:
+      - zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty
+      parameters:
+        yearly_expenditure_raw: 1200.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: zm-excise-spirits-24000
+      period: '2025'
+      scenario: household-ad-valorem-excise
+      outputs:
+      - zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty
+      parameters:
+        yearly_expenditure_raw: 24000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
   zm-napsa-contributions:
     locale: ZM
     entity: Person
@@ -238,6 +291,43 @@ case_sets:
       scenario: small-business-turnover-tax
       parameters:
         yearly_turnover: 4999999.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+  zm-vat:
+    locale: ZM
+    entity: Person
+    entity_id: head
+    outputs:
+    - zm:statutes/cap-331/value-added-tax-act#vat_amount
+    cases:
+    - id: zm-vat-1200-low
+      period: '2025'
+      scenario: household-vat-standard-rate
+      parameters:
+        yearly_expenditure_raw: 1200.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: zm-vat-12000-mid
+      period: '2025'
+      scenario: household-vat-standard-rate
+      parameters:
+        yearly_expenditure_raw: 12000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: zm-vat-60000-high
+      period: '2025'
+      scenario: household-vat-standard-rate
+      parameters:
+        yearly_expenditure_raw: 60000.0
       entities:
       - id: head
         kind: person

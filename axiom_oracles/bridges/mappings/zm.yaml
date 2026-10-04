@@ -68,6 +68,36 @@ mappings:
       of basic salary, uncapped). Validated against MicroZAMOD tscerhl_s
       by the zm-nhima-contributions suite, monthly. PolicyEngine has no
       Zambia model; the household oracle is MicroZAMOD.
+  - legal_id: zm:statutes/cap-331/value-added-tax-act#vat_amount
+    country: zm
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      VAT at the 16% standard rate (Value Added Tax (Rate of Tax) Order,
+      2008, S.I. No. 14 of 2008, under Cap. 331 s.9(3)). Validated against
+      MicroZAMOD tva_s by the zm-vat suite on a non-excise item, with the
+      model's il_vat01 income list as the base. PolicyEngine has no Zambia
+      model; the household oracle is MicroZAMOD.
+  - legal_id: zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty
+    country: zm
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Wine excise duty (60 percent, Act 19 of 2018 Second Schedule heading
+      5, carried into the CY2025 module). Validated against MicroZAMOD
+      tex02_s by the zm-excise-ad-valorem suite on single-item wine
+      expenditure. PolicyEngine has no Zambia model; the household oracle
+      is MicroZAMOD.
+  - legal_id: zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty
+    country: zm
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Spirits excise duty (60 percent, Act 45 of 2021 Second Schedule
+      heading 6, carried into the CY2025 module). Validated against
+      MicroZAMOD tex02_s by the zm-excise-ad-valorem suite on single-item
+      spirits expenditure. PolicyEngine has no Zambia model; the household
+      oracle is MicroZAMOD.
 prefixes:
   - legal_id_prefix: "zm:"
     country: zm
