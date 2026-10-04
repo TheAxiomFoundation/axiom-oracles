@@ -4611,6 +4611,48 @@
       "varied_fields": 1,
       "verdict_concepts": {}
     },
+    "gh-excise": {
+      "binding": "unbound",
+      "binding_defects": [
+        "gh-excise: chunk index dashboard/public/data/cases/gh-excise/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 2,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "annual_beer_spend": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-gh-excise.json",
+      "report_sha256": "97085af27d93c0f5fbc96f8356f3158447f808e5767358250b01fa49a4c164da",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "gh-income-tax-rate-schedule": {
       "binding": "unbound",
       "binding_defects": [
@@ -4777,6 +4819,44 @@
       "report": "dashboard/public/data/axiom-euromod-gh-ssnit-contributions.json",
       "report_sha256": "b82dc711f92d49b292a162f18d8f02053548b928368b7da13689b79efb909303",
       "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "gh-transfers": {
+      "binding": "unbound",
+      "binding_defects": [
+        "gh-transfers: chunk index dashboard/public/data/cases/gh-transfers/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 1,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-gh-transfers.json",
+      "report_sha256": "342a64fff876e1d537dbc792485466886f2a9e7a9fa4818ba9f489b021b0286d",
+      "varied_fields": 0,
       "verdict_concepts": {}
     },
     "gh-vat-levies": {

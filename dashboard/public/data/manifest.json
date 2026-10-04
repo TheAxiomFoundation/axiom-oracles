@@ -234,6 +234,8 @@
     "axiom-euromod-gh-ssnit-contributions.json",
     "axiom-euromod-gh-capital-income.json",
     "axiom-euromod-gh-presumptive-turnover.json",
-    "axiom-euromod-gh-vat-levies.json"
+    "axiom-euromod-gh-vat-levies.json",
+    "axiom-euromod-gh-excise.json",
+    "axiom-euromod-gh-transfers.json"
   ]
 }

@@ -579,6 +579,15 @@
       "source": "comparisons/gh-capital-income.yaml"
     },
     {
+      "suite": "gh-excise",
+      "name": null,
+      "report": "axiom-euromod-gh-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-excise.yaml"
+    },
+    {
       "suite": "gh-income-tax-rate-schedule",
       "name": null,
       "report": "axiom-euromod-gh-income-tax-rate-schedule.json",
@@ -613,6 +622,15 @@
         "TheAxiomFoundation/rulespec-gh"
       ],
       "source": "comparisons/gh-ssnit-contributions.yaml"
+    },
+    {
+      "suite": "gh-transfers",
+      "name": null,
+      "report": "axiom-euromod-gh-transfers.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-transfers.yaml"
     },
     {
       "suite": "gh-vat-levies",
