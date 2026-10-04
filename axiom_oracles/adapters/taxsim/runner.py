@@ -40,6 +40,7 @@ class TaxsimPackageRunner(EngineAdapter):
 
     Cases may carry a TAXSIM-format row in ``metadata["taxsim_input"]``. When
     absent, the adapter projects the thin Axiom case into a TAXSIM input row.
+    Submitted ids must be unique after normalization.
 
     The default path writes the batch with policyengine-taxsim's own input
     formatter, runs the pinned binary directly and parses its stdout with
@@ -183,6 +184,7 @@ class TaxsimPackageRunner(EngineAdapter):
 
     def _input_rows(self, cases: list[Case]) -> list[dict[str, Any]]:
         rows = []
+        cases_by_id: dict[str, Case] = {}
         for index, case in enumerate(cases, start=1):
             row = case.metadata.get("taxsim_input") or case.fact("taxsim_input")
             if row is not None and not isinstance(row, Mapping):
@@ -195,6 +197,14 @@ class TaxsimPackageRunner(EngineAdapter):
             else:
                 normalized = dict(row)
                 normalized.setdefault(self.id_column, case.case_id)
+            submitted = normalized.get(self.id_column)
+            key = id_key(case.case_id if submitted is None else submitted)
+            if key in cases_by_id:
+                raise RuntimeError(
+                    f"Duplicate submitted TAXSIM {self.id_column}={key} for "
+                    f"cases {cases_by_id[key].case_id!r} and {case.case_id!r}"
+                )
+            cases_by_id[key] = case
             rows.append(normalized)
         return rows
 

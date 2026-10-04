@@ -4,9 +4,10 @@ Fixtures under ``tests/fixtures/taxsim/`` are verbatim captures from the
 pinned macOS binary (``taxsimtest-osx.exe``, header ``cdate-20260521``,
 SHA-256 in ``taxsim_pins.json``) run on the ``*_input.csv`` next to them on
 2026-09-27. Expected values below are read off those captures, not off the
-parser under test. The binary writes six copies of a ``" d2 ..."`` line before
-the CSV row of every Utah record whose primary filer is 73 or older; with
-``idtl=0`` they precede the header itself.
+parser under test. In these captures, the binary writes six copies of a
+``" d2 ..."`` line before the CSV rows of Utah profiles with $30,000 wages
+and primary filers aged 73, 74, and 80; with ``idtl=0`` they precede the
+header itself. These observations do not establish an age-only trigger.
 """
 
 from __future__ import annotations
@@ -18,7 +19,7 @@ import subprocess
 from pathlib import Path
 
 import pytest
-from hypothesis import given, settings
+from hypothesis import example, given, settings
 from hypothesis import strategies as st
 
 from axiom_oracles.adapters.taxsim import (
@@ -283,6 +284,53 @@ def test_runner_refuses_duplicate_rows() -> None:
         runner.run_cases(_cases("utah_elderly_idtl2_input.csv"))
 
 
+@pytest.mark.parametrize("submitted_ids", [(1, 1), (1, "1.0")], ids=["exact", "alias"])
+@pytest.mark.parametrize("legacy", [False, True], ids=["stdout", "legacy"])
+def test_runner_rejects_duplicate_submitted_ids_before_execution(
+    submitted_ids, legacy
+) -> None:
+    """One output row must never be reused for two distinct submitted cases."""
+    cases = [
+        Case(
+            case_id=case_id,
+            period="2024",
+            metadata={"taxsim_input": {"taxsimid": submitted_id, "year": 2024}},
+        )
+        for case_id, submitted_id in zip(
+            ("first", "second"), submitted_ids, strict=True
+        )
+    ]
+    calls = []
+
+    def execute(frame):
+        calls.append(frame)
+        return TaxsimExecution(
+            stdout="taxsimid,fiitax\n1.,100.\n", stderr="", returncode=0
+        )
+
+    class FakeTaxsimRunner:
+        def __init__(self, input_frame):
+            calls.append(input_frame)
+
+        def run(self, show_progress=False):
+            del show_progress
+            return [{"taxsimid": 1, "fiitax": 100}]
+
+    runner = (
+        TaxsimPackageRunner(runner_factory=FakeTaxsimRunner)
+        if legacy
+        else TaxsimPackageRunner(executor=execute)
+    )
+
+    with pytest.raises(
+        RuntimeError,
+        match=r"Duplicate submitted TAXSIM taxsimid=1 for cases 'first' and 'second'",
+    ):
+        runner.run_cases(cases)
+
+    assert calls == []
+
+
 def test_runner_refuses_unattributable_trailing_output() -> None:
     text = _fixture("utah_elderly_idtl2_stdout.txt") + " d9 1 2 3\n"
     runner = TaxsimPackageRunner(executor=_executor(text))
@@ -337,12 +385,17 @@ def test_legacy_runner_without_output_ids_preserves_case_identity(projected) -> 
 
 
 @settings(deadline=None)
+@example(
+    submitted_ids=[1, 1],
+    id_column="taxsimid",
+    null_output_ids=False,
+    text_input_ids=False,
+)
 @given(
     submitted_ids=st.lists(
         st.integers(min_value=1, max_value=100_000),
         min_size=1,
         max_size=10,
-        unique=True,
     ),
     id_column=st.sampled_from(["taxsimid", "custom_id"]),
     null_output_ids=st.booleans(),
@@ -351,7 +404,7 @@ def test_legacy_runner_without_output_ids_preserves_case_identity(projected) -> 
 def test_legacy_runner_missing_ids_map_positionally_to_submitted_cases(
     submitted_ids, id_column, null_output_ids, text_input_ids
 ) -> None:
-    """Dropping output IDs preserves case order, identity, values, and raw rows."""
+    """Each case gets its own positional row, or duplicate inputs are rejected."""
     cases = [
         Case(
             case_id=f"case-{index}",
@@ -378,9 +431,15 @@ def test_legacy_runner_missing_ids_map_positionally_to_submitted_cases(
             del show_progress
             return output
 
-    results = TaxsimPackageRunner(
+    runner = TaxsimPackageRunner(
         runner_factory=FakeTaxsimRunner, id_column=id_column
-    ).run_cases(cases)
+    )
+    if len(set(submitted_ids)) != len(submitted_ids):
+        with pytest.raises(RuntimeError, match="Duplicate submitted TAXSIM"):
+            runner.run_cases(cases)
+        return
+
+    results = runner.run_cases(cases)
 
     assert [result.household_id for result in results] == [case.case_id for case in cases]
     assert [result.values for result in results] == [

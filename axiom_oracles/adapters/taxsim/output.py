@@ -3,21 +3,23 @@
 The NBER ``taxsimtest`` binary writes one CSV header plus one CSV row per input
 record, but it also writes Fortran diagnostic text to the same stream. The
 bundled macOS build (``cdate-20260521``) prints six copies of a line such as
-``" d2      105822       25000        2020           0"`` immediately *before*
-the CSV row of every Utah record whose primary filer is 73 or older, and with
-``idtl=0`` those lines even precede the header. policyengine-taxsim parses the
-stream with ``pandas.read_csv`` and coerces every column to numeric, which
-turns each diagnostic line into a phantom row whose ``taxsimid`` is NaN; the
-comparator then fails with ``unexpected [nan, nan, ...]`` (fiit-taxsim-ecps,
-batch 13, 2026-09-27).
+``" d2       29126       25000         103         346"`` immediately *before*
+the CSV rows of captured Utah profiles with $30,000 wages and primary filers
+aged 73, 74, and 80. With ``idtl=0`` those lines even precede the header.
+These fixtures establish behavior for the captured profiles, not an age-only
+trigger. policyengine-taxsim parses the stream with ``pandas.read_csv`` and
+coerces every column to numeric, which turns each diagnostic line into a
+phantom row whose ``taxsimid`` is NaN. The resulting comparator failure in
+fiit-taxsim-ecps batch 13 was reported on 2026-09-27; that historical batch
+capture is not bundled here.
 
 This module keeps the two kinds of line apart. A record line has the header's
 field count and a numeric first field; every other non-blank line is a
-diagnostic attributed to the record whose CSV row follows it, which is where
-the binary writes it (verified by solo runs of each affected record and a
-clean run of their complement). Diagnostics after the last row are kept
-separately so the caller can decide whether they belong to a record that
-produced no row.
+diagnostic attributed to the record whose CSV row follows it, as observed in
+the bundled fixtures. Historical solo/complement checks were also reported,
+but their inputs and captures are not bundled. Diagnostics after the last
+row are kept separately so the caller can decide whether they belong to a
+record that produced no row.
 """
 
 from __future__ import annotations
