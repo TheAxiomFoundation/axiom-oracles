@@ -828,31 +828,56 @@ _REMEDY = (
 )
 
 
-def check_records(records: list[Record], ratchet: Ratchet | None) -> list[str]:
+def _status_baselines(
+    current: Mapping[tuple[str, str, str], dict],
+    versions: Iterable[tuple[str, Ratchet]],
+) -> dict[tuple[str, str, str], dict]:
+    """Recorded ranks, including rows only removed from the working file.
+
+    A committed removal closes a row's historical status baseline. An
+    uncommitted removal cannot erase that baseline, but these ranks never
+    authorize grandfathering a record absent from the working ratchet.
+    """
+
+    baselines = dict(current)
+    versions = list(versions)
+    if not versions:
+        return baselines
+    shared = set(versions[0][1].grandfathered)
+    for _, version in versions[1:]:
+        shared.intersection_update(version.grandfathered)
+    for key in shared:
+        best = dict(baselines.get(key, versions[0][1].grandfathered[key]))
+        for _, version in versions:
+            then = version.grandfathered[key]
+            if _PE_ISSUE_RANK[then["pe_issue"]] > _PE_ISSUE_RANK[best["pe_issue"]]:
+                best["pe_issue"] = then["pe_issue"]
+            if _AXIOM_RANK[then["axiom"]] > _AXIOM_RANK[best["axiom"]]:
+                best["axiom"] = then["axiom"]
+        baselines[key] = best
+    return baselines
+
+
+def check_records(
+    records: list[Record],
+    ratchet: Ratchet | None,
+    *,
+    versions: Iterable[tuple[str, Ratchet]] = (),
+) -> list[str]:
     """Presence + monotonic rules for the live records against the ratchet."""
 
     problems: list[str] = []
     grandfathered = ratchet.grandfathered if ratchet else {}
+    status_baselines = _status_baselines(grandfathered, versions)
     for record in records:
         problems.extend(companion_scope_problems(record))
-        if record.compliant:
-            continue
-        missing = []
-        if record.pe_issue is None:
-            missing.append("a PolicyEngine issue URL")
-        if record.axiom_status == "missing":
-            missing.append("axiom_companion or axiom_encoding_debt")
-        baseline = grandfathered.get(record.key)
-        if baseline is None:
-            problems.append(
-                f"{record.label()}: PolicyEngine-attributed mismatch "
-                f"(basis: {record.basis}) lacks {' and '.join(missing)}. "
-                f"New attributions cannot be grandfathered: {_REMEDY}."
-            )
-            continue
-        if _PE_ISSUE_RANK[record.pe_issue_status] < _PE_ISSUE_RANK[
-            baseline["pe_issue"]
-        ] or _AXIOM_RANK[record.axiom_status] < _AXIOM_RANK[baseline["axiom"]]:
+        baseline = status_baselines.get(record.key)
+        # Presence improvements do not waive either recorded status: adding
+        # the PE issue must not hide a companion -> debt downgrade.
+        if baseline is not None and (
+            _PE_ISSUE_RANK[record.pe_issue_status] < _PE_ISSUE_RANK[baseline["pe_issue"]]
+            or _AXIOM_RANK[record.axiom_status] < _AXIOM_RANK[baseline["axiom"]]
+        ):
             problems.append(
                 f"{record.label()}: grandfathered entry regressed from "
                 f"pe_issue={baseline['pe_issue']}, "
@@ -860,6 +885,20 @@ def check_records(records: list[Record], ratchet: Ratchet | None) -> list[str]:
                 f"pe_issue={record.pe_issue_status}, "
                 f"axiom={record.axiom_status}"
             )
+        if record.compliant:
+            continue
+        missing = []
+        if record.pe_issue is None:
+            missing.append("a PolicyEngine issue URL")
+        if record.axiom_status == "missing":
+            missing.append("axiom_companion or axiom_encoding_debt")
+        if record.key not in grandfathered:
+            problems.append(
+                f"{record.label()}: PolicyEngine-attributed mismatch "
+                f"(basis: {record.basis}) lacks {' and '.join(missing)}. "
+                f"New attributions cannot be grandfathered: {_REMEDY}."
+            )
+            continue
     open_count = sum(1 for r in records if r.open)
     if ratchet is not None and open_count > ratchet.open_max:
         problems.append(
@@ -1242,6 +1281,7 @@ def _numeric(value) -> float | None:
 
 # RuleSpec encodes judgments as holds / not_holds; comparisons carry booleans.
 _JUDGMENTS = {"holds": True, "not_holds": False}
+_ELIGIBILITY_KINDS = {"eligibility_left_only", "eligibility_right_only"}
 
 
 def _comparable(value) -> tuple[str, object] | None:
@@ -1259,21 +1299,47 @@ def _comparable(value) -> tuple[str, object] | None:
     return None if number is None else ("number", number)
 
 
-def _same(left: tuple[str, object], right: tuple[str, object]) -> bool:
+def _same(
+    left: tuple[str, object], right: tuple[str, object], *, eligibility: bool = False
+) -> bool:
     if left[0] == right[0] == "number":
-        return math.isclose(left[1], right[1], rel_tol=1e-9, abs_tol=0.005)
+        return math.isclose(left[1], right[1], rel_tol=0, abs_tol=0.005)
     if left[0] == right[0]:
         return left[1] == right[1]
-    # A judgment against a 0/1 number (an eligibility flag carried as a number).
+    if not eligibility:
+        return False
+    # Only explicitly identified eligibility outputs may carry a 0/1 judgment.
     judgment, number = (left, right) if left[0] == "judgment" else (right, left)
     return number[1] in (0.0, 1.0) and bool(number[1]) == judgment[1]
 
 
-def _same_assertion(left, right) -> bool:
-    if left == right:
-        return True
+def _same_assertion(
+    left, right, *, eligibility: bool = False, numeric: bool = False
+) -> bool:
     a, b = _comparable(left), _comparable(right)
-    return a is not None and b is not None and _same(a, b)
+    if numeric:
+        return (
+            a is not None
+            and b is not None
+            and a[0] == b[0] == "number"
+            and _same(a, b)
+        )
+    if a is not None and b is not None:
+        return _same(a, b, eligibility=eligibility)
+    if type(left) is not type(right):
+        return False
+    # Python's container equality also aliases nested false/true with 0/1.
+    if isinstance(left, list):
+        return len(left) == len(right) and all(
+            _same_assertion(x, y, eligibility=eligibility)
+            for x, y in zip(left, right)
+        )
+    if isinstance(left, Mapping):
+        return left.keys() == right.keys() and all(
+            _same_assertion(left[key], right[key], eligibility=eligibility)
+            for key in left
+        )
+    return left == right
 
 
 def _find_case(document: object, name: str) -> dict | None:
@@ -1310,7 +1376,7 @@ def companion_scope_problems(record: Record) -> list[str]:
     such as ``us:tax/federal-income-tax#eitc`` has no RuleSpec module of its
     own), every legal id and test must at least be in the concept's country.
     ``--resolve`` additionally requires the concept itself whenever it is a
-    RuleSpec output at the pinned commit.
+    RuleSpec output on its canonical repository's main or at the pinned commit.
     """
 
     companion = record.entry.get("axiom_companion")
@@ -1388,6 +1454,30 @@ class CompanionResolver:
         problems: list[str] = []
         legal_ids = [str(x) for x in companion.get("legal_ids") or []]
         concept_module = legal_id_companion_path(record.concept)
+        if record.concept not in legal_ids and concept_module is not None:
+            # Discover scope independently of the submitted repository/SHA:
+            # an older or unrelated pin cannot hide a RuleSpec output on main.
+            repo, path = concept_module
+            head = self._main_sha(repo)
+            if head is None:
+                problems.append(
+                    f"{record.label()}: cannot read {repo} main to verify "
+                    f"the disputed concept {record.concept} (re-run)"
+                )
+            else:
+                module = self._document(repo, head, path)
+                if module is _UNAVAILABLE:
+                    problems.append(
+                        f"{record.label()}: could not fetch {path} on {repo} "
+                        f"main to verify the disputed concept {record.concept} "
+                        "(transient; re-run)"
+                    )
+                elif module is not None and _asserts(module, record.concept):
+                    problems.append(
+                        f"{record.label()}: the disputed concept {record.concept} "
+                        f"is a RuleSpec output ({path} asserts it on {repo} "
+                        "main); declare it among legal_ids"
+                    )
         for raw in companion.get("tests") or []:
             pointer = CompanionPointer.parse(raw)
             if pointer is None:
@@ -1454,7 +1544,7 @@ class CompanionResolver:
                 )
             if self.require_merged:
                 problems.extend(
-                    self._main_problems(label, pointer, legal_ids, outputs)
+                    self._main_problems(label, pointer, legal_ids, outputs, record)
                 )
         return problems
 
@@ -1465,20 +1555,33 @@ class CompanionResolver:
         Axiom produced in the comparison, so the dispute is pinned in RuleSpec
         CI, not just described."""
 
-        actual = {
-            _comparable(value) for value in record.axiom_values.get(case_name, ())
-        } - {None}
-        if len(actual) != 1:
-            return []  # not a disputed case, or its rows disagree
-        (value,) = actual
+        eligibility = record.entry.get("kind") in _ELIGIBILITY_KINDS
         expected = _comparable(asserted)
-        if expected is None:
+        if case_name not in record.axiom_values:
+            if not eligibility and (expected is None or expected[0] != "number"):
+                return [
+                    f"{label}: cannot compare {record.concept} = {asserted!r} "
+                    "as a numeric amount assertion; pin it with a scalar "
+                    "(or one-row) numeric case"
+                ]
+            return []  # a differently named companion case has its own value
+        actual = {_comparable(value) for value in record.axiom_values[case_name]}
+        if None in actual or len(actual) != 1:
+            return [
+                f"{label}: disputed Axiom values for {record.concept} in "
+                f"{case_name!r} are unreadable or conflicting: "
+                f"{record.axiom_values[case_name]!r}"
+            ]
+        (value,) = actual
+        if expected is None or (
+            not eligibility and (expected[0] != "number" or value[0] != "number")
+        ):
             return [
                 f"{label}: cannot compare {record.concept} = {asserted!r} with "
                 f"the disputed Axiom value {value[1]!r}; pin it with a scalar "
                 "(or one-row) case"
             ]
-        if not _same(expected, value):
+        if not _same(expected, value, eligibility=eligibility):
             return [
                 f"{label}: case asserts {record.concept} = {expected[1]!r} but "
                 f"the disputed Axiom value is {value[1]!r}"
@@ -1486,7 +1589,7 @@ class CompanionResolver:
         return []
 
     def _main_problems(
-        self, label: str, pointer: CompanionPointer, legal_ids, outputs
+        self, label: str, pointer: CompanionPointer, legal_ids, outputs, record: Record
     ) -> list[str]:
         """The pinned case must still be on main, asserting the same values:
         RuleSpec CI runs main, so a case deleted or changed there no longer
@@ -1519,7 +1622,18 @@ class CompanionResolver:
             if legal_id in outputs
             and not (
                 legal_id in head_outputs
-                and _same_assertion(head_outputs[legal_id], outputs[legal_id])
+                and _same_assertion(
+                    head_outputs[legal_id],
+                    outputs[legal_id],
+                    eligibility=(
+                        legal_id == record.concept
+                        and record.entry.get("kind") in _ELIGIBILITY_KINDS
+                    ),
+                    numeric=(
+                        legal_id == record.concept
+                        and record.entry.get("kind") not in _ELIGIBILITY_KINDS
+                    ),
+                )
             )
         ]
 

@@ -14,9 +14,10 @@ I4  Re-pin never loosens: open_max, the grandfathered keys and debt_raises
     passes check_records and check_history against it.
 I5  Improvement is monotone: a passing gate keeps passing when a record
     gains a PolicyEngine issue or a stronger Axiom side, or disappears.
-I6  Differential: the grandfathered entries check_records reports as
-    regressed are exactly those check_history reports as lowered in the
-    re-pinned file (the two monotonic checkers agree).
+I6  Differential: persisted non-compliant grandfathered entries reported as
+    regressed by check_records are exactly those check_history reports as
+    lowered in the re-pinned file. Compliant regressions must be refused by
+    the live gate before re-pinning can drop their status rows.
 I7  Replay: any sequence of re-pins and deliberate raises, each taken only
     when the gate allows it, passes check_history against every earlier
     committed version.
@@ -38,7 +39,7 @@ from __future__ import annotations
 import copy
 
 import yaml
-from hypothesis import given, settings
+from hypothesis import example, given, settings
 from hypothesis import strategies as st
 
 from axiom_oracles.comparison.pe_axiom_standard import (
@@ -177,8 +178,9 @@ def _commit(
     """What a contributor can commit: a re-pin, or a raise when only the
     ceiling blocks. ``None`` when the gate refuses the data change."""
 
+    versions = list(versions)
     effective = effective_ratchet(current, versions)
-    problems = check_records(records, effective)
+    problems = check_records(records, effective, versions=versions)
     if not problems:
         return _parse(derive_ratchet(records, effective))
     if raise_allowed and _only_the_ceiling(problems):
@@ -231,6 +233,10 @@ def test_bootstrap_passes_the_records_it_was_derived_from(records) -> None:
 
 
 @PROPERTY_SETTINGS
+@example(
+    records=[_record(SOURCES[0], "NEL\u0085id", CONCEPTS[0], False, "missing")],
+    current=([], _parse(derive_ratchet([], None))),
+)
 @given(records=any_records, current=committed_ratchets())
 def test_serialization_round_trips(records, current) -> None:
     for document in (
@@ -296,7 +302,9 @@ def test_regression_checks_agree(records, current) -> None:
     history_problems = check_history(
         _parse(derive_ratchet(records, committed)), [("committed", committed)]
     )
-    labels = {(r.source, r.id) for r in records}
+    # A re-pin drops compliant rows. Their regressions must be rejected
+    # before serialization; history can only compare rows that persist.
+    labels = {(r.source, r.id) for r in records if not r.compliant}
     regressed = {
         label
         for label in labels
@@ -314,6 +322,86 @@ def test_regression_checks_agree(records, current) -> None:
         )
     }
     assert regressed == lowered
+    for record in records:
+        if record.compliant and any(
+            p.startswith(f"{record.label()}: grandfathered entry regressed")
+            for p in live_problems
+        ):
+            assert _commit(records, committed, raise_allowed=True) is None
+            assert _commit(
+                records, committed, raise_allowed=True,
+                versions=[("committed", committed)],
+            ) is None
+
+
+@PROPERTY_SETTINGS
+@given(source=st.sampled_from(SOURCES), other_count=st.integers(1, 8))
+def test_issue_improvement_cannot_hide_a_companion_regression(source, other_count) -> None:
+    """Paying down another entry's debt cannot buy a status regression."""
+
+    start = [_record(source, "a", CONCEPTS[0], False, "missing")] + [
+        _record(source, f"b{i}", CONCEPTS[0], True, "missing")
+        for i in range(other_count)
+    ]
+    base = _parse(derive_ratchet(start, None))
+    backed = [_record(source, "a", CONCEPTS[0], False, "companion"), *start[1:]]
+    assert check_records(backed, base) == []
+    paid = _parse(derive_ratchet(backed, base))
+    history = [("base", base), ("paid", paid)]
+    final = [
+        _record(source, "a", CONCEPTS[0], True, "debt"),
+        _record(source, "b0", CONCEPTS[0], True, "companion"),
+        *start[2:],
+    ]
+    assert _open(final) == paid.open_max
+    for baseline in (paid, effective_ratchet(base, history)):
+        assert any(
+            "grandfathered entry regressed" in p
+            and "axiom=companion" in p
+            and "axiom=debt" in p
+            for p in check_records(final, baseline)
+        )
+        assert _commit(final, baseline, raise_allowed=True, versions=history) is None
+        omitted = Ratchet(
+            open_max=baseline.open_max,
+            grandfathered={k: row for k, row in baseline.grandfathered.items() if k != final[0].key},
+        )
+        assert any(
+            "grandfathered entry regressed" in p
+            for p in check_records(final, omitted, versions=history)
+        )
+        assert _commit(final, omitted, raise_allowed=True, versions=history) is None
+
+
+def test_historical_status_does_not_authorize_a_removed_grandfather() -> None:
+    record = _record(SOURCES[0], "a", CONCEPTS[0], False, "companion")
+    historical = _parse(derive_ratchet([record], None))
+    current = Ratchet(open_max=0)
+    problems = check_records([record], current, versions=[("historical", historical)])
+    assert any("New attributions cannot be grandfathered" in p for p in problems)
+    assert _commit([record], current, raise_allowed=True, versions=[("historical", historical)]) is None
+
+
+def test_committed_closure_or_disappearance_removes_the_status_baseline() -> None:
+    a = _record(SOURCES[0], "a", CONCEPTS[0], False, "companion")
+    b = _record(SOURCES[0], "b", CONCEPTS[0], True, "missing")
+    initial = _parse(derive_ratchet([a, b], None))
+    compliant_a = _record(SOURCES[0], "a", CONCEPTS[0], True, "companion")
+    for closure in ([compliant_a, b], [b]):
+        closed = _parse(derive_ratchet(closure, initial))
+        assert _commit(
+            closure, initial, raise_allowed=True, versions=[("initial", initial)]
+        ) == closed
+        history = [("initial", initial), ("closed", closed)]
+        assert check_records(closure, closed, versions=history) == []
+        assert _commit(closure, closed, raise_allowed=True, versions=history) == closed
+        final = [
+            _record(SOURCES[0], "a", CONCEPTS[0], True, "debt"),
+            _record(SOURCES[0], "b", CONCEPTS[0], True, "companion"),
+        ]
+        assert check_records(final, closed, versions=history) == []
+        repinned = _commit(final, closed, raise_allowed=True, versions=history)
+        assert repinned is not None and check_history(repinned, history) == []
 
 
 @PROPERTY_SETTINGS
@@ -378,6 +466,28 @@ def test_an_accepted_document_is_bound_by_its_raise(current, data) -> None:
 # --------------------------------------------------------------------------
 # I12: parallel branches always merge
 # --------------------------------------------------------------------------
+
+
+def test_effective_ratchet_keeps_merged_maximum_status() -> None:
+    record = _record(SOURCES[0], "a", CONCEPTS[0], False, "missing")
+    current = _parse(derive_ratchet([record], None))
+    row = current.grandfathered[record.key]
+    issue_branch = Ratchet(
+        open_max=1, grandfathered={record.key: dict(row, pe_issue="present")}
+    )
+    companion_branch = Ratchet(
+        open_max=0, grandfathered={record.key: dict(row, axiom="companion")}
+    )
+    history = [("issue", issue_branch), ("companion", companion_branch)]
+    merged = effective_ratchet(current, history)
+    assert merged.grandfathered[record.key]["pe_issue"] == "present"
+    assert merged.grandfathered[record.key]["axiom"] == "companion"
+    assert check_history(merged, history) == []
+    without_issue = _record(SOURCES[0], "a", CONCEPTS[0], False, "companion")
+    assert any(
+        "grandfathered entry regressed" in p
+        for p in check_records([without_issue], merged)
+    )
 
 
 @PROPERTY_SETTINGS

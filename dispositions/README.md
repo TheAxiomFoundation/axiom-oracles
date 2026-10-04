@@ -124,8 +124,9 @@ Every such entry must carry:
 A companion must be about the disputed concept.
 
 - When the concept is a RuleSpec output (its module's companion test asserts
-  it), the concept itself must be among `legal_ids`, and `--resolve` refuses
-  a companion that leaves it out.
+  it on its canonical repository's main or at the pinned commit), the concept
+  itself must be among `legal_ids`, and `--resolve` refuses a companion that
+  leaves it out. An older pin cannot hide a concept now encoded on main.
 - A comparison-surface concept (such as `us:tax/federal-income-tax#eitc`) has
   no module of its own. For those, every legal id and test must at least be
   in the concept's country (`us` → `rulespec-us` or `rulespec-us-*`).
@@ -167,9 +168,10 @@ files can come from local clones instead):
   - The test file exists at the pinned commit, and that commit is on main.
   - The case asserts each legal id.
   - A case named like the disputed case asserts the Axiom value from the
-    comparison. Judgments compare as holds/not_holds, numbers within
-    0.005, and a one-row tables case by its row. A value that cannot be
-    compared fails.
+    comparison. Amounts require numeric assertions within an absolute
+    0.005; eligibility outputs also compare judgments as holds/not_holds
+    or 0/1. A one-row tables case compares by its row. Unreadable or
+    conflicting values for a known disputed case fail.
   - The case is still on main and asserts the same values there, because
     RuleSpec CI runs main.
 - **Encoding debt** must be an open issue, not a pull request, in a

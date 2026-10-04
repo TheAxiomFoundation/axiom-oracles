@@ -197,8 +197,8 @@ def main(argv: list[str] | None = None, repo_root: Path = REPO_ROOT) -> int:
 
     if args.check:
         problems = list(syntax_errors)
-        problems.extend(check_records(records, committed))
         versions, history_errors = committed_versions(repo_root)
+        problems.extend(check_records(records, committed, versions=versions or []))
         problems.extend(history_errors)
         if versions:
             problems.extend(check_history(committed, versions))
@@ -261,6 +261,7 @@ def main(argv: list[str] | None = None, repo_root: Path = REPO_ROOT) -> int:
             open_max=document["open_max"],
             grandfathered=effective.grandfathered,
         ),
+        versions=versions or [],
     )
     if problems:
         return _fail(problems)

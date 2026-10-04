@@ -1007,6 +1007,8 @@ def _one_case(value) -> str:
 def test_value_check_reads_judgments_and_one_row_tables(axiom_value, asserted, needle) -> None:
     source = FakeSource({("rulespec-us", SHA, TEST_PATH): _one_case(asserted)})
     record = _record()
+    if isinstance(axiom_value, bool) or asserted in ("holds", "not_holds"):
+        record.entry["kind"] = "eligibility_right_only"
     record.axiom_values = {"disputed-case": (axiom_value,)}
     problems = CompanionResolver(source).resolve(record)
     if needle is None:
