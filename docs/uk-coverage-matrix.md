@@ -70,8 +70,9 @@ EUROMOD Belgium scoper).
 - **axiom-oracles** live-compares to PolicyEngine-UK through **two** suites
   (`uk-tax-benefits-efrs`, `uk-universal-credit-efrs`) on the same
   `enhanced_frs_2023_24` population at 2026, PE-UK `2.88.56` / core `3.26.11`.
-  The six `uk-*-ukmod` suites target **UKMOD/EUROMOD, not PolicyEngine** —
-  excluded from this matrix except as noted. The `uk-pe` **conformance
+  The 25 `uk-*-ukmod` suites target **UKMOD (CeMPA, University of Essex; run
+  on the EUROMOD platform), not PolicyEngine** — excluded from this matrix
+  except as noted. The `uk-pe` **conformance
   universe** (`conformance/uk-pe.yaml`, #188) pins PolicyEngine-UK **2.89.2**;
   where a program's PE behaviour differs between the running-suite pin
   (2.88.56) and the universe pin (2.89.2) — notably Council Tax Reduction,
@@ -165,9 +166,9 @@ in any running suite** (dominated by the 7 excluded "final wrapper" surfaces plu
 PIP/state-pension/WFA/AA/TFC/CTC families). Nothing already-compared is marked
 missing above.
 
-The six `uk-*-ukmod` suites (+4 more found: dividend/savings/mixed income-tax,
-UC) target **UKMOD/EUROMOD**, not PolicyEngine — synthetic 5-point grids, out of
-scope here. `comparisons/parameter-oracles.yaml` has **zero UK entries**.
+The 25 `uk-*-ukmod` suites (`git ls-files 'comparisons/uk-*-ukmod.yaml'`)
+target **UKMOD** (CeMPA's model, run on the EUROMOD platform), not PolicyEngine —
+synthetic grids, out of scope here. `comparisons/parameter-oracles.yaml` has **zero UK entries**.
 
 ## Wave plan — gap workers grouped (PE var names + legal source families)
 

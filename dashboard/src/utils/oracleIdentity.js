@@ -35,7 +35,7 @@ export const ORACLE_IDENTITY = {
   },
   ukmod: {
     org: "University of Essex (CeMPA)",
-    what: `UKMOD — the tax–benefit microsimulation model for the UK and its four nations, run on the EUROMOD platform and maintained by the Centre for Microsimulation and Policy Analysis (CeMPA) at ISER, University of Essex. Axiom runs its registration-free public release (${UKMOD_RELEASE}) on synthetic households.`,
+    what: `UKMOD — a tax–benefit microsimulation model for the UK and its four nations, run on the EUROMOD platform and developed by the Centre for Microsimulation and Policy Analysis (CeMPA) at the University of Essex. Axiom runs its registration-free public release (${UKMOD_RELEASE}) on synthetic households.`,
     url: "https://www.microsimulation.ac.uk/ukmod/",
     acknowledgement: ukmodAcknowledgement(),
     licence: {
@@ -70,3 +70,13 @@ export const ORACLE_IDENTITY = {
     url: "https://www.statcan.gc.ca/en/microsimulation/spsdm/spsdm",
   },
 };
+
+/**
+ * The oracles among `ids` whose terms ask published output to carry an
+ * acknowledgement or a licence link; the footer links each one's record.
+ */
+export function attributedOracles(ids) {
+  return ids.filter(
+    (id) => ORACLE_IDENTITY[id]?.acknowledgement || ORACLE_IDENTITY[id]?.licence,
+  );
+}

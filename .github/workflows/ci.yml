@@ -232,9 +232,10 @@ jobs:
 
   # The dashboard deploys by hand (vercel --prod from dashboard/), so no
   # Vercel check runs on pull requests: build it here and run its
-  # self-contained tests, including the oracle attribution test that holds
-  # each EUROMOD-platform report's credit (EUROMOD, UKMOD, SOUTHMOD) to the
-  # model its comparison config ran.
+  # self-contained tests. The oracle attribution test checks every report
+  # whose comparison config names a EUROMOD-platform model root against the
+  # model that root names (EUROMOD, UKMOD, SOUTHMOD), and requires such a
+  # config behind every UKMOD and SOUTHMOD credit.
   dashboard:
     runs-on: ubuntu-latest
     defaults:

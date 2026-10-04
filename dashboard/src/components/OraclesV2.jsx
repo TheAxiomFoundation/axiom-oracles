@@ -20,12 +20,18 @@ import {
   accumulateExplainedRate,
   resolveExplainedRate,
   topLevelAggregates,
-  isAxiomPair,
   otherOracle,
+  displayEngines,
   JURISDICTION_LABELS,
   SOUTHMOD_MODELS,
 } from "../utils/suites";
-import { ORACLE_IDENTITY } from "../utils/oracleIdentity";
+import { ORACLE_IDENTITY, attributedOracles } from "../utils/oracleIdentity";
+import {
+  crossCheckCount,
+  groupByOracle,
+  reportHouseholds,
+  verificationReports,
+} from "../utils/roster";
 
 /**
  * v2 concept — the oracle-first, validation-centered dashboard.
@@ -71,18 +77,6 @@ const REGION_LABELS = {
 // national federal lane (99.75% classified), and the intersection lane's
 // residue characterized. Ratchets pin every remaining unexplained count.
 const HIDDEN_ORACLES = new Set([]);
-
-/**
- * The unit of counting is the household case: one household compared once,
- * no matter how many concepts (liability, CTC, EITC, …) that comparison
- * covers — component concepts roll up into their parent, and a household's
- * concept-by-concept comparisons are the evidence, not extra households.
- */
-function reportHouseholds(report) {
-  return Number.isFinite(report.case_count)
-    ? report.case_count
-    : (report.cases || []).length;
-}
 
 function compactCount(n) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)} million`;
@@ -147,7 +141,7 @@ function buildClasses(reports, knownCauses) {
         program: suiteLabel(report.suite),
         region: suiteMeta(report.suite).region,
         oracle: otherOracle(report),
-        engines: report.engines,
+        engines: displayEngines(report),
         concept,
         conceptLabel: descriptions.get(concept) || concept,
         kind,
@@ -633,46 +627,10 @@ export default function OraclesV2() {
 
   const model = useMemo(() => {
     if (!data) return null;
-    const verification = data.reports.filter(
-      (r) =>
-        isAxiomPair(r) &&
-        !HIDDEN_ORACLES.has(otherOracle(r)) &&
-        suiteMeta(r.suite).kind !== "diagnostic" &&
-        (r.aggregates || []).length > 0,
-    );
-    const crossChecks = data.reports.filter(
-      (r) =>
-        !isAxiomPair(r) &&
-        !HIDDEN_ORACLES.has(r.engines?.left) &&
-        !HIDDEN_ORACLES.has(r.engines?.right),
-    ).length;
+    const verification = verificationReports(data.reports, HIDDEN_ORACLES);
+    const crossChecks = crossCheckCount(data.reports, HIDDEN_ORACLES);
 
-    const byOracle = new Map();
-    for (const report of verification) {
-      const id = otherOracle(report);
-      if (!byOracle.has(id)) {
-        byOracle.set(id, {
-          id,
-          reports: [],
-          checks: 0,
-          mismatches: 0,
-          households: 0,
-          regions: new Set(),
-          programs: new Set(),
-        });
-      }
-      const entry = byOracle.get(id);
-      entry.reports.push(report);
-      const m = reportMetric(report);
-      entry.checks += m.total;
-      entry.mismatches += m.mismatches;
-      entry.households += reportHouseholds(report);
-      const meta = suiteMeta(report.suite);
-      entry.regions.add(meta.region);
-      entry.programs.add(`${meta.family}__${meta.jurisdiction}`);
-    }
-
-    const oracles = [...byOracle.values()]
+    const oracles = groupByOracle(verification)
       .map((o) => ({
         ...o,
         rate: o.checks > 0 ? ((o.checks - o.mismatches) / o.checks) * 100 : null,
@@ -1044,6 +1002,26 @@ export default function OraclesV2() {
 
         <footer className="v2-footer mono">
           <span>Axiom Foundation · Oracles · {new Date().getFullYear()}</span>
+          {attributedOracles(oracles.map((o) => o.id)).length > 0 && (
+            <span>
+              Model acknowledgements and licences:{" "}
+              {attributedOracles(oracles.map((o) => o.id)).map((id, i) => (
+                <span key={id}>
+                  {i > 0 && " · "}
+                  <a
+                    className="cite"
+                    href={`?oracle=${id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate({ oracle: id });
+                    }}
+                  >
+                    {engineLabel(id)}
+                  </a>
+                </span>
+              ))}
+            </span>
+          )}
           <a
             href="https://github.com/TheAxiomFoundation/axiom-oracles"
             target="_blank"
