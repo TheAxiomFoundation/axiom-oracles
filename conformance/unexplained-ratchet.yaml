@@ -484,3 +484,11 @@ ratchets:
   unexplained_max: 0
 - suite: wv-income-tax-populace
   unexplained_max: 0
+- suite: zm-napsa-contributions
+  unexplained_max: 0
+- suite: zm-nhima-contributions
+  unexplained_max: 0
+- suite: zm-paye-rate-schedule
+  unexplained_max: 0
+- suite: zm-turnover
+  unexplained_max: 0

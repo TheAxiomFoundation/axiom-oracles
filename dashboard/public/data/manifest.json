@@ -246,6 +246,10 @@
     "axiom-euromod-ug-scg.json",
     "axiom-euromod-ug-vat.json",
     "axiom-euromod-ug-fuel-excise.json",
-    "axiom-euromod-ug-dispy.json"
+    "axiom-euromod-ug-dispy.json",
+    "axiom-euromod-zm-paye-rate-schedule.json",
+    "axiom-euromod-zm-turnover.json",
+    "axiom-euromod-zm-napsa-contributions.json",
+    "axiom-euromod-zm-nhima-contributions.json"
   ]
 }
