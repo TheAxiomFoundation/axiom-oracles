@@ -1,0 +1,245 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: zm
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  zm-napsa-contributions:
+    locale: ZM
+    entity: Person
+    entity_id: head
+    outputs:
+    - zm:regulations/si-2024-9/pensionable-earnings-amendment-2024#napsa_employee_contribution
+    - zm:regulations/si-2024-9/pensionable-earnings-amendment-2024#napsa_employer_contribution
+    cases:
+    - id: zm-napsa-10000-below-ceiling
+      period: '2024'
+      scenario: formal-employee-napsa-contributions
+      parameters:
+        monthly_earnings: 10000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000.0
+    - id: zm-napsa-29816-at-ceiling
+      period: '2024'
+      scenario: formal-employee-napsa-contributions
+      parameters:
+        monthly_earnings: 29816.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 357792.0
+    - id: zm-napsa-45000-above-ceiling
+      period: '2024'
+      scenario: formal-employee-napsa-contributions
+      parameters:
+        monthly_earnings: 45000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 540000.0
+  zm-nhima-contributions:
+    locale: ZM
+    entity: Person
+    entity_id: head
+    outputs:
+    - zm:regulations/si-2019-63/national-health-insurance-general-regulations-2019#employee_monthly_contribution_amount
+    - zm:regulations/si-2019-63/national-health-insurance-general-regulations-2019#employer_monthly_contribution_amount
+    cases:
+    - id: zm-nhima-5000-low
+      period: '2025'
+      scenario: formal-employee-nhima-contributions
+      parameters:
+        monthly_basic_salary: 5000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 60000.0
+    - id: zm-nhima-34164-napsa-ceiling-region
+      period: '2025'
+      scenario: formal-employee-nhima-contributions
+      parameters:
+        monthly_basic_salary: 34164.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 409968.0
+    - id: zm-nhima-144295-high-income
+      period: '2025'
+      scenario: formal-employee-nhima-contributions
+      parameters:
+        monthly_basic_salary: 144295.1
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1731541.2000000002
+  zm-paye-rate-schedule:
+    locale: ZM
+    entity: Person
+    entity_id: head
+    outputs:
+    - zm:statutes/act-2023-22/income-tax-amendment-2023#individual_income_tax
+    cases:
+    - id: zm-paye-40000-nil-interior
+      period: '2025'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 40000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 40000.0
+    - id: zm-paye-61200-exempt-bound-gross
+      period: '2025'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 61200.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 61200.0
+    - id: zm-paye-75000-band2-interior
+      period: '2025'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 75000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 75000.0
+    - id: zm-paye-90000-band3-interior
+      period: '2025'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 90000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 90000.0
+    - id: zm-paye-120000-band4-lower-region
+      period: '2025'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 120000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000.0
+    - id: zm-paye-240000-band4-interior
+      period: '2025'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 240000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 240000.0
+    - id: zm-paye-409968-napsa-cap-region
+      period: '2025'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 409968.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 409968.0
+    - id: zm-paye-600000-high-income
+      period: '2025'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 600000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 600000.0
+  zm-turnover:
+    locale: ZM
+    entity: Person
+    entity_id: head
+    outputs:
+    - zm:statutes/act-2024-22/income-tax-amendment-2024#turnover_tax
+    cases:
+    - id: zm-turnover-20000-low-interior
+      period: '2025'
+      scenario: small-business-turnover-tax
+      parameters:
+        yearly_turnover: 20000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: zm-turnover-100000-interior
+      period: '2025'
+      scenario: small-business-turnover-tax
+      parameters:
+        yearly_turnover: 100000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: zm-turnover-800000-old-threshold
+      period: '2025'
+      scenario: small-business-turnover-tax
+      parameters:
+        yearly_turnover: 800000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: zm-turnover-2500000-mid-interior
+      period: '2025'
+      scenario: small-business-turnover-tax
+      parameters:
+        yearly_turnover: 2500000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: zm-turnover-4999999-below-ceiling
+      period: '2025'
+      scenario: small-business-turnover-tax
+      parameters:
+        yearly_turnover: 4999999.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
