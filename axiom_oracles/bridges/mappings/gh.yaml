@@ -156,6 +156,42 @@ mappings:
       gh-presumptive-turnover suite, exact to the cedi on the shared
       turnover base. PolicyEngine has no Ghana model; the household oracle
       is GHAMOD.
+  - legal_id: gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      National Health Insurance Levy (Act 852 s.47 as substituted by Act
+      1156: 2.5% of the chargeable supply value, the rate GHAMOD's GH_2025
+      also applies). Validated against GHAMOD tva01_s by the
+      gh-vat-levies suite, exact to the cedi on the shared standard-rated
+      base (GHAMOD's household expenditure base, given to both engines; the
+      base-definition divergence is recorded in ghamod_issues.json).
+      PolicyEngine has no Ghana model; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Ghana Education Trust Fund Levy (Act 581 s.3A as substituted by Act
+      1152: 2.5% of the taxable supply value, the rate GHAMOD's GH_2025
+      also applies). Validated against GHAMOD tva02_s by the gh-vat-levies suite,
+      exact to the cedi on the shared base (the base-definition divergence is
+      recorded in ghamod_issues.json). PolicyEngine has no Ghana model; the
+      household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1151/value-added-tax-2025/section-3-rate-of-the-tax#value_added_tax_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Value Added Tax (Act 1151 s.3: fifteen per cent of the taxable supply
+      or import value, commencing 1 January 2026). No live GHAMOD case:
+      GHAMOD emits no pure-VAT output. On a standard-rated base its tva_s is
+      27% and its consumption-tax total 33% (probed), against a statutory 2025 cascade
+      of 21.9%; recorded in ghamod_issues.json
+      (ghamod-tva-wedge-double-and-triple-counts-levies). The Axiom branch
+      is exercised by the rulespec-gh companion tests. PolicyEngine has no
+      Ghana model.
 prefixes:
   - legal_id_prefix: "gh:"
     country: gh

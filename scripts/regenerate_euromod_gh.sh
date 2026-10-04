@@ -43,7 +43,8 @@ for name in \
   gh-personal-reliefs \
   gh-ssnit-contributions \
   gh-capital-income \
-  gh-presumptive-turnover; do
+  gh-presumptive-turnover \
+  gh-vat-levies; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done
