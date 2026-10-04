@@ -340,6 +340,12 @@ ratchets:
   unexplained_max: 0
 - suite: tx-tanf-parameters
   unexplained_max: 0
+- suite: ug-dispy
+  unexplained_max: 0
+- suite: ug-fuel-excise
+  unexplained_max: 0
+- suite: ug-lst
+  unexplained_max: 0
 - suite: ug-nssf-contributions
   unexplained_max: 0
 - suite: ug-paye-rate-schedule
@@ -347,6 +353,10 @@ ratchets:
 - suite: ug-presumptive
   unexplained_max: 0
 - suite: ug-rental
+  unexplained_max: 0
+- suite: ug-scg
+  unexplained_max: 0
+- suite: ug-vat
   unexplained_max: 0
 - suite: uk-attendance-allowance-pe
   unexplained_max: 0
