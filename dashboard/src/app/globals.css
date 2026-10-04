@@ -1568,6 +1568,8 @@ a.v2-action-filed:hover {
 
 .v2-footer {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
   justify-content: space-between;
   align-items: center;
   font-size: 12px;

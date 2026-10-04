@@ -20,12 +20,18 @@ import {
   accumulateExplainedRate,
   resolveExplainedRate,
   topLevelAggregates,
-  isAxiomPair,
   otherOracle,
+  displayEngines,
   JURISDICTION_LABELS,
   SOUTHMOD_MODELS,
-  southmodAcknowledgement,
 } from "../utils/suites";
+import { ORACLE_IDENTITY, attributedOracles } from "../utils/oracleIdentity";
+import {
+  crossCheckCount,
+  groupByOracle,
+  reportHouseholds,
+  verificationReports,
+} from "../utils/roster";
 
 /**
  * v2 concept — the oracle-first, validation-centered dashboard.
@@ -43,61 +49,6 @@ import {
 
 const AXIOM_APP_URL = "https://axiom-foundation.org";
 
-/** Who each oracle IS — the identity that makes the check independent. */
-const ORACLE_IDENTITY = {
-  policyengine: {
-    org: "PolicyEngine",
-    what: "Open-source tax–benefit microsimulation of US and UK law, maintained independently of Axiom.",
-    url: "https://policyengine.org",
-  },
-  taxsim: {
-    org: "NBER",
-    what: "TAXSIM-35 — the National Bureau of Economic Research's federal and state income-tax calculator, the reference model of empirical tax research.",
-    url: "https://taxsim.nber.org/",
-  },
-  taxcalc: {
-    org: "Policy Simulation Library",
-    what: "Tax-Calculator — open-source US federal income-tax microsimulation used by think tanks across the spectrum.",
-    url: "https://github.com/PSLmodels/Tax-Calculator",
-  },
-  euromod: {
-    org: "European Commission JRC",
-    what: "The EU's official tax–benefit microsimulation model, covering all member states including Belgium.",
-    url: "https://euromod-web.jrc.ec.europa.eu/",
-  },
-  ukmod: {
-    org: "University of Essex (CeMPA)",
-    what: "UKMOD — the UK's tax–benefit microsimulation model, EUROMOD's UK descendant.",
-    url: "https://www.microsimulation.ac.uk/ukmod/",
-  },
-  southmod: {
-    org: "UNU-WIDER",
-    what: "SOUTHMOD — UNU-WIDER's tax–benefit microsimulation models for countries in the Global South, run on the EUROMOD software under the SOUTHMOD_A4.0 licence. The model and its input data stay on Axiom's licensed machine; the comparison households are synthetic.",
-    url: "https://www.wider.unu.edu/project/southmod-simulating-tax-and-benefit-policies-development-phase-3",
-    acknowledgement: southmodAcknowledgement(),
-  },
-  accessnyc: {
-    org: "NYC Opportunity",
-    what: "ACCESS NYC — New York City's official benefits screening service.",
-    url: "https://access.nyc.gov/",
-  },
-  prd: {
-    org: "Policy Rules Database",
-    what: "The Atlanta Fed's Policy Rules Database of US safety-net program rules.",
-    url: "https://www.atlantafed.org/economic-mobility-and-resilience/advancing-careers-for-low-income-families/policy-rules-database",
-  },
-  "snap-qc": {
-    org: "USDA Food and Nutrition Service",
-    what: "SNAP Quality Control public-use file — the USDA's national sample of active SNAP cases, each reviewed by state QC reviewers who reinterview the household. Axiom is compared with FSBEN, the file's final calculated benefit, which Mathematica computes for USDA from each edited case record; the benefit received is a separate field (RAWBEN).",
-    url: "https://snapqcdata.net/datafiles",
-  },
-  spsm: {
-    org: "Statistics Canada",
-    what: "SPSD/M — Statistics Canada's Social Policy Simulation Database and Model, the reference Canadian tax–transfer microsimulation, run under licence over its synthetic database. Results carry the SPSD/M licence attribution; per-household evidence stays local.",
-    url: "https://www.statcan.gc.ca/en/microsimulation/spsdm/spsdm",
-  },
-};
-
 const REGION_LABELS = {
   us: "US",
   ca: "CA",
@@ -113,6 +64,8 @@ const REGION_LABELS = {
 /**
  * Oracles hidden from every dashboard surface (roster, hero totals, program
  * census, household drill) without touching their data or dispositions.
+ * Entries are dashboard oracle ids (otherOracle), so "euromod" hides the
+ * JRC release's countries only, not UKMOD or SOUTHMOD.
  * TAXSIM is parked here until its comparison surface is rebuilt — the full
  * mismatch rows are not yet persisted (axiom-oracles#439), so most of its
  * open residuals cannot be triaged. The unexplained publication ratchet
@@ -124,18 +77,6 @@ const REGION_LABELS = {
 // national federal lane (99.75% classified), and the intersection lane's
 // residue characterized. Ratchets pin every remaining unexplained count.
 const HIDDEN_ORACLES = new Set([]);
-
-/**
- * The unit of counting is the household case: one household compared once,
- * no matter how many concepts (liability, CTC, EITC, …) that comparison
- * covers — component concepts roll up into their parent, and a household's
- * concept-by-concept comparisons are the evidence, not extra households.
- */
-function reportHouseholds(report) {
-  return Number.isFinite(report.case_count)
-    ? report.case_count
-    : (report.cases || []).length;
-}
 
 function compactCount(n) {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)} million`;
@@ -200,7 +141,7 @@ function buildClasses(reports, knownCauses) {
         program: suiteLabel(report.suite),
         region: suiteMeta(report.suite).region,
         oracle: otherOracle(report),
-        engines: report.engines,
+        engines: displayEngines(report),
         concept,
         conceptLabel: descriptions.get(concept) || concept,
         kind,
@@ -686,46 +627,10 @@ export default function OraclesV2() {
 
   const model = useMemo(() => {
     if (!data) return null;
-    const verification = data.reports.filter(
-      (r) =>
-        isAxiomPair(r) &&
-        !HIDDEN_ORACLES.has(otherOracle(r)) &&
-        suiteMeta(r.suite).kind !== "diagnostic" &&
-        (r.aggregates || []).length > 0,
-    );
-    const crossChecks = data.reports.filter(
-      (r) =>
-        !isAxiomPair(r) &&
-        !HIDDEN_ORACLES.has(r.engines?.left) &&
-        !HIDDEN_ORACLES.has(r.engines?.right),
-    ).length;
+    const verification = verificationReports(data.reports, HIDDEN_ORACLES);
+    const crossChecks = crossCheckCount(data.reports, HIDDEN_ORACLES);
 
-    const byOracle = new Map();
-    for (const report of verification) {
-      const id = otherOracle(report);
-      if (!byOracle.has(id)) {
-        byOracle.set(id, {
-          id,
-          reports: [],
-          checks: 0,
-          mismatches: 0,
-          households: 0,
-          regions: new Set(),
-          programs: new Set(),
-        });
-      }
-      const entry = byOracle.get(id);
-      entry.reports.push(report);
-      const m = reportMetric(report);
-      entry.checks += m.total;
-      entry.mismatches += m.mismatches;
-      entry.households += reportHouseholds(report);
-      const meta = suiteMeta(report.suite);
-      entry.regions.add(meta.region);
-      entry.programs.add(`${meta.family}__${meta.jurisdiction}`);
-    }
-
-    const oracles = [...byOracle.values()]
+    const oracles = groupByOracle(verification)
       .map((o) => ({
         ...o,
         rate: o.checks > 0 ? ((o.checks - o.mismatches) / o.checks) * 100 : null,
@@ -977,6 +882,20 @@ export default function OraclesV2() {
                   {ORACLE_IDENTITY[routeOracle.id].acknowledgement}
                 </p>
               )}
+              {(ORACLE_IDENTITY[routeOracle.id] || {}).licence && (
+                <p className="v2-oracle-what v2-oracle-ack">
+                  {engineLabel(routeOracle.id)} is licensed under{" "}
+                  <a
+                    className="cite"
+                    href={ORACLE_IDENTITY[routeOracle.id].licence.url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {ORACLE_IDENTITY[routeOracle.id].licence.name}
+                  </a>
+                  .
+                </p>
+              )}
             </div>
             <OracleRecord
               key={routeOracle.id}
@@ -1083,6 +1002,26 @@ export default function OraclesV2() {
 
         <footer className="v2-footer mono">
           <span>Axiom Foundation · Oracles · {new Date().getFullYear()}</span>
+          {attributedOracles(oracles.map((o) => o.id)).length > 0 && (
+            <span>
+              Model acknowledgements and licences:{" "}
+              {attributedOracles(oracles.map((o) => o.id)).map((id, i) => (
+                <span key={id}>
+                  {i > 0 && " · "}
+                  <a
+                    className="cite"
+                    href={`?oracle=${id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      navigate({ oracle: id });
+                    }}
+                  >
+                    {engineLabel(id)}
+                  </a>
+                </span>
+              ))}
+            </span>
+          )}
           <a
             href="https://github.com/TheAxiomFoundation/axiom-oracles"
             target="_blank"
