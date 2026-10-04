@@ -8529,6 +8529,144 @@
       "varied_fields": 3,
       "verdict_concepts": {}
     },
+    "ug-dispy": {
+      "binding": "unbound",
+      "binding_defects": [
+        "ug-dispy: chunk index dashboard/public/data/cases/ug-dispy/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 10,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_earned_income": {
+          "distinct": 10,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-ug-dispy.json",
+      "report_sha256": "2197b67b7f851cd87bdd3748fc46af13bef26c7331fbea5839f612e88e46f5be",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "ug-fuel-excise": {
+      "binding": "unbound",
+      "binding_defects": [
+        "ug-fuel-excise: chunk index dashboard/public/data/cases/ug-fuel-excise/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 2,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "annual_diesel_litres": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "annual_petrol_litres": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-ug-fuel-excise.json",
+      "report_sha256": "8b6cdfb8b90617b54415d12f441ad30d776268f90e8d70be58018cc838096d48",
+      "varied_fields": 2,
+      "verdict_concepts": {}
+    },
+    "ug-lst": {
+      "binding": "unbound",
+      "binding_defects": [
+        "ug-lst: chunk index dashboard/public/data/cases/ug-lst/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 12,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "monthly_gross_employment_income": {
+          "distinct": 12,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-ug-lst.json",
+      "report_sha256": "ded1f39720bb98cd9b1300799e75561575bcf25462097f0bbf827c34e9d13de4",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "ug-nssf-contributions": {
       "binding": "unbound",
       "binding_defects": [
@@ -8711,6 +8849,94 @@
       "report": "dashboard/public/data/axiom-euromod-ug-rental.json",
       "report_sha256": "0a7920cece0528bd160d202e0cb6c3a06de829369f0cd9c828533e05a2744ada",
       "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "ug-scg": {
+      "binding": "unbound",
+      "binding_defects": [
+        "ug-scg: chunk index dashboard/public/data/cases/ug-scg/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 3,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "person_age": {
+          "distinct": 3,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-ug-scg.json",
+      "report_sha256": "a8698da5ff90c4ba3b68d774c5d86082f383bac1ea82c2e24c75ca40a859b5e9",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "ug-vat": {
+      "binding": "unbound",
+      "binding_defects": [
+        "ug-vat: chunk index dashboard/public/data/cases/ug-vat/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 1,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "annual_standard_rated_consumption": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-ug-vat.json",
+      "report_sha256": "9fcfc52c63c48a42adef51753d892df57237150bfcc51955ce7434e4d650e0dd",
+      "varied_fields": 0,
       "verdict_concepts": {}
     },
     "uk-attendance-allowance-pe": {

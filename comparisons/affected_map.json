@@ -1229,6 +1229,33 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ug-dispy",
+      "name": null,
+      "report": "axiom-euromod-ug-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-dispy.yaml"
+    },
+    {
+      "suite": "ug-fuel-excise",
+      "name": null,
+      "report": "axiom-euromod-ug-fuel-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-fuel-excise.yaml"
+    },
+    {
+      "suite": "ug-lst",
+      "name": null,
+      "report": "axiom-euromod-ug-lst.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-lst.yaml"
+    },
+    {
       "suite": "ug-nssf-contributions",
       "name": null,
       "report": "axiom-euromod-ug-nssf-contributions.json",
@@ -1263,6 +1290,24 @@
         "TheAxiomFoundation/rulespec-ug"
       ],
       "source": "comparisons/ug-rental.yaml"
+    },
+    {
+      "suite": "ug-scg",
+      "name": null,
+      "report": "axiom-euromod-ug-scg.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-scg.yaml"
+    },
+    {
+      "suite": "ug-vat",
+      "name": null,
+      "report": "axiom-euromod-ug-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-vat.yaml"
     },
     {
       "suite": "uk-attendance-allowance-pe",

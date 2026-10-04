@@ -162,11 +162,31 @@ case_sets:
     outputs:
     - ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax
     cases:
+    - id: ug-lst-below-100k-no-tax
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_gross_employment_income: 80000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
     - id: ug-lst-band1-150k
       period: '2026'
       scenario: formal-employee-local-service-tax
       parameters:
-        monthly_take_home_income: 150000.0
+        monthly_gross_employment_income: 150000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-band2-250k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_gross_employment_income: 250000.0
       entities:
       - id: head
         kind: person
@@ -176,7 +196,37 @@ case_sets:
       period: '2026'
       scenario: formal-employee-local-service-tax
       parameters:
-        monthly_take_home_income: 350000.0
+        monthly_gross_employment_income: 350000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-band4-450k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_gross_employment_income: 450000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-band5-550k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_gross_employment_income: 550000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-band6-610k-just-above-edge
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_gross_employment_income: 610000.0
       entities:
       - id: head
         kind: person
@@ -186,7 +236,37 @@ case_sets:
       period: '2026'
       scenario: formal-employee-local-service-tax
       parameters:
-        monthly_take_home_income: 650000.0
+        monthly_gross_employment_income: 650000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-band7-750k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_gross_employment_income: 750000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-band8-850k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_gross_employment_income: 850000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-lst-band9-950k
+      period: '2026'
+      scenario: formal-employee-local-service-tax
+      parameters:
+        monthly_gross_employment_income: 950000.0
       entities:
       - id: head
         kind: person
@@ -196,17 +276,7 @@ case_sets:
       period: '2026'
       scenario: formal-employee-local-service-tax
       parameters:
-        monthly_take_home_income: 1500000.0
-      entities:
-      - id: head
-        kind: person
-        age: 40
-        relation: HeadOfHousehold
-    - id: ug-lst-below-100k-no-tax
-      period: '2026'
-      scenario: formal-employee-local-service-tax
-      parameters:
-        monthly_take_home_income: 80000.0
+        monthly_gross_employment_income: 1500000.0
       entities:
       - id: head
         kind: person

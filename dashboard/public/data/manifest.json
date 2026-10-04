@@ -241,6 +241,11 @@
     "axiom-euromod-ug-paye-rate-schedule.json",
     "axiom-euromod-ug-rental.json",
     "axiom-euromod-ug-presumptive.json",
-    "axiom-euromod-ug-nssf-contributions.json"
+    "axiom-euromod-ug-nssf-contributions.json",
+    "axiom-euromod-ug-lst.json",
+    "axiom-euromod-ug-scg.json",
+    "axiom-euromod-ug-vat.json",
+    "axiom-euromod-ug-fuel-excise.json",
+    "axiom-euromod-ug-dispy.json"
   ]
 }
