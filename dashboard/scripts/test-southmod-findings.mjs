@@ -1,5 +1,6 @@
 // Semantics of the SOUTHMOD model-findings helpers, run by
-// tests/test_dashboard_loader.py over the published bundle. The pytest side
+// tests/test_southmod_issues.py::test_dashboard_findings_helpers_agree_with_python
+// over the published bundle. The pytest side
 // passes SOUTHMOD_FINDINGS_EXPECTED: the dashboard registry (parsed from
 // suites.js) and the per-region entry counts Python reads from the packaged
 // ledgers, so the JS grouping is checked against an independent count.

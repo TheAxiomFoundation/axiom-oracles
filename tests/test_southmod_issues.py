@@ -129,28 +129,62 @@ def test_ledgerless_model_has_no_published_mismatch(model) -> None:
 
 
 def test_every_ledger_citation_resolves() -> None:
+    """`<ledger>.json#<id>` citations and bare `<model>-<slug>` ids resolve.
+
+    A bare token defined on its own `id:` line is a disposition or case id
+    that happens to share the model prefix, not a citation.
+    """
     ids = {
         m.ledger: {e["id"] for e in _ledger(m.region)["entries"]} for m in LEDGER_MODELS
     }
+    all_ids = set().union(*ids.values())
+    stems = [name.removesuffix("_issues.json") for name in ids]
     files = subprocess.run(
-        ["git", "ls-files", "dispositions", "comparisons", "axiom_oracles", "docs"],
+        [
+            "git",
+            "ls-files",
+            "dispositions",
+            "comparisons",
+            "axiom_oracles",
+            "docs",
+            "scripts",
+            "conformance",
+        ],
         cwd=ROOT,
         check=True,
         capture_output=True,
         text=True,
     ).stdout.split()
-    pattern = re.compile(
+    fragment = re.compile(
         r"\b(" + "|".join(re.escape(name) for name in ids) + r")#([a-z0-9-]+)"
     )
-    cited = 0
+    bare = re.compile(
+        r"(?<![\w-])((?:" + "|".join(stems) + r")-[a-z0-9]+(?:-[a-z0-9]+)*)"
+    )
+    definition = re.compile(r"^\s*-?\s*id:\s*[\"']?([a-z0-9-]+)[\"']?\s*$")
+    cited = bare_cited = 0
     for name in files:
         path = ROOT / name
-        if path.suffix not in {".yaml", ".yml", ".py", ".md", ".json"}:
+        if name.endswith("_issues.json") or path.suffix not in {
+            ".yaml",
+            ".yml",
+            ".py",
+            ".md",
+            ".json",
+        }:
             continue
-        for ledger, entry_id in pattern.findall(path.read_text(encoding="utf-8")):
+        text = path.read_text(encoding="utf-8")
+        for ledger, entry_id in fragment.findall(text):
             cited += 1
             assert entry_id in ids[ledger], f"{name}: {ledger}#{entry_id}"
-    assert cited > 0
+        for line in text.splitlines():
+            defined = definition.match(line)
+            for token in bare.findall(line):
+                if defined and defined.group(1) == token:
+                    continue
+                bare_cited += 1
+                assert token in all_ids, f"{name}: unresolved ledger id {token}"
+    assert cited > 0 and bare_cited > 0
 
 
 def _entry_with(region: str, **fields) -> dict:
@@ -167,7 +201,7 @@ def _entry_with(region: str, **fields) -> dict:
         (lambda e: e["observed_with"].update(model_root="EM"), "model_root"),
         (lambda e: e.update(jurisdiction="UG"), "jurisdiction"),
         (lambda e: e.update(status="filed"), "status"),
-        (lambda e: e.update(oracle_outputs=["tin_gh"]), "oracle_outputs"),
+        (lambda e: e.update(oracle_outputs=["yem"]), "oracle_outputs must list"),
         (lambda e: e.update(affected_comparisons=["gh-nope"]), "gh-nope"),
         (lambda e: e.update(affected_comparisons=["zm-vat"]), "zm-vat"),
         (lambda e: e.update(affected_concepts=["zm:x#y"]), "affected_concepts"),
@@ -180,6 +214,23 @@ def _entry_with(region: str, **fields) -> dict:
             "summary or observed",
         ),
         (lambda e: e.update(statute=["Act 896"]), "statute must be a string"),
+        (lambda e: e["observed_with"].update(country="UG"), "country must be"),
+        (lambda e: e["observed_with"].update(system="GH2025"), "system"),
+        (lambda e: e["observed_with"].update(dataset="GLSS7 rows"), "dataset"),
+        (
+            lambda e: e["observed_with"].update(
+                dataset="gh_2017_a8 (14,009 households)"
+            ),
+            "dataset",
+        ),
+        (
+            lambda e: e["observed_with"].update(reproduction_note={"rates": [0.35]}),
+            "reproduction_note must be a non-empty string",
+        ),
+        (lambda e: e.update(oracle_scope="microdata"), "oracle_scope"),
+        (lambda e: e.update(status=["observed_local"]), "status"),
+        (lambda e: e.update(oracle_scope={"a": 1}), "oracle_scope"),
+        (lambda e: e.update(observed=float("nan")), "non-finite"),
     ],
 )
 def test_closed_schema_rejects(mutate, expected) -> None:
@@ -198,6 +249,14 @@ def test_top_level_and_identity_rules() -> None:
     assert any("top-level keys" in p for p in problems)
     assert any("schema" in p for p in problems)
     assert any("duplicate id" in p for p in problems)
+    for key, value, expected in (
+        ("updated_at", "4 Oct 2026", "updated_at"),
+        ("purpose", None, "purpose"),
+        ("entries", [], "non-empty list"),
+    ):
+        broken = copy.deepcopy(_ledger("et"))
+        broken[key] = value
+        assert any(expected in p for p in ledger_problems("et", broken)), key
     assert ledger_problems("ug", {}) == ["ug: UGAMOD has no ledger registered"]
     with pytest.raises(KeyError):
         model_for("xx")
@@ -223,6 +282,20 @@ FORBIDDEN = [
     ("internal_variable", "the i_tmp_s helper"),
     ("parameter_constant", "tscse_StdRate1"),
     ("local_path", "see /Users/someone/.axiom/oracles"),
+    # The brace-less condition and formula forms the GH, UG, ZM and RW models
+    # use, and multi-underscore policy names.
+    ("condition_syntax", "elig condition (dag>=15 & dag<=45)"),
+    ("condition_syntax", "lfo=1&dag>=15"),
+    ("condition_syntax", "(dag>=15)"),
+    ("condition_syntax", "!(IsDepChild)"),
+    ("formula_syntax", "dag>15"),
+    ("formula_syntax", "yem+yse+yiy+ypp"),
+    ("formula_syntax", "(amount)*(days/total)"),
+    ("policy_or_unit", "The output_std_hh_gh policy writes it."),
+    ("policy_or_unit", "tin_gh_2025"),
+    ("income_list_composition", "ils_dispy equals yem + yse - tin_s"),
+    ("microdata_count", "The input data hold 14,009 households."),
+    ("microdata_count", "a mean weight of 512.3"),
 ]
 
 BENIGN = [
@@ -234,6 +307,13 @@ BENIGN = [
     "Income Tax (Amendment) (No. 2) Act 2023 (Act 1111) First Schedule.",
     "GETFund levy and NHIL on household expenditure.",
     "dependant_child_count >= 2 on the encoded side.",
+    "Probed on formal-sector earners (lfo=1) aged 35.",
+    "(probed: tex02_s = 26.06 per 130.29 uprated)",
+    "See https://example.org/home/page and PR#592, GH#12.",
+    "Totals: 5; Min(cost, 2,000 GHS); Max/min; Scale: monthly.",
+    "R&D spending, yem + yse, GH¢600,000, K0.400 per piece, <Birr 2,000,000.",
+    "il_tintb3 equals gross employment income yem (probed).",
+    "rw_2024_a1 (registered name; synthetic rows)",
 ]
 
 
@@ -287,3 +367,61 @@ def test_any_unlisted_field_is_rejected(model, data, key) -> None:
     entry[key] = "value"
     problems = ledger_problems(model.region, ledger)
     assert any("outside the allowlist" in p for p in problems), problems
+
+
+BUNDLE = Path.home() / ".axiom/oracles/southmod/bundle/SOUTHMOD_A4.0/XMLParam/Countries"
+#: Distinct condition / formula parameter values per country model that pass
+#: every licence pattern, measured 2026-10-04 on SOUTHMOD_A4.0 (the rest trip
+#: at least one). What passes is mostly a bare ``v=n`` test, the same shape a
+#: ledger uses for a synthetic household's input (``lfo=1``). Ceilings: a
+#: change that loosens the lint fails here on the licensed machine.
+RECALL_CEILINGS = {
+    "GH": {"cond": 6, "formula": 13, "policy": 0},
+    "UG": {"cond": 2, "formula": 7, "policy": 0},
+    "ZM": {"cond": 15, "formula": 9, "policy": 0},
+    "ET": {"cond": 9, "formula": 10, "policy": 0},
+    "RW": {"cond": 10, "formula": 9, "policy": 0},
+}
+
+
+@pytest.mark.skipif(
+    not BUNDLE.is_dir(), reason="licensed SOUTHMOD bundle not on this machine"
+)
+@pytest.mark.parametrize("country", sorted(RECALL_CEILINGS))
+def test_licence_lint_recall_on_the_licensed_bundle(country: str) -> None:
+    """Counts only: no bundle text reaches the assertion message or output."""
+    import xml.etree.ElementTree as ET
+
+    def local(tag: str) -> str:
+        return tag.split("}")[-1]
+
+    def child(el, tag: str) -> str | None:
+        for c in el:
+            if local(c.tag) == tag:
+                return c.text or None
+        return None
+
+    root = ET.parse(BUNDLE / country / f"{country}.xml").getroot()
+    values: dict[str, set[str]] = {"cond": set(), "formula": set(), "policy": set()}
+    for el in root.iter():
+        if local(el.tag) == "Parameter":
+            name = (child(el, "Name") or "").lower()
+            value = child(el, "Value")
+            if not value or value.strip().lower() == "n/a":
+                continue
+            if name.endswith("cond"):
+                values["cond"].add(value)
+            elif "formula" in name:
+                values["formula"].add(value)
+        elif local(el.tag) == "Policy" and child(el, "Name"):
+            values["policy"].add(f"the {child(el, 'Name')} policy")
+    passing = {
+        kind: sum(1 for v in vals if not licence_hits({"x": v}))
+        for kind, vals in values.items()
+    }
+    assert all(values.values()), {k: len(v) for k, v in values.items()}
+    for kind, ceiling in RECALL_CEILINGS[country].items():
+        assert passing[kind] <= ceiling, (
+            f"{country} {kind}: {passing[kind]} of {len(values[kind])} distinct "
+            f"values pass the lint (ceiling {ceiling})"
+        )

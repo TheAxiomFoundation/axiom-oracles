@@ -15,7 +15,8 @@ import {
   STATUS_TONES,
 } from "../utils/southmodFindings.mjs";
 
-// One fetch per page load, shared by every mount of the section. Written by
+// One fetch per page load, shared by every mount of the section; a failed
+// fetch is forgotten so the next mount retries. Written by
 // scripts/publish_issue_ledgers.py; CI's --check keeps it equal to the
 // packaged ledgers.
 let bundlePromise = null;
@@ -23,14 +24,23 @@ function loadSouthmodIssues() {
   if (!bundlePromise) {
     bundlePromise = fetch(`${BASE_PATH}/data/southmod-issues.json`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(r.status))))
-      .catch(() => null);
+      .catch(() => {
+        bundlePromise = null;
+        return null;
+      });
   }
   return bundlePromise;
 }
 
+/** The entry id a `#finding-<id>` URL fragment names, or null. */
 function hashFinding() {
   if (typeof window === "undefined") return null;
-  const hash = decodeURIComponent(window.location.hash.slice(1));
+  let hash;
+  try {
+    hash = decodeURIComponent(window.location.hash.slice(1));
+  } catch {
+    return null;
+  }
   return hash.startsWith("finding-") ? hash.slice("finding-".length) : null;
 }
 
@@ -50,7 +60,7 @@ function FindingDetail({ entry, onOpenSuite }) {
   const concepts = entry.affected_concepts || [];
   return (
     <div className="v2-expl v2-finding-expl">
-      {entry.statute && <Field label="statute">{entry.statute}</Field>}
+      {entry.statute && <Field label="source">{entry.statute}</Field>}
       {entry.axiom_position && (
         <Field label="Axiom's position">{entry.axiom_position}</Field>
       )}
@@ -174,17 +184,23 @@ export default function SouthmodFindings({ region, keepSuite, onOpenSuite }) {
 
   useEffect(() => {
     let live = true;
-    loadSouthmodIssues().then((b) => {
-      if (!live) return;
-      setBundle(b);
+    const follow = () => {
       const target = hashFinding();
       if (target) {
         setPinned(target);
         setOpenId(target);
       }
+    };
+    loadSouthmodIssues().then((b) => {
+      if (!live) return;
+      setBundle(b);
+      follow();
     });
+    // A permalink clicked (or a fragment typed) after load pins its entry too.
+    window.addEventListener("hashchange", follow);
     return () => {
       live = false;
+      window.removeEventListener("hashchange", follow);
     };
   }, []);
 

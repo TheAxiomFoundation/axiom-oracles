@@ -75,7 +75,7 @@
       },
       "oracle_scope": "household_level",
       "status": "observed_local",
-      "summary": "RWAMOD prices every item in its juice expenditure basket at 10% (tex09_s; probed 2026-10-04: 10% of each item's post-uprating value), where the Law 011/2025 Annex prices only juices with at least 30% local raw material content at 10% (item 1) and other juices at 39% (item 2). Basket-level simplification: the survey data cannot split local content, so the model applies the local rate to all juice.",
+      "summary": "RWAMOD prices every item in its juice expenditure basket at 10% (tex09_s; probed 2026-10-04: 10% of each item's post-uprating value), where the Law 011/2025 Annex prices only juices with at least 30% local raw material content at 10% (item 1) and other juices at 39% (item 2). Basket-level simplification: the probed 10% applies to every juice item whatever its local content.",
       "affected_comparisons": [
         "rw-excise"
       ],

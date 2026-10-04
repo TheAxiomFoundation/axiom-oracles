@@ -168,6 +168,27 @@ def test_licence_violation_is_never_published(tree, capsys) -> None:
     assert (dashboard / "southmod-issues.json").read_bytes() == before
 
 
+def test_missing_registered_ledger_fails(tree, capsys) -> None:
+    module, package, _ = tree
+    (package / "etmod_issues.json").unlink()
+    assert module.main(["--check"]) == 1
+    assert "etmod_issues.json missing" in capsys.readouterr().err
+
+
+def test_non_finite_number_is_never_published(tree, capsys) -> None:
+    module, package, dashboard = tree
+    before = (dashboard / "southmod-issues.json").read_bytes()
+    path = package / "rwamod_issues.json"
+    ledger = json.loads(path.read_text())
+    ledger["entries"][0]["observed_with"]["reproduction_note"] = float("nan")
+    path.write_text(json.dumps(ledger, indent=2))  # writes the NaN token
+    assert module.main([]) == 1
+    assert "non-finite" in capsys.readouterr().err
+    assert (dashboard / "southmod-issues.json").read_bytes() == before
+    with pytest.raises(ValueError):
+        module.serialize({"x": float("inf")})
+
+
 def test_unregistered_ledger_for_ledgerless_model_fails(tree, capsys) -> None:
     module, package, _ = tree
     model = next(m for m in SOUTHMOD_MODELS if m.ledger is None)

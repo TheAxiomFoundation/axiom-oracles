@@ -3,8 +3,9 @@
  *
  * The data is dashboard/public/data/southmod-issues.json, written by
  * scripts/publish_issue_ledgers.py from axiom_oracles/data/<model>_issues.json.
- * No imports, so dashboard/scripts/test-southmod-findings.mjs runs it under
- * plain node; the caller passes the SOUTHMOD_MODELS registry in.
+ * No imports, so dashboard/scripts/test-southmod-findings.mjs (run by
+ * tests/test_southmod_issues.py) runs it under plain node; the caller passes
+ * the SOUTHMOD_MODELS registry in.
  *
  * Nothing here infers a ledger field: a missing status stays missing, and
  * `reported_upstream` is shown as written (several entries say nothing was

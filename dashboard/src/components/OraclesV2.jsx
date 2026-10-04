@@ -703,6 +703,10 @@ export default function OraclesV2() {
     setRoute(next);
     const url = new URL(window.location.href);
     for (const k of ["oracle", "program", "view"]) url.searchParams.delete(k);
+    // A #finding-<id> fragment belongs to the page it was opened on; carried
+    // along, it would re-pin that finding whenever the SOUTHMOD record
+    // remounts and ride into unrelated shareable URLs.
+    url.hash = "";
     if (next.oracle) url.searchParams.set("oracle", next.oracle);
     if (next.program) url.searchParams.set("program", next.program);
     if (next.view) url.searchParams.set("view", next.view);

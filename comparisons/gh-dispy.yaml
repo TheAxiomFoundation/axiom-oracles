@@ -6,8 +6,9 @@ description: >-
   deduction of that contribution from the income-tax base, the Act 1111 First
   Schedule bands, and disposable income = gross + benefits - tax -
   contribution) against GHAMOD ils_dispy. GHAMOD taxes gross employment income
-  without the s.112(2) SSNIT deduction (finding #13, ghamod-tin-taxes-gross-
-  employment-income-omitting-s112-deduction), so live cases sit at or below
+  without the s.112(2) SSNIT deduction (finding #13,
+  ghamod-tin-taxes-gross-employment-income-omitting-s112-deduction), so live
+  cases sit at or below
   the 5,880 nil band, where both engines charge no tax and disposable income
   is 94.5% of gross. Live run: 2 cases (5,000 and 5,880 a year), 2
   comparisons, both exact (4,725.00 and 5,556.60). These cases exercise only

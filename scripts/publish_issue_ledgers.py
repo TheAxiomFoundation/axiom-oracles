@@ -51,7 +51,11 @@ GENERATOR = "scripts/publish_issue_ledgers.py"
 
 def serialize(document: Any) -> bytes:
     """The one canonical encoding both outputs are written and checked in."""
-    return (json.dumps(document, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
+    # allow_nan=False: NaN and Infinity are not JSON, and the browser would
+    # reject the whole file.
+    return (
+        json.dumps(document, indent=2, ensure_ascii=False, allow_nan=False) + "\n"
+    ).encode("utf-8")
 
 
 def _read_json(path: Path) -> Any:
@@ -115,8 +119,14 @@ def build_outputs(
     package_data: Path = PACKAGE_DATA,
     comparisons_dir: Path = COMPARISONS,
 ) -> tuple[dict[str, bytes], list[str]]:
-    """Output name -> canonical bytes, plus publishing problems."""
+    """Output name -> canonical bytes, plus publishing problems.
+
+    With problems there are no outputs: nothing that failed validation is
+    serialized, let alone written.
+    """
     bundle, problems = build_southmod_bundle(package_data, comparisons_dir)
+    if problems:
+        return {}, problems
     euromod = _read_json(package_data / EUROMOD_SOURCE.name)
     return (
         {

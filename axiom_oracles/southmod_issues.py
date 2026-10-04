@@ -21,6 +21,7 @@ so ledger edits still need a reader who knows the licence.
 from __future__ import annotations
 
 import json
+import math
 import re
 from dataclasses import dataclass
 from importlib import resources
@@ -119,8 +120,15 @@ _DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 #: Simulated outputs (``tin_s``) and income lists (``ils_dispy``).
 _OUTPUT_VARIABLE = re.compile(r"^(?:[a-z][a-z0-9]*_s|ils?_[a-z0-9_]+)$")
 
-#: Structural tokens EUROMOD model content is written in. None of them can
-#: occur in an observation of outputs, so any hit means content was copied.
+_COMPARE = r"(?:>=|<=|!=|==|<>|=|<|>)"
+_RELATIONAL = r"(?:>=|<=|!=|==|<>|<|>)"
+
+#: Tripwires for the tokens EUROMOD model content is written in, and for
+#: survey-microdata counts. A hit is not proof of copying: a few benign
+#: phrasings also trip them (a parenthesised "(age >= 15)", "issue#4"), and
+#: those need rephrasing ("aged 15 or over", "issue 4"), never an exemption
+#: in the ledger. Equally, a miss is not proof of absence (see the module
+#: docstring).
 LICENCE_PATTERNS: dict[str, re.Pattern[str]] = {
     "guid": re.compile(r"\b[0-9a-fA-F]{8}-(?:[0-9a-fA-F]{4}-){3}[0-9a-fA-F]{12}\b"),
     "xml_tag": re.compile(r"</?[A-Za-z][\w:.-]*(?:\s[^<>]*)?/?>"),
@@ -130,29 +138,45 @@ LICENCE_PATTERNS: dict[str, re.Pattern[str]] = {
         r"|DefOutput|ChangeParam|ChangeSwitch|IlArithOp|AddHHMembers"
         r"|CallProgramme|DropUnit|KeepUnit|RandSeed|SetDefault|DefInput)\b"
         r"|\b(?:Elig|Min|Max|Allocate|Loop|Uprate|Store|Restore|Totals|Scale)"
-        r"(?=[_/(:\[])"
+        r"(?=[_\[])"
     ),
-    # Policy names (tin_gh), tax-unit names (tu_individual_gh).
+    # Policy names (tin_gh, output_std_hh_gh, tin_gh_2025) and tax-unit names
+    # (tu_individual_gh).
     "policy_or_unit": re.compile(
-        r"\b[A-Za-z][A-Za-z0-9]*_(?:gh|ug|zm|et|rw|GH|UG|ZM|ET|RW)\b"
+        r"\b[A-Za-z][A-Za-z0-9_]*_(?:gh|ug|zm|et|rw|GH|UG|ZM|ET|RW)(?![A-Za-z0-9])"
         r"|\btu_[A-Za-z]\w*"
     ),
+    # Braced conditions ({IsMarried & dag>=18}, ETMOD) and the brace-less form
+    # the GH, UG, ZM and RW models use: comparisons joined by & or |, and a
+    # parenthesised relational test.
     "condition_syntax": re.compile(
-        r"\{[^{}]*(?:[<>]=?|[!=]=|=|&|\|)[^{}]*\}|!\{|&&|\|\|"
+        r"\{[^{}]*(?:[<>]=?|[!=]=|=|&|\|)[^{}]*\}|!\{|!\s*\(|&&|\|\|"
         r"|\{[A-Z][A-Za-z]+\}|\b(?:Is|Has|Get)[A-Z][a-z]+[A-Za-z]*\b"
         r"|\bn[A-Z][A-Za-z]*(?:InTu|InHH|InUnit)\b|#_[A-Z][A-Za-z]+"
+        rf"|\b[a-z]\w*\s*{_COMPARE}\s*[\w$#.]+\s*\)?\s*[&|]"
+        rf"|[&|]\s*\(?\s*[a-z]\w*\s*{_COMPARE}\s*[\w$#.]"
+        rf"|\(\s*[a-z]\w*\s*{_RELATIONAL}\s*[\w$#.]+\s*\)"
     ),
-    # Footnote parameters (amount#2); issue references (rulespec-zm#1) and
-    # prose numbering ("finding #8") are not.
-    "footnote_parameter": re.compile(r"(?<![\w/-])[A-Za-z_][A-Za-z0-9_]*#\d+"),
+    # Formula text: an unspaced relational test (dag>15; prose spaces its
+    # operators, and an input value on a synthetic household is written
+    # lfo=1, which stays allowed), a sum of four or more variable names, and
+    # a (a)*(b/c) proration.
+    "formula_syntax": re.compile(
+        r"\b[a-z][a-z0-9_]*(?:>=|<=|!=|<>|<|>)-?[\w$.]"
+        r"|\b[a-z][a-z0-9_]*(?:\s*\+\s*[a-z][a-z0-9_]*){3,}"
+        r"|\(\s*[a-z]\w*\s*\)\s*\*\s*\(\s*[a-z]\w*\s*/\s*[a-z]\w*\s*\)"
+    ),
+    # Footnote parameters (amount#2); issue references (rulespec-zm#1, PR#592)
+    # and prose numbering ("finding #8") are not.
+    "footnote_parameter": re.compile(r"(?<![\w/-])[a-z_][a-z0-9_]*#\d+"),
     "internal_variable": re.compile(r"\bi_[a-z]\w*"),
     "parameter_constant": re.compile(
         r"\b[a-z]{2,}\w*_[A-Z][A-Za-z0-9]*\b"
         r"|\b\w+_(?:uprate|Rate\d*|Thres\w*|UpLim|LowLim|Amount\d*)\b"
     ),
     "income_list_composition": re.compile(
-        r"\bils?_\w+\s*(?:=|:=|is the sum of|comprises|consists of)\s*"
-        r"[a-z]\w*(?:\s*[+-]\s*[a-z]\w*)+"
+        r"\bils?_\w+\s*(?:=|==|:=|:|equals|is the sum of|comprises|consists of)"
+        r"\s*[a-z]\w*(?:\s*[+-]\s*[a-z]\w*)+"
     ),
     # Counts drawn from the survey microdata behind a model's input data.
     "microdata_count": re.compile(
@@ -160,10 +184,15 @@ LICENCE_PATTERNS: dict[str, re.Pattern[str]] = {
         r"|persons?|observations?|records?|respondents?|people|rows?)\s+"
         r"(?:in|of|from)\s+(?:the\s+)?(?:dataset|survey|sample|microdata"
         r"|input data|GLSS\w*|LCMS\w*|UNHS\w*|ESPS\w*|[a-z]{2}_\d{4}_a\d+)"
-        r"|\b(?:population[- ]weighted|sample size|survey weights?)\b"
+        r"|\b(?:input data|microdata|survey|sample|dataset|GLSS\w*|LCMS\w*"
+        r"|UNHS\w*|ESPS\w*)\b[^.;]{0,40}?\b\d[\d,.]*\s*(?:households?"
+        r"|individuals?|persons?|observations?|records?|respondents?)\b"
+        r"|\b(?:population[- ]weighted|sample size|(?:mean|average|survey"
+        r"|sampling) weights?)\b"
     ),
-    # Machine-local paths (the licensed bundle lives on one machine).
-    "local_path": re.compile(r"(?:/Users/|/home/|~/|[A-Za-z]:\\)"),
+    # Machine-local paths (the licensed bundle lives on one machine); a URL
+    # whose path contains /home/ is not one.
+    "local_path": re.compile(r"(?:^|[\s(\[\'\"`])(?:/Users/|/home/|~/)|\b[A-Za-z]:\\"),
 }
 
 
@@ -198,6 +227,18 @@ def _strings(value: Any, path: str):
     elif isinstance(value, list):
         for index, item in enumerate(value):
             yield from _strings(item, f"{path}[{index}]")
+
+
+def _non_finite(value: Any, path: str):
+    """Yield the path of every NaN or infinite float under ``value``."""
+    if isinstance(value, float) and not math.isfinite(value):
+        yield path
+    elif isinstance(value, dict):
+        for key, item in value.items():
+            yield from _non_finite(item, f"{path}.{key}")
+    elif isinstance(value, list):
+        for index, item in enumerate(value):
+            yield from _non_finite(item, f"{path}[{index}]")
 
 
 def licence_hits(ledger: Any) -> list[str]:
@@ -248,12 +289,14 @@ def _entry_problems(
         problems.append(
             f"{where}: jurisdiction {entry.get('jurisdiction')!r} != {jurisdiction!r}"
         )
-    if "status" in entry and entry["status"] not in STATUSES:
-        problems.append(
-            f"{where}: status {entry['status']!r} not in {sorted(STATUSES)}"
-        )
-    if "oracle_scope" in entry and entry["oracle_scope"] not in ORACLE_SCOPES:
-        problems.append(f"{where}: oracle_scope {entry['oracle_scope']!r} unknown")
+    status = entry.get("status")
+    if "status" in entry and (not isinstance(status, str) or status not in STATUSES):
+        problems.append(f"{where}: status {status!r} not in {sorted(STATUSES)}")
+    scope = entry.get("oracle_scope")
+    if "oracle_scope" in entry and (
+        not isinstance(scope, str) or scope not in ORACLE_SCOPES
+    ):
+        problems.append(f"{where}: oracle_scope {scope!r} unknown")
     if not any(
         isinstance(entry.get(f), str) and entry[f] for f in ("summary", "observed")
     ):
@@ -271,6 +314,13 @@ def _entry_problems(
             problems.append(
                 f"{where}: observed_with fields outside allowlist: {unknown}"
             )
+        # Every value is a plain string: a nested object or a number here
+        # would carry content past the allowlist and break the page.
+        for key, value in observed_with.items():
+            if not isinstance(value, str) or not value:
+                problems.append(
+                    f"{where}: observed_with.{key} must be a non-empty string"
+                )
         if observed_with.get("model_root") != MODEL_ROOT:
             problems.append(f"{where}: observed_with.model_root must be {MODEL_ROOT!r}")
         if observed_with.get("country") != jurisdiction:
@@ -280,9 +330,11 @@ def _entry_problems(
             rf"{jurisdiction}_\d{{4}}", system
         ):
             problems.append(f"{where}: observed_with.system {system!r} malformed")
+        # A registered dataset name, optionally with a digit-free note (no
+        # room for a survey count): "rw_2024_a1 (registered name; ...)".
         dataset = observed_with.get("dataset")
         if not isinstance(dataset, str) or not re.match(
-            rf"{model.region}_\d{{4}}_a\d+(?: \(.*\))?$", dataset
+            rf"{model.region}_\d{{4}}_a\d+(?: \([^0-9()]*\))?$", dataset
         ):
             problems.append(f"{where}: observed_with.dataset {dataset!r} malformed")
 
@@ -346,6 +398,8 @@ def ledger_problems(
         problems.append(f"{name}: updated_at must be YYYY-MM-DD")
     if not isinstance(ledger.get("purpose"), str):
         problems.append(f"{name}: purpose must be a string")
+    for path in _non_finite(ledger, "$"):
+        problems.append(f"{name} {path}: non-finite number (not valid JSON)")
     entries = ledger.get("entries")
     if not isinstance(entries, list) or not entries:
         problems.append(f"{name}: entries must be a non-empty list")
