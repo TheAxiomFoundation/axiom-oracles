@@ -52,6 +52,7 @@ from .gh_income_tax import (
     gh_personal_reliefs_cases,
 )
 from .gh_capital_income import gh_capital_income_cases
+from .gh_dispy import gh_dispy_cases
 from .gh_excise_transfers import gh_excise_cases, gh_transfers_cases
 from .gh_presumptive import gh_presumptive_turnover_cases
 from .gh_ssnit import gh_ssnit_contributions_cases
@@ -182,6 +183,7 @@ def available_suites() -> tuple[str, ...]:
         "gh-vat-levies",
         "gh-excise",
         "gh-transfers",
+        "gh-dispy",
         "us-tariff",
     )
 
@@ -339,6 +341,8 @@ def load_suite(name: str):
         return gh_excise_cases()
     if name == "gh-transfers":
         return gh_transfers_cases()
+    if name == "gh-dispy":
+        return gh_dispy_cases()
     if name == "us-tariff":
         return us_tariff_cases()
     raise ValueError(f"Unknown suite: {name}")
@@ -382,6 +386,7 @@ __all__ = [
     "be_worker_tax_income_list_cases",
     "gh_income_tax_rate_schedule_cases",
     "gh_capital_income_cases",
+    "gh_dispy_cases",
     "gh_excise_cases",
     "gh_personal_reliefs_cases",
     "gh_presumptive_turnover_cases",
