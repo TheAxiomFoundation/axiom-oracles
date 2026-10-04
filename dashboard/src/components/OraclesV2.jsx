@@ -13,6 +13,7 @@ import {
 import ProgramPage from "./ProgramPage";
 import DispositionNote from "./DispositionNote";
 import HouseholdsView from "./Households";
+import SouthmodFindings from "./SouthmodFindings";
 import {
   suiteMeta,
   suiteLabel,
@@ -400,7 +401,17 @@ function OracleCard({ oracle, selected, onSelect }) {
   );
 }
 
-const REGION_ORDER = ["us", "ca", "uk", "be", "de", "dk"];
+// SOUTHMOD countries follow their registry order, so the SOUTHMOD record
+// and the overview census both get a chip per country model.
+const REGION_ORDER = [
+  "us",
+  "ca",
+  "uk",
+  "be",
+  "de",
+  "dk",
+  ...Object.keys(SOUTHMOD_MODELS),
+];
 
 function ProgRow({ p, onOpenProgram }) {
   return (
@@ -529,18 +540,23 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
     );
   }, [programRows, activeProgram, q]);
 
-  const scoped = useMemo(() => {
-    if (!activeProgram && !matchedKeys) return regionScoped;
-    const keep = (suite) => {
+  // null when no program filter is active.
+  const keepSuite = useMemo(() => {
+    if (!activeProgram && !matchedKeys) return null;
+    return (suite) => {
       const key = programKeyOf(suite);
       return activeProgram ? key === activeProgram : matchedKeys.has(key);
     };
+  }, [activeProgram, matchedKeys]);
+
+  const scoped = useMemo(() => {
+    if (!keepSuite) return regionScoped;
     return {
       ...regionScoped,
-      reports: regionScoped.reports.filter((r) => keep(r.suite)),
-      classes: regionScoped.classes.filter((c) => keep(c.suite)),
+      reports: regionScoped.reports.filter((r) => keepSuite(r.suite)),
+      classes: regionScoped.classes.filter((c) => keepSuite(c.suite)),
     };
-  }, [regionScoped, activeProgram, matchedKeys]);
+  }, [regionScoped, keepSuite]);
 
   const visibleRows = activeProgram
     ? programRows.filter((p) => p.key === activeProgram)
@@ -634,6 +650,16 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
             <ClassLedger classes={scoped.classes} />
           )}
         </div>
+
+        {oracle.id === "southmod" && (
+          <div className="v2-dossier-col">
+            <SouthmodFindings
+              region={region}
+              keepSuite={keepSuite}
+              onOpenSuite={(suite) => onOpenProgram(programKeyOf(suite))}
+            />
+          </div>
+        )}
       </div>
       {onBrowseHouseholds && (
         <div className="v2-record-foot">

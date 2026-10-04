@@ -114,8 +114,15 @@ semantics; the rows are ours.
    convention, so end-to-end liability comparisons need a composed
    `pilot_worker_oracle_pipeline`-style module on the rulespec side.
 4. **Issue ledger**: engine/model findings go in
-   `axiom_oracles/data/euromod_issues.json` (dashboard panel reads it);
-   encoding findings go on the `rulespec-<cc>` repo with the exact
+   `axiom_oracles/data/euromod_issues.json` (EUROMOD and UKMOD) or, for a
+   SOUTHMOD country, `axiom_oracles/data/<model>_issues.json` registered in
+   `axiom_oracles/southmod_issues.py`, whose closed field allowlist and
+   licence lint every SOUTHMOD ledger must pass. After editing a ledger run
+   `uv run scripts/publish_issue_ledgers.py` to refresh the dashboard copies
+   (`dashboard/public/data/euromod-issues.json`, `southmod-issues.json`); CI
+   runs it with `--check`. The SOUTHMOD oracle page renders the SOUTHMOD
+   ledgers; the EUROMOD copy is published but no page renders it yet.
+   Encoding findings go on the `rulespec-<cc>` repo with the exact
    arithmetic decomposition (see TheAxiomFoundation/rulespec-be#1 for the
    template).
 5. **Expectations**: hand-compute against post-uprating gross, exactly as
