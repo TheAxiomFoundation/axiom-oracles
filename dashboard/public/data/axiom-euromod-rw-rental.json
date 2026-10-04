@@ -1,0 +1,348 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "rw:statutes/law-2023-048/rental-income-tax#rental_income_tax",
+      "description": "Rwanda rental income tax (Law 048/2023 Articles 42-43)",
+      "left_weighted_sum": 267999.499992,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 267999.999992,
+      "weighted_difference": -0.5,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 4,
+  "cases": [
+    {
+      "case_id": "rw-rental-120000-nil",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income": 119999.9999977471
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 1,
+            "lfo": 0,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 0.0,
+            "ypr": 9332.463263552556
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ypr": [
+            "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income": 119999.9999977471
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "RW",
+        "scenario": "individual-rental-income-tax",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        },
+        "yearly_gross_rental": 120000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-rental-360000-zero-bound",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income": 359999.9999932413
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 1,
+            "lfo": 0,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 0.0,
+            "ypr": 27997.389790657664
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ypr": [
+            "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income": 359999.9999932413
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "RW",
+        "scenario": "individual-rental-income-tax",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        },
+        "yearly_gross_rental": 360000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-rental-800000-band2",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income": 799999.9999849808
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 1,
+            "lfo": 0,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 0.0,
+            "ypr": 62216.42175701704
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ypr": [
+            "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income": 799999.9999849808
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "RW",
+        "scenario": "individual-rental-income-tax",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        },
+        "yearly_gross_rental": 800000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-rental-2400000-band3",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income": 2399999.999954942
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 1,
+            "lfo": 0,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 0.0,
+            "ypr": 186649.26527105112
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ypr": [
+            "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:statutes/law-2023-048/rental-income-tax#input.gross_rental_income": 2399999.999954942
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "RW",
+        "scenario": "individual-rental-income-tax",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        },
+        "yearly_gross_rental": 2400000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda rental income tax (Law 048/2023 Articles 42-43)",
+      "id": "rw:statutes/law-2023-048/rental-income-tax#rental_income_tax",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom"
+  },
+  "errors": [],
+  "locales": [
+    "RW"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "82743c15350157f9391732b0066a9087a41eaa53",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-07-09T15:50:43Z",
+    "generated_by": "scripts/run_comparison.py::rw-rental-local",
+    "oracle": {
+      "euromod_country": "RW",
+      "euromod_dataset": "rw_2024_a1",
+      "euromod_system": "RW_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-rw",
+        "sha": "91e8f66c66449795ee7535d7d4ed2687f6ea8841"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "rw-rental",
+  "summary": {
+    "comparison_count": 4,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": [],
+    "match_count": 4,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 4,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_weight": 0
+    }
+  }
+}
