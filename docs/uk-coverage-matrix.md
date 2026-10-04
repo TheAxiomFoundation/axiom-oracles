@@ -262,7 +262,11 @@ this is a large blind spot the engine oracles structurally cannot close.
 The `entitledto` recorded-fixture oracle
 (`axiom_oracles/adapters/entitledto/`, suite `uk-ctr`; its report artifact is
 `reports/axiom-uk-council-tax-reduction-entitledto.json`, deliberately
-uncommitted until fixtures are captured) closes it: entitledto models every
+uncommitted until fixtures are captured) is meant to give per-council reference
+values for part of it. Its 8 fixtures cover 6 councils (4 in England), and all
+8 are `pending_capture`; once captured, a case is graded against PolicyEngine
+only where PolicyEngine models that council's scheme and prices the same
+council-tax liability. entitledto models every
 council's CTR scheme, so it is the most complete per-council reference
 (entitledto publishes estimates, not authoritative awards). It is a *recorded*
 oracle — entitledto's legal notices bar systematic collection on the free

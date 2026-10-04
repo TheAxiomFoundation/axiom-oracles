@@ -149,10 +149,13 @@ but its constant repeal result is not executed or counted as tax coverage.
 5. Publish the canonical v2.1 report only after every residual is dispositioned,
    independent review is clean, and current CI is green.
 
-Population readiness is a legal-coverage claim, not merely a successful engine
-invocation. A state is ready only when every included case has a non-circular
-projection, every excluded case has a stable reason, and all operative branches
-within the declared comparison scope are encoded and tested.
+Population readiness is a projection-contract status. The contract validator
+accepts a state as `ready` only when none of its input or relation slots is
+`blocked` (`axiom_oracles/bridges/state_tax_populace.py`); every slot must carry
+evidence, and a PolicyEngine boundary may not reuse the comparison target. The
+runner records a fixed disposition for each tax unit it does not compare, such
+as `excluded_unknown_geography`. Neither checks that the RuleSpec branches in
+the comparison scope are encoded or tested.
 
 Validate the current contract with:
 
