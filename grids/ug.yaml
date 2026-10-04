@@ -61,6 +61,28 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 124507512.48
+    - id: ug-nssf-probe-income-age-60
+      period: '2026'
+      scenario: single-formal-employee-nssf
+      parameters:
+        annual_total_wages: 6225375.6
+      entities:
+      - id: head
+        kind: person
+        age: 60
+        relation: HeadOfHousehold
+        yearly_earned_income: 6225375.6
+    - id: ug-nssf-probe-income-age-70
+      period: '2026'
+      scenario: single-formal-employee-nssf
+      parameters:
+        annual_total_wages: 6225375.6
+      entities:
+      - id: head
+        kind: person
+        age: 70
+        relation: HeadOfHousehold
+        yearly_earned_income: 6225375.6
   ug-paye-rate-schedule:
     locale: UG
     entity: Person

@@ -8529,6 +8529,52 @@
       "varied_fields": 3,
       "verdict_concepts": {}
     },
+    "ug-nssf-contributions": {
+      "binding": "unbound",
+      "binding_defects": [
+        "ug-nssf-contributions: chunk index dashboard/public/data/cases/ug-nssf-contributions/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 6,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "annual_total_wages": {
+          "distinct": 4,
+          "state": "varied"
+        },
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-ug-nssf-contributions.json",
+      "report_sha256": "3a93fe5661f85f02499bb87a419f957cabc8141624ac259e2ce936c5fa16ab57",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "ug-paye-rate-schedule": {
       "binding": "unbound",
       "binding_defects": [
