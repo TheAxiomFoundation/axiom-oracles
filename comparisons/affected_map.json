@@ -468,6 +468,51 @@
       "source": "comparisons/dk-child-youth-benefit-couple-euromod.yaml"
     },
     {
+      "suite": "et-business-mat",
+      "name": null,
+      "report": "axiom-euromod-et-business-mat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-business-mat.yaml"
+    },
+    {
+      "suite": "et-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-et-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "et-pension-contributions",
+      "name": null,
+      "report": "axiom-euromod-et-pension-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-pension-contributions.yaml"
+    },
+    {
+      "suite": "et-presumptive",
+      "name": null,
+      "report": "axiom-euromod-et-presumptive.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-presumptive.yaml"
+    },
+    {
+      "suite": "et-vat",
+      "name": null,
+      "report": "axiom-euromod-et-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-vat.yaml"
+    },
+    {
       "suite": "fiit-ecps",
       "name": null,
       "report": "axiom-policyengine-fiit-ecps.json",

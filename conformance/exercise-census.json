@@ -3776,6 +3776,220 @@
       "varied_fields": 0,
       "verdict_concepts": {}
     },
+    "et-business-mat": {
+      "binding": "unbound",
+      "binding_defects": [
+        "et-business-mat: chunk index dashboard/public/data/cases/et-business-mat/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 5,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "annual_business_income": {
+          "distinct": 5,
+          "state": "varied"
+        },
+        "annual_gross_receipts": {
+          "distinct": 4,
+          "state": "varied"
+        },
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 3,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-et-business-mat.json",
+      "report_sha256": "b455403a7b5ba442f069b09ca60961de6b82119f2465e3c1e54a9e9bd3bd682a",
+      "varied_fields": 3,
+      "verdict_concepts": {}
+    },
+    "et-paye-rate-schedule": {
+      "binding": "unbound",
+      "binding_defects": [
+        "et-paye-rate-schedule: chunk index dashboard/public/data/cases/et-paye-rate-schedule/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 8,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "monthly_employment_income": {
+          "distinct": 8,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-et-paye-rate-schedule.json",
+      "report_sha256": "97494f136cb8a8dddcd52e86b7cf9f03fd6e38262c18fe210c977ea0ce079e19",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "et-pension-contributions": {
+      "binding": "unbound",
+      "binding_defects": [
+        "et-pension-contributions: chunk index dashboard/public/data/cases/et-pension-contributions/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 3,
+      "chunk_manifest": [],
+      "constant_fields": 3,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "monthly_salary": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 2,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-et-pension-contributions.json",
+      "report_sha256": "1e44a1323630c17f38cca43929c714568ff1ce9dde971808e82f128625bd4bf7",
+      "varied_fields": 2,
+      "verdict_concepts": {}
+    },
+    "et-presumptive": {
+      "binding": "unbound",
+      "binding_defects": [
+        "et-presumptive: chunk index dashboard/public/data/cases/et-presumptive/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 5,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "annual_gross_receipts": {
+          "distinct": 5,
+          "state": "varied"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-et-presumptive.json",
+      "report_sha256": "dc981339f9f99057bf56bf0851b0b7b7503756a14589b58e5763530923b27ed2",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "et-vat": {
+      "binding": "unbound",
+      "binding_defects": [
+        "et-vat: chunk index dashboard/public/data/cases/et-vat/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 6,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-et-vat.json",
+      "report_sha256": "166c0af268e3e5e3090aa8fc3e57fda624887f089eb039f6504b59e65d95d5f5",
+      "varied_fields": 0,
+      "verdict_concepts": {}
+    },
     "fiit-ecps": {
       "binding": "unbound",
       "binding_defects": [
