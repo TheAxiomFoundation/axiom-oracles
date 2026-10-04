@@ -236,6 +236,7 @@
     "axiom-euromod-gh-presumptive-turnover.json",
     "axiom-euromod-gh-vat-levies.json",
     "axiom-euromod-gh-excise.json",
-    "axiom-euromod-gh-transfers.json"
+    "axiom-euromod-gh-transfers.json",
+    "axiom-euromod-gh-dispy.json"
   ]
 }
