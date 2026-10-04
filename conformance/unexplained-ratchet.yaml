@@ -492,6 +492,8 @@ ratchets:
   unexplained_max: 0
 - suite: zm-paye-rate-schedule
   unexplained_max: 0
+- suite: zm-sct
+  unexplained_max: 0
 - suite: zm-turnover
   unexplained_max: 0
 - suite: zm-vat

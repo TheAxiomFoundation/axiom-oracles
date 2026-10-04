@@ -44,7 +44,8 @@ for name in \
   zm-napsa-contributions \
   zm-nhima-contributions \
   zm-vat \
-  zm-excise-ad-valorem; do
+  zm-excise-ad-valorem \
+  zm-sct; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

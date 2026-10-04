@@ -1925,6 +1925,15 @@
       "source": "comparisons/zm-paye-rate-schedule.yaml"
     },
     {
+      "suite": "zm-sct",
+      "name": null,
+      "report": "axiom-euromod-zm-sct.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-sct.yaml"
+    },
+    {
       "suite": "zm-turnover",
       "name": null,
       "report": "axiom-euromod-zm-turnover.json",

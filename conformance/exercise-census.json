@@ -11332,6 +11332,44 @@
       "varied_fields": 1,
       "verdict_concepts": {}
     },
+    "zm-sct": {
+      "binding": "unbound",
+      "binding_defects": [
+        "zm-sct: chunk index dashboard/public/data/cases/zm-sct/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 2,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-zm-sct.json",
+      "report_sha256": "dbd0c8612f856b8c7f7196299bf593b34ef6e8e104b8ee2326a091502fe27082",
+      "varied_fields": 0,
+      "verdict_concepts": {}
+    },
     "zm-turnover": {
       "binding": "unbound",
       "binding_defects": [
