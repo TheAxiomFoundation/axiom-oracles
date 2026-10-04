@@ -153,6 +153,37 @@ export function southmodAcknowledgement() {
   );
 }
 
+/**
+ * UKMOD, CeMPA's model for the UK and its four nations, also runs on the
+ * EUROMOD platform, so its reports carry engine id "euromod" too. Every UK
+ * suite on that engine runs this registration-free public release (the
+ * euromod_model_root of comparisons/uk-*-ukmod.yaml); the dashboard test
+ * scripts/test-oracle-attribution.mjs holds the configs and reports to it.
+ */
+export const UKMOD_RELEASE = "B2026.03";
+
+/**
+ * The acknowledgement UKMOD's Terms and Conditions ask of every output that
+ * uses it (microsimulation.ac.uk/ukmod/access): the version, CeMPA as its
+ * developers and the reference paper, plus the changes the comparison
+ * makes, which its CC BY-NC-ND 4.0 licence asks users to indicate.
+ * scripts/test-oracle-attribution.mjs checks every override the UKMOD
+ * configs and reports record is named here.
+ */
+export function ukmodAcknowledgement() {
+  // The Terms' recommended wording, verbatim except for the version and the
+  // author it leaves for the user to fill in.
+  return (
+    `The results presented here are based on UKMOD version ${UKMOD_RELEASE}. ` +
+    "UKMOD is maintained, developed and managed by the Centre for Microsimulation and Policy Analysis (CeMPA) at the University of Essex. " +
+    "The process of extending and updating UKMOD was financially supported by the Nuffield Foundation (2018-2021) and the abrdn Financial Fairness Trust (2023-2024). " +
+    "The results and their interpretation are the Axiom Foundation's sole responsibility. " +
+    "Reference: Richiardi M, Collado D, Popova D (2021). UKMOD – A new tax-benefit model for the four nations of the UK. International Journal of Microsimulation, 14(1): 92-101. DOI: 10.34196/IJM.00231. " +
+    "Changes: the runs override some UKMOD parameters on a temporary copy of the model, never the model itself. Most benefit suites switch off UKMOD's take-up policies (BTA_uk, random_uk); some set take-up rates to 1; the Scottish Child Payment suite also sets the Universal Credit transition share ($UCtransition) to 0. Switching the take-up policies off does not remove UKMOD's take-up draw or its Universal Credit transition, so some Universal Credit, Pension Credit and Housing Benefit results stay zero; the record marks each as a UKMOD gap. " +
+    "Input data: every comparison household is synthetic; of UKMOD's bundled training_data file only the column header is read."
+  );
+}
+
 // Suite-slug words spelled out (or capitalized) in SOUTHMOD suite labels.
 const SOUTHMOD_WORDS = {
   dispy: "disposable income",
@@ -1129,18 +1160,50 @@ export function isAxiomPair(report) {
   return report?.engines?.left === "axiom" || report?.engines?.right === "axiom";
 }
 
-/** The non-Axiom engine in an Axiom-pair report (e.g. policyengine, taxsim). */
+/**
+ * The oracle behind an Axiom-pair report (e.g. policyengine, taxsim): the
+ * non-Axiom engine, named for the model it ran (see platformOracle).
+ */
 export function otherOracle(report) {
   if (!isAxiomPair(report)) return null;
   const engine =
     report.engines.left === "axiom" ? report.engines.right : report.engines.left;
-  // SOUTHMOD models run on the EUROMOD engine but are UNU-WIDER's models,
-  // licensed with an acknowledgement requirement: never credit them to the
-  // European Commission's EUROMOD.
-  if (engine === "euromod" && SOUTHMOD_MODELS[suiteRegion(report.suite)]) {
-    return "southmod";
-  }
-  return engine;
+  return platformOracle(engine, report.suite);
+}
+
+/**
+ * A report's engine pair as the dashboard names them: each side through
+ * platformOracle, so labels that name both sides ("UKMOD returned no
+ * value") credit the model that ran. Matching against known causes keeps
+ * the raw report.engines.
+ */
+export function displayEngines(report) {
+  const engines = report?.engines || {};
+  return {
+    left: platformOracle(engines.left, report?.suite),
+    right: platformOracle(engines.right, report?.suite),
+  };
+}
+
+/** An engine id named for the model it ran: only "euromod" is refined. */
+export function platformOracle(engine, suite) {
+  return engine === "euromod" ? euromodPlatformModel(suite) : engine;
+}
+
+/**
+ * Which model a EUROMOD-platform suite ran. Every model on the platform
+ * reports engine id "euromod", so the suite's region tells them apart.
+ * SOUTHMOD models are UNU-WIDER's and UKMOD is CeMPA's, each licensed with
+ * its own acknowledgement: never credit either to the European Commission's
+ * EUROMOD. Every other region stays "euromod": Axiom runs the JRC's
+ * EUROMOD J2.0+ release for BE and DK, and for DE in the EUROMOD-vs-GETTSIM
+ * cross-checks.
+ */
+export function euromodPlatformModel(suite) {
+  const region = suiteRegion(suite);
+  if (SOUTHMOD_MODELS[region]) return "southmod";
+  if (region === "uk") return "ukmod";
+  return "euromod";
 }
 
 /** The SOUTHMOD country model behind a suite (e.g. "GHAMOD"), or null. */
