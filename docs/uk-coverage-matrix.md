@@ -9,6 +9,8 @@ oracle-compared, or already live-compared to PolicyEngine.
 This is the PolicyEngine-oracle analogue of `docs/be-coverage-matrix.md` (the
 EUROMOD Belgium scoper).
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
+
 ## Provenance (facts from code/config, not memory)
 
 - **PolicyEngine-UK facts** are read from the installed model at

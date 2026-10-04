@@ -6,6 +6,8 @@ the complete, sha256-pinned US Populace validation population. The historical
 `ecps` command name is retained for compatibility, but the dataset is the certified
 `populace-us` artifact rather than Enhanced CPS.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
+
 ## Why the grid runner cannot simply use a larger sample
 
 The current-law campaign exercises 42 RuleSpec modules with 252 hand-computed

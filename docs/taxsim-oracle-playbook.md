@@ -6,6 +6,10 @@ mechanics of the comparison path (shared input row, state-code conversion,
 law-year support) live in [policyengine-taxsim.md](policyengine-taxsim.md);
 this page is the standing recipe and the standing *judgment*.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
 Every TAXSIM lane grades **Axiom** against TAXSIM. Oracle-vs-oracle
 comparisons (PolicyEngine vs TAXSIM) are diagnostic tooling for triage
 sessions, not published lanes — an agreement rate that does not bear on

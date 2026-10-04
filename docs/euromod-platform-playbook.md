@@ -21,7 +21,7 @@ XMLs and a bundled demo-schema file are required.
 |---|---|---|
 | EUROMOD (JRC) | all EU member states | direct download, no registration: `EUROMOD_RELEASES_J*.zip` from the JRC download page |
 | UKMOD (CeMPA) | UK + nations | `git clone --branch <release> https://github.com/centreformicrosimulation/UKMOD-PUBLIC` |
-| SOUTHMOD (UNU-WIDER) | ET, GH, MZ, TZ, UG, ZM, RW, SA (SAMOD), VN, EC (ECUAMOD), BO, PE, CO, … | free non-commercial access via the UNU-WIDER SOUTHMOD request form (per-model bundles; same engine, so the adapter applies unchanged — verify each bundle ships a demo/training dataset and note its DRD provenance) |
+| SOUTHMOD (UNU-WIDER) | Ethiopia, Ghana, Mozambique, Tanzania, Uganda, Zambia, Rwanda, South Africa (SAMOD), Vietnam, Ecuador (ECUAMOD), Bolivia, Peru, Colombia, … | free non-commercial access via the UNU-WIDER SOUTHMOD request form (per-model bundles; same engine, so the adapter applies unchanged — verify each bundle ships a demo/training dataset and note its DRD provenance) |
 
 Each release documents its demo data in a per-country DRD
 (`Input/DRD_<CC>_training_data.xls`). The EUROMOD training datasets are

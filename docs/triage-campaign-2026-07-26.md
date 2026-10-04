@@ -6,6 +6,10 @@ characterized. Method: per-row verification against persisted household
 evidence (input/output panels), PE parameter surfaces as oracle ground
 truth, PE-side decomposition where our reports can't decide.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
 ## Ledger (start: 14,479 → **4,611**; batch 4 = AZ decomposed + NC harvested)
 
 AZ (597): fully explained — composition bug (snap_eligible binds

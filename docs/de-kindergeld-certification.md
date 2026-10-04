@@ -111,7 +111,7 @@ manual certificate-status edit.
 
 ## Claim labels
 
-Stored EUROMOD/GETTSIM result rows and external engine release identities are
+Stored EUROMOD/GETTSIM result rows and engine release identities are
 attested observations because ordinary refresh does not rerun those licensed
 or optional engines. Their row digests and comparison verdicts are computed.
 Axiom results, fresh released-binary replay, hashes, signature verification,

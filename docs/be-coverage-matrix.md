@@ -6,6 +6,10 @@ comparison suites. This gates the Belgium encoding wave: a row's status tells a
 worker whether the instrument is unencoded, encoded-but-unvalidated, or already
 oracle-compared.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
 - **EUROMOD facts** are parsed from the model itself:
   `EUROMOD_RELEASES_J2.0+/XMLParam/Countries/BE/BE.xml`, system `BE_2025`
   (SystemID `98820bac-c53d-4fac-8abf-96e0b43d29eb`), sha256

@@ -3,6 +3,10 @@
 This document classifies the residual mismatches from the PE/TAXSIM smoke test
 (issue #6) and identifies their root causes.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
 ## Summary
 
 All federal income tax mismatches trace to **two NBER TAXSIM modeling gaps** in
