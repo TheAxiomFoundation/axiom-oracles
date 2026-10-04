@@ -250,6 +250,8 @@
     "axiom-euromod-zm-paye-rate-schedule.json",
     "axiom-euromod-zm-turnover.json",
     "axiom-euromod-zm-napsa-contributions.json",
-    "axiom-euromod-zm-nhima-contributions.json"
+    "axiom-euromod-zm-nhima-contributions.json",
+    "axiom-euromod-zm-vat.json",
+    "axiom-euromod-zm-excise-ad-valorem.json"
   ]
 }

@@ -42,7 +42,9 @@ for name in \
   zm-paye-rate-schedule \
   zm-turnover \
   zm-napsa-contributions \
-  zm-nhima-contributions; do
+  zm-nhima-contributions \
+  zm-vat \
+  zm-excise-ad-valorem; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

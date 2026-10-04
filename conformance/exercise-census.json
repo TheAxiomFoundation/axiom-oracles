@@ -11160,6 +11160,48 @@
         }
       }
     },
+    "zm-excise-ad-valorem": {
+      "binding": "unbound",
+      "binding_defects": [
+        "zm-excise-ad-valorem: chunk index dashboard/public/data/cases/zm-excise-ad-valorem/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 4,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_expenditure_raw": {
+          "distinct": 2,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-zm-excise-ad-valorem.json",
+      "report_sha256": "6a54e1affc70aa055cd40541aa6d65b61d475f45f5a817229a3776b1874be2f2",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "zm-napsa-contributions": {
       "binding": "unbound",
       "binding_defects": [
@@ -11329,6 +11371,48 @@
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-euromod-zm-turnover.json",
       "report_sha256": "887ec2a6c3dee3d976bdb824e0e61c2f3db1dda9c7b5be4a221708ad2466d480",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "zm-vat": {
+      "binding": "unbound",
+      "binding_defects": [
+        "zm-vat: chunk index dashboard/public/data/cases/zm-vat/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 3,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_expenditure_raw": {
+          "distinct": 3,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-zm-vat.json",
+      "report_sha256": "bf9fb46be5f65fe997e378719ff1a59c5f450a6e1e0a6efec3f7648c51b1ba2a",
       "varied_fields": 1,
       "verdict_concepts": {}
     }

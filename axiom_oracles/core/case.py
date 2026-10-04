@@ -768,6 +768,25 @@ class Concepts:
         "national-health-insurance-general-regulations-2019"
         "#employer_monthly_contribution_amount"
     )
+    # Zambia VAT standard rate (16% per S.I. 14 of 2008 under Cap. 331
+    # s.9(3)), compared to MicroZAMOD ``tva_s`` on the bridged
+    # ``il_vat01`` post-uprating VAT base.
+    ZM_VAT_AMOUNT = (
+        "zm:statutes/cap-331/value-added-tax-act"
+        "#vat_amount"
+    )
+    # Zambia wine and spirits ad-valorem excise (60%), compared to
+    # MicroZAMOD ``tex02_s`` on single-item expenditure cases (Axiom
+    # input = raw expenditure x the probed ZM_2025 uprating factor for
+    # these items; no output column carries their uprated value).
+    ZM_WINE_DUTY = (
+        "zm:statutes/act-2024-24/customs-and-excise-amendment-2024"
+        "#wine_duty"
+    )
+    ZM_SPIRITS_DUTY = (
+        "zm:statutes/act-2024-24/customs-and-excise-amendment-2024"
+        "#spirits_duty"
+    )
 
     # Composed Denmark børne- og ungeydelse pipelines (rulespec-dk). The
     # original surface pays one recipient and the couple surface applies § 4,

@@ -1889,6 +1889,15 @@
       "source": "comparisons/wv-income-tax-liability.yaml"
     },
     {
+      "suite": "zm-excise-ad-valorem",
+      "name": null,
+      "report": "axiom-euromod-zm-excise-ad-valorem.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-excise-ad-valorem.yaml"
+    },
+    {
       "suite": "zm-napsa-contributions",
       "name": null,
       "report": "axiom-euromod-zm-napsa-contributions.json",
@@ -1923,6 +1932,15 @@
         "TheAxiomFoundation/rulespec-zm"
       ],
       "source": "comparisons/zm-turnover.yaml"
+    },
+    {
+      "suite": "zm-vat",
+      "name": null,
+      "report": "axiom-euromod-zm-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-vat.yaml"
     }
   ]
 }

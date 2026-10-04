@@ -59,6 +59,10 @@ from .gh_ssnit import gh_ssnit_contributions_cases
 from .gh_vat_levies import gh_vat_levies_cases
 from .ug_income_tax import ug_paye_rate_schedule_cases
 from .ug_dispy import ug_dispy_cases
+from .zm_consumption import (
+    zm_excise_ad_valorem_cases,
+    zm_vat_cases,
+)
 from .zm_core import (
     zm_napsa_contributions_cases,
     zm_nhima_contributions_cases,
@@ -213,6 +217,8 @@ def available_suites() -> tuple[str, ...]:
         "zm-turnover",
         "zm-napsa-contributions",
         "zm-nhima-contributions",
+        "zm-vat",
+        "zm-excise-ad-valorem",
         "us-tariff",
     )
 
@@ -398,6 +404,10 @@ def load_suite(name: str):
         return zm_napsa_contributions_cases()
     if name == "zm-nhima-contributions":
         return zm_nhima_contributions_cases()
+    if name == "zm-vat":
+        return zm_vat_cases()
+    if name == "zm-excise-ad-valorem":
+        return zm_excise_ad_valorem_cases()
     if name == "us-tariff":
         return us_tariff_cases()
     raise ValueError(f"Unknown suite: {name}")
@@ -449,10 +459,12 @@ __all__ = [
     "gh_transfers_cases",
     "gh_vat_levies_cases",
     "ug_dispy_cases",
+    "zm_excise_ad_valorem_cases",
     "zm_napsa_contributions_cases",
     "zm_nhima_contributions_cases",
     "zm_paye_rate_schedule_cases",
     "zm_turnover_cases",
+    "zm_vat_cases",
     "ug_fuel_excise_cases",
     "ug_lst_cases",
     "ug_nssf_contributions_cases",
