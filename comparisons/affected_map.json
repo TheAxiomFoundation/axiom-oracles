@@ -615,6 +615,15 @@
       "source": "comparisons/gh-ssnit-contributions.yaml"
     },
     {
+      "suite": "gh-vat-levies",
+      "name": null,
+      "report": "axiom-euromod-gh-vat-levies.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-vat-levies.yaml"
+    },
+    {
       "suite": "hi-income-tax-liability",
       "name": null,
       "report": "axiom-policyengine-taxsim-hi-income-tax-liability.json",

@@ -182,6 +182,8 @@ ratchets:
   unexplained_max: 0
 - suite: gh-ssnit-contributions
   unexplained_max: 0
+- suite: gh-vat-levies
+  unexplained_max: 0
 - suite: hi-income-tax-liability
   unexplained_max: 0
 - suite: hi-income-tax-parameters

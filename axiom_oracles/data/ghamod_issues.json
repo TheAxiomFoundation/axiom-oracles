@@ -148,6 +148,62 @@
     "gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable",
     "gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount"
    ]
+  },
+  {
+   "id": "ghamod-tva-wedge-double-and-triple-counts-levies",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tva_s",
+    "ils_taxco"
+   ],
+   "statute": "Value Added Tax Act, 2013 (Act 870) chain (2025 cascade: levies 6% + VAT 15% on the levy-inclusive value = 21.9% of the standard base)",
+   "observed": "On one standard-rated item (x0111105) with matching xhh and a post-uprating standard-rated base (ils_vat_std) of 1,000 a month, GH_2025 returns tva01_s / tva02_s / tva03_s = 25 / 25 / 10 (2.5%, 2.5% and 1%, the statutory levy rates), tva_s = 270 (27%) and ils_taxco = 330 (33%). Both totals exceed the 15% VAT rate plus the 60 of levies (210), by one and two further multiples of the levy total respectively. GH_2024 gives the same shares (tva_s 237.10 and ils_taxco 289.78 on a base of 878.13: 27% and 33%). The statutory 2025 cascade is 21.9% of the base: levies of 6% plus VAT of 15% on the levy-inclusive value.",
+   "axiom_position": "The encoded 2026 modules (Act 1151 VAT 15%; Act 1152 GETFund 2.5%; Act 1156 NHIL 2.5%) follow the reform texts; the levy rates carry unchanged across the boundary, so the gh-vat-levies suite compares the two levies against tva01_s/tva02_s exactly and records this entry for VAT, which has no live case because GHAMOD emits no pure-VAT output.",
+   "reported_upstream": "Candidate finding #8 for UNU-WIDER (southmod@wider.unu.edu), the largest in magnitude so far: about 5 points of the standard-rated base on tva_s (27% against 21.9%) and about 11 on ils_taxco (33%). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-vat-levies"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1151/value-added-tax-2025/section-3-rate-of-the-tax#value_added_tax_amount"
+   ]
+  },
+  {
+   "id": "ghamod-nhil-getfund-charged-on-household-expenditure",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "oracle_outputs": [
+    "tva01_s",
+    "tva02_s",
+    "ils_vat_std"
+   ],
+   "statute": "National Health Insurance Act, 2012 (Act 852) s.47 as substituted by Act 1156; Ghana Education Trust Fund Act, 2000 (Act 581) s.3A as substituted by Act 1152",
+   "observed": "GHAMOD charges NHIL (tva01_s) and the GETFund Levy (tva02_s) at 2.5% each of household expenditure on standard-rated items, its ils_vat_std (probed: 25 each on a base of 1,000 a month; live in gh-vat-levies: 300 each on 12,000 a year and 1,500 each on 60,000). Acts 1156 and 1152 charge each levy on taxable supplies, that is on the value of the supply. Household expenditure recorded at purchase prices already includes the levies and VAT, so on such expenditure GHAMOD's base is larger than the statutory one.",
+   "axiom_position": "The gh-vat-levies cases give Axiom the same amount (GHAMOD's post-uprating ils_vat_std) as levy_chargeable_value and taxable_value_of_goods_or_services, so they test the 2.5% rates on an identical base, not the base definition.",
+   "reported_upstream": "A convention adopted for the comparison, not a defect report.",
+   "affected_comparisons": [
+    "gh-vat-levies"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount",
+    "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount"
+   ]
   }
  ]
 }
