@@ -1196,3 +1196,47 @@ def test_a_snapshot_pin_keeps_the_snapshots_measured_state(run_comparison, tmp_p
     assert entry["dirty"] is True
     with pytest.raises(SystemExit):
         run_comparison._guard_unclean_rulespec_trees("pinned-suite", {**block, "run_kind": "weekly"})
+
+
+def test_a_pinned_federal_run_records_only_the_snapshot_that_ran(
+    run_comparison, tmp_path, monkeypatch
+):
+    """With several configured roots, the pinned federal runner keeps only
+    the one holding the pin. Provenance must record exactly that checkout:
+    a set-aside or missing root would otherwise carry the pin's SHA with no
+    worktree state, and a non-manual run would be refused for a tree that
+    never ran."""
+    snapshot = _repo(tmp_path / "pins" / "rulespec-us")
+    tree = _git(snapshot, "rev-parse", "HEAD^{tree}").strip()
+    pin = "4" * 40
+    params = {
+        "policy": "aca_ptc",
+        "rulespec_roots": [str(tmp_path / "missing" / "rulespec-us"), str(snapshot)],
+        "rulespec_upstream_sha": pin,
+        "rulespec_upstream_tree": tree,
+        "policyengine_version": "4.18.9",
+        "policyengine_us_version": "1.767.3",
+        "policyengine_core_version": "3.30.3",
+    }
+    real_run = subprocess.run
+
+    def fake_run(cmd, *args, **kwargs):
+        if cmd[0] == "uv":  # the generator; the git checks run for real
+            return subprocess.CompletedProcess(cmd, 0)
+        return real_run(cmd, *args, **kwargs)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    config = {"name": "fed-pinned", "runner": {"type": "federal-tax-liability-grid", "parameters": params}}
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "fed-pinned"}))
+
+    run_comparison._run_federal_tax_liability_grid(config["runner"], output)
+    block = run_comparison._build_run_provenance(config, "federal-tax-liability-grid", output)
+
+    assert params["rulespec_roots"] == [str(snapshot.resolve())]
+    assert block["rulespecs"] == [
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pin, "dirty": False}
+    ]
+    run_comparison._guard_unclean_rulespec_trees(
+        "fed-pinned", {**block, "run_kind": "affected-rerun"}
+    )

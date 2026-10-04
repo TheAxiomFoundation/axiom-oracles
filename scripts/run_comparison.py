@@ -2862,7 +2862,12 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
                     "rulespec_remote fallback is declared"
                 )
             roots = [_ensure_rulespec_us_checkout(str(remote), upstream_sha)]
-            params["rulespec_roots"] = [str(roots[0])]
+        # The config object is shared with the outer provenance stamper,
+        # which stamps the verified pin onto every recorded root. Record
+        # exactly the snapshot that runs: a set-aside or missing root would
+        # otherwise carry the pin's SHA without having run it (and, with no
+        # worktree state, refuse a non-manual run).
+        params["rulespec_roots"] = [str(root) for root in roots]
     elif not roots:
         remote = params.get("rulespec_remote")
         if not remote:
