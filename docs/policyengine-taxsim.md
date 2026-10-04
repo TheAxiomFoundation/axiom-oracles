@@ -77,6 +77,56 @@ its 2026 model, verified empirically against the binary:
   3.99%, GA 5.19% vs 4.99%). The state income-tax liability suites
   disposition each such residual per case.
 
+## Diagnostic Lines In TAXSIM Stdout
+
+The binary writes Fortran diagnostics to the same stdout stream as its CSV
+table. In the bundled fixtures, the pinned macOS build prints six copies of
+a line such as `" d2       29126       25000         103         346"`
+immediately before the CSV rows of Utah (TAXSIM state 45) profiles with
+$30,000 wages and primary filers aged 73, 74, and 80. The `idtl=0` fixture
+places those lines before the header itself. These captures establish the
+behavior for their input profiles, not an age-only trigger (fixtures in
+`tests/fixtures/taxsim/`, captured 2026-09-27).
+
+The original `fiit-taxsim-ecps` batch-13 failure and solo/complement checks
+were reported on 2026-09-27; those historical inputs and captures are not
+bundled here.
+policyengine-taxsim's `TaxsimRunner.run()` reads the stream with
+`pandas.read_csv` and coerces every column to numeric, so each diagnostic line
+became a phantom row with a NaN `taxsimid` and the comparator failed with
+`unexpected [nan, nan, ...]`.
+
+`TaxsimPackageRunner` therefore uses policyengine-taxsim only to format the
+input file and locate the binary, runs the binary itself, and parses stdout
+with `axiom_oracles.adapters.taxsim.output.parse_taxsim_stdout`:
+
+- duplicate normalized submitted ids are rejected before either runner path
+  executes, with an error naming the id and colliding cases;
+- a line is a record when it has the header's field count and a numeric first
+  field; every other non-blank line is a diagnostic attributed to the record
+  whose row follows it, kept on `EngineResult.raw["taxsim_stdout_diagnostics"]`
+  and summarized in one `WARNING` log line per batch;
+- a submitted case with no output row gets an `errors` entry naming its
+  `taxsimid` (plus stderr and any trailing stdout), so it surfaces in the
+  report's `errors` rows instead of vanishing;
+- an output row matching no submitted case, a duplicate row, a nonzero exit,
+  or trailing diagnostics that no missing case can own abort the batch with
+  the offending ids or lines in the message.
+
+These stdout and result-row checks apply to `TaxsimPackageRunner`.
+`PolicyEngineTaxsimRunner` uses its own in-process result conversion.
+
+Verbose `idtl=5` output is also accepted: each `Basic Output` record and its
+`Marginal Rates` section supply the same fields as the pinned package's verbose
+parser, including `state_name`. Numeric fields must be finite and complete;
+records use their output IDs for the same duplicate and case-attribution checks.
+Input echoes and detailed tax calculations do not become result rows. A recorded
+California fixture and tests with the pinned formatter and binary cover this mode.
+
+The pinned Linux build (`taxsimtest-linux.exe`) refuses law year 2026
+outright (`TAXSIM: Federal tax calculator available 1960 - 2024 only.`,
+`STOP 1`), so 2026 TAXSIM suites currently run only with the macOS build.
+
 ## Reproduce The Smoke Test
 
 ```bash
