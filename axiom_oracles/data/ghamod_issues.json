@@ -66,6 +66,33 @@
    "affected_concepts": [
     "gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief"
    ]
+  },
+  {
+   "id": "ghamod-tscee-tscer-age-15-45-contributor-cap",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tscee_s",
+    "tscer_s"
+   ],
+   "statute": "National Pensions Act, 2008 (Act 766) s.3",
+   "observed": "GHAMOD pays SSNIT contributions only for formal earners aged 15 to 45. Probed on formal-sector earners (lfo=1) with post-uprating yem of 1,000 a month: ages 15, 35 and 45 get tscee_s = 55 and tscer_s = 130 (exactly 5.5% and 13%); ages 14, 46 and 50 get 0 for both.",
+   "axiom_position": "Act 766 s.3, the section rulespec-gh encodes (gh/statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme.yaml), sets the worker's 5.5% and the employer's 13% on 'the worker's salary' with no age condition; whether other provisions of Act 766 limit coverage by age has not been checked here. The gh-ssnit-contributions suite keeps its live cases at age 35, inside GHAMOD's window, and records this entry for the out-of-window divergence.",
+   "reported_upstream": "Candidate finding for UNU-WIDER (southmod@wider.unu.edu). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-ssnit-contributions"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution",
+    "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution"
+   ]
   }
  ]
 }

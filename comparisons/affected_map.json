@@ -588,6 +588,15 @@
       "source": "comparisons/gh-personal-reliefs.yaml"
     },
     {
+      "suite": "gh-ssnit-contributions",
+      "name": null,
+      "report": "axiom-euromod-gh-ssnit-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-ssnit-contributions.yaml"
+    },
+    {
       "suite": "hi-income-tax-liability",
       "name": null,
       "report": "axiom-policyengine-taxsim-hi-income-tax-liability.json",

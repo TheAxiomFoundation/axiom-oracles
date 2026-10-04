@@ -4649,6 +4649,48 @@
       "varied_fields": 1,
       "verdict_concepts": {}
     },
+    "gh-ssnit-contributions": {
+      "binding": "unbound",
+      "binding_defects": [
+        "gh-ssnit-contributions: chunk index dashboard/public/data/cases/gh-ssnit-contributions/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 4,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_earned_income": {
+          "distinct": 4,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-gh-ssnit-contributions.json",
+      "report_sha256": "b82dc711f92d49b292a162f18d8f02053548b928368b7da13689b79efb909303",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "hi-income-tax-liability": {
       "binding": "unbound",
       "binding_defects": [

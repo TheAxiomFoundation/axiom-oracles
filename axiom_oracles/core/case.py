@@ -577,6 +577,18 @@ class Concepts:
         "gh:statutes/act-896/income-tax-2015/fifth-schedule"
         "#training_personal_relief"
     )
+    # National Pensions Act, 2008 (Act 766) s.3 SSNIT contributions, compared
+    # to GHAMOD ``tscee_s`` (worker 5.5%) and ``tscer_s`` (employer 13%).
+    GH_EMPLOYEE_SSNIT_CONTRIBUTION = (
+        "gh:statutes/act-766/national-pensions-2008/"
+        "section-3-contributions-to-the-scheme"
+        "#employee_social_security_contribution"
+    )
+    GH_EMPLOYER_SSNIT_CONTRIBUTION = (
+        "gh:statutes/act-766/national-pensions-2008/"
+        "section-3-contributions-to-the-scheme"
+        "#employer_social_security_contribution"
+    )
 
     # Composed Denmark børne- og ungeydelse pipelines (rulespec-dk). The
     # original surface pays one recipient and the couple surface applies § 4,
