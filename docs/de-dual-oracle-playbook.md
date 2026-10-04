@@ -164,7 +164,7 @@ All other grid comparisons match to the cent.
 
 ## Rule: encode before filing oracle findings (Max, 2026-08-19)
 
-Never file an issue against another oracle until we have encoded the
+Never file an issue against an oracle until we have encoded the
 provision ourselves. A divergence discovered before our signed encoding exists
 is recorded in dispositions as `unexplained` (or a neutral divergence record),
 never as a filed upstream finding. File upstream only when our encoding exists

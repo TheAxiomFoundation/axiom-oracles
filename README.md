@@ -12,8 +12,8 @@ This repo is the home for executable program comparisons across:
 - entitledto (recorded per-council UK Council Tax Reduction reference)
 - Axiom RuleSpec/runtime programs
 
-Two of the systems above are tied to Axiom.
-Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+Apart from Axiom's own runtime, two of the systems above are tied to Axiom.
+Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine, the calculator we compare against most,
 and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages.
 The TAXSIM adapter calls the binary bundled in
 `policyengine-taxsim` 2.30.0; `axiom_oracles/adapters/taxsim/taxsim_pins.json`
@@ -229,10 +229,11 @@ systems. The TAXSIM adapter projects thin `Case` objects to TAXSIM rows from
 period, geography, age, relation, and earned-income facts, while still accepting
 explicit `metadata["taxsim_input"]` rows for hand-authored fixtures. The bundled
 TAXSIM executable supports tax years through 2026, so comparisons involving
-TAXSIM default to tax year 2026 unless `--period` is supplied. At 2026 it returns
-zero for the ACTC, CDCC, and EITC with children, so a TAXSIM zero on those
-credits is a gap in TAXSIM (see the `TAXSIM_DEFAULT_PERIOD` comment in
-`axiom_oracles/cli.py`). PRD
+TAXSIM default to tax year 2026 unless `--period` is supplied. At 2026 it lacks
+the qualifying-child credit rules: its CTC falls back to the $500 credit for
+other dependents, and its ACTC, CDCC, and EITC with children are zero. Treat any
+TAXSIM child-credit result at 2026 as a gap in TAXSIM (see the
+`TAXSIM_DEFAULT_PERIOD` comment in `axiom_oracles/cli.py`). PRD
 cases carry an external PRD household object in `metadata["prd_household"]` or
 use a mapper. The adapters normalize those package outputs to the same
 `EngineResult` shape consumed by the comparator. `compare policyengine taxsim`
@@ -446,9 +447,9 @@ long-term care 96.00 / income tax 6,433, and a one-child household pays
 SteFeG stages, executed as tests). GETTSIM is an optional heavy dependency,
 imported lazily; the `gettsim-live` CI job runs the live tests with the locked
 fork installed. See `docs/gettsim-oracle-playbook.md` for the full API-gotcha
-notes, and `docs/de-dual-oracle-playbook.md` for the DE comparison suite
-(`comparisons/de-worker-dual-oracle-axiom-gettsim.yaml`, which runs a pinned
-rulespec-de snapshot over a 13-household worker grid).
+notes, and `docs/de-dual-oracle-playbook.md` for the 13-household grid and
+GETTSIM engine contract that `comparisons/de-worker-dual-oracle-axiom-gettsim.yaml`
+reuses (that config runs a pinned rulespec-de snapshot over the grid).
 
 ## SNAP QC administrative data oracle
 
@@ -535,13 +536,16 @@ they are projection targets rather than the canonical interface.
 
 ## Why this belongs in Axiom
 
-TAXSIM and PRD comparisons are useful validation artifacts, but Axiom's broader
-aim is source-linked, executable law compared with other calculators and
-datasets. This repo gives all of those comparisons one thin interface, so no
-oracle needs its own comparator or UI.
+Axiom's aim is source-linked, executable law compared with other calculators
+and datasets. This repo aims to give those comparisons one thin interface, so an
+oracle does not need its own comparator or UI; the SNAP QC replay and the German
+Axiom suites still use their own.
 
-In September 2026, 20,780 of the 34,810 rules in rulespec-us had no comparison
-with another calculator or dataset
-(`dashboard/public/data/rule_verification_summary.json`). The other 14,030 sit
-in programs that at least one comparison covers, and a comparison of a program
-need not exercise every rule in it.
+In September 2026, the comparison register
+(`dashboard/public/data/rule_verification_summary.json` at commit d1e9d5ad8)
+placed 14,030 of the 34,810 rules in rulespec-us in programs that at least one
+comparison with another calculator or dataset covers. A comparison of a program
+need not exercise every rule in it. The register counted the other 20,780 as
+uncompared; that figure runs high, because the register lags some published
+comparisons (it lists Arizona, Georgia, and Maryland SNAP as coverage-only,
+though their SNAP QC replays are published).
