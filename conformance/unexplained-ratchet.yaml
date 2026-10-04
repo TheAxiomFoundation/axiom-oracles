@@ -172,6 +172,8 @@ ratchets:
   unexplained_max: 0
 - suite: ga-tanf-standards
   unexplained_max: 0
+- suite: gh-capital-income
+  unexplained_max: 0
 - suite: gh-income-tax-rate-schedule
   unexplained_max: 0
 - suite: gh-personal-reliefs
