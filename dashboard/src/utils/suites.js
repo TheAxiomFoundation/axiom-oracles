@@ -96,6 +96,12 @@ export const SOUTHMOD_MODELS = {
     // the SOUTHMOD_A4.0 Adhesion Agreement, Annex 1.
     data: "Ghana Statistical Service (GSS) (2020). Ghana Living Standards Survey Round 7 (GLSS7), 2016–2017. Accra: GSS. https://microdata.fao.org/index.php/catalog/1397",
   },
+  ug: {
+    model: "UGAMOD",
+    country: "Uganda",
+    jurisdiction: "UGA",
+    data: "Uganda Bureau of Statistics (UBOS) (2025). Uganda National Household Survey, 2023/24 (UNHS 2023/24). Kampala: UBOS. https://microdata.ubos.org:7070/index.php/catalog/80",
+  },
 };
 
 /**
@@ -132,6 +138,9 @@ const SOUTHMOD_WORDS = {
   paye: "PAYE",
   vat: "VAT",
   ssnit: "SSNIT",
+  nssf: "NSSF",
+  lst: "local service tax",
+  scg: "Senior Citizens Grant",
 };
 
 function southmodSuiteMeta(slug) {

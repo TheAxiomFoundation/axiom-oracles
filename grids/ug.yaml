@@ -1,0 +1,128 @@
+# Canonical case grid — GENERATED from axiom_oracles.suites; do not edit by hand.
+# Regenerate with: uv run python scripts/extract_grids.py
+# Byte-preserving extraction of the live suites; the extraction-equivalence
+# test proves this grid and the suites describe the identical case list.
+# See grids/README.md.
+schema_version: axiom-oracles/case-grid/v1
+jurisdiction: ug
+generated_from:
+  suites_module: axiom_oracles.suites
+  extractor: scripts/extract_grids.py
+case_sets:
+  ug-paye-rate-schedule:
+    locale: UG
+    entity: Person
+    entity_id: head
+    outputs:
+    - ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#resident_individual_income_tax
+    cases:
+    - id: ug-paye-2m-nil-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 2000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 2000000.0
+    - id: ug-paye-2820000-nil-band-top
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 2820000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 2820000.0
+    - id: ug-paye-3420000-10pct-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 3420000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 3420000.0
+    - id: ug-paye-4020000-10pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 4020000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4020000.0
+    - id: ug-paye-4500000-20pct-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 4500000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4500000.0
+    - id: ug-paye-4920000-20pct-band-top
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 4920000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 4920000.0
+    - id: ug-paye-6m-30pct-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 6000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 6000000.0
+    - id: ug-paye-probe-income-30pct
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 6225375.6
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 6225375.6
+    - id: ug-paye-120m-additional-rate-boundary
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 120000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 120000000.0
+    - id: ug-paye-150m-additional-rate-interior
+      period: '2026'
+      scenario: single-formal-employee-paye-schedule
+      parameters:
+        yearly_earned_income: 150000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 150000000.0

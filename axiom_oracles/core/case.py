@@ -651,6 +651,14 @@ class Concepts:
         "gh:statutes/composed/pilot-worker-disposable-income-pipeline"
         "#pilot_worker_disposable_income"
     )
+    # Uganda Third Schedule Part I resident schedule (Act 4 of 2012
+    # substitution), compared to UGAMOD ``tin_s`` (which implements the
+    # full schedule including the additional 10% above 120,000,000/yr).
+    UG_RESIDENT_INCOME_TAX = (
+        "ug:statutes/act-2012-4/income-tax-amendment-2012/"
+        "third-schedule-rates-of-tax-substituted"
+        "#resident_individual_income_tax"
+    )
 
     # Composed Denmark børne- og ungeydelse pipelines (rulespec-dk). The
     # original surface pays one recipient and the couple surface applies § 4,
