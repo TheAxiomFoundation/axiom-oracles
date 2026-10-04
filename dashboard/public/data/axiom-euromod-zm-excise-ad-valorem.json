@@ -1,0 +1,371 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty",
+      "description": "Zambia wine excise duty (Second Schedule heading 5, 60 percent)",
+      "left_weighted_sum": 19699.413917,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 19699.413917,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 2,
+      "comparison_weight": 2,
+      "components": [],
+      "concept": "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty",
+      "description": "Zambia spirits excise duty (Second Schedule heading 6, 60 percent)",
+      "left_weighted_sum": 19699.413917,
+      "match_rate": 100,
+      "match_weight": 2,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 19699.413917,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 4,
+  "cases": [
+    {
+      "case_id": "zm-excise-wine-1200",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty",
+          "left": 938.0673293669854,
+          "right": 938.0673293669856
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#input.spirits_taxable_value": 0.0,
+          "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#input.wine_taxable_value": 1563.445548944976
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "x02121": 100.0,
+            "yem": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ZM",
+        "scenario": "household-ad-valorem-excise",
+        "scope": {
+          "geoid": "ZM",
+          "type": "country"
+        },
+        "yearly_expenditure_raw": 1200.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "zm-excise-wine-24000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty",
+          "left": 18761.34658733971,
+          "right": 18761.34658733971
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#input.spirits_taxable_value": 0.0,
+          "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#input.wine_taxable_value": 31268.91097889952
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "x02121": 2000.0,
+            "yem": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ZM",
+        "scenario": "household-ad-valorem-excise",
+        "scope": {
+          "geoid": "ZM",
+          "type": "country"
+        },
+        "yearly_expenditure_raw": 24000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "zm-excise-spirits-1200",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty",
+          "left": 938.0673293669854,
+          "right": 938.0673293669856
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#input.spirits_taxable_value": 1563.445548944976,
+          "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#input.wine_taxable_value": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "x02110": 100.0,
+            "yem": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ZM",
+        "scenario": "household-ad-valorem-excise",
+        "scope": {
+          "geoid": "ZM",
+          "type": "country"
+        },
+        "yearly_expenditure_raw": 1200.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "zm-excise-spirits-24000",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty",
+          "left": 18761.34658733971,
+          "right": 18761.34658733971
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#input.spirits_taxable_value": 31268.91097889952,
+          "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#input.wine_taxable_value": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "x02110": 2000.0,
+            "yem": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1
+        },
+        "locale": "ZM",
+        "scenario": "household-ad-valorem-excise",
+        "scope": {
+          "geoid": "ZM",
+          "type": "country"
+        },
+        "yearly_expenditure_raw": 24000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Zambia wine excise duty (Second Schedule heading 5, 60 percent)",
+      "id": "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Zambia spirits excise duty (Second Schedule heading 6, 60 percent)",
+      "id": "zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "ZM"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:21:30Z",
+    "generated_by": "scripts/run_comparison.py::zm-excise-ad-valorem",
+    "oracle": {
+      "euromod_country": "ZM",
+      "euromod_dataset": "zm_2022_a2",
+      "euromod_system": "ZM_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-zm",
+        "sha": "664fbba45d704effe572b50218be3432ee098ce2"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "zm-excise-ad-valorem",
+  "summary": {
+    "comparison_count": 4,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 4,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 4,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_weight": 0
+    }
+  }
+}
