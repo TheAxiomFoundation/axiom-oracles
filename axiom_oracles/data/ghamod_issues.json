@@ -120,6 +120,34 @@
     "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#dividend_final_withholding",
     "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#interest_paid_to_individual_withholding"
    ]
+  },
+  {
+   "id": "ghamod-ttn-eligibility-band-10k-120k-superseded",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "ttn01_s",
+    "ttn02_s",
+    "ttn_s"
+   ],
+   "statute": "Income Tax Act, 2015 (Act 896) Second Schedule paragraph 5, as substituted by Act 902 (2015) and Act 1071 (2021); COVID-19 Health Recovery Levy Act, 2021 (Act 1068)",
+   "observed": "GHAMOD charges the presumptive turnover tax (ttn01_s, 3%) and the COVID-19 levy component (ttn02_s, 1%) only on annual turnover from 10,000 to 120,000. Probed: turnover 15,000 a year gives 450 + 150 although every printed version of paragraph 5 starts at 'more than twenty thousand'; 200,000 a year gives 0 although the in-force band (Act 1071, December 2021) runs to five hundred thousand cedis (the statute charges 6,000 plus the levy); 30,000, 60,000 and 119,999 a year give exactly 3% and 1% (900 + 300, 1,800 + 600, 3,599.97 + 1,199.99). The 120,000 ceiling is a cliff: two monthly inputs a few floating-point steps apart, both uprating to 120,000 a year to within 1e-10, straddle it (just below gets the full 3,600 + 1,200; just above gets 0), and 120,012 a year gets 0. The ceiling matches only the original Act 896 text (assented 1 September 2015: 'more than twenty thousand cedis but does not exceed one hundred and twenty thousand cedis'); Act 902 (assented 30 December 2015) raised it to two hundred thousand and Act 1071 to five hundred thousand. The 10,000 floor (probed 2026-10-04: 9,990 a year gives 0; 10,010 gives 300.30 + 100.10) appears in none of the three texts.",
+   "axiom_position": "The encoded modules (rulespec-gh act-1071 second-schedule-substitutions; act-1068 section-1-imposition-of-levy) follow the in-force texts. The gh-presumptive-turnover suite keeps live cases inside the shared band, uses 119,999 rather than 120,000 for its top case so floating-point noise in the uprating cannot tip it over GHAMOD's cliff, and records this entry for the band divergence.",
+   "reported_upstream": "Candidate finding #7 for UNU-WIDER (southmod@wider.unu.edu). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-presumptive-turnover"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable",
+    "gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount"
+   ]
   }
  ]
 }
