@@ -79,6 +79,87 @@ export const FAMILY_LABELS = {
   canada_family_benefits: "Canada family and disability benefits",
 };
 
+/**
+ * SOUTHMOD country models (UNU-WIDER), run on the EUROMOD engine. Their
+ * reports carry engine id "euromod", so the oracle is told apart by the
+ * suite's country prefix: each key is both the suite-slug prefix and the
+ * dashboard region. Add a country here and its region, jurisdiction, family
+ * and suite labels follow.
+ */
+export const SOUTHMOD_MODELS = {
+  gh: {
+    model: "GHAMOD",
+    country: "Ghana",
+    jurisdiction: "GHA",
+    // The input-dataset configuration the comparison runs under (its
+    // uprating and variable list; every household is synthetic). Cited per
+    // the SOUTHMOD_A4.0 Adhesion Agreement, Annex 1.
+    data: "Ghana Statistical Service (GSS) (2020). Ghana Living Standards Survey Round 7 (GLSS7), 2016–2017. Accra: GSS. https://microdata.fao.org/index.php/catalog/1397",
+  },
+};
+
+/**
+ * The acknowledgement the SOUTHMOD_A4.0 Adhesion Agreement (clause 2,
+ * Annex 1.2) requires on any output that uses the models, naming every
+ * country model the dashboard publishes and the data behind each.
+ */
+export function southmodAcknowledgement() {
+  const models = Object.values(SOUTHMOD_MODELS);
+  const named = models.map((m) => `${m.country} (${m.model})`).join(", ");
+  const data = models
+    .map((m) =>
+      m.data
+        ? `${m.model}: ${m.data}`
+        : `${m.model}: no input data (the bundle ships none; runs use a header-only file and synthetic rows)`,
+    )
+    .join(" ");
+  // Annex 1.2 of the SOUTHMOD_A4.0 Adhesion Agreement, verbatim except for
+  // the bracketed fields it asks the user to fill in.
+  return (
+    `The results presented here are based on the tax-benefit microsimulation models for ${named} in SOUTHMOD_A4.0. ` +
+    "Models in the SOUTHMOD bundle are developed, maintained and managed by UNU-WIDER in collaboration with SASPRI (Southern African Social Policy Research Insights), the International Inequalities Institute at the London School of Economics and Political Science, and local partners in selected developing countries (Bolivia, Colombia, Ecuador, Egypt, Ethiopia, Ghana, Mozambique, Peru, Rwanda, Mainland Tanzania, Uganda, Viet Nam, Zambia, and Zanzibar) in the scope of the SOUTHMOD project. " +
+    "The results presented here are based on EUROMOD version EM_Executable 1.0.0 (run through the euromod Python connector 0.2.18). " +
+    "Originally maintained, developed and managed by the Institute for Social and Economic Research (ISER), since 2021 EUROMOD is maintained, developed and managed by the Joint Research Centre (JRC) of the European Commission, in collaboration with EUROSTAT and national teams from the EU countries. " +
+    "We are indebted to the many people who have contributed to the development of SOUTHMOD and EUROMOD. " +
+    "The results and their interpretation presented in this publication are solely the Axiom Foundation's responsibility. " +
+    `Input data: the policy systems run under the input-dataset configurations UNU-WIDER built from these surveys; only each dataset's variable list is read, and every comparison household is synthetic. ${data}`
+  );
+}
+
+// Suite-slug words spelled out (or capitalized) in SOUTHMOD suite labels.
+const SOUTHMOD_WORDS = {
+  dispy: "disposable income",
+  paye: "PAYE",
+  vat: "VAT",
+  ssnit: "SSNIT",
+};
+
+function southmodSuiteMeta(slug) {
+  const [prefix, ...rest] = slug.split("-");
+  const entry = SOUTHMOD_MODELS[prefix];
+  if (!entry) return null;
+  const words = rest.map((w) => SOUTHMOD_WORDS[w] || w).join(" ");
+  return {
+    suite: slug,
+    family: `${prefix}_taxes_transfers`,
+    jurisdiction: entry.jurisdiction,
+    label: `${entry.country} ${words} (${entry.model})`,
+    region: prefix,
+    kind: "household",
+    order: 700,
+  };
+}
+
+const SOUTHMOD_JURISDICTION_LABELS = Object.fromEntries(
+  Object.values(SOUTHMOD_MODELS).map((m) => [m.jurisdiction, m.country]),
+);
+const SOUTHMOD_FAMILY_LABELS = Object.fromEntries(
+  Object.entries(SOUTHMOD_MODELS).map(([prefix, m]) => [
+    `${prefix}_taxes_transfers`,
+    `${m.country} taxes and transfers`,
+  ]),
+);
+
 const SUITE_OVERRIDES = {
   "ca-federal-schedule-tax-spsm": {
     family: "canada_personal_income_tax",
@@ -961,6 +1042,9 @@ export function suiteMeta(suite) {
     };
   }
 
+  const southmod = southmodSuiteMeta(slug);
+  if (southmod) return southmod;
+
   const tanf = slug.match(TANF_ECPS_SUITE_RE);
   if (tanf && US_STATE_NAMES[tanf[1].toUpperCase()]) {
     const abbr = tanf[1].toUpperCase();
@@ -1016,9 +1100,20 @@ export function isAxiomPair(report) {
 /** The non-Axiom engine in an Axiom-pair report (e.g. policyengine, taxsim). */
 export function otherOracle(report) {
   if (!isAxiomPair(report)) return null;
-  return report.engines.left === "axiom"
-    ? report.engines.right
-    : report.engines.left;
+  const engine =
+    report.engines.left === "axiom" ? report.engines.right : report.engines.left;
+  // SOUTHMOD models run on the EUROMOD engine but are UNU-WIDER's models,
+  // licensed with an acknowledgement requirement: never credit them to the
+  // European Commission's EUROMOD.
+  if (engine === "euromod" && SOUTHMOD_MODELS[suiteRegion(report.suite)]) {
+    return "southmod";
+  }
+  return engine;
+}
+
+/** The SOUTHMOD country model behind a suite (e.g. "GHAMOD"), or null. */
+export function southmodModel(suite) {
+  return SOUTHMOD_MODELS[suiteRegion(suite)]?.model || null;
 }
 
 /**
@@ -1168,3 +1263,8 @@ export function rateStatus(rate) {
   if (rate >= 70) return "diverging";
   return "attention";
 }
+
+// SOUTHMOD tables are derived from SOUTHMOD_MODELS (declared after the label
+// tables), so merge them in once the registry exists.
+Object.assign(JURISDICTION_LABELS, SOUTHMOD_JURISDICTION_LABELS);
+Object.assign(FAMILY_LABELS, SOUTHMOD_FAMILY_LABELS);

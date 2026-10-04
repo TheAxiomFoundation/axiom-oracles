@@ -228,6 +228,8 @@
     "axiom-euromod-be-self-employment-pit.json",
     "axiom-euromod-be-replacement-income-pit.json",
     "axiom-taxsim-fiit-ecps.json",
-    "euromod-gettsim-de-kindergeld-eligibility.json"
+    "euromod-gettsim-de-kindergeld-eligibility.json",
+    "axiom-euromod-gh-income-tax-rate-schedule.json",
+    "axiom-euromod-gh-personal-reliefs.json"
   ]
 }

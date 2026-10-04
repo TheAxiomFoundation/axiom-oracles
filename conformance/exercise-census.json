@@ -4569,6 +4569,86 @@
       "varied_fields": 3,
       "verdict_concepts": {}
     },
+    "gh-income-tax-rate-schedule": {
+      "binding": "unbound",
+      "binding_defects": [
+        "gh-income-tax-rate-schedule: chunk index dashboard/public/data/cases/gh-income-tax-rate-schedule/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 11,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_earned_income": {
+          "distinct": 11,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-gh-income-tax-rate-schedule.json",
+      "report_sha256": "6e0f95f8ff0f781898953b5f7e29856ecd2cda01f23ef360dd22e69c1cdedcba",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "gh-personal-reliefs": {
+      "binding": "unbound",
+      "binding_defects": [
+        "gh-personal-reliefs: chunk index dashboard/public/data/cases/gh-personal-reliefs/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 8,
+      "chunk_manifest": [],
+      "constant_fields": 3,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 6,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-gh-personal-reliefs.json",
+      "report_sha256": "8f3d2a7e96efeea732ad1baed440120e76efefe116c5f919e1563d9dc558470e",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "hi-income-tax-liability": {
       "binding": "unbound",
       "binding_defects": [
