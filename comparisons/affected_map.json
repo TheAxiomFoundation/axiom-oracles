@@ -1889,6 +1889,15 @@
       "source": "comparisons/wv-income-tax-liability.yaml"
     },
     {
+      "suite": "zm-dispy",
+      "name": null,
+      "report": "axiom-euromod-zm-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-dispy.yaml"
+    },
+    {
       "suite": "zm-excise-ad-valorem",
       "name": null,
       "report": "axiom-euromod-zm-excise-ad-valorem.json",

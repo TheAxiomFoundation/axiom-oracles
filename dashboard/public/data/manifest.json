@@ -253,6 +253,7 @@
     "axiom-euromod-zm-nhima-contributions.json",
     "axiom-euromod-zm-vat.json",
     "axiom-euromod-zm-excise-ad-valorem.json",
-    "axiom-euromod-zm-sct.json"
+    "axiom-euromod-zm-sct.json",
+    "axiom-euromod-zm-dispy.json"
   ]
 }
