@@ -219,7 +219,9 @@ class TaxsimPackageRunner(EngineAdapter):
             trailing = output.parsed.trailing_diagnostics
             execution: TaxsimExecution | None = output.execution
         else:
-            records = _records_from_legacy_output(output, self.id_column, cases)
+            records = _records_from_legacy_output(
+                output, self.id_column, cases, input_rows
+            )
             trailing = ()
             execution = None
         return self._results_for_cases(
@@ -398,21 +400,26 @@ def _records_from_legacy_output(
     output: Any,
     id_column: str,
     cases: list[Case],
+    input_rows: list[dict[str, Any]],
 ) -> list[TaxsimRecord]:
     """Adapt ``runner.run()`` records to :class:`TaxsimRecord`.
 
-    A record without an id column takes the id of the case at its position
-    (the pre-existing convention for runners that drop the column). An id
+    A record without an id column takes the submitted id at its position,
+    or the case id if the submitted id is None (the pre-existing positional
+    convention for runners that drop the column). An id
     that is not a finite number or text — pandas' NaN for a line it could not
     read, for example — is rejected here rather than passed on as a phantom
     household.
     """
     records = []
-    case_ids = [case.case_id for case in cases]
+    fallback_ids = [
+        case.case_id if row.get(id_column) is None else row[id_column]
+        for row, case in zip(input_rows, cases, strict=True)
+    ]
     for index, record in enumerate(_records(output)):
         household_id = record.get(id_column)
-        if household_id is None and index < len(case_ids):
-            household_id = case_ids[index]
+        if household_id is None and index < len(fallback_ids):
+            household_id = fallback_ids[index]
         if household_id is None or (
             isinstance(household_id, float) and household_id != household_id
         ):
