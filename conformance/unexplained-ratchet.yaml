@@ -484,6 +484,8 @@ ratchets:
   unexplained_max: 0
 - suite: wv-income-tax-populace
   unexplained_max: 0
+- suite: zm-dispy
+  unexplained_max: 0
 - suite: zm-excise-ad-valorem
   unexplained_max: 0
 - suite: zm-napsa-contributions

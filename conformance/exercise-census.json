@@ -11160,6 +11160,52 @@
         }
       }
     },
+    "zm-dispy": {
+      "binding": "unbound",
+      "binding_defects": [
+        "zm-dispy: chunk index dashboard/public/data/cases/zm-dispy/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 2,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_earned_income": {
+          "distinct": 2,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-zm-dispy.json",
+      "report_sha256": "89e9da5c8b91b7c24ec9fef1307bd676f6811837e3914295ae38b6df115c5034",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "zm-excise-ad-valorem": {
       "binding": "unbound",
       "binding_defects": [
