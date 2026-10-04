@@ -116,6 +116,13 @@ with `axiom_oracles.adapters.taxsim.output.parse_taxsim_stdout`:
 These stdout and result-row checks apply to `TaxsimPackageRunner`.
 `PolicyEngineTaxsimRunner` uses its own in-process result conversion.
 
+Verbose `idtl=5` output is also accepted: each `Basic Output` record and its
+`Marginal Rates` section supply the same fields as the pinned package's verbose
+parser, including `state_name`. Numeric fields must be finite and complete;
+records use their output IDs for the same duplicate and case-attribution checks.
+Input echoes and detailed tax calculations do not become result rows. A recorded
+California fixture and tests with the pinned formatter and binary cover this mode.
+
 The pinned Linux build (`taxsimtest-linux.exe`) refuses law year 2026
 outright (`TAXSIM: Federal tax calculator available 1960 - 2024 only.`,
 `STOP 1`), so 2026 TAXSIM suites currently run only with the macOS build.

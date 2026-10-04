@@ -25,6 +25,7 @@ record that produced no row.
 from __future__ import annotations
 
 import csv
+import re
 from dataclasses import dataclass, field
 from io import StringIO
 from numbers import Integral, Real
@@ -35,7 +36,7 @@ Scalar = float | int | str
 
 @dataclass(frozen=True)
 class TaxsimRecord:
-    """One CSV row of TAXSIM output plus the diagnostics written before it."""
+    """One TAXSIM result plus any diagnostics written before its CSV row."""
 
     id_key: str
     values: dict[str, Scalar]
@@ -72,6 +73,10 @@ def parse_taxsim_stdout(text: str, *, id_column: str = "taxsimid") -> TaxsimStdo
     line after the header is a record when it splits into as many fields as
     the header and its first field is numeric; anything else is a diagnostic
     for the next record. Blank lines carry nothing and are ignored.
+
+    Without a CSV header, ``idtl=5`` results are read from their ``Basic
+    Output`` and ``Marginal Rates`` sections. Input echoes and calculation
+    details are ignored, as in the pinned package's verbose parser.
     """
     lines = text.splitlines()
     header: tuple[str, ...] | None = None
@@ -86,6 +91,11 @@ def parse_taxsim_stdout(text: str, *, id_column: str = "taxsimid") -> TaxsimStdo
         if line.strip():
             pending.append(line)
     if header is None:
+        starts = [
+            index for index, line in enumerate(lines) if line.strip() == "Basic Output:"
+        ]
+        if starts:
+            return _parse_verbose_stdout(lines, starts, id_column)
         raise TaxsimOutputError(
             f"TAXSIM stdout has no header line starting with {id_column!r}; "
             f"first lines: {lines[:5]!r}"
@@ -116,6 +126,65 @@ def parse_taxsim_stdout(text: str, *, id_column: str = "taxsimid") -> TaxsimStdo
         records=records,
         trailing_diagnostics=tuple(pending),
     )
+
+
+def _parse_verbose_stdout(
+    lines: list[str], starts: list[int], id_column: str
+) -> TaxsimStdout:
+    """Read the pinned verbose parser's fields, validating each result block."""
+    columns = (
+        id_column,
+        "year",
+        "state",
+        "fiitax",
+        "siitax",
+        "fica",
+        "frate",
+        "srate",
+        "ficar",
+    )
+    records: list[TaxsimRecord] = []
+    for start, end in zip(starts, [*starts[1:], len(lines)], strict=True):
+        values: dict[str, Scalar] = {}
+        section_fields = range(1, 7)
+        line_number = start + 1
+        for index in range(start + 1, end):
+            line = lines[index].strip()
+            if line.startswith("Marginal Rates"):
+                section_fields = range(7, 10)
+                continue
+            if line.startswith("Federal Tax Calculation:"):
+                break
+            match = re.fullmatch(r"(\d+)\.\s*[^:]+:\s*(.*)", line)
+            if match is None or int(match[1]) not in section_fields:
+                continue
+            field_number = int(match[1])
+            column = columns[field_number - 1]
+            parts = match[2].split()
+            if not parts or _numeric_id_key(parts[0]) is None:
+                raise TaxsimOutputError(
+                    f"TAXSIM verbose output has invalid {column} at "
+                    f"stdout line {index + 1}: {match[2]!r}"
+                )
+            values[column] = float(parts[0])
+            if field_number == 1:
+                line_number = index + 1
+            elif field_number == 3 and len(parts) > 1:
+                values["state_name"] = parts[1]
+        missing = [column for column in columns if column not in values]
+        if missing:
+            raise TaxsimOutputError(
+                f"TAXSIM verbose output at stdout line {start + 1} "
+                f"is missing fields: {missing!r}"
+            )
+        records.append(
+            TaxsimRecord(
+                id_key=id_key(values[id_column]),
+                values=values,
+                line_number=line_number,
+            )
+        )
+    return TaxsimStdout(header=tuple(records[0].values), records=records)
 
 
 def id_key(value: Any) -> str:

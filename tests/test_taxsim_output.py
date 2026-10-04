@@ -3,8 +3,9 @@
 Fixtures under ``tests/fixtures/taxsim/`` are verbatim captures from the
 pinned macOS binary (``taxsimtest-osx.exe``, header ``cdate-20260521``,
 SHA-256 in ``taxsim_pins.json``) run on the ``*_input.csv`` next to them on
-2026-09-27. Expected values below are read off those captures, not off the
-parser under test. In these captures, the binary writes six copies of a
+2026-09-27 (Utah) and 2026-10-04 (California ``idtl=5``). The latter input
+uses the pinned package's formatter. Expected values are read off the captures,
+not off the parser under test. In the Utah captures, the binary writes six copies of a
 ``" d2 ..."`` line before the CSV rows of Utah profiles with $30,000 wages
 and primary filers aged 73, 74, and 80; with ``idtl=0`` they precede the
 header itself. These observations do not establish an age-only trigger.
@@ -76,7 +77,46 @@ def _executor(stdout: str, *, stderr: str = "", returncode: int = 0):
     return execute
 
 
+def _verbose_record(taxsimid: int) -> str:
+    # Leave the Input Data echo at id 1 to prove only Basic Output keys results.
+    return _fixture("california_idtl5_stdout.txt").replace(
+        "1. Record ID:                1.", f"1. Record ID:                {taxsimid}."
+    )
+
+
 # --- parser -----------------------------------------------------------------
+
+
+def test_parse_verbose_idtl5_preserves_legacy_fields() -> None:
+    parsed = parse_taxsim_stdout(_fixture("california_idtl5_stdout.txt"))
+
+    [record] = parsed.records
+    assert record.id_key == "1"
+    assert record.line_number == 37
+    assert record.values == {
+        "taxsimid": 1.0,
+        "year": 2026.0,
+        "state": 5.0,
+        "state_name": "California",
+        "fiitax": 3820.0,
+        "siitax": 980.7,
+        "fica": 7650.0,
+        "frate": 0.0,
+        "srate": 0.0,
+        "ficar": 0.0,
+    }
+
+
+@pytest.mark.parametrize("record_id", ["nan", "inf", "-inf", "", None])
+def test_parse_verbose_rejects_unusable_or_missing_output_ids(record_id) -> None:
+    text = _fixture("california_idtl5_stdout.txt")
+    basic_id = "      1. Record ID:                1.                            \n"
+    text = text.replace(
+        basic_id, "" if record_id is None else f"      1. Record ID: {record_id}\n"
+    )
+
+    with pytest.raises(TaxsimOutputError, match="verbose.*taxsimid"):
+        parse_taxsim_stdout(text)
 
 
 def test_parse_attributes_diagnostics_to_the_row_that_follows_them() -> None:
@@ -182,6 +222,75 @@ def test_parse_treats_short_rows_nan_ids_and_blank_lines_correctly() -> None:
 
 
 # --- adapter ----------------------------------------------------------------
+
+
+def test_runner_accepts_recorded_verbose_idtl5_output() -> None:
+    runner = TaxsimPackageRunner(
+        executor=_executor(_fixture("california_idtl5_stdout.txt"))
+    )
+
+    [result] = runner.run_cases(
+        _cases("california_idtl5_input.csv"), variables=["fiitax", "siitax"]
+    )
+
+    assert result.household_id == "case-1"
+    assert result.values == {"fiitax": 3820.0, "siitax": 980.7}
+    assert result.raw["state_name"] == "California"
+    assert result.errors == ()
+
+
+@settings(deadline=None)
+@given(
+    submitted_ids=st.lists(
+        st.integers(min_value=1, max_value=100_000),
+        min_size=1,
+        max_size=5,
+        unique=True,
+    )
+)
+def test_verbose_results_follow_basic_output_ids_in_submitted_order(
+    submitted_ids,
+) -> None:
+    """Each verbose record maps to its case; input echoes never key results."""
+    text = "".join(_verbose_record(key) for key in submitted_ids)
+    cases = [
+        Case(
+            case_id=f"case-{key}",
+            period="2026",
+            metadata={"taxsim_input": {"taxsimid": key, "year": 2026, "idtl": 5}},
+        )
+        for key in reversed(submitted_ids)
+    ]
+
+    results = TaxsimPackageRunner(executor=_executor(text)).run_cases(
+        cases, variables=["fiitax", "siitax"]
+    )
+
+    assert [result.household_id for result in results] == [
+        case.case_id for case in cases
+    ]
+    assert all(
+        result.values == {"fiitax": 3820.0, "siitax": 980.7} for result in results
+    )
+    assert [result.raw["taxsimid"] for result in results] == list(
+        reversed(submitted_ids)
+    )
+    assert all(result.errors == () for result in results)
+
+
+def test_runner_refuses_duplicate_verbose_output_ids() -> None:
+    text = _fixture("california_idtl5_stdout.txt") * 2
+    runner = TaxsimPackageRunner(executor=_executor(text))
+
+    with pytest.raises(RuntimeError, match="more than one output row for taxsimid=1"):
+        runner.run_cases(_cases("california_idtl5_input.csv"))
+
+
+def test_runner_refuses_unexpected_verbose_output_ids() -> None:
+    runner = TaxsimPackageRunner(executor=_executor(_verbose_record(99)))
+
+    with pytest.raises(RuntimeError, match="matching no submitted case: taxsimid=99"):
+        runner.run_cases(_cases("california_idtl5_input.csv"))
 
 
 def test_runner_maps_every_case_and_keeps_diagnostics_on_raw(caplog) -> None:
@@ -503,7 +612,9 @@ def _pinned_binary() -> Path:
     return binary
 
 
-@pytest.mark.parametrize("stem", ["utah_elderly_idtl2", "utah_elderly_idtl0"])
+@pytest.mark.parametrize(
+    "stem", ["utah_elderly_idtl2", "utah_elderly_idtl0", "california_idtl5"]
+)
 def test_pinned_macos_binary_reproduces_the_fixture(stem: str) -> None:
     binary = _pinned_binary()
 
@@ -538,3 +649,16 @@ def test_adapter_runs_the_pinned_binary_without_phantom_rows() -> None:
     assert results[1].values == {"fiitax": 585.0, "siitax": 49.88}
     assert results[1].raw[DIAGNOSTICS_KEY] == [D2_SINGLE_30K] * 6
     assert DIAGNOSTICS_KEY not in results[2].raw
+
+
+def test_adapter_runs_verbose_idtl5_with_the_pinned_formatter_and_binary() -> None:
+    _pinned_binary()
+
+    [result] = TaxsimPackageRunner().run_cases(
+        _cases("california_idtl5_input.csv"), variables=["fiitax", "siitax"]
+    )
+
+    assert result.household_id == "case-1"
+    assert result.values == {"fiitax": 3820.0, "siitax": 980.7}
+    assert result.raw["state_name"] == "California"
+    assert result.errors == ()
