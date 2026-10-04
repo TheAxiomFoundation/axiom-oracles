@@ -35,7 +35,8 @@ export EUROMOD_MODEL_ROOT EUROMOD_PYTHON DOTNET_ROOT PYTHONNET_RUNTIME \
 for name in \
   ug-paye-rate-schedule \
   ug-rental \
-  ug-presumptive; do
+  ug-presumptive \
+  ug-nssf-contributions; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

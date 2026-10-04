@@ -9,6 +9,58 @@ generated_from:
   suites_module: axiom_oracles.suites
   extractor: scripts/extract_grids.py
 case_sets:
+  ug-nssf-contributions:
+    locale: UG
+    entity: Person
+    entity_id: head
+    outputs:
+    - ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employee_share
+    - ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employer_net_share
+    cases:
+    - id: ug-nssf-1200000-low
+      period: '2026'
+      scenario: single-formal-employee-nssf
+      parameters:
+        annual_total_wages: 1200000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 1200000.0
+    - id: ug-nssf-probe-income
+      period: '2026'
+      scenario: single-formal-employee-nssf
+      parameters:
+        annual_total_wages: 6225375.6
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 6225375.6
+    - id: ug-nssf-12m
+      period: '2026'
+      scenario: single-formal-employee-nssf
+      parameters:
+        annual_total_wages: 12000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 12000000.0
+    - id: ug-nssf-124m-high
+      period: '2026'
+      scenario: single-formal-employee-nssf
+      parameters:
+        annual_total_wages: 124507512.48
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+        yearly_earned_income: 124507512.48
   ug-paye-rate-schedule:
     locale: UG
     entity: Person

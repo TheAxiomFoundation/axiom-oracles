@@ -41,6 +41,30 @@ mappings:
       against UGAMOD ttn_s by the ug-presumptive suite in both regimes,
       exact at every band. PolicyEngine has no Uganda model; the
       household oracle is UGAMOD.
+  - legal_id: ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employee_share
+    country: ug
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      NSSF employee share (five percent of monthly total wages, Cap. 230
+      s.11, deductible by the employer from the fifteen percent standard
+      contribution). Validated against UGAMOD tscee_s by the
+      ug-nssf-contributions suite - run live exact at every case (wage
+      sweep at age 35, probe income at ages 60 and 70), no ceiling;
+      UGAMOD applies no age window (contrast GHAMOD's age-15-45 cap).
+      Whether the Act itself has an age limit is not settled (the
+      captured corpus lacks the "eligible employee" definition).
+      PolicyEngine has no Uganda model; the household oracle is UGAMOD.
+  - legal_id: ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employer_net_share
+    country: ug
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      NSSF employer-net share (the fifteen percent standard contribution
+      less the five percent employee share, derived - economically ten
+      percent). Validated against UGAMOD tscer_s by the
+      ug-nssf-contributions suite, run live exact. PolicyEngine has no
+      Uganda model; the household oracle is UGAMOD.
 prefixes:
   - legal_id_prefix: "ug:"
     country: ug
