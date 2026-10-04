@@ -1229,6 +1229,15 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ug-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-ug-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-paye-rate-schedule.yaml"
+    },
+    {
       "suite": "uk-attendance-allowance-pe",
       "name": null,
       "report": "axiom-policyengine-uk-attendance-allowance-pe.json",

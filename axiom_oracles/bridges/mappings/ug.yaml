@@ -1,6 +1,43 @@
+mappings:
+  # Uganda outputs are validated against UGAMOD (SOUTHMOD Uganda, run on the
+  # EUROMOD engine), not PolicyEngine, which has no Uganda model. These explicit
+  # entries record the UGAMOD household-oracle wiring for each output a ug-*
+  # suite compares; they stay not_comparable to PolicyEngine because there is
+  # no Uganda PolicyEngine target, mirroring the UKMOD-compared UK pipeline
+  # entries. The comparisons live in comparisons/ug-*.yaml and their committed
+  # reports in dashboard/public/data/.
+  - legal_id: ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#resident_individual_income_tax
+    country: ug
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Resident individual income tax (Cap. 340 Third Schedule Part I as
+      substituted by Act 4 of 2012: nil to 2,820,000; 10% to 4,020,000;
+      20% to 4,920,000; 30% above; an additional 10% on chargeable income
+      exceeding 120,000,000). Validated against UGAMOD tin_s by the
+      ug-paye-rate-schedule suite (SOUTHMOD A4.0, UG_2025 = FY2025/26):
+      run live within 0.4 UGX a year (tolerance 1) at every tested income, including the
+      additional-rate region, which UGAMOD implements. PolicyEngine has
+      no Uganda model; the household oracle is UGAMOD.
 prefixes:
   - legal_id_prefix: "ug:"
     country: ug
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: PolicyEngine has no Uganda model and cannot serve as a Uganda tax-benefit oracle. Axiom Uganda outputs are built from official Uganda legislation (the Income Tax Act, Cap. 340, as amended, from Parliament of Uganda assented prints); the household oracle is UGAMOD (UNU-WIDER SOUTHMOD, EUROMOD engine, systems UG_2016-UG_2025 in the licensed SOUTHMOD A4.0 bundle), whose suite wiring lands with the Ghana/Uganda oracle chain. This prefix classifies Uganda outputs as not comparable to PolicyEngine; add exact PolicyEngine mappings only if a real one-to-one Uganda PolicyEngine oracle target is ever implemented.
+    rationale: >-
+      PolicyEngine has no Uganda model and cannot serve as a Uganda
+      tax-benefit oracle. Axiom Uganda outputs are built from official Uganda
+      legislation (the Income Tax Act, Cap. 340, as amended; the NSSF Act,
+      Cap. 230; the Local Governments, VAT and Excise Duty instruments) from
+      Parliament of Uganda assented prints and MGLSD sources; the household
+      oracle is UGAMOD (UNU-WIDER SOUTHMOD, run on the EUROMOD engine;
+      licensed SOUTHMOD A4.0 bundle, system UG_2025), wired by the ug-*
+      comparison suites. Their reports are run by hand where the licensed
+      bundle is installed and committed with a dated provenance stamp
+      (comparisons/ug-*.yaml declare ci: manual, because the licence bars
+      giving the bundle to a shared CI runner); see the explicit mappings
+      above and concept_mappings.yaml; Uganda has no findings ledger because
+      no value mismatch was found. This prefix classifies any remaining Uganda
+      output with no explicit entry as not comparable to PolicyEngine; add
+      exact PolicyEngine mappings only if a real one-to-one Uganda
+      PolicyEngine oracle target is ever implemented.
