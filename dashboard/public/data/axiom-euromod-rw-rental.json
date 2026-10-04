@@ -29,7 +29,15 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2023-048/rental-income-tax#rental_income_tax",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 1,
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
@@ -88,7 +96,15 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2023-048/rental-income-tax#rental_income_tax",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 1,
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
@@ -147,7 +163,15 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2023-048/rental-income-tax#rental_income_tax",
+          "left": 43999.79999849808,
+          "right": 43999.99999849808
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 1,
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
@@ -206,7 +230,15 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2023-048/rental-income-tax#rental_income_tax",
+          "left": 223999.69999324135,
+          "right": 223999.9999932413
+        }
+      ],
       "metadata": {
+        "axiom_all_outputs_count": 1,
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
@@ -276,7 +308,10 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom"
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
   },
   "errors": [],
   "locales": [
@@ -290,11 +325,11 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "82743c15350157f9391732b0066a9087a41eaa53",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-07-09T15:50:43Z",
-    "generated_by": "scripts/run_comparison.py::rw-rental-local",
+    "generated_at": "2026-10-04T14:35:23Z",
+    "generated_by": "scripts/run_comparison.py::rw-rental",
     "oracle": {
       "euromod_country": "RW",
       "euromod_dataset": "rw_2024_a1",
@@ -304,7 +339,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-rw",
-        "sha": "91e8f66c66449795ee7535d7d4ed2687f6ea8841"
+        "sha": "001fa4b6267d5d8f3694770984aacd36774e400e"
       }
     ],
     "run_kind": "manual",
@@ -332,7 +367,7 @@
       "unexplained_count": 0
     },
     "error_count": 0,
-    "errors_by_engine": [],
+    "errors_by_engine": {},
     "match_count": 4,
     "mismatch_count": 0,
     "mismatches_by_concept": [],

@@ -29,6 +29,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2022-027/employment-income-tax#employment_income_tax",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -91,6 +98,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2022-027/employment-income-tax#employment_income_tax",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -153,6 +167,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2022-027/employment-income-tax#employment_income_tax",
+          "left": 1999.8999998498068,
+          "right": 1999.999999849807
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -215,6 +236,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2022-027/employment-income-tax#employment_income_tax",
+          "left": 3999.8999998122586,
+          "right": 3999.999999812258
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -277,6 +305,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2022-027/employment-income-tax#employment_income_tax",
+          "left": 13999.799999436778,
+          "right": 13999.999999436775
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -339,6 +374,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2022-027/employment-income-tax#employment_income_tax",
+          "left": 23999.799999249037,
+          "right": 23999.999999249034
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -401,6 +443,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2022-027/employment-income-tax#employment_income_tax",
+          "left": 83999.6999977471,
+          "right": 83999.9999977471
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -463,6 +512,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2022-027/employment-income-tax#employment_income_tax",
+          "left": 263999.6999943677,
+          "right": 263999.99999436777
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -536,7 +592,10 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom"
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
   },
   "errors": [],
   "locales": [
@@ -550,11 +609,11 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "82743c15350157f9391732b0066a9087a41eaa53",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-07-09T15:50:15Z",
-    "generated_by": "scripts/run_comparison.py::rw-paye-rate-schedule-local",
+    "generated_at": "2026-10-04T14:35:11Z",
+    "generated_by": "scripts/run_comparison.py::rw-paye-rate-schedule",
     "oracle": {
       "euromod_country": "RW",
       "euromod_dataset": "rw_2024_a1",
@@ -564,7 +623,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-rw",
-        "sha": "91e8f66c66449795ee7535d7d4ed2687f6ea8841"
+        "sha": "001fa4b6267d5d8f3694770984aacd36774e400e"
       }
     ],
     "run_kind": "manual",
@@ -592,7 +651,7 @@
       "unexplained_count": 0
     },
     "error_count": 0,
-    "errors_by_engine": [],
+    "errors_by_engine": {},
     "match_count": 8,
     "mismatch_count": 0,
     "mismatches_by_concept": [],

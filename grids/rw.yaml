@@ -22,6 +22,8 @@ case_sets:
       parameters:
         monthly_earnings: 20000.0
         imibereho_level: 2
+        comparison_basis: period-shifted schedule check (Axiom 2027 vs RWAMOD RW_2025)
+        level_pairing: suite assumption (no source maps incomes to IMIBEREHO levels)
       entities:
       - id: head
         kind: person
@@ -33,6 +35,8 @@ case_sets:
       parameters:
         monthly_earnings: 45000.0
         imibereho_level: 3
+        comparison_basis: period-shifted schedule check (Axiom 2027 vs RWAMOD RW_2025)
+        level_pairing: suite assumption (no source maps incomes to IMIBEREHO levels)
       entities:
       - id: head
         kind: person
@@ -44,6 +48,8 @@ case_sets:
       parameters:
         monthly_earnings: 90000.0
         imibereho_level: 4
+        comparison_basis: period-shifted schedule check (Axiom 2027 vs RWAMOD RW_2025)
+        level_pairing: suite assumption (no source maps incomes to IMIBEREHO levels)
       entities:
       - id: head
         kind: person
@@ -55,6 +61,8 @@ case_sets:
       parameters:
         monthly_earnings: 200000.0
         imibereho_level: 5
+        comparison_basis: period-shifted schedule check (Axiom 2027 vs RWAMOD RW_2025)
+        level_pairing: suite assumption (no source maps incomes to IMIBEREHO levels)
       entities:
       - id: head
         kind: person
@@ -73,9 +81,9 @@ case_sets:
       - rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution
       - rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution
       - rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution
-      - rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution
       parameters:
         monthly_employment_income: 100000.0
+        sector: private
       entities:
       - id: head
         kind: person
@@ -90,9 +98,9 @@ case_sets:
       - rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution
       - rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution
       - rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution
-      - rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution
       parameters:
         monthly_employment_income: 400000.0
+        sector: private
       entities:
       - id: head
         kind: person
@@ -107,11 +115,11 @@ case_sets:
       - rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution
       - rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution
       - rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution
-      - rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution
       - rw:statutes/law-2001-24/rama-contributions#employee_rama_contribution
       - rw:statutes/law-2001-24/rama-contributions#employer_rama_contribution
       parameters:
         monthly_employment_income: 100000.0
+        sector: public
       entities:
       - id: head
         kind: person
@@ -126,11 +134,11 @@ case_sets:
       - rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution
       - rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution
       - rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution
-      - rw:regulations/pmo-2020-105-03/cbhi-employee-contribution#employee_cbhi_contribution
       - rw:statutes/law-2005-23/mmi-contributions#insured_mmi_contribution
       - rw:statutes/law-2005-23/mmi-contributions#government_mmi_contribution
       parameters:
         monthly_employment_income: 100000.0
+        sector: military
       entities:
       - id: head
         kind: person
@@ -143,6 +151,7 @@ case_sets:
     entity_id: head
     outputs:
     - rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    - rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy
     cases:
     - id: rw-dispy-30000-nil-zone
       period: '2026'

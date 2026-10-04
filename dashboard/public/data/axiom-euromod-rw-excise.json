@@ -3,14 +3,14 @@
     {
       "category": "tax",
       "comparison": "amount",
-      "comparison_count": 6,
-      "comparison_weight": 6,
+      "comparison_count": 2,
+      "comparison_weight": 2,
       "components": [],
       "concept": "rw:statutes/law-2025-011/excise-duty#premium_fuel_excise_duty",
       "description": "Rwanda premium fuel excise (Law 011/2025 Annex item 17, FRW 183/litre)",
       "left_weighted_sum": 263520,
       "match_rate": 100,
-      "match_weight": 6,
+      "match_weight": 2,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
@@ -24,14 +24,14 @@
     {
       "category": "tax",
       "comparison": "amount",
-      "comparison_count": 6,
-      "comparison_weight": 6,
+      "comparison_count": 2,
+      "comparison_weight": 2,
       "components": [],
       "concept": "rw:statutes/law-2025-011/excise-duty#gas_oil_excise_duty",
       "description": "Rwanda gas oil excise (Law 011/2025 Annex item 18, FRW 150/litre)",
       "left_weighted_sum": 162000,
       "match_rate": 100,
-      "match_weight": 6,
+      "match_weight": 2,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
@@ -45,14 +45,14 @@
     {
       "category": "tax",
       "comparison": "amount",
-      "comparison_count": 6,
-      "comparison_weight": 6,
+      "comparison_count": 2,
+      "comparison_weight": 2,
       "components": [],
       "concept": "rw:statutes/law-2025-011/excise-duty#cigarette_excise_duty",
       "description": "Rwanda cigarette compound excise (Law 011/2025 Annex item 13, 36% + FRW 230/pack)",
       "left_weighted_sum": 665677.917853,
       "match_rate": 100,
-      "match_weight": 6,
+      "match_weight": 2,
       "mismatch_count": 0,
       "mismatch_weight": 0,
       "missing_both_count": 0,
@@ -71,6 +71,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2025-011/excise-duty#premium_fuel_excise_duty",
+          "left": 43920.0,
+          "right": 43920.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -126,6 +133,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2025-011/excise-duty#premium_fuel_excise_duty",
+          "left": 219600.0,
+          "right": 219600.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -181,6 +195,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2025-011/excise-duty#gas_oil_excise_duty",
+          "left": 18000.0,
+          "right": 18000.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -236,6 +257,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2025-011/excise-duty#gas_oil_excise_duty",
+          "left": 144000.0,
+          "right": 144000.0
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -291,6 +319,13 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2025-011/excise-duty#cigarette_excise_duty",
+          "left": 123541.4396095974,
+          "right": 123541.4396095974
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
@@ -321,17 +356,14 @@
             "loc": 3,
             "q02301": 10.0,
             "x02301": 20000.0,
+            "x02309": 20000.0,
             "yem": 0.0
           }
         ],
         "euromod_to_axiom_input_bridge": {
-          "tex01_s": {
-            "add": -76666.66666666667,
-            "divide_by": 0.36,
-            "inputs": [
-              "rw:statutes/law-2025-011/excise-duty#input.cigarette_retail_value"
-            ]
-          }
+          "il_exp_vat01": [
+            "rw:statutes/law-2025-011/excise-duty#input.cigarette_retail_value"
+          ]
         },
         "euromod_to_axiom_input_bridge_applied": {
           "rw:statutes/law-2025-011/excise-duty#input.cigarette_retail_value": 266503.9989155483
@@ -360,13 +392,20 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/law-2025-011/excise-duty#cigarette_excise_duty",
+          "left": 542136.4782431882,
+          "right": 542136.4782431884
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
           "rw:statutes/law-2025-011/excise-duty#input.cigar_value": 0,
           "rw:statutes/law-2025-011/excise-duty#input.cigarette_packs": 480.0,
-          "rw:statutes/law-2025-011/excise-duty#input.cigarette_retail_value": 1199267.9951199673,
+          "rw:statutes/law-2025-011/excise-duty#input.cigarette_retail_value": 1199267.9951199675,
           "rw:statutes/law-2025-011/excise-duty#input.gas_oil_litres": 0,
           "rw:statutes/law-2025-011/excise-duty#input.premium_fuel_litres": 0
         },
@@ -390,20 +429,17 @@
             "loc": 3,
             "q02301": 40.0,
             "x02301": 90000.0,
+            "x02309": 90000.0,
             "yem": 0.0
           }
         ],
         "euromod_to_axiom_input_bridge": {
-          "tex01_s": {
-            "add": -306666.6666666667,
-            "divide_by": 0.36,
-            "inputs": [
-              "rw:statutes/law-2025-011/excise-duty#input.cigarette_retail_value"
-            ]
-          }
+          "il_exp_vat01": [
+            "rw:statutes/law-2025-011/excise-duty#input.cigarette_retail_value"
+          ]
         },
         "euromod_to_axiom_input_bridge_applied": {
-          "rw:statutes/law-2025-011/excise-duty#input.cigarette_retail_value": 1199267.9951199673
+          "rw:statutes/law-2025-011/excise-duty#input.cigarette_retail_value": 1199267.9951199675
         },
         "household_summary": {
           "ages": [
@@ -462,7 +498,10 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom"
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
   },
   "errors": [],
   "locales": [
@@ -476,11 +515,11 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "82743c15350157f9391732b0066a9087a41eaa53",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-07-09T15:56:14Z",
-    "generated_by": "scripts/run_comparison.py::rw-excise-local",
+    "generated_at": "2026-10-04T14:35:41Z",
+    "generated_by": "scripts/run_comparison.py::rw-excise",
     "oracle": {
       "euromod_country": "RW",
       "euromod_dataset": "rw_2024_a1",
@@ -490,7 +529,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-rw",
-        "sha": "91e8f66c66449795ee7535d7d4ed2687f6ea8841"
+        "sha": "001fa4b6267d5d8f3694770984aacd36774e400e"
       }
     ],
     "run_kind": "manual",
@@ -500,7 +539,7 @@
   "scope": null,
   "suite": "rw-excise",
   "summary": {
-    "comparison_count": 18,
+    "comparison_count": 6,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
@@ -518,16 +557,16 @@
       "unexplained_count": 0
     },
     "error_count": 0,
-    "errors_by_engine": [],
-    "match_count": 18,
+    "errors_by_engine": {},
+    "match_count": 6,
     "mismatch_count": 0,
     "mismatches_by_concept": [],
     "mismatches_by_kind": [],
     "mismatches_by_scenario": [],
     "weighted": {
-      "comparison_weight": 18,
+      "comparison_weight": 6,
       "match_rate": 100,
-      "match_weight": 18,
+      "match_weight": 6,
       "mismatch_weight": 0
     }
   }

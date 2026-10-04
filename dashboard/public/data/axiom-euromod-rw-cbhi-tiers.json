@@ -7,7 +7,7 @@
       "comparison_weight": 4,
       "components": [],
       "concept": "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution",
-      "description": "Rwanda CBHI member premium by IMIBEREHO level (MO 002/26/10/TC of 16/02/2026; RW_2025 timing finding)",
+      "description": "Rwanda CBHI member premium by IMIBEREHO level (MO 002/26/10/TC of 16/02/2026); period-shifted schedule check, Axiom at 2027 vs RWAMOD RW_2025 (timing finding)",
       "left_weighted_sum": 36000,
       "match_rate": 100,
       "match_weight": 4,
@@ -29,12 +29,20 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution",
+          "left": 3000.0,
+          "right": 3000
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
           "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#input.imibereho_dynamic_social_registry_level": 2
         },
+        "comparison_basis": "period-shifted schedule check (Axiom 2027 vs RWAMOD RW_2025)",
         "euromod_inputs": [
           {
             "dag": 35,
@@ -64,6 +72,7 @@
           "household_size": 1
         },
         "imibereho_level": 2,
+        "level_pairing": "suite assumption (no source maps incomes to IMIBEREHO levels)",
         "locale": "RW",
         "monthly_earnings": 20000.0,
         "scenario": "informal-cbhi-member-premium",
@@ -81,12 +90,20 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution",
+          "left": 5000.0,
+          "right": 5000
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
           "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#input.imibereho_dynamic_social_registry_level": 3
         },
+        "comparison_basis": "period-shifted schedule check (Axiom 2027 vs RWAMOD RW_2025)",
         "euromod_inputs": [
           {
             "dag": 35,
@@ -116,6 +133,7 @@
           "household_size": 1
         },
         "imibereho_level": 3,
+        "level_pairing": "suite assumption (no source maps incomes to IMIBEREHO levels)",
         "locale": "RW",
         "monthly_earnings": 45000.0,
         "scenario": "informal-cbhi-member-premium",
@@ -133,12 +151,20 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution",
+          "left": 8000.0,
+          "right": 8000
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
           "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#input.imibereho_dynamic_social_registry_level": 4
         },
+        "comparison_basis": "period-shifted schedule check (Axiom 2027 vs RWAMOD RW_2025)",
         "euromod_inputs": [
           {
             "dag": 35,
@@ -168,6 +194,7 @@
           "household_size": 1
         },
         "imibereho_level": 4,
+        "level_pairing": "suite assumption (no source maps incomes to IMIBEREHO levels)",
         "locale": "RW",
         "monthly_earnings": 90000.0,
         "scenario": "informal-cbhi-member-premium",
@@ -185,12 +212,20 @@
       "left_engine": "euromod",
       "left_errors": [],
       "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution",
+          "left": 20000.0,
+          "right": 20000
+        }
+      ],
       "metadata": {
         "axiom_entity": "Person",
         "axiom_entity_id": "head",
         "axiom_inputs": {
           "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#input.imibereho_dynamic_social_registry_level": 5
         },
+        "comparison_basis": "period-shifted schedule check (Axiom 2027 vs RWAMOD RW_2025)",
         "euromod_inputs": [
           {
             "dag": 35,
@@ -220,6 +255,7 @@
           "household_size": 1
         },
         "imibereho_level": 5,
+        "level_pairing": "suite assumption (no source maps incomes to IMIBEREHO levels)",
         "locale": "RW",
         "monthly_earnings": 200000.0,
         "scenario": "informal-cbhi-member-premium",
@@ -238,7 +274,7 @@
       "category": "contribution",
       "comparison": "amount",
       "components": [],
-      "description": "Rwanda CBHI member premium by IMIBEREHO level (MO 002/26/10/TC of 16/02/2026; RW_2025 timing finding)",
+      "description": "Rwanda CBHI member premium by IMIBEREHO level (MO 002/26/10/TC of 16/02/2026); period-shifted schedule check, Axiom at 2027 vs RWAMOD RW_2025 (timing finding)",
       "id": "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution",
       "parent": null,
       "priority": "high",
@@ -248,7 +284,10 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom"
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
   },
   "errors": [],
   "locales": [
@@ -262,11 +301,11 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "82743c15350157f9391732b0066a9087a41eaa53",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-07-09T15:52:36Z",
-    "generated_by": "scripts/run_comparison.py::rw-cbhi-tiers-local",
+    "generated_at": "2026-10-04T14:35:47Z",
+    "generated_by": "scripts/run_comparison.py::rw-cbhi-tiers",
     "oracle": {
       "euromod_country": "RW",
       "euromod_dataset": "rw_2024_a1",
@@ -276,7 +315,7 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-rw",
-        "sha": "91e8f66c66449795ee7535d7d4ed2687f6ea8841"
+        "sha": "001fa4b6267d5d8f3694770984aacd36774e400e"
       }
     ],
     "run_kind": "manual",
@@ -304,7 +343,7 @@
       "unexplained_count": 0
     },
     "error_count": 0,
-    "errors_by_engine": [],
+    "errors_by_engine": {},
     "match_count": 4,
     "mismatch_count": 0,
     "mismatches_by_concept": [],
