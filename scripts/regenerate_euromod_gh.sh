@@ -41,7 +41,8 @@ export EUROMOD_MODEL_ROOT EUROMOD_PYTHON DOTNET_ROOT PYTHONNET_RUNTIME \
 for name in \
   gh-income-tax-rate-schedule \
   gh-personal-reliefs \
-  gh-ssnit-contributions; do
+  gh-ssnit-contributions \
+  gh-capital-income; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

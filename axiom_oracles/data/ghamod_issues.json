@@ -93,6 +93,33 @@
     "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution",
     "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution"
    ]
+  },
+  {
+   "id": "ghamod-tiniy-15pct-rate-unsupported-by-para-8",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tiniy_s",
+    "tinkt_s"
+   ],
+   "statute": "Income Tax Act, 2015 (Act 896) First Schedule paragraph 8(1)(b); Act 907 s.1",
+   "observed": "GHAMOD withholds a flat 15% on investment income: probed, 1,000 a month of post-uprating yiy gives tiniy_s = tinkt_s = 150. The paragraph 8(1)(b) rows rulespec-gh encodes from Act 896 as in force carry no 15% rate for investment income proper: dividends are 8% (row (i)); interest paid to an individual is 1% (row (ii)), with interest from a resident financial institution or on Government of Ghana bonds exempt under the section 7 exemptions inserted by Act 907; other interest is 8% (row (iii)). Among the encoded rows, 15% applies only to non-residential rent and to natural-resource payments and royalties.",
+   "axiom_position": "The encoded module (rulespec-gh gh/statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax.yaml) follows the statutory rows. The gh-capital-income suite compares rent (tinrt_s, 8%, exact) live and records this entry instead of running yiy cases, which would all diverge.",
+   "reported_upstream": "Candidate finding #6 for UNU-WIDER (southmod@wider.unu.edu). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-capital-income"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#dividend_final_withholding",
+    "gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#interest_paid_to_individual_withholding"
+   ]
   }
  ]
 }

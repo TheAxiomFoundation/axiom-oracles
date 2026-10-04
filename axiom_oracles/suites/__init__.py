@@ -51,6 +51,7 @@ from .gh_income_tax import (
     gh_income_tax_rate_schedule_cases,
     gh_personal_reliefs_cases,
 )
+from .gh_capital_income import gh_capital_income_cases
 from .gh_ssnit import gh_ssnit_contributions_cases
 from .dk_child_youth_benefit import (
     dk_child_youth_benefit_2023_cases,
@@ -173,6 +174,7 @@ def available_suites() -> tuple[str, ...]:
         "gh-income-tax-rate-schedule",
         "gh-personal-reliefs",
         "gh-ssnit-contributions",
+        "gh-capital-income",
         "us-tariff",
     )
 
@@ -320,6 +322,8 @@ def load_suite(name: str):
         return gh_personal_reliefs_cases()
     if name == "gh-ssnit-contributions":
         return gh_ssnit_contributions_cases()
+    if name == "gh-capital-income":
+        return gh_capital_income_cases()
     if name == "us-tariff":
         return us_tariff_cases()
     raise ValueError(f"Unknown suite: {name}")
@@ -362,6 +366,7 @@ __all__ = [
     "be_worker_ssc_cases",
     "be_worker_tax_income_list_cases",
     "gh_income_tax_rate_schedule_cases",
+    "gh_capital_income_cases",
     "gh_personal_reliefs_cases",
     "gh_ssnit_contributions_cases",
     "dk_child_youth_benefit_cases",
