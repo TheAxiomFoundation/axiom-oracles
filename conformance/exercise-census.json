@@ -8575,6 +8575,98 @@
       "varied_fields": 1,
       "verdict_concepts": {}
     },
+    "ug-presumptive": {
+      "binding": "unbound",
+      "binding_defects": [
+        "ug-presumptive: chunk index dashboard/public/data/cases/ug-presumptive/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 10,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "annual_gross_turnover": {
+          "distinct": 6,
+          "state": "varied"
+        },
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "taxpayer_keeps_records": {
+          "distinct": 2,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-ug-presumptive.json",
+      "report_sha256": "31e06e923d4c33b7aafcd1f397cbd88a9d8cd983d0b198d1a66ac951651b5998",
+      "varied_fields": 2,
+      "verdict_concepts": {}
+    },
+    "ug-rental": {
+      "binding": "unbound",
+      "binding_defects": [
+        "ug-rental: chunk index dashboard/public/data/cases/ug-rental/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 4,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "annual_gross_rental_income": {
+          "distinct": 4,
+          "state": "varied"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-ug-rental.json",
+      "report_sha256": "0a7920cece0528bd160d202e0cb6c3a06de829369f0cd9c828533e05a2744ada",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "uk-attendance-allowance-pe": {
       "binding": "unbound",
       "binding_defects": [

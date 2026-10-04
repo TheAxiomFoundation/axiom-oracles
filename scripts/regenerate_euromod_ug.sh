@@ -33,7 +33,9 @@ export EUROMOD_MODEL_ROOT EUROMOD_PYTHON DOTNET_ROOT PYTHONNET_RUNTIME \
   AXIOM_RULESPEC_REPO_ROOTS
 
 for name in \
-  ug-paye-rate-schedule; do
+  ug-paye-rate-schedule \
+  ug-rental \
+  ug-presumptive; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

@@ -126,3 +126,167 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 150000000.0
+  ug-presumptive:
+    locale: UG
+    entity: Person
+    entity_id: head
+    outputs:
+    - ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits
+    cases:
+    - id: ug-presumptive-nil-band-8m-records
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 8000000.0
+        taxpayer_keeps_records: true
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-presumptive-band1-20m-no-records
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 20000000.0
+        taxpayer_keeps_records: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-presumptive-band2-40m-no-records
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 40000000.0
+        taxpayer_keeps_records: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-presumptive-band3-60m-no-records
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 60000000.0
+        taxpayer_keeps_records: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-presumptive-band4-100m-no-records
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 100000000.0
+        taxpayer_keeps_records: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-presumptive-band1-20m-records
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 20000000.0
+        taxpayer_keeps_records: true
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-presumptive-band2-40m-records
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 40000000.0
+        taxpayer_keeps_records: true
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-presumptive-band3-60m-records
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 60000000.0
+        taxpayer_keeps_records: true
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-presumptive-band4-100m-records
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 100000000.0
+        taxpayer_keeps_records: true
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-presumptive-above-ceiling-160m
+      period: '2026'
+      scenario: small-business-presumptive-turnover
+      parameters:
+        annual_gross_turnover: 160000000.0
+        taxpayer_keeps_records: false
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+  ug-rental:
+    locale: UG
+    entity: Person
+    entity_id: head
+    outputs:
+    - ug:statutes/act-2022-11/income-tax-amendment-2022/third-schedule-rental-rate-part-substituted#individual_rental_income_tax
+    cases:
+    - id: ug-rental-2m-below-threshold
+      period: '2026'
+      scenario: single-landlord-rental-income
+      parameters:
+        annual_gross_rental_income: 2000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-rental-2820000-at-threshold
+      period: '2026'
+      scenario: single-landlord-rental-income
+      parameters:
+        annual_gross_rental_income: 2820000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-rental-probe-5m
+      period: '2026'
+      scenario: single-landlord-rental-income
+      parameters:
+        annual_gross_rental_income: 5000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: ug-rental-probe-10m
+      period: '2026'
+      scenario: single-landlord-rental-income
+      parameters:
+        annual_gross_rental_income: 10000000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
