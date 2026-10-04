@@ -380,7 +380,7 @@ def test_pinned_repo_roots_win_over_the_convention_checkout(tmp_path, monkeypatc
     )
 
     assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pinned_sha}
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pinned_sha, "dirty": False}
     ]
 
 
@@ -408,7 +408,7 @@ def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch)
     )
 
     assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": override_sha}
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": override_sha, "dirty": False}
     ]
 
 
@@ -433,7 +433,7 @@ def test_a_root_naming_a_rulespec_checkout_is_lifted_to_its_parent(
     )
 
     assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pinned_sha}
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pinned_sha, "dirty": False}
     ]
 
 
@@ -455,7 +455,7 @@ def test_absent_pinned_roots_fall_back_to_the_convention_checkout(
     )
 
     assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": convention_sha}
+        {"repo": "TheAxiomFoundation/rulespec-us", "sha": convention_sha, "dirty": False}
     ]
 
 

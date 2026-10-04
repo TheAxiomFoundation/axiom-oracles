@@ -648,6 +648,7 @@ def main() -> int:
         # report records exactly what it ran against and the affected-rerun
         # map can diff its SHAs.
         provenance = _build_run_provenance(config, runner_type, staging)
+        _guard_unclean_rulespec_trees(config["name"], provenance)
         compared_engines = {
             str(config["runner"]["parameters"].get("left", "")),
             str(config["runner"]["parameters"].get("right", "")),
@@ -736,6 +737,45 @@ def main() -> int:
     return 0
 
 
+def _guard_unclean_rulespec_trees(name: str, provenance: dict) -> None:
+    """Refuse a non-manual report from rules that differ from their recorded SHA.
+
+    Provenance names each rulespec checkout by its HEAD SHA, but the run read
+    the working tree: a mutated scratch copy of rulespec-rw reported 001fa4b
+    while running a 17% VAT rate, and the July rw-contributions report recorded
+    d814f2d for values only an uncommitted tree could produce. A ``weekly``,
+    ``pr-triggered`` or ``affected-rerun`` report is published as what the
+    committed rules compute, so it must come from trees whose state is recorded
+    and clean (untracked files do not count). Exits before stamping or
+    publication, so nothing reaches reports/ or the dashboard. A ``manual`` run
+    may use a dirty tree: it is published with ``dirty: true`` and the diff
+    hash on each such entry, the affected-rerun selector treats it as stale,
+    and this warns on stderr.
+    """
+    from axiom_oracles.provenance import describe_rulespec_tree, unclean_rulespecs
+
+    unclean = unclean_rulespecs(provenance.get("rulespecs"), require_recorded=True)
+    if not unclean:
+        return
+    trees = "; ".join(describe_rulespec_tree(entry) for entry in unclean)
+    run_kind = provenance.get("run_kind")
+    if run_kind != "manual":
+        raise SystemExit(
+            f"{name}: {run_kind} run refused before publication: these "
+            "rulespec working trees are not verified clean against their "
+            f"recorded SHA: "
+            f"{trees}. Commit or discard the tracked changes (untracked files "
+            "are ignored), or run manually (AXIOM_ORACLES_RUN_KIND unset) to "
+            "publish a report marked dirty."
+        )
+    sys.stderr.write(
+        f"WARNING: {name}: these numbers come from rulespec working trees that "
+        f"are not verified clean against their recorded SHA: {trees}. The "
+        "report's provenance records this, and the affected-rerun selector "
+        "will treat the report as stale.\n"
+    )
+
+
 def _euromod_release_from_model_root(model_root: str | None) -> str | None:
     """Read the EUROMOD-platform release label off the model-root directory name.
 
@@ -817,10 +857,11 @@ def _complete_rulespecs_from_affected_map(
     repo this report cannot yet prove a SHA for, resolve one honestly:
 
     * the runner's own fresh-clone SHA when it recorded one
-      (``_cloned_rulespec_us_sha``, the tax lane's temp clone), else
+      (``_cloned_rulespec_us_sha``, the tax lane's temp clone, with the
+      worktree state the runner measured before deleting it), else
     * the checkout the supervised-layout conventions resolve
       (:func:`axiom_oracles.provenance.resolve_rulespec_checkout` — the same
-      locations the harnesses themselves search).
+      locations the harnesses themselves search), with its worktree state.
 
     Entries that already carry a SHA are untouched, and declared-path entries
     always win over convention lookups. Unresolvable repos keep or gain a
@@ -829,7 +870,10 @@ def _complete_rulespecs_from_affected_map(
     never fail one.
     """
     try:
-        from axiom_oracles.provenance import resolve_rulespec_checkout
+        from axiom_oracles.provenance import (
+            resolve_rulespec_checkout,
+            worktree_state,
+        )
 
         mapped_repos = _affected_map_repos(config)
         if not mapped_repos:
@@ -840,17 +884,20 @@ def _complete_rulespecs_from_affected_map(
             if by_repo.get(repo, {}).get("sha"):
                 continue
             sha = None
+            state: dict = {}
             if repo == "TheAxiomFoundation/rulespec-us":
                 sha = runner.get("_cloned_rulespec_us_sha")
+                state = runner.get("_cloned_rulespec_us_worktree") or {}
             if sha is None:
                 checkout = resolve_rulespec_checkout(repo)
                 if checkout is not None:
                     sha = _git_head_sha(checkout)
+                    state = worktree_state(checkout) if sha else {}
             if repo in by_repo:
                 if sha:
-                    by_repo[repo]["sha"] = sha
+                    by_repo[repo].update({"sha": sha, **state})
             else:
-                entry = {"repo": repo, "sha": sha}
+                entry = {"repo": repo, "sha": sha, **(state if sha else {})}
                 by_repo[repo] = entry
                 completed.append(entry)
         return completed
@@ -961,9 +1008,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # A skip-capable runner that re-emitted the committed report never
     # executed any rules this run — no matter which path produced a rulespec
     # entry (configured roots included), its SHA must not be recorded, or the
-    # selector would mark rules-stale numbers fresh (#296 review).
+    # selector would mark rules-stale numbers fresh (#296 review). The
+    # checkout's worktree state goes with it: no tree ran, clean or dirty.
     if runner.get("_reemitted_report"):
-        rulespecs = [{**entry, "sha": None} for entry in rulespecs]
+        rulespecs = [{"repo": entry.get("repo"), "sha": None} for entry in rulespecs]
 
     # Engine identity (Axiom side under test).
     axiom_rules_ref = runner.get("axiom_rules_repo") or params.get("axiom_rules_repo")
@@ -1421,6 +1469,11 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         with output.open("w") as f:
             subprocess.run(cmd, check=True, stdout=f)
     finally:
+        # Measured after the run, so a harness that wrote into the clone is
+        # recorded as dirty rather than assumed clean.
+        from axiom_oracles.provenance import worktree_state
+
+        runner["_cloned_rulespec_us_worktree"] = worktree_state(rulespec_root)
         shutil.rmtree(rulespec_root.parent, ignore_errors=True)
 
 

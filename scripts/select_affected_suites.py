@@ -33,7 +33,12 @@ A suite is selected when, for any affected repo:
   unless the map entry pins that repo (``pinned: {repo: sha}``, emitted for
   suites declaring ``rulespec_upstream_sha``): a pinned suite replays one
   reviewed snapshot, so it is judged against the PIN instead and goes stale
-  only when the pin itself changes.
+  only when the pin itself changes, or
+* the report records that the repo's working tree was dirty or unverifiable
+  when it ran (``dirty: true`` / ``dirty: null`` on the entry): no commit
+  produced those numbers, so no SHA match, pin or unknown HEAD makes them
+  fresh. ``run_comparison.py`` publishes such a report only from a manual
+  run.
 
 A suite whose every affected repo's HEAD equals what its report already ran
 against (or whose pin equals what it ran against, for pinned repos) is fresh
@@ -110,6 +115,31 @@ def _report_ran_against(report: dict) -> dict[str, str | None]:
     """{repo: sha-or-None} the report's provenance says it ran against."""
     rulespecs = (report.get("provenance") or {}).get("rulespecs") or []
     return {r["repo"]: r.get("sha") for r in rulespecs if r.get("repo")}
+
+
+def _report_unclean_trees(report: dict) -> dict[str, str]:
+    """{repo: reason} for entries whose SHA the report's numbers did not run.
+
+    Mirrors ``axiom_oracles.provenance.unclean_rulespecs`` (this script runs
+    with only PyYAML installed, so it cannot import the package): an entry
+    with a ``sha`` and ``dirty: true`` ran uncommitted rules, and one with
+    ``dirty: null`` could not show it did not. Either way its SHA cannot prove
+    the report fresh, even when it equals HEAD or the pin. An entry with no
+    ``dirty`` key predates the field and is judged on its SHA alone.
+    """
+    unclean: dict[str, str] = {}
+    for entry in (report.get("provenance") or {}).get("rulespecs") or []:
+        if not isinstance(entry, dict) or not entry.get("repo"):
+            continue
+        sha = entry.get("sha")
+        if not sha or "dirty" not in entry or entry["dirty"] is False:
+            continue
+        state = "a dirty" if entry["dirty"] is True else "an unverifiable"
+        unclean[entry["repo"]] = (
+            f"{entry['repo']}: report ran against {state} working tree "
+            f"at {str(sha)[:12]}"
+        )
+    return unclean
 
 
 def _selector_report_path(value: object) -> Path | None:
@@ -195,8 +225,15 @@ def select(
             )
             continue
         pinned = entry.get("pinned") or {}
+        unclean = _report_unclean_trees(report)
         reasons: list[str] = []
         for repo in repos:
+            if repo in unclean:
+                # Checked before the pin and HEAD: a dirty run is stale
+                # whatever SHA it recorded, and an unknown HEAD cannot excuse
+                # numbers no commit produces.
+                reasons.append(unclean[repo])
+                continue
             pin = pinned.get(repo)
             if pin is not None:
                 # A pinned suite replays one reviewed snapshot; its report can

@@ -840,7 +840,7 @@ def test_snap_qc_map_repos_are_exactly_what_a_real_run_records(tmp_path):
 
     provenance = rc._build_run_provenance(config, "snap-qc-compare", output)
 
-    assert provenance["rulespecs"] == [{"repo": RULESPEC_US, "sha": sha}]
+    assert provenance["rulespecs"] == [{"repo": RULESPEC_US, "sha": sha, "dirty": False}]
     entry = next(
         e for e in gam.build_map()["suites"] if e["suite"] == "ny-snap-qc"
     )

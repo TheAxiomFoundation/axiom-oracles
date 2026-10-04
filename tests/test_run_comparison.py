@@ -2128,8 +2128,10 @@ def test_completion_fills_missing_repo_from_convention_checkout(
     monkeypatch.setattr(rc, "_git_head_sha", lambda repo: "a" * 40)
 
     completed = rc._complete_rulespecs_from_affected_map(config, {}, [])
+    # The faked SHA sits on a directory git cannot inspect, so the worktree
+    # state is recorded as unverifiable rather than assumed clean.
     assert completed == [
-        {"repo": "TheAxiomFoundation/rulespec-us-az", "sha": "a" * 40}
+        {"repo": "TheAxiomFoundation/rulespec-us-az", "sha": "a" * 40, "dirty": None}
     ]
 
 

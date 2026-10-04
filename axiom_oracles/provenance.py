@@ -17,6 +17,8 @@ The block shape (``axiom_oracles.provenance.v1``)::
       rulespecs:                       # the rulespec repos the cases ran against
         - repo: TheAxiomFoundation/rulespec-us
           sha: 9c1f2ab…                 # 40-hex, or None when unresolved
+          dirty: false                  # tracked files differ from `sha`?
+          diff_sha256: 3f0a…            # only when dirty (see worktree_state)
       engine:                          # the Axiom side under test
         axiom_rules_engine_sha: …      # git SHA of the axiom-rules checkout
         axiom_rules_engine_version: …  # crate version if resolvable
@@ -40,12 +42,23 @@ Only ``schema`` and ``generated_at`` are guaranteed present. ``run_kind`` is a
 free-form-but-validated enum (see :data:`RUN_KINDS`) resolved from the
 ``AXIOM_ORACLES_RUN_KIND`` environment variable, defaulting to ``manual`` so a
 local run is never mislabeled as a scheduled one.
+
+A ``sha`` names a commit, but a run reads the working tree: a mutated scratch
+copy of rulespec-rw once reported ``001fa4b`` while running a 17% VAT rate.
+Every rulespec entry whose ``sha`` resolved therefore also records ``dirty``
+(:func:`worktree_state`): ``false`` when the tracked files match ``sha``,
+``true`` plus a ``diff_sha256`` when they do not, and ``null`` when git could
+not tell. Entries without a ``sha``, and reports stamped before this field
+existed, carry no ``dirty`` key.
 """
 
 from __future__ import annotations
 
+import hashlib
 import os
+import shutil
 import subprocess
+import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -95,6 +108,203 @@ def _git_sha(repo: Path) -> str | None:
     return sha or None
 
 
+#: ``git status`` arguments that decide ``dirty``: staged or unstaged changes
+#: to tracked files only (``--untracked-files=no``), and a submodule counts
+#: only for modified content, not untracked content, for the same reason.
+_STATUS_ARGS = (
+    "--no-optional-locks",
+    "status",
+    "--porcelain=v1",
+    "-z",
+    "--untracked-files=no",
+    "--ignore-submodules=untracked",
+)
+
+#: The ``git diff`` behind ``diff_sha256``. Every output-shaping option that
+#: git config can change is pinned here, so the hash depends on the change
+#: alone. From the checkout's top level, a reader can recompute it with
+#: ``git <_DIFF_CONFIG> <_DIFF_ARGS> | shasum -a 256``, after clearing any
+#: skip-worktree or assume-unchanged flag that :func:`worktree_state` clears.
+_DIFF_CONFIG = (
+    "-c",
+    "core.quotePath=false",
+    "-c",
+    "diff.noprefix=false",
+    "-c",
+    "diff.mnemonicPrefix=false",
+    "-c",
+    "diff.relative=false",
+    "-c",
+    "diff.suppressBlankEmpty=false",
+)
+_DIFF_ARGS = (
+    "--no-optional-locks",
+    "diff",
+    "--binary",
+    "--full-index",
+    "--no-color",
+    "--no-ext-diff",
+    "--no-textconv",
+    "--no-renames",
+    "--diff-algorithm=myers",
+    "--indent-heuristic",
+    "--unified=3",
+    "--inter-hunk-context=0",
+    "--src-prefix=a/",
+    "--dst-prefix=b/",
+    "--submodule=short",
+    "--ignore-submodules=untracked",
+    "-O/dev/null",
+    "HEAD",
+    "--",
+)
+
+
+def _git_output(
+    repo: Path, *args: str, env: dict[str, str] | None = None, stdin: bytes | None = None
+) -> bytes:
+    return subprocess.run(
+        ["git", "-C", str(repo), *args],
+        input=stdin,
+        capture_output=True,
+        check=True,
+        env=env,
+    ).stdout
+
+
+def _index_revealing_hidden_edits(toplevel: Path, workdir: Path) -> dict[str, str] | None:
+    """Environment whose index shows edits that index flags hide, or None.
+
+    ``git status`` and ``git diff`` trust a ``skip-worktree`` or
+    ``assume-unchanged`` entry without reading the file, so an edit behind
+    either flag runs while the tree looks clean. When any flagged file is
+    present on disk, copy the index into ``workdir`` and clear both flags on
+    the copy (``update-index`` applies only the last mode option it is given,
+    hence one pass per flag). The checkout's own index is never written. A
+    flagged file absent from disk, as in a sparse checkout, keeps its flag.
+    """
+    hidden = []
+    for record in _git_output(toplevel, "ls-files", "-v", "-z").split(b"\0"):
+        tag, path = record[:1], record[2:]
+        if not path or not (tag == b"S" or tag.islower()):
+            continue
+        if os.path.lexists(toplevel / os.fsdecode(path)):
+            hidden.append(path)
+    if not hidden:
+        return None
+    index = Path(
+        os.fsdecode(_git_output(toplevel, "rev-parse", "--git-path", "index").strip())
+    )
+    if not index.is_absolute():
+        index = toplevel / index
+    copy = workdir / "index"
+    # copy2 keeps the index's mtime. Git rehashes an entry whose file is no
+    # older than the index ("racily clean"); a fresh mtime on the copy would
+    # make a same-size edit made in the same second look unchanged.
+    shutil.copy2(index, copy)
+    env = {**os.environ, "GIT_INDEX_FILE": str(copy)}
+    paths = b"\0".join(hidden) + b"\0"
+    for flag in ("--no-skip-worktree", "--no-assume-unchanged"):
+        _git_output(
+            toplevel,
+            "update-index",
+            "--no-split-index",
+            flag,
+            "-z",
+            "--stdin",
+            env=env,
+            stdin=paths,
+        )
+    return env
+
+
+def worktree_state(repo: Path | str | None) -> dict[str, Any]:
+    """Whether a checkout's tracked files match its ``HEAD`` commit.
+
+    Returns ``{"dirty": False}`` when they match, ``{"dirty": True,
+    "diff_sha256": <64-hex>}`` when they do not, and ``{"dirty": None}`` when
+    git cannot tell (not a checkout, no commit, git missing). The whole
+    enclosing repository counts, wherever in it ``repo`` points, because the
+    recorded ``sha`` names the whole commit.
+
+    Dirty means ``git status`` reports a staged or unstaged change to a
+    tracked file: an edit, a deletion, a mode change, a newly staged file, a
+    conflict. Edits hidden behind ``skip-worktree`` or ``assume-unchanged``
+    count too (:func:`_index_revealing_hidden_edits`). Untracked files do not
+    count, so build output never marks a tree dirty; the cost is that a run
+    compiling an untracked module that no tracked file imports goes unseen.
+
+    ``diff_sha256`` is the SHA-256 of ``git diff HEAD`` under the pinned
+    :data:`_DIFF_CONFIG` and :data:`_DIFF_ARGS`, so the hash identifies the
+    edit: the same edit on the same commit hashes the same whatever the local
+    git config, and a different diff hashes differently. (Binary patches are
+    deflated, so a binary edit may hash differently under another zlib.) Never
+    raises: provenance must annotate a run, never fail one.
+    """
+    if repo is None:
+        return {"dirty": None}
+    try:
+        toplevel = Path(
+            os.fsdecode(
+                _git_output(
+                    Path(os.path.expandvars(os.path.expanduser(str(repo)))),
+                    "rev-parse",
+                    "--show-toplevel",
+                ).strip()
+            )
+        )
+        _git_output(toplevel, "rev-parse", "--verify", "--quiet", "HEAD^{commit}")
+        with tempfile.TemporaryDirectory(prefix="axiom-provenance-") as workdir:
+            env = _index_revealing_hidden_edits(toplevel, Path(workdir))
+            status = _git_output(toplevel, *_STATUS_ARGS, env=env)
+            if not status.strip(b"\0"):
+                return {"dirty": False}
+            diff = _git_output(toplevel, *_DIFF_CONFIG, *_DIFF_ARGS, env=env)
+    except Exception:  # provenance must annotate, never fail a run
+        return {"dirty": None}
+    return {"dirty": True, "diff_sha256": hashlib.sha256(diff).hexdigest()}
+
+
+def unclean_rulespecs(
+    rulespecs: list[dict[str, Any]] | None, *, require_recorded: bool = False
+) -> list[dict[str, Any]]:
+    """Rulespec entries whose ``sha`` is not shown to be what ran.
+
+    An entry with a ``sha`` is unclean when it records ``dirty: true``, or
+    ``dirty: null`` (git could not tell). With ``require_recorded`` an entry
+    that has a ``sha`` but no ``dirty`` key at all is unclean as well: use it
+    for a block this code just built, where every resolved ``sha`` comes with
+    a ``dirty`` value, so a missing one means a path skipped the check. Leave
+    it off for committed reports, where a missing key only means the report
+    predates the field. Entries without a ``sha`` claim no commit and are
+    never unclean here; the affected-rerun selector already treats them as
+    unproven.
+    """
+    unclean = []
+    for entry in rulespecs or []:
+        if not isinstance(entry, dict) or not entry.get("sha"):
+            continue
+        if "dirty" in entry:
+            if entry["dirty"] is not False:
+                unclean.append(entry)
+        elif require_recorded:
+            unclean.append(entry)
+    return unclean
+
+
+def describe_rulespec_tree(entry: dict[str, Any]) -> str:
+    """``owner/repo@sha12 (state)`` for messages about unclean entries."""
+    sha = str(entry.get("sha") or "")[:12] or "unknown"
+    if entry.get("dirty") is True:
+        digest = str(entry.get("diff_sha256") or "")[:12] or "unknown"
+        state = f"dirty, diff sha256 {digest}"
+    elif "dirty" in entry:
+        state = "working tree unverifiable"
+    else:
+        state = "working tree not recorded"
+    return f"{entry.get('repo')}@{sha} ({state})"
+
+
 def _remote_url(repo: Path) -> str | None:
     try:
         result = subprocess.run(
@@ -133,13 +343,15 @@ def repo_slug_from_remote(url: str | None) -> str | None:
 
 
 def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
-    """Resolve ``{repo, sha}`` provenance for each rulespec checkout path.
+    """Resolve ``{repo, sha, dirty}`` provenance for each rulespec checkout path.
 
     ``paths`` are local checkout directories (as the runner resolves them from
     ``rulespec_root`` / ``rulespec_roots``). Each is walked up to its enclosing
     git repo; the ``repo`` slug comes from the origin remote when available,
     otherwise from the directory basename so a report is never left with an
-    anonymous rulespec entry. Deduplicated on ``(repo, sha)``, order-stable.
+    anonymous rulespec entry. An entry whose ``sha`` resolved also carries the
+    checkout's :func:`worktree_state`. Deduplicated on the whole entry,
+    order-stable, so two checkouts of one commit in different states both stay.
     """
     entries: list[dict[str, Any]] = []
     seen: set[tuple[str | None, str | None]] = set()
@@ -154,11 +366,14 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
             remote_slug = repo_slug_from_remote(_remote_url(path))
             repo = remote_slug or canonical_rulespec_slug(path.name)
             sha = _git_sha(path)
-        key = (repo, sha)
+        entry: dict[str, Any] = {"repo": repo, "sha": sha}
+        if sha:
+            entry.update(worktree_state(path))
+        key = (repo, sha, entry.get("dirty"), entry.get("diff_sha256"))
         if key in seen:
             continue
         seen.add(key)
-        entries.append({"repo": repo, "sha": sha})
+        entries.append(entry)
     return entries
 
 
