@@ -259,6 +259,7 @@
     "axiom-euromod-et-presumptive.json",
     "axiom-euromod-et-business-mat.json",
     "axiom-euromod-et-pension-contributions.json",
-    "axiom-euromod-et-vat.json"
+    "axiom-euromod-et-vat.json",
+    "axiom-euromod-et-dispy.json"
   ]
 }
