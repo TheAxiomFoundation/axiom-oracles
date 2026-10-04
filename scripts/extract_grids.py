@@ -49,6 +49,7 @@ _JURISDICTION_BY_COUNTRY = {
     "UG": "ug",
     "UK": "uk",
     "US": "us",
+    "ZM": "zm",
 }
 
 

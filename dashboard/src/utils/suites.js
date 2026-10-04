@@ -102,6 +102,12 @@ export const SOUTHMOD_MODELS = {
     jurisdiction: "UGA",
     data: "Uganda Bureau of Statistics (UBOS) (2025). Uganda National Household Survey, 2023/24 (UNHS 2023/24). Kampala: UBOS. https://microdata.ubos.org:7070/index.php/catalog/80",
   },
+  zm: {
+    model: "MicroZAMOD",
+    country: "Zambia",
+    jurisdiction: "ZMB",
+    data: "Zambia Statistics Agency (ZamStats) (2024). Living Conditions Monitoring Survey, 2022 (LCMS 2022). Lusaka: ZamStats. https://www.zamstats.gov.zm/wp-content/uploads/2024/07/2022-LCMS-Report-2022.pdf",
+  },
 };
 
 /**
@@ -138,6 +144,9 @@ const SOUTHMOD_WORDS = {
   paye: "PAYE",
   vat: "VAT",
   ssnit: "SSNIT",
+  napsa: "NAPSA",
+  nhima: "NHIMA",
+  sct: "Social Cash Transfer",
   nssf: "NSSF",
   lst: "local service tax",
   scg: "Senior Citizens Grant",
