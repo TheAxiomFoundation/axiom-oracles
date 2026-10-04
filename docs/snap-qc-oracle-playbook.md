@@ -1,8 +1,9 @@
 # SNAP QC administrative data oracle playbook
 
 The SNAP QC oracle checks the benefit arithmetic of Axiom SNAP encodings and
-leaves eligibility untested (§3). It replays the USDA SNAP Quality Control public-use file (PUF)
-through the Axiom RuleSpec SNAP composition and compares Axiom's benefit and
+leaves eligibility untested (§3). It replays the USDA SNAP Quality Control
+public-use file (PUF) through the Axiom RuleSpec SNAP composition and compares
+Axiom's benefit and
 stage intermediates with the values Mathematica calculated for USDA from each
 edited case record (`FSBEN` and its intermediates, §2).
 This playbook is the standing recipe — the one a future contributor follows to add
@@ -626,8 +627,8 @@ and the whole-dollar computation, #826) plus one mapper fix before reaching
 
 New York, California, Arizona, Georgia, and Maryland joined for FY2024 on
 the same arc. California's first committed run (2026-07-12, rulespec-us
-`b53ce208`) matched 883/883 benefits with the other five compared values within the $1 stage
-tolerance then in force; the federal chain fixes Colorado surfaced carried
+`b53ce208`) matched 883/883 benefits, with the other five compared values
+within the $1 stage tolerance then in force; the federal chain fixes Colorado surfaced carried
 over intact. New York's first run, recorded in the #269 description and not
 committed, scored 814/847: all 33 divergences were the one-dollar
 whole-dollar class through the composition's statutory-chain surface (§7).

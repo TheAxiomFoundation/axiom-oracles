@@ -5,8 +5,10 @@ consortium) — is the second German comparison oracle in the
 dual-oracle lane (`rulespec-de#1`), running alongside `EuromodPlatformRunner`.
 The German lane has *two* oracles. The 13-household worker grid compares six
 amounts between EUROMOD and GETTSIM. The Axiom side runs for Kindergeld only so
-far, matching each oracle in 13 of 13 cases; the other five amounts have no Axiom
-values yet (`leg-pending` in `comparisons/de-worker-dual-oracle/axiom-*.json`).
+far. It matches each oracle in all 13 cases, but 11 are childless households
+where every engine pays zero; the two households with children (EUR 255 and
+EUR 510 a month) are the only nonzero matches. The other five amounts have no
+Axiom values yet (`leg-pending` in `comparisons/de-worker-dual-oracle/axiom-*.json`).
 Where the two oracles disagree, the statute print adjudicates and the divergence
 is a finding against the losing model; where both agree against the Axiom
 encoding, the encoding is presumed wrong until the print says otherwise.

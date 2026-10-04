@@ -3,8 +3,8 @@
 Goal (Pavel, 2026-07-26): explain all differences in all programs; only
 verified classes get dispositions; the remainder must be precisely
 characterized. Method: per-row verification against persisted household
-evidence (input/output panels), PE parameter surfaces as oracle ground
-truth, PE-side decomposition where our reports can't decide.
+evidence (input/output panels), PE parameter surfaces as the oracle's
+reference values, PE-side decomposition where our reports can't decide.
 
 Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
 and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages

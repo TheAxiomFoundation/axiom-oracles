@@ -1,4 +1,4 @@
-# PolicyEngine/TAXSIM Validation
+# PolicyEngine/TAXSIM comparison
 
 This page documents how `axiom-oracles` compares PolicyEngine against TAXSIM,
 how to reproduce the current smoke test, and how to triage residual mismatches.
