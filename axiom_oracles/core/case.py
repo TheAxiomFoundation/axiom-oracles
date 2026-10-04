@@ -642,6 +642,15 @@ class Concepts:
         "gh:policies/gsfp/feeding-grant"
         "#school_feeding_value_per_year"
     )
+    # Composed single-employee disposable income (Act 766 s.3(1) + s.112(2),
+    # Act 1111 First Schedule), compared to GHAMOD ``ils_dispy`` in the
+    # shared-nil zone; the taxed-zone divergence (GHAMOD taxes gross
+    # employment income, omitting the s.112(2) deduction) is recorded
+    # in ghamod_issues.json.
+    GH_PILOT_DISPOSABLE_INCOME = (
+        "gh:statutes/composed/pilot-worker-disposable-income-pipeline"
+        "#pilot_worker_disposable_income"
+    )
 
     # Composed Denmark børne- og ungeydelse pipelines (rulespec-dk). The
     # original surface pays one recipient and the couple surface applies § 4,

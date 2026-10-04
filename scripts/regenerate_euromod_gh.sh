@@ -46,7 +46,8 @@ for name in \
   gh-presumptive-turnover \
   gh-vat-levies \
   gh-excise \
-  gh-transfers; do
+  gh-transfers \
+  gh-dispy; do
   echo "== $name"
   .venv/bin/python scripts/run_comparison.py "$name" --summary || echo "!! $name failed"
 done

@@ -4611,6 +4611,52 @@
       "varied_fields": 1,
       "verdict_concepts": {}
     },
+    "gh-dispy": {
+      "binding": "unbound",
+      "binding_defects": [
+        "gh-dispy: chunk index dashboard/public/data/cases/gh-dispy/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 2,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_earned_income": {
+          "distinct": 2,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-gh-dispy.json",
+      "report_sha256": "ececbf3ea8570ea0eda85a26da72c7199a7afe2ac913ffb0d52d6f0c0bf4d030",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "gh-excise": {
       "binding": "unbound",
       "binding_defects": [
