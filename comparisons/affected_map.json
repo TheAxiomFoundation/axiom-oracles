@@ -597,6 +597,15 @@
       "source": "comparisons/gh-personal-reliefs.yaml"
     },
     {
+      "suite": "gh-presumptive-turnover",
+      "name": null,
+      "report": "axiom-euromod-gh-presumptive-turnover.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-presumptive-turnover.yaml"
+    },
+    {
       "suite": "gh-ssnit-contributions",
       "name": null,
       "report": "axiom-euromod-gh-ssnit-contributions.json",
