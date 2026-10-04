@@ -49,6 +49,28 @@ case_sets:
         kind: person
         age: 35
         relation: HeadOfHousehold
+    - id: et-business-mat-active-3000000-60000-finding1
+      period: '2026'
+      scenario: category-a-minimum-tax-active
+      parameters:
+        annual_gross_receipts: 3000000.0
+        annual_business_income: 60000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-business-article-49-regime-50000-20000-finding2
+      period: '2026'
+      scenario: category-b-gross-revenue-regime
+      parameters:
+        annual_gross_receipts: 50000.0
+        annual_business_income: 20000.0
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
   et-paye-rate-schedule:
     locale: ET
     entity: Person
@@ -262,7 +284,47 @@ case_sets:
         kind: person
         age: 35
         relation: HeadOfHousehold
+    - id: et-vat-electricity-at-threshold-200kwh
+      period: '2026'
+      scenario: household-vat-utility-thresholds
+      outputs:
+      - et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-vat-electricity-just-above-201kwh
+      period: '2026'
+      scenario: household-vat-utility-thresholds
+      outputs:
+      - et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
     - id: et-vat-water-above-threshold
+      period: '2026'
+      scenario: household-vat-utility-thresholds
+      outputs:
+      - et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-vat-water-at-threshold-15m3
+      period: '2026'
+      scenario: household-vat-utility-thresholds
+      outputs:
+      - et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat
+      entities:
+      - id: head
+        kind: person
+        age: 35
+        relation: HeadOfHousehold
+    - id: et-vat-water-just-above-16m3
       period: '2026'
       scenario: household-vat-utility-thresholds
       outputs:

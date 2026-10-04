@@ -254,6 +254,11 @@
     "axiom-euromod-zm-vat.json",
     "axiom-euromod-zm-excise-ad-valorem.json",
     "axiom-euromod-zm-sct.json",
-    "axiom-euromod-zm-dispy.json"
+    "axiom-euromod-zm-dispy.json",
+    "axiom-euromod-et-paye-rate-schedule.json",
+    "axiom-euromod-et-presumptive.json",
+    "axiom-euromod-et-business-mat.json",
+    "axiom-euromod-et-pension-contributions.json",
+    "axiom-euromod-et-vat.json"
   ]
 }
