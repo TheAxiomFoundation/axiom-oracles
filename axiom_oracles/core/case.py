@@ -712,8 +712,9 @@ class Concepts:
         "ug:regulations/vat-rate-of-tax-order-2006/rate-of-tax-order-2006"
         "#vat_amount"
     )
-    # Uganda fuel excise (2024 amendment item 8: petrol 1550/l, diesel
-    # 1230/l), compared to UGAMOD ``tex10_s`` (FY2025/26 vintage open).
+    # Uganda fuel excise (2024 amendment Schedule 2 items 8(a) and (b):
+    # petrol 1550/l, diesel 1230/l), compared to UGAMOD ``tex10_s``
+    # (FY2025/26 vintage open).
     UG_FUEL_EXCISE_DUTY = (
         "ug:statutes/act-2024-excise/excise-duty-amendment-2024"
         "#fuel_excise_duty"

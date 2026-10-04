@@ -83,8 +83,8 @@ export const FAMILY_LABELS = {
  * SOUTHMOD country models (UNU-WIDER), run on the EUROMOD engine. Their
  * reports carry engine id "euromod", so the oracle is told apart by the
  * suite's country prefix: each key is both the suite-slug prefix and the
- * dashboard region. Add a country here and its region, jurisdiction, family
- * and suite labels follow.
+ * dashboard region. Add a country here and its region, jurisdiction and
+ * suite labels follow (each suite is its own program; see southmodSuiteMeta).
  */
 export const SOUTHMOD_MODELS = {
   gh: {
@@ -100,7 +100,7 @@ export const SOUTHMOD_MODELS = {
     model: "UGAMOD",
     country: "Uganda",
     jurisdiction: "UGA",
-    data: "Uganda Bureau of Statistics (UBOS) (2025). Uganda National Household Survey, 2023/24 (UNHS 2023/24). Kampala: UBOS. https://microdata.ubos.org:7070/index.php/catalog/80",
+    data: "Uganda Bureau of Statistics (UBOS) (2025). Uganda National Household Survey, 2023/24 (UNHS 2023/24). Kampala: UBOS. https://microdata.ubos.org:7070/index.php/catalog/80/download/275",
   },
   zm: {
     model: "MicroZAMOD",
@@ -139,8 +139,9 @@ export function southmodAcknowledgement() {
         : `${m.model}: no input data (the bundle ships none; runs use a header-only file and synthetic rows)`,
     )
     .join(" ");
-  // Annex 1.2 of the SOUTHMOD_A4.0 Adhesion Agreement, verbatim except for
-  // the bracketed fields it asks the user to fill in.
+  // Annex 1.2 of the SOUTHMOD_A4.0 Adhesion Agreement with its bracketed
+  // fields filled in ("models", plural, because several countries are
+  // named), followed by the input-data citations clause 8 requires.
   return (
     `The results presented here are based on the tax-benefit microsimulation models for ${named} in SOUTHMOD_A4.0. ` +
     "Models in the SOUTHMOD bundle are developed, maintained and managed by UNU-WIDER in collaboration with SASPRI (Southern African Social Policy Research Insights), the International Inequalities Institute at the London School of Economics and Political Science, and local partners in selected developing countries (Bolivia, Colombia, Ecuador, Egypt, Ethiopia, Ghana, Mozambique, Peru, Rwanda, Mainland Tanzania, Uganda, Viet Nam, Zambia, and Zanzibar) in the scope of the SOUTHMOD project. " +
