@@ -239,6 +239,29 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 600000.0
+  zm-sct:
+    locale: ZM
+    entity: Person
+    entity_id: head
+    outputs:
+    - zm:policies/mcdss-sct/ministerial-statement-transfer-values#sct_monthly_transfer
+    cases:
+    - id: zm-sct-standing-base
+      period: '2024'
+      scenario: sct-standing-transfer-values
+      entities:
+      - id: head
+        kind: person
+        age: 65
+        relation: HeadOfHousehold
+    - id: zm-sct-severe-disability-double
+      period: '2024'
+      scenario: sct-standing-transfer-values
+      entities:
+      - id: head
+        kind: person
+        age: 65
+        relation: HeadOfHousehold
   zm-turnover:
     locale: ZM
     entity: Person

@@ -787,6 +787,14 @@ class Concepts:
         "zm:statutes/act-2024-24/customs-and-excise-amendment-2024"
         "#spirits_duty"
     )
+    # Zambia Social Cash Transfer standing values (MCDSS Ministerial
+    # Statement: 200/month, doubled for severe disability), compared to
+    # MicroZAMOD ``bsa_s`` on the ZM_2024 system (the standing scheme);
+    # the ZM_2025 400/600 amounts are finding 6 (a ledger entry).
+    ZM_SCT_MONTHLY_TRANSFER = (
+        "zm:policies/mcdss-sct/ministerial-statement-transfer-values"
+        "#sct_monthly_transfer"
+    )
 
     # Composed Denmark børne- og ungeydelse pipelines (rulespec-dk). The
     # original surface pays one recipient and the couple surface applies § 4,

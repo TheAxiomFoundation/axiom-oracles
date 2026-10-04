@@ -98,6 +98,17 @@ mappings:
       MicroZAMOD tex02_s by the zm-excise-ad-valorem suite on single-item
       spirits expenditure. PolicyEngine has no Zambia model; the household
       oracle is MicroZAMOD.
+  - legal_id: zm:policies/mcdss-sct/ministerial-statement-transfer-values#sct_monthly_transfer
+    country: zm
+    program: benefits
+    mapping_type: not_comparable
+    rationale: >-
+      Social Cash Transfer standing value (MCDSS Ministerial Statement:
+      K200 per month per household, K400 with a severely disabled member).
+      Validated against MicroZAMOD bsa_s by the zm-sct suite on the
+      ZM_2024 system, monthly; ZM_2025's 400/600 amounts are finding 6 in
+      microzamod_issues.json. PolicyEngine has no Zambia model; the
+      household oracle is MicroZAMOD.
 prefixes:
   - legal_id_prefix: "zm:"
     country: zm
