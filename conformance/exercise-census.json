@@ -8190,6 +8190,378 @@
       "varied_fields": 0,
       "verdict_concepts": {}
     },
+    "rw-cbhi-tiers": {
+      "binding": "unbound",
+      "binding_defects": [
+        "rw-cbhi-tiers: chunk index dashboard/public/data/cases/rw-cbhi-tiers/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 4,
+      "chunk_manifest": [],
+      "constant_fields": 6,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "comparison_basis": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "imibereho_level": {
+          "distinct": 4,
+          "state": "varied"
+        },
+        "level_pairing": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "monthly_earnings": {
+          "distinct": 4,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-rw-cbhi-tiers.json",
+      "report_sha256": "296260819ee4b526bcd6db62519a8492e369439df53a2ca095d94e17ff1b1ed8",
+      "varied_fields": 2,
+      "verdict_concepts": {}
+    },
+    "rw-contributions": {
+      "binding": "unbound",
+      "binding_defects": [
+        "rw-contributions: chunk index dashboard/public/data/cases/rw-contributions/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 4,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "monthly_employment_income": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "sector": {
+          "distinct": 3,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-rw-contributions.json",
+      "report_sha256": "ef6e3c7cd9923336c4a5dce321446457df69503f49fa028b8da720ccfdffcab4",
+      "varied_fields": 2,
+      "verdict_concepts": {}
+    },
+    "rw-dispy": {
+      "binding": "unbound",
+      "binding_defects": [
+        "rw-dispy: chunk index dashboard/public/data/cases/rw-dispy/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 6,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "monthly_employment_income": {
+          "distinct": 6,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-rw-dispy.json",
+      "report_sha256": "70e200223b2c75aa2f062ef8ee72badbb83435478fa98d7a90bf4f1b169cfd41",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "rw-excise": {
+      "binding": "unbound",
+      "binding_defects": [
+        "rw-excise: chunk index dashboard/public/data/cases/rw-excise/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 6,
+      "chunk_manifest": [],
+      "constant_fields": 3,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "monthly_litres": {
+          "distinct": 4,
+          "state": "varied"
+        },
+        "monthly_packs": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "monthly_retail_raw": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 2,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-rw-excise.json",
+      "report_sha256": "ce36972b35c16db57cbdf33debf8f735877fae67d4d0e919d00de7344cf3653f",
+      "varied_fields": 4,
+      "verdict_concepts": {}
+    },
+    "rw-lump-sum": {
+      "binding": "unbound",
+      "binding_defects": [
+        "rw-lump-sum: chunk index dashboard/public/data/cases/rw-lump-sum/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 7,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_turnover": {
+          "distinct": 7,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-rw-lump-sum.json",
+      "report_sha256": "465d0e08b0bee6d1bd3585890bb2526ed03a8e1316b22064e3a1203d598f6903",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "rw-paye-rate-schedule": {
+      "binding": "unbound",
+      "binding_defects": [
+        "rw-paye-rate-schedule: chunk index dashboard/public/data/cases/rw-paye-rate-schedule/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 8,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "monthly_employment_income": {
+          "distinct": 8,
+          "state": "varied"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-rw-paye-rate-schedule.json",
+      "report_sha256": "85d6f699238b80adac2cce40706286ce5792490c06b13dee697aba2a4807d6c1",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "rw-rental": {
+      "binding": "unbound",
+      "binding_defects": [
+        "rw-rental: chunk index dashboard/public/data/cases/rw-rental/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 4,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_gross_rental": {
+          "distinct": 4,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-rw-rental.json",
+      "report_sha256": "d6ccd892b92d31c06ee29ea73704cd13deb9276f4b0c4bedf59b6c5bcac15e63",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
+    "rw-vat": {
+      "binding": "unbound",
+      "binding_defects": [
+        "rw-vat: chunk index dashboard/public/data/cases/rw-vat/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 3,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_expenditure_raw": {
+          "distinct": 3,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-rw-vat.json",
+      "report_sha256": "950f3624221d31e44d4ae2655b4f650c110d28d4c5eb1613d8c40d2028eaa2b4",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "sc-income-tax-liability": {
       "binding": "unbound",
       "binding_defects": [

@@ -850,6 +850,94 @@ class Concepts:
         "#pilot_worker_disposable_income"
     )
 
+    # Rwanda Law 027/2022 Article 56 monthly schedules (Table 2 from
+    # CY2024) and lump-sum regime, the Law 048/2023 rental tax, the
+    # Law 049/2023 VAT and the Law 011/2025 excise rows, compared to
+    # RWAMOD tin_s/ttn_s/tpr_s/tva_s/tex*_s.
+    RW_EMPLOYMENT_INCOME_TAX = (
+        "rw:statutes/law-2022-027/employment-income-tax"
+        "#employment_income_tax"
+    )
+    RW_LUMP_SUM_TAX = (
+        "rw:statutes/law-2022-027/lump-sum-regime"
+        "#lump_sum_tax"
+    )
+    RW_RENTAL_INCOME_TAX = (
+        "rw:statutes/law-2023-048/rental-income-tax"
+        "#rental_income_tax"
+    )
+    RW_VAT_AMOUNT = (
+        "rw:statutes/law-2023-049/value-added-tax"
+        "#vat_amount"
+    )
+    RW_PREMIUM_FUEL_EXCISE_DUTY = (
+        "rw:statutes/law-2025-011/excise-duty"
+        "#premium_fuel_excise_duty"
+    )
+    RW_GAS_OIL_EXCISE_DUTY = (
+        "rw:statutes/law-2025-011/excise-duty"
+        "#gas_oil_excise_duty"
+    )
+    RW_CIGARETTE_EXCISE_DUTY = (
+        "rw:statutes/law-2025-011/excise-duty"
+        "#cigarette_excise_duty"
+    )
+    # Rwanda contribution stack (Presidential Order 086/01 pension
+    # halves, Law 003/2016 maternity, Law 24/2001 RAMA, Law 23/2005
+    # MMI, MO 002/26/10/TC premiums), compared to RWAMOD tsc* arms. The
+    # PM Order 105/03 CBHI levy module takes net salary as an input that
+    # RWAMOD does not echo, so it has no concept here; the levy is
+    # compared through the composed pipeline below.
+    RW_EMPLOYEE_PENSION_CONTRIBUTION = (
+        "rw:regulations/po-2024-086-01/pension-contribution-rate"
+        "#employee_pension_contribution"
+    )
+    RW_EMPLOYER_PENSION_CONTRIBUTION = (
+        "rw:regulations/po-2024-086-01/pension-contribution-rate"
+        "#employer_pension_contribution"
+    )
+    RW_EMPLOYEE_MATERNITY_CONTRIBUTION = (
+        "rw:statutes/law-2016-003/maternity-leave-contributions"
+        "#employee_maternity_contribution"
+    )
+    RW_EMPLOYER_MATERNITY_CONTRIBUTION = (
+        "rw:statutes/law-2016-003/maternity-leave-contributions"
+        "#employer_maternity_contribution"
+    )
+    RW_EMPLOYEE_RAMA_CONTRIBUTION = (
+        "rw:statutes/law-2001-24/rama-contributions"
+        "#employee_rama_contribution"
+    )
+    RW_EMPLOYER_RAMA_CONTRIBUTION = (
+        "rw:statutes/law-2001-24/rama-contributions"
+        "#employer_rama_contribution"
+    )
+    RW_INSURED_MMI_CONTRIBUTION = (
+        "rw:statutes/law-2005-23/mmi-contributions"
+        "#insured_mmi_contribution"
+    )
+    RW_GOVERNMENT_MMI_CONTRIBUTION = (
+        "rw:statutes/law-2005-23/mmi-contributions"
+        "#government_mmi_contribution"
+    )
+    RW_CBHI_MEMBER_PAID_PREMIUM = (
+        "rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums"
+        "#cbhi_member_paid_annual_contribution"
+    )
+    # Rwanda composed monthly disposable income (Table 2 tax on gross,
+    # less the employee pension half, maternity share and the CBHI
+    # levy on the composed net), compared to RWAMOD ``ils_dispy`` on
+    # the FULL grid (no base divergence), and the pipeline's CBHI levy
+    # on that composed net salary, compared to RWAMOD ``tsceehl03_s``.
+    RW_PILOT_DISPOSABLE_INCOME = (
+        "rw:statutes/composed/pilot-worker-disposable-income-pipeline"
+        "#pilot_worker_disposable_income"
+    )
+    RW_PILOT_CBHI_LEVY = (
+        "rw:statutes/composed/pilot-worker-disposable-income-pipeline"
+        "#pilot_worker_cbhi_levy"
+    )
+
     # Composed Denmark børne- og ungeydelse pipelines (rulespec-dk). The
     # original surface pays one recipient and the couple surface applies § 4,
     # stk. 1 ligedeling plus a separate own-income § 1 a taper to each holder.

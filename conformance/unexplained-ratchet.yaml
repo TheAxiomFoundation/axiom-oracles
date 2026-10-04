@@ -334,6 +334,22 @@ ratchets:
   unexplained_max: 0
 - suite: ri-income-tax-liability
   unexplained_max: 0
+- suite: rw-cbhi-tiers
+  unexplained_max: 0
+- suite: rw-contributions
+  unexplained_max: 0
+- suite: rw-dispy
+  unexplained_max: 0
+- suite: rw-excise
+  unexplained_max: 0
+- suite: rw-lump-sum
+  unexplained_max: 0
+- suite: rw-paye-rate-schedule
+  unexplained_max: 0
+- suite: rw-rental
+  unexplained_max: 0
+- suite: rw-vat
+  unexplained_max: 0
 - suite: sc-income-tax-liability
   unexplained_max: 0
 - suite: sc-income-tax-populace

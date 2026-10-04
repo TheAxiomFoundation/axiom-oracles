@@ -260,6 +260,14 @@
     "axiom-euromod-et-business-mat.json",
     "axiom-euromod-et-pension-contributions.json",
     "axiom-euromod-et-vat.json",
-    "axiom-euromod-et-dispy.json"
+    "axiom-euromod-et-dispy.json",
+    "axiom-euromod-rw-paye-rate-schedule.json",
+    "axiom-euromod-rw-lump-sum.json",
+    "axiom-euromod-rw-rental.json",
+    "axiom-euromod-rw-contributions.json",
+    "axiom-euromod-rw-vat.json",
+    "axiom-euromod-rw-excise.json",
+    "axiom-euromod-rw-cbhi-tiers.json",
+    "axiom-euromod-rw-dispy.json"
   ]
 }

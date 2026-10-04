@@ -47,6 +47,7 @@ _JURISDICTION_BY_COUNTRY = {
     "DK": "dk",
     "ET": "et",
     "GH": "gh",
+    "RW": "rw",
     "UG": "ug",
     "UK": "uk",
     "US": "us",

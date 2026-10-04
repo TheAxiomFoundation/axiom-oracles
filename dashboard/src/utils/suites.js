@@ -114,6 +114,14 @@ export const SOUTHMOD_MODELS = {
     jurisdiction: "ETH",
     data: "Central Statistical Agency of Ethiopia (CSA) (2024). Ethiopia Socioeconomic Panel Survey, Wave 5 (ESPS-5) 2021–2022. Addis Ababa: CSA. https://microdata.worldbank.org/index.php/catalog/6161",
   },
+  rw: {
+    model: "RWAMOD",
+    country: "Rwanda",
+    jurisdiction: "RWA",
+    // No input data: the bundle ships no Rwandan microdata, so runs use a
+    // header-only file built locally (scripts/southmod_rw_header.py).
+    data: null,
+  },
 };
 
 /**
@@ -150,6 +158,7 @@ const SOUTHMOD_WORDS = {
   paye: "PAYE",
   vat: "VAT",
   ssnit: "SSNIT",
+  cbhi: "CBHI",
   mat: "MAT",
   napsa: "NAPSA",
   nhima: "NHIMA",
