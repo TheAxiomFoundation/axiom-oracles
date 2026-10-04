@@ -8529,6 +8529,52 @@
       "varied_fields": 3,
       "verdict_concepts": {}
     },
+    "ug-paye-rate-schedule": {
+      "binding": "unbound",
+      "binding_defects": [
+        "ug-paye-rate-schedule: chunk index dashboard/public/data/cases/ug-paye-rate-schedule/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 10,
+      "chunk_manifest": [],
+      "constant_fields": 5,
+      "evidence_fields": {
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "yearly_earned_income": {
+          "distinct": 10,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-ug-paye-rate-schedule.json",
+      "report_sha256": "1447f8cbbdee9bda522f059fef4952bdde0169b863b7fb68e882d3eeffd60b8a",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "uk-attendance-allowance-pe": {
       "binding": "unbound",
       "binding_defects": [
