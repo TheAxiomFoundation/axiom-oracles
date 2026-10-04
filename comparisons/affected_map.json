@@ -1238,6 +1238,24 @@
       "source": "comparisons/ug-paye-rate-schedule.yaml"
     },
     {
+      "suite": "ug-presumptive",
+      "name": null,
+      "report": "axiom-euromod-ug-presumptive.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-presumptive.yaml"
+    },
+    {
+      "suite": "ug-rental",
+      "name": null,
+      "report": "axiom-euromod-ug-rental.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-rental.yaml"
+    },
+    {
       "suite": "uk-attendance-allowance-pe",
       "name": null,
       "report": "axiom-policyengine-uk-attendance-allowance-pe.json",
