@@ -114,11 +114,12 @@ PROSE_FIELDS = (
     "reported_upstream",
 )
 
-_SLUG = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
-_SNAKE = re.compile(r"^[a-z][a-z0-9_]*$")
-_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+# Used with fullmatch: a "$" anchor would accept a trailing newline.
+_SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+_SNAKE = re.compile(r"[a-z][a-z0-9_]*")
+_DATE = re.compile(r"\d{4}-\d{2}-\d{2}")
 #: Simulated outputs (``tin_s``) and income lists (``ils_dispy``).
-_OUTPUT_VARIABLE = re.compile(r"^(?:[a-z][a-z0-9]*_s|ils?_[a-z0-9_]+)$")
+_OUTPUT_VARIABLE = re.compile(r"(?:[a-z][a-z0-9]*_s|ils?_[a-z0-9_]+)")
 
 _COMPARE = r"(?:>=|<=|!=|==|<>|=|<|>)"
 _RELATIONAL = r"(?:>=|<=|!=|==|<>|<|>)"
@@ -206,7 +207,24 @@ def load_southmod_issues(region: str) -> dict[str, Any] | None:
         .joinpath(model.ledger)
         .read_text(encoding="utf-8")
     )
-    return json.loads(payload)
+    return loads_strict(payload)
+
+
+def _reject_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    keys = [key for key, _ in pairs]
+    duplicates = sorted({key for key in keys if keys.count(key) > 1})
+    if duplicates:
+        raise ValueError(f"duplicate JSON keys {duplicates}")
+    return dict(pairs)
+
+
+def loads_strict(text: str) -> Any:
+    """json.loads that rejects a repeated key.
+
+    Plain json.loads keeps only a repeated key's last value, so text in an
+    earlier copy would sit in the public source file unseen by the lint.
+    """
+    return json.loads(text, object_pairs_hook=_reject_duplicate_keys)
 
 
 def model_for(region: str) -> SouthmodModel:
@@ -269,13 +287,13 @@ def _entry_problems(
 
     stem = Path(model.ledger or "").name.removesuffix("_issues.json")
     entry_id = entry.get("id")
-    if not isinstance(entry_id, str) or not _SLUG.match(entry_id):
+    if not isinstance(entry_id, str) or not _SLUG.fullmatch(entry_id):
         problems.append(f"{where}: id must be a lower-case slug, got {entry_id!r}")
     elif not entry_id.startswith(f"{stem}-"):
         problems.append(f"{where}: id {entry_id!r} must start with '{stem}-'")
 
     classification = entry.get("classification")
-    if not isinstance(classification, str) or not _SNAKE.match(classification):
+    if not isinstance(classification, str) or not _SNAKE.fullmatch(classification):
         problems.append(
             f"{where}: classification must be snake_case, got {classification!r}"
         )
@@ -333,14 +351,14 @@ def _entry_problems(
         # A registered dataset name, optionally with a digit-free note (no
         # room for a survey count): "rw_2024_a1 (registered name; ...)".
         dataset = observed_with.get("dataset")
-        if not isinstance(dataset, str) or not re.match(
-            rf"{model.region}_\d{{4}}_a\d+(?: \([^0-9()]*\))?$", dataset
+        if not isinstance(dataset, str) or not re.fullmatch(
+            rf"{model.region}_\d{{4}}_a\d+(?: \([^0-9()\n]*\))?", dataset
         ):
             problems.append(f"{where}: observed_with.dataset {dataset!r} malformed")
 
     outputs = entry.get("oracle_outputs", [])
     if not isinstance(outputs, list) or not all(
-        isinstance(o, str) and _OUTPUT_VARIABLE.match(o) for o in outputs
+        isinstance(o, str) and _OUTPUT_VARIABLE.fullmatch(o) for o in outputs
     ):
         problems.append(
             f"{where}: oracle_outputs must list output variables "
@@ -394,7 +412,7 @@ def ledger_problems(
     if ledger.get("schema") != schema:
         problems.append(f"{name}: schema {ledger.get('schema')!r} != {schema!r}")
     updated_at = ledger.get("updated_at")
-    if not isinstance(updated_at, str) or not _DATE.match(updated_at):
+    if not isinstance(updated_at, str) or not _DATE.fullmatch(updated_at):
         problems.append(f"{name}: updated_at must be YYYY-MM-DD")
     if not isinstance(ledger.get("purpose"), str):
         problems.append(f"{name}: purpose must be a string")

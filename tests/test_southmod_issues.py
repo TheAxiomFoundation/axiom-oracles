@@ -37,9 +37,11 @@ from axiom_oracles.southmod_issues import (
     LICENCE_PATTERNS,
     PROSE_FIELDS,
     SOUTHMOD_MODELS,
+    _strings,
     ledger_problems,
     licence_hits,
     load_southmod_issues,
+    loads_strict,
     model_for,
 )
 
@@ -67,6 +69,16 @@ def dashboard_southmod_models() -> list[tuple[str, str, str]]:
     )
 
 
+def _suite_counts() -> dict[str, dict[str, int]]:
+    counts: dict[str, dict[str, int]] = {}
+    for m in LEDGER_MODELS:
+        for entry in _ledger(m.region)["entries"]:
+            for suite in set(entry["affected_comparisons"]):
+                by_region = counts.setdefault(suite, {})
+                by_region[m.region] = by_region.get(m.region, 0) + 1
+    return counts
+
+
 @pytest.mark.skipif(shutil.which("node") is None, reason="node runtime not available")
 def test_dashboard_findings_helpers_agree_with_python() -> None:
     expected = {
@@ -75,6 +87,9 @@ def test_dashboard_findings_helpers_agree_with_python() -> None:
             for region, model, country in dashboard_southmod_models()
         },
         "counts": {m.region: len(_ledger(m.region)["entries"]) for m in LEDGER_MODELS},
+        # suite -> region -> entries naming it, counted here independently of
+        # the JS filter the node test checks against it.
+        "suite_counts": _suite_counts(),
     }
     proc = subprocess.run(
         ["node", "scripts/test-southmod-findings.mjs"],
@@ -118,14 +133,19 @@ def test_ledgerless_model_has_no_published_mismatch(model) -> None:
     # The dashboard shows no_ledger_note ("no UGAMOD comparison found a value
     # mismatch"); a mismatch in any of the model's reports falsifies it.
     assert model.no_ledger_note
-    reports = sorted(
-        (ROOT / "dashboard/public/data").glob(f"axiom-euromod-{model.region}-*.json")
+    suites = sorted(
+        path.stem for path in (ROOT / "comparisons").glob(f"{model.region}-*.yaml")
     )
-    assert reports, f"no published {model.model} reports"
-    for path in reports:
+    assert suites, f"no {model.model} comparisons"
+    for suite in suites:
+        # Every suite must have its published report: a missing one would
+        # leave a mismatch unchecked.
+        path = ROOT / f"dashboard/public/data/axiom-euromod-{suite}.json"
         summary = json.loads(path.read_text())["summary"]
-        assert summary["mismatch_count"] == 0, path.name
-        assert summary["match_count"] == summary["comparison_count"], path.name
+        assert summary["comparison_count"] > 0, suite
+        assert summary["mismatch_count"] == 0, suite
+        assert summary["error_count"] == 0, suite
+        assert summary["match_count"] == summary["comparison_count"], suite
 
 
 def test_every_ledger_citation_resolves() -> None:
@@ -330,6 +350,27 @@ def test_licence_lint_passes_benign_prose(text: str) -> None:
     assert licence_hits({"entries": [{"observed": text}]}) == []
 
 
+def test_duplicate_keys_are_rejected() -> None:
+    # json.loads would keep the last "summary" and hide the first from the lint.
+    text = '{"summary": "The tin_et policy", "summary": "clean"}'
+    assert json.loads(text) == {"summary": "clean"}
+    with pytest.raises(ValueError, match="duplicate JSON keys"):
+        loads_strict(text)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("id", "ghamod-tin-s-missing-act-1111-35pct-top-band\n"),
+        ("classification", "southmod_model_simplification\n"),
+        ("oracle_outputs", ["tin_s\n"]),
+    ],
+)
+def test_trailing_newline_is_not_a_valid_value(field, value) -> None:
+    ledger = _entry_with("gh", **{field: value})
+    assert any(field in p for p in ledger_problems("gh", ledger))
+
+
 def test_licence_lint_scans_keys_and_nested_values() -> None:
     assert licence_hits({"a": {"tin_gh": 1}})
     assert licence_hits({"a": [[{"b": "$x"}]]})
@@ -384,12 +425,20 @@ RECALL_CEILINGS = {
 }
 
 
-@pytest.mark.skipif(
-    not BUNDLE.is_dir(), reason="licensed SOUTHMOD bundle not on this machine"
-)
-@pytest.mark.parametrize("country", sorted(RECALL_CEILINGS))
-def test_licence_lint_recall_on_the_licensed_bundle(country: str) -> None:
-    """Counts only: no bundle text reaches the assertion message or output."""
+def _bundle_counts(country: str) -> dict[str, tuple[int, int]]:
+    """kind -> (distinct values, values passing the lint), for one model.
+
+    Only integers leave this function, so no bundle text can reach an
+    assertion message, pytest's introspection or a ``-l`` locals dump.
+    """
+    values = _bundle_values(country)
+    return {
+        kind: (len(vals), sum(1 for v in vals if not licence_hits({"x": v})))
+        for kind, vals in values.items()
+    }
+
+
+def _bundle_values(country: str) -> dict[str, set[str]]:
     import xml.etree.ElementTree as ET
 
     def local(tag: str) -> str:
@@ -402,26 +451,67 @@ def test_licence_lint_recall_on_the_licensed_bundle(country: str) -> None:
         return None
 
     root = ET.parse(BUNDLE / country / f"{country}.xml").getroot()
-    values: dict[str, set[str]] = {"cond": set(), "formula": set(), "policy": set()}
+    values: dict[str, set[str]] = {
+        "cond": set(),
+        "formula": set(),
+        "policy": set(),
+        "constant": set(),
+    }
     for el in root.iter():
-        if local(el.tag) == "Parameter":
-            name = (child(el, "Name") or "").lower()
+        name = child(el, "Name")
+        if local(el.tag) == "Parameter" and name:
+            if name.startswith("$"):
+                values["constant"].add(name[1:].lower())
             value = child(el, "Value")
             if not value or value.strip().lower() == "n/a":
                 continue
-            if name.endswith("cond"):
+            if name.lower().endswith("cond"):
                 values["cond"].add(value)
-            elif "formula" in name:
+            elif "formula" in name.lower():
                 values["formula"].add(value)
-        elif local(el.tag) == "Policy" and child(el, "Name"):
-            values["policy"].add(f"the {child(el, 'Name')} policy")
-    passing = {
-        kind: sum(1 for v in vals if not licence_hits({"x": v}))
-        for kind, vals in values.items()
+        elif local(el.tag) == "Policy" and name:
+            values["policy"].add(name.lower())
+    return values
+
+
+def _defined_identifier_overlap(region: str) -> int:
+    """How many ledger tokens equal a constant or policy name the bundle defines.
+
+    A token that is the stem of an output variable the ledger names
+    (``tscee`` for ``tscee_s``) is the output, not the constant that shares
+    its name. Returns a count only.
+    """
+    values = _bundle_values(region.upper())
+    defined = values["constant"] | values["policy"]
+    text = [s for _, s in _strings(_ledger(region), "$")]
+    tokens = {
+        t.lower().lstrip("$")
+        for s in text
+        for t in re.findall(r"\$?[A-Za-z_][A-Za-z0-9_]*", s)
     }
-    assert all(values.values()), {k: len(v) for k, v in values.items()}
+    stems = {t.removesuffix("_s") for t in tokens if t.endswith("_s")}
+    return len((tokens - stems) & defined)
+
+
+@pytest.mark.skipif(
+    not BUNDLE.is_dir(), reason="licensed SOUTHMOD bundle not on this machine"
+)
+@pytest.mark.parametrize("country", sorted(RECALL_CEILINGS))
+def test_licence_lint_recall_on_the_licensed_bundle(country: str) -> None:
+    counts = _bundle_counts(country)
+    assert all(total > 0 for kind, (total, _) in counts.items() if kind != "constant")
     for kind, ceiling in RECALL_CEILINGS[country].items():
-        assert passing[kind] <= ceiling, (
-            f"{country} {kind}: {passing[kind]} of {len(values[kind])} distinct "
-            f"values pass the lint (ceiling {ceiling})"
+        total, passing = counts[kind]
+        assert passing <= ceiling, (
+            f"{country} {kind}: {passing} of {total} distinct values pass the "
+            f"lint (ceiling {ceiling})"
         )
+
+
+@pytest.mark.skipif(
+    not BUNDLE.is_dir(), reason="licensed SOUTHMOD bundle not on this machine"
+)
+@pytest.mark.parametrize("model", LEDGER_MODELS, ids=lambda m: m.model)
+def test_no_ledger_token_is_a_bundle_constant_or_policy(model) -> None:
+    """Exact match, so it also catches constant names written without $."""
+    assert _defined_identifier_overlap(model.region) == 0

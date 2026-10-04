@@ -302,6 +302,9 @@ export default function SouthmodFindings({ region, keepSuite, onOpenSuite }) {
           {shown.map(renderGroup)}
           {rest.length > 0 && (
             <details
+              // Remount per pinned entry, so a later deep link into the fold
+              // opens it even after the reader closed it.
+              key={pinnedInRest ? `pinned-${pinned}` : "fold"}
               className="v2-ledger-more"
               open={pinnedInRest || undefined}
             >

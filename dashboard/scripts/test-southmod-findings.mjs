@@ -81,8 +81,10 @@ const filters = [
   null,
   () => false,
   () => true,
-  ...suites.map((s) => (suite) => suite === s),
+  ...suites.map((s) => Object.assign((suite) => suite === s, { only: s })),
 ];
+// Python's independent per-suite counts cover exactly the suites cited.
+assert.deepEqual([...suites].sort(), Object.keys(expected.suite_counts).sort());
 let cases = 0;
 for (const region of [null, ...Object.keys(models)]) {
   const regional = groups.filter((g) => !region || g.region === region);
@@ -115,6 +117,15 @@ for (const region of [null, ...Object.keys(models)]) {
         .filter((e) => (e.affected_comparisons || []).some(keepSuite));
       assert.deepEqual(shownEntries, want);
       assert.ok(scope.groups.every((g) => g.entries.length > 0));
+    }
+    // Differential: a single-suite filter keeps exactly the entries Python
+    // counted as naming that suite, in this region.
+    if (keepSuite?.only) {
+      const byRegion = expected.suite_counts[keepSuite.only];
+      const want = region
+        ? byRegion[region] ?? 0
+        : Object.values(byRegion).reduce((n, c) => n + c, 0);
+      assert.equal(scope.inScope, want, `${region} ${keepSuite.only}`);
     }
     // Folding never loses or splits a group, and shows at least one.
     const fold = foldGroups(scope.groups, 10, null);

@@ -37,6 +37,7 @@ if str(REPO_ROOT) not in sys.path:
 from axiom_oracles.southmod_issues import (  # noqa: E402
     SOUTHMOD_MODELS,
     ledger_problems,
+    loads_strict,
 )
 
 PACKAGE_DATA = REPO_ROOT / "axiom_oracles" / "data"
@@ -59,7 +60,7 @@ def serialize(document: Any) -> bytes:
 
 
 def _read_json(path: Path) -> Any:
-    return json.loads(path.read_bytes().decode("utf-8"))
+    return loads_strict(path.read_bytes().decode("utf-8"))
 
 
 def build_southmod_bundle(
@@ -91,7 +92,11 @@ def build_southmod_bundle(
         if not path.exists():
             problems.append(f"axiom_oracles/data/{model.ledger} missing")
             continue
-        ledger = _read_json(path)
+        try:
+            ledger = _read_json(path)
+        except ValueError as error:
+            problems.append(f"axiom_oracles/data/{model.ledger}: {error}")
+            continue
         problems.extend(
             ledger_problems(model.region, ledger, comparisons_dir=comparisons_dir)
         )

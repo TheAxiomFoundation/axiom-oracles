@@ -120,7 +120,9 @@ semantics; the rows are ours.
    licence lint every SOUTHMOD ledger must pass. After editing a ledger run
    `uv run scripts/publish_issue_ledgers.py` to refresh the dashboard copies
    (`dashboard/public/data/euromod-issues.json`, `southmod-issues.json`); CI
-   runs it with `--check`. The SOUTHMOD oracle page renders the SOUTHMOD
+   runs it with `--check`. Run it before pushing a SOUTHMOD ledger edit: this
+   repository is public, so a pushed branch is already published, and the
+   licence lint only gates the merge. The SOUTHMOD oracle page renders the SOUTHMOD
    ledgers; the EUROMOD copy is published but no page renders it yet.
    Encoding findings go on the `rulespec-<cc>` repo with the exact
    arithmetic decomposition (see TheAxiomFoundation/rulespec-be#1 for the

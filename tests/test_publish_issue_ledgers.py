@@ -168,6 +168,24 @@ def test_licence_violation_is_never_published(tree, capsys) -> None:
     assert (dashboard / "southmod-issues.json").read_bytes() == before
 
 
+def test_duplicate_key_ledger_is_refused(tree, capsys) -> None:
+    module, package, dashboard = tree
+    before = (dashboard / "southmod-issues.json").read_bytes()
+    path = package / "etmod_issues.json"
+    text = path.read_text()
+    first = '"summary": '
+    assert first in text
+    path.write_text(
+        text.replace(
+            first, '"summary": "The tin_et policy applies $mat_rate.", ' + first, 1
+        )
+    )
+    assert module.main([]) == 1
+    assert module.main(["--check"]) == 1
+    assert "duplicate JSON keys" in capsys.readouterr().err
+    assert (dashboard / "southmod-issues.json").read_bytes() == before
+
+
 def test_missing_registered_ledger_fails(tree, capsys) -> None:
     module, package, _ = tree
     (package / "etmod_issues.json").unlink()
