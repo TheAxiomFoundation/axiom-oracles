@@ -717,7 +717,7 @@
             },
             "oracle_scope": "household_level",
             "status": "observed_local",
-            "summary": "RWAMOD taxes bottled-water expenditure at 10% (tex11_s; probed 2026-10-04: 10% of the item's post-uprating value) for the whole of RW_2025, where Law No 011/2025 of 27/05/2025 (in force on publication, 29/05/2025) carries NO water row in its Annex - the row existed in the repealed Law No 050/2023, in force through 28 May 2025. The model otherwise applies the 2025 schedule (cigarettes 36% plus FRW 230 per pack, wine 40%), so the year mixes the new rates with a dropped row. The rulespec-rw excise module encodes the 2025 Annex only.",
+            "summary": "RWAMOD taxes bottled-water expenditure at 10% (tex11_s; probed 2026-10-04: 10% of the item's post-uprating value) for the whole of RW_2025, where Law No 011/2025 of 27/05/2025 (in force on publication, 29/05/2025) carries NO water row in its Annex - the row existed in the repealed Law No 050/2023, in force through 28 May 2025. The model otherwise applies the 2025 schedule (cigarettes 36% plus FRW 230 per pack, wine 40%; both probed 2026-10-04), so the year mixes the new rates with a dropped row. The rulespec-rw excise module encodes the 2025 Annex only.",
             "affected_comparisons": [
               "rw-excise"
             ],
