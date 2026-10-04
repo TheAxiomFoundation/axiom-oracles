@@ -192,6 +192,34 @@ mappings:
       (ghamod-tva-wedge-double-and-triple-counts-levies). The Axiom branch
       is exercised by the rulespec-gh companion tests. PolicyEngine has no
       Ghana model.
+  - legal_id: gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Beer excise (Act 1108 First Schedule: 47.5/32.5/10 per centum of the
+      ex-factory price by local raw material). Validated against GHAMOD
+      tvl04_s by the gh-excise suite on the under-50-per-cent band, exact to
+      the cedi on an identical base: the one GHAMOD ad-valorem excise output
+      whose rate matches the statutory table. GHAMOD charges it on household
+      beer expenditure rather than the ex-factory price, and its other
+      excise outputs match no Act 1108 rate; both are recorded in
+      ghamod_issues.json. PolicyEngine has no Ghana model; the household
+      oracle is GHAMOD.
+  - legal_id: gh:policies/gsfp/feeding-grant#school_feeding_value_per_year
+    country: gh
+    program: benefits
+    mapping_type: not_comparable
+    rationale: >-
+      Ghana School Feeding Programme grant (GH¢2.00 per meal per child per
+      day, 2025 Budget Statement paragraph 381). The gh-transfers suite
+      checks that GHAMOD bed_s equals GH¢2.00 over every weekday of the year
+      (365 x 5/7 days, a calendar inferred from GHAMOD's own output), so it is
+      a regression check of GHAMOD's annual value and cannot separate a rate
+      error from an offsetting calendar error; the calendar is recorded as a
+      divergence from the school year in ghamod_issues.json. LEAP
+      and Free SHS are recorded there too (findings #10/#11). PolicyEngine
+      has no Ghana model; the household oracle is GHAMOD.
 prefixes:
   - legal_id_prefix: "gh:"
     country: gh
