@@ -1229,6 +1229,15 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ug-nssf-contributions",
+      "name": null,
+      "report": "axiom-euromod-ug-nssf-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-nssf-contributions.yaml"
+    },
+    {
       "suite": "ug-paye-rate-schedule",
       "name": null,
       "report": "axiom-euromod-ug-paye-rate-schedule.json",

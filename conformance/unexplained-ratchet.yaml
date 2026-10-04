@@ -340,6 +340,8 @@ ratchets:
   unexplained_max: 0
 - suite: tx-tanf-parameters
   unexplained_max: 0
+- suite: ug-nssf-contributions
+  unexplained_max: 0
 - suite: ug-paye-rate-schedule
   unexplained_max: 0
 - suite: ug-presumptive

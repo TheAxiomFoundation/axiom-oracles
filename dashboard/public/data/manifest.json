@@ -240,6 +240,7 @@
     "axiom-euromod-gh-dispy.json",
     "axiom-euromod-ug-paye-rate-schedule.json",
     "axiom-euromod-ug-rental.json",
-    "axiom-euromod-ug-presumptive.json"
+    "axiom-euromod-ug-presumptive.json",
+    "axiom-euromod-ug-nssf-contributions.json"
   ]
 }
