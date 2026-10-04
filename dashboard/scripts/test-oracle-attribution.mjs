@@ -355,6 +355,28 @@ for (const report of reports) {
   anchors.set(anchor, report.file);
 }
 
+// ── The pages route through the helpers tested above ────────────────────
+// The checks above exercise the helpers; these pin that the components
+// still call them, since a revert to raw engine ids would pass the build.
+const WIRING = {
+  "src/components/OraclesV2.jsx": [
+    "verificationReports(data.reports, HIDDEN_ORACLES)",
+    "crossCheckCount(data.reports, HIDDEN_ORACLES)",
+    "groupByOracle(verification)",
+    "engines: displayEngines(report)",
+    "attributedOracles(oracles.map((o) => o.id))",
+    "{ORACLE_IDENTITY[routeOracle.id].acknowledgement}",
+    "href={ORACLE_IDENTITY[routeOracle.id].licence.url}",
+  ],
+  "src/components/ProgramPage.jsx": ["oracle: otherOracle(report)", "engines: displayEngines(report)"],
+  "src/components/Households.jsx": ["oracle: otherOracle(r)"],
+};
+for (const [file, needles] of Object.entries(WIRING)) {
+  const source = readFileSync(file, "utf8");
+  for (const needle of needles) assert.ok(source.includes(needle), `${file} no longer has ${needle}`);
+  assert.doesNotMatch(source, /engines: report\.engines/, `${file} passes raw engine ids to labels`);
+}
+
 // ── Disposition tags name the model, for every model-root config ────────
 const { dispositionTag } = await import("../src/components/DispositionNote.jsx");
 for (const config of configs) {
