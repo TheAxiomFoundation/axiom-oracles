@@ -4691,6 +4691,52 @@
       "varied_fields": 1,
       "verdict_concepts": {}
     },
+    "gh-presumptive-turnover": {
+      "binding": "unbound",
+      "binding_defects": [
+        "gh-presumptive-turnover: chunk index dashboard/public/data/cases/gh-presumptive-turnover/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 6,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "annual_turnover": {
+          "distinct": 3,
+          "state": "varied"
+        },
+        "axiom_all_outputs_count": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 2,
+          "state": "varied"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-gh-presumptive-turnover.json",
+      "report_sha256": "e3ba7833c8974281cd870c572ee75782ca6739179b0c8708fdf2a8e99de6b095",
+      "varied_fields": 2,
+      "verdict_concepts": {}
+    },
     "gh-ssnit-contributions": {
       "binding": "unbound",
       "binding_defects": [
