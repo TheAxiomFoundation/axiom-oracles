@@ -905,8 +905,9 @@ def main() -> int:
             f"{len(dirty)} suite(s) from dirty rulespec trees"
         )
         for suite in dirty:
-            # Non-blocking, like staleness: the affected-rerun selector already
-            # selects these for a rerun. The annotation makes them visible in CI.
+            # Non-blocking, like staleness. The affected-rerun selector reruns a
+            # dirty report for the repos its map entry lists; the annotation
+            # makes every dirty report visible in CI, mapped or not.
             print(
                 f"::warning::{suite['suite']} report ran on dirty rulespec "
                 f"trees: {', '.join(suite['dirty_rulespecs'])}"

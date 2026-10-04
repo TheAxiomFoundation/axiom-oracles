@@ -747,7 +747,9 @@ def _guard_unclean_rulespec_trees(name: str, provenance: dict) -> None:
     ``pr-triggered`` or ``affected-rerun`` report is published as what the
     committed rules compute, so it must come from trees whose state is recorded
     and clean (untracked files do not count). Exits before stamping or
-    publication, so nothing reaches reports/ or the dashboard. A ``manual`` run
+    publication, so nothing this script publishes reaches reports/ or the
+    dashboard (a generator that writes its own files during the run is not
+    rolled back, as with --require-live). A ``manual`` run
     may use a dirty tree: it is published with ``dirty: true`` and the diff
     hash on each such entry, the affected-rerun selector treats it as stale,
     and this warns on stderr.
@@ -975,11 +977,24 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # The federal runner set this private marker only after checking that
         # the clean local snapshot's tree equals the public upstream tree pin.
         # Record the merged-main commit whose content ran, not a local
-        # content-equivalent materialization commit.
-        rulespecs = [
-            {**entry, "sha": str(verified_upstream_sha)}
-            for entry in rulespecs
-        ]
+        # content-equivalent materialization commit. Its tree is the pin's, so
+        # the worktree state measured against it still describes the pin.
+        if params.get(_VERIFIED_RULESPEC_UPSTREAM_TREE):
+            # The DE producer read the pinned commit straight from git objects
+            # (de_axiom_legs.inspect_pinned_ref: rev-parse, ls-tree and
+            # `git show <commit>:<path>`), so no working-tree file fed the run
+            # and the checkout's state, measured against its own HEAD, says
+            # nothing about the pin. What ran is the pin's committed content.
+            tree_state = {"dirty": False}
+            rulespecs = [
+                {"repo": entry.get("repo"), "sha": str(verified_upstream_sha), **tree_state}
+                for entry in rulespecs
+            ]
+        else:
+            rulespecs = [
+                {**entry, "sha": str(verified_upstream_sha)}
+                for entry in rulespecs
+            ]
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote and not rulespecs:
         from axiom_oracles.provenance import repo_slug_from_remote
@@ -2658,6 +2673,9 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
 
 
 _VERIFIED_RULESPEC_UPSTREAM_SHA = "_verified_rulespec_upstream_sha"
+#: Set beside the SHA marker by scripts/de_axiom_legs.py once it has verified
+#: the pinned commit and tree in the object database it reads them from.
+_VERIFIED_RULESPEC_UPSTREAM_TREE = "_verified_rulespec_upstream_tree"
 
 
 def _pinned_snapshot_unusable_reason(root: Path, upstream_tree: str) -> str | None:

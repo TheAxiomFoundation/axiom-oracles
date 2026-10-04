@@ -1576,10 +1576,13 @@ def test_registry_verifies_snapshot_tree_and_stamps_upstream_sha(tmp_path):
         "federal-tax-liability-grid",
         output,
     )
+    # The snapshot's tree is the pin's, so its measured (clean) worktree state
+    # still describes the recorded upstream SHA.
     assert block["rulespecs"] == [
         {
             "repo": "TheAxiomFoundation/rulespec-us",
             "sha": upstream_sha,
+            "dirty": False,
         }
     ]
 

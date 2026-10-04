@@ -13,8 +13,10 @@ Invariants (each tested below, the first two property-based):
 * ``dirty`` is ``True`` exactly when a tracked file's working-tree or index
   content differs from ``HEAD``; untracked files never change it.
 * ``diff_sha256`` is present exactly when ``dirty`` is ``True``, is a function
-  of the diff (deterministic, independent of git config), and reverting the
-  edit returns the checkout to ``{"dirty": False}``.
+  of the change alone (the same operations on two clones of one commit hash
+  the same, whatever the git config), and reverting the edit returns the
+  checkout to ``{"dirty": False}``.
+* The checkout's own index and files are never written.
 * The gate refuses exactly when the run kind is not ``manual`` and some entry
   with a SHA is not recorded clean.
 """
@@ -27,10 +29,11 @@ import json
 import os
 import subprocess
 import tempfile
+import time
 from pathlib import Path
 
 import pytest
-from hypothesis import HealthCheck, given, settings
+from hypothesis import HealthCheck, example, given, settings
 from hypothesis import strategies as st
 
 from axiom_oracles import provenance
@@ -219,13 +222,80 @@ def test_hidden_flag_edit_hashes_like_the_plain_edit(tmp_path):
     assert worktree_state(plain)["diff_sha256"] == worktree_state(hidden)["diff_sha256"]
 
 
-def test_a_flagged_file_absent_from_disk_is_not_dirty(tmp_path):
+def test_a_file_a_sparse_checkout_leaves_out_is_not_dirty(tmp_path):
     """A sparse checkout leaves skip-worktree files off disk; their rules
     cannot have run, so they must not mark the tree dirty."""
     repo = _repo(tmp_path / "rulespec-rw")
-    _git(repo, "update-index", "--skip-worktree", "rw/pit.yaml")
-    (repo / "rw/pit.yaml").unlink()
+    _git(repo, "sparse-checkout", "set", "--no-cone", "/*", "!/rw/pit.yaml")
+    assert not (repo / "rw/pit.yaml").exists()
+    assert _git(repo, "ls-files", "-v", "rw/pit.yaml").startswith("S ")
     assert worktree_state(repo) == {"dirty": False}
+    # An edit inside the sparse cone still counts.
+    (repo / "rw/vat.yaml").write_text("rate: 0.17\n")
+    assert worktree_state(repo)["dirty"] is True
+
+
+@pytest.mark.parametrize(
+    "hide",
+    [
+        pytest.param(lambda r: _git(r, "update-index", "--assume-unchanged", "rw/vat.yaml"), id="assume-unchanged"),
+        pytest.param(lambda r: _git(r, "update-index", "--skip-worktree", "rw/vat.yaml"), id="skip-worktree-not-sparse"),
+        pytest.param(
+            lambda r: (
+                _git(r, "config", "core.ignoreStat", "true"),
+                (r / "rw/vat.yaml").write_text("rate: 0.19\n"),
+                _git(r, "commit", "-qam", "under ignoreStat"),
+            ),
+            id="core.ignoreStat",
+        ),
+    ],
+)
+def test_a_deletion_behind_an_index_flag_is_dirty(tmp_path, hide):
+    """Outside a sparse checkout an absent flagged file is a deletion: the
+    run went without that module, so the tree is dirty."""
+    repo = _repo(tmp_path / "rulespec-rw")
+    hide(repo)
+    assert _git(repo, "ls-files", "-v", "rw/vat.yaml")[0] in "Sh"
+    (repo / "rw/vat.yaml").unlink()
+    assert _git(repo, "status", "--porcelain") == ""  # git itself is blind
+    state = worktree_state(repo)
+    assert state["dirty"] is True
+    assert _is_hex64(state["diff_sha256"])
+
+
+@pytest.mark.parametrize("flag", ["--skip-worktree", "--assume-unchanged"])
+def test_a_hidden_edit_survives_a_later_index_rewrite(tmp_path, flag):
+    """A flagged entry keeps the stat data from before the edit; once any git
+    command rewrites the index after the edit, that stale stat no longer
+    looks racy. The revealed entry's stat is zeroed, so git still compares
+    the content: a same-size edit made in the commit's second is caught."""
+    repo = _repo(tmp_path / "rulespec-rw")
+    _git(repo, "update-index", flag, "rw/vat.yaml")
+    (repo / "rw/vat.yaml").write_text("rate: 0.17\n")  # same size as 0.18
+    time.sleep(1.1)
+    _git(repo, "update-index", "--refresh")
+    _git(repo, "status")
+    assert worktree_state(repo)["dirty"] is True
+
+
+def test_the_checkouts_own_index_is_never_written(tmp_path):
+    """Porcelain status/diff refresh the index they read and can rewrite it
+    under index.lock; another session committing in a shared checkout would
+    then hit the lock. Everything runs against a private copy."""
+    repo = _repo(tmp_path / "rulespec-rw")
+    _git(repo, "update-index", "--skip-worktree", "rw/pit.yaml")
+    time.sleep(1.1)
+    (repo / "rw/pit.yaml").touch()  # stat-only change: a refresh would rewrite
+    (repo / "rw/vat.yaml").write_text("rate: 0.17\n")
+    index = repo / ".git" / "index"
+    before = (index.read_bytes(), index.stat().st_mtime_ns)
+    files_before = sorted(p.name for p in (repo / ".git").iterdir())
+
+    assert worktree_state(repo)["dirty"] is True
+
+    assert (index.read_bytes(), index.stat().st_mtime_ns) == before
+    assert sorted(p.name for p in (repo / ".git").iterdir()) == files_before
+    assert _git(repo, "ls-files", "-v", "rw/pit.yaml").startswith("S ")
 
 
 @pytest.mark.parametrize("target", ["none", "missing", "not-git", "no-commit"])
@@ -286,13 +356,15 @@ def test_a_different_edit_hashes_differently(tmp_path):
     assert seventeen != sixteen
 
 
-def test_the_hash_ignores_git_config(tmp_path):
-    """Every config knob that reshapes ``git diff`` output is pinned, so a
-    developer's or CI runner's config cannot change the hash of an edit."""
+def test_the_hash_ignores_git_config(tmp_path, monkeypatch):
+    """The hash is built from object ids and raw bytes, not diff text, so no
+    diff, attribute, line-ending or compression setting, nor GIT_DIFF_OPTS,
+    can change the hash of an edit on a developer's or CI runner's machine."""
     files = {
         "rw/vat.yaml": "a: 1\n\nb: 2\nc: 3\nd: 4\ne: 5\nf: 6\ng: 7\nh: 8\ni: 9\nj: 10\n",
         "rw/naïve.yaml": "x: 1\n",
         "rw/moved.yaml": "long enough content to be detected as a rename\n" * 5,
+        "rw/table.pdf": "%PDF-1.4 placeholder\n",
     }
     repo = _repo(tmp_path / "rulespec-rw", files)
     (repo / "rw/vat.yaml").write_text(
@@ -300,10 +372,14 @@ def test_the_hash_ignores_git_config(tmp_path):
     )
     (repo / "rw/naïve.yaml").write_text("x: 2\n")
     _git(repo, "mv", "rw/moved.yaml", "rw/renamed.yaml")
+    (repo / "rw/table.pdf").write_bytes(bytes(range(256)) * 4)  # binary edit
     baseline = worktree_state(repo)
+    assert baseline["dirty"] is True
 
     order = tmp_path / "order.txt"
     order.write_text("rw/renamed.yaml\nrw/naïve.yaml\n")
+    attributes = tmp_path / "attributes"
+    attributes.write_text("*.yaml diff=yamlx text eol=crlf\n")
     for key, value in {
         "diff.noprefix": "true",
         "diff.mnemonicPrefix": "true",
@@ -317,32 +393,73 @@ def test_the_hash_ignores_git_config(tmp_path):
         "diff.orderFile": str(order),
         "diff.external": "false",
         "diff.submodule": "log",
-        "core.quotePath": "true",
+        "diff.yamlx.xfuncname": "^.*rate.*$",
+        "diff.yamlx.textconv": "rev",
+        "core.attributesFile": str(attributes),
+        "core.quotePath": "false",
         "core.abbrev": "7",
+        "core.compression": "9",
+        "core.autocrlf": "true",
+        "core.eol": "crlf",
         "color.ui": "always",
         "color.diff": "always",
     }.items():
         _git(repo, "config", key, value)
+    (repo / ".git" / "info").mkdir(exist_ok=True)
+    (repo / ".git" / "info" / "attributes").write_text("*.yaml diff=yamlx\n*.pdf -diff\n")
 
     assert worktree_state(repo) == baseline
     assert worktree_state(repo / "rw") == baseline
+    monkeypatch.setenv("GIT_DIFF_OPTS", "-u10")
+    assert worktree_state(repo) == baseline
 
 
-def test_the_hash_is_sha256_of_a_default_git_diff(tmp_path):
-    """Under default config the pinned options are git's own defaults, so a
-    reader can recompute the hash with plain ``git diff --binary
-    --full-index HEAD``."""
-    repo = _repo(tmp_path / "rulespec-rw")
-    _edit_two_files(repo)
-    (repo / "rw/blob.bin").write_bytes(bytes(range(256)))
-    _git(repo, "add", "rw/blob.bin")
-    plain = subprocess.run(
-        ["git", "-C", str(repo), "diff", "--binary", "--full-index", "HEAD"],
-        check=True,
-        capture_output=True,
-        env={**os.environ, **_HERMETIC_GIT_ENV},
+def _expected_manifest(repo: Path) -> bytes:
+    """An independent rebuild of the documented manifest: per path git
+    reports changed, its HEAD entry, index entries and the sha256 of its
+    bytes on disk."""
+    status = subprocess.run(
+        ["git", "-C", str(repo), "status", "--porcelain=v1", "-z", "--no-renames", "--untracked-files=no"],
+        check=True, capture_output=True, env={**os.environ, **_HERMETIC_GIT_ENV},
     ).stdout
-    assert worktree_state(repo)["diff_sha256"] == hashlib.sha256(plain).hexdigest()
+    lines = []
+    for path in sorted({r[3:] for r in status.split(b"\0") if r}):
+        name = path.decode()
+        tree = _git(repo, "ls-tree", "--full-tree", "HEAD", "--", name).strip()
+        head = (tree.split("\t")[0].split(" ")[0] + " " + tree.split("\t")[0].split(" ")[2]) if tree else "-"
+        staged = sorted(line.split("\t")[0] for line in _git(repo, "ls-files", "-s", "--", name).splitlines())
+        target = repo / name
+        if target.is_symlink():
+            work = "120000 sha256:" + hashlib.sha256(os.fsencode(os.readlink(target))).hexdigest()
+        elif target.exists():
+            mode = "100755" if target.stat().st_mode & 0o111 else "100644"
+            work = f"{mode} sha256:" + hashlib.sha256(target.read_bytes()).hexdigest()
+        else:
+            work = "-"
+        lines.append("\0".join([name, head, ";".join(staged) or "-", work]) + "\n")
+    return b"axiom_oracles.worktree_manifest.v1\n" + "".join(lines).encode()
+
+
+def test_the_hash_is_sha256_of_the_documented_manifest(tmp_path):
+    """Differential check of ``_change_manifest`` against an independent
+    rebuild of its documented format, over every kind of change at once."""
+    repo = _repo(
+        tmp_path / "rulespec-rw",
+        {"rw/vat.yaml": "rate: 0.18\n", "rw/pit.yaml": "band: 1\n", "rw/old.yaml": "x\n", "rw/x.sh": "echo\n"},
+    )
+    (repo / "rw/vat.yaml").write_text("rate: 0.17\n")  # unstaged edit
+    (repo / "rw/pit.yaml").write_text("band: 2\n")
+    _git(repo, "add", "rw/pit.yaml")  # staged edit
+    (repo / "rw/pit.yaml").write_text("band: 3\n")  # ...then edited again
+    (repo / "rw/old.yaml").unlink()  # deletion
+    (repo / "rw/x.sh").chmod(0o755)  # mode change
+    (repo / "rw/blob.bin").write_bytes(bytes(range(256)))
+    _git(repo, "add", "rw/blob.bin")  # staged binary
+    (repo / "rw/link").symlink_to("vat.yaml")
+    _git(repo, "add", "rw/link")  # staged symlink
+
+    expected = hashlib.sha256(_expected_manifest(repo)).hexdigest()
+    assert worktree_state(repo) == {"dirty": True, "diff_sha256": expected}
 
 
 # --- invariant: dirty <=> tracked content differs from HEAD (property) -------
@@ -360,12 +477,49 @@ _OPS = st.lists(
 )
 
 
+def _apply_ops(repo: Path, ops) -> bool:
+    """Apply ``ops`` to ``repo`` while tracking an independent dict model of
+    HEAD, the index and the working tree; return whether the model says some
+    tracked path's index or working-tree content differs from HEAD."""
+    files = {name: f"{name}: 0\n" for name in _FILES}
+    head = dict(files)
+    index: dict[str, str | None] = dict(files)
+    work: dict[str, str | None] = dict(files)
+    for op, name, value in ops:
+        path = repo / name
+        if op == "edit":
+            work[name] = f"{name}: {value}\n"
+            path.write_text(work[name])
+        elif op == "revert":
+            work[name] = head[name]
+            path.write_text(head[name])
+        elif op == "delete":
+            work[name] = None
+            path.unlink(missing_ok=True)
+        elif op == "stage":
+            if index[name] is None and work[name] is None:
+                continue  # nothing left for git to stage
+            _git(repo, "add", "-A", "--", name)
+            index[name] = work[name]
+        elif op == "untracked":
+            (repo / f"new-{name}-{value}").write_text("untracked\n")
+        else:
+            (repo / f"{name}.{value}.out").write_text("ignored\n")
+    return any(index[n] != head[n] or work[n] != head[n] for n in _FILES)
+
+
+def _model_repo(path: Path) -> Path:
+    return _repo(path, {**{n: f"{n}: 0\n" for n in _FILES}, ".gitignore": "*.out\n"})
+
+
 @settings(
     max_examples=40,
     deadline=None,
     suppress_health_check=[HealthCheck.function_scoped_fixture],
 )
 @given(ops=_OPS)
+@example(ops=[("delete", "a.yaml", 0), ("stage", "a.yaml", 0), ("stage", "a.yaml", 0)])
+@example(ops=[("edit", "a.yaml", 1), ("stage", "a.yaml", 0), ("revert", "a.yaml", 0)])
 def test_dirty_iff_tracked_content_differs_from_head(ops):
     """Model check against an independent dict model of HEAD, the index and
     the working tree: ``dirty`` is exactly "some tracked path's index or
@@ -373,38 +527,44 @@ def test_dirty_iff_tracked_content_differs_from_head(ops):
     files exist; ``diff_sha256`` accompanies it exactly then; and the call is
     deterministic."""
     with tempfile.TemporaryDirectory() as tmp:
-        files = {name: f"{name}: 0\n" for name in _FILES}
-        repo = _repo(Path(tmp) / "rulespec-rw", {**files, ".gitignore": "*.out\n"})
-        head = dict(files)
-        index = dict(files)
-        work: dict[str, str | None] = dict(files)
-        for op, name, value in ops:
-            path = repo / name
-            if op == "edit":
-                work[name] = f"{name}: {value}\n"
-                path.write_text(work[name])
-            elif op == "revert":
-                work[name] = head[name]
-                path.write_text(head[name])
-            elif op == "delete":
-                work[name] = None
-                path.unlink(missing_ok=True)
-            elif op == "stage":
-                _git(repo, "add", "-A", "--", name)
-                index[name] = work[name]
-            elif op == "untracked":
-                (repo / f"new-{name}-{value}").write_text("untracked\n")
-            else:
-                (repo / f"{name}.{value}.out").write_text("ignored\n")
-        expected_dirty = any(
-            index[name] != head[name] or work[name] != head[name] for name in _FILES
-        )
+        repo = _model_repo(Path(tmp) / "rulespec-rw")
+        expected_dirty = _apply_ops(repo, ops)
 
         state = worktree_state(repo)
 
         assert state["dirty"] is expected_dirty, (ops, state)
         assert ("diff_sha256" in state) is expected_dirty
         assert worktree_state(repo) == state
+
+
+@settings(
+    max_examples=20,
+    deadline=None,
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
+@given(ops=_OPS, hostile=st.booleans())
+def test_the_same_change_on_two_clones_hashes_the_same(ops, hostile):
+    """Determinism across checkouts: two clones of one commit given the same
+    operations record the same state, even when one carries config that
+    reshapes diff output (the hash never reads diff text)."""
+    with tempfile.TemporaryDirectory() as tmp:
+        origin = _model_repo(Path(tmp) / "origin")
+        states = []
+        for name in ("one", "two"):
+            clone = Path(tmp) / name / "rulespec-rw"
+            clone.parent.mkdir()
+            _git(Path(tmp), "clone", "-q", str(origin), str(clone))
+            if hostile and name == "two":
+                for key, value in {
+                    "diff.algorithm": "patience",
+                    "diff.noprefix": "true",
+                    "core.autocrlf": "true",
+                    "diff.context": "9",
+                }.items():
+                    _git(clone, "config", key, value)
+            _apply_ops(clone, ops)
+            states.append(worktree_state(clone))
+        assert states[0] == states[1], (ops, states)
 
 
 # --- rulespec_provenance records the state ----------------------------------
@@ -905,3 +1065,134 @@ def test_freshness_lists_dirty_rulespecs_only_when_present(tmp_path, monkeypatch
     # ran_against still records the SHAs; the new key qualifies them.
     assert suites["rw-vat"]["ran_against"]["o/rulespec-rw"] == "aaa"
 
+
+
+def test_check_mode_warns_in_ci_about_a_dirty_report(tmp_path, monkeypatch, capsys):
+    """``--check`` stays green (staleness-style, non-blocking) but emits a
+    GitHub ``::warning::`` naming the suite and its dirty repos."""
+    gate = _load_script("check_vacuous_gate.py")
+    data = tmp_path / "data"
+    data.mkdir()
+    (data / "rw-vat.json").write_text(
+        json.dumps(
+            {
+                "suite": "rw-vat",
+                "provenance": {
+                    "generated_at": "2026-10-04T00:00:00Z",
+                    "run_kind": "manual",
+                    "rulespecs": [
+                        {"repo": "o/rulespec-rw", "sha": "aaa", "dirty": True, "diff_sha256": "f" * 64}
+                    ],
+                },
+            }
+        )
+    )
+    monkeypatch.setattr(gate, "DASHBOARD_DATA_DIR", data)
+    monkeypatch.setattr(gate, "COVERAGE_OVERVIEW", data / "missing.json")
+    monkeypatch.setattr(gate, "AFFECTED_MAP", tmp_path / "missing-map.json")
+    monkeypatch.setattr(gate, "FRESHNESS_OUTPUT", tmp_path / "freshness.json")
+    # The oracle-backed guard reads the real registry against this stand-in
+    # data dir; it is covered in test_vacuous_gate.py.
+    monkeypatch.setattr(gate, "check_oracle_backed", lambda: [])
+    gate._write_freshness(gate.build_freshness())
+    monkeypatch.setattr("sys.argv", ["check_vacuous_gate.py", "--check"])
+
+    assert gate.main() == 0
+
+    out = capsys.readouterr().out
+    assert "1 suite(s) from dirty rulespec trees" in out
+    assert "::warning::rw-vat report ran on dirty rulespec trees: o/rulespec-rw" in out
+
+
+# --- submodules -------------------------------------------------------------
+
+
+def _superproject(tmp_path: Path) -> tuple[Path, Path]:
+    module = _repo(tmp_path / "module", {"m.yaml": "m: 1\n"})
+    (module / "m.yaml").write_text("m: 2\n")
+    _git(module, "commit", "-qam", "second")
+    parent = _repo(tmp_path / "rulespec-rw")
+    _git(parent, "-c", "protocol.file.allow=always", "submodule", "add", "-q", str(module), "vendor/module")
+    _git(parent, "commit", "-qm", "add submodule")
+    return parent, parent / "vendor" / "module"
+
+
+def test_a_submodule_moved_off_its_recorded_commit_is_dirty(tmp_path):
+    parent, sub = _superproject(tmp_path)
+    assert worktree_state(parent) == {"dirty": False}
+    _git(sub, "checkout", "-q", "HEAD~1")
+    state = worktree_state(parent)
+    assert state["dirty"] is True
+    assert _is_hex64(state["diff_sha256"])
+
+
+def test_untracked_content_inside_a_submodule_leaves_the_tree_clean(tmp_path):
+    parent, sub = _superproject(tmp_path)
+    (sub / "build-output.json").write_text("{}")
+    assert worktree_state(parent) == {"dirty": False}
+    (sub / "m.yaml").write_text("m: 3\n")  # modified content does count
+    assert worktree_state(parent)["dirty"] is True
+
+
+# --- verified upstream pins --------------------------------------------------
+
+
+def _pinned_config(runner_type: str, root: Path, params: dict) -> dict:
+    return {
+        "name": "pinned-suite",
+        "runner": {
+            "type": runner_type,
+            "parameters": {"rulespec_root": str(root), **params},
+        },
+    }
+
+
+def test_a_pin_read_from_git_objects_records_the_pin_as_clean(run_comparison, tmp_path):
+    """The DE producer reads its pinned commit from the object database, so
+    the checkout's working tree, dirty against its own HEAD, fed nothing:
+    the entry names the pin, and the pin's committed content is what ran."""
+    root = _repo(tmp_path / "rulespec-de", {"de/kindergeld.yaml": "amount: 255\n"})
+    (root / "de/kindergeld.yaml").write_text("amount: 999\n")
+    assert worktree_state(root)["dirty"] is True
+    pin = "1" * 40
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "pinned-suite"}))
+    config = _pinned_config(
+        "de-axiom-oracle-compare",
+        root,
+        {
+            "oracle": "euromod",
+            run_comparison._VERIFIED_RULESPEC_UPSTREAM_SHA: pin,
+            run_comparison._VERIFIED_RULESPEC_UPSTREAM_TREE: "2" * 40,
+        },
+    )
+
+    block = run_comparison._build_run_provenance(config, "de-axiom-oracle-compare", output)
+
+    assert block["rulespecs"] == [
+        {"repo": "TheAxiomFoundation/rulespec-de", "sha": pin, "dirty": False}
+    ]
+
+
+def test_a_snapshot_pin_keeps_the_snapshots_measured_state(run_comparison, tmp_path):
+    """The federal path verified a checkout whose tree is the pin's, so the
+    state measured on that checkout describes the pin; an edit made after
+    verification shows as dirty and is refused for non-manual runs."""
+    root = _repo(tmp_path / "rulespec-us")
+    (root / "rw/vat.yaml").write_text("rate: 0.17\n")
+    pin = "3" * 40
+    output = tmp_path / "r.json"
+    output.write_text(json.dumps({"suite": "pinned-suite"}))
+    config = _pinned_config(
+        "federal-tax-liability-grid",
+        root,
+        {run_comparison._VERIFIED_RULESPEC_UPSTREAM_SHA: pin},
+    )
+
+    block = run_comparison._build_run_provenance(config, "federal-tax-liability-grid", output)
+
+    [entry] = block["rulespecs"]
+    assert entry["sha"] == pin
+    assert entry["dirty"] is True
+    with pytest.raises(SystemExit):
+        run_comparison._guard_unclean_rulespec_trees("pinned-suite", {**block, "run_kind": "weekly"})
