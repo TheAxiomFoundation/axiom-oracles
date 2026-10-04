@@ -108,6 +108,12 @@ export const SOUTHMOD_MODELS = {
     jurisdiction: "ZMB",
     data: "Zambia Statistics Agency (ZamStats) (2024). Living Conditions Monitoring Survey, 2022 (LCMS 2022). Lusaka: ZamStats. https://www.zamstats.gov.zm/wp-content/uploads/2024/07/2022-LCMS-Report-2022.pdf",
   },
+  et: {
+    model: "ETMOD",
+    country: "Ethiopia",
+    jurisdiction: "ETH",
+    data: "Central Statistical Agency of Ethiopia (CSA) (2024). Ethiopia Socioeconomic Panel Survey, Wave 5 (ESPS-5) 2021–2022. Addis Ababa: CSA. https://microdata.worldbank.org/index.php/catalog/6161",
+  },
 };
 
 /**
@@ -144,6 +150,7 @@ const SOUTHMOD_WORDS = {
   paye: "PAYE",
   vat: "VAT",
   ssnit: "SSNIT",
+  mat: "MAT",
   napsa: "NAPSA",
   nhima: "NHIMA",
   sct: "Social Cash Transfer",
