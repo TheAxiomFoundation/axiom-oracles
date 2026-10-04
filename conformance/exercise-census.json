@@ -4569,6 +4569,48 @@
       "varied_fields": 3,
       "verdict_concepts": {}
     },
+    "gh-capital-income": {
+      "binding": "unbound",
+      "binding_defects": [
+        "gh-capital-income: chunk index dashboard/public/data/cases/gh-capital-income/index.json is missing; report/chunk evidence binding is unbound"
+      ],
+      "bridge_audited": false,
+      "bridge_declared": false,
+      "bridge_manifest_sha256": null,
+      "bridged_through": {},
+      "cases_scanned": 3,
+      "chunk_manifest": [],
+      "constant_fields": 4,
+      "evidence_fields": {
+        "annual_residential_rent": {
+          "distinct": 3,
+          "state": "varied"
+        },
+        "axiom_entity": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "axiom_entity_id": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "locale": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "scenario": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
+      "evidence_source": "inline",
+      "inline_cases_not_counted": 0,
+      "reconciliation": "none",
+      "report": "dashboard/public/data/axiom-euromod-gh-capital-income.json",
+      "report_sha256": "fad97fe2f2ef18bef3e57eff825c8c6f03aa3f0219bcaa187a16967a5dca4ad1",
+      "varied_fields": 1,
+      "verdict_concepts": {}
+    },
     "gh-income-tax-rate-schedule": {
       "binding": "unbound",
       "binding_defects": [

@@ -570,6 +570,15 @@
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "gh-capital-income",
+      "name": null,
+      "report": "axiom-euromod-gh-capital-income.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-capital-income.yaml"
+    },
+    {
       "suite": "gh-income-tax-rate-schedule",
       "name": null,
       "report": "axiom-euromod-gh-income-tax-rate-schedule.json",
