@@ -229,3 +229,29 @@ jobs:
         env:
           AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE: "1"
         run: uv run --no-sync pytest -q tests/bridges/test_snap_child_support_adapters.py
+
+  # The dashboard deploys by hand (vercel --prod from dashboard/), so no
+  # Vercel check runs on pull requests: build it here and run its
+  # self-contained tests, including the oracle attribution test that holds
+  # each EUROMOD-platform report's credit (EUROMOD, UKMOD, SOUTHMOD) to the
+  # model its comparison config ran.
+  dashboard:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dashboard
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+
+      - name: Install dashboard dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Dashboard tests
+        run: |
+          bun scripts/test-case-agreement.mjs
+          bun scripts/test-oracle-attribution.mjs
+
+      - name: Build dashboard
+        run: bun run build
