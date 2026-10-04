@@ -176,6 +176,152 @@
    ]
   },
   {
+   "id": "ghamod-fuel-levies-diverge-from-esla-2025-schedule",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "texsx01_s",
+    "texsx04_s",
+    "texsx06_s",
+    "texsx02_s",
+    "texsx05_s",
+    "texsx07_s",
+    "texsx03_s",
+    "texry01_s",
+    "texry02_s"
+   ],
+   "statute": "Energy Sector Levies Act, 2025 (Act 1135) Schedule as amended by Acts 1141 and 1145",
+   "observed": "Probed on single-person households buying 100 litres a year, with positive household expenditure xhh (GH_2025 returns zero fuel duty when xhh is 0): the petrol outputs texsx01_s / texsx04_s / texsx06_s come to 1.65 / 0.20 / 0.20 per litre (2.05 in all) and the diesel outputs texsx02_s / texsx05_s / texsx07_s to 1.63 / 0.20 / 0.10 (1.93). Diesel's total equals the Act 1141 shortfall-and-debt-repayment rate on diesel (GHp 193); petrol's is GHp 10 above the Act 1141 petrol rate (GHp 195), and its third output per litre is double diesel's third. Neither fuel carries the Road Fund Levy (GHp 48 per litre) or the Energy Fund Levy (GHp 1 per litre), which the Schedule levies on both. The Act 1135 Schedule (2 April 2025) has no other per-litre petrol or diesel rows, so the statutory totals are GHp 244 on petrol and GHp 242 on diesel from 29 July 2025 (Act 1141 rates from 4 June 2025, Act 1145 road and energy fund rows from 29 July 2025). The kerosene output is negative (texsx03_s, -0.0271 per unit of q045301) and the LPG outputs total 0.7408 per unit of q045302 (texry01_s + texry02_s), against the Schedule's GHp 73 per kilogramme on LPG (Act 1141) and GHp 1 per kilogramme on kerosene (Energy Fund Levy).",
+   "axiom_position": "The encoded fuel-levy modules (rulespec-gh act-1141 schedule-shortfall-row-substituted, importing the act-1145 road and energy fund rows) follow the in-force schedule (petrol 244 / diesel 242 GHp per litre; LPG 73 GHp/kg; kerosene 1 GHp/kg). No live fuel cases run because every row diverges; this entry records the probes.",
+   "reported_upstream": "Candidate finding #9 for UNU-WIDER (southmod@wider.unu.edu), with the petrol third-row question called out separately. Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-excise"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1141/energy-sector-levies-amendment-2025/schedule-shortfall-row-substituted#petrol_fuel_levies_amount",
+    "gh:statutes/act-1141/energy-sector-levies-amendment-2025/schedule-shortfall-row-substituted#diesel_fuel_levies_amount",
+    "gh:statutes/act-1141/energy-sector-levies-amendment-2025/schedule-shortfall-row-substituted#lpg_shortfall_levy_amount",
+    "gh:statutes/act-1141/energy-sector-levies-amendment-2025/schedule-shortfall-row-substituted#kerosene_energy_fund_levy_amount"
+   ]
+  },
+  {
+   "id": "ghamod-leap-pays-bimonthly-amounts-monthly",
+   "classification": "southmod_model_defect_candidate",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "bsa_s"
+   ],
+   "statute": "LEAP administrative schedule (MoGCSP 97th payment cycle, June 2025 indexation)",
+   "observed": "The official LEAP grants are paid per two-month cycle: GH¢320 / 380 / 440 / 530 by 1 / 2 / 3 / 4+ eligible members (MoGCSP 97th-cycle announcement, which calls the payment 'bi-monthly'). GHAMOD pays the same four amounts every month: probed, households with one to four dependants aged 70 or over get bsa_s = 320 / 380 / 440 / 530 a month. A two-member household therefore gets 4,560 a year from GHAMOD against 2,280 at six bi-monthly cycles a year, 2x on every band.",
+   "axiom_position": "The encoded module (rulespec-gh gh/policies/mogcsp-leap/payment-cycle-grants) carries the per-cycle amounts and has no annual output; six cycles a year follows from the bi-monthly schedule. No live LEAP cases run (every case would show the 2x); this entry records the probe.",
+   "reported_upstream": "Candidate finding #10 for UNU-WIDER (southmod@wider.unu.edu). Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-transfers"
+   ],
+   "affected_concepts": [
+    "gh:policies/mogcsp-leap/payment-cycle-grants#leap_grant_per_cycle"
+   ]
+  },
+  {
+   "id": "ghamod-free-shs-amounts-have-no-official-basis",
+   "classification": "southmod_source_gap",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "bedes_s"
+   ],
+   "statute": "Free SHS programme (administrative; 2025 Budget Statement paragraphs 376-379 fund it via the uncapped GETFund)",
+   "observed": "GHAMOD pays bedes_s = 83.54 a month to a residential student and 54.04 a month to a day student (1,002.47 and 648.47 a year). rulespec-gh found no official public per-student Free SHS subsidy schedule (its fee-free-structure module records a search of the Ministry of Education, the Free SHS Secretariat and the 2025/2026 Budget Statements on 2026-07-07). Also probed: a household member with deh=4 receives the residential amount even with der=0 and dpp=0 (not a boarder, not in a public school).",
+   "axiom_position": "The encoded module (rulespec-gh gh/policies/free-shs/fee-free-structure) encodes the fee-free structure and defers the per-student value output pending an official schedule; bedes_s is recorded here rather than compared.",
+   "reported_upstream": "Candidate finding #11 for UNU-WIDER (southmod@wider.unu.edu): what is the official basis for the amounts, and should the residential amount reach non-boarders outside public schools? Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-transfers"
+   ],
+   "affected_concepts": [
+    "gh:policies/free-shs/fee-free-structure#free_shs_subsidy_value_per_year"
+   ]
+  },
+  {
+   "id": "ghamod-excise-buckets-diverge-from-act-1108-table",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_outputs": [
+    "tvl01_s",
+    "tvl02_s",
+    "tvl03_s",
+    "tvl05_s",
+    "tvl06_s",
+    "tvl07_s"
+   ],
+   "statute": "Excise Duty Act, 2014 (Act 878) First Schedule as substituted by Act 1108 (29 Dec 2023)",
+   "observed": "Probed at 100 of spend on single items (with matching xhh), each of GHAMOD's seven ad-valorem alcohol and tobacco excise outputs charges one flat share of the spend it covers: tvl01_s 25%, tvl02_s 20%, tvl03_s 22.5%, tvl04_s 47.5%, tvl05_s 10%, tvl06_s 150% and tvl07_s 170.65%. Only tvl04_s (47.5% on beer spend, x021302 and x021303) equals an Act 1108 rate (beer, stout other than indigenous beer, below 50 per cent local raw material). The Act 1108 table charges wine 45%, blended or compounded spirits 50%, akpeteshie 20% and cigarettes 50% plus a specific duty of 28 pesewas per stick, all on the ex-factory price; 22.5% is exactly half the wine rate, and no output carries a per-stick component.",
+   "axiom_position": "The encoded module (rulespec-gh act-1108 first-schedule-goods-liable-to-excise-duty) carries the statutory table. The gh-excise suite compares the beer under-50 band live and records the other outputs under this entry.",
+   "reported_upstream": "Candidate finding #12 for UNU-WIDER (southmod@wider.unu.edu), a documentation question: which statutory rows the other outputs stand for, and whether their shares are retail-price conversions or ad-valorem equivalents of specific duties. Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-excise"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#wine_excise_amount",
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#blended_spirits_excise_amount",
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#akpeteshie_excise_amount",
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#cigarette_excise_amount_ghp"
+   ]
+  },
+  {
+   "id": "ghamod-beer-excise-charged-on-household-expenditure",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "oracle_outputs": [
+    "tvl04_s"
+   ],
+   "statute": "Excise Duty Act, 2014 (Act 878) First Schedule as substituted by Act 1108 (beer, stout other than indigenous beer)",
+   "observed": "GHAMOD charges the Act 1108 beer rate on household beer expenditure: tvl04_s is 47.5% of the uprated beer spend (live in gh-excise: 1,200 a year gives 570.00, 6,000 gives 2,850.00). Act 1108 charges 47.5 per centum of the ex-factory price, which leaves out the margins and taxes added after the factory gate, so on a retail purchase GHAMOD's base is larger than the statutory one.",
+   "axiom_position": "The gh-excise cases give Axiom the same amount as beer_ex_factory_value (bridged from GHAMOD's post-uprating ils_coicop02, which in these cases holds only the beer spend), so they test the 47.5% rate on an identical base. They are not evidence that GHAMOD's beer excise matches the statute in level: the base definitions differ, and the gap depends on the retail-to-ex-factory price ratio, which neither engine models here.",
+   "reported_upstream": "A convention adopted for the comparison, not a defect report.",
+   "affected_comparisons": [
+    "gh-excise"
+   ],
+   "affected_concepts": [
+    "gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount"
+   ]
+  },
+  {
    "id": "ghamod-nhil-getfund-charged-on-household-expenditure",
    "classification": "southmod_model_simplification",
    "counts_as_axiom_gap": false,
@@ -203,6 +349,33 @@
    "affected_concepts": [
     "gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount",
     "gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount"
+   ]
+  },
+  {
+   "id": "ghamod-school-feeding-every-weekday-of-the-year",
+   "classification": "southmod_model_simplification",
+   "counts_as_axiom_gap": false,
+   "jurisdiction": "GH",
+   "observed_with": {
+    "country": "GH",
+    "system": "GH_2025",
+    "dataset": "gh_2017_a8",
+    "model_root": "SOUTHMOD_A4.0"
+   },
+   "oracle_scope": "household_level",
+   "status": "observed_local",
+   "oracle_outputs": [
+    "bed_s"
+   ],
+   "statute": "2025 Budget Statement paragraph 381 (Ghana School Feeding Programme, GH¢2.00 per meal per child per day)",
+   "observed": "GHAMOD pays the GH¢2.00 daily feeding grant for every weekday of the year: a public basic-school pupil aged 8 gets bed_s = 43.45 a month, 521.43 a year, which is 2.00 x 260.71 days (365 / 7 x 5). The programme pays per child per school day, and a school year has fewer days than that. The rulespec-gh feeding-grant module takes the number of school days fed as an input (school_days_fed); its companion fixture uses 190 days, which gives 380 a year, so GHAMOD's amount would be 37% higher at that count.",
+   "axiom_position": "The gh-transfers case gives Axiom the every-weekday calendar (365 x 5/7 days), which was inferred from GHAMOD's own output, so it is a regression check that GHAMOD's annual value stays at GH¢2.00 over that calendar; it cannot separate a rate error from an offsetting calendar error. It is not evidence that GHAMOD's annual feeding value is right: Axiom does not encode a school-year day count, and the calendar is a methodology input the comparison takes from the oracle.",
+   "reported_upstream": "A convention adopted for the comparison; candidate question for UNU-WIDER on the day count. Nothing in this repository records that it was sent.",
+   "affected_comparisons": [
+    "gh-transfers"
+   ],
+   "affected_concepts": [
+    "gh:policies/gsfp/feeding-grant#school_feeding_value_per_year"
    ]
   }
  ]

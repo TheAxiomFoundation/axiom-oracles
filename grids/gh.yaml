@@ -49,6 +49,33 @@ case_sets:
         age: 45
         relation: HeadOfHousehold
         rental_income: 60000.0
+  gh-excise:
+    locale: GH
+    entity: Person
+    entity_id: head
+    outputs:
+    - gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount
+    cases:
+    - id: gh-excise-beer-1200
+      period: '2026'
+      scenario: single-consumer-beer-excise
+      parameters:
+        annual_beer_spend: 1200.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+    - id: gh-excise-beer-6000
+      period: '2026'
+      scenario: single-consumer-beer-excise
+      parameters:
+        annual_beer_spend: 6000.0
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
   gh-income-tax-rate-schedule:
     locale: GH
     entity: Person
@@ -407,6 +434,24 @@ case_sets:
         age: 35
         relation: HeadOfHousehold
         yearly_earned_income: 500000.0
+  gh-transfers:
+    locale: GH
+    entity: Person
+    entity_id: pupil
+    outputs:
+    - gh:policies/gsfp/feeding-grant#school_feeding_value_per_year
+    cases:
+    - id: gh-feeding-pupil
+      period: '2026'
+      scenario: public-basic-pupil-school-feeding
+      entities:
+      - id: head
+        kind: person
+        age: 40
+        relation: HeadOfHousehold
+      - id: pupil
+        kind: person
+        age: 8
   gh-vat-levies:
     locale: GH
     entity: Person
