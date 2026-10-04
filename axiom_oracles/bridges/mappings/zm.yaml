@@ -109,6 +109,18 @@ mappings:
       ZM_2024 system, monthly; ZM_2025's 400/600 amounts are finding 6 in
       microzamod_issues.json. PolicyEngine has no Zambia model; the
       household oracle is MicroZAMOD.
+  - legal_id: zm:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    country: zm
+    program: income
+    mapping_type: not_comparable
+    rationale: >-
+      Composed single-employee disposable income (Act 22 of 2023 tax on
+      gross income, less the employee NAPSA and NHIMA contributions the
+      pipeline takes as inputs). Validated against MicroZAMOD ils_dispy by
+      the zm-dispy suite in the shared-nil zone; the taxed-zone
+      net-of-contributions base is candidate finding 1 in
+      microzamod_issues.json. PolicyEngine has no Zambia model; the
+      household oracle is MicroZAMOD.
 prefixes:
   - legal_id_prefix: "zm:"
     country: zm
