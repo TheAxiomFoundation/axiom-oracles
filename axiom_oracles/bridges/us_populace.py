@@ -12,7 +12,11 @@ from typing import Any
 
 import yaml
 
-from .adapters import PolicyEngineUSVarAdapter, get_pe_us_var_adapter
+from .adapters import (
+    PolicyEngineUSVarAdapter,
+    boolean_parameter_reading,
+    get_pe_us_var_adapter,
+)
 from .tax_populace import (
     array,
     bool_value,
@@ -516,6 +520,7 @@ def load_policyengine_variable_data(
                 f"expected person ({len(person_outputs)}) or SPM unit ({len(spm_outputs)})."
             )
     spm_outputs = spm_outputs.set_index("spm_unit_id", drop=False)
+    parameters = sim.tax_benefit_system.parameters(f"{year:04d}-{month:02d}")
     cases_by_variable: dict[str, list[USVariableCase]] = {}
     skipped_reasons: dict[str, int] = {}
     for variable in variables:
@@ -544,6 +549,7 @@ def load_policyengine_variable_data(
                 adapter,
                 row=row,
                 spm_row=spm_row,
+                parameters=parameters,
             )
             if skip_reason is not None:
                 skipped_reasons[skip_reason] = skipped_reasons.get(skip_reason, 0) + 1
@@ -620,6 +626,7 @@ def project_case_inputs(
     *,
     row: Any,
     spm_row: Any,
+    parameters: Any = None,
 ) -> tuple[dict[str, Any], str | None]:
     if variable == "ca_capi":
         return project_ca_capi_inputs(row=row, spm_row=spm_row)
@@ -665,6 +672,16 @@ def project_case_inputs(
         inputs[rule_key] = money(row_value(spm_row, pe_key))
     for rule_key, pe_key in adapter.annual_direct_spm_overrides:
         inputs[rule_key] = money(row_value(spm_row, pe_key)) / 12.0
+    if adapter.boolean_input_parameter_check is not None:
+        # A household's election is its own state's PolicyEngine parameter at
+        # the comparison month, e.g. the SNAP child support election.
+        input_key, parameter_path, value_mode = adapter.boolean_input_parameter_check
+        state = row_value(row, "state", None)
+        if parameters is None or not isinstance(state, str) or not state:
+            return {}, f"{variable}_missing_state_election"
+        inputs[input_key] = boolean_parameter_reading(
+            parameters, parameter_path, value_mode, state
+        )
     for key in adapter.unsupported_truthy_input_keys:
         inputs.setdefault(key, False)
     for key in adapter.unsupported_falsy_input_keys:
@@ -906,6 +923,8 @@ def calculate_policyengine(sim: Any, name: str, period: str | int) -> Any:
 
 def policyengine_source_period(variable: str, *, year: int, month: int) -> str | int:
     monthly_sources = {
+        # direct_spm_overrides project their source as a monthly amount.
+        "snap_countable_child_support_expense",
         "ssi",
         "ssi_countable_income",
         "ssi_amount_if_eligible",
