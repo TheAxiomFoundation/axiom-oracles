@@ -1,4 +1,4 @@
-# axiom_oracles.pe_axiom_standard.v1 — GENERATED; advance only via scripts/pe_axiom_standard.py.
+# axiom_oracles.pe_axiom_standard.v1 - GENERATED; advance only via scripts/pe_axiom_standard.py.
 schema: axiom_oracles.pe_axiom_standard.v1
 _comment: PolicyEngine-attributed mismatch explanations and their Axiom side. Every
   explanation that blames PolicyEngine must link the PolicyEngine issue and declare

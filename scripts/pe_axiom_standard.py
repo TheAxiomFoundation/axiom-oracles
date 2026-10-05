@@ -26,8 +26,9 @@ Usage:
         Resolve every companion pointer (test file at the pinned commit, the
         commit on main, the case asserting each legal id, the disputed
         concept and value, and the same values on main) and every encoding
-        debt (an open rulespec issue). Uses local clones for test files when
-        given, else raw.githubusercontent.com; issues always come from the
+        debt (an open rulespec issue), and verify each cited PolicyEngine
+        issue is an issue rather than a PR. Uses local clones for test files
+        when given, else raw.githubusercontent.com; issues always come from the
         GitHub API.
     uv run scripts/pe_axiom_standard.py
         Re-pin: drop grandfathered entries that became compliant or vanished
@@ -141,8 +142,8 @@ def main(argv: list[str] | None = None, repo_root: Path = REPO_ROOT) -> int:
         return 0
 
     if args.resolve:
-        # Issues live only on GitHub, so debt is checked there even when the
-        # RuleSpec test files come from local clones.
+        # Issues live only on GitHub, so PE citations and debt are checked
+        # there even when the RuleSpec test files come from local clones.
         resolver = CompanionResolver(
             _source(args),
             require_merged=not args.no_require_merged,
@@ -151,7 +152,7 @@ def main(argv: list[str] | None = None, repo_root: Path = REPO_ROOT) -> int:
         problems = list(syntax_errors)
         companions = [r for r in records if r.axiom_status == "companion"]
         debts = [r for r in records if r.axiom_status == "debt"]
-        for record in companions:
+        for record in records:
             problems.extend(resolver.resolve(record))
         for record in debts:
             problems.extend(resolver.resolve_debt(record))

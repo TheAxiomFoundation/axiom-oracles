@@ -102,6 +102,7 @@ same rule when two things hold:
 
 A cause whose mismatch cleared attributes nothing. Of two causes for one
 bucket, only the one the dashboard shows attributes.
+An explicit `engines` mapping must be nonempty; omit it for a generic cause.
 
 Every such entry must carry:
 
@@ -164,6 +165,10 @@ working file alone:
 `--resolve` checks each declared Axiom side against GitHub (the RuleSpec test
 files can come from local clones instead):
 
+- **PolicyEngine citations** must resolve to issue payloads with the cited
+  repository and number. A PR returned by GitHub's issues endpoint does not
+  qualify. Both open and closed issues qualify; absent or unverifiable reads
+  fail closed.
 - **Companion tests:**
   - The test file exists at the pinned commit, and that commit is on main.
   - The case asserts each legal id.
@@ -172,6 +177,10 @@ files can come from local clones instead):
     0.005; eligibility outputs also compare judgments as holds/not_holds
     or 0/1. A one-row tables case compares by its row. Unreadable or
     conflicting values for a known disputed case fail.
+    Actual matched row kinds determine amount versus eligibility validation,
+    including rows in the exact bucket selected for a known cause. An optional
+    disposition `kind` filter cannot change that type. Conflicting row types
+    fail; without row evidence, assertions must be numeric.
   - The case is still on main and asserts the same values there, because
     RuleSpec CI runs main.
 - **Encoding debt** must be an open issue, not a pull request, in a

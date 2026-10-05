@@ -899,6 +899,12 @@ class FakeSource:
     def main_sha(self, repo):
         return self.main
 
+    def fetch_json(self, url):
+        return 200, {
+            "number": int(url.rsplit("/", 1)[1]),
+            "html_url": url.replace("https://api.github.com/repos/", "https://github.com/"),
+        }
+
 
 def _test_file(value: str = "10") -> str:
     return yaml.safe_dump(
@@ -922,6 +928,7 @@ def _record(**entry_overrides) -> Record:
         entry=entry,
         case_ids=("disputed-case",),
         axiom_values={"disputed-case": (10.0,)},
+        row_kinds=("amount_difference",),
     )
 
 
@@ -1009,6 +1016,7 @@ def test_value_check_reads_judgments_and_one_row_tables(axiom_value, asserted, n
     record = _record()
     if isinstance(axiom_value, bool) or asserted in ("holds", "not_holds"):
         record.entry["kind"] = "eligibility_right_only"
+        record.row_kinds = ("eligibility_right_only",)
     record.axiom_values = {"disputed-case": (axiom_value,)}
     problems = CompanionResolver(source).resolve(record)
     if needle is None:
@@ -1069,6 +1077,12 @@ class Issues:
 
     def issue(self, repo, number):
         return self.payload
+
+    def fetch_json(self, url):
+        return 200, {
+            "number": int(url.rsplit("/", 1)[1]),
+            "html_url": url.replace("https://api.github.com/repos/", "https://github.com/"),
+        }
 
 
 def _debt_record(url: str = DEBT_ISSUE) -> Record:
@@ -1216,6 +1230,7 @@ def _pointed(sha: str, case: str = "disputed-case", **overrides) -> dict:
 
 
 def test_resolve_cli_passes_then_bites(tmp_path: Path, capsys, monkeypatch) -> None:
+    monkeypatch.setattr(script, "GitHubSource", lambda **_: Issues({"state": "open"}))
     repo, merged, unmerged = _rulespec(tmp_path)
     root = tmp_path / "oracles"
     _write_repo(root, [_pointed(merged)])

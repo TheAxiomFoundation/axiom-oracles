@@ -42,7 +42,8 @@ PolicyEngine leg of a comparison. This module makes the standard structural:
   the pinned commit, which must be on the repository's main line; the named
   case must assert every declared legal id, the Axiom value the comparison
   produced when it shares the disputed case's id, and the same values on
-  main today. Encoding debt must be an open issue.
+  main today. PolicyEngine citations must resolve to issue payloads rather
+  than pull requests. Encoding debt must be an open issue.
 
 Attribution rule (``upstream_engine_gap`` dispositions only — the one kind
 that says the counterpart engine is wrong):
@@ -102,7 +103,7 @@ AXIOM_ENGINE = "axiom"
 # with a comment anchor or query). Either one attributes a mismatch to
 # PolicyEngine; only an issue satisfies the standard's "cite the PE issue".
 PE_LINK_URL_RE = re.compile(
-    r"^https://github\.com/(?i:policyengine)/[A-Za-z0-9._-]+/"
+    r"^https://github\.com/(?i:policyengine)/(?P<repo>[A-Za-z0-9._-]+)/"
     r"(?P<kind>issues|pull)/(?P<number>[1-9]\d*)/?(?:[?#]\S*)?$"
 )
 RULESPEC_ISSUE_URL_RE = re.compile(
@@ -129,7 +130,7 @@ _PE_ISSUE_RANK = {"missing": 0, "present": 1}
 _AXIOM_RANK = {"missing": 0, "debt": 1, "companion": 2}
 
 _HEADER = (
-    f"# {RATCHET_SCHEMA} — GENERATED; advance only via "
+    f"# {RATCHET_SCHEMA} - GENERATED; advance only via "
     "scripts/pe_axiom_standard.py.\n"
 )
 _COMMENT = (
@@ -303,6 +304,8 @@ class Record:
     case_ids: tuple[str, ...] = ()
     # case id -> Axiom-side values of the rows this entry annotates.
     axiom_values: dict[str, tuple] = field(default_factory=dict)
+    # Actual dashboard row kinds, independent of an optional entry filter.
+    row_kinds: tuple[str, ...] = ()
 
     @property
     def key(self) -> tuple[str, str, str]:
@@ -413,6 +416,28 @@ def _links_pe(entry: dict) -> bool:
     return any(is_pe_link_url(url) for url in _disposition_links(entry))
 
 
+def _disposition_rows(entry: dict, reports: list[dict]):
+    for report in reports:
+        for row in report.get("mismatches") or []:
+            annotation = row.get("disposition")
+            if (
+                isinstance(annotation, dict)
+                and str(annotation.get("id")) == str(entry.get("id"))
+                and row.get("concept") == entry.get("concept")
+            ):
+                yield report, row
+
+
+def _row_evidence(rows) -> tuple[tuple[str, ...], dict[str, tuple], tuple[str, ...]]:
+    values: dict[str, list] = {}
+    kinds: dict[str, None] = {}
+    for report, row in rows:
+        case = str(row.get("case_id"))
+        values.setdefault(case, []).append(_row_axiom_value(report, row))
+        kinds[str(row.get("kind"))] = None
+    return tuple(values), {case: tuple(v) for case, v in values.items()}, tuple(kinds)
+
+
 def attribute_disposition(
     entry: dict, reports: list[dict]
 ) -> tuple[str | None, tuple[str, ...], dict[str, tuple]]:
@@ -424,27 +449,16 @@ def attribute_disposition(
 
     if entry.get("disposition") != UPSTREAM_ENGINE_GAP:
         return None, (), {}
-    entry_id = str(entry.get("id"))
     counterparts: set[str] = set()
     case_ids: list[str] = []
     axiom_values: dict[str, list] = {}
     annotated = 0
-    for report in reports:
-        for row in report.get("mismatches") or []:
-            annotation = row.get("disposition")
-            if not isinstance(annotation, dict):
-                continue
-            if str(annotation.get("id")) != entry_id:
-                continue
-            if row.get("concept") != entry.get("concept"):
-                continue
-            annotated += 1
-            counterparts |= _row_counterparts(report, row)
-            case_id = str(row.get("case_id"))
-            case_ids.append(case_id)
-            axiom_values.setdefault(case_id, []).append(
-                _row_axiom_value(report, row)
-            )
+    for report, row in _disposition_rows(entry, reports):
+        annotated += 1
+        counterparts |= _row_counterparts(report, row)
+        case_id = str(row.get("case_id"))
+        case_ids.append(case_id)
+        axiom_values.setdefault(case_id, []).append(_row_axiom_value(report, row))
     basis = None
     if annotated:
         if any(is_pe_engine(engine) for engine in counterparts):
@@ -549,6 +563,15 @@ def _known_cause_live(
     return False
 
 
+def _known_cause_rows(cause: dict, known_causes: list[dict], reports: list[dict]):
+    concept, kind = cause.get("concept"), cause.get("kind")
+    for report in reports:
+        if _cause_for(known_causes, report, concept, kind) is cause:
+            for row in report.get("mismatches") or []:
+                if row.get("concept") == concept and row.get("kind") == kind:
+                    yield report, row
+
+
 def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
     """Every PolicyEngine-attributed explanation, plus syntax errors."""
 
@@ -570,6 +593,9 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
             )
             if basis is None:
                 continue
+            _, _, row_kinds = _row_evidence(
+                _disposition_rows(entry, reports.get(suite, []))
+            )
             records.append(
                 Record(
                     source=source,
@@ -581,6 +607,7 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
                     entry=entry,
                     case_ids=case_ids or _declared_case_ids(entry),
                     axiom_values=axiom_values,
+                    row_kinds=row_kinds,
                 )
             )
     known_causes_path = repo_root / KNOWN_CAUSES_RELATIVE_PATH
@@ -590,6 +617,10 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
         causes = [c for c in payload.get("entries") or [] if isinstance(c, dict)]
         for cause in causes:
             cause_id = known_cause_id(cause)
+            if isinstance(cause.get("engines"), dict) and not cause["engines"]:
+                errors.append(
+                    f"{source} [{cause_id}]: engines mapping must not be empty"
+                )
             errors.extend(
                 validate_axiom_side_fields(cause, f"{source} [{cause_id}]")
             )
@@ -603,6 +634,11 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
                 cause, causes, reports.get(str(cause.get("suite")), [])
             ):
                 continue
+            case_ids, axiom_values, row_kinds = _row_evidence(
+                _known_cause_rows(
+                    cause, causes, reports.get(str(cause.get("suite")), [])
+                )
+            )
             records.append(
                 Record(
                     source=source,
@@ -612,6 +648,9 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
                     basis="fix_owner" if owned else "url",
                     pe_issue=issue if is_pe_issue_url(issue) else None,
                     entry=cause,
+                    case_ids=case_ids,
+                    axiom_values=axiom_values,
+                    row_kinds=row_kinds,
                 )
             )
     # Grandfathering and the presence rule are keyed by (source, id,
@@ -871,6 +910,7 @@ def check_records(
     status_baselines = _status_baselines(grandfathered, versions)
     for record in records:
         problems.extend(companion_scope_problems(record))
+        problems.extend(companion_row_kind_problems(record))
         baseline = status_baselines.get(record.key)
         # Presence improvements do not waive either recorded status: adding
         # the PE issue must not hide a companion -> debt downgrade.
@@ -1225,6 +1265,11 @@ class GitHubSource:
         except ValueError:
             return 0, None
 
+    def fetch_json(self, url: str) -> tuple[int, object]:
+        """Read a GitHub API payload, preserving absence vs failed reads."""
+
+        return self._json(url)
+
     def read(self, repo: str, sha: str, path: str) -> str | None:
         status, body = self._get(
             f"https://raw.githubusercontent.com/{self.owner}/{repo}/{sha}/{path}"
@@ -1410,15 +1455,52 @@ def companion_scope_problems(record: Record) -> list[str]:
 _UNAVAILABLE = object()
 
 
+def _record_eligibility(record: Record) -> bool:
+    return bool(record.row_kinds) and all(
+        kind in _ELIGIBILITY_KINDS for kind in record.row_kinds
+    )
+
+
+def companion_row_kind_problems(record: Record) -> list[str]:
+    if not isinstance(record.entry.get("axiom_companion"), Mapping):
+        return []
+    types = {kind in _ELIGIBILITY_KINDS for kind in record.row_kinds}
+    if len(types) > 1:
+        return [
+            f"{record.label()}: conflicting actual mismatch row types: "
+            f"{record.row_kinds!r}"
+        ]
+    kind = record.entry.get("kind")
+    if types and kind is not None and (kind in _ELIGIBILITY_KINDS) not in types:
+        return [
+            f"{record.label()}: kind filter {kind!r} conflicts with actual "
+            f"mismatch row types: {record.row_kinds!r}"
+        ]
+    return []
+
+
 class CompanionResolver:
     """Resolve an entry's Axiom side against the RuleSpec repositories."""
 
-    def __init__(self, source, *, require_merged: bool = True, issue_source=None):
+    def __init__(
+        self,
+        source,
+        *,
+        require_merged: bool = True,
+        issue_source=None,
+        fetch_json: Callable[[str], tuple[int, object]] | None = None,
+    ):
         self.source = source
         self.require_merged = require_merged
         if issue_source is None and hasattr(source, "issue"):
             issue_source = source
         self.issue_source = issue_source
+        self.fetch_json = (
+            fetch_json
+            or getattr(issue_source, "fetch_json", None)
+            or getattr(source, "fetch_json", None)
+        )
+        self._pe_issues: dict[str, tuple[int, object]] = {}
         self._cache: dict[tuple[str, str, str], object] = {}
         self._merged: dict[tuple[str, str], bool | None] = {}
         self._main: dict[str, str | None] = {}
@@ -1448,10 +1530,10 @@ class CompanionResolver:
         return self._main[repo]
 
     def resolve(self, record: Record) -> list[str]:
+        problems = self.resolve_pe_issue(record) + companion_row_kind_problems(record)
         companion = record.entry.get("axiom_companion")
         if not isinstance(companion, Mapping):
-            return []
-        problems: list[str] = []
+            return problems
         legal_ids = [str(x) for x in companion.get("legal_ids") or []]
         concept_module = legal_id_companion_path(record.concept)
         if record.concept not in legal_ids and concept_module is not None:
@@ -1548,6 +1630,56 @@ class CompanionResolver:
                 )
         return problems
 
+    def resolve_pe_issue(self, record: Record) -> list[str]:
+        """GitHub's issues endpoint also returns PRs; verify the issue identity.
+
+        Open and closed issues both satisfy the citation requirement. Missing
+        grandfathered citations remain governed by the offline presence gate.
+        """
+
+        match = (
+            PE_LINK_URL_RE.match(record.pe_issue)
+            if isinstance(record.pe_issue, str)
+            else None
+        )
+        if match is None or match.group("kind") != "issues":
+            return []  # Presence and URL syntax are checked by the offline gate.
+        label = f"{record.label()} PolicyEngine issue {record.pe_issue}"
+        if self.fetch_json is None:
+            return [f"{label}: no GitHub source to verify the issue"]
+        repo, number = match.group("repo"), int(match.group("number"))
+        url = f"https://api.github.com/repos/PolicyEngine/{repo}/issues/{number}"
+        if url not in self._pe_issues:
+            try:
+                self._pe_issues[url] = self.fetch_json(url)
+            except (SourceUnavailable, OSError, ValueError):
+                self._pe_issues[url] = (0, None)
+        status, payload = self._pe_issues[url]
+        if status in (404, 410):
+            return [f"{label}: no such issue"]
+        if status != 200 or not isinstance(payload, Mapping):
+            return [f"{label}: cannot verify the issue (GitHub unavailable; re-run)"]
+        if "pull_request" in payload:
+            return [f"{label}: is a pull request, not an issue"]
+        actual_url = payload.get("html_url")
+        actual = (
+            PE_LINK_URL_RE.match(actual_url)
+            if isinstance(actual_url, str) else None
+        )
+        if (
+            type(payload.get("number")) is not int
+            or payload["number"] != number
+            or actual is None
+            or actual.group("kind") != "issues"
+            or actual.group("repo").lower() != repo.lower()
+            or int(actual.group("number")) != number
+        ):
+            return [
+                f"{label}: cannot verify the issue identity in the GitHub "
+                "response (re-run)"
+            ]
+        return []
+
     def _value_problems(
         self, label: str, record: Record, case_name: str, asserted
     ) -> list[str]:
@@ -1555,7 +1687,7 @@ class CompanionResolver:
         Axiom produced in the comparison, so the dispute is pinned in RuleSpec
         CI, not just described."""
 
-        eligibility = record.entry.get("kind") in _ELIGIBILITY_KINDS
+        eligibility = _record_eligibility(record)
         expected = _comparable(asserted)
         if case_name not in record.axiom_values:
             if not eligibility and (expected is None or expected[0] != "number"):
@@ -1627,11 +1759,11 @@ class CompanionResolver:
                     outputs[legal_id],
                     eligibility=(
                         legal_id == record.concept
-                        and record.entry.get("kind") in _ELIGIBILITY_KINDS
+                        and _record_eligibility(record)
                     ),
                     numeric=(
                         legal_id == record.concept
-                        and record.entry.get("kind") not in _ELIGIBILITY_KINDS
+                        and not _record_eligibility(record)
                     ),
                 )
             )

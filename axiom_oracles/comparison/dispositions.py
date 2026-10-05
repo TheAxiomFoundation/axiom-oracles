@@ -701,6 +701,7 @@ def apply_dispositions(
     annotated_mismatches = []
     for row, winner in zip(source_rows, row_winner):
         annotated = dict(row)
+        annotated.pop("disposition", None)
         if winner is not None and winner not in binding_violated:
             entry = entry_by_id[winner]
             disposition_kind = entry["disposition"]
