@@ -538,8 +538,9 @@ they are projection targets rather than the canonical interface.
 
 Axiom's aim is source-linked, executable law compared with other calculators
 and datasets. This repo aims to give those comparisons one thin interface, so an
-oracle does not need its own comparator or UI; the SNAP QC replay and the German
-Axiom suites still use their own.
+oracle does not need its own comparator or UI. Many lanes still use their own
+comparison code, among them the SNAP QC replay, the German Axiom suites, the US
+state and federal tax grids, and the UK PolicyEngine grids.
 
 In September 2026, the comparison register
 (`dashboard/public/data/rule_verification_summary.json` at commit d1e9d5ad8)
