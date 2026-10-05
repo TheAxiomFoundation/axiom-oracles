@@ -179,7 +179,7 @@ export function ukmodAcknowledgement() {
     "The process of extending and updating UKMOD was financially supported by the Nuffield Foundation (2018-2021) and the abrdn Financial Fairness Trust (2023-2024). " +
     "The results and their interpretation are the Axiom Foundation's sole responsibility. " +
     "Reference: Richiardi M, Collado D, Popova D (2021). UKMOD – A new tax-benefit model for the four nations of the UK. International Journal of Microsimulation, 14(1): 92-101. DOI: 10.34196/IJM.00231. " +
-    "Changes: the runs override some UKMOD parameters on a temporary copy of the model, never the model itself. Most benefit suites switch off UKMOD's take-up policies (BTA_uk, random_uk); some set take-up rates to 1; the Scottish Child Payment suite also sets the Universal Credit transition share ($UCtransition) to 0. Switching the take-up policies off does not remove UKMOD's take-up draw or its Universal Credit transition, so some Universal Credit, Pension Credit and Housing Benefit results stay zero; the record marks each as a UKMOD gap. " +
+    "Changes: the runs override some UKMOD parameters on a temporary overlay of the model, never the model itself. Most benefit suites switch off UKMOD's take-up policies (BTA_uk, random_uk); some set take-up rates to 1; the Scottish Child Payment suite also sets the Universal Credit transition parameter ($UCtransition) to 0. Switching the take-up policies off does not remove UKMOD's take-up draw or its Universal Credit transition, so some Universal Credit, Pension Credit and Housing Benefit results stay zero; the record marks each as a UKMOD gap. " +
     "Input data: every comparison household is synthetic; of UKMOD's bundled training_data file only the column header is read."
   );
 }
