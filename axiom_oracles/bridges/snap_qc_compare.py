@@ -16,14 +16,16 @@ surface, run the engine, and compare the regular monthly allotment and its
 intermediate stages against the QC constructed values.
 
 FSBEN need not equal the benefit on the case record. Editing Step 13 keeps a
-deduction adjustment only when it meets that step's conditions, mainly a
-calculated benefit within $5 of the raw benefit (error-adjusted when the
-reviewer recorded an error); the utility step also accepts a shelter-deduction
-match (May PDF p.32-33). Step 14 drops only calculated benefits under $1. In
-the FY 2024 file, FSBEN is within $5 of the issued benefit (``RAWBEN``) for
-556 of 856 Colorado units and of the reviewer-corrected benefit (``BENFIX``)
-for 797. A match here means Axiom reproduces Mathematica's calculation from the
-edited inputs (docs/snap-qc-oracle-playbook.md, sections 2 and 3).
+deduction adjustment only when it meets that step's conditions: a calculated
+benefit within $5 of the raw benefit (error-adjusted when the reviewer recorded
+an error), or, in the utility step (13c) for a unit with no recorded payment
+error, a calculated shelter deduction within $5 of the raw one, or a New York
+unit coded as using the HCSUA whose utilities equal it (May PDF p.32-33).
+Step 14 drops only calculated benefits under $1. In the FY 2024 file, FSBEN is
+within $5 of the issued benefit (``RAWBEN``) for 556 of 856 Colorado units and
+of the reviewer-corrected benefit (``BENFIX``) for 797. A match here means
+Axiom reproduces Mathematica's calculation from the edited inputs
+(docs/snap-qc-oracle-playbook.md, sections 2 and 3).
 
 This oracle validates the *benefit computation*; eligibility screening is out
 of scope. The public file keeps only completed reviews of eligible units that
