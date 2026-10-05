@@ -510,6 +510,18 @@ def _cause_for(
 ) -> dict | None:
     """Mirror ``causeFor()`` in dashboard/src/utils/programs.js."""
 
+    # JSON arrays and mappings are truthy in JavaScript even when empty.
+    # An absent left/right property is undefined, distinct from explicit null.
+    missing = object()
+
+    def truthy(value):
+        return isinstance(value, (Mapping, list)) or bool(value)
+
+    def engine_pair(value):
+        if isinstance(value, Mapping):
+            return value.get("left", missing), value.get("right", missing)
+        return missing, missing
+
     candidates = [
         c
         for c in known_causes
@@ -517,15 +529,12 @@ def _cause_for(
         and c.get("concept") == concept
         and c.get("kind") == kind
     ]
-    engines = report.get("engines") or {}
+    engines = engine_pair(report.get("engines"))
     for cause in candidates:
         own = cause.get("engines")
-        if isinstance(own, dict) and own and (
-            own.get("left") == engines.get("left")
-            and own.get("right") == engines.get("right")
-        ):
+        if truthy(own) and engine_pair(own) == engines:
             return cause
-    return next((c for c in candidates if not c.get("engines")), None)
+    return next((c for c in candidates if not truthy(c.get("engines"))), None)
 
 
 def _known_cause_live(
@@ -617,10 +626,25 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
         causes = [c for c in payload.get("entries") or [] if isinstance(c, dict)]
         for cause in causes:
             cause_id = known_cause_id(cause)
-            if isinstance(cause.get("engines"), dict) and not cause["engines"]:
-                errors.append(
-                    f"{source} [{cause_id}]: engines mapping must not be empty"
-                )
+            if "engines" in cause:
+                engines = cause["engines"]
+                if isinstance(engines, Mapping) and not engines:
+                    errors.append(
+                        f"{source} [{cause_id}]: engines mapping must not be empty"
+                    )
+                elif (
+                    not isinstance(engines, Mapping)
+                    or set(engines) != {"left", "right"}
+                    or any(
+                        not isinstance(value, str) or not value.strip()
+                        for value in engines.values()
+                    )
+                ):
+                    errors.append(
+                        f"{source} [{cause_id}]: engines must be a nonempty "
+                        "mapping with only left and right nonempty string values; "
+                        "omit engines for a generic cause"
+                    )
             errors.extend(
                 validate_axiom_side_fields(cause, f"{source} [{cause_id}]")
             )
@@ -1784,8 +1808,24 @@ class CompanionResolver:
             return [f"{label}: cannot verify the issue (GitHub unavailable; re-run)"]
         if not payload:
             return [f"{label}: no such issue"]
-        if payload.get("pull_request") is not None:
+        if "pull_request" in payload:
             return [f"{label}: is a pull request, not an issue"]
+        actual_url = payload.get("html_url")
+        actual = (
+            RULESPEC_ISSUE_URL_RE.match(actual_url)
+            if isinstance(actual_url, str) else None
+        )
+        number = int(match.group("number"))
+        if (
+            type(payload.get("number")) is not int
+            or payload["number"] != number
+            or actual is None
+            or int(actual.group("number")) != number
+        ):
+            return [
+                f"{label}: cannot verify the issue identity in the GitHub "
+                "response (re-run)"
+            ]
         if payload.get("state") != "open":
             return [
                 f"{label}: the issue is closed. If the encoding landed, replace "

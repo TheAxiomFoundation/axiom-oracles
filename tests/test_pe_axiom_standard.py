@@ -59,6 +59,7 @@ CONCEPT = "us:policies/income_tax/example_pipeline#federal_example"
 TEST_PATH = "us/policies/income_tax/example_pipeline.test.yaml"
 PE_ISSUE = "https://github.com/PolicyEngine/policyengine-us/issues/9999"
 DEBT_ISSUE = "https://github.com/TheAxiomFoundation/rulespec-us/issues/4242"
+DEBT_PAYLOAD = {"number": 4242, "state": "open", "html_url": DEBT_ISSUE}
 
 
 # --------------------------------------------------------------------------
@@ -1094,12 +1095,12 @@ def _debt_record(url: str = DEBT_ISSUE) -> Record:
 @pytest.mark.parametrize(
     ("payload", "needle"),
     [
-        ({"state": "open", "pull_request": None}, None),
-        ({"state": "open"}, None),
+        (dict(DEBT_PAYLOAD, pull_request=None), "is a pull request"),
+        (DEBT_PAYLOAD, None),
         ({}, "no such issue"),
         (None, "cannot verify the issue"),
-        ({"state": "open", "pull_request": {"url": "x"}}, "is a pull request"),
-        ({"state": "closed"}, "the issue is closed"),
+        (dict(DEBT_PAYLOAD, pull_request={"url": "x"}), "is a pull request"),
+        (dict(DEBT_PAYLOAD, state="closed"), "the issue is closed"),
     ],
 )
 def test_encoding_debt_must_be_an_open_rulespec_issue(payload, needle) -> None:
@@ -1230,7 +1231,7 @@ def _pointed(sha: str, case: str = "disputed-case", **overrides) -> dict:
 
 
 def test_resolve_cli_passes_then_bites(tmp_path: Path, capsys, monkeypatch) -> None:
-    monkeypatch.setattr(script, "GitHubSource", lambda **_: Issues({"state": "open"}))
+    monkeypatch.setattr(script, "GitHubSource", lambda **_: Issues(DEBT_PAYLOAD))
     repo, merged, unmerged = _rulespec(tmp_path)
     root = tmp_path / "oracles"
     _write_repo(root, [_pointed(merged)])
@@ -1255,11 +1256,11 @@ def test_resolve_cli_passes_then_bites(tmp_path: Path, capsys, monkeypatch) -> N
     assert _resolve(root, repo) == 1
     assert "axiom_encoding_debt must be" in capsys.readouterr().err
     # Encoding debt is checked against GitHub issues even with local clones.
-    monkeypatch.setattr(script, "GitHubSource", lambda **_: Issues({"state": "closed"}))
+    monkeypatch.setattr(script, "GitHubSource", lambda **_: Issues(dict(DEBT_PAYLOAD, state="closed")))
     _write_repo(root, [_gap("bug", linked_issue=PE_ISSUE, axiom_encoding_debt=DEBT_ISSUE)])
     assert _resolve(root, repo) == 1
     assert "the issue is closed" in capsys.readouterr().err
-    monkeypatch.setattr(script, "GitHubSource", lambda **_: Issues({"state": "open"}))
+    monkeypatch.setattr(script, "GitHubSource", lambda **_: Issues(DEBT_PAYLOAD))
     assert _resolve(root, repo) == 0
     assert "1 encoding-debt issues open" in capsys.readouterr().out
 
