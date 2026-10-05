@@ -143,6 +143,13 @@ jobs:
       - name: Dashboard overview bundle is current
         run: uv run scripts/generate_dashboard_overview.py --check
 
+      - name: Published findings ledgers are current (SOUTHMOD licence lint)
+        # The dashboard's euromod-issues.json and southmod-issues.json must equal,
+        # byte for byte, the canonical serialization the script builds from the
+        # packaged axiom_oracles/data/*_issues.json, and every SOUTHMOD ledger
+        # must pass the closed-schema licence lint.
+        run: uv run scripts/publish_issue_ledgers.py --check
+
       - name: Validate conformance universes (drift vs oracle model spine)
         # No-op-clean when the model checkouts are absent (the committed
         # universes stand alone); enforces determinism when they are present.

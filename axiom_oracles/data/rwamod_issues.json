@@ -75,7 +75,7 @@
       },
       "oracle_scope": "household_level",
       "status": "observed_local",
-      "summary": "RWAMOD prices every item in its juice expenditure basket at 10% (tex09_s; probed 2026-10-04: 10% of each item's post-uprating value), where the Law 011/2025 Annex prices only juices with at least 30% local raw material content at 10% (item 1) and other juices at 39% (item 2). Basket-level simplification: the survey data cannot split local content, so the model applies the local rate to all juice.",
+      "summary": "RWAMOD prices every item in its juice expenditure basket at 10% (tex09_s; probed 2026-10-04: 10% of each item's post-uprating value), where the Law 011/2025 Annex prices only juices with at least 30% local raw material content at 10% (item 1) and other juices at 39% (item 2). Basket-level simplification: the probed 10% applies to every juice item whatever its local content.",
       "affected_comparisons": [
         "rw-excise"
       ],
@@ -130,7 +130,7 @@
       },
       "oracle_scope": "household_level",
       "status": "observed_local",
-      "summary": "RWAMOD charges VAT twice on the bottled-water item. Probed 2026-10-04 on a row with 10,000 FRW per month of bottled-water spend and nothing else: the echoed VAT base il_exp_vat01 holds the post-uprating 10,977.19, the water excise tex11_s is 1,097.72 (10%), and tva_s is 4,149.38 = 18% of 10,977.19 (1,975.89, the standard-rated VAT base) plus 18% of 10,977.19 + 1,097.72 (2,173.48, the VAT the model adds on every excisable purchase's value plus excise). A juice item at the same spend, whose spend does not show up in il_exp_vat01 (observed), carries only the second amount. Law No 049/2023 Article 4 charges VAT once on the taxable value, so the water item's effective VAT (37.8% of the post-uprating value) has no statutory basis whichever of the two bases is right. No rw suite compares VAT on an excisable good, so nothing mismatches today.",
+      "summary": "RWAMOD charges VAT twice on the bottled-water item. Probed 2026-10-04 on a row with 10,000 FRW per month of bottled-water spend and nothing else: the echoed VAT base il_exp_vat01 holds the post-uprating 10,977.19, the water excise tex11_s is 1,097.72 (10%), and tva_s is 4,149.38 = 18% of 10,977.19 (1,975.89, the standard-rated VAT base) plus 18% of 10,977.19 + 1,097.72 (2,173.48, the VAT the model adds on an excisable item's value plus excise, as on the juice and cigarette probes). A juice item at the same spend, whose spend does not show up in il_exp_vat01 (observed), carries only the second amount. Law No 049/2023 Article 4 charges VAT once on the taxable value, so the water item's effective VAT (37.8% of the post-uprating value) has no statutory basis whichever of the two bases is right. No rw suite compares VAT on an excisable good, so nothing mismatches today.",
       "affected_comparisons": [],
       "affected_concepts": []
     },
