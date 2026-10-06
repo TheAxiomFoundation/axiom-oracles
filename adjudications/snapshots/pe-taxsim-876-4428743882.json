@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/876#issuecomment-4428743882",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-12T08:36:06Z",
+  "body": "The Behavioral Health Services Tax / Mental Health Services Tax under [CA Rev. & Tax. Code §17043](https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=17043.&lawCode=RTC) is now included in PE's `ca_income_tax`. Fix landed in PE-US 1.632.3: *\"Include CA AMT and mental health services tax in state_income_tax\"* — the bundle was generated on 1.570.7, before that fix. For this case PE now returns $546,143 (matching the TaxAct Form 540 final), of which $33,831 is the 1% BHST on income over $1M ([`ca_mental_health_services_tax.py`](https://github.com/PolicyEngine/policyengine-us/blob/main/policyengine_us/variables/gov/states/ca/tax/income/credits/mental_health_services_tax/ca_mental_health_services_tax.py)). After model adjustments, the values now align."
+}

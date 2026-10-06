@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/354#issuecomment-2998651607",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-06-24T03:14:48Z",
+  "body": "@feenberg Tax Act is right, we double count the standard deduction for married couples filing separately on the same return. \nI have filed the following issue:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6170"
+}

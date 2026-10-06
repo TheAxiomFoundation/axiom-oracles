@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1194#issuecomment-5764721306",
+  "author": "DTrim99",
+  "createdAt": "2026-09-21T17:29:31Z",
+  "body": "Agreed. PE and Taxsim match here — Delaware's earned income credit is **20% of the $2,306 federal EIC = $461.18**, computed once for the return (Schedule PIT-RSS), which nets to siitax $245.13. TaxAct's lower result comes from computing a separate DE EIC for each spouse's column under combined-separate filing, exactly the piece you flagged. Delaware's EIC is a single 20%-of-federal credit, so PE and Taxsim's one-credit treatment is the straightforward reading, and I'm happy to leave the per-spouse-EIC difference alone as you suggest.\n\nIf you ever want me to check whether Delaware actually intends a per-column EIC split on combined-separate returns (the way it does split the tax), just say the word — but I'll treat this as resolved for now.\n"
+}

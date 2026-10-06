@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1118#issuecomment-5181043696",
+  "author": "feenberg",
+  "createdAt": "2026-08-04T15:17:11Z",
+  "body": "I am confused. Running the sample through today's PE I get taxable income of $37,578, not $87,236. Given Pavel's preference we should enforce the age 65 limitation, which I don't think PE is doing today."
+}

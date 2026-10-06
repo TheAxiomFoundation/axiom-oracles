@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/364#issuecomment-3018394972",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-06-30T09:12:51Z",
+  "body": "@feenberg we have an argument `--disable-salt` which is setting the value of `state_and_local_sales_or_income_tax` to 0, causing the `salt_deduction` to be set to 0. In this case, it will trigger the standard deduction of $29,200. \n\nIt is a command line argument e.g.:\n`python policyengine_taxsim/cli.py test.csv --logs --disable-salt` "
+}

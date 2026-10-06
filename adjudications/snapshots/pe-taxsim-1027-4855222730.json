@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1027#issuecomment-4855222730",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-01T13:05:58Z",
+  "body": "The cutoff PE used was a flat **55**, so a GA 65/61 couple (both ≥55) split the pension 50/50 and stranded the 61-year-old's half. Fixed in #1036 (now merged): the split age is now **per-state** — GA's pension exclusion qualifies at **62** (O.C.G.A. §48-7-27), so the pension routes to the 65-year-old and PE matches TAXSIM/TaxAct at **$0** (GA Form 500 / Schedule 1: full pension on the 65-year-old, −$65,000 exclusion). The cutoff is now the state's pension-exclusion age (default 55, GA 62). Thanks for flagging it.\n"
+}

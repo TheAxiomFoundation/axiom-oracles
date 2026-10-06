@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/200#issuecomment-2578833199",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-01-08T22:53:46Z",
+  "body": "> Should we just just make it amount/2 or is there any lower/upper cap?\n\nWe should just split it by 2. That is what TaxSim is doing if I understood Dan correctly "
+}

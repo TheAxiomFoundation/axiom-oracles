@@ -1,0 +1,302 @@
+[
+  {
+    "id": "pe-taxsim-1225",
+    "question": "Does TAXSIM include Additional Medicare Tax in both fiitax and fica/tfica?",
+    "jurisdiction": "US",
+    "law_years": [
+      2000,
+      2001,
+      2002,
+      2003,
+      2004,
+      2005,
+      2006,
+      2007,
+      2008,
+      2009,
+      2010,
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "engines": [
+      "taxsim",
+      "policyengine"
+    ],
+    "verdict": "taxsim_wrong",
+    "attribution": "taxsim",
+    "status": "evidence_ready",
+    "issues": [
+      "https://github.com/PolicyEngine/policyengine-taxsim/issues/1225"
+    ],
+    "proof_atoms": [
+      {
+        "kind": "maintainer_statement",
+        "engine": "taxsim",
+        "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1225#issuecomment-5820033668",
+        "author": "feenberg",
+        "date": "2026-09-24",
+        "quote": "it did demonstrate an error that was present in 2000-2023. I believe I have corrected it corrected now.",
+        "snapshot": "adjudications/snapshots/pe-taxsim-1225-5820033668.json",
+        "snapshot_sha256": "b555f7de72d442fec63572d81e34c0a6fdb3c6e6eb022470311fa18e55786b26",
+        "acknowledges_error": true
+      }
+    ],
+    "notes": "Own-engine acknowledgment only, explicitly limited by Feenberg to 2000–2023. The recorded isolated AddMed rows reconcile numerically; mixed NIIT/AddMed rows remain unexplained. No claim about current corrected binaries or independent statutory correctness."
+  },
+  {
+    "id": "pe-taxsim-1222",
+    "question": "Does the recorded Louisiana 2025 TAXSIM calculation omit the standard deduction from taxable income?",
+    "jurisdiction": "LA",
+    "law_years": [
+      2025
+    ],
+    "engines": [
+      "taxsim",
+      "policyengine"
+    ],
+    "verdict": "taxsim_wrong",
+    "attribution": "taxsim",
+    "status": "evidence_ready",
+    "issues": [
+      "https://github.com/PolicyEngine/policyengine-taxsim/issues/1222"
+    ],
+    "proof_atoms": [
+      {
+        "kind": "maintainer_statement",
+        "engine": "taxsim",
+        "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1222#issuecomment-5833721957",
+        "author": "feenberg",
+        "date": "2026-09-25",
+        "quote": "Agreed, corrected.",
+        "snapshot": "adjudications/snapshots/pe-taxsim-1222-5833721957.json",
+        "snapshot_sha256": "1d5ff72f00251ca2ef83799a17cc09e93f14fd3b16519b3074492cc095944bbc",
+        "acknowledges_error": true
+      }
+    ],
+    "notes": "Read in context of the 2025 standard-deduction omission issue and preceding retest. The admission supports the isolated omission, not every Louisiana discrepancy or the separate head-of-household amount. No unverified form quotation is promoted to a legal atom."
+  },
+  {
+    "id": "pe-taxsim-1068",
+    "question": "Do TAXSIM and PolicyEngine place one-time state rebates in different years?",
+    "jurisdiction": "US",
+    "law_years": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "engines": [
+      "taxsim",
+      "policyengine"
+    ],
+    "verdict": "convention",
+    "attribution": "convention",
+    "status": "evidence_ready",
+    "issues": [
+      "https://github.com/PolicyEngine/policyengine-taxsim/issues/1068",
+      "https://github.com/PolicyEngine/policyengine-taxsim/issues/716"
+    ],
+    "proof_atoms": [
+      {
+        "kind": "maintainer_statement",
+        "engine": "taxsim",
+        "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4897009628",
+        "author": "feenberg",
+        "date": "2026-07-06",
+        "quote": "The production default for 27 is zero, that selects the paid year.",
+        "snapshot": "adjudications/snapshots/pe-taxsim-1068-4897009628.json",
+        "snapshot_sha256": "2cd1acad8dd7f26dd82e385288715853c2fba3d8ef9ff428a6431b72d920d9cd",
+        "establishes_convention": true
+      },
+      {
+        "kind": "maintainer_statement",
+        "engine": "policyengine",
+        "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4896784506",
+        "author": "PavelMakarchuk",
+        "date": "2026-07-06",
+        "quote": "PE books each rebate to the year whose liability determines it; TAXSIM subtracts it in the payout year.",
+        "snapshot": "adjudications/snapshots/pe-taxsim-1068-4896784506.json",
+        "snapshot_sha256": "f0684a54be591e4c20947496aa41a1c996d9ba6678ab04ac4dae0fc169970e4c",
+        "establishes_convention": true
+      },
+      {
+        "kind": "maintainer_statement",
+        "engine": "policyengine",
+        "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4897543635",
+        "author": "PavelMakarchuk",
+        "date": "2026-07-06",
+        "quote": "computed as `state_income_tax` with one-time rebates zeroed minus actual",
+        "snapshot": "adjudications/snapshots/pe-taxsim-1068-4897543635.json",
+        "snapshot_sha256": "40970a7c7498437a98cacaebcc1d2dfaea6362c4d2b513cbc2951d01e1f5001d",
+        "establishes_convention": true
+      },
+      {
+        "kind": "maintainer_statement",
+        "engine": "taxsim",
+        "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/716#issuecomment-3980290481",
+        "author": "feenberg",
+        "date": "2026-03-01",
+        "quote": "In every case I prefer assigning the rebate by default to the year paid, but I understand the argument for assigning it to the year it depends on",
+        "snapshot": "adjudications/snapshots/pe-taxsim-716-3980290481.json",
+        "snapshot_sha256": "4e7f26dbca2a8a5e9c795c34580b4296b1631a62c12ae74e16a2d23c3843dffe",
+        "establishes_convention": true
+      }
+    ],
+    "notes": "Nationwide reporting convention applicable to the benchmark years, not a claim that every state or rebate has identical law. Later #1068 comments withdraw the Montana wiring allegation and identify remaining coverage gaps. Bound rows must reconcile after adding each engine's reported srebate; engine outputs select affected rows but are not proof atoms."
+  },
+  {
+    "id": "pe-taxsim-1053",
+    "question": "Does the scorp input represent passive or active income for NIIT?",
+    "jurisdiction": "US",
+    "law_years": [
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "engines": [
+      "taxsim",
+      "policyengine"
+    ],
+    "verdict": "input_ambiguity",
+    "attribution": "input",
+    "status": "pending_evidence",
+    "issues": [
+      "https://github.com/PolicyEngine/policyengine-taxsim/issues/1053"
+    ],
+    "proof_atoms": [
+      {
+        "kind": "document_quote",
+        "url": "https://taxsim.nber.org/taxsimtest/",
+        "retrieved_on": "2026-09-27",
+        "snapshot": "adjudications/snapshots/nber-taxsimtest-scorp-2026-09-27.txt",
+        "snapshot_sha256": "e00509fd2aa0e8442325f2da9b4f3b757cc82e9c7c96d1cca70c57a8855e1a90",
+        "excerpt": "scorp Passive business income not subject to FICA, SSTB, SECA or QBID phaseout but subject to the passive loss limitation.",
+        "establishes_convention": true
+      },
+      {
+        "kind": "document_quote",
+        "url": "https://taxsim.nber.org/taxsim35/",
+        "retrieved_on": "2026-09-27",
+        "snapshot": "adjudications/snapshots/nber-taxsim35-scorp-2026-09-27.txt",
+        "snapshot_sha256": "5776ffcf18b1cc0c5344bd450b34532f34cd4d694fdbb64aa170096dd76580b0",
+        "excerpt": "scorp Active S-Corp income (is SSTB).",
+        "establishes_convention": true
+      },
+      {
+        "kind": "corpus_quote",
+        "corpus": {
+          "repository": "TheAxiomFoundation/axiom-corpus",
+          "commit": "f1916d73b568616cbd0b4c3c26a92796835188d9",
+          "path": "data/corpus/provisions/us/statute/2026-07-13-recovery-r2026-07-15-self-contained-r2026-07-17-dedup.jsonl",
+          "sha256": "03ddda0b2bcd59345ec4efa1daaf1c77b423a5166852fd80bb4cf00c0bd8e461"
+        },
+        "citation_path": "us/statute/26/1411",
+        "heading": "Imposition of tax",
+        "excerpt": "(a) In general Except as provided in subsection (e)— (1) Application to individuals In the case of an individual, there is hereby imposed (in addition to any other tax imposed by this subtitle) for each taxable year a tax equal to 3.8 percent of the lesser of— (A) net investment income for such taxable year, or (B) the excess (if any) of— (i) the modified adjusted gross income for such taxable year, over (ii) the threshold amount. (2) Application to estates and trusts In the case of an estate or trust, there is hereby imposed (in addition to any other tax imposed by this subtitle) for each taxable year a tax of 3.8 percent of the lesser of— (A) the undistributed net investment income for such taxable year, or (B) the excess (if any) of— (i) the adjusted gross income (as defined in section 67(e)) for such taxable year, over (ii) the dollar amount at which the highest tax bracket in section 1(e) begins for such taxable year.",
+        "applies_to": "Individuals; paragraphs (a)(1), (b), (c) and (d). Estates/trusts in (a)(2) are outside the benchmark. Historical applicability to 2021–2025 has not been established.",
+        "law_years": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ]
+      },
+      {
+        "kind": "corpus_quote",
+        "corpus": {
+          "repository": "TheAxiomFoundation/axiom-corpus",
+          "commit": "f1916d73b568616cbd0b4c3c26a92796835188d9",
+          "path": "data/corpus/provisions/us/statute/2026-07-13-recovery-r2026-07-15-self-contained-r2026-07-17-dedup.jsonl",
+          "sha256": "03ddda0b2bcd59345ec4efa1daaf1c77b423a5166852fd80bb4cf00c0bd8e461"
+        },
+        "citation_path": "us/statute/26/1411",
+        "heading": "Imposition of tax",
+        "excerpt": "(b) Threshold amount For purposes of this chapter, the term “threshold amount” means— (1) in the case of a taxpayer making a joint return under section 6013 or a surviving spouse (as defined in section 2(a)), $250,000, (2) in the case of a married taxpayer (as defined in section 7703) filing a separate return, ½ of the dollar amount determined under paragraph (1), and (3) in any other case, $200,000.",
+        "applies_to": "Individuals; paragraphs (a)(1), (b), (c) and (d). Estates/trusts in (a)(2) are outside the benchmark. Historical applicability to 2021–2025 has not been established.",
+        "law_years": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ]
+      },
+      {
+        "kind": "corpus_quote",
+        "corpus": {
+          "repository": "TheAxiomFoundation/axiom-corpus",
+          "commit": "f1916d73b568616cbd0b4c3c26a92796835188d9",
+          "path": "data/corpus/provisions/us/statute/2026-07-13-recovery-r2026-07-15-self-contained-r2026-07-17-dedup.jsonl",
+          "sha256": "03ddda0b2bcd59345ec4efa1daaf1c77b423a5166852fd80bb4cf00c0bd8e461"
+        },
+        "citation_path": "us/statute/26/1411",
+        "heading": "Imposition of tax",
+        "excerpt": "(c) Net investment income For purposes of this chapter— (1) In general The term “net investment income” means the excess (if any) of— (A) the sum of— (i) gross income from interest, dividends, annuities, royalties, and rents, other than such income which is derived in the ordinary course of a trade or business not described in paragraph (2), (ii) other gross income derived from a trade or business described in paragraph (2), and (iii) net gain (to the extent taken into account in computing taxable income) attributable to the disposition of property other than property held in a trade or business not described in paragraph (2), over (B) the deductions allowed by this subtitle which are properly allocable to such gross income or net gain. (2) Trades and businesses to which tax applies A trade or business is described in this paragraph if such trade or business is— (A) a passive activity (within the meaning of section 469) with respect to the taxpayer, or (B) a trade or business of trading in financial instruments or commodities (as defined in section 475(e)(2)). (3) Income on investment of working capital subject to tax A rule similar to the rule of section 469(e)(1)(B) shall apply for purposes of this subsection. (4) Exception for certain active interests in partnerships and S corporations In the case of a disposition of an interest in a partnership or S corporation— (A) gain from such disposition shall be taken into account under clause (iii) of paragraph (1)(A) only to the extent of the net gain which would be so taken into account by the transferor if all property of the partnership or S corporation were sold for fair market value immediately before the disposition of such interest, and (B) a rule similar to the rule of subparagraph (A) shall apply to a loss from such disposition. (5) Exception for distributions from qualified plans The term “net investment income” shall not include any distribution from a plan or arrangement described in section 401(a), 403(a), 403(b), 408, 408A, or 457(b). (6) Special rule Net investment income shall not include any item taken into account in determining self-employment income for such taxable year on which a tax is imposed by section 1401(b).",
+        "applies_to": "Individuals; paragraphs (a)(1), (b), (c) and (d). Estates/trusts in (a)(2) are outside the benchmark. Historical applicability to 2021–2025 has not been established.",
+        "law_years": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ]
+      },
+      {
+        "kind": "corpus_quote",
+        "corpus": {
+          "repository": "TheAxiomFoundation/axiom-corpus",
+          "commit": "f1916d73b568616cbd0b4c3c26a92796835188d9",
+          "path": "data/corpus/provisions/us/statute/2026-07-13-recovery-r2026-07-15-self-contained-r2026-07-17-dedup.jsonl",
+          "sha256": "03ddda0b2bcd59345ec4efa1daaf1c77b423a5166852fd80bb4cf00c0bd8e461"
+        },
+        "citation_path": "us/statute/26/1411",
+        "heading": "Imposition of tax",
+        "excerpt": "(d) Modified adjusted gross income For purposes of this chapter, the term “modified adjusted gross income” means adjusted gross income increased by the excess of— (1) the amount excluded from gross income under section 911(a)(1), over (2) the amount of any deductions (taken into account in computing adjusted gross income) or exclusions disallowed under section 911(d)(6) with respect to the amounts described in paragraph (1).",
+        "applies_to": "Individuals; paragraphs (a)(1), (b), (c) and (d). Estates/trusts in (a)(2) are outside the benchmark. Historical applicability to 2021–2025 has not been established.",
+        "law_years": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ]
+      }
+    ],
+    "notes": "The two currently retrieved NBER interfaces describe different input conventions; this is not proof of a law-year change. The corpus version 2026-07-13-recovery-r2026-07-15-self-contained-r2026-07-17-dedup (source_as_of 2026-07-13; publication Online@119-100) mechanically supplies §1411 text, headings and scope, but does not prove 2021–2025 applicability. Every niit-scorp explained ledger entry is therefore downgraded. The issue body and its sole comment were reread; engine-output claims and proposed emulator mappings are hypotheses, not atoms."
+  },
+  {
+    "id": "pe-taxsim-1249",
+    "question": "Did the emulator use a Texas sales-tax deduction for TAXSIM state-zero inputs?",
+    "jurisdiction": "US",
+    "law_years": [
+      2024
+    ],
+    "engines": [
+      "taxsim",
+      "policyengine"
+    ],
+    "verdict": "open",
+    "attribution": "two_sided",
+    "status": "open",
+    "issues": [
+      "https://github.com/PolicyEngine/policyengine-taxsim/pull/1249"
+    ],
+    "proof_atoms": [],
+    "notes": "Merged PR #1249 was reread live on 2026-09-27. Its author describes a correction, but the only issue comment is from vercel[bot]. The allowed maintainer_statement requires a comment snapshot; a PR body is not substituted. No independent legal atom establishes PolicyEngine error. The state-zero probe is downgraded to unexplained pending admissible evidence."
+  }
+]

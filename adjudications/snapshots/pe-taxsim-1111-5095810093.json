@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1111#issuecomment-5095810093",
+  "author": "DTrim99",
+  "createdAt": "2026-07-27T19:26:10Z",
+  "body": "Same root cause as #1110 — PolicyEngine applies the $12,000 married pension-exclusion cap per spouse instead of as the combined limit (\"a married couple is allowed a combined exclusion of up to $12,000,\" 2021 Expanded Instructions p. 27). Your read is exactly right. Tracked in PolicyEngine/policyengine-us#9155 with the fix in PolicyEngine/policyengine-us#9156, which prorates the single $12,000 across eligible spouses by pension share, as TaxAct does here.\n\nRe-running this record with that fix applied, everything reconciles with the TaxAct return: net income 138,890 vs 69,445 + 69,444 = 138,889; taxable income 108,739 on both sides; tax before credits 5,712.90 vs 2,857 + 2,857 = 5,714; and after the $160 of exemption credits, 5,552.90 vs 5,554 — differences are whole-dollar rounding. We'll flag here once the fix is in a released policyengine-us version.\n\nExample household:\n```\ntaxsimid,year,state,mstat,page,sage,depx,intrec,pensions,gssi,idtl\n5419616,2021,16,2,82,82,1,66201.156,84688.828,39114.598,5\n```\n"
+}

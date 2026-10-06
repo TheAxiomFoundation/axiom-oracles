@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/382#issuecomment-3080377687",
+  "author": "feenberg",
+  "createdAt": "2025-07-16T20:27:40Z",
+  "body": "My feeling is that taxsim is wrong. pearn and searn should be subject to the QBI deduction. I will change taxsim if you agree. However, I do think that pprofinc and sprofinc should also be QBI, but subject to a clawback. That ignores the dependence on business assets and wages. Do you disagree? "
+}

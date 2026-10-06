@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/715#issuecomment-3947567673",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-02-23T22:01:03Z",
+  "body": "After pulling latest from [feenberg/taxsim](https://github.com/feenberg/taxsim), this appears to be fixed in commit `2c5d32e` (\"rebate\"). The updated `11ga.for` now has three separate rebate windows instead of one catch-all:\n\n```fortran\nif(law.ge.2020.and.statax.gt.0d0) then \n   reb=250d0*d(7)\n   if(nfile.eq.3) reb=375d0\n   rebate=twn(taxbc,0d0,reb)\n   if(    in(law,2021,2022)) then\n      rebate=rebatef(rebate,law,2021,2022)\n   elseif(in(law,2022,2023)) then \n      rebate=rebatef(rebate,law,2022,2023)\n   elseif(in(law,2023,2024)) then\n      rebate=rebatef(rebate,law,2023,2024)\n   else\n      rebate=0d0\n   endif\n   statax=statax-rebate\nendif\n```\n\nThis also fixes the HoH amount (now correctly `375` instead of `250*d(7)`).\n\nThe compiled binary we were running was from the older source. Rebuilding from the latest source should resolve the 30 GA mismatches."
+}

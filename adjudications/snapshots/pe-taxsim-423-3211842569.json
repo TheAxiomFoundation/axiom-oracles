@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/423#issuecomment-3211842569",
+  "author": "feenberg",
+  "createdAt": "2025-08-21T19:35:59Z",
+  "body": "See http://taxsim.nber.org/out2psl/nj14\n\nYes, they should. This is a \"no tax due\" taxpayer and they get eic and pcred, which I wasn't giving them. This is corrected now. However, PE seems to give them $232 in eic refund, which I don't think is right, as they have no wage or self-employment income."
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/968#issuecomment-5388015439",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-08-23T19:26:46Z",
+  "body": "**Verdict: PolicyEngine adjustment (emulator display) + question for TAXSIM.**\n\nOn the homeowner case: we'd prefer to keep `siitax` = Form M1 net liability — the M1PR Homestead Credit Refund is a separate return, consistent with how PE-modeled non-return payments are handled elsewhere (#1065). Your 20260521 build already reports the refund in `v37` (3,388 for the 10110502 example) alongside netting it into `siitax` (−3,388) — would you consider reporting it in `v37` only, so both engines carry it in the property-tax-credit channel and `siitax` stays comparable to Form M1?\n\nOn our side, the emulator currently shows the refund nowhere (`v37` = 0 for MN) — we'll map `mn_homestead_credit_refund` into `v37` so the amount is visible either way.\n"
+}

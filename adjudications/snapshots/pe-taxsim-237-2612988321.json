@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/237#issuecomment-2612988321",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-01-24T16:59:11Z",
+  "body": "@feenberg many integration tests will fail until we fix this issue -> we have added sales tax logic in PR [#5370](https://github.com/PolicyEngine/policyengine-us/pull/5370) which will affect results of most itemizing households - I will set the value to 0 in the emulator "
+}

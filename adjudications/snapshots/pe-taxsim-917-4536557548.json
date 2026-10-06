@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/917#issuecomment-4536557548",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-25T19:02:46Z",
+  "body": "Same root cause as #921 / #920: PE-US's `taxable_unemployment_compensation` reassigns the entire tax unit's taxable UI to the head, giving the no-income primary phantom AGI of $14,312. That makes [`md_two_income_subtraction`](https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/variables/gov/states/md/tax/income/subtractions/md_two_income_subtraction.py) see both spouses as having income, so it applies the $1,200 cap that TaxAct's worksheet correctly denies (line 7 of the Two-Income Subtraction Worksheet uses the smaller spouse-allocated AGI, which should be $0 here). Tracked at PolicyEngine/policyengine-us#8494 — once that lands, MD tax reproduces to ~$407 (within $2 of TaxAct's $409)."
+}

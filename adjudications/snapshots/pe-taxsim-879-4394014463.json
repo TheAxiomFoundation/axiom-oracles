@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/879#issuecomment-4394014463",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-07T03:41:56Z",
+  "body": "Confirmed bug — filed PolicyEngine/policyengine-us#8239 with diagnosis and proposed fix.\n\n**Diagnosis**: PE's `ok_child_care_child_tax_credit` reads `ctc_value`, which represents only the refundable portion of federal CTC (gated by earned-income phase-in). For this filer (no earned income, K interest), `ctc_value = $0` even though ~$2,800 of nonrefundable CTC is absorbing federal tax. Per OK 68 O.S. § 2357.6 and Schedule 511-F line 3, OK takes 5% of the federal CTC actually allowed = nonref applied + refundable ACTC.\n\n**TaxAct shows $160** (5% × $3,193 federal CTC absorbed against tax). PE with the proposed fix gives \\~$140 (5% × $2,799). The remaining $20 gap reflects a separate federal-tax-calculation difference between PE 1.666.0 and TaxAct, not the OK CTC bug."
+}

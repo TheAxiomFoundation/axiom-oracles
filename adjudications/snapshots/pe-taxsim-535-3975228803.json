@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/535#issuecomment-3975228803",
+  "author": "feenberg",
+  "createdAt": "2026-02-27T21:43:04Z",
+  "body": "I am reconsidering this.   I have since learned that Schedule C income is treated as a pass-through by QBID.  This makes psearn ssearn the same as pbusinc and sbusinc.  Can I ask of the four classes of income:\n\nscorp\nsearn\nbusinc\nprofinc\n\nwhich are subject to QBI, QBI with phaseout, and FICA?  I ahve wanted to discuss this with Sabelhaus, or perhaps you know a tax lawyer who would talk to us."
+}

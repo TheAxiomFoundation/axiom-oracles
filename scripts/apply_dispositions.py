@@ -212,6 +212,7 @@ def _merge_reports(
                 dispositions,
                 dispositions_file=f"dispositions/{suite}.yaml",
                 taxsim_lane=_taxsim_lane(report),
+                repo_root=REPO_ROOT,
             )
         except DispositionError as exc:
             problems.append(f"{path.relative_to(REPO_ROOT)}: {exc}")
@@ -360,6 +361,7 @@ def _premerged_block_problems(
                 dispositions,
                 dispositions_file=f"dispositions/{suite}.yaml",
                 taxsim_lane=_taxsim_lane(full),
+                repo_root=REPO_ROOT,
             )
         except DispositionError as exc:
             problems.append(f"{full_rel}: {exc}")
@@ -555,7 +557,7 @@ def _report_orphans(dispositions_by_suite: dict[str, dict]) -> None:
         else:
             try:
                 merged = apply_dispositions(
-                    report, dispositions, taxsim_lane=_taxsim_lane(report)
+                    report, dispositions, taxsim_lane=_taxsim_lane(report), repo_root=REPO_ROOT
                 )
             except DispositionError:
                 continue  # already reported as a problem by _merge_reports

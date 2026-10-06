@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1089#issuecomment-4983069520",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-15T16:42:29Z",
+  "body": "**Verdict: PolicyEngine adjustment — no TAXSIM change involved.**\n\nConfirmed, and the mystery is on our side: nothing changed upstream around July 8 — that's when our opt30 conformance test landed (#1074) and exposed that the Linux/Windows `taxsimtest` binaries bundled in this repo date from Aug 2025 (the macOS one was current, which is why only Linux/Windows CI failed). Re-running the VA 2021 record through a fresh `taxsimtest-linux` download (build 2025Dec24) gives siitax 2068.05 / srebate 500 under opt(30) — matching PE and your out2psl/1068 results exactly. Bundled binaries updated in #1095; thanks for checking.\n"
+}

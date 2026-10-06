@@ -27,45 +27,29 @@ FEDERAL = "us:tax/federal-income-tax#liability"
 STATE = "us:tax/state-income-tax#liability"
 UPSTREAM = "https://github.com/PolicyEngine/policyengine-taxsim/"
 SCORP_SOURCES = ["https://taxsim.nber.org/taxsimtest/", "https://taxsim.nber.org/taxsim35/"]
+ADJUDICATION_SOURCE = "adjudications/taxsim-emulator.yaml"
 SCORP_EVIDENCE = (
-    'NBER taxsimtest input 25 documents "scorp Passive business income not subject '
-    'to FICA, SSTB, SECA or QBID phaseout but subject to the passive loss limitation." '
-    'NBER taxsim35 input 31 instead documents "scorp Active S-Corp income (is SSTB)." '
-    "Both pages were checked 2026-09-25. Pavel Makarchuk (@PavelMakarchuk), "
-    '2026-07-05, #1053: "This depends on what `taxsimtest` assumes about material '
-    'participation for S-corp income." #1053 documents the open NIIT question; '
-    "draft PR #1199 is not a settled correction. "
+    "Adjudication pe-taxsim-1053 records the active/passive S-corp input question. "
+    "Its current-law source does not prove applicability to these historical "
+    "law years. The following numerical signature is a hypothesis, not a "
+    "verified legal explanation; this class remains unexplained. "
 )
 ADDMED_URL = UPSTREAM + "issues/1225#issuecomment-5820033668"
 ADDMED_EVIDENCE = (
-    'Daniel Feenberg (@feenberg), 2026-09-24: "it did demonstrate an error that '
-    'was present in 2000-2023. I believe I have corrected it corrected now." '
-    "The issue concerns AddMed included in fiitax. The recorded emulator has no "
-    "addmed output (null); we do not impute that missing output as zero. The "
-    "checked identity uses TAXSIM's addmed and the documented fiitax convention "
-    "in #1225 / emulator PR #1239. "
+    "Adjudication pe-taxsim-1225 verifies the TAXSIM maintainer's acknowledgment "
+    "of the AddMed-in-fiitax error for 2000-2023. The recorded emulator has no "
+    "addmed output (null); the row identity uses TAXSIM's reported addmed. "
 )
-REBATE_SOURCES = [UPSTREAM + "issues/1068#issuecomment-4897009628",
-                  UPSTREAM + "issues/1068#issuecomment-4896784506",
-                  UPSTREAM + "issues/1068#issuecomment-4897543635"]
+REBATE_SOURCES = [ADJUDICATION_SOURCE + "#pe-taxsim-1068"]
 REBATE_EVIDENCE = (
-    'Daniel Feenberg (@feenberg), 2026-07-06: "The production default for 27 is '
-    'zero, that selects the paid year." Pavel Makarchuk (@PavelMakarchuk), '
-    '2026-07-06: "PE books each rebate to the year whose liability determines it; '
-    'TAXSIM subtracts it in the payout year." His srebate description is '
-    '"computed as `state_income_tax` with one-time rebates zeroed minus actual". '
-    "Thus rebates are added back to both siitax values. Every selected row is "
-    "within the suite's $15 match tolerance after that adjustment. This is the "
-    "documented timing convention, not a finding about either engine's law."
+    "Adjudication pe-taxsim-1068 verifies the assessment-year versus payout-year "
+    "rebate convention. Adding each engine's reported rebate back to its state "
+    "liability brings every selected row within the suite's $15 tolerance. "
+    "This identifies a convention; it does not establish legal correctness."
 )
 NIIT = "difference + right_aux.niit - left_aux.niit"
-# Treating scorp as passive adds it to net investment income. 26 U.S.C.
-# 1411(a)(1) (LII, "(a) In general", individuals): "a tax equal to 3.8
-# percent of the lesser of— (A) net investment income for such taxable year,
-# or (B) the excess (if any) of— (i) the modified adjusted gross income for
-# such taxable year, over (ii) the threshold amount". While neither engine's
-# NIIT is at the (B) limit, the passive treatment raises NIIT by exactly
-# 3.8 percent of scorp; this checks that per row.
+# Numerical signatures retained from PR4 as hypotheses. The operative text
+# and unresolved historical scope are in adjudication pe-taxsim-1053.
 SCORP_PASSIVE_NIIT = "right_aux.niit - left_aux.niit - 0.038 * facts.scorp"
 NIIT_1411_URL = "https://www.law.cornell.edu/uscode/text/26/1411"
 COMBINED = NIIT + " + right_aux.addmed"
@@ -96,12 +80,25 @@ def document(year: int) -> dict:
             evidence["row_arithmetic"] = list(checks)
         if sources:
             evidence["sources"] = list(sources)
-        entries.append({
+        adjudication = {
+            "addmed-in-fiitax": "pe-taxsim-1225",
+            "rebate-timing": "pe-taxsim-1068",
+            "la-standard-deduction-omission": "pe-taxsim-1222",
+        }.get(entry_id)
+        if entry_id == "niit-scorp" or entry_id.startswith("niit-scorp-at-cap-"):
+            adjudication = "pe-taxsim-1053"
+        entry = {
             "id": entry_id, "concept": concept, "kind": "amount_difference",
             "case_selector": {"case_ids": sorted(ids)}, "disposition": kind,
             "attribution": attribution, "evidence": evidence,
             "linked_issue": UPSTREAM + issue, "expires_on_source_change": True,
-        })
+        }
+        if adjudication:
+            entry["adjudication"] = adjudication
+            source = ADJUDICATION_SOURCE + "#" + adjudication
+            if source not in evidence.setdefault("sources", []):
+                evidence["sources"].append(source)
+        entries.append(entry)
 
     def niit_gap(r):
         return r["aux"]["right"]["niit"] - r["aux"]["left"]["niit"]
@@ -129,12 +126,12 @@ def document(year: int) -> dict:
         if year <= 2023:
             pure_checks.append(arithmetic("right_aux.addmed", 0))
         if scorp:
-            # Explained only where the convention's own effect reconciles:
-            # TAXSIM's NIIT exceeds PE's by exactly 3.8% of scorp.
+            # Preserve the historical uncapped numeric signature. It remains
+            # unexplained until the registry proves law-year applicability.
             add("niit-scorp", FEDERAL,
                 lambda r: pure_niit(r, True)
                 and abs(niit_gap(r) - .038 * r["facts"]["scorp"]) <= 1,
-                "explained_residual", "input", "issues/1053",
+                "unexplained", "two_sided", "issues/1053",
                 SCORP_EVIDENCE + "On every selected row the liability gap lies in "
                 "NIIT within $1, and TAXSIM's NIIT exceeds the emulator's by 3.8% of "
                 "scorp within $1: the effect of counting scorp as passive net "
@@ -143,17 +140,8 @@ def document(year: int) -> dict:
                 "ambiguity; it does not adjudicate which treatment is legally correct.",
                 [*pure_checks, arithmetic(SCORP_PASSIVE_NIIT)],
                 [*SCORP_SOURCES, NIIT_1411_URL])
-            # At the 1411(a)(1)(B) limit: TAXSIM's NIIT equals 3.8% of AGI over
-            # the 1411(b) threshold, the emulator's NIIT is below it, and adding
-            # scorp to the emulator's implied net investment income reaches it.
-            # 26 U.S.C. 1411(b) (LII, "(b) Threshold amount"): "$250,000" for a
-            # joint return or surviving spouse, "½ of the dollar amount
-            # determined under paragraph (1)" for married filing separately, and
-            # "$200,000" "in any other case". MAGI is AGI plus the section 911
-            # exclusion (1411(d)); these inputs carry no foreign earned income.
-            # TAXSIM35 mstat: 1 single/head of household, 2 joint, 6 separate,
-            # 8 dependent taxpayer. Surviving-spouse returns are not
-            # distinguishable in these inputs and fall to the $200,000 case.
+            # Preserve the at-limit numeric signatures, also unexplained.
+            # Neither this identity nor agreement of engine outputs proves law.
             for label, mstat, threshold in (("single", 1, 200000), ("joint", 2, 250000),
                                             ("separate", 6, 125000), ("dependent", 8, 200000)):
                 def at_cap(r, mstat=mstat, threshold=threshold):
@@ -165,7 +153,7 @@ def document(year: int) -> dict:
                             and left["niit"] < limit - .5
                             and left["niit"] + .038 * r["facts"]["scorp"] >= limit - 1)
                 add(f"niit-scorp-at-cap-{label}", FEDERAL, at_cap,
-                    "explained_residual", "input", "issues/1053",
+                    "unexplained", "two_sided", "issues/1053",
                     SCORP_EVIDENCE + "On every selected row the liability gap lies in NIIT "
                     "within $1; AGI agrees within $1; TAXSIM's NIIT equals 3.8% of AGI "
                     f"over the ${threshold:,} threshold for mstat {mstat} within $1 (the "
@@ -255,8 +243,8 @@ def document(year: int) -> dict:
             and abs(r["difference"] + .03 * (r["aux"]["right"]["v36"]
                                             - r["aux"]["left"]["v36"])) <= 1,
             "upstream_engine_gap", "taxsim", "issues/1222",
-            'Daniel Feenberg (@feenberg), 2026-09-25: "Agreed, corrected." '
-            "He responds to #1222's Louisiana 2025 standard-deduction omission. "
+            "Adjudication pe-taxsim-1222 verifies the TAXSIM maintainer's acknowledgment "
+            "of the Louisiana 2025 standard-deduction omission. "
             "Selected rows have agreeing state AGI within $1, a taxable-income "
             "gap equal to PE's reported $12,500 or $25,000 deduction within $1, "
             "and a liability gap equal to minus 3% of that taxable-income gap "
@@ -279,7 +267,7 @@ def document(year: int) -> dict:
     for entry in entries:
         entry.update(bindings[entry["id"]])
     return {"schema": "axiom_oracles.dispositions.v1", "suite": suite,
-            "updated": "2026-09-25", "entries": entries}
+            "updated": "2026-09-27", "entries": entries}
 
 
 def probe_document():
@@ -291,22 +279,19 @@ def probe_document():
         state = row["facts"]["taxsim_state"]
         assert state in (0, 44)
         if state == 0:
-            # The emulator side acknowledged and fixed this (merged 2026-09-26),
-            # after this probe ran on policyengine-taxsim 2.31.7. A rerun on an
-            # emulator release that includes #1249 changes the left value, so
-            # this pinned entry expires and the row should then match.
+            # A PR body is not a qualifying maintainer comment atom. Preserve
+            # the observation, but withdraw the unsupported engine attribution.
             entries.append({
                 "id": "state-zero-sales-tax",
                 "concept": FEDERAL, "kind": "amount_difference", "case_id": row["case_id"],
-                "disposition": "upstream_engine_gap", "attribution": "policyengine",
+                "disposition": "unexplained", "attribution": "two_sided",
+                "adjudication": "pe-taxsim-1249",
                 "evidence": {
-                    "mechanism": "The emulator simulated TAXSIM state 0 in Texas, taking a "
-                    "sales-tax deduction that TAXSIM's state 0 does not take. PolicyEngine/"
-                    "policyengine-taxsim PR #1249 (merged 2026-09-26) states: \"TAXSIM state 0 "
-                    "means 'no state tax': `taxsimtest` runs no state calculation for the "
-                    "record, so its federal return deducts no state or local income or sales "
-                    "tax.\" It fixes the emulator to match (TAXSIM fiitax 50165.00 on this "
-                    "record). This probe ran before the fix, on the observed macOS binary.",
+                    "mechanism": "Observed state-zero probe: TAXSIM fiitax 50165.00 and "
+                    "emulator fiitax 49315.8515625. Adjudication pe-taxsim-1249 has no "
+                    "qualifying maintainer comment acknowledging an emulator error. "
+                    "The sales-tax explanation in the linked PR remains a hypothesis "
+                    "under this registry's evidence rules; engine outputs are not proof.",
                     "row_arithmetic": [arithmetic("difference", .000001, row["difference"])],
                     "sources": [UPSTREAM + "pull/1249", UPSTREAM + "pull/1204"],
                 },
@@ -334,7 +319,7 @@ def probe_document():
     for entry in entries:
         entry.update(bindings[entry["id"]])
     return {"schema": "axiom_oracles.dispositions.v1", "suite": suite,
-            "updated": "2026-09-25", "entries": entries}
+            "updated": "2026-09-27", "entries": entries}
 
 
 def main():

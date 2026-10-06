@@ -1,6 +1,6 @@
 schema: axiom_oracles.dispositions.v1
 suite: taxsim-emulator-ecps-2025
-updated: '2026-09-25'
+updated: '2026-09-27'
 entries:
 - id: niit-scorp
   concept: us:tax/federal-income-tax#liability
@@ -181,19 +181,16 @@ entries:
     - taxsim-57277
     - taxsim-57283
     - taxsim-82613
-  disposition: explained_residual
-  attribution: input
+  disposition: unexplained
+  attribution: two_sided
   evidence:
-    mechanism: 'NBER taxsimtest input 25 documents "scorp Passive business income not subject to FICA,
-      SSTB, SECA or QBID phaseout but subject to the passive loss limitation." NBER taxsim35 input 31
-      instead documents "scorp Active S-Corp income (is SSTB)." Both pages were checked 2026-09-25. Pavel
-      Makarchuk (@PavelMakarchuk), 2026-07-05, #1053: "This depends on what `taxsimtest` assumes about
-      material participation for S-corp income." #1053 documents the open NIIT question; draft PR #1199
-      is not a settled correction. On every selected row the liability gap lies in NIIT within $1, and
-      TAXSIM''s NIIT exceeds the emulator''s by 3.8% of scorp within $1: the effect of counting scorp
-      as passive net investment income under 26 U.S.C. 1411(a)(1) while neither NIIT is at the MAGI limit.
-      This records the documented active/passive input ambiguity; it does not adjudicate which treatment
-      is legally correct.'
+    mechanism: 'Adjudication pe-taxsim-1053 records the active/passive S-corp input question. Its current-law
+      source does not prove applicability to these historical law years. The following numerical signature
+      is a hypothesis, not a verified legal explanation; this class remains unexplained. On every selected
+      row the liability gap lies in NIIT within $1, and TAXSIM''s NIIT exceeds the emulator''s by 3.8%
+      of scorp within $1: the effect of counting scorp as passive net investment income under 26 U.S.C.
+      1411(a)(1) while neither NIIT is at the MAGI limit. This records the documented active/passive input
+      ambiguity; it does not adjudicate which treatment is legally correct.'
     row_arithmetic:
     - &id001
       expression: difference + right_aux.niit - left_aux.niit
@@ -210,8 +207,10 @@ entries:
     - https://taxsim.nber.org/taxsimtest/
     - https://taxsim.nber.org/taxsim35/
     - https://www.law.cornell.edu/uscode/text/26/1411
+    - adjudications/taxsim-emulator.yaml#pe-taxsim-1053
   linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/issues/1053
   expires_on_source_change: true
+  adjudication: pe-taxsim-1053
   selector_binding:
     units: 174
     rows_sha256: 25688aa98acad0211771f179ac63c2cce52b4c1a9df26eec643fd9811ea79d2f
@@ -426,20 +425,18 @@ entries:
     - taxsim-99841
     - taxsim-99922
     - taxsim-99997
-  disposition: explained_residual
-  attribution: input
+  disposition: unexplained
+  attribution: two_sided
   evidence:
-    mechanism: 'NBER taxsimtest input 25 documents "scorp Passive business income not subject to FICA,
-      SSTB, SECA or QBID phaseout but subject to the passive loss limitation." NBER taxsim35 input 31
-      instead documents "scorp Active S-Corp income (is SSTB)." Both pages were checked 2026-09-25. Pavel
-      Makarchuk (@PavelMakarchuk), 2026-07-05, #1053: "This depends on what `taxsimtest` assumes about
-      material participation for S-corp income." #1053 documents the open NIIT question; draft PR #1199
-      is not a settled correction. On every selected row the liability gap lies in NIIT within $1; AGI
-      agrees within $1; TAXSIM''s NIIT equals 3.8% of AGI over the $200,000 threshold for mstat 1 within
-      $1 (the 26 U.S.C. 1411(a)(1)(B) limit); and the emulator''s NIIT is below that limit while its implied
-      net investment income plus scorp reaches it (checked by the recipe and tests/test_taxsim_emulator_dispositions.py).
-      Counting scorp as passive therefore moves NIIT to the limit. This assumes the engines agree on the
-      other net investment income; it records the documented input ambiguity, not which treatment is right.'
+    mechanism: Adjudication pe-taxsim-1053 records the active/passive S-corp input question. Its current-law
+      source does not prove applicability to these historical law years. The following numerical signature
+      is a hypothesis, not a verified legal explanation; this class remains unexplained. On every selected
+      row the liability gap lies in NIIT within $1; AGI agrees within $1; TAXSIM's NIIT equals 3.8% of
+      AGI over the $200,000 threshold for mstat 1 within $1 (the 26 U.S.C. 1411(a)(1)(B) limit); and the
+      emulator's NIIT is below that limit while its implied net investment income plus scorp reaches it
+      (checked by the recipe and tests/test_taxsim_emulator_dispositions.py). Counting scorp as passive
+      therefore moves NIIT to the limit. This assumes the engines agree on the other net investment income;
+      it records the documented input ambiguity, not which treatment is right.
     row_arithmetic:
     - *id001
     - *id002
@@ -456,8 +453,10 @@ entries:
     - https://taxsim.nber.org/taxsimtest/
     - https://taxsim.nber.org/taxsim35/
     - https://www.law.cornell.edu/uscode/text/26/1411
+    - adjudications/taxsim-emulator.yaml#pe-taxsim-1053
   linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/issues/1053
   expires_on_source_change: true
+  adjudication: pe-taxsim-1053
   selector_binding:
     units: 202
     rows_sha256: dfa90f084a54704758f404bc29da33931c5aa91d12e182bd3b9c867a98b138ba
@@ -1485,20 +1484,18 @@ entries:
     - taxsim-99860
     - taxsim-99865
     - taxsim-99989
-  disposition: explained_residual
-  attribution: input
+  disposition: unexplained
+  attribution: two_sided
   evidence:
-    mechanism: 'NBER taxsimtest input 25 documents "scorp Passive business income not subject to FICA,
-      SSTB, SECA or QBID phaseout but subject to the passive loss limitation." NBER taxsim35 input 31
-      instead documents "scorp Active S-Corp income (is SSTB)." Both pages were checked 2026-09-25. Pavel
-      Makarchuk (@PavelMakarchuk), 2026-07-05, #1053: "This depends on what `taxsimtest` assumes about
-      material participation for S-corp income." #1053 documents the open NIIT question; draft PR #1199
-      is not a settled correction. On every selected row the liability gap lies in NIIT within $1; AGI
-      agrees within $1; TAXSIM''s NIIT equals 3.8% of AGI over the $250,000 threshold for mstat 2 within
-      $1 (the 26 U.S.C. 1411(a)(1)(B) limit); and the emulator''s NIIT is below that limit while its implied
-      net investment income plus scorp reaches it (checked by the recipe and tests/test_taxsim_emulator_dispositions.py).
-      Counting scorp as passive therefore moves NIIT to the limit. This assumes the engines agree on the
-      other net investment income; it records the documented input ambiguity, not which treatment is right.'
+    mechanism: Adjudication pe-taxsim-1053 records the active/passive S-corp input question. Its current-law
+      source does not prove applicability to these historical law years. The following numerical signature
+      is a hypothesis, not a verified legal explanation; this class remains unexplained. On every selected
+      row the liability gap lies in NIIT within $1; AGI agrees within $1; TAXSIM's NIIT equals 3.8% of
+      AGI over the $250,000 threshold for mstat 2 within $1 (the 26 U.S.C. 1411(a)(1)(B) limit); and the
+      emulator's NIIT is below that limit while its implied net investment income plus scorp reaches it
+      (checked by the recipe and tests/test_taxsim_emulator_dispositions.py). Counting scorp as passive
+      therefore moves NIIT to the limit. This assumes the engines agree on the other net investment income;
+      it records the documented input ambiguity, not which treatment is right.
     row_arithmetic:
     - *id001
     - *id002
@@ -1515,8 +1512,10 @@ entries:
     - https://taxsim.nber.org/taxsimtest/
     - https://taxsim.nber.org/taxsim35/
     - https://www.law.cornell.edu/uscode/text/26/1411
+    - adjudications/taxsim-emulator.yaml#pe-taxsim-1053
   linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/issues/1053
   expires_on_source_change: true
+  adjudication: pe-taxsim-1053
   selector_binding:
     units: 1015
     rows_sha256: 61ceec1a95a145dc24b07e5d6fcec6c9e29a129123884d0611efa4a1caa35d20
@@ -11590,23 +11589,18 @@ entries:
   disposition: explained_residual
   attribution: convention
   evidence:
-    mechanism: 'Daniel Feenberg (@feenberg), 2026-07-06: "The production default for 27 is zero, that
-      selects the paid year." Pavel Makarchuk (@PavelMakarchuk), 2026-07-06: "PE books each rebate to
-      the year whose liability determines it; TAXSIM subtracts it in the payout year." His srebate description
-      is "computed as `state_income_tax` with one-time rebates zeroed minus actual". Thus rebates are
-      added back to both siitax values. Every selected row is within the suite''s $15 match tolerance
-      after that adjustment. This is the documented timing convention, not a finding about either engine''s
-      law.'
+    mechanism: Adjudication pe-taxsim-1068 verifies the assessment-year versus payout-year rebate convention.
+      Adding each engine's reported rebate back to its state liability brings every selected row within
+      the suite's $15 tolerance. This identifies a convention; it does not establish legal correctness.
     row_arithmetic:
     - expression: difference + left_aux.srebate - right_aux.srebate
       equals: 0
       tolerance: 15
     sources:
-    - https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4897009628
-    - https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4896784506
-    - https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4897543635
+    - adjudications/taxsim-emulator.yaml#pe-taxsim-1068
   linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/issues/1068
   expires_on_source_change: true
+  adjudication: pe-taxsim-1068
   selector_binding:
     units: 1261
     rows_sha256: c161cfda04c0d7886a18697cba89500dcade1b8056ff03308a6e063d59a06329
@@ -14392,10 +14386,10 @@ entries:
   disposition: upstream_engine_gap
   attribution: taxsim
   evidence:
-    mechanism: 'Daniel Feenberg (@feenberg), 2026-09-25: "Agreed, corrected." He responds to #1222''s
-      Louisiana 2025 standard-deduction omission. Selected rows have agreeing state AGI within $1, a taxable-income
-      gap equal to PE''s reported $12,500 or $25,000 deduction within $1, and a liability gap equal to
-      minus 3% of that taxable-income gap within $1. Other Louisiana rows are not attributed by this identity.'
+    mechanism: Adjudication pe-taxsim-1222 verifies the TAXSIM maintainer's acknowledgment of the Louisiana
+      2025 standard-deduction omission. Selected rows have agreeing state AGI within $1, a taxable-income
+      gap equal to PE's reported $12,500 or $25,000 deduction within $1, and a liability gap equal to
+      minus 3% of that taxable-income gap within $1. Other Louisiana rows are not attributed by this identity.
     row_arithmetic:
     - expression: left_aux.v34
       equals:
@@ -14413,8 +14407,10 @@ entries:
       tolerance: 1
     sources:
     - https://github.com/PolicyEngine/policyengine-taxsim/issues/1222#issuecomment-5833721957
+    - adjudications/taxsim-emulator.yaml#pe-taxsim-1222
   linked_issue: https://github.com/PolicyEngine/policyengine-taxsim/issues/1222
   expires_on_source_change: true
+  adjudication: pe-taxsim-1222
   selector_binding:
     units: 1430
     rows_sha256: b71f422ee46fdab0458eb412e77d2d5276d70ac0aab1e9cb2376eba85059a335

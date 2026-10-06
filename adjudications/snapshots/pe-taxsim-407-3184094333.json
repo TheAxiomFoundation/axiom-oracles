@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/407#issuecomment-3184094333",
+  "author": "feenberg",
+  "createdAt": "2025-08-13T14:08:54Z",
+  "body": "https://www.governor.virginia.gov/newsroom/news-releases/2022/september/name-939822-en.html\n\nI tend to accept things like this - I know it isn't a statute reference. The release is dated 2022 but note that the link in the release is about a 2025 rebate. Some articles about the 2021 rebate include \"up to\" qualifications. This could refer to the limitation to tax  amount, or it could be a semi-secret phaseout. I don't know.\n\nI have updated Taxsim to $250/$500 with eligible/paid to 2021/2022. "
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/605#issuecomment-3652382365",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-12-14T23:36:46Z",
+  "body": "## Analysis Complete\n\n**Status:** pe_fix_needed (duplicate of #585)\n\n### Summary\nPE matches YAML expected value ($4,321.50), but both are WRONG. TaxAct shows $4,141 after applying the $180 Iowa Child and Dependent Care Credit (CDCC).\n\n### Root Cause\nSame bug as issue #585: `ia_cdcc.py` uses `ia_net_income` (~$92,225) instead of `ia_taxable_income` ($89,125) for the percentage lookup.\n\n- ia_net_income ≈ $92,225 → Falls in \"$90,000 and over\" bracket → 0% → CDCC = $0\n- ia_taxable_income = $89,125 → Falls in \"$40,000-$89,999\" bracket → 30% → CDCC = $180\n\n### TaxAct Child Credits Worksheet\n| Line | Description | Value |\n|------|-------------|-------|\n| 1 | Federal Form 2441 CDCC | $600 |\n| 2 | Iowa taxable income (IA 1040 Line 4) | $89,125 |\n| 3 | Applicable decimal | 0.30 |\n| 4 | Iowa CDCC | $180 |\n\n### Fix\nAlready filed as [policyengine-us #6977](https://github.com/PolicyEngine/policyengine-us/issues/6977). The fix will address both this issue and #585."
+}

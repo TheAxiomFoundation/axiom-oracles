@@ -24,7 +24,7 @@ DARWIN_SHA = "02286edad9c023b0f61d32e6aed680370ecf3e767c217bbb0289f85b64ff105d"
 # explicitly reviewing its coverage changes here.
 EXPECTED = {
     2021: {
-        "matched": 168094, "explained": 16922, "unexplained": 37678,
+        "matched": 168094, "explained": 15411, "unexplained": 39189,
         "entries": {
             "rebate-timing": 14872,
             "niit-addmed-no-scorp": 3443,
@@ -40,7 +40,7 @@ EXPECTED = {
         },
     },
     2022: {
-        "matched": 175546, "explained": 16923, "unexplained": 30225,
+        "matched": 175546, "explained": 15593, "unexplained": 31555,
         "entries": {
             "rebate-timing": 15115,
             "niit-addmed-no-scorp": 3332,
@@ -56,7 +56,7 @@ EXPECTED = {
         },
     },
     2023: {
-        "matched": 183593, "explained": 6384, "unexplained": 32717,
+        "matched": 183593, "explained": 4893, "unexplained": 34208,
         "entries": {
             "niit-addmed-no-scorp": 3455,
             "addmed-in-fiitax": 506,
@@ -72,7 +72,7 @@ EXPECTED = {
         },
     },
     2024: {
-        "matched": 188026, "explained": 4433, "unexplained": 30235,
+        "matched": 188026, "explained": 2934, "unexplained": 31734,
         "entries": {
             "niit-no-scorp": 1152,
             "md-august-county-signature": 739,
@@ -86,7 +86,7 @@ EXPECTED = {
         },
     },
     2025: {
-        "matched": 188070, "explained": 4082, "unexplained": 30542,
+        "matched": 188070, "explained": 2691, "unexplained": 31933,
         "entries": {
             "niit-no-scorp": 1003,
             "md-august-county-signature": 742,
@@ -162,6 +162,12 @@ def test_emulator_ledger_coverage_and_evidence(year):
         assert recorded_shas == expected_shas, entry["id"]
         assert set(entry["oracle_binding"]["taxsim_binary_sha256"]) == recorded_shas
 
+        if entry["id"] == "niit-scorp" or entry["id"].startswith("niit-scorp-at-cap-"):
+            assert entry["disposition"] == "unexplained"
+            assert entry["attribution"] == "two_sided"
+            assert entry["adjudication"] == "pe-taxsim-1053"
+        if entry["disposition"] != "unexplained":
+            assert entry["adjudication"] in {"pe-taxsim-1225", "pe-taxsim-1222", "pe-taxsim-1068"}
         if entry["disposition"] == "explained_residual":
             assert entry["attribution"] in {"convention", "input"}
         if entry["disposition"] == "upstream_engine_gap":
@@ -206,12 +212,12 @@ def test_sales_tax_probes_preserve_observations_without_claiming_resolution():
     assert report["summary"]["dispositioned"] == block
     assert block["expired_entries"] == []
     assert block["orphaned_entries"] == []
-    # state 0 is attributed to the emulator (fixed in pe-taxsim #1249); the
-    # Texas proxy difference stays open.
-    assert block["unexplained_count"] == block["counts"]["unexplained"] == 1
-    assert block["counts"]["upstream_engine_gap"] == 1
+    # PR #1249 has no qualifying maintainer comment atom: both observations
+    # stay unexplained under the evidence registry, rather than inferring fault.
+    assert block["unexplained_count"] == block["counts"]["unexplained"] == 2
+    assert block["counts"]["upstream_engine_gap"] == 0
     assert block["raw_match_rate"] == 50
-    assert block["explained_rate"] == 75
+    assert block["explained_rate"] == 50
     assert merged["summary"]["comparison_count"] == 4
     assert merged["summary"]["error_count"] == 0
     assert merged["summary"]["match_count"] == 2
@@ -235,8 +241,9 @@ def test_sales_tax_probes_preserve_observations_without_claiming_resolution():
         assert row["difference"] == pytest.approx(49315.8515625 - right, abs=1e-9)
         assert row["disposition"]["id"] == entry["id"] == entry_id
         if state == 0:
-            assert entry["disposition"] == "upstream_engine_gap"
-            assert entry["attribution"] == "policyengine"
+            assert entry["disposition"] == "unexplained"
+            assert entry["attribution"] == "two_sided"
+            assert entry["adjudication"] == "pe-taxsim-1249"
             assert entry["linked_issue"].endswith("/pull/1249")
         else:
             assert entry["disposition"] == "unexplained"
@@ -265,12 +272,11 @@ NIIT_THRESHOLD = {1: 200000, 2: 250000, 6: 125000, 8: 200000}
 
 
 @pytest.mark.parametrize("year", range(2021, 2026))
-def test_scorp_niit_explanations_reconcile_the_passive_treatment(year):
-    """Explained S-corp NIIT rows must show the convention's own effect.
+def test_scorp_niit_hypotheses_retain_their_numeric_signatures(year):
+    """Downgrading evidence readiness preserves the recorded numeric classes.
 
-    Uncapped: TAXSIM NIIT - emulator NIIT = 3.8% of scorp. At the 1411(a)(1)(B)
-    limit: TAXSIM NIIT = 3.8% of (AGI - threshold), the emulator is below it,
-    and its implied net investment income plus scorp reaches it.
+    These equalities locate differences; they supply no external legal proof
+    or historical applicability for the amounts used in the signatures.
     """
     suite = f"taxsim-emulator-ecps-{year}"
     report = load_report(ROOT / f"reports/taxsim-emulator/{suite}.json.gz")
@@ -294,4 +300,18 @@ def test_scorp_niit_explanations_reconcile_the_passive_treatment(year):
     assert checked == sum(
         count for entry_id, count in EXPECTED[year]["entries"].items()
         if entry_id.startswith("niit-scorp") and entry_id != "niit-scorp-unreconciled"
+    )
+
+
+@pytest.mark.parametrize("year,previous_explained,withdrawn", [
+    (2021, 16922, 1511), (2022, 16923, 1330), (2023, 6384, 1491),
+    (2024, 4433, 1499), (2025, 4082, 1391),
+])
+def test_registry_migration_intentionally_withdraws_historical_niit_claims(
+    year, previous_explained, withdrawn
+):
+    assert EXPECTED[year]["explained"] == previous_explained - withdrawn
+    assert withdrawn == sum(
+        count for entry_id, count in EXPECTED[year]["entries"].items()
+        if entry_id == "niit-scorp" or entry_id.startswith("niit-scorp-at-cap-")
     )

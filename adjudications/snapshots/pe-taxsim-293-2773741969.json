@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/293#issuecomment-2773741969",
+  "author": "feenberg",
+  "createdAt": "2025-04-02T21:04:50Z",
+  "body": "I changed Taxsim to apply credits in MFC states to the higher taxable income spouse. That is probably close enough to the truth. It seems to me that in some states, some taxpayers could lose some part of personal exemption credits, (at least TA thinks so) but it would be rare enough. "
+}

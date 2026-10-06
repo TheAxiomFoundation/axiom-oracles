@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1087#issuecomment-4972346561",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-14T17:57:22Z",
+  "body": "**Verdict: Question — no action needed.**\n\nThis is PolicyEngine's deliberate one-time-rebate convention: rebates are booked to the tax year whose return determines them, not the payout year. Act 115's $300/$100 amount keys off the **2021 return's** federal AGI (<$100k single / <$200k joint → $300; above → $100, per [SB 514 §1](https://www.capitol.hawaii.gov/sessions/session2022/bills/SB514_CD2_.pdf)), even though checks went out in 2022 — so PE books it in TY2021 via [`hi_act_115_rebate`](https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/variables/gov/states/hi/tax/income/credits/hi_act_115_rebate.py) (2021 only; it's out of HI's refundable-credit list from 2022 on).\n\nSame convention as the GA/ME/CO/etc. rebates resolved in #1068: the emulator reports these in `srebate`, and `--taxsim-opt30` scores `siitax` net of one-time rebates so the timing difference washes out of comparisons. Whether TAXSIM's opt(27) should also cover HI Act 115 is already tracked in #1075.\n"
+}

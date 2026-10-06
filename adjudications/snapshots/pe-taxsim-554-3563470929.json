@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/554#issuecomment-3563470929",
+  "author": "feenberg",
+  "createdAt": "2025-11-21T15:20:05Z",
+  "body": "I wasn't clear above. I am guessing that we should assume capital gains come from real estate and financial assets, and so are not eligible for the percentage exclusion, and therefore PE is not correct.  See also  #635 "
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/851#issuecomment-4446568212",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-14T01:29:20Z",
+  "body": "Thanks Dan — after model adjustments the values now align. Re-running on current PE (1.691.3): DC CDCC = $192 (= 32% × federal CDCC $600 per [DC Code §47-1806.04(c)(1)(B)](https://code.dccouncil.gov/us/dc/council/code/sections/47-1806.04)) — your \"$1,292 seems large\" instinct was right; the reporter run was on `policyengine-us` 1.570.7. The Schedule J allocation gap (TAXSIM $6,084 vs PE $6,241 vs TaxAct $6,850 on tax-before-credits) is a separate optimization question — PE computes at tax-unit level without per-spouse splitting. Happy to file a separate PE-US issue for Schedule J optimization if useful."
+}

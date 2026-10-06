@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/455#issuecomment-4886577342",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-05T15:33:55Z",
+  "body": "Mapped in **PR #1052**: `transfers → general_assistance`. Rationale — it's non-taxable federally (verified: a $5k transfers leaves AGI/fiitax unchanged), counted in state household-income tests (e.g. Michigan household resources → Homestead PTC + Home Heating Credit), and free of the child-support/dependent side effects that `child_support_received` would introduce. It also doesn't collide with the transfer variables zeroed in #1049. `general_assistance` is a pure input variable, so the standard mapping mechanism sets it cleanly."
+}

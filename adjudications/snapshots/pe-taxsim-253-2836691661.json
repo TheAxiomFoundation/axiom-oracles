@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/253#issuecomment-2836691661",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-04-28T21:12:59Z",
+  "body": "I see the issue, the EITC is reduced by the household credit - which should not apply when state income tax is 0:\n\nMaking the fix here:\nhttps://github.com/PolicyEngine/policyengine-us/pull/5920\n"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1099#issuecomment-4993797955",
+  "author": "DTrim99",
+  "createdAt": "2026-07-16T15:40:39Z",
+  "body": "You're right — tax year 2022 is the first year of the Working Families Tax Credit. [RCW 82.08.0206](https://app.leg.wa.gov/RCW/default.aspx?cite=82.08.0206) as funded by the 2021 legislature (ch. 195, Laws of 2021 / HB 1297) starts the program with the 2022 tax year, and [DOR opened the first application window in February 2023 for TY2022](https://dor.wa.gov/about/news-releases/2023/applications-now-being-accepted-working-families-tax-credit).\n\nThe $300 on this return is a PolicyEngine parameter bug: the WFTC amount tables are dated from 2022-01-01, but PolicyEngine's parameter system carries a first value backward to earlier years unless an explicit zero precedes it — and the WFTC files have no pre-2022 zero, so the $300 childless minimum leaks into 2021 and earlier. Your record reproduces it directly:\n\n```\ntaxsimid,year,state,mstat,page,sage,depx,pwages,idtl\n6804848,2021,48,1,36,0,0,5306.2446,5\n```\n\nFiled as PolicyEngine/policyengine-us#9056; the fix (explicit pre-2022 zeros plus a TY2021 regression test) is on its way."
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/614#issuecomment-3605700446",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-12-03T08:44:56Z",
+  "body": "@feenberg thank you for attaching, I believe in this case TA is wrong, looking at the [instructions](https://www.tax.ny.gov/pdf/2024/inc/it201i_2024.pdf), the form states that each filer has to be over 59 to receive the exclusion and the unused pension amounts can not be claimed by the other partner. Since we split the pension income 50/50 the exclusion comes out to $10,000 \n\nIf allocating all to the older partner, then the values align \n\n<img width=\"1174\" height=\"242\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/484cfa6b-4328-44b3-b8f6-8d81a3207eea\" />\n\n<img width=\"1168\" height=\"684\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/9db6219c-b39d-402d-a799-9a517bac8dba\" />"
+}

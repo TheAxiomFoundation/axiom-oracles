@@ -126,6 +126,13 @@ Suites whose two sides are both external engines (no ``axiom`` side)
 require ``attribution`` on every ``upstream_engine_gap`` entry: "upstream"
 is otherwise ambiguous.
 
+``taxsim-emulator-*`` suites also require ``adjudication`` on explained
+residuals and upstream engine gaps. Its proof atoms are reverified against
+``adjudications/taxsim-emulator.yaml`` on load and merge; the record must be
+``evidence_ready`` with matching attribution and law-year/jurisdiction scope.
+Unexplained entries may reference pending hypotheses, whose references and
+atoms still must verify. Numerical row identities never supply legal proof.
+
 Merge semantics
 ---------------
 
@@ -252,6 +259,7 @@ _ENTRY_KEYS = {
     "receipt",
     "reason",
     "comment",
+    "adjudication",
 }
 _EVIDENCE_KEYS = {
     "mechanism", "arithmetic", "row_arithmetic", "upstream_url", "sources",
@@ -648,6 +656,10 @@ def _validate_entry(
         errors.append(f"{label} duplicates entry id {entry_id!r}")
     else:
         seen_ids.add(entry_id)
+    if "adjudication" in entry and (
+        not isinstance(entry["adjudication"], str) or not entry["adjudication"].strip()
+    ):
+        errors.append(f"{label} adjudication must be a non-empty string")
 
     concept = entry.get("concept")
     if not isinstance(concept, str) or "#" not in concept:
@@ -915,6 +927,87 @@ def validate_dispositions(
         errors.extend(
             _validate_entry(entry, index, seen_ids, repo_root, context)
         )
+    errors.extend(_adjudication_errors(data, repo_root=repo_root))
+    return errors
+
+
+def _emulator_suite(suite: object) -> bool:
+    return isinstance(suite, str) and suite.startswith("taxsim-emulator-")
+
+
+def _adjudication_errors(
+    document: Mapping[str, Any],
+    *,
+    repo_root: Path | None = None,
+    report: Mapping[str, Any] | None = None,
+    selected: Mapping[str, list[dict]] | None = None,
+) -> list[str]:
+    """Re-read proof atoms and check each emulator explanation's exact scope.
+
+    Load-time checks use the suite period. Merge-time checks use every selected
+    row's law year and state, so a broad selector cannot borrow a narrower
+    adjudication. US-scoped conventions may span states; state-specific findings
+    must match the selected states even when the effect is on federal liability.
+    """
+    suite = document.get("suite")
+    report_suite = (report or {}).get("suite")
+    if not (_emulator_suite(suite) or _emulator_suite(report_suite)):
+        return []
+    if document and report_suite is not None and suite != report_suite:
+        return ["emulator disposition suite must equal the report suite"]
+    entries = [entry for entry in document.get("entries", []) if isinstance(entry, dict)
+               and (entry.get("adjudication") is not None
+                    or entry.get("disposition") in {"explained_residual", "upstream_engine_gap"})]
+    if not entries:
+        return []
+    root = Path(repo_root) if repo_root is not None else Path(__file__).resolve().parents[2]
+    from .adjudications import AdjudicationError, load_adjudications
+
+    try:
+        registry = load_adjudications(root / "adjudications/taxsim-emulator.yaml", repo_root=root)
+    except (AdjudicationError, OSError, ValueError) as exc:
+        return [f"emulator adjudications could not be verified: {exc}"]
+    records = {record["id"]: record for record in registry["adjudications"]}
+    period = None
+    config_path = root / "comparisons" / f"{suite}.yaml"
+    if config_path.is_file():
+        config = yaml.safe_load(config_path.read_text())
+        period = ((config or {}).get("runner") or {}).get("parameters", {}).get("period")
+    errors = []
+    for entry in entries:
+        label = f"entry {entry.get('id')!r}"
+        reference = entry.get("adjudication")
+        record = records.get(reference) if isinstance(reference, str) else None
+        if record is None:
+            errors.append(f"{label}: emulator entry needs an existing adjudication reference")
+            continue
+        if entry.get("disposition") not in {"explained_residual", "upstream_engine_gap"}:
+            # An unexplained entry may cite a pending hypothesis whose ownership
+            # has not been established. Existence and atom integrity still apply.
+            continue
+        if record["status"] != "evidence_ready":
+            errors.append(f"{label}: adjudication {reference!r} must be evidence_ready")
+        if entry.get("attribution") != record["attribution"]:
+            errors.append(f"{label}: attribution differs from adjudication {reference!r}")
+        if (record["jurisdiction"] == "US"
+                and "state-income-tax#" in str(entry.get("concept"))
+                and record["verdict"] not in {"convention", "input_ambiguity"}):
+            errors.append(f"{label}: federal adjudication cannot establish a state-law error")
+        if not {"policyengine", "taxsim"} <= set(record["engines"]):
+            errors.append(f"{label}: adjudication must cover policyengine and taxsim")
+        years = set(record["law_years"])
+        if period is not None and str(period) not in {str(year) for year in years}:
+            errors.append(f"{label}: suite law year {period} is outside adjudication {reference!r}")
+        if selected is None:
+            continue
+        for row in selected.get(str(entry.get("id")), []):
+            facts = row.get("facts") or {}
+            if facts.get("year") not in years:
+                errors.append(f"{label}: row {row.get('case_id')!r} law year is outside adjudication {reference!r}")
+                break
+            if record["jurisdiction"] != "US" and facts.get("state") != record["jurisdiction"]:
+                errors.append(f"{label}: row {row.get('case_id')!r} jurisdiction is outside adjudication {reference!r}")
+                break
     return errors
 
 
@@ -1349,6 +1442,7 @@ def apply_dispositions(
     *,
     dispositions_file: str | None = None,
     taxsim_lane: bool | None = None,
+    repo_root: Path | None = None,
 ) -> dict:
     """Join dispositions into a v2 comparison report (additive, v2.1).
 
@@ -1389,6 +1483,11 @@ def apply_dispositions(
     )
     if conflicts:
         raise _conservation_error(conflicts, dispositions_file)
+    adjudication_errors = _adjudication_errors(
+        dispositions or {}, repo_root=repo_root, report=report, selected=entry_selected_rows
+    )
+    if adjudication_errors:
+        raise DispositionError(dispositions_file or "<dispositions>", adjudication_errors)
 
     # Pass 1.5 — invalidate entries whose evidence no longer holds on the
     # rows they select. Per ``expires_on_source_change`` semantics an
@@ -1438,6 +1537,8 @@ def apply_dispositions(
             }
             if entry.get("linked_issue"):
                 annotation["linked_issue"] = entry["linked_issue"]
+            if entry.get("adjudication"):
+                annotation["adjudication"] = entry["adjudication"]
             annotated["disposition"] = annotation
             counts[disposition_kind] += 1
         annotated_mismatches.append(annotated)
@@ -1562,6 +1663,7 @@ def apply_dispositions_from_dir(
         report,
         dispositions,
         dispositions_file=label,
+        repo_root=root,
         taxsim_lane=(
             report_is_taxsim_lane(report)
             or suite_context(report.get("suite"), root).taxsim_lane

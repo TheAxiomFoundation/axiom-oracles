@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/415#issuecomment-3212063021",
+  "author": "feenberg",
+  "createdAt": "2025-08-21T21:03:29Z",
+  "body": "I think this is another instance of a dependent age given as zero. See #417"
+}

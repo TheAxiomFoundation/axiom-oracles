@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1108#issuecomment-5053880078",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-23T03:09:50Z",
+  "body": "**Verdict: PolicyEngine adjustment.**\n\nConfirmed — PE has the $90,000 cutoff in its percentage table but keys the lookup on taxable income (line 38, $80,306 here) instead of net income (line 26, $97,059), so it lands in the 30% band and pays $406.01. The 2021 Expanded Instructions worksheet (p. 86) keys line 2 on \"total of line 26 of the IA 1040, columns A and B\" with \"$90,000 and over: not eligible for credit\" — matching your TaxAct worksheet and [r. 701-304.15](https://www.law.cornell.edu/regulations/iowa/Iowa-Code-r-701-304.15). Without the credit PE is $4,719.40 vs your $4,721. Tracked in PolicyEngine/policyengine-us#9140."
+}

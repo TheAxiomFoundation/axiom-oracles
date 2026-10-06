@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/716#issuecomment-3980290481",
+  "author": "feenberg",
+  "createdAt": "2026-03-01T15:26:32Z",
+  "body": "The rebate function is called from CO DE GA HI ID IL IN ME MA MT NM NY RI SC VA.  We should treat all the rebates in the same way.\n\nIn every case I prefer assigning the rebate by default to the year paid, but I understand the argument for assigning it to the year it depends on (with the year paid income acting as a proxy for income in the year eligible). That is what extnd(27) allows for. \n\nYou can set extnd(27) by adding the variables\n\n\n```\nopt1=27 \nopt2=1\n```\n\nto the csv file. There is also option 30, which if set to 1 will set option 27 to 1, and also change some other calculations to be closer to PE conventions. See https://taxsim.nber.org/taxsimtest/options.html\n\nMy argument for using the year paid, is that the most common use of the calculator is to calculate after-tax income, which implies the year paid. It is also the relevant year for revenue scoring. Lastly, the year eligible is long before the year announced, so the rebate can't influence behavior in the year eligible. \n\nI can change my default, but I think it better that PE change its default."
+}

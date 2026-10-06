@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/226#issuecomment-2703844741",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-03-06T13:23:42Z",
+  "body": "@feenberg you are right, we should we exclude retirement income from the MS income calculation - I will fix [here](https://github.com/PolicyEngine/policyengine-us/pull/5667) \n"
+}

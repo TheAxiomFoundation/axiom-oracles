@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/497#issuecomment-3517024563",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-11-11T13:50:17Z",
+  "body": "I can add a boolean flag to check whether the child is enrolled in a licensed care facility which then circumvents the 100% of fpg but it is set to false by default, I believe this might be the easiest way to account for this clause "
+}

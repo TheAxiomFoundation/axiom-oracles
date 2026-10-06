@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/673#issuecomment-3675595574",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-12-19T16:00:17Z",
+  "body": "I found the issue in PE: \n\nFixing here: \nhttps://github.com/PolicyEngine/policyengine-us/issues/7017"
+}

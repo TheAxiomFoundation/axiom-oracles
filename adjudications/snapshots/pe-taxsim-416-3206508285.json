@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/416#issuecomment-3206508285",
+  "author": "feenberg",
+  "createdAt": "2025-08-20T14:00:31Z",
+  "body": "\nI included Form 8959 line 24 because it copies to form 1040 line 25c, \nwhich is included in Form 1040 line 33 parallel to the refundable portions \nof the EIC and ACTC. But you are right, it is different as it is actually \npart of FICA not general revenue. I will fix that.\n\nThanks\nDan\n\nOn Tue, 19 Aug 2025, Pavel Makarchuk wrote:\n\n> PavelMakarchuk created an issue (PolicyEngine/policyengine-taxsim#416)\n>\n> @feenberg I noticed some of the mismatches result due to TAXSIM \n> including the additional Medicare Tax from [Form \n> 8959](https://www.irs.gov/pub/irs-pdf/f8959.pdf) in the fiitax variable\n>\n> [household_37285_input_data.csv](https://github.com/user-attachments/files/21867733/household_37285_input_data.csv)\n>\n> I have included an example household above, TAXSIM align on the main \n> income tax values and NIIT\n>\n> Let me know if I missed anything\n>\n> -- \n> Reply to this email directly or view it on GitHub:\n> https://github.com/PolicyEngine/policyengine-taxsim/issues/416\n> You are receiving this because you were mentioned.\n>\n> Message ID: ***@***.***>\n"
+}

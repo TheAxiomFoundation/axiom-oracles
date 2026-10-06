@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/249#issuecomment-2690753361",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-02-28T14:14:48Z",
+  "body": "@feenberg - we were reducing the federal tax deduction by the premium tax credit but it should have been only the repayment - fixing in [this](https://github.com/PolicyEngine/policyengine-us/pull/5652) US PR "
+}

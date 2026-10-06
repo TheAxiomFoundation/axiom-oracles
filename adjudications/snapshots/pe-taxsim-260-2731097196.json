@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/260#issuecomment-2731097196",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-03-17T22:33:03Z",
+  "body": "Hey dan, yes this is due to a missing tax rate bracket that was missed in PE - adjusting [here](https://github.com/PolicyEngine/policyengine-us/issues/5732)"
+}

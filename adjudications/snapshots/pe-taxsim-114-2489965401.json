@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/114#issuecomment-2489965401",
+  "author": "PavelMakarchuk",
+  "createdAt": "2024-11-21T02:59:05Z",
+  "body": "@feenberg we have not included the 2022 rebate into the Delaware model but decided to add it in the following PR: [#5355](https://github.com/PolicyEngine/policyengine-us/pull/5355)"
+}

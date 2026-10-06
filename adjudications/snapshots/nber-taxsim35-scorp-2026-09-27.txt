@@ -1,0 +1,5 @@
+URL: https://taxsim.nber.org/taxsim35/
+Retrieved: 2026-09-27
+Extraction: HTMLParser text, whitespace collapsed; input scorp context
+
+ne 19) Casulty or Theft Losses (Line 20) The following are for the TCJA Business Tax Deduction. 31. scorp Active S-Corp income (is SSTB). 32. pbusinc Primary Taxpayer's Qualified Business Income (QBI) subject to a preferential rate witho

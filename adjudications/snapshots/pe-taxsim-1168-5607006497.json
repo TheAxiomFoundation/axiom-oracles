@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1168#issuecomment-5607006497",
+  "author": "feenberg",
+  "createdAt": "2026-09-09T18:46:48Z",
+  "body": "Both spouses are 37 years old, so shouldn't the pension income be split evenly? I don't think I should change Taxsim for this. I do the pension assignment in a single place, so I can easily change it for all states & years, if you want to discuss changing it. The current convention was my doing, but I am not as happy about it as I expected. "
+}

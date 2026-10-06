@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1097#issuecomment-4994571740",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-16T17:05:32Z",
+  "body": "**Verdict: PolicyEngine adjustment.**\n\nTaxAct is right. Delaware [HB 285](https://legis.delaware.gov/BillDetail/79061) (signed 2022-01-27) amended [30 Del. C. § 1106(b)(10)](https://delcode.delaware.gov/title30/c011/sc02/index.html) to exclude \"any unemployment benefits received in calendar years **2020 and 2021**, to the extent included in federal adjusted gross income,\" and the [2021 PIT-RES instructions](https://revenuefiles.delaware.gov/2021/PIT-RES_TY21_2021-01_Instructions.pdf) put it on Line 7 — matching the bundled return.\n\nPE-US has no DE unemployment subtraction ([subtractions list](https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/parameters/gov/states/de/tax/income/subtractions/subtractions.yaml)), so the $12,240 PUI stays in DE AGI:\n\n| | PE (current) | TaxAct |\n|---|---|---|\n| DE AGI | 35,032 | 22,792 |\n| siitax | 1,267.40 | 608 |\n\nTracking: PolicyEngine/policyengine-us#9065.\n"
+}

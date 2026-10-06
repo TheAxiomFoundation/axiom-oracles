@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/885#issuecomment-4537645008",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-25T22:24:23Z",
+  "body": "Resolved on PE-US 1.705.16. PE now returns SC siitax = $608.70 vs TaxAct $609 (within $1). Same SC OBBBA non-conformity fix from PolicyEngine/policyengine-us#7854 that resolved #909."
+}

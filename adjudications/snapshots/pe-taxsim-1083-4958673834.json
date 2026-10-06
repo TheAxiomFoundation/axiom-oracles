@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1083#issuecomment-4958673834",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-13T13:52:00Z",
+  "body": "This one is on us, and it corrects an earlier PolicyEngine change rather than a longstanding gap. Filed as PolicyEngine/policyengine-us#9009.\n\nPolicyEngine PR PolicyEngine/policyengine-us#8911 had excluded private (IRC §401) employer pensions from Oklahoma's $10,000 other-retirement exclusion before 2022, on the premise that the 2021 Schedule 511-A line 6 instructions didn't list §401 plans. Re-reading the 2021 Form 511 packet (p. 17), that premise is false — \"An employee pension benefit plan under IRC Section 401\" is the first qualifying source listed, word-for-word identical to the 2022 packet. So TaxAct's 2 × $10,000 on line 6 is correct, and PE over-taxes this record by exactly $1,000 (5% × the missing $20,000): PE OK tax $3,004.57 vs TaxAct $2,004 / TAXSIM-35 $2,004.57.\n\nVerified: reverting the gate reproduces the binary and TaxAct to the cent ($20,000 subtraction / OK AGI $61,891.36 / tax $2,004.57). Revert is in progress.\n"
+}

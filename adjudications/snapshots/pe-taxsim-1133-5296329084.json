@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1133#issuecomment-5296329084",
+  "author": "DTrim99",
+  "createdAt": "2026-08-14T17:35:19Z",
+  "body": "Same convention as #1132 — the emulator zeroes Maryland county tax on every MD record to match TAXSIM's state-only `siitax` (PE, like TAXSIM, gets no county in the input). Here that county tax is real and large: rebuilding this record, PE computes ~$19,100 of local tax (3.05% × 626,236 taxable net income) with no EIC to offset it, so zeroing it drops siitax from ~52,931 to the state-only **33,831** you see. (TaxAct's 53,871 includes the county tax at its 3.20% Baltimore-City default.)\n\nSo this is the same state-only treatment as #1132 — the difference is only that here the county tax has nothing offsetting it, whereas in #1132 the low-income filer's county tax is fully absorbed by the local EIC and nets to $0 on its own. Full write-up on #1132.\n"
+}

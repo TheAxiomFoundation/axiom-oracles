@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/680#issuecomment-3906230315",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-02-16T03:20:33Z",
+  "body": "I see, we need to limit the credit, fixing here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/7410"
+}

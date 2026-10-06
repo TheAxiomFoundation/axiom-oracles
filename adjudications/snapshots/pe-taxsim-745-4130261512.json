@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/745#issuecomment-4130261512",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-03-25T22:32:41Z",
+  "body": "## Diagnosis\n\nThe bug is in `de_agi_joint.py` — it floors each spouse's income at zero before summing, so the primary's SE loss (-$49K) gets discarded instead of offsetting the spouse's income ($74K).\n\n| Item | PE (current) | TaxAct (correct) |\n|------|-------------|-----------------|\n| Federal AGI | $25,959 | $25,959 |\n| DE AGI | $73,636 | $24,043 |\n| DE income tax | $3,194 | ~$0 |\n\n### Fix\n\nTracked in PolicyEngine/policyengine-us#7869"
+}

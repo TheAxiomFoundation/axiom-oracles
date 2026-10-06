@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/408#issuecomment-3189765132",
+  "author": "feenberg",
+  "createdAt": "2025-08-14T20:19:07Z",
+  "body": "\nTaxsim was giving the rebate twice. Fixed now.\n\nIt is different amount every year. I get $37 for your example.\n\nOn Thu, 14 Aug 2025, Pavel Makarchuk wrote:\n\n> PavelMakarchuk left a comment (PolicyEngine/policyengine-taxsim#408)\n>\n> I believe taxsim if I am checking it correctly,\n>\n> Attached is an example household:\n>\n> [household_43671_input_data (1).csv](https://github.com/user-attachments/files/21779223/household_43671_input_data.1.csv)\n>\n>\n>\n> -- \n> Reply to this email directly or view it on GitHub:\n> https://github.com/PolicyEngine/policyengine-taxsim/issues/408#issuecomment-3189659994\n> You are receiving this because you were mentioned.\n>\n> Message ID: ***@***.***>\n"
+}

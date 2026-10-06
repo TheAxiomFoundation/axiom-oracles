@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1034#issuecomment-4866455754",
+  "author": "feenberg",
+  "createdAt": "2026-07-02T13:49:17Z",
+  "body": "\nI will modify taxsim to use 2022 EIC parameters.\n\nDan\n\nOn Wed, 1 Jul 2026, Pavel Makarchuk wrote:\n\n> PavelMakarchuk left a comment (PolicyEngine/policyengine-taxsim#1034)\n>\n> PE is correct here. Washington's WFTC freezes the 'maximum qualifying income' at the June 9, 2022 IRC (RCW 82.08.0206(2)), so the single/0-child completed-phaseout AGI is $16,480 (not the current-year $19,104), and this $14,482 filer is $502 into the phaseout ? WFTC $277.76. TAXSIM applies no WA WFTC phaseout and a stale max, so it's the outlier; TaxAct doesn't do WA. No PE change needed. (Note: the issue body links out2psl/1033; the /1034 bundle holds an unrelated CO record.)\n>\n> -- \n> Reply to this email directly or view it on GitHub:\n> https://github.com/PolicyEngine/policyengine-taxsim/issues/1034#issuecomment-4862240868\n> You are receiving this because you authored the thread.\n>\n> Message ID: ***@***.***>\n"
+}

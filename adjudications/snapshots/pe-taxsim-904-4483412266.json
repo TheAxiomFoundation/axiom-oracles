@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/904#issuecomment-4483412266",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-19T00:30:02Z",
+  "body": "Reproducible on current PE-US. `nj_income_tax` correctly returns $0 per the [NJ-1040 filing threshold rule](https://www.nj.gov/treasury/taxation/pdf/current/1040i.pdf#page=5), but the unified `state_income_tax` variable bypasses NJ's threshold logic — so PE-taxsim emits a positive `siitax`. Filed at [policyengine-us#8343](https://github.com/PolicyEngine/policyengine-us/issues/8343)."
+}

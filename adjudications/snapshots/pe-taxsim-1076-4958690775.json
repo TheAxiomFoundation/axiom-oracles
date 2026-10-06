@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1076#issuecomment-4958690775",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-13T13:53:44Z",
+  "body": "Confirmed — PolicyEngine bug, you're right about the $40. Filed as PolicyEngine/policyengine-us#9010.\n\nPE correctly elects the combined-separate return (Form 740 status 2; pre-credit column tax 1,353.50 beats joint 1,453.06), but then pools the 66-year-old spouse's $40 over-65 credit at the unit level and nets it against total tax. Form 740 computes lines 16–18 per column with a per-column zero floor (\"If line 17 is larger than line 16, enter zero\"), and Schedule ITC Section B lines 10–11 assign each spouse's own credit to their own column — so the $40 dies in her near-zero column, exactly as TaxAct's return shows. Three-engine result: TaxAct $1,354 / TAXSIM-35 $1,353.50 (identical under default and opt30) / PE $1,313.50.\n\nSame class as the Delaware Filing-Status-4 fix (PolicyEngine/policyengine-us#8978): own personal credits are fixed per column, and the separate-vs-joint election should be judged on post-credit liability. Fix in progress on the PE side; no emulator change needed.\n"
+}

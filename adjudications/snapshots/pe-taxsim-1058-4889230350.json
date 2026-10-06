@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1058#issuecomment-4889230350",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-06T04:57:33Z",
+  "body": "**Correction to my earlier eCPS-impact comment.** I claimed this drives ~92% of federal eCPS mismatches (→ ~1.5% if fixed). That was a **mis-attribution** and is wrong. Implementing the fix and re-running the eCPS proved it: every eCPS record has `mortgage = proptax = 0`, so **nobody itemizes**, and the state-income-tax SALT component never enters the federal deduction — the fix changed **0/8000** records (2021/2023) and 37/8000 (2025). My earlier signal was the `v17` itemized-diff, which is a phantom that doesn't affect tax when the standard deduction is used.\n\nSo **#1058 is real only for records that itemize** (feenberg's #974/#973, which have a $50k mortgage), not the eCPS. The fix (draft **PR #1060**) is correct + regression-free (NY #974 → binary exactly; 175 tests pass; zero state-tax change) but inert on the eCPS. Left as a draft pending the withholding-vs-liability convention decision."
+}

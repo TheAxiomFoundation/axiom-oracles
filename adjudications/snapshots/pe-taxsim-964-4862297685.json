@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/964#issuecomment-4862297685",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-02T04:48:54Z",
+  "body": "Resolved upstream. The PE-US fix (pe-us #8659, \"OK Child Care/Child Tax Credit uses federal CDCC potential instead of allowed\") merged today via **PR #8778**. Per 2025 OK Form 511 Schedule 511-F, the credit is the greater of 20% of the CDCC **allowed by the IRC** (tax-limited) or 5% of the CTC — the fix switches PE from the CDCC *potential* to the *allowed* amount, resolving the PE $174 vs TAXSIM/TaxAct $85 gap.\n\nThe fix is merged upstream but not yet in the emulator's currently-installed PE-US 1.729.3; it will take effect on the next PE-US bump. Closing as resolved-upstream."
+}

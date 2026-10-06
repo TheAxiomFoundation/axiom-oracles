@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/883#issuecomment-4434630599",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-12T20:44:03Z",
+  "body": "Tracked in [policyengine-us#8276](https://github.com/PolicyEngine/policyengine-us/issues/8276) — `me_pension_income_deduction` is missing the 2025 federal-AGI phaseout per [36 M.R.S. § 5122(2)(M)/(M-1)](https://www.mainelegislature.org/legis/statutes/36/title36sec5122.html) and the [2025 1040ME General Instructions p. 3](https://www.maine.gov/revenue/sites/maine.gov.revenue/files/inline-files/25_1040me_gen_instr_w_cover_pg.pdf). PR will cap the deduction by (1 − excess/$100K) for federal AGI above $125K/$187.5K/$250K (single/HoH/joint) per the [Worksheet for Phaseout of Non-Military Pension Income Deduction](http://taxsim.nber.org/out2psl/883/a%20a%202025%20Maine%20Pension%20Income%20Deduction.pdf). Integration test on this filer is included in the PE-US issue."
+}

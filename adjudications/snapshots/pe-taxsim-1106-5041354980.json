@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1106#issuecomment-5041354980",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-22T03:05:08Z",
+  "body": "**Verdict: PolicyEngine adjustment** — and one question about the return.\n\nYou're right: [St. 2021, c. 9, § 26(b)](https://malegislature.gov/Laws/SessionLaws/Acts/2021/Chapter9) allows up to $10,200 of UI deducted for 2020–2021 when household income ≤ 200% FPL ($25,520 for a household of 1), and PE doesn't model it — filed as PolicyEngine/policyengine-us#9115 with the statute and worksheet extracts. This record qualifies (household income $23,267), so PE's MA tax will drop once fixed.\n\nOne question: the bundled Form 1 shows line 3 (wages) empty — line 10 is $13,260 (UI only), and No Tax Status is claimed on that basis — while the record has $10,007 of wages (and the return's federal AGI of $23,362 includes $95 of bank interest not in the record). Was the wage income dropped from the MA return? With wages included, line 17 ≈ $9,302 > $8,000, so NTS wouldn't apply (the Limited Income Credit would, capping tax at ~$130)."
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1071#issuecomment-4908175317",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-07T20:05:00Z",
+  "body": "txpydata record (a clean OR isolation), with your option columns:\n\n```\ntaxsimid,year,state,mstat,page,sage,depx,pwages,intrec,idtl,opt1,opt1v\n900010,2021,38,1,40,0,0,100000,0,2,30,1\n```\n\nAnd an update that mostly answers my own question: re-testing with **`opt(30)=1`** (your PSL-conformance mode), the binary applies **no kicker** — siitax = staxbc = 7,670.92 — which matches PolicyEngine exactly (PE's `or_tax_before_credits_in_prior_year` input has no TAXSIM column, so its kicker is $0). Default mode applies the 17.341% kicker in 2021 (7,670.92 → 6,340.71) but not 2023's 44.28% or 2025's 9.86%.\n\nSo under your testing protocol there's no OR discrepancy; the residual question is only about **default mode**: is 2021-only kicker coverage intentional (vs 2023/2025), and is the current-year-`staxbc` proxy for the prior-year base the intended convention there? Low priority — our comparisons will switch to `opt(30)=1` to measure the mode you actually test."
+}

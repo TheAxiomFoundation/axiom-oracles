@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/592#issuecomment-3651938004",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-12-14T19:50:25Z",
+  "body": "I see, we are applying the federal income tax deduction post 2024 but it was eliminated, fixing here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6973"
+}

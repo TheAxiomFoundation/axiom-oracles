@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1161#issuecomment-5479712649",
+  "author": "DTrim99",
+  "createdAt": "2026-08-31T14:20:59Z",
+  "body": "Confirmed — this is a PolicyEngine bug. We compute the CalEITC on California earned income only ($8,839 → $1,247) and skip the federal-AGI comparison. The CalEITC Worksheet line 6 (FTB 3514 instructions) says to take the *smaller* of the credit figured on earned income (line 2) and on federal AGI (line 5) — and because the $1,343 of interest pushes AGI ($10,182) above earned income and both sit in the CalEITC phase-out, the AGI-based credit ($861 on your Form 540, line 75) is the smaller and controls.\n\nWe'll fix `ca_eitc` to take the smaller of the earned-income and AGI credits, matching the worksheet (and how we already handle the federal EITC). Fix is up as PolicyEngine/policyengine-us#9363; I'll ping you here when it merges so you can rerun."
+}

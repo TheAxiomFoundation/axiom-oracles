@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/374#issuecomment-3018101862",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-06-30T07:32:19Z",
+  "body": "@feenberg we currently do not split the difference. Since Hawaii starts with federal AGI, I am inclined to subtract all taxable pension income from the HI AGI. \n\nWe typically include the military income subtraction in state AGI calculations but it is a separate input from the pension income input used in TAXSIM - so it should not affect any calculations"
+}

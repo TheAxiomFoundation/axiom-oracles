@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/473#issuecomment-3656398393",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-12-15T15:58:12Z",
+  "body": "I see now, we focused on the wrong part of the rules engine in the first fix, editing here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6986"
+}

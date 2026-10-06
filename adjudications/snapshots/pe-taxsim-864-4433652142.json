@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/864#issuecomment-4433652142",
+  "author": "DTrim99",
+  "createdAt": "2026-05-12T18:41:59Z",
+  "body": "Same shape as #854 — identical TAXSIM inputs, only the state code changes. Possible that the federal CDCC stays at $600 in PE because [`cdcc_credit_limit.py`](https://github.com/PolicyEngine/policyengine-us/blob/3225f95deb462b7e7fb9db4e827205ca21efc70d/policyengine_us/variables/gov/irs/credits/cdcc/cdcc_credit_limit.py) only subtracts `foreign_tax_credit` (the literal reading of [Form 2441 Worksheet A](https://www.irs.gov/pub/irs-pdf/i2441.pdf)), while TaxAct's worksheet appears to also subtract nonref CTC and lands at $0? NJ's 50% match then carries that through to $300.\n\nPer your guidance on #854, looks like the same disposition — leaving PE as-is."
+}

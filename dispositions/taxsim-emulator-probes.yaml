@@ -1,19 +1,19 @@
 schema: axiom_oracles.dispositions.v1
 suite: taxsim-emulator-probes
-updated: '2026-09-25'
+updated: '2026-09-27'
 entries:
 - id: state-zero-sales-tax
   concept: us:tax/federal-income-tax#liability
   kind: amount_difference
   case_id: taxsim-77
-  disposition: upstream_engine_gap
-  attribution: policyengine
+  disposition: unexplained
+  attribution: two_sided
+  adjudication: pe-taxsim-1249
   evidence:
-    mechanism: 'The emulator simulated TAXSIM state 0 in Texas, taking a sales-tax deduction that TAXSIM''s
-      state 0 does not take. PolicyEngine/policyengine-taxsim PR #1249 (merged 2026-09-26) states: "TAXSIM
-      state 0 means ''no state tax'': `taxsimtest` runs no state calculation for the record, so its federal
-      return deducts no state or local income or sales tax." It fixes the emulator to match (TAXSIM fiitax
-      50165.00 on this record). This probe ran before the fix, on the observed macOS binary.'
+    mechanism: 'Observed state-zero probe: TAXSIM fiitax 50165.00 and emulator fiitax 49315.8515625. Adjudication
+      pe-taxsim-1249 has no qualifying maintainer comment acknowledging an emulator error. The sales-tax
+      explanation in the linked PR remains a hypothesis under this registry''s evidence rules; engine
+      outputs are not proof.'
     row_arithmetic:
     - expression: difference
       equals: -849.1484375

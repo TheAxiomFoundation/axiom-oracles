@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1228#issuecomment-5823470756",
+  "author": "feenberg",
+  "createdAt": "2026-09-24T22:45:47Z",
+  "body": "From http://taxsimtest.nber.org/options.html\n\n```\n\noption 51 | Set to 1 for compulsory itemization for all taxpayers, set to 2 for compulsory standard deduction\nfor all taxpayers, set to 3 to itemize if that lowers federal taxable income, even if it raises federal plus\nstate liability. Otherwise the default is to minimize federal plus state liability.\n-- | --\n```\n\nI am fine with making 3 the default for testing, but I am not sure that it always lowers federal tax.\n\nNew Jersey is problem when optimizing itemization. I hadn't realized Taxsim was doing that and it won't be an easy fix. I'll think about it."
+}

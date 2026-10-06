@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1025#issuecomment-4858859656",
+  "author": "DTrim99",
+  "createdAt": "2026-07-01T18:19:49Z",
+  "body": "You're exactly right. For a joint claim you use Schedule 2 (lived with spouse), which gives $479 at household income $2,598; PE is instead applying Schedule 1 (lived alone) and returning $301. The $50 increased excise tax credit is correct, so the refund should be $529, not $351.\n\nRoot cause is on our side: the internal flag that selects the \"lived with spouse/others\" table (`cohabitating_spouses`) was never implemented and defaults to false, so a married-filing-jointly couple is wrongly treated as living alone. This is the same defect you flagged in #983 — already tracked in PolicyEngine/policyengine-us#8649 — and this record is another clean example of it. Thanks!"
+}

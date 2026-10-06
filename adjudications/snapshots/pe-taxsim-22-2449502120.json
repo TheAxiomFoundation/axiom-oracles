@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/22#issuecomment-2449502120",
+  "author": "feenberg",
+  "createdAt": "2024-10-31T10:15:18Z",
+  "body": "\nThe documentation fpr taxsim does instruct users to set state to zero for \nno state tax. Leaving state off the data has the effect of defaulting \nstate to zero, so that works also.\n\nBut we need to accept an explicit state==0.\n\nDan\n\n\nOn Wed, 30 Oct 2024, Al Noman wrote:\n\n> @feenberg its implemented as if there is no state passed in csv it considered as alaska, if your users frequently passed 0 as no state we have enhance it.\n>\n> -- \n> Reply to this email directly or view it on GitHub:\n> https://github.com/PolicyEngine/policyengine-taxsim/issues/22#issuecomment-2449083744\n> You are receiving this because you were mentioned.\n>\n> Message ID: ***@***.***>\n"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/435#issuecomment-3229364922",
+  "author": "feenberg",
+  "createdAt": "2025-08-27T18:48:16Z",
+  "body": "\nYes, you are right. I changed \"capgn\" to \"(capgn+data(12))\" in the line \ncalculating the limitation and the result:\n\n    http://taxsim.nber.org/out2psl/result.txt\n\nmatches your calculation below. I will push it this evening.\n\nThanks\nDan\n\n"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/167#issuecomment-2565609932",
+  "author": "feenberg",
+  "createdAt": "2024-12-30T15:15:58Z",
+  "body": "I will go along with that reasoning, with reservations.  It doesn't seem quite right for users that want after-tax income in 2021 which is most users of Taxsim. It isn't right for users that want marginal tax rates either, since their 2021 behavior can't be affected by a  2022 change in the law.  But going along makes validation testing much easier. \n\nMT issued in 2023 based on 2021 income \n   https://mtrevenue.gov/taxes/montana-tax-rebates/individual-income-tax-rebate-house-bill-192/#Rebates\n\nNM issued in 2023 based on 2021 income\n   https://www.tax.newmexico.gov/wp-content/uploads/2023/05/Rebate-deadline-address-update.pdf\n  \nOR apparently the rebate is a line on the form in odd years, based on the prior year income.\n   https://www.oregon.gov/dor/programs/individuals/pages/kicker.aspx\n\nRI I don't see a mention of this on the 2022 forms, and I can't tell when it was paid.\n\nSC based on 2021 income but paid in 2022\n   https://dor.sc.gov/rebate-2022\n\n"
+}

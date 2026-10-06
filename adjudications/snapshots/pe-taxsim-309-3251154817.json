@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/309#issuecomment-3251154817",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-09-03T23:53:02Z",
+  "body": "@feenberg you are right, I am adding the child care contributions in this PR:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6507"
+}

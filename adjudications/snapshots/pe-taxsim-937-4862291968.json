@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/937#issuecomment-4862291968",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-02T04:47:41Z",
+  "body": "Resolved. The PE-US fix (pe-us #8547 / PR #8548, shipped in **policyengine-us 1.722.0**, 2026-06-08) is present in the emulator's installed 1.729.3. Both diagnosed bugs are fixed: the Montana Elderly Homeowner/Renter Credit multiplier now applies to **household-level** gross income, and gross household income now includes the **full** Social Security amount per §15-30-2337(9)(a)(viii).\n\nRe-ran the #937 record (MT joint elderly, $30k wages, $5,280 interest, $51,792 SS, $17,139 rent) through the emulator: gross household income ≈ $87k > the $45,000 cap → credit **$0** (v37), matching TAXSIM-35 and TaxAct. Closing."
+}

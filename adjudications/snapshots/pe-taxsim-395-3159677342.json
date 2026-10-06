@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/395#issuecomment-3159677342",
+  "author": "feenberg",
+  "createdAt": "2025-08-06T11:04:01Z",
+  "body": "There is a Taxsim variable **transfers** for this sort of income. We should implement it in PE in the fullness of time. For testing now it is fine to zero it out."
+}

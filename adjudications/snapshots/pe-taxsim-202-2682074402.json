@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/202#issuecomment-2682074402",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-02-25T14:00:19Z",
+  "body": "@feenberg this was arising because we didn't map `proptax` to `real_estate_taxes` - just merged [this](https://github.com/PolicyEngine/policyengine-taxsim/issues/282) PR - now the values align in PE and TaxAct "
+}

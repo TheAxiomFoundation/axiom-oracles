@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/567#issuecomment-3421106616",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-10-20T08:49:51Z",
+  "body": "I see, we add the additional exemption for the head of household here:\n\n[Legal code](https://www.kansas.gov/kdor/webfile/help/modal-food-sales-credit-details.html)\n\n<img width=\"1780\" height=\"320\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/54865877-c4cf-458f-bb12-083eff93348f\" />\n\nFixing here:\nhttps://github.com/PolicyEngine/policyengine-us/pull/6711"
+}

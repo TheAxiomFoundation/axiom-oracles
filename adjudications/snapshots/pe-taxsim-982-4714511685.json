@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/982#issuecomment-4714511685",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-06-16T03:13:45Z",
+  "body": "Same root cause as #981: the emulator wasn't zeroing PolicyEngine's **imputed Medicare Part B premiums**, whose federal medical deduction lowered OH AGI below the zero-bracket, so PE returned $0 OH tax (the $4,800 exemption was applied correctly all along). TAXSIM/TaxAct have no medical input.\n\nFixed in #993 by zeroing `medical_expense_health_insurance_premiums` in the emulator. After the fix OH tax is **$330.83**, matching the NBER `taxsimtest` binary to the penny. Closing as resolved by #993."
+}

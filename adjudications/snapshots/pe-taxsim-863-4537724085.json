@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/863#issuecomment-4537724085",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-25T22:40:11Z",
+  "body": "Resolved on PE-US 1.705.16. Both reconstructed examples now match the diagnostic comment's expected behavior:\n\n- $20K AGI example: `ne_refundable_ctc = $2,000`, `ne_cdcc_refundable = $960` (.32 × $3K)\n- $54K AGI example: `ne_refundable_ctc = $2,000` (for the age-2 dependent), `ne_cdcc_nonrefundable = $150`\n\nThe eligibility-proxy bug in `ne_refundable_ctc_eligible_child` is fixed via PolicyEngine/policyengine-us#8290 (merged) — the \"received qualifying child care\" path (§77-7202(a)) now fires correctly."
+}

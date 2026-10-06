@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/867#issuecomment-4432261193",
+  "author": "feenberg",
+  "createdAt": "2026-05-12T15:43:07Z",
+  "body": "Taxsim has always used current liability in place of cash basis and there have been no complaints.  It is very important for the SALT deduction, especially in the past, less significant here but uniformity is good. The rationale is explained on the main Taxsim web page, including iteration to handle cross-deduction of tax. But for testing it is best not to iterate. Since Taxsim calculates the FICA/SECA federal tax second , then the state tax this means that during testing we don't get state values on the Federal Schedule A, but that is OK for testing. We still need the federal values on the state form.\n\nDavid - I just noticed you had started contributing. Sorry for being no inattentive.  You are so welcome! If  I can do anything to make my reports better for you, don't hesitate to ask. I don't have enough Python knowledge to actually contribute patches, or even read the code.  Sometimes I submit  the wrong files with issues. It happens, don't waste time when it does, just ping me with that info."
+}

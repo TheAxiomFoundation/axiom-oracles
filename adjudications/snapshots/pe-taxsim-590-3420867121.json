@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/590#issuecomment-3420867121",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-10-20T07:14:18Z",
+  "body": "@feenberg year are right we were not accounting for the cdcc income limitations, fixing here:\nhttps://github.com/PolicyEngine/policyengine-us/pull/6704"
+}

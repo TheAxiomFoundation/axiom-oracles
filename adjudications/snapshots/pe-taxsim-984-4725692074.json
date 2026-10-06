@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/984#issuecomment-4725692074",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-06-17T03:46:24Z",
+  "body": "Here's the full Worksheet D walk-through:\n\n**NJ Other Retirement Income Exclusion** (Worksheet D): for joint filers with total income (Line 27) in the **$125,001–$150,000** band, the maximum exclusion is **25% of total income** = 0.25 × $133,899 = **$33,475**. With no pension income (Line 28a = $0), the full $33,475 lands on Line 28b. So NJ gross $133,899 − $33,475 = **$100,424** (NJ AGI), matching the TAXSIM binary exactly.\n\n**Taxable income** then = $100,424 − $4,000 exemptions − **$3,085** property-tax deduction (18% of the $17,139 rent) = **$93,339**, tax **$2,382** — matching the binary to the cent.\n\nPE was showing taxable income $90,908 / tax $2,247 because of a separate bug — imputed Medicare Part B premiums were flowing into the NJ medical-expense deduction. That's fixed by #993; with it, PE returns $93,339 / $2,382. Will close on merge.\n"
+}

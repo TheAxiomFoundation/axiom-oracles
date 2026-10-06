@@ -1,0 +1,5 @@
+URL: https://taxsim.nber.org/taxsimtest/
+Retrieved: 2026-09-27
+Extraction: HTMLParser text, whitespace collapsed; input scorp context
+
+e 20) The following are for the TCJA Business Tax Deduction. but are ordinary income 1960-2017. 25. scorp Passive business income not subject to FICA, SSTB, SECA or QBID phaseout but subject to the passive loss limitation. 26. pbusinc and sbusinc Primary and secondary Taxpayer's active income eligible for the QBI deducti

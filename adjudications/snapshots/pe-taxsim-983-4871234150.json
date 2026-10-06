@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/983#issuecomment-4871234150",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-02T23:17:51Z",
+  "body": "Fix PR up: **PolicyEngine/policyengine-us#8874** (Fixes #8649). AZ Form 140PTC now uses Table 2 for married/cohabitating filers (ARS §43-1072(A)(3)) via a local table-selection fix (avoided flipping the global `cohabitating_spouses` default). Verified $78 → **$323**; 468 AZ tests pass."
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/718#issuecomment-4209916831",
+  "author": "feenberg",
+  "createdAt": "2026-04-08T21:53:18Z",
+  "body": "I prefer to assign the rebate to the year paid, but options 27 or  30 set to 1 will move it to the year on which the payment is based. All my testing is based on year based, following our discussions in the past.  For the user, it depends on if they want after tax income or the marginal tax rate. Is that your question?"
+}

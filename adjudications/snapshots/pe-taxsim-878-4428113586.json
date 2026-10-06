@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/878#issuecomment-4428113586",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-12T07:03:51Z",
+  "body": "Couldn't quite reproduce the discrepancy as stated — the bundled `output.txt` and the bundled TaxAct DC Form D-40 PDF both show DC taxable income = $14,415 and a refund of about $2,151, so neither the $26,726 nor the $352 figures appear in this bundle. The title says **CO** but the TAXSIM `state=9` and bundled PDF are for **DC** (District of Columbia) — was this meant to be DC, or did you intend to look at the same income profile for CO? Happy to re-run once we know."
+}

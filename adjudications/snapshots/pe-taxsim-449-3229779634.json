@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/449#issuecomment-3229779634",
+  "author": "feenberg",
+  "createdAt": "2025-08-27T21:21:47Z",
+  "body": "Taxsim shows the same tax before credits (3720) as PE for this taxpayer in 2022. See\n\n  http://taxsim.nber.org/out2psl/ga9\n\nThe difference in siitax is from a $500 rebate. See\n\n   https://dor.georgia.gov/georgia-surplus-tax-refund"
+}

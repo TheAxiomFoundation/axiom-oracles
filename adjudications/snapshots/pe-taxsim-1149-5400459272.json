@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1149#issuecomment-5400459272",
+  "author": "DTrim99",
+  "createdAt": "2026-08-24T19:47:14Z",
+  "body": "It's not the birthdate — PolicyEngine does treat the taxpayer as 65 and computes the $40 aged credit at the person level. The problem is the filing-method election.\n\nYour Form 740 is filed jointly (status 3), and the $40 reduces the combined tax to $1,393 (line 18). PolicyEngine instead elects combined-separate, where each spouse's personal credit only offsets their own column's tax. The 65-year-old here has no income of their own (just Social Security), so their column tax is $0 and the $40 is wasted — leaving $1,433.\n\nWhy does PE pick separate? Its election compares tax *before* credits, and separate comes out $0.18 lower there (essentially a wash on two standard deductions). But that ignores the $40 credit, which survives only under joint filing — after credits, joint is $40 cheaper ($1,393 vs $1,433). So PE should elect joint here, matching your return.\n\nThis is the same kind of issue we fixed for Delaware (electing on post-credit liability rather than pre-credit), so I've filed it as PolicyEngine/policyengine-us#9342 and will fix Kentucky's election the same way.\n"
+}

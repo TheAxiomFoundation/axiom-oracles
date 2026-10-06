@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/195#issuecomment-2603360795",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-01-20T23:33:32Z",
+  "body": "@feenberg we default child ages to 10, when running the case locally, I am getting a `vt_ctc` amount of 0 "
+}

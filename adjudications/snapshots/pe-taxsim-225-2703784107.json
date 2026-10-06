@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/225#issuecomment-2703784107",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-03-06T12:59:34Z",
+  "body": "@feenberg this is a new deduction in 2023 - we have the logic but there was a minor bug - will be fixed in [this](https://github.com/PolicyEngine/policyengine-us/pull/5665) PR"
+}

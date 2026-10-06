@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1035#issuecomment-4854917214",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-01T12:39:33Z",
+  "body": "**Correction to the original post.** An earlier draft of this issue claimed PR #994's both-young 50/50 fix had been reverted by #997. That was wrong — it was an artifact of a stale local `main` in my checkout; #994 (`e607e8c`) is present on `origin/main` and working. I've rewritten the issue above to drop that claim. This issue and PR #1036 are scoped to the genuine remaining gap: the pension-split age being a flat 55 rather than per-state (GA 62). Apologies for the noise.\n"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/597#issuecomment-3435820966",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-10-23T08:56:02Z",
+  "body": "I see, we need to have a NJ state specific gross income definition and not start from federal AGI. \n\nFixing here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6736"
+}

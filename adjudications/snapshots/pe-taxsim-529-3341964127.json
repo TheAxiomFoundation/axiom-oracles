@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/529#issuecomment-3341964127",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-09-27T18:26:01Z",
+  "body": "> OK, I found this, which confirms your point. However, it seems that to be eligible for a rebate in 2022 you need have filed returns in **both** 2019 **and** 2020. which I intend to ignore.\n> \n> [2019/2021](https://tax.idaho.gov/taxes/tax-pros/tax-update/2021-tax-rebate/)\n> \n> [2020/2022](https://tax.idaho.gov/taxes/tax-pros/tax-update/2022-tax-rebates/)\n\nAgreed, we are only checking 2020"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/748#issuecomment-4130188114",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-03-25T22:15:53Z",
+  "body": "@feenberg The current splits pension income 50/50 is consistent with how we handle other unsplit income types (interest, dividends, capital gains). Assigning all pension to the older spouse would help in states with age-based exclusions like Iowa, but I wonder if there are other state edge cases where splitting it 50/50 is more advantageous.                                                                                        \n\nI'd lean toward keeping the 50/50 split for consistency across income types, but open for suggestions."
+}

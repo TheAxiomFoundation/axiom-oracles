@@ -9,6 +9,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      AXIOM_CORPUS_ROOT: ${{ github.workspace }}/.ci/axiom-corpus
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,6 +40,28 @@ jobs:
 
       - name: Validate state-tax Populace projection contract
         run: uv run scripts/check_state_tax_populace_contract.py
+
+      - name: Checkout pinned adjudication corpus provisions
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-corpus
+          ref: f1916d73b568616cbd0b4c3c26a92796835188d9
+          path: .ci/axiom-corpus
+          # History proves the pin belongs to origin/main; sparse checkout
+          # fetches only the provision blobs needed by the adjudication atoms.
+          fetch-depth: 0
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            data/corpus/provisions/us/statute/2026-07-13-recovery-r2026-07-15-self-contained-r2026-07-17-dedup.jsonl
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Re-verify adjudication evidence and dashboard notes
+        run: |
+          uv run scripts/check_adjudications.py --check
+          uv run scripts/import_taxsim_adjudications.py --check
+          uv run scripts/export_taxsim_dashboard_notes.py --check
+          uv run scripts/build_taxsim_emulator_dispositions.py --check
+          uv run scripts/generate_taxsim_emulator_ledger_summary.py --check
 
       - name: Validate mismatch dispositions
         run: uv run scripts/apply_dispositions.py --check

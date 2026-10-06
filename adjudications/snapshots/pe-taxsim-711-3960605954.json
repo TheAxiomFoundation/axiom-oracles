@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/711#issuecomment-3960605954",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-02-25T16:50:54Z",
+  "body": "Fixed in the latest TAXSIM binary (post-Oct 2025). The new binary correctly counts 17-year-olds as CTC-eligible for 2021 (ARPA). Verified: v22=$6,600 for a 2-child household (age 17 + age 2), matching the expected $3,000 + $3,600."
+}

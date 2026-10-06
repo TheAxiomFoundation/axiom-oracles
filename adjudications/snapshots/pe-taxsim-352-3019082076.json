@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/352#issuecomment-3019082076",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-06-30T13:05:58Z",
+  "body": "@feenberg you are right, we missed a rate update, I will fix in this -us PR:\nhttps://github.com/PolicyEngine/policyengine-us/pull/6190"
+}

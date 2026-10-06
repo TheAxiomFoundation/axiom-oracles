@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/584#issuecomment-3399297525",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-10-13T22:44:31Z",
+  "body": "@feenberg TA is right here we were excluding 18 year old dependents which does not align with the legal code.\n\nFixing here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6663"
+}

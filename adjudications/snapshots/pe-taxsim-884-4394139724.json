@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/884#issuecomment-4394139724",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-07T04:20:18Z",
+  "body": "Confirmed bug — filed PolicyEngine/policyengine-us#8241 with diagnosis and proposed fix.\n\n**Diagnosis**: PE correctly computes household resources ($73,288) but doesn't gate the credit on the MI-1040CR line 33 income limit ($71,500 for 2025). The senior-renter Worksheet 5 path then leaks the $1,900 max because it legitimately bypasses the standard Table B phase-out (per form). TaxAct correctly returns $0 due to the line 33 STOP.\n\n**Fix**: add a household-resources eligibility gate ($69,700 for 2024, $71,500 for 2025), matching the form's line 33 STOP rule and aligning with MCL 206.520(8) statutory phase-out endpoint."
+}

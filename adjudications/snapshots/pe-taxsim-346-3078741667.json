@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/346#issuecomment-3078741667",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-07-16T13:55:47Z",
+  "body": "However, looking at the attached forms we double count the net investment income \n\nI will fix in -us here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6255"
+}

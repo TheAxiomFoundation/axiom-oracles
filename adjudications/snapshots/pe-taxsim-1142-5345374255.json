@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1142#issuecomment-5345374255",
+  "author": "DTrim99",
+  "createdAt": "2026-08-19T16:59:02Z",
+  "body": "You've got it exactly — and it's the same issue you flagged on #1127, tracked as PolicyEngine/policyengine-us#9270 with a fix already up in PR PolicyEngine/policyengine-us#9274.\n\nPolicyEngine books the 2022 Connecticut child tax rebate as a **non-refundable credit against 2022 CT income tax** — it's in PE's CT non-refundable-credit list for 2022 — so it knocks $250/child off the CT-1040 liability. On this return that drops CT tax from $1,764 to $1,514, the $250 you're seeing.\n\nThat's wrong for exactly the reason you give: per TSSB 2022-5 (PA 22-118), the child tax rebate is a **separate one-time rebate you applied for between June 1 and July 31, 2022** and received as a check — keyed to the 2021 return and never appearing on any CT-1040. TaxAct correctly leaves it off ($1,764).\n\nPR #9274 removes the rebate from the 2022 CT income-tax credits (re-booking it to the 2021 eligibility year like the RI/NM prior-year rebates), so 2022 CT liability will match TaxAct once it merges. I'll follow up here when it lands so you can rerun.\n"
+}

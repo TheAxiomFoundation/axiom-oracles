@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1225#issuecomment-5820033668",
+  "author": "feenberg",
+  "createdAt": "2026-09-24T18:41:34Z",
+  "body": "There is a lot of discussion here, I don't understand most of it. However, I do see a sample record and it did demonstrate an error that was present in 2000-2023. I believe I have corrected it corrected now. \n\n1) The .038 tax on excess property income is in fiitax\n2) The .009 tax on excess earnings income is in fica and tfica\n\nThis is easily changed if useful."
+}

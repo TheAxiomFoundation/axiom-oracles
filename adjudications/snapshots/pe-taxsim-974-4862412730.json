@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/974#issuecomment-4862412730",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-02T05:12:03Z",
+  "body": "Confirmed live PolicyEngine-US bug, filed as **pe-us #8838**. Diagnosis refined: it's neither the §615(f) itemized limitation nor the §601(d-1) recapture (both are implemented correctly) — the defect is the itemized **base**. `ny_salt_deduction` wrongly includes an imputed **general sales tax** ($2,375 here). Per NY Tax Law §615(c)(1) and Form IT-196-I Line 41 item A, state/local general sales tax is **added back** (like income tax); only real estate / personal property taxes survive.\n\nNeutralizing sales tax makes PE match line-for-line: itemized $47,458.64, taxable income $162,706.80, **NY tax $9,739.81 ≈ $9,740** = TAXSIM-35 and TaxAct. PE was $915 low ($8,825) because the phantom sales tax, after the §615(f) 25% haircut, also slid taxable income across the Tax-Computation-Worksheet-2 boundary. Tracking via pe-us #8838."
+}

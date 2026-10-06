@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/686#issuecomment-4453532692",
+  "author": "feenberg",
+  "createdAt": "2026-05-14T18:24:10Z",
+  "body": "How did you want to go with this? I have modified taxsim to allocate all deductions to the higher income partner when testing, but optimally in production. We shouldn't keep that difference into the future.  Here is my code for allocating deductions. \n\n            ```\ndiff=agit-agis\n            dedt=min(dedex,diff)\n            rest=dedex-dedt\n            dedt=dedt+.5*rest\n            deds=dedex-dedt\n            taxint=agit-dedt\n            taxins=agis-deds\n```\nagit, agis are agi of taxpayer and spouse. dedex is total deduction."
+}

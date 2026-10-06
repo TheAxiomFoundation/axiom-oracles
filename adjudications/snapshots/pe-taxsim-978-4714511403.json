@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/978#issuecomment-4714511403",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-06-16T03:13:42Z",
+  "body": "Root cause: the emulator wasn't zeroing PolicyEngine's **imputed Medicare Part B premiums**. They produced a ~$1,956 federal medical deduction that fed the OK Schedule 511-D above-cap medical add-back, inflating OK itemized deductions from $17,000 to $18,956. TAXSIM/TaxAct see no medical input.\n\nFixed in #993 by zeroing `medical_expense_health_insurance_premiums` in the emulator. After the fix OK `siitax` is **$83.20**, matching TaxAct's $83 (Form 511 line 15/Schedule 511-D $17,000 cap). Closing as resolved by #993."
+}

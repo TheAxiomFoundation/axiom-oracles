@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/894#issuecomment-4433954904",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-12T19:22:27Z",
+  "body": "Thanks Dan — after model adjustments the values now align. The reporter run is on `policyengine-us` 1.570.7; [commit `c546e2d`](https://github.com/PolicyEngine/policyengine-us/commit/c546e2d51abe0d6c4f27e71455b4f8d8c281c575) routes [`ca_mental_health_services_tax`](https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/variables/gov/states/ca/tax/income/ca_mental_health_services_tax.py) (CA 540 line 62, the renamed BHST) into `state_income_tax` per [R&TC § 17043](https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=17043.) and the [2025 CA 540 booklet](https://www.ftb.ca.gov/forms/2025/2025-540.pdf).\n\nRe-running on current PE (1.690.7):\n\n| Variable | TaxAct CA 540 | Current PE | Match |\n|---|---|---|---|\n| Line 48 (tax) | 1,175,832 | 1,175,832 | ✓ |\n| Line 62 (BHST, 1% × (TI − $1M)) | 87,154 | 87,154 | ✓ |\n| Line 64 (total) / siitax | 1,262,986 | 1,262,986 | ✓ |"
+}

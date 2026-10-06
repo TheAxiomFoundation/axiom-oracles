@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1004#issuecomment-4799801660",
+  "author": "feenberg",
+  "createdAt": "2026-06-25T13:27:48Z",
+  "body": "\nI have been ignoring differences of less than a thousandth of AGI unless \nthe fix was obvious and easy.\n\nOn Wed, 24 Jun 2026, Pavel Makarchuk wrote:\n\n> PavelMakarchuk left a comment (PolicyEngine/policyengine-taxsim#1004)\n>\n> Reproduces ? large S-corp **gain** ($478K `scorp`) plus $201K interest: federal differs by ~$33,527 and state by ~$5,067. This is the S-corp/?199A treatment at extreme eCPS magnitudes (see #1018 for PE's assumptions: active QBI, QBID, no SE/NIIT). At these magnitudes small treatment differences become large absolute diffs, and the $15 absolute match tolerance is unrealistic. We generally filter `scorp != 0` for headline comparisons for this reason.\n>\n>\n> -- \n> Reply to this email directly or view it on GitHub:\n> https://github.com/PolicyEngine/policyengine-taxsim/issues/1004#issuecomment-4793742498\n> You are receiving this because you authored the thread.\n>\n> Message ID: ***@***.***>\n"
+}

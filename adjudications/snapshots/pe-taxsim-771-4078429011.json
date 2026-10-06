@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/771#issuecomment-4078429011",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-03-17T22:41:19Z",
+  "body": "@feenberg I found the issue, it the hoh exemption fixing here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/7793"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1105#issuecomment-5041349549",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-22T03:04:10Z",
+  "body": "**Verdict: Question — no action needed.**\n\nPE doesn't refund lines 49/50 — its nonrefundable-credit cap floors the balance at $0, matching your line 52 exactly, and its refundable excise credit is $100 = your line 56/refund. The extra $750 in PE's refund is the SB 1734 Arizona Families Tax Rebate ($250 × 3-dependent cap, keyed to the 2021 return), booked to the liability year per the #1068 convention and reported in `srebate` — net of it, PE = TaxAct to the dollar. Whether this record should get that rebate at all (SB 1734's liability test) is the open question in #1102 / PolicyEngine/policyengine-us#9098.\n\n| | PE (policyengine-us 1.776.2) | TaxAct Form 140 |\n|---|---|---|\n| Balance after nonrefundable credits (line 52) | 0.00 | 0 |\n| Increased Excise Tax Credit (line 56) | 100.00 | 100 |\n| Refund excl. rebate | 100.00 | 100 |"
+}

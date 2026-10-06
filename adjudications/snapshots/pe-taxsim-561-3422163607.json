@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/561#issuecomment-3422163607",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-10-20T13:53:41Z",
+  "body": "@feenberg I believe the difference here is the way that the 21 year old dependent is treated. Under the [legal code](https://www.law.cornell.edu/uscode/text/26/2#b) filers can only claim head of household filing status if they have child dependents, [reference](https://www.law.cornell.edu/uscode/text/26/152#e). Those only include dependents under 19 years of age. \n\nThis is causing some of the differences here "
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/865#issuecomment-4862331903",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-02T04:56:19Z",
+  "body": "Resolved. The PE-US fix (pe-us #8550 / PR #8551, NJ minimum-filing-threshold, shipped in **1.722.0**) is present in the emulator's installed 1.729.3. `nj_income_tax.py` now applies `where(agi <= filing_threshold, -refundable_credits, income_tax - refundable_credits)`.\n\nRe-ran the #865 record (NJ joint, $20k wages, gssi $24,925, 2 deps, proptax $30k) through the emulator: AGI $20,000 = the joint filing threshold, so the phantom $210 tax is zeroed and PE returns **−$3,860.80**, matching the current TAXSIM-35 binary (−$3,860.80) and TaxAct (−$3,861). (The published out2psl/865 shows −3650.8 but is stale; the current binary matches PE.) Closing."
+}

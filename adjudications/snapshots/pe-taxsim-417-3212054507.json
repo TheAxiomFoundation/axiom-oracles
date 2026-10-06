@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/417#issuecomment-3212054507",
+  "author": "feenberg",
+  "createdAt": "2025-08-21T20:59:55Z",
+  "body": " Taxsim does include the 2021 Additional CTC at the larger amount. The problem is that your txpydata.raw file includes a zero for one of the ages. That becomes 10 years old. Infants need to be shown as 1 year old after I  made that change, I get $9600 for the addititional ctc, which is what PE gets.. I would have to make a lot of code changes to undo this.\n\nAlso, I note that with idtl set to 5, PE shows zero for the number of dependent exemptions. I don't think that affects the tax calculation.  See\n\n   http://taxsim.nber.org/out2psl/us4\n"
+}

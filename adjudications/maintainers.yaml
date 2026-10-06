@@ -1,0 +1,62 @@
+schema: axiom_oracles.adjudication-maintainers.v1
+engines:
+  taxsim:
+    maintainers:
+    - feenberg
+    provenance:
+    - url: https://github.com/feenberg/taxsim
+      basis: NBER TAXSIM maintainer designated by task; saved issue comments identify GitHub author feenberg.
+  policyengine:
+    maintainers:
+    - DTrim99
+    - MaxGhenis
+    - PavelMakarchuk
+    - anth-volk
+    - eqberkovich
+    - noman404
+    - sgerson2
+    provenance:
+    - author: DTrim99
+      url: https://github.com/PolicyEngine/policyengine-taxsim/pull/1065
+      number: 1065
+      mergedAt: '2026-07-16T18:14:11Z'
+      title: 'Zero PE-modeled direct payments (ME affordability payment, MA premium pay) in siitax (#1056,
+        #1084)'
+    - author: MaxGhenis
+      url: https://github.com/PolicyEngine/policyengine-taxsim/pull/26
+      number: 26
+      mergedAt: '2024-10-21T13:09:47Z'
+      title: Create package
+    - author: PavelMakarchuk
+      url: https://github.com/PolicyEngine/policyengine-taxsim/pull/164
+      number: 164
+      mergedAt: '2024-12-27T21:55:51Z'
+      title: Add mortgage_interest as an input
+    - author: anth-volk
+      url: https://github.com/PolicyEngine/policyengine-taxsim/pull/776
+      number: 776
+      mergedAt: '2026-03-20T20:39:06Z'
+      title: Fix versioning auth and deploy-pages artifact path
+    - author: eqberkovich
+      url: https://github.com/PolicyEngine/policyengine-taxsim/pull/1
+      number: 1
+      mergedAt: '2024-06-05T20:37:10Z'
+      title: Added connector to LLM. Added requirements.txt.
+    - author: noman404
+      url: https://github.com/PolicyEngine/policyengine-taxsim/pull/12
+      number: 12
+      mergedAt: '2024-10-14T10:53:27Z'
+      title: code cleanup
+    - author: sgerson2
+      url: https://github.com/PolicyEngine/policyengine-taxsim/pull/2
+      number: 2
+      mergedAt: '2024-06-21T21:36:18Z'
+      title: Added basic framework for Taxsim emulator.
+    criterion: Authors of merged PolicyEngine/policyengine-taxsim PRs; fetched 2026-09-27 via GitHub gh
+      pr list --state merged --limit 500. This is an operational evidence allowlist, not an assertion
+      of formal repository governance.
+official_document_hosts:
+- taxsim.nber.org
+notes: PolicyEngine maintainer list is the complete distinct author set of the retrieved merged emulator
+  PRs. One merged PR per author is recorded as provenance. Maintainer quotes establish only the engine
+  admission or documented comparison convention, never independent statutory correctness.

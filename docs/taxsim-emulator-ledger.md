@@ -237,7 +237,7 @@ probe versions above are explicitly recorded rather than attributed to the
 locked environment. CI uses the ordinary locked sync and records its own
 observations.
 
-## Bound dispositions (2026-09-25)
+## Bound dispositions (evidence migration, 2026-09-27)
 
 `scripts/build_taxsim_emulator_dispositions.py` is the reproducible selection
 recipe. It enumerates case IDs after applying the predicates below, in the
@@ -246,6 +246,32 @@ listed order, and uses the binding script's shared implementation. Running
 All entries expire on population/output or oracle drift. There are no overlaps.
 Rows labeled `unexplained` remain in the unexplained denominator; attaching
 an issue does not increase the explained rate.
+
+Explained residuals and upstream engine gaps now require an `adjudication`
+reference into [`adjudications/taxsim-emulator.yaml`](../adjudications/taxsim-emulator.yaml).
+The referenced record must be `evidence_ready`, cover the selected law years
+and jurisdictions, and agree on attribution. Both file loading and direct
+report merging re-verify the registry; every selected row is checked at merge
+time. US records cover federal findings and nationwide conventions; a
+state-specific record must match every selected row's state. Pending records
+can be linked as hypotheses on unexplained entries.
+
+The migration preserves every selector and binary/population binding but
+withdraws 7,222 S-corp NIIT explanations: 1,511 / 1,330 / 1,491 / 1,499 /
+1,391 rows in 2021–2025. The pinned section 1411 text is a current-law
+snapshot; its historical applicability to those years is unproven. The one
+state-zero probe formerly attributed to PolicyEngine is also unexplained:
+its PR body has no qualifying maintainer comment atom. These changes are
+asserted explicitly in the ledger regression tests.
+
+Regenerate the count and remaining-cluster tables after applying dispositions
+with `uv run scripts/generate_taxsim_emulator_ledger_summary.py`; `--check`
+detects drift. The dashboard handoff is generated separately by
+`uv run scripts/export_taxsim_dashboard_notes.py` into
+[`dashboard-notes.json`](../reports/taxsim-emulator/dashboard-notes.json).
+Counts in that export are mismatch rows from the bound full reports, not
+households. A verified record without a bound explanation has zero affected
+rows and does not explain an unclassified difference.
 
 Each year has 111,347 households and two comparisons per household. Explained
 rate means `(raw matches + explained mismatches) / comparisons`; it includes
@@ -256,11 +282,11 @@ unexplained mechanisms. The fixed count regression is
 <!-- BEGIN LEDGER COUNTS -->
 | Year | Comparisons | Raw match rate | Explained rate | Explained mismatches | Unexplained |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| 2021 | 222,694 | 75.4821% | 83.0808% | 16,922 | 37,678 |
-| 2022 | 222,694 | 78.8283% | 86.4276% | 16,923 | 30,225 |
-| 2023 | 222,694 | 82.4418% | 85.3085% | 6,384 | 32,717 |
-| 2024 | 222,694 | 84.4325% | 86.4231% | 4,433 | 30,235 |
-| 2025 | 222,694 | 84.4522% | 86.2852% | 4,082 | 30,542 |
+| 2021 | 222,694 | 75.4821% | 82.4023% | 15,411 | 39,189 |
+| 2022 | 222,694 | 78.8283% | 85.8303% | 15,593 | 31,555 |
+| 2023 | 222,694 | 82.4418% | 84.6390% | 4,893 | 34,208 |
+| 2024 | 222,694 | 84.4325% | 85.7500% | 2,934 | 31,734 |
+| 2025 | 222,694 | 84.4522% | 85.6606% | 2,691 | 31,933 |
 <!-- END LEDGER COUNTS -->
 
 The following counts use the same entry IDs in each
@@ -269,9 +295,9 @@ The following counts use the same entry IDs in each
 | Entry ID | 2021 | 2022 | 2023 | 2024 | 2025 | Disposition / attribution |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | `addmed-in-fiitax` | 539 | 478 | 506 | — | — | upstream_engine_gap / taxsim |
-| `niit-scorp` | 3 | 3 | 3 | 93 | 174 | explained_residual / input |
-| `niit-scorp-at-cap-joint` | 1,203 | 1,188 | 1,185 | 1,184 | 1,015 | explained_residual / input |
-| `niit-scorp-at-cap-single` | 305 | 139 | 303 | 222 | 202 | explained_residual / input |
+| `niit-scorp` | 3 | 3 | 3 | 93 | 174 | unexplained / two_sided |
+| `niit-scorp-at-cap-joint` | 1,203 | 1,188 | 1,185 | 1,184 | 1,015 | unexplained / two_sided |
+| `niit-scorp-at-cap-single` | 305 | 139 | 303 | 222 | 202 | unexplained / two_sided |
 | `niit-scorp-unreconciled` | 282 | 288 | 293 | 8,170 | 7,736 | unexplained / two_sided |
 | `niit-addmed-scorp` | 8,559 | 6,996 | 8,464 | — | — | unexplained / two_sided |
 | `niit-no-scorp` | 83 | 84 | 84 | 1,152 | 1,003 | unexplained / two_sided |
@@ -308,12 +334,11 @@ The two `taxsim-emulator-probes` entries pin left and right amounts and
 check D within $0.000001:
 
 * `state-zero-sales-tax` (`case_id: taxsim-77`, `D = -849.1484375`) is
-  `upstream_engine_gap / policyengine`. The emulator simulated state 0 in
-  Texas and took a sales-tax deduction that TAXSIM's state 0 does not;
-  [pe-taxsim PR #1249](https://github.com/PolicyEngine/policyengine-taxsim/pull/1249)
-  (merged 2026-09-26) fixes the emulator to match. The probe ran before that
-  fix, so rerunning it on an emulator release that includes #1249 changes the
-  left value and expires this entry.
+  `unexplained / two_sided`, linked to the open record `pe-taxsim-1249`.
+  The PR body is not a qualifying maintainer comment acknowledging an emulator
+  error, and this record has no proof atoms. The observed
+  amounts alone cannot supply that acknowledgment. A changed output expires
+  this entry's pins.
 * `texas-sales-tax-proxy` (`case_id: taxsim-78`, `D = -302.4484375000029`)
   stays `unexplained / two_sided`: both engines take a sales-tax deduction at
   Texas, in different amounts, and #1249 does not address it.
@@ -328,91 +353,32 @@ Binary bindings use the exact selected-row union:
 
 ## Evidence and issue map
 
-The evidence below was read from the supplied September 25 issue/comment
-census, with NBER input documentation verified online. Cached comments retain
-the original author, timestamp, and URL. GitHub API access failed locally;
-the cached PR bodies were used for #1204, #1219, #1223 and #1199.
+The registry stores the operative quotes and minimal comment snapshots, with
+source hashes, author/date checks and corpus pins. CI re-reads every atom on
+every run. See [the adjudications guide](taxsim-adjudications.md) for the
+requirements and full import summary. A cited issue or an arithmetical match
+alone cannot establish that an engine is wrong.
 
-**S-corp input contract.** NBER's [taxsimtest input 25](https://taxsim.nber.org/taxsimtest/)
-reads: “scorp Passive business income not subject to FICA, SSTB, SECA or QBID
-phaseout but subject to the passive loss limitation.” Its
-[taxsim35 input 31](https://taxsim.nber.org/taxsim35/) instead reads: “scorp
-Active S-Corp income (is SSTB).” These are incompatible documented meanings.
-Pavel Makarchuk, July 5, 2026: “This depends on what `taxsimtest` assumes about
-material participation for S-corp income.” [Issue #1053](https://github.com/PolicyEngine/policyengine-taxsim/issues/1053).
-The `niit-scorp` entries record an input-contract ambiguity, not a finding that
-either engine is legally right. A row counts as explained only when the
-passive treatment's own effect reconciles: TAXSIM's NIIT exceeds the emulator's
-by exactly 3.8% of scorp (neither at the limit), or TAXSIM sits exactly at the
-26 U.S.C. 1411(a)(1)(B) limit that adding scorp reaches. Both assume the engines
-agree on the other net investment income. Rows where the NIIT identity holds
-but neither reconciliation does stay `niit-scorp-unreconciled` (unexplained);
-in 2024–25 that is most of them, consistent with (but not shown to be) the
-state-tax allocation change in #1226. Keeping the reconciled classes as
-explained/input is a judgment call for the lane owner to confirm; mixed
-NIIT/AddMed classes remain unexplained. [Draft #1199](https://github.com/PolicyEngine/policyengine-taxsim/pull/1199)
-documents regressions and is not treated as a settled correction.
-
-**Additional Medicare.** Daniel Feenberg (`feenberg`), September 24, 2026:
-“it did demonstrate an error that was present in 2000-2023. I believe I have
-corrected it corrected now.” [Comment on #1225](https://github.com/PolicyEngine/policyengine-taxsim/issues/1225#issuecomment-5820033668).
-This acknowledgment supports TAXSIM attribution only on the isolated AddMed
-class. [PR #1239](https://github.com/PolicyEngine/policyengine-taxsim/pull/1239)
-documents the emulator convention; it does not resolve the NIIT component.
-
-**Rebate timing and sign.** Daniel Feenberg, July 6, 2026: “The production
-default for 27 is zero, that selects the paid year.”
-[Comment on #1068](https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4897009628).
-Pavel Makarchuk, July 6, 2026: “PE books each rebate to the year whose
-liability determines it; TAXSIM subtracts it in the payout year.”
-[Convention comment](https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4896784506).
-His description of srebate is “computed as `state_income_tax` with one-time
-rebates zeroed minus actual”. [Sign comment](https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4897543635).
-This verifies adding srebate back on each side. All 1,260 Virginia 2024 and
-1,229 Virginia 2025 rows rounding to ±$200/$400 are already in `rebate-timing`;
-no second Virginia selector is needed.
-
-**NIIT without S-corp.** Feenberg, September 24, 2026: “Agreed, subtraction is
-now for itemizer only.” [Comment on #1226](https://github.com/PolicyEngine/policyengine-taxsim/issues/1226#issuecomment-5823307696).
-That acknowledgment concerns a narrower allocation defect. The broad
-no-S-corp classes have not been shown to be the same non-itemizers, nor do
-these reports contain paired Alabama/state-zero reruns. They stay unexplained.
-
-**Maryland.** [PR #1223](https://github.com/PolicyEngine/policyengine-taxsim/pull/1223)
-describes the county-tax hypothesis. The
-[pinned README output table](https://github.com/PolicyEngine/policyengine-taxsim/blob/a80b8c1dca088b147e36f9c770ed92d403d747f6/README.md)
-identifies v36 as state taxable income and v25 as federal EITC. The arithmetic
-holds within $1 for 739/742 rows; this is a numerical signature, not an
-acknowledged error or legal evidence. Direct retrieval of the
-[published NBER source](https://taxsim.nber.org/out2psl/taxsim.f) failed here,
-so the proposed source/build difference is not independently verified. No
-Fortran is reproduced and no invented source line references are supplied.
-The entries remain unexplained. Maryland has 1,310 state comparisons per
-year: 281 raw matches (21.4504%) in 2024 and 284 (21.6794%) in 2025.
-Streaming the full paired release gives all-Maryland median differences
-of -$1,795.63 in 2024 and -$1,774.83 in 2025. Mismatch-only medians are
--$2,941.24 and -$2,922.47; those are different populations.
-
-**Louisiana.** Feenberg, September 25, 2026: “Agreed, corrected.”
-[Comment on #1222](https://github.com/PolicyEngine/policyengine-taxsim/issues/1222#issuecomment-5833721957).
-This responds to the 2025 standard-deduction omission report. Combined with
-the row-specific deduction/taxable-income checks, it supports TAXSIM
-attribution for 1,430 rows. Of those, 548 use $12,500 and 882 use $25,000.
-The raw rounded -$375/-$750 clusters contain 594/946 rows; the stricter class
-does not claim every cluster member. The other 481 Louisiana rows remain
-explicitly unexplained.
-
-| pe-taxsim issue / PR | Ledger entries | Interpretation |
+| Adjudication | Bound ledger entries | Evidence and classification |
 | --- | --- | --- |
-| [#1053](https://github.com/PolicyEngine/policyengine-taxsim/issues/1053), [#1199](https://github.com/PolicyEngine/policyengine-taxsim/pull/1199) | `niit-scorp`, `niit-addmed-scorp` | Input ambiguity; mixed mechanism open. |
-| [#1225](https://github.com/PolicyEngine/policyengine-taxsim/issues/1225), [#1239](https://github.com/PolicyEngine/policyengine-taxsim/pull/1239) | `addmed-in-fiitax`, `niit-addmed-*` | Acknowledged AddMed defect; mixed identity is not fully adjudicated. |
-| [#1068](https://github.com/PolicyEngine/policyengine-taxsim/issues/1068), [#716](https://github.com/PolicyEngine/policyengine-taxsim/issues/716), [#1062](https://github.com/PolicyEngine/policyengine-taxsim/issues/1062) | `rebate-timing` | Documented assessment/payout-year convention; #1068 supplies quotes. |
-| [#1226](https://github.com/PolicyEngine/policyengine-taxsim/issues/1226) | `niit-no-scorp`, `niit-addmed-no-scorp` | Related allocation defect; selected population not proven to share it. |
-| [#1223](https://github.com/PolicyEngine/policyengine-taxsim/pull/1223) | `md-august-county-signature` | Bound county signature, legal ownership unresolved. |
-| [#1204](https://github.com/PolicyEngine/policyengine-taxsim/pull/1204) | `al-federal-residual`, `al-state-residual`, both probe entries | Residual populations and observed state-zero probe. |
-| [#1219](https://github.com/PolicyEngine/policyengine-taxsim/pull/1219) | Both probe entries | Related CE suppressed-state Texas proxy, not a proof of the probe mechanism. |
-| [#1222](https://github.com/PolicyEngine/policyengine-taxsim/issues/1222) | `la-standard-deduction-omission`, `la-other-state-residual` | Acknowledged omission; other Louisiana mechanisms remain open. |
-| [#1214](https://github.com/PolicyEngine/policyengine-taxsim/issues/1214) | None; crash-probe TODO | No observed Linux crash available to bind. |
+| `pe-taxsim-1225` | `addmed-in-fiitax` | Verified TAXSIM maintainer acknowledgment of the AddMed error in 2000–2023; evidence_ready, taxsim_wrong / taxsim. |
+| `pe-taxsim-1068` (also #716) | `rebate-timing` | Maintainer statements establish payout-year versus liability-year timing and the rebate output convention; evidence_ready, convention / convention. |
+| `pe-taxsim-1222` | `la-standard-deduction-omission` | Verified TAXSIM maintainer acknowledgment of Louisiana's 2025 deduction omission; evidence_ready, taxsim_wrong / taxsim. |
+| `pe-taxsim-1053` | `niit-scorp`, `niit-scorp-at-cap-*` | Official NBER input definitions and pinned current-law section 1411 text; historical legal applicability missing, pending_evidence. All bound entries are unexplained / two_sided. |
+| `pe-taxsim-1249` | `state-zero-sales-tax` | Open, no proof atoms: no qualifying PolicyEngine maintainer comment admitting error. Bound entry is unexplained / two_sided. |
+
+The AddMed acknowledgment covers only the isolated AddMed class. Mixed
+`niit-addmed-*` identities remain unexplained because the NIIT component is
+unresolved. The #1226 allocation acknowledgment likewise does not prove that
+the broad no-S-corp populations share that cause. No population was expanded
+because an issue describes a related defect.
+
+Maryland's `md-august-county-signature` entries remain unexplained: their
+output identity does not establish the source/build hypothesis in #1223.
+Alabama residuals still lack paired state-zero reruns. The other Louisiana
+rows remain unexplained because they fail the narrower deduction identity.
+The #1214 Linux crash report remains a follow-up question; it is not a
+locally observed crash that can be bound to these successful macOS probes.
 
 ## Remaining questions
 
@@ -426,11 +392,11 @@ an explanation.
 <!-- BEGIN REMAINING CLUSTERS -->
 | Year | Bound unexplained | No ledger entry | Largest unbound state/concept populations | Largest rounded dollar clusters |
 | --- | ---: | ---: | --- | --- |
-| 2021 | 13,096 | 24,582 | NY state 2,775; CA state 2,191; AR state 1,445 | MI +$175: 250; MT -$2,477: 234; NY +$75: 161 |
-| 2022 | 11,251 | 18,974 | AR state 1,369; HI state 1,134; CA federal 791 | MI +$164: 258; WA +$700: 194; NY +$100: 156 |
-| 2023 | 12,805 | 19,912 | NY state 3,688; AR state 1,358; HI state 1,177 | NY -$200: 1,425; NY -$400: 654; MI +$111: 270 |
-| 2024 | 10,564 | 19,671 | AR state 1,384; SC state 1,015; HI state 939 | SC +$20: 950; OK -$22: 753; OR +$44: 435 |
-| 2025 | 10,494 | 20,048 | AR state 1,389; MI state 1,129; CA federal 936 | OK -$22: 753; KS +$16: 406; OH -$19: 313 |
+| 2021 | 14,607 | 24,582 | NY state 2,775; CA state 2,191; AR state 1,445 | MI +$175: 250; MT -$2,477: 234; NY +$75: 161 |
+| 2022 | 12,581 | 18,974 | AR state 1,369; HI state 1,134; CA federal 791 | MI +$164: 258; WA +$700: 194; NY +$100: 156 |
+| 2023 | 14,296 | 19,912 | NY state 3,688; AR state 1,358; HI state 1,177 | NY -$200: 1,425; NY -$400: 654; MI +$111: 270 |
+| 2024 | 12,063 | 19,671 | AR state 1,384; SC state 1,015; HI state 939 | SC +$20: 950; OK -$22: 753; OR +$44: 435 |
+| 2025 | 11,885 | 20,048 | AR state 1,389; MI state 1,129; CA federal 936 | OK -$22: 753; KS +$16: 406; OH -$19: 313 |
 
 All listed dollar clusters are state-liability differences, rounded to the
 nearest dollar for descriptive grouping only. Their selectors were not
@@ -440,9 +406,10 @@ in 2024/2025, after the county signature; they do not share its $1 identity.
 
 There are still substantial clusters as well as heterogeneous residuals.
 This is a seed ledger, not full closure: engine-output patterns alone do not
-justify expanding the explained numerator. The lane owner should confirm
-the input-ambiguity treatment of the reconciled `niit-scorp` classes, seek the missing paired
-Alabama state-0/state-1 evidence, and obtain observed Linux crash outcomes. The
+justify expanding the explained numerator. Historical section 1411 evidence
+is needed before the S-corp NIIT hypotheses can count as explained. The lane
+also needs paired Alabama state-0/state-1 evidence and observed Linux crash
+outcomes. The
 Maryland source/build hypothesis and no-S-corp allocation classes need
 independent evidence before any stronger attribution.
 pe-taxsim PR #1219's `docs/ce-pumd-comparison.md` counts 9,847

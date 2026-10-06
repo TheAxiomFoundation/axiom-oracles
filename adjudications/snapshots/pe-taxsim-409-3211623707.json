@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/409#issuecomment-3211623707",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-08-21T18:15:48Z",
+  "body": "> I am not sure what the emulator policy is for rebates. Should it be for the year that detmines eligibility or the year in which it is paid? In the case of NM there are rebates paid in 2021 and 2022, but in each case eligibility is detrmined by the prior year. I have a switch that moves all the states to either policy.\n\n\nWe should attribute the rebates in the year that they are paid out"
+}

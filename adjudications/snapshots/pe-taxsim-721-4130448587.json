@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/721#issuecomment-4130448587",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-03-25T23:18:39Z",
+  "body": "The phase-out rule for the Enhanced Senior Deduction (OBBBA, IRC §63(f)) works as follows:\n\n- **Amount**: $6,000 per eligible person (65+), so $12,000 for this joint return\n- **Joint threshold**: $150,000 AGI\n- **Phase-out rate**: 6% of AGI exceeding the threshold\n- **Full phase-out**: $350,000 for joint ($150K + $12K/0.06)\n\nFor this case ($200K AGI joint, both 70):\n- Excess: $200,000 - $150,000 = $50,000\n- Reduction: $50,000 × 6% = $3,000\n- **Net deduction: $9,000** (not $6,000 — the phase-out isn't linear between $150K-$250K, it's 6% of the excess)\n\nPE correctly applies this at the federal level (federal taxable = $131,000). At the Idaho level, PE doesn't yet apply the conformity deduction — Idaho conforms via [HB 559](https://legislature.idaho.gov/sessioninfo/2026/legislation/H0559/), and the [Tax Commission guidance](https://tax.idaho.gov/pressrelease/update-on-filing-2025-idaho-income-taxes-now-that-conformity-is-law/) says it should be claimed on Form 40 line 18. We've filed PolicyEngine/policyengine-us#7874 to add this."
+}

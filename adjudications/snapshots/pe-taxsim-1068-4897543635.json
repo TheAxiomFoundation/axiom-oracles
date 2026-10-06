@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1068#issuecomment-4897543635",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-06T20:57:24Z",
+  "body": "Implementation up: **PR #1070**. The emulator now emits its own `srebate` (computed as `state_income_tax` with one-time rebates zeroed minus actual — exactly what rebates moved siitax), and `compare --net-of-rebates` scores `siitax + srebate` on both sides, removing the payout-year vs liability-year convention from match scoring **without changing either engine**.\n\nValidated on the 8k eCPS: **2021 state match 75.50% → 87.08% (+11.58)**, **2022 79.30% → 83.30% (+4.00)**, federal identical both years. ME 2021 srebate = $850.00 and VA = $250.00 to the penny. So @feenberg — no convention change needed on either side for comparison purposes; the residual (~13-17%) is now genuinely non-rebate material."
+}

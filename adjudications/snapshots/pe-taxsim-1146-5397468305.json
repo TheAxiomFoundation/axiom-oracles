@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1146#issuecomment-5397468305",
+  "author": "DTrim99",
+  "createdAt": "2026-08-24T15:27:56Z",
+  "body": "Fix up in PolicyEngine/policyengine-taxsim#1151 — Delaware `staxbc` now reports the elected combined-separate path (the two columns summed, $9,431 here) instead of the joint single-column figure. The final liability was already correct."
+}

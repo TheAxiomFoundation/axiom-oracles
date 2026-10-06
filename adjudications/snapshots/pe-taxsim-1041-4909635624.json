@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1041#issuecomment-4909635624",
+  "author": "feenberg",
+  "createdAt": "2026-07-07T22:33:07Z",
+  "body": "I have to leave and start packing now, and I have only gotten as far as AGI for the first record for this issue, however, I notice that PE allows an additiona standard deduction of 1350, presumably based on the age of the primary taxpayer. Looking at page 3 of the instructions at\n\nhttps://taxsim.nber.org/historical_state_tax_forms/DC/2021/52926_D-40_12.21.21_Final_Rev011122.pdf\n\nthe taxapyer must be born before Jan 2 1957, which corresponds to an age of 68. But page==66. Oddly the minimum age changes nearly every year according to no pattern. I will look at the more serious Taxsim problems next week. I can see that the standard deduction is calculated incorectly for the married/combined filing status. "
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/657#issuecomment-3648486268",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-12-12T23:21:26Z",
+  "body": "I see we need to implement the split better, fixing here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6961"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1200#issuecomment-5782214094",
+  "author": "DTrim99",
+  "createdAt": "2026-09-22T18:56:59Z",
+  "body": "Confirmed — v37=3410 is intentional. v37 is the emulator's property-tax-credit output slot (the same column TAXSIM uses for state property-tax credits/circuit breakers across states); for Minnesota it carries the Form M1PR Homestead Credit Refund (PolicyEngine variable `mn_homestead_credit_refund`).\n\nPolicyEngine keeps `siitax` equal to the Form M1 income-tax liability and surfaces the M1PR refund in v37 rather than netting it into siitax — so PE and TA agree on tax after credits and the M1PR appears only in v37. Matching that in test mode (report M1PR in v37, exclude it from siitax) is exactly right.\n\nOne heads-up for non-test mode: per #968, TAXSIM's `siitax` nets the M1PR in as of 2026-05-21, whereas PE deliberately keeps siitax = Form M1 liability. So outside test mode the two will differ on siitax by the M1PR amount; in test mode they line up.\n"
+}

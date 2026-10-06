@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/313#issuecomment-3090225662",
+  "author": "feenberg",
+  "createdAt": "2025-07-18T17:50:03Z",
+  "body": "This creates a huge discontinuity between zero and one dollar of wage income - 30,000% marginal subsidy rate. I will modify this for testing only."
+}

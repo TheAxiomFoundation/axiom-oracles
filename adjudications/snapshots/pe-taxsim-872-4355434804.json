@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/872#issuecomment-4355434804",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-04-30T19:07:03Z",
+  "body": "@feenberg we assume that the assessed property value is 0 unless set explicitly. We have an input variable for this which defaults to 0"
+}

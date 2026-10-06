@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/896#issuecomment-4433739024",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-12T18:53:51Z",
+  "body": "Thanks Dan — after model adjustments the values now align. The reporter run is on `policyengine-us` 1.570.7; [commit `1c05a75`](https://github.com/PolicyEngine/policyengine-us/commit/1c05a755dacc498d047b87d73b04d12a84f71170) (closing [PE-US #7291](https://github.com/PolicyEngine/policyengine-us/issues/7291)) changed [`vt_percentage_capital_gains_exclusion`](https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/variables/gov/states/vt/tax/income/adjusted_gross_income/subtractions/vt_capital_gain_exclusion/vt_percentage_capital_gains_exclusion.py) to treat standard LTCG as ineligible financial instruments per [VT Schedule IN-153](https://tax.vermont.gov/sites/tax/files/documents/IN-153-2024.pdf) and [32 V.S.A. § 5811(21)(B)(ii)](https://legislature.vermont.gov/statutes/section/32/151/05811). On current PE (1.690.7), v32 = 674,286 = 679,286 − $5,000 flat exclusion, matching your stated preference here."
+}

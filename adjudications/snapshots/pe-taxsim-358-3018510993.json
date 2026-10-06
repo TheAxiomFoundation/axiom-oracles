@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/358#issuecomment-3018510993",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-06-30T09:50:21Z",
+  "body": "@feenberg you right, we exclude mortgage interest from the CA item. ded. limitation calculation but it should only be non-mortgage interest, fixing here:\nhttps://github.com/PolicyEngine/policyengine-us/pull/6188"
+}

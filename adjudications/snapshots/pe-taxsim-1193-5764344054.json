@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1193#issuecomment-5764344054",
+  "author": "DTrim99",
+  "createdAt": "2026-09-21T17:01:43Z",
+  "body": "The property tax rebate equals the **2021 Illinois property tax credit** you were entitled to on your IL-1040 — that's **5% of the Illinois property tax you paid on your principal residence** (Schedule ICR, line 4a), **capped at $300**, and only if AGI is under $250,000 (single) / $500,000 (joint). So it's not a flat $300 — it's 5% of property tax, up to the $300 max.\n\nYour case: $6,427 property tax × 5% = $321, capped at **$300**. Plus the income-tax rebate ($50 filer + $100 dependent = $150). Total = **$450**, matching Taxsim.\n\nPE currently reports only the $150 income rebate. The PolicyEngine side that computes the $300 property tax rebate was merged last week ([policyengine-us#9420](https://github.com/PolicyEngine/policyengine-us/pull/9420)); the emulator change that surfaces it in the `srebate` column is a PR I have open ([policyengine-taxsim#1177](https://github.com/PolicyEngine/policyengine-taxsim/pull/1177)). Once that merges, PE's srebate will be $450 — I'll ping you here when it's in.\n"
+}

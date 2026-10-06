@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/538#issuecomment-3341865828",
+  "author": "feenberg",
+  "createdAt": "2025-09-27T15:36:54Z",
+  "body": "Off-by-error in age criteria for CTC in Taxsim. Fixed now."
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/812#issuecomment-4193951557",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-04-06T17:45:41Z",
+  "body": "@feenberg PE currently pools all non-refundable credits at the unit level and subtracts from total tax — essentially what you're describing. However, after reviewing the PIT-RES instructions (page 5), DE requires per-column credit allocation for Filing Status 4: \"you must each report your own income, personal credits, deductions.\" The form does let taxpayers choose how to allocate personal exemptions between columns (Line 27a), so the optimal approach is to assign them to the higher-tax column. I have filed PolicyEngine/policyengine-us#7931 to implement proper per-column allocation with optimized exemption placement.  "
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/216#issuecomment-2651280052",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-02-11T16:07:32Z",
+  "body": "@feenberg you are absolutely right, I have removed the Montana CTC from the list of refundable credits in [this](https://github.com/PolicyEngine/policyengine-us/pull/5578) PR "
+}

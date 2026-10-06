@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/916#issuecomment-4862365584",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-02T05:02:59Z",
+  "body": "Confirmed PolicyEngine-US bug, filed as **pe-us #8836**. The DE eligible-retirement-income basket (`de_pension_exclusion_income`) sums the **raw, unlimited** `capital_gains`, so the −$2.85M capital loss (split 50/50) drives each spouse's basket negative and `min_(cap, max_(0, …))` clamps the exclusion to $0. But per 30 Del. C. §1106(b)(3) + 2025 PIT-RES Line 6, eligible retirement income counts \"capital gains **net of capital losses**\" — i.e. the federal Schedule D net, loss-limited to −$3,000 (IRC §1211(b)). So the $85,793 interest alone yields the full $12,500 exclusion. Fix: use `loss_limited_net_capital_gains_person` in the basket → PE $3,547.51 → **$2,860.25**, matching TAXSIM ($2,885) and TaxAct (~$2,851). pe-us #8501/PR#8502 fixed only the negative bleed, not this. Tracking via pe-us #8836."
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/453#issuecomment-3233032570",
+  "author": "feenberg",
+  "createdAt": "2025-08-28T11:03:24Z",
+  "body": "**otherprop** shouild everywhere be treated the same as intrec. I'll look at your example this afternoon, but the only reason it is a separate variable is that many years ago there was a $100 interest exclusion.  It can be negative. I'll clarify the description."
+}

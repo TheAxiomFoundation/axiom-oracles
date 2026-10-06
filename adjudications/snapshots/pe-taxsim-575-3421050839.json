@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/575#issuecomment-3421050839",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-10-20T08:28:39Z",
+  "body": "@feenberg you are right, we need allow for the Sales Tax refund for filers with negative AGI \nI will fix here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6708"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/576#issuecomment-3486055443",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-11-04T13:39:00Z",
+  "body": "@feenberg you are right, the disable slat works properly, what actually happens is that there was a bill repealing the capital gains tax in HI which never passed, we applied that change, \n\nI will revert here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6771"
+}

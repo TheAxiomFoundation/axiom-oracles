@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1054#issuecomment-4897928631",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-06T21:50:26Z",
+  "body": "That answers it — per-spouse columns confirmed (`pbusinc`/`sbusinc` for business income, `pprofinc`/`sprofinc` for professions), which is exactly how #1051 wired the emulator (`pbusinc` → primary, `sbusinc` → spouse). No change needed. Understood on the limited testing pending the tax-expert recruit — closing this as answered; the expert-dependent items stay tracked in #1053/#384."
+}

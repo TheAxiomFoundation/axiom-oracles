@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1098#issuecomment-4994571502",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-16T17:05:31Z",
+  "body": "**Verdict: PolicyEngine adjustment.**\n\nConfirmed — PE caps the Form 140PTC credit at property taxes + **100% of rent** instead of the line 13 rent-equivalent property tax (Form 201: rent × landlord's property-tax factor), so the cap never binds for renters and PE returns the full Table 1 amount.\n\n| | Line 11 (table) | Line 13/14 (taxes paid) | Line 15 (credit) |\n|---|---|---|---|\n| PE 1.768.4 | $457 | $857 (full rent) | **$457** |\n| Per form, 15% factor | $457 | $129 | **$129** |\n\nARS [43-1072(B)](https://www.azleg.gov/ars/43/01072.htm) (\"amount of property taxes actually paid... whichever is less\") with the landlord factor from 43-1072(C)/Form 201. Since AZ has no statutory fraction, we'll add a parameterized rent-equivalent rate (as we do for MT/WI/MN) — likely matching your 15% default. Tracking: PolicyEngine/policyengine-us#9064.\n"
+}

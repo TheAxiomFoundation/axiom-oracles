@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/442#issuecomment-4598546248",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-06-02T03:48:51Z",
+  "body": "This is a display-only quirk — PE's v17 (TAXSIM \"Itemized Deductions in taxable income\") reports the itemized calculation regardless of whether the filer ultimately took the standard deduction. It doesn't affect federal tax (v19/fiitax) since the standard-vs-itemized choice happens at the federal taxable-income level.\n\nTAXSIM-35 has the same quirk per its docs — column 17 shows the hypothetical itemized amount even when the standard deduction was chosen. PE-taxsim mirrors that to maintain TAXSIM-compatibility on the column semantics.\n\nClosing as known-behavior consistent with TAXSIM-35's own treatment."
+}

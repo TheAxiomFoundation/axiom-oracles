@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/652#issuecomment-3660677127",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-12-16T14:00:49Z",
+  "body": "I was doing some prep for our conversation today and I think you are right. We only rely on the definition of \"Qualifying child\" but ignore the \"Qualifying relative\" section. We basically need to a gross income check which has to be below the personal exemption amount. If that is met then the age limit is irrelevant. We also need to account for disability which renders the age check irrelevant. \n\nFixing here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6994\n"
+}

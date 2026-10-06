@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1082#issuecomment-4958502921",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-13T13:34:15Z",
+  "body": "The $1,500 is the Colorado Cash Back (SB 22-233), keyed to filing a 2021 return. On the timing — This is the rebate-timing convention we closed out in #1068: PolicyEngine books one-time rebates to the year whose return determines them; `taxsimtest` default mode books the payment year; and — key point — **your own `opt(27)=1`/`opt(30)=1` (set on this very record's txpydata) books the eligible year, same as PE**. TaxAct returns show neither, since these are administrative payments, not return line items. For comparisons we ship three tools: the `srebate` output column, `compare --net-of-rebates`, and `compare --taxsim-opt30` (#1070/#1074). If you'd rather both engines exclude rebates from `siitax` entirely (matching the TA return), that's `opt(27)=2` on your side and `--net-of-rebates` on ours — happy to converge on that as the standard if you prefer it.\n\n(For CO specifically we verified your `opt(27)=1` books the Cash Back into 2021 exactly like PE — a $60k-joint test record goes 1,487.77 → −12.23 with srebate 1,500. The exe.py output you referenced is the frozen pre-options build, which always books payment-year.)"
+}

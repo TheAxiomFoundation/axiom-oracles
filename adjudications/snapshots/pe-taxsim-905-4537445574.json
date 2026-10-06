@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/905#issuecomment-4537445574",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-25T21:43:10Z",
+  "body": "Resolved on PE-US 1.705.16. PE now returns MT siitax = $940.14, matching TaxAct's MT Form 2 line 13 = $940 (sum of Schedule II line 11 cap-gains tax $409 + ordinary tax line 12 $531). The double-subtraction bug in `mt_capital_gains_tax_joint` is fixed via PolicyEngine/policyengine-us#8344 (merged)."
+}

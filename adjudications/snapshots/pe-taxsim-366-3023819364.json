@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/366#issuecomment-3023819364",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-07-01T12:30:54Z",
+  "body": "> That is interesting. My former assitant left this note in the code:\n> \n> > c Senior Housing Credit is not coded because\n> > c most elderly will not be eligible according to this:.\n> > c https://tax.colorado.gov/income-qualified-senior-housing-income-tax-credit\n> \n> I have no opinion on this, but I thought you should have a look at the that URL before I change anything here. I found this:\n> \n> https://www.douglas.co.us/documents/hb24-1052-senior-housing-income-tax-credit.pdf/\n> \n> which is more optimistic.\n\nIt appears that filers are ineligible if they receive the senior property tax exemption. We currently don't include this in our model, I will add a dependency in the future but for now I would provide the credit."
+}

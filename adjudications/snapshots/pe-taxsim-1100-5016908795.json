@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1100#issuecomment-5016908795",
+  "author": "feenberg",
+  "createdAt": "2026-07-19T18:33:58Z",
+  "body": "I have modified TA and Taxsim to use \"heat included\" and the school property tax now matches.  No need for PE to change."
+}

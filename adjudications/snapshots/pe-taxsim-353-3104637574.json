@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/353#issuecomment-3104637574",
+  "author": "feenberg",
+  "createdAt": "2025-07-22T19:51:33Z",
+  "body": "I corrected the taxpayer age and now the standard deduction is $16,550, as you expected. Taxable Income now matches. However, TA tax is $2,830 while PE shows $2,623."
+}

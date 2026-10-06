@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/512#issuecomment-3312190048",
+  "author": "feenberg",
+  "createdAt": "2025-09-19T13:23:21Z",
+  "body": "Yes when testing, year of eligibility. This is when option 30 is non-zero. I don't want to change the default."
+}

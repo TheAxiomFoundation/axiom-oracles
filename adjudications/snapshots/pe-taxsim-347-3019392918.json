@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/347#issuecomment-3019392918",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-06-30T14:29:58Z",
+  "body": "@feenberg the issue was that we did not uprate the tax brackets in 2024, I made the fix in the following -us PR:\nhttps://github.com/PolicyEngine/policyengine-us/pull/6194"
+}

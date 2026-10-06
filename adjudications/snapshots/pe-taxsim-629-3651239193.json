@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/629#issuecomment-3651239193",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-12-14T14:36:14Z",
+  "body": "@feenberg I believe the difference here is the split of the standard deduction. TA allocates it 50/50 but DC 2024 Calculation J, Line f: \"You may allocate this amount as you wish.\". This reduces the tax when married couples are filing separately "
+}

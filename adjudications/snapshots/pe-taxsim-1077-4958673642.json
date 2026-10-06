@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1077#issuecomment-4958673642",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-07-13T13:51:59Z",
+  "body": "Confirmed — this is a PolicyEngine bug, now filed as PolicyEngine/policyengine-us#9008.\n\nThe TY2024 phase-down brackets for the CT pension/annuity subtraction (PA 23-204, $100k–$150k MFJ) were entered only from 2024-01-01, but PolicyEngine's parameter system resolves them at earlier dates to their 2024 values. So for 2019–2023 — when the subtraction was a hard cliff at $100,000 MFJ — PE grants a partial subtraction above the cliff. On this record (federal AGI $112,804) PE computes a $51,450 subtraction (0.55 × $93,545) where the 2021 Line 48b answer is $0; hence PE CT tax $812.13 vs TaxAct/TAXSIM-35 $4,671.\n\nPE's Social Security adjustment matches TaxAct's Line 42 exactly ($12,245.56 vs $12,245), so the pension parameter is the entire gap. TaxAct and TAXSIM-35 are both correct here. Fix (explicit zero values for the phase-out brackets before 2024) is in progress.\n"
+}

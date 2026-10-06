@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/868#issuecomment-4434563214",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-12T20:35:18Z",
+  "body": "Verified fixed by [policyengine-us#8213](https://github.com/PolicyEngine/policyengine-us/pull/8213) (now merged). The `tax_unit_itemizes` tied-federal-tax fallback now uses `itemized_taxable_income_deductions > standard_deduction` (federal face-value) instead of the asymmetric state-deduction helpers. Re-running on the patched build: `tax_unit_itemizes: True`, federal CDCC: $0, `ri_cdcc: 0` — matching [the bundled TaxAct RI-1040](http://taxsim.nber.org/out2psl/868/) and [RI 1040 Schedule I instructions](http://www.tax.ri.gov/forms/2025/Income/2025%20RI-1040%20Instructions.pdf)."
+}

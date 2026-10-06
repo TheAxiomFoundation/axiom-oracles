@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/921#issuecomment-4535155442",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-25T14:51:09Z",
+  "body": "Tracked upstream: PolicyEngine/policyengine-us#8494. Root cause is PE-US's `taxable_unemployment_compensation` collapsing the entire tax unit's taxable UI onto the head, which gives the no-income spouse phantom AGI (here ~$8,500) and lets them claim a separate KY standard deduction under the combined-return optimization. With per-person UI preserved, KY tax reproduces to ~$524."
+}

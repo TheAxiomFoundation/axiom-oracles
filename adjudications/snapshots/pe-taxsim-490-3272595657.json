@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/490#issuecomment-3272595657",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-09-09T23:26:22Z",
+  "body": "@feenberg Looking at the home heating credit tax form on line 47:\nhttps://www.michigan.gov/taxes/-/media/Project/Websites/taxes/Forms/IIT/TY2024/MI-1040CR-7.pdf\n\nThe credit amount is multiplied by 52% (it was 56% in 2023) - I will update PE with the new rate as well.\n\nTo answer the other question, we have a boolean check for whether utilities are included in rent but we default it to false "
+}

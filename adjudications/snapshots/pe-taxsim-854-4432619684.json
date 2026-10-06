@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/854#issuecomment-4432619684",
+  "author": "feenberg",
+  "createdAt": "2026-05-12T16:25:59Z",
+  "body": "I think we should leave PE as it is.  Given the difficulty of conforming to TA, and the suspicion that it is wrong, and the infrequency of it being in the data, there is no incentive to invest in a change."
+}

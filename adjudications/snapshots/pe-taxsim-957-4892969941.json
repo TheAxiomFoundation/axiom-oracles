@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/957#issuecomment-4892969941",
+  "author": "MaxGhenis",
+  "createdAt": "2026-07-06T12:49:15Z",
+  "body": "Adjudicated against the OK Form 511 packet (Schedule 511-F) and 68 O.S. § 2357.43 (policyengine-us `main` @ `6d8a7f55ec`): **PolicyEngine is correct on both credits; the reference values omit Oklahoma's mandatory part-year/nonresident-style proration on Schedule 511-F.**\n\nThis household's OK-AGI/federal-AGI ratio is 25,000 / 34,515 = **0.7243**, and Schedule 511-F states the child care/child tax credit \"must be prorated\" by that ratio:\n\n- **OK child care/child tax credit**: max(20% × federal CDCC $289, 5% × federal CTC allowed $1,700) × 0.7243 = **$61.57**. The $108.70 reference equals the 5%-of-CTC leg *unprorated*.\n- **OK EITC**: 5% × federal EITC computed under frozen TY2020 law (HB 2962) $1,157.40 × 0.7243 = **$41.92**, refundable. The $99 reference matches neither frozen-2020 nor current-law parameters.\n\nOne genuine (small) PE gap surfaced while checking: the Form 538-S sales-tax-relief credit isn't modeled at all — but this filer is over the $50k gross-income cap anyway (Line 9 income includes the EITC), so it contributes $0 here.\n\nClosing as PE-correct; flagging the proration omission upstream to TAXSIM (NBER) separately."
+}

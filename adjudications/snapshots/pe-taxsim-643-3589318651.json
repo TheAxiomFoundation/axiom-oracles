@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/643#issuecomment-3589318651",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-11-28T13:17:25Z",
+  "body": "@feenberg you are right, we currently compute this as a marginal rate, will fix here:\nhttps://github.com/PolicyEngine/policyengine-us/issues/6872"
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1179#issuecomment-5638224684",
+  "author": "DTrim99",
+  "createdAt": "2026-09-11T17:29:50Z",
+  "body": "You're right — PE is including the unemployment compensation in Arkansas AGI, and it shouldn't for 2021. Per Act 154 of 2021, Arkansas exempted unemployment benefits for tax years 2020 and 2021 (Line 21: \"For 2021, per Act 154 of 2021, unemployment compensation is not taxable\"). So AR AGI here should be $144,580 − $31,167 = **$113,413**, not $144,580.\n\n(The Line 21 puzzle: the AR1000F keeps unemployment as a standard line across years — it's taxable in most years — but the 2021 instruction tells filers it's exempt, so for 2021 it's excluded to zero. Arkansas taxes it again from 2022, when Act 154's exemption expired.)\n\nWe'll fix this on the PolicyEngine side — excluding unemployment from Arkansas gross income for 2021 (and leaving it taxable from 2022). Filed as PolicyEngine/policyengine-us#9439."
+}

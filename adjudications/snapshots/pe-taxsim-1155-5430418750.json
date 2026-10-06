@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1155#issuecomment-5430418750",
+  "author": "DTrim99",
+  "createdAt": "2026-08-26T19:59:32Z",
+  "body": "You're right — the credit should be about $403, and the cause is our income cap. PolicyEngine freezes the WFTC maximum qualifying income at the 2022 federal EITC value ($49,620 for married-filing-jointly with one child), so this return's AGI of $50,047 falls just over it and we return $0.\n\nWashington DOR's published 2023 limit for one child (MFJ) is $53,120 — the indexed 2023 federal EITC figure (2022's was $49,622). RCW 82.08.0206(2)(d) pins the IRC conformity *version* (June 9, 2022), but that Code still contains the EITC inflation-adjustment provisions (IRC §32(j)), so the amounts still index to each tax year. With $53,120 as the cap, PolicyEngine produces exactly $403.29 (max $625 less 11.5% × ($50,047 − $48,120)) — matching your figure and DOR's table.\n\nFiled as PolicyEngine/policyengine-us#9350. Note our current implementation deliberately freezes the federal limits at 2022, so the fix is under discussion there.\n"
+}

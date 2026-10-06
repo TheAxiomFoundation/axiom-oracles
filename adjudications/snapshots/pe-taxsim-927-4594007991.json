@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/927#issuecomment-4594007991",
+  "author": "feenberg",
+  "createdAt": "2026-06-01T15:23:00Z",
+  "body": "  I think part of the problem with the TA calculation is with the age of the taxpayers, but that isn't everything. I am giving up on TA for this taxpayer and will just try to get taxsim to match PE.  Some questions:\n\n1) Does PE care that the oldest taxpayer is only 47? Does PE want to give all the pension to that taxpayer because they are the eoldest? I was splitting the pension unless the oldest was >=65 and the other was <65. I can always give pension income to the oldest  if you think that is better.\n\n2) Does PE think pension income is always \"normal distribution\" and therefore eligible for exclusion? I have been looking at each state for an age limit. It seems that many have a limit, but with exceptions. We could document that pension income is assumed to be eligible for special treatment, regardless of age."
+}

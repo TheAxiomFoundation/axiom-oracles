@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/920#issuecomment-4579862667",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-05-29T21:04:19Z",
+  "body": "Resolved by PolicyEngine/policyengine-us#8498. PE siitax = $580.90, matching TAXSIM-35 exactly and TaxAct IT-140 Line 8 ($582) within rounding. Closing."
+}

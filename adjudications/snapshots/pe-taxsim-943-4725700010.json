@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/943#issuecomment-4725700010",
+  "author": "PavelMakarchuk",
+  "createdAt": "2026-06-17T03:47:48Z",
+  "body": "Yes — that's the expected §199A behavior. TAXSIM `scorp` maps to PolicyEngine's `partnership_s_corp_income`, which is qualified business income. For higher-income filers the §199A QBI deduction is limited by the W-2-wages / UBIA-of-qualified-property test; with no wages or capital supplied (the default), the deduction phases out — correctly, given zero wages and capital. The `--assume-w2-wages` flag sets `w2_wages_from_qualified_business` so that wage limit doesn't bind, and is the standard flag for these comparison runs.\n\nAgreed that a holistic pass over the pass-through inputs (`scorp`, `pbusinc`, `pprofinc`, `sprofinc`) as a group would be worthwhile — want us to open a separate tracking issue to scope that (it'd benefit from a tax-law review, as you note)?\n"
+}

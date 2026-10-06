@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1046#issuecomment-4886516828",
+  "author": "MaxGhenis",
+  "createdAt": "2026-07-05T15:13:05Z",
+  "body": "Investigated on policyengine-us 1.756.10 (git main @ a2cececb, 2026-07-05) (recomputed via the harness: policyengine + local taxsimtest binary).\n\n**This looks like a TAXSIM-35 bug, and the direction is the opposite of the hypothesis in the issue.** PE *is* applying the Vermont retirement/Social-Security income exemption; TAXSIM is not.\n\nFor this household the implied federal-AGI -> VT-AGI subtraction is:\n- PE: **-7902** (the exemption is applied)\n- TAXSIM: **+113** (essentially no exemption)\n\nPE computes `vt_retirement_income_exemption = 8354.06`, which matches the 2025 Schedule IN-112 Retirement Income Exemption Worksheet to the cent:\n- Federal AGI = 76,295.45; taxable Social Security = 22,578.54; filing JOINT\n- 32 V.S.A. § 5830e(a)(2): JOINT phase-out band 70,000 (full) -> 80,000 (zero), divisor 10,000\n- ratio = (80,000 - 76,295.45) / 10,000 = 0.3705 -> rounded to **0.37**\n- exemption = 22,578.54 x 0.37 = **8,354.06**\n\nTAXSIM applies **$0** VT retirement/SS exemption on the same AGI, which is not consistent with § 5830e / IN-112. PE matches the statute. Leaving open pending the TAXSIM-side report to NBER (grouping with #999, #1000).\n"
+}

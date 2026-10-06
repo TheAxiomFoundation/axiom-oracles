@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/1144#issuecomment-5375438059",
+  "author": "DTrim99",
+  "createdAt": "2026-08-21T21:08:35Z",
+  "body": "Yes — Tables A and B are a bracketed form of a formula, and PolicyEngine implements it: property taxes capped at $1,460, minus 8.785% of household income above $8,060 (Table A), times 80% (Table B). Fed your household income of $15,826 that gives (1,460 − 0.08785 × (15,826 − 8,060)) × 0.80 = **$622**, matching your $620 (the $2 is the bracketed tables vs. the continuous formula). So the tables aren't where we differ.\n\nThe difference is **household income**. Your Schedule H line 12c is $15,826 — wages only; the $3,885 of interest isn't in it. PolicyEngine includes the interest (household income ≈ $19,211 after the $500 dependent reduction), which gives **$384**.\n\nAnd I think the interest belongs there: Schedule H counts taxable interest through Wisconsin income (line 7) and nontaxable US-government/municipal interest through the line 9g add-back. On this return the $3,885 isn't in federal AGI (Form 1 line 1 = 15,826), so it's being treated as tax-exempt — in which case line 9g should add it back, but it's blank. With it included the credit is $384. Does that match your reading of line 9g, or is there a reason it stays out?\n"
+}

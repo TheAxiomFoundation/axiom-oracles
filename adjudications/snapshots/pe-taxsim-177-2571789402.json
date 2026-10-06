@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/177#issuecomment-2571789402",
+  "author": "PavelMakarchuk",
+  "createdAt": "2025-01-05T23:32:40Z",
+  "body": "@noman404 @MaxGhenis we will need to an adjustment to either the US repo or to the TAXSIM repo \nMissouri calculates all parts of the net income tree individually up until the income tax. [Form](https://dor.mo.gov/forms/MO-1040%20Print%20Only_2024.pdf). \nWe reflect this structure in US repo e.g. [mo_taxable_income](https://github.com/PolicyEngine/policyengine-us/blob/master/policyengine_us/variables/gov/states/mo/tax/income/taxable_income/mo_taxable_income.py) - we could either create new files in US which sum up the person level files or add logic to the emulator to sum up those intermediate calculations "
+}

@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/887#issuecomment-4441610835",
+  "author": "feenberg",
+  "createdAt": "2026-05-13T13:42:55Z",
+  "body": "I have modified Taxsim to allow the exclusion regardless of age.  The updated taxsim web page hints that non-excludable distriutions should be entered as interest.  "
+}

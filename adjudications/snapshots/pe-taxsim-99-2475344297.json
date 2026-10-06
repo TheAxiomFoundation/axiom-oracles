@@ -1,0 +1,6 @@
+{
+  "url": "https://github.com/PolicyEngine/policyengine-taxsim/issues/99#issuecomment-2475344297",
+  "author": "PavelMakarchuk",
+  "createdAt": "2024-11-14T03:35:18Z",
+  "body": "The emulator is using the 0.0495 but we also apply a use tax \r\nWill be fixed by PR #88 "
+}
