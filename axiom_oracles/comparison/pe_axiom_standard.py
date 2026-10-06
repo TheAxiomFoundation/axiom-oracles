@@ -1,7 +1,8 @@
 """PolicyEngine-attributed mismatches must carry their Axiom side.
 
-Standard (Max, 2026-09-24): when a policy bug is found in PolicyEngine, the
-same policy must be encoded correctly in Axiom too. In this repository a
+Reported standard (attributed to Max, 2026-09-24; the original decision log
+is private): when a policy bug is found in PolicyEngine, the same policy
+must be encoded correctly in Axiom too. In this repository a
 PolicyEngine policy bug is recorded as a mismatch explanation that blames the
 PolicyEngine leg of a comparison. This module makes the standard structural:
 
@@ -73,10 +74,12 @@ import datetime as _dt
 import http.client
 import json
 import math
+import posixpath
 import re
 import subprocess
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from collections import Counter
 from collections.abc import Callable, Iterable, Mapping
@@ -103,12 +106,12 @@ AXIOM_ENGINE = "axiom"
 # with a comment anchor or query). Either one attributes a mismatch to
 # PolicyEngine; only an issue satisfies the standard's "cite the PE issue".
 PE_LINK_URL_RE = re.compile(
-    r"^https://github\.com/(?i:policyengine)/(?P<repo>[A-Za-z0-9._-]+)/"
-    r"(?P<kind>issues|pull)/(?P<number>[1-9]\d*)/?(?:[?#]\S*)?$"
+    r"^https://github\.com/(?ai:policyengine)/(?P<repo>[A-Za-z0-9._-]+)/"
+    r"(?P<kind>issues|pull)/(?P<number>[1-9][0-9]*)/?(?:[?#]\S*)?$"
 )
 RULESPEC_ISSUE_URL_RE = re.compile(
     r"^https://github\.com/TheAxiomFoundation/(?P<repo>rulespec-[a-z0-9-]+)/"
-    r"issues/(?P<number>[1-9]\d*)/?$"
+    r"issues/(?P<number>[1-9][0-9]*)/?$"
 )
 COMPANION_POINTER_RE = re.compile(
     r"^(?P<repo>rulespec-[a-z0-9-]+)@(?P<sha>[0-9a-f]{40}):"
@@ -152,6 +155,17 @@ _COMMENT = (
 # --------------------------------------------------------------------------
 
 
+def _literal_repository_path(path: str) -> bool:
+    """A Git path without components a filesystem or URL might normalize."""
+
+    return (
+        bool(path)
+        and not any(char in path for char in "\\:")
+        and not any(ord(char) < 32 or ord(char) == 127 for char in path)
+        and all(part not in {"", ".", ".."} for part in path.split("/"))
+    )
+
+
 @dataclass(frozen=True)
 class CompanionPointer:
     """``rulespec-<jur>@<sha>:<path>.test.yaml#<case>``."""
@@ -165,11 +179,11 @@ class CompanionPointer:
     def parse(cls, value: object) -> CompanionPointer | None:
         if not isinstance(value, str):
             return None
-        match = COMPANION_POINTER_RE.match(value)
+        match = COMPANION_POINTER_RE.fullmatch(value)
         if match is None:
             return None
         path = match.group("path")
-        if path.startswith("/") or ".." in Path(path).parts:
+        if not _literal_repository_path(path) or any(char in path for char in "?%"):
             return None
         return cls(
             repo=match.group("repo"),
@@ -190,8 +204,8 @@ def validate_axiom_side_fields(
 ) -> list[str]:
     """Syntax of ``axiom_companion`` / ``axiom_encoding_debt`` on one entry.
 
-    Used by the dispositions schema validator for every entry and by the
-    standard gate for known causes. Presence rules (which entries MUST carry
+    Used by the dispositions schema validator and the standard gate for
+    every entry and known cause. Presence rules (which entries MUST carry
     one) live in :func:`check_records`, because they depend on attribution.
     """
 
@@ -212,7 +226,7 @@ def validate_axiom_side_fields(
             f"counterpart engine); got {disposition_kind!r}"
         )
     if debt is not None and (
-        not isinstance(debt, str) or not RULESPEC_ISSUE_URL_RE.match(debt)
+        not isinstance(debt, str) or not RULESPEC_ISSUE_URL_RE.fullmatch(debt)
     ):
         errors.append(
             f"{label} axiom_encoding_debt must be a TheAxiomFoundation "
@@ -265,17 +279,92 @@ def is_pe_engine(name: object) -> bool:
     )
 
 
+def _pe_link_match(value: object, *, for_attribution: bool = False) -> re.Match | None:
+    """Recognize equivalent GitHub routes before deriving attribution.
+
+    GitHub serves the same issue through case-insensitive hosts, percent-
+    encoded route characters, dot segments, zero-padded numbers and HTTP
+    redirects. Browser hrefs also normalize protocol-relative URLs, ASCII
+    whitespace, backslashes and encoded/IDNA hosts. Matching only one spelling
+    lets these links hide attribution. Query and fragment text do not change
+    the issue's identity. The API's issue/pull endpoints name that same
+    identity; unrelated API endpoints do not.
+    """
+
+    if not isinstance(value, str):
+        return None
+    value = value.translate(str.maketrans("", "", "\t\r\n")).strip(
+        "".join(chr(code) for code in range(33))
+    ).replace("\\", "/")
+    if value.startswith("//"):
+        value = "https:" + value
+    special = re.match(r"^(https?):(.*)$", value, re.IGNORECASE)
+    if special is not None:
+        scheme, remainder = special.groups()
+        slashes = len(remainder) - len(remainder.lstrip("/"))
+        if slashes < 2 and not for_attribution:
+            # Whether a no/one-slash href is relative depends on the page's
+            # scheme. Attribute conservatively, but never manufacture a
+            # valid issue citation from this ambiguous spelling.
+            return None
+        value = f"{scheme}://{remainder.lstrip('/')}"
+    try:
+        parts = urllib.parse.urlsplit(value)
+        host = urllib.parse.unquote(parts.hostname or "").encode("idna").decode("ascii").lower()
+        if host == "www.github.com":
+            host = "github.com"  # GitHub redirects this host to the same route.
+        if (
+            parts.scheme.lower() not in {"http", "https"}
+            or host not in {"github.com", "api.github.com"}
+            or parts.port not in {None, 80 if parts.scheme.lower() == "http" else 443}
+        ):
+            return None
+    except (ValueError, UnicodeError):
+        return None
+    # GitHub does not serve the same issue through duplicate separators or
+    # percent-encoded separators: do not turn an absent route into a citation.
+    if "//" in parts.path or re.search(r"%2f", parts.path, re.IGNORECASE):
+        return None
+    path = posixpath.normpath(urllib.parse.unquote(parts.path))
+    if host == "api.github.com":
+        api = re.fullmatch(
+            r"/repos/(?ai:policyengine)/([A-Za-z0-9._-]+)/(issues|pulls)/([0-9]+)",
+            path,
+        )
+        if api is None:
+            return None
+        repo, kind, number = api.groups()
+        path = f"/PolicyEngine/{repo}/{'pull' if kind == 'pulls' else kind}/{number}"
+    route, _, number = path.rpartition("/")
+    if re.fullmatch(r"[0-9]+", number):
+        path = f"{route}/{number.lstrip('0') or '0'}"
+    return PE_LINK_URL_RE.fullmatch(f"https://github.com{path}")
+
+
 def is_pe_link_url(value: object) -> bool:
     """A PolicyEngine issue or pull request: enough to attribute."""
 
-    return isinstance(value, str) and PE_LINK_URL_RE.match(value) is not None
+    return _pe_link_match(value, for_attribution=True) is not None
 
 
 def is_pe_issue_url(value: object) -> bool:
     """A PolicyEngine issue: what the standard requires an entry to cite."""
 
-    match = PE_LINK_URL_RE.match(value) if isinstance(value, str) else None
+    match = _pe_link_match(value)
     return match is not None and match.group("kind") == "issues"
+
+
+def _repository_identity_agrees(payload: Mapping, owner: str, repo: str) -> bool:
+    """An optional GitHub repository identity must agree with its issue URL."""
+
+    if "repository_url" not in payload:
+        return True
+    repository_url = payload["repository_url"]
+    return (
+        isinstance(repository_url, str)
+        and repository_url.rstrip("/").lower()
+        == f"https://api.github.com/repos/{owner}/{repo}".lower()
+    )
 
 
 def is_pe_owner(owner: object) -> bool:
@@ -337,15 +426,107 @@ class Record:
         return f"{self.source} [{self.id}]"
 
 
-def _dashboard_reports(repo_root: Path) -> dict[str, list[dict]]:
+def _bucket_identifier_problems(entry: Mapping, fields, label: str) -> list[str]:
+    """Identifiers must survive dashboard stringification and bucket splitting.
+
+    The dashboard joins concept/kind with ``::``; the ratchet joins cause
+    identity fields with ``|``. Neither delimiter may occur in an identifier.
+    """
+
+    errors = []
+    for identifier in fields:
+        value = entry.get(identifier)
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"{label}: {identifier} must be a nonempty string")
+        elif "::" in value or "|" in value:
+            errors.append(f"{label}: {identifier} must not contain '::' or '|'")
+    return errors
+
+
+def _report_bucket_problems(report: dict, label: str) -> list[str]:
+    rows = report.get("mismatches")
+    if rows is None:
+        return []
+    if not isinstance(rows, list):
+        return [f"{label}: mismatches must be a list"]
+    errors = []
+    for index, row in enumerate(rows):
+        row_label = f"{label} mismatches[{index}]"
+        if not isinstance(row, Mapping):
+            errors.append(f"{row_label}: mismatch row must be a mapping")
+        else:
+            errors.extend(
+                _bucket_identifier_problems(row, ("concept", "kind"), row_label)
+            )
+    return errors
+
+
+def _dashboard_report_paths(repo_root: Path, errors: list[str]) -> dict[str, Path]:
+    """Include the dashboard manifest's reports, including nested locators."""
+
+    data_dir = repo_root / DASHBOARD_RELATIVE_DIR
+    paths = {path.name: path for path in data_dir.glob("*.json")}
+    manifest_path = data_dir / "manifest.json"
+    if not manifest_path.exists():
+        return paths
+    label = manifest_path.relative_to(repo_root).as_posix()
+    try:
+        manifest = json.loads(manifest_path.read_text())
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        errors.append(f"{label}: cannot read dashboard manifest ({exc})")
+        return paths
+    declared = manifest.get("reports") if isinstance(manifest, Mapping) else None
+    if not isinstance(declared, list):
+        errors.append(f"{label}: reports must be a list of literal relative paths")
+        return paths
+    for name in declared:
+        if (
+            not isinstance(name, str)
+            or not _literal_repository_path(name)
+            or any(char in name for char in "?#%")
+            or any(char.isspace() for char in name)
+        ):
+            errors.append(f"{label}: invalid literal report path {name!r}")
+            continue
+        path = data_dir / name
+        if not path.is_file():
+            errors.append(f"{label}: declared report {name!r} is missing")
+            continue
+        paths[name] = path
+    return paths
+
+
+def _dashboard_reports(repo_root: Path, errors: list[str]) -> dict[str, list[dict]]:
     by_suite: dict[str, list[dict]] = {}
-    for path in sorted((repo_root / DASHBOARD_RELATIVE_DIR).glob("*.json")):
+    data_dir = repo_root / DASHBOARD_RELATIVE_DIR
+    for name, path in sorted(_dashboard_report_paths(repo_root, errors).items()):
+        parts = Path(name).parts
+        if any(data_dir.joinpath(*parts[:index]).is_symlink()
+               for index in range(1, len(parts) + 1)):
+            errors.append(f"{path.relative_to(repo_root)}: report path must not use symlinks")
+            continue
         try:
             data = json.loads(path.read_text())
-        except (OSError, json.JSONDecodeError):
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+            errors.append(f"{path.relative_to(repo_root)}: cannot read JSON ({exc})")
             continue
-        if isinstance(data, dict) and data.get("suite") and "summary" in data:
-            by_suite.setdefault(str(data["suite"]), []).append(data)
+        if (
+            isinstance(data, dict)
+            and any(key in data for key in ("suite", "engines", "mismatches"))
+        ):
+            problems = _bucket_identifier_problems(
+                data, ("suite",), path.relative_to(repo_root).as_posix()
+            )
+            errors.extend(problems)
+            if not problems:
+                # dashboard/src/utils/data.js corrects this known generator
+                # default using the full manifest filename, not its basename.
+                from_file = re.fullmatch(
+                    r"axiom-policyengine-([a-z]{2}-snap-ecps)\.json", name
+                )
+                if from_file and data["suite"] == "nyc-synthetic":
+                    data["suite"] = from_file.group(1)
+                by_suite.setdefault(data["suite"], []).append(data)
     return by_suite
 
 
@@ -501,7 +682,13 @@ def known_cause_id(cause: dict) -> str:
     ]
     engines = cause.get("engines")
     if isinstance(engines, dict) and engines:
-        parts.append(f"{engines.get('left')}-{engines.get('right')}")
+        # Escape the separator in the left engine, and escape literal escape
+        # markers in both names. Conventional engine pairs retain their ids.
+        def escaped(value):
+            return str(value).replace("%", "%25").replace("|", "%7C")
+
+        left = escaped(engines.get("left")).replace("-", "%2D")
+        parts.append(f"{left}-{escaped(engines.get('right'))}")
     return "|".join(parts)
 
 
@@ -584,10 +771,48 @@ def _known_cause_rows(cause: dict, known_causes: list[dict], reports: list[dict]
 def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
     """Every PolicyEngine-attributed explanation, plus syntax errors."""
 
-    reports = _dashboard_reports(repo_root)
     records: list[Record] = []
     errors: list[str] = []
+    reports = _dashboard_reports(repo_root, errors)
+    known_causes_path = repo_root / KNOWN_CAUSES_RELATIVE_PATH
+    causes = []
+    if known_causes_path.exists():
+        payload = json.loads(known_causes_path.read_text())
+        causes = [c for c in payload.get("entries") or [] if isinstance(c, dict)]
     dispositions_dir = repo_root / DISPOSITIONS_RELATIVE_DIR
+    cause_suites = {c["suite"] for c in causes if isinstance(c.get("suite"), str)}
+    disposition_suites = {p.stem for p in dispositions_dir.glob("*.yaml")}
+    for suite, suite_reports in reports.items():
+        accepted = []
+        for report in suite_reports:
+            rows = report.get("mismatches") or []
+            # SPSM diagnostic rows have no concept. They participate only if
+            # a cause/disposition is added for that suite. Concept buckets
+            # and any report/row naming PolicyEngine are trusted input.
+            relevant = (
+                suite in cause_suites | disposition_suites
+                or any(is_pe_engine(e) for e in _report_counterparts(report))
+                or not isinstance(rows, list)
+                or any(
+                    not isinstance(row, Mapping)
+                    or "concept" in row
+                    or any(is_pe_engine(e) for e in _row_sides(report, row))
+                    or (
+                        isinstance(row.get("disposition"), Mapping)
+                        and row["disposition"].get("disposition")
+                        == UPSTREAM_ENGINE_GAP
+                    )
+                    for row in rows
+                )
+            )
+            problems = (
+                _report_bucket_problems(report, f"dashboard report [{suite}]")
+                if relevant else []
+            )
+            errors.extend(problems)
+            if not problems:
+                accepted.append(report)
+        reports[suite] = accepted
     for path in sorted(dispositions_dir.glob("*.yaml")):
         if path.name in CAMPAIGN_LOCAL_DISPOSITIONS_FILES:
             continue
@@ -597,6 +822,13 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
         for entry in document.get("entries") or []:
             if not isinstance(entry, dict):
                 continue
+            errors.extend(
+                validate_axiom_side_fields(
+                    entry,
+                    f"{source} [{entry.get('id')}]",
+                    disposition_kind=entry.get("disposition"),
+                )
+            )
             basis, case_ids, axiom_values = attribute_disposition(
                 entry, reports.get(suite, [])
             )
@@ -619,13 +851,14 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
                     row_kinds=row_kinds,
                 )
             )
-    known_causes_path = repo_root / KNOWN_CAUSES_RELATIVE_PATH
     if known_causes_path.exists():
-        payload = json.loads(known_causes_path.read_text())
         source = KNOWN_CAUSES_RELATIVE_PATH.as_posix()
-        causes = [c for c in payload.get("entries") or [] if isinstance(c, dict)]
         for cause in causes:
             cause_id = known_cause_id(cause)
+            identifier_errors = _bucket_identifier_problems(
+                cause, ("suite", "concept", "kind"), f"{source} [{cause_id}]"
+            )
+            errors.extend(identifier_errors)
             if "engines" in cause:
                 engines = cause["engines"]
                 if isinstance(engines, Mapping) and not engines:
@@ -648,6 +881,8 @@ def collect_records(repo_root: Path) -> tuple[list[Record], list[str]]:
             errors.extend(
                 validate_axiom_side_fields(cause, f"{source} [{cause_id}]")
             )
+            if identifier_errors:
+                continue
             issue = cause.get("issue_url")
             owned = is_pe_owner(cause.get("fix_owner"))
             if not (owned or is_pe_link_url(issue)):
@@ -1212,10 +1447,27 @@ class LocalGitSource:
         return _git(root, *args)
 
     def read(self, repo: str, sha: str, path: str) -> str | None:
+        if not _literal_repository_path(path):
+            return None
         result = self._git(repo, "show", f"{sha}:{path}")
         if result is None or result.returncode != 0:
             return None
         return result.stdout
+
+    def is_regular_file(self, repo: str, sha: str, path: str) -> bool | None:
+        if not _literal_repository_path(path):
+            return False
+        result = self._git(repo, "ls-tree", "-z", sha, "--", path)
+        if result is None or result.returncode != 0:
+            return None
+        for entry in result.stdout.split("\0"):
+            metadata, separator, name = entry.partition("\t")
+            fields = metadata.split()
+            if separator and name == path:
+                return len(fields) == 3 and fields[:2] in (
+                    ["100644", "blob"], ["100755", "blob"]
+                )
+        return False
 
     def is_merged(self, repo: str, sha: str) -> bool | None:
         result = self._git(repo, "merge-base", "--is-ancestor", sha, self.main_ref)
@@ -1258,6 +1510,7 @@ class GitHubSource:
         self.token = token
         self.attempts = attempts
         self.backoff = backoff
+        self._trees: dict[tuple[str, str], tuple[int, object]] = {}
 
     def _get(self, url: str, *, api: bool = False) -> tuple[int, bytes]:
         request = urllib.request.Request(url)
@@ -1295,8 +1548,11 @@ class GitHubSource:
         return self._json(url)
 
     def read(self, repo: str, sha: str, path: str) -> str | None:
+        if not _literal_repository_path(path):
+            return None
+        encoded_path = urllib.parse.quote(path, safe="/")
         status, body = self._get(
-            f"https://raw.githubusercontent.com/{self.owner}/{repo}/{sha}/{path}"
+            f"https://raw.githubusercontent.com/{self.owner}/{repo}/{sha}/{encoded_path}"
         )
         if status == 200:
             return body.decode("utf-8")
@@ -1305,6 +1561,42 @@ class GitHubSource:
         raise SourceUnavailable(
             f"could not fetch {repo}@{sha[:12]}:{path} (HTTP {status or 'no response'})"
         )
+
+    def is_regular_file(self, repo: str, sha: str, path: str) -> bool | None:
+        """Bind content to its literal Git path and regular-file mode.
+
+        Raw symlink blobs can contain case-shaped YAML. The complete pinned
+        tree distinguishes those from files, without following a symlink.
+        A truncated or unavailable tree cannot prove the file's identity.
+        """
+
+        if not _literal_repository_path(path):
+            return False
+        key = (repo, sha)
+        if key not in self._trees:
+            self._trees[key] = self._json(
+                f"https://api.github.com/repos/{self.owner}/{repo}/git/trees/{sha}?recursive=1"
+            )
+        status, payload = self._trees[key]
+        if status == 404:
+            return False
+        if (
+            status != 200
+            or not isinstance(payload, Mapping)
+            or payload.get("truncated") is not False
+            or not isinstance(payload.get("tree"), list)
+        ):
+            return None
+        matches = [
+            entry for entry in payload["tree"]
+            if isinstance(entry, Mapping) and entry.get("path") == path
+        ]
+        if len(matches) != 1:
+            return False
+        entry = matches[0]
+        return entry.get("type") == "blob" and entry.get("mode") in {
+            "100644", "100755"
+        }
 
     def is_merged(self, repo: str, sha: str) -> bool | None:
         status, payload = self._json(
@@ -1533,6 +1825,12 @@ class CompanionResolver:
         key = (repo, sha, path)
         if key not in self._cache:
             try:
+                regular = getattr(self.source, "is_regular_file", None)
+                if regular is not None:
+                    verified = regular(repo, sha, path)
+                    if verified is not True:
+                        self._cache[key] = None if verified is False else _UNAVAILABLE
+                        return self._cache[key]
                 text = self.source.read(repo, sha, path)
             except SourceUnavailable:
                 self._cache[key] = _UNAVAILABLE
@@ -1554,6 +1852,9 @@ class CompanionResolver:
         return self._main[repo]
 
     def resolve(self, record: Record) -> list[str]:
+        syntax = validate_axiom_side_fields(record.entry, record.label())
+        if syntax:
+            return syntax
         problems = self.resolve_pe_issue(record) + companion_row_kind_problems(record)
         companion = record.entry.get("axiom_companion")
         if not isinstance(companion, Mapping):
@@ -1587,7 +1888,8 @@ class CompanionResolver:
         for raw in companion.get("tests") or []:
             pointer = CompanionPointer.parse(raw)
             if pointer is None:
-                continue  # syntax already reported
+                problems.append(f"{record.label()}: invalid companion pointer {raw!r}")
+                continue
             label = f"{record.label()} companion {pointer}"
             if self.require_merged:
                 merged = self._is_merged(pointer.repo, pointer.sha)
@@ -1661,11 +1963,7 @@ class CompanionResolver:
         grandfathered citations remain governed by the offline presence gate.
         """
 
-        match = (
-            PE_LINK_URL_RE.match(record.pe_issue)
-            if isinstance(record.pe_issue, str)
-            else None
-        )
+        match = _pe_link_match(record.pe_issue)
         if match is None or match.group("kind") != "issues":
             return []  # Presence and URL syntax are checked by the offline gate.
         label = f"{record.label()} PolicyEngine issue {record.pe_issue}"
@@ -1686,10 +1984,7 @@ class CompanionResolver:
         if "pull_request" in payload:
             return [f"{label}: is a pull request, not an issue"]
         actual_url = payload.get("html_url")
-        actual = (
-            PE_LINK_URL_RE.match(actual_url)
-            if isinstance(actual_url, str) else None
-        )
+        actual = _pe_link_match(actual_url)
         if (
             type(payload.get("number")) is not int
             or payload["number"] != number
@@ -1697,6 +1992,7 @@ class CompanionResolver:
             or actual.group("kind") != "issues"
             or actual.group("repo").lower() != repo.lower()
             or int(actual.group("number")) != number
+            or not _repository_identity_agrees(payload, "PolicyEngine", repo)
         ):
             return [
                 f"{label}: cannot verify the issue identity in the GitHub "
@@ -1797,7 +2093,7 @@ class CompanionResolver:
         """``axiom_encoding_debt`` must name an open issue in a rulespec repo."""
 
         url = record.entry.get("axiom_encoding_debt")
-        match = RULESPEC_ISSUE_URL_RE.match(url) if isinstance(url, str) else None
+        match = RULESPEC_ISSUE_URL_RE.fullmatch(url) if isinstance(url, str) else None
         if match is None:
             return []  # syntax already reported
         label = f"{record.label()} axiom_encoding_debt {url}"
@@ -1812,7 +2108,7 @@ class CompanionResolver:
             return [f"{label}: is a pull request, not an issue"]
         actual_url = payload.get("html_url")
         actual = (
-            RULESPEC_ISSUE_URL_RE.match(actual_url)
+            RULESPEC_ISSUE_URL_RE.fullmatch(actual_url)
             if isinstance(actual_url, str) else None
         )
         number = int(match.group("number"))
@@ -1821,6 +2117,9 @@ class CompanionResolver:
             or payload["number"] != number
             or actual is None
             or int(actual.group("number")) != number
+            or not _repository_identity_agrees(
+                payload, "TheAxiomFoundation", actual.group("repo")
+            )
         ):
             return [
                 f"{label}: cannot verify the issue identity in the GitHub "

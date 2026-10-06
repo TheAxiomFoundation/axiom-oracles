@@ -103,6 +103,11 @@ same rule when two things hold:
 A cause whose mismatch cleared attributes nothing. Of two causes for one
 bucket, only the one the dashboard shows attributes.
 An explicit `engines` mapping must be nonempty; omit it for a generic cause.
+Suite, concept and kind identifiers used for attribution must be nonempty
+strings without `::` or `|`, so dashboard buckets and ratchet identities
+cannot alias one another. Unknown string kinds remain attributed when the
+dashboard selects the cause; only actual eligibility row kinds allow judgment
+assertions instead of numeric assertions.
 
 Every such entry must carry:
 
@@ -170,7 +175,11 @@ files can come from local clones instead):
   qualify. Both open and closed issues qualify; absent or unverifiable reads
   fail closed.
 - **Companion tests:**
-  - The test file exists at the pinned commit, and that commit is on main.
+  - The literal repository-relative `.test.yaml` path exists as a regular
+    Git file at the pinned commit, and that commit is on main. URL queries,
+    percent escapes, Windows separators, empty/dot path components and
+    symlinks cannot stand in for that file. Case and Unicode are matched
+    exactly; the raw fetch encodes the literal path.
   - The case asserts each legal id.
   - A case named like the disputed case asserts the Axiom value from the
     comparison. Amounts require numeric assertions within an absolute
