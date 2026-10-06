@@ -552,7 +552,10 @@ In September 2026, the comparison register
 (`dashboard/public/data/rule_verification_summary.json` at commit d1e9d5ad8)
 placed 14,030 of the 34,810 rules in rulespec-us in programs that at least one
 comparison with another calculator or dataset covers. A comparison of a program
-need not exercise every rule in it. The register counted the other 20,780 as
-uncompared; that figure runs high, because the register lags some published
-comparisons (it lists Arizona, Georgia, and Maryland SNAP as coverage-only,
-though their SNAP QC replays are published).
+need not exercise every rule in it. The rest is not a count of uncompared rules.
+The register maps 16,716 rules to no program at all, and published comparisons
+check some of them directly: the US tariff duty
+(`dashboard/public/data/axiom-usitc-us-tariff.json`) and the New Jersey pilot
+income tax (`dashboard/public/data/axiom-policyengine-taxsim-nj-income-tax-liability.json`).
+The register also lists Arizona, Georgia, and Maryland SNAP as coverage-only,
+though their SNAP QC replays were already published.
