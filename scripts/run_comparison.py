@@ -1133,8 +1133,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     elif runner_type == "snap-qc-compare":
         # The USDA SNAP QC public-use file is the oracle; its identity is the
         # pinned posting for the fiscal year (immutable, sha256-verified by the
-        # loader). The bridge's own summary.provenance carries the richer
-        # overlay/engine identity for the run.
+        # loader). The bridge's own summary.provenance carries the overlay
+        # identity (file sha256s, patches, module-id rewrites) and the local
+        # paths of the engine binary and rulespec root; it records no engine
+        # commit or binary hash (TheAxiomFoundation/axiom-oracles#584).
         oracle = {"name": "snap-qc", "fiscal_year": params.get("fiscal_year")}
         try:
             from axiom_oracles.populations.snap_qc import SNAP_QC_PINS
