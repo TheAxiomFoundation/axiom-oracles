@@ -11,6 +11,9 @@ const CLASSIFIED_KINDS = [
   "axiom_encoding_gap",
 ];
 const KNOWN_KINDS = [...CLASSIFIED_KINDS, "unexplained"];
+// JSON reports cannot supply this key. Object spreads retain it when the
+// loader filters rows, preserving only assessments made from original rows.
+const LOADER_ASSESSMENT = Symbol("unfiltered unexplained assessment");
 const object = value => value !== null && typeof value === "object" && !Array.isArray(value);
 const has = (value, key) => Object.hasOwn(value, key);
 const truthy = value => {
@@ -48,13 +51,16 @@ function repr(value) {
 
 export function admitCount(value) {
   return typeof value === "number" && Number.isFinite(value) &&
-    Number.isInteger(value) && value >= 0 ? value : null;
+    Number.isSafeInteger(value) && value >= 0 ? value : null;
 }
 
 function countDefect(value, field, suite) {
   if (typeof value === "boolean") return `${suite}: ${field} is a boolean, not a count`;
   if (typeof value === "number" && Number.isInteger(value) && value < 0) {
     return `${suite}: ${field} is negative (${BigInt(value)})`;
+  }
+  if (typeof value === "number" && value > Number.MAX_SAFE_INTEGER) {
+    return `${suite}: ${field} exceeds the maximum safe integer (${Number.MAX_SAFE_INTEGER})`;
   }
   return `${suite}: ${field} is not a non-negative integer (${repr(value)})`;
 }
@@ -65,10 +71,10 @@ function isOpenRulespecIssue(url) {
 }
 
 function causeFor(knownCauses, report, concept, kind, suite) {
-  const engines = report.engines || {};
+  const engines = object(report.engines) ? report.engines : {};
   const candidates = knownCauses.filter(cause => cause.suite === suite &&
     cause.concept === concept && (cause.kind ?? null) === (kind ?? null));
-  return candidates.find(cause => truthy(cause.engines) &&
+  return candidates.find(cause => object(cause.engines) && truthy(cause.engines) &&
     (cause.engines.left ?? null) === (engines.left ?? null) &&
     (cause.engines.right ?? null) === (engines.right ?? null)) ||
     candidates.find(cause => !truthy(cause.engines));
@@ -109,6 +115,16 @@ export function assessUnexplained(report, {
     );
     mismatch = rows.length;
   }
+  const comparison = has(summary, "comparison_count") ? read(summary.comparison_count, "comparison_count") : null;
+  const matched = has(summary, "match_count") ? read(summary.match_count, "match_count") : null;
+  let inconsistentDifference = 0;
+  if (comparison !== null && matched !== null && comparison - matched > mismatch) {
+    inconsistentDifference = comparison - matched;
+    defects.push(`${suiteLabel}: comparison_count - match_count (${inconsistentDifference}) exceeds mismatch_count (${mismatch})`);
+    mismatch = inconsistentDifference;
+  }
+  const annotatedUnexplained = rows.filter(row => object(row) &&
+    object(row.disposition) && row.disposition.disposition === "unexplained").length;
   let block = summary.dispositioned;
   if (block == null) block = {};
   else if (!object(block)) {
@@ -127,7 +143,17 @@ export function assessUnexplained(report, {
   }
   const admittedCounts = Object.fromEntries(Object.keys(counts).sort().map(kind =>
     [kind, read(counts[kind], `counts.${kind}`)]));
-  const classified = CLASSIFIED_KINDS.reduce((sum, kind) => sum + (admittedCounts[kind] || 0), 0);
+  let classified = 0;
+  let classifiedOverflow = false;
+  for (const kind of CLASSIFIED_KINDS) {
+    const value = admittedCounts[kind] || 0;
+    if (value > Number.MAX_SAFE_INTEGER - classified) classifiedOverflow = true;
+    else classified += value;
+  }
+  if (classifiedOverflow) {
+    defects.push(`${suiteLabel}: combined classified count exceeds the maximum safe integer (${Number.MAX_SAFE_INTEGER})`);
+    classified = 0;
+  }
   const signals = [];
   if (has(block, "unexplained_count")) {
     const signal = read(block.unexplained_count, "unexplained_count");
@@ -140,7 +166,7 @@ export function assessUnexplained(report, {
   if (filename != null && filename !== "" && typeof filename !== "string") {
     defects.push(`${suiteLabel}: dispositions_file must be a repository-relative string`);
   }
-  const mode = typeof filename === "string" && filename ? "file" : classified > 0 ? "inline" : "none";
+  const mode = typeof filename === "string" && filename ? "file" : classified > 0 || classifiedOverflow ? "inline" : "none";
   let covered = 0;
   let axiom = 0;
   let count;
@@ -162,7 +188,7 @@ export function assessUnexplained(report, {
         defects.push(`${suiteLabel}: mismatch row must be an object`);
         continue;
       }
-      if (has(row, "disposition") || !truthy(row.concept)) continue;
+      if (has(row, "disposition") || typeof row.concept !== "string" || !row.concept) continue;
       const cause = causeFor(known_causes, report, row.concept, row.kind, suite);
       if (cause) {
         covered += 1;
@@ -177,21 +203,36 @@ export function assessUnexplained(report, {
     } else count = mismatch - covered;
     count = Math.max(count, declared || 0);
   }
+  if (classified > mismatch) {
+    defects.push(`${suiteLabel}: classified count (${classified}) exceeds mismatches (${mismatch})`);
+    count = Math.max(mismatch, declared || 0);
+  }
+  if (annotatedUnexplained > count) {
+    defects.push(`${suiteLabel}: ${annotatedUnexplained} rows annotated unexplained exceed assessed count (${count})`);
+  }
+  count = Math.max(count, inconsistentDifference, annotatedUnexplained);
   return {
     count, mode, mismatch_count: mismatch, declared, classified,
     known_cause_covered: covered, axiom_attributed: axiom, defects, notes,
   };
 }
 
+/** Record an assessment before the loader filters the report's rows. */
+export function assessUnfilteredReport(report, options) {
+  const assessment = assessUnexplained(report, options);
+  report.unexplained_assessment = assessment;
+  report[LOADER_ASSESSMENT] = assessment;
+}
+
 /**
  * The unexplained publication gate's domain, mirroring
  * scripts/unexplained_ratchet.py: a report with a suite and engines, carrying
- * summary and mismatches, not a typed diagnostic suite, with an Axiom leg in
+ * a summary (rows may be omitted), not a typed diagnostic suite, with an Axiom leg in
  * either the {left, right} or the named-engine (grid) shape.
  */
 export function isUnexplainedGated(report, isDiagnostic = () => false) {
   if (!object(report) || !truthy(report.suite) || !truthy(report.engines)) return false;
-  if (!has(report, "mismatches") || !has(report, "summary")) return false;
+  if (!has(report, "summary")) return false;
   if (isDiagnostic(report.suite)) return false;
   const engines = object(report.engines) ? report.engines : {};
   return engines.left === "axiom" || engines.right === "axiom" || has(engines, "axiom");
@@ -209,7 +250,7 @@ export function gatedUnexplainedBySuite(reports, {
   const bySuite = {};
   for (const report of reports || []) {
     if (!isUnexplainedGated(report, isDiagnostic)) continue;
-    const assessment = report.unexplained_assessment
+    const assessment = report[LOADER_ASSESSMENT]
       || assessUnexplained(report, { known_causes });
     bySuite[report.suite] = Math.max(bySuite[report.suite] ?? 0, assessment.count);
   }

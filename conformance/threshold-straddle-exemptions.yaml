@@ -1,0 +1,12 @@
+schema_version: 1
+exemptions:
+- program: nz/independent-earner-tax-credit
+  view: nz/independent-earner-tax-credit
+  site_id: nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status/expr/left/right:items/1~items/0:individual_tax_credits_months_in_year[0]=12
+  side: above
+  reason: The numerator counts eligible whole months within the tax year. A tax year has twelve
+    months, so more than twelve eligible whole months is outside the legal input domain. The
+    below side remains an evidence gap.
+  citation: 'Income Tax Act 2007, section LC 13(2) and (6): whole months in the tax year divided
+    by 12. RuleSpec nz:statutes/income_tax/credits/individual_credits, individual_tax_credits_months_in_year
+    and independent_earner_tax_credit_before_status, at 89a7d25d.'

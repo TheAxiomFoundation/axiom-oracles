@@ -14,12 +14,15 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads
+
 CLASSIFIED_DISPOSITION_KINDS = (
     "explained_residual",
     "upstream_engine_gap",
     "bridge_artifact",
     "axiom_encoding_gap",
 )
+MAX_SAFE_COUNT = 2**53 - 1
 KNOWN_DISPOSITION_KINDS = (*CLASSIFIED_DISPOSITION_KINDS, "unexplained")
 
 
@@ -37,12 +40,12 @@ class UnexplainedAssessment:
 
 
 def admit_count(value: object) -> int | None:
-    """Admit only nonnegative integers and finite integral floats, never bools."""
+    """Admit nonnegative integers representable exactly in both Python and JavaScript."""
     if isinstance(value, bool):
         return None
-    if isinstance(value, int) and value >= 0:
+    if isinstance(value, int) and 0 <= value <= MAX_SAFE_COUNT:
         return value
-    if isinstance(value, float) and math.isfinite(value) and value.is_integer() and value >= 0:
+    if isinstance(value, float) and math.isfinite(value) and value.is_integer() and 0 <= value <= MAX_SAFE_COUNT:
         return int(value)
     return None
 
@@ -55,6 +58,8 @@ def count_defect(value: object, field: str, suite: str) -> str:
         isinstance(value, float) and math.isfinite(value) and value.is_integer() and value < 0
     ):
         return f"{suite}: {field} is negative ({int(value)})"
+    if isinstance(value, (int, float)) and value > MAX_SAFE_COUNT:
+        return f"{suite}: {field} exceeds the maximum safe integer ({MAX_SAFE_COUNT})"
     return f"{suite}: {field} is not a non-negative integer ({value!r})"
 
 
@@ -63,7 +68,7 @@ def load_known_causes(repo_root: Path | None = None) -> list[dict]:
     path = root / "dashboard/public/data/known_causes.json"
     if not path.exists():
         return []
-    return json.loads(path.read_text()).get("entries") or []
+    return strict_json_loads(path.read_text()).get("entries") or []
 
 
 def is_open_rulespec_issue(url: object) -> bool:
@@ -74,7 +79,8 @@ def is_open_rulespec_issue(url: object) -> bool:
 
 def cause_for(known_causes, report: dict, concept: str, kind: str, suite: str):
     """Prefer an exact engine-pair label; otherwise use an engine-less label."""
-    engines = report.get("engines") or {}
+    engines = report.get("engines")
+    engines = engines if isinstance(engines, dict) else {}
     candidates = [
         cause for cause in known_causes
         if cause.get("suite") == suite
@@ -83,7 +89,7 @@ def cause_for(known_causes, report: dict, concept: str, kind: str, suite: str):
     ]
     for cause in candidates:
         pair = cause.get("engines")
-        if pair and pair.get("left") == engines.get("left") and pair.get("right") == engines.get("right"):
+        if isinstance(pair, dict) and pair and pair.get("left") == engines.get("left") and pair.get("right") == engines.get("right"):
             return cause
     return next((cause for cause in candidates if not cause.get("engines")), None)
 
@@ -101,8 +107,8 @@ def _file_defect(filename: str, suite: str, aliases: set[str], repo_root: Path) 
     if not path.is_file():
         return f"{suite}: dispositions_file {filename!r} does not exist in the repository"
     try:
-        payload = yaml.safe_load(path.read_text())
-    except (OSError, UnicodeError, yaml.YAMLError):
+        payload = strict_yaml_loads(path.read_text())
+    except (OSError, UnicodeError, ValueError, yaml.YAMLError):
         payload = None
     errors = validate_dispositions(payload, path_label=filename, repo_root=repo_root)
     if errors:
@@ -165,6 +171,21 @@ def assess_unexplained(
             f"is {mismatch}"
         )
         mismatch = len(rows)
+    comparison = read(summary["comparison_count"], "comparison_count") if "comparison_count" in summary else None
+    matched = read(summary["match_count"], "match_count") if "match_count" in summary else None
+    inconsistent_difference = 0
+    if comparison is not None and matched is not None and comparison - matched > mismatch:
+        inconsistent_difference = comparison - matched
+        defects.append(
+            f"{suite}: comparison_count - match_count ({inconsistent_difference}) "
+            f"exceeds mismatch_count ({mismatch})"
+        )
+        mismatch = inconsistent_difference
+    annotated_unexplained = sum(
+        isinstance(row, dict) and isinstance(row.get("disposition"), dict)
+        and row["disposition"].get("disposition") == "unexplained"
+        for row in rows
+    )
     block = summary.get("dispositioned")
     if block is None:
         block = {}
@@ -185,6 +206,12 @@ def assess_unexplained(
         kind: read(value, f"counts.{kind}") for kind, value in sorted(counts.items())
     }
     classified = sum(admitted_counts.get(kind) or 0 for kind in CLASSIFIED_DISPOSITION_KINDS)
+    classified_overflow = classified > MAX_SAFE_COUNT
+    if classified_overflow:
+        defects.append(f"{suite}: combined classified count exceeds the maximum safe integer ({MAX_SAFE_COUNT})")
+        # Reject this combined explanatory signal as a whole. Keep its mode
+        # below so rejecting it cannot activate known-cause subtraction.
+        classified = 0
     signals = []
     if "unexplained_count" in block:
         signal = read(block["unexplained_count"], "unexplained_count")
@@ -198,7 +225,7 @@ def assess_unexplained(
     filename = block.get("dispositions_file")
     if filename is not None and filename != "" and not isinstance(filename, str):
         defects.append(f"{suite}: dispositions_file must be a repository-relative string")
-    mode = "file" if isinstance(filename, str) and filename else "inline" if classified > 0 else "none"
+    mode = "file" if isinstance(filename, str) and filename else "inline" if classified > 0 or classified_overflow else "none"
     covered = 0
     axiom = 0
     if mode in ("file", "inline"):
@@ -222,7 +249,7 @@ def assess_unexplained(
             if not isinstance(row, dict):
                 defects.append(f"{suite}: mismatch row must be an object")
                 continue
-            if "disposition" in row or not row.get("concept"):
+            if "disposition" in row or not isinstance(row.get("concept"), str) or not row["concept"]:
                 continue
             cause = cause_for(known_causes, report, row["concept"], row.get("kind"), suite)
             if cause is not None:
@@ -238,6 +265,14 @@ def assess_unexplained(
         # Even a block with no explanatory classes cannot erase a declared
         # unexplained signal (including when a mutation removes its last class).
         count = max(count, declared or 0)
+    if classified > mismatch:
+        defects.append(f"{suite}: classified count ({classified}) exceeds mismatches ({mismatch})")
+        count = max(mismatch, declared or 0)
+    if annotated_unexplained > count:
+        defects.append(
+            f"{suite}: {annotated_unexplained} rows annotated unexplained exceed assessed count ({count})"
+        )
+    count = max(count, inconsistent_difference, annotated_unexplained)
     return UnexplainedAssessment(
         count, mode, mismatch, declared, classified, covered, axiom,
         tuple(defects), tuple(notes),

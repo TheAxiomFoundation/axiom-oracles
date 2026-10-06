@@ -39,6 +39,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads  # noqa: E402
+
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
 ARTIFACT_PATH = REPO_ROOT / "conformance" / "closure" / "dk-boerne-og-ungeydelse.yaml"
@@ -212,8 +214,8 @@ def _module_id(path: str) -> str:
 
 def _load_yaml_bytes(data: bytes, *, label: str) -> Any:
     try:
-        return yaml.safe_load(data)
-    except yaml.YAMLError as exc:
+        return strict_yaml_loads(data)
+    except (yaml.YAMLError, ValueError) as exc:
         raise _SourceError(f"could not parse {label}: {exc}") from exc
 
 
@@ -267,8 +269,8 @@ def _read_corpus_spine(
         if not line.strip():
             continue
         try:
-            row = json.loads(line)
-        except json.JSONDecodeError as exc:
+            row = strict_json_loads(line)
+        except ValueError as exc:
             raise _SourceError(
                 f"{commit}:{relative_path}:{line_number}: invalid JSON: {exc}"
             ) from exc
@@ -685,8 +687,8 @@ def _read_instrument_graph(path: Path = INSTRUMENT_GRAPH_PATH) -> dict[str, Any]
     except OSError as exc:
         raise _SourceError(f"could not read instrument graph {path}: {exc}") from exc
     try:
-        snapshot = json.loads(data)
-    except json.JSONDecodeError as exc:
+        snapshot = strict_json_loads(data)
+    except ValueError as exc:
         raise _SourceError(f"instrument graph is not valid JSON: {exc}") from exc
     if not isinstance(snapshot, Mapping):
         raise _SourceError("instrument graph must be a JSON object")
@@ -730,8 +732,8 @@ def _load_decisions(path: Path) -> dict[str, Any]:
     if not path.exists():
         return _empty_decisions()
     try:
-        document = yaml.safe_load(path.read_text())
-    except (OSError, yaml.YAMLError) as exc:
+        document = strict_yaml_loads(path.read_text())
+    except (OSError, yaml.YAMLError, ValueError) as exc:
         raise _SourceError(
             f"could not read committed decisions from {path}: {exc}"
         ) from exc
@@ -1857,8 +1859,8 @@ def verify_artifact(
     errors: list[str] = []
     try:
         text = artifact_path.read_text()
-        loaded = yaml.safe_load(text)
-    except (OSError, yaml.YAMLError) as exc:
+        loaded = strict_yaml_loads(text)
+    except (OSError, yaml.YAMLError, ValueError) as exc:
         return VerificationResult(
             None, None, (f"could not read {artifact_path}: {exc}",)
         )

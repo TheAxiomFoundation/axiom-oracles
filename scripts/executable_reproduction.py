@@ -40,6 +40,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads  # noqa: E402
+
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
 from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner  # noqa: E402
@@ -162,8 +164,8 @@ def _sha256(path: Path) -> str:
 
 def _read_json(path: Path) -> dict[str, Any]:
     try:
-        document = json.loads(path.read_text())
-    except (OSError, json.JSONDecodeError) as exc:
+        document = strict_json_loads(path.read_text())
+    except (OSError, ValueError) as exc:
         raise ValueError(f"cannot read JSON {path}: {exc}") from exc
     if not isinstance(document, dict):
         raise ValueError(f"{path}: top level must be a mapping")
@@ -180,12 +182,12 @@ def _configured_engine_pin(repo_root: Path = REPO_ROOT) -> str:
     for spec in REPORT_SPECS:
         config_path = repo_root / str(spec["config"])
         try:
-            config = yaml.safe_load(config_path.read_text())
+            config = strict_yaml_loads(config_path.read_text())
             parameters = config["runner"]["parameters"]
             pin = parameters["engine_binary_sha256"]
-        except (OSError, TypeError, KeyError, yaml.YAMLError) as exc:
+        except (OSError, TypeError, KeyError, yaml.YAMLError, ValueError) as exc:
             raise ValueError(
-                f"{config_path}: cannot read runner.parameters.engine_binary_sha256"
+                f"{config_path}: cannot read runner.parameters.engine_binary_sha256: {exc}"
             ) from exc
         _require(
             parameters.get("suite") == spec["suite"],
@@ -419,8 +421,8 @@ def _committed_case_rows(
     expanded: list[dict[str, Any]] = []
     for chunk in evidence.chunks:
         try:
-            payload = json.loads((chunk_dir / chunk.name).read_text())
-        except (OSError, json.JSONDecodeError) as exc:
+            payload = strict_json_loads((chunk_dir / chunk.name).read_text())
+        except (OSError, ValueError) as exc:
             raise ValueError(f"{chunk_dir / chunk.name}: cannot read chunk: {exc}") from exc
         _require(
             isinstance(payload, list),

@@ -25,6 +25,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_json_loads  # noqa: E402
+
 from axiom_oracles.core.case import Concepts  # noqa: E402
 from axiom_oracles.suites.de_worker import (  # noqa: E402
     DE_WORKER_PERIOD,
@@ -113,8 +115,8 @@ def _sha256(path: Path) -> str:
 
 def _load_object(path: Path) -> dict:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = strict_json_loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
         try:
             label = path.relative_to(REPO_ROOT)
         except ValueError:

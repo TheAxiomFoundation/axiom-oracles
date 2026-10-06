@@ -16,6 +16,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_json_loads  # noqa: E402
+
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
 OUT_DIR = REPO_ROOT / "closure" / "de"
@@ -326,8 +328,8 @@ def load_source() -> dict:
             raise ClosureError(
                 "DE closure source bytes changed; review and re-pin the denominator"
             )
-        source = json.loads(raw)
-    except (OSError, json.JSONDecodeError) as exc:
+        source = strict_json_loads(raw)
+    except (OSError, ValueError) as exc:
         raise ClosureError(f"cannot read the DE closure source: {exc}") from exc
     if not isinstance(source, dict):
         raise ClosureError("DE closure source must contain an object")
@@ -856,7 +858,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         summary = build(load_source())
-    except (OSError, json.JSONDecodeError, ClosureError) as exc:
+    except (OSError, ValueError, ClosureError) as exc:
         print(f"DE closure ERROR: {exc}", file=sys.stderr)
         return 1
     rendered = _render(summary)

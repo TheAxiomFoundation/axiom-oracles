@@ -37,7 +37,6 @@ import copy
 import hashlib
 import importlib.util
 import json
-import math
 import re
 import sys
 from collections import Counter
@@ -46,6 +45,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
 from types import ModuleType
+from typing import TypeVar
 
 import yaml
 
@@ -65,6 +65,7 @@ from axiom_oracles.conformance.unexplained import (  # noqa: E402
 )
 from axiom_oracles.evidence import (  # noqa: E402
     strict_json_loads,
+    strict_yaml_loads,
     validate_suite_evidence,
 )
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
@@ -386,46 +387,7 @@ def sha256_of(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def _strict_yaml_loads(raw: str) -> object:
-    """Reject ambiguous mappings, cycles and non-finite numbers in YAML evidence."""
-
-    class UniqueLoader(yaml.SafeLoader):
-        pass
-
-    def mapping(loader, node, deep=False):
-        keys = set()
-        for key_node, _ in node.value:
-            if key_node.tag == "tag:yaml.org,2002:merge":
-                continue
-            key = loader.construct_object(key_node, deep=deep)
-            if key in keys:
-                raise ValueError(f"duplicate YAML key {key!r}")
-            keys.add(key)
-        loader.flatten_mapping(node)
-        return loader.construct_mapping(node, deep=deep)
-
-    UniqueLoader.add_constructor(
-        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, mapping
-    )
-    value = yaml.load(raw, Loader=UniqueLoader)
-
-    def finite_tree(item, ancestors):
-        if isinstance(item, float) and not math.isfinite(item):
-            raise ValueError("non-finite YAML number")
-        if isinstance(item, (dict, list, tuple, set)):
-            if id(item) in ancestors:
-                raise ValueError("cyclic YAML evidence")
-            ancestors = ancestors | {id(item)}
-            children = (
-                [part for pair in item.items() for part in pair]
-                if isinstance(item, dict)
-                else item
-            )
-            for child in children:
-                finite_tree(child, ancestors)
-
-    finite_tree(value, set())
-    return value
+_strict_yaml_loads = strict_yaml_loads
 
 
 def _load(path: Path) -> dict:
@@ -829,10 +791,11 @@ def _suite_verdict(entry: dict) -> tuple[dict, list[dict], list[str]]:
     )
     try:
         loaded_report = _load(report_path)
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+    except (OSError, UnicodeDecodeError, ValueError) as exc:
         # The validator already records the precise parse/read defect. Keep
         # computing a defective leg so the certificate surfaces that finding
         # instead of crashing before it can report it.
+        defects.append(f"{entry['suite']}: report cannot be parsed: {exc}")
         report = {}
         report_loaded = False
     else:
@@ -1914,6 +1877,19 @@ class PremiseRoute:
     dispatch_key: str | None
 
 
+@dataclass(frozen=True)
+class CertificateRoute:
+    """Select the complete certificate shape before composing its premises."""
+
+    name: str
+    selects: Callable[[dict], bool]
+    build: Callable[..., dict]
+    dispatch_key: str | None
+
+
+_Route = TypeVar("_Route", PremiseRoute, CertificateRoute)
+
+
 def _route_flag(spec: dict, key: str) -> bool:
     if key.startswith("computed."):
         computed = spec.get("computed")
@@ -2047,7 +2023,7 @@ EXECUTABLE_ROUTES = _premise_routes(
 )
 
 
-def _select_route(routes: tuple[PremiseRoute, ...], spec: dict) -> PremiseRoute:
+def _select_route(routes: tuple[_Route, ...], spec: dict) -> _Route:
     selected = [route for route in routes if route.selects(spec)]
     if len(selected) != 1:
         raise ValueError(
@@ -2130,6 +2106,7 @@ def _cross_premise_blockers(
                 and SHA256.fullmatch(program_set["rows_sha256"])
                 and isinstance(program_set.get("program_count"), int)
                 and not isinstance(program_set.get("program_count"), bool)
+                and program_set["program_count"] >= 1
             )
 
         if not (comparable(closed_set) and comparable(executable_set)):
@@ -2726,10 +2703,19 @@ def _exercise_threshold_blockers(program: str, block: dict) -> list[str]:
         )
         label = refs if direct else f"{site['id']} ({refs})"
         missing = []
-        if not site.get("below"):
+        if not site.get("below") and "below" not in site.get("exempted_sides", []):
             missing.append("below")
-        if not site.get("above"):
+        if not site.get("above") and "above" not in site.get("exempted_sides", []):
             missing.append("above")
+        if not missing:
+            continue
+        if site.get("kind") == "comparison":
+            outcomes = [site["side_meaning"][side] for side in missing]
+            blockers.append(
+                f"exercise: {program} threshold {label} has no live oracle evaluation "
+                f"with {site['op']} outcome {' or '.join(outcomes)}"
+            )
+            continue
         detail = ""
         if direct and missing == ["above"] and site.get("max_observed") is not None:
             detail = f" (max observed {site['max_observed']})"
@@ -2761,13 +2747,17 @@ def _de_census_row(program: str, evidence: list[dict]) -> dict:
     return row
 
 
-def _build_pending_de_certificate(program: str, spec: dict) -> dict:
+def _build_pending_de_certificate(
+    program: str, spec: dict, *, verify_producers: bool = False
+) -> dict:
     """Emit a fail-closed certificate for a declared candidate with no run."""
 
     evidence: list[dict] = []
     row = _de_census_row(program, evidence)
-    closed = _closed_verdict(program, spec, evidence)
-    executable = _executable_verdict(program, spec, evidence)
+    closed = _closed_verdict(program, spec, evidence, verify_producer=verify_producers)
+    executable = _executable_verdict(
+        program, spec, evidence, verify_producer=verify_producers
+    )
     binding_blockers = _cross_premise_blockers(
         spec,
         _select_route(CLOSED_ROUTES, spec),
@@ -2833,14 +2823,12 @@ def _build_pending_de_certificate(program: str, spec: dict) -> dict:
     }
 
 
-def build_certificate(
+def _build_standard_certificate(
     program: str,
     spec: dict,
     *,
     verify_producers: bool = False,
 ) -> dict:
-    if spec.get("pending_de_candidate"):
-        return _build_pending_de_certificate(program, spec)
     if spec.get("computed_de_exercise"):
         census, evidence = {}, []
     elif spec.get("attested_exercise_receipt"):
@@ -2920,11 +2908,7 @@ def build_certificate(
     blockers = [
         *all_defects,
         *(spec.get("blockers") or []),
-        *(
-            []
-            if spec.get("computed_de_executable")
-            else ((de_census_row or {}).get("blockers") or [])
-        ),
+        *((de_census_row or {}).get("blockers") or []),
     ]
     straddle_blocks = (
         [exercised_block["threshold_straddle"]]
@@ -2938,8 +2922,7 @@ def build_certificate(
         blockers.extend(_exercise_threshold_blockers(program, straddle))
     for leg in reference_legs:
         for missing in leg.get("missing_required_legs") or []:
-            if not spec.get("computed_de_executable"):
-                blockers.append(f"{leg['suite']}: missing required leg {missing}")
+            blockers.append(f"{leg['suite']}: missing required leg {missing}")
         if leg["unexplained"] or leg["axiom_attributed_open"]:
             open_classes = leg.get("axiom_attributed_open_classes") or {}
             open_detail = ", ".join(
@@ -3133,6 +3116,30 @@ def build_certificate(
             )
         ),
     }
+
+
+CERTIFICATE_ROUTES = (
+    CertificateRoute(
+        "pending_de",
+        _route_selector("pending_de_candidate", ()),
+        _build_pending_de_certificate,
+        "pending_de_candidate",
+    ),
+    CertificateRoute(
+        "standard",
+        _route_selector(None, ("pending_de_candidate",)),
+        _build_standard_certificate,
+        None,
+    ),
+)
+
+
+def build_certificate(
+    program: str, spec: dict, *, verify_producers: bool = False
+) -> dict:
+    return _select_route(CERTIFICATE_ROUTES, spec).build(
+        program, spec, verify_producers=verify_producers
+    )
 
 
 def build_all(*, verify_producers: bool = False) -> dict[str, dict]:

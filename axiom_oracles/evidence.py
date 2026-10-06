@@ -30,6 +30,8 @@ from pathlib import Path
 import re
 from typing import Literal
 
+import yaml
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 CHUNK_INDEX_SCHEMA_VERSION = "axiom_oracles.chunk_index.v1"
@@ -53,11 +55,13 @@ def _finite_json_float(value: str) -> float:
 
 
 def _reject_duplicate_json_keys(pairs: list[tuple[str, object]]) -> dict:
-    keys = [key for key, _value in pairs]
-    duplicates = sorted({key for key in keys if keys.count(key) > 1})
-    if duplicates:
+    document = dict(pairs)
+    if len(document) != len(pairs):
+        duplicates = sorted(
+            key for key, count in Counter(key for key, _ in pairs).items() if count > 1
+        )
         raise ValueError(f"duplicate JSON key(s) {duplicates!r}")
-    return dict(pairs)
+    return document
 
 
 def strict_json_loads(raw: str | bytes) -> object:
@@ -74,6 +78,47 @@ def strict_json_loads(raw: str | bytes) -> object:
         parse_constant=_reject_json_constant,
         parse_float=_finite_json_float,
     )
+
+
+def strict_yaml_loads(raw: str | bytes) -> object:
+    """Reject ambiguous mappings, cycles and non-finite numbers in YAML evidence."""
+
+    class UniqueLoader(yaml.SafeLoader):
+        pass
+
+    def mapping(loader, node, deep=False):
+        keys = set()
+        for key_node, _ in node.value:
+            if key_node.tag == "tag:yaml.org,2002:merge":
+                raise ValueError("YAML merge keys are not permitted in evidence")
+            key = loader.construct_object(key_node, deep=deep)
+            if key in keys:
+                raise ValueError(f"duplicate YAML key {key!r}")
+            keys.add(key)
+        return loader.construct_mapping(node, deep=deep)
+
+    UniqueLoader.add_constructor(
+        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, mapping
+    )
+    value = yaml.load(raw, Loader=UniqueLoader)
+
+    def finite_tree(item, ancestors):
+        if isinstance(item, float) and not math.isfinite(item):
+            raise ValueError("non-finite YAML number")
+        if isinstance(item, (dict, list, tuple, set)):
+            if id(item) in ancestors:
+                raise ValueError("cyclic YAML evidence")
+            ancestors = ancestors | {id(item)}
+            children = (
+                [part for pair in item.items() for part in pair]
+                if isinstance(item, dict)
+                else item
+            )
+            for child in children:
+                finite_tree(child, ancestors)
+
+    finite_tree(value, set())
+    return value
 
 
 def _finite_native_number(value: object) -> int | float | None:

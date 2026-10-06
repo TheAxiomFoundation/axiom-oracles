@@ -118,9 +118,10 @@ def seed_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
     # The unexplained publication gate scopes out kind:"diagnostic" suites via
     # the dashboard's suite table; without it, nyc-synthetic (a diagnostic
     # suite the gate must ignore) would trip the fixture's ratchet.
-    suites_table = Path("dashboard/src/utils/suites.js")
-    (seed / suites_table).parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(REPO_ROOT / suites_table, seed / suites_table)
+    for name in ("suites.js", "diagnostic-suites.json"):
+        suites_table = Path("dashboard/src/utils") / name
+        (seed / suites_table).parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(REPO_ROOT / suites_table, seed / suites_table)
     for md in REPO_ROOT.glob("*.md"):  # dispositions evidence (e.g. PROGRESS.md)
         shutil.copy2(md, seed / md.name)
     _grant_perturbation_headroom(seed)
@@ -678,6 +679,14 @@ def _add_first_time_report(clone: Path, suite: str) -> str:
     filename = f"axiom-policyengine-{suite}.json"
     doc = json.loads((clone / REPORT).read_text())
     doc["suite"] = suite
+    # Dispositions declare their owning suite; a new suite has no such ledger.
+    doc["summary"].pop("dispositioned", None)
+    # New suites have a zero unexplained ceiling. Give this manifest-race
+    # fixture a clean comparison instead of inheriting NC's six disagreements.
+    doc["mismatches"] = []
+    doc["summary"]["mismatch_count"] = 0
+    doc["summary"]["match_count"] = doc["summary"]["comparison_count"]
+    doc["summary"]["match_rate"] = 100.0
     (clone / SEED_DATA / filename).write_text(json.dumps(doc, indent=2) + "\n")
     manifest_path = clone / SEED_DATA / "manifest.json"
     manifest = (
@@ -688,6 +697,20 @@ def _add_first_time_report(clone: Path, suite: str) -> str:
     manifest["reports"].append(filename)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n")
     return filename
+
+
+@pytest.mark.parametrize("suite", ["zz-fake-a", "zz-fake-b"])
+def test_first_time_fixture_has_no_foreign_dispositions(tmp_path, suite):
+    from axiom_oracles.conformance.unexplained import assess_unexplained
+
+    (tmp_path / SEED_DATA).mkdir(parents=True)
+    shutil.copy2(REPO_ROOT / REPORT, tmp_path / REPORT)
+    filename = _add_first_time_report(tmp_path, suite)
+    report = json.loads((tmp_path / SEED_DATA / filename).read_text())
+    assert "dispositioned" not in report["summary"]
+    assessment = assess_unexplained(report, repo_root=REPO_ROOT)
+    assert not assessment.defects
+    assert assessment.count == 0
 
 
 def test_first_time_reports_from_racing_legs_merge_manifest(origin, tmp_path):

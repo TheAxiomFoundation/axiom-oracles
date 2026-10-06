@@ -26,6 +26,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_json_loads  # noqa: E402
+
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
@@ -159,8 +161,8 @@ def _sha256(path: Path) -> str:
 
 def _load(path: Path) -> dict[str, Any]:
     try:
-        value = json.loads(path.read_text())
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        value = strict_json_loads(path.read_text())
+    except (OSError, UnicodeError, ValueError) as exc:
         raise ValueError(f"cannot read {path}: {exc}") from exc
     if not isinstance(value, dict):
         raise ValueError(f"{path}: top level must be an object")
@@ -804,8 +806,8 @@ def _json_at(revision: str, path: Path) -> dict[str, Any] | None:
     if shown.returncode:
         return None
     try:
-        value = json.loads(shown.stdout)
-    except json.JSONDecodeError as exc:
+        value = strict_json_loads(shown.stdout)
+    except ValueError as exc:
         raise ValueError(f"ancestor {revision}:{relative} is invalid JSON") from exc
     _require(
         isinstance(value, dict), f"ancestor {revision}:{relative} must be an object"
@@ -1163,8 +1165,8 @@ def _live_reproduction(
                 stdin=json.dumps(row["request"], sort_keys=True, separators=(",", ":")),
             )
             try:
-                response = json.loads(process.stdout)
-            except json.JSONDecodeError as exc:
+                response = strict_json_loads(process.stdout)
+            except ValueError as exc:
                 raise ValueError(f"{row['id']}: engine returned invalid JSON") from exc
             _require(
                 isinstance(response, dict),

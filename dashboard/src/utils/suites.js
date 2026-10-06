@@ -13,6 +13,8 @@
  *  - "diagnostic": instrumentation / gap-analysis run; excluded from headlines
  */
 
+import diagnosticSuites from "./diagnostic-suites.json" with { type: "json" };
+
 export const US_STATE_NAMES = {
   AL: "Alabama", AK: "Alaska", AZ: "Arizona", AR: "Arkansas",
   CA: "California", CO: "Colorado", CT: "Connecticut", DE: "Delaware",
@@ -80,6 +82,7 @@ export const FAMILY_LABELS = {
 };
 
 const SUITE_OVERRIDES = {
+  ...diagnosticSuites,
   "ca-federal-schedule-tax-spsm": {
     family: "canada_personal_income_tax",
     jurisdiction: "CAN",
@@ -839,30 +842,6 @@ const SUITE_OVERRIDES = {
     region: "de",
     kind: "household",
     order: 601,
-  },
-  "nyc-income-tax-gap": {
-    family: "nyc_income_tax",
-    jurisdiction: "NYC",
-    label: "NYC income tax components",
-    region: "us",
-    kind: "diagnostic",
-    order: 400,
-  },
-  "nyc-income-tax-ecps-diagnostic": {
-    family: "nyc_income_tax",
-    jurisdiction: "NYC",
-    label: "NYC income tax ECPS diagnostic",
-    region: "us",
-    kind: "diagnostic",
-    order: 410,
-  },
-  "nyc-synthetic": {
-    family: "nyc_income_tax",
-    jurisdiction: "NYC",
-    label: "NYC synthetic scenarios",
-    region: "us",
-    kind: "diagnostic",
-    order: 420,
   },
 };
 

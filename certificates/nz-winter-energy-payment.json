@@ -252,6 +252,7 @@
             "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
             "complete": true,
             "defects": [],
+            "exemptions": [],
             "mode": "computed",
             "requested_output_roots": [
               "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period"

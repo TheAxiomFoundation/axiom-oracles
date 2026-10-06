@@ -24,11 +24,12 @@ import tempfile
 from pathlib import Path
 from typing import Any
 
-import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads  # noqa: E402
 
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
@@ -208,7 +209,7 @@ def _programs(root: Path) -> list[dict[str, str]]:
             (root / row["program_spec"]).is_file(), f"missing {row['program_spec']}"
         )
         _require((root / row["module"]).is_file(), f"missing {row['module']}")
-        program_spec = yaml.safe_load((root / row["program_spec"]).read_text())
+        program_spec = strict_yaml_loads((root / row["program_spec"]).read_text())
         outputs = (
             program_spec.get("outputs") if isinstance(program_spec, dict) else None
         )
@@ -309,7 +310,7 @@ def _expected_vector(interval: Any) -> dict[str, float]:
 def _reviewed_conformant_cases(repo_root: Path) -> list[dict[str, Any]]:
     intervals, unbridged = load_reference(repo_root / REFERENCE_DIRNAME)
     _require(not unbridged, f"reference contains unbridged origins: {unbridged}")
-    report = json.loads((repo_root / REPORT_PATH).read_text())
+    report = strict_json_loads((repo_root / REPORT_PATH).read_text())
     families = report.get("cases")
     _require(
         report.get("suite") == "us-tariff-panel" and isinstance(families, list),
@@ -667,7 +668,7 @@ def main(argv: list[str] | None = None) -> int:
     committed = None
     if args.check:
         try:
-            committed = json.loads(artifact.read_text())
+            committed = strict_json_loads(artifact.read_text())
             validate_artifact(committed)
             ref = committed["rulespec"]["sha"]
             if args.rulespec_ref is not None:
@@ -675,7 +676,7 @@ def main(argv: list[str] | None = None) -> int:
                     _git_commit(args.rulespec_root, args.rulespec_ref) == ref,
                     "--rulespec-ref differs from receipt",
                 )
-        except (OSError, KeyError, ValueError, json.JSONDecodeError) as exc:
+        except (OSError, KeyError, ValueError) as exc:
             print(f"invalid executable artifact: {exc}", file=sys.stderr)
             return 1
     try:

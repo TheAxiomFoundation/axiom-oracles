@@ -30,6 +30,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads  # noqa: E402
+
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
 from axiom_oracles.suites.de_worker import DE_WORKER_OUTPUTS  # noqa: E402
@@ -86,8 +88,8 @@ def _serialized(record: dict[str, Any]) -> str:
 
 def _load_object(path: Path, label: str) -> dict[str, Any]:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = strict_json_loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
         raise DEAxiomLegError(f"cannot read {label}: {exc}") from exc
     if not isinstance(value, dict):
         raise DEAxiomLegError(f"{label} must contain an object")
@@ -96,8 +98,8 @@ def _load_object(path: Path, label: str) -> dict[str, Any]:
 
 def _load_yaml_object(path: Path, label: str) -> dict[str, Any]:
     try:
-        value = yaml.safe_load(path.read_text(encoding="utf-8"))
-    except (OSError, yaml.YAMLError) as exc:
+        value = strict_yaml_loads(path.read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError, ValueError) as exc:
         raise DEAxiomLegError(f"cannot read {label}: {exc}") from exc
     if not isinstance(value, dict):
         raise DEAxiomLegError(f"{label} must contain an object")

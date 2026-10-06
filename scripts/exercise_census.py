@@ -13,9 +13,10 @@ with committed per-case evidence (inline ``cases`` or
 ``dashboard/public/data/cases/<suite>/chunk-*.json``), it counts distinct
 values per evidence field and per verdict concept across all cases, and writes
 ``conformance/exercise-census.json``. View-scoped engine traces also measure
-whether live evaluations fall strictly on both sides of each reachable
-parameter threshold, after reproducing the recorded outputs with the committed
-compiled IR. Without those bound bytes, threshold coverage is unavailable and
+live observations at input-free parameter thresholds: strict below/above for
+min/max, false/true outcomes for comparisons. A validated legal exemption may
+record a missing, unreachable side separately. Recorded outputs must reproduce
+exactly with the committed compiled IR. Without those bound bytes, threshold coverage is unavailable and
 the suite cannot claim to be exercised.
 
 Reading a row, three states matter per field:
@@ -72,6 +73,8 @@ OUTPUT_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_yaml_loads  # noqa: E402
+
 from axiom_oracles.evidence import (  # noqa: E402
     EvidenceChunk,
     is_safe_suite_name,
@@ -102,7 +105,9 @@ def _threshold_straddle_for_view(
     would let an in-process artifact edit retain a computed exercise verdict.
     The caller has already validated the trace identity and view root receipt.
     """
-    from scripts.threshold_straddle import compute_threshold_straddle
+    from scripts.threshold_straddle import (
+        apply_threshold_exemptions, compute_threshold_straddle,
+    )
 
     trace_ref = report["experiment"]["trace"]
     executable_path = (
@@ -130,12 +135,22 @@ def _threshold_straddle_for_view(
             raise ValueError("compiled artifact bytes disagree with comparison report")
     except (OSError, UnicodeDecodeError, ValueError) as exc:
         return _unavailable_threshold_straddle(str(exc))
-    return compute_threshold_straddle(
-        compiled_bytes,
-        traces,
-        view=view,
-        roots=receipt["requested_output_roots"],
+    # Validate the complete ledger against every view, including entries that
+    # could otherwise go stale outside this certificate's requested view.
+    blocks = {
+        trace_view: compute_threshold_straddle(compiled_bytes, trace_bytes, view=trace_view)
+        for trace_view in sorted({e["view"] for e in traces["evaluations"]})
+    }
+    blocks[view] = compute_threshold_straddle(
+        compiled_bytes, trace_bytes, view=view, roots=receipt["requested_output_roots"]
     )
+    try:
+        ledger_bytes = (REPO_ROOT / "conformance/threshold-straddle-exemptions.yaml").read_bytes()
+    except OSError as exc:
+        blocks[view]["defects"].append(f"threshold exemption ledger: {exc}")
+        blocks[view]["complete"] = False
+        return blocks[view]
+    return apply_threshold_exemptions(blocks, ledger_bytes)[view]
 
 
 def _manifest_strict_clean() -> dict[str, bool]:
@@ -204,19 +219,9 @@ def _bridged_through_by_suite() -> dict[str, dict[str, str]]:
     with no manifest is unaudited — never "nothing bridged". Historical suite
     aliases map to the same manifest so committed reports keep their names.
     """
-    try:
-        import yaml
-    except ModuleNotFoundError:  # pragma: no cover - environment guard
-        sys.exit(
-            "exercise_census needs PyYAML to read bridge manifests. Run under "
-            "the project env (`uv run python scripts/exercise_census.py`) or "
-            "install the package first — bridged-through state must come from "
-            "the manifests, never be silently skipped."
-        )
-
     by_suite: dict[str, dict[str, str]] = {}
     for path in sorted(MANIFEST_DIR.glob("*.yaml")):
-        manifest = yaml.safe_load(path.read_text())
+        manifest = strict_yaml_loads(path.read_text())
         if not isinstance(manifest, dict):
             continue
         bridged = {

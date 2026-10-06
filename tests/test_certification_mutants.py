@@ -910,7 +910,7 @@ def test_same_suite_empty_dispositions_document_cannot_authorize(tmp_path):
 
 
 def test_weighted_mass_must_be_finite_and_nonnegative():
-    for weight, marker in ((float("nan"), "finite"), (-5.0, "negative")):
+    for weight, marker in ((float("nan"), "non-standard JSON numeric constant"), (-5.0, "negative")):
         name = f"zz-r3-w{marker}.json"
         _mutant(
             name,
@@ -5743,9 +5743,15 @@ rules:
         == descriptor["encoding_manifest"]["source_file_sha256"]
     )
     wrong_checkout_commit = copy.deepcopy(descriptor)
-    wrong_checkout_commit["checkout_observation"]["commit"] = "0" * 40
+    wrong_checkout_commit["checkout_observation"]["commit"] = "a" * 40
     with pytest.raises(executable.DEExecutableError, match="pinned commit"):
         executable._validate_signed_descriptor_document(wrong_checkout_commit, manifest)
+
+    assert executable.GIT_SHA.fullmatch("0" * 40) is None
+    digit_only_commit = copy.deepcopy(descriptor)
+    digit_only_commit["checkout_observation"]["commit"] = "0" * 40
+    with pytest.raises(executable.DEExecutableError, match="full lowercase commit SHA"):
+        executable._validate_signed_descriptor_document(digit_only_commit, manifest)
 
     wrong_checkout_tree = copy.deepcopy(descriptor)
     wrong_checkout_tree["checkout_observation"]["tree"] = "0" * 40

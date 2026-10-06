@@ -73,7 +73,9 @@ def _universe_paths() -> list[Path]:
     return sorted(
         p
         for p in CONFORMANCE_DIR.glob("*.yaml")
-        if p.stem not in {"ratchet", "unexplained-ratchet"}
+        if p.stem not in {
+            "ratchet", "unexplained-ratchet", "threshold-straddle-exemptions"
+        }
     )
 
 

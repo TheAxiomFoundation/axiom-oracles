@@ -34,9 +34,16 @@ adversarially audited.
 - **exercised** — the comparison evidence actually executed: bound case
   corpora, validated bridge manifests with the strict opt-in, a census that
   binds every manifest sha so no evidence edit is invisible, and computed
-  oracle observations strictly below and strictly above every parameter
-  threshold reachable from the certified roots. Only observations on live
-  evaluation paths count; equality alone does not straddle a threshold.
+  oracle observations at every reachable site where an input-dependent operand
+  meets a parameter-dependent, input-free threshold. Min/max sites require
+  strictly below and strictly above observations. Ordered comparisons require
+  both false and true outcomes; equality belongs to the operator's outcome.
+  Only observations on live evaluation paths count. A legally unreachable
+  missing side may instead have a typed decision in
+  `conformance/threshold-straddle-exemptions.yaml`, identifying the program/view,
+  stable site id, side, reason and legal citation. The site must exist and the
+  side must be unobserved; stale decisions fail validation. Certificates list
+  exemptions separately, and never count them as observations.
   The threshold interpreter must reproduce every recorded requested output
   exactly from the sha-bound compiled IR. Programs without committed IR
   cannot claim exercised, except when authenticated source bytes prove that
@@ -129,8 +136,11 @@ is announced anywhere, in any words, without Max's explicit clear.
   reports — and each certificate's closed verdict carries either its
   enumerated worklist or the missing-block marker.
 - v4 (2026-09-24): exercised requires computed evidence on both sides of
-  every parameter threshold reachable from the certified roots, with exact
-  interpreter replay and live-path observations. Programs without committed,
+  every input-free parameter threshold reachable from the certified roots,
+  with exact interpreter replay and live-path observations. Min/max require
+  strict below/above observations; comparisons require false/true outcomes.
+  Legally unreachable missing sides require validated, cited exemption
+  decisions; merely untested sides cannot be exempted. Programs without committed,
   sha-bound IR cannot claim exercised; authenticated literal-only parameter
   roots can prove zero reachable sites. The NZ income-tax evidence never
   exceeds the 180000 threshold, so its exercised premise becomes false.

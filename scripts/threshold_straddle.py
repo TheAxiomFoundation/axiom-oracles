@@ -14,15 +14,20 @@ import hashlib
 import itertools
 import json
 import re
-from collections import defaultdict
+from collections import OrderedDict, defaultdict
+from copy import deepcopy
 from datetime import date
 from decimal import Decimal, ROUND_FLOOR, ROUND_HALF_EVEN, ROUND_HALF_UP, localcontext
 from typing import Any
 
-from axiom_oracles.evidence import strict_json_loads
+from yaml import YAMLError
+
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads
 
 MAX_COEFFICIENT = (1 << 96) - 1
 ORDERED_OPS = {"lt", "lte", "gt", "gte"}
+# Content-addressed replay: rereading and hashing callers' bytes still detects edits.
+_REPLAY_CACHE: OrderedDict[tuple[str, str], dict] = OrderedDict()
 
 
 class InterpretationError(ValueError):
@@ -87,6 +92,10 @@ def _nearest(observations: list[tuple[Decimal, Decimal]], *, below: bool) -> str
         for left, right in observations
         if (left < right if below else left > right)
     ]
+    return _nearest_candidate(candidates)
+
+
+def _nearest_candidate(candidates: list[tuple[Decimal, Decimal]]) -> str | None:
     if not candidates:
         return None
     with localcontext() as context:
@@ -129,6 +138,16 @@ class Interpreter:
         self.parameters = {
             row["name"]: row for row in artifact["program"]["parameters"]
         }
+        ids = [row.get("id") or row["name"] for row in self.derived.values()]
+        if len(set(ids)) != len(ids):
+            raise InterpretationError("duplicate derived ids")
+        for row in self.derived.values():
+            ident = row.get("id")
+            if ident is not None and (
+                not isinstance(ident, str)
+                or not re.fullmatch(r"[^#\s]+#[A-Za-z_][A-Za-z0-9_]*", ident)
+            ):
+                raise InterpretationError("invalid derived id")
         self.roots = {
             row.get("id") or row["name"]: row["name"] for row in self.derived.values()
         }
@@ -177,7 +196,9 @@ class Interpreter:
             ]
             if not applicable:
                 raise InterpretationError(f"no derived formula version for {name}")
-            i, selected = max(applicable, key=lambda item: item[1]["effective_from"])
+            i, selected = max(
+                applicable, key=lambda item: (item[1]["effective_from"], item[0])
+            )
             return selected["expr"], f"/versions/{i}/expr"
         return row["expr"], "/expr"
 
@@ -189,7 +210,9 @@ class Interpreter:
         ]
         if not versions:
             raise InterpretationError(f"no parameter version for {name}")
-        selected = max(versions, key=lambda v: v["effective_from"])
+        selected = max(
+            enumerate(versions), key=lambda item: (item[1]["effective_from"], item[0])
+        )[1]
         if str(index) not in selected["values"]:
             raise InterpretationError(f"no parameter value {name}[{index}]")
         return _literal(selected["values"][str(index)])
@@ -339,27 +362,6 @@ class Interpreter:
             parameters[json.dumps(ref, sort_keys=True)] = ref
         return inputs, parameters
 
-    def input_terms(self, expr: dict) -> dict[str, Decimal]:
-        """Retain dependencies conservatively except identical expressions.
-
-        Algebraic cancellation of ``x + p - x`` is unsound here: rounding to
-        the engine's finite coefficient can make that difference depend on x.
-        Expand derived references, but preserve every arithmetic operation.
-        """
-        if not self.dependencies(expr)[0]:
-            return {}
-
-        def expand(value):
-            if isinstance(value, dict):
-                if value.get("kind") == "derived":
-                    return expand(self.formula(value["name"])[0])
-                return {key: expand(item) for key, item in value.items()}
-            if isinstance(value, list):
-                return [expand(item) for item in value]
-            return value
-
-        return {json.dumps(expand(expr), sort_keys=True): Decimal(1)}
-
     def sites(self, roots: list[str]) -> list[dict]:
         result: list[dict] = []
         visited = set()
@@ -385,9 +387,11 @@ class Interpreter:
             for (left_path, left), (right_path, right) in pairs:
                 li, lp = self.dependencies(left)
                 ri, rp = self.dependencies(right)
-                if not (lp or rp) or self.input_terms(left) == self.input_terms(right):
+                # A threshold must be parameter-dependent and input-free.
+                # In particular, x versus floor(x) cannot define such a site.
+                if not ((li and rp and not ri) or (ri and lp and not li)):
                     continue
-                # Orient the input-bearing side first when the other is constant.
+                # Orient the input-bearing side first.
                 if ri and not li:
                     left_path, right_path = right_path, left_path
                     left, right = right, left
@@ -405,6 +409,14 @@ class Interpreter:
                         "derived": derived_id,
                         "path": path,
                         "kind": expr["kind"],
+                        **(
+                            {
+                                "op": expr["op"],
+                                "side_meaning": {"below": "false", "above": "true"},
+                            }
+                            if expr["kind"] == "comparison"
+                            else {}
+                        ),
                         "parameters": refs,
                         "_key": (name, path),
                         "_left": (name, f"{path}/{left_path}"),
@@ -419,9 +431,86 @@ class Interpreter:
         return result
 
 
+def _replay(
+    compiled_program: bytes, traces: dict, trace_sha256: str, *, copy_traces: bool
+) -> dict:
+    """Cache evaluation replay by content pair, retaining live values."""
+    key = (hashlib.sha256(compiled_program).hexdigest(), trace_sha256)
+    if key in _REPLAY_CACHE:
+        _REPLAY_CACHE.move_to_end(key)
+        return _REPLAY_CACHE[key]
+    interpreter = Interpreter(strict_json_loads(compiled_program.decode()))
+    records = []
+    for evaluation in traces["evaluations"]:
+        record = {"checked": 0, "matched": 0, "error": None, "live": {}}
+        try:
+            queries = evaluation["request"]["queries"]
+            if len(queries) != 1:
+                raise InterpretationError("normalized traces require exactly one query")
+            query = queries[0]
+            if sorted(query["outputs"]) != sorted(evaluation["requested_output_roots"]):
+                raise InterpretationError("trace roots disagree with query outputs")
+            response = evaluation["response"]
+            if set(response["outputs"]) != set(query["outputs"]):
+                raise InterpretationError(
+                    "recorded outputs disagree with query outputs"
+                )
+            if (
+                response.get("entity_id") != query["entity_id"]
+                or response.get("period") != query["period"]
+            ):
+                raise InterpretationError(
+                    "recorded entity or period disagrees with query"
+                )
+            interpreter.prepare(evaluation["request"], query)
+            for root in query["outputs"]:
+                record["checked"] += 1
+                actual = interpreter.evaluate(root)
+                recorded = response["outputs"][root]
+                expected = (
+                    recorded["outcome"] == "holds"
+                    if recorded["kind"] == "judgment"
+                    else _literal(recorded["value"])
+                )
+                if recorded["kind"] == "judgment" and recorded["outcome"] not in {
+                    "holds",
+                    "not_holds",
+                }:
+                    raise InterpretationError("unsupported judgment outcome")
+                if (
+                    isinstance(actual, bool) != isinstance(expected, bool)
+                    or actual != expected
+                ):
+                    raise InterpretationError(
+                        f"interpreter mismatch for {root}: {actual!s} != {expected!s}"
+                    )
+                record["matched"] += 1
+            record["live"] = interpreter.live.copy()
+        except (
+            ValueError,
+            KeyError,
+            TypeError,
+            AttributeError,
+            ArithmeticError,
+        ) as error:
+            record["error"] = str(error)
+        records.append(record)
+    result = {
+        "traces": deepcopy(traces) if copy_traces else traces,
+        "interpreter": interpreter,
+        "records": records,
+        "sites": {},
+        "blocks": {},
+    }
+    _REPLAY_CACHE[key] = result
+    if len(_REPLAY_CACHE) > 8:
+        _REPLAY_CACHE.popitem(last=False)
+    return result
+
+
 def compute_threshold_straddle(
     compiled_program: bytes,
-    traces: dict,
+    traces: dict | bytes,
     *,
     view: str | None = None,
     roots: list[str] | None = None,
@@ -444,6 +533,20 @@ def compute_threshold_straddle(
         "defects": [],
     }
     check = block["self_check"]
+    caller_owned_traces = not isinstance(traces, bytes)
+    try:
+        if isinstance(traces, bytes):
+            trace_sha256 = hashlib.sha256(traces).hexdigest()
+            cached = _REPLAY_CACHE.get((sha, trace_sha256))
+            traces = cached["traces"] if cached else strict_json_loads(traces)
+        else:
+            trace_sha256 = hashlib.sha256(
+                json.dumps(traces, sort_keys=True, separators=(",", ":")).encode()
+            ).hexdigest()
+    except (ValueError, TypeError, UnicodeDecodeError) as error:
+        block["defects"].append(str(error))
+        return block
+
     trace_binding = traces.get("compiled_program") if isinstance(traces, dict) else None
     if (
         not isinstance(trace_binding, dict)
@@ -454,10 +557,16 @@ def compute_threshold_straddle(
         )
         return block
     try:
-        interpreter = Interpreter(strict_json_loads(compiled_program.decode()))
-        evaluations = [
-            e for e in traces["evaluations"] if view is None or e["view"] == view
+        replay = _replay(
+            compiled_program, traces, trace_sha256, copy_traces=caller_owned_traces
+        )
+        interpreter = replay["interpreter"]
+        selected = [
+            (e, replay["records"][i])
+            for i, e in enumerate(traces["evaluations"])
+            if view is None or e["view"] == view
         ]
+        evaluations = [e for e, _ in selected]
         certified_roots = (
             roots
             if roots is not None
@@ -474,67 +583,34 @@ def compute_threshold_straddle(
             raise InterpretationError(
                 "certified roots disagree with observed requested roots"
             )
+        block_key = (view, tuple(certified_roots))
+        if block_key in replay["blocks"]:
+            return deepcopy(replay["blocks"][block_key])
         collected: dict[str, dict] = {}
-        site_cache: dict[str, list[dict]] = {}
-        for evaluation in evaluations:
+        site_cache = replay["sites"]
+        for evaluation, record in selected:
             check["evaluations"] += 1
             try:
-                queries = evaluation["request"]["queries"]
-                if len(queries) != 1:
-                    raise InterpretationError(
-                        "normalized traces require exactly one query"
-                    )
-                query = queries[0]
-                if sorted(query["outputs"]) != sorted(
-                    evaluation["requested_output_roots"]
-                ):
-                    raise InterpretationError("trace roots disagree with query outputs")
-                response = evaluation["response"]
-                if set(response["outputs"]) != set(query["outputs"]):
-                    raise InterpretationError(
-                        "recorded outputs disagree with query outputs"
-                    )
-                if (
-                    response.get("entity_id") != query["entity_id"]
-                    or response.get("period") != query["period"]
-                ):
-                    raise InterpretationError(
-                        "recorded entity or period disagrees with query"
-                    )
-                interpreter.prepare(evaluation["request"], query)
-                period_key = query["period"]["start"]
+                check["outputs_checked"] += record["checked"]
+                check["outputs_matched"] += record["matched"]
+                if record["error"]:
+                    raise InterpretationError(record["error"])
+                query = evaluation["request"]["queries"][0]
+                period_key = (query["period"]["start"], tuple(certified_roots))
                 if period_key not in site_cache:
+                    interpreter.prepare(evaluation["request"], query)
                     site_cache[period_key] = interpreter.sites(certified_roots)
                 candidates = site_cache[period_key]
                 for site in candidates:
                     collected.setdefault(site["id"], {**site, "_observations": []})
-                for root in query["outputs"]:
-                    check["outputs_checked"] += 1
-                    actual = interpreter.evaluate(root)
-                    recorded = evaluation["response"]["outputs"][root]
-                    expected = (
-                        recorded["outcome"] == "holds"
-                        if recorded["kind"] == "judgment"
-                        else _literal(recorded["value"])
-                    )
-                    if recorded["kind"] == "judgment" and recorded["outcome"] not in {
-                        "holds",
-                        "not_holds",
-                    }:
-                        raise InterpretationError("unsupported judgment outcome")
-                    if (
-                        isinstance(actual, bool) != isinstance(expected, bool)
-                        or actual != expected
-                    ):
-                        raise InterpretationError(
-                            f"interpreter mismatch for {root}: {actual!s} != {expected!s}"
-                        )
-                    check["outputs_matched"] += 1
+                live = record["live"]
                 for site in candidates:
-                    if site["_key"] in interpreter.live:
-                        left = _number(interpreter.live[site["_left"]])
-                        right = _number(interpreter.live[site["_right"]])
-                        collected[site["id"]]["_observations"].append((left, right))
+                    if site["_key"] in live:
+                        left = _number(live[site["_left"]])
+                        right = _number(live[site["_right"]])
+                        collected[site["id"]]["_observations"].append(
+                            (left, right, live[site["_key"]])
+                        )
             except (
                 ValueError,
                 KeyError,
@@ -549,10 +625,23 @@ def compute_threshold_straddle(
                     }
                 )
         for site in sorted(collected.values(), key=lambda site: site["id"]):
-            observations = site["_observations"]
-            below = [left for left, right in observations if left < right]
-            at = [left for left, right in observations if left == right]
-            above = [left for left, right in observations if left > right]
+            observations = [(left, right) for left, right, _ in site["_observations"]]
+            if site["kind"] == "comparison":
+                below = [
+                    left
+                    for left, _, outcome in site["_observations"]
+                    if outcome is False
+                ]
+                above = [
+                    left
+                    for left, _, outcome in site["_observations"]
+                    if outcome is True
+                ]
+                at = []
+            else:
+                below = [left for left, right in observations if left < right]
+                at = [left for left, right in observations if left == right]
+                above = [left for left, right in observations if left > right]
             row = {k: v for k, v in site.items() if not k.startswith("_")}
             row.update(
                 below=len(below),
@@ -572,6 +661,15 @@ def compute_threshold_straddle(
                 if observations and len({r for _, r in observations}) == 1
                 else None,
             )
+            if site["kind"] == "comparison":
+                for label, outcome in (("below", False), ("above", True)):
+                    row[f"nearest_{label}"] = _nearest_candidate(
+                        [
+                            (left, right)
+                            for left, right, actual in site["_observations"]
+                            if actual is outcome
+                        ]
+                    )
             if len(row["parameters"]) == 1:
                 row.update(row["parameters"][0])
             block["sites"].append(row)
@@ -582,34 +680,109 @@ def compute_threshold_straddle(
             and check["outputs_checked"] > 0
         )
         block["complete"] = check["complete"] and not block["unstraddled"]
+        replay["blocks"][block_key] = deepcopy(block)
     except (ValueError, KeyError, TypeError, AttributeError, ArithmeticError) as error:
         block["defects"].append(str(error))
     return block
+
+
+def apply_threshold_exemptions(
+    blocks: dict[str, dict], ledger_bytes: bytes
+) -> dict[str, dict]:
+    """Validate recorded legal decisions without converting them to observations."""
+    result = deepcopy(blocks)
+    for block in result.values():
+        block["exemptions"] = []
+        for site in block["sites"]:
+            site.pop("exempted_sides", None)
+    try:
+        ledger = strict_yaml_loads(ledger_bytes)
+        if (
+            not isinstance(ledger, dict)
+            or set(ledger) != {"schema_version", "exemptions"}
+            or type(ledger["schema_version"]) is not int
+            or ledger["schema_version"] != 1
+        ):
+            raise InterpretationError("invalid threshold exemption ledger schema")
+        entries = ledger["exemptions"]
+        if not isinstance(entries, list):
+            raise InterpretationError("threshold exemptions must be a list")
+        seen = set()
+        for entry in entries:
+            if not isinstance(entry, dict) or set(entry) != {
+                "program",
+                "view",
+                "site_id",
+                "side",
+                "reason",
+                "citation",
+            }:
+                raise InterpretationError("invalid threshold exemption entry fields")
+            if any(
+                not isinstance(value, str) or not value.strip()
+                for value in entry.values()
+            ):
+                raise InterpretationError(
+                    "threshold exemption fields must be non-empty strings"
+                )
+            view, ident, side = entry["view"], entry["site_id"], entry["side"]
+            if view not in result or entry["program"] != view:
+                raise InterpretationError(
+                    f"threshold exemption names an unknown program/view: {view}"
+                )
+            if side not in {"below", "above"}:
+                raise InterpretationError(f"invalid threshold exemption side: {side}")
+            key = (view, ident, side)
+            if key in seen:
+                raise InterpretationError("duplicate threshold exemption")
+            seen.add(key)
+            sites = [site for site in result[view]["sites"] if site["id"] == ident]
+            if len(sites) != 1:
+                raise InterpretationError(
+                    f"threshold exemption site does not exist: {ident}"
+                )
+            site = sites[0]
+            if site.get(side) != 0:
+                raise InterpretationError(
+                    f"stale threshold exemption: {ident} {side} is observed"
+                )
+            site.setdefault("exempted_sides", []).append(side)
+            result[view]["exemptions"].append(dict(entry))
+        for block in result.values():
+            block["unstraddled"] = [
+                site for site in block["sites"] if not site["straddled"]
+            ]
+            block["complete"] = (
+                block.get("self_check", {}).get("complete") is True
+                and not block.get("defects")
+                and all(
+                    site.get(side) or side in site.get("exempted_sides", [])
+                    for site in block["sites"]
+                    for side in ("below", "above")
+                )
+            )
+    except (ValueError, KeyError, TypeError, AttributeError, YAMLError) as error:
+        for block in result.values():
+            block.setdefault("defects", []).append(
+                f"threshold exemption ledger: {error}"
+            )
+            block["complete"] = False
+    return result
 
 
 def parameter_only_straddle(
     module_bytes: bytes, *, roots: list[str], module_id: str
 ) -> dict:
     """Prove zero sites in source bytes whose signature the caller validated."""
-    import yaml
-
-    class UniqueLoader(yaml.SafeLoader):
-        pass
-
-    def mapping(loader, node):
-        pairs = loader.construct_pairs(node, deep=True)
-        result = {}
-        for key, value in pairs:
-            if key in result:
-                raise InterpretationError(f"duplicate YAML key {key!r}")
-            result[key] = value
-        return result
-
-    UniqueLoader.add_constructor(
-        yaml.resolver.BaseResolver.DEFAULT_MAPPING_TAG, mapping
-    )
     try:
-        document = yaml.load(module_bytes, Loader=UniqueLoader)
+        document = strict_yaml_loads(module_bytes)
+        if not isinstance(document, dict) or set(document) - {
+            "format",
+            "module",
+            "description",
+            "rules",
+        }:
+            raise InterpretationError("unsupported parameter-only module keys")
         if not roots or len(set(roots)) != len(roots):
             raise InterpretationError("parameter root set is empty or duplicated")
         rules = document["rules"]
@@ -617,7 +790,29 @@ def parameter_only_straddle(
             raise InterpretationError("module rules are not a list")
         by_name = {}
         for rule in rules:
-            name = rule.get("name") or rule.get("id")
+            # The engine's apply_source_relation_sets scans every rule, even
+            # one whose kind is derived. Reject unrecognized rule-level fields
+            # throughout the module before relying on a literal root proof.
+            if not isinstance(rule, dict) or set(rule) - {
+                "name",
+                "kind",
+                "dtype",
+                "description",
+                "entity",
+                "period",
+                "unit",
+                "source",
+                "metadata",
+                "versions",
+            }:
+                raise InterpretationError("unsupported parameter-only module rule keys")
+            name = rule.get("name")
+            if not isinstance(name, str) or not name:
+                raise InterpretationError("parameter rule requires a name")
+            if rule.get("kind") not in {"parameter", "derived"}:
+                raise InterpretationError(
+                    "unsupported rule kind in parameter-only module"
+                )
             if name in by_name:
                 raise InterpretationError("duplicate parameter rule")
             by_name[name] = rule
@@ -628,10 +823,31 @@ def parameter_only_straddle(
             rule = by_name.get(name)
             if not rule or rule.get("kind") != "parameter":
                 raise InterpretationError(f"root is not a parameter rule: {root}")
+            if set(rule) - {
+                "name",
+                "kind",
+                "dtype",
+                "description",
+                "period",
+                "unit",
+                "source",
+                "metadata",
+                "versions",
+            }:
+                raise InterpretationError("unsupported parameter-only rule keys")
             versions = rule.get("versions")
             if not isinstance(versions, list) or not versions:
                 raise InterpretationError(f"parameter has no literal versions: {root}")
             for version in versions:
+                if not isinstance(version, dict) or set(version) - {
+                    "effective_from",
+                    "formula",
+                }:
+                    raise InterpretationError("unsupported parameter-only version keys")
+                effective = version.get("effective_from")
+                if not isinstance(effective, (str, date)):
+                    raise InterpretationError("parameter version has no effective_from")
+                date.fromisoformat(str(effective))
                 formula = version.get("formula")
                 if isinstance(formula, bool) or not isinstance(
                     formula, (int, float, str)
@@ -655,5 +871,5 @@ def parameter_only_straddle(
             "unstraddled": [],
             "complete": True,
         }
-    except (ValueError, KeyError, TypeError, AttributeError, yaml.YAMLError) as error:
+    except (ValueError, KeyError, TypeError, AttributeError, YAMLError) as error:
         return {"mode": "unavailable", "reason": str(error), "complete": False}

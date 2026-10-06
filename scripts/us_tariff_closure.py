@@ -27,7 +27,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import io
-import json
 import math
 import os
 import subprocess
@@ -44,6 +43,8 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads  # noqa: E402
 
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
@@ -614,7 +615,7 @@ def _blob_facts(
     if not GIT_SHA.fullmatch(commit):
         raise ValueError(f"invalid source commit {commit!r}")
     blob = _git(root, "show", f"{commit}:{relative}")
-    rows = [json.loads(line) for line in blob.splitlines() if line.strip()]
+    rows = [strict_json_loads(line) for line in blob.splitlines() if line.strip()]
     return rows, {
         "path": relative,
         "commit": commit,
@@ -667,7 +668,7 @@ def _derive_program_set(
             raise ValueError(
                 f"tariff program-set path is absent: {spec_path} / {module_path}"
             )
-        spec = yaml.safe_load(
+        spec = strict_yaml_loads(
             _git(rulespec_root, "show", f"{rulespec_ref}:{spec_path}")
         )
         outputs = spec.get("outputs") if isinstance(spec, Mapping) else None
@@ -1134,7 +1135,7 @@ def reproduce_input_inventory(
         env.pop("AXIOM_RULESPEC_ROOT", None)
         env["AXIOM_RULESPEC_REPO_ROOTS"] = str(snapshot.parent)
         for module_path, spec_path, kind in programs:
-            spec = yaml.safe_load((snapshot / spec_path).read_text())
+            spec = strict_yaml_loads((snapshot / spec_path).read_text())
             outputs = spec.get("outputs") if isinstance(spec, Mapping) else None
             if outputs != audit["promised_outputs"][kind]:
                 raise ValueError(
@@ -1161,7 +1162,7 @@ def reproduce_input_inventory(
                     "input inventory compile failed for "
                     f"{module_path}: {result.stderr.strip()}"
                 )
-            payload = json.loads(compiled_path.read_text())
+            payload = strict_json_loads(compiled_path.read_text())
             program = payload.get("program") if isinstance(payload, Mapping) else None
             if not isinstance(program, Mapping):
                 raise TypeError("compiled input inventory has no program")
@@ -1185,7 +1186,7 @@ def _load_instrument_graph(
     digest = hashlib.sha256(raw).hexdigest()
     if digest != INSTRUMENT_GRAPH_SHA256:
         raise ValueError("instrument graph source pin drift")
-    graph = json.loads(raw)
+    graph = strict_json_loads(raw)
     if not isinstance(graph, dict):
         raise TypeError("instrument graph must be an object")
     if graph.get("schema") != INSTRUMENT_GRAPH_SCHEMA:
@@ -1477,7 +1478,7 @@ def build(
         and not path.endswith(".test.yaml")
     )
     rate_table_modules = [
-        (path, yaml.safe_load(_git(rulespec_root, "show", f"{rs_commit}:{path}")))
+        (path, strict_yaml_loads(_git(rulespec_root, "show", f"{rs_commit}:{path}")))
         for path in rate_table_paths
     ]
     rate_table_facts, rate_table_counts = _derive_rate_table_correspondence(
@@ -1551,7 +1552,7 @@ def validate(
         instrument_graph, expected_instrument_graph_facts = _load_instrument_graph(
             instrument_graph_path
         )
-    except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
+    except (OSError, TypeError, ValueError) as exc:
         return [str(exc)]
     expected_decisions, expected_computed = _decision_state(
         EXPECTED_SOURCE_COUNTS, instrument_graph
@@ -1790,7 +1791,7 @@ def verify_artifact(
     expected: dict[str, Any] | None = None
     errors: list[str] = []
     try:
-        document = yaml.safe_load(artifact_path.read_text()) or {}
+        document = strict_yaml_loads(artifact_path.read_text()) or {}
         validate_artifact(
             document,
             instrument_graph_path=instrument_graph_path,
@@ -1810,7 +1811,6 @@ def verify_artifact(
         TypeError,
         ValueError,
         KeyError,
-        json.JSONDecodeError,
         yaml.YAMLError,
     ) as exc:
         errors.append(str(exc))
@@ -1839,7 +1839,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             engine_binary=args.engine_binary,
             instrument_graph_path=args.instrument_graph,
         )
-    except (OSError, TypeError, ValueError, KeyError, json.JSONDecodeError) as exc:
+    except (OSError, TypeError, ValueError, KeyError) as exc:
         print(f"closure ledger error: {exc}", file=sys.stderr)
         return 1
     errors = validate(expected, instrument_graph_path=args.instrument_graph)

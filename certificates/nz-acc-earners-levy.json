@@ -256,6 +256,7 @@
             "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
             "complete": false,
             "defects": [],
+            "exemptions": [],
             "mode": "computed",
             "requested_output_roots": [
               "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst"

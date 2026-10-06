@@ -42,6 +42,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads  # noqa: E402
+
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
 SOURCE_PATH = REPO_ROOT / "closure" / "de" / "source.json"
@@ -299,15 +301,15 @@ def _measurement_uncertainty(graph: Mapping[str, Any]) -> str:
 
 def _load_json_bytes(data: bytes, label: str) -> Any:
     try:
-        return json.loads(data)
-    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        return strict_json_loads(data)
+    except (UnicodeDecodeError, ValueError) as exc:
         raise _SourceError(f"could not parse {label}: {exc}") from exc
 
 
 def load_document(path: Path) -> dict[str, Any]:
     try:
-        value = yaml.safe_load(path.read_bytes())
-    except (OSError, yaml.YAMLError) as exc:
+        value = strict_yaml_loads(path.read_bytes())
+    except (OSError, yaml.YAMLError, ValueError) as exc:
         raise ClosureLedgerError((f"could not read {path}: {exc}",)) from exc
     if not isinstance(value, dict):
         raise ClosureLedgerError(("ledger must be a mapping",))
@@ -319,8 +321,8 @@ def _load_committed_document(program_id: str) -> dict[str, Any]:
     relative = path.relative_to(REPO_ROOT).as_posix()
     data = _git(REPO_ROOT, "show", f"HEAD:{relative}")
     try:
-        value = yaml.safe_load(data)
-    except yaml.YAMLError as exc:
+        value = strict_yaml_loads(data)
+    except (yaml.YAMLError, ValueError) as exc:
         raise _SourceError(f"could not parse committed ledger {relative}: {exc}") from exc
     if not isinstance(value, dict):
         raise _SourceError(f"committed ledger must be a mapping: {relative}")
@@ -513,7 +515,7 @@ def _rulespec_facts(
         blob = _git_blob(rulespec_root, resolved, path)
         if _sha256(blob) != expected_sha:
             raise _SourceError(f"RuleSpec artifact hash mismatch: {path}")
-        document = yaml.safe_load(blob)
+        document = strict_yaml_loads(blob)
         if not isinstance(document, Mapping):
             raise _SourceError(f"RuleSpec artifact is not a mapping: {path}")
         module_id = _module_id(path)
@@ -2262,7 +2264,7 @@ def verify_artifact(
                 source_path=source_path,
                 corpus_root=resolved_corpus_root,
             )
-    except (ClosureLedgerError, _SourceError, OSError, yaml.YAMLError) as exc:
+    except (ClosureLedgerError, _SourceError, OSError, yaml.YAMLError, ValueError) as exc:
         if isinstance(exc, ClosureLedgerError):
             errors.extend(exc.errors)
         else:

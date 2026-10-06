@@ -19,7 +19,7 @@ weeks). This ratchet closes that hole with the same monotonic contract:
 counts, and unfiltered mismatch rows all remain visible; concept-less rows are
 never explained by known-cause labels. The dashboard mirrors this definition.
 Hard assessment defects, unreadable dashboard JSON, and vanished pins fail the
-gate. Only the typed dashboard suite table can exempt diagnostics.
+gate. Only the shared typed diagnostic JSON can exempt diagnostics.
 
 Usage:
     uv run scripts/unexplained_ratchet.py --check   # CI gate; exit 1 on rise
@@ -67,23 +67,18 @@ def count_unexplained(report: dict, known_causes: list[dict]) -> int:
 
 
 def diagnostic_suites() -> set[str]:
-    """Suites the dashboard marks kind: "diagnostic" (excluded from headlines).
+    """Read the typed diagnostic metadata imported by dashboard suiteMeta."""
+    from axiom_oracles.evidence import strict_json_loads
 
-    Parsed from the suite table in dashboard/src/utils/suites.js so the gate
-    and the hero share an explicit exemption list. A suite name alone cannot
-    exempt a newly published report.
-    """
-    suites: set[str] = set()
-    table = REPO_ROOT / "dashboard" / "src" / "utils" / "suites.js"
-    if table.exists():
-        import re
-
-        text = table.read_text()
-        for match in re.finditer(
-            r'"([\w-]+)":\s*\{[^{}]*?kind:\s*"diagnostic"', text
-        ):
-            suites.add(match.group(1))
-    return suites
+    table = REPO_ROOT / "dashboard/src/utils/diagnostic-suites.json"
+    payload = strict_json_loads(table.read_text())
+    if not isinstance(payload, dict) or any(
+        not isinstance(suite, str) or not suite
+        or not isinstance(metadata, dict) or metadata.get("kind") != "diagnostic"
+        for suite, metadata in payload.items()
+    ):
+        raise ValueError(f"{table}: expected suite metadata with kind 'diagnostic'")
+    return set(payload)
 
 
 def _gated_report_rows() -> list[dict]:
@@ -92,12 +87,14 @@ def _gated_report_rows() -> list[dict]:
     reports = []
     for report in load_dashboard_reports(DASHBOARD_DATA):
         suite = report["suite"]
-        # Grid lanes have summary + mismatches but no aggregates.
-        if "mismatches" not in report or "summary" not in report:
+        # Summary-only reports still declare a count and belong in the gate.
+        if "summary" not in report:
             continue
         if suite in diagnostics:
             continue
-        engines = report.get("engines") or {}
+        engines = report.get("engines")
+        if not isinstance(engines, dict):
+            continue
         if "axiom" not in (engines.get("left"), engines.get("right")) and (
             "axiom" not in engines
         ):

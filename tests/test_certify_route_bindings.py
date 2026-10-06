@@ -30,6 +30,7 @@ from types import SimpleNamespace
 
 import pytest
 from hypothesis import example, given, settings, strategies as st
+from axiom_oracles.evidence import _reject_duplicate_json_keys, strict_json_loads
 
 
 REPO = Path(__file__).resolve().parents[1]
@@ -355,11 +356,14 @@ PROGRAM_SET_CASES = (
             ("program_count", "2"),
             ("program_count", 2.0),
             ("program_count", None),
+            ("program_count", 0),
+            ("program_count", -1),
         )
         for malformed in ({**PROGRAM_SET, field: invalid},)
         for case in (
             (False, malformed, PROGRAM_SET, "not comparable"),
             (False, PROGRAM_SET, malformed, "not comparable"),
+            (False, malformed, malformed, "not comparable"),
         )
     ),
     (True, {}, {}, "not comparable"),
@@ -712,15 +716,50 @@ def test_strict_json_rejects_duplicate_keys(tmp_path):
         certify._load(path)
 
 
-def test_strict_yaml_rejects_duplicate_keys(tmp_path):
+@pytest.mark.parametrize(
+    "raw,reason",
+    [
+        ("commit: first\ncommit: second\n", "duplicate"),
+        ("a: &a {commit: bad}\nb: &b {commit: good}\n<<: *a\n<<: *b\n", "merge"),
+        ("a: &a {commit: bad}\nb: &b {commit: good}\n<<: [*a, *b]\n", "merge"),
+        ("a: &a {commit: bad}\n<<: *a\ncommit: good\n", "merge"),
+        ("a: &a {commit: bad}\ncommit: good\n<<: *a\n", "merge"),
+    ],
+)
+def test_strict_yaml_rejects_duplicate_keys(tmp_path, raw, reason):
     path = tmp_path / "artifact.yaml"
-    path.write_text("commit: first\ncommit: second\n")
-    with pytest.raises(ValueError, match="duplicate"):
+    path.write_text(raw)
+    with pytest.raises(ValueError, match=reason):
         certify._load(path)
 
 
-def test_certify_has_no_raw_artifact_parser_outside_strict_loaders():
-    tree = ast.parse((REPO / "scripts/certify.py").read_text())
+STRICT_PRODUCERS = (
+    "certify",
+    "executable_reproduction",
+    "exercise_census",
+    "closure_ledger",
+    "closure_universe",
+    "nz_incomeexplorer",
+    "nz_exercise_denominator",
+    "nz_executable_reproduction",
+    "nz_closure",
+    "de_axiom_legs",
+    "de_certificate_census",
+    "de_unified_comparison",
+    "de_executable",
+    "de_closure",
+    "de_closure_ledger",
+    "tariff_executable_reproduction",
+    "us_tariff_closure",
+)
+
+
+@pytest.mark.parametrize(
+    "module",
+    [*(f"scripts/{name}.py" for name in STRICT_PRODUCERS), "axiom_oracles/conformance/unexplained.py"],
+)
+def test_certify_has_no_raw_artifact_parser_outside_strict_loaders(module):
+    tree = ast.parse((REPO / module).read_text())
     violations = []
 
     class ParserCalls(ast.NodeVisitor):
@@ -743,12 +782,170 @@ def test_certify_has_no_raw_artifact_parser_outside_strict_loaders():
                     or function.value.id == "yaml"
                     and function.attr in {"load", "safe_load"}
                 )
-                if raw and not set(self.functions) & {
-                    "_strict_json_loads",
-                    "_strict_yaml_loads",
-                }:
+                if raw:
                     violations.append((node.lineno, ast.unparse(function)))
             self.generic_visit(node)
 
     ParserCalls().visit(tree)
     assert not violations, f"premise parsing bypasses strict admission: {violations}"
+
+
+def test_premise_dispatch_cannot_branch_outside_its_registry():
+    tree = ast.parse((REPO / "scripts/certify.py").read_text())
+    functions = {
+        node.name: node for node in tree.body if isinstance(node, ast.FunctionDef)
+    }
+    for name, registry in (
+        ("_closed_verdict", "CLOSED_ROUTES"),
+        ("_executable_verdict", "EXECUTABLE_ROUTES"),
+        ("build_certificate", "CERTIFICATE_ROUTES"),
+    ):
+        function = functions[name]
+        returns = [node for node in ast.walk(function) if isinstance(node, ast.Return)]
+        assert len(returns) == 1
+        expression = returns[0].value
+        assert isinstance(expression, ast.Call)
+        assert isinstance(expression.func, ast.Attribute)
+        assert expression.func.attr == "build"
+        assert ast.unparse(expression.func.value) == f"_select_route({registry}, spec)"
+        # Argument compatibility may branch on evidence; premise selection
+        # may not inspect spec or program anywhere outside the registry.
+        for branch in (node for node in ast.walk(function) if isinstance(node, ast.If)):
+            names = {node.id for node in ast.walk(branch.test) if isinstance(node, ast.Name)}
+            assert not names & {"spec", "program"}
+
+
+def test_certificate_dispatch_is_exhaustive_and_registry_only(monkeypatch):
+    assert {(route.name, route.dispatch_key) for route in certify.CERTIFICATE_ROUTES} == {
+        ("pending_de", "pending_de_candidate"), ("standard", None)
+    }
+    for route in certify.CERTIFICATE_ROUTES:
+        with pytest.raises(FrozenInstanceError):
+            route.name = "unregistered"
+    monkeypatch.setattr(
+        certify, "CERTIFICATE_ROUTES",
+        tuple(replace(route, build=lambda *args, _name=route.name, **kwargs: {
+            "selected": _name, "verify_producers": kwargs["verify_producers"],
+        }) for route in certify.CERTIFICATE_ROUTES),
+    )
+    visited = set()
+    for flags in itertools.product((False, True), repeat=len(DISPATCH_KEYS)):
+        spec = {}
+        for key, present in zip(DISPATCH_KEYS, flags, strict=True):
+            if present:
+                _set_dispatch(spec, key, {} if key.startswith("computed.") else True)
+        selected = [route for route in certify.CERTIFICATE_ROUTES if route.selects(spec)]
+        assert len(selected) == 1
+        for verify in (False, True):
+            assert certify.build_certificate("test/bindings", spec, verify_producers=verify) == {
+                "selected": selected[0].name, "verify_producers": verify,
+            }
+        visited.add(selected[0].name)
+    assert visited == {route.name for route in certify.CERTIFICATE_ROUTES}
+
+
+@pytest.mark.parametrize("exec_route", certify.EXECUTABLE_ROUTES, ids=lambda r: r.name)
+def test_executable_route_cannot_drop_census_or_missing_leg_blockers(
+    exec_route, passing_other_premises, monkeypatch
+):
+    if exec_route.name == "pending_de":
+        return  # Its complete certificate builder already preserves census blockers.
+    closed_route = next(route for route in certify.CLOSED_ROUTES if route.name == "producer")
+    spec = _pair_spec(closed_route, exec_route)
+    spec["de_census_program"] = True
+    monkeypatch.setattr(certify, "_de_census_row", lambda *args: {"blockers": ["census: unresolved"]})
+    original = certify._suite_verdict
+
+    def missing_leg(entry):
+        leg, evidence, defects = original(entry)
+        leg["missing_required_legs"] = ["axiom-vs-synthetic-leg"]
+        return leg, evidence, defects
+
+    monkeypatch.setattr(certify, "_suite_verdict", missing_leg)
+    _replace_builders(monkeypatch, _block(closed_route), _block(exec_route))
+    certificate = certify.build_certificate("test/bindings", spec)
+    assert "census: unresolved" in certificate["blockers"]
+    assert "binding-control: missing required leg axiom-vs-synthetic-leg" in certificate["blockers"]
+    assert certificate["certified"]["state"] != "yes"
+
+
+@pytest.mark.parametrize("first_pin", ["f" * 64, ".nan"])
+def test_dk_producer_rejects_review_duplicate_engine_pin(tmp_path, first_pin):
+    module = certify._load_generator(
+        "_duplicate_dk_engine_pin", REPO / "scripts/executable_reproduction.py"
+    )
+    for row in module.REPORT_SPECS:
+        relative = row["config"]
+        path = tmp_path / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        raw = (REPO / relative).read_text()
+        marker = "    engine_binary_sha256: "
+        assert raw.count(marker) == 1
+        path.write_text(raw.replace(marker, f"{marker}{first_pin}\n{marker}", 1))
+    with pytest.raises(ValueError, match="duplicate YAML key.*engine_binary_sha256"):
+        module._configured_engine_pin(tmp_path)
+
+
+@pytest.mark.parametrize(
+    "raw,reason",
+    [
+        ("suite: forged\nsuite: real\nbindings: []\n", "duplicate"),
+        ("defaults: &a {suite: forged}\n<<: *a\nsuite: real\nbindings: []\n", "merge"),
+    ],
+)
+def test_census_producer_rejects_ambiguous_bridge_manifest(tmp_path, monkeypatch, raw, reason):
+    module = certify._load_generator(
+        "_duplicate_census_bridge", REPO / "scripts/exercise_census.py"
+    )
+    monkeypatch.setattr(module, "MANIFEST_DIR", tmp_path)
+    path = tmp_path / "bridge.yaml"
+    path.write_text("suite: real\nbindings: []\n")
+    assert module._bridged_through_by_suite() == {"real": {}}
+    path.write_text(raw)
+    with pytest.raises(ValueError, match=reason):
+        module._bridged_through_by_suite()
+
+
+@given(count=st.integers())
+def test_program_set_cardinality_must_be_positive(count):
+    closed_route = next(route for route in certify.CLOSED_ROUTES if route.name == "producer")
+    exec_route = next(route for route in certify.EXECUTABLE_ROUTES if route.name == "producer")
+    closed, executable = _block(closed_route), _block(exec_route)
+    closed["program_set"] = executable["program_set"] = {**PROGRAM_SET, "program_count": count}
+    blockers = certify._cross_premise_blockers({}, closed_route, closed, exec_route, executable)
+    assert bool(blockers) is (count < 1)
+
+
+@given(st.lists(st.tuples(st.text(max_size=8), st.integers()), max_size=30))
+def test_strict_json_mapping_admission_preserves_unique_pairs(pairs):
+    raw = "{" + ",".join(f"{json.dumps(key)}:{value}" for key, value in pairs) + "}"
+    if len({key for key, _ in pairs}) != len(pairs):
+        with pytest.raises(ValueError, match="duplicate JSON key"):
+            strict_json_loads(raw)
+    else:
+        assert strict_json_loads(raw) == dict(pairs)
+
+
+@given(size=st.integers(min_value=2, max_value=100))
+@example(size=100)
+def test_strict_json_distinct_keys_do_not_trigger_pairwise_scans(size):
+    """Distinct hash-separated keys need at most linear equality comparisons."""
+    class CountedKey(str):
+        comparisons = 0
+
+        def __new__(cls, ordinal):
+            key = super().__new__(cls, str(ordinal))
+            key.ordinal = ordinal
+            return key
+
+        def __hash__(self):
+            return self.ordinal
+
+        def __eq__(self, other):
+            type(self).comparisons += 1
+            return super().__eq__(other)
+
+    pairs = [(CountedKey(index), index) for index in range(size)]
+    parsed = _reject_duplicate_json_keys(pairs)
+    assert CountedKey.comparisons <= size
+    assert list(parsed.values()) == list(range(size))

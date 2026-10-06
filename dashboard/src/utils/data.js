@@ -7,7 +7,7 @@
  */
 
 import { topLevelAggregates } from "./suites.js";
-import { assessUnexplained } from "./unexplained.js";
+import { assessUnfilteredReport } from "./unexplained.js";
 
 /**
  * @typedef {Object} OracleData
@@ -110,7 +110,7 @@ export async function loadOracleData(basePath = "") {
   // Assess the original report before concept filtering can remove mismatch
   // rows. Both the overview bundle and per-file path retain this evidence.
   for (const report of reports) {
-    report.unexplained_assessment = assessUnexplained(report, {
+    assessUnfilteredReport(report, {
       known_causes: knownCauses,
     });
   }

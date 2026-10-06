@@ -39,6 +39,10 @@ from typing import Any
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads  # noqa: E402
+
 
 UNIVERSE_SCHEMA = "axiom_oracles.closure.universe.v1"
 SUMMARY_SCHEMA = "axiom_oracles.closure.summary.v1"
@@ -168,8 +172,8 @@ def _load_provenance(data_dir: Path, errors: list[str]) -> dict[str, dict[str, A
         errors.append(f"{_display(path)} is missing")
         return {}
     try:
-        document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    except (OSError, UnicodeError, yaml.YAMLError) as exc:
+        document = strict_yaml_loads(path.read_text(encoding="utf-8")) or {}
+    except (OSError, UnicodeError, yaml.YAMLError, ValueError) as exc:
         errors.append(f"{_display(path)} could not be read: {exc}")
         return {}
     if not isinstance(document, Mapping):
@@ -268,8 +272,8 @@ def _load_source_rows(
                 continue
             label = f"{_display(path)}:{line_number}"
             try:
-                raw = json.loads(raw_line)
-            except json.JSONDecodeError as exc:
+                raw = strict_json_loads(raw_line)
+            except ValueError as exc:
                 errors.append(f"{label}: invalid JSON: {exc}")
                 continue
             if not isinstance(raw, Mapping):
@@ -309,8 +313,8 @@ def _load_universe(path: Path, errors: list[str]) -> dict[str, Any] | None:
     if not path.is_file():
         return None
     try:
-        document = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    except (OSError, UnicodeError, yaml.YAMLError) as exc:
+        document = strict_yaml_loads(path.read_text(encoding="utf-8")) or {}
+    except (OSError, UnicodeError, yaml.YAMLError, ValueError) as exc:
         errors.append(f"{_display(path)} could not be read: {exc}")
         return None
     if not isinstance(document, Mapping):
@@ -323,8 +327,8 @@ def _load_summary(path: Path, errors: list[str]) -> dict[str, Any] | None:
     if not path.is_file():
         return None
     try:
-        document = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        document = strict_json_loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, ValueError) as exc:
         errors.append(f"{_display(path)} could not be read: {exc}")
         return None
     if not isinstance(document, Mapping):
@@ -987,8 +991,8 @@ def _history_ratchet_baseline(
         if artifact_result.returncode != 0:
             continue
         try:
-            historical = yaml.safe_load(artifact_result.stdout.decode("utf-8")) or {}
-        except (UnicodeError, yaml.YAMLError):
+            historical = strict_yaml_loads(artifact_result.stdout.decode("utf-8")) or {}
+        except (UnicodeError, yaml.YAMLError, ValueError):
             continue
         if not isinstance(historical, Mapping):
             continue

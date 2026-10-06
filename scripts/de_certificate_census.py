@@ -20,6 +20,10 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+from axiom_oracles.evidence import strict_json_loads  # noqa: E402
+
 OUTPUT_PATH = REPO_ROOT / "conformance" / "de-certificate-census.json"
 UNIFIED_PATH = (
     REPO_ROOT / "comparisons" / "de-worker-dual-oracle" / "unified-record.json"
@@ -288,8 +292,8 @@ def _sha256(path: Path) -> str:
 
 def _load(path: Path) -> dict:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = strict_json_loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
         raise DECensusError(f"cannot read {path}: {exc}") from exc
     if not isinstance(value, dict):
         raise DECensusError(f"{path}: top level must be an object")

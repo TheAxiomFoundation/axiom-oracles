@@ -113,7 +113,7 @@ def _load_ratchet_module():
 
 @pytest.mark.skipif(shutil.which("node") is None, reason="node runtime not available")
 def test_unexplained_gate_domain_and_total_parity(monkeypatch) -> None:
-    """The dashboard headline counts exactly what the publication gate counts.
+    """The dashboard assessment agrees with the gate on committed valid evidence.
 
     Same domain (grid-shaped named-engine reports included, typed diagnostics
     excluded), same per-suite maximum over duplicates, same counts, for every
@@ -152,7 +152,21 @@ def test_unexplained_gate_domain_and_total_parity(monkeypatch) -> None:
         "summary": {"mismatch_count": 0},
         "mismatches": [{"concept": "c", "kind": "amount_difference"}],
     }
-    synthetic = [grid, duplicate_low, duplicate_high, understated]
+    summary_only = {
+        "suite": "zz-parity-summary-only",
+        "engines": {"left": "axiom", "right": "oracle"},
+        "summary": {"mismatch_count": 500},
+    }
+    malformed_engines = [
+        {**grid, "suite": f"zz-parity-engines-{index}", "engines": engines}
+        for index, engines in enumerate((["axiom", "oracle"], "axiom", 1, True))
+    ]
+    forged_assessment = {
+        **duplicate_low, "suite": "zz-parity-forged-assessment",
+        "summary": {"mismatch_count": 5}, "unexplained_assessment": {"count": 0},
+    }
+    synthetic = [grid, duplicate_low, duplicate_high, understated, summary_only,
+                 forged_assessment, *malformed_engines]
     documents.extend(synthetic)
     reports = [
         {**doc, "_file": f"doc-{index}.json"}
@@ -164,10 +178,12 @@ def test_unexplained_gate_domain_and_total_parity(monkeypatch) -> None:
     assert expected["zz-parity-grid"] == 5
     assert expected["zz-parity-duplicate"] == 7
     assert expected["zz-parity-understated"] == 1
+    assert expected["zz-parity-summary-only"] == 500
+    assert expected["zz-parity-forged-assessment"] == 5
+    assert not any(suite.startswith("zz-parity-engines-") for suite in expected)
     payload = {
         "documents": documents,
         "known_causes": json.loads((data / "known_causes.json").read_text())["entries"],
-        "diagnostics": sorted(ratchet.diagnostic_suites()),
         "expected": expected,
     }
     proc = subprocess.run(
@@ -180,3 +196,75 @@ def test_unexplained_gate_domain_and_total_parity(monkeypatch) -> None:
     assert proc.returncode == 0, proc.stdout + proc.stderr
     assert f"UNEXPLAINED GATE PARITY: {len(expected)} suites" in proc.stdout
 
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node runtime not available")
+def test_diagnostic_exemptions_ignore_javascript_comments(tmp_path, monkeypatch):
+    ratchet = _load_ratchet_module()
+    utility = tmp_path / "dashboard/src/utils"
+    utility.mkdir(parents=True)
+    source = (DASHBOARD / "src/utils/suites.js").read_text()
+    # The review's exact injected comment must have no gate authority.
+    source += '\n// "fl-snap-ecps": { kind: "diagnostic" } (a comment)\n'
+    (utility / "suites.mjs").write_text(source)
+    (utility / "suites.js").write_text(source)
+    shutil.copy(DASHBOARD / "src/utils/diagnostic-suites.json", utility)
+    monkeypatch.setattr(ratchet, "REPO_ROOT", tmp_path)
+    python_diagnostics = ratchet.diagnostic_suites()
+    assert "fl-snap-ecps" not in python_diagnostics
+    doc = json.loads((utility / "diagnostic-suites.json").read_text())
+    names = [*doc, "fl-snap-ecps", "unregistered-diagnostic"]
+    proc = subprocess.run(
+        ["node", "--input-type=module", "-e",
+         f"import {{ suiteMeta }} from {json.dumps((utility / 'suites.mjs').as_uri())};"
+         "const names=JSON.parse(process.argv[1]);"
+         "console.log(JSON.stringify(names.filter(suite => suiteMeta(suite).kind === 'diagnostic')));",
+         json.dumps(names)],
+        capture_output=True, text=True, check=True,
+    )
+    assert set(json.loads(proc.stdout)) == python_diagnostics == set(doc)
+
+
+@pytest.mark.parametrize("payload", [[], {"sample": {}}, {"sample": {"kind": "household"}}, {"": {"kind": "diagnostic"}}])
+def test_diagnostic_source_requires_typed_entries(payload, tmp_path, monkeypatch):
+    ratchet = _load_ratchet_module()
+    table = tmp_path / "dashboard/src/utils/diagnostic-suites.json"
+    table.parent.mkdir(parents=True)
+    table.write_text(json.dumps(payload))
+    monkeypatch.setattr(ratchet, "REPO_ROOT", tmp_path)
+    with pytest.raises(ValueError, match="expected suite metadata"):
+        ratchet.diagnostic_suites()
+
+
+@pytest.mark.parametrize("engines", [["axiom", "oracle"], "axiom", 1, True, None])
+def test_nonobject_engines_are_outside_gate(engines, monkeypatch):
+    ratchet = _load_ratchet_module()
+    report = {"suite": "sample", "engines": engines,
+              "summary": {"mismatch_count": 1}, "mismatches": []}
+    monkeypatch.setattr(ratchet, "load_dashboard_reports", lambda _: [report])
+    assert ratchet._gated_report_rows() == []
+
+
+def test_summary_only_report_is_in_gate(monkeypatch):
+    ratchet = _load_ratchet_module()
+    report = {"suite": "sample", "engines": {"left": "axiom", "right": "oracle"},
+              "summary": {"mismatch_count": 500}}
+    monkeypatch.setattr(ratchet, "load_dashboard_reports", lambda _: [report])
+    assert ratchet._gated_report_rows() == [report]
+    assert ratchet.count_unexplained(report, []) == 500
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node runtime not available")
+def test_gated_helper_reassesses_report_carried_assessment():
+    module = (DASHBOARD / "src/utils/unexplained.js").as_uri()
+    report = {"suite": "sample", "engines": {"left": "axiom", "right": "oracle"},
+              "summary": {"mismatch_count": 5}, "mismatches": [],
+              "unexplained_assessment": {"count": 0}}
+    proc = subprocess.run(
+        ["node", "--input-type=module", "-e",
+         f"import {{ gatedUnexplainedBySuite }} from {json.dumps(module)};"
+         "console.log(JSON.stringify(gatedUnexplainedBySuite([JSON.parse(process.argv[1])])));",
+         json.dumps(report)],
+        capture_output=True, text=True, check=True,
+    )
+    assert json.loads(proc.stdout) == {"sample": 5}

@@ -121,9 +121,7 @@ def test_unbound_or_nonreconciling_chunks_do_not_block_census(tmp_path, monkeypa
     assert row["cases_scanned"] == 2
 
 
-def test_census_counts_bound_execution_inputs_as_case_evidence(
-    tmp_path, monkeypatch
-):
+def test_census_counts_bound_execution_inputs_as_case_evidence(tmp_path, monkeypatch):
     census = _load_census()
     data_dir = tmp_path / "data"
     cases_dir = data_dir / "cases"
@@ -257,9 +255,7 @@ def test_committed_exercise_receipt_rejects_artifact_hash_drift(
             "cases": 1,
             "report": "report.json",
             "report_sha256": hashlib.sha256(report.read_bytes()).hexdigest(),
-            "evidence_artifacts": [
-                {"path": "artifact.json", "sha256": "0" * 64}
-            ],
+            "evidence_artifacts": [{"path": "artifact.json", "sha256": "0" * 64}],
             "evidence_fields": {"x": {"distinct": 1, "state": "constant"}},
         },
     )
@@ -283,14 +279,19 @@ def test_global_census_records_separate_nz_view_threshold_verdicts(monkeypatch):
     report = json.loads(report_path.read_text())
     calls = []
 
-    def compute(compiled, traces, *, view, roots):
+    def compute(compiled, traces, *, view, roots=None):
+        traces = json.loads(traces) if isinstance(traces, bytes) else traces
         calls.append((view, roots))
-        assert hashlib.sha256(compiled).hexdigest() == (
-            traces["compiled_program"]["artifact_sha256"]
+        assert (
+            hashlib.sha256(compiled).hexdigest()
+            == (traces["compiled_program"]["artifact_sha256"])
         )
         return {"mode": "computed", "complete": view != "nz/income-tax"}
 
     monkeypatch.setattr(threshold_straddle, "compute_threshold_straddle", compute)
+    monkeypatch.setattr(
+        threshold_straddle, "apply_threshold_exemptions", lambda blocks, raw: blocks
+    )
     monkeypatch.setattr(
         census, "_iter_suite_reports", lambda: [(report["suite"], report, report_path)]
     )
@@ -301,8 +302,10 @@ def test_global_census_records_separate_nz_view_threshold_verdicts(monkeypatch):
     assert result["suites"] == {}
     views = result["views"][report["suite"]]
     assert set(views) == set(report["experiment"]["views"])
-    assert len(calls) == len(views)
-    for view, roots in calls:
+    assert {view for view, _ in calls} == set(views)
+    bound_calls = [(view, roots) for view, roots in calls if roots is not None]
+    assert {view for view, _ in bound_calls} == set(views)
+    for view, roots in bound_calls:
         assert roots == report["experiment"]["views"][view]["requested_output_roots"]
         assert views[view]["exercised"] is (view != "nz/income-tax")
     assert views["nz/income-tax"]["evaluations_scanned"] == 91
@@ -337,7 +340,13 @@ def test_threshold_loader_rechecks_artifact_bytes(relative_path, marker, monkeyp
         return {"mode": "computed", "complete": True}
 
     monkeypatch.setattr(threshold_straddle, "compute_threshold_straddle", compute)
-    assert census._threshold_straddle_for_view(report, view, receipt)["complete"] is True
+    monkeypatch.setattr(
+        threshold_straddle, "apply_threshold_exemptions", lambda blocks, raw: blocks
+    )
+    assert (
+        census._threshold_straddle_for_view(report, view, receipt)["complete"] is True
+    )
+    calls_before_drift = len(calls)
     original = Path.read_bytes
     target = (REPO_ROOT / relative_path).resolve()
 
@@ -350,7 +359,7 @@ def test_threshold_loader_rechecks_artifact_bytes(relative_path, marker, monkeyp
 
     assert result["mode"] == "unavailable"
     assert marker in result["reason"]
-    assert len(calls) == 1
+    assert len(calls) == calls_before_drift
 
 
 def test_threshold_loader_rejects_comparison_artifact_substitution(monkeypatch):

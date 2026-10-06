@@ -3,7 +3,6 @@
   "blockers": [
     "host-side aggregation pin: rulespec-nz#108 prerequisite 2 remains open; person/child/family aggregation is still performed by the comparison harness because the compiled composition carries no relations. Structural fix axiom-rules-engine#134 is not yet ratified.",
     "exercise: nz/income-tax threshold individual_income_tax_bracket_thresholds[4] = 180000 has no live oracle evaluation above it (max observed 78214.285714285714285714285714)",
-    "exercise: nz/income-tax threshold nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[4]=180000 (individual_income_tax_bracket_thresholds[4] = 180000) has no live oracle evaluation above it",
     "exercise: census incomplete (missing per-case evidence, unaudited bridge, or incomplete threshold straddle) for at least one suite",
     "closed: closure must disposition the act's subordinate instruments (oracles#491); this artifact declares none",
     "closed: closure must type every leaf and encode every law-derived dependency (CERTIFIED.md v3); this artifact declares no dependency-closure block"
@@ -250,6 +249,7 @@
             "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
             "complete": false,
             "defects": [],
+            "exemptions": [],
             "mode": "computed",
             "requested_output_roots": [
               "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits"
@@ -315,34 +315,6 @@
                 "value": "53500"
               },
               {
-                "above": 65,
-                "at": 0,
-                "below": 26,
-                "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/0/items/0/items/0/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[1]=15600;individual_income_tax_bracket_thresholds[2]=53500",
-                "kind": "max",
-                "live_observations": 91,
-                "max_observed": "37900",
-                "min_observed": "-15600",
-                "nearest_above": "1096.935064935064935064935065",
-                "nearest_below": "-1415.395051875498802873104549",
-                "parameters": [
-                  {
-                    "index": 1,
-                    "parameter": "individual_income_tax_bracket_thresholds",
-                    "value": "15600"
-                  },
-                  {
-                    "index": 2,
-                    "parameter": "individual_income_tax_bracket_thresholds",
-                    "value": "53500"
-                  }
-                ],
-                "path": "/expr/items/0/items/0/items/0/items/1/right",
-                "straddled": true,
-                "threshold": "0"
-              },
-              {
                 "above": 2,
                 "at": 0,
                 "below": 89,
@@ -369,34 +341,6 @@
                 "value": "78100"
               },
               {
-                "above": 15,
-                "at": 0,
-                "below": 76,
-                "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/0/items/0/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[2]=53500;individual_income_tax_bracket_thresholds[3]=78100",
-                "kind": "max",
-                "live_observations": 91,
-                "max_observed": "24600",
-                "min_observed": "-53500",
-                "nearest_above": "12.845171588188347964884278",
-                "nearest_below": "-18.906624102154828411811652",
-                "parameters": [
-                  {
-                    "index": 2,
-                    "parameter": "individual_income_tax_bracket_thresholds",
-                    "value": "53500"
-                  },
-                  {
-                    "index": 3,
-                    "parameter": "individual_income_tax_bracket_thresholds",
-                    "value": "78100"
-                  }
-                ],
-                "path": "/expr/items/0/items/0/items/1/right",
-                "straddled": true,
-                "threshold": "0"
-              },
-              {
                 "above": 0,
                 "at": 0,
                 "below": 91,
@@ -420,60 +364,6 @@
                 "path": "/expr/items/0/items/1/right/items/1/left",
                 "straddled": false,
                 "threshold": "180000",
-                "value": "180000"
-              },
-              {
-                "above": 2,
-                "at": 0,
-                "below": 89,
-                "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/0/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[3]=78100;individual_income_tax_bracket_thresholds[4]=180000",
-                "kind": "max",
-                "live_observations": 91,
-                "max_observed": "114.285714285714285714285714",
-                "min_observed": "-78100",
-                "nearest_above": "62.142857142857142857142857",
-                "nearest_below": "-1032.857142857142857142857143",
-                "parameters": [
-                  {
-                    "index": 3,
-                    "parameter": "individual_income_tax_bracket_thresholds",
-                    "value": "78100"
-                  },
-                  {
-                    "index": 4,
-                    "parameter": "individual_income_tax_bracket_thresholds",
-                    "value": "180000"
-                  }
-                ],
-                "path": "/expr/items/0/items/1/right",
-                "straddled": true,
-                "threshold": "0"
-              },
-              {
-                "above": 0,
-                "at": 0,
-                "below": 91,
-                "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[4]=180000",
-                "index": 4,
-                "kind": "max",
-                "live_observations": 91,
-                "max_observed": "-101785.71428571428571428571429",
-                "min_observed": "-180000",
-                "nearest_above": null,
-                "nearest_below": "-101785.71428571428571428571429",
-                "parameter": "individual_income_tax_bracket_thresholds",
-                "parameters": [
-                  {
-                    "index": 4,
-                    "parameter": "individual_income_tax_bracket_thresholds",
-                    "value": "180000"
-                  }
-                ],
-                "path": "/expr/items/1/right",
-                "straddled": false,
-                "threshold": "0",
                 "value": "180000"
               }
             ],
@@ -502,32 +392,6 @@
                 "path": "/expr/items/0/items/1/right/items/1/left",
                 "straddled": false,
                 "threshold": "180000",
-                "value": "180000"
-              },
-              {
-                "above": 0,
-                "at": 0,
-                "below": 91,
-                "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[4]=180000",
-                "index": 4,
-                "kind": "max",
-                "live_observations": 91,
-                "max_observed": "-101785.71428571428571428571429",
-                "min_observed": "-180000",
-                "nearest_above": null,
-                "nearest_below": "-101785.71428571428571428571429",
-                "parameter": "individual_income_tax_bracket_thresholds",
-                "parameters": [
-                  {
-                    "index": 4,
-                    "parameter": "individual_income_tax_bracket_thresholds",
-                    "value": "180000"
-                  }
-                ],
-                "path": "/expr/items/1/right",
-                "straddled": false,
-                "threshold": "0",
                 "value": "180000"
               }
             ]

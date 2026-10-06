@@ -1,15 +1,20 @@
 """Load-bearing invariants for exact interpretation and threshold evidence.
 
-* Every recorded NZ requested output equals the interpreter's typed value;
-  any byte-binding or output disagreement invalidates the whole verdict.
+* Every requested output checked for a view must reproduce its recorded typed
+  value; byte-binding or checked-output disagreement invalidates that verdict.
 * Only executed paths observe sites. Static extraction includes dormant
   reachable paths, so no observation cannot be mistaken for completion.
-* Below/at/above form a disjoint, exhaustive partition of live observations;
-  equality alone never straddles. Counts and verdicts are permutation invariant.
-* Adding a valid evaluation cannot un-straddle an existing site.
-* Missing inputs, unknown IR, and unsupported semantics never become zero.
-* Parameter-only source roots have zero sites only when each selected rule's
-  every version is a numeric literal. The caller must validate its signature.
+* Min/max below/at/above partition live observations; equality alone never
+  straddles. Comparisons partition false/true outcomes into below/above, with
+  equality assigned by the operator. Counts are permutation invariant.
+* For fixed artifact/root scope, adding a valid evaluation cannot remove
+  observed straddling. New period-specific sites or stale exemptions can still
+  make the overall verdict incomplete.
+* Missing inputs, unknown IR, and unsupported semantics cannot establish a
+  zero-site proof.
+* Parameter-only source roots have zero sites only within the accepted source
+  shape, with a dated numeric literal in every selected version. The caller
+  must validate the signature.
 """
 
 from __future__ import annotations
@@ -22,7 +27,7 @@ from decimal import Decimal, localcontext
 from pathlib import Path
 
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given, settings, strategies as st
 
 from scripts.threshold_straddle import (
     InterpretationError,
@@ -30,6 +35,8 @@ from scripts.threshold_straddle import (
     _decimal,
     _literal,
     compute_threshold_straddle,
+    apply_threshold_exemptions,
+    _REPLAY_CACHE,
     parameter_only_straddle,
 )
 
@@ -172,7 +179,7 @@ def test_income_tax_has_no_evidence_above_180000():
     ]
     assert block["self_check"]["complete"]
     assert not block["complete"]
-    assert len(sites) == 2
+    assert len(sites) == 1
     direct = next(s for s in sites if s["threshold"] == "180000")
     assert direct["max_observed"] == "78214.285714285714285714285714"
     assert direct["below"] == 91 and direct["above"] == 0
@@ -307,7 +314,7 @@ def test_difference_of_identical_operands_has_no_input_dependency():
     assert block["sites"] == []
 
 
-def test_finite_precision_prevents_unsound_algebraic_cancellation():
+def test_parameter_on_input_side_is_not_a_threshold():
     program = artifact(
         {"kind": "min", "items": [{"kind": "add", "items": [INPUT, PARAM]}, INPUT]}
     )
@@ -317,9 +324,8 @@ def test_finite_precision_prevents_unsound_algebraic_cancellation():
     maximum = "79228162514264337593543950335"
     block = assess(program, ["0", maximum], ["0", maximum])
     assert block["self_check"]["complete"]
-    assert len(block["sites"]) == 1
-    # At zero, x+p > x. At the maximum coefficient the addition rounds to x.
-    assert block["sites"][0]["above"] == block["sites"][0]["at"] == 1
+    assert block["sites"] == []
+    # Neither side is a parameter-only threshold, irrespective of rounding.
 
 
 def test_equality_is_at_never_straddled_and_eq_ne_are_not_sites():
@@ -418,6 +424,7 @@ def test_input_intervals_select_latest_covering_whole_period():
     assert compute_threshold_straddle(raw, traces)["self_check"]["complete"]
 
 
+@settings(deadline=None)
 @given(st.lists(st.integers(min_value=-100, max_value=100), min_size=1, max_size=25))
 def test_side_partition_and_permutation_invariance(values):
     forward = assess(artifact(), values)
@@ -435,6 +442,7 @@ def test_side_partition_and_permutation_invariance(values):
     assert site["above"] == sum(v > 10 for v in values)
 
 
+@settings(deadline=None)
 @given(
     st.lists(st.integers(-100, 100), min_size=1, max_size=25), st.integers(-100, 100)
 )
@@ -445,6 +453,7 @@ def test_adding_evaluation_cannot_unstraddle(values, extra):
     assert not before["sites"][0]["straddled"] or after["sites"][0]["straddled"]
 
 
+@settings(deadline=None)
 @given(st.integers(min_value=-(10**20), max_value=10**20), st.integers(1, 28))
 def test_decimal_fitting_is_context_independent_and_representable(coefficient, scale):
     exact = Decimal(f"{coefficient}e-{scale}")
@@ -549,7 +558,8 @@ def test_census_route_without_suites_is_not_exercised():
     import importlib.util
 
     spec = importlib.util.spec_from_file_location(
-        "_straddle_certify", Path(__file__).resolve().parents[1] / "scripts" / "certify.py"
+        "_straddle_certify",
+        Path(__file__).resolve().parents[1] / "scripts" / "certify.py",
     )
     certify = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(certify)
@@ -557,3 +567,344 @@ def test_census_route_without_suites_is_not_exercised():
     assert rows == {}
     assert complete is False
 
+
+@pytest.mark.parametrize("op", ["lt", "lte", "gt", "gte"])
+@pytest.mark.parametrize("reverse", [False, True])
+@settings(deadline=None)
+@given(st.lists(st.integers(8, 12), min_size=1, max_size=15))
+def test_comparison_outcomes_partition_equality_and_permute(op, reverse, values):
+    def outcome(value):
+        left, right = (10, value) if reverse else (value, 10)
+        return {
+            "lt": left < right,
+            "lte": left <= right,
+            "gt": left > right,
+            "gte": left >= right,
+        }[op]
+
+    expr = {
+        "kind": "comparison",
+        "op": op,
+        "left": PARAM if reverse else INPUT,
+        "right": INPUT if reverse else PARAM,
+    }
+    outputs = [outcome(value) for value in values]
+    block = assess(artifact(expr), values, outputs)
+    site = block["sites"][0]
+    assert site["above"] == sum(outputs)
+    assert site["below"] == len(outputs) - sum(outputs)
+    assert site["at"] == 0
+    assert site["below"] + site["above"] == site["live_observations"] == len(values)
+    assert site["straddled"] == (any(outputs) and not all(outputs))
+    for label, expected in (("below", False), ("above", True)):
+        nearest = site[f"nearest_{label}"]
+        if nearest is not None:
+            assert outcome(Decimal(nearest)) is expected
+        else:
+            assert not any(value is expected for value in outputs)
+
+    assert (
+        block["sites"] == assess(artifact(expr), values[::-1], outputs[::-1])["sites"]
+    )
+    extended = assess(artifact(expr), [*values, 10], [*outputs, outcome(10)])
+    assert not block["complete"] or extended["complete"]
+
+
+def test_input_versus_its_floor_is_not_a_parameter_threshold():
+    amount = {"kind": "add", "items": [INPUT, PARAM]}
+    expr = {
+        "kind": "comparison",
+        "op": "gt",
+        "left": amount,
+        "right": {"kind": "floor", "value": amount},
+    }
+    block = assess(artifact(expr), [0, "0.5"], [False, True])
+    assert block["self_check"]["complete"] and block["complete"]
+    assert block["sites"] == []
+
+
+@pytest.mark.parametrize("kind", ["parameter", "derived"])
+@settings(deadline=None)
+@given(st.lists(st.integers(1, 100), min_size=2, max_size=10))
+def test_equal_effective_dates_select_last_version(kind, values):
+    program = artifact(PARAM)
+    if kind == "parameter":
+        program["program"]["parameters"][0]["versions"] = [
+            {"effective_from": "2025-01-01", "values": {"0": literal(value)["value"]}}
+            for value in values
+        ]
+    else:
+        program["program"]["derived"][0]["versions"] = [
+            {"effective_from": "2025-01-01", "expr": literal(value)} for value in values
+        ]
+    assert assess(program, [0], [values[-1]])["self_check"]["complete"]
+
+
+@pytest.mark.parametrize(
+    "ident", ["test:module#root", "root", "test:module#X/versions/0"]
+)
+def test_duplicate_or_invalid_derived_ids_fail_closed(ident):
+    program = artifact()
+    program["program"]["derived"].append({"name": "other", "id": ident, "expr": MIN})
+    block = assess(program, [1, 11])
+    assert not block["complete"]
+    assert any("derived id" in reason for reason in block["defects"])
+
+
+@pytest.mark.parametrize(
+    "scope,key,value",
+    [
+        ("rule", "values", {0: 1}),
+        ("rule", "formula", "income"),
+        ("rule", "entity", "Person"),
+        ("rule", "indexed_by", "rank"),
+        ("rule", "id", "other"),
+        ("rule", "future_key", True),
+        ("version", "values", {0: 1}),
+        ("version", "effective_to", "2026-01-01"),
+        ("version", "future_key", True),
+    ],
+)
+def test_parameter_only_proof_rejects_unaccepted_keys(scope, key, value):
+    import yaml
+
+    rule = {
+        "name": "amount",
+        "kind": "parameter",
+        "versions": [{"effective_from": "2025-01-01", "formula": "255"}],
+    }
+    (rule if scope == "rule" else rule["versions"][0])[key] = value
+    block = parameter_only_straddle(
+        yaml.safe_dump({"rules": [rule]}).encode(),
+        roots=["de:test#amount"],
+        module_id="de:test",
+    )
+    assert block["mode"] == "unavailable"
+
+
+def test_parameter_only_version_requires_effective_date():
+    raw = (
+        b"rules:\n- name: amount\n  kind: parameter\n  versions:\n  - formula: '255'\n"
+    )
+    assert not parameter_only_straddle(
+        raw, roots=["de:test#amount"], module_id="de:test"
+    )["complete"]
+
+
+def exemption_ledger(block, **changes):
+    entry = {
+        "program": "test",
+        "view": "test",
+        "site_id": block["sites"][0]["id"],
+        "side": "above",
+        "reason": "Fixture's permitted input domain ends at ten.",
+        "citation": "Fixture input-domain specification.",
+    }
+    entry.update(changes)
+    return json.dumps({"schema_version": 1, "exemptions": [entry]}).encode()
+
+
+def test_exemptions_are_decisions_not_observations():
+    block = assess(artifact(), [1, 10])
+    result = apply_threshold_exemptions({"test": block}, exemption_ledger(block))[
+        "test"
+    ]
+    assert result["complete"]
+    assert result["sites"][0]["above"] == 0
+    assert not result["sites"][0]["straddled"]
+    assert result["sites"][0]["exempted_sides"] == ["above"]
+    assert len(result["unstraddled"]) == len(result["exemptions"]) == 1
+    assert "exemptions" not in block
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"view": "missing"},
+        {"program": "missing"},
+        {"site_id": "missing"},
+        {"side": "below"},
+        {"side": "at"},
+        {"reason": " "},
+        {"citation": ""},
+        {"reason": 1},
+        {"unknown": "x"},
+    ],
+)
+def test_invalid_or_stale_exemptions_fail_closed(changes):
+    block = assess(artifact(), [1, 10])
+    result = apply_threshold_exemptions(
+        {"test": block}, exemption_ledger(block, **changes)
+    )["test"]
+    assert not result["complete"] and result["defects"]
+
+
+def test_exemption_becomes_stale_when_missing_side_is_observed():
+    block = assess(artifact(), [1, 10])
+    after = assess(artifact(), [1, 10, 11])
+    result = apply_threshold_exemptions({"test": after}, exemption_ledger(block))[
+        "test"
+    ]
+    assert not result["complete"] and "stale" in result["defects"][0]
+
+
+def test_replay_cache_shares_views_and_revalidates_bytes_and_traces(monkeypatch):
+    _REPLAY_CACHE.clear()
+    raw, traces = trace(artifact(), [1, 11])
+    traces["evaluations"][1]["view"] = "other"
+    calls = 0
+    original = Interpreter.evaluate
+
+    def counted(self, root):
+        nonlocal calls
+        calls += 1
+        return original(self, root)
+
+    monkeypatch.setattr(Interpreter, "evaluate", counted)
+    first = compute_threshold_straddle(raw, traces, view="test")
+    second = compute_threshold_straddle(raw, traces, view="other")
+    combined = compute_threshold_straddle(raw, traces)
+    assert calls == 2
+    assert first["sites"][0]["below"] == second["sites"][0]["above"] == 1
+    assert not first["complete"] and not second["complete"] and combined["complete"]
+    combined["sites"][0]["below"] = 999
+    assert compute_threshold_straddle(raw, traces)["sites"][0]["below"] == 1
+    assert calls == 2
+    assert not compute_threshold_straddle(raw + b" ", traces)["complete"]
+    changed = copy.deepcopy(traces)
+    changed["evaluations"][0]["response"]["outputs"]["test:module#root"]["value"][
+        "value"
+    ] = 999
+    assert not compute_threshold_straddle(raw, changed)["complete"]
+    assert calls == 4
+    assert compute_threshold_straddle(raw, traces)["complete"]
+    assert calls == 4
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    ["duplicate", "bool_version", "missing_entries", "extra_field", "entries_mapping"],
+)
+def test_exemption_ledger_shape_is_strict(mutation):
+    block = assess(artifact(), [1, 10])
+    ledger = json.loads(exemption_ledger(block))
+    if mutation == "duplicate":
+        ledger["exemptions"] *= 2
+    elif mutation == "bool_version":
+        ledger["schema_version"] = True
+    elif mutation == "missing_entries":
+        del ledger["exemptions"]
+    elif mutation == "extra_field":
+        ledger["extra"] = []
+    else:
+        ledger["exemptions"] = {}
+    result = apply_threshold_exemptions({"test": block}, json.dumps(ledger).encode())[
+        "test"
+    ]
+    assert not result["complete"] and result["defects"]
+
+
+def test_committed_exemptions_reference_missing_sides_without_changing_counts():
+    traces = json.loads(TRACES.read_text())
+    blocks = {
+        view: compute_threshold_straddle(PROGRAM.read_bytes(), traces, view=view)
+        for view in sorted({row["view"] for row in traces["evaluations"]})
+    }
+    applied = apply_threshold_exemptions(
+        blocks, (ROOT / "conformance/threshold-straddle-exemptions.yaml").read_bytes()
+    )
+    assert sum(len(block["exemptions"]) for block in applied.values()) == 1
+    for view, block in applied.items():
+        assert not block["defects"]
+        before = {site["id"]: site for site in blocks[view]["sites"]}
+        for site in block["sites"]:
+            for field in ("below", "at", "above", "live_observations", "straddled"):
+                assert site[field] == before[site["id"]][field]
+    ietc = applied["nz/independent-earner-tax-credit"]
+    assert not ietc["complete"]
+    assert ietc["unstraddled"][0]["exempted_sides"] == ["above"]
+    assert ietc["unstraddled"][0]["below"] == 0
+
+
+def test_removing_exemption_revalidates_original_unobserved_side():
+    block = assess(artifact(), [1, 10])
+    first = apply_threshold_exemptions({"test": block}, exemption_ledger(block))
+    assert first["test"]["complete"]
+    second = apply_threshold_exemptions(first, b'{"schema_version":1,"exemptions":[]}')[
+        "test"
+    ]
+    assert not second["complete"]
+    assert second["exemptions"] == []
+    assert "exempted_sides" not in second["sites"][0]
+
+
+def test_replay_cache_bytes_rechecks_trace_mutation(monkeypatch):
+    _REPLAY_CACHE.clear()
+    raw, traces = trace(artifact(), [1, 11])
+    encoded = json.dumps(traces).encode()
+    first = compute_threshold_straddle(raw, encoded)
+    assert first["complete"]
+
+    def forbidden(*args):
+        raise AssertionError("unchanged trace bytes must reuse replay")
+
+    monkeypatch.setattr(Interpreter, "evaluate", forbidden)
+    assert compute_threshold_straddle(raw, encoded, view="test")["complete"]
+    assert not compute_threshold_straddle(raw, encoded[:-1])["complete"]
+
+
+def test_mutating_dictionary_cannot_change_cached_trace_bytes():
+    _REPLAY_CACHE.clear()
+    raw, traces = trace(artifact(), [1, 11])
+    encoded = json.dumps(traces, sort_keys=True, separators=(",", ":")).encode()
+    assert compute_threshold_straddle(raw, traces)["complete"]
+    traces["evaluations"].clear()
+    assert compute_threshold_straddle(raw, encoded)["complete"]
+    assert not compute_threshold_straddle(raw, traces)["complete"]
+
+
+@pytest.mark.parametrize("raw", [b"rules: [", b"rules:\n  bad: @broken"])
+def test_malformed_yaml_becomes_unavailable_or_ledger_defect(raw):
+    proof = parameter_only_straddle(raw, roots=["de:test#amount"], module_id="de:test")
+    assert proof["mode"] == "unavailable" and not proof["complete"]
+    block = assess(artifact(), [1, 11])
+    invalid = apply_threshold_exemptions({"test": block}, raw)["test"]
+    assert invalid["defects"] and not invalid["complete"]
+
+
+@pytest.mark.parametrize(
+    "extra",
+    [
+        {
+            "source_relation": {
+                "type": "sets",
+                "target": "de:test#amount",
+                "value": "de:test#other",
+            }
+        },
+        {"data_relation": {"arity": 1}},
+        {"future_key": True},
+    ],
+)
+def test_unselected_rules_cannot_carry_global_semantic_fields(extra):
+    import yaml
+
+    document = {
+        "rules": [
+            {
+                "name": "amount",
+                "kind": "parameter",
+                "versions": [{"effective_from": "2025-01-01", "formula": "255"}],
+            },
+            {
+                "name": "other",
+                "kind": "derived",
+                "versions": [{"effective_from": "2025-01-01", "formula": "1"}],
+                **extra,
+            },
+        ]
+    }
+    proof = parameter_only_straddle(
+        yaml.safe_dump(document).encode(), roots=["de:test#amount"], module_id="de:test"
+    )
+    assert proof["mode"] == "unavailable" and not proof["complete"]

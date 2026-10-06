@@ -17,6 +17,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_json_loads, strict_yaml_loads  # noqa: E402
+
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
@@ -162,8 +164,8 @@ def load_source() -> dict:
             raise ClosureError(
                 "NZ closure source bytes changed; review and re-pin the denominator"
             )
-        source = json.loads(raw)
-    except (OSError, json.JSONDecodeError) as exc:
+        source = strict_json_loads(raw)
+    except (OSError, ValueError) as exc:
         raise ClosureError(f"cannot read the NZ closure source: {exc}") from exc
     if not isinstance(source, dict):
         raise ClosureError("NZ closure source must contain an object")
@@ -172,8 +174,8 @@ def load_source() -> dict:
 
 def _load_json_object(path: Path, label: str) -> dict:
     try:
-        value = json.loads(path.read_text())
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        value = strict_json_loads(path.read_text())
+    except (OSError, UnicodeError, ValueError) as exc:
         raise ClosureError(f"cannot read {label}: {exc}") from exc
     if not isinstance(value, dict):
         raise ClosureError(f"{label} must contain an object")
@@ -478,8 +480,8 @@ def _ratchet_at_revision(
             _history_note(f"{label} has no readable {RATCHET_REPO_PATH}")
         return None
     try:
-        document = json.loads(shown.stdout)
-    except json.JSONDecodeError as exc:
+        document = strict_json_loads(shown.stdout)
+    except ValueError as exc:
         raise ClosureError(
             f"{label} denominator ratchet is invalid JSON: {exc}"
         ) from exc
@@ -620,8 +622,8 @@ def bootstrap_source() -> dict:
     ).splitlines():
         raw = _git(RULESPEC_REPO, "show", f"{RULESPEC_SHA}:{path}")
         try:
-            document = yaml.safe_load(raw)
-        except yaml.YAMLError as exc:
+            document = strict_yaml_loads(raw)
+        except (yaml.YAMLError, ValueError) as exc:
             raise ClosureError(f"{path}: invalid YAML at pinned commit: {exc}") from exc
         parsed_files.append((path, document))
         rules = document.get("rules") or [] if isinstance(document, dict) else []
@@ -668,9 +670,9 @@ def bootstrap_source() -> dict:
             _git(CORPUS_REPO, "show", f"{CORPUS_RELEASE_REF}:{path}").splitlines(), 1
         ):
             try:
-                row = json.loads(line)
+                row = strict_json_loads(line)
                 citation = row["citation_path"]
-            except (json.JSONDecodeError, KeyError, TypeError) as exc:
+            except (ValueError, KeyError, TypeError) as exc:
                 raise ClosureError(
                     f"{path}:{line_number}: invalid provision row"
                 ) from exc
@@ -678,7 +680,7 @@ def bootstrap_source() -> dict:
                 raise ClosureError(f"duplicate corpus citation path {citation!r}")
             corpus_paths.add(citation)
     ledger_raw = _git(RULESPEC_REPO, "show", f"{RULESPEC_SHA}:{LEDGER_REPO_PATH}")
-    ledger = yaml.safe_load(ledger_raw)
+    ledger = strict_yaml_loads(ledger_raw)
     return {
         "schema": "axiom_oracles.nz_closure_source.v2",
         "rulespec": {
@@ -999,7 +1001,7 @@ def main() -> int:
             return 0
         source = load_source()
         summary = build(source)
-    except (OSError, json.JSONDecodeError, ClosureError) as exc:
+    except (OSError, ValueError, ClosureError) as exc:
         print(f"NZ closure ERROR: {exc}", file=sys.stderr)
         return 1
     rendered = _render(summary)

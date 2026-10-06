@@ -1,0 +1,26 @@
+{
+  "nyc-income-tax-gap": {
+    "family": "nyc_income_tax",
+    "jurisdiction": "NYC",
+    "label": "NYC income tax components",
+    "region": "us",
+    "kind": "diagnostic",
+    "order": 400
+  },
+  "nyc-income-tax-ecps-diagnostic": {
+    "family": "nyc_income_tax",
+    "jurisdiction": "NYC",
+    "label": "NYC income tax ECPS diagnostic",
+    "region": "us",
+    "kind": "diagnostic",
+    "order": 410
+  },
+  "nyc-synthetic": {
+    "family": "nyc_income_tax",
+    "jurisdiction": "NYC",
+    "label": "NYC synthetic scenarios",
+    "region": "us",
+    "kind": "diagnostic",
+    "order": 420
+  }
+}

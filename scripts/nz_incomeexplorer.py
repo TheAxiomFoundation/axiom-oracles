@@ -35,6 +35,8 @@ from emit_case_artifacts import (  # noqa: E402
     compact_case,
     explained_lookup,
 )
+from axiom_oracles.evidence import strict_json_loads  # noqa: E402
+
 from axiom_oracles.evidence import (  # noqa: E402
     build_chunk_index,
     validate_suite_evidence,
@@ -110,8 +112,8 @@ def _sha256(path: Path) -> str:
 
 def _load(path: Path) -> dict:
     try:
-        value = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+        value = strict_json_loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as exc:
         raise NZRecordError(f"cannot read {path.relative_to(REPO_ROOT)}: {exc}") from exc
     if not isinstance(value, dict):
         raise NZRecordError(f"{path.relative_to(REPO_ROOT)} must contain an object")

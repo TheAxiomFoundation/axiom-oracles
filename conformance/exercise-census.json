@@ -11554,6 +11554,7 @@
           "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
           "complete": false,
           "defects": [],
+          "exemptions": [],
           "mode": "computed",
           "requested_output_roots": [
             "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst"
@@ -11750,7 +11751,7 @@
           }
         },
         "evidence_source": "view-scoped-evaluation-traces",
-        "exercised": false,
+        "exercised": true,
         "inline_cases_not_counted": 0,
         "report": "dashboard/public/data/nz-treasury-incomeexplorer.json",
         "report_sha256": "123fb3378d29322dcff7583cd8365fbd03079f9629183e7e46767eacce0e5784",
@@ -11921,8 +11922,9 @@
         ],
         "threshold_straddle": {
           "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
-          "complete": false,
+          "complete": true,
           "defects": [],
+          "exemptions": [],
           "mode": "computed",
           "requested_output_roots": [
             "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
@@ -11936,583 +11938,8 @@
             "outputs_checked": 1008,
             "outputs_matched": 1008
           },
-          "sites": [
-            {
-              "above": 96,
-              "at": 0,
-              "below": 240,
-              "derived": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction",
-              "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction/expr:items/0~items/1:accommodation_supplement_board_and_contribution_fraction[0]=0.62;accommodation_supplement_full_premises_area_ratio[0]=1;accommodation_supplement_homeownership_entry_threshold_rate[0]=0.3;accommodation_supplement_large_family_area_1_maximum_weekly_rate[0]=305;accommodation_supplement_large_family_area_2_maximum_weekly_rate[0]=220;accommodation_supplement_large_family_area_3_maximum_weekly_rate[0]=160;accommodation_supplement_large_family_area_4_maximum_weekly_rate[0]=120;accommodation_supplement_middle_family_area_1_maximum_weekly_rate[0]=235;accommodation_supplement_middle_family_area_2_maximum_weekly_rate[0]=155;accommodation_supplement_middle_family_area_3_maximum_weekly_rate[0]=105;accommodation_supplement_middle_family_area_4_maximum_weekly_rate[0]=80;accommodation_supplement_other_area_1_maximum_weekly_rate[0]=165;accommodation_supplement_other_area_2_maximum_weekly_rate[0]=105;accommodation_supplement_other_area_3_maximum_weekly_rate[0]=80;accommodation_supplement_other_area_4_maximum_weekly_rate[0]=70;accommodation_supplement_rebate_rate[0]=0.7;accommodation_supplement_rent_board_entry_threshold_rate[0]=0.25",
-              "kind": "min",
-              "live_observations": 336,
-              "max_observed": "387.52498630136986301369863014",
-              "min_observed": "0",
-              "nearest_above": "276.19778846153846153846153845",
-              "nearest_below": "302.14982191780821917808219178",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_board_and_contribution_fraction",
-                  "value": "0.62"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_full_premises_area_ratio",
-                  "value": "1"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_homeownership_entry_threshold_rate",
-                  "value": "0.3"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_1_maximum_weekly_rate",
-                  "value": "305"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_2_maximum_weekly_rate",
-                  "value": "220"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_3_maximum_weekly_rate",
-                  "value": "160"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_4_maximum_weekly_rate",
-                  "value": "120"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_1_maximum_weekly_rate",
-                  "value": "235"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_2_maximum_weekly_rate",
-                  "value": "155"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_3_maximum_weekly_rate",
-                  "value": "105"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_4_maximum_weekly_rate",
-                  "value": "80"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_1_maximum_weekly_rate",
-                  "value": "165"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_2_maximum_weekly_rate",
-                  "value": "105"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_3_maximum_weekly_rate",
-                  "value": "80"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_4_maximum_weekly_rate",
-                  "value": "70"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_rebate_rate",
-                  "value": "0.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_rent_board_entry_threshold_rate",
-                  "value": "0.25"
-                }
-              ],
-              "path": "/expr",
-              "straddled": true,
-              "threshold": null
-            },
-            {
-              "above": 160,
-              "at": 0,
-              "below": 176,
-              "derived": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap",
-              "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap/expr/left:items/1~items/0:accommodation_supplement_board_and_contribution_fraction[0]=0.62;accommodation_supplement_full_premises_area_ratio[0]=1;accommodation_supplement_homeownership_entry_threshold_rate[0]=0.3;accommodation_supplement_rent_board_entry_threshold_rate[0]=0.25",
-              "kind": "max",
-              "live_observations": 336,
-              "max_observed": "553.60712328767123287671232877",
-              "min_observed": "-205.43173076923076923076923078",
-              "nearest_above": "89.515",
-              "nearest_below": "-93.1375",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_board_and_contribution_fraction",
-                  "value": "0.62"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_full_premises_area_ratio",
-                  "value": "1"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_homeownership_entry_threshold_rate",
-                  "value": "0.3"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_rent_board_entry_threshold_rate",
-                  "value": "0.25"
-                }
-              ],
-              "path": "/expr/left",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
-              "above": 76,
-              "at": 260,
-              "below": 0,
-              "derived": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
-              "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment/expr/condition:left~right:accommodation_supplement_board_and_contribution_fraction[0]=0.62;accommodation_supplement_full_premises_area_ratio[0]=1;accommodation_supplement_homeownership_entry_threshold_rate[0]=0.3;accommodation_supplement_large_family_area_1_maximum_weekly_rate[0]=305;accommodation_supplement_large_family_area_2_maximum_weekly_rate[0]=220;accommodation_supplement_large_family_area_3_maximum_weekly_rate[0]=160;accommodation_supplement_large_family_area_4_maximum_weekly_rate[0]=120;accommodation_supplement_middle_family_area_1_maximum_weekly_rate[0]=235;accommodation_supplement_middle_family_area_2_maximum_weekly_rate[0]=155;accommodation_supplement_middle_family_area_3_maximum_weekly_rate[0]=105;accommodation_supplement_middle_family_area_4_maximum_weekly_rate[0]=80;accommodation_supplement_non_beneficiary_income_reduction_rate[0]=0.25;accommodation_supplement_other_area_1_maximum_weekly_rate[0]=165;accommodation_supplement_other_area_2_maximum_weekly_rate[0]=105;accommodation_supplement_other_area_3_maximum_weekly_rate[0]=80;accommodation_supplement_other_area_4_maximum_weekly_rate[0]=70;accommodation_supplement_rebate_rate[0]=0.7;accommodation_supplement_rent_board_entry_threshold_rate[0]=0.25",
-              "kind": "comparison",
-              "live_observations": 336,
-              "max_observed": "302.14982191780821917808219178",
-              "min_observed": "0",
-              "nearest_above": "96.00714285714285714285714285",
-              "nearest_below": null,
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_board_and_contribution_fraction",
-                  "value": "0.62"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_full_premises_area_ratio",
-                  "value": "1"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_homeownership_entry_threshold_rate",
-                  "value": "0.3"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_1_maximum_weekly_rate",
-                  "value": "305"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_2_maximum_weekly_rate",
-                  "value": "220"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_3_maximum_weekly_rate",
-                  "value": "160"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_4_maximum_weekly_rate",
-                  "value": "120"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_1_maximum_weekly_rate",
-                  "value": "235"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_2_maximum_weekly_rate",
-                  "value": "155"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_3_maximum_weekly_rate",
-                  "value": "105"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_4_maximum_weekly_rate",
-                  "value": "80"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_non_beneficiary_income_reduction_rate",
-                  "value": "0.25"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_1_maximum_weekly_rate",
-                  "value": "165"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_2_maximum_weekly_rate",
-                  "value": "105"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_3_maximum_weekly_rate",
-                  "value": "80"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_4_maximum_weekly_rate",
-                  "value": "70"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_rebate_rate",
-                  "value": "0.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_rent_board_entry_threshold_rate",
-                  "value": "0.25"
-                }
-              ],
-              "path": "/expr/condition",
-              "straddled": false,
-              "threshold": null
-            },
-            {
-              "above": 152,
-              "at": 98,
-              "below": 86,
-              "derived": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
-              "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding/expr:items/1~items/0:accommodation_supplement_board_and_contribution_fraction[0]=0.62;accommodation_supplement_full_premises_area_ratio[0]=1;accommodation_supplement_homeownership_entry_threshold_rate[0]=0.3;accommodation_supplement_large_family_area_1_maximum_weekly_rate[0]=305;accommodation_supplement_large_family_area_2_maximum_weekly_rate[0]=220;accommodation_supplement_large_family_area_3_maximum_weekly_rate[0]=160;accommodation_supplement_large_family_area_4_maximum_weekly_rate[0]=120;accommodation_supplement_middle_family_area_1_maximum_weekly_rate[0]=235;accommodation_supplement_middle_family_area_2_maximum_weekly_rate[0]=155;accommodation_supplement_middle_family_area_3_maximum_weekly_rate[0]=105;accommodation_supplement_middle_family_area_4_maximum_weekly_rate[0]=80;accommodation_supplement_non_beneficiary_income_reduction_rate[0]=0.25;accommodation_supplement_other_area_1_maximum_weekly_rate[0]=165;accommodation_supplement_other_area_2_maximum_weekly_rate[0]=105;accommodation_supplement_other_area_3_maximum_weekly_rate[0]=80;accommodation_supplement_other_area_4_maximum_weekly_rate[0]=70;accommodation_supplement_rebate_rate[0]=0.7;accommodation_supplement_rent_board_entry_threshold_rate[0]=0.25",
-              "kind": "max",
-              "live_observations": 336,
-              "max_observed": "302.14982191780821917808219178",
-              "min_observed": "-280.92857142857142857142857142",
-              "nearest_above": "17.82142857142857142857142858",
-              "nearest_below": "-0.1917808219178082191780821925",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_board_and_contribution_fraction",
-                  "value": "0.62"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_full_premises_area_ratio",
-                  "value": "1"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_homeownership_entry_threshold_rate",
-                  "value": "0.3"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_1_maximum_weekly_rate",
-                  "value": "305"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_2_maximum_weekly_rate",
-                  "value": "220"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_3_maximum_weekly_rate",
-                  "value": "160"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_4_maximum_weekly_rate",
-                  "value": "120"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_1_maximum_weekly_rate",
-                  "value": "235"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_2_maximum_weekly_rate",
-                  "value": "155"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_3_maximum_weekly_rate",
-                  "value": "105"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_4_maximum_weekly_rate",
-                  "value": "80"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_non_beneficiary_income_reduction_rate",
-                  "value": "0.25"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_1_maximum_weekly_rate",
-                  "value": "165"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_2_maximum_weekly_rate",
-                  "value": "105"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_3_maximum_weekly_rate",
-                  "value": "80"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_4_maximum_weekly_rate",
-                  "value": "70"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_rebate_rate",
-                  "value": "0.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_rent_board_entry_threshold_rate",
-                  "value": "0.25"
-                }
-              ],
-              "path": "/expr",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
-              "above": 160,
-              "at": 176,
-              "below": 0,
-              "derived": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
-              "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs/expr/else_expr:items/1~items/0:accommodation_supplement_board_and_contribution_fraction[0]=0.62",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 336,
-              "max_observed": "800",
-              "min_observed": "0",
-              "nearest_above": "248",
-              "nearest_below": null,
-              "parameter": "accommodation_supplement_board_and_contribution_fraction",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_board_and_contribution_fraction",
-                  "value": "0.62"
-                }
-              ],
-              "path": "/expr/else_expr",
-              "straddled": false,
-              "threshold": "0",
-              "value": "0.62"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
-              "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs/expr/then_expr:items/1~items/0:accommodation_supplement_board_and_contribution_fraction[0]=0.62;accommodation_supplement_full_premises_area_ratio[0]=1",
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_board_and_contribution_fraction",
-                  "value": "0.62"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_full_premises_area_ratio",
-                  "value": "1"
-                }
-              ],
-              "path": "/expr/then_expr",
-              "straddled": false,
-              "threshold": null
-            }
-          ],
-          "unstraddled": [
-            {
-              "above": 76,
-              "at": 260,
-              "below": 0,
-              "derived": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
-              "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment/expr/condition:left~right:accommodation_supplement_board_and_contribution_fraction[0]=0.62;accommodation_supplement_full_premises_area_ratio[0]=1;accommodation_supplement_homeownership_entry_threshold_rate[0]=0.3;accommodation_supplement_large_family_area_1_maximum_weekly_rate[0]=305;accommodation_supplement_large_family_area_2_maximum_weekly_rate[0]=220;accommodation_supplement_large_family_area_3_maximum_weekly_rate[0]=160;accommodation_supplement_large_family_area_4_maximum_weekly_rate[0]=120;accommodation_supplement_middle_family_area_1_maximum_weekly_rate[0]=235;accommodation_supplement_middle_family_area_2_maximum_weekly_rate[0]=155;accommodation_supplement_middle_family_area_3_maximum_weekly_rate[0]=105;accommodation_supplement_middle_family_area_4_maximum_weekly_rate[0]=80;accommodation_supplement_non_beneficiary_income_reduction_rate[0]=0.25;accommodation_supplement_other_area_1_maximum_weekly_rate[0]=165;accommodation_supplement_other_area_2_maximum_weekly_rate[0]=105;accommodation_supplement_other_area_3_maximum_weekly_rate[0]=80;accommodation_supplement_other_area_4_maximum_weekly_rate[0]=70;accommodation_supplement_rebate_rate[0]=0.7;accommodation_supplement_rent_board_entry_threshold_rate[0]=0.25",
-              "kind": "comparison",
-              "live_observations": 336,
-              "max_observed": "302.14982191780821917808219178",
-              "min_observed": "0",
-              "nearest_above": "96.00714285714285714285714285",
-              "nearest_below": null,
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_board_and_contribution_fraction",
-                  "value": "0.62"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_full_premises_area_ratio",
-                  "value": "1"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_homeownership_entry_threshold_rate",
-                  "value": "0.3"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_1_maximum_weekly_rate",
-                  "value": "305"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_2_maximum_weekly_rate",
-                  "value": "220"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_3_maximum_weekly_rate",
-                  "value": "160"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_large_family_area_4_maximum_weekly_rate",
-                  "value": "120"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_1_maximum_weekly_rate",
-                  "value": "235"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_2_maximum_weekly_rate",
-                  "value": "155"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_3_maximum_weekly_rate",
-                  "value": "105"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_middle_family_area_4_maximum_weekly_rate",
-                  "value": "80"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_non_beneficiary_income_reduction_rate",
-                  "value": "0.25"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_1_maximum_weekly_rate",
-                  "value": "165"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_2_maximum_weekly_rate",
-                  "value": "105"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_3_maximum_weekly_rate",
-                  "value": "80"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_other_area_4_maximum_weekly_rate",
-                  "value": "70"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_rebate_rate",
-                  "value": "0.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_rent_board_entry_threshold_rate",
-                  "value": "0.25"
-                }
-              ],
-              "path": "/expr/condition",
-              "straddled": false,
-              "threshold": null
-            },
-            {
-              "above": 160,
-              "at": 176,
-              "below": 0,
-              "derived": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
-              "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs/expr/else_expr:items/1~items/0:accommodation_supplement_board_and_contribution_fraction[0]=0.62",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 336,
-              "max_observed": "800",
-              "min_observed": "0",
-              "nearest_above": "248",
-              "nearest_below": null,
-              "parameter": "accommodation_supplement_board_and_contribution_fraction",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_board_and_contribution_fraction",
-                  "value": "0.62"
-                }
-              ],
-              "path": "/expr/else_expr",
-              "straddled": false,
-              "threshold": "0",
-              "value": "0.62"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
-              "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs/expr/then_expr:items/1~items/0:accommodation_supplement_board_and_contribution_fraction[0]=0.62;accommodation_supplement_full_premises_area_ratio[0]=1",
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_board_and_contribution_fraction",
-                  "value": "0.62"
-                },
-                {
-                  "index": 0,
-                  "parameter": "accommodation_supplement_full_premises_area_ratio",
-                  "value": "1"
-                }
-              ],
-              "path": "/expr/then_expr",
-              "straddled": false,
-              "threshold": null
-            }
-          ]
+          "sites": [],
+          "unstraddled": []
         },
         "trace_artifact": "comparisons/nz-treasury-incomeexplorer/evaluation-traces.json",
         "trace_binding": "bound",
@@ -12566,6 +11993,7 @@
           "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
           "complete": false,
           "defects": [],
+          "exemptions": [],
           "mode": "computed",
           "requested_output_roots": [
             "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits"
@@ -12631,34 +12059,6 @@
               "value": "53500"
             },
             {
-              "above": 65,
-              "at": 0,
-              "below": 26,
-              "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-              "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/0/items/0/items/0/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[1]=15600;individual_income_tax_bracket_thresholds[2]=53500",
-              "kind": "max",
-              "live_observations": 91,
-              "max_observed": "37900",
-              "min_observed": "-15600",
-              "nearest_above": "1096.935064935064935064935065",
-              "nearest_below": "-1415.395051875498802873104549",
-              "parameters": [
-                {
-                  "index": 1,
-                  "parameter": "individual_income_tax_bracket_thresholds",
-                  "value": "15600"
-                },
-                {
-                  "index": 2,
-                  "parameter": "individual_income_tax_bracket_thresholds",
-                  "value": "53500"
-                }
-              ],
-              "path": "/expr/items/0/items/0/items/0/items/1/right",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
               "above": 2,
               "at": 0,
               "below": 89,
@@ -12685,34 +12085,6 @@
               "value": "78100"
             },
             {
-              "above": 15,
-              "at": 0,
-              "below": 76,
-              "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-              "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/0/items/0/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[2]=53500;individual_income_tax_bracket_thresholds[3]=78100",
-              "kind": "max",
-              "live_observations": 91,
-              "max_observed": "24600",
-              "min_observed": "-53500",
-              "nearest_above": "12.845171588188347964884278",
-              "nearest_below": "-18.906624102154828411811652",
-              "parameters": [
-                {
-                  "index": 2,
-                  "parameter": "individual_income_tax_bracket_thresholds",
-                  "value": "53500"
-                },
-                {
-                  "index": 3,
-                  "parameter": "individual_income_tax_bracket_thresholds",
-                  "value": "78100"
-                }
-              ],
-              "path": "/expr/items/0/items/0/items/1/right",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
               "above": 0,
               "at": 0,
               "below": 91,
@@ -12736,60 +12108,6 @@
               "path": "/expr/items/0/items/1/right/items/1/left",
               "straddled": false,
               "threshold": "180000",
-              "value": "180000"
-            },
-            {
-              "above": 2,
-              "at": 0,
-              "below": 89,
-              "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-              "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/0/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[3]=78100;individual_income_tax_bracket_thresholds[4]=180000",
-              "kind": "max",
-              "live_observations": 91,
-              "max_observed": "114.285714285714285714285714",
-              "min_observed": "-78100",
-              "nearest_above": "62.142857142857142857142857",
-              "nearest_below": "-1032.857142857142857142857143",
-              "parameters": [
-                {
-                  "index": 3,
-                  "parameter": "individual_income_tax_bracket_thresholds",
-                  "value": "78100"
-                },
-                {
-                  "index": 4,
-                  "parameter": "individual_income_tax_bracket_thresholds",
-                  "value": "180000"
-                }
-              ],
-              "path": "/expr/items/0/items/1/right",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 91,
-              "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-              "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[4]=180000",
-              "index": 4,
-              "kind": "max",
-              "live_observations": 91,
-              "max_observed": "-101785.71428571428571428571429",
-              "min_observed": "-180000",
-              "nearest_above": null,
-              "nearest_below": "-101785.71428571428571428571429",
-              "parameter": "individual_income_tax_bracket_thresholds",
-              "parameters": [
-                {
-                  "index": 4,
-                  "parameter": "individual_income_tax_bracket_thresholds",
-                  "value": "180000"
-                }
-              ],
-              "path": "/expr/items/1/right",
-              "straddled": false,
-              "threshold": "0",
               "value": "180000"
             }
           ],
@@ -12818,32 +12136,6 @@
               "path": "/expr/items/0/items/1/right/items/1/left",
               "straddled": false,
               "threshold": "180000",
-              "value": "180000"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 91,
-              "derived": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
-              "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits/expr/items/1/right:items/1~items/0:individual_income_tax_bracket_thresholds[4]=180000",
-              "index": 4,
-              "kind": "max",
-              "live_observations": 91,
-              "max_observed": "-101785.71428571428571428571429",
-              "min_observed": "-180000",
-              "nearest_above": null,
-              "nearest_below": "-101785.71428571428571428571429",
-              "parameter": "individual_income_tax_bracket_thresholds",
-              "parameters": [
-                {
-                  "index": 4,
-                  "parameter": "individual_income_tax_bracket_thresholds",
-                  "value": "180000"
-                }
-              ],
-              "path": "/expr/items/1/right",
-              "straddled": false,
-              "threshold": "0",
               "value": "180000"
             }
           ]
@@ -12990,6 +12282,16 @@
           "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
           "complete": false,
           "defects": [],
+          "exemptions": [
+            {
+              "citation": "Income Tax Act 2007, section LC 13(2) and (6): whole months in the tax year divided by 12. RuleSpec nz:statutes/income_tax/credits/individual_credits, individual_tax_credits_months_in_year and independent_earner_tax_credit_before_status, at 89a7d25d.",
+              "program": "nz/independent-earner-tax-credit",
+              "reason": "The numerator counts eligible whole months within the tax year. A tax year has twelve months, so more than twelve eligible whole months is outside the legal input domain. The below side remains an evidence gap.",
+              "side": "above",
+              "site_id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status/expr/left/right:items/1~items/0:individual_tax_credits_months_in_year[0]=12",
+              "view": "nz/independent-earner-tax-credit"
+            }
+          ],
           "mode": "computed",
           "requested_output_roots": [
             "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit"
@@ -13003,48 +12305,13 @@
           },
           "sites": [
             {
-              "above": 10,
-              "at": 1,
-              "below": 4,
-              "derived": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status",
-              "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status/expr/left/left:items/1~items/0:independent_earner_tax_credit_abatement_rate[0]=0.13;independent_earner_tax_credit_abatement_threshold[0]=66000;independent_earner_tax_credit_full_year_amount[0]=520;independent_earner_tax_credit_minimum_net_income[0]=24000",
-              "kind": "max",
-              "live_observations": 15,
-              "max_observed": "520",
-              "min_observed": "-1067.82",
-              "nearest_above": "3.25",
-              "nearest_below": "-3.51",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "independent_earner_tax_credit_abatement_rate",
-                  "value": "0.13"
-                },
-                {
-                  "index": 0,
-                  "parameter": "independent_earner_tax_credit_abatement_threshold",
-                  "value": "66000"
-                },
-                {
-                  "index": 0,
-                  "parameter": "independent_earner_tax_credit_full_year_amount",
-                  "value": "520"
-                },
-                {
-                  "index": 0,
-                  "parameter": "independent_earner_tax_credit_minimum_net_income",
-                  "value": "24000"
-                }
-              ],
-              "path": "/expr/left/left",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
               "above": 0,
               "at": 15,
               "below": 0,
               "derived": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status",
+              "exempted_sides": [
+                "above"
+              ],
               "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status/expr/left/right:items/1~items/0:individual_tax_credits_months_in_year[0]=12",
               "index": 0,
               "kind": "min",
@@ -13067,32 +12334,6 @@
               "value": "12"
             },
             {
-              "above": 7,
-              "at": 0,
-              "below": 8,
-              "derived": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_full_year_abatement",
-              "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_full_year_abatement/expr/left/value:items/1~items/0:independent_earner_tax_credit_abatement_threshold[0]=66000",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 15,
-              "max_observed": "12214.285714285714285714285714",
-              "min_observed": "-66000",
-              "nearest_above": "12.857142857142857142857143",
-              "nearest_below": "-39.285714285714285714285714",
-              "parameter": "independent_earner_tax_credit_abatement_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "independent_earner_tax_credit_abatement_threshold",
-                  "value": "66000"
-                }
-              ],
-              "path": "/expr/left/value",
-              "straddled": true,
-              "threshold": "0",
-              "value": "66000"
-            },
-            {
               "above": 14,
               "at": 0,
               "below": 1,
@@ -13105,6 +12346,7 @@
               "min_observed": "0",
               "nearest_above": "36135",
               "nearest_below": "0",
+              "op": "gte",
               "parameter": "independent_earner_tax_credit_minimum_net_income",
               "parameters": [
                 {
@@ -13114,6 +12356,10 @@
                 }
               ],
               "path": "/expr/condition",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": true,
               "threshold": "24000",
               "value": "24000"
@@ -13125,6 +12371,9 @@
               "at": 15,
               "below": 0,
               "derived": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status",
+              "exempted_sides": [
+                "above"
+              ],
               "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status/expr/left/right:items/1~items/0:individual_tax_credits_months_in_year[0]=12",
               "index": 0,
               "kind": "min",
@@ -13320,6 +12569,7 @@
           "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
           "complete": false,
           "defects": [],
+          "exemptions": [],
           "mode": "computed",
           "requested_output_roots": [
             "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment",
@@ -13334,9 +12584,9 @@
           },
           "sites": [
             {
-              "above": 30,
+              "above": 0,
               "at": 0,
-              "below": 0,
+              "below": 30,
               "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate",
               "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate/expr/then_expr/else_expr/condition/items/0/items/0:left~right:jobseeker_support_under_20_living_with_parent_age_limit[0]=20",
               "index": 0,
@@ -13344,8 +12594,9 @@
               "live_observations": 30,
               "max_observed": "25",
               "min_observed": "25",
-              "nearest_above": "25",
-              "nearest_below": null,
+              "nearest_above": null,
+              "nearest_below": "25",
+              "op": "lt",
               "parameter": "jobseeker_support_under_20_living_with_parent_age_limit",
               "parameters": [
                 {
@@ -13355,14 +12606,18 @@
                 }
               ],
               "path": "/expr/then_expr/else_expr/condition/items/0/items/0",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "20",
               "value": "20"
             },
             {
               "above": 0,
-              "at": 30,
-              "below": 0,
+              "at": 0,
+              "below": 30,
               "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate",
               "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate/expr/then_expr/else_expr/else_expr/condition:left~right:jobseeker_support_under_25_without_children_age_limit[0]=25",
               "index": 0,
@@ -13371,7 +12626,8 @@
               "max_observed": "25",
               "min_observed": "25",
               "nearest_above": null,
-              "nearest_below": null,
+              "nearest_below": "25",
+              "op": "lt",
               "parameter": "jobseeker_support_under_25_without_children_age_limit",
               "parameters": [
                 {
@@ -13381,13 +12637,17 @@
                 }
               ],
               "path": "/expr/then_expr/else_expr/else_expr/condition",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "25",
               "value": "25"
             },
             {
-              "above": 0,
-              "at": 16,
+              "above": 16,
+              "at": 0,
               "below": 3,
               "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate",
               "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate/expr/then_expr/then_expr/condition:left~right:jobseeker_support_youngest_child_14_or_older_age_threshold[0]=14",
@@ -13396,8 +12656,9 @@
               "live_observations": 19,
               "max_observed": "14",
               "min_observed": "0",
-              "nearest_above": null,
+              "nearest_above": "14",
               "nearest_below": "6",
+              "op": "gte",
               "parameter": "jobseeker_support_youngest_child_14_or_older_age_threshold",
               "parameters": [
                 {
@@ -13407,246 +12668,13 @@
                 }
               ],
               "path": "/expr/then_expr/then_expr/condition",
-              "straddled": false,
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
+              "straddled": true,
               "threshold": "14",
               "value": "14"
-            },
-            {
-              "above": 99,
-              "at": 0,
-              "below": 51,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment/expr:items/1~items/0:jobseeker_support_partner_ineligible_with_children_special_weekly_rate[0]=334.7;jobseeker_support_partner_ineligible_without_children_special_weekly_rate[0]=316.97;jobseeker_support_partnered_both_main_benefits_with_children_weekly_rate[0]=334.7;jobseeker_support_partnered_both_main_benefits_without_children_weekly_rate[0]=316.97;jobseeker_support_partnered_partner_without_own_benefit_with_children_weekly_rate[0]=669.4;jobseeker_support_partnered_partner_without_own_benefit_without_children_weekly_rate[0]=633.94;jobseeker_support_partnered_with_super_or_veterans_with_children_weekly_rate[0]=334.7;jobseeker_support_partnered_with_super_or_veterans_without_children_weekly_rate[0]=316.97;jobseeker_support_single_no_children_standard_weekly_rate[0]=372.55;jobseeker_support_single_no_children_transferred_2013_weekly_rate[0]=384.52;jobseeker_support_single_under_20_living_with_parent_weekly_rate[0]=276.46;jobseeker_support_single_under_25_without_children_weekly_rate[0]=324.5;jobseeker_support_single_with_dependent_children_weekly_rate[0]=521.52;jobseeker_support_single_youngest_child_14_or_older_weekly_rate[0]=521.52;jobseeker_support_under_20_living_with_parent_age_limit[0]=20;jobseeker_support_under_25_without_children_age_limit[0]=25;jobseeker_support_youngest_child_14_or_older_age_threshold[0]=14;main_benefit_income_test_1_lower_abatement_rate[0]=0.3;main_benefit_income_test_1_upper_abatement_rate[0]=0.7;main_benefit_income_test_3_abatement_rate[0]=0.7;main_benefit_income_test_4_abatement_rate[0]=0.35;main_benefit_income_test_lower_weekly_threshold[0]=160;main_benefit_income_test_upper_weekly_threshold[0]=250",
-              "kind": "max",
-              "live_observations": 150,
-              "max_observed": "521.52",
-              "min_observed": "-565.45",
-              "nearest_above": "0.15",
-              "nearest_below": "-0.55",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_partner_ineligible_with_children_special_weekly_rate",
-                  "value": "334.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_partner_ineligible_without_children_special_weekly_rate",
-                  "value": "316.97"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_partnered_both_main_benefits_with_children_weekly_rate",
-                  "value": "334.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_partnered_both_main_benefits_without_children_weekly_rate",
-                  "value": "316.97"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_partnered_partner_without_own_benefit_with_children_weekly_rate",
-                  "value": "669.4"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_partnered_partner_without_own_benefit_without_children_weekly_rate",
-                  "value": "633.94"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_partnered_with_super_or_veterans_with_children_weekly_rate",
-                  "value": "334.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_partnered_with_super_or_veterans_without_children_weekly_rate",
-                  "value": "316.97"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_single_no_children_standard_weekly_rate",
-                  "value": "372.55"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_single_no_children_transferred_2013_weekly_rate",
-                  "value": "384.52"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_single_under_20_living_with_parent_weekly_rate",
-                  "value": "276.46"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_single_under_25_without_children_weekly_rate",
-                  "value": "324.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_single_with_dependent_children_weekly_rate",
-                  "value": "521.52"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_single_youngest_child_14_or_older_weekly_rate",
-                  "value": "521.52"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_under_20_living_with_parent_age_limit",
-                  "value": "20"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_under_25_without_children_age_limit",
-                  "value": "25"
-                },
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_youngest_child_14_or_older_age_threshold",
-                  "value": "14"
-                },
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_1_lower_abatement_rate",
-                  "value": "0.3"
-                },
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_1_upper_abatement_rate",
-                  "value": "0.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_3_abatement_rate",
-                  "value": "0.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_4_abatement_rate",
-                  "value": "0.35"
-                },
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                },
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_upper_weekly_threshold",
-                  "value": "250"
-                }
-              ],
-              "path": "/expr",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/else_expr/else_expr/left:items/1~items/0:main_benefit_income_test_lower_weekly_threshold[0]=160",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameter": "main_benefit_income_test_lower_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                }
-              ],
-              "path": "/expr/else_expr/else_expr/left",
-              "straddled": false,
-              "threshold": null,
-              "value": "160"
-            },
-            {
-              "above": 92,
-              "at": 2,
-              "below": 7,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/else_expr/then_expr/left:items/1~items/0:main_benefit_income_test_lower_weekly_threshold[0]=160",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 101,
-              "max_observed": "2080",
-              "min_observed": "-160",
-              "nearest_above": "1",
-              "nearest_below": "-159",
-              "parameter": "main_benefit_income_test_lower_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                }
-              ],
-              "path": "/expr/else_expr/then_expr/left",
-              "straddled": true,
-              "threshold": "0",
-              "value": "160"
-            },
-            {
-              "above": 27,
-              "at": 1,
-              "below": 2,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/then_expr/else_expr/else_expr/left:items/1~items/0:main_benefit_income_test_lower_weekly_threshold[0]=160",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 30,
-              "max_observed": "1340",
-              "min_observed": "-160",
-              "nearest_above": "1",
-              "nearest_below": "-159",
-              "parameter": "main_benefit_income_test_lower_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                }
-              ],
-              "path": "/expr/then_expr/else_expr/else_expr/left",
-              "straddled": true,
-              "threshold": "0",
-              "value": "160"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/then_expr/else_expr/then_expr/items/0/left/items/0:items/1~items/0:main_benefit_income_test_lower_weekly_threshold[0]=160",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameter": "main_benefit_income_test_lower_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                }
-              ],
-              "path": "/expr/then_expr/else_expr/then_expr/items/0/left/items/0",
-              "straddled": false,
-              "threshold": null,
-              "value": "160"
             },
             {
               "above": 0,
@@ -13677,58 +12705,6 @@
               "threshold": null
             },
             {
-              "above": 0,
-              "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/then_expr/else_expr/then_expr/items/1/left:items/1~items/0:main_benefit_income_test_upper_weekly_threshold[0]=250",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameter": "main_benefit_income_test_upper_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_upper_weekly_threshold",
-                  "value": "250"
-                }
-              ],
-              "path": "/expr/then_expr/else_expr/then_expr/items/1/left",
-              "straddled": false,
-              "threshold": null,
-              "value": "250"
-            },
-            {
-              "above": 13,
-              "at": 1,
-              "below": 5,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/then_expr/then_expr/items/0/left/items/0:items/1~items/0:main_benefit_income_test_lower_weekly_threshold[0]=160",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 19,
-              "max_observed": "1340",
-              "min_observed": "-160",
-              "nearest_above": "1",
-              "nearest_below": "-159",
-              "parameter": "main_benefit_income_test_lower_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                }
-              ],
-              "path": "/expr/then_expr/then_expr/items/0/left/items/0",
-              "straddled": true,
-              "threshold": "0",
-              "value": "160"
-            },
-            {
               "above": 11,
               "at": 1,
               "below": 7,
@@ -13757,32 +12733,6 @@
               "threshold": "90"
             },
             {
-              "above": 11,
-              "at": 1,
-              "below": 7,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/then_expr/then_expr/items/1/left:items/1~items/0:main_benefit_income_test_upper_weekly_threshold[0]=250",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 19,
-              "max_observed": "1250",
-              "min_observed": "-250",
-              "nearest_above": "1",
-              "nearest_below": "-89",
-              "parameter": "main_benefit_income_test_upper_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_upper_weekly_threshold",
-                  "value": "250"
-                }
-              ],
-              "path": "/expr/then_expr/then_expr/items/1/left",
-              "straddled": true,
-              "threshold": "0",
-              "value": "250"
-            },
-            {
               "above": 0,
               "at": 0,
               "below": 16,
@@ -13807,108 +12757,6 @@
               "straddled": false,
               "threshold": "20",
               "value": "20"
-            },
-            {
-              "above": 15,
-              "at": 1,
-              "below": 0,
-              "derived": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test",
-              "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test/expr:items/1~items/0:sole_parent_support_childcare_earnings_disregard_maximum[0]=20",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 16,
-              "max_observed": "1500",
-              "min_observed": "0",
-              "nearest_above": "1",
-              "nearest_below": null,
-              "parameter": "sole_parent_support_childcare_earnings_disregard_maximum",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "sole_parent_support_childcare_earnings_disregard_maximum",
-                  "value": "20"
-                }
-              ],
-              "path": "/expr",
-              "straddled": false,
-              "threshold": "0",
-              "value": "20"
-            },
-            {
-              "above": 12,
-              "at": 0,
-              "below": 4,
-              "derived": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment",
-              "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment/expr:items/1~items/0:main_benefit_income_test_1_lower_abatement_rate[0]=0.3;main_benefit_income_test_1_upper_abatement_rate[0]=0.7;main_benefit_income_test_lower_weekly_threshold[0]=160;main_benefit_income_test_upper_weekly_threshold[0]=250;sole_parent_support_childcare_earnings_disregard_maximum[0]=20;sole_parent_support_weekly_rate[0]=521.52",
-              "kind": "max",
-              "live_observations": 16,
-              "max_observed": "521.52",
-              "min_observed": "-380.48",
-              "nearest_above": "150.82",
-              "nearest_below": "-30.48",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_1_lower_abatement_rate",
-                  "value": "0.3"
-                },
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_1_upper_abatement_rate",
-                  "value": "0.7"
-                },
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                },
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_upper_weekly_threshold",
-                  "value": "250"
-                },
-                {
-                  "index": 0,
-                  "parameter": "sole_parent_support_childcare_earnings_disregard_maximum",
-                  "value": "20"
-                },
-                {
-                  "index": 0,
-                  "parameter": "sole_parent_support_weekly_rate",
-                  "value": "521.52"
-                }
-              ],
-              "path": "/expr",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
-              "above": 13,
-              "at": 1,
-              "below": 2,
-              "derived": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction/expr/items/0/left/items/0:items/1~items/0:main_benefit_income_test_lower_weekly_threshold[0]=160;sole_parent_support_childcare_earnings_disregard_maximum[0]=20",
-              "kind": "max",
-              "live_observations": 16,
-              "max_observed": "1340",
-              "min_observed": "-160",
-              "nearest_above": "1",
-              "nearest_below": "-159",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                },
-                {
-                  "index": 0,
-                  "parameter": "sole_parent_support_childcare_earnings_disregard_maximum",
-                  "value": "20"
-                }
-              ],
-              "path": "/expr/items/0/left/items/0",
-              "straddled": true,
-              "threshold": "0"
             },
             {
               "above": 11,
@@ -13942,41 +12790,13 @@
               "path": "/expr/items/0/left",
               "straddled": true,
               "threshold": "90"
-            },
-            {
-              "above": 11,
-              "at": 1,
-              "below": 4,
-              "derived": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction/expr/items/1/left:items/1~items/0:main_benefit_income_test_upper_weekly_threshold[0]=250;sole_parent_support_childcare_earnings_disregard_maximum[0]=20",
-              "kind": "max",
-              "live_observations": 16,
-              "max_observed": "1250",
-              "min_observed": "-250",
-              "nearest_above": "1",
-              "nearest_below": "-89",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_upper_weekly_threshold",
-                  "value": "250"
-                },
-                {
-                  "index": 0,
-                  "parameter": "sole_parent_support_childcare_earnings_disregard_maximum",
-                  "value": "20"
-                }
-              ],
-              "path": "/expr/items/1/left",
-              "straddled": true,
-              "threshold": "0"
             }
           ],
           "unstraddled": [
             {
-              "above": 30,
+              "above": 0,
               "at": 0,
-              "below": 0,
+              "below": 30,
               "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate",
               "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate/expr/then_expr/else_expr/condition/items/0/items/0:left~right:jobseeker_support_under_20_living_with_parent_age_limit[0]=20",
               "index": 0,
@@ -13984,8 +12804,9 @@
               "live_observations": 30,
               "max_observed": "25",
               "min_observed": "25",
-              "nearest_above": "25",
-              "nearest_below": null,
+              "nearest_above": null,
+              "nearest_below": "25",
+              "op": "lt",
               "parameter": "jobseeker_support_under_20_living_with_parent_age_limit",
               "parameters": [
                 {
@@ -13995,14 +12816,18 @@
                 }
               ],
               "path": "/expr/then_expr/else_expr/condition/items/0/items/0",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "20",
               "value": "20"
             },
             {
               "above": 0,
-              "at": 30,
-              "below": 0,
+              "at": 0,
+              "below": 30,
               "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate",
               "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate/expr/then_expr/else_expr/else_expr/condition:left~right:jobseeker_support_under_25_without_children_age_limit[0]=25",
               "index": 0,
@@ -14011,7 +12836,8 @@
               "max_observed": "25",
               "min_observed": "25",
               "nearest_above": null,
-              "nearest_below": null,
+              "nearest_below": "25",
+              "op": "lt",
               "parameter": "jobseeker_support_under_25_without_children_age_limit",
               "parameters": [
                 {
@@ -14021,87 +12847,13 @@
                 }
               ],
               "path": "/expr/then_expr/else_expr/else_expr/condition",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "25",
               "value": "25"
-            },
-            {
-              "above": 0,
-              "at": 16,
-              "below": 3,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate/expr/then_expr/then_expr/condition:left~right:jobseeker_support_youngest_child_14_or_older_age_threshold[0]=14",
-              "index": 0,
-              "kind": "comparison",
-              "live_observations": 19,
-              "max_observed": "14",
-              "min_observed": "0",
-              "nearest_above": null,
-              "nearest_below": "6",
-              "parameter": "jobseeker_support_youngest_child_14_or_older_age_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "jobseeker_support_youngest_child_14_or_older_age_threshold",
-                  "value": "14"
-                }
-              ],
-              "path": "/expr/then_expr/then_expr/condition",
-              "straddled": false,
-              "threshold": "14",
-              "value": "14"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/else_expr/else_expr/left:items/1~items/0:main_benefit_income_test_lower_weekly_threshold[0]=160",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameter": "main_benefit_income_test_lower_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                }
-              ],
-              "path": "/expr/else_expr/else_expr/left",
-              "straddled": false,
-              "threshold": null,
-              "value": "160"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/then_expr/else_expr/then_expr/items/0/left/items/0:items/1~items/0:main_benefit_income_test_lower_weekly_threshold[0]=160",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameter": "main_benefit_income_test_lower_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_lower_weekly_threshold",
-                  "value": "160"
-                }
-              ],
-              "path": "/expr/then_expr/else_expr/then_expr/items/0/left/items/0",
-              "straddled": false,
-              "threshold": null,
-              "value": "160"
             },
             {
               "above": 0,
@@ -14134,32 +12886,6 @@
             {
               "above": 0,
               "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
-              "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction/expr/then_expr/else_expr/then_expr/items/1/left:items/1~items/0:main_benefit_income_test_upper_weekly_threshold[0]=250",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameter": "main_benefit_income_test_upper_weekly_threshold",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "main_benefit_income_test_upper_weekly_threshold",
-                  "value": "250"
-                }
-              ],
-              "path": "/expr/then_expr/else_expr/then_expr/items/1/left",
-              "straddled": false,
-              "threshold": null,
-              "value": "250"
-            },
-            {
-              "above": 0,
-              "at": 0,
               "below": 16,
               "derived": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_disregarded_for_childcare",
               "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_disregarded_for_childcare/expr:items/1~items/0:sole_parent_support_childcare_earnings_disregard_maximum[0]=20",
@@ -14181,32 +12907,6 @@
               "path": "/expr",
               "straddled": false,
               "threshold": "20",
-              "value": "20"
-            },
-            {
-              "above": 15,
-              "at": 1,
-              "below": 0,
-              "derived": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test",
-              "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test/expr:items/1~items/0:sole_parent_support_childcare_earnings_disregard_maximum[0]=20",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 16,
-              "max_observed": "1500",
-              "min_observed": "0",
-              "nearest_above": "1",
-              "nearest_below": null,
-              "parameter": "sole_parent_support_childcare_earnings_disregard_maximum",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "sole_parent_support_childcare_earnings_disregard_maximum",
-                  "value": "20"
-                }
-              ],
-              "path": "/expr",
-              "straddled": false,
-              "threshold": "0",
               "value": "20"
             }
           ]
@@ -14272,6 +12972,7 @@
           "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
           "complete": true,
           "defects": [],
+          "exemptions": [],
           "mode": "computed",
           "requested_output_roots": [
             "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period"
@@ -15396,6 +14097,7 @@
           "compiled_program_sha256": "b1d72c1f4840a1774aefbddc9692e22a79ced26cde6c44efb4c01fc394a15c33",
           "complete": false,
           "defects": [],
+          "exemptions": [],
           "mode": "computed",
           "requested_output_roots": [
             "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
@@ -15430,6 +14132,7 @@
               "min_observed": "25",
               "nearest_above": "25",
               "nearest_below": null,
+              "op": "gte",
               "parameter": "wff_minimum_age",
               "parameters": [
                 {
@@ -15439,13 +14142,17 @@
                 }
               ],
               "path": "/expr",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "16",
               "value": "16"
             },
             {
-              "above": 0,
-              "at": 95,
+              "above": 95,
+              "at": 0,
               "below": 0,
               "derived": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement",
               "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement/expr/items/0/items/0/items/0/items/1:left~right:wff_residence_continuous_presence_months[0]=12",
@@ -15454,8 +14161,9 @@
               "live_observations": 95,
               "max_observed": "12",
               "min_observed": "12",
-              "nearest_above": null,
+              "nearest_above": "12",
               "nearest_below": null,
+              "op": "gte",
               "parameter": "wff_residence_continuous_presence_months",
               "parameters": [
                 {
@@ -15465,6 +14173,10 @@
                 }
               ],
               "path": "/expr/items/0/items/0/items/0/items/1",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "12",
               "value": "12"
@@ -15482,6 +14194,7 @@
               "min_observed": "1",
               "nearest_above": "1",
               "nearest_below": null,
+              "op": "gte",
               "parameter": "wff_principal_caregiver_minimum_exclusive_care_fraction",
               "parameters": [
                 {
@@ -15491,6 +14204,10 @@
                 }
               ],
               "path": "/expr/items/1",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "0.3333333333333333",
               "value": "0.3333333333333333"
@@ -15508,6 +14225,7 @@
               "min_observed": null,
               "nearest_above": null,
               "nearest_below": null,
+              "op": "lte",
               "parameter": "in_work_tax_credit_recent_requirement_concession_days",
               "parameters": [
                 {
@@ -15517,6 +14235,10 @@
                 }
               ],
               "path": "/expr/items/1",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": null,
               "value": "14"
@@ -15534,6 +14256,7 @@
               "min_observed": "0",
               "nearest_above": null,
               "nearest_below": "0",
+              "op": "gte",
               "parameter": "family_scheme_controlling_shareholder_voting_interest_threshold",
               "parameters": [
                 {
@@ -15543,63 +14266,13 @@
                 }
               ],
               "path": "/expr/condition",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "0.5",
               "value": "0.5"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
-              "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income/expr/then_expr/left:items/1~items/0:family_scheme_dependent_child_income_exemption[0]=500",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameter": "family_scheme_dependent_child_income_exemption",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_dependent_child_income_exemption",
-                  "value": "500"
-                }
-              ],
-              "path": "/expr/then_expr/left",
-              "straddled": false,
-              "threshold": null,
-              "value": "500"
-            },
-            {
-              "above": 0,
-              "at": 8,
-              "below": 170,
-              "derived": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income",
-              "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income/expr/condition:left~right:family_scheme_short_term_charge_facility_amount_cap[0]=1200;family_scheme_short_term_charge_facility_salary_rate[0]=0.05",
-              "kind": "comparison",
-              "live_observations": 178,
-              "max_observed": "0",
-              "min_observed": "0",
-              "nearest_above": null,
-              "nearest_below": "0",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_amount_cap",
-                  "value": "1200"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_salary_rate",
-                  "value": "0.05"
-                }
-              ],
-              "path": "/expr/condition",
-              "straddled": false,
-              "threshold": null
             },
             {
               "above": 118,
@@ -15630,200 +14303,6 @@
               "threshold": "1200"
             },
             {
-              "above": 12,
-              "at": 0,
-              "below": 29,
-              "derived": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_full_year_abatement",
-              "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_full_year_abatement/expr/left/value:items/1~items/0:best_start_abatement_threshold[0]=79000;family_scheme_controlling_shareholder_voting_interest_threshold[0]=0.5;family_scheme_days_in_year[0]=365;family_scheme_dependent_child_income_exemption[0]=500;family_scheme_pension_or_annuity_inclusion_rate[0]=0.5;family_scheme_short_term_charge_facility_amount_cap[0]=1200;family_scheme_short_term_charge_facility_salary_rate[0]=0.05",
-              "kind": "max",
-              "live_observations": 41,
-              "max_observed": "37800",
-              "min_observed": "-70657.142857142857142857142857",
-              "nearest_above": "48.57142857142857142857143",
-              "nearest_below": "-3.57142857142857142857143",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "best_start_abatement_threshold",
-                  "value": "79000"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_controlling_shareholder_voting_interest_threshold",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_days_in_year",
-                  "value": "365"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_dependent_child_income_exemption",
-                  "value": "500"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_pension_or_annuity_inclusion_rate",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_amount_cap",
-                  "value": "1200"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_salary_rate",
-                  "value": "0.05"
-                }
-              ],
-              "path": "/expr/left/value",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
-              "above": 36,
-              "at": 0,
-              "below": 5,
-              "derived": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit",
-              "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit/expr:items/1~items/0:best_start_abatement_rate[0]=0.21;best_start_abatement_threshold[0]=79000;best_start_tax_credit_prescribed_amount[0]=4041;family_scheme_controlling_shareholder_voting_interest_threshold[0]=0.5;family_scheme_days_in_year[0]=365;family_scheme_dependent_child_income_exemption[0]=500;family_scheme_pension_or_annuity_inclusion_rate[0]=0.5;family_scheme_short_term_charge_facility_amount_cap[0]=1200;family_scheme_short_term_charge_facility_salary_rate[0]=0.05;wff_days_in_tax_year[0]=365",
-              "kind": "max",
-              "live_observations": 41,
-              "max_observed": "4041",
-              "min_observed": "-3897",
-              "nearest_above": "187.5",
-              "nearest_below": "-3634.08",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "best_start_abatement_rate",
-                  "value": "0.21"
-                },
-                {
-                  "index": 0,
-                  "parameter": "best_start_abatement_threshold",
-                  "value": "79000"
-                },
-                {
-                  "index": 0,
-                  "parameter": "best_start_tax_credit_prescribed_amount",
-                  "value": "4041"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_controlling_shareholder_voting_interest_threshold",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_days_in_year",
-                  "value": "365"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_dependent_child_income_exemption",
-                  "value": "500"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_pension_or_annuity_inclusion_rate",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_amount_cap",
-                  "value": "1200"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_salary_rate",
-                  "value": "0.05"
-                },
-                {
-                  "index": 0,
-                  "parameter": "wff_days_in_tax_year",
-                  "value": "365"
-                }
-              ],
-              "path": "/expr",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
-              "above": 85,
-              "at": 42,
-              "below": 10,
-              "derived": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
-              "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement/expr:items/1~items/0:family_scheme_controlling_shareholder_voting_interest_threshold[0]=0.5;family_scheme_days_in_year[0]=365;family_scheme_dependent_child_income_exemption[0]=500;family_scheme_pension_or_annuity_inclusion_rate[0]=0.5;family_scheme_short_term_charge_facility_amount_cap[0]=1200;family_scheme_short_term_charge_facility_salary_rate[0]=0.05;family_tax_credit_eldest_child_annual_amount[0]=7921;family_tax_credit_subsequent_child_annual_amount[0]=6454;wff_days_in_tax_year[0]=365;wff_family_credit_abatement_rate[0]=0.275;wff_family_credit_abatement_threshold[0]=44900",
-              "kind": "max",
-              "live_observations": 137,
-              "max_observed": "27283",
-              "min_observed": "-5397.5",
-              "nearest_above": "1758",
-              "nearest_below": "-20.15",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_controlling_shareholder_voting_interest_threshold",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_days_in_year",
-                  "value": "365"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_dependent_child_income_exemption",
-                  "value": "500"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_pension_or_annuity_inclusion_rate",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_amount_cap",
-                  "value": "1200"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_salary_rate",
-                  "value": "0.05"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_tax_credit_eldest_child_annual_amount",
-                  "value": "7921"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_tax_credit_subsequent_child_annual_amount",
-                  "value": "6454"
-                },
-                {
-                  "index": 0,
-                  "parameter": "wff_days_in_tax_year",
-                  "value": "365"
-                },
-                {
-                  "index": 0,
-                  "parameter": "wff_family_credit_abatement_rate",
-                  "value": "0.275"
-                },
-                {
-                  "index": 0,
-                  "parameter": "wff_family_credit_abatement_threshold",
-                  "value": "44900"
-                }
-              ],
-              "path": "/expr",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
               "above": 14,
               "at": 14,
               "below": 59,
@@ -15848,160 +14327,6 @@
               "straddled": true,
               "threshold": "3",
               "value": "3"
-            },
-            {
-              "above": 23,
-              "at": 70,
-              "below": 44,
-              "derived": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit",
-              "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit/expr:items/1~items/0:minimum_family_tax_credit_prescribed_amount[0]=36604;wff_weeks_in_tax_year[0]=52",
-              "kind": "max",
-              "live_observations": 137,
-              "max_observed": "19641.991780821917808219178083",
-              "min_observed": "-58585.77534246575342465753425",
-              "nearest_above": "3052.6917808219178082191780819",
-              "nearest_below": "-1862.3482191780821917808219181",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "minimum_family_tax_credit_prescribed_amount",
-                  "value": "36604"
-                },
-                {
-                  "index": 0,
-                  "parameter": "wff_weeks_in_tax_year",
-                  "value": "52"
-                }
-              ],
-              "path": "/expr",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
-              "above": 10,
-              "at": 42,
-              "below": 85,
-              "derived": "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit",
-              "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit/expr:items/1~items/0:family_scheme_controlling_shareholder_voting_interest_threshold[0]=0.5;family_scheme_days_in_year[0]=365;family_scheme_dependent_child_income_exemption[0]=500;family_scheme_pension_or_annuity_inclusion_rate[0]=0.5;family_scheme_short_term_charge_facility_amount_cap[0]=1200;family_scheme_short_term_charge_facility_salary_rate[0]=0.05;family_tax_credit_eldest_child_annual_amount[0]=7921;family_tax_credit_subsequent_child_annual_amount[0]=6454;wff_days_in_tax_year[0]=365;wff_family_credit_abatement_rate[0]=0.275;wff_family_credit_abatement_threshold[0]=44900",
-              "kind": "max",
-              "live_observations": 137,
-              "max_observed": "5397.5",
-              "min_observed": "-27283",
-              "nearest_above": "20.15",
-              "nearest_below": "-1758",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_controlling_shareholder_voting_interest_threshold",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_days_in_year",
-                  "value": "365"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_dependent_child_income_exemption",
-                  "value": "500"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_pension_or_annuity_inclusion_rate",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_amount_cap",
-                  "value": "1200"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_salary_rate",
-                  "value": "0.05"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_tax_credit_eldest_child_annual_amount",
-                  "value": "7921"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_tax_credit_subsequent_child_annual_amount",
-                  "value": "6454"
-                },
-                {
-                  "index": 0,
-                  "parameter": "wff_days_in_tax_year",
-                  "value": "365"
-                },
-                {
-                  "index": 0,
-                  "parameter": "wff_family_credit_abatement_rate",
-                  "value": "0.275"
-                },
-                {
-                  "index": 0,
-                  "parameter": "wff_family_credit_abatement_threshold",
-                  "value": "44900"
-                }
-              ],
-              "path": "/expr",
-              "straddled": true,
-              "threshold": "0"
-            },
-            {
-              "above": 65,
-              "at": 0,
-              "below": 72,
-              "derived": "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_full_year_abatement",
-              "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_full_year_abatement/expr/left/value:items/1~items/0:family_scheme_controlling_shareholder_voting_interest_threshold[0]=0.5;family_scheme_days_in_year[0]=365;family_scheme_dependent_child_income_exemption[0]=500;family_scheme_pension_or_annuity_inclusion_rate[0]=0.5;family_scheme_short_term_charge_facility_amount_cap[0]=1200;family_scheme_short_term_charge_facility_salary_rate[0]=0.05;wff_family_credit_abatement_threshold[0]=44900",
-              "kind": "max",
-              "live_observations": 137,
-              "max_observed": "71900",
-              "min_observed": "-36557.142857142857142857142857",
-              "nearest_above": "47.142857142857142857142858",
-              "nearest_below": "-5",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_controlling_shareholder_voting_interest_threshold",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_days_in_year",
-                  "value": "365"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_dependent_child_income_exemption",
-                  "value": "500"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_pension_or_annuity_inclusion_rate",
-                  "value": "0.5"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_amount_cap",
-                  "value": "1200"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_salary_rate",
-                  "value": "0.05"
-                },
-                {
-                  "index": 0,
-                  "parameter": "wff_family_credit_abatement_threshold",
-                  "value": "44900"
-                }
-              ],
-              "path": "/expr/left/value",
-              "straddled": true,
-              "threshold": "0"
             }
           ],
           "unstraddled": [
@@ -16018,6 +14343,7 @@
               "min_observed": "25",
               "nearest_above": "25",
               "nearest_below": null,
+              "op": "gte",
               "parameter": "wff_minimum_age",
               "parameters": [
                 {
@@ -16027,13 +14353,17 @@
                 }
               ],
               "path": "/expr",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "16",
               "value": "16"
             },
             {
-              "above": 0,
-              "at": 95,
+              "above": 95,
+              "at": 0,
               "below": 0,
               "derived": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement",
               "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement/expr/items/0/items/0/items/0/items/1:left~right:wff_residence_continuous_presence_months[0]=12",
@@ -16042,8 +14372,9 @@
               "live_observations": 95,
               "max_observed": "12",
               "min_observed": "12",
-              "nearest_above": null,
+              "nearest_above": "12",
               "nearest_below": null,
+              "op": "gte",
               "parameter": "wff_residence_continuous_presence_months",
               "parameters": [
                 {
@@ -16053,6 +14384,10 @@
                 }
               ],
               "path": "/expr/items/0/items/0/items/0/items/1",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "12",
               "value": "12"
@@ -16070,6 +14405,7 @@
               "min_observed": "1",
               "nearest_above": "1",
               "nearest_below": null,
+              "op": "gte",
               "parameter": "wff_principal_caregiver_minimum_exclusive_care_fraction",
               "parameters": [
                 {
@@ -16079,6 +14415,10 @@
                 }
               ],
               "path": "/expr/items/1",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "0.3333333333333333",
               "value": "0.3333333333333333"
@@ -16096,6 +14436,7 @@
               "min_observed": null,
               "nearest_above": null,
               "nearest_below": null,
+              "op": "lte",
               "parameter": "in_work_tax_credit_recent_requirement_concession_days",
               "parameters": [
                 {
@@ -16105,6 +14446,10 @@
                 }
               ],
               "path": "/expr/items/1",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": null,
               "value": "14"
@@ -16122,6 +14467,7 @@
               "min_observed": "0",
               "nearest_above": null,
               "nearest_below": "0",
+              "op": "gte",
               "parameter": "family_scheme_controlling_shareholder_voting_interest_threshold",
               "parameters": [
                 {
@@ -16131,63 +14477,13 @@
                 }
               ],
               "path": "/expr/condition",
+              "side_meaning": {
+                "above": "true",
+                "below": "false"
+              },
               "straddled": false,
               "threshold": "0.5",
               "value": "0.5"
-            },
-            {
-              "above": 0,
-              "at": 0,
-              "below": 0,
-              "derived": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
-              "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income/expr/then_expr/left:items/1~items/0:family_scheme_dependent_child_income_exemption[0]=500",
-              "index": 0,
-              "kind": "max",
-              "live_observations": 0,
-              "max_observed": null,
-              "min_observed": null,
-              "nearest_above": null,
-              "nearest_below": null,
-              "parameter": "family_scheme_dependent_child_income_exemption",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_dependent_child_income_exemption",
-                  "value": "500"
-                }
-              ],
-              "path": "/expr/then_expr/left",
-              "straddled": false,
-              "threshold": null,
-              "value": "500"
-            },
-            {
-              "above": 0,
-              "at": 8,
-              "below": 170,
-              "derived": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income",
-              "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income/expr/condition:left~right:family_scheme_short_term_charge_facility_amount_cap[0]=1200;family_scheme_short_term_charge_facility_salary_rate[0]=0.05",
-              "kind": "comparison",
-              "live_observations": 178,
-              "max_observed": "0",
-              "min_observed": "0",
-              "nearest_above": null,
-              "nearest_below": "0",
-              "parameters": [
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_amount_cap",
-                  "value": "1200"
-                },
-                {
-                  "index": 0,
-                  "parameter": "family_scheme_short_term_charge_facility_salary_rate",
-                  "value": "0.05"
-                }
-              ],
-              "path": "/expr/condition",
-              "straddled": false,
-              "threshold": null
             }
           ]
         },

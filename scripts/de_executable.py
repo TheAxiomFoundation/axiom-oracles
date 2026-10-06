@@ -64,6 +64,8 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.evidence import strict_yaml_loads  # noqa: E402
+
 from axiom_oracles.provenance import GIT_SHA  # noqa: E402
 
 from axiom_oracles.evidence import strict_json_loads  # noqa: E402
@@ -1328,8 +1330,8 @@ def _validate_signed_descriptor_document(
     module_sha = _sha256_bytes(module_bytes)
     _require_equal(module_block.get("sha256"), module_sha, "signed module SHA-256")
     try:
-        parsed_module = yaml.safe_load(module_bytes.decode("utf-8"))
-    except (UnicodeDecodeError, yaml.YAMLError) as exc:
+        parsed_module = strict_yaml_loads(module_bytes.decode("utf-8"))
+    except (UnicodeDecodeError, yaml.YAMLError, ValueError) as exc:
         raise DEExecutableError(
             "signed module is not valid UTF-8 RuleSpec YAML"
         ) from exc
@@ -2846,7 +2848,7 @@ def main() -> int:
         status_path.write_text(rendered, encoding="utf-8")
         print(f"wrote {status_path.relative_to(REPO_ROOT)}")
         return 0
-    except (DEExecutableError, OSError, UnicodeDecodeError, yaml.YAMLError) as exc:
+    except (DEExecutableError, OSError, UnicodeDecodeError, yaml.YAMLError, ValueError) as exc:
         print(f"DE executable ERROR: {exc}", file=sys.stderr)
         return 1
 

@@ -100,8 +100,9 @@ export function causeFor(knownCauses, report, concept, kind) {
 /**
  * The unexplained-gate count over these reports: the shared assessment (made
  * before the loader filters concepts), restricted to the publication gate's
- * domain and resolved per suite by maximum, exactly as
- * scripts/unexplained_ratchet.py counts. A report outside the gate counts 0.
+ * domain and resolved per suite by maximum. Counts equal the Python ratchet
+ * when any cited dispositions files pass its repository validation; browser
+ * consumers cannot validate those files. A report outside the gate counts 0.
  */
 export function countUnexplained(reports, knownCauses) {
   const bySuite = gatedUnexplainedBySuite(reports, {

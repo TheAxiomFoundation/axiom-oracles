@@ -34,12 +34,15 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
-import json
 import sys
 from collections import Counter
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+from axiom_oracles.evidence import strict_json_loads  # noqa: E402
+
 if str(REPO_ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
@@ -71,8 +74,8 @@ class DenominatorError(ValueError):
 
 def _load(path: Path, label: str) -> dict:
     try:
-        value = json.loads(path.read_text())
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        value = strict_json_loads(path.read_text())
+    except (OSError, UnicodeError, ValueError) as exc:
         raise DenominatorError(f"cannot read {label}: {exc}") from exc
     if not isinstance(value, dict):
         raise DenominatorError(f"{label} must contain an object")

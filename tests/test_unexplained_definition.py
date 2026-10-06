@@ -1,14 +1,13 @@
-"""Load-bearing unexplained invariants, checked by examples and generated cases.
+"""Load-bearing unexplained invariants, checked by generated and exhaustive cases.
 
-Every consumer uses one admitted count; malformed counts always carry a hard
-failure, never silently authorize a clean gate. The count is nonnegative and at
-least every admitted declared unexplained signal, even with capped/concept-less
-rows. Only validated class counts or eligible known-cause rows explain work;
-known causes apply only in mode none. The count is at least the number of
-listed mismatch rows: a declared total below them is a hard defect.
-Raising an unexplained signal or removing an explanation without replacing it
-with another explanation cannot lower the count. Duplicate report order cannot
-change the maximum per-suite count. Python and JS assessments must agree.
+The count is nonnegative and at least every admitted unexplained declaration.
+For admitted classifications C <= M, file/inline count is at least M - C;
+none mode uses M - K for eligible known-cause rows. Impossible C > M is a
+hard defect and floors the count at M. Listed rows floor M, not the final count.
+Raising a declared signal is monotone. Removing a class is monotone within a
+mode when C <= M; removing the last inline class activates known causes, so
+M=5, C=1, K=5 changes 4 inline to 0 none. Report order cannot change a suite's
+maximum. Python and JavaScript agree over committed reports and mutant shapes.
 """
 
 from __future__ import annotations
@@ -23,9 +22,10 @@ from types import SimpleNamespace
 
 import pytest
 import yaml
-from hypothesis import given, strategies as st
+from hypothesis import example, given, settings, strategies as st
 
 from axiom_oracles.conformance.unexplained import (
+    MAX_SAFE_COUNT,
     admit_count,
     assess_unexplained,
     load_known_causes,
@@ -60,13 +60,13 @@ def parity_cases():
     cases = []
     for mismatch, classified, declared, filename in (
         (8702, 8605, 97, None), (8702, 8605, 5000, None),
-        (10, 2, 1, None), (10, 30, 2, None), (0, 0, 10, None),
+        (10, 2, 1, None), (10, 30, 0, None), (10, 30, 2, None), (0, 0, 10, None),
         (10, 9, 1, "dispositions/sample.yaml"), (10, 9, 9, None),
     ):
         report = _report(mismatch, classified, declared, filename)
         cases.append({"report": report, "options": {}})
         cases.append({"report": report, "options": {"known_causes": [_cause()]}})
-    for value in (True, False, -1, -1.0, 0.5, float("nan"), float("inf"), float("-inf"), "7", None):
+    for value in (True, False, -1, -1.0, 0.5, float("nan"), float("inf"), float("-inf"), "7", None, 2**53 - 1, 2**53, 2**53 + 1, 2**63, 10**30):
         for field in ("mismatch_count", "unexplained_count", "upstream_engine_gap", "unexplained"):
             report = _report()
             if field == "mismatch_count":
@@ -93,6 +93,21 @@ def parity_cases():
                    "mismatches": [{"concept": "c", "kind": "amount_difference"}] * 3}
     cases.append({"report": understated, "options": {}})
     cases.append({"report": understated, "options": {"known_causes": [_cause()]}})
+    for concept in (1, True, ["c"], {"a": 1}, ""):
+        report = {**_report(1), "mismatches": [{"concept": concept, "kind": "amount_difference"}]}
+        cases.append({"report": report, "options": {"known_causes": [_cause(concept=concept)]}})
+    for engines in (None, ["axiom", "oracle"], "axiom", 1):
+        cases.append({"report": {**_report(1), "engines": engines}, "options": {"known_causes": [_cause()]}})
+    for filename in (None, "dispositions/sample.yaml"):
+        report = _report(10, 9, 1, filename)
+        report["mismatches"] = [{"disposition": {"disposition": "unexplained"}}] * 10
+        cases.append({"report": report, "options": {}})
+    report = {**_report(0), "mismatches": []}
+    report["summary"].update(comparison_count=10, match_count=5)
+    cases.append({"report": report, "options": {}})
+    report = _report(10, MAX_SAFE_COUNT, 0)
+    report["summary"]["dispositioned"]["counts"]["bridge_artifact"] = 2
+    cases.append({"report": report, "options": {"known_causes": [_cause()]}})
     return cases
 
 
@@ -127,6 +142,7 @@ def test_junk_counts_fail_closed_with_field_diagnostics(value, field):
     assert any(field in defect for defect in assessment.defects)
 
 
+@settings(deadline=None)
 @given(st.integers(min_value=0, max_value=10**12))
 def test_admission_preserves_nonnegative_integer_values(value):
     """Admission preserves exact counts, including integral finite JSON floats."""
@@ -134,18 +150,22 @@ def test_admission_preserves_nonnegative_integer_values(value):
     assert admit_count(float(value)) == value
 
 
+@settings(deadline=None)
 @given(st.integers(min_value=0, max_value=10000), st.integers(min_value=0, max_value=10000), st.integers(min_value=0, max_value=10000))
 def test_inline_conservative_envelope(mismatch, classified, declared):
     """No disagreement can lower the maximum of declared and unclassified totals."""
     actual = assess_unexplained(_report(mismatch, classified, declared))
     # _report lists one row, which floors the mismatch total.
-    assert actual.count == max(declared, max(mismatch, 1) - classified)
+    floor = max(mismatch, 1)
+    assert actual.count == max(declared, floor if classified > floor else floor - classified)
+    assert any("classified count" in defect for defect in actual.defects) == (classified > floor)
     assert actual.count >= 0
     assert actual.declared == declared
     if classified:
         assert actual.mode == "inline"
 
 
+@settings(deadline=None)
 @given(st.integers(min_value=1, max_value=10000), st.integers(min_value=0, max_value=10000), st.integers(min_value=1, max_value=10000))
 def test_raising_a_declared_signal_never_lowers_count(mismatch, declared, increase):
     """Increasing either admitted unexplained declaration is monotone in all modes."""
@@ -159,18 +179,39 @@ def test_raising_a_declared_signal_never_lowers_count(mismatch, declared, increa
             assert assess_unexplained(mutant, known_causes=[_cause()]).count >= before
 
 
-@given(st.integers(min_value=0, max_value=10000), st.integers(min_value=1, max_value=10000), st.integers(min_value=0, max_value=10000))
-def test_removing_classification_never_lowers_count(mismatch, classified, declared):
-    """Removing classified evidence, with no replacement labels, cannot help a gate."""
+@settings(deadline=None)
+@given(
+    st.integers(min_value=1, max_value=100),
+    st.integers(min_value=1, max_value=100),
+    st.integers(min_value=0, max_value=100),
+    st.integers(min_value=0, max_value=100),
+)
+@example(5, 1, 0, 5)
+def test_removing_classification_never_lowers_count(mismatch, classified, declared, covered):
+    """Class removal is monotone within a mode; switching to none activates K."""
+    classified = min(classified, mismatch)
+    covered = min(covered, mismatch)
+    causes = [_cause()]
     for filename in (None, "dispositions/sample.yaml"):
         original = _report(mismatch, classified, declared, filename)
-        before = assess_unexplained(original).count
+        original["mismatches"] = [{"concept": "c", "kind": "amount_difference"}] * covered
+        before = assess_unexplained(original, known_causes=causes)
+        assert before.count == max(declared, mismatch - classified)
         for replacement in (0, classified - 1, None, "junk"):
             mutant = copy.deepcopy(original)
             mutant["summary"]["dispositioned"]["counts"]["upstream_engine_gap"] = replacement
-            assert assess_unexplained(mutant).count >= before
+            after = assess_unexplained(mutant, known_causes=causes)
+            if after.mode == before.mode:
+                assert after.count >= before.count
+            else:
+                assert (before.mode, after.mode) == ("inline", "none")
+                assert after.count == max(declared, mismatch - covered)
+                assert after.known_cause_covered == covered
+                if (mismatch, classified, declared, covered) == (5, 1, 0, 5):
+                    assert (before.count, after.count) == (4, 0)
 
 
+@settings(deadline=None)
 @given(st.integers(min_value=1, max_value=100), st.integers(min_value=0, max_value=100))
 def test_removing_known_cause_or_concept_never_lowers_count(size, extra):
     """Removing either the label or its eligible concept cannot explain more work."""
@@ -214,6 +255,7 @@ def test_listed_rows_floor_an_understated_mismatch_total():
     assert any("mismatch_count is 0" in d for d in covered.defects)
 
 
+@settings(deadline=None)
 @given(st.integers(min_value=0, max_value=50), st.integers(min_value=0, max_value=50))
 def test_count_is_never_below_unexplained_listed_rows(declared_total, listed):
     """Invariant: count >= listed rows that nothing explains."""
@@ -262,6 +304,7 @@ def test_file_validation_requires_safe_valid_suite_bound_artifact(tmp_path):
     assert assess_unexplained(_report(10, 9, 5000, path.name), repo_root=tmp_path).count == 5000
 
 
+@settings(deadline=None)
 @given(st.lists(st.integers(min_value=0, max_value=10000), min_size=1, max_size=12))
 def test_duplicate_resolution_is_order_independent_maximum(counts):
     """Every suite gates its largest assessment, independent of report order."""
@@ -321,3 +364,91 @@ def test_every_committed_gated_report_has_one_consumer_count(monkeypatch):
                                if json.loads(path.read_text()).get("suite") == suite)
         leg, _, _ = certify._suite_verdict({"suite": suite, "oracle_type": "reference", "oracle": "committed count census", "report": report_path.relative_to(ROOT).as_posix()})
         assert leg["unexplained"] == expected, suite
+
+
+@settings(deadline=None)
+@given(st.integers(min_value=MAX_SAFE_COUNT + 1, max_value=10**100))
+def test_counts_above_javascript_safe_integer_range_are_defects(value):
+    assert admit_count(value) is None
+    report = _report(value)
+    actual = assess_unexplained(report)
+    assert any("maximum safe integer" in defect for defect in actual.defects)
+
+
+@settings(deadline=None)
+@given(st.one_of(st.integers(), st.booleans(), st.lists(st.text()), st.dictionaries(st.text(), st.integers())))
+def test_only_nonempty_string_concepts_can_be_covered(concept):
+    report = _report(1)
+    report["mismatches"][0]["concept"] = concept
+    actual = assess_unexplained(report, known_causes=[_cause(concept=concept)])
+    assert actual.count == 1
+    assert actual.known_cause_covered == 0
+
+
+@settings(deadline=None)
+@given(st.integers(min_value=1, max_value=100), st.integers(min_value=0, max_value=100))
+def test_comparison_difference_floors_an_understated_mismatch_count(difference, matched):
+    report = _report(0)
+    report["mismatches"] = []
+    report["summary"].update(comparison_count=matched + difference, match_count=matched)
+    actual = assess_unexplained(report)
+    assert actual.count == difference
+    assert any("comparison_count - match_count" in defect for defect in actual.defects)
+
+
+@settings(deadline=None)
+@given(st.integers(min_value=2, max_value=100))
+def test_unexplained_row_annotations_floor_classified_report_counts(size):
+    for filename in (None, "dispositions/sample.yaml"):
+        report = _report(size, size - 1, 1, filename)
+        report["mismatches"] = [{"disposition": {"disposition": "unexplained"}}] * size
+        actual = assess_unexplained(report)
+        assert actual.count == size
+        assert any("rows annotated unexplained" in defect for defect in actual.defects)
+
+
+@settings(deadline=None)
+@given(st.integers(min_value=1, max_value=1000))
+def test_combined_classification_must_fit_safe_integer_range(extra):
+    report = _report(10, MAX_SAFE_COUNT)
+    report["summary"]["dispositioned"]["counts"]["bridge_artifact"] = extra
+    actual = assess_unexplained(report, known_causes=[_cause()])
+    assert actual.mode == "inline"
+    assert actual.classified == 0
+    assert actual.known_cause_covered == 0
+    assert actual.count == 10
+    assert any("combined classified count exceeds" in defect for defect in actual.defects)
+
+
+@pytest.mark.parametrize("mutation", ["duplicate", "merge"])
+def test_dispositions_evidence_rejects_ambiguous_yaml(mutation, tmp_path):
+    document = {
+        "schema": "axiom_oracles.dispositions.v1", "suite": "sample",
+        "entries": [{
+            "id": "one", "concept": "sample#c", "case_id": "case",
+            "disposition": "upstream_engine_gap",
+            "evidence": {"mechanism": "A pinned oracle defect", "upstream_url": "https://example.org/issue/1"},
+            "expires_on_source_change": False,
+        }],
+    }
+    raw = yaml.safe_dump(document, sort_keys=False)
+    if mutation == "duplicate":
+        raw = raw.replace("suite: sample", "suite: foreign\nsuite: sample")
+    else:
+        raw = "<<: {suite: foreign}\n" + raw
+    (tmp_path / "dispositions.yaml").write_text(raw)
+    actual = assess_unexplained(_report(10, 9, 1, "dispositions.yaml"), repo_root=tmp_path)
+    assert actual.count == 10
+    assert any("not a readable dispositions document" in defect for defect in actual.defects)
+
+
+@pytest.mark.parametrize("raw", [
+    '{"entries": [], "entries": [{"suite": "sample"}]}',
+    '{"entries": [{"suite": "sample", "weight": NaN}]}',
+])
+def test_known_causes_evidence_requires_strict_json(raw, tmp_path):
+    path = tmp_path / "dashboard/public/data/known_causes.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(raw)
+    with pytest.raises(ValueError):
+        load_known_causes(tmp_path)
