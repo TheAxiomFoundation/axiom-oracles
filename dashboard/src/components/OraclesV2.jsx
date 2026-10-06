@@ -329,9 +329,9 @@ function OracleCard({ oracle, selected, onSelect }) {
       <p className="v2-card-what">{id.what}</p>
       <div
         className="v2-card-stats"
-        title={`${oracle.checks.toLocaleString()} individual checks across these households`}
+        title={`${oracle.checks.toLocaleString()} individual checks across these comparison cases`}
       >
-        <Stat value={oracle.households.toLocaleString()} label="households" />
+        <Stat value={oracle.households.toLocaleString()} label="comparison cases" />
         <Stat value={oracle.programs.size} label="programs" />
       </div>
       <div className="mono v2-card-foot">
@@ -376,10 +376,10 @@ function ProgRow({ p, onOpenProgram }) {
       </span>
       <span
         className="mono v2-prog-checks"
-        title={`${p.households.toLocaleString()} households · ${p.total.toLocaleString()} checks`}
+        title={`${p.households.toLocaleString()} comparison cases · ${p.total.toLocaleString()} checks`}
       >
         {p.households.toLocaleString()}
-        <span className="v2-prog-unit"> households</span>
+        <span className="v2-prog-unit"> comparison cases</span>
       </span>
       <span className="mono v2-prog-rate">
         <span className="v2-prog-rate-part">
@@ -946,7 +946,7 @@ export default function OraclesV2() {
                 className="v2-thesis"
                 title={`${compactCount(totals.checks)} concept-level checks behind these figures${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
               >
-                <em>{compactCount(totals.households)}</em> households checked
+                <em>{compactCount(totals.households)}</em> comparison cases checked
                 against <em>{oracles.length}</em> other engines and datasets,
                 with disagreements tracked in the open.
               </h1>

@@ -264,6 +264,7 @@ jobs:
         run: |
           bun scripts/test-case-agreement.mjs
           bun scripts/test-oracle-attribution.mjs
+          bun test ./scripts/test-comparison-counts.mjs ./scripts/test-disclosures.mjs
 
       - name: Build dashboard
         run: bun run build
