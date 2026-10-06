@@ -1,0 +1,36 @@
+# VAT — rulespec-uk two-rate module vs PolicyEngine-UK on a synthetic
+# household-consumption grid. The Axiom side is the encoded VATA 1994 s.2(1)
+# standard rate and s.29A reduced rate (uk/policies/govuk/vat.yaml), evaluated
+# through the axiom rules engine over PolicyEngine's own full/reduced consumption
+# split and the microdata VAT-coverage factor. PolicyEngine-UK computes vat as
+# (full*standard + reduced*reduced) / coverage; the two schemes are the same
+# rates on the same supplied inputs, so the grid matches to the penny.
+#
+# Run locally (needs a PolicyEngine-UK 2.89.2 env, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-vat
+
+name: uk-vat
+title: UK VAT — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded VAT rate application (rulespec-uk uk/policies/govuk/vat.yaml,
+  VATA 1994 s.2(1) standard rate 20 per cent and s.29A reduced rate 5 per cent)
+  against PolicyEngine-UK vat (2.89.2) at the 2026 validation year on a synthetic
+  household-consumption grid. The full/reduced consumption split and the microdata
+  VAT-coverage factor are supplied inputs on both engines.
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-vat-grid
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+artifacts:
+  report_basename: axiom-policyengine-uk-vat
+
+dashboard:
+  filename: axiom-policyengine-uk-vat.json
+  suite: uk-vat

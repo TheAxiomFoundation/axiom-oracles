@@ -1,0 +1,46 @@
+# Attendance Allowance — rulespec-uk SI 2026/148 Schedule 1 Part III weekly rates
+# vs PolicyEngine-UK attendance_allowance on a synthetic care-category grid. The
+# Axiom side is the encoded rate-given-category pipeline
+# (uk/policies/attendance_allowance_composed_amount_pipeline.yaml), evaluated
+# through the axiom rules engine over the awarded-category judgments and annualised
+# over PolicyEngine's WEEKS_IN_YEAR (52). This is a rate_only surface:
+# PolicyEngine-UK applies its gov.dwp.attendance_allowance rate table over a frozen
+# aa_category input, so the comparison binds the rate schedule, not the SSCBA 1992
+# s.64-66 needs assessment.
+#
+# Both engines carry the same weekly rate (higher 114.60, lower 76.70) for the same
+# supplied award category, so the grid matches to the penny (higher £5,959.20,
+# lower £3,988.40, none £0); the only residuals would be sub-0.01 PolicyEngine
+# float32 artifacts, inside tolerance.
+#
+# Run locally (needs a PolicyEngine-UK 2.89.2 env, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-attendance-allowance-pe
+
+name: uk-attendance-allowance-pe
+title: UK Attendance Allowance — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded Attendance Allowance weekly rates (rulespec-uk
+  uk/policies/attendance_allowance_composed_amount_pipeline.yaml, SI 2026/148
+  Schedule 1 Part III) against PolicyEngine-UK attendance_allowance (2.89.2) at the
+  2026 validation year on a synthetic care-category grid (higher / lower / none).
+  The award category is a frozen input on both engines, so the grid binds the rate
+  schedule (rate_only comparability).
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-attendance-allowance-pe-grid
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+    # Links this suite to the rulespec-uk monorepo in the affected map so a
+    # change to the encoded Attendance Allowance pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+artifacts:
+  report_basename: axiom-policyengine-uk-attendance-allowance-pe
+
+dashboard:
+  filename: axiom-policyengine-uk-attendance-allowance-pe.json
+  suite: uk-attendance-allowance-pe

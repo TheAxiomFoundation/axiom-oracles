@@ -1,0 +1,2 @@
+$ uv run python scripts/certify.py --check --program dk/boerne-og-ungeydelse
+certificates up to date

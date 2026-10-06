@@ -1,0 +1,44 @@
+# Colorado income tax -- Axiom vs NBER TAXSIM on Enhanced CPS.
+#
+# The third oracle: TAXSIM-35 (the actual NBER Fortran binary bundled and
+# pinned via policyengine-taxsim — see adapters/taxsim/taxsim_pins.json),
+# which models 2026 law including OBBBA. Where axiom and PolicyEngine
+# disagree on this suite, TAXSIM breaks the tie.
+
+name: co-state-income-tax-taxsim
+title: Colorado income tax -- Axiom vs TAXSIM
+description: >-
+  Compares Colorado income tax liability from the composed oracle-bridge
+  program against NBER TAXSIM-35's siitax on Enhanced CPS tax units in
+  Colorado, as an independent second oracle beside PolicyEngine. TAXSIM's
+  2026 Colorado core matches exactly (taxable x 4.40 percent); residuals
+  are credit-model differences (its smooth TABOR-style estimate vs the
+  tiered statutory refund table, and state-EITC vintage).
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
+# staging fails the engine's canonical-path scan (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049) before any comparison runs;
+# rulespec-us#1050 (removed plural corpus_citation_paths) and -- for the
+# composed program lanes -- axiom-compose#29 and axiom-oracles#335 queue
+# behind it. Manual lane only; drop this marker when the upstream chain lands
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules
+  parameters:
+    left: axiom
+    right: taxsim
+    population: enhanced-cps
+    sample_size: 0
+    period: "2026"
+    concept: us:tax/state-income-tax#liability
+    axiom_rulespec_repo_roots: $HOME
+
+artifacts:
+  report_basename: axiom-taxsim-co-state-income-tax-ecps
+
+dashboard:
+  filename: axiom-taxsim-co-state-income-tax-ecps.json
+  suite: co-state-income-tax-taxsim

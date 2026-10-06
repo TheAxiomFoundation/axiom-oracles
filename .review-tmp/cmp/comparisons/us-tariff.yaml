@@ -1,0 +1,49 @@
+# US tariff duty T0 — rulespec-us duty spine vs the USITC statutory schedule.
+# Companion to TheAxiomFoundation/rulespec-us#1190 (lane charter) and
+# TheAxiomFoundation/axiom-oracles#444 (oracle program).
+#
+# The reference side is the statute itself: 40 grid cases (36 line cells +
+# 4 postal/de-minimis) frozen from the USITC HTS 2026 Rev 3/4/12/14 editions
+# retained in axiom-corpus (PR #557) plus the controlling Federal Register
+# instruments, each with component-level citations. The Axiom side runs the
+# composed rulespec-us pipeline us:policies/cbp/us-tariff-duty/composition
+# through the axiom rules engine at four entry dates that straddle the
+# 2026-02-24 IEEPA termination and the 2026-07-24 §122 sunset / CBP postal
+# informal-entry cutover.
+#
+# Run locally (needs a built axiom rules engine and the rulespec-us checkout
+# with the us-tariff-duty spine):
+#   uv run python scripts/run_comparison.py us-tariff
+
+name: us-tariff
+title: US tariff duty — Axiom vs USITC statutory schedule
+description: >-
+  Compares the composed US tariff duty pipeline encoded in Axiom RuleSpec
+  (rulespec-us us/policies/cbp/us-tariff-duty/composition.yaml: HTS General
+  Note 3 MFN/special rates, IEEPA fentanyl/reciprocal/Brazil overlays with
+  their 2026-02-24 termination, the §122 surcharge window 2026-02-24..07-23,
+  §232 aluminum incl. the Rev 12 heading consolidation, China Section 301,
+  Brazil and forced-labor Section 301 tiers, and the de-minimis
+  suspension / postal flat-rate machinery) against duty amounts frozen
+  directly from the official USITC HTS 2026 Rev 3/4/12/14 editions and the
+  controlling Federal Register instruments on a 40-case
+  (HTS-10 line, origin, customs value, entry date, postal flag) grid across
+  pilot chapters 72 / 76 / 95. Every expected duty is a hand-verified
+  statutory computation whose components each cite a retained corpus
+  artifact; line-level fidelity to the official schedule is the T0 primary
+  gate, with aggregate reconciliation against the Budget Lab at Yale / TPC
+  trackers deferred to T1 (axiom-oracles#444).
+
+runner:
+  type: us-tariff-grid
+  parameters:
+    period: "2026"
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-usitc-us-tariff
+
+dashboard:
+  filename: axiom-usitc-us-tariff.json
+  suite: us-tariff

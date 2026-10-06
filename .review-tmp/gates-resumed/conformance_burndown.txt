@@ -1,0 +1,2 @@
+$ uv run python scripts/conformance_burndown.py --check
+conformance burn-down OK: 6 series, 395 point(s)

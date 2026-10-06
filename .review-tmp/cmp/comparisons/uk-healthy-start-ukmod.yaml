@@ -1,0 +1,60 @@
+name: uk-healthy-start-ukmod
+title: UK Healthy Start — Axiom vs UKMOD
+description: >-
+  Compares the composed Healthy Start pipeline encoded in Axiom RuleSpec (Healthy
+  Start Scheme and Welfare Food (Amendment) Regulations 2005 (SI 2005/3262)
+  regulation 8: the voucher-or-credit value, floored at £3.10 and set by the
+  Secretary of State's determination above it) against CeMPA's UKMOD bmamt01_s on
+  synthetic passported cases for the rest of the UK: a zero-earnings lone parent
+  responsible for a newborn (£8.50/week determined value) and for a toddler
+  (£4.25/week), each renting and passporting onto Universal Credit. Healthy Start
+  is a passported means-tested payment — its UKMOD Elig_Cond requires a qualifying
+  means-tested benefit in payment (bsauc_s > 0 among others) — so the cases are
+  built to receive Universal Credit and the voucher passports off it. UKMOD
+  bmamt01_uk annualises the weekly value over its 365/7 calendar-week convention
+  (£8.50 x 365/7 = £443.21 for a newborn); the rulespec pilot annualises the same
+  weekly value over 52 benefit weeks (£442.00), about 0.27% lower, so the
+  comparison carries a 0.3% relative tolerance that absorbs the convention
+  residual while both sides recover the same weekly value.
+
+  UKMOD's Universal Credit output bsauc_s carries a STOCHASTIC per-benefit-unit
+  take-up draw (i_rand_tu, gated in bsauc_uk on the $ISTUNoChild / $ISTUChild
+  take-up-rate constants); for a hypothetical benefit unit a non-taking solo draw
+  would zero the UC award and switch the passport off (documented in
+  axiom_oracles/data/euromod_issues.json as ukmod-uc-bsauc-takeup-correction).
+  euromod_constant_overrides pins those UC take-up rates to 1.0 so Universal
+  Credit is deterministically in payment and Healthy Start passports; the adapter
+  patches the DefConst values into the system XML on the model overlay
+  (axiom-oracles#168), since the connector's constantsToOverwrite kwarg silently
+  ignores DefConst constants. bmamt01_uk itself does not consume i_rand_tu, so
+  once UC is in payment the voucher value is a deterministic per-household result.
+  UKMOD runs the registration-free public model (UKMOD_PUBLIC_B2026.03, system
+  UK_2026, dataset training_data). This suite runs where the x64 UKMOD runtime and
+  model checkout are available; on runners without them it re-emits the committed
+  dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: uk-healthy-start
+    population: synthetic
+    sample_size: 0
+    period: 2026-04
+    euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
+    euromod_country: UK
+    euromod_system: UK_2026
+    euromod_dataset: training_data
+    # Pin the Universal Credit take-up-rate constants to 1.0 so the passporting
+    # benefit is deterministically in payment (bsauc_s > 0) rather than a take-up
+    # lottery realization; Healthy Start's Elig_Cond then passports off UC.
+    euromod_constant_overrides: $ISTUNochild=1.0,$ISTUChild=1.0
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-uk-healthy-start.json
+
+artifacts:
+  report_basename: axiom-euromod-uk-healthy-start
+
+dashboard:
+  filename: axiom-euromod-uk-healthy-start.json
+  suite: uk-healthy-start

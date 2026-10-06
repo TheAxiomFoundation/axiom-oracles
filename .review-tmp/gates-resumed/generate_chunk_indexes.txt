@@ -1,0 +1,4 @@
+$ uv run python scripts/generate_chunk_indexes.py --check
+OK co-snap-ecps: bound/full
+OK co-snap-qc: bound/cardinality
+OK nz-treasury-incomeexplorer: bound/full

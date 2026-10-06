@@ -1,0 +1,4 @@
+1790566200.991 pid=36886 start elapsed=0.07 argv=['scripts/emit_disposition_artifacts.py', '--check', 'de-worker-dual-oracle']
+1790566207.209 pid=36886 finish elapsed=6.29 argv=['scripts/emit_disposition_artifacts.py', '--check', 'de-worker-dual-oracle']
+1790566209.297 pid=37934 start elapsed=0.00 argv=['scripts/emit_case_artifacts.py', '--check', 'de-worker-dual-oracle']
+1790566239.004 pid=37934 finish elapsed=29.71 argv=['scripts/emit_case_artifacts.py', '--check', 'de-worker-dual-oracle']

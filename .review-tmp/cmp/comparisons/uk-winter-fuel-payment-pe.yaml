@@ -1,0 +1,51 @@
+# Winter Fuel Payment — rulespec-uk SI 2025/969 England-and-Wales award pipeline
+# vs PolicyEngine-UK winter_fuel_allowance on a synthetic pensioner-household
+# grid. The Axiom side is the encoded SI 2025/969 regulation 3 standard amounts
+# (uk/policies/winter_fuel_payment_composed_award_pipeline.yaml), evaluated
+# through the axiom rules engine over the state-pension-age, 80+ and
+# income-below-recovery-threshold judgments the same age/income facts imply (the
+# uk-council-tax-reduction / uk-pension-credit bridge pattern). PolicyEngine
+# gained the 2024/25 means-tested Winter Fuel restriction in its
+# gov.dwp.winter_fuel_payment parameters (require_benefits true from 2024,
+# maximum_taxable_income 35000 from 2025 per SI 2025/969).
+#
+# Both engines carry the same SI 2025/969 amounts (200 under 80, 300 at/over 80)
+# and the same income/age gating on the same supplied unit, so the grid matches
+# to the penny (the under-80 and at-80 tiers, the household non-per-member
+# allocation for couples, the 35000 income-recovery withdrawal, and the
+# state-pension-age gate); the only residuals would be sub-0.01 PolicyEngine
+# float32 artifacts, inside tolerance. Scotland (the devolved Pension Age Winter
+# Heating Payment) is outside the pipeline's scope and not placed.
+#
+# Run locally (needs a PolicyEngine-UK 2.89.2 env, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-winter-fuel-payment-pe
+
+name: uk-winter-fuel-payment-pe
+title: UK Winter Fuel Payment — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded England-and-Wales Winter Fuel Payment award pipeline
+  (rulespec-uk uk/policies/winter_fuel_payment_composed_award_pipeline.yaml,
+  SI 2025/969 reg 3) against PolicyEngine-UK winter_fuel_allowance (2.89.2) at the
+  2026 validation year on a synthetic England pensioner-household grid crossing the
+  under-80/at-80 amount tiers, the 35000 income-recovery threshold and the
+  state-pension-age gate. The award judgments are supplied to the pipeline from the
+  same age/income facts PolicyEngine reads.
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-winter-fuel-payment-pe-grid
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+    # Links this suite to the rulespec-uk monorepo in the affected map so a
+    # change to the encoded Winter Fuel pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+artifacts:
+  report_basename: axiom-policyengine-uk-winter-fuel-payment-pe
+
+dashboard:
+  filename: axiom-policyengine-uk-winter-fuel-payment-pe.json
+  suite: uk-winter-fuel-payment-pe

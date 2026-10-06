@@ -1,0 +1,44 @@
+# Federal individual income tax — PSL Tax-Calculator vs PolicyEngine, pinned
+# Populace.
+#
+# A third US tax engine (Tax-Calculator) validated against the certified
+# PolicyEngine oracle over the standing Populace US population, so the Axiom
+# federal-tax encoding is triangulated against two independent engines rather
+# than one. Neither side is Axiom — this lane is oracle-vs-oracle, so it
+# exercises no rulespec repo and needs no engine binary; it establishes the
+# Tax-Calculator adapter's parity against PolicyEngine before the adapter is
+# used as an Axiom oracle.
+#
+# Run locally:
+#   uv run --with 'taxcalc==6.7.1' scripts/run_comparison.py taxcalc-fiit-ecps --summary
+
+name: taxcalc-fiit-ecps
+title: Federal income tax — Tax-Calculator vs PolicyEngine
+description: >-
+  Compares every federal income tax surface (AGI, standard deduction, taxable
+  income, tax before credits, EITC, CTC, AMT, liability) PSL Tax-Calculator
+  computes against PolicyEngine, over a deterministic slice of the certified
+  Populace US validation population.
+
+runner:
+  type: axiom-oracles-compare
+  # No axiom side: the generic comparator runs both Python engines directly.
+  # axiom_rules_repo is still read by the runner, but the pre-built mirror
+  # binary is reused (no rebuild) and no rulespec is imported for a
+  # PolicyEngine-vs-Tax-Calculator run.
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    left: taxcalc
+    right: policyengine
+    population: enhanced-cps
+    sample_size: 25
+    period: "2026"
+    concept: us:tax/federal-income-tax#liability
+    include_components: true
+
+artifacts:
+  report_basename: taxcalc-policyengine-fiit-ecps
+
+dashboard:
+  filename: taxcalc-policyengine-fiit-ecps.json
+  suite: taxcalc-fiit-ecps

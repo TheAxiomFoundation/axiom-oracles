@@ -1,0 +1,49 @@
+# Ohio composed income-tax liability — Axiom pipeline vs PolicyEngine and TAXSIM
+# on a modest case grid (single and married filers at incomes that cross the
+# state's no-tax threshold and bracket). The Axiom side is the composed
+# rulespec-us pipeline us-oh/policies/income_tax/pilot_liability_pipeline,
+# evaluated through the axiom rules engine (its liabilities are the
+# engine-verified companion-test fixtures). Ohio applies the section 5747.02
+# schedule (no tax up to $26,050, then $332 plus 2.75 per cent of the excess)
+# to completed-return Ohio taxable nonbusiness income before credits.
+#
+# PolicyEngine and TAXSIM both run at the 2026 validation year
+# (policyengine-taxsim 2.30.0 models 2026 law including OBBBA).
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py oh-income-tax-liability
+
+name: oh-income-tax-liability
+title: Ohio income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Ohio income-tax liability pipeline encoded in Axiom
+  RuleSpec (us-oh/policies/income_tax/pilot_liability_pipeline) against
+  PolicyEngine (oh_income_tax_before_non_refundable_credits) at 2026 and TAXSIM (siitax) at 2026 on a modest grid of
+  single and married filers crossing the state's no-tax threshold and bracket.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: the engine's
+# canonical-path root scan rejects the whole tree (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049), and the state pipelines carry the
+# removed plural `corpus_citation_paths` schema (rulespec-us#1050; 176 files
+# across every jurisdiction as of 2026-08-05). Every dispatched leg fails
+# before producing a report. Manual lane only; drop this marker when both land
+# upstream (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: OH
+    period: "2026"
+    taxsim_law_year: 2026
+    # Links this suite to the rulespec-us monorepo in the affected map
+    # so a change to the composed pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-oh-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-oh-income-tax-liability.json
+  suite: oh-income-tax-liability

@@ -1,0 +1,50 @@
+# New York section 601 main income tax — Axiom vs PolicyEngine and TAXSIM
+# on a modest case grid (single and married filers at incomes that cross the
+# state's brackets). The Axiom side is the composed rulespec-us pipeline
+# us-ny/policies/income_tax/pilot_liability_pipeline, evaluated through the
+# axiom rules engine (its liabilities are the engine-verified companion-test
+# fixtures). New York is progressive (Tax Law s.601 brackets, 3.9-10.9 per
+# cent). Section 601(d-5) supplemental tax and credits are outside this suite.
+#
+# PolicyEngine and TAXSIM both run at the 2026 validation year
+# (policyengine-taxsim 2.30.0 models 2026 law including OBBBA).
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py ny-income-tax-liability
+
+name: ny-income-tax-liability
+title: New York main income tax — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the complete 2026 Tax Law section 601 main-income-tax schedules in Axiom
+  RuleSpec (us-ny/policies/income_tax/pilot_liability_pipeline) against
+  PolicyEngine (ny_main_income_tax) at 2026 and TAXSIM (siitax) at 2026 on a
+  modest grid of single and married filers crossing the state's brackets.
+  Supplemental tax and credits are deliberately excluded from the Axiom and
+  PolicyEngine comparison target.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: the engine's
+# canonical-path root scan rejects the whole tree (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049), and the state pipelines carry the
+# removed plural `corpus_citation_paths` schema (rulespec-us#1050; 176 files
+# across every jurisdiction as of 2026-08-05). Every dispatched leg fails
+# before producing a report. Manual lane only; drop this marker when both land
+# upstream (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: NY
+    period: "2026"
+    taxsim_law_year: 2026
+    # Links this suite to the rulespec-us monorepo in the affected map
+    # so a change to the composed pipeline triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-ny-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-ny-income-tax-liability.json
+  suite: ny-income-tax-liability

@@ -1,0 +1,101 @@
+# Repo-owned extensions to the pinned RuleSpec-US companion fixture.
+#
+# These nine B-1 probes were executed against the clean
+# rulespec-us@dcbae4344c522b4ad8004169316266cbc153186f module compiled by
+# axiom-rules-engine 0.1.0. They supplement, without modifying, the upstream
+# companion fixture whose exact-boundary and B+1 cases remain authoritative.
+
+- name: single-one-below-50-percent-limit
+  period: &tax_year_2026
+    period_kind: tax_year
+    start: '2026-01-01'
+    end: '2026-12-31'
+  input:
+    <<: &eligible_common
+      us:policies/income_tax/savers_credit_pipeline#input.section_911_excluded_income: 0
+      us:policies/income_tax/savers_credit_pipeline#input.section_931_excluded_income: 0
+      us:policies/income_tax/savers_credit_pipeline#input.section_933_excluded_income: 0
+      us:policies/income_tax/savers_credit_pipeline#input.primary_age_at_close_of_taxable_year: 30
+      us:policies/income_tax/savers_credit_pipeline#input.primary_is_student_under_section_152_f_2: false
+      us:policies/income_tax/savers_credit_pipeline#input.primary_may_be_claimed_as_dependent_by_another_taxpayer: false
+      us:policies/income_tax/savers_credit_pipeline#input.spouse_age_at_close_of_taxable_year: 30
+      us:policies/income_tax/savers_credit_pipeline#input.spouse_is_student_under_section_152_f_2: false
+      us:policies/income_tax/savers_credit_pipeline#input.spouse_may_be_claimed_as_dependent_by_another_taxpayer: false
+      us:policies/income_tax/savers_credit_pipeline#input.primary_qualified_retirement_savings_contributions: 2000
+      us:policies/income_tax/savers_credit_pipeline#input.spouse_qualified_retirement_savings_contributions: 0
+    us:policies/income_tax/savers_credit_pipeline#input.filing_status: 0
+    us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income: 24249
+  output:
+    us:policies/income_tax/savers_credit_pipeline#federal_savers_credit: '1000'
+
+- name: single-one-below-20-percent-limit
+  period: *tax_year_2026
+  input:
+    <<: *eligible_common
+    us:policies/income_tax/savers_credit_pipeline#input.filing_status: 0
+    us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income: 26249
+  output:
+    us:policies/income_tax/savers_credit_pipeline#federal_savers_credit: '400'
+
+- name: single-one-below-10-percent-limit
+  period: *tax_year_2026
+  input:
+    <<: *eligible_common
+    us:policies/income_tax/savers_credit_pipeline#input.filing_status: 0
+    us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income: 40249
+  output:
+    us:policies/income_tax/savers_credit_pipeline#federal_savers_credit: '200'
+
+- name: joint-one-below-50-percent-limit
+  period: *tax_year_2026
+  input:
+    <<: *eligible_common
+    us:policies/income_tax/savers_credit_pipeline#input.filing_status: 1
+    us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income: 48499
+  output:
+    us:policies/income_tax/savers_credit_pipeline#federal_savers_credit: '1000'
+
+- name: joint-one-below-20-percent-limit
+  period: *tax_year_2026
+  input:
+    <<: *eligible_common
+    us:policies/income_tax/savers_credit_pipeline#input.filing_status: 1
+    us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income: 52499
+  output:
+    us:policies/income_tax/savers_credit_pipeline#federal_savers_credit: '400'
+
+- name: joint-one-below-10-percent-limit
+  period: *tax_year_2026
+  input:
+    <<: *eligible_common
+    us:policies/income_tax/savers_credit_pipeline#input.filing_status: 1
+    us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income: 80499
+  output:
+    us:policies/income_tax/savers_credit_pipeline#federal_savers_credit: '200'
+
+- name: head-of-household-one-below-50-percent-limit
+  period: *tax_year_2026
+  input:
+    <<: *eligible_common
+    us:policies/income_tax/savers_credit_pipeline#input.filing_status: 3
+    us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income: 36374
+  output:
+    us:policies/income_tax/savers_credit_pipeline#federal_savers_credit: '1000'
+
+- name: head-of-household-one-below-20-percent-limit
+  period: *tax_year_2026
+  input:
+    <<: *eligible_common
+    us:policies/income_tax/savers_credit_pipeline#input.filing_status: 3
+    us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income: 39374
+  output:
+    us:policies/income_tax/savers_credit_pipeline#federal_savers_credit: '400'
+
+- name: head-of-household-one-below-10-percent-limit
+  period: *tax_year_2026
+  input:
+    <<: *eligible_common
+    us:policies/income_tax/savers_credit_pipeline#input.filing_status: 3
+    us:policies/income_tax/savers_credit_pipeline#input.adjusted_gross_income: 60374
+  output:
+    us:policies/income_tax/savers_credit_pipeline#federal_savers_credit: '200'

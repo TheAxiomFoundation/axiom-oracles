@@ -1,0 +1,62 @@
+name: uk-best-start-foods-ukmod
+title: UK Best Start Foods — Axiom vs UKMOD
+description: >-
+  Compares the composed Best Start Foods pipeline encoded in Axiom RuleSpec
+  (Welfare Foods (Best Start Foods) (Scotland) Regulations 2019 (SSI 2019/193)
+  regulation 13: the £5.60 basic weekly rate in force from 1 April 2026 by SSI
+  2026/170, doubled to £11.20/week for a child under one) against CeMPA's UKMOD
+  bmascmt01_s on synthetic passported Scottish cases: a zero-earnings lone parent
+  (drgn1=12) responsible for a newborn (£11.20/week doubled rate) and for a
+  toddler (£5.60/week basic rate), each renting and passporting onto Universal
+  Credit. Best Start Foods is a passported means-tested payment requiring Scottish
+  residence — its UKMOD Elig_Cond requires a qualifying means-tested benefit in
+  payment (bsauc_s > 0 among others) and drgn1=12 — so the cases are built to
+  receive Universal Credit in Scotland and the payment passports off it. UKMOD
+  bmascmt01_uk annualises the weekly value over its 365/7 calendar-week convention
+  (£11.20 x 365/7 = £584.00 for a newborn); the rulespec pilot annualises the same
+  weekly value over 52 benefit weeks (£582.40), about 0.27% lower, so the
+  comparison carries a 0.3% relative tolerance that absorbs the convention
+  residual while both sides recover the same weekly rate.
+
+  UKMOD's Universal Credit output bsauc_s carries a STOCHASTIC per-benefit-unit
+  take-up draw (i_rand_tu, gated in bsauc_uk on the $ISTUNoChild / $ISTUChild
+  take-up-rate constants); for a hypothetical benefit unit a non-taking solo draw
+  would zero the UC award and switch the passport off (documented in
+  axiom_oracles/data/euromod_issues.json as ukmod-uc-bsauc-takeup-correction).
+  euromod_constant_overrides pins those UC take-up rates to 1.0 so Universal
+  Credit is deterministically in payment and Best Start Foods passports; the
+  adapter patches the DefConst values into the system XML on the model overlay
+  (axiom-oracles#168), since the connector's constantsToOverwrite kwarg silently
+  ignores DefConst constants. Unlike its sibling Best Start Grant (bmascmt_uk,
+  excluded as a take-up-adjustment surface), Best Start Foods does not consume
+  i_rand_tu itself, so once UC is in payment the weekly value is a deterministic
+  per-household result. UKMOD runs the registration-free public model
+  (UKMOD_PUBLIC_B2026.03, system UK_2026, dataset training_data). This suite runs
+  where the x64 UKMOD runtime and model checkout are available; on runners without
+  them it re-emits the committed dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: uk-best-start-foods
+    population: synthetic
+    sample_size: 0
+    period: 2026-04
+    euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
+    euromod_country: UK
+    euromod_system: UK_2026
+    euromod_dataset: training_data
+    # Pin the Universal Credit take-up-rate constants to 1.0 so the passporting
+    # benefit is deterministically in payment (bsauc_s > 0) rather than a take-up
+    # lottery realization; Best Start Foods' Elig_Cond then passports off UC.
+    euromod_constant_overrides: $ISTUNochild=1.0,$ISTUChild=1.0
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-uk-best-start-foods.json
+
+artifacts:
+  report_basename: axiom-euromod-uk-best-start-foods
+
+dashboard:
+  filename: axiom-euromod-uk-best-start-foods.json
+  suite: uk-best-start-foods

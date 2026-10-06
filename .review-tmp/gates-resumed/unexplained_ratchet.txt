@@ -1,0 +1,2 @@
+$ uv run python scripts/unexplained_ratchet.py --check
+unexplained ratchet OK: 222 suites gated, 0 unexplained within pinned ceilings

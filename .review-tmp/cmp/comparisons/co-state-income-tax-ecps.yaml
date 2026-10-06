@@ -1,0 +1,38 @@
+name: co-state-income-tax-ecps
+title: Colorado state income tax — Axiom vs PolicyEngine
+description: >-
+  Compares the Colorado state income tax liability produced by the generated
+  Axiom tax oracle bridge against PolicyEngine on Colorado Enhanced CPS
+  households.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
+# staging fails the engine's canonical-path scan (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049) before any comparison runs;
+# rulespec-us#1050 (removed plural corpus_citation_paths) and -- for the
+# composed program lanes -- axiom-compose#29 and axiom-oracles#335 queue
+# behind it. Manual lane only; drop this marker when the upstream chain lands
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules
+  parameters:
+    left: axiom
+    right: policyengine
+    population: enhanced-cps
+    sample_size: 0
+    period: "2026"
+    concept: us:tax/state-income-tax#liability
+    axiom_rulespec_repo_roots: $HOME
+    # The CO slice is ~1,200 tax units — well under FULL_CASE_INPUT_LIMIT —
+    # but the jurisdiction filter runs inside the tax bridge, so the CLI's
+    # loaded-case heuristic sees the whole national ECPS. Force evidence on.
+    include_case_inputs: true
+
+artifacts:
+  report_basename: axiom-policyengine-co-state-income-tax-ecps
+
+dashboard:
+  filename: axiom-policyengine-co-state-income-tax-ecps.json
+  suite: co-state-income-tax-ecps

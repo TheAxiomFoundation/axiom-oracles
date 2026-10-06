@@ -1,0 +1,95 @@
+name: uk-tax-benefits-efrs
+title: UK tax and benefits — Axiom vs PolicyEngine
+description: >-
+  Compares merged UK RuleSpec tax, National Insurance, Child Benefit, State
+  Pension Credit, tariff-income, Housing Benefit applicable-amount and
+  entitlement, student-loan, Carer's Allowance, and final Carer Support
+  Payment, Scottish Child Payment, child Disability Living Allowance, and
+  Personal Independence Payment surfaces against PolicyEngine UK on the
+  Enhanced FRS population.
+  Six retired final-wrapper surfaces (Child Benefit, State Pension, Pension
+  Credit, ESA income, Housing Benefit, Severe Disablement Allowance) are no
+  longer coded in the bridge: rulespec-uk deleted five wrappers (829ab1a,
+  2026-06-10) and re-grounded the two survivors away from the bridge's I/O
+  contract (60501ec); their composed-pipeline re-encodings are compared via
+  their own surfaces and suites. Per-surface history:
+  docs/uk-coverage-matrix.md.
+
+# Not CI-runnable: the pinned Populace UK artifact lives in the PRIVATE
+# Hugging Face repo policyengine/populace-uk-private, and the runner has no
+# HF credential -- the leg dies on `Failed to download pinned Populace UK
+# artifact ...: 401 Client Error` (verified in run 31073838536, 2026-08-06,
+# after the subcommand/layout/compose fixes landed; every other blocker is
+# cleared and the same chain passes locally with a credentialed HF cache).
+# The workflows already pass HF_TOKEN from the org HUGGING_FACE_TOKEN
+# secret; that secret is currently broken org-wide (policyengine-uk#1816,
+# fix = org owners). Drop this marker when the org token is restored and
+# shared to this repo (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+runner:
+  type: axiom-encode-uk-efrs-compare
+  axiom_encode_repo: $HOME/axiom-encode
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  rulespec_root: $HOME/rulespec-uk-official
+  parameters:
+    # No axiom_program/axiom_compose_binary here: every surface below is a
+    # source-path surface, and the composed Universal Credit program is only
+    # consumed by UC surfaces (uk-universal-credit-efrs). Declaring it made
+    # the CI leg build the axiom-compose venv — an extra private-repo clone
+    # and venv build the comparison never used (it failed the first restored
+    # sweep on exactly that dead dependency).
+    rulespec_roots:
+      - $HOME/rulespec-uk-official
+    data_folder: $HOME/axiom-oracles/.axiom/policyengine-data
+    sample_size: 0
+    year: 2026
+    python: "3.13"
+    dataset: enhanced_frs_2023_24
+    policyengine_uk_version: 2.88.56
+    policyengine_core_version: 3.26.11
+    tolerance: 0.01
+    relative_tolerance: 2e-7
+    surfaces:
+      - national-insurance-class-1
+      - national-insurance-class-4
+      - national-insurance-class-4-final
+      - national-insurance-final
+      - personal-allowance
+      - marriage-allowance
+      - income-tax-income-base
+      - income-tax-section-10-earned-income
+      - income-tax-section-11d-savings-income
+      - income-tax-section-13-dividend-income
+      - child-benefit
+      - benefit-cap-relevant-amount
+      - state-pension-credit-qualifying-age
+      - state-pension-credit-guarantee-credit
+      - state-pension-credit-savings-credit
+      - pension-credit
+      - pension-credit-child-addition
+      - pension-credit-deemed-income
+      - esa-income-tariff-income
+      - jsa-income-tariff-income
+      - income-support-tariff-income
+      - housing-benefit-working-age-tariff-income
+      - housing-benefit-pension-age-tariff-income
+      - housing-benefit-applicable-amount
+      - housing-benefit-entitlement
+      - student-loan-repayment
+      - carers-allowance-final
+      - carer-support-payment-final
+      - scottish-child-payment-final
+      - disability-living-allowance-final
+      - personal-independence-payment-final
+
+artifacts:
+  report_basename: axiom-policyengine-uk-tax-benefits-efrs
+
+dashboard:
+  filename: axiom-policyengine-uk-tax-benefits-efrs.json
+  suite: uk-tax-benefits-efrs
+  parent_concept: uk:tax-benefits/efrs#amount
+  parent_category: tax-benefits
+  parent_description: UK tax and benefit EFRS surfaces
+  known_policyengine_divergence_detail_limit: 25

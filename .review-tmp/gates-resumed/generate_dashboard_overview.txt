@@ -1,0 +1,2 @@
+$ uv run python scripts/generate_dashboard_overview.py --check
+overview OK: 229 reports bundled

@@ -1,0 +1,40 @@
+name: be-elderly-income-support
+title: Belgium income guarantee for elderly people (GRAPA/IGO) — Axiom vs EUROMOD
+description: >-
+  Compares the GRAPA / income guarantee for elderly people (garantie de revenus
+  aux personnes âgées / inkomensgarantie voor ouderen) encoded in Axiom RuleSpec
+  (Federal law of 22 March 2001, articles 6, 7, and 11) against EUROMOD Belgium
+  bsaoa_s on a synthetic isolated-senior case with no resources. bsaoa_be is
+  marked "TO BE SWITCHED ON MANUALLY, otherwise from data" in BE_2025, so the
+  case carries a per-policy switch override (euromod_policy_switch_overrides:
+  [(bsaoa_be, True)]) that the adapter applies by patching the model XML — no
+  extension switch can enable it. EUROMOD runs the registration-free public model
+  (EUROMOD_RELEASES_J2.0+, system BE_2025) under the real dataset-configuration
+  name BE_2024_c1_2015_03_e2 (the dataset-name gating workaround; no licensed
+  microdata is read) with input rows templated from the bundled BE_training_data
+  schema. This suite runs where the x64 EUROMOD runtime and model checkout are
+  available; on runners without them the registry re-emits the committed
+  dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: be-elderly-income-support
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+
+    euromod_country: BE
+    euromod_system: BE_2025
+    euromod_dataset: BE_2024_c1_2015_03_e2
+    euromod_template_dataset: BE_training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-be-elderly-income-support.json
+
+artifacts:
+  report_basename: axiom-euromod-be-elderly-income-support
+
+dashboard:
+  filename: axiom-euromod-be-elderly-income-support.json
+  suite: be-elderly-income-support

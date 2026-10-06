@@ -1,0 +1,2 @@
+$ uv run python scripts/check_vacuous_gate.py --check
+vacuous-gate OK: 151 configs oracle-backed; 228 suites, 34 executable surfaces, 69 suite(s) awaiting provenance

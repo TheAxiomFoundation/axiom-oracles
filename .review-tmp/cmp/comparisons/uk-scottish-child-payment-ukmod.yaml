@@ -1,0 +1,58 @@
+name: uk-scottish-child-payment-ukmod
+title: UK Scottish Child Payment — Axiom vs UKMOD
+description: >-
+  Compares the Scottish Child Payment encoded in Axiom RuleSpec (rulespec-uk
+  uk/policies/govuk/scottish-child-payment, the Scottish Child Payment
+  Regulations 2020 (SSI 2020/351): the per-child weekly amount for a qualifying
+  child under 16 whose applicant or partner receives a qualifying means-tested
+  benefit) against CeMPA's UKMOD bchmt_s on single-child Scotland benefit units.
+  Each case is a lone parent in Scotland (drgn1=12) working part-time on a low
+  income, so UKMOD pays Universal Credit bsauc_s (the qualifying passport) and
+  the Scottish Child Payment fires. The grid runs a qualifying child in each
+  take-up age band (4, 7, 15) and a 16-year-old over the maximum age (nil on
+  both engines). bchmt_s embeds UKMOD's Scottish Child Payment take-up draw
+  (i_rand_tu against $SCPTUu6y / $SCPTU6to15y); the suite pins those rates to 1.0
+  and the Universal Credit child take-up ($ISTUChild) to 1.0 with $UCtransition=0
+  through euromod_constant_overrides so the engine returns the statutory
+  entitlement with the qualifying award kept on. bchmt_s is monthly and the
+  pipeline amount is annual, so the adapter annualizes bchmt_s (×12); the weekly
+  statutory rate is identical (28.20) and the only residual is the annualization
+  convention (UKMOD 365/7 vs the pipeline's 52 weeks/year), dispositioned
+  explained_residual. UKMOD runs the registration-free public model
+  (UKMOD_PUBLIC_B2026.03, system UK_2026, dataset training_data). This suite runs
+  where the x64 UKMOD runtime and model checkout are available and is regenerated
+  by scripts/regenerate_euromod_uk.sh; on runners without them it re-emits the
+  committed dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: uk-scottish-child-payment
+    population: synthetic
+    sample_size: 0
+    # UKMOD's Scottish Child Payment output bchmt_s carries a stochastic per-row
+    # take-up draw (i_rand_tu against the $SCPTU* age-band rates) and passports
+    # off a qualifying means-tested award. Pinning $SCPTUu6y/$SCPTU6to15y to 1.0
+    # keeps the payment on every draw; pinning the Universal Credit child take-up
+    # $ISTUChild to 1.0 and setting $UCtransition=0 keeps the qualifying UC award
+    # on so the passport is satisfied. Any residual take-up zero is dispositioned
+    # upstream_engine_gap; the weeks-convention residual is explained_residual.
+    euromod_constant_overrides: $UCtransition=0,$SCPTUu6y=1.0,$SCPTU6to15y=1.0,$ISTUChild=1.0
+    # The Scottish Child Payment 2026-27 rate applies from April 2026. UKMOD
+    # resolves the policy year from euromod_system (UK_2026) and ignores the case
+    # period.
+    period: 2026-04
+    euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
+    euromod_country: UK
+    euromod_system: UK_2026
+    euromod_dataset: training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-uk-scottish-child-payment.json
+
+artifacts:
+  report_basename: axiom-euromod-uk-scottish-child-payment
+
+dashboard:
+  filename: axiom-euromod-uk-scottish-child-payment.json
+  suite: uk-scottish-child-payment

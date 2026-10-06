@@ -1,0 +1,176 @@
+[
+  {
+    "name": "generate_affected_map",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/generate_affected_map.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 3.12
+  },
+  {
+    "name": "check_vacuous_gate",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/check_vacuous_gate.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 4.11
+  },
+  {
+    "name": "generate_dashboard_overview",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/generate_dashboard_overview.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 1.99
+  },
+  {
+    "name": "exercise_census",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/exercise_census.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 37.09
+  },
+  {
+    "name": "conformance_scoreboard",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/conformance_scoreboard.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 4.96
+  },
+  {
+    "name": "conformance_burndown",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/conformance_burndown.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 17.2
+  },
+  {
+    "name": "apply_dispositions",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/apply_dispositions.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 122.34
+  },
+  {
+    "name": "generate_chunk_indexes",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/generate_chunk_indexes.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 2.09
+  },
+  {
+    "name": "unexplained_ratchet",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/unexplained_ratchet.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 6.86
+  },
+  {
+    "name": "conformance_ratchet",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/conformance_ratchet.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 2.29
+  },
+  {
+    "name": "closure_universe",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/closure_universe.py",
+      "--check"
+    ],
+    "returncode": 0,
+    "seconds": 15.72
+  },
+  {
+    "name": "certify-dk-boerne-og-ungeydelse",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/certify.py",
+      "--check",
+      "--program",
+      "dk/boerne-og-ungeydelse"
+    ],
+    "returncode": 0,
+    "seconds": 14.06
+  },
+  {
+    "name": "certify-us-co-snap",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/certify.py",
+      "--check",
+      "--program",
+      "us-co/snap"
+    ],
+    "returncode": 0,
+    "seconds": 3.65
+  },
+  {
+    "name": "certify-us-tariff-duty",
+    "command": [
+      "uv",
+      "run",
+      "python",
+      "scripts/certify.py",
+      "--check",
+      "--program",
+      "us/tariff-duty"
+    ],
+    "returncode": 0,
+    "seconds": 17.32
+  }
+]

@@ -1,0 +1,31 @@
+name: in-income-tax-liability
+title: Indiana income tax liability — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the composed Indiana resident wage-earner income-tax pipeline in
+  Axiom RuleSpec against PolicyEngine (in_agi_tax) at 2026 and TAXSIM
+  (siitax) at 2026 on the standard six-case grid.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: the engine's
+# canonical-path root scan rejects the whole tree (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049), and the state pipelines carry the
+# removed plural `corpus_citation_paths` schema (rulespec-us#1050; 176 files
+# across every jurisdiction as of 2026-08-05). Every dispatched leg fails
+# before producing a report. Manual lane only; drop this marker when both land
+# upstream (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: IN
+    period: "2026"
+    taxsim_law_year: 2026
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-in-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-in-income-tax-liability.json
+  suite: in-income-tax-liability

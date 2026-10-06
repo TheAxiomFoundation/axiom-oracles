@@ -1,0 +1,667 @@
+# Parameter-oracle suites: encoded rulespec parameter values compared against
+# PolicyEngine parameters at a fixed instant. The rulespec side is read from
+# upstream rulespec-us origin/main (local checkouts drift), evaluated from the
+# encoded formulas by scripts/run_parameter_comparisons.py.
+#
+# NOTE: the parameter runner evaluates PolicyEngine from the repo venv,
+# while household suites run the pinned PE 4.11 stack — a PE upgrade can
+# make the two families disagree about the same parameter. Keep the venv
+# and _PE_ORACLE_PINS aligned when bumping either.
+#
+# axiom_formula (optional) combines rules from the same file — e.g. Medicaid
+# effective limits are raw FPL limit + the 5% MAGI disregard, mirroring how
+# PolicyEngine stores the effective limit. (The disregard itself moved to
+# the shared us:policies/cms/medicaid-chip-bhp-eligibility-levels module
+# upstream, so it appears here as the 0.05 literal.)
+#
+# This file is NOT a single-runner comparison config: it declares a *list* of
+# parameter-oracle suites consumed by scripts/run_parameter_comparisons.py, not
+# by run_comparison.py's runner registry. The explicit `kind` marker below is
+# what makes that first-class — `run_comparison.py --list`, the affected-map
+# generator, and the vacuous-verification gate all key off `kind` instead of
+# the old heuristic of "no `name:` key means non-registry" (the #73 --list
+# KeyError patch). Recognized in place; no relocation needed.
+
+schema: axiom_oracles.parameter_suite_list.v1
+kind: parameter-suite-list
+
+period: "2026-01-01"
+
+suites:
+  - suite: ga-health-thresholds
+    category: health
+    locales: [GA]
+    comparisons:
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_children_medicaid_ages_0_to_1_fpl_limit
+        axiom_formula: georgia_children_medicaid_ages_0_to_1_fpl_limit + 0.05
+        description: Children Medicaid ages 0-1 FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.infant.income_limit.GA
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_children_medicaid_ages_1_to_5_fpl_limit
+        axiom_formula: georgia_children_medicaid_ages_1_to_5_fpl_limit + 0.05
+        description: Children Medicaid ages 1-5 FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.young_child.income_limit.GA
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_children_medicaid_ages_6_to_18_fpl_limit
+        axiom_formula: georgia_children_medicaid_ages_6_to_18_fpl_limit + 0.05
+        description: Children Medicaid ages 6-18 FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.older_child.income_limit.GA
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_pregnant_women_medicaid_fpl_limit
+        axiom_formula: georgia_pregnant_women_medicaid_fpl_limit + 0.05
+        description: Pregnant women Medicaid FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.pregnant.income_limit.GA
+      - file: us-ga/policies/cms/georgia-medicaid-chip-bhp-eligibility-levels.yaml
+        rule: georgia_parent_caretaker_adults_medicaid_fpl_limit
+        axiom_formula: georgia_parent_caretaker_adults_medicaid_fpl_limit + 0.05
+        description: Parent / caretaker adult Medicaid FPL limit
+        pe: gov.hhs.medicaid.eligibility.categories.parent.income_limit.GA
+
+  - suite: ssi-parameters
+    category: cash
+    locales: [US]
+    comparisons:
+      # The SSI income exclusions were never inflation-adjusted, so the
+      # encoded 1972 statutory annual amounts compare directly against
+      # PolicyEngine's current monthly parameters. The federal benefit rate
+      # itself is NOT compared here: computing it from the encoded statute
+      # requires the full 1382f COLA chain (a composition, not a file).
+      - file: us/statutes/42/1382a/b/2.yaml
+        rule: annual_general_income_exclusion_limit
+        axiom_formula: annual_general_income_exclusion_limit / 12
+        description: SSI general income exclusion (monthly)
+        pe: gov.ssa.ssi.income.exclusions.general
+      - file: us/statutes/42/1382a/b/4.yaml
+        rule: annual_earned_income_initial_exclusion_limit
+        axiom_formula: annual_earned_income_initial_exclusion_limit / 12
+        description: SSI earned income initial exclusion (monthly)
+        pe: gov.ssa.ssi.income.exclusions.earned
+      - file: us/statutes/42/1382a/b/4.yaml
+        rule: earned_income_remainder_exclusion_rate
+        description: SSI earned income remainder exclusion rate
+        pe: gov.ssa.ssi.income.exclusions.earned_share
+
+  - suite: co-state-supplement
+    category: cash
+    locales: [CO]
+    comparisons:
+      - file: us-co/regulations/9-ccr-2503-5/3.530.yaml
+        rule: oap_total_monthly_grant_standard
+        description: Colorado Old Age Pension total monthly grant standard
+        pe: gov.states.co.ssa.state_supplement.grant_standard
+
+  - suite: wa-tanf-payment-standard
+    category: cash
+    locales: [WA]
+    comparisons:
+      - file: us-wa/regulations/388/388-478/388-478-0020.yaml
+        rule: cash_assistance_maximum_monthly_payment_standard
+        key: 1
+        description: WA cash assistance payment standard, unit size 1
+        pe: gov.states.wa.dshs.tanf.payment_standard.amount.1
+      - file: us-wa/regulations/388/388-478/388-478-0020.yaml
+        rule: cash_assistance_maximum_monthly_payment_standard
+        key: 3
+        description: WA cash assistance payment standard, unit size 3
+        pe: gov.states.wa.dshs.tanf.payment_standard.amount.3
+      - file: us-wa/regulations/388/388-478/388-478-0020.yaml
+        rule: cash_assistance_maximum_monthly_payment_standard
+        key: 5
+        description: WA cash assistance payment standard, unit size 5
+        pe: gov.states.wa.dshs.tanf.payment_standard.amount.5
+      - file: us-wa/regulations/388/388-478/388-478-0020.yaml
+        rule: cash_assistance_maximum_monthly_payment_standard
+        key: 8
+        description: WA cash assistance payment standard, unit size 8
+        pe: gov.states.wa.dshs.tanf.payment_standard.amount.8
+
+  - suite: ny-tanf-standards
+    category: cash
+    locales: [NY]
+    comparisons:
+      - file: us-ny/policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant.yaml
+        rule: regular_recurring_monthly_need_schedule
+        key: 1
+        description: NY regular recurring monthly need, household of 1
+        pe: gov.states.ny.otda.tanf.need_standard.main.1
+      - file: us-ny/policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant.yaml
+        rule: regular_recurring_monthly_need_schedule
+        key: 3
+        description: NY regular recurring monthly need, household of 3
+        pe: gov.states.ny.otda.tanf.need_standard.main.3
+      - file: us-ny/policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant.yaml
+        rule: regular_recurring_monthly_need_schedule
+        key: 6
+        description: NY regular recurring monthly need, household of 6
+        pe: gov.states.ny.otda.tanf.need_standard.main.6
+      - file: us-ny/policies/otda/tanf-state-plan-2024-2026/standard-of-need-and-monthly-grant.yaml
+        rule: monthly_home_energy_payment_schedule
+        key: 3
+        description: NY home energy payment, household of 3
+        pe: gov.states.ny.otda.tanf.need_standard.home_energy.main.3
+
+  - suite: pell-parameters
+    category: education
+    locales: [US]
+    comparisons:
+      - file: us/policies/ed/fsa/gen-26-01-pell-award-amounts/block-1.yaml
+        rule: maximum_pell_grant_award
+        description: Maximum Pell Grant award
+        pe: gov.ed.pell_grant.amount.max
+      - file: us/policies/ed/fsa/gen-26-01-pell-award-amounts/block-1.yaml
+        rule: minimum_pell_grant_award
+        description: Minimum Pell Grant award
+        pe: gov.ed.pell_grant.amount.min
+
+  - suite: lifeline-parameters
+    category: utilities
+    locales: [US]
+    comparisons:
+      - file: us/regulations/47-cfr/54/409.yaml
+        rule: lifeline_income_limit_ratio
+        description: Lifeline income limit (share of federal poverty guidelines)
+        pe: gov.fcc.lifeline.fpg_limit
+
+  - suite: csfp-parameters
+    category: food
+    locales: [US]
+    comparisons:
+      - file: us/regulations/7-cfr/247/9/b.yaml
+        rule: maximum_csfp_household_income_limit_fpg_ratio
+        description: CSFP maximum household income limit (share of federal poverty guidelines)
+        pe: gov.usda.csfp.fpg_limit
+
+  # Federal IRC adjustment/deduction constants. Only unindexed statutory
+  # amounts and OBBBA current-year figures are compared — the encoded
+  # statutory BASES of indexed amounts (e.g. the 219(b) $5,000 deductible
+  # base, the 221 $50k/$100k MAGI threshold bases, the 223(b) $2,250/$4,500
+  # HSA bases) deliberately are not, because PolicyEngine holds the indexed
+  # current-year values, a different quantity by design.
+  - suite: irs-adjustment-parameters
+    category: tax
+    locales: [US]
+    comparisons:
+      - file: us/statutes/26/164.yaml
+        rule: applicable_limitation_amount_for_taxable_year_beginning_in_calendar_year_2026
+        description: SALT deduction limitation, tax year 2026 (OBBBA)
+        pe: gov.irs.deductions.itemized.salt_and_real_estate.cap.JOINT
+      - file: us/statutes/26/164.yaml
+        rule: modified_adjusted_gross_income_threshold_for_taxable_year_beginning_in_calendar_year_2026
+        description: SALT limitation MAGI phaseout threshold, tax year 2026 (OBBBA)
+        pe: gov.irs.deductions.itemized.salt_and_real_estate.phase_out.threshold.JOINT
+      - file: us/statutes/26/164.yaml
+        rule: modified_adjusted_gross_income_phaseout_rate
+        description: SALT limitation MAGI phaseout rate (OBBBA)
+        pe: gov.irs.deductions.itemized.salt_and_real_estate.phase_out.rate
+      - file: us/statutes/26/164.yaml
+        rule: applicable_limitation_amount_phaseout_floor
+        description: SALT limitation phaseout floor (OBBBA)
+        pe: gov.irs.deductions.itemized.salt_and_real_estate.phase_out.floor.amount.JOINT
+      - file: us/statutes/26/221.yaml
+        rule: statutory_student_loan_interest_deduction_cap
+        description: Student loan interest deduction cap (unindexed)
+        pe: gov.irs.ald.student_loan_interest.cap.SINGLE
+      - file: us/statutes/26/221.yaml
+        rule: student_loan_interest_phaseout_range_other_return
+        description: Student loan interest phaseout range, non-joint (unindexed)
+        pe: gov.irs.ald.student_loan_interest.reduction.divisor.SINGLE
+      - file: us/statutes/26/221.yaml
+        rule: student_loan_interest_phaseout_range_joint_return
+        description: Student loan interest phaseout range, joint (unindexed)
+        pe: gov.irs.ald.student_loan_interest.reduction.divisor.JOINT
+      - file: us/statutes/26/219/b.yaml
+        rule: catch_up_age_threshold
+        description: IRA catch-up contribution age threshold
+        pe: gov.irs.gross_income.retirement_contributions.catch_up.age_threshold
+      - file: us/statutes/26/219/b.yaml
+        rule: catch_up_applicable_amount_base
+        description: IRA catch-up contribution amount ($100-rounded indexation holds it at the base)
+        pe: gov.irs.gross_income.retirement_contributions.catch_up.limit.ira
+      - file: us/statutes/26/68.yaml
+        axiom_formula: itemized_deduction_reduction_numerator / itemized_deduction_reduction_denominator
+        rule: itemized_deduction_reduction_numerator
+        description: Itemized-deduction limitation rate, 2/37 (OBBBA section 68)
+        pe: gov.irs.deductions.itemized.limitation.obbb.rate
+        tolerance: 1e-6
+
+  # Hawaii income-tax amounts (HRS 235). The estate/trust exemption amounts
+  # in 235-54 have no PolicyEngine analog (PE does not model fiduciary
+  # returns) and stay in the upstream pending ledger.
+  - suite: hi-income-tax-parameters
+    category: tax
+    locales: [HI]
+    comparisons:
+      - file: us-hi/statutes/235-54.yaml
+        rule: individual_personal_exemption_unit_amount
+        description: Hawaii personal exemption unit amount
+        pe: gov.states.hi.tax.income.exemptions.base
+      - file: us-hi/statutes/235-54.yaml
+        rule: blind_deaf_or_totally_disabled_person_exemption_amount
+        description: Hawaii blind/deaf/disabled exemption amount
+        pe: gov.states.hi.tax.income.exemptions.disabled
+      - file: us-hi/statutes/235-55/7.yaml
+        rule: credit_amount_per_qualified_exemption
+        description: Hawaii low-income household renters credit, per exemption
+        pe: gov.states.hi.tax.income.credits.lihrtc.amount
+      - file: us-hi/statutes/235-55/7.yaml
+        rule: senior_double_credit_age_threshold
+        description: Hawaii renters credit senior double-exemption age
+        pe: gov.states.hi.tax.income.credits.lihrtc.aged_age_threshold
+      - file: us-hi/statutes/235-55/7.yaml
+        rule: adjusted_gross_income_credit_threshold
+        description: Hawaii renters credit AGI ceiling
+        pe: gov.states.hi.tax.income.credits.lihrtc.eligibility.agi_limit
+      - file: us-hi/statutes/235-55/7.yaml
+        rule: rent_paid_credit_threshold
+        description: Hawaii renters credit minimum rent paid
+        pe: gov.states.hi.tax.income.credits.lihrtc.eligibility.rent_threshold
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: single_return_food_excise_credit_per_exemption
+        key: 0
+        description: Hawaii food/excise credit per exemption, single, lowest AGI band
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.single[0].amount
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: single_return_food_excise_credit_per_exemption
+        key: 4
+        description: Hawaii food/excise credit per exemption, single, highest paying band
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.single[4].amount
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: single_return_food_excise_credit_band_upper_bound
+        key: 0
+        description: Hawaii food/excise credit first AGI band bound, single
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.single[1].threshold
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: single_return_food_excise_credit_band_upper_bound
+        key: 4
+        description: Hawaii food/excise credit single credit-ending AGI bound
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.single[5].threshold
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: non_single_return_food_excise_credit_per_exemption
+        key: 5
+        description: Hawaii food/excise credit per exemption, joint, 40-50k band
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.joint[5].amount
+      - file: us-hi/statutes/235-55/85.yaml
+        rule: non_single_return_food_excise_credit_per_exemption
+        key: 6
+        description: Hawaii food/excise credit per exemption, joint, 50-60k band
+        pe: gov.states.hi.tax.income.credits.food_excise_tax.amount.joint[6].amount
+
+  # Iowa income-tax exemption credits (Iowa Code 422.12). The joint/HoH $80
+  # credit is two $40 personal exemptions in PolicyEngine's formula (not a
+  # separate parameter), and the tuition and firefighter/EMS/reserve-officer
+  # credits have no PolicyEngine model — those stay in the pending ledger.
+  - suite: ia-income-tax-parameters
+    category: tax
+    locales: [IA]
+    comparisons:
+      - file: us-ia/statutes/422/12.yaml
+        rule: estate_trust_single_or_separate_return_personal_exemption_credit
+        description: Iowa personal exemption credit (single/separate)
+        pe: gov.states.ia.tax.income.credits.exemption.personal
+      - file: us-ia/statutes/422/12.yaml
+        rule: dependent_personal_exemption_credit
+        description: Iowa dependent exemption credit
+        pe: gov.states.ia.tax.income.credits.exemption.dependent
+      - file: us-ia/statutes/422/12.yaml
+        rule: age_sixty_five_additional_exemption_credit
+        description: Iowa age-65 additional exemption credit
+        pe: gov.states.ia.tax.income.credits.exemption.additional
+      - file: us-ia/statutes/422/12.yaml
+        rule: blind_additional_exemption_credit
+        description: Iowa blind additional exemption credit
+        pe: gov.states.ia.tax.income.credits.exemption.additional
+
+  - suite: ga-tanf-standards
+    category: cash
+    locales: [GA]
+    comparisons:
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: standard_of_need
+        key: 1
+        description: GA TANF standard of need, family of 1
+        pe: gov.states.ga.dfcs.tanf.financial_standards.standard_of_need.base.1
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: standard_of_need
+        key: 3
+        description: GA TANF standard of need, family of 3
+        pe: gov.states.ga.dfcs.tanf.financial_standards.standard_of_need.base.3
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: standard_of_need
+        key: 6
+        description: GA TANF standard of need, family of 6
+        pe: gov.states.ga.dfcs.tanf.financial_standards.standard_of_need.base.6
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: family_maximum_tanf
+        key: 1
+        description: GA TANF family maximum, family of 1
+        pe: gov.states.ga.dfcs.tanf.financial_standards.family_maximum.base.1
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: family_maximum_tanf
+        key: 3
+        description: GA TANF family maximum, family of 3
+        pe: gov.states.ga.dfcs.tanf.financial_standards.family_maximum.base.3
+      - file: us-ga/policies/dfcs/tanf/appendix-a.yaml
+        rule: family_maximum_tanf
+        key: 6
+        description: GA TANF family maximum, family of 6
+        pe: gov.states.ga.dfcs.tanf.financial_standards.family_maximum.base.6
+      - file: us-ga/policies/dfcs/tanf/1615/block-5.yaml
+        rule: standard_work_deduction_amount
+        description: GA TANF standard work deduction
+        pe: gov.states.ga.dfcs.tanf.income.deductions.work_expense
+      - file: us-ga/policies/dfcs/tanf/appendix-a/block-3.yaml
+        rule: assistance_unit_limit
+        description: GA TANF assistance unit resource limit
+        pe: gov.states.ga.dfcs.tanf.resources.limit
+
+  - suite: ak-atap-standards
+    category: cash
+    locales: [AK]
+    comparisons:
+      - file: us-ak/policies/dpa/atap/standards/2026/adult-included.yaml
+        rule: adult_included_need_standard_by_family_size
+        key: 2
+        description: AK ATAP need standard, family of 2 (adult included)
+        pe: gov.states.ak.dpa.atap.need_standard.amount.2
+      - file: us-ak/policies/dpa/atap/standards/2026/adult-included.yaml
+        rule: adult_included_need_standard_by_family_size
+        key: 5
+        description: AK ATAP need standard, family of 5 (adult included)
+        pe: gov.states.ak.dpa.atap.need_standard.amount.5
+      - file: us-ak/policies/dpa/atap/standards/2026/adult-included.yaml
+        rule: adult_included_need_standard_by_family_size
+        key: 8
+        description: AK ATAP need standard, family of 8 (adult included)
+        pe: gov.states.ak.dpa.atap.need_standard.amount.8
+
+  - suite: tx-tanf-parameters
+    category: cash
+    locales: [TX]
+    comparisons:
+      - file: us-tx/policies/hhs/texas-works-handbook/c-110-tanf/block-2.yaml
+        rule: recognizable_need_percentage
+        description: TX TANF recognizable needs rate
+        pe: gov.states.tx.tanf.needs_standard.recognizable_needs.rate
+      - file: us-tx/policies/hhs/texas-works-handbook/a-1340-income-limits/block-16.yaml
+        rule: tanf_minimum_grant_amount
+        description: TX TANF minimum grant
+        pe: gov.states.tx.tanf.minimum_grant
+      - file: us-tx/policies/hhs/texas-works-handbook/c-110-tanf/block-2.yaml
+        rule: non_caretaker_budgetary_need_by_family_size
+        key: 1
+        description: TX TANF budgetary need, non-caretaker family of 1
+        pe: gov.states.tx.tanf.needs_standard.budgetary_needs.non_caretaker[1].amount
+      - file: us-tx/policies/hhs/texas-works-handbook/c-110-tanf/block-2.yaml
+        rule: non_caretaker_budgetary_need_by_family_size
+        key: 3
+        description: TX TANF budgetary need, non-caretaker family of 3
+        pe: gov.states.tx.tanf.needs_standard.budgetary_needs.non_caretaker[3].amount
+  - suite: md-tca-payments
+    category: cash
+    locales: [MD]
+    comparisons:
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 1
+        description: MD TCA allowable monthly payment, household of 1
+        pe: gov.states.md.tca.maximum_benefit.main.1
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 3
+        description: MD TCA allowable monthly payment, household of 3
+        pe: gov.states.md.tca.maximum_benefit.main.3
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 6
+        description: MD TCA allowable monthly payment, household of 6
+        pe: gov.states.md.tca.maximum_benefit.main.6
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 10
+        description: MD TCA allowable monthly payment, household of 10
+        pe: gov.states.md.tca.maximum_benefit.main.10
+      - file: us-md/policies/dhs/fia/im-26-13/2026-tca-tdap-benefit-increase/allowable-tca-monthly-payment.yaml
+        rule: allowable_tca_monthly_payment_by_household_size
+        key: 21
+        description: MD TCA allowable monthly payment, household of 21
+        pe: gov.states.md.tca.maximum_benefit.main.21
+  - suite: me-tanf-standards
+    category: cash
+    locales: [ME]
+    comparisons:
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_standard_of_need_base
+        key: 1
+        description: ME TANF standard of need, unit of 1 (adult included)
+        pe: gov.states.me.dhhs.tanf.standard_of_need.amount.1
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_standard_of_need_base
+        key: 4
+        description: ME TANF standard of need, unit of 4 (adult included)
+        pe: gov.states.me.dhhs.tanf.standard_of_need.amount.4
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_standard_of_need_base
+        key: 8
+        description: ME TANF standard of need, unit of 8 (adult included)
+        pe: gov.states.me.dhhs.tanf.standard_of_need.amount.8
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_standard_of_need_add_member
+        description: ME TANF standard of need, each additional member
+        pe: gov.states.me.dhhs.tanf.standard_of_need.additional_person
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_maximum_grant_base
+        key: 1
+        description: ME TANF maximum grant, unit of 1 (adult included)
+        pe: gov.states.me.dhhs.tanf.maximum_benefit.amount.1
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_maximum_grant_base
+        key: 4
+        description: ME TANF maximum grant, unit of 4 (adult included)
+        pe: gov.states.me.dhhs.tanf.maximum_benefit.amount.4
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_maximum_grant_base
+        key: 8
+        description: ME TANF maximum grant, unit of 8 (adult included)
+        pe: gov.states.me.dhhs.tanf.maximum_benefit.amount.8
+      - file: us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a/maximum-benefit-and-standard-of-need.yaml
+        rule: adult_included_maximum_grant_add_member
+        description: ME TANF maximum grant, each additional member
+        pe: gov.states.me.dhhs.tanf.maximum_benefit.additional_person
+  - suite: al-tanf-payment-standards
+    category: cash
+    locales: [AL]
+    comparisons:
+      - file: us-al/policies/dhr/tanf/state-plan/2024/payment-standards.yaml
+        rule: al_tanf_monthly_payment_standard_by_assistance_unit_size
+        key: 1
+        description: AL TANF monthly payment standard, unit of 1
+        pe: gov.states.al.dhs.tanf.payment_standard.1
+      - file: us-al/policies/dhr/tanf/state-plan/2024/payment-standards.yaml
+        rule: al_tanf_monthly_payment_standard_by_assistance_unit_size
+        key: 3
+        description: AL TANF monthly payment standard, unit of 3
+        pe: gov.states.al.dhs.tanf.payment_standard.3
+      - file: us-al/policies/dhr/tanf/state-plan/2024/payment-standards.yaml
+        rule: al_tanf_monthly_payment_standard_by_assistance_unit_size
+        key: 6
+        description: AL TANF monthly payment standard, unit of 6
+        pe: gov.states.al.dhs.tanf.payment_standard.6
+      - file: us-al/policies/dhr/tanf/state-plan/2024/payment-standards.yaml
+        rule: al_tanf_monthly_payment_standard_by_assistance_unit_size
+        key: 10
+        description: AL TANF monthly payment standard, unit of 10
+        pe: gov.states.al.dhs.tanf.payment_standard.10
+  - suite: az-tanf-deductions
+    category: cash
+    locales: [AZ]
+    comparisons:
+      - file: us-az/policies/des/faa5/ca-benefit-determination/earned-income-deduction.yaml
+        rule: ca_earned_income_deduction_rate
+        description: AZ cash assistance earned income deduction rate
+        pe: gov.states.az.hhs.tanf.income.deductions.percentage
+      - file: us-az/policies/des/faa5/ca-benefit-determination/cost-of-employment-deduction.yaml
+        rule: cost_of_employment_monthly_deduction_amount
+        description: AZ cash assistance cost-of-employment monthly deduction
+        pe: gov.states.az.hhs.tanf.income.deductions.flat
+  - suite: ak-apa-state-supplement
+    category: cash
+    locales: [AK]
+    comparisons:
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: a_individual_apa_payment_standard
+        description: AK APA state supplement, independent living, individual
+        pe: gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.INDIVIDUAL
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: a_couple_one_eligible_apa_payment_standard
+        description: AK APA state supplement, independent living, couple one eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.COUPLE_ONE_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: a_couple_both_eligible_apa_payment_standard
+        description: AK APA state supplement, independent living, couple both eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.INDEPENDENT.COUPLE_BOTH_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: b_individual_apa_payment_standard
+        description: AK APA state supplement, household of another, individual
+        pe: gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.INDIVIDUAL
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: b_couple_one_eligible_apa_payment_standard
+        description: AK APA state supplement, household of another, couple one eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.COUPLE_ONE_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: b_couple_both_eligible_apa_payment_standard
+        description: AK APA state supplement, household of another, couple both eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.HOUSEHOLD_OF_ANOTHER.COUPLE_BOTH_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: alh_individual_apa_payment_standard
+        description: AK APA state supplement, assisted living home, individual
+        pe: gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.INDIVIDUAL
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: alh_couple_one_eligible_apa_payment_standard
+        description: AK APA state supplement, assisted living home, couple one eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.COUPLE_ONE_ELIGIBLE
+      - file: us-ak/policies/dpa/apa/standards/2026/state-supplement-payment-standard.yaml
+        rule: alh_couple_both_eligible_apa_payment_standard
+        description: AK APA state supplement, assisted living home, couple both eligible
+        pe: gov.states.ak.dpa.ssp.payment_standard.ASSISTED_LIVING.COUPLE_BOTH_ELIGIBLE
+  - suite: mi-ssp-payments
+    category: cash
+    locales: [MI]
+    comparisons:
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: independent_living_individual_state_ssi_payment
+        description: MI SSP, independent living, individual
+        pe: gov.states.mi.mdhhs.ssp.payment.individual.INDEPENDENT_LIVING
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: independent_living_couple_state_ssi_payment
+        axiom_formula: independent_living_couple_state_ssi_payment * 2
+        description: MI SSP, independent living, couple (RFT 248 lists per person)
+        pe: gov.states.mi.mdhhs.ssp.payment.couple.INDEPENDENT_LIVING
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: household_of_another_individual_state_ssi_payment
+        description: MI SSP, household of another, individual
+        pe: gov.states.mi.mdhhs.ssp.payment.individual.HOUSEHOLD_OF_ANOTHER
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: household_of_another_couple_state_ssi_payment
+        axiom_formula: household_of_another_couple_state_ssi_payment * 2
+        description: MI SSP, household of another, couple (RFT 248 lists per person)
+        pe: gov.states.mi.mdhhs.ssp.payment.couple.HOUSEHOLD_OF_ANOTHER
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: domiciliary_care_individual_dhs_supplement
+        description: MI SSP, domiciliary care supplement, individual
+        pe: gov.states.mi.mdhhs.ssp.payment.individual.DOMICILIARY_CARE
+      - file: us-mi/policies/mdhhs/rft/248.yaml
+        rule: personal_care_individual_dhs_supplement
+        description: MI SSP, personal care supplement, individual
+        pe: gov.states.mi.mdhhs.ssp.payment.individual.PERSONAL_CARE
+  - suite: ca-capi-limits
+    category: cash
+    locales: [CA]
+    comparisons:
+      - file: us-ca/regulations/cdss/eas/49/49-040.yaml
+        rule: ca_capi_individual_resource_limit
+        description: CA CAPI resource limit, individual
+        pe: gov.states.ca.cdss.capi.resources.limit.single
+      - file: us-ca/regulations/cdss/eas/49/49-040.yaml
+        rule: ca_capi_couple_resource_limit
+        description: CA CAPI resource limit, couple
+        pe: gov.states.ca.cdss.capi.resources.limit.couple
+  - suite: fl-tca-standards
+    category: cash
+    locales: [FL]
+    comparisons:
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 2
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 1
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.1
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 4
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 2
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.2
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 6
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 3
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.3
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 10
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 5
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.5
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_i_payment_standard_at_listed_half_unit_size
+        key: 16
+        description: FL TCA payment standard, tier I (shelter obligation above $50), filing unit of 8
+        pe: gov.states.fl.dcf.tanf.payment_standard.high_shelter.8
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 2
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 1
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.1
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 4
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 2
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.2
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 6
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 3
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.3
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 10
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 5
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.5
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_ii_payment_standard_at_listed_half_unit_size
+        key: 16
+        description: FL TCA payment standard, tier II (shelter obligation up to $50), filing unit of 8
+        pe: gov.states.fl.dcf.tanf.payment_standard.low_shelter.8
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 2
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 1
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.1
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 4
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 2
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.2
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 6
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 3
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.3
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 10
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 5
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.5
+      - file: us-fl/policies/dcf/ess-program-policy-manual/appendix-a-5-temporary-cash-assistance-income-standards/page-1.yaml
+        rule: tier_iii_payment_standard_at_listed_half_unit_size
+        key: 16
+        description: FL TCA payment standard, tier III (no shelter obligation), filing unit of 8
+        pe: gov.states.fl.dcf.tanf.payment_standard.zero_shelter.8

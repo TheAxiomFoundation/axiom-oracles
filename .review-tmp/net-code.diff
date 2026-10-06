@@ -1,0 +1,1570 @@
+diff --git a/.github/workflows/affected-rerun.yml b/.github/workflows/affected-rerun.yml
+index 5c1248eca..698febd83 100644
+--- a/.github/workflows/affected-rerun.yml
++++ b/.github/workflows/affected-rerun.yml
+@@ -3,8 +3,12 @@ name: Affected suite rerun
+ # Reruns ONLY the comparison suites whose rules have changed since their report
+ # was last generated, on a 6-hourly cadence (plus repository_dispatch, so a
+ # rulespec repo can trigger it on push). The weekly full matrix
+-# (comparisons.yml) stays the backstop; this keeps the reports fresh between
+-# weekly runs without paying for the whole matrix every 6 hours.
++# (comparisons.yml) is only a CI signal: it uploads reports as artifacts and
++# never commits them. This workflow is what keeps the committed reports fresh,
++# without paying for the whole matrix every 6 hours. Suites whose
++# map entry has `name: null` (parameter suites, and suites declaring
++# `ci: manual`, such as the SNAP QC replays, which these runners could only
++# re-emit) are reported as awaiting the manual lane, never dispatched.
+ #
+ # Selection is deterministic and committed:
+ #   comparisons/affected_map.json   suite → affected rulespec repos
+@@ -21,7 +25,10 @@ name: Affected suite rerun
+ # conflicted. The ratchet (conformance/ratchet.yaml) is never re-pinned from
+ # this bot path — re-pinning after a genuine improvement stays a deliberate
+ # human action, and a genuine regression is MEANT to fail ci.yml's ratchet
+-# gate on main.
++# gate on main. A leg whose runner marks its output as a re-emission
++# (provenance.reemitted_report) never replaces a committed report from a real
++# run: run_comparison.py leaves that copy untouched, and the commit script
++# re-checks every push attempt's tip (scripts/guard_reemitted_reports.py).
+ #
+ # See scripts/select_affected_suites.py and comparisons/README.md.
+ 
+@@ -31,7 +38,8 @@ on:
+       force_all:
+         description: >-
+           Rerun every CI-runnable mapped suite regardless of freshness
+-          (manual parameter suites are reported, not dispatched)
++          (suites without a CI-runnable registry name are reported, not
++          dispatched)
+         required: false
+         default: "false"
+   repository_dispatch:
+@@ -131,7 +139,7 @@ jobs:
+             fi
+           } >> "$GITHUB_STEP_SUMMARY"
+           if [ "$manual_count" != "0" ]; then
+-            echo "::warning::$manual_count stale parameter suite(s) need the manual lane: ${{ steps.select.outputs.manual }}"
++            echo "::warning::$manual_count stale suite(s) with no CI-runnable registry name need the manual lane: ${{ steps.select.outputs.manual }}"
+           fi
+ 
+   rerun:
+diff --git a/.github/workflows/comparisons.yml b/.github/workflows/comparisons.yml
+index 71dbaa16e..2c406134f 100644
+--- a/.github/workflows/comparisons.yml
++++ b/.github/workflows/comparisons.yml
+@@ -54,6 +54,7 @@ jobs:
+           import yaml
+           only = os.environ.get("ONLY", "").strip()
+           names = []
++          manual = []
+           for path in sorted(Path("comparisons").glob("*.yaml")):
+               if path.name.endswith(".fixtures.yaml"):
+                   continue
+@@ -63,9 +64,15 @@ jobs:
+               if not (config.get("runner") or {}).get("type"):
+                   continue
+               if config.get("ci") == "manual":
++                  manual.append(path.stem)
+                   continue
+               names.append(path.stem)
+           if only:
++              if only in manual:
++                  raise SystemExit(
++                      f"{only} declares ci: manual (see comparisons/{only}.yaml); "
++                      "run it with a supervised run_comparison.py"
++                  )
+               names = [n for n in names if n == only]
+               if not names:
+                   raise SystemExit(f"unknown comparison: {only}")
+diff --git a/README.md b/README.md
+index 76f542553..5222e1709 100644
+--- a/README.md
++++ b/README.md
+@@ -470,7 +470,10 @@ The comparison bridge (`axiom_oracles.bridges.snap_qc_compare`) downloads and
+ sha256-verifies the pinned public-use file, materializes a patched FY2024 rule overlay,
+ and evaluates at a nominal period; the run skips gracefully and re-emits the
+ committed dashboard report on any machine that lacks the engine binary, the dated
+-rulespec checkout, or the QC file. The standing recipe — the FY-gap overlay
++rulespec checkout, or the QC file, and that re-emission never replaces a
++committed report from a real run. The suites declare `ci: manual`: the weekly
++matrix and the 6-hourly affected rerun never dispatch them, and a supervised run
++refreshes the committed reports. The standing recipe — the FY-gap overlay
+ mechanism, the exclusion table, and how to add a fiscal year or a second state —
+ is in [docs/snap-qc-oracle-playbook.md](docs/snap-qc-oracle-playbook.md).
+ 
+diff --git a/axiom_oracles/provenance.py b/axiom_oracles/provenance.py
+index 3732a7f51..b273cff22 100644
+--- a/axiom_oracles/provenance.py
++++ b/axiom_oracles/provenance.py
+@@ -220,6 +220,24 @@ def canonical_rulespec_slug(name: str) -> str:
+     return f"{RULESPEC_OWNER}/{resolved}"
+ 
+ 
++def is_real_run_report(report: Any) -> bool:
++    """Whether a parsed report came from a real run rather than a re-emission.
++
++    A skip-capable runner that cannot execute re-emits the committed report and
++    marks it ``provenance.reemitted_report``. Its numbers are the committed
++    ones, so it must never replace a real run's report, whose provenance
++    records what the numbers ran against. Unstamped legacy reports count as
++    real: nothing marks them re-emitted. Anything that is not a JSON object is
++    not a report.
++    """
++    if not isinstance(report, dict):
++        return False
++    provenance = report.get("provenance")
++    if not isinstance(provenance, dict):
++        return True
++    return not provenance.get("reemitted_report")
++
++
+ def build_provenance(
+     *,
+     generated_by: str,
+diff --git a/comparisons/README.md b/comparisons/README.md
+index d6c166d50..1ef6a552e 100644
+--- a/comparisons/README.md
++++ b/comparisons/README.md
+@@ -4,7 +4,8 @@ Each `*.yaml` in this directory declares one oracle comparison — a head-to-hea
+ between two engines over a validation population. `scripts/run_comparison.py`
+ reads a config, dispatches to the right runner type, writes a JSON report, and
+ prints a headline summary. `.github/workflows/comparisons.yml` matrix-runs
+-every config in the registry on a weekly schedule.
++every config in the registry that does not declare `ci: manual` on a weekly
++schedule.
+ 
+ ## How to run one locally
+ 
+@@ -39,14 +40,28 @@ YAML (with a comment saying why and what unblocks it). The affected-map
+ generator then emits `name: null`, the 6-hourly selector routes it to the
+ manual lane instead of dispatching a doomed leg, and the weekly matrix skips
+ it. Its committed report refreshes only via a supervised
+-`run_comparison.py` run.
++`run_comparison.py` run. The seven SNAP QC suites (`*-snap-qc`) declare
++`ci: manual` for that reason: both workflows clone rulespec-us main but never
++build the engine binary or download the QC public-use file, so their legs
++could only re-emit the committed report, and on 2026-09-23 the affected rerun
++committed such re-emissions over the five real reports #548 had landed. (The
++EUROMOD, UKMOD, and GETTSIM synthetic suites also only re-emit on those
++runners and are still dispatched; the rule below keeps their re-emissions off
++real reports.)
+ 
+ Reports must carry real rulespec SHAs: `provenance.rulespecs[].sha` is what
+ `select_affected_suites.py` diffs against repo HEADs, and a `null` SHA means
+ "cannot prove fresh" — re-selected every sweep. The always-real runner lanes
+ complete missing SHAs from the affected map plus the checkout the run actually
+ resolved; skip-capable lanes (euromod/gettsim/snap-qc) are deliberately
+-excluded so a re-emitted report is never stamped fresh.
++excluded so a re-emitted report is never stamped fresh. A re-emission also
++never replaces a committed report from a real run: `run_comparison.py` leaves
++that dashboard copy byte-for-byte unchanged, and
++`scripts/commit_refreshed_report.sh` puts back the tip's copy
++(`scripts/guard_reemitted_reports.py`) before it commits. Both rely on the
++runner marking its re-emission (`provenance.reemitted_report`); the UK
++PolicyEngine case-grid runners' fallbacks do not mark theirs yet (#549 adds the
++marker), so their re-emissions still publish as fresh runs.
+ 
+ A suite that pins one reviewed rulespec snapshot
+ (`rulespec_upstream_sha`/`rulespec_upstream_tree` in its parameters — the
+@@ -232,8 +247,10 @@ seven New York regional amounts, one California amount) at the nominal period
+ `2026-01`, because the federal-regulation and state-manual chain is snapshot-
+ dated `2025-10-01` and true-period FY2024 evaluation is impossible today (see the
+ playbook and TheAxiomFoundation/rulespec-us#759). Suites: `co-snap-qc`,
+-`ny-snap-qc` (847 reviews including the 107 NYSCAP units), and `ca-snap-qc`
+-(883 reviews). The runner **skips gracefully**
++`ny-snap-qc` (847 reviews including the 107 NYSCAP units), `ca-snap-qc`
++(883 reviews), `az-snap-qc`, `ga-snap-qc`, `md-snap-qc`, and `tx-snap-qc`
++(its composition is not on rulespec-us main yet); all seven declare
++`ci: manual` (see above). The runner **skips gracefully**
+ — re-emitting the committed dashboard report, exactly like
+ `euromod-synthetic-compare` — when the `axiom-rules-engine` binary, a rulespec-us
+ checkout carrying the `fy-2024-cola` modules, or the downloaded QC public-use file
+@@ -292,7 +309,10 @@ date with `scripts/backfill_report_provenance.py`.
+ 
+ `comparisons/affected_map.json` (generated by `scripts/generate_affected_map.py`,
+ CI-checked with `--check`) maps each suite to the rulespec repos its concepts
+-exercise. The **affected-rerun** workflow
++exercise. A SNAP QC suite maps to the one rulespec root its overlay is built
++from (rulespec-us), since both the federal `us/` chain and the state's
++`us-<st>/` layer are copied out of it; the archived `rulespec-us-<st>` repos
++are never read. The **affected-rerun** workflow
+ (`.github/workflows/affected-rerun.yml`, every 6h + `repository_dispatch`)
+ resolves each mapped repo's `main` HEAD, and `scripts/select_affected_suites.py`
+ selects only the suites whose report ran against an older SHA — those get rerun
+@@ -303,9 +323,13 @@ scoreboard + detail, the daily history snapshot, and
+ the burn-down), self-checks the tree against ci.yml's staleness gates before
+ pushing, and rebuilds the commit from scratch on the current tip on every push
+ attempt so concurrent matrix siblings can't strand main stale or conflicted.
+-The conformance ratchet is never re-pinned from that bot path. The weekly full
+-matrix (`comparisons.yml`) stays the backstop. Regenerate the map after adding
+-a comparison: `uv run scripts/generate_affected_map.py`.
++The conformance ratchet is never re-pinned from that bot path. Stale suites
++with `name: null` (parameter suites and `ci: manual` suites) are listed as
++awaiting the manual lane, not rerun. The weekly full matrix (`comparisons.yml`)
++runs every suite that does not declare `ci: manual` as a CI signal; it uploads
++reports as artifacts and never commits them.
++Regenerate the map after adding a comparison:
++`uv run scripts/generate_affected_map.py`.
+ 
+ Regenerating these aggregates with the report is not optional bookkeeping —
+ they are *derived* from the committed reports, so a report refresh that skips
+diff --git a/comparisons/affected_map.json b/comparisons/affected_map.json
+index 902017fae..4f70d53ab 100644
+--- a/comparisons/affected_map.json
++++ b/comparisons/affected_map.json
+@@ -86,11 +86,10 @@
+     },
+     {
+       "suite": "az-snap-qc",
+-      "name": "az-snap-qc",
++      "name": null,
+       "report": "axiom-snapqc-az-snap.json",
+       "repos": [
+-        "TheAxiomFoundation/rulespec-us",
+-        "TheAxiomFoundation/rulespec-us-az"
++        "TheAxiomFoundation/rulespec-us"
+       ],
+       "source": "comparisons/az-snap-qc.yaml"
+     },
+@@ -266,11 +265,10 @@
+     },
+     {
+       "suite": "ca-snap-qc",
+-      "name": "ca-snap-qc",
++      "name": null,
+       "report": "axiom-snapqc-ca-snap.json",
+       "repos": [
+-        "TheAxiomFoundation/rulespec-us",
+-        "TheAxiomFoundation/rulespec-us-ca"
++        "TheAxiomFoundation/rulespec-us"
+       ],
+       "source": "comparisons/ca-snap-qc.yaml"
+     },
+@@ -304,11 +302,10 @@
+     },
+     {
+       "suite": "co-snap-qc",
+-      "name": "co-snap-qc",
++      "name": null,
+       "report": "axiom-snapqc-co-snap.json",
+       "repos": [
+-        "TheAxiomFoundation/rulespec-us",
+-        "TheAxiomFoundation/rulespec-us-co"
++        "TheAxiomFoundation/rulespec-us"
+       ],
+       "source": "comparisons/co-snap-qc.yaml"
+     },
+@@ -547,11 +544,10 @@
+     },
+     {
+       "suite": "ga-snap-qc",
+-      "name": "ga-snap-qc",
++      "name": null,
+       "report": "axiom-snapqc-ga-snap.json",
+       "repos": [
+-        "TheAxiomFoundation/rulespec-us",
+-        "TheAxiomFoundation/rulespec-us-ga"
++        "TheAxiomFoundation/rulespec-us"
+       ],
+       "source": "comparisons/ga-snap-qc.yaml"
+     },
+@@ -747,11 +743,10 @@
+     },
+     {
+       "suite": "md-snap-qc",
+-      "name": "md-snap-qc",
++      "name": null,
+       "report": "axiom-snapqc-md-snap.json",
+       "repos": [
+-        "TheAxiomFoundation/rulespec-us",
+-        "TheAxiomFoundation/rulespec-us-md"
++        "TheAxiomFoundation/rulespec-us"
+       ],
+       "source": "comparisons/md-snap-qc.yaml"
+     },
+@@ -965,11 +960,10 @@
+     },
+     {
+       "suite": "ny-snap-qc",
+-      "name": "ny-snap-qc",
++      "name": null,
+       "report": "axiom-snapqc-ny-snap.json",
+       "repos": [
+-        "TheAxiomFoundation/rulespec-us",
+-        "TheAxiomFoundation/rulespec-us-ny"
++        "TheAxiomFoundation/rulespec-us"
+       ],
+       "source": "comparisons/ny-snap-qc.yaml"
+     },
+@@ -1137,11 +1131,10 @@
+     },
+     {
+       "suite": "tx-snap-qc",
+-      "name": "tx-snap-qc",
++      "name": null,
+       "report": "axiom-snapqc-tx-snap.json",
+       "repos": [
+-        "TheAxiomFoundation/rulespec-us",
+-        "TheAxiomFoundation/rulespec-us-tx"
++        "TheAxiomFoundation/rulespec-us"
+       ],
+       "source": "comparisons/tx-snap-qc.yaml"
+     },
+diff --git a/comparisons/az-snap-qc.yaml b/comparisons/az-snap-qc.yaml
+index 58f80cc2e..60791743d 100644
+--- a/comparisons/az-snap-qc.yaml
++++ b/comparisons/az-snap-qc.yaml
+@@ -15,10 +15,22 @@ description: >-
+   at the nominal period 2026-01 (TheAxiomFoundation/rulespec-us#759 retires
+   the overlay). Runs where the engine binary, a rulespec-us checkout with the
+   fy-2024-cola modules and the state's SNAP layer (rulespec-us#842), and the
+-  QC file all exist; elsewhere the registry re-emits the committed dashboard
+-  report.
++  QC file all exist; a run elsewhere re-emits the committed dashboard report,
++  which never replaces a real run's report.
+ documentation: docs/snap-qc-oracle-playbook.md
+ 
++# Not runnable on the CI matrix runners. The replay needs the
++# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
++# modules, and the QC public-use file. The 6-hourly affected rerun and the
++# weekly matrix clone rulespec-us main (which has fy-2024-cola) but never
++# build the engine or download the QC file, so there run_comparison.py can
++# only re-emit the committed report. On 2026-09-23 the affected rerun
++# committed such re-emissions over the five real reports #548 had landed (NY,
++# MD, AZ, CA, GA). Manual lane only: a supervised run_comparison.py run
++# refreshes the committed report. Drop this marker only once those two
++# workflows build the engine and fetch the QC file themselves.
++ci: manual
++
+ runner:
+   type: snap-qc-compare
+   parameters:
+diff --git a/comparisons/ca-snap-qc.yaml b/comparisons/ca-snap-qc.yaml
+index 760c3a2dd..6858f40a4 100644
+--- a/comparisons/ca-snap-qc.yaml
++++ b/comparisons/ca-snap-qc.yaml
+@@ -31,10 +31,22 @@ description: >-
+   (TheAxiomFoundation/rulespec-us#759 inverts the chain and retires the
+   overlay). This suite runs where the axiom-rules-engine binary, a rulespec-us
+   checkout with the fy-2024-cola modules, and the downloaded QC public-use
+-  file all exist; on runners without them the registry re-emits the committed
+-  dashboard report.
++  file all exist; a run without them re-emits the committed dashboard report,
++  which never replaces a real run's report.
+ documentation: docs/snap-qc-oracle-playbook.md
+ 
++# Not runnable on the CI matrix runners. The replay needs the
++# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
++# modules, and the QC public-use file. The 6-hourly affected rerun and the
++# weekly matrix clone rulespec-us main (which has fy-2024-cola) but never
++# build the engine or download the QC file, so there run_comparison.py can
++# only re-emit the committed report. On 2026-09-23 the affected rerun
++# committed such re-emissions over the five real reports #548 had landed (NY,
++# MD, AZ, CA, GA). Manual lane only: a supervised run_comparison.py run
++# refreshes the committed report. Drop this marker only once those two
++# workflows build the engine and fetch the QC file themselves.
++ci: manual
++
+ runner:
+   type: snap-qc-compare
+   parameters:
+diff --git a/comparisons/co-snap-qc.yaml b/comparisons/co-snap-qc.yaml
+index a5cf61bd7..3b86bb8d6 100644
+--- a/comparisons/co-snap-qc.yaml
++++ b/comparisons/co-snap-qc.yaml
+@@ -31,10 +31,22 @@ description: >-
+   (TheAxiomFoundation/rulespec-us#759 inverts the chain and retires the
+   overlay). This suite runs where the axiom-rules-engine binary, a rulespec-us
+   checkout with the fy-2024-cola modules, and the downloaded QC public-use
+-  file all exist; on runners without them the registry re-emits the committed
+-  dashboard report.
++  file all exist; a run without them re-emits the committed dashboard report,
++  which never replaces a real run's report.
+ documentation: docs/snap-qc-oracle-playbook.md
+ 
++# Not runnable on the CI matrix runners. The replay needs the
++# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
++# modules, and the QC public-use file. The 6-hourly affected rerun and the
++# weekly matrix clone rulespec-us main (which has fy-2024-cola) but never
++# build the engine or download the QC file, so there run_comparison.py can
++# only re-emit the committed report. On 2026-09-23 the affected rerun
++# committed such re-emissions over the five real reports #548 had landed (NY,
++# MD, AZ, CA, GA). Manual lane only: a supervised run_comparison.py run
++# refreshes the committed report. Drop this marker only once those two
++# workflows build the engine and fetch the QC file themselves.
++ci: manual
++
+ runner:
+   type: snap-qc-compare
+   parameters:
+diff --git a/comparisons/ga-snap-qc.yaml b/comparisons/ga-snap-qc.yaml
+index d7404fd93..e4b89ac72 100644
+--- a/comparisons/ga-snap-qc.yaml
++++ b/comparisons/ga-snap-qc.yaml
+@@ -14,10 +14,22 @@ description: >-
+   nominal period 2026-01 (TheAxiomFoundation/rulespec-us#759 retires the
+   overlay). Runs where the engine binary, a rulespec-us checkout with the
+   fy-2024-cola modules and the state's SNAP layer (rulespec-us#842), and the
+-  QC file all exist; elsewhere the registry re-emits the committed dashboard
+-  report.
++  QC file all exist; a run elsewhere re-emits the committed dashboard report,
++  which never replaces a real run's report.
+ documentation: docs/snap-qc-oracle-playbook.md
+ 
++# Not runnable on the CI matrix runners. The replay needs the
++# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
++# modules, and the QC public-use file. The 6-hourly affected rerun and the
++# weekly matrix clone rulespec-us main (which has fy-2024-cola) but never
++# build the engine or download the QC file, so there run_comparison.py can
++# only re-emit the committed report. On 2026-09-23 the affected rerun
++# committed such re-emissions over the five real reports #548 had landed (NY,
++# MD, AZ, CA, GA). Manual lane only: a supervised run_comparison.py run
++# refreshes the committed report. Drop this marker only once those two
++# workflows build the engine and fetch the QC file themselves.
++ci: manual
++
+ runner:
+   type: snap-qc-compare
+   parameters:
+diff --git a/comparisons/md-snap-qc.yaml b/comparisons/md-snap-qc.yaml
+index 2e365aecf..681ac490c 100644
+--- a/comparisons/md-snap-qc.yaml
++++ b/comparisons/md-snap-qc.yaml
+@@ -15,10 +15,23 @@ description: >-
+   the state's Table F.7 SUA amount patches) at the nominal period 2026-01
+   (TheAxiomFoundation/rulespec-us#759 retires the overlay). Runs where the
+   engine binary, a rulespec-us checkout with the fy-2024-cola modules and the
+-  state's SNAP layer (rulespec-us#842), and the QC file all exist; elsewhere
+-  the registry re-emits the committed dashboard report.
++  state's SNAP layer (rulespec-us#842), and the QC file all exist; a run
++  elsewhere re-emits the committed dashboard report, which never replaces a
++  real run's report.
+ documentation: docs/snap-qc-oracle-playbook.md
+ 
++# Not runnable on the CI matrix runners. The replay needs the
++# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
++# modules, and the QC public-use file. The 6-hourly affected rerun and the
++# weekly matrix clone rulespec-us main (which has fy-2024-cola) but never
++# build the engine or download the QC file, so there run_comparison.py can
++# only re-emit the committed report. On 2026-09-23 the affected rerun
++# committed such re-emissions over the five real reports #548 had landed (NY,
++# MD, AZ, CA, GA). Manual lane only: a supervised run_comparison.py run
++# refreshes the committed report. Drop this marker only once those two
++# workflows build the engine and fetch the QC file themselves.
++ci: manual
++
+ runner:
+   type: snap-qc-compare
+   parameters:
+diff --git a/comparisons/ny-snap-qc.yaml b/comparisons/ny-snap-qc.yaml
+index 00e4a0b80..d7abc4a0d 100644
+--- a/comparisons/ny-snap-qc.yaml
++++ b/comparisons/ny-snap-qc.yaml
+@@ -31,10 +31,22 @@ description: >-
+   (TheAxiomFoundation/rulespec-us#759 inverts the chain and retires the
+   overlay). This suite runs where the axiom-rules-engine binary, a rulespec-us
+   checkout with the fy-2024-cola modules, and the downloaded QC public-use
+-  file all exist; on runners without them the registry re-emits the committed
+-  dashboard report.
++  file all exist; a run without them re-emits the committed dashboard report,
++  which never replaces a real run's report.
+ documentation: docs/snap-qc-oracle-playbook.md
+ 
++# Not runnable on the CI matrix runners. The replay needs the
++# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
++# modules, and the QC public-use file. The 6-hourly affected rerun and the
++# weekly matrix clone rulespec-us main (which has fy-2024-cola) but never
++# build the engine or download the QC file, so there run_comparison.py can
++# only re-emit the committed report. On 2026-09-23 the affected rerun
++# committed such re-emissions over the five real reports #548 had landed (NY,
++# MD, AZ, CA, GA). Manual lane only: a supervised run_comparison.py run
++# refreshes the committed report. Drop this marker only once those two
++# workflows build the engine and fetch the QC file themselves.
++ci: manual
++
+ runner:
+   type: snap-qc-compare
+   parameters:
+diff --git a/comparisons/tx-snap-qc.yaml b/comparisons/tx-snap-qc.yaml
+index 57b1dc850..bd9edc0d7 100644
+--- a/comparisons/tx-snap-qc.yaml
++++ b/comparisons/tx-snap-qc.yaml
+@@ -13,10 +13,27 @@ description: >-
+   the state's Table F.7 utility amount patches) at the nominal period 2026-01
+   (TheAxiomFoundation/rulespec-us#759 retires the overlay). Runs where the
+   engine binary, a rulespec-us checkout with the fy-2024-cola modules and the
+-  state's SNAP layer (rulespec-us#888), and the QC file all exist; elsewhere
+-  the registry re-emits the committed dashboard report.
++  state's SNAP layer (rulespec-us#888), and the QC file all exist; a run
++  elsewhere re-emits the committed dashboard report, which never replaces a
++  real run's report.
+ documentation: docs/snap-qc-oracle-playbook.md
+ 
++# Not runnable on the CI matrix runners. The replay needs the
++# axiom-rules-engine binary, a rulespec-us checkout carrying the fy-2024-cola
++# modules, and the QC public-use file. The 6-hourly affected rerun and the
++# weekly matrix clone rulespec-us main (which has fy-2024-cola) but never
++# build the engine or download the QC file, so there run_comparison.py can
++# only re-emit the committed report. On 2026-09-23 the affected rerun
++# committed such re-emissions over the five real reports #548 had landed (NY,
++# MD, AZ, CA, GA). Texas also needs its composition, which is not on
++# rulespec-us main yet (rulespec-us#888, implemented by the open
++# rulespec-us#891); its committed report is the July 2026 run (#279) against
++# rulespec-us 53ae9199, a pre-rebase commit of that PR, on the May 2026 QC
++# posting's weights. Manual lane only: a supervised run_comparison.py run
++# refreshes the committed report. Drop this marker only once those two
++# workflows build the engine and fetch the QC file themselves.
++ci: manual
++
+ runner:
+   type: snap-qc-compare
+   parameters:
+diff --git a/docs/snap-qc-oracle-playbook.md b/docs/snap-qc-oracle-playbook.md
+index 393e6b81c..af30ec64c 100644
+--- a/docs/snap-qc-oracle-playbook.md
++++ b/docs/snap-qc-oracle-playbook.md
+@@ -24,7 +24,10 @@ committed report is the July 2026 run against that branch.
+ That runs the real replay where the `axiom-rules-engine` binary, a rulespec-us
+ checkout carrying the `fy-2024-cola` modules, and the downloaded QC file all exist,
+ and re-emits the committed dashboard report everywhere else (the same graceful-skip
+-contract the EUROMOD runner honors). The pins, sha256s, and archive members live in
++contract the EUROMOD runner honors). A re-emission never replaces a committed
++report from a real run. The seven suites declare `ci: manual`, so the weekly
++matrix and the 6-hourly affected rerun never dispatch them; a supervised
++`run_comparison.py <st>-snap-qc` run is how the committed reports refresh. The pins, sha256s, and archive members live in
+ `axiom_oracles/populations/snap_qc.py::SNAP_QC_PINS`; the loader (`load_qc_units`)
+ downloads, verifies, caches, and parses them; the replay harness is
+ `axiom_oracles/bridges/snap_qc_compare.py`. Everything below cites the FY2024 QC
+@@ -194,6 +197,10 @@ in the public file (tech doc Table II.1, PDF p.18). Demonstration-state componen
+   prerequisites it re-emits the committed dashboard report, and that report's
+   provenance carries `reemitted_report: true` and no `rulespecs` entry. A real
+   run's provenance lists the rulespec-us SHA it ran against under `rulespecs`.
++  A re-emission is never published over a committed report from a real run.
++  The affected map lists only rulespec-us for these suites, because the overlay
++  copies both `us/` and `us-<st>/` out of that one checkout, so staleness is
++  judged against the one SHA a real run records.
+ 
+ ## 6. The fiscal-year gap and the overlay
+ 
+diff --git a/scripts/commit_refreshed_report.sh b/scripts/commit_refreshed_report.sh
+index ca9a0336c..6a6564714 100755
+--- a/scripts/commit_refreshed_report.sh
++++ b/scripts/commit_refreshed_report.sh
+@@ -383,6 +383,13 @@ if added:
+         manifest.write_text(json.dumps(doc, indent=2) + "\n")
+ PY
+ 
++  # A re-emission never replaces a real report on THIS tip: for any restored
++  # dashboard report that is a re-emission while the tip's copy is a real run,
++  # put back the tip's bytes.
++  # run_comparison.py already declines to publish one; this is the check at
++  # the push, which no CI workflow sees (bot pushes don't trigger ci.yml).
++  "$PYTHON" scripts/guard_reemitted_reports.py
++
+   # Recompute every derived artifact against THIS tip, then refuse to push
+   # anything ci.yml would call stale.
+   regenerate_derived
+diff --git a/scripts/generate_affected_map.py b/scripts/generate_affected_map.py
+index 7a874ac56..a820e234d 100644
+--- a/scripts/generate_affected_map.py
++++ b/scripts/generate_affected_map.py
+@@ -22,6 +22,12 @@ Derivation, per suite, unions three signals (all deterministic):
+    ``parameter-oracles.yaml`` names files like ``us-ga/policies/…`` whose top
+    path segment maps to a rulespec repo the same way.
+ 
++A few runner types add their own rules (the encoder SNAP lane's jurisdiction,
++the EUROMOD country). A SNAP QC replay (``snap-qc-compare``) uses only a
++configured ``rulespec_root`` (signal 1), defaulting to rulespec-us, and ignores
++concept prefixes and the jurisdiction: it maps to exactly the one rulespec root
++its overlay is built from (see ``snap_qc_repos``).
++
+ The output is sorted and stable; ``--check`` fails if the committed file drifts
+ from a fresh regeneration, so CI keeps it honest.
+ 
+@@ -182,11 +188,41 @@ def pinned_repos_for_registry_config(config: dict) -> dict[str, str]:
+     return {repos.pop(): sha}
+ 
+ 
++def snap_qc_repos(config: dict) -> set[str]:
++    """The one rulespec repo a ``snap-qc-compare`` replay reads.
++
++    The bridge builds its fiscal-year overlay from a single rulespec root:
++    ``build_overlay`` copies both the federal ``us/`` chain and the state's
++    ``us-<st>/`` layer out of that root, and the engine is pointed at the
++    overlay alone (``bridges/snap_qc_compare.run_snap_qc_comparison``). That
++    root's repo is therefore the suite's whole rules dependency, and the only
++    repo whose SHA its report can record (``provenance.rulespecs``). The root is
++    the rulespec-us monorepo unless the config names another one.
++
++    The per-state ``rulespec-us-<st>`` repos are never read: they were archived
++    into ``rulespec-us/us-<st>`` on 2026-06-27. Mapping them anyway meant no
++    report could ever prove it was fresh, so the affected-rerun selector picked
++    every snap-qc suite on every sweep ("rulespec-us-<st>: report ran against
++    unknown SHA").
++    """
++    runner = config.get("runner") or {}
++    params = runner.get("parameters") or {}
++    root = runner.get("rulespec_root") or params.get("rulespec_root")
++    slug = _repo_from_path(str(root)) if root else None
++    return {slug or _slug("rulespec-us")}
++
++
+ def repos_for_registry_config(config: dict) -> set[str]:
+     repos: set[str] = set()
+     runner = config.get("runner") or {}
+     params = runner.get("parameters") or {}
+ 
++    # The SNAP QC administrative-data lane depends on exactly the root its
++    # overlay is built from; no other signal (concept prefixes, the
++    # jurisdiction) names a repo it reads. See snap_qc_repos.
++    if runner.get("type") == "snap-qc-compare":
++        return snap_qc_repos(config)
++
+     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
+     if remote:
+         slug = _repo_from_remote(str(remote))
+@@ -244,16 +280,6 @@ def repos_for_registry_config(config: dict) -> set[str]:
+             repos.add(state_slug)
+         repos.add(_slug("rulespec-us"))
+ 
+-    # The SNAP QC administrative-data lane (snap-qc-compare) replays USDA QC
+-    # public-use cases through the state's composed SNAP program under the
+-    # fy-cola overlay; rule changes in the state shard or the federal SNAP
+-    # chain both move its results.
+-    if runner.get("type") == "snap-qc-compare" and jurisdiction:
+-        state_slug = _repo_from_prefix(str(jurisdiction))
+-        if state_slug:
+-            repos.add(state_slug)
+-        repos.add(_slug("rulespec-us"))
+-
+     # The EUROMOD/UKMOD synthetic lane (euromod-synthetic-compare) points
+     # `axiom_rulespec_repo_roots` at the whole org dir and names the model
+     # country (`euromod_country: UK`/`BE`); the encoded rules live in that
+@@ -361,10 +387,12 @@ def build_map() -> dict:
+             # (e.g. dashboard suite `uk-benefit-cap` runs under registry
+             # name `uk-benefit-cap-ukmod`); dispatching the dashboard
+             # suite key crashes the leg with "unknown comparison".
+-            # A suite declaring `ci: manual` cannot run in CI at all
+-            # (e.g. or/ut SNAP: the encoder's snap-populace-compare has no
+-            # jurisdiction config for them yet) — emit null so the
+-            # selector and the weekly matrix leave it to the manual lane.
++            # A suite declaring `ci: manual` cannot produce a real report
++            # in CI (e.g. or/ut SNAP: the encoder's snap-populace-compare
++            # has no jurisdiction config for them yet; the SNAP QC replays:
++            # no CI matrix provisions the engine or the QC file, so a leg
++            # could only re-emit) — emit null so the selector and the
++            # weekly matrix leave it to the manual lane.
+             "name": None if config.get("ci") == "manual" else config["name"],
+             "report": report,
+             "repos": sorted(repos_for_registry_config(config)),
+diff --git a/scripts/guard_reemitted_reports.py b/scripts/guard_reemitted_reports.py
+new file mode 100644
+index 000000000..5accf9c6c
+--- /dev/null
++++ b/scripts/guard_reemitted_reports.py
+@@ -0,0 +1,115 @@
++#!/usr/bin/env python3
++"""Keep a re-emission from replacing a real committed dashboard report.
++
++``scripts/commit_refreshed_report.sh`` runs this on every push attempt, after
++it has reset to the current tip and restored the leg's own outputs. For each
++top-level dashboard report (``dashboard/public/data/*.json``) that differs from
++the tip, a working copy marked ``provenance.reemitted_report`` is put back to
++the tip's bytes when the tip's copy came from a real run
++(:func:`axiom_oracles.provenance.is_real_run_report`).
++
++A re-emission copies the committed numbers, so committing it can only replace
++the real run's provenance (the rulespec SHAs it ran against, its run kind and
++date) with "re-emitted, SHA unknown". ``run_comparison.py`` already declines to
++publish one over a real report; this is the check at the bot's push, which no
++CI workflow sees. It runs against each attempt's tip, not the leg's starting
++commit, so a real report that lands while the leg runs is protected too.
++
++Usage:
++    python3 scripts/guard_reemitted_reports.py [--rev REV]
++"""
++
++from __future__ import annotations
++
++import argparse
++import json
++import os
++import subprocess
++import sys
++from pathlib import Path
++
++REPO_ROOT = Path(__file__).resolve().parent.parent
++if str(REPO_ROOT) not in sys.path:
++    sys.path.insert(0, str(REPO_ROOT))
++
++from axiom_oracles.provenance import is_real_run_report  # noqa: E402
++
++DASHBOARD_DATA = "dashboard/public/data"
++
++
++def _git(*args: str, check: bool = True) -> subprocess.CompletedProcess:
++    # Undecodable bytes become replacement characters: a report that is not
++    # valid UTF-8 then fails to parse (not a report) instead of crashing the
++    # push loop.
++    return subprocess.run(
++        ["git", *args],
++        cwd=REPO_ROOT,
++        capture_output=True,
++        encoding="utf-8",
++        errors="replace",
++        check=check,
++    )
++
++
++def changed_reports(rev: str) -> list[str]:
++    """Top-level dashboard reports whose working copy differs from ``rev``."""
++    out = _git("diff", "--name-only", "-z", rev, "--", f"{DASHBOARD_DATA}/*.json")
++    return sorted(
++        path
++        for path in out.stdout.split("\0")
++        if path and Path(path).parent.as_posix() == DASHBOARD_DATA
++    )
++
++
++def _load(text: str) -> object:
++    try:
++        return json.loads(text)
++    except ValueError:
++        return None
++
++
++def downgrades(rev: str) -> list[str]:
++    """Reports whose working copy is a re-emission and whose ``rev`` copy is real."""
++    found = []
++    for path in changed_reports(rev):
++        working = REPO_ROOT / path
++        if not working.exists():
++            continue
++        report = _load(working.read_bytes().decode("utf-8", errors="replace"))
++        if not isinstance(report, dict) or is_real_run_report(report):
++            continue
++        committed = _git("show", f"{rev}:{path}", check=False)
++        if committed.returncode != 0:
++            continue
++        if is_real_run_report(_load(committed.stdout)):
++            found.append(path)
++    return found
++
++
++def main(argv: list[str] | None = None) -> int:
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument(
++        "--rev",
++        default="HEAD",
++        help="Commit whose real reports to protect (default: HEAD).",
++    )
++    args = parser.parse_args(argv)
++
++    restored = downgrades(args.rev)
++    for path in restored:
++        # Literal pathspec: a report name containing glob characters must not
++        # match (and revert) any neighbouring file.
++        _git("--literal-pathspecs", "checkout", args.rev, "--", path)
++        message = (
++            f"kept the real report {path}: this leg re-emitted it, and a "
++            "re-emission never replaces a real run"
++        )
++        if os.environ.get("GITHUB_ACTIONS") == "true":
++            print(f"::warning title=Re-emission not committed::{message}")
++        else:
++            print(message)
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/scripts/run_comparison.py b/scripts/run_comparison.py
+index dacd8fe92..5dbafbedd 100755
+--- a/scripts/run_comparison.py
++++ b/scripts/run_comparison.py
+@@ -3818,10 +3818,10 @@ def _snap_qc_cola_marker_reason(rulespec_root: Path, fiscal_year: int) -> str |
+     The overlay compiles the CO SNAP composition with its COLA module ids
+     rewritten from the in-repo fy-2026 vintage to ``fy-<year>-cola``, so the base
+     checkout must actually define that vintage under
+-    ``us/policies/usda/snap/fy-<year>-cola/``. A plain rulespec-us checkout (or an
+-    un-rebased clone) carries only fy-2026 and is skipped — the common CI case.
+-    ``fy-2024-cola`` currently lives on the branch tracked by
+-    TheAxiomFoundation/rulespec-us#759, which retires the overlay once it lands.
++    ``us/policies/usda/snap/fy-<year>-cola/``. A checkout that predates the
++    target vintage is skipped. ``fy-2024-cola`` is on rulespec-us main
++    (TheAxiomFoundation/rulespec-us#760); the parameter-set inversion tracked by
++    TheAxiomFoundation/rulespec-us#759 retires the overlay once it lands.
+     """
+     if not rulespec_root.exists():
+         return f"rulespec root not found at {rulespec_root}"
+@@ -3903,9 +3903,11 @@ def _reemit_snap_qc_committed_report(
+     """Re-emit the committed dashboard report as the run output (graceful skip).
+ 
+     Mirrors ``_run_euromod_synthetic_compare``: when the replay cannot run here,
+-    reuse the committed dashboard JSON so the weekly matrix stays green and the
+-    dashboard copy is idempotent. Falls back to an empty v2 report shell when no
+-    committed report exists yet (the first run before numbers are checked in).
++    reuse the committed dashboard JSON as the run output. The publisher then
++    leaves a committed report from a real run byte-for-byte unchanged
++    (``_write_dashboard_report``), so a skip never replaces it. Falls back to
++    an empty v2 report shell when no committed report exists yet (the first
++    run before numbers are checked in).
+     """
+     dashboard_filename = runner.get("dashboard_filename") or params.get(
+         "dashboard_filename", ""
+@@ -3955,11 +3957,13 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
+     The replay needs three things a shared CI runner does not carry: the built
+     ``axiom-rules-engine`` binary, a rulespec-us checkout whose SNAP COLA modules
+     are dated for the target fiscal year (the overlay base), and the downloaded
+-    QC public-use file. When any is absent — or the bridge is still mid-build —
+-    this runner **skips gracefully**, re-emitting the committed dashboard report
+-    so the weekly matrix stays green and the dashboard copy is idempotent, exactly
+-    like ``_run_euromod_synthetic_compare``. Regenerate the committed numbers
+-    locally where all three exist.
++    QC public-use file. The snap-qc suites therefore declare ``ci: manual``, so
++    neither the weekly matrix nor the affected rerun dispatches them. When any
++    prerequisite is absent — or the bridge is still mid-build — this runner
++    **skips gracefully**, re-emitting the committed dashboard report exactly like
++    ``_run_euromod_synthetic_compare``; that re-emission never replaces a
++    committed real report. Regenerate the committed numbers with a supervised run
++    where all three exist.
+     """
+     params = runner["parameters"]
+     fiscal_year = int(params.get("fiscal_year", 2024))
+@@ -5663,7 +5667,8 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
+     """Whether a skip publish would overwrite its preserved bound source.
+ 
+     The pointer is read from the existing dashboard copy, because that is the
+-    evidence set a versioned skip preserves.  Resolution mirrors
++    evidence set a skip preserves: a versioned copy, or any copy from a real
++    run (see ``_write_dashboard_report``).  Resolution mirrors
+     ``apply_dispositions._resolve_source_pointer``: only a repo-relative path
+     resolving beneath ``reports/`` is eligible.  Digest and fullness remain
+     the consumer's fail-closed responsibility; this helper only prevents the
+@@ -5671,13 +5676,15 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
+     can verify them.
+     """
+ 
++    from axiom_oracles.provenance import is_real_run_report
++
+     target = DASHBOARD_DATA_DIR / filename
+     try:
+         existing = json.loads(target.read_text())
+     except (OSError, json.JSONDecodeError):
+         return False
+-    if not isinstance(existing, dict) or not _uses_versioned_case_chunks(
+-        existing
++    if not isinstance(existing, dict) or not (
++        _uses_versioned_case_chunks(existing) or is_real_run_report(existing)
+     ):
+         return False
+     block = (existing.get("summary") or {}).get("dispositioned")
+@@ -5697,6 +5704,21 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
+     return reports_dir in candidate.parents and candidate == output.resolve()
+ 
+ 
++def committed_report_is_real(path: Path) -> bool:
++    """Whether ``path`` holds a report that was not itself a re-emission.
++
++    See :func:`axiom_oracles.provenance.is_real_run_report`; a missing or
++    unparseable file is not a real report.
++    """
++    from axiom_oracles.provenance import is_real_run_report
++
++    try:
++        report = json.loads(path.read_text())
++    except (OSError, ValueError):
++        return False
++    return is_real_run_report(report)
++
++
+ def _write_dashboard_report(
+     report: dict,
+     filename: str,
+@@ -5719,6 +5741,11 @@ def _write_dashboard_report(
+     bytes, so the preserved binding remains checkable while that source stays
+     present and unchanged.  The main publisher also protects a same-path,
+     same-day skip from replacing those prior source bytes before this return.
++
++    The flag also covers unversioned reports: a skip leaves any committed
++    report from a real run byte-for-byte unchanged (``committed_report_is_real``).
++    It rewrites only a committed report that was itself a re-emission, or
++    publishes the first copy when none is committed.
+     """
+ 
+     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
+@@ -5737,6 +5764,18 @@ def _write_dashboard_report(
+         )
+         return
+     target = DASHBOARD_DATA_DIR / filename
++    if preserve_existing_versioned and committed_report_is_real(target):
++        # A re-emission copies the committed numbers, so publishing it can
++        # only overwrite a real run's provenance (the rulespec SHAs it ran
++        # against, its run kind and date) with "re-emitted, SHA unknown", and
++        # once that is committed the affected-rerun selector can never again
++        # prove the suite fresh. On 2026-09-23 that replaced five real SNAP QC
++        # reports.
++        print(
++            f"Preserved real dashboard report {filename} for skipped "
++            f"{report['suite']}: a re-emission never replaces a real run"
++        )
++        return
+     dashboard_config = dashboard_config or {}
+     slim = _slim_report_for_dashboard(
+         strip_heavy_case_metadata(report),
+diff --git a/scripts/select_affected_suites.py b/scripts/select_affected_suites.py
+index cd49fc8b7..e44f9f240 100644
+--- a/scripts/select_affected_suites.py
++++ b/scripts/select_affected_suites.py
+@@ -4,8 +4,11 @@
+ Given the current ``main`` HEAD SHA of each rulespec repo and the committed
+ reports' provenance, emit the suites whose affected repos have moved past the
+ SHA their report last ran against — i.e. the reports that are now stale because
+-the rules underneath them changed. The 6-hourly workflow reruns only these,
+-leaving the weekly full matrix as the backstop.
++the rules underneath them changed. The 6-hourly workflow reruns only these;
++the weekly full matrix is a CI signal (it uploads reports as artifacts and never
++commits them) for every suite that does not declare ``ci: manual``. A
++``ci: manual`` suite's committed report refreshes only through a supervised
++run.
+ 
+ Inputs:
+ 
+@@ -214,8 +217,8 @@ def select(
+             head = heads.get(repo)
+             if head is None:
+                 # HEAD unknown (repo not queried) — cannot prove staleness, so
+-                # do not force a rerun on missing data; the weekly backstop
+-                # still covers it.
++                # do not force a rerun on missing data; a later sweep that can
++                # read the HEAD (or a supervised run) refreshes the report.
+                 continue
+             recorded = ran_against.get(repo)
+             if recorded is None:
+@@ -327,7 +330,9 @@ def main() -> int:
+     if manual:
+         print(
+             f"note: {len(manual)} stale suite(s) have no CI-runnable registry "
+-            f"name and are left to the manual parameter lane: "
++            f"name and are left to the manual lane (parameter suites: "
++            f"run_parameter_comparisons.py; ci: manual suites: a supervised "
++            f"run_comparison.py run): "
+             + ", ".join(manual),
+             file=sys.stderr,
+         )
+diff --git a/tests/test_affected_map.py b/tests/test_affected_map.py
+index 8e4109c2c..380b05c8a 100644
+--- a/tests/test_affected_map.py
++++ b/tests/test_affected_map.py
+@@ -728,3 +728,146 @@ def test_selector_pinned_repo_unknown_sha_still_selected():
+     }
+     reports = {"s1": _report("s1", [{"repo": "owner/rulespec-us", "sha": None}])}
+     assert [s["suite"] for s in sel.select(aff, {}, reports)] == ["s1"]
++
++
++# --- SNAP QC replays (2026-09-23) ----------------------------------------------
++#
++# The map listed each snap-qc suite under rulespec-us AND the archived per-state
++# rulespec-us-<st> repo. The replay reads both layers from one rulespec-us
++# checkout, so no report could ever record a state-repo SHA: the selector picked
++# every snap-qc suite on every sweep, bare runners re-emitted, and the commit
++# step overwrote the real NY/MD/AZ/CA/GA reports.
++
++REPO = Path(__file__).parents[1]
++RULESPEC_US = "TheAxiomFoundation/rulespec-us"
++
++
++def _snap_qc_configs() -> list[dict]:
++    import yaml
++
++    configs = []
++    for path in sorted((REPO / "comparisons").glob("*.yaml")):
++        if path.name.endswith(".fixtures.yaml"):
++            continue
++        config = yaml.safe_load(path.read_text())
++        if isinstance(config, dict) and (config.get("runner") or {}).get(
++            "type"
++        ) == "snap-qc-compare":
++            configs.append(config)
++    return configs
++
++
++def test_snap_qc_lane_maps_only_the_root_its_overlay_is_built_from():
++    gam = _load("generate_affected_map.py")
++
++    def config(**parameters):
++        return {
++            "name": "co-snap-qc",
++            "runner": {
++                "type": "snap-qc-compare",
++                "parameters": {"jurisdiction": "us-co", **parameters},
++            },
++        }
++
++    assert gam.repos_for_registry_config(config()) == {RULESPEC_US}
++    # NEGATIVE: neither the jurisdiction nor a state concept id names a repo the
++    # replay reads; the archived state repo must never come back.
++    assert gam.repos_for_registry_config(
++        config(concepts=["us-co:policies/cdhs/snap#co_snap_allotment"])
++    ) == {RULESPEC_US}
++    # An explicit root names the checkout the bridge replays.
++    assert gam.repos_for_registry_config(
++        config(rulespec_root="$HOME/TheAxiomFoundation/rulespec-us")
++    ) == {RULESPEC_US}
++
++
++def test_every_snap_qc_suite_is_manual_and_maps_only_rulespec_us():
++    """Bare CI runners can only re-emit a SNAP QC report, so no snap-qc suite
++    may be dispatched by the affected rerun or the weekly matrix."""
++    gam = _load("generate_affected_map.py")
++    entries = {e["suite"]: e for e in gam.build_map()["suites"]}
++    configs = _snap_qc_configs()
++    assert len(configs) >= 7
++    for config in configs:
++        entry = entries[config["dashboard"]["suite"]]
++        assert config.get("ci") == "manual", config["name"]
++        assert entry["name"] is None, config["name"]
++        assert entry["repos"] == [RULESPEC_US], config["name"]
++
++
++def test_snap_qc_map_repos_are_exactly_what_a_real_run_records(tmp_path):
++    """The invariant the old map broke: every repo the map lists for a snap-qc
++    suite is one its report's provenance can record a SHA for."""
++    import subprocess
++
++    import yaml
++
++    rc = _load("run_comparison.py")
++    gam = _load("generate_affected_map.py")
++    checkout = tmp_path / "rulespec-us"
++    checkout.mkdir()
++    for args in (
++        ["init", "-q"],
++        ["-c", "user.name=t", "-c", "user.email=t@t", "commit", "-q",
++         "--allow-empty", "-m", "seed"],
++    ):
++        subprocess.run(["git", *args], cwd=checkout, check=True)
++    sha = subprocess.run(
++        ["git", "rev-parse", "HEAD"], cwd=checkout, check=True,
++        capture_output=True, text=True,
++    ).stdout.strip()
++    config = yaml.safe_load((REPO / "comparisons/ny-snap-qc.yaml").read_text())
++    output = tmp_path / "report.json"
++    output.write_text(
++        json.dumps({"summary": {"provenance": {"rulespec_root": str(checkout)}}})
++    )
++
++    provenance = rc._build_run_provenance(config, "snap-qc-compare", output)
++
++    assert provenance["rulespecs"] == [{"repo": RULESPEC_US, "sha": sha}]
++    entry = next(
++        e for e in gam.build_map()["suites"] if e["suite"] == "ny-snap-qc"
++    )
++    assert {r["repo"] for r in provenance["rulespecs"]} == set(entry["repos"])
++
++
++def test_committed_snap_qc_reports_are_real_runs():
++    """Every committed SNAP QC dashboard report came from a real replay and
++    records the rulespec-us SHA it ran against; a re-emission committed over
++    one (2026-09-23) fails here."""
++    from axiom_oracles.provenance import is_real_run_report
++
++    for config in _snap_qc_configs():
++        path = REPO / "dashboard/public/data" / config["dashboard"]["filename"]
++        if not path.exists():
++            continue
++        report = json.loads(path.read_text())
++        assert is_real_run_report(report), f"{path.name} is a re-emission"
++        shas = [
++            r.get("sha")
++            for r in report["provenance"].get("rulespecs") or []
++            if r.get("repo") == RULESPEC_US
++        ]
++        assert len(shas) == 1 and len(shas[0] or "") == 40, path.name
++
++
++def test_selector_never_dispatches_snap_qc_and_leaves_fresh_ones_alone():
++    sel = _load("select_affected_suites.py")
++    affected = json.loads(sel.AFFECTED_MAP.read_text())
++    reports = sel.load_reports(affected)
++    archived = {
++        f"TheAxiomFoundation/rulespec-us-{st}": "a" * 40
++        for st in ("co", "ny", "ca", "az", "ga", "md", "tx")
++    }
++    for config in _snap_qc_configs():
++        suite = config["dashboard"]["suite"]
++        ran_against = sel._report_ran_against(reports[suite])[RULESPEC_US]
++        # rulespec-us unmoved: fresh, whatever the archived state repos say.
++        fresh = sel.select(affected, {**archived, RULESPEC_US: ran_against}, reports)
++        assert suite not in {d["suite"] for d in fresh}
++        # rulespec-us moved: stale, but routed to the manual lane.
++        moved = sel.select(affected, {**archived, RULESPEC_US: "b" * 40}, reports)
++        decision = next(d for d in moved if d["suite"] == suite)
++        assert decision["name"] is None
++        assert config["name"] not in sel.runnable_names(moved)
++        assert suite in sel.manual_suites(moved)
+diff --git a/tests/test_commit_refreshed_report.py b/tests/test_commit_refreshed_report.py
+index 779a25fcd..faea38a41 100644
+--- a/tests/test_commit_refreshed_report.py
++++ b/tests/test_commit_refreshed_report.py
+@@ -356,6 +356,61 @@ def test_de_refresh_chain_is_ordered_checked_and_staged():
+         )
+ 
+ 
++#: A committed report from a real SNAP QC replay (no versioned case chunks, so
++#: the only report class the 2026-09-23 affected rerun could overwrite).
++SNAPQC_REPORT = "dashboard/public/data/axiom-snapqc-ny-snap.json"
++
++
++def _reemit(clone: Path, report: str = SNAPQC_REPORT) -> None:
++    """Rewrite a real report the way a skip re-emission publishes it: the same
++    numbers, with provenance saying re-emitted and naming no rulespec SHA."""
++    path = clone / report
++    doc = json.loads(path.read_text())
++    provenance = doc["provenance"]
++    assert provenance.get("rulespecs") and not provenance.get("reemitted_report")
++    provenance.pop("rulespecs")
++    provenance.update(
++        generated_at=datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
++        run_kind="affected-rerun",
++        reemitted_report=True,
++    )
++    path.write_text(json.dumps(doc, indent=2, sort_keys=True))
++
++
++def test_reemission_guard_runs_on_every_attempt_before_regeneration():
++    """The guard must see each attempt's freshly reset tip (a real report can
++    land while the leg runs) and must run before derived artifacts are
++    regenerated from the report bytes."""
++    shell = (REPO_ROOT / SCRIPT).read_text()
++    loop = shell.split('for attempt in $(seq 1 "$MAX_ATTEMPTS"); do', 1)[1]
++    guard = loop.index('"$PYTHON" scripts/guard_reemitted_reports.py')
++    assert loop.index("git reset --hard FETCH_HEAD") < guard
++    assert loop.index('cp -p "$stash/$path" "$path"') < guard
++    assert guard < loop.index("regenerate_derived")
++    assert guard < loop.index("git add -A")
++
++
++def test_reemission_never_replaces_a_real_report(origin, tmp_path):
++    """2026-09-23: affected-rerun legs with no engine or QC file committed
++    re-emissions over the real NY/MD/AZ/CA/GA SNAP QC reports. Whatever wrote the
++    leg's dashboard copy, the push keeps the tip's real report."""
++    clone = _clone(origin, tmp_path / "job-reemit")
++    committed = (clone / SNAPQC_REPORT).read_bytes()
++    before = _git(origin, "rev-parse", "main")
++    _reemit(clone)
++
++    result = _run_script(clone, "ny-snap-qc")
++    assert result.returncode == 0, result.stderr
++    assert "a re-emission never replaces a real run" in result.stdout
++
++    verify = _assert_origin_tip_green(origin, tmp_path)
++    assert (verify / SNAPQC_REPORT).read_bytes() == committed
++    # Whatever else the leg pushed (a host-dependent derived artifact, say),
++    # none of it touched the report.
++    pushed = _git(origin, "diff", "--name-only", before, "main").splitlines()
++    assert SNAPQC_REPORT not in pushed
++
++
+ def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
+     """A report refresh lands together with regenerated scoreboard/detail,
+     freshness, and burn-down — the pushed tip passes ci.yml's staleness gates
+diff --git a/tests/test_guard_reemitted_reports.py b/tests/test_guard_reemitted_reports.py
+new file mode 100644
+index 000000000..df11c3eca
+--- /dev/null
++++ b/tests/test_guard_reemitted_reports.py
+@@ -0,0 +1,173 @@
++"""Tests for scripts/guard_reemitted_reports.py (the commit-step re-emission guard).
++
++scripts/commit_refreshed_report.sh runs the guard on every push attempt, after
++restoring the leg's outputs onto the current tip. A re-emitted dashboard report
++must never replace the tip's copy when that copy came from a real run; anything
++else the leg wrote passes through untouched.
++"""
++
++from __future__ import annotations
++
++import importlib.util
++import json
++import os
++import subprocess
++from pathlib import Path
++
++import pytest
++
++SCRIPT = Path(__file__).parents[1] / "scripts" / "guard_reemitted_reports.py"
++DATA = "dashboard/public/data"
++REAL = {"run_kind": "manual", "rulespecs": [{"repo": "o/rulespec-us", "sha": "a" * 40}]}
++REEMITTED = {"run_kind": "affected-rerun", "reemitted_report": True}
++GIT_ENV = {"GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_SYSTEM": os.devnull}
++
++
++def _git(repo: Path, *args: str) -> str:
++    return subprocess.run(
++        ["git", "-c", "user.name=t", "-c", "user.email=t@t", *args],
++        cwd=repo,
++        env={**os.environ, **GIT_ENV},
++        check=True,
++        capture_output=True,
++        text=True,
++    ).stdout
++
++
++def _report(suite: str, provenance: dict | None, stamp: str = "t0") -> str:
++    report: dict = {"suite": suite, "case_count": 1}
++    if provenance is not None:
++        report["provenance"] = {**provenance, "generated_at": stamp}
++    return json.dumps(report, indent=2) + "\n"
++
++
++@pytest.fixture()
++def guard(tmp_path, monkeypatch):
++    spec = importlib.util.spec_from_file_location("guard_reemitted_reports", SCRIPT)
++    module = importlib.util.module_from_spec(spec)
++    assert spec.loader is not None
++    spec.loader.exec_module(module)
++    repo = tmp_path / "repo"
++    (repo / DATA / "cases" / "s").mkdir(parents=True)
++    files = {
++        f"{DATA}/real.json": _report("real", REAL),
++        f"{DATA}/legacy.json": _report("legacy", None),
++        f"{DATA}/reemitted.json": _report("reemitted", REEMITTED),
++        f"{DATA}/cases/s/chunk-0.json": _report("chunk", REAL),
++    }
++    for path, text in files.items():
++        (repo / path).write_text(text)
++    _git(repo, "init", "-q", "-b", "main")
++    _git(repo, "add", "-A")
++    _git(repo, "commit", "-q", "-m", "seed")
++    monkeypatch.setattr(module, "REPO_ROOT", repo)
++    monkeypatch.delenv("GITHUB_ACTIONS", raising=False)
++    return module, repo
++
++
++def test_reemission_over_a_real_report_is_put_back(guard, capsys):
++    module, repo = guard
++    committed = (repo / DATA / "real.json").read_text()
++    (repo / DATA / "real.json").write_text(_report("real", REEMITTED, stamp="t1"))
++
++    assert module.downgrades("HEAD") == [f"{DATA}/real.json"]
++    assert module.main([]) == 0
++
++    assert (repo / DATA / "real.json").read_text() == committed
++    assert "a re-emission never replaces a real run" in capsys.readouterr().out
++    assert _git(repo, "status", "--porcelain") == ""
++
++
++def test_unstamped_legacy_report_counts_as_real(guard):
++    module, repo = guard
++    committed = (repo / DATA / "legacy.json").read_text()
++    (repo / DATA / "legacy.json").write_text(_report("legacy", REEMITTED, stamp="t1"))
++
++    assert module.main([]) == 0
++
++    assert (repo / DATA / "legacy.json").read_text() == committed
++
++
++def test_other_changes_pass_through(guard):
++    """Only a real -> re-emitted downgrade is undone: a re-emission over a
++    re-emission, a real run over a real run, a first report, and anything below
++    the top-level data directory are left as the leg wrote them."""
++    module, repo = guard
++    writes = {
++        f"{DATA}/reemitted.json": _report("reemitted", REEMITTED, stamp="t1"),
++        f"{DATA}/real.json": _report("real", REAL, stamp="t1"),
++        f"{DATA}/new.json": _report("new", REEMITTED, stamp="t1"),
++        f"{DATA}/cases/s/chunk-0.json": _report("chunk", REEMITTED, stamp="t1"),
++    }
++    for path, text in writes.items():
++        (repo / path).write_text(text)
++
++    assert module.downgrades("HEAD") == []
++    assert module.main([]) == 0
++
++    for path, text in writes.items():
++        assert (repo / path).read_text() == text, path
++
++
++def test_judged_against_the_given_revision(guard):
++    """The commit script runs the guard after resetting to each attempt's tip,
++    so what counts is the tip's copy, not the one the leg started from."""
++    module, repo = guard
++    start = _git(repo, "rev-parse", "HEAD").strip()
++    # A real report lands on the tip while the leg runs.
++    (repo / DATA / "reemitted.json").write_text(_report("reemitted", REAL, stamp="t2"))
++    _git(repo, "commit", "-q", "-am", "real run lands")
++    landed = (repo / DATA / "reemitted.json").read_text()
++    # The leg restores its own re-emission onto that tip.
++    (repo / DATA / "reemitted.json").write_text(
++        _report("reemitted", REEMITTED, stamp="t3")
++    )
++
++    assert module.downgrades(start) == []
++    assert module.main([]) == 0
++
++    assert (repo / DATA / "reemitted.json").read_text() == landed
++
++
++def test_github_actions_emits_a_warning_annotation(guard, capsys, monkeypatch):
++    module, repo = guard
++    monkeypatch.setenv("GITHUB_ACTIONS", "true")
++    (repo / DATA / "real.json").write_text(_report("real", REEMITTED, stamp="t1"))
++
++    assert module.main([]) == 0
++
++    assert capsys.readouterr().out.startswith(
++        "::warning title=Re-emission not committed::"
++    )
++
++
++def test_unreadable_reports_are_not_reports(guard):
++    """Invalid UTF-8 or JSON on either side never crashes the push loop, and
++    is never mistaken for a real report to put back."""
++    module, repo = guard
++    (repo / DATA / "real.json").write_bytes(b"\xff\xfe not json")
++    (repo / DATA / "reemitted.json").write_text("{not json")
++
++    assert module.downgrades("HEAD") == []
++    assert module.main([]) == 0
++    assert (repo / DATA / "real.json").read_bytes() == b"\xff\xfe not json"
++
++
++def test_restore_touches_only_the_downgraded_report(guard):
++    """The checkout uses a literal pathspec, so a report whose name contains
++    glob characters cannot revert neighbouring files."""
++    module, repo = guard
++    (repo / DATA / "r[e]al.json").write_text(_report("r[e]al", REAL))
++    _git(repo, "add", "-A")
++    _git(repo, "commit", "-q", "-m", "glob-named report")
++    (repo / DATA / "r[e]al.json").write_text(_report("r[e]al", REEMITTED, stamp="t1"))
++    neighbour = _report("real", REAL, stamp="t9")  # a real run over a real run
++    (repo / DATA / "real.json").write_text(neighbour)
++
++    assert module.main([]) == 0
++
++    assert (repo / DATA / "real.json").read_text() == neighbour
++    assert json.loads((repo / DATA / "r[e]al.json").read_text())["provenance"][
++        "run_kind"
++    ] == "manual"
++
+diff --git a/tests/test_provenance.py b/tests/test_provenance.py
+index 840c49fb2..f2b22a103 100644
+--- a/tests/test_provenance.py
++++ b/tests/test_provenance.py
+@@ -16,6 +16,7 @@ from axiom_oracles.provenance import (
+     build_provenance,
+     dataset_provenance_from_identity,
+     engine_provenance,
++    is_real_run_report,
+     repo_slug_from_remote,
+     resolve_run_kind,
+     rulespec_provenance,
+@@ -31,6 +32,28 @@ def _load_run_comparison():
+     return module
+ 
+ 
++# --- is_real_run_report ------------------------------------------------------
++
++
++@pytest.mark.parametrize(
++    ("report", "real"),
++    [
++        ({"provenance": {"run_kind": "manual", "rulespecs": []}}, True),
++        ({"provenance": {"reemitted_report": False}}, True),
++        ({"suite": "unstamped-legacy"}, True),
++        ({"provenance": None}, True),
++        ({"provenance": {"reemitted_report": True}}, False),
++        (None, False),
++        ([{"provenance": {}}], False),
++        ("report", False),
++    ],
++)
++def test_is_real_run_report(report, real):
++    """A re-emission is exactly a report marked reemitted_report; anything
++    else shaped like a report counts as a real (possibly legacy) run."""
++    assert is_real_run_report(report) is real
++
++
+ # --- build_provenance -------------------------------------------------------
+ 
+ 
+diff --git a/tests/test_run_comparison.py b/tests/test_run_comparison.py
+index a08fa0e08..df56fcbd6 100644
+--- a/tests/test_run_comparison.py
++++ b/tests/test_run_comparison.py
+@@ -1414,6 +1414,174 @@ def test_skipped_versioned_run_preserves_existing_bound_artifacts(
+     assert after == before
+ 
+ 
++def _unversioned_report(suite: str, provenance: dict) -> dict:
++    return {
++        "schema_version": "axiom.comparison_report.v2",
++        "suite": suite,
++        "case_count": 1,
++        "cases": [],
++        "mismatches": [],
++        "summary": {"comparison_count": 1, "match_count": 1, "mismatch_count": 0},
++        "provenance": provenance,
++    }
++
++
++_REAL_PROVENANCE = {
++    "generated_at": "2026-09-23T00:21:17Z",
++    "run_kind": "manual",
++    "rulespecs": [{"repo": "TheAxiomFoundation/rulespec-us", "sha": "f" * 40}],
++}
++_REEMITTED_PROVENANCE = {
++    "generated_at": "2026-09-23T11:56:31Z",
++    "run_kind": "affected-rerun",
++    "reemitted_report": True,
++}
++
++
++def test_skipped_run_preserves_a_real_unversioned_dashboard_report(
++    monkeypatch, tmp_path, capsys
++):
++    """2026-09-23: the affected rerun re-emitted NY/MD/AZ/CA/GA SNAP QC over their
++    real reports. Only suites with versioned case chunks (CO) were preserved; a
++    re-emission must leave ANY committed real report byte-for-byte unchanged."""
++    run_comparison = load_run_comparison_module()
++    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
++    target = tmp_path / "axiom-snapqc-ny-snap.json"
++    target.write_text(
++        json.dumps(_unversioned_report("ny-snap-qc", _REAL_PROVENANCE), indent=2)
++    )
++    (tmp_path / "manifest.json").write_text('{"reports": []}\n')
++    before = (target.read_bytes(), (tmp_path / "manifest.json").read_bytes())
++
++    run_comparison._write_dashboard_report(
++        _unversioned_report("ny-snap-qc", _REEMITTED_PROVENANCE),
++        target.name,
++        preserve_existing_versioned=True,
++    )
++
++    assert (target.read_bytes(), (tmp_path / "manifest.json").read_bytes()) == before
++    assert "a re-emission never replaces a real run" in capsys.readouterr().out
++
++
++def test_skipped_run_still_rewrites_a_committed_reemission_or_first_copy(
++    monkeypatch, tmp_path
++):
++    """The guard protects real reports only: a committed re-emission (or no
++    committed copy at all) is still published, as before."""
++    run_comparison = load_run_comparison_module()
++    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
++    reemitted = tmp_path / "axiom-euromod-uk-winter-fuel.json"
++    reemitted.write_text(
++        json.dumps(_unversioned_report("uk-winter-fuel", _REEMITTED_PROVENANCE))
++    )
++    newer = dict(_REEMITTED_PROVENANCE, generated_at="2026-09-24T00:00:00Z")
++
++    run_comparison._write_dashboard_report(
++        _unversioned_report("uk-winter-fuel", newer),
++        reemitted.name,
++        preserve_existing_versioned=True,
++    )
++    assert (
++        json.loads(reemitted.read_text())["provenance"]["generated_at"]
++        == "2026-09-24T00:00:00Z"
++    )
++
++    run_comparison._write_dashboard_report(
++        _unversioned_report("brand-new", newer),
++        "brand-new.json",
++        preserve_existing_versioned=True,
++    )
++    assert (tmp_path / "brand-new.json").exists()
++    assert "brand-new.json" in json.loads((tmp_path / "manifest.json").read_text())[
++        "reports"
++    ]
++
++
++def test_real_run_still_replaces_a_real_dashboard_report(monkeypatch, tmp_path):
++    run_comparison = load_run_comparison_module()
++    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
++    target = tmp_path / "axiom-snapqc-ny-snap.json"
++    target.write_text(json.dumps(_unversioned_report("ny-snap-qc", _REAL_PROVENANCE)))
++    fresher = dict(_REAL_PROVENANCE, generated_at="2026-10-01T00:00:00Z")
++
++    run_comparison._write_dashboard_report(
++        _unversioned_report("ny-snap-qc", fresher), target.name
++    )
++
++    assert (
++        json.loads(target.read_text())["provenance"]["generated_at"]
++        == "2026-10-01T00:00:00Z"
++    )
++
++
++def test_snap_qc_skip_through_main_leaves_the_real_report_untouched(
++    monkeypatch, tmp_path
++):
++    """End to end, the 2026-09-23 path: an affected-rerun leg with no engine or
++    QC file runs ``run_comparison.py ny-snap-qc``. Its own output says it
++    re-emitted, and the committed real dashboard report is left alone."""
++    run_comparison = load_run_comparison_module()
++    committed = (
++        Path(__file__).parents[1] / "dashboard/public/data/axiom-snapqc-ny-snap.json"
++    )
++    dashboard = tmp_path / "dashboard-data"
++    dashboard.mkdir()
++    target = dashboard / committed.name
++    target.write_bytes(committed.read_bytes())
++    (dashboard / "manifest.json").write_text(
++        json.dumps({"reports": [committed.name]}, indent=2) + "\n"
++    )
++    assert json.loads(target.read_text())["provenance"].get("rulespecs"), (
++        "precondition: the committed NY report is a real run"
++    )
++    before = target.read_bytes()
++    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard)
++    monkeypatch.setattr(
++        run_comparison, "_snap_qc_skip_reason", lambda *_a, **_k: "no engine here"
++    )
++    monkeypatch.setenv("AXIOM_ORACLES_RUN_KIND", "affected-rerun")
++    out_dir = tmp_path / "reports"
++    monkeypatch.setattr(
++        "sys.argv",
++        ["run_comparison.py", "ny-snap-qc", "--output-dir", str(out_dir)],
++    )
++
++    assert run_comparison.main() == 0
++
++    assert target.read_bytes() == before
++    (published,) = out_dir.glob("axiom-snapqc-ny-snap-*.json")
++    provenance = json.loads(published.read_text())["provenance"]
++    assert provenance["reemitted_report"] is True
++    assert provenance["run_kind"] == "affected-rerun"
++    assert "rulespecs" not in provenance
++
++
++def test_preserved_source_pointer_covers_real_unversioned_copies(
++    monkeypatch, tmp_path
++):
++    """A same-day skip must not overwrite the reports/ file a preserved real
++    copy's dispositioned block points at, versioned or not."""
++    run_comparison = load_run_comparison_module()
++    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
++    output = run_comparison.REPO_ROOT / "reports" / "pointer-target-0-2026-09-23.json"
++    pointer = {
++        "dispositioned": {
++            "source_report": {
++                "path": "reports/pointer-target-0-2026-09-23.json",
++                "sha256": "0" * 64,
++            }
++        }
++    }
++    for provenance, expected in ((_REAL_PROVENANCE, True), (_REEMITTED_PROVENANCE, False)):
++        report = _unversioned_report("pointer-suite", provenance)
++        report["summary"] = {**report["summary"], **pointer}
++        (tmp_path / "pointer.json").write_text(json.dumps(report))
++        assert (
++            run_comparison._preserved_versioned_source_is_output("pointer.json", output)
++            is expected
++        )
++
++
+ def test_dataset_label_from_identity_falls_back_without_revision():
+     run_comparison = load_run_comparison_module()
+ 

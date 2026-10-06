@@ -1,0 +1,80 @@
+name: uk-housing-benefit-ukmod
+title: UK Housing Benefit — Axiom vs UKMOD
+description: >-
+  Compares the composed Housing Benefit entitlement pipeline encoded in Axiom
+  RuleSpec (rulespec-uk housing_benefit_composed_entitlement_pipeline, #83: the
+  Housing Benefit Regulations 2006 (SI 2006/213) and pension-age SI 2006/214
+  regulation 22 applicable amount from the Schedule 3 paragraph 1 personal
+  allowances, the regulation 74 / regulation 55 non-dependant deductions, and
+  the regulation 70 / regulation 50 appropriate maximum housing benefit after
+  the regulation 71 / regulation 51 65 per cent taper, wired from hypothetical
+  renter facts) against CeMPA's UKMOD bho_s on a shared renter grid: single and
+  couple, working-age and pension-age, an earnings sweep crossing the taper, and
+  a non-dependant-deduction case. Housing Benefit is a benefit-unit means-tested
+  award, so each case is an explicit UKMOD household (responsible adult carrying
+  dhr; partners linked through idpartner; the social-renter tenure amrtn=5 so the
+  eligible rent xhcrt enters the award). UKMOD simulates Housing Benefit: the
+  bho_uk BenCalc computes bho_s as i_bho_maxHousBen - 0.65 * (ymn01_s -
+  i_bho_prelimAmt) — the maximum housing benefit less 65 per cent of the excess
+  of the HB means (ymn01_s, "Means HB") over the preliminary applicable amount —
+  the same structure as the pipeline's rent_after_taper less non-dependant
+  deductions, so bho_s is the parity target for hb_pilot_entitlement. UKMOD builds
+  ymn01_s internally with its own Housing Benefit earnings disregards (ydg03_s)
+  and capital tariff income (yiviy03_s), whose disregards differ from the statute
+  (flagged in the #83 pipeline summary); to isolate the taper / maximum-benefit /
+  non-dependant mechanics from the disregard-build divergence, the suite bridges
+  UKMOD's assessed ymn01_s into the pipeline's applicable-income input so both
+  engines taper the identical assessed income. bho_s is a monthly Housing Benefit
+  amount and hb_pilot_entitlement is annual, so the adapter annualizes bho_s
+  (×12) and the comparison is annual-to-annual. bho_s embeds UKMOD's Housing
+  Benefit take-up correction (the "fully random" i_bho_probtu split into take-up
+  groups i_bho_grptu, gated on i_rand_tu against $HBTUWAWork = 0.59 / $HBTUWANowork
+  = 0.93 / $HBTUPen = 0.85, with group 1 on Income Support / Pension Credit always
+  paid) and a Universal-Credit transition (i_bho_noUC / i_bho_yesUC) that can zero
+  a would-be award for a hypothetical benefit unit away from the entitlement
+  (documented in axiom_oracles/data/euromod_issues.json). The suite requests the
+  take-up policy switches off, and per the or#168 constant-override pinning path
+  euromod_constant_overrides pins the three HB take-up rates to 1.0 so a runner
+  regeneration returns statutory entitlements to verify the income test against;
+  residual transition-zeroed points are classified as UKMOD-side artefacts rather
+  than Axiom encoding mismatches. UKMOD runs the registration-free public model
+  (UKMOD_PUBLIC_B2026.03, system UK_2026, dataset training_data). This suite runs
+  where the x64 UKMOD runtime and model checkout are available and is regenerated
+  by scripts/regenerate_euromod_uk.sh; on runners without them it re-emits the
+  committed dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: uk-housing-benefit
+    population: synthetic
+    sample_size: 0
+    # UKMOD's Housing Benefit output bho_s carries a stochastic per-row take-up
+    # draw (i_rand_tu against the $HBTU* group rates) and a UC transition that
+    # can zero a would-be award away from the statutory entitlement, the same
+    # EUROMOD-platform behaviour the merged uk-universal-credit and
+    # uk-pension-credit suites found. Pinning the three working-age/pensioner HB
+    # take-up rates to 1.0 (below) keeps bho_s on every draw for an entitled
+    # benefit unit, so the engine returns the statutory entitlement rather than a
+    # take-up lottery realization; any residual transition zero is dispositioned
+    # upstream_engine_gap (euromod_issues.json#ukmod-hb-bho-takeup-transition).
+    euromod_constant_overrides: $HBTUWAWork=1.0,$HBTUWANowork=1.0,$HBTUPen=1.0
+    # The composed Housing Benefit pipeline parameters are effective from
+    # 2026-04-01, so the Axiom side evaluates in the April 2026 period. UKMOD
+    # resolves the policy year from euromod_system (UK_2026) and ignores the
+    # case period.
+    period: 2026-04
+    euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
+    euromod_country: UK
+    euromod_system: UK_2026
+    euromod_dataset: training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-uk-housing-benefit.json
+
+artifacts:
+  report_basename: axiom-euromod-uk-housing-benefit
+
+dashboard:
+  filename: axiom-euromod-uk-housing-benefit.json
+  suite: uk-housing-benefit

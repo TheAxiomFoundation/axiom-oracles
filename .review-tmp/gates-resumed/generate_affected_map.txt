@@ -1,0 +1,2 @@
+$ uv run python scripts/generate_affected_map.py --check
+affected_map OK: 187 suites, 190 suite-repo edges

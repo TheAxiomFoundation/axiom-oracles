@@ -1,0 +1,48 @@
+# Kentucky KRS 141.020 schedule before credits — Axiom vs PolicyEngine and
+# TAXSIM on a modest case grid. The bridge derives completed Kentucky net
+# income from PolicyEngine's upstream joint/separate taxable-income candidates,
+# executes the canonical RuleSpec live, and compares its 3.5 percent schedule
+# result to PolicyEngine's unit-level tax before nonrefundable credits.
+#
+# PolicyEngine and TAXSIM both run at the 2026 validation year
+# (policyengine-taxsim 2.30.0 models 2026 law including OBBBA).
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py ky-income-tax-liability
+
+name: ky-income-tax-liability
+title: Kentucky KRS 141.020 schedule before credits — Axiom vs PolicyEngine and TAXSIM
+description: >-
+  Compares the canonical Kentucky KRS 141.020 tax-year-2026 schedule before
+  credits encoded in Axiom RuleSpec
+  (us-ky/policies/income_tax/2026_krs_141_020_schedule_before_credits) against
+  PolicyEngine (ky_income_tax_before_non_refundable_credits_unit) and TAXSIM
+  (siitax) at 2026 on a modest grid of single and married wage earners. This
+  suite does not claim a completed annual return or post-credit liability.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: the engine's
+# canonical-path root scan rejects the whole tree (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049), and the state pipelines carry the
+# removed plural `corpus_citation_paths` schema (rulespec-us#1050; 176 files
+# across every jurisdiction as of 2026-08-05). Every dispatched leg fails
+# before producing a report. Manual lane only; drop this marker when both land
+# upstream (axiom-oracles#455 tracks the flip-back).
+ci: manual
+
+runner:
+  type: state-income-tax-liability-grid
+  parameters:
+    state: KY
+    period: "2026"
+    taxsim_law_year: 2026
+    # Links this suite to the rulespec-us monorepo in the affected map
+    # so a change to the canonical schedule triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-taxsim-ky-income-tax-liability
+
+dashboard:
+  filename: axiom-policyengine-taxsim-ky-income-tax-liability.json
+  suite: ky-income-tax-liability

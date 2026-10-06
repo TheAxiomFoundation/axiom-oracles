@@ -1,0 +1,41 @@
+name: uk-scottish-carer-supplement-ukmod
+title: UK Scottish Carer Supplement — Axiom vs UKMOD
+description: >-
+  Compares the Scottish Carer Supplement encoded in Axiom RuleSpec (rulespec-uk
+  uk/policies/govuk/scottish-carer-supplement, the Carer's Assistance (Carer
+  Support Payment) (Scotland) Regulations 2023 (SSI 2023/302) regulation 16(1A):
+  the GBP 11.70/week Scottish top-up, annualised over 52 weeks, excluding the
+  separate GBP 86.45 base Carer Support Payment) against CeMPA's UKMOD bcrdicm_s
+  on a single Scotland carer. The case is a carer in a Scotland benefit unit
+  (drgn1=12) receiving the underlying carer award (bcrdi), so UKMOD's bcrdicm_uk
+  pays the supplement. The residual is only a small annualisation/uprating-timing
+  difference (UKMOD 609.55 vs the pipeline's 608.40), dispositioned
+  explained_residual. UKMOD take-up is disabled through
+  euromod_policy_switch_overrides (BTA_uk / random_uk = false) so the supplement
+  fires deterministically. UKMOD runs the registration-free public model
+  (UKMOD_PUBLIC_B2026.03, system UK_2026, dataset training_data). This suite runs
+  where the x64 UKMOD runtime and model checkout are available and is regenerated
+  by scripts/regenerate_euromod_uk.sh; on runners without them it re-emits the
+  committed dashboard report.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: uk-scottish-carer-supplement
+    population: synthetic
+    sample_size: 0
+    period: 2026-04-06
+    euromod_model_root: $HOME/Downloads/UKMOD_PUBLIC_B2026.03
+    euromod_country: UK
+    euromod_system: UK_2026
+    euromod_dataset: training_data
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-uk-scottish-carer-supplement.json
+
+artifacts:
+  report_basename: axiom-euromod-uk-scottish-carer-supplement
+
+dashboard:
+  filename: axiom-euromod-uk-scottish-carer-supplement.json
+  suite: uk-scottish-carer-supplement

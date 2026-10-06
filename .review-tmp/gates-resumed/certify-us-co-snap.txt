@@ -1,0 +1,2 @@
+$ uv run python scripts/certify.py --check --program us-co/snap
+certificates up to date

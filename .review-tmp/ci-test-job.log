@@ -1,0 +1,1509 @@
+test	UNKNOWN STEP	﻿2026-09-27T19:19:48.9244474Z Current runner version: '2.337.0'
+test	UNKNOWN STEP	2026-09-27T19:19:48.9264110Z ##[group]Runner Image Provisioner
+test	UNKNOWN STEP	2026-09-27T19:19:48.9264845Z Hosted Compute Agent
+test	UNKNOWN STEP	2026-09-27T19:19:48.9265399Z Version: 20260828.587
+test	UNKNOWN STEP	2026-09-27T19:19:48.9265925Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+test	UNKNOWN STEP	2026-09-27T19:19:48.9266574Z Build Date: 2026-08-28T16:44:25Z
+test	UNKNOWN STEP	2026-09-27T19:19:48.9267140Z Worker ID: {a8040dd5-ded6-47b1-b260-66ca87d3ae82}
+test	UNKNOWN STEP	2026-09-27T19:19:48.9267720Z Azure Region: westus3
+test	UNKNOWN STEP	2026-09-27T19:19:48.9268229Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:19:48.9269601Z ##[group]Operating System
+test	UNKNOWN STEP	2026-09-27T19:19:48.9270132Z Ubuntu
+test	UNKNOWN STEP	2026-09-27T19:19:48.9270670Z 24.04.5
+test	UNKNOWN STEP	2026-09-27T19:19:48.9271094Z LTS
+test	UNKNOWN STEP	2026-09-27T19:19:48.9271565Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:19:48.9272018Z ##[group]Runner Image
+test	UNKNOWN STEP	2026-09-27T19:19:48.9272532Z Image: ubuntu-24.04
+test	UNKNOWN STEP	2026-09-27T19:19:48.9273057Z Version: 20260920.314.1
+test	UNKNOWN STEP	2026-09-27T19:19:48.9274379Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260920.314/images/ubuntu/Ubuntu2404-Readme.md
+test	UNKNOWN STEP	2026-09-27T19:19:48.9275749Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260920.314
+test	UNKNOWN STEP	2026-09-27T19:19:48.9276561Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:19:48.9277586Z ##[group]GITHUB_TOKEN Permissions
+test	UNKNOWN STEP	2026-09-27T19:19:48.9279295Z Contents: read
+test	UNKNOWN STEP	2026-09-27T19:19:48.9279865Z Metadata: read
+test	UNKNOWN STEP	2026-09-27T19:19:48.9280361Z Packages: read
+test	UNKNOWN STEP	2026-09-27T19:19:48.9280847Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:19:48.9282510Z Secret source: Actions
+test	UNKNOWN STEP	2026-09-27T19:19:48.9283343Z Cache mode: write
+test	UNKNOWN STEP	2026-09-27T19:19:48.9284168Z Prepare workflow directory
+test	UNKNOWN STEP	2026-09-27T19:19:48.9540956Z Prepare all required actions
+test	UNKNOWN STEP	2026-09-27T19:19:48.9582245Z Getting action download info
+test	UNKNOWN STEP	2026-09-27T19:19:49.2711639Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+test	UNKNOWN STEP	2026-09-27T19:19:49.6718496Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+test	UNKNOWN STEP	2026-09-27T19:19:49.8571756Z Download action repository 'astral-sh/setup-uv@v5' (SHA:d4b2f3b6ecc6e67c4457f6d3e41ec42d3d0fcb86)
+test	UNKNOWN STEP	2026-09-27T19:19:50.7413360Z Download action repository 'actions/cache@v4' (SHA:0057852bfaa89a56745cba8c7296529d2fc39830)
+test	UNKNOWN STEP	2026-09-27T19:19:51.2288283Z Complete job name: test
+test	UNKNOWN STEP	2026-09-27T19:19:51.3284190Z ##[group]Run actions/checkout@v4
+test	UNKNOWN STEP	2026-09-27T19:19:51.3285273Z with:
+test	UNKNOWN STEP	2026-09-27T19:19:51.3285873Z   fetch-depth: 0
+test	UNKNOWN STEP	2026-09-27T19:19:51.3286606Z   repository: TheAxiomFoundation/axiom-oracles
+test	UNKNOWN STEP	2026-09-27T19:19:51.3293335Z   token: ***
+test	UNKNOWN STEP	2026-09-27T19:19:51.3294081Z   ssh-strict: true
+test	UNKNOWN STEP	2026-09-27T19:19:51.3294721Z   ssh-user: git
+test	UNKNOWN STEP	2026-09-27T19:19:51.3295362Z   persist-credentials: true
+test	UNKNOWN STEP	2026-09-27T19:19:51.3296078Z   clean: true
+test	UNKNOWN STEP	2026-09-27T19:19:51.3296730Z   sparse-checkout-cone-mode: true
+test	UNKNOWN STEP	2026-09-27T19:19:51.3297491Z   fetch-tags: false
+test	UNKNOWN STEP	2026-09-27T19:19:51.3298138Z   show-progress: true
+test	UNKNOWN STEP	2026-09-27T19:19:51.3298797Z   lfs: false
+test	UNKNOWN STEP	2026-09-27T19:19:51.3299406Z   submodules: false
+test	UNKNOWN STEP	2026-09-27T19:19:51.3300053Z   set-safe-directory: true
+test	UNKNOWN STEP	2026-09-27T19:19:51.3300796Z   allow-unsafe-pr-checkout: false
+test	UNKNOWN STEP	2026-09-27T19:19:51.3301753Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:19:51.4140787Z Syncing repository: TheAxiomFoundation/axiom-oracles
+test	UNKNOWN STEP	2026-09-27T19:19:51.4142853Z ##[group]Getting Git version info
+test	UNKNOWN STEP	2026-09-27T19:19:51.4144249Z Working directory is '/home/runner/work/axiom-oracles/axiom-oracles'
+test	UNKNOWN STEP	2026-09-27T19:19:51.4145823Z [command]/usr/bin/git version
+test	UNKNOWN STEP	2026-09-27T19:19:51.5096544Z git version 2.55.0
+test	UNKNOWN STEP	2026-09-27T19:19:51.5113316Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:19:51.5127112Z Temporarily overriding HOME='/home/runner/work/_temp/93d3d647-79fd-42b8-9d2a-30a6229b531d' before making global git config changes
+test	UNKNOWN STEP	2026-09-27T19:19:51.5130212Z Adding repository directory to the temporary git global config as a safe directory
+test	UNKNOWN STEP	2026-09-27T19:19:51.5132907Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/axiom-oracles/axiom-oracles
+test	UNKNOWN STEP	2026-09-27T19:19:51.5340329Z Deleting the contents of '/home/runner/work/axiom-oracles/axiom-oracles'
+test	UNKNOWN STEP	2026-09-27T19:19:51.5343338Z ##[group]Initializing the repository
+test	UNKNOWN STEP	2026-09-27T19:19:51.5347556Z [command]/usr/bin/git init /home/runner/work/axiom-oracles/axiom-oracles
+test	UNKNOWN STEP	2026-09-27T19:19:51.5753727Z hint: Using 'master' as the name for the initial branch. This default branch name
+test	UNKNOWN STEP	2026-09-27T19:19:51.5755996Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+test	UNKNOWN STEP	2026-09-27T19:19:51.5758167Z hint: to use in all of your new repositories, which will suppress this warning,
+test	UNKNOWN STEP	2026-09-27T19:19:51.5759859Z hint: call:
+test	UNKNOWN STEP	2026-09-27T19:19:51.5760719Z hint:
+test	UNKNOWN STEP	2026-09-27T19:19:51.5761785Z hint: 	git config --global init.defaultBranch <name>
+test	UNKNOWN STEP	2026-09-27T19:19:51.5763103Z hint:
+test	UNKNOWN STEP	2026-09-27T19:19:51.5764567Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+test	UNKNOWN STEP	2026-09-27T19:19:51.5766614Z hint: 'development'. The just-created branch can be renamed via this command:
+test	UNKNOWN STEP	2026-09-27T19:19:51.5768235Z hint:
+test	UNKNOWN STEP	2026-09-27T19:19:51.5769117Z hint: 	git branch -m <name>
+test	UNKNOWN STEP	2026-09-27T19:19:51.5770119Z hint:
+test	UNKNOWN STEP	2026-09-27T19:19:51.5771583Z hint: Disable this message with "git config set advice.defaultBranchName false"
+test	UNKNOWN STEP	2026-09-27T19:19:51.5774132Z Initialized empty Git repository in /home/runner/work/axiom-oracles/axiom-oracles/.git/
+test	UNKNOWN STEP	2026-09-27T19:19:51.5777846Z [command]/usr/bin/git remote add origin https://github.com/TheAxiomFoundation/axiom-oracles
+test	UNKNOWN STEP	2026-09-27T19:19:51.6018264Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:19:51.6019991Z ##[group]Disabling automatic garbage collection
+test	UNKNOWN STEP	2026-09-27T19:19:51.6021817Z [command]/usr/bin/git config --local gc.auto 0
+test	UNKNOWN STEP	2026-09-27T19:19:51.6052618Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:19:51.6054378Z ##[group]Setting up auth
+test	UNKNOWN STEP	2026-09-27T19:19:51.6059041Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	UNKNOWN STEP	2026-09-27T19:19:51.6091341Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	UNKNOWN STEP	2026-09-27T19:19:51.7763727Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	UNKNOWN STEP	2026-09-27T19:19:51.7798752Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	UNKNOWN STEP	2026-09-27T19:19:51.7989875Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+test	UNKNOWN STEP	2026-09-27T19:19:51.8018843Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+test	UNKNOWN STEP	2026-09-27T19:19:51.8203230Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+test	UNKNOWN STEP	2026-09-27T19:19:51.8237133Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:19:51.8237729Z ##[group]Fetching the repository
+test	UNKNOWN STEP	2026-09-27T19:19:51.8244931Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/* +50084a3743fa550c0c24053da04a252c87119660:refs/remotes/pull/552/merge
+test	UNKNOWN STEP	2026-09-27T19:21:19.7393183Z From https://github.com/TheAxiomFoundation/axiom-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:19.7394627Z  * [new branch]          al-ty2025-three-way-lane                 -> origin/al-ty2025-three-way-lane
+test	UNKNOWN STEP	2026-09-27T19:21:19.7396430Z  * [new branch]          api-parity-corpus                        -> origin/api-parity-corpus
+test	UNKNOWN STEP	2026-09-27T19:21:19.7399363Z  * [new branch]          autogo/executable-producer-rebuild       -> origin/autogo/executable-producer-rebuild
+test	UNKNOWN STEP	2026-09-27T19:21:19.7400448Z  * [new branch]          autogo/harness-integration               -> origin/autogo/harness-integration
+test	UNKNOWN STEP	2026-09-27T19:21:19.7401180Z  * [new branch]          be-euromod-issues-24-26                  -> origin/be-euromod-issues-24-26
+test	UNKNOWN STEP	2026-09-27T19:21:19.7401917Z  * [new branch]          be-leave-publish-20260705-be-leave       -> origin/be-leave-publish-20260705-be-leave
+test	UNKNOWN STEP	2026-09-27T19:21:19.7402658Z  * [new branch]          be-marital-quotient-person-records       -> origin/be-marital-quotient-person-records
+test	UNKNOWN STEP	2026-09-27T19:21:19.7403720Z  * [new branch]          be-suites-pensions-selfemp-unemployment  -> origin/be-suites-pensions-selfemp-unemployment
+test	UNKNOWN STEP	2026-09-27T19:21:19.7405070Z  * [new branch]          be/retire-marital-quotient-dispositions  -> origin/be/retire-marital-quotient-dispositions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7405999Z  * [new branch]          bed-be-axiom-oracles-20260705-172806     -> origin/bed-be-axiom-oracles-20260705-172806
+test	UNKNOWN STEP	2026-09-27T19:21:19.7406820Z  * [new branch]          bridge-manifests                         -> origin/bridge-manifests
+test	UNKNOWN STEP	2026-09-27T19:21:19.7407492Z  * [new branch]          bun-be-oracle-suite                      -> origin/bun-be-oracle-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7408165Z  * [new branch]          ca-auditable-oracles                     -> origin/ca-auditable-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:19.7408885Z  * [new branch]          ca-final-evidence                        -> origin/ca-final-evidence
+test	UNKNOWN STEP	2026-09-27T19:21:19.7409556Z  * [new branch]          ca-oracles-land                          -> origin/ca-oracles-land
+test	UNKNOWN STEP	2026-09-27T19:21:19.7410249Z  * [new branch]          ca-policyengine-coverage                 -> origin/ca-policyengine-coverage
+test	UNKNOWN STEP	2026-09-27T19:21:19.7410969Z  * [new branch]          ci/snap-qc-affected-live                 -> origin/ci/snap-qc-affected-live
+test	UNKNOWN STEP	2026-09-27T19:21:19.7411688Z  * [new branch]          ci/snap-qc-affected-live-trial           -> origin/ci/snap-qc-affected-live-trial
+test	UNKNOWN STEP	2026-09-27T19:21:19.7412451Z  * [new branch]          ci/snap-qc-live-replay                   -> origin/ci/snap-qc-live-replay
+test	UNKNOWN STEP	2026-09-27T19:21:19.7413207Z  * [new branch]          clarify-dashboard-coverage               -> origin/clarify-dashboard-coverage
+test	UNKNOWN STEP	2026-09-27T19:21:19.7414175Z  * [new branch]          classify-ms-pilot-oracle-outputs         -> origin/classify-ms-pilot-oracle-outputs
+test	UNKNOWN STEP	2026-09-27T19:21:19.7415023Z  * [new branch]          claude/amazing-zhukovsky-51fce0          -> origin/claude/amazing-zhukovsky-51fce0
+test	UNKNOWN STEP	2026-09-27T19:21:19.7415849Z  * [new branch]          claude/pe-uk-conformance-universe        -> origin/claude/pe-uk-conformance-universe
+test	UNKNOWN STEP	2026-09-27T19:21:19.7416628Z  * [new branch]          claude/sc-29732-mechanism                -> origin/claude/sc-29732-mechanism
+test	UNKNOWN STEP	2026-09-27T19:21:19.7417597Z  * [new branch]          claude/sc-29732-reclassify               -> origin/claude/sc-29732-reclassify
+test	UNKNOWN STEP	2026-09-27T19:21:19.7418405Z  * [new branch]          claude/snap-unexplained-sweep            -> origin/claude/snap-unexplained-sweep
+test	UNKNOWN STEP	2026-09-27T19:21:19.7419210Z  * [new branch]          claude/uk-child-benefit-oracle           -> origin/claude/uk-child-benefit-oracle
+test	UNKNOWN STEP	2026-09-27T19:21:19.7420011Z  * [new branch]          claude/uk-pe-attendance-allowance        -> origin/claude/uk-pe-attendance-allowance
+test	UNKNOWN STEP	2026-09-27T19:21:19.7421102Z  * [new branch]          claude/uk-pe-pensions-care-lane          -> origin/claude/uk-pe-pensions-care-lane
+test	UNKNOWN STEP	2026-09-27T19:21:19.7421688Z  * [new branch]          claude/uk-pe-tax-free-childcare          -> origin/claude/uk-pe-tax-free-childcare
+test	UNKNOWN STEP	2026-09-27T19:21:19.7422191Z  * [new branch]          claude/ukmod-uk-oracle-suites            -> origin/claude/ukmod-uk-oracle-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7422725Z  * [new branch]          claude/ukmod-wave2-laneA-bcap-wfa        -> origin/claude/ukmod-wave2-laneA-bcap-wfa
+test	UNKNOWN STEP	2026-09-27T19:21:19.7423255Z  * [new branch]          closure-universes                        -> origin/closure-universes
+test	UNKNOWN STEP	2026-09-27T19:21:19.7423948Z  * [new branch]          closure/medicare-evidence-grid           -> origin/closure/medicare-evidence-grid
+test	UNKNOWN STEP	2026-09-27T19:21:19.7424415Z  * [new branch]          co-income-tax-suite                      -> origin/co-income-tax-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7424852Z  * [new branch]          co-income-tax-suite-v2                   -> origin/co-income-tax-suite-v2
+test	UNKNOWN STEP	2026-09-27T19:21:19.7425326Z  * [new branch]          codex/402a-oracle-mapping-553            -> origin/codex/402a-oracle-mapping-553
+test	UNKNOWN STEP	2026-09-27T19:21:19.7425839Z  * [new branch]          codex/comparison-oracle-infra            -> origin/codex/comparison-oracle-infra
+test	UNKNOWN STEP	2026-09-27T19:21:19.7426492Z  * [new branch]          codex/oasdi-oracle-mappings-541          -> origin/codex/oasdi-oracle-mappings-541
+test	UNKNOWN STEP	2026-09-27T19:21:19.7427019Z  * [new branch]          codex/package-oracle-targets             -> origin/codex/package-oracle-targets
+test	UNKNOWN STEP	2026-09-27T19:21:19.7427663Z  * [new branch]          codex/py314-ci-package-process           -> origin/codex/py314-ci-package-process
+test	UNKNOWN STEP	2026-09-27T19:21:19.7428484Z  * [new branch]          codex/taxcalc-yale-oracles               -> origin/codex/taxcalc-yale-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:19.7429349Z  * [new branch]          codex/uk-oracles-dashboard-toggle-20260609 -> origin/codex/uk-oracles-dashboard-toggle-20260609
+test	UNKNOWN STEP	2026-09-27T19:21:19.7430032Z  * [new branch]          codex/uk-uc-full-efrs-dashboard-20260606 -> origin/codex/uk-uc-full-efrs-dashboard-20260606
+test	UNKNOWN STEP	2026-09-27T19:21:19.7430693Z  * [new branch]          conformance-execution-attestation-355    -> origin/conformance-execution-attestation-355
+test	UNKNOWN STEP	2026-09-27T19:21:19.7431266Z  * [new branch]          conformance-harness                      -> origin/conformance-harness
+test	UNKNOWN STEP	2026-09-27T19:21:19.7431802Z  * [new branch]          d3/central-closure-rule                  -> origin/d3/central-closure-rule
+test	UNKNOWN STEP	2026-09-27T19:21:19.7432345Z  * [new branch]          d3/certified-definition                  -> origin/d3/certified-definition
+test	UNKNOWN STEP	2026-09-27T19:21:19.7432866Z  * [new branch]          d3/citation-scan-frontier                -> origin/d3/citation-scan-frontier
+test	UNKNOWN STEP	2026-09-27T19:21:19.7433360Z  * [new branch]          d3/dk-conformance                        -> origin/d3/dk-conformance
+test	UNKNOWN STEP	2026-09-27T19:21:19.7434001Z  * [new branch]          d3/dk-exercised                          -> origin/d3/dk-exercised
+test	UNKNOWN STEP	2026-09-27T19:21:19.7434501Z  * [new branch]          d3/instrument-frontier                   -> origin/d3/instrument-frontier
+test	UNKNOWN STEP	2026-09-27T19:21:19.7435032Z  * [new branch]          d3/pending-precedent-reads               -> origin/d3/pending-precedent-reads
+test	UNKNOWN STEP	2026-09-27T19:21:19.7435524Z  * [new branch]          dashboard-tabs                           -> origin/dashboard-tabs
+test	UNKNOWN STEP	2026-09-27T19:21:19.7435999Z  * [new branch]          dashboard-ui-rework                      -> origin/dashboard-ui-rework
+test	UNKNOWN STEP	2026-09-27T19:21:19.7436639Z  * [new branch]          data/ca-snap-bbce-rerun                  -> origin/data/ca-snap-bbce-rerun
+test	UNKNOWN STEP	2026-09-27T19:21:19.7437168Z  * [new branch]          data/final-59-unexplained                -> origin/data/final-59-unexplained
+test	UNKNOWN STEP	2026-09-27T19:21:19.7437668Z  * [new branch]          data/month-fix-regen                     -> origin/data/month-fix-regen
+test	UNKNOWN STEP	2026-09-27T19:21:19.7438240Z  * [new branch]          data/triage-unexplained-dispositions     -> origin/data/triage-unexplained-dispositions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7438801Z  * [new branch]          de-central-closure-gate                  -> origin/de-central-closure-gate
+test	UNKNOWN STEP	2026-09-27T19:21:19.7439318Z  * [new branch]          de-dakg-heading-frontier                 -> origin/de-dakg-heading-frontier
+test	UNKNOWN STEP	2026-09-27T19:21:19.7439910Z  * [new branch]          de-executable-per-platform-engine-pin    -> origin/de-executable-per-platform-engine-pin
+test	UNKNOWN STEP	2026-09-27T19:21:19.7440532Z  * [new branch]          de-kindergeld-agreement-members          -> origin/de-kindergeld-agreement-members
+test	UNKNOWN STEP	2026-09-27T19:21:19.7441133Z  * [new branch]          de-kindergeld-corpus-repin-stacked       -> origin/de-kindergeld-corpus-repin-stacked
+test	UNKNOWN STEP	2026-09-27T19:21:19.7441755Z  * [new branch]          de-kindergeld-discovered-candidates      -> origin/de-kindergeld-discovered-candidates
+test	UNKNOWN STEP	2026-09-27T19:21:19.7442364Z  * [new branch]          de-kindergeld-eligibility-euromod        -> origin/de-kindergeld-eligibility-euromod
+test	UNKNOWN STEP	2026-09-27T19:21:19.7442962Z  * [new branch]          de-kindergeld-eligibility-grid           -> origin/de-kindergeld-eligibility-grid
+test	UNKNOWN STEP	2026-09-27T19:21:19.7443724Z  * [new branch]          de-kindergeld-frontier-2026-09-08        -> origin/de-kindergeld-frontier-2026-09-08
+test	UNKNOWN STEP	2026-09-27T19:21:19.7444397Z  * [new branch]          de-kindergeld-reads-dakg-A               -> origin/de-kindergeld-reads-dakg-A
+test	UNKNOWN STEP	2026-09-27T19:21:19.7445055Z  * [new branch]          de-kindergeld-reads-dakg-O               -> origin/de-kindergeld-reads-dakg-O
+test	UNKNOWN STEP	2026-09-27T19:21:19.7445610Z  * [new branch]          de-kindergeld-reads-dakg-RS              -> origin/de-kindergeld-reads-dakg-RS
+test	UNKNOWN STEP	2026-09-27T19:21:19.7446153Z  * [new branch]          de-kindergeld-reads-dakg-V               -> origin/de-kindergeld-reads-dakg-V
+test	UNKNOWN STEP	2026-09-27T19:21:19.7446701Z  * [new branch]          de-kindergeld-resolver-hints             -> origin/de-kindergeld-resolver-hints
+test	UNKNOWN STEP	2026-09-27T19:21:19.7447359Z  * [new branch]          de-kindergeld-spine-and-candidate-decisions -> origin/de-kindergeld-spine-and-candidate-decisions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7448008Z  * [new branch]          de-kindergeld-spine-provisions           -> origin/de-kindergeld-spine-provisions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7448581Z  * [new branch]          de-kindergeld-supplementals              -> origin/de-kindergeld-supplementals
+test	UNKNOWN STEP	2026-09-27T19:21:19.7449101Z  * [new branch]          de-ledger-decisions                      -> origin/de-ledger-decisions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7449673Z  * [new branch]          de-ledger-supplemental-instruments       -> origin/de-ledger-supplemental-instruments
+test	UNKNOWN STEP	2026-09-27T19:21:19.7450250Z  * [new branch]          de-program-registry-design               -> origin/de-program-registry-design
+test	UNKNOWN STEP	2026-09-27T19:21:19.7450776Z  * [new branch]          dk/wave-1-input-renames                  -> origin/dk/wave-1-input-renames
+test	UNKNOWN STEP	2026-09-27T19:21:19.7451288Z  * [new branch]          ecps-input-mapping-yaml                  -> origin/ecps-input-mapping-yaml
+test	UNKNOWN STEP	2026-09-27T19:21:19.7451834Z  * [new branch]          efrs-student-loan-balance-147            -> origin/efrs-student-loan-balance-147
+test	UNKNOWN STEP	2026-09-27T19:21:19.7452356Z  * [new branch]          efrs-triage-20260705                     -> origin/efrs-triage-20260705
+test	UNKNOWN STEP	2026-09-27T19:21:19.7452898Z  * [new branch]          encode/al-2026-tax-classifications       -> origin/encode/al-2026-tax-classifications
+test	UNKNOWN STEP	2026-09-27T19:21:19.7453630Z  * [new branch]          encode/ar-2026-oracle-truthfulness       -> origin/encode/ar-2026-oracle-truthfulness
+test	UNKNOWN STEP	2026-09-27T19:21:19.7454318Z  * [new branch]          encode/az-2026-tax-classifications       -> origin/encode/az-2026-tax-classifications
+test	UNKNOWN STEP	2026-09-27T19:21:19.7454904Z  * [new branch]          encode/ct-2026-oracle-truthfulness       -> origin/encode/ct-2026-oracle-truthfulness
+test	UNKNOWN STEP	2026-09-27T19:21:19.7455474Z  * [new branch]          encode/dc-2026-tax-classifications       -> origin/encode/dc-2026-tax-classifications
+test	UNKNOWN STEP	2026-09-27T19:21:19.7456019Z  * [new branch]          encode/in-2026-e2e-resident              -> origin/encode/in-2026-e2e-resident
+test	UNKNOWN STEP	2026-09-27T19:21:19.7456549Z  * [new branch]          encode/ks-2026-e2e-resident              -> origin/encode/ks-2026-e2e-resident
+test	UNKNOWN STEP	2026-09-27T19:21:19.7457104Z  * [new branch]          encode/me-2026-tax-classifications       -> origin/encode/me-2026-tax-classifications
+test	UNKNOWN STEP	2026-09-27T19:21:19.7457682Z  * [new branch]          encode/nv-2026-tax-classifications       -> origin/encode/nv-2026-tax-classifications
+test	UNKNOWN STEP	2026-09-27T19:21:19.7458282Z  * [new branch]          encode/state-income-tax-all-oracles      -> origin/encode/state-income-tax-all-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:19.7458981Z  * [new branch]          encode/state-income-tax-conformance-truthfulness -> origin/encode/state-income-tax-conformance-truthfulness
+test	UNKNOWN STEP	2026-09-27T19:21:19.7459681Z  * [new branch]          encode/state-income-tax-ecps-ar-person   -> origin/encode/state-income-tax-ecps-ar-person
+test	UNKNOWN STEP	2026-09-27T19:21:19.7460299Z  * [new branch]          encode/state-income-tax-ecps-batch-2     -> origin/encode/state-income-tax-ecps-batch-2
+test	UNKNOWN STEP	2026-09-27T19:21:19.7460921Z  * [new branch]          encode/state-income-tax-ecps-co-base     -> origin/encode/state-income-tax-ecps-co-base
+test	UNKNOWN STEP	2026-09-27T19:21:19.7461501Z  * [new branch]          encode/state-income-tax-ecps-hi          -> origin/encode/state-income-tax-ecps-hi
+test	UNKNOWN STEP	2026-09-27T19:21:19.7462112Z  * [new branch]          encode/state-income-tax-ecps-ms-schedule -> origin/encode/state-income-tax-ecps-ms-schedule
+test	UNKNOWN STEP	2026-09-27T19:21:19.7462871Z  * [new branch]          encode/state-income-tax-ecps-nh-repeal   -> origin/encode/state-income-tax-ecps-nh-repeal
+test	UNKNOWN STEP	2026-09-27T19:21:19.7463407Z  * [new branch]          et-core-suites                           -> origin/et-core-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7464044Z  * [new branch]          et-dispy-suite                           -> origin/et-dispy-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7464521Z  * [new branch]          euromod-batch-audit                      -> origin/euromod-batch-audit
+test	UNKNOWN STEP	2026-09-27T19:21:19.7465044Z  * [new branch]          euromod-country-preseed                  -> origin/euromod-country-preseed
+test	UNKNOWN STEP	2026-09-27T19:21:19.7465573Z  * [new branch]          euromod-platform-oracle                  -> origin/euromod-platform-oracle
+test	UNKNOWN STEP	2026-09-27T19:21:19.7466079Z  * [new branch]          evidence-validator                       -> origin/evidence-validator
+test	UNKNOWN STEP	2026-09-27T19:21:19.7466579Z  * [new branch]          evidence-validator-land                  -> origin/evidence-validator-land
+test	UNKNOWN STEP	2026-09-27T19:21:19.7467069Z  * [new branch]          exercise-census                          -> origin/exercise-census
+test	UNKNOWN STEP	2026-09-27T19:21:19.7467587Z  * [new branch]          fable/be89-pensioner-oracles             -> origin/fable/be89-pensioner-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:19.7468110Z  * [new branch]          feat/de-certificates                     -> origin/feat/de-certificates
+test	UNKNOWN STEP	2026-09-27T19:21:19.7468615Z  * [new branch]          feat/de-discovery-ledgers                -> origin/feat/de-discovery-ledgers
+test	UNKNOWN STEP	2026-09-27T19:21:19.7469141Z  * [new branch]          feat/de-dual-oracle-suites               -> origin/feat/de-dual-oracle-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7469641Z  * [new branch]          feat/gettsim-adapter                     -> origin/feat/gettsim-adapter
+test	UNKNOWN STEP	2026-09-27T19:21:19.7470211Z  * [new branch]          fed-parity/addmed-grid-expansion-hold    -> origin/fed-parity/addmed-grid-expansion-hold
+test	UNKNOWN STEP	2026-09-27T19:21:19.7470784Z  * [new branch]          fed-parity/addmed-mappings               -> origin/fed-parity/addmed-mappings
+test	UNKNOWN STEP	2026-09-27T19:21:19.7471436Z  * [new branch]          fed-parity/atomic0-mappings              -> origin/fed-parity/atomic0-mappings
+test	UNKNOWN STEP	2026-09-27T19:21:19.7471985Z  * [new branch]          fed-parity/ca-bbce-mappings              -> origin/fed-parity/ca-bbce-mappings
+test	UNKNOWN STEP	2026-09-27T19:21:19.7472538Z  * [new branch]          fed-parity/chunk1-oracle-suites          -> origin/fed-parity/chunk1-oracle-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7473101Z  * [new branch]          fed-parity/chunk2-oracle-suite           -> origin/fed-parity/chunk2-oracle-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7473828Z  * [new branch]          fed-parity/federal-grid-suites           -> origin/fed-parity/federal-grid-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7474384Z  * [new branch]          fed-parity/savers-addmed-grids           -> origin/fed-parity/savers-addmed-grids
+test	UNKNOWN STEP	2026-09-27T19:21:19.7474961Z  * [new branch]          fed-parity/snap-residual-cleanup         -> origin/fed-parity/snap-residual-cleanup
+test	UNKNOWN STEP	2026-09-27T19:21:19.7475568Z  * [new branch]          fed-parity/taxable-income-mappings       -> origin/fed-parity/taxable-income-mappings
+test	UNKNOWN STEP	2026-09-27T19:21:19.7476101Z  * [new branch]          fiit-unification                         -> origin/fiit-unification
+test	UNKNOWN STEP	2026-09-27T19:21:19.7476631Z  * [new branch]          fix-be-leave-manifest-20260705           -> origin/fix-be-leave-manifest-20260705
+test	UNKNOWN STEP	2026-09-27T19:21:19.7477177Z  * [new branch]          fix-co-snap-oracle-inputs                -> origin/fix-co-snap-oracle-inputs
+test	UNKNOWN STEP	2026-09-27T19:21:19.7477717Z  * [new branch]          fix-conformance-scoreboard               -> origin/fix-conformance-scoreboard
+test	UNKNOWN STEP	2026-09-27T19:21:19.7478265Z  * [new branch]          fix/absorbed-state-repo-map              -> origin/fix/absorbed-state-repo-map
+test	UNKNOWN STEP	2026-09-27T19:21:19.7478791Z  * [new branch]          fix/affected-rerun-ci-legs               -> origin/fix/affected-rerun-ci-legs
+test	UNKNOWN STEP	2026-09-27T19:21:19.7479415Z  * [new branch]          fix/affected-rerun-dispatch-runnable-names -> origin/fix/affected-rerun-dispatch-runnable-names
+test	UNKNOWN STEP	2026-09-27T19:21:19.7480190Z  * [new branch]          fix/affected-rerun-regenerate-derived    -> origin/fix/affected-rerun-regenerate-derived
+test	UNKNOWN STEP	2026-09-27T19:21:19.7480856Z  * [new branch]          fix/affected-rerun-regenerates-scoreboard -> origin/fix/affected-rerun-regenerates-scoreboard
+test	UNKNOWN STEP	2026-09-27T19:21:19.7481523Z  * [new branch]          fix/canonical-rulespec-hard-cut-current  -> origin/fix/canonical-rulespec-hard-cut-current
+test	UNKNOWN STEP	2026-09-27T19:21:19.7482133Z  * [new branch]          fix/certification-s3-hardening           -> origin/fix/certification-s3-hardening
+test	UNKNOWN STEP	2026-09-27T19:21:19.7482709Z  * [new branch]          fix/comparison-completeness-263          -> origin/fix/comparison-completeness-263
+test	UNKNOWN STEP	2026-09-27T19:21:19.7506034Z  * [new branch]          fix/conformance-us-pe-scoreboard         -> origin/fix/conformance-us-pe-scoreboard
+test	UNKNOWN STEP	2026-09-27T19:21:19.7506927Z  * [new branch]          fix/de-closed-v3-honesty                 -> origin/fix/de-closed-v3-honesty
+test	UNKNOWN STEP	2026-09-27T19:21:19.7507727Z  * [new branch]          fix/documentary-rulespec-boundary        -> origin/fix/documentary-rulespec-boundary
+test	UNKNOWN STEP	2026-09-27T19:21:19.7508675Z  * [new branch]          fix/midijob-disposition-readjudication   -> origin/fix/midijob-disposition-readjudication
+test	UNKNOWN STEP	2026-09-27T19:21:19.7509504Z  * [new branch]          fix/pe-runner-requested-month            -> origin/fix/pe-runner-requested-month
+test	UNKNOWN STEP	2026-09-27T19:21:19.7510306Z  * [new branch]          fix/pytest-tmp-retention-failed          -> origin/fix/pytest-tmp-retention-failed
+test	UNKNOWN STEP	2026-09-27T19:21:19.7511116Z  * [new branch]          fix/snap-concept-citations               -> origin/fix/snap-concept-citations
+test	UNKNOWN STEP	2026-09-27T19:21:19.7511940Z  * [new branch]          fix/snap-qc-affected-rerun               -> origin/fix/snap-qc-affected-rerun
+test	UNKNOWN STEP	2026-09-27T19:21:19.7512804Z  * [new branch]          fix/snap-qc-check-stage-concepts         -> origin/fix/snap-qc-check-stage-concepts
+test	UNKNOWN STEP	2026-09-27T19:21:19.7513865Z  * [new branch]          fix/stop-reemission-churn                -> origin/fix/stop-reemission-churn
+test	UNKNOWN STEP	2026-09-27T19:21:19.7515009Z  * [new branch]          fix/tariff-closure-reasons-encoded-state -> origin/fix/tariff-closure-reasons-encoded-state
+test	UNKNOWN STEP	2026-09-27T19:21:19.7516000Z  * [new branch]          fix/tariff-closure-reasons-leads         -> origin/fix/tariff-closure-reasons-leads
+test	UNKNOWN STEP	2026-09-27T19:21:19.7516942Z  * [new branch]          fix/tariff-evidence-ci-hardening         -> origin/fix/tariff-evidence-ci-hardening
+test	UNKNOWN STEP	2026-09-27T19:21:19.7517772Z  * [new branch]          fix/taxsim-mstat6-mfs                    -> origin/fix/taxsim-mstat6-mfs
+test	UNKNOWN STEP	2026-09-27T19:21:19.7518501Z  * [new branch]          fix/taxsim-nan-ids                       -> origin/fix/taxsim-nan-ids
+test	UNKNOWN STEP	2026-09-27T19:21:19.7519237Z  * [new branch]          fix/uk-efrs-hf-token                     -> origin/fix/uk-efrs-hf-token
+test	UNKNOWN STEP	2026-09-27T19:21:19.7520062Z  * [new branch]          fix/uk-tax-benefits-compose-dep          -> origin/fix/uk-tax-benefits-compose-dep
+test	UNKNOWN STEP	2026-09-27T19:21:19.7520964Z  * [new branch]          gh-capital-income-oracle-suite           -> origin/gh-capital-income-oracle-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7521551Z  * [new branch]          gh-dispy-oracle-suite                    -> origin/gh-dispy-oracle-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7522128Z  * [new branch]          gh-excise-transfers-oracle-suites        -> origin/gh-excise-transfers-oracle-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7522690Z  * [new branch]          gh-ghamod-oracle-suites                  -> origin/gh-ghamod-oracle-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7523221Z  * [new branch]          gh-oracle-mapping-minimal                -> origin/gh-oracle-mapping-minimal
+test	UNKNOWN STEP	2026-09-27T19:21:19.7523974Z  * [new branch]          gh-presumptive-oracle-suite              -> origin/gh-presumptive-oracle-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7524533Z  * [new branch]          gh-ssnit-oracle-suite                    -> origin/gh-ssnit-oracle-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7525060Z  * [new branch]          gh-vat-levies-oracle-suite               -> origin/gh-vat-levies-oracle-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7525741Z  * [new branch]          hb-mappings-20260705                     -> origin/hb-mappings-20260705
+test	UNKNOWN STEP	2026-09-27T19:21:19.7526228Z  * [new branch]          hb-wave-20260705                         -> origin/hb-wave-20260705
+test	UNKNOWN STEP	2026-09-27T19:21:19.7526672Z  * [new branch]          hicbc-oracle                             -> origin/hicbc-oracle
+test	UNKNOWN STEP	2026-09-27T19:21:19.7527280Z  * [new branch]          hotfix/relocate-tariff-campaign-dispositions -> origin/hotfix/relocate-tariff-campaign-dispositions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7527884Z  * [new branch]          lane-a-suite-oracles                     -> origin/lane-a-suite-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:19.7528396Z  * [new branch]          lane-a2-oracles-20260708                 -> origin/lane-a2-oracles-20260708
+test	UNKNOWN STEP	2026-09-27T19:21:19.7528897Z  * [new branch]          lane-a3-oracles-20260709                 -> origin/lane-a3-oracles-20260709
+test	UNKNOWN STEP	2026-09-27T19:21:19.7529455Z  * [new branch]          lane-completion-oracles-20260709         -> origin/lane-completion-oracles-20260709
+test	UNKNOWN STEP	2026-09-27T19:21:19.7530015Z  * [new branch]          laneB/uk-lbtt-ltt-suite                  -> origin/laneB/uk-lbtt-ltt-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7530576Z  * [new branch]          laneD/panel-rerun-dispositions           -> origin/laneD/panel-rerun-dispositions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7531148Z  * [new branch]          laneE/witness-extract-refresh            -> origin/laneE/witness-extract-refresh
+test	UNKNOWN STEP	2026-09-27T19:21:19.7531661Z  * [new branch]          laneb-oh-oracles                         -> origin/laneb-oh-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:19.7532138Z  * [new branch]          laneb-slice-oracles                      -> origin/laneb-slice-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:19.7532630Z  * [new branch]          laneb-slice-oracles-ne                   -> origin/laneb-slice-oracles-ne
+test	UNKNOWN STEP	2026-09-27T19:21:19.7533125Z  * [new branch]          ledger-ecjrc-pr16                        -> origin/ledger-ecjrc-pr16
+test	UNKNOWN STEP	2026-09-27T19:21:19.7533747Z  * [new branch]          main                                     -> origin/main
+test	UNKNOWN STEP	2026-09-27T19:21:19.7534224Z  * [new branch]          map/ca-2026-bhst-canonical               -> origin/map/ca-2026-bhst-canonical
+test	UNKNOWN STEP	2026-09-27T19:21:19.7534923Z  * [new branch]          map/co-2026-e2e-resident-bounded         -> origin/map/co-2026-e2e-resident-bounded
+test	UNKNOWN STEP	2026-09-27T19:21:19.7535553Z  * [new branch]          map/dc-2026-section-47-1806-03-canonical -> origin/map/dc-2026-section-47-1806-03-canonical
+test	UNKNOWN STEP	2026-09-27T19:21:19.7536187Z  * [new branch]          map/ga-2026-annual-tax-surface-durable   -> origin/map/ga-2026-annual-tax-surface-durable
+test	UNKNOWN STEP	2026-09-27T19:21:19.7536773Z  * [new branch]          map/id-2026-e2e-resident-bounded         -> origin/map/id-2026-e2e-resident-bounded
+test	UNKNOWN STEP	2026-09-27T19:21:19.7537461Z  * [new branch]          map/il-2026-before-nonrefundable-credits-canonical -> origin/map/il-2026-before-nonrefundable-credits-canonical
+test	UNKNOWN STEP	2026-09-27T19:21:19.7538117Z  * [new branch]          map/ky-2026-e2e-resident-bounded         -> origin/map/ky-2026-e2e-resident-bounded
+test	UNKNOWN STEP	2026-09-27T19:21:19.7538671Z  * [new branch]          map/ma-2026-e2e-resident-bounded         -> origin/map/ma-2026-e2e-resident-bounded
+test	UNKNOWN STEP	2026-09-27T19:21:19.7539218Z  * [new branch]          map/md-2026-e2e-resident-bounded         -> origin/map/md-2026-e2e-resident-bounded
+test	UNKNOWN STEP	2026-09-27T19:21:19.7539795Z  * [new branch]          map/mi-2026-e2e-resident-source-held     -> origin/map/mi-2026-e2e-resident-source-held
+test	UNKNOWN STEP	2026-09-27T19:21:19.7540356Z  * [new branch]          map/mn-2026-basic-tax-oracle             -> origin/map/mn-2026-basic-tax-oracle
+test	UNKNOWN STEP	2026-09-27T19:21:19.7540962Z  * [new branch]          map/ms-2026-section-27-7-5-schedule-durable -> origin/map/ms-2026-section-27-7-5-schedule-durable
+test	UNKNOWN STEP	2026-09-27T19:21:19.7541617Z  * [new branch]          map/pa-2026-before-forgiveness-canonical -> origin/map/pa-2026-before-forgiveness-canonical
+test	UNKNOWN STEP	2026-09-27T19:21:19.7542335Z  * [new branch]          map/sc-2026-before-nonrefundable-credits-canonical -> origin/map/sc-2026-before-nonrefundable-credits-canonical
+test	UNKNOWN STEP	2026-09-27T19:21:19.7543071Z  * [new branch]          map/tn-2026-e2e-resident                 -> origin/map/tn-2026-e2e-resident
+test	UNKNOWN STEP	2026-09-27T19:21:19.7543772Z  * [new branch]          map/wy-2026-e2e-resident                 -> origin/map/wy-2026-e2e-resident
+test	UNKNOWN STEP	2026-09-27T19:21:19.7544302Z  * [new branch]          mapping/dk-not-comparable                -> origin/mapping/dk-not-comparable
+test	UNKNOWN STEP	2026-09-27T19:21:19.7544805Z  * [new branch]          maxtrace-runlog-viz                      -> origin/maxtrace-runlog-viz
+test	UNKNOWN STEP	2026-09-27T19:21:19.7545322Z  * [new branch]          mif-reg90-mappings-on-pin                -> origin/mif-reg90-mappings-on-pin
+test	UNKNOWN STEP	2026-09-27T19:21:19.7545842Z  * [new branch]          ng-mapping-on-encoder-pin                -> origin/ng-mapping-on-encoder-pin
+test	UNKNOWN STEP	2026-09-27T19:21:19.7546330Z  * [new branch]          nz-certification                         -> origin/nz-certification
+test	UNKNOWN STEP	2026-09-27T19:21:19.7546777Z  * [new branch]          nz-certified                             -> origin/nz-certified
+test	UNKNOWN STEP	2026-09-27T19:21:19.7547299Z  * [new branch]          nz-computed-closed-executable            -> origin/nz-computed-closed-executable
+test	UNKNOWN STEP	2026-09-27T19:21:19.7547839Z  * [new branch]          nz-exercise-denominator                  -> origin/nz-exercise-denominator
+test	UNKNOWN STEP	2026-09-27T19:21:19.7548354Z  * [new branch]          oracle-bridges-package                   -> origin/oracle-bridges-package
+test	UNKNOWN STEP	2026-09-27T19:21:19.7548846Z  * [new branch]          oracle-pending-lane                      -> origin/oracle-pending-lane
+test	UNKNOWN STEP	2026-09-27T19:21:19.7549373Z  * [new branch]          oracle-rerun-taxsim-populace             -> origin/oracle-rerun-taxsim-populace
+test	UNKNOWN STEP	2026-09-27T19:21:19.7549953Z  * [new branch]          oracle/us-snap-abawd-boundary-grid       -> origin/oracle/us-snap-abawd-boundary-grid
+test	UNKNOWN STEP	2026-09-27T19:21:19.7550476Z  * [new branch]          oracle/us-tariff-t0                      -> origin/oracle/us-tariff-t0
+test	UNKNOWN STEP	2026-09-27T19:21:19.7551072Z  * [new branch]          oracles-135-boundary-allowlist           -> origin/oracles-135-boundary-allowlist
+test	UNKNOWN STEP	2026-09-27T19:21:19.7551613Z  * [new branch]          oracles-165-hb-disregard                 -> origin/oracles-165-hb-disregard
+test	UNKNOWN STEP	2026-09-27T19:21:19.7552326Z  * [new branch]          oracles-be-tin-surcharge-capital-suites  -> origin/oracles-be-tin-surcharge-capital-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7552983Z  * [new branch]          oracles/be-pit-marital-quotient-suite    -> origin/oracles/be-pit-marital-quotient-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7553746Z  * [new branch]          panel/us-tariff-panel-dispositions       -> origin/panel/us-tariff-panel-dispositions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7554344Z  * [new branch]          panel/us-tariff-panel-reference          -> origin/panel/us-tariff-panel-reference
+test	UNKNOWN STEP	2026-09-27T19:21:19.7554902Z  * [new branch]          panel/us-tariff-panel-suite              -> origin/panel/us-tariff-panel-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7555429Z  * [new branch]          pe-uk-budget-2026-parity                 -> origin/pe-uk-budget-2026-parity
+test	UNKNOWN STEP	2026-09-27T19:21:19.7555917Z  * [new branch]          per-rule-coverage                        -> origin/per-rule-coverage
+test	UNKNOWN STEP	2026-09-27T19:21:19.7556381Z  * [new branch]          populace-pin                             -> origin/populace-pin
+test	UNKNOWN STEP	2026-09-27T19:21:19.7556832Z  * [new branch]          prd-oracle-lane                          -> origin/prd-oracle-lane
+test	UNKNOWN STEP	2026-09-27T19:21:19.7557318Z  * [new branch]          program-certificate                      -> origin/program-certificate
+test	UNKNOWN STEP	2026-09-27T19:21:19.7557842Z  * [new branch]          qc-error-prediction-pilot                -> origin/qc-error-prediction-pilot
+test	UNKNOWN STEP	2026-09-27T19:21:19.7558401Z  * [new branch]          reconcile-conformance-20260706           -> origin/reconcile-conformance-20260706
+test	UNKNOWN STEP	2026-09-27T19:21:19.7559065Z  * [new branch]          reconstruct/ct-2026-ordinary-tax-oracle-post-al -> origin/reconstruct/ct-2026-ordinary-tax-oracle-post-al
+test	UNKNOWN STEP	2026-09-27T19:21:19.7559738Z  * [new branch]          record-conformance-compositions-185      -> origin/record-conformance-compositions-185
+test	UNKNOWN STEP	2026-09-27T19:21:19.7560317Z  * [new branch]          refresh-co-nc-sc-al-tn-snap              -> origin/refresh-co-nc-sc-al-tn-snap
+test	UNKNOWN STEP	2026-09-27T19:21:19.7560952Z  * [new branch]          refresh-us-pe-scoreboard                 -> origin/refresh-us-pe-scoreboard
+test	UNKNOWN STEP	2026-09-27T19:21:19.7561508Z  * [new branch]          regen-uk-pe-conformance-detail           -> origin/regen-uk-pe-conformance-detail
+test	UNKNOWN STEP	2026-09-27T19:21:19.7562072Z  * [new branch]          registry-federal-wrappers                -> origin/registry-federal-wrappers
+test	UNKNOWN STEP	2026-09-27T19:21:19.7562572Z  * [new branch]          rw-core-suites                           -> origin/rw-core-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7563105Z  * [new branch]          scottish-income-tax-oracle               -> origin/scottish-income-tax-oracle
+test	UNKNOWN STEP	2026-09-27T19:21:19.7563776Z  * [new branch]          silent-failure-guardrails                -> origin/silent-failure-guardrails
+test	UNKNOWN STEP	2026-09-27T19:21:19.7564309Z  * [new branch]          snap-qc-856                              -> origin/snap-qc-856
+test	UNKNOWN STEP	2026-09-27T19:21:19.7564829Z  * [new branch]          snap-qc-az-ga-md                         -> origin/snap-qc-az-ga-md
+test	UNKNOWN STEP	2026-09-27T19:21:19.7565342Z  * [new branch]          snap-qc-federal-composition              -> origin/snap-qc-federal-composition
+test	UNKNOWN STEP	2026-09-27T19:21:19.7565863Z  * [new branch]          snap-qc-fy2024-refresh                   -> origin/snap-qc-fy2024-refresh
+test	UNKNOWN STEP	2026-09-27T19:21:19.7566327Z  * [new branch]          snap-qc-oracle                           -> origin/snap-qc-oracle
+test	UNKNOWN STEP	2026-09-27T19:21:19.7566787Z  * [new branch]          snap-view-rework                         -> origin/snap-view-rework
+test	UNKNOWN STEP	2026-09-27T19:21:19.7567270Z  * [new branch]          snapqc-restamp-federal                   -> origin/snapqc-restamp-federal
+test	UNKNOWN STEP	2026-09-27T19:21:19.7567814Z  * [new branch]          sprint/tariff-closure-v3-20260920        -> origin/sprint/tariff-closure-v3-20260920
+test	UNKNOWN STEP	2026-09-27T19:21:19.7568585Z  * [new branch]          sprint/tariff-evidence-continuation-20260907 -> origin/sprint/tariff-evidence-continuation-20260907
+test	UNKNOWN STEP	2026-09-27T19:21:19.7569198Z  * [new branch]          state-liability-suites                   -> origin/state-liability-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7569922Z  * [new branch]          state-tax-ca-mappings                    -> origin/state-tax-ca-mappings
+test	UNKNOWN STEP	2026-09-27T19:21:19.7570423Z  * [new branch]          state-tax-ny-mappings                    -> origin/state-tax-ny-mappings
+test	UNKNOWN STEP	2026-09-27T19:21:19.7571024Z  * [new branch]          suite/dk-child-youth-benefit             -> origin/suite/dk-child-youth-benefit
+test	UNKNOWN STEP	2026-09-27T19:21:19.7571811Z  * [new branch]          tariff/certification-arc                 -> origin/tariff/certification-arc
+test	UNKNOWN STEP	2026-09-27T19:21:19.7572594Z  * [new branch]          taxsim-100-explained                     -> origin/taxsim-100-explained
+test	UNKNOWN STEP	2026-09-27T19:21:19.7573329Z  * [new branch]          taxsim-first-class                       -> origin/taxsim-first-class
+test	UNKNOWN STEP	2026-09-27T19:21:19.7574294Z  * [new branch]          taxsim-ledger/1-binary-pins              -> origin/taxsim-ledger/1-binary-pins
+test	UNKNOWN STEP	2026-09-27T19:21:19.7575229Z  * [new branch]          taxsim-ledger/2-taxsim-csv-population    -> origin/taxsim-ledger/2-taxsim-csv-population
+test	UNKNOWN STEP	2026-09-27T19:21:19.7576236Z  * [new branch]          taxsim-ledger/3-hardened-dispositions    -> origin/taxsim-ledger/3-hardened-dispositions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7577172Z  * [new branch]          taxsim-ledger/4-emulator-ledger          -> origin/taxsim-ledger/4-emulator-ledger
+test	UNKNOWN STEP	2026-09-27T19:21:19.7577911Z  * [new branch]          taxsim-pin                               -> origin/taxsim-pin
+test	UNKNOWN STEP	2026-09-27T19:21:19.7578582Z  * [new branch]          triage-batch6                            -> origin/triage-batch6
+test	UNKNOWN STEP	2026-09-27T19:21:19.7579252Z  * [new branch]          triage-batch7                            -> origin/triage-batch7
+test	UNKNOWN STEP	2026-09-27T19:21:19.7579961Z  * [new branch]          triage/ca-snap-441                       -> origin/triage/ca-snap-441
+test	UNKNOWN STEP	2026-09-27T19:21:19.7580609Z  * [new branch]          tx-snap-qc                               -> origin/tx-snap-qc
+test	UNKNOWN STEP	2026-09-27T19:21:19.7581500Z  * [new branch]          uc-pipeline-classify                     -> origin/uc-pipeline-classify
+test	UNKNOWN STEP	2026-09-27T19:21:19.7582236Z  * [new branch]          ug-dispy-suite                           -> origin/ug-dispy-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7582929Z  * [new branch]          ug-final-suites                          -> origin/ug-final-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7583769Z  * [new branch]          ug-nssf-suite                            -> origin/ug-nssf-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7584497Z  * [new branch]          ug-paye-oracle-suite                     -> origin/ug-paye-oracle-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7585314Z  * [new branch]          ug-rental-presumptive-suites             -> origin/ug-rental-presumptive-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7586307Z  * [new branch]          uk-boundary-cases                        -> origin/uk-boundary-cases
+test	UNKNOWN STEP	2026-09-27T19:21:19.7587007Z  * [new branch]          uk-conformance-snapshot                  -> origin/uk-conformance-snapshot
+test	UNKNOWN STEP	2026-09-27T19:21:19.7587539Z  * [new branch]          uk-finals-bridge-removal                 -> origin/uk-finals-bridge-removal
+test	UNKNOWN STEP	2026-09-27T19:21:19.7588042Z  * [new branch]          uk-pip-efrs-suite                        -> origin/uk-pip-efrs-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7588580Z  * [new branch]          uk-statpay-axiom-oracles-20260706        -> origin/uk-statpay-axiom-oracles-20260706
+test	UNKNOWN STEP	2026-09-27T19:21:19.7589131Z  * [new branch]          uk-ukmod-badge-closers                   -> origin/uk-ukmod-badge-closers
+test	UNKNOWN STEP	2026-09-27T19:21:19.7589645Z  * [new branch]          uk-ukmod-devolved-suites                 -> origin/uk-ukmod-devolved-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7590202Z  * [new branch]          ukmod-it-savings-dividend                -> origin/ukmod-it-savings-dividend
+test	UNKNOWN STEP	2026-09-27T19:21:19.7590710Z  * [new branch]          ukmod-nic-family-m1                      -> origin/ukmod-nic-family-m1
+test	UNKNOWN STEP	2026-09-27T19:21:19.7591225Z  * [new branch]          ukmod-pension-credit-m3                  -> origin/ukmod-pension-credit-m3
+test	UNKNOWN STEP	2026-09-27T19:21:19.7591808Z  * [new branch]          update-pe-pins-and-release-engine        -> origin/update-pe-pins-and-release-engine
+test	UNKNOWN STEP	2026-09-27T19:21:19.7592543Z  * [new branch]          us-federal-repealed-exclusions           -> origin/us-federal-repealed-exclusions
+test	UNKNOWN STEP	2026-09-27T19:21:19.7593365Z  * [new branch]          us-pe-reconciliation                     -> origin/us-pe-reconciliation
+test	UNKNOWN STEP	2026-09-27T19:21:19.7594264Z  * [new branch]          us-tanf-scout-wave1                      -> origin/us-tanf-scout-wave1
+test	UNKNOWN STEP	2026-09-27T19:21:19.7594773Z  * [new branch]          us-tanf-wave2-ga-oracle                  -> origin/us-tanf-wave2-ga-oracle
+test	UNKNOWN STEP	2026-09-27T19:21:19.7595266Z  * [new branch]          us-tanf-wave3-de-oracle                  -> origin/us-tanf-wave3-de-oracle
+test	UNKNOWN STEP	2026-09-27T19:21:19.7595773Z  * [new branch]          wave9-marriage-surface                   -> origin/wave9-marriage-surface
+test	UNKNOWN STEP	2026-09-27T19:21:19.7596249Z  * [new branch]          z1-wic-citation                          -> origin/z1-wic-citation
+test	UNKNOWN STEP	2026-09-27T19:21:19.7596715Z  * [new branch]          zm-benefit-suites                        -> origin/zm-benefit-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7597206Z  * [new branch]          zm-consumption-suites                    -> origin/zm-consumption-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7597683Z  * [new branch]          zm-core-suites                           -> origin/zm-core-suites
+test	UNKNOWN STEP	2026-09-27T19:21:19.7598122Z  * [new branch]          zm-dispy-suite                           -> origin/zm-dispy-suite
+test	UNKNOWN STEP	2026-09-27T19:21:19.7598564Z  * [new branch]          zm-prefix-stub                           -> origin/zm-prefix-stub
+test	UNKNOWN STEP	2026-09-27T19:21:19.7599021Z  * [new tag]             api-parity-corpus-v1                     -> api-parity-corpus-v1
+test	UNKNOWN STEP	2026-09-27T19:21:19.7599458Z  * [new ref]             50084a3743fa550c0c24053da04a252c87119660 -> pull/552/merge
+test	UNKNOWN STEP	2026-09-27T19:21:19.7600483Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:19.7600788Z ##[group]Determining the checkout info
+test	UNKNOWN STEP	2026-09-27T19:21:19.7601112Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:19.7601335Z [command]/usr/bin/git sparse-checkout disable
+test	UNKNOWN STEP	2026-09-27T19:21:19.7602133Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+test	UNKNOWN STEP	2026-09-27T19:21:19.7607642Z ##[group]Checking out the ref
+test	UNKNOWN STEP	2026-09-27T19:21:19.7611021Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/552/merge
+test	UNKNOWN STEP	2026-09-27T19:21:20.8196438Z Updating files:  84% (1944/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8602374Z Updating files:  85% (1948/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8648133Z Updating files:  86% (1971/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8679602Z Updating files:  87% (1994/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8700848Z Updating files:  88% (2017/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8725681Z Updating files:  89% (2039/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8753622Z Updating files:  90% (2062/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8780761Z Updating files:  91% (2085/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8789359Z Updating files:  92% (2108/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8821130Z Updating files:  93% (2131/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8840930Z Updating files:  94% (2154/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8866071Z Updating files:  95% (2177/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8886622Z Updating files:  96% (2200/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8903258Z Updating files:  97% (2223/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8921558Z Updating files:  98% (2246/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8949131Z Updating files:  99% (2269/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8949501Z Updating files: 100% (2291/2291)
+test	UNKNOWN STEP	2026-09-27T19:21:20.8949833Z Updating files: 100% (2291/2291), done.
+test	UNKNOWN STEP	2026-09-27T19:21:20.8980435Z Note: switching to 'refs/remotes/pull/552/merge'.
+test	UNKNOWN STEP	2026-09-27T19:21:20.8980922Z 
+test	UNKNOWN STEP	2026-09-27T19:21:20.8981166Z You are in 'detached HEAD' state. You can look around, make experimental
+test	UNKNOWN STEP	2026-09-27T19:21:20.8981625Z changes and commit them, and you can discard any commits you make in this
+test	UNKNOWN STEP	2026-09-27T19:21:20.8981987Z state without impacting any branches by switching back to a branch.
+test	UNKNOWN STEP	2026-09-27T19:21:20.8982198Z 
+test	UNKNOWN STEP	2026-09-27T19:21:20.8982341Z If you want to create a new branch to retain commits you create, you may
+test	UNKNOWN STEP	2026-09-27T19:21:20.8982679Z do so (now or later) by using -c with the switch command. Example:
+test	UNKNOWN STEP	2026-09-27T19:21:20.8982884Z 
+test	UNKNOWN STEP	2026-09-27T19:21:20.8982976Z   git switch -c <new-branch-name>
+test	UNKNOWN STEP	2026-09-27T19:21:20.8983110Z 
+test	UNKNOWN STEP	2026-09-27T19:21:20.8983674Z Or undo this operation with:
+test	UNKNOWN STEP	2026-09-27T19:21:20.8983808Z 
+test	UNKNOWN STEP	2026-09-27T19:21:20.8983887Z   git switch -
+test	UNKNOWN STEP	2026-09-27T19:21:20.8983990Z 
+test	UNKNOWN STEP	2026-09-27T19:21:20.8984157Z Turn off this advice by setting config variable advice.detachedHead to false
+test	UNKNOWN STEP	2026-09-27T19:21:20.8984400Z 
+test	UNKNOWN STEP	2026-09-27T19:21:20.8984672Z HEAD is now at 50084a374 Merge 8eca4516450f2a4bbeceb9f4298360f8b9e83bc8 into fc3ce90de39d702b5ec3981a4e170d03a488b6eb
+test	UNKNOWN STEP	2026-09-27T19:21:20.9079538Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:20.9082566Z [command]/usr/bin/git log -1 --format=%H
+test	UNKNOWN STEP	2026-09-27T19:21:20.9107521Z 50084a3743fa550c0c24053da04a252c87119660
+test	UNKNOWN STEP	2026-09-27T19:21:20.9326202Z ##[group]Run actions/setup-python@v5
+test	UNKNOWN STEP	2026-09-27T19:21:20.9326429Z with:
+test	UNKNOWN STEP	2026-09-27T19:21:20.9326594Z   python-version: 3.14
+test	UNKNOWN STEP	2026-09-27T19:21:20.9326774Z   check-latest: false
+test	UNKNOWN STEP	2026-09-27T19:21:20.9328809Z   token: ***
+test	UNKNOWN STEP	2026-09-27T19:21:20.9329001Z   update-environment: true
+test	UNKNOWN STEP	2026-09-27T19:21:20.9329199Z   allow-prereleases: false
+test	UNKNOWN STEP	2026-09-27T19:21:20.9329377Z   freethreaded: false
+test	UNKNOWN STEP	2026-09-27T19:21:20.9329549Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:21.0361608Z ##[group]Installed versions
+test	UNKNOWN STEP	2026-09-27T19:21:21.0818492Z (node:2191) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+test	UNKNOWN STEP	2026-09-27T19:21:21.0819283Z (Use `node --trace-deprecation ...` to show where the warning was created)
+test	UNKNOWN STEP	2026-09-27T19:21:21.0819795Z Successfully set up CPython (3.14.7)
+test	UNKNOWN STEP	2026-09-27T19:21:21.0820264Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:21.1027854Z ##[group]Run astral-sh/setup-uv@v5
+test	UNKNOWN STEP	2026-09-27T19:21:21.1028180Z with:
+test	UNKNOWN STEP	2026-09-27T19:21:21.1028414Z   enable-cache: true
+test	UNKNOWN STEP	2026-09-27T19:21:21.1032184Z   github-token: ***
+test	UNKNOWN STEP	2026-09-27T19:21:21.1032524Z   cache-dependency-glob: **/uv.lock
+test	UNKNOWN STEP	**/requirements*.txt
+test	UNKNOWN STEP	
+test	UNKNOWN STEP	2026-09-27T19:21:21.1032931Z   prune-cache: true
+test	UNKNOWN STEP	2026-09-27T19:21:21.1033201Z   ignore-nothing-to-cache: false
+test	UNKNOWN STEP	2026-09-27T19:21:21.1033864Z   ignore-empty-workdir: false
+test	UNKNOWN STEP	2026-09-27T19:21:21.1034154Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:21.1034460Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:21.1034993Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:21.1035511Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:21.1035971Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:21.1036428Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:21.1036928Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:21.1037325Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:21.2438926Z (node:2199) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+test	UNKNOWN STEP	2026-09-27T19:21:21.2439509Z (Use `node --trace-deprecation ...` to show where the warning was created)
+test	UNKNOWN STEP	2026-09-27T19:21:21.6073169Z Downloading uv from "https://github.com/astral-sh/uv/releases/download/0.12.19/uv-x86_64-unknown-linux-gnu.tar.gz" ...
+test	UNKNOWN STEP	2026-09-27T19:21:21.9725425Z [command]/usr/bin/tar xz --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/71745c6f-f1fb-4ebf-ac8f-46f699ace870 -f /home/runner/work/_temp/58c470d3-d7b9-463a-9bab-4fe3a77e4c17
+test	UNKNOWN STEP	2026-09-27T19:21:22.5416098Z Added /home/runner/.local/bin to the path
+test	UNKNOWN STEP	2026-09-27T19:21:22.5419438Z Added /opt/hostedtoolcache/uv/0.12.19/x86_64 to the path
+test	UNKNOWN STEP	2026-09-27T19:21:22.5427193Z Set UV_CACHE_DIR to /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:22.5427790Z Successfully installed uv version 0.12.19
+test	UNKNOWN STEP	2026-09-27T19:21:22.5428408Z Searching files using cache dependency glob: **/uv.lock,**/requirements*.txt
+test	UNKNOWN STEP	2026-09-27T19:21:22.7276986Z /home/runner/work/axiom-oracles/axiom-oracles/uv.lock
+test	UNKNOWN STEP	2026-09-27T19:21:22.7294923Z Found 1 files to hash.
+test	UNKNOWN STEP	2026-09-27T19:21:23.3820955Z Trying to restore uv cache from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.14.7-cff08ae6738f9db8cb61152c1ea936cfe3a2ce8f276c6fc5ece6619fe30ea3ca
+test	UNKNOWN STEP	2026-09-27T19:21:23.6639955Z Cache hit for: setup-uv-1-x86_64-unknown-linux-gnu-3.14.7-cff08ae6738f9db8cb61152c1ea936cfe3a2ce8f276c6fc5ece6619fe30ea3ca
+test	UNKNOWN STEP	2026-09-27T19:21:23.6721311Z (node:2199) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+test	UNKNOWN STEP	2026-09-27T19:21:24.0922957Z Received 130435 of 130435 (100.0%), 0.6 MBs/sec
+test	UNKNOWN STEP	2026-09-27T19:21:24.0923386Z Cache Size: ~0 MB (130435 B)
+test	UNKNOWN STEP	2026-09-27T19:21:24.0943901Z [command]/usr/bin/tar -xf /home/runner/work/_temp/541e6760-9214-43a0-a398-0137407a2125/cache.tzst -P -C /home/runner/work/axiom-oracles/axiom-oracles --use-compress-program unzstd
+test	UNKNOWN STEP	2026-09-27T19:21:24.1559841Z Cache restored successfully
+test	UNKNOWN STEP	2026-09-27T19:21:24.1565298Z uv cache restored from GitHub Actions cache with key: setup-uv-1-x86_64-unknown-linux-gnu-3.14.7-cff08ae6738f9db8cb61152c1ea936cfe3a2ce8f276c6fc5ece6619fe30ea3ca
+test	UNKNOWN STEP	2026-09-27T19:21:24.1686114Z ##[group]Run uv sync --extra dev
+test	UNKNOWN STEP	2026-09-27T19:21:24.1686417Z ^[[36;1muv sync --extra dev^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:24.4372050Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:24.4372312Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:24.4384477Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:24.4384880Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:24.4385220Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:24.4385518Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:24.4385811Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:24.4386100Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:24.4386392Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:24.4386636Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:24.4540515Z Using CPython 3.14.7 interpreter at: /opt/hostedtoolcache/Python/3.14.7/x64/bin/python3
+test	UNKNOWN STEP	2026-09-27T19:21:24.4540967Z Creating virtual environment at: .venv
+test	UNKNOWN STEP	2026-09-27T19:21:24.4575278Z Resolved 142 packages in 0.67ms
+test	UNKNOWN STEP	2026-09-27T19:21:24.4643651Z    Building axiom-oracles @ file:///home/runner/work/axiom-oracles/axiom-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:24.5495820Z Downloading cryptography (4.5MiB)
+test	UNKNOWN STEP	2026-09-27T19:21:24.5637510Z Downloading ruff (10.8MiB)
+test	UNKNOWN STEP	2026-09-27T19:21:24.5641705Z Downloading pygments (1.2MiB)
+test	UNKNOWN STEP	2026-09-27T19:21:24.5643145Z Downloading numpy (15.9MiB)
+test	UNKNOWN STEP	2026-09-27T19:21:24.5645804Z Downloading hypothesis (1.1MiB)
+test	UNKNOWN STEP	2026-09-27T19:21:24.5646630Z Downloading pandas (10.4MiB)
+test	UNKNOWN STEP	2026-09-27T19:21:24.8994641Z  Downloaded pygments
+test	UNKNOWN STEP	2026-09-27T19:21:24.8994916Z  Downloaded hypothesis
+test	UNKNOWN STEP	2026-09-27T19:21:25.0432070Z  Downloaded cryptography
+test	UNKNOWN STEP	2026-09-27T19:21:25.1372621Z  Downloaded ruff
+test	UNKNOWN STEP	2026-09-27T19:21:25.1743247Z  Downloaded pandas
+test	UNKNOWN STEP	2026-09-27T19:21:25.1743663Z  Downloaded numpy
+test	UNKNOWN STEP	2026-09-27T19:21:25.7182424Z       Built axiom-oracles @ file:///home/runner/work/axiom-oracles/axiom-oracles
+test	UNKNOWN STEP	2026-09-27T19:21:25.7193020Z Prepared 23 packages in 1.26s
+test	UNKNOWN STEP	2026-09-27T19:21:25.7435030Z Installed 23 packages in 24ms
+test	UNKNOWN STEP	2026-09-27T19:21:25.7435588Z  + axiom-oracles==0.2.1 (from file:///home/runner/work/axiom-oracles/axiom-oracles)
+test	UNKNOWN STEP	2026-09-27T19:21:25.7436116Z  + certifi==2026.4.22
+test	UNKNOWN STEP	2026-09-27T19:21:25.7436384Z  + cffi==2.1.0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7436666Z  + charset-normalizer==3.4.7
+test	UNKNOWN STEP	2026-09-27T19:21:25.7436964Z  + click==8.3.3
+test	UNKNOWN STEP	2026-09-27T19:21:25.7437218Z  + cryptography==49.0.0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7437531Z  + hypothesis==6.168.1
+test	UNKNOWN STEP	2026-09-27T19:21:25.7437747Z  + idna==3.13
+test	UNKNOWN STEP	2026-09-27T19:21:25.7438029Z  + iniconfig==2.3.0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7438362Z  + numpy==2.4.4
+test	UNKNOWN STEP	2026-09-27T19:21:25.7438815Z  + packaging==26.2
+test	UNKNOWN STEP	2026-09-27T19:21:25.7439128Z  + pandas==3.0.2
+test	UNKNOWN STEP	2026-09-27T19:21:25.7439412Z  + pluggy==1.6.0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7439685Z  + pycparser==3.0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7440037Z  + pygments==2.20.0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7440395Z  + pytest==8.4.2
+test	UNKNOWN STEP	2026-09-27T19:21:25.7440848Z  + python-dateutil==2.9.0.post0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7441169Z  + pyyaml==6.0.3
+test	UNKNOWN STEP	2026-09-27T19:21:25.7441570Z  + requests==2.33.1
+test	UNKNOWN STEP	2026-09-27T19:21:25.7441867Z  + ruff==0.15.12
+test	UNKNOWN STEP	2026-09-27T19:21:25.7442140Z  + six==1.17.0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7442514Z  + sortedcontainers==2.4.0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7442878Z  + urllib3==2.7.0
+test	UNKNOWN STEP	2026-09-27T19:21:25.7561658Z ##[group]Run uv run ruff check .
+test	UNKNOWN STEP	2026-09-27T19:21:25.7561914Z ^[[36;1muv run ruff check .^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:25.7617954Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:25.7618164Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:25.7618384Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:25.7618737Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:25.7619084Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:25.7619378Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:25.7619669Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:25.7619956Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:25.7620240Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:25.7620488Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:25.8711354Z All checks passed!
+test	UNKNOWN STEP	2026-09-27T19:21:25.8764668Z ##[group]Run uv run scripts/run_comparison.py --list
+test	UNKNOWN STEP	2026-09-27T19:21:25.8764999Z ^[[36;1muv run scripts/run_comparison.py --list^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:25.8820285Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:25.8820494Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:25.8820709Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:25.8821053Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:25.8821383Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:25.8821672Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:25.8821953Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:25.8822240Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:25.8822540Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:25.8822772Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:26.2991745Z al-snap-ecps              Alabama SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.2992375Z al-tanf-ecps              Alabama TANF -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.2993224Z az-income-tax-liability   Arizona income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.2993963Z az-snap-ecps              Arizona SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.2994517Z az-snap-qc                Arizona SNAP — Axiom vs USDA SNAP QC administrative data
+test	UNKNOWN STEP	2026-09-27T19:21:26.2995020Z az-tanf-ecps              Arizona Cash Assistance -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.2995815Z be-article-51-forfait     Belgium Article 51 employee professional-expense forfait (tintace) — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.2996729Z be-capital-income-tax     Belgium separately-taxed capital-income tax (tinkt) — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.2997625Z be-elderly-income-support  Belgium income guarantee for elderly people (GRAPA/IGO) — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.2998546Z be-local-municipal-pit    Belgium local/municipal PIT additional tax (tinmu) — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.2999471Z be-marital-quotient       Belgium single-earner-couple marital-quotient PIT (tintb) — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3000502Z be-pensioner-contributions  Belgium pensioner health/disability + solidarity contribution — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3001319Z be-pensioner-pit          Belgium pensioner PIT — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3002044Z be-regional-pit-surcharge  Belgium regional PIT additional tax (tinrg) — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3002826Z be-replacement-income-pit  Belgium replacement-income PIT — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3003677Z be-self-employment-pit    Belgium self-employment PIT — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3004350Z be-study-allowance        Belgium study allowances (bed_s) — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3004873Z be-work-bonus-credit      Belgium Article 289ter/1 low-wage work-bonus credit (tintcly) — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3005406Z ca-federal-schedule-tax-spsm  Canada federal schedule tax — Axiom vs SPSD/M
+test	UNKNOWN STEP	2026-09-27T19:21:26.3005913Z ca-income-tax-liability   California income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3006329Z ca-snap-ecps              California SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3006764Z ca-snap-qc                California CalFresh — Axiom vs USDA SNAP QC administrative data
+test	UNKNOWN STEP	2026-09-27T19:21:26.3007153Z ca-tanf-ecps              California TANF -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3007613Z co-income-tax-liability   Colorado section 39-22-104 base tax — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3008054Z co-snap-ecps              Colorado SNAP — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3008443Z co-snap-qc                Colorado SNAP — Axiom vs USDA SNAP QC administrative data
+test	UNKNOWN STEP	2026-09-27T19:21:26.3008877Z co-state-income-tax-ecps  Colorado state income tax — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3009265Z co-state-income-tax-taxsim  Colorado income tax -- Axiom vs TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3009969Z co-tanf-ecps              Colorado TANF -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3010345Z co-tax-intersection-taxsim  Shared tax concepts — Axiom vs TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3010840Z dc-income-tax-liability   District of Columbia income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3011376Z de-kindergeld-eligibility  Germany Kindergeld child eligibility — EUROMOD vs GETTSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3011750Z de-tanf-ecps              Delaware TANF -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3012137Z de-worker-dual-oracle-axiom-euromod  Germany workers — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3012556Z de-worker-dual-oracle-axiom-gettsim  Germany workers — Axiom vs GETTSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3012938Z de-worker-dual-oracle     Germany workers — EUROMOD vs GETTSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3013419Z dk-child-youth-benefit-2023-euromod  Denmark 2023 Child and Youth Benefit Supplement — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3014268Z dk-child-youth-benefit-couple-euromod  Denmark Couple Child and Youth Benefit — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3014795Z dk-child-youth-benefit-euromod  Denmark Child and Youth Benefit — Axiom vs EUROMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3015207Z fiit-ecps                 Federal income tax — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3015579Z fiit-taxsim-ecps          Federal income tax — Axiom vs TAXSIM (national)
+test	UNKNOWN STEP	2026-09-27T19:21:26.3015932Z fl-snap-ecps              Florida SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3016447Z ga-income-tax-liability   Georgia section 48-7-20 tax before nonrefundable credits — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3016893Z ga-snap-ecps              Georgia SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3017262Z ga-snap-qc                Georgia SNAP — Axiom vs USDA SNAP QC administrative data
+test	UNKNOWN STEP	2026-09-27T19:21:26.3017584Z ga-tanf-ecps              Georgia TANF -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3017995Z hi-income-tax-liability   Hawaii income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3018505Z ia-income-tax-liability   Iowa income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3018982Z id-income-tax-liability   Idaho income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3019476Z il-income-tax-liability   Illinois income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3019969Z in-income-tax-liability   Indiana income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3020454Z ks-income-tax-liability   Kansas income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3020855Z ks-tanf-ecps              Kansas TANF maximum benefit -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3021356Z ky-income-tax-liability   Kentucky KRS 141.020 schedule before credits — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3021904Z la-income-tax-liability   Louisiana income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3022444Z ma-income-tax-liability   Massachusetts income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3022891Z ma-snap-ecps              Massachusetts SNAP — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3023322Z md-income-tax-liability   Maryland income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3023864Z md-snap-qc                Maryland SNAP — Axiom vs USDA SNAP QC administrative data
+test	UNKNOWN STEP	2026-09-27T19:21:26.3024309Z me-income-tax-liability   Maine income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3024765Z medicaid-magi-co-ecps     Medicaid eligibility groups (CO) -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3025244Z mi-income-tax-liability   Michigan income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3025747Z mn-income-tax-liability   Minnesota income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3026133Z mn-tanf-ecps              Minnesota TANF -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3026703Z mo-income-tax-liability   Missouri income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3027275Z ms-income-tax-liability   Mississippi section 27-7-5 Person schedule tax — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3027815Z mt-income-tax-liability   Montana income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3028331Z nc-income-tax-liability   North Carolina income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3028741Z nc-snap-ecps              North Carolina SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3029192Z nd-income-tax-liability   North Dakota income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3029700Z ne-income-tax-liability   Nebraska income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3030219Z nj-income-tax-liability   New Jersey gross income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3030748Z nm-income-tax-liability   New Mexico income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3031344Z ny-income-tax-liability   New York main income tax — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3031716Z ny-snap-ecps              New York SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3032099Z ny-snap-qc                New York SNAP — Axiom vs USDA SNAP QC administrative data
+test	UNKNOWN STEP	2026-09-27T19:21:26.3032432Z ny-tanf-ecps              New York TANF -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3032837Z oh-income-tax-liability   Ohio income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3033322Z ok-income-tax-liability   Oklahoma income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3033926Z or-income-tax-liability   Oregon income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3034306Z or-snap-ecps              Oregon SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3034743Z pa-income-tax-liability   Pennsylvania income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3035136Z parameter-oracles         (22 parameter suites)
+test	UNKNOWN STEP	2026-09-27T19:21:26.3035548Z ri-income-tax-liability   Rhode Island income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3036074Z sc-income-tax-liability   South Carolina income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3036509Z sc-snap-ecps              South Carolina SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3036810Z ssi-ecps                  SSI -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3037086Z state-income-tax-populace  (non-registry config)
+test	UNKNOWN STEP	2026-09-27T19:21:26.3037457Z taxcalc-fiit-ecps         Federal income tax — Tax-Calculator vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3037809Z tn-snap-ecps              Tennessee SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3038184Z tx-snap-qc                Texas SNAP — Axiom vs USDA SNAP QC administrative data
+test	UNKNOWN STEP	2026-09-27T19:21:26.3038614Z uk-attendance-allowance-pe  UK Attendance Allowance — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3039086Z uk-benefit-cap-ukmod      UK benefit cap (Universal Credit reduction) — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3039506Z uk-best-start-foods-ukmod  UK Best Start Foods — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3039888Z uk-business-rates         UK Business Rates — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3040277Z uk-capital-gains-tax      UK Capital Gains Tax — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3040651Z uk-child-benefit-ukmod    UK Child Benefit — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3041087Z uk-child-winter-heating-payment-ukmod  UK Child Winter Heating Payment — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3041571Z uk-contribution-based-jsa-ukmod  UK contribution-based JSA — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3042003Z uk-council-tax-reduction  UK Council Tax Reduction — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3042414Z uk-employer-nic-ukmod     UK employer secondary NIC — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3042776Z uk-fuel-duty              UK fuel duty — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3043128Z uk-healthy-start-ukmod    UK Healthy Start — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3043662Z uk-housing-benefit-ukmod  UK Housing Benefit — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3044053Z uk-income-tax-dividend-ukmod  UK dividend income tax — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3044495Z uk-income-tax-mixed-ukmod  UK mixed savings and dividend income tax — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3044929Z uk-income-tax-savings-ukmod  UK savings income tax — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3045328Z uk-income-tax-scottish-ukmod  Scottish income tax — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3045751Z uk-lbtt-ltt               UK devolved property transaction taxes — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3046184Z uk-maternity-allowance-ukmod  UK Maternity Allowance — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3046578Z uk-pension-credit-ukmod   UK Pension Credit — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3046963Z uk-personal-allowance-ukmod  UK personal allowance — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3047553Z uk-scottish-carer-supplement-ukmod  UK Scottish Carer Supplement — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3048026Z uk-scottish-child-payment-ukmod  UK Scottish Child Payment — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3048451Z uk-self-employed-nic-ukmod  UK self-employed NIC — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3048875Z uk-statutory-maternity-pay-ukmod  UK Statutory Maternity Pay — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3049321Z uk-statutory-paternity-pay-ukmod  UK Statutory Paternity Pay — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3049790Z uk-sure-start-maternity-grant-ukmod  UK Sure Start Maternity Grant — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3050228Z uk-tax-benefits-efrs      UK tax and benefits — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3050634Z uk-tax-free-childcare-pe  UK Tax-Free Childcare — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3051014Z uk-tv-licence             UK TV licence — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3051389Z uk-universal-credit-efrs  UK Universal Credit — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3051776Z uk-universal-credit-ukmod  UK Universal Credit — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3052120Z uk-vat                    UK VAT — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3052485Z uk-winter-fuel-payment-pe  UK Winter Fuel Payment — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3052883Z uk-winter-fuel-ukmod      UK Winter Fuel Payment — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3053243Z uk-worker-nic-ukmod       UK worker employee NIC — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3053672Z uk-worker-pit-ukmod       UK worker income tax — Axiom vs UKMOD
+test	UNKNOWN STEP	2026-09-27T19:21:26.3054068Z us-aca-ptc-grid           Federal ACA premium tax credit — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3054538Z us-additional-medicare-grid  Federal Additional Medicare Tax — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3055018Z us-elderly-disabled-grid  Federal elderly or disabled credit — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3055731Z us-itemized-taxable-income-deductions-grid  Federal itemized taxable-income deductions — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3056464Z us-llc-grid               Federal Lifetime Learning Credit — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3056894Z us-niit-grid              Federal net investment income tax — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3057348Z us-qbid-grid              Federal qualified business income deduction — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3057796Z us-salt-deduction-grid    Federal SALT deduction — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3058408Z us-savers-grid            Federal saver’s credit — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3059053Z us-seca-grid              Federal self-employment tax — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3059817Z us-snap-abawd-grid        SNAP ABAWD post-P.L. 119-21 boundaries — Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3060441Z us-tariff-panel           US tariff panel — Axiom vs Yale Budget Lab statutory panel
+test	UNKNOWN STEP	2026-09-27T19:21:26.3061086Z us-tariff-schedule        US tariff full schedule — Axiom bulk path vs Yale statutory panel
+test	UNKNOWN STEP	2026-09-27T19:21:26.3061836Z us-tariff                 US tariff duty — Axiom vs USITC statutory schedule
+test	UNKNOWN STEP	2026-09-27T19:21:26.3062690Z ut-income-tax-liability   Utah resident income tax before credits — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3063249Z ut-snap-ecps              Utah SNAP -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3063988Z va-income-tax-liability   Virginia income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3064693Z vt-income-tax-liability   Vermont income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3065526Z wa-income-tax-liability   Washington capital-gains income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3066239Z wa-tanf-ecps              Washington TANF -- Axiom vs PolicyEngine
+test	UNKNOWN STEP	2026-09-27T19:21:26.3066959Z wi-income-tax-liability   Wisconsin income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3067826Z wv-income-tax-liability   West Virginia income tax liability — Axiom vs PolicyEngine and TAXSIM
+test	UNKNOWN STEP	2026-09-27T19:21:26.3130601Z ##[group]Run uv run scripts/check_rule_verification.py
+test	UNKNOWN STEP	2026-09-27T19:21:26.3130926Z ^[[36;1muv run scripts/check_rule_verification.py^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:26.3186747Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:26.3186958Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:26.3187187Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.3187528Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:26.3187851Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.3188140Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.3188427Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.3188715Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:26.3189003Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:26.3189238Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:26.4465870Z rule_verification OK: 34704 rules, 79.4% grounded, 97.8% manifest-backed, 34/130 executable surfaces (commit c654250f07c3)
+test	UNKNOWN STEP	2026-09-27T19:21:26.4546346Z ##[group]Run uv run scripts/check_state_tax_populace_contract.py
+test	UNKNOWN STEP	2026-09-27T19:21:26.4546728Z ^[[36;1muv run scripts/check_state_tax_populace_contract.py^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:26.4602068Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:26.4602277Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:26.4602499Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.4602845Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:26.4603176Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.4603596Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.4603897Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.4604184Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:26.4604477Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:26.4604711Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:26.7010729Z state-tax-populace contract OK: 43 jurisdictions, 32 ready, 11 blocked, 134 explicit inputs, 0 explicit relations
+test	UNKNOWN STEP	2026-09-27T19:21:26.7177858Z ##[group]Run uv run scripts/apply_dispositions.py --check
+test	UNKNOWN STEP	2026-09-27T19:21:26.7178209Z ^[[36;1muv run scripts/apply_dispositions.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:26.7233736Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:26.7233941Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:26.7234162Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.7234506Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:26.7234831Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.7235129Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.7235417Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:26.7235713Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:26.7236005Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:26.7236262Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:50.2402890Z Validated 102 dispositions files
+test	UNKNOWN STEP	2026-09-27T19:21:50.2405603Z note: dispositions/be-worker-ssc.yaml entry 'dataset-uprating-bridge-artifact-resolved' is expired (source values changed or mismatch cleared)
+test	UNKNOWN STEP	2026-09-27T19:21:50.2406430Z Dispositions are consistent with the committed dashboard data
+test	UNKNOWN STEP	2026-09-27T19:21:50.2579599Z ##[group]Run uv run python scripts/nz_incomeexplorer.py --check
+test	UNKNOWN STEP	2026-09-27T19:21:50.2579975Z ^[[36;1muv run python scripts/nz_incomeexplorer.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:50.2635772Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:50.2635981Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:50.2636212Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:50.2636550Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:50.2636877Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:50.2637169Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:50.2637456Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:50.2637898Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:50.2638192Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:50.2638426Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:51.1718430Z NZ IncomeExplorer unified record and bound case evidence up to date
+test	UNKNOWN STEP	2026-09-27T19:21:51.1869077Z ##[group]Run uv run python scripts/emit_disposition_artifacts.py --check de-worker-dual-oracle
+test	UNKNOWN STEP	2026-09-27T19:21:51.1869612Z ^[[36;1muv run python scripts/emit_disposition_artifacts.py --check de-worker-dual-oracle^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:51.1870065Z ^[[36;1muv run python scripts/emit_case_artifacts.py --check de-worker-dual-oracle^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:51.1925655Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:51.1925872Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:51.1926095Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:51.1926443Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:51.1926781Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:51.1927080Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:51.1927380Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:51.1927677Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:51.1927990Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:51.1928227Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:51.2634969Z disposition-artifacts OK: 1 suites, 3 entries, exact YAML parity
+test	UNKNOWN STEP	2026-09-27T19:21:51.5322986Z case-artifacts OK: 1 suites, 12 mismatch rows, 12 annotated, 0 silent classifications
+test	UNKNOWN STEP	2026-09-27T19:21:51.5464137Z ##[group]Run uv run python scripts/de_axiom_legs.py --check
+test	UNKNOWN STEP	2026-09-27T19:21:51.5464526Z ^[[36;1muv run python scripts/de_axiom_legs.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:51.5519804Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:51.5520014Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:51.5520235Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:51.5520598Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:51.5520927Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:51.5521219Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:51.5521508Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:51.5521802Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:51.5522097Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:51.5522332Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:55.2769637Z Verified: comparisons/de-worker-dual-oracle/axiom-euromod.json
+test	UNKNOWN STEP	2026-09-27T19:21:55.2770511Z Verified: comparisons/de-worker-dual-oracle/axiom-gettsim.json
+test	UNKNOWN STEP	2026-09-27T19:21:55.3055140Z ##[group]Run uv run python scripts/de_unified_comparison.py --check
+test	UNKNOWN STEP	2026-09-27T19:21:55.3055749Z ^[[36;1muv run python scripts/de_unified_comparison.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:55.3132803Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:55.3133123Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:55.3133659Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.3134189Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:55.3134724Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.3135197Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.3135667Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.3136138Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:55.3136615Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:55.3136984Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:55.5077592Z DE unified comparison record up to date
+test	UNKNOWN STEP	2026-09-27T19:21:55.5331522Z ##[group]Run uv run python scripts/de_closure.py --check
+test	UNKNOWN STEP	2026-09-27T19:21:55.5331879Z ^[[36;1muv run python scripts/de_closure.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:55.5387402Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:55.5387612Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:55.5388018Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.5388394Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:55.5388740Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.5389032Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.5389320Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.5389608Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:55.5389925Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:55.5390165Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:55.6127066Z DE closure summary up to date
+test	UNKNOWN STEP	2026-09-27T19:21:55.6230603Z ##[group]Run uv run python scripts/de_executable.py --check
+test	UNKNOWN STEP	2026-09-27T19:21:55.6231153Z ^[[36;1muv run python scripts/de_executable.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:55.6301170Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:55.6301386Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:55.6301620Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.6301991Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:55.6302333Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.6302632Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.6302931Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:55.6303229Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:55.6313815Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:55.6314179Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:56.0080295Z DE Kindergeld executable status up to date
+test	UNKNOWN STEP	2026-09-27T19:21:56.0369267Z ##[group]Run uv run python scripts/de_certificate_census.py --check
+test	UNKNOWN STEP	2026-09-27T19:21:56.0369658Z ^[[36;1muv run python scripts/de_certificate_census.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:56.0425479Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:56.0425685Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:56.0425909Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:56.0426264Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:56.0426593Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:56.0426882Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:56.0427169Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:56.0427463Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:56.0427757Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:56.0427994Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:57.5377750Z DE certificate census up to date
+test	UNKNOWN STEP	2026-09-27T19:21:57.5680607Z ##[group]Run uv run python scripts/generate_chunk_indexes.py --check
+test	UNKNOWN STEP	2026-09-27T19:21:57.5681025Z ^[[36;1muv run python scripts/generate_chunk_indexes.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:57.5742760Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:57.5742985Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:57.5743214Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:57.5743729Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:57.5744056Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:57.5744350Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:57.5744646Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:57.5744951Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:57.5745242Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:57.5745482Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:21:57.7711484Z OK co-snap-ecps: bound/full
+test	UNKNOWN STEP	2026-09-27T19:21:57.7711888Z OK co-snap-qc: bound/cardinality
+test	UNKNOWN STEP	2026-09-27T19:21:57.7712225Z OK nz-treasury-incomeexplorer: bound/full
+test	UNKNOWN STEP	2026-09-27T19:21:57.7838379Z ##[group]Run uv run python scripts/exercise_census.py --check
+test	UNKNOWN STEP	2026-09-27T19:21:57.7838741Z ^[[36;1muv run python scripts/exercise_census.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:21:57.7909469Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:21:57.7910028Z env:
+test	UNKNOWN STEP	2026-09-27T19:21:57.7910363Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:57.7910904Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:21:57.7911438Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:57.7911914Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:57.7912399Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:21:57.7912873Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:21:57.7913331Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:21:57.7913875Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:04.2959590Z exercise census up to date
+test	UNKNOWN STEP	2026-09-27T19:22:04.3298453Z ##[group]Run uv run python scripts/validate_bridge_manifests.py --strict
+test	UNKNOWN STEP	2026-09-27T19:22:04.3298872Z ^[[36;1muv run python scripts/validate_bridge_manifests.py --strict^[[0m
+test	UNKNOWN STEP	2026-09-27T19:22:04.3354102Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:22:04.3354329Z env:
+test	UNKNOWN STEP	2026-09-27T19:22:04.3354551Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:04.3354886Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:22:04.3355221Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:04.3355532Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:04.3355819Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:04.3356104Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:22:04.3356399Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:22:04.3356636Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:06.6235691Z FINDING co-snap-populace.yaml: bridged binding [4] covered_by entry 'rulespec-us us-co/regulations/10-ccr-2506-1/4.407.4.test.yam' is not verifiable from this repository (cross-repo evidence — audit debt)
+test	UNKNOWN STEP	2026-09-27T19:22:06.6236891Z FINDING co-snap-populace.yaml: non-synthetic population family 'populace-us' has no revision + sha256 identity in dashboard/public/data/axiom-policyengine-co-snap-ecps.json; revision must be a non-empty string and sha256 a full lowercase digest
+test	UNKNOWN STEP	2026-09-27T19:22:06.6237831Z FINDING co-snap-populace.yaml: 3 binding(s) audit=partial — audit debt
+test	UNKNOWN STEP	2026-09-27T19:22:06.6238463Z FINDING co-snap-populace.yaml: completeness=unverified — input-catalog verification pending (engine main's metadata.input_catalog)
+test	UNKNOWN STEP	2026-09-27T19:22:06.6238942Z 6 manifest(s): 0 error(s), 4 finding(s)
+test	UNKNOWN STEP	2026-09-27T19:22:06.6239420Z strict enforcement: 5 strict-declared manifest(s), 0 enforced finding(s); 4 audit-debt finding(s) on non-strict manifests (visible, not enforced)
+test	UNKNOWN STEP	2026-09-27T19:22:06.6524505Z ##[group]Run uv run python scripts/nz_executable_reproduction.py --check
+test	UNKNOWN STEP	2026-09-27T19:22:06.6524928Z ^[[36;1muv run python scripts/nz_executable_reproduction.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:22:06.6525245Z ^[[36;1muv run python scripts/nz_closure.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:22:06.6525548Z ^[[36;1muv run python scripts/nz_exercise_denominator.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:22:06.6580829Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:22:06.6581038Z env:
+test	UNKNOWN STEP	2026-09-27T19:22:06.6581258Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:06.6581592Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:22:06.6581915Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:06.6582203Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:06.6582493Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:06.6582779Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:22:06.6583095Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:22:06.6583330Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:07.1226889Z NZ executable receipt OK (hermetic full-response reduction): 19 requests, 22 independently reconstructed cells
+test	UNKNOWN STEP	2026-09-27T19:22:07.4957151Z NZ closure summary up to date
+test	UNKNOWN STEP	2026-09-27T19:22:07.6727308Z NZ exercise denominator OK: 328 slots from the committed artifact (150 supplied, 178 never supplied), 883 committed evaluation traces
+test	UNKNOWN STEP	2026-09-27T19:22:07.6930024Z ##[group]Run actions/cache@v4
+test	UNKNOWN STEP	2026-09-27T19:22:07.6930244Z with:
+test	UNKNOWN STEP	2026-09-27T19:22:07.6930527Z   path: ~/.cargo/registry
+test	UNKNOWN STEP	~/.cargo/git
+test	UNKNOWN STEP	/home/runner/work/_temp/nz-engine-target
+test	UNKNOWN STEP	
+test	UNKNOWN STEP	2026-09-27T19:22:07.6930926Z   key: nz-engine-Linux-d59969b53430ae2fd97eb4349d44ad23ce930d85
+test	UNKNOWN STEP	2026-09-27T19:22:07.6931221Z   enableCrossOsArchive: false
+test	UNKNOWN STEP	2026-09-27T19:22:07.6931430Z   fail-on-cache-miss: false
+test	UNKNOWN STEP	2026-09-27T19:22:07.6931628Z   lookup-only: false
+test	UNKNOWN STEP	2026-09-27T19:22:07.6931802Z   save-always: false
+test	UNKNOWN STEP	2026-09-27T19:22:07.6931963Z env:
+test	UNKNOWN STEP	2026-09-27T19:22:07.6932172Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:07.6932508Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:22:07.6932831Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:07.6933142Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:07.6933609Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:07.6933950Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:22:07.6934247Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:22:07.6934483Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:07.7746724Z (node:2427) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+test	UNKNOWN STEP	2026-09-27T19:22:07.7747388Z (Use `node --trace-deprecation ...` to show where the warning was created)
+test	UNKNOWN STEP	2026-09-27T19:22:08.0136596Z Cache hit for: nz-engine-Linux-d59969b53430ae2fd97eb4349d44ad23ce930d85
+test	UNKNOWN STEP	2026-09-27T19:22:08.0215958Z (node:2427) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+test	UNKNOWN STEP	2026-09-27T19:22:09.1487215Z Received 38092671 of 38092671 (100.0%), 39.9 MBs/sec
+test	UNKNOWN STEP	2026-09-27T19:22:09.1487707Z Cache Size: ~36 MB (38092671 B)
+test	UNKNOWN STEP	2026-09-27T19:22:09.1531217Z [command]/usr/bin/tar -xf /home/runner/work/_temp/7ec84aef-6fa6-41cc-b832-63aeaff64f3a/cache.tzst -P -C /home/runner/work/axiom-oracles/axiom-oracles --use-compress-program unzstd
+test	UNKNOWN STEP	2026-09-27T19:22:09.4069878Z Cache restored successfully
+test	UNKNOWN STEP	2026-09-27T19:22:09.4145697Z Cache restored from key: nz-engine-Linux-d59969b53430ae2fd97eb4349d44ad23ce930d85
+test	UNKNOWN STEP	2026-09-27T19:22:09.4275355Z ##[group]Run actions/checkout@v4
+test	UNKNOWN STEP	2026-09-27T19:22:09.4275570Z with:
+test	UNKNOWN STEP	2026-09-27T19:22:09.4275782Z   repository: TheAxiomFoundation/axiom-rules-engine
+test	UNKNOWN STEP	2026-09-27T19:22:09.4276057Z   ref: d59969b53430ae2fd97eb4349d44ad23ce930d85
+test	UNKNOWN STEP	2026-09-27T19:22:09.4276299Z   path: .ci/axiom-rules-engine
+test	UNKNOWN STEP	2026-09-27T19:22:09.4278642Z   token: ***
+test	UNKNOWN STEP	2026-09-27T19:22:09.4278843Z   ssh-strict: true
+test	UNKNOWN STEP	2026-09-27T19:22:09.4279030Z   ssh-user: git
+test	UNKNOWN STEP	2026-09-27T19:22:09.4279215Z   persist-credentials: true
+test	UNKNOWN STEP	2026-09-27T19:22:09.4279420Z   clean: true
+test	UNKNOWN STEP	2026-09-27T19:22:09.4279621Z   sparse-checkout-cone-mode: true
+test	UNKNOWN STEP	2026-09-27T19:22:09.4279837Z   fetch-depth: 1
+test	UNKNOWN STEP	2026-09-27T19:22:09.4280019Z   fetch-tags: false
+test	UNKNOWN STEP	2026-09-27T19:22:09.4280198Z   show-progress: true
+test	UNKNOWN STEP	2026-09-27T19:22:09.4280386Z   lfs: false
+test	UNKNOWN STEP	2026-09-27T19:22:09.4280549Z   submodules: false
+test	UNKNOWN STEP	2026-09-27T19:22:09.4280725Z   set-safe-directory: true
+test	UNKNOWN STEP	2026-09-27T19:22:09.4280945Z   allow-unsafe-pr-checkout: false
+test	UNKNOWN STEP	2026-09-27T19:22:09.4281152Z env:
+test	UNKNOWN STEP	2026-09-27T19:22:09.4281392Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:09.4281741Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:22:09.4282076Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:09.4282374Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:09.4282669Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:09.4282968Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:22:09.4283265Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:22:09.4283836Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:09.4948331Z Syncing repository: TheAxiomFoundation/axiom-rules-engine
+test	UNKNOWN STEP	2026-09-27T19:22:09.4949158Z ##[group]Getting Git version info
+test	UNKNOWN STEP	2026-09-27T19:22:09.4949843Z Working directory is '/home/runner/work/axiom-oracles/axiom-oracles/.ci/axiom-rules-engine'
+test	UNKNOWN STEP	2026-09-27T19:22:09.4977160Z [command]/usr/bin/git version
+test	UNKNOWN STEP	2026-09-27T19:22:09.5010783Z git version 2.55.0
+test	UNKNOWN STEP	2026-09-27T19:22:09.5025753Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:09.5036151Z Temporarily overriding HOME='/home/runner/work/_temp/348d97d6-c563-4193-8ae1-e496217c691c' before making global git config changes
+test	UNKNOWN STEP	2026-09-27T19:22:09.5037179Z Adding repository directory to the temporary git global config as a safe directory
+test	UNKNOWN STEP	2026-09-27T19:22:09.5040399Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/axiom-oracles/axiom-oracles/.ci/axiom-rules-engine
+test	UNKNOWN STEP	2026-09-27T19:22:09.5068468Z ##[group]Initializing the repository
+test	UNKNOWN STEP	2026-09-27T19:22:09.5071684Z [command]/usr/bin/git init /home/runner/work/axiom-oracles/axiom-oracles/.ci/axiom-rules-engine
+test	UNKNOWN STEP	2026-09-27T19:22:09.5108707Z hint: Using 'master' as the name for the initial branch. This default branch name
+test	UNKNOWN STEP	2026-09-27T19:22:09.5109563Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+test	UNKNOWN STEP	2026-09-27T19:22:09.5111223Z hint: to use in all of your new repositories, which will suppress this warning,
+test	UNKNOWN STEP	2026-09-27T19:22:09.5111930Z hint: call:
+test	UNKNOWN STEP	2026-09-27T19:22:09.5112336Z hint:
+test	UNKNOWN STEP	2026-09-27T19:22:09.5112800Z hint: 	git config --global init.defaultBranch <name>
+test	UNKNOWN STEP	2026-09-27T19:22:09.5113329Z hint:
+test	UNKNOWN STEP	2026-09-27T19:22:09.5114090Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+test	UNKNOWN STEP	2026-09-27T19:22:09.5114868Z hint: 'development'. The just-created branch can be renamed via this command:
+test	UNKNOWN STEP	2026-09-27T19:22:09.5115493Z hint:
+test	UNKNOWN STEP	2026-09-27T19:22:09.5115906Z hint: 	git branch -m <name>
+test	UNKNOWN STEP	2026-09-27T19:22:09.5116397Z hint:
+test	UNKNOWN STEP	2026-09-27T19:22:09.5117039Z hint: Disable this message with "git config set advice.defaultBranchName false"
+test	UNKNOWN STEP	2026-09-27T19:22:09.5118706Z Initialized empty Git repository in /home/runner/work/axiom-oracles/axiom-oracles/.ci/axiom-rules-engine/.git/
+test	UNKNOWN STEP	2026-09-27T19:22:09.5120760Z [command]/usr/bin/git remote add origin https://github.com/TheAxiomFoundation/axiom-rules-engine
+test	UNKNOWN STEP	2026-09-27T19:22:09.5147854Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:09.5148346Z ##[group]Disabling automatic garbage collection
+test	UNKNOWN STEP	2026-09-27T19:22:09.5152118Z [command]/usr/bin/git config --local gc.auto 0
+test	UNKNOWN STEP	2026-09-27T19:22:09.5177630Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:09.5178154Z ##[group]Setting up auth
+test	UNKNOWN STEP	2026-09-27T19:22:09.5184276Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	UNKNOWN STEP	2026-09-27T19:22:09.5211396Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	UNKNOWN STEP	2026-09-27T19:22:09.5432784Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	UNKNOWN STEP	2026-09-27T19:22:09.5463070Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	UNKNOWN STEP	2026-09-27T19:22:09.5668498Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+test	UNKNOWN STEP	2026-09-27T19:22:09.5704967Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+test	UNKNOWN STEP	2026-09-27T19:22:09.5904766Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+test	UNKNOWN STEP	2026-09-27T19:22:09.5939081Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:09.5939596Z ##[group]Fetching the repository
+test	UNKNOWN STEP	2026-09-27T19:22:09.5981042Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin d59969b53430ae2fd97eb4349d44ad23ce930d85
+test	UNKNOWN STEP	2026-09-27T19:22:10.3380527Z From https://github.com/TheAxiomFoundation/axiom-rules-engine
+test	UNKNOWN STEP	2026-09-27T19:22:10.3381405Z  * branch            d59969b53430ae2fd97eb4349d44ad23ce930d85 -> FETCH_HEAD
+test	UNKNOWN STEP	2026-09-27T19:22:10.3384030Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:10.3384432Z ##[group]Determining the checkout info
+test	UNKNOWN STEP	2026-09-27T19:22:10.3385836Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:10.3390478Z [command]/usr/bin/git sparse-checkout disable
+test	UNKNOWN STEP	2026-09-27T19:22:10.3427834Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+test	UNKNOWN STEP	2026-09-27T19:22:10.3454951Z ##[group]Checking out the ref
+test	UNKNOWN STEP	2026-09-27T19:22:10.3458085Z [command]/usr/bin/git checkout --progress --force d59969b53430ae2fd97eb4349d44ad23ce930d85
+test	UNKNOWN STEP	2026-09-27T19:22:10.3580679Z Note: switching to 'd59969b53430ae2fd97eb4349d44ad23ce930d85'.
+test	UNKNOWN STEP	2026-09-27T19:22:10.3581732Z 
+test	UNKNOWN STEP	2026-09-27T19:22:10.3581918Z You are in 'detached HEAD' state. You can look around, make experimental
+test	UNKNOWN STEP	2026-09-27T19:22:10.3582389Z changes and commit them, and you can discard any commits you make in this
+test	UNKNOWN STEP	2026-09-27T19:22:10.3582812Z state without impacting any branches by switching back to a branch.
+test	UNKNOWN STEP	2026-09-27T19:22:10.3583082Z 
+test	UNKNOWN STEP	2026-09-27T19:22:10.3583565Z If you want to create a new branch to retain commits you create, you may
+test	UNKNOWN STEP	2026-09-27T19:22:10.3584198Z do so (now or later) by using -c with the switch command. Example:
+test	UNKNOWN STEP	2026-09-27T19:22:10.3584494Z 
+test	UNKNOWN STEP	2026-09-27T19:22:10.3584589Z   git switch -c <new-branch-name>
+test	UNKNOWN STEP	2026-09-27T19:22:10.3584790Z 
+test	UNKNOWN STEP	2026-09-27T19:22:10.3584921Z Or undo this operation with:
+test	UNKNOWN STEP	2026-09-27T19:22:10.3585137Z 
+test	UNKNOWN STEP	2026-09-27T19:22:10.3585250Z   git switch -
+test	UNKNOWN STEP	2026-09-27T19:22:10.3585410Z 
+test	UNKNOWN STEP	2026-09-27T19:22:10.3585680Z Turn off this advice by setting config variable advice.detachedHead to false
+test	UNKNOWN STEP	2026-09-27T19:22:10.3586060Z 
+test	UNKNOWN STEP	2026-09-27T19:22:10.3586418Z HEAD is now at d59969b Release infrastructure for v0.1.0 (cargo-dist, checksums, attestations) (#106)
+test	UNKNOWN STEP	2026-09-27T19:22:10.3587720Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:10.3621389Z [command]/usr/bin/git log -1 --format=%H
+test	UNKNOWN STEP	2026-09-27T19:22:10.3643867Z d59969b53430ae2fd97eb4349d44ad23ce930d85
+test	UNKNOWN STEP	2026-09-27T19:22:10.3801582Z ##[group]Run actions/checkout@v4
+test	UNKNOWN STEP	2026-09-27T19:22:10.3801931Z with:
+test	UNKNOWN STEP	2026-09-27T19:22:10.3802225Z   repository: TheAxiomFoundation/rulespec-nz
+test	UNKNOWN STEP	2026-09-27T19:22:10.3802632Z   ref: 89a7d25dc03a4d045348620283332de10b1047da
+test	UNKNOWN STEP	2026-09-27T19:22:10.3803004Z   path: .ci/rulespec-nz
+test	UNKNOWN STEP	2026-09-27T19:22:10.3806980Z   token: ***
+test	UNKNOWN STEP	2026-09-27T19:22:10.3807274Z   ssh-strict: true
+test	UNKNOWN STEP	2026-09-27T19:22:10.3807536Z   ssh-user: git
+test	UNKNOWN STEP	2026-09-27T19:22:10.3807806Z   persist-credentials: true
+test	UNKNOWN STEP	2026-09-27T19:22:10.3808108Z   clean: true
+test	UNKNOWN STEP	2026-09-27T19:22:10.3808379Z   sparse-checkout-cone-mode: true
+test	UNKNOWN STEP	2026-09-27T19:22:10.3808709Z   fetch-depth: 1
+test	UNKNOWN STEP	2026-09-27T19:22:10.3808968Z   fetch-tags: false
+test	UNKNOWN STEP	2026-09-27T19:22:10.3809237Z   show-progress: true
+test	UNKNOWN STEP	2026-09-27T19:22:10.3809509Z   lfs: false
+test	UNKNOWN STEP	2026-09-27T19:22:10.3809752Z   submodules: false
+test	UNKNOWN STEP	2026-09-27T19:22:10.3810023Z   set-safe-directory: true
+test	UNKNOWN STEP	2026-09-27T19:22:10.3810356Z   allow-unsafe-pr-checkout: false
+test	UNKNOWN STEP	2026-09-27T19:22:10.3810672Z env:
+test	UNKNOWN STEP	2026-09-27T19:22:10.3811033Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:10.3811581Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:22:10.3812120Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:10.3812612Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:10.3813118Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:10.3813796Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:22:10.3814278Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:22:10.3814665Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:10.4495510Z Syncing repository: TheAxiomFoundation/rulespec-nz
+test	UNKNOWN STEP	2026-09-27T19:22:10.4498732Z ##[group]Getting Git version info
+test	UNKNOWN STEP	2026-09-27T19:22:10.4499327Z Working directory is '/home/runner/work/axiom-oracles/axiom-oracles/.ci/rulespec-nz'
+test	UNKNOWN STEP	2026-09-27T19:22:10.4522556Z [command]/usr/bin/git version
+test	UNKNOWN STEP	2026-09-27T19:22:10.4556595Z git version 2.55.0
+test	UNKNOWN STEP	2026-09-27T19:22:10.4571179Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:10.4581569Z Temporarily overriding HOME='/home/runner/work/_temp/6b2bc65f-cc20-4e1b-b068-3b0d9e3c0f41' before making global git config changes
+test	UNKNOWN STEP	2026-09-27T19:22:10.4582600Z Adding repository directory to the temporary git global config as a safe directory
+test	UNKNOWN STEP	2026-09-27T19:22:10.4586142Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/axiom-oracles/axiom-oracles/.ci/rulespec-nz
+test	UNKNOWN STEP	2026-09-27T19:22:10.4611816Z ##[group]Initializing the repository
+test	UNKNOWN STEP	2026-09-27T19:22:10.4615206Z [command]/usr/bin/git init /home/runner/work/axiom-oracles/axiom-oracles/.ci/rulespec-nz
+test	UNKNOWN STEP	2026-09-27T19:22:10.4651050Z hint: Using 'master' as the name for the initial branch. This default branch name
+test	UNKNOWN STEP	2026-09-27T19:22:10.4651832Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+test	UNKNOWN STEP	2026-09-27T19:22:10.4653277Z hint: to use in all of your new repositories, which will suppress this warning,
+test	UNKNOWN STEP	2026-09-27T19:22:10.4654244Z hint: call:
+test	UNKNOWN STEP	2026-09-27T19:22:10.4654621Z hint:
+test	UNKNOWN STEP	2026-09-27T19:22:10.4655087Z hint: 	git config --global init.defaultBranch <name>
+test	UNKNOWN STEP	2026-09-27T19:22:10.4655605Z hint:
+test	UNKNOWN STEP	2026-09-27T19:22:10.4656570Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+test	UNKNOWN STEP	2026-09-27T19:22:10.4657378Z hint: 'development'. The just-created branch can be renamed via this command:
+test	UNKNOWN STEP	2026-09-27T19:22:10.4658082Z hint:
+test	UNKNOWN STEP	2026-09-27T19:22:10.4658530Z hint: 	git branch -m <name>
+test	UNKNOWN STEP	2026-09-27T19:22:10.4659023Z hint:
+test	UNKNOWN STEP	2026-09-27T19:22:10.4659560Z hint: Disable this message with "git config set advice.defaultBranchName false"
+test	UNKNOWN STEP	2026-09-27T19:22:10.4661109Z Initialized empty Git repository in /home/runner/work/axiom-oracles/axiom-oracles/.ci/rulespec-nz/.git/
+test	UNKNOWN STEP	2026-09-27T19:22:10.4662931Z [command]/usr/bin/git remote add origin https://github.com/TheAxiomFoundation/rulespec-nz
+test	UNKNOWN STEP	2026-09-27T19:22:10.4696761Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:10.4697250Z ##[group]Disabling automatic garbage collection
+test	UNKNOWN STEP	2026-09-27T19:22:10.4699696Z [command]/usr/bin/git config --local gc.auto 0
+test	UNKNOWN STEP	2026-09-27T19:22:10.4726845Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:10.4727438Z ##[group]Setting up auth
+test	UNKNOWN STEP	2026-09-27T19:22:10.4733182Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	UNKNOWN STEP	2026-09-27T19:22:10.4762088Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	UNKNOWN STEP	2026-09-27T19:22:10.4967828Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	UNKNOWN STEP	2026-09-27T19:22:10.5000705Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	UNKNOWN STEP	2026-09-27T19:22:10.5215232Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+test	UNKNOWN STEP	2026-09-27T19:22:10.5251843Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+test	UNKNOWN STEP	2026-09-27T19:22:10.5454961Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+test	UNKNOWN STEP	2026-09-27T19:22:10.5490640Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:10.5491128Z ##[group]Fetching the repository
+test	UNKNOWN STEP	2026-09-27T19:22:10.5504575Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 89a7d25dc03a4d045348620283332de10b1047da
+test	UNKNOWN STEP	2026-09-27T19:22:11.3469992Z From https://github.com/TheAxiomFoundation/rulespec-nz
+test	UNKNOWN STEP	2026-09-27T19:22:11.3470412Z  * branch            89a7d25dc03a4d045348620283332de10b1047da -> FETCH_HEAD
+test	UNKNOWN STEP	2026-09-27T19:22:11.3474326Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:11.3474782Z ##[group]Determining the checkout info
+test	UNKNOWN STEP	2026-09-27T19:22:11.3476371Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:11.3480618Z [command]/usr/bin/git sparse-checkout disable
+test	UNKNOWN STEP	2026-09-27T19:22:11.3517992Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+test	UNKNOWN STEP	2026-09-27T19:22:11.3544579Z ##[group]Checking out the ref
+test	UNKNOWN STEP	2026-09-27T19:22:11.3547334Z [command]/usr/bin/git checkout --progress --force 89a7d25dc03a4d045348620283332de10b1047da
+test	UNKNOWN STEP	2026-09-27T19:22:11.3790499Z Note: switching to '89a7d25dc03a4d045348620283332de10b1047da'.
+test	UNKNOWN STEP	2026-09-27T19:22:11.3790854Z 
+test	UNKNOWN STEP	2026-09-27T19:22:11.3791114Z You are in 'detached HEAD' state. You can look around, make experimental
+test	UNKNOWN STEP	2026-09-27T19:22:11.3791696Z changes and commit them, and you can discard any commits you make in this
+test	UNKNOWN STEP	2026-09-27T19:22:11.3792300Z state without impacting any branches by switching back to a branch.
+test	UNKNOWN STEP	2026-09-27T19:22:11.3792641Z 
+test	UNKNOWN STEP	2026-09-27T19:22:11.3792882Z If you want to create a new branch to retain commits you create, you may
+test	UNKNOWN STEP	2026-09-27T19:22:11.3793584Z do so (now or later) by using -c with the switch command. Example:
+test	UNKNOWN STEP	2026-09-27T19:22:11.3793903Z 
+test	UNKNOWN STEP	2026-09-27T19:22:11.3794045Z   git switch -c <new-branch-name>
+test	UNKNOWN STEP	2026-09-27T19:22:11.3794269Z 
+test	UNKNOWN STEP	2026-09-27T19:22:11.3794395Z Or undo this operation with:
+test	UNKNOWN STEP	2026-09-27T19:22:11.3794600Z 
+test	UNKNOWN STEP	2026-09-27T19:22:11.3794713Z   git switch -
+test	UNKNOWN STEP	2026-09-27T19:22:11.3794880Z 
+test	UNKNOWN STEP	2026-09-27T19:22:11.3795126Z Turn off this advice by setting config variable advice.detachedHead to false
+test	UNKNOWN STEP	2026-09-27T19:22:11.3795369Z 
+test	UNKNOWN STEP	2026-09-27T19:22:11.3795601Z HEAD is now at 89a7d25 Merge pull request #94 from TheAxiomFoundation/encode/nz-familyboost-tax-credit
+test	UNKNOWN STEP	2026-09-27T19:22:11.3798161Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:11.3831232Z [command]/usr/bin/git log -1 --format=%H
+test	UNKNOWN STEP	2026-09-27T19:22:11.3853663Z 89a7d25dc03a4d045348620283332de10b1047da
+test	UNKNOWN STEP	2026-09-27T19:22:11.3969901Z ##[group]Run set -euo pipefail
+test	UNKNOWN STEP	2026-09-27T19:22:11.3970157Z ^[[36;1mset -euo pipefail^[[0m
+test	UNKNOWN STEP	2026-09-27T19:22:11.3970623Z ^[[36;1mCARGO_TARGET_DIR="$NZ_ENGINE_TARGET" cargo build --locked --release --manifest-path "$NZ_ENGINE_ROOT/Cargo.toml" --bin axiom-rules-engine^[[0m
+test	UNKNOWN STEP	2026-09-27T19:22:11.3971575Z ^[[36;1muv run python scripts/nz_executable_reproduction.py --check --live --source-built-engine --engine-root "$NZ_ENGINE_ROOT" --engine-binary "$NZ_ENGINE_TARGET/release/axiom-rules-engine" --rulespec-root "$NZ_RULESPEC_ROOT"^[[0m
+test	UNKNOWN STEP	2026-09-27T19:22:11.4027920Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:22:11.4028132Z env:
+test	UNKNOWN STEP	2026-09-27T19:22:11.4028359Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:11.4028709Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:22:11.4029041Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:11.4029343Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:11.4029662Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:11.4029958Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:22:11.4030253Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:22:11.4030601Z   NZ_ENGINE_ROOT: /home/runner/work/axiom-oracles/axiom-oracles/.ci/axiom-rules-engine
+test	UNKNOWN STEP	2026-09-27T19:22:11.4030988Z   NZ_ENGINE_TARGET: /home/runner/work/_temp/nz-engine-target
+test	UNKNOWN STEP	2026-09-27T19:22:11.4031348Z   NZ_RULESPEC_ROOT: /home/runner/work/axiom-oracles/axiom-oracles/.ci/rulespec-nz
+test	UNKNOWN STEP	2026-09-27T19:22:11.4031665Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:22:19.4422528Z    Compiling proc-macro2 v1.0.106
+test	UNKNOWN STEP	2026-09-27T19:22:19.4423335Z    Compiling quote v1.0.45
+test	UNKNOWN STEP	2026-09-27T19:22:19.4423910Z    Compiling unicode-ident v1.0.24
+test	UNKNOWN STEP	2026-09-27T19:22:19.4424243Z    Compiling serde_core v1.0.228
+test	UNKNOWN STEP	2026-09-27T19:22:23.5512256Z    Compiling serde v1.0.228
+test	UNKNOWN STEP	2026-09-27T19:22:26.2484673Z    Compiling autocfg v1.5.0
+test	UNKNOWN STEP	2026-09-27T19:22:26.2731655Z    Compiling zmij v1.0.21
+test	UNKNOWN STEP	2026-09-27T19:22:26.3548806Z    Compiling thiserror v2.0.18
+test	UNKNOWN STEP	2026-09-27T19:22:26.4496656Z    Compiling serde_json v1.0.149
+test	UNKNOWN STEP	2026-09-27T19:22:26.5038324Z    Compiling rust_decimal v1.41.0
+test	UNKNOWN STEP	2026-09-27T19:22:26.6937307Z    Compiling itoa v1.0.18
+test	UNKNOWN STEP	2026-09-27T19:22:26.7994656Z    Compiling num-traits v0.2.19
+test	UNKNOWN STEP	2026-09-27T19:22:27.1690069Z    Compiling syn v2.0.117
+test	UNKNOWN STEP	2026-09-27T19:22:27.7506592Z    Compiling hashbrown v0.17.0
+test	UNKNOWN STEP	2026-09-27T19:22:27.7835578Z    Compiling equivalent v1.0.2
+test	UNKNOWN STEP	2026-09-27T19:22:28.0127421Z    Compiling ryu v1.0.23
+test	UNKNOWN STEP	2026-09-27T19:22:28.2139291Z    Compiling memchr v2.8.0
+test	UNKNOWN STEP	2026-09-27T19:22:28.3707423Z    Compiling indexmap v2.14.0
+test	UNKNOWN STEP	2026-09-27T19:22:28.6004381Z    Compiling unsafe-libyaml v0.2.11
+test	UNKNOWN STEP	2026-09-27T19:22:29.1810581Z    Compiling arrayvec v0.7.6
+test	UNKNOWN STEP	2026-09-27T19:22:29.4249785Z    Compiling serde_derive v1.0.228
+test	UNKNOWN STEP	2026-09-27T19:22:29.8264586Z    Compiling thiserror-impl v2.0.18
+test	UNKNOWN STEP	2026-09-27T19:22:30.7434875Z    Compiling rust_decimal_macros v1.40.0
+test	UNKNOWN STEP	2026-09-27T19:22:31.4309574Z    Compiling chrono v0.4.44
+test	UNKNOWN STEP	2026-09-27T19:22:31.4314002Z    Compiling serde_yaml v0.9.34+deprecated
+test	UNKNOWN STEP	2026-09-27T19:22:32.6575160Z    Compiling axiom-rules-engine v0.1.0 (/home/runner/work/axiom-oracles/axiom-oracles/.ci/axiom-rules-engine)
+test	UNKNOWN STEP	2026-09-27T19:22:51.2358629Z     Finished `release` profile [optimized] target(s) in 36.93s
+test	UNKNOWN STEP	2026-09-27T19:22:52.3626189Z NZ executable receipt OK (source-build live compile+execute): 19 requests, 22 independently reconstructed cells
+test	UNKNOWN STEP	2026-09-27T19:22:52.3787265Z ##[group]Run uv run python scripts/certify.py --check
+test	UNKNOWN STEP	2026-09-27T19:22:52.3787786Z ^[[36;1muv run python scripts/certify.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:22:52.3843621Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:22:52.3843848Z env:
+test	UNKNOWN STEP	2026-09-27T19:22:52.3844083Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:52.3844453Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:22:52.3844799Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:52.3845104Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:52.3845405Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:22:52.3845701Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:22:52.3845996Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:22:52.3846238Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:21.3912943Z certificates up to date
+test	UNKNOWN STEP	2026-09-27T19:23:21.4298369Z ##[group]Run uv run python scripts/us_tariff_capture_integrity.py
+test	UNKNOWN STEP	2026-09-27T19:23:21.4298761Z ^[[36;1muv run python scripts/us_tariff_capture_integrity.py^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:21.4354327Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:21.4354548Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:21.4354779Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:21.4355137Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:21.4355486Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:21.4355787Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:21.4356086Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:21.4356381Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:21.4356687Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:21.4356931Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:21.7641651Z tariff capture integrity: 40 committed capture files match every recorded receipt/manifest digest
+test	UNKNOWN STEP	2026-09-27T19:23:21.7763811Z ##[group]Run uv run scripts/emit_case_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps
+test	UNKNOWN STEP	2026-09-27T19:23:21.7764525Z ^[[36;1muv run scripts/emit_case_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:21.7765155Z ^[[36;1muv run scripts/emit_disposition_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:21.7820566Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:21.7820780Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:21.7821008Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:21.7821362Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:21.7821703Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:21.7821997Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:21.7822296Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:21.7822613Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:21.7822906Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:21.7823317Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:22.2636625Z case-artifacts OK: 5 suites, 597 mismatch rows, 597 annotated, 0 silent classifications
+test	UNKNOWN STEP	2026-09-27T19:23:22.5999616Z disposition-artifacts OK: 5 suites, 215 entries, exact YAML parity
+test	UNKNOWN STEP	2026-09-27T19:23:22.6115010Z ##[group]Run uv run scripts/extract_grids.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:22.6115336Z ^[[36;1muv run scripts/extract_grids.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:22.6170428Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:22.6170645Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:22.6170870Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:22.6171218Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:22.6171555Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:22.6171862Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:22.6172163Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:22.6172493Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:22.6172806Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:22.6173057Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:22.9911205Z Grids up to date.
+test	UNKNOWN STEP	2026-09-27T19:23:23.0183309Z ##[group]Run uv run scripts/generate_boundary_cases.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:23.0183825Z ^[[36;1muv run scripts/generate_boundary_cases.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:23.0239134Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:23.0239353Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:23.0239579Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.0239927Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:23.0240261Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.0240555Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.0240851Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.0241146Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:23.0241454Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:23.0241697Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:23.1071416Z Could not find the axiom-corpus concept registry. Pass --registry-root or set AXIOM_CORPUS_CONCEPTS_ROOT.
+test	UNKNOWN STEP	2026-09-27T19:23:23.1183731Z ##[group]Run uv run scripts/generate_affected_map.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:23.1184097Z ^[[36;1muv run scripts/generate_affected_map.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:23.1239111Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:23.1239330Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:23.1239558Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.1239921Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:23.1240261Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.1240562Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.1240859Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.1241154Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:23.1241471Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:23.1241712Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:23.4699567Z affected_map OK: 187 suites, 190 suite-repo edges
+test	UNKNOWN STEP	2026-09-27T19:23:23.4845580Z ##[group]Run uv run scripts/check_vacuous_gate.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:23.4845915Z ^[[36;1muv run scripts/check_vacuous_gate.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:23.4900969Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:23.4901184Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:23.4901407Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.4901749Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:23.4902086Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.4902386Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.4902687Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:23.4902985Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:23.4903627Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:23.4903885Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:24.3020140Z vacuous-gate OK: 151 configs oracle-backed; 228 suites, 34 executable surfaces, 69 suite(s) awaiting provenance
+test	UNKNOWN STEP	2026-09-27T19:23:24.3180090Z ##[group]Run uv run scripts/generate_dashboard_overview.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:24.3180472Z ^[[36;1muv run scripts/generate_dashboard_overview.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:24.3235850Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:24.3236076Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:24.3236305Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.3236654Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:24.3236992Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.3237290Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.3237595Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.3237914Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:24.3238219Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:24.3238470Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:24.6327924Z overview OK: 229 reports bundled
+test	UNKNOWN STEP	2026-09-27T19:23:24.6414794Z ##[group]Run uv run scripts/generate_conformance_universe.py --all --check
+test	UNKNOWN STEP	2026-09-27T19:23:24.6415214Z ^[[36;1muv run scripts/generate_conformance_universe.py --all --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:24.6470373Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:24.6470592Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:24.6470820Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.6471169Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:24.6471506Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.6471811Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.6472117Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.6472430Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:24.6472725Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:24.6472970Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:24.9373879Z conformance[uk] --check: model checkout absent (looked for $HOME/Downloads/UKMOD_PUBLIC_B2026.03 / UKMOD_MODEL_ROOT/EUROMOD_MODEL_ROOT); committed universe left unverified this run (no-op clean).
+test	UNKNOWN STEP	2026-09-27T19:23:24.9375368Z conformance[be] --check: model checkout absent (looked for $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+ / EUROMOD_MODEL_ROOT); committed universe left unverified this run (no-op clean).
+test	UNKNOWN STEP	2026-09-27T19:23:24.9376417Z conformance[dk] OK: 44 policies (22 in scope, 22 excluded) match EUROMOD_J2.0/DK_2025
+test	UNKNOWN STEP	2026-09-27T19:23:24.9377436Z conformance[uk-pe] --check: model checkout absent (looked for $HOME/PolicyEngine/policyengine-uk / POLICYENGINE_UK_CHECKOUT); committed universe left unverified this run (no-op clean).
+test	UNKNOWN STEP	2026-09-27T19:23:24.9378855Z conformance[us-pe] --check: model checkout absent (looked for $HOME/PolicyEngine/policyengine-us / POLICYENGINE_US_CHECKOUT); committed universe left unverified this run (no-op clean).
+test	UNKNOWN STEP	2026-09-27T19:23:24.9380302Z conformance[us-tariff-yale] --check: model checkout absent (looked for $HOME/TheAxiomFoundation/_tariff-yale / YALE_TARIFF_CHECKOUT); committed universe left unverified this run (no-op clean).
+test	UNKNOWN STEP	2026-09-27T19:23:24.9515385Z ##[group]Run uv run scripts/closure_universe.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:24.9515728Z ^[[36;1muv run scripts/closure_universe.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:24.9570675Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:24.9570892Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:24.9571118Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.9571472Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:24.9571806Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.9572101Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.9572556Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:24.9572848Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:24.9573141Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:24.9573387Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:26.6540152Z closure universes OK: 3 roots, 1156 provisions, 290 pending, closed=false
+test	UNKNOWN STEP	2026-09-27T19:23:26.6690728Z ##[group]Run uv run scripts/generate_conformance_compositions.py --all --check
+test	UNKNOWN STEP	2026-09-27T19:23:26.6691186Z ^[[36;1muv run scripts/generate_conformance_compositions.py --all --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:26.6746930Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:26.6747149Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:26.6747386Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:26.6747730Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:26.6748064Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:26.6748377Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:26.6748664Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:26.6748964Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:26.6749255Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:26.6749499Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:26.9248693Z conformance compositions[be] OK: 23 covered suite(s)
+test	UNKNOWN STEP	2026-09-27T19:23:26.9505163Z ##[group]Run uv run scripts/conformance_scoreboard.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:26.9505541Z ^[[36;1muv run scripts/conformance_scoreboard.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:26.9561206Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:26.9561428Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:26.9561656Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:26.9562010Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:26.9562358Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:26.9562677Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:26.9562979Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:26.9563281Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:26.9563772Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:26.9564026Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:27.6422633Z conformance scoreboard OK: 6 jurisdiction(s), 4 conformant
+test	UNKNOWN STEP	2026-09-27T19:23:27.6590779Z ##[group]Run uv run scripts/conformance_ratchet.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:27.6591136Z ^[[36;1muv run scripts/conformance_ratchet.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:27.6646205Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:27.6646412Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:27.6646636Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:27.6646979Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:27.6647315Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:27.6647635Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:27.6647934Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:27.6648232Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:27.6648536Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:27.6648790Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:28.3452619Z conformance ratchet OK: 6 jurisdiction(s), no invariant regressed
+test	UNKNOWN STEP	2026-09-27T19:23:28.3620332Z ##[group]Run uv run scripts/unexplained_ratchet.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:28.3620672Z ^[[36;1muv run scripts/unexplained_ratchet.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:28.3676144Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:28.3676364Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:28.3676586Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:28.3676935Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:28.3677275Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:28.3677751Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:28.3678061Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:28.3678365Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:28.3678669Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:28.3678917Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:28.8493245Z unexplained ratchet OK: 222 suites gated, 0 unexplained within pinned ceilings
+test	UNKNOWN STEP	2026-09-27T19:23:28.8633693Z ##[group]Run uv run scripts/conformance_burndown.py --check
+test	UNKNOWN STEP	2026-09-27T19:23:28.8634063Z ^[[36;1muv run scripts/conformance_burndown.py --check^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:28.8689462Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:28.8689682Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:28.8689915Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:28.8690267Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:28.8690611Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:28.8690930Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:28.8691230Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:28.8691529Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:28.8691829Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:28.8692083Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:29.5620713Z conformance burn-down OK: 6 series, 395 point(s)
+test	UNKNOWN STEP	2026-09-27T19:23:29.6190159Z ##[group]Run uv run pytest -q
+test	UNKNOWN STEP	2026-09-27T19:23:29.6190401Z ^[[36;1muv run pytest -q^[[0m
+test	UNKNOWN STEP	2026-09-27T19:23:29.6247468Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T19:23:29.6248171Z env:
+test	UNKNOWN STEP	2026-09-27T19:23:29.6248663Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:29.6249020Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T19:23:29.6249378Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:29.6249784Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:29.6250277Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T19:23:29.6250695Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T19:23:29.6251510Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T19:23:29.6251889Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T19:23:41.1132299Z s.......s...s......s...s...s.....s...s.s....s..........s...s...s...s...s [  2%]
+test	UNKNOWN STEP	2026-09-27T19:23:43.0462359Z s..............................s.................................s...s.. [  4%]
+test	UNKNOWN STEP	2026-09-27T19:23:44.0803916Z ..s.........s...s...s....s....ss.....s.....s...s....s...s......s........ [  6%]
+test	UNKNOWN STEP	2026-09-27T19:23:48.3829484Z ........................................................................ [  8%]
+test	UNKNOWN STEP	2026-09-27T19:23:55.9449471Z ........................................................................ [ 10%]
+test	UNKNOWN STEP	2026-09-27T19:23:56.2608039Z ........................................................................ [ 12%]
+test	UNKNOWN STEP	2026-09-27T19:23:56.5148643Z ........................................................................ [ 14%]
+test	UNKNOWN STEP	2026-09-27T19:23:56.7257956Z ........................................................................ [ 16%]
+test	UNKNOWN STEP	2026-09-27T19:23:56.9094405Z ........................................................................ [ 18%]
+test	UNKNOWN STEP	2026-09-27T19:23:57.0545348Z ........................................................................ [ 20%]
+test	UNKNOWN STEP	2026-09-27T19:23:57.1071441Z ........................................................................ [ 22%]
+test	UNKNOWN STEP	2026-09-27T19:23:57.1543774Z ........................................................................ [ 24%]
+test	UNKNOWN STEP	2026-09-27T19:23:58.9751476Z ........................................................................ [ 26%]
+test	UNKNOWN STEP	2026-09-27T19:24:00.2814230Z ....................................................s................... [ 28%]
+test	UNKNOWN STEP	2026-09-27T19:24:05.6817387Z .......s....s........................................................... [ 30%]
+test	UNKNOWN STEP	2026-09-27T19:24:11.3963885Z ........................................................................ [ 32%]
+test	UNKNOWN STEP	2026-09-27T19:24:16.8270344Z ........................................................................ [ 34%]
+test	UNKNOWN STEP	2026-09-27T19:24:18.6311760Z ....................................................s...s........s...... [ 36%]
+test	UNKNOWN STEP	2026-09-27T19:24:22.8757810Z ........................................................................ [ 38%]
+test	UNKNOWN STEP	2026-09-27T19:24:26.6144411Z ........................................................................ [ 40%]
+test	UNKNOWN STEP	2026-09-27T19:24:33.8734440Z ........................................................................ [ 42%]
+test	UNKNOWN STEP	2026-09-27T19:25:06.4041905Z ..........s...s......................................................... [ 44%]
+test	UNKNOWN STEP	2026-09-27T19:26:07.4732032Z ........................................................................ [ 46%]
+test	UNKNOWN STEP	2026-09-27T19:26:16.8649946Z ........................................................................ [ 48%]
+test	UNKNOWN STEP	2026-09-27T19:27:57.8848395Z ........................................................s............... [ 50%]
+test	UNKNOWN STEP	2026-09-27T19:28:25.5613846Z ........................................................................ [ 52%]
+test	UNKNOWN STEP	2026-09-27T19:28:45.2030815Z ........................................................................ [ 54%]
+test	UNKNOWN STEP	2026-09-27T20:33:37.2986597Z ........................................................................ [ 56%]
+test	UNKNOWN STEP	2026-09-27T20:33:38.5628292Z .................................................................ss..... [ 58%]
+test	UNKNOWN STEP	2026-09-27T20:33:49.8803382Z sss.s...........................s....................................... [ 60%]
+test	UNKNOWN STEP	2026-09-27T20:34:46.6509175Z ....s.........................................s......................... [ 62%]
+test	UNKNOWN STEP	2026-09-27T20:35:40.2592541Z ........................................................................ [ 64%]
+test	UNKNOWN STEP	2026-09-27T20:35:44.4419966Z ........................................................................ [ 66%]
+test	UNKNOWN STEP	2026-09-27T20:35:44.7118600Z ......................................................................s. [ 68%]
+test	UNKNOWN STEP	2026-09-27T20:36:02.9957969Z .........................ssssssss.............................sss....... [ 70%]
+test	UNKNOWN STEP	2026-09-27T20:36:03.2704820Z ........................................................................ [ 72%]
+test	UNKNOWN STEP	2026-09-27T20:36:04.3229318Z .......................ssssssssssssssssssssssssss....................... [ 74%]
+test	UNKNOWN STEP	2026-09-27T20:36:09.6832594Z ........................................................................ [ 76%]
+test	UNKNOWN STEP	2026-09-27T20:36:11.9443877Z ............s........................................................... [ 78%]
+test	UNKNOWN STEP	2026-09-27T20:36:24.7122943Z ........................................................................ [ 80%]
+test	UNKNOWN STEP	2026-09-27T20:36:25.5194573Z ........................................................................ [ 82%]
+test	UNKNOWN STEP	2026-09-27T20:36:25.8764229Z ........................................................................ [ 84%]
+test	UNKNOWN STEP	2026-09-27T20:36:25.9281054Z ..............................s......................................... [ 86%]
+test	UNKNOWN STEP	2026-09-27T20:36:31.4635437Z ................s....................................................... [ 88%]
+test	UNKNOWN STEP	2026-09-27T20:36:31.8497719Z ........................................................................ [ 90%]
+test	UNKNOWN STEP	2026-09-27T20:36:42.2878666Z .......................s....ss.......................................... [ 92%]
+test	UNKNOWN STEP	2026-09-27T20:36:48.1190466Z ...............s...s.......................................s.s.......s.. [ 94%]
+test	UNKNOWN STEP	2026-09-27T20:36:55.3649065Z ..s.........s.............................s............................. [ 96%]
+test	UNKNOWN STEP	2026-09-27T20:36:56.3349641Z ..................s..................s.................................. [ 98%]
+test	UNKNOWN STEP	2026-09-27T20:36:58.0846956Z ........................................                                 [100%]
+test	UNKNOWN STEP	2026-09-27T20:36:58.0847480Z 3464 passed, 104 skipped in 4406.76s (1:13:26)
+test	UNKNOWN STEP	2026-09-27T20:36:58.4910236Z ##[group]Run uv build
+test	UNKNOWN STEP	2026-09-27T20:36:58.4910454Z ^[[36;1muv build^[[0m
+test	UNKNOWN STEP	2026-09-27T20:36:58.4965971Z shell: /usr/bin/bash -e {0}
+test	UNKNOWN STEP	2026-09-27T20:36:58.4966190Z env:
+test	UNKNOWN STEP	2026-09-27T20:36:58.4966419Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T20:36:58.4966947Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib/pkgconfig
+test	UNKNOWN STEP	2026-09-27T20:36:58.4967281Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T20:36:58.4967589Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T20:36:58.4967880Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.7/x64
+test	UNKNOWN STEP	2026-09-27T20:36:58.4968180Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.7/x64/lib
+test	UNKNOWN STEP	2026-09-27T20:36:58.4968476Z   UV_CACHE_DIR: /home/runner/work/_temp/setup-uv-cache
+test	UNKNOWN STEP	2026-09-27T20:36:58.4968717Z ##[endgroup]
+test	UNKNOWN STEP	2026-09-27T20:36:58.5088547Z Building source distribution...
+test	UNKNOWN STEP	2026-09-27T20:37:09.3195475Z Building wheel from source distribution...
+test	UNKNOWN STEP	2026-09-27T20:37:09.8225111Z Successfully built dist/axiom_oracles-0.2.1.tar.gz
+test	UNKNOWN STEP	2026-09-27T20:37:09.8225792Z Successfully built dist/axiom_oracles-0.2.1-py3-none-any.whl
+test	UNKNOWN STEP	2026-09-27T20:37:09.8342825Z Post job cleanup.
+test	UNKNOWN STEP	2026-09-27T20:37:09.9074494Z [command]/usr/bin/git version
+test	UNKNOWN STEP	2026-09-27T20:37:09.9094235Z git version 2.55.0
+test	UNKNOWN STEP	2026-09-27T20:37:09.9124276Z Temporarily overriding HOME='/home/runner/work/_temp/b3ef7b84-c984-4c3f-a9db-02217cc68152' before making global git config changes
+test	UNKNOWN STEP	2026-09-27T20:37:09.9125455Z Adding repository directory to the temporary git global config as a safe directory
+test	UNKNOWN STEP	2026-09-27T20:37:09.9128866Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/axiom-oracles/axiom-oracles/.ci/rulespec-nz
+test	UNKNOWN STEP	2026-09-27T20:37:09.9164991Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	UNKNOWN STEP	2026-09-27T20:37:09.9196710Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	UNKNOWN STEP	2026-09-27T20:37:09.9410449Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	UNKNOWN STEP	2026-09-27T20:37:09.9434730Z http.https://github.com/.extraheader
+test	UNKNOWN STEP	2026-09-27T20:37:09.9448031Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+test	UNKNOWN STEP	2026-09-27T20:37:09.9483273Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	UNKNOWN STEP	2026-09-27T20:37:09.9718083Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+test	UNKNOWN STEP	2026-09-27T20:37:09.9755357Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+test	UNKNOWN STEP	2026-09-27T20:37:10.0101531Z Post job cleanup.
+test	UNKNOWN STEP	2026-09-27T20:37:10.0972159Z [command]/usr/bin/git version
+test	UNKNOWN STEP	2026-09-27T20:37:10.1012576Z git version 2.55.0
+test	UNKNOWN STEP	2026-09-27T20:37:10.1046010Z Temporarily overriding HOME='/home/runner/work/_temp/71f7600b-2c9e-4bd7-aee7-7e399415f85b' before making global git config changes
+test	UNKNOWN STEP	2026-09-27T20:37:10.1046939Z Adding repository directory to the temporary git global config as a safe directory
+test	UNKNOWN STEP	2026-09-27T20:37:10.1047845Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/axiom-oracles/axiom-oracles/.ci/axiom-rules-engine
+test	UNKNOWN STEP	2026-09-27T20:37:10.1091582Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	UNKNOWN STEP	2026-09-27T20:37:10.1134915Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	UNKNOWN STEP	2026-09-27T20:37:10.1424814Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	UNKNOWN STEP	2026-09-27T20:37:10.1461368Z http.https://github.com/.extraheader
+test	UNKNOWN STEP	2026-09-27T20:37:10.1475381Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+test	UNKNOWN STEP	2026-09-27T20:37:10.1527471Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	UNKNOWN STEP	2026-09-27T20:37:10.1816888Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+test	UNKNOWN STEP	2026-09-27T20:37:10.1875823Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+test	UNKNOWN STEP	2026-09-27T20:37:10.3428036Z Post job cleanup.
+test	UNKNOWN STEP	2026-09-27T20:37:10.4507188Z Cache hit occurred on the primary key nz-engine-Linux-d59969b53430ae2fd97eb4349d44ad23ce930d85, not saving cache.
+test	UNKNOWN STEP	2026-09-27T20:37:10.4508402Z (node:16981) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+test	UNKNOWN STEP	2026-09-27T20:37:10.4509331Z (Use `node --trace-deprecation ...` to show where the warning was created)
+test	UNKNOWN STEP	2026-09-27T20:37:10.4630464Z Post job cleanup.
+test	UNKNOWN STEP	2026-09-27T20:37:10.5819678Z Cache hit occurred on key setup-uv-1-x86_64-unknown-linux-gnu-3.14.7-cff08ae6738f9db8cb61152c1ea936cfe3a2ce8f276c6fc5ece6619fe30ea3ca, not saving cache.
+test	UNKNOWN STEP	2026-09-27T20:37:10.5821238Z (node:16989) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+test	UNKNOWN STEP	2026-09-27T20:37:10.5822046Z (Use `node --trace-deprecation ...` to show where the warning was created)
+test	UNKNOWN STEP	2026-09-27T20:37:10.5929771Z Post job cleanup.
+test	UNKNOWN STEP	2026-09-27T20:37:10.7432551Z (node:16997) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+test	UNKNOWN STEP	2026-09-27T20:37:10.7433194Z (Use `node --trace-deprecation ...` to show where the warning was created)
+test	UNKNOWN STEP	2026-09-27T20:37:10.7627886Z Post job cleanup.
+test	UNKNOWN STEP	2026-09-27T20:37:10.8427318Z [command]/usr/bin/git version
+test	UNKNOWN STEP	2026-09-27T20:37:10.8468898Z git version 2.55.0
+test	UNKNOWN STEP	2026-09-27T20:37:10.8504276Z Temporarily overriding HOME='/home/runner/work/_temp/48f9364a-e9c3-40c4-b441-fe783983a530' before making global git config changes
+test	UNKNOWN STEP	2026-09-27T20:37:10.8505210Z Adding repository directory to the temporary git global config as a safe directory
+test	UNKNOWN STEP	2026-09-27T20:37:10.8509597Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/axiom-oracles/axiom-oracles
+test	UNKNOWN STEP	2026-09-27T20:37:10.8549593Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	UNKNOWN STEP	2026-09-27T20:37:10.8585447Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	UNKNOWN STEP	2026-09-27T20:37:10.8880913Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	UNKNOWN STEP	2026-09-27T20:37:10.8920662Z http.https://github.com/.extraheader
+test	UNKNOWN STEP	2026-09-27T20:37:10.8938627Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+test	UNKNOWN STEP	2026-09-27T20:37:10.8972710Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	UNKNOWN STEP	2026-09-27T20:37:10.9296299Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+test	UNKNOWN STEP	2026-09-27T20:37:10.9340222Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+test	UNKNOWN STEP	2026-09-27T20:37:10.9712056Z Cleaning up orphan processes
+test	UNKNOWN STEP	2026-09-27T20:37:10.9980735Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/cache@v4, actions/checkout@v4, actions/setup-python@v5, astral-sh/setup-uv@v5. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

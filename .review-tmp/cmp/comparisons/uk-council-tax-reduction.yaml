@@ -1,0 +1,45 @@
+# Council Tax Reduction — rulespec-uk England pension-age scheme vs PolicyEngine-UK
+# on a synthetic pensioner-household grid. The Axiom side is the encoded England
+# pension-age prescribed scheme (SI 2012/2885 Schedule 1),
+# uk/policies/govuk/council-tax-reduction.yaml, evaluated through the axiom rules
+# engine over PolicyEngine's own applicable amount / applicable income /
+# non-dependant deductions / council_tax liability / savings (the uk-pension-credit
+# bridge pattern). PolicyEngine gained a council_tax_reduction formula in 2.89.2
+# (PolicyEngine/policyengine-uk#1769 national core + #1771 Kingston, both merged).
+#
+# council_tax liability is a supplied input on both sides, so the schemes are
+# commensurable and the grid matches to the penny (full award below the
+# applicable amount, the 20 per cent taper interior, the 16000 capital screen,
+# single and couple applicable amounts); the only residuals are sub-0.001
+# PolicyEngine float32 artifacts, inside tolerance.
+#
+# Run locally (needs a PolicyEngine-UK 2.89.2 env, a built axiom rules engine and
+# the rulespec-uk checkout):
+#   uv run python scripts/run_comparison.py uk-council-tax-reduction
+
+name: uk-council-tax-reduction
+title: UK Council Tax Reduction — Axiom vs PolicyEngine
+description: >-
+  Compares the encoded England pension-age Council Tax Reduction scheme
+  (rulespec-uk uk/policies/govuk/council-tax-reduction.yaml, SI 2012/2885) against
+  PolicyEngine-UK council_tax_reduction (2.89.2) at the 2026 validation year on a
+  synthetic pensioner-household grid crossing the 20 per cent taper and the 16000
+  capital limit. council_tax liability is a supplied input on both engines.
+documentation: docs/uk-coverage-matrix.md
+
+runner:
+  type: uk-council-tax-reduction-grid
+  parameters:
+    period: "2026"
+    policyengine_uk_version: "2.89.2"
+    # Links this suite to the rulespec-uk monorepo in the affected map so a
+    # change to the encoded England pension-age scheme triggers a re-run.
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-uk
+
+artifacts:
+  report_basename: axiom-policyengine-uk-council-tax-reduction
+
+dashboard:
+  filename: axiom-policyengine-uk-council-tax-reduction.json
+  suite: uk-council-tax-reduction
