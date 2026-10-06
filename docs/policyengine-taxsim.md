@@ -62,19 +62,23 @@ intersection from `axiom_oracles/config/concept_mappings.yaml`:
 
 ## Law-Year Support Of The Pinned Binary
 
-The pinned policyengine-taxsim 2.30.0 binary (see
-`axiom_oracles/adapters/taxsim/taxsim_pins.json`; `cdate-20260521`) accepts
-law years through 2026, and TAXSIM comparisons now default to the 2026
-validation year (`TAXSIM_DEFAULT_PERIOD` in `axiom_oracles/cli.py`). Scope of
-its 2026 model, verified empirically against the binary:
+The macOS binary in the pinned policyengine-taxsim 2.30.0 release
+(`taxsimtest-osx.exe`, `cdate-20260521`; see
+`axiom_oracles/adapters/taxsim/taxsim_pins.json`) accepts law years through
+2026, and TAXSIM comparisons now default to the 2026 validation year
+(`TAXSIM_DEFAULT_PERIOD` in `axiom_oracles/cli.py`). The Linux binary in the
+same release (`taxsimtest-linux.exe`) is an older build that stops at 2024 and
+fails on 2025 and 2026 rows, so on Linux pass `--period 2024`. Scope of the
+macOS binary's 2026 model, verified empirically against that binary:
 
 - **Modeled at 2026**: the OBBBA federal rate schedule and standard
   deduction, childless EITC, FICA/SECA (`tfica`), AGI (`v10`).
 - **Missing at 2026** (fine at 2024/2025): the qualifying-child credit
-  machinery. The CTC collapses to the $500 ODC path, and ACTC, CDCC, and
-  EITC-with-children all return zero. 2025 models all of them, including the
-  OBBBA $2,200/child CTC. A 2026 comparison of child-credit concepts must
-  treat TAXSIM zeros as an NBER gap, not evidence.
+  machinery. The CTC collapses to the $500 ODC path, ACTC and CDCC return
+  zero, and the EITC ignores qualifying children, so a family with children
+  gets the childless EITC. 2025 models all of them, including the OBBBA
+  $2,200/child CTC. A 2026 comparison of child-credit concepts must treat
+  these TAXSIM values as an NBER gap, not evidence.
 - **Projected at 2026**: state modules extrapolate many parameters
   (fractional-dollar deductions/credits in the `idtl=2` detail) and in some
   states retain un-enacted rates (e.g. KY 4.0% vs enacted 3.5%, NC 4.25% vs
