@@ -246,7 +246,8 @@ comment in `axiom_oracles/cli.py`). PRD cases carry a PRD household object
 package outputs to the same `EngineResult` shape consumed by the comparator.
 `compare policyengine taxsim` defaults to the explicit tax concept intersection
 (`fiitax` and `siitax` with a $15 tolerance), while `compare policyengine prd`
-currently maps the PRD SNAP value output to PolicyEngine `snap`.
+currently maps the PRD SNAP value output to PolicyEngine
+`snap_normal_allotment`.
 
 See [docs/policyengine-taxsim.md](docs/policyengine-taxsim.md) for the
 PolicyEngine/TAXSIM comparison path, state-code handling, residual smoke-test
