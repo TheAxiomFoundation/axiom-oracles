@@ -1,0 +1,7 @@
+f07280b5f chore: record isolated current-code Yale campaign setup
+9c1df1eb8 test: record tariff prerequisites and cache validity audit
+60fac6a52 test: measure fresh A/B tariff probes and remaining open gaps
+3869ba0c3 test: authenticate fresh CH79 results and trace remaining tariff gaps
+75b334ae9 test: checkpoint current Yale campaign and report fresh candidate results
+9579964ef checkpoint: preserve and verify candidate B resume state
+93f67126f audit: retain verified B census, gap evidence and continuation

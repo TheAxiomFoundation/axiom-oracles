@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "yale-full-run/run_targeted_probe.py",
+    "select",
+    "--oracles-root",
+    "yale-full-run/B/oracles",
+    "--output",
+    "yale-full-run/targeted-selection.json"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2",
+  "environment_overrides": {},
+  "started_at": "2026-09-23T19:36:13.850336+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/targeted-selection.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/targeted-selection.stderr",
+  "pid": 56996,
+  "timeout_seconds": 900.0,
+  "status": "complete",
+  "returncode": 0,
+  "elapsed_seconds": 162.797,
+  "finished_at": "2026-09-23T19:38:56.651246+00:00"
+}

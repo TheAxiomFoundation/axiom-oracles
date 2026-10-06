@@ -1,0 +1,50 @@
+{
+  "verification": "PASS",
+  "scope": "Current B source copies equal the individually audited prior B files",
+  "files": [
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/reference/us-tariff-schedule/campaign-dispositions.yaml",
+      "sha256": "de97837499bfc71a4c472b0e9c8b6b5cc78961d00cadbed9ad85985c27baa83b"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/reference/us-tariff-schedule/output-semantics-ruling.md",
+      "sha256": "955892542af0f5612b46f86b0dfbf3bc5043a984510bb3bae78e2806e8c82765"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/scripts/us_tariff_schedule_campaign.py",
+      "sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/rulespec-us/tools/b16_entry_flags.py",
+      "sha256": "b0a0fe6aa5990c14becef5184e4096c95c22790909e72f11d1736b7fe827243d"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/rulespec-us/tools/generate_incidence_tables.py",
+      "sha256": "308af4e2baf9ad30e1ff084c59f76b9dadb9328f823ff6441b38cc3bb422540b"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/rulespec-us/tools/generate_schedule_compositions.py",
+      "sha256": "98a44962a34ee09ff537f26d39bbbec32c0593409c57e746cee83d3c179b8310"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/rulespec-us/us/policies/cbp/us-tariff-duty/composition.yaml",
+      "sha256": "0745c24a9c7ca8cd54d28bf4da5ea474f479a866daf59d4890824a2f79c82c02"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch62/ch62.yaml",
+      "sha256": "0b8ade106330aeeccb6e779a1ef22e10f29c0fa127fcb18f4e1b0d3595122aca"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch84/ch84.yaml",
+      "sha256": "6b6b500ec468654020d3ffe0513818f27e0a6936309885a83a5a942e06b0c141"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/rulespec-us/us/policies/usitc/us-tariff-duty/overlays/section-301/forced-labor-costa-rica-9903-05-33.yaml",
+      "sha256": "1e796c7505d0e97256509f49fd6705d178d6b9ff9506c7a4615415db2d4d62cd"
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note16-232-steel.yaml",
+      "sha256": "8ec8adf882321fe51240606a1d3a85322e4a9b7ecf06ef3c3e8bee19ffec21f4"
+    }
+  ]
+}

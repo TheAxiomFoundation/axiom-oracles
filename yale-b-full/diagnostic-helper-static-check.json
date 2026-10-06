@@ -1,0 +1,25 @@
+{
+  "chapters": [
+    "79",
+    "29"
+  ],
+  "checks": [
+    "Prior chapter artifact hashes",
+    "CH29/79 actual census conservation",
+    "11779722 aggregate comparisons",
+    "197314 class/slot inventory units",
+    "Zero gap families",
+    "Deliberately changed mismatch total rejected",
+    "Prior targeted census conservation",
+    "168 unexplained and 83 open units retained",
+    "251 units in 8 correctly ranked gap families",
+    "HTS10/origin/date/Axiom/Yale samples retained"
+  ],
+  "helper_sha256": "19dea4290a9d6b7674f42df9c93b2fbf6cc759c633adebfd1c4e54c9bcdce57c",
+  "prior_targeted_totals": {
+    "axiom_attributed_open": 83,
+    "families": 8,
+    "unexplained": 168
+  },
+  "status": "PASS"
+}

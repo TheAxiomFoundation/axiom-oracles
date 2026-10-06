@@ -1,0 +1,22 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "scripts/us_tariff_schedule_campaign.py",
+    "input-contract",
+    "--rulespec-root",
+    "../rulespec-us",
+    "--engine-binary",
+    "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/oracles",
+  "environment_overrides": {
+    "AXIOM_TARIFF_C1_CACHE": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/cache",
+    "RULESPEC_US_CHECKOUT": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/rulespec-us"
+  },
+  "started_at": "2026-09-23T19:27:29.537075+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/A-input-contract.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/A-input-contract.stderr",
+  "returncode": 0,
+  "elapsed_seconds": 82.47,
+  "finished_at": "2026-09-23T19:28:52.007949+00:00"
+}

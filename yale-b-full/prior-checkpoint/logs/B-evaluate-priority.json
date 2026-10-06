@@ -1,0 +1,31 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "scripts/us_tariff_schedule_campaign.py",
+    "evaluate",
+    "--rulespec-root",
+    "../rulespec-us",
+    "--engine-binary",
+    "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+    "--chapters",
+    "62,84,79",
+    "--workers",
+    "2",
+    "--resume"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles",
+  "environment_overrides": {
+    "AXIOM_TARIFF_C1_CACHE": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/cache",
+    "RULESPEC_US_CHECKOUT": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us"
+  },
+  "started_at": "2026-09-23T19:34:31.504528+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/B-evaluate-priority.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/B-evaluate-priority.stderr",
+  "pid": 49358,
+  "timeout_seconds": 2700.0,
+  "status": "timeout",
+  "child_returncode": -15,
+  "returncode": 124,
+  "elapsed_seconds": 2701.981,
+  "finished_at": "2026-09-23T20:19:33.555583+00:00"
+}

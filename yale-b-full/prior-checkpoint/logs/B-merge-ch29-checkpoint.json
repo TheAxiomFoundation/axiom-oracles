@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "../../merge_isolated_checkpoint.py"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles",
+  "environment_overrides": {},
+  "started_at": "2026-09-23T20:19:40.475773+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/B-merge-ch29-checkpoint.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/B-merge-ch29-checkpoint.stderr",
+  "pid": 35495,
+  "timeout_seconds": null,
+  "status": "complete",
+  "returncode": 0,
+  "elapsed_seconds": 0.36,
+  "finished_at": "2026-09-23T20:19:40.835809+00:00"
+}

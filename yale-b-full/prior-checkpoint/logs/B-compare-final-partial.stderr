@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles/scripts/us_tariff_schedule_campaign.py", line 2155, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles/scripts/us_tariff_schedule_campaign.py", line 2126, in main
+    print(_render(compare_campaign()), end="")
+                  ~~~~~~~~~~~~~~~~^^
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles/scripts/us_tariff_schedule_campaign.py", line 907, in compare_campaign
+    _require(chapters == expected_chapters, "evaluation manifest is incomplete")
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles/scripts/us_tariff_schedule_campaign.py", line 179, in _require
+    raise ValueError(message)
+ValueError: evaluation manifest is incomplete

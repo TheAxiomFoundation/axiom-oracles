@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "yale-b-full/verify_setup.py"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full",
+  "environment_overrides": {},
+  "started_at": "2026-09-24T02:41:19.010548+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/logs/setup-verification.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/logs/setup-verification.stderr",
+  "pid": 82777,
+  "timeout_seconds": null,
+  "status": "complete",
+  "returncode": 0,
+  "elapsed_seconds": 16.366,
+  "finished_at": "2026-09-24T02:41:35.376692+00:00"
+}

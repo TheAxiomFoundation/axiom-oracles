@@ -1,0 +1,25 @@
+29: resume skip cases=991575 errors=0
+79: resume skip cases=8100 errors=0
+{
+  "schema": "axiom_oracles.us_tariff_schedule.eval_manifest.v1",
+  "shards": {
+    "962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3": {
+      "cases": 991575,
+      "chapter": "29",
+      "elapsed_seconds": 1730.683,
+      "engine_errors": 0,
+      "key": "962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3",
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/cache/eval/96/962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3.jsonl.gz",
+      "sha256": "24bda301e144abc4cd1e7c8d2868d91a9edfbd1ca0d83ecc803e63f110ca5d1c"
+    },
+    "b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808": {
+      "cases": 8100,
+      "chapter": "79",
+      "elapsed_seconds": 303.372,
+      "engine_errors": 0,
+      "key": "b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808",
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/cache/eval/b3/b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808.jsonl.gz",
+      "sha256": "d0dbcb414a8314765aa75ad1d24f216d464614a5972fbdd49c8baf597a0f5704"
+    }
+  }
+}

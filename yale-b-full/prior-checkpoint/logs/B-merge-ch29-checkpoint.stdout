@@ -1,0 +1,11 @@
+{
+  "verification": "PASS: current keys, hashes, unique chapters",
+  "manifest": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles/reference/us-tariff-schedule/eval/MANIFEST.json",
+  "before_sha256": "3cfb2674d2dded5c8c6ffe2807f57b3f8662a51f297e49b44abbf5192e638f63",
+  "after_sha256": "11a722f898e8fd3ce23a33f175acdf4ad2bf9e66e178f8d6e2c960f783cbad42",
+  "chapters": [
+    "29",
+    "79"
+  ],
+  "cases": 999675
+}

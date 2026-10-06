@@ -1,0 +1,773 @@
+{
+  "rows": 9913304,
+  "elapsed_seconds": 154.417,
+  "method": "nonzero Yale Brazil and note52 selected values, counted once per campaign endpoint probe; exposure ranking, not measured Axiom mismatches",
+  "ranking": [
+    {
+      "chapter": "62",
+      "rows": 727930,
+      "probes": 1403865,
+      "note52_nonzero_probes": 139040,
+      "brazil_nonzero_probes": 7482,
+      "combined_exposure": 146522
+    },
+    {
+      "chapter": "84",
+      "rows": 944302,
+      "probes": 1821240,
+      "note52_nonzero_probes": 127132,
+      "brazil_nonzero_probes": 6558,
+      "combined_exposure": 133690
+    },
+    {
+      "chapter": "29",
+      "rows": 514207,
+      "probes": 991575,
+      "note52_nonzero_probes": 106602,
+      "brazil_nonzero_probes": 6746,
+      "combined_exposure": 113348
+    },
+    {
+      "chapter": "61",
+      "rows": 485618,
+      "probes": 936549,
+      "note52_nonzero_probes": 92120,
+      "brazil_nonzero_probes": 5028,
+      "combined_exposure": 97148
+    },
+    {
+      "chapter": "85",
+      "rows": 481511,
+      "probes": 928638,
+      "note52_nonzero_probes": 76028,
+      "brazil_nonzero_probes": 4026,
+      "combined_exposure": 80054
+    },
+    {
+      "chapter": "52",
+      "rows": 309540,
+      "probes": 596970,
+      "note52_nonzero_probes": 60208,
+      "brazil_nonzero_probes": 3150,
+      "combined_exposure": 63358
+    },
+    {
+      "chapter": "03",
+      "rows": 294322,
+      "probes": 567621,
+      "note52_nonzero_probes": 59208,
+      "brazil_nonzero_probes": 3072,
+      "combined_exposure": 62280
+    },
+    {
+      "chapter": "44",
+      "rows": 277046,
+      "probes": 534303,
+      "note52_nonzero_probes": 46228,
+      "brazil_nonzero_probes": 2082,
+      "combined_exposure": 48310
+    },
+    {
+      "chapter": "90",
+      "rows": 231770,
+      "probes": 446985,
+      "note52_nonzero_probes": 45648,
+      "brazil_nonzero_probes": 2490,
+      "combined_exposure": 48138
+    },
+    {
+      "chapter": "64",
+      "rows": 224658,
+      "probes": 433269,
+      "note52_nonzero_probes": 43968,
+      "brazil_nonzero_probes": 2346,
+      "combined_exposure": 46314
+    },
+    {
+      "chapter": "55",
+      "rows": 229306,
+      "probes": 442233,
+      "note52_nonzero_probes": 42684,
+      "brazil_nonzero_probes": 2394,
+      "combined_exposure": 45078
+    },
+    {
+      "chapter": "39",
+      "rows": 179727,
+      "probes": 346617,
+      "note52_nonzero_probes": 37200,
+      "brazil_nonzero_probes": 1914,
+      "combined_exposure": 39114
+    },
+    {
+      "chapter": "07",
+      "rows": 193138,
+      "probes": 372492,
+      "brazil_nonzero_probes": 2088,
+      "note52_nonzero_probes": 35596,
+      "combined_exposure": 37684
+    },
+    {
+      "chapter": "48",
+      "rows": 162022,
+      "probes": 312471,
+      "note52_nonzero_probes": 32556,
+      "brazil_nonzero_probes": 1872,
+      "combined_exposure": 34428
+    },
+    {
+      "chapter": "70",
+      "rows": 159922,
+      "probes": 308421,
+      "note52_nonzero_probes": 31888,
+      "brazil_nonzero_probes": 1662,
+      "combined_exposure": 33550
+    },
+    {
+      "chapter": "04",
+      "rows": 149674,
+      "probes": 288657,
+      "note52_nonzero_probes": 29384,
+      "brazil_nonzero_probes": 1596,
+      "combined_exposure": 30980
+    },
+    {
+      "chapter": "54",
+      "rows": 152502,
+      "probes": 294111,
+      "note52_nonzero_probes": 28652,
+      "brazil_nonzero_probes": 1590,
+      "combined_exposure": 30242
+    },
+    {
+      "chapter": "94",
+      "rows": 146559,
+      "probes": 282654,
+      "note52_nonzero_probes": 27464,
+      "brazil_nonzero_probes": 1464,
+      "combined_exposure": 28928
+    },
+    {
+      "chapter": "20",
+      "rows": 139538,
+      "probes": 269109,
+      "note52_nonzero_probes": 26772,
+      "brazil_nonzero_probes": 1446,
+      "combined_exposure": 28218
+    },
+    {
+      "chapter": "63",
+      "rows": 133896,
+      "probes": 258228,
+      "note52_nonzero_probes": 25836,
+      "brazil_nonzero_probes": 1362,
+      "combined_exposure": 27198
+    },
+    {
+      "chapter": "38",
+      "rows": 119473,
+      "probes": 230409,
+      "note52_nonzero_probes": 24540,
+      "brazil_nonzero_probes": 1260,
+      "combined_exposure": 25800
+    },
+    {
+      "chapter": "28",
+      "rows": 130004,
+      "probes": 250722,
+      "note52_nonzero_probes": 23552,
+      "brazil_nonzero_probes": 1230,
+      "combined_exposure": 24782
+    },
+    {
+      "chapter": "24",
+      "rows": 109634,
+      "probes": 211437,
+      "note52_nonzero_probes": 21560,
+      "brazil_nonzero_probes": 1230,
+      "combined_exposure": 22790
+    },
+    {
+      "chapter": "41",
+      "rows": 100800,
+      "probes": 194400,
+      "note52_nonzero_probes": 20488,
+      "brazil_nonzero_probes": 1014,
+      "combined_exposure": 21502
+    },
+    {
+      "chapter": "32",
+      "rows": 96656,
+      "probes": 186408,
+      "note52_nonzero_probes": 19828,
+      "brazil_nonzero_probes": 990,
+      "combined_exposure": 20818
+    },
+    {
+      "chapter": "91",
+      "rows": 95060,
+      "probes": 183330,
+      "note52_nonzero_probes": 19176,
+      "brazil_nonzero_probes": 1062,
+      "combined_exposure": 20238
+    },
+    {
+      "chapter": "16",
+      "rows": 95634,
+      "probes": 184437,
+      "note52_nonzero_probes": 19184,
+      "brazil_nonzero_probes": 1020,
+      "combined_exposure": 20204
+    },
+    {
+      "chapter": "40",
+      "rows": 102354,
+      "probes": 197397,
+      "note52_nonzero_probes": 18764,
+      "brazil_nonzero_probes": 960,
+      "combined_exposure": 19724
+    },
+    {
+      "chapter": "96",
+      "rows": 89726,
+      "probes": 173043,
+      "note52_nonzero_probes": 18124,
+      "brazil_nonzero_probes": 942,
+      "combined_exposure": 19066
+    },
+    {
+      "chapter": "08",
+      "rows": 91427,
+      "probes": 176328,
+      "note52_nonzero_probes": 16792,
+      "brazil_nonzero_probes": 942,
+      "combined_exposure": 17734
+    },
+    {
+      "chapter": "82",
+      "rows": 97874,
+      "probes": 188757,
+      "note52_nonzero_probes": 14448,
+      "brazil_nonzero_probes": 756,
+      "combined_exposure": 15204
+    },
+    {
+      "chapter": "69",
+      "rows": 68978,
+      "probes": 133029,
+      "note52_nonzero_probes": 13788,
+      "brazil_nonzero_probes": 720,
+      "combined_exposure": 14508
+    },
+    {
+      "chapter": "51",
+      "rows": 69440,
+      "probes": 133920,
+      "note52_nonzero_probes": 13496,
+      "brazil_nonzero_probes": 744,
+      "combined_exposure": 14240
+    },
+    {
+      "chapter": "42",
+      "rows": 69930,
+      "probes": 134865,
+      "note52_nonzero_probes": 13476,
+      "brazil_nonzero_probes": 726,
+      "combined_exposure": 14202
+    },
+    {
+      "chapter": "95",
+      "rows": 65366,
+      "probes": 126063,
+      "note52_nonzero_probes": 13300,
+      "brazil_nonzero_probes": 708,
+      "combined_exposure": 14008
+    },
+    {
+      "chapter": "58",
+      "rows": 63630,
+      "probes": 122715,
+      "note52_nonzero_probes": 12292,
+      "brazil_nonzero_probes": 666,
+      "combined_exposure": 12958
+    },
+    {
+      "chapter": "22",
+      "rows": 60193,
+      "probes": 116100,
+      "note52_nonzero_probes": 11988,
+      "brazil_nonzero_probes": 714,
+      "combined_exposure": 12702
+    },
+    {
+      "chapter": "71",
+      "rows": 62281,
+      "probes": 120114,
+      "note52_nonzero_probes": 11648,
+      "brazil_nonzero_probes": 612,
+      "combined_exposure": 12260
+    },
+    {
+      "chapter": "60",
+      "rows": 62146,
+      "probes": 119853,
+      "note52_nonzero_probes": 11552,
+      "brazil_nonzero_probes": 636,
+      "combined_exposure": 12188
+    },
+    {
+      "chapter": "15",
+      "rows": 57613,
+      "probes": 111096,
+      "note52_nonzero_probes": 11364,
+      "brazil_nonzero_probes": 642,
+      "combined_exposure": 12006
+    },
+    {
+      "chapter": "68",
+      "rows": 54474,
+      "probes": 105057,
+      "note52_nonzero_probes": 11084,
+      "brazil_nonzero_probes": 558,
+      "combined_exposure": 11642
+    },
+    {
+      "chapter": "19",
+      "rows": 53244,
+      "probes": 102699,
+      "note52_nonzero_probes": 10288,
+      "brazil_nonzero_probes": 600,
+      "combined_exposure": 10888
+    },
+    {
+      "chapter": "21",
+      "rows": 54888,
+      "probes": 105858,
+      "note52_nonzero_probes": 10292,
+      "brazil_nonzero_probes": 570,
+      "combined_exposure": 10862
+    },
+    {
+      "chapter": "02",
+      "rows": 56070,
+      "probes": 108135,
+      "note52_nonzero_probes": 10060,
+      "brazil_nonzero_probes": 558,
+      "combined_exposure": 10618
+    },
+    {
+      "chapter": "17",
+      "rows": 48827,
+      "probes": 94167,
+      "note52_nonzero_probes": 9240,
+      "brazil_nonzero_probes": 552,
+      "combined_exposure": 9792
+    },
+    {
+      "chapter": "12",
+      "rows": 70067,
+      "probes": 135153,
+      "brazil_nonzero_probes": 990,
+      "note52_nonzero_probes": 8588,
+      "combined_exposure": 9578
+    },
+    {
+      "chapter": "56",
+      "rows": 45332,
+      "probes": 87426,
+      "note52_nonzero_probes": 8860,
+      "brazil_nonzero_probes": 480,
+      "combined_exposure": 9340
+    },
+    {
+      "chapter": "59",
+      "rows": 43092,
+      "probes": 83106,
+      "note52_nonzero_probes": 8504,
+      "brazil_nonzero_probes": 450,
+      "combined_exposure": 8954
+    },
+    {
+      "chapter": "06",
+      "rows": 46592,
+      "probes": 89856,
+      "note52_nonzero_probes": 8484,
+      "brazil_nonzero_probes": 468,
+      "combined_exposure": 8952
+    },
+    {
+      "chapter": "18",
+      "rows": 42096,
+      "probes": 81189,
+      "note52_nonzero_probes": 8396,
+      "brazil_nonzero_probes": 498,
+      "combined_exposure": 8894
+    },
+    {
+      "chapter": "01",
+      "rows": 41468,
+      "probes": 79974,
+      "note52_nonzero_probes": 8216,
+      "brazil_nonzero_probes": 468,
+      "combined_exposure": 8684
+    },
+    {
+      "chapter": "57",
+      "rows": 41776,
+      "probes": 80568,
+      "note52_nonzero_probes": 8220,
+      "brazil_nonzero_probes": 444,
+      "combined_exposure": 8664
+    },
+    {
+      "chapter": "25",
+      "rows": 42014,
+      "probes": 81027,
+      "note52_nonzero_probes": 7844,
+      "brazil_nonzero_probes": 432,
+      "combined_exposure": 8276
+    },
+    {
+      "chapter": "88",
+      "rows": 38234,
+      "probes": 73737,
+      "note52_nonzero_probes": 7776,
+      "brazil_nonzero_probes": 402,
+      "combined_exposure": 8178
+    },
+    {
+      "chapter": "87",
+      "rows": 165622,
+      "probes": 319446,
+      "note52_nonzero_probes": 7512,
+      "brazil_nonzero_probes": 408,
+      "combined_exposure": 7920
+    },
+    {
+      "chapter": "93",
+      "rows": 36890,
+      "probes": 71145,
+      "note52_nonzero_probes": 7488,
+      "brazil_nonzero_probes": 402,
+      "combined_exposure": 7890
+    },
+    {
+      "chapter": "92",
+      "rows": 36470,
+      "probes": 70335,
+      "note52_nonzero_probes": 7472,
+      "brazil_nonzero_probes": 378,
+      "combined_exposure": 7850
+    },
+    {
+      "chapter": "65",
+      "rows": 36764,
+      "probes": 70902,
+      "note52_nonzero_probes": 7284,
+      "brazil_nonzero_probes": 384,
+      "combined_exposure": 7668
+    },
+    {
+      "chapter": "37",
+      "rows": 34706,
+      "probes": 66933,
+      "note52_nonzero_probes": 7020,
+      "brazil_nonzero_probes": 360,
+      "combined_exposure": 7380
+    },
+    {
+      "chapter": "23",
+      "rows": 33544,
+      "probes": 64692,
+      "note52_nonzero_probes": 6800,
+      "brazil_nonzero_probes": 366,
+      "combined_exposure": 7166
+    },
+    {
+      "chapter": "89",
+      "rows": 33236,
+      "probes": 64098,
+      "note52_nonzero_probes": 6792,
+      "brazil_nonzero_probes": 348,
+      "combined_exposure": 7140
+    },
+    {
+      "chapter": "53",
+      "rows": 33250,
+      "probes": 64125,
+      "note52_nonzero_probes": 6440,
+      "brazil_nonzero_probes": 372,
+      "combined_exposure": 6812
+    },
+    {
+      "chapter": "10",
+      "rows": 32312,
+      "probes": 62316,
+      "brazil_nonzero_probes": 366,
+      "note52_nonzero_probes": 5756,
+      "combined_exposure": 6122
+    },
+    {
+      "chapter": "83",
+      "rows": 43142,
+      "probes": 83214,
+      "note52_nonzero_probes": 5828,
+      "brazil_nonzero_probes": 294,
+      "combined_exposure": 6122
+    },
+    {
+      "chapter": "33",
+      "rows": 30254,
+      "probes": 58347,
+      "note52_nonzero_probes": 5684,
+      "brazil_nonzero_probes": 294,
+      "combined_exposure": 5978
+    },
+    {
+      "chapter": "46",
+      "rows": 28616,
+      "probes": 55188,
+      "note52_nonzero_probes": 5576,
+      "brazil_nonzero_probes": 210,
+      "combined_exposure": 5786
+    },
+    {
+      "chapter": "26",
+      "rows": 32578,
+      "probes": 62829,
+      "note52_nonzero_probes": 5416,
+      "brazil_nonzero_probes": 300,
+      "combined_exposure": 5716
+    },
+    {
+      "chapter": "34",
+      "rows": 25704,
+      "probes": 49572,
+      "note52_nonzero_probes": 5312,
+      "brazil_nonzero_probes": 288,
+      "combined_exposure": 5600
+    },
+    {
+      "chapter": "11",
+      "rows": 26054,
+      "probes": 50247,
+      "note52_nonzero_probes": 5204,
+      "brazil_nonzero_probes": 276,
+      "combined_exposure": 5480
+    },
+    {
+      "chapter": "43",
+      "rows": 21966,
+      "probes": 42363,
+      "note52_nonzero_probes": 4476,
+      "brazil_nonzero_probes": 228,
+      "combined_exposure": 4704
+    },
+    {
+      "chapter": "05",
+      "rows": 19908,
+      "probes": 38394,
+      "note52_nonzero_probes": 3836,
+      "brazil_nonzero_probes": 222,
+      "combined_exposure": 4058
+    },
+    {
+      "chapter": "81",
+      "rows": 23366,
+      "probes": 45063,
+      "note52_nonzero_probes": 3716,
+      "brazil_nonzero_probes": 192,
+      "combined_exposure": 3908
+    },
+    {
+      "chapter": "35",
+      "rows": 17581,
+      "probes": 33912,
+      "note52_nonzero_probes": 3568,
+      "brazil_nonzero_probes": 198,
+      "combined_exposure": 3766
+    },
+    {
+      "chapter": "50",
+      "rows": 17416,
+      "probes": 33588,
+      "note52_nonzero_probes": 3016,
+      "brazil_nonzero_probes": 180,
+      "combined_exposure": 3196
+    },
+    {
+      "chapter": "75",
+      "rows": 13846,
+      "probes": 26703,
+      "note52_nonzero_probes": 2708,
+      "brazil_nonzero_probes": 132,
+      "combined_exposure": 2840
+    },
+    {
+      "chapter": "13",
+      "rows": 12803,
+      "probes": 24696,
+      "note52_nonzero_probes": 2476,
+      "brazil_nonzero_probes": 144,
+      "combined_exposure": 2620
+    },
+    {
+      "chapter": "72",
+      "rows": 187735,
+      "probes": 362061,
+      "note52_nonzero_probes": 2172,
+      "brazil_nonzero_probes": 150,
+      "combined_exposure": 2322
+    },
+    {
+      "chapter": "36",
+      "rows": 10402,
+      "probes": 20061,
+      "note52_nonzero_probes": 2112,
+      "brazil_nonzero_probes": 108,
+      "combined_exposure": 2220
+    },
+    {
+      "chapter": "47",
+      "rows": 11130,
+      "probes": 21465,
+      "note52_nonzero_probes": 2136,
+      "brazil_nonzero_probes": 54,
+      "combined_exposure": 2190
+    },
+    {
+      "chapter": "49",
+      "rows": 7700,
+      "probes": 14850,
+      "note52_nonzero_probes": 1800,
+      "brazil_nonzero_probes": 300,
+      "combined_exposure": 2100
+    },
+    {
+      "chapter": "45",
+      "rows": 10682,
+      "probes": 20601,
+      "note52_nonzero_probes": 1752,
+      "brazil_nonzero_probes": 114,
+      "combined_exposure": 1866
+    },
+    {
+      "chapter": "86",
+      "rows": 16282,
+      "probes": 31401,
+      "note52_nonzero_probes": 1636,
+      "brazil_nonzero_probes": 84,
+      "combined_exposure": 1720
+    },
+    {
+      "chapter": "30",
+      "rows": 24518,
+      "probes": 47286,
+      "note52_nonzero_probes": 1582,
+      "brazil_nonzero_probes": 94,
+      "combined_exposure": 1676
+    },
+    {
+      "chapter": "73",
+      "rows": 200816,
+      "probes": 387288,
+      "note52_nonzero_probes": 1556,
+      "brazil_nonzero_probes": 84,
+      "combined_exposure": 1640
+    },
+    {
+      "chapter": "78",
+      "rows": 7322,
+      "probes": 14121,
+      "note52_nonzero_probes": 1492,
+      "brazil_nonzero_probes": 78,
+      "combined_exposure": 1570
+    },
+    {
+      "chapter": "67",
+      "rows": 7280,
+      "probes": 14040,
+      "note52_nonzero_probes": 1472,
+      "brazil_nonzero_probes": 78,
+      "combined_exposure": 1550
+    },
+    {
+      "chapter": "76",
+      "rows": 48566,
+      "probes": 93663,
+      "brazil_nonzero_probes": 96,
+      "note52_nonzero_probes": 1364,
+      "combined_exposure": 1460
+    },
+    {
+      "chapter": "14",
+      "rows": 6468,
+      "probes": 12474,
+      "note52_nonzero_probes": 1208,
+      "brazil_nonzero_probes": 66,
+      "combined_exposure": 1274
+    },
+    {
+      "chapter": "66",
+      "rows": 4564,
+      "probes": 8802,
+      "note52_nonzero_probes": 924,
+      "brazil_nonzero_probes": 48,
+      "combined_exposure": 972
+    },
+    {
+      "chapter": "80",
+      "rows": 4788,
+      "probes": 9234,
+      "note52_nonzero_probes": 868,
+      "brazil_nonzero_probes": 42,
+      "combined_exposure": 910
+    },
+    {
+      "chapter": "79",
+      "rows": 4200,
+      "probes": 8100,
+      "note52_nonzero_probes": 724,
+      "brazil_nonzero_probes": 36,
+      "combined_exposure": 760
+    },
+    {
+      "chapter": "09",
+      "rows": 8596,
+      "probes": 16578,
+      "note52_nonzero_probes": 228,
+      "brazil_nonzero_probes": 12,
+      "combined_exposure": 240
+    },
+    {
+      "chapter": "27",
+      "rows": 11872,
+      "probes": 22896,
+      "combined_exposure": 0
+    },
+    {
+      "chapter": "31",
+      "rows": 2338,
+      "probes": 4509,
+      "combined_exposure": 0
+    },
+    {
+      "chapter": "74",
+      "rows": 41608,
+      "probes": 80244,
+      "combined_exposure": 0
+    },
+    {
+      "chapter": "97",
+      "rows": 2940,
+      "probes": 5670,
+      "combined_exposure": 0
+    },
+    {
+      "chapter": "98",
+      "rows": 13888,
+      "probes": 26784,
+      "combined_exposure": 0
+    }
+  ]
+}

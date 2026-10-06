@@ -1,0 +1,2414 @@
+{
+  "argv": [
+    "yale-b-full/audit_historical_eligibility.py",
+    "--prior-run",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run",
+    "--candidate",
+    "yale-b-full/B",
+    "--engine",
+    "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+    "--output",
+    "yale-b-full/historical-eligibility.json"
+  ],
+  "audit_source_sha256": "9fe6964d1511454baa6c2d1535c1e62f2f52713bd1ae86e2c4fb5487a81d31ef",
+  "common_key_ingredients": {
+    "engine_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7",
+    "outputs": [
+      "mfn_ad_valorem_rate",
+      "ieepa_component_rate",
+      "section_201_component_rate",
+      "section_122_component_rate",
+      "section_232_aluminum_component_rate",
+      "section_232_steel_component_rate",
+      "section_338_component_rate",
+      "china_section_301_component_rate",
+      "brazil_section_301_component_rate",
+      "forced_labor_section_301_component_rate",
+      "schedule_statutory_stack"
+    ],
+    "routing_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3",
+    "selected_sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
+  },
+  "created_utc": "2026-09-24T02:37:52.617844+00:00",
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full",
+  "elapsed_seconds": 17.056,
+  "eligible_fresh_A_chapters": [
+    "79"
+  ],
+  "eligible_historical_chapters_under_retained_A": [],
+  "fresh_A_checks": [
+    {
+      "cases": 8100,
+      "chapter": "79",
+      "computed_key": "afe26dac684df76304d52dae388aff67c51af5bbc223f19f0f63f1554953df6e",
+      "elapsed_seconds": 153.706,
+      "eligible_under_retained_A": true,
+      "engine_errors": 0,
+      "key": "afe26dac684df76304d52dae388aff67c51af5bbc223f19f0f63f1554953df6e",
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/cache/eval/af/afe26dac684df76304d52dae388aff67c51af5bbc223f19f0f63f1554953df6e.jsonl.gz",
+      "same_compressed_bytes_as_historical": true,
+      "sha256": "03624b9ab3ee7539ae7ef0333725e1a1e79211dbee08d035e07786ab44ee3e62",
+      "sha256_verified": true
+    }
+  ],
+  "historical_chapters": 100,
+  "historical_checks": [
+    {
+      "cases": 79974,
+      "chapter": "01",
+      "compressed_bytes": 3032376,
+      "computed_keys": {
+        "archived_main": "50f0ee90f71b96eafbd69317a09bc63413f296ec543bbdec5671a47af064e0fb",
+        "historical_pre_510": "2a92903d59ac9d5ce1b7ddb41af996a42a8409e4d02bfe1c2584b963b724ce2a",
+        "retained_B": "fc1c8199dc8a749a0e61be7f6b632990191ad5c58de29eff09f713eeacf633a6",
+        "retained_fresh_A": "d7b6b8e52798d7b678a07a2dbb47342eff532e90f1f94e3b6713f5edb20b3f13"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "2a92903d59ac9d5ce1b7ddb41af996a42a8409e4d02bfe1c2584b963b724ce2a",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/2a/2a92903d59ac9d5ce1b7ddb41af996a42a8409e4d02bfe1c2584b963b724ce2a.jsonl.gz",
+      "sha256": "d13ebfa09a03b6d1e8b39a74d87f256529905323775951cd4ebf79f46d0b26d8",
+      "sha256_verified": true
+    },
+    {
+      "cases": 108135,
+      "chapter": "02",
+      "compressed_bytes": 4110456,
+      "computed_keys": {
+        "archived_main": "a61dffca11c305ebaa8ddde2c58c41f4e74811adad27b2931875a5127002ad9c",
+        "historical_pre_510": "75817fe0be6b6680e2bb782d1e1c5e0eebe872e91f25acff72f3cc12944bff1b",
+        "retained_B": "573f048f4dc906ff3b13f3c000835fa45a137c42201cd23d38c112a0b77bb7ad",
+        "retained_fresh_A": "b01e0a30be5c78b3c8267ac85ec1e8aaa714bd1e595fbac6c330f5c81e603e97"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "75817fe0be6b6680e2bb782d1e1c5e0eebe872e91f25acff72f3cc12944bff1b",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/75/75817fe0be6b6680e2bb782d1e1c5e0eebe872e91f25acff72f3cc12944bff1b.jsonl.gz",
+      "sha256": "a8a37668b6ece333943bdbd78e59cefa778ffc771e663b5a396344a71e84d6bf",
+      "sha256_verified": true
+    },
+    {
+      "cases": 567621,
+      "chapter": "03",
+      "compressed_bytes": 21318961,
+      "computed_keys": {
+        "archived_main": "48eeda3e5c5ebe647c4cfe7bc581ace31e854557e2686afaa8b93a0aabd3bbf3",
+        "historical_pre_510": "cee102c5c5f5f5a44cfc904c5d7e118cf9c052c7a20c2d74b6598f5273c276cd",
+        "retained_B": "c95896503837c36071dddb0e2749cea74bcd571153d48504f663e499e6d48f56",
+        "retained_fresh_A": "1cfa2b09f3374055a097fe2cc4573ad8530ba08b54614ec7ea78b74f0b92afc2"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "cee102c5c5f5f5a44cfc904c5d7e118cf9c052c7a20c2d74b6598f5273c276cd",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/ce/cee102c5c5f5f5a44cfc904c5d7e118cf9c052c7a20c2d74b6598f5273c276cd.jsonl.gz",
+      "sha256": "967674b752d4a798d758e7b98440ee8bd9fa4d5d8868a51d52be0da36011006f",
+      "sha256_verified": true
+    },
+    {
+      "cases": 288657,
+      "chapter": "04",
+      "compressed_bytes": 10960449,
+      "computed_keys": {
+        "archived_main": "7f30b4320f15ac89b49a559a50fd29a873a12d277404c610da830502866799ba",
+        "historical_pre_510": "e660b1225025fcc53e5187bb07901c06042a5faadd49614039d42161d8aa3532",
+        "retained_B": "3ab3f3496bc8e2783a3cd2dff07fca1722e519c9844ac121c0799b1be475d224",
+        "retained_fresh_A": "de36763dfff53e2d226cda9313b6fdaab665c9ec5906c246a0077a02faa051e6"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "e660b1225025fcc53e5187bb07901c06042a5faadd49614039d42161d8aa3532",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e6/e660b1225025fcc53e5187bb07901c06042a5faadd49614039d42161d8aa3532.jsonl.gz",
+      "sha256": "7fdfe7a12e8185e7cefbaec527d53509fc26ac3f15e2ba030e2195dbf8191f05",
+      "sha256_verified": true
+    },
+    {
+      "cases": 38394,
+      "chapter": "05",
+      "compressed_bytes": 1445019,
+      "computed_keys": {
+        "archived_main": "cdd5971daa769c23ce6ed4e63b5292dfc80622f2a9790815720a4f6a0cf0d2cc",
+        "historical_pre_510": "73cd167a78d3e5b8c76f6cf2b7e740a55f98e17031160fad02c6bd9f98267081",
+        "retained_B": "06d1e1d598615a3ec21ecb7921ea528bda18a1f6dae6004c43600e505b71c114",
+        "retained_fresh_A": "d778524413c8071be22d65b8ff77215858c5f56a22c7edb457cb5fb3ec097461"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "73cd167a78d3e5b8c76f6cf2b7e740a55f98e17031160fad02c6bd9f98267081",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/73/73cd167a78d3e5b8c76f6cf2b7e740a55f98e17031160fad02c6bd9f98267081.jsonl.gz",
+      "sha256": "036a33826ad2a55cb8dc10513e81319d889c5dc81791c20a9e6cf5e6203a5c1a",
+      "sha256_verified": true
+    },
+    {
+      "cases": 89856,
+      "chapter": "06",
+      "compressed_bytes": 3392905,
+      "computed_keys": {
+        "archived_main": "5dcb93f6eb0e2e5bd0f89f1be2c668abafe4059d8fb5646be732a487ebdf2ed2",
+        "historical_pre_510": "80d075b5cc22984a9ad91b995dd4caa66f4bdd25007226ce51b714cef47f0139",
+        "retained_B": "8df0c563d67d80329b0957290073574c84a42df05c98167e9567286867599196",
+        "retained_fresh_A": "609b8c1c97824df0b957fb016d9667d5df7d5273e974258f2edf42fc7795453c"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "80d075b5cc22984a9ad91b995dd4caa66f4bdd25007226ce51b714cef47f0139",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/80/80d075b5cc22984a9ad91b995dd4caa66f4bdd25007226ce51b714cef47f0139.jsonl.gz",
+      "sha256": "0bec65ebfc8de20670325263981ff7a3b65d6b409209736ff8c43a38e54012ff",
+      "sha256_verified": true
+    },
+    {
+      "cases": 372492,
+      "chapter": "07",
+      "compressed_bytes": 14180084,
+      "computed_keys": {
+        "archived_main": "7ad24af0fc2b0d6ec822f86aeaba5c75419e2722ae733efde1788623c4bafcfb",
+        "historical_pre_510": "4b3db258cebca14f0807d86fe5abb63b5ca65e3f8c27f00169e6a75fb953a003",
+        "retained_B": "bab096a41d87669bace1238f19c87b1d92f25abccfb7f3bbc7da7a75ce1c6e02",
+        "retained_fresh_A": "eaa28bb8b8396c5aae06893f8bd29c04e38f71416e380b7ec2a9dc1b6c5ed3b5"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "4b3db258cebca14f0807d86fe5abb63b5ca65e3f8c27f00169e6a75fb953a003",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/4b/4b3db258cebca14f0807d86fe5abb63b5ca65e3f8c27f00169e6a75fb953a003.jsonl.gz",
+      "sha256": "47cd7a26759e12d5a064184c5b06e53f19e036cc5d5f161b350efc259260dd15",
+      "sha256_verified": true
+    },
+    {
+      "cases": 176328,
+      "chapter": "08",
+      "compressed_bytes": 6685360,
+      "computed_keys": {
+        "archived_main": "51027f2064ed4fe71ab9c77c5d3a23858652e6933fb59a44f6cb253061b92859",
+        "historical_pre_510": "f92cf039f8a3c77f0cc69ec324b67398ede551492a0aa6661a7be925f777c7b3",
+        "retained_B": "a3ff486353795e3ee22c96c1337affa653fcefa69569b6f5f94a8de7469aa809",
+        "retained_fresh_A": "b60721eacf4420420ad6bccc38fc648649d5c025924e9ad45d9150b2017cf17f"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "f92cf039f8a3c77f0cc69ec324b67398ede551492a0aa6661a7be925f777c7b3",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/f9/f92cf039f8a3c77f0cc69ec324b67398ede551492a0aa6661a7be925f777c7b3.jsonl.gz",
+      "sha256": "5923d9a937fcd740460b304f649fb6f32ef80241879f69151b82a47297662411",
+      "sha256_verified": true
+    },
+    {
+      "cases": 16578,
+      "chapter": "09",
+      "compressed_bytes": 617134,
+      "computed_keys": {
+        "archived_main": "430728a566ced89feedac7eced39532464610f2771098ca05b4b8be9841cbe0d",
+        "historical_pre_510": "021b6b13feca5fbb5f8c64cd3707c767cd0770dbc76340e18e7001bc654907d7",
+        "retained_B": "4df3f140a6a2f707e86c3b1698ce79409916ca339d7347e86157f7fb5fbfa54e",
+        "retained_fresh_A": "fceb95dfd17c35e43d2969e9c7297919dc6db36fdb51dbbb0d754c7d5ae32ea9"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "021b6b13feca5fbb5f8c64cd3707c767cd0770dbc76340e18e7001bc654907d7",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/02/021b6b13feca5fbb5f8c64cd3707c767cd0770dbc76340e18e7001bc654907d7.jsonl.gz",
+      "sha256": "0d6afddc9ba682db67f56580a587e7c44f82c2c4415ba71e341640fbd6235e0f",
+      "sha256_verified": true
+    },
+    {
+      "cases": 62316,
+      "chapter": "10",
+      "compressed_bytes": 2376165,
+      "computed_keys": {
+        "archived_main": "6b9b66d090edffc05ac912a502b32afbafed6daed82798fab0a96d8de04ac5d3",
+        "historical_pre_510": "76311de8c256b7f69880c7309eebcf93e8a3885b61d7149b9f61bfd0b5045d21",
+        "retained_B": "c23d6b76ba579898bc1b3706fc712102980ec63783fa30a0c8e6aed406d266d5",
+        "retained_fresh_A": "d119dd70e452b670181dd463ca8e1c24706dad9dc0f41c7aa74fe7ca9db19cae"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "76311de8c256b7f69880c7309eebcf93e8a3885b61d7149b9f61bfd0b5045d21",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/76/76311de8c256b7f69880c7309eebcf93e8a3885b61d7149b9f61bfd0b5045d21.jsonl.gz",
+      "sha256": "cd683e676fe35f8d2490fa33d05ad64d87f2ae60313d33326ef4a6ba8bad63d6",
+      "sha256_verified": true
+    },
+    {
+      "cases": 50247,
+      "chapter": "11",
+      "compressed_bytes": 1913366,
+      "computed_keys": {
+        "archived_main": "87e074c6dfd954f738de822e2de28713f4ea1cc90a89501f84e03fefa64ddc11",
+        "historical_pre_510": "8609bdb5bb4d2ea02078448b710ed6c06019442d4722d4aaccbdbd2def019135",
+        "retained_B": "fe6f02db23c4416d160ec11ededebda164df31fb1b8a34f1db26564663c4d412",
+        "retained_fresh_A": "c730722977f83fb80f18798096639bfe95fec624289d9cb1f1e71b5bc49bdbeb"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "8609bdb5bb4d2ea02078448b710ed6c06019442d4722d4aaccbdbd2def019135",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/86/8609bdb5bb4d2ea02078448b710ed6c06019442d4722d4aaccbdbd2def019135.jsonl.gz",
+      "sha256": "524f6e0c119492ad7bbff9369e453f3cad535e1700990ae4e96601b96f739342",
+      "sha256_verified": true
+    },
+    {
+      "cases": 135153,
+      "chapter": "12",
+      "compressed_bytes": 5102300,
+      "computed_keys": {
+        "archived_main": "674de0a36110e097c6b3d93647f83b58327b126f20d46cd6787dd330eecc8923",
+        "historical_pre_510": "2584e3252a0c13cb818e8812940bfca6c3388eb7ddf0487319359ee038f386ed",
+        "retained_B": "6b3b539eaf98a57962b599a302065845dec730c2b4c269afbe67f2595d32e2bc",
+        "retained_fresh_A": "ec5ee6a0bd1d31ee765a3ed6b8049d749252b9cb7bea4be9ab1735aa7fb3671e"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "2584e3252a0c13cb818e8812940bfca6c3388eb7ddf0487319359ee038f386ed",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/25/2584e3252a0c13cb818e8812940bfca6c3388eb7ddf0487319359ee038f386ed.jsonl.gz",
+      "sha256": "43a84349e9a7160f7afc8f132cf07071172f99cd4d180b37c6ef731ee815bfab",
+      "sha256_verified": true
+    },
+    {
+      "cases": 24696,
+      "chapter": "13",
+      "compressed_bytes": 927553,
+      "computed_keys": {
+        "archived_main": "a64d88b4dc3a403587c78767892c79c0bd455775b48d4cd1fd88278b69440927",
+        "historical_pre_510": "e94c13d49fdb2855975894fc658afc87ac8e2be1de59880821afb8d5318ab2d7",
+        "retained_B": "a675806e2f6f71e560f60f3f25ea2ab14521e95d832c351b5212c29fa021c10f",
+        "retained_fresh_A": "5a9fbb9f57a5c003f50c1105044635b84bd9e21c4ab19dc406119274165efe30"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "e94c13d49fdb2855975894fc658afc87ac8e2be1de59880821afb8d5318ab2d7",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e9/e94c13d49fdb2855975894fc658afc87ac8e2be1de59880821afb8d5318ab2d7.jsonl.gz",
+      "sha256": "410db0ec2914bfdf1f3f8fb5497b50c7fce092c8bf5f03d3723d412895546854",
+      "sha256_verified": true
+    },
+    {
+      "cases": 12474,
+      "chapter": "14",
+      "compressed_bytes": 471348,
+      "computed_keys": {
+        "archived_main": "58720e92e08b8e56ac50cc49e4e8cf6df18d66ebad608874ff3d5627554de798",
+        "historical_pre_510": "8b2d69dea3fb29acf7d1afb8d776f4ef3202edc33a81715cb21e368522789525",
+        "retained_B": "38c726781e972260ecdfd37cfb036c6fb0c231f52c974cf33c458c4986a5d229",
+        "retained_fresh_A": "97630763641964d35a19f79bdd2a37eb62895d4d3f500509e92a9d3e316d25ca"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "8b2d69dea3fb29acf7d1afb8d776f4ef3202edc33a81715cb21e368522789525",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/8b/8b2d69dea3fb29acf7d1afb8d776f4ef3202edc33a81715cb21e368522789525.jsonl.gz",
+      "sha256": "9788d9f3b240c82a2b2ecfb1c4ad704e68bf2919057ec4c7edf04cb3fe53ad2c",
+      "sha256_verified": true
+    },
+    {
+      "cases": 111096,
+      "chapter": "15",
+      "compressed_bytes": 4219365,
+      "computed_keys": {
+        "archived_main": "8d4325c7d9a11763c12533e99f9e45b964eee06805e89be87bafa8ebb3048e28",
+        "historical_pre_510": "97b58a7c7c51d7cc92f69e5fd30ed0b17a14132229fb69e1075bfb8b3691be03",
+        "retained_B": "2ffc2e2785a1585326510219018fe4c1fe38b25bba0578b29d3d182b663d8aea",
+        "retained_fresh_A": "88f73b5ea4a1e73a1a02879d47f897aa08a0f6bb21cbf05d8e1eec35b9d1d0b2"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "97b58a7c7c51d7cc92f69e5fd30ed0b17a14132229fb69e1075bfb8b3691be03",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/97/97b58a7c7c51d7cc92f69e5fd30ed0b17a14132229fb69e1075bfb8b3691be03.jsonl.gz",
+      "sha256": "88d0163ab80b99fe5d67c5c0b12387dae8146351e02385653f88e61f20875f6e",
+      "sha256_verified": true
+    },
+    {
+      "cases": 184437,
+      "chapter": "16",
+      "compressed_bytes": 6949637,
+      "computed_keys": {
+        "archived_main": "5597c1d985095883f294ca45b93a131c05ce7942de688fb97517be38ab625662",
+        "historical_pre_510": "a3d0c9f05297af131c9da00c81f4cadf4214b311ec40bef341f8d84939480efb",
+        "retained_B": "7d2cf06ef70d1360bd24d57fbb7b6b166d2a902c0ab49b6e38974178d1a7130b",
+        "retained_fresh_A": "546f067a1b71d4c880e24c816300f37b2776b3fbae4a2b10e8327d8ea0006dcb"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "a3d0c9f05297af131c9da00c81f4cadf4214b311ec40bef341f8d84939480efb",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/a3/a3d0c9f05297af131c9da00c81f4cadf4214b311ec40bef341f8d84939480efb.jsonl.gz",
+      "sha256": "9df5401d7b3945684845697a835d74e189bb23fc12d7ebf3c9e017a1201f8dbb",
+      "sha256_verified": true
+    },
+    {
+      "cases": 94167,
+      "chapter": "17",
+      "compressed_bytes": 3574392,
+      "computed_keys": {
+        "archived_main": "b9068295bb0a2dceb1276db2d2b6b86b66b325907cee7b13f77db9567ac7a015",
+        "historical_pre_510": "7a04302afd4d1fb311f428db5298e856800e2ef86d8abe12f2c165b0f8570ebf",
+        "retained_B": "f41738091badee8368daa4f527d4086b05ce4ac3478f06f877b34f9b75f6c263",
+        "retained_fresh_A": "a53cf0600792e70db1c5ceff348feb982f77468ecb0d387fca7afb9edd37a106"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "7a04302afd4d1fb311f428db5298e856800e2ef86d8abe12f2c165b0f8570ebf",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7a/7a04302afd4d1fb311f428db5298e856800e2ef86d8abe12f2c165b0f8570ebf.jsonl.gz",
+      "sha256": "6727d837716047e89640ea5e8aafd91907af15bd02aa670d952a41365f960c7c",
+      "sha256_verified": true
+    },
+    {
+      "cases": 81189,
+      "chapter": "18",
+      "compressed_bytes": 3060914,
+      "computed_keys": {
+        "archived_main": "2059bdc18a1c23310b5c83c1a28ceab03c0e493177d2f42c9991e0acfc587854",
+        "historical_pre_510": "9b064014b9bdcbf3be2bf09916e94b1e8b13aeb0fcf2c483a60512ab432cd5e2",
+        "retained_B": "c1f1118d2c037f1917dd896204a7a915d9258e2ae6ffcb0fa18ad89cb437e0f0",
+        "retained_fresh_A": "cae2a287c71cd35570937a82138b7a13dfca14c2f48353af429192ef834bc959"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "9b064014b9bdcbf3be2bf09916e94b1e8b13aeb0fcf2c483a60512ab432cd5e2",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/9b/9b064014b9bdcbf3be2bf09916e94b1e8b13aeb0fcf2c483a60512ab432cd5e2.jsonl.gz",
+      "sha256": "98f1aa985b4294021dba1a9d2ba60b56c6cd06f05e56bbef925351e5e50b8623",
+      "sha256_verified": true
+    },
+    {
+      "cases": 102699,
+      "chapter": "19",
+      "compressed_bytes": 3869751,
+      "computed_keys": {
+        "archived_main": "15b25c9c76c1de70edbcdb02829baba7c00d80a2b7c3acd93236df2ee213e654",
+        "historical_pre_510": "225f35f96de66de14054d76a0254e3c772bd0d29d77462dd56e99a47c7711452",
+        "retained_B": "eced6929de6767dbd8bc4c62c87b5b1b64e038138f26786c05f3b105d41db8ed",
+        "retained_fresh_A": "82021afb720924fe24d38a6c412282403550cd9c6585f12b9fd7a40bb8b6bb13"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "225f35f96de66de14054d76a0254e3c772bd0d29d77462dd56e99a47c7711452",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/22/225f35f96de66de14054d76a0254e3c772bd0d29d77462dd56e99a47c7711452.jsonl.gz",
+      "sha256": "911823ba3a913def2f490901dc16af5a215b1e0bdf3662409f50702192e32519",
+      "sha256_verified": true
+    },
+    {
+      "cases": 269109,
+      "chapter": "20",
+      "compressed_bytes": 10212391,
+      "computed_keys": {
+        "archived_main": "4db2b0092da72dc8a329c3ba31b41d0cc367eca5ac436822139e7f314ffed048",
+        "historical_pre_510": "64de1621f670375359fcd65cc53ec4e921fa705c851d10c56a442eb9c65f3d3a",
+        "retained_B": "7306ed7bbd6d13cc146d658cd88396cd790983c6c9511f9bb01f20dfbb39df49",
+        "retained_fresh_A": "593983d58d60fd2b99ff86acc72def870dfe3ce6fe20b4bb32b9ad7951687efa"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "64de1621f670375359fcd65cc53ec4e921fa705c851d10c56a442eb9c65f3d3a",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/64/64de1621f670375359fcd65cc53ec4e921fa705c851d10c56a442eb9c65f3d3a.jsonl.gz",
+      "sha256": "82c80dbddf80379ad72a0b8eb02168247af404950ead31e75e13c17489fcf607",
+      "sha256_verified": true
+    },
+    {
+      "cases": 105858,
+      "chapter": "21",
+      "compressed_bytes": 4003973,
+      "computed_keys": {
+        "archived_main": "d4ec95334de4e114eb864c629e8994ff57e8c3091d82d5bde93bd6df57aebbdd",
+        "historical_pre_510": "108ca26a8dd207a1b98c6c41fe93fb3570369be9c0d6594f788eefa7fabf4f68",
+        "retained_B": "4dc3c4f15718de6e268b3c5c1d776554ead2cd5af3efd6f9e087828f00bc46fc",
+        "retained_fresh_A": "cf0eb31a95ab979dc3592a71e218dfe9882d97b5c7b99d73ee0a262e0a6bceb9"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "108ca26a8dd207a1b98c6c41fe93fb3570369be9c0d6594f788eefa7fabf4f68",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/10/108ca26a8dd207a1b98c6c41fe93fb3570369be9c0d6594f788eefa7fabf4f68.jsonl.gz",
+      "sha256": "b1e708a36ec094e3bbc4324d8d19c99bc695a41a941af186f3bbf1c96c6e60be",
+      "sha256_verified": true
+    },
+    {
+      "cases": 116100,
+      "chapter": "22",
+      "compressed_bytes": 4406094,
+      "computed_keys": {
+        "archived_main": "a00c9e0c6aefc3999ab38386cf239b6315bc7a9f70a16be195940ad0564238a6",
+        "historical_pre_510": "d7c67c78cb71bf9ab261e2d346f05a299445b14f1242b3591040f944d03fb349",
+        "retained_B": "70f12ecb97e2558cef1f349a7d65b90a9bb29342c11483030b95f4456ddf32a2",
+        "retained_fresh_A": "042082a4c0a5953cf3274ac03147cb963b374c369bcf93999fe66a30a73ea7d2"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "d7c67c78cb71bf9ab261e2d346f05a299445b14f1242b3591040f944d03fb349",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d7/d7c67c78cb71bf9ab261e2d346f05a299445b14f1242b3591040f944d03fb349.jsonl.gz",
+      "sha256": "53a6d3f619baf466575768abb8da8ed7e0afeecb88bc34123e68e9d77f83e40d",
+      "sha256_verified": true
+    },
+    {
+      "cases": 64692,
+      "chapter": "23",
+      "compressed_bytes": 2449517,
+      "computed_keys": {
+        "archived_main": "5d119ab745eeb6c4e6a362d0d131ee08b59267586067e0ea850199a742952f18",
+        "historical_pre_510": "9e1c36568b9e3ab90871c18f1d2e8f6d25d451e84ee5a0fbf6085731d1a58012",
+        "retained_B": "593b915b77ccb6d838bd57e1dee92bfa04bef260520e37da54aa433f0a5afffa",
+        "retained_fresh_A": "72d6703e4e15e51d9389f688be7e9a6fea0bbba5e330e5954a03c7b64f3162f3"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "9e1c36568b9e3ab90871c18f1d2e8f6d25d451e84ee5a0fbf6085731d1a58012",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/9e/9e1c36568b9e3ab90871c18f1d2e8f6d25d451e84ee5a0fbf6085731d1a58012.jsonl.gz",
+      "sha256": "1226c07b631123018bf39834e25babd408d0f3501be09af9c5c7d46143b874ce",
+      "sha256_verified": true
+    },
+    {
+      "cases": 211437,
+      "chapter": "24",
+      "compressed_bytes": 8030946,
+      "computed_keys": {
+        "archived_main": "85e36a7a634d1b2c6ee24f8a007f82b6d3cdd3174f8bcee3ee1a4ffb60fd9477",
+        "historical_pre_510": "7d3cb29685cf223bd85ba6e00be43fa93e20012dca153a84fc74a0ff5f9307de",
+        "retained_B": "1570a522551e7652be11d8d71d100753a2233b1e81f5d129c3b51e7ffc9d19b5",
+        "retained_fresh_A": "915591145d2e5a6f1e845886740fe27108ec449b7154164d8b154ed70796897a"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "7d3cb29685cf223bd85ba6e00be43fa93e20012dca153a84fc74a0ff5f9307de",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7d/7d3cb29685cf223bd85ba6e00be43fa93e20012dca153a84fc74a0ff5f9307de.jsonl.gz",
+      "sha256": "4e44ad7b97a99611d9a5c0866a36e53ea33a88ce6d80255fc70f84adf82125f9",
+      "sha256_verified": true
+    },
+    {
+      "cases": 81027,
+      "chapter": "25",
+      "compressed_bytes": 3041611,
+      "computed_keys": {
+        "archived_main": "4d9a46dd6edefb81a9890bec616f641f29b5d3d04bddaf8f75e262b72c975e65",
+        "historical_pre_510": "b4296a393350fd452df5655ab45f1a24b8b2278167ec66e83aa9a37c1d9fa943",
+        "retained_B": "a7b16c5b96c29240fae8c92b1130dc73ad46b025474104a9565e2b3ed9ee4322",
+        "retained_fresh_A": "b6f1280684642c4810a2fd6abca0427759b9f8c8963bdf1e8fbe5cd0f0d4aeb1"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "b4296a393350fd452df5655ab45f1a24b8b2278167ec66e83aa9a37c1d9fa943",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/b4/b4296a393350fd452df5655ab45f1a24b8b2278167ec66e83aa9a37c1d9fa943.jsonl.gz",
+      "sha256": "0064a97e1feb2da8fe7102f571829d2567c3afea0a3425eef83da4c697a11ca2",
+      "sha256_verified": true
+    },
+    {
+      "cases": 62829,
+      "chapter": "26",
+      "compressed_bytes": 2367571,
+      "computed_keys": {
+        "archived_main": "4c84dbf8e7b8f2e84c560942bfd6ab9f85052ec52be0d590f40cdd0430f91409",
+        "historical_pre_510": "84b5ef792d6b918881a20ee8013197694b02a1694dd3459794171473e5bf0139",
+        "retained_B": "1762d8816eeca43c0f9e55debd38bdc486b359b5c566d60a0722557146abd7fa",
+        "retained_fresh_A": "4cf2b7e1ef0a8755f0654803a2283cbf0cf3adf051d4d5ce008a397032b887cb"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "84b5ef792d6b918881a20ee8013197694b02a1694dd3459794171473e5bf0139",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/84/84b5ef792d6b918881a20ee8013197694b02a1694dd3459794171473e5bf0139.jsonl.gz",
+      "sha256": "6543de09f30f07b01b5449f0c87b2ae813e72daffaa76a42f26fdb8adeecbec3",
+      "sha256_verified": true
+    },
+    {
+      "cases": 22896,
+      "chapter": "27",
+      "compressed_bytes": 856717,
+      "computed_keys": {
+        "archived_main": "606faf06f1a409a099889b46e6302f99892ccedd829e61e188b27edf3706b0cd",
+        "historical_pre_510": "7a150fa07e5770a37eeffb3922413d4f8547390a216bb9377f115e3b7699a69c",
+        "retained_B": "048f4eea7a819e56b5150af6e8e9797ff10333845391df3f86c55b862421317e",
+        "retained_fresh_A": "5bc1aa36701ec86d03e192de4b0a5faa057cb8e5020b5cfaa5d1c1b59a9e523d"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "7a150fa07e5770a37eeffb3922413d4f8547390a216bb9377f115e3b7699a69c",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7a/7a150fa07e5770a37eeffb3922413d4f8547390a216bb9377f115e3b7699a69c.jsonl.gz",
+      "sha256": "90f1b21013355e8e9a8dbfd07fe5bba3eba4c4438dac28c9cbb99d3082f2432d",
+      "sha256_verified": true
+    },
+    {
+      "cases": 250722,
+      "chapter": "28",
+      "compressed_bytes": 9449655,
+      "computed_keys": {
+        "archived_main": "f756f6ad6f5e8bfda32d152afc97a611b5b96c82656b4366e67f39ece057a12e",
+        "historical_pre_510": "e02af0976b8f8d905b31b98ef847db16db342ce8b1f416e1670b142993fe602f",
+        "retained_B": "44fdff382f43f69eb2818ffcdd86b3fe6ab98f8339281ceaa28ed15957a3974c",
+        "retained_fresh_A": "b666af038bdc31134d16f712e0cec296cf3aaf147cc42ad411ae245cc166e9c3"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "e02af0976b8f8d905b31b98ef847db16db342ce8b1f416e1670b142993fe602f",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e0/e02af0976b8f8d905b31b98ef847db16db342ce8b1f416e1670b142993fe602f.jsonl.gz",
+      "sha256": "f33315ecf9f7fe9ce979090ff8a5819082dc444e21626dea9d5948a95b815c4f",
+      "sha256_verified": true
+    },
+    {
+      "cases": 991575,
+      "chapter": "29",
+      "compressed_bytes": 37375237,
+      "computed_keys": {
+        "archived_main": "eb69f7ac166cf0006086c39babb5dfb6a3ed29b4fe0fe6ada95a58dab58277f9",
+        "historical_pre_510": "8d6adc4454cb3431104f3b1c6ae91f04e23e2c1a3e069d8c5c5969a00a2ecf13",
+        "retained_B": "962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3",
+        "retained_fresh_A": "3fade5cb48c0d8a0aab5e92058c1bf4aa6c17f571f0bec8879ac327a6c824189"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "8d6adc4454cb3431104f3b1c6ae91f04e23e2c1a3e069d8c5c5969a00a2ecf13",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/8d/8d6adc4454cb3431104f3b1c6ae91f04e23e2c1a3e069d8c5c5969a00a2ecf13.jsonl.gz",
+      "sha256": "c87a669598ee1412974542c1e7aa9a2bd47992e2db6e6c7e3cd21ed5066e8082",
+      "sha256_verified": true
+    },
+    {
+      "cases": 47286,
+      "chapter": "30",
+      "compressed_bytes": 1745804,
+      "computed_keys": {
+        "archived_main": "8fbc09d54c6aa0535d5ff0a96eddb2a0170476e94020613e8a4acad5943fb5aa",
+        "historical_pre_510": "90479b08f59f48704a86c899b6e08a87bd80c552d5e51f0a5ed01f4e9899c9dd",
+        "retained_B": "8f2563967c373aedb81779d51626a850468f5da3e611d6a0a8946ca883f7fdf7",
+        "retained_fresh_A": "ba7156d929dd8220ce23ef3e45cbea7c26bbd757fb75fe7ba0f976961dc3f75d"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "90479b08f59f48704a86c899b6e08a87bd80c552d5e51f0a5ed01f4e9899c9dd",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/90/90479b08f59f48704a86c899b6e08a87bd80c552d5e51f0a5ed01f4e9899c9dd.jsonl.gz",
+      "sha256": "5e264c407a0360e62f10fa5201e051a4a0c1522882bb63748fca2167e668eb2c",
+      "sha256_verified": true
+    },
+    {
+      "cases": 4509,
+      "chapter": "31",
+      "compressed_bytes": 167461,
+      "computed_keys": {
+        "archived_main": "ea1a8f7703913d092f87f406c3929abd3bc5943d4352c3a6373dc07328fefc2d",
+        "historical_pre_510": "58d96be4b16afffd5f0aa295f17ef9f646a88fc18bfbf8c7aefbe14379e62a8b",
+        "retained_B": "ded0d4ce35cd570d4f3fa8ceb6b17c3e6a3b686118afb1fa2a3c77bcc3394640",
+        "retained_fresh_A": "b14fcbf624edec565e024164131f212fc2ef140df8f3cef98f33a56199d75da3"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "58d96be4b16afffd5f0aa295f17ef9f646a88fc18bfbf8c7aefbe14379e62a8b",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/58/58d96be4b16afffd5f0aa295f17ef9f646a88fc18bfbf8c7aefbe14379e62a8b.jsonl.gz",
+      "sha256": "a77cfc91dbb57cac3758417c606c29c109c621efa55ee57b6b04edca6aee825b",
+      "sha256_verified": true
+    },
+    {
+      "cases": 186408,
+      "chapter": "32",
+      "compressed_bytes": 7057251,
+      "computed_keys": {
+        "archived_main": "233aa23e51bc97d580b290246e8719296d07934253c8fbc02b9312d094e958ca",
+        "historical_pre_510": "3eae3dbadf41fac779963e6cfac2c6cfe4f942428aa0f4ffd17933d275031b5f",
+        "retained_B": "d352959f63baf1ceb1886c2448188763c181f6b5a239d559e0c81d458cc2aca2",
+        "retained_fresh_A": "c33af24608a37bbf81835dd5cdafe79b5a22d76094ca4a946faf48d930d6a838"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "3eae3dbadf41fac779963e6cfac2c6cfe4f942428aa0f4ffd17933d275031b5f",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/3e/3eae3dbadf41fac779963e6cfac2c6cfe4f942428aa0f4ffd17933d275031b5f.jsonl.gz",
+      "sha256": "53fd165c73a70d25ad142cd4ae81fbebd1bfbef123276f6ce5689d915bb5d1b2",
+      "sha256_verified": true
+    },
+    {
+      "cases": 58347,
+      "chapter": "33",
+      "compressed_bytes": 2207745,
+      "computed_keys": {
+        "archived_main": "0fa2e0f0a826accbcc888c82c936f5c018edbd81da057df36d1a58be49e3d6ac",
+        "historical_pre_510": "3b684d45339a9c61b4bba656da92a4a963275df4ea7e31c84cd8a4d7dfd81b46",
+        "retained_B": "2be26146f1bf4fa37bd431565d6101966b0e07845b5360478c56b7f88936a143",
+        "retained_fresh_A": "a4106d76c9f38fba77444234ec055866a48978ed2685d4264fed4dcd681cb150"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "3b684d45339a9c61b4bba656da92a4a963275df4ea7e31c84cd8a4d7dfd81b46",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/3b/3b684d45339a9c61b4bba656da92a4a963275df4ea7e31c84cd8a4d7dfd81b46.jsonl.gz",
+      "sha256": "138b91b4c26c1d6546916ce2592f860d4f8bcc4a181c611392dd1e96f4db9ec8",
+      "sha256_verified": true
+    },
+    {
+      "cases": 49572,
+      "chapter": "34",
+      "compressed_bytes": 1883561,
+      "computed_keys": {
+        "archived_main": "f0fc46b28c9d64f38b133efdd9a05b54e8ef267c05c8b7b332c72f206b564b4e",
+        "historical_pre_510": "d78197482432682a793dea0394ee50917bbe0710f3ff251ffde2b22638b93e93",
+        "retained_B": "e25f9d8cb980556ab86c243a8be124e057740555ba3c47a2eac3036531d15313",
+        "retained_fresh_A": "e87dc350f7e34f6d1013f96165d1ae0075d1ce45cebf9991c383a8298e059d82"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "d78197482432682a793dea0394ee50917bbe0710f3ff251ffde2b22638b93e93",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d7/d78197482432682a793dea0394ee50917bbe0710f3ff251ffde2b22638b93e93.jsonl.gz",
+      "sha256": "12618415688518d2f0f7e2166f610dcd3744a642a72bdbc9c4af2d8e9ca3f8c9",
+      "sha256_verified": true
+    },
+    {
+      "cases": 33912,
+      "chapter": "35",
+      "compressed_bytes": 1290399,
+      "computed_keys": {
+        "archived_main": "5bad6feb630bb2fe572626a50b827347ed76dfccfe69e7b81bd19373660f1ed1",
+        "historical_pre_510": "005fc7b5f2bb1c2352815b1f1152f10bfa4dc8d852de79ed3f8009df032280ff",
+        "retained_B": "a82eebec2fc3a12f8163e89a26a88d8d6810556484376097ff9a2e6bfc198005",
+        "retained_fresh_A": "cc1456039979ec87012ff3ba457a655615cd0b4c66fadccaf019afe54c710473"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "005fc7b5f2bb1c2352815b1f1152f10bfa4dc8d852de79ed3f8009df032280ff",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/00/005fc7b5f2bb1c2352815b1f1152f10bfa4dc8d852de79ed3f8009df032280ff.jsonl.gz",
+      "sha256": "4c2caac021c55f4756261eb6c428130b1a156fdedc841a133603a86bc8524ddf",
+      "sha256_verified": true
+    },
+    {
+      "cases": 20061,
+      "chapter": "36",
+      "compressed_bytes": 758440,
+      "computed_keys": {
+        "archived_main": "79ffae257f27afbb99606009074b73cf2db45980a35d0ede07b25bd788486aaa",
+        "historical_pre_510": "9fc95fd0c532f7c1dbaf27c256e5c2148d751b26474771183314968aed6ce93c",
+        "retained_B": "d2db48a5750e7fe3b604785cfcf739d32f1ab6168ac80d7885d4f5cce684e677",
+        "retained_fresh_A": "ccced6f82b27eecee6c5493525fbbdda709e774a63f030a7da02064dfc6c362a"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "9fc95fd0c532f7c1dbaf27c256e5c2148d751b26474771183314968aed6ce93c",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/9f/9fc95fd0c532f7c1dbaf27c256e5c2148d751b26474771183314968aed6ce93c.jsonl.gz",
+      "sha256": "6e48d45d914182233af9678d6d8d3560d03450d15e8b5e89e7d29437b79ca8c2",
+      "sha256_verified": true
+    },
+    {
+      "cases": 66933,
+      "chapter": "37",
+      "compressed_bytes": 2526457,
+      "computed_keys": {
+        "archived_main": "315f02ff1280857d1f42be442c010f33695f2bb3017d899b357d49d3c1c283c0",
+        "historical_pre_510": "19453ad077bdca64f2bcd9417698c5fed7e7b236a5b6e35be94202db9d631691",
+        "retained_B": "81dc5e8368c59b74c15ed490cf098267428d15268073c76df46633abd3fc5ef1",
+        "retained_fresh_A": "4dcca6f25582cc9974798aed19f328040cfd7fa5dd41d6b950e417081f17fb1a"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "19453ad077bdca64f2bcd9417698c5fed7e7b236a5b6e35be94202db9d631691",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/19/19453ad077bdca64f2bcd9417698c5fed7e7b236a5b6e35be94202db9d631691.jsonl.gz",
+      "sha256": "842cbeca5094289db90414a24e76c5c04451daa560ef0e363ad095ad6ace4a9e",
+      "sha256_verified": true
+    },
+    {
+      "cases": 230409,
+      "chapter": "38",
+      "compressed_bytes": 8720286,
+      "computed_keys": {
+        "archived_main": "24e18c03eebe3f9b83d94104165d22f40cf944f669d545f883a73249c1f9327f",
+        "historical_pre_510": "15b8cdf40ad81ee520e8c108ae42692d2babd7d829218b8ce18411faa0992470",
+        "retained_B": "d851630e71ebab9c6c7f1e6d11cbc3a535dcc37271dc2f4d526e6faee6419f96",
+        "retained_fresh_A": "14794773cede6dfda8393923e718b8d9ba77126d4a4a9a0dfbf2b86dc82c10d9"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "15b8cdf40ad81ee520e8c108ae42692d2babd7d829218b8ce18411faa0992470",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/15/15b8cdf40ad81ee520e8c108ae42692d2babd7d829218b8ce18411faa0992470.jsonl.gz",
+      "sha256": "41ab7746a9635485ea96637a234c1bc9f7b9fb9025f91296df784748f2f5071a",
+      "sha256_verified": true
+    },
+    {
+      "cases": 346617,
+      "chapter": "39",
+      "compressed_bytes": 13116367,
+      "computed_keys": {
+        "archived_main": "94e37ba25f6c51af80f087236c3b8d17e2594d8bcafabb5b5e9a51538cfdb69e",
+        "historical_pre_510": "e5d4b107ea5ba23b5388d324b64f2ebb1e566ec586e928268e3a56ff18710f7f",
+        "retained_B": "94edf9073bd7cf4c39eaf44d745df48a3e4c7102014cabadbc14db19b20f4a99",
+        "retained_fresh_A": "141187ba6ed493bc4d9862063ec6c1994754d8326357f69be9cfe642698b37f2"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "e5d4b107ea5ba23b5388d324b64f2ebb1e566ec586e928268e3a56ff18710f7f",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e5/e5d4b107ea5ba23b5388d324b64f2ebb1e566ec586e928268e3a56ff18710f7f.jsonl.gz",
+      "sha256": "da6f6f72628a628681db7b83cf569892ddc592874015fb655767cf61da6ed382",
+      "sha256_verified": true
+    },
+    {
+      "cases": 197397,
+      "chapter": "40",
+      "compressed_bytes": 7464084,
+      "computed_keys": {
+        "archived_main": "a20b21bccc5592592b46f32ee899a8e4cd4fa82f1ff14594ef05631b01a0a217",
+        "historical_pre_510": "eb1c32f4e9c62fe2f2aa130f40e9564432f4b278a7a5e0370e46ce7967575ff1",
+        "retained_B": "c2f4c14cdaa8166409255542e4c91c2c0fe21a19d0881fc4b9c9e09b33a0a411",
+        "retained_fresh_A": "13bb97901c6d484eb346542853ae3f5a7d118f3374c0cd9c09ab2e7eba896ac3"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "eb1c32f4e9c62fe2f2aa130f40e9564432f4b278a7a5e0370e46ce7967575ff1",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/eb/eb1c32f4e9c62fe2f2aa130f40e9564432f4b278a7a5e0370e46ce7967575ff1.jsonl.gz",
+      "sha256": "b3e20fab706c0d04551feff47b913b8fec733b09f7684eaddc4e32a6b486d229",
+      "sha256_verified": true
+    },
+    {
+      "cases": 194400,
+      "chapter": "41",
+      "compressed_bytes": 7334520,
+      "computed_keys": {
+        "archived_main": "112fd9aa77e5f58bd332fc872d9d76139312d22f22801c4839a1c8614e75d414",
+        "historical_pre_510": "b1a12f1de442fadb1375df2e20ffbaaace41fecae3e7e42a073823e95ba195cb",
+        "retained_B": "d6c7b68eff9a82419b5d5cea363fa5dc89caa1100870ad585a860c222bedbf2e",
+        "retained_fresh_A": "d1f93271f6e4b1d4019050d6f2f8a45275874f387cf984f54fdb3013d2494f45"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "b1a12f1de442fadb1375df2e20ffbaaace41fecae3e7e42a073823e95ba195cb",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/b1/b1a12f1de442fadb1375df2e20ffbaaace41fecae3e7e42a073823e95ba195cb.jsonl.gz",
+      "sha256": "ac0e13a0facb074048c9b0fe252e248702032be554d1ee4f5f92d86e4adc063c",
+      "sha256_verified": true
+    },
+    {
+      "cases": 134865,
+      "chapter": "42",
+      "compressed_bytes": 5086583,
+      "computed_keys": {
+        "archived_main": "d42dee4dce64678629ad102b34df51a6771d9c610a6715ada3d0aa49850df22b",
+        "historical_pre_510": "0cff88529f63c5eef3da29df57732ee1ad0efc03568ec96a7f71ea25d3cff945",
+        "retained_B": "96d7576ab282f0b120b33ed0eee7568af2199db196ec36b87f7e7cf7c5184cf8",
+        "retained_fresh_A": "3f167d96f71dbddb9436f9764e07746af118b9906a4d5e6795ad68a18a8fe922"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "0cff88529f63c5eef3da29df57732ee1ad0efc03568ec96a7f71ea25d3cff945",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/0c/0cff88529f63c5eef3da29df57732ee1ad0efc03568ec96a7f71ea25d3cff945.jsonl.gz",
+      "sha256": "34b901206f555460acca0463e3bc45849af22d0cf57898437e1ef3550b4d6dd8",
+      "sha256_verified": true
+    },
+    {
+      "cases": 42363,
+      "chapter": "43",
+      "compressed_bytes": 1597480,
+      "computed_keys": {
+        "archived_main": "d7160791e0311c428c0aa5517c92becbe182cf75a5cd776e06b0236bd9779aeb",
+        "historical_pre_510": "e86cff37ed5a310c6ddce33f371b3522ff48a107e175bf49cdd54df917709346",
+        "retained_B": "f7c3ade1810af5b9d947443caabc3ec0f3184b192855993cfa84814b9966dc4c",
+        "retained_fresh_A": "656e659b018dbd55e5ab46218af64d7034d7a7c2ae2cb5c6ba19e39cad3604e7"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "e86cff37ed5a310c6ddce33f371b3522ff48a107e175bf49cdd54df917709346",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e8/e86cff37ed5a310c6ddce33f371b3522ff48a107e175bf49cdd54df917709346.jsonl.gz",
+      "sha256": "4ad707e9f20c19477ae0e352e6ff5f343d6cdf577ae5e4ea4573165af35c76df",
+      "sha256_verified": true
+    },
+    {
+      "cases": 534303,
+      "chapter": "44",
+      "compressed_bytes": 20089772,
+      "computed_keys": {
+        "archived_main": "5262b0b802566151eff97ac5eab38d0aea902169dd52f5240b346d0bd5e29979",
+        "historical_pre_510": "7cab0533612ef282b2757b3a0dbd905be98f1592b6340b4cc97df96b4bf4ed45",
+        "retained_B": "136dc2d0e4c7047073ba3a241e9f84f0e918a5d3df897837e3cde192f0a8c44f",
+        "retained_fresh_A": "ab98b3940d4aa5531f5faf2a0b45f057b9c3ae3f8a524845077b6652f4203a0b"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "7cab0533612ef282b2757b3a0dbd905be98f1592b6340b4cc97df96b4bf4ed45",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7c/7cab0533612ef282b2757b3a0dbd905be98f1592b6340b4cc97df96b4bf4ed45.jsonl.gz",
+      "sha256": "2c4ff97030276eb5eebfff75faf91d80db237ff52a17d0e0977942d6fcfa7045",
+      "sha256_verified": true
+    },
+    {
+      "cases": 20601,
+      "chapter": "45",
+      "compressed_bytes": 773789,
+      "computed_keys": {
+        "archived_main": "af8d05e069d083433354638da3374458bcfbee111cf5418a25358a76c75c0813",
+        "historical_pre_510": "e35817e2e0369c81435f731c2db47678455b11392d4da6c8b3500672350f7c1a",
+        "retained_B": "5f013caee3c484da9d4c6b7542338e626490ee5d8a496aec881195af94833f2b",
+        "retained_fresh_A": "62fa447a114c1ea5cf2cc08875e68cf8cd099504968c5ef63f52bd23e01fb6e7"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "e35817e2e0369c81435f731c2db47678455b11392d4da6c8b3500672350f7c1a",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e3/e35817e2e0369c81435f731c2db47678455b11392d4da6c8b3500672350f7c1a.jsonl.gz",
+      "sha256": "b457737e999d7158e48b025e040c8e99b46be782e23b43db8b8b05a6f920c170",
+      "sha256_verified": true
+    },
+    {
+      "cases": 55188,
+      "chapter": "46",
+      "compressed_bytes": 2080120,
+      "computed_keys": {
+        "archived_main": "fb3caa29f8d2aa5f92569b10c750732b592956c0e54e2d840bd94d76c6afe617",
+        "historical_pre_510": "ca7ffbd9c5a8a7ef4505896129e952f2ed94bb436b180d2c733daa3930f497ad",
+        "retained_B": "c08301ef2f19f1b5e78e067db573273e5c912694f853a2029c7e73310389bf02",
+        "retained_fresh_A": "45386613cf4f67fc57fd0792f9fe264337400ef376a0cbf56214e80d83e4f41c"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "ca7ffbd9c5a8a7ef4505896129e952f2ed94bb436b180d2c733daa3930f497ad",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/ca/ca7ffbd9c5a8a7ef4505896129e952f2ed94bb436b180d2c733daa3930f497ad.jsonl.gz",
+      "sha256": "7392ce5e2e3134437ef501584be15087b411539ea31de0536746f3846420b8b4",
+      "sha256_verified": true
+    },
+    {
+      "cases": 21465,
+      "chapter": "47",
+      "compressed_bytes": 805283,
+      "computed_keys": {
+        "archived_main": "5a3ef3eabb1bab742bd8e35fd64a78063afc9140ca4b93d9dff0e1015110d33a",
+        "historical_pre_510": "590df73b732234178616f4c61e13e333a0106133825bd0afac3d4bfbc9393bcf",
+        "retained_B": "c92d846367968932d0d423d69c58ad91135dee55cb533d7c34e10c3b91eedf1c",
+        "retained_fresh_A": "4f495a82012ed0ec97a6dedb057f7612afd77f7e7a9598ba78f6e086c575417f"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "590df73b732234178616f4c61e13e333a0106133825bd0afac3d4bfbc9393bcf",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/59/590df73b732234178616f4c61e13e333a0106133825bd0afac3d4bfbc9393bcf.jsonl.gz",
+      "sha256": "195300a53b4df0d351fc04cada90614cf5321c3fec004c7bfa8a12d889723080",
+      "sha256_verified": true
+    },
+    {
+      "cases": 312471,
+      "chapter": "48",
+      "compressed_bytes": 11735988,
+      "computed_keys": {
+        "archived_main": "24dc523963e5515ff0f7c78ad0b7333a5954941aca813253c4cca6cbd08ade18",
+        "historical_pre_510": "6de4db9878c56d83f7ceca262a56183e13d22d25cc61e5dbb5a457ace4145437",
+        "retained_B": "f9177d0e3d39009f72283bd10fba722cf498d945492e78192a2b0b46a282a2d7",
+        "retained_fresh_A": "14367ae4e1a35c1a8232e2ee3d98f4b3d61198c3ce4f71bcf430a8e961e5d383"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "6de4db9878c56d83f7ceca262a56183e13d22d25cc61e5dbb5a457ace4145437",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/6d/6de4db9878c56d83f7ceca262a56183e13d22d25cc61e5dbb5a457ace4145437.jsonl.gz",
+      "sha256": "294a7c17e7c6e969f5350c96cf4c6ce0eff0bb83fc0bf154e78bc37e6e79e381",
+      "sha256_verified": true
+    },
+    {
+      "cases": 14850,
+      "chapter": "49",
+      "compressed_bytes": 559418,
+      "computed_keys": {
+        "archived_main": "821bce1bd27fe39ec95e3f7d6c4baf24acbbd8f9ae191d8b1d17970b66d34fd9",
+        "historical_pre_510": "abdf13a7a7f8e6399754559059c6783ec4708f6bf8aac42d9ba9cd10ac4857a3",
+        "retained_B": "62b28654118782e276d522359a3a22384a2b758f405aa2610a244e0cd28ff8fd",
+        "retained_fresh_A": "ae2bca2f611760f7e3e7c9b4ca49f4da30a1142cc50bf9016d7879ce94bba4f5"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "abdf13a7a7f8e6399754559059c6783ec4708f6bf8aac42d9ba9cd10ac4857a3",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/ab/abdf13a7a7f8e6399754559059c6783ec4708f6bf8aac42d9ba9cd10ac4857a3.jsonl.gz",
+      "sha256": "42754682c848ce2424fd365c7e6cf5b7aad994c3b65b1934ada0b015e7a945de",
+      "sha256_verified": true
+    },
+    {
+      "cases": 33588,
+      "chapter": "50",
+      "compressed_bytes": 1264315,
+      "computed_keys": {
+        "archived_main": "9f7bfadcd433214fb38e056946aebe30e3c3d2d556198a7174e167aae484398f",
+        "historical_pre_510": "830d2b01ad889e764f88cffbfb95bee71fb9df9a470e5dbffbf64c13aac5393c",
+        "retained_B": "96212bf6f4fed628c91242913a6b4e343e3aa7d1bfc104df148a58744221a84c",
+        "retained_fresh_A": "56fc9bad8959ff50371d9704db69ffe73aeae85b62eda927953c31842b9c56e4"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "830d2b01ad889e764f88cffbfb95bee71fb9df9a470e5dbffbf64c13aac5393c",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/83/830d2b01ad889e764f88cffbfb95bee71fb9df9a470e5dbffbf64c13aac5393c.jsonl.gz",
+      "sha256": "572550f5d5de47065b5fce55b08c9e1f25ed9e83edc01e5a721922f19bcf9c39",
+      "sha256_verified": true
+    },
+    {
+      "cases": 133920,
+      "chapter": "51",
+      "compressed_bytes": 5051325,
+      "computed_keys": {
+        "archived_main": "16870f4763e8af19f4dab7c7df7f94930bd9c3a6243a01a7d23e4c00334c8549",
+        "historical_pre_510": "cf4c55c5d68f7b14b19e0b86fab400fd5ef3a0ccaa0167e1d84e4a1e46c95986",
+        "retained_B": "877b53bf4980fbda22341f040cdec088e05e9c3d505991bf00760b4b0ba0b2c8",
+        "retained_fresh_A": "7419fec11da7643cea3493710b9616dc3d93dd093ae44f20d990d2c1c011d809"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "cf4c55c5d68f7b14b19e0b86fab400fd5ef3a0ccaa0167e1d84e4a1e46c95986",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/cf/cf4c55c5d68f7b14b19e0b86fab400fd5ef3a0ccaa0167e1d84e4a1e46c95986.jsonl.gz",
+      "sha256": "6fcff68d5a6c3279a7e34f3c6a9b15ef5e019fd22f960bf30f134fcf3e3a85df",
+      "sha256_verified": true
+    },
+    {
+      "cases": 596970,
+      "chapter": "52",
+      "compressed_bytes": 22543946,
+      "computed_keys": {
+        "archived_main": "2ae4170d7b86f8446901cdc1ec16f05dff81710bb55f843bc54cc97e3716eb83",
+        "historical_pre_510": "26c69cfe4560c9ca5baba0e0919fdb3e5e30357957081e0b77ffd27eb9e0b768",
+        "retained_B": "c109e80f8dd43fabe4f18687098429e8515fc228e5335f8e7df63afd4f96e275",
+        "retained_fresh_A": "bea083ddd1f2ffa71aa955729c1f24f0d641ca9e50cf0865c17d01b8c5a72a6f"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "26c69cfe4560c9ca5baba0e0919fdb3e5e30357957081e0b77ffd27eb9e0b768",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/26/26c69cfe4560c9ca5baba0e0919fdb3e5e30357957081e0b77ffd27eb9e0b768.jsonl.gz",
+      "sha256": "da0a0e2cb23ed9937fb3ab56f5380670e38e6fbf61e80dbf584ddca3134c7a61",
+      "sha256_verified": true
+    },
+    {
+      "cases": 64125,
+      "chapter": "53",
+      "compressed_bytes": 2413907,
+      "computed_keys": {
+        "archived_main": "5deb15097c9997b5ab2fef1f2129ecf53e99b5ede902acc853fa255763bfd60f",
+        "historical_pre_510": "4759f00182e9f4cd75a03c4bafc7e96e3c20664df3eb693c8e5441cf46e0053e",
+        "retained_B": "a71251b8b1411051cf18dff6991580dea50e70d2673212840a939d460d05d6f9",
+        "retained_fresh_A": "ed6e570d033892b3295b092a2a9f7022a0498988029956cf5e149d6e994c1719"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "4759f00182e9f4cd75a03c4bafc7e96e3c20664df3eb693c8e5441cf46e0053e",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/47/4759f00182e9f4cd75a03c4bafc7e96e3c20664df3eb693c8e5441cf46e0053e.jsonl.gz",
+      "sha256": "6a812a9842603d7f64d290c9dbd5b4cec689046d2824b9b0b4d6f6120537449e",
+      "sha256_verified": true
+    },
+    {
+      "cases": 294111,
+      "chapter": "54",
+      "compressed_bytes": 11092003,
+      "computed_keys": {
+        "archived_main": "180b0380605f7096230970a12b3a91b7ac9d48233b8b8b6863ea9ecf6f981ea4",
+        "historical_pre_510": "e31d673ef92ec71d0fe4b45d017e124f7990e7ff1baa9d61fc9a349b4e4926db",
+        "retained_B": "45154a2774e2aaccd71c1da6340dff9b8c1fe668d4131a85a784aca026b5deb9",
+        "retained_fresh_A": "3bee09ddf0d99a4a1edd1e5119e4ce9201c35a5d7c06f3488bff6117c26652be"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "e31d673ef92ec71d0fe4b45d017e124f7990e7ff1baa9d61fc9a349b4e4926db",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/e3/e31d673ef92ec71d0fe4b45d017e124f7990e7ff1baa9d61fc9a349b4e4926db.jsonl.gz",
+      "sha256": "d6bdf759746a2552f89344eb76a092039538bd16e065a80ece6592d9725cd03d",
+      "sha256_verified": true
+    },
+    {
+      "cases": 442233,
+      "chapter": "55",
+      "compressed_bytes": 16667360,
+      "computed_keys": {
+        "archived_main": "6ef74a61ecae68c9a775212d6f9cc72e672aeadb61766846c85582831c8c91f7",
+        "historical_pre_510": "9889647fd34efef37654e2a7f826c17eeb66143b8b4a120f9eb6223b87fcc878",
+        "retained_B": "5699110afe87a236c12dcd470ae41a4eb65e4d5aadb0c9307f2970bb37aeecd1",
+        "retained_fresh_A": "edd653a904c64dd516ae9f908bfc0e1b03c849f20ade6ba2be1ff866d6a15008"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "9889647fd34efef37654e2a7f826c17eeb66143b8b4a120f9eb6223b87fcc878",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/98/9889647fd34efef37654e2a7f826c17eeb66143b8b4a120f9eb6223b87fcc878.jsonl.gz",
+      "sha256": "3837c805bc72b4422917c4e8ac7357a7fb8e24bfeadaad3a168361bb894bc890",
+      "sha256_verified": true
+    },
+    {
+      "cases": 87426,
+      "chapter": "56",
+      "compressed_bytes": 3295162,
+      "computed_keys": {
+        "archived_main": "1b4913a08e91482538981b0f52a3327adaf3c5e1b8e2f931950ffbc3398a58f0",
+        "historical_pre_510": "36c433a332b43af905cf0609eb6c49006edaad43fb76eed92a0c2ad232041d35",
+        "retained_B": "7fbb85da45c55b9b2c8ab4118c4c3721992b5ed9d179a85cb11f25db95aaed83",
+        "retained_fresh_A": "6642514b30e843da5b8491e2c4c91e3efd4c104d01b0c7259fff47e0ef103e72"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "36c433a332b43af905cf0609eb6c49006edaad43fb76eed92a0c2ad232041d35",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/36/36c433a332b43af905cf0609eb6c49006edaad43fb76eed92a0c2ad232041d35.jsonl.gz",
+      "sha256": "724f542af5d83960c37b698d6250b1eb599a7801f182745556f0e019f07d7bbf",
+      "sha256_verified": true
+    },
+    {
+      "cases": 80568,
+      "chapter": "57",
+      "compressed_bytes": 3035143,
+      "computed_keys": {
+        "archived_main": "f3f089da6803cf845124c8b82590af59d17546d8700eeb73f5f37d82021486f5",
+        "historical_pre_510": "d3800a9886ef32758a6a8adc08a82175690c12aa00062af381e2592ab32a7bcc",
+        "retained_B": "78439c93d2e47c44e2aa448e51076d5e29935f207a4b94665cf51c41778ff0ad",
+        "retained_fresh_A": "621a542f6f29fa23ae3ed6eca6faf6393dfea1580da77724336d2cc2fa2da762"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "d3800a9886ef32758a6a8adc08a82175690c12aa00062af381e2592ab32a7bcc",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d3/d3800a9886ef32758a6a8adc08a82175690c12aa00062af381e2592ab32a7bcc.jsonl.gz",
+      "sha256": "b507ce39b39407042132271c180d61b9f1ea455e04e2af60d92f2504bd2ef8d4",
+      "sha256_verified": true
+    },
+    {
+      "cases": 122715,
+      "chapter": "58",
+      "compressed_bytes": 4631880,
+      "computed_keys": {
+        "archived_main": "3d9f79b922e2dff05b6d032e069a249a650012fc3380c5fb4fc1ec77a3f751d5",
+        "historical_pre_510": "2aa3ff8bbaff9ec51f3cb8426bda7c86bfc6be99fa8f1397e86697062b7ae3be",
+        "retained_B": "0f508dcb2635dad47409f656b0d8892e7a3036790a645c37b48d87506789e1a3",
+        "retained_fresh_A": "eeaa927a72cd46ab3872956267feb4b2aae606cb507dbdfc733a67d6a0ec9f76"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "2aa3ff8bbaff9ec51f3cb8426bda7c86bfc6be99fa8f1397e86697062b7ae3be",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/2a/2aa3ff8bbaff9ec51f3cb8426bda7c86bfc6be99fa8f1397e86697062b7ae3be.jsonl.gz",
+      "sha256": "2ded4d8e15795b4d75587b24dadf0e84d4ff5d7e2dd4aa6e60a4945737f948ed",
+      "sha256_verified": true
+    },
+    {
+      "cases": 83106,
+      "chapter": "59",
+      "compressed_bytes": 3134022,
+      "computed_keys": {
+        "archived_main": "a9c2e4124cf07d7af2b3877a02f0a42f98800fa653ebd7cdf8a065ddc6b8b784",
+        "historical_pre_510": "92e0d7c679e42f83804f7d6149a0b526dce3dd834f11e10562be8da6fe0466b4",
+        "retained_B": "4e17e1f925c86834ac85d98c53830b32395fe3c5c42ed2747fa51e1452dcfbee",
+        "retained_fresh_A": "2e3321651a366b78255f49bf68855702a6549efb2d0735f615c162eac48d3259"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "92e0d7c679e42f83804f7d6149a0b526dce3dd834f11e10562be8da6fe0466b4",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/92/92e0d7c679e42f83804f7d6149a0b526dce3dd834f11e10562be8da6fe0466b4.jsonl.gz",
+      "sha256": "2d8a8d8db2132c15c3204044998f33ddbff441725c246b0ed4c9e8dfe77ef60d",
+      "sha256_verified": true
+    },
+    {
+      "cases": 119853,
+      "chapter": "60",
+      "compressed_bytes": 4503922,
+      "computed_keys": {
+        "archived_main": "e7967037d3a4670160fa1a4a72cca39edaf90b8e58c56b0b4685a846ee9f7ecd",
+        "historical_pre_510": "50c70c4f3563778aae4555b47d161075e889f7dda01da8b4cb96baa9f2a8135e",
+        "retained_B": "8de64e7ed308bde4f5fa3ebe3e6b44a800b67afc8425793d97da2fdac084c97a",
+        "retained_fresh_A": "e6c8a7df3dddc1fdeafcf63c78f75f989f7dd266d6b1b8d2792221f3f9213c10"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "50c70c4f3563778aae4555b47d161075e889f7dda01da8b4cb96baa9f2a8135e",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/50/50c70c4f3563778aae4555b47d161075e889f7dda01da8b4cb96baa9f2a8135e.jsonl.gz",
+      "sha256": "ba133fb03a1199d8c6d8208c5a4868c76a66925de22c4461fec8f1b0405e34ba",
+      "sha256_verified": true
+    },
+    {
+      "cases": 936549,
+      "chapter": "61",
+      "compressed_bytes": 35430173,
+      "computed_keys": {
+        "archived_main": "ed932f998e974dc4bc1b2fb86613eaa521212ad3061b8bd035f0ec3e7c2c7bee",
+        "historical_pre_510": "ea8f58907005d4f5011c50dc2fdad37ae3487d31b0845bee5c77753b06f870df",
+        "retained_B": "03732d2a305cec28eedd77a3ca5c27bd144a8311eacdebcc24bc329b6a595284",
+        "retained_fresh_A": "a456d0924c7b73e2867e64337e3a2a9ecdb6f158d65eb9b87c818e3b28bb9641"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "ea8f58907005d4f5011c50dc2fdad37ae3487d31b0845bee5c77753b06f870df",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/ea/ea8f58907005d4f5011c50dc2fdad37ae3487d31b0845bee5c77753b06f870df.jsonl.gz",
+      "sha256": "d6564f6f20707716b4440004b3802ed1c8081c161a968196bda3543299b87b2e",
+      "sha256_verified": true
+    },
+    {
+      "cases": 1403865,
+      "chapter": "62",
+      "compressed_bytes": 53123769,
+      "computed_keys": {
+        "archived_main": "1f9bc766f5763c3136e822460f92846b8b2b15c48264536c352169613d8885ca",
+        "historical_pre_510": "980c39f7ec3fd05c3b27c1d6cb4b71c49dbd2742fd4f54b4c1bb29c380458e49",
+        "retained_B": "06d6ec81331a2d900eb050d57734913e94d242e4e24261ba6e2bf18452f2ad58",
+        "retained_fresh_A": "fe11b286e80fedf6daab6074b677f871908ce9c3b23f0d5d88200ca4175024ed"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "980c39f7ec3fd05c3b27c1d6cb4b71c49dbd2742fd4f54b4c1bb29c380458e49",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/98/980c39f7ec3fd05c3b27c1d6cb4b71c49dbd2742fd4f54b4c1bb29c380458e49.jsonl.gz",
+      "sha256": "55e0d0b9eb6bd9a2ec149bbdcf8680b02d9587468203ca40cb3cd6fc225b97a0",
+      "sha256_verified": true
+    },
+    {
+      "cases": 258228,
+      "chapter": "63",
+      "compressed_bytes": 9765606,
+      "computed_keys": {
+        "archived_main": "4fd4f0d097f095fe28737c07f3896b08355057f4f3223321da39afb968697600",
+        "historical_pre_510": "445d98012d23c870ba62e1bc869e689cda5fda8d07129e09d1ae60bf958ddee7",
+        "retained_B": "0d869e1970751b6b178565834a76f7751674bf80c2c5e3555e8cc49c5a3bd0b9",
+        "retained_fresh_A": "ccd2602732e9110e3e448c86f953a124cd716ba44d863bc2ff379ac6d95c284c"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "445d98012d23c870ba62e1bc869e689cda5fda8d07129e09d1ae60bf958ddee7",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/44/445d98012d23c870ba62e1bc869e689cda5fda8d07129e09d1ae60bf958ddee7.jsonl.gz",
+      "sha256": "acf9f9ebb8519127714e2eddfbb04680f2403302537ead9d619c267857e16529",
+      "sha256_verified": true
+    },
+    {
+      "cases": 433269,
+      "chapter": "64",
+      "compressed_bytes": 16394676,
+      "computed_keys": {
+        "archived_main": "c716b7c0260e42320d904e326eac306b43e409acb71b9a7ce394259f7b90629f",
+        "historical_pre_510": "011260cc44e9b91d73f5dbd5edce111ea2054f88432bbc06d2c0844162d04aff",
+        "retained_B": "27b28e2ba6915cef1e103d6e7f47aecd07ccf42328228f0da4202d0109434200",
+        "retained_fresh_A": "4f79af513bf5f0c30218953a2b02f09fa551346fe088c38767fdfb94f06d6d51"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "011260cc44e9b91d73f5dbd5edce111ea2054f88432bbc06d2c0844162d04aff",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/01/011260cc44e9b91d73f5dbd5edce111ea2054f88432bbc06d2c0844162d04aff.jsonl.gz",
+      "sha256": "94ae76a368ed204f57372076ff8657a8774193a52bef576376a4a5d1ee4217ab",
+      "sha256_verified": true
+    },
+    {
+      "cases": 70902,
+      "chapter": "65",
+      "compressed_bytes": 2690564,
+      "computed_keys": {
+        "archived_main": "b369ee13d6c24cc1adb02c5c6c91d3cf513cee92a6a00f12ddef8f99e19dd419",
+        "historical_pre_510": "3784a48d4ce51a032357c08ca10b2c73f988d3ed04a617aad7bffb1b04844904",
+        "retained_B": "ba5e61a732d81bf48e94cc7d60dd22f3321facafb0b42a14abc1f37f87893596",
+        "retained_fresh_A": "974d35e633f17c1754330f56b6718edc853d09478ab812ecc55d01ad943d6696"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "3784a48d4ce51a032357c08ca10b2c73f988d3ed04a617aad7bffb1b04844904",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/37/3784a48d4ce51a032357c08ca10b2c73f988d3ed04a617aad7bffb1b04844904.jsonl.gz",
+      "sha256": "1b24faa5e43ad13bc73da8f7d7a3de04abad9a6b68cd57228b4e6e53314145ed",
+      "sha256_verified": true
+    },
+    {
+      "cases": 8802,
+      "chapter": "66",
+      "compressed_bytes": 334138,
+      "computed_keys": {
+        "archived_main": "56b21367de9ae6e09a796829ebc4e4b3cb497833938e1904b362e01f90dbe1c4",
+        "historical_pre_510": "4c894f46b4ec429909575c088bcbf883cdf2393b0125215ed5754f12e4877000",
+        "retained_B": "db1bbf3bdbb2a2aed0050bd1dd8e73b6b75bc3643d8000d080f64589b8de3a2a",
+        "retained_fresh_A": "3a4a0aa7099a2e41c42b73672dfd1277da5a066ee802833c6ad4651507ebd837"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "4c894f46b4ec429909575c088bcbf883cdf2393b0125215ed5754f12e4877000",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/4c/4c894f46b4ec429909575c088bcbf883cdf2393b0125215ed5754f12e4877000.jsonl.gz",
+      "sha256": "54249398c323353dae919fa98bd6462a9b66e16a4cdf731d830326a76a93ad0c",
+      "sha256_verified": true
+    },
+    {
+      "cases": 14040,
+      "chapter": "67",
+      "compressed_bytes": 530422,
+      "computed_keys": {
+        "archived_main": "01c917746629e9271c2846bb958fb828f51b87821376317e803f032a7f939194",
+        "historical_pre_510": "748ec77e2ac7d9e29e0f32f9b75656c61e73810957911d323ed6225c09d8b0fd",
+        "retained_B": "032ea9d7f0fc2297b4a92940a5a8225fbc2c68392f72be4ea4a687f0d90661e4",
+        "retained_fresh_A": "0b1d5ad7b1faa35996bfef756793e604d598fb67e1612af697d859bf43593d8a"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "748ec77e2ac7d9e29e0f32f9b75656c61e73810957911d323ed6225c09d8b0fd",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/74/748ec77e2ac7d9e29e0f32f9b75656c61e73810957911d323ed6225c09d8b0fd.jsonl.gz",
+      "sha256": "64ff8b8e3f85053e7d2af034f8b1a1a2e9876e809267e19fb28d8d94ab6392b1",
+      "sha256_verified": true
+    },
+    {
+      "cases": 105057,
+      "chapter": "68",
+      "compressed_bytes": 3966310,
+      "computed_keys": {
+        "archived_main": "41dddaae68395dc0c742986053ac11abcea354f493800bbaddf00e1da4eb0326",
+        "historical_pre_510": "621294f9c208baf4eb35ad960982fb6fe6cb92f20e19fb7e84244f6daeb9242c",
+        "retained_B": "a132e09bc80eb249a382361dc7f640453d1ccd73bf4f1007ad5496043d012afd",
+        "retained_fresh_A": "8af1f61759a6a3eb986e1ebcb0f987a4d3918163132cd196ee591777ecfa3ed8"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "621294f9c208baf4eb35ad960982fb6fe6cb92f20e19fb7e84244f6daeb9242c",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/62/621294f9c208baf4eb35ad960982fb6fe6cb92f20e19fb7e84244f6daeb9242c.jsonl.gz",
+      "sha256": "1dee574a45cf19c5f6c4b6500c32fb48e1d4bd05adc60939392d69b070cb00ea",
+      "sha256_verified": true
+    },
+    {
+      "cases": 133029,
+      "chapter": "69",
+      "compressed_bytes": 5015352,
+      "computed_keys": {
+        "archived_main": "258a06277e0fcb47e4e6b9a71b4392efd11276006d7a7ffcb50cf6d7e44e3c93",
+        "historical_pre_510": "46fea03a7cf93a2a5a1aad492f7e83d11ca365cc54fce8dd1bc48b1700142826",
+        "retained_B": "4006a8d30df0a05043b3d90496e70292f15138e62f0bd78e1c1b719efdd0dce1",
+        "retained_fresh_A": "05b3be5bdd29a952ebf0dbbdf671d5e2b792e3766d8e6cfa9e0d0bb86748fb89"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "46fea03a7cf93a2a5a1aad492f7e83d11ca365cc54fce8dd1bc48b1700142826",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/46/46fea03a7cf93a2a5a1aad492f7e83d11ca365cc54fce8dd1bc48b1700142826.jsonl.gz",
+      "sha256": "465f0bb7b3df85d0fefd2d8571e133a6b18f07772ab0b704896ed64633ffe34b",
+      "sha256_verified": true
+    },
+    {
+      "cases": 308421,
+      "chapter": "70",
+      "compressed_bytes": 11640961,
+      "computed_keys": {
+        "archived_main": "f44ec5770b8487821ef8084e2d67f4f53cd05f43fc6031e8e76d050be17e4278",
+        "historical_pre_510": "fc361c88f9e2dde34855c0ec36d8ee8b6bd9134836028690f917e778e6edb224",
+        "retained_B": "e0ced0f49a7715f83f5da54952503c33a063af73c79a2d12cca1b6ab8a79a38a",
+        "retained_fresh_A": "ef5e94381120030cf318c159ba5ac1e436d7602f15fb557315c75f6b5c9589b0"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "fc361c88f9e2dde34855c0ec36d8ee8b6bd9134836028690f917e778e6edb224",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/fc/fc361c88f9e2dde34855c0ec36d8ee8b6bd9134836028690f917e778e6edb224.jsonl.gz",
+      "sha256": "3ffe5be43cb0fa19d43c249fb8ee4f57a00daa203c12758ef2b6d99c7e3f7530",
+      "sha256_verified": true
+    },
+    {
+      "cases": 120114,
+      "chapter": "71",
+      "compressed_bytes": 4517845,
+      "computed_keys": {
+        "archived_main": "3a6f345b9e09627eadf72812f0feeb087096dd8d18932e07e5e601e01c54a35b",
+        "historical_pre_510": "d3c7a074b738a861bed4607456c6b2f9010a353e1ea81da098533eb73dbaeee4",
+        "retained_B": "863c0e66f97b27f495801ba434558e83c8153eaf2c2153a9c2740d611cc932b9",
+        "retained_fresh_A": "f2b1d9977efeefa4fa013eacfe4c242690ff399c4c3fd38886946004f8665eb3"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "d3c7a074b738a861bed4607456c6b2f9010a353e1ea81da098533eb73dbaeee4",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d3/d3c7a074b738a861bed4607456c6b2f9010a353e1ea81da098533eb73dbaeee4.jsonl.gz",
+      "sha256": "f624b31460ccd06f5404148d3e7da827a0fae4e1bbce942a8242f267e88bd9df",
+      "sha256_verified": true
+    },
+    {
+      "cases": 362061,
+      "chapter": "72",
+      "compressed_bytes": 13362803,
+      "computed_keys": {
+        "archived_main": "8f728e165b9eede2a09b7ac2b14f588e3bbdd46e7bae0ab2ef00eaa940a2c2e8",
+        "historical_pre_510": "6c6cb5c0485ea469e8264e457532081556b4730612e79d98f0306bfe4ccb1966",
+        "retained_B": "7952f2eb35ddaf1382e8da485bf9ccbada4bf25e77fa70690c719d052891e6a6",
+        "retained_fresh_A": "83bc0ba4f708f0e599e025f107de8650f2e59d6ae70f86b7645bc0383a544bea"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "6c6cb5c0485ea469e8264e457532081556b4730612e79d98f0306bfe4ccb1966",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/6c/6c6cb5c0485ea469e8264e457532081556b4730612e79d98f0306bfe4ccb1966.jsonl.gz",
+      "sha256": "e337a8f676de530e6a9ad41dfb67d057254e60060fbd3e71a798285033013997",
+      "sha256_verified": true
+    },
+    {
+      "cases": 387288,
+      "chapter": "73",
+      "compressed_bytes": 14376824,
+      "computed_keys": {
+        "archived_main": "2b8d311ec0118885b0e6d899be60778bd5a061fa539b8aa3afa3e81bdf71dbe6",
+        "historical_pre_510": "7aa1e19beb3464fa063ab4e14f8bae64e24c2aaa71da5b198a258978e37a9c8f",
+        "retained_B": "a98db9e916a54ade7a790fef4f12648d0a925333ac65d7bdc6ca547db8f53ac2",
+        "retained_fresh_A": "58b135c3dd128f3bbcffa4741302fdf1d9e334c6567a9e1067f855db9cef6e0b"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "7aa1e19beb3464fa063ab4e14f8bae64e24c2aaa71da5b198a258978e37a9c8f",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7a/7aa1e19beb3464fa063ab4e14f8bae64e24c2aaa71da5b198a258978e37a9c8f.jsonl.gz",
+      "sha256": "efec8135147a6fa9adb5042bfff1649715f551de282392ab344692d90c6b26b6",
+      "sha256_verified": true
+    },
+    {
+      "cases": 80244,
+      "chapter": "74",
+      "compressed_bytes": 3060632,
+      "computed_keys": {
+        "archived_main": "996f022e3f2389b37035cf6aa16d5cee5798645f7d64e5c8cab165718a6b9870",
+        "historical_pre_510": "875a11bfdb614d6c0fa463cf999aa3d5561d7d4c2e154c3d0ddbf7864e74f9dd",
+        "retained_B": "c68c62e34b97b0098cea249c3050548ea0b8850190a2718365babf89cfe0ce23",
+        "retained_fresh_A": "f7c13701d6ed12a3c5300d3581f041ac7dba591346cefa851a3843b44ed2946e"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "875a11bfdb614d6c0fa463cf999aa3d5561d7d4c2e154c3d0ddbf7864e74f9dd",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/87/875a11bfdb614d6c0fa463cf999aa3d5561d7d4c2e154c3d0ddbf7864e74f9dd.jsonl.gz",
+      "sha256": "fd135bf01a69600bdc2363635c5fb5eb0ab4c44517d5c527dd82ec3ae61fc76f",
+      "sha256_verified": true
+    },
+    {
+      "cases": 26703,
+      "chapter": "75",
+      "compressed_bytes": 1006187,
+      "computed_keys": {
+        "archived_main": "06307bf70c6f3f1973421803f2f7eaa912d5031a97051c60af3f0f8f33318a0c",
+        "historical_pre_510": "9488875b2d3ad7db66cd719066da4b05ea73dd940f18a9cf7f24c4bd30fcc9ee",
+        "retained_B": "4a55dc3154c691557bc9619c785471942bb135e368ba6e7d0e370604e6025be8",
+        "retained_fresh_A": "f6b6ae2a5b6479032757f7e19202ddf40e467f689c2a6342ee16bdfc80eff428"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "9488875b2d3ad7db66cd719066da4b05ea73dd940f18a9cf7f24c4bd30fcc9ee",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/94/9488875b2d3ad7db66cd719066da4b05ea73dd940f18a9cf7f24c4bd30fcc9ee.jsonl.gz",
+      "sha256": "becbdddd6f85484db4012622534a5d8dcfb2dc106b5b7ad6e0ec33a9b342b14f",
+      "sha256_verified": true
+    },
+    {
+      "cases": 93663,
+      "chapter": "76",
+      "compressed_bytes": 3509013,
+      "computed_keys": {
+        "archived_main": "744670e259f46239af24f95fd9b5a2249738203d251ba1e7ff883d604f433f40",
+        "historical_pre_510": "bf13afd8f6bb19261df61cc6ed74a52d2037e16c81b98f85f9ac2979b3da0a86",
+        "retained_B": "54c45d0882465c3c25b0b9da226e273fd3dff805e1ad8fb9c0c6730ac85fc115",
+        "retained_fresh_A": "68ebe12a18f1dd2b948e61fd0abb3316266125ed3d5929eb5b1775d6784f14cb"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "bf13afd8f6bb19261df61cc6ed74a52d2037e16c81b98f85f9ac2979b3da0a86",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/bf/bf13afd8f6bb19261df61cc6ed74a52d2037e16c81b98f85f9ac2979b3da0a86.jsonl.gz",
+      "sha256": "1b9f9395c909a04adf228338bf7139ba253489ee65413186943f34d115110613",
+      "sha256_verified": true
+    },
+    {
+      "cases": 14121,
+      "chapter": "78",
+      "compressed_bytes": 536006,
+      "computed_keys": {
+        "archived_main": "a6e2636b206f686afe319b28533e19e449a464833908b79460cd6ca09ae6d954",
+        "historical_pre_510": "8df2f724ba7778d1056dad69ae34a944e9ce9278b1ee897ec7f11fe8d8661a60",
+        "retained_B": "b8716eca366f196e9408d75c1c0e681f0c724a68fa0c4bca1b2dbce60186d55f",
+        "retained_fresh_A": "c87d2683a25e6ead0dff2fddb5d0697cb8820d5fa8f9587dc2abab2045a69a21"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "8df2f724ba7778d1056dad69ae34a944e9ce9278b1ee897ec7f11fe8d8661a60",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/8d/8df2f724ba7778d1056dad69ae34a944e9ce9278b1ee897ec7f11fe8d8661a60.jsonl.gz",
+      "sha256": "08058155018ccc10d7a70ba37f28423543e52c5d8affecd4ce86b423cae885c9",
+      "sha256_verified": true
+    },
+    {
+      "cases": 8100,
+      "chapter": "79",
+      "compressed_bytes": 306170,
+      "computed_keys": {
+        "archived_main": "d127650867caee9e5947c14bcae0bb915b811b03cb9b79f3e565b75703149abb",
+        "historical_pre_510": "a1a7f1475b4dc03548b924aae7ce2ef77fdda158b866ed0c2b6dbf6f503d4761",
+        "retained_B": "b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808",
+        "retained_fresh_A": "afe26dac684df76304d52dae388aff67c51af5bbc223f19f0f63f1554953df6e"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "a1a7f1475b4dc03548b924aae7ce2ef77fdda158b866ed0c2b6dbf6f503d4761",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/a1/a1a7f1475b4dc03548b924aae7ce2ef77fdda158b866ed0c2b6dbf6f503d4761.jsonl.gz",
+      "sha256": "03624b9ab3ee7539ae7ef0333725e1a1e79211dbee08d035e07786ab44ee3e62",
+      "sha256_verified": true
+    },
+    {
+      "cases": 9234,
+      "chapter": "80",
+      "compressed_bytes": 349374,
+      "computed_keys": {
+        "archived_main": "bea85de3c83949b0ca452271ebf9371d1795d18b40f0ac8a95fddfbb0b6e614f",
+        "historical_pre_510": "b3e1373339ffc6812bb7055ba9b016b47f80939c910a0082b6bfc61238ed014c",
+        "retained_B": "82375cfd58b5525290356bffdd13e8e89025218c9eabc64c1d734f155b0e7c1b",
+        "retained_fresh_A": "07c8548f23b9f4cb3c7948c2c90d257c804781ca4e4fd9b01123e5f925469779"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "b3e1373339ffc6812bb7055ba9b016b47f80939c910a0082b6bfc61238ed014c",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/b3/b3e1373339ffc6812bb7055ba9b016b47f80939c910a0082b6bfc61238ed014c.jsonl.gz",
+      "sha256": "e0e78a353c7a1de7187004277f0235f17bf2598128382e7b96c2b60402967a40",
+      "sha256_verified": true
+    },
+    {
+      "cases": 45063,
+      "chapter": "81",
+      "compressed_bytes": 1697563,
+      "computed_keys": {
+        "archived_main": "ecf69668e94dc849a2e271731426080ff7c501fab4d9affd5f9688a101442fad",
+        "historical_pre_510": "705579bda6e2909265e9f0b1356e972d023a9fe7a02b413efc238836713744f3",
+        "retained_B": "ce0e0d79feb110a6f074595c801d209fda81326192959c3ce1a2e50f858885cf",
+        "retained_fresh_A": "5e4cdcb177b3b12fae993891bceac33a95478be1d4d0cb73fe963aa7d8f0670a"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "705579bda6e2909265e9f0b1356e972d023a9fe7a02b413efc238836713744f3",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/70/705579bda6e2909265e9f0b1356e972d023a9fe7a02b413efc238836713744f3.jsonl.gz",
+      "sha256": "e43ec13813208a86d497034da4791dd5da8a8bc1e4a54670ffdd433120f57341",
+      "sha256_verified": true
+    },
+    {
+      "cases": 188757,
+      "chapter": "82",
+      "compressed_bytes": 7155496,
+      "computed_keys": {
+        "archived_main": "3e9febaf79cf76337c99a40c52448276d8c649d028c166c26177e2a2fbe5c4e8",
+        "historical_pre_510": "9e5a63ff2f5d328fc6454ab86d5055bf6931840e199f7565122201e8046565ad",
+        "retained_B": "8d892d2ef4f398af2ed1b04c9c66c9de503669119df7f8987916f9bb8ee242fd",
+        "retained_fresh_A": "f549e83201f8c7877b83a07faf351cc5c127909c593ffb5f215cdb335ecf8c18"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "9e5a63ff2f5d328fc6454ab86d5055bf6931840e199f7565122201e8046565ad",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/9e/9e5a63ff2f5d328fc6454ab86d5055bf6931840e199f7565122201e8046565ad.jsonl.gz",
+      "sha256": "35fb9219eb3e8a480bcd61b5ca8818812326c69a7ba08b94695f68c2490ca3e9",
+      "sha256_verified": true
+    },
+    {
+      "cases": 83214,
+      "chapter": "83",
+      "compressed_bytes": 3165342,
+      "computed_keys": {
+        "archived_main": "8ed57cbd61579dca2f9e170078e4683d6811ebd105ed7543957ebe3dc1cce591",
+        "historical_pre_510": "56879084011af3c96cdb9154b1d74c168404616f64c6c174ca5645b8b96857ed",
+        "retained_B": "d7671d3f0dc91fc4a8ad2a50da68f3e106358f21a2d4850a0be6f2b1a63edbce",
+        "retained_fresh_A": "665f3213f60209d6d460a8805b2a4b1c2ac4a95cdcd64fbb2fe021a4e1f2d1ad"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "56879084011af3c96cdb9154b1d74c168404616f64c6c174ca5645b8b96857ed",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/56/56879084011af3c96cdb9154b1d74c168404616f64c6c174ca5645b8b96857ed.jsonl.gz",
+      "sha256": "6d3becb40bb9915844422bed84da417e176313ee5ef1285bc33ce9e65d837e61",
+      "sha256_verified": true
+    },
+    {
+      "cases": 1821240,
+      "chapter": "84",
+      "compressed_bytes": 68985770,
+      "computed_keys": {
+        "archived_main": "c9554daaa0e8f15918ff3ff40857542bd701b6ac20155c977139797d49b8d194",
+        "historical_pre_510": "f488b1f749b670b20da35a9d4633ceead92cf69e1de1a8bdee1dc4be935e469a",
+        "retained_B": "db5a83bc7d73326bdbf80abc2a295cc6ffbfc133682dda590bc122337120e9f4",
+        "retained_fresh_A": "71cee719c5e61b534d7c0d17b295b29048bffb6549fadb9bb83eeacb9f8d1e63"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "f488b1f749b670b20da35a9d4633ceead92cf69e1de1a8bdee1dc4be935e469a",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/f4/f488b1f749b670b20da35a9d4633ceead92cf69e1de1a8bdee1dc4be935e469a.jsonl.gz",
+      "sha256": "4748ae8f46e379c23f50fda1d0271502e419d56217a84761d9374a1e4679a145",
+      "sha256_verified": true
+    },
+    {
+      "cases": 928638,
+      "chapter": "85",
+      "compressed_bytes": 35164151,
+      "computed_keys": {
+        "archived_main": "794bbd52ad39cfb296e89b34bb2794044b66cebed81a8309423aa23519c7d429",
+        "historical_pre_510": "cb9c6e14535646f8f3d746f1b728fed779b7fd6170ff78738f5d0fd764e5b26a",
+        "retained_B": "3097b8bb7196acda8569acc9f8b71326fa521ddc713e8771bfd7a735d16ce1b4",
+        "retained_fresh_A": "a4785a76c889dc4c122813db8a7cff15d517a821ea051ea666f970e4ae654476"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "cb9c6e14535646f8f3d746f1b728fed779b7fd6170ff78738f5d0fd764e5b26a",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/cb/cb9c6e14535646f8f3d746f1b728fed779b7fd6170ff78738f5d0fd764e5b26a.jsonl.gz",
+      "sha256": "d16aab39974047cd570cc1bbafe041ce989052c758f2dd9afbd001f0f3f5cb8c",
+      "sha256_verified": true
+    },
+    {
+      "cases": 31401,
+      "chapter": "86",
+      "compressed_bytes": 1187044,
+      "computed_keys": {
+        "archived_main": "b3dfae110420c16ff400b132a2bf74cc1c18969ff6560ba4c696e46a559b62d1",
+        "historical_pre_510": "20e96e447390a0ff08885597bd9e35d8438bd4f36ca661d5d62f971fc4dc5c42",
+        "retained_B": "19ef681ea7bb34eb7cd7d2f2583e5b3d06cbfc85f3094883a82cdfbdc77e7736",
+        "retained_fresh_A": "ae7e414c6e6f8f16996b85c01a971ca31e324688d181b82666ff4af3ac206cda"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "20e96e447390a0ff08885597bd9e35d8438bd4f36ca661d5d62f971fc4dc5c42",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/20/20e96e447390a0ff08885597bd9e35d8438bd4f36ca661d5d62f971fc4dc5c42.jsonl.gz",
+      "sha256": "64806a718e5118c1d2e86175152d3ee39fcbe095355fe5b1c47f624a9a23a580",
+      "sha256_verified": true
+    },
+    {
+      "cases": 319446,
+      "chapter": "87",
+      "compressed_bytes": 12138043,
+      "computed_keys": {
+        "archived_main": "34fafd301d5726604cdb12bb78e5385d60a7644a0e4cc910cb71cb7af7abee5d",
+        "historical_pre_510": "c428b23512fa32e466af99a009686695c7487236eafa359e653330b43326070c",
+        "retained_B": "a6778c0c28f4cb5c960c6e953731a49e1525fb273217a6b0975e07eb9cfa463c",
+        "retained_fresh_A": "5b9001ce5e1ce45b8b9c88eade93d2b7cadd3ce4c7201a1b73f41d24951ef01a"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "c428b23512fa32e466af99a009686695c7487236eafa359e653330b43326070c",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/c4/c428b23512fa32e466af99a009686695c7487236eafa359e653330b43326070c.jsonl.gz",
+      "sha256": "b73cbb69e62b2d80eaaee9f697331a4efac4e0ef7e52e8297e11a864443d0534",
+      "sha256_verified": true
+    },
+    {
+      "cases": 73737,
+      "chapter": "88",
+      "compressed_bytes": 2796933,
+      "computed_keys": {
+        "archived_main": "e453a29fc64f8ebce961fdcb91a320dbec76d92227b1b76c81b4deb4fbbac529",
+        "historical_pre_510": "231be79b6e325e0ae4435ac82fc9c4518e06d09b846744c41888f7e66b52107a",
+        "retained_B": "4c4d10b39291e67f43bcc710adbcdb256ce727e042566505581105b79bed2c52",
+        "retained_fresh_A": "96b0caa1426db22557ab62b61313bf3b69010e7390d0baef1a447b7074a314a7"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "231be79b6e325e0ae4435ac82fc9c4518e06d09b846744c41888f7e66b52107a",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/23/231be79b6e325e0ae4435ac82fc9c4518e06d09b846744c41888f7e66b52107a.jsonl.gz",
+      "sha256": "83714fa60ca818f717b46f001ae1ac27a74b4a6d200bb1df76151c3e228488ee",
+      "sha256_verified": true
+    },
+    {
+      "cases": 64098,
+      "chapter": "89",
+      "compressed_bytes": 2417109,
+      "computed_keys": {
+        "archived_main": "46381b956d1344ee11836c45bb690b64220778ff25c76a60e7bb267069e24a4f",
+        "historical_pre_510": "3fa12d27e6ab0361021166efea4b6bd3078739c0ac6a841ace02a9dd7d21e577",
+        "retained_B": "e98f13e3a7a1ffc1eaf527d0bcab5e8bc097e035b39dae1b0306676cb718dd08",
+        "retained_fresh_A": "36889b4df2d2cf5336a8e881a5d2f83ffdf09daad1a72209d4bb14d500ca5d24"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "3fa12d27e6ab0361021166efea4b6bd3078739c0ac6a841ace02a9dd7d21e577",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/3f/3fa12d27e6ab0361021166efea4b6bd3078739c0ac6a841ace02a9dd7d21e577.jsonl.gz",
+      "sha256": "a526c23b976d3e0944d90bf33ce1dbd26917d1ef9f723ee7556d624799f05e2a",
+      "sha256_verified": true
+    },
+    {
+      "cases": 446985,
+      "chapter": "90",
+      "compressed_bytes": 16910250,
+      "computed_keys": {
+        "archived_main": "80299db9d3f44f15132cdcb77bb1c3cde3abcfe9eec586230038588098d4035c",
+        "historical_pre_510": "971f35be4330a0b4619609ba4e66a97f9311c07fbcadfc3684628d2ab4c9da38",
+        "retained_B": "8a52ce60f1e9a68a6e42cb5fcc5747909c494d77d36a65641a91aab1ede832a4",
+        "retained_fresh_A": "ffa30befcea804afee73044773f5f0f30bb758f56365286918be6a0e6ba7f7a0"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "971f35be4330a0b4619609ba4e66a97f9311c07fbcadfc3684628d2ab4c9da38",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/97/971f35be4330a0b4619609ba4e66a97f9311c07fbcadfc3684628d2ab4c9da38.jsonl.gz",
+      "sha256": "5845d72d2f0d45f98146591acaf2c5984d9c044eefc40e1199f498e71b5aad7d",
+      "sha256_verified": true
+    },
+    {
+      "cases": 183330,
+      "chapter": "91",
+      "compressed_bytes": 6993592,
+      "computed_keys": {
+        "archived_main": "fed9467811b701f9f75c70bb1c9ab746811edbda24ad20d188f10338f9af9674",
+        "historical_pre_510": "7defc5c165608677c126c1cc4487811762a0b70dd83ca82edc378240b3d26f1c",
+        "retained_B": "655a0576ff368b3520cfa96b0bab1e3c9f027d5e9ac3274d47a3dc7b6c182112",
+        "retained_fresh_A": "d51f8310ead4a3bdee54b2e2e4378bb309f0fdc12dfa91f70cfaea6c8b6f787e"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "7defc5c165608677c126c1cc4487811762a0b70dd83ca82edc378240b3d26f1c",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/7d/7defc5c165608677c126c1cc4487811762a0b70dd83ca82edc378240b3d26f1c.jsonl.gz",
+      "sha256": "6a96809719e1d878fb72b722bbdf6a5eae1c8c36e24c726d2bc76f7bdc4b6c13",
+      "sha256_verified": true
+    },
+    {
+      "cases": 70335,
+      "chapter": "92",
+      "compressed_bytes": 2658692,
+      "computed_keys": {
+        "archived_main": "24b87b39dc60823794b604accdc99432985cbed5cd15d875a570683925618923",
+        "historical_pre_510": "d9c6e30cf98b81df99dbe971cb64c24a4479df635a58261956b9e9baf7c98594",
+        "retained_B": "c92a28447201b85c1d7f86d9cccc4add1d10e29cde1cd90ebbb02e1ab56cdb9b",
+        "retained_fresh_A": "2ca0656a79489dccc633d382978b09cf551d1a57f752aaa46bfec9443bddf2ae"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "d9c6e30cf98b81df99dbe971cb64c24a4479df635a58261956b9e9baf7c98594",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/d9/d9c6e30cf98b81df99dbe971cb64c24a4479df635a58261956b9e9baf7c98594.jsonl.gz",
+      "sha256": "5ec69fea447e20caa1501fff1a23197e671a928c8fd888258861f9aac8f02aaa",
+      "sha256_verified": true
+    },
+    {
+      "cases": 71145,
+      "chapter": "93",
+      "compressed_bytes": 2689033,
+      "computed_keys": {
+        "archived_main": "5b06f7d150ce432989c7559b694616121480f5928feb5caed7375d228e833421",
+        "historical_pre_510": "c267a9cfa8436844f62b805ea728bd06000fe29f0556bfd7c661b3c784d1f6a5",
+        "retained_B": "dc0445bb895cbab2a3eb3b681c45a3defface6ba589f1a0b54bab24f89728549",
+        "retained_fresh_A": "9335fa95be96c42f0b4de7aae242cb215d57515d2f5c6eb501c1e83946373cf0"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "c267a9cfa8436844f62b805ea728bd06000fe29f0556bfd7c661b3c784d1f6a5",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/c2/c267a9cfa8436844f62b805ea728bd06000fe29f0556bfd7c661b3c784d1f6a5.jsonl.gz",
+      "sha256": "08bd7b85dc9ef10d7bdc6e2f077ad33f98ddd57462bbc46fb1ecf14f2b5daa83",
+      "sha256_verified": true
+    },
+    {
+      "cases": 282654,
+      "chapter": "94",
+      "compressed_bytes": 10697947,
+      "computed_keys": {
+        "archived_main": "e5664f94f4800d13e86736eff2ef7234e350b7d0e088059bc5260606b796cadd",
+        "historical_pre_510": "65157a655f3be4fad4f79fd451ac3b5fe6022c13886976598cd2588cbd1cb1ac",
+        "retained_B": "caa705665a8676a3f16b016a292e235c846a622794aa5c9da7051c0b6c5751f5",
+        "retained_fresh_A": "47bef27e7d755d6ffba0ffad563cd69bc57253cba90508cdc5f33525703f68fe"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "65157a655f3be4fad4f79fd451ac3b5fe6022c13886976598cd2588cbd1cb1ac",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/65/65157a655f3be4fad4f79fd451ac3b5fe6022c13886976598cd2588cbd1cb1ac.jsonl.gz",
+      "sha256": "54d418535e16199ef1293701ee9cb5fecdf2990fd26bfabc4d8dc8427d6bbbf5",
+      "sha256_verified": true
+    },
+    {
+      "cases": 126063,
+      "chapter": "95",
+      "compressed_bytes": 4768543,
+      "computed_keys": {
+        "archived_main": "c4532893b302ab536af420d6a43ecc41f99d03c6485c22d8e51938bda96c4a46",
+        "historical_pre_510": "f44cf3cd8e7d927016ea6339f2409146e422c39da5a58dae3413f398286fa42e",
+        "retained_B": "948a8bbab18d1148c6dae6a64bceb4be11cfce209a03796dd9a23120453b67df",
+        "retained_fresh_A": "1d1327d683093a9908a6ea67392c0909095c92b92ba799b9f5563f43c9fcaa41"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "f44cf3cd8e7d927016ea6339f2409146e422c39da5a58dae3413f398286fa42e",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/f4/f44cf3cd8e7d927016ea6339f2409146e422c39da5a58dae3413f398286fa42e.jsonl.gz",
+      "sha256": "8231ea86e6cbb907fc25b68819ebced3e2217a181fc084f3caa4cb8055e7d57b",
+      "sha256_verified": true
+    },
+    {
+      "cases": 173043,
+      "chapter": "96",
+      "compressed_bytes": 6558438,
+      "computed_keys": {
+        "archived_main": "08272a761d12b7078e7edcef1625387a0fcfbbab5cdf290628e266c2eb5814f2",
+        "historical_pre_510": "903222d95b4b80820bfc863ea173b66b8c3e8c43e7e5caf1cc73b52704ea5911",
+        "retained_B": "0bb5c57ca564a94ef10405538a3809153eb17b40a583f17ce2f567ddaadd5dbe",
+        "retained_fresh_A": "f3a2a7c28087aae5d9225b75b8692f76a99509f52856af155b5b13d697c697d9"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "903222d95b4b80820bfc863ea173b66b8c3e8c43e7e5caf1cc73b52704ea5911",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/90/903222d95b4b80820bfc863ea173b66b8c3e8c43e7e5caf1cc73b52704ea5911.jsonl.gz",
+      "sha256": "78b519ec4831d0dbea67874091a39c6b04562fb7ccb3f32275f8d2ff90b8bb89",
+      "sha256_verified": true
+    },
+    {
+      "cases": 5670,
+      "chapter": "97",
+      "compressed_bytes": 213320,
+      "computed_keys": {
+        "archived_main": "7e9920969d1146d0b0e87ce051d5bd5b43c2fe37034d6cc7c1d0f41ed12d2a94",
+        "historical_pre_510": "51a2e5e3723e5d77d0fec01e8370c03452c39f14bcadad096c1f20475f08f375",
+        "retained_B": "5be7430b00793f7743201f9446ce91063d7f05064d629ea19bdf2d748addf5c6",
+        "retained_fresh_A": "5185dcafe36c02d4812857be2f95290295fd874e17706c4042ea3e33e01c0c2e"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "51a2e5e3723e5d77d0fec01e8370c03452c39f14bcadad096c1f20475f08f375",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/51/51a2e5e3723e5d77d0fec01e8370c03452c39f14bcadad096c1f20475f08f375.jsonl.gz",
+      "sha256": "965c1e5e420074679c21510615dde91a3e26afd5fb4711d598887fee99a6fb7d",
+      "sha256_verified": true
+    },
+    {
+      "cases": 26784,
+      "chapter": "98",
+      "compressed_bytes": 993510,
+      "computed_keys": {
+        "archived_main": "0c842152a364395bf751e3edb169f0eb64ec005b23be095b20c937ef128ff756",
+        "historical_pre_510": "247e46e42ba3e40b361458d8666e8e5649705d4704428627bf73512332571bdd",
+        "retained_B": "c30d3192ee59ba0d7dee418b7b2b264cb3fd8244c30659ac0036fb299623d94a",
+        "retained_fresh_A": "8726f455257bd6dccc444bbd160922ab25b1eea227e984485e00b3f5899a60f4"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "247e46e42ba3e40b361458d8666e8e5649705d4704428627bf73512332571bdd",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/24/247e46e42ba3e40b361458d8666e8e5649705d4704428627bf73512332571bdd.jsonl.gz",
+      "sha256": "709fc596fffc1f065223c9104418fc5f35994f24ce03b677e1e0fd6d3852d5d9",
+      "sha256_verified": true
+    },
+    {
+      "cases": 0,
+      "chapter": "99a",
+      "compressed_bytes": 20,
+      "computed_keys": {
+        "archived_main": "af0f20050f09c5e39a5f3ce15aba1e1864140e8ffcb7af86c93759712ca2ee6d",
+        "historical_pre_510": "536b908ac70f11e3cb2581c30d2f66375dbf6f158b05985a5e75371668f9cd34",
+        "retained_B": "ad4395fd99b684e94fad2e19e6c13acf3c487002a3fa2031ffff160416a3a3a4",
+        "retained_fresh_A": "62a87f6e275eb8bc09815da0296b439823813d2e7fab3a6a55209da688f971e0"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "536b908ac70f11e3cb2581c30d2f66375dbf6f158b05985a5e75371668f9cd34",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/53/536b908ac70f11e3cb2581c30d2f66375dbf6f158b05985a5e75371668f9cd34.jsonl.gz",
+      "sha256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+      "sha256_verified": true
+    },
+    {
+      "cases": 0,
+      "chapter": "99b",
+      "compressed_bytes": 20,
+      "computed_keys": {
+        "archived_main": "a4816efae06da6fb3d6480da2f5669af6bbaa04b12dc0330559de1bbd91a177f",
+        "historical_pre_510": "43483ca585a209d97be324d8a0b97643fe9526aa1c48e180a7d8a3ed704bb8b3",
+        "retained_B": "188af13fecd7670d539d2bee67b6d99a972590d8156df08096300d02a6f0ebfe",
+        "retained_fresh_A": "caf3fc75e68cd664c8d1883c7f42c47210b40368850ce13fff54d9e421ded044"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "43483ca585a209d97be324d8a0b97643fe9526aa1c48e180a7d8a3ed704bb8b3",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/43/43483ca585a209d97be324d8a0b97643fe9526aa1c48e180a7d8a3ed704bb8b3.jsonl.gz",
+      "sha256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+      "sha256_verified": true
+    },
+    {
+      "cases": 0,
+      "chapter": "99c",
+      "compressed_bytes": 20,
+      "computed_keys": {
+        "archived_main": "0d74d2d0742bc6764b7dbf5402d4e8ebf94004a6035b069150a945e455a00485",
+        "historical_pre_510": "6db3eeab506c61545866b07e8d3ac18a78b8a19f0ee7816ea554130422b12709",
+        "retained_B": "ef62c45cd79983e0f349259021221ca20a02c0a898708a58941fa1ec202a4d36",
+        "retained_fresh_A": "80bb08300ef2334f4c19fed36c36458a890a0ceefce2f63d32421e2b06be4c29"
+      },
+      "eligible_under_retained_A": false,
+      "exists": true,
+      "historical_key": "6db3eeab506c61545866b07e8d3ac18a78b8a19f0ee7816ea554130422b12709",
+      "key_matches": {
+        "archived_main": false,
+        "historical_pre_510": true,
+        "retained_B": false,
+        "retained_fresh_A": false
+      },
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/6d/6db3eeab506c61545866b07e8d3ac18a78b8a19f0ee7816ea554130422b12709.jsonl.gz",
+      "sha256": "ac73670af3abed54ac6fb4695131f4099be9fbe39d6076c5d0264a6bbdae9d83",
+      "sha256_verified": true
+    }
+  ],
+  "historical_compressed_bytes": 722142701,
+  "historical_hash_verified": 100,
+  "historical_key_matches_by_receipt": {
+    "archived_main": 0,
+    "historical_pre_510": 100,
+    "retained_B": 0,
+    "retained_fresh_A": 0
+  },
+  "historical_receipt_digest_provenance": "Prior lane baseline-historical-cache-audit.json; no historical receipt installed.",
+  "inputs": {
+    "baseline_campaign": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/oracles/scripts/us_tariff_schedule_campaign.py",
+      "sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24"
+    },
+    "campaign": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/scripts/us_tariff_schedule_campaign.py",
+      "sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24"
+    },
+    "candidate_manifest_snapshot": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/reference/us-tariff-schedule/eval/MANIFEST.json",
+      "sha256": "11a722f898e8fd3ce23a33f175acdf4ad2bf9e66e178f8d6e2c960f783cbad42"
+    },
+    "historical_manifest": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/committed/MANIFEST.json",
+      "sha256": "5123e201a32c3965d82440c515525c854e9113d7efc84e820bbe878617a83a39"
+    },
+    "prior_historical_receipt_digest_evidence": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/baseline-historical-cache-audit.json",
+      "sha256": "f8765d3f14919decd4c3b8e926978de8cc46a328c2b4c72facfb7c40dd51af0a"
+    },
+    "retained_fresh_A_manifest": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/oracles/reference/us-tariff-schedule/eval/MANIFEST.json",
+      "sha256": "e31cde40f807fa5984fb29ff9bc2d8016327b93b088a8ed17e9cf8d744540a88"
+    }
+  },
+  "method": "Exact current campaign cache ingredients and render; all historical compressed bodies hashed only; no decompression, evaluation, census, or pairing replay.",
+  "optimized_key_matches_official_helper_ch79": true,
+  "prior_ch79_pair_evidence": {
+    "bound_to_current_sources_and_retained_accepted_shards": true,
+    "cases": 8100,
+    "comparison_units": 90072,
+    "fresh_baseline_byte_identical_to_historical": true,
+    "match_to_mismatch": 0,
+    "measurement_origin": "Prior lane measurement; hashes verified here, pairing not rerun.",
+    "mismatch_to_match": 1266,
+    "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/fresh-ch79-paired.json",
+    "sha256": "97517a3c5e112ad60cc37a95e9a3baae8b2764936e3ca56c0d0a24d38fa582e2"
+  },
+  "receipt_sha256": {
+    "archived_main": "bdd258d7e86a81d4ffd472149d14033b75c11ceb490ae13685592c06475da717",
+    "historical_pre_510": "48f9caf2ad8461035007a1ee3b0d38968abc4c3da6239d5383631bae9de2ba29",
+    "retained_B": "8494896f42fff6a6a24700d979bef4fd4f6f57a88c783b19bd4f139eed196e8a",
+    "retained_fresh_A": "8b043af60d2b7c3be4b54072d1ebadb95ed3bd8e68dd793fffa0ed8ccf0c9d64"
+  },
+  "same_campaign_source_A_and_B": true,
+  "same_selected_and_routing_A_and_B": true,
+  "schema": "measurement.historical_cache_eligibility.v1"
+}

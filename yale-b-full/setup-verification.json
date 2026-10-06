@@ -1,0 +1,59 @@
+{
+  "checkpoint_source": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run",
+  "checks": [
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/scripts/us_tariff_schedule_campaign.py",
+      "sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/reference/us-tariff-schedule/campaign-dispositions.yaml",
+      "sha256": "de97837499bfc71a4c472b0e9c8b6b5cc78961d00cadbed9ad85985c27baa83b",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/reference/us-tariff-schedule/disposition-routing.csv.gz",
+      "sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/reference/us-tariff-schedule/disposition-routing-receipt.json",
+      "sha256": "9266f31772dcd66be293fbfdec98237df2114e69b18ffe25a4d9a3656e3c649c",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/reference/us-tariff-schedule/declared-input-contract-receipt.json",
+      "sha256": "8494896f42fff6a6a24700d979bef4fd4f6f57a88c783b19bd4f139eed196e8a",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/reference/us-tariff-schedule/evaluation-projection-receipt.json",
+      "sha256": "5cdf2bbda9e52ecb69ac44f75dd1a992eda1fca2d5f9fc9c0cf6fafadec43ff0",
+      "unchanged": true
+    },
+    {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles/reference/us-tariff-schedule/selected-intervals.csv.gz",
+      "sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826",
+      "unchanged": true
+    },
+    {
+      "chapter": "29",
+      "key": "962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3",
+      "sha256": "24bda301e144abc4cd1e7c8d2868d91a9edfbd1ca0d83ecc803e63f110ca5d1c",
+      "old_path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/cache/eval/96/962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3.jsonl.gz",
+      "new_path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/cache/eval/96/962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3.jsonl.gz"
+    },
+    {
+      "chapter": "79",
+      "key": "b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808",
+      "sha256": "d0dbcb414a8314765aa75ad1d24f216d464614a5972fbdd49c8baf597a0f5704",
+      "old_path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/cache/eval/b3/b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808.jsonl.gz",
+      "new_path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/cache/eval/b3/b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808.jsonl.gz"
+    }
+  ],
+  "engine_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7",
+  "original_manifest_sha256": "11a722f898e8fd3ce23a33f175acdf4ad2bf9e66e178f8d6e2c960f783cbad42",
+  "relocated_manifest_sha256": "b1bd7699a3a35cfd63b14b3d4b6ff511dc0565fed90d14dc73f3e9c881f28193",
+  "result": "PASS",
+  "relocation": "Only shard path metadata changed; no receipts, keys or shard bytes changed."
+}

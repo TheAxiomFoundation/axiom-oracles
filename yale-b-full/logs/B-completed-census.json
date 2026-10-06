@@ -1,0 +1,30 @@
+{
+  "command": [
+    "nice",
+    "-n",
+    "10",
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "yale-b-full/helpers/inventory_completed.py",
+    "--oracles-root",
+    "yale-b-full/B/oracles",
+    "--rulespec-root",
+    "yale-b-full/B/rulespec-us",
+    "--engine-binary",
+    "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+    "--chapters",
+    "29,79",
+    "--output",
+    "yale-b-full/B-completed-gap-inventory.json"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full",
+  "environment_overrides": {},
+  "started_at": "2026-09-24T02:42:45.737445+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/logs/B-completed-census.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/logs/B-completed-census.stderr",
+  "pid": 5950,
+  "timeout_seconds": null,
+  "status": "complete",
+  "returncode": 0,
+  "elapsed_seconds": 150.722,
+  "finished_at": "2026-09-24T02:45:16.460252+00:00"
+}

@@ -1,0 +1,30 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "yale-full-run/run_targeted_probe.py",
+    "evaluate",
+    "--oracles-root",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles",
+    "--rulespec-root",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us",
+    "--engine-binary",
+    "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+    "--selection",
+    "yale-full-run/targeted-selection.json",
+    "--output-dir",
+    "yale-full-run/targeted-B"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2",
+  "environment_overrides": {
+    "TMPDIR": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/probe-tmp"
+  },
+  "started_at": "2026-09-23T19:39:32.057791+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/targeted-B-evaluate.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/targeted-B-evaluate.stderr",
+  "pid": 71556,
+  "timeout_seconds": 1200.0,
+  "status": "complete",
+  "returncode": 0,
+  "elapsed_seconds": 40.587,
+  "finished_at": "2026-09-23T19:40:12.645056+00:00"
+}

@@ -1,0 +1,35 @@
+{
+  "command": [
+    "nice",
+    "-n",
+    "10",
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "-B",
+    "-u",
+    "scripts/us_tariff_schedule_campaign.py",
+    "evaluate",
+    "--rulespec-root",
+    "../rulespec-us",
+    "--engine-binary",
+    "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+    "--chapters",
+    "29,79",
+    "--workers",
+    "3",
+    "--resume"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/oracles",
+  "environment_overrides": {
+    "AXIOM_TARIFF_C1_CACHE": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/cache",
+    "RULESPEC_US_CHECKOUT": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/B/rulespec-us"
+  },
+  "started_at": "2026-09-24T02:42:18.476807+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/logs/B-relocated-resume-check.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/logs/B-relocated-resume-check.stderr",
+  "pid": 96356,
+  "timeout_seconds": null,
+  "status": "complete",
+  "returncode": 0,
+  "elapsed_seconds": 3.91,
+  "finished_at": "2026-09-24T02:42:22.386638+00:00"
+}

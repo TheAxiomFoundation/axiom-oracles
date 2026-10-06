@@ -1,0 +1,17 @@
+{
+  "interrupted_rsync": true,
+  "interrupted_exit": 130,
+  "reason": "No completion output or cache directory after prolonged copy; use scoped exact copies on top of local git clones.",
+  "copied": [
+    {
+      "source": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/cache",
+      "target": "yale-b-full/B/cache",
+      "seconds": 0.49220224999589846
+    },
+    {
+      "source": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs",
+      "target": "yale-b-full/prior-checkpoint/logs",
+      "seconds": 3.6967313340283
+    }
+  ]
+}

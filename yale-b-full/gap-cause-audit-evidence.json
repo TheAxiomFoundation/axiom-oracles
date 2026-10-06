@@ -1,0 +1,1251 @@
+{
+  "additional_yale_sources_equal_pinned_git_blobs": {
+    "resources/s301fl_final_country_exemptions.csv": "a38f8e42e9615b58dc09fd8a661b4a0fdb9d12e2121342a657fae69450215280",
+    "src/model/authority_adapter.R": "91d6adab284dc823fa4c541910d6c4a74494b3a09f3e5fb6b6a71a98e3b1288a"
+  },
+  "argv": [
+    "yale-b-full/audit_known_gap_sources.py",
+    "--prior-run",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run",
+    "--output",
+    "yale-b-full/gap-cause-audit-evidence.json"
+  ],
+  "audited_source_hashes": {
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles/reference/us-tariff-schedule/campaign-dispositions.yaml": "de97837499bfc71a4c472b0e9c8b6b5cc78961d00cadbed9ad85985c27baa83b",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles/reference/us-tariff-schedule/output-semantics-ruling.md": "955892542af0f5612b46f86b0dfbf3bc5043a984510bb3bae78e2806e8c82765",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles/scripts/us_tariff_schedule_campaign.py": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us/tools/b16_entry_flags.py": "b0a0fe6aa5990c14becef5184e4096c95c22790909e72f11d1736b7fe827243d",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us/tools/generate_incidence_tables.py": "308af4e2baf9ad30e1ff084c59f76b9dadb9328f823ff6441b38cc3bb422540b",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us/tools/generate_schedule_compositions.py": "98a44962a34ee09ff537f26d39bbbec32c0593409c57e746cee83d3c179b8310",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us/us/policies/cbp/us-tariff-duty/composition.yaml": "0745c24a9c7ca8cd54d28bf4da5ea474f479a866daf59d4890824a2f79c82c02",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch62/ch62.yaml": "0b8ade106330aeeccb6e779a1ef22e10f29c0fa127fcb18f4e1b0d3595122aca",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us/us/policies/cbp/us-tariff-schedule/generated/ch84/ch84.yaml": "6b6b500ec468654020d3ffe0513818f27e0a6936309885a83a5a942e06b0c141",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us/us/policies/usitc/us-tariff-duty/overlays/section-301/forced-labor-costa-rica-9903-05-33.yaml": "1e796c7505d0e97256509f49fd6705d178d6b9ff9506c7a4615415db2d4d62cd",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note16-232-steel.yaml": "8ec8adf882321fe51240606a1d3a85322e4a9b7ecf06ef3c3e8bee19ffec21f4",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/measure_shards.py": "220c5821cc5bc1ce73e7101c25a31a727af11c31b1d67012b2673b7ed0251cfc"
+  },
+  "bounded_censuses": {
+    "62": {
+      "cases": 640,
+      "class_census": {
+        "__derived_total__": 169,
+        "cafta-52i-deferred": 5,
+        "column2-gn3b": 164
+      },
+      "class_per_slot": {
+        "__derived_total__": {
+          "total": 169
+        },
+        "cafta-52i-deferred": {
+          "forced_labor_section_301": 5
+        },
+        "column2-gn3b": {
+          "base": 164
+        }
+      },
+      "summary": {
+        "axiom_attributed_open": 5,
+        "comparisons": 7170,
+        "derived_total_units": 169,
+        "engine_errors": 0,
+        "matches": 6832,
+        "mismatches": 338,
+        "unexplained": 0,
+        "unexplained_total_units": 0
+      },
+      "verified_shard_sha256": "6fc125657874723c7f6838e27ca62d3ce47cb842150970608887ffce8d6b14b8"
+    },
+    "84": {
+      "cases": 800,
+      "class_census": {
+        "__derived_total__": 473,
+        "aircraft-utilization-proxy-brazil": 14,
+        "aircraft-utilization-proxy-forced-labor": 34,
+        "column2-gn3b": 169,
+        "non-metal-232-family": 89,
+        "s122-entry-status-lines": 60,
+        "s122-gn6-lines": 32,
+        "section232-annex-brazil": 33,
+        "section232-annex-forced-labor": 35,
+        "section232-heading-brazil": 2,
+        "section232-heading-forced-labor": 8,
+        "vintage-revision-232": 209,
+        "vintage-revision-301": 1,
+        "yale-hts8-broadening-brazil": 16
+      },
+      "class_per_slot": {
+        "__derived_total__": {
+          "total": 473
+        },
+        "aircraft-utilization-proxy-brazil": {
+          "brazil_section_301": 14
+        },
+        "aircraft-utilization-proxy-forced-labor": {
+          "forced_labor_section_301": 34
+        },
+        "column2-gn3b": {
+          "base": 169
+        },
+        "non-metal-232-family": {
+          "section_232": 89
+        },
+        "s122-entry-status-lines": {
+          "section_122": 60
+        },
+        "s122-gn6-lines": {
+          "section_122": 32
+        },
+        "section232-annex-brazil": {
+          "brazil_section_301": 33
+        },
+        "section232-annex-forced-labor": {
+          "forced_labor_section_301": 35
+        },
+        "section232-heading-brazil": {
+          "brazil_section_301": 2
+        },
+        "section232-heading-forced-labor": {
+          "forced_labor_section_301": 8
+        },
+        "vintage-revision-232": {
+          "section_232": 209
+        },
+        "vintage-revision-301": {
+          "china_section_301": 1
+        },
+        "yale-hts8-broadening-brazil": {
+          "brazil_section_301": 16
+        }
+      },
+      "summary": {
+        "axiom_attributed_open": 78,
+        "comparisons": 9588,
+        "derived_total_units": 473,
+        "engine_errors": 0,
+        "matches": 8413,
+        "mismatches": 1175,
+        "unexplained": 0,
+        "unexplained_total_units": 0
+      },
+      "verified_shard_sha256": "4a74078e8e723f97ae6d30a475c093e04a23ca2ecabcb85717b82c04a255c325"
+    },
+    "94": {
+      "cases": 198,
+      "class_census": {
+        "__derived_total__": 116,
+        "__unexplained_component__": 86,
+        "__unexplained_total__": 82,
+        "column2-gn3b": 12,
+        "s122-entry-status-lines": 74,
+        "vintage-revision-232": 198
+      },
+      "class_per_slot": {
+        "__derived_total__": {
+          "total": 116
+        },
+        "__unexplained_component__": {
+          "brazil_section_301": 6,
+          "forced_labor_section_301": 80
+        },
+        "__unexplained_total__": {
+          "total": 82
+        },
+        "column2-gn3b": {
+          "base": 12
+        },
+        "s122-entry-status-lines": {
+          "section_122": 74
+        },
+        "vintage-revision-232": {
+          "section_232": 198
+        }
+      },
+      "summary": {
+        "axiom_attributed_open": 0,
+        "comparisons": 2376,
+        "derived_total_units": 116,
+        "engine_errors": 0,
+        "matches": 1808,
+        "mismatches": 568,
+        "unexplained": 168,
+        "unexplained_total_units": 82
+      },
+      "verified_shard_sha256": "e77a5dcc0265065e532f1b44d574e6ae71bc9af8cdf7ec01d407b1516c898f16"
+    }
+  },
+  "corpus": {
+    "commit": "5cf7556ad3d68aa0596d58f7ac60942bb5db3120",
+    "directly_reverified_pages": [
+      {
+        "body": "U.S. Notes (con.) (c) The quantitative limitations that may be established under any of subheadings 9903.18.01 through 9903.18.10 shall apply to sugar, syrups and molasses described therein during any effective period announced in the Federal Register by the United States Trade Representative for such a subheading in any year, during which period only the aggregate quantity of the specified goods shall be allowed entry into the customs territory of the United States. Such limitation shall apply notwithstanding any other quantitative limitation on such goods that may be provided for in the tariff schedule and the availability of any quantitative limitation set forth for such goods in chapter 17 or chapter 21 of the tariff schedule or allocation thereof. Any quantity set forth in a notice issued by the United States Trade Representative for any subheading specified herein may be allocated among supplying countries and areas and shall thereby supersede any quantity or allocation that may have been announced under additional U.S. note 5 to chapter 17. 16. (a) Except as provided in headings 9903.82.01, 9903.85.67, and 9903.85.68, headings 9903.82.02\u20139903.82.26 provide the ordinary customs duty treatment of certain articles of aluminum, of steel, or of copper and certain derivative aluminum or steel articles as provided for in subdivision (c) of this note. These headings are mutually exclusive, such that an imported article will be subject to no more than one of these headings. (b) For imported articles provided for in headings 9903.82.02\u20139903.82.26 that are eligible for special tariff treatment under any of the free trade agreements or preference programs listed in general note 3(c)(i) to the tariff schedule, the duties provided in these headings shall be collected in addition to any special rate of duty otherwise applicable under the appropriate tariff subheading. Goods for which entry is claimed under a provision of chapter 98 to the HTSUS and that are subject to the additional duties prescribed herein shall be eligible for and subject to the terms of such provision and applicable U.S. Customs and Border Protection (CBP) regulations, except that duties under subheading 9802.00.60 shall be assessed based upon the full value of the imported article. No claim for entry or for any duty exemption or reduction shall be allowed under a provision of chapter 99 to the HTSUS that may set forth a lower rate of duty or provide duty-free treatment, taking into account information supplied by CBP. All antidumping, countervailing or other duties and charges applicable to such goods shall continue to be imposed. (c) Headings 9903.82.02\u20139903.82.26 apply to the full customs value of articles classifiable in the provisions of the HTSUS enumerated in the following lists. For articles classified in the listed provisions that are not in chapters 72, 73, 74 or 76 of the HTSUS, headings 9903.82.02, 9903.82.04\u20139903.82.17 and 9903.82.20\u20139903.82.26 only apply where the weight of the applicable metal is at least 15 percent of the weight of the imported article. The applicable metal is identified in the title of each of the lists below. If an article is classified in a provision that is present on multiple lists, use the aggregate weight of the listed metals. [Compiler's note: List continues on subsequent pages. read numbers from left to right.] (i) Articles of aluminum: 7606 7605 7604 7601 7616.99.5160 7609 7608 7607 7616.99.5170 (ii) Derivative aluminum articles: 7612.10.00 7610.90.00 7610.10.00 7308.20.0035 7614.10.10 7613.00.00 7612.90.50 7612.90.10 7614.90.50 7614.90.40 7614.90.20 7614.10.50 7616.99.5175 7616.99.5150 7616.99.5120 7616.10.9090 7616.99.5190 (iii) Articles of steel: 7209 7208 7207 7206 7213 7212 7211 7210 7216.21.00 7216.10.00 7215 7214 7216.33.00 7216.32.00 7216.31.00 7216.22.00 7217 7216.99.00 7216.50.00 7216.40.00 7221 7220 7219 7218 7225 7224 7223 7222 7229 7228 7227 7226 7302.90 7302.40.00 7302.10 7301.10.00 7306 7305 7304 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 64",
+        "citation_path": "us/statute/hts/chapter-99/page-236",
+        "physical_jsonl_line": 246
+      },
+      {
+        "body": "U.S. Notes (con.) (vi) Derivative aluminum articles: 3701.30.00 7615.10.3025 7615.10.3015 7615.10.2025 7615.10.2015 7615.10.7130 7615.10.7125 7615.10.5040 7615.10.5020 7615.20.00 7615.10.91 7615.10.7180 7615.10.7155 8302.10.30 7616.99.5140 7616.99.5130 7616.99.10 8302.30.3060 8302.30.3010 8302.20.00 8302.10.60 8302.41.6050 8302.41.6045 8302.41.6015 8302.41.30 8302.50.00 8302.49.60 8302.42.30 8302.41.6080 8306.30.00 8305.10.0050 8302.60.90 8302.60.30 8412.90.9070 8309.90.0025 8309.90.0020 8307.90.60 8418.10.00 8414.80.16 8414.59.6590 8412.90.9075 8419.50.10 8418.99.8060 8418.99.8050 8418.99.8005 8424.90.9080 8422.90.0640 8419.90.10 8419.50.50 8467.22.00 8451.21.00 8450.11.00 8443.16.00 8479.90.85 8467.89.50 8467.81.00 8467.29.00 8483.90.5020 8483.40.5020 8481.90.9085 8481.90.9060 8502.31.00 8502.20.00 8501.64.0110 8487.90.0080 8504.31.20 8503.00.9570 8503.00.9546 8503.00.9520 8504.90.41 8504.33.00 8504.31.60 8504.31.40 8516.90.50 8515.90.20 8513.90.20 8508.70.00 8536.90.8585 8529.90.73 8517.71.00 8516.90.8050 8544.42.90 8544.19.00 8543.90.8885 8538.10.00 8544.60.60 8544.60.20 8544.49.90 8544.49.20 8708.10.30 8547.90.0040 8547.90.0030 8547.90.0020 8708.80.6590 8708.29.5160 8708.10.60 8716.80.5010 8716.39.00 8716.10.00 8708.99.6890 8716.90.50 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 66",
+        "citation_path": "us/statute/hts/chapter-99/page-238",
+        "physical_jsonl_line": 248
+      },
+      {
+        "body": "U.S. Notes (con.) 8716.10.00 8708.99.81 8716.80.50 8716.39.00 9403.20.0082 9403.20.0075 8716.90.50 8716.90.30 9406.90.01 9406.20.00 9403.99.9040 9403.99.9020 (viii) Articles of copper: 8544.49.10 8544.42.90 8544.42.20 8544.42.10 (ix) Derivative aluminum articles: 8415.90.8085 8415.90.8045 8415.90.8020 8415.90.8010 8504.34.00 8479.90.9596 8479.89.9599 8424.89.90 8504.90.9610 8504.90.75 8504.90.65 8504.90.20 8504.90.9690 8504.90.9650 8504.90.9646 8504.90.9630 9013.90.80 8708.29.2130 (x) Derivative steel articles: 8401.40.00 8207.30.6095 8207.30.6062 8207.20.0070 8415.81.01 8415.10.90 8415.10.60 8407.90.10 8419.81.50 8417.90.00 8415.90.80 8415.82.01 8428.33.00 8428.32.00 8424.89.90 8421.29.00 8428.90.03 8428.70.00 8428.60.00 8428.39.00 8432.90.00 8432.10.00 8431.41.00 8431.39.00 8433.90.50 8433.59.00 8433.51.00 8433.20.00 8455.90.40 8455.30.00 8454.20.0060 8454.20.0010 8477.10.30 8474.90.00 8457.10.00 8455.90.80 8477.90.8601 8477.90.25 8477.10.90 8477.10.40 8480.49.0010 8479.90.95 8479.89.65 8479.89.55 8483.60.80 8480.79.9010 8480.71.8060 8480.71.8045 8701.30.10 8516.29.00 8504.23.00 8483.90.20 8701.94.10 8701.93.10 8701.92.10 8701.91.10 8706.00.30 8703.21.01 8701.95.10 8708.92.10 8708.40.60 8708.40.30 8708.29.2120 8708.99.23 8708.93.30 8708.93.15 8708.92.60 8716.90.10 8716.80.10 (xi) Derivative steel articles: 8427.20.80 8427.20.40 8427.10.80 8427.10.40 8429.20.00 8429.19.00 8429.11.00 8427.90.00 8429.51.50 8429.51.10 8429.40.00 8429.30.00 8429.59.50 8429.59.10 8429.52.50 8429.52.10 8701.10.01 8431.49.90 8431.42.00 8431.20.00 8701.93.50 8701.92.50 8701.91.50 8701.30.50 8705.20.00 8705.10.00 8701.95.50 8701.94.50 (d) Headings 9903.82.04 and 9903.82.05 apply to articles the product of the United Kingdom in which at least 95 percent of the aluminum was smelted or most recently cast in the United Kingdom, or in which at least 95 percent of the steel was melted and poured in the United Kingdom. Heading 9903.82.04 applies to such products classifiable in the provisions enumerated in subdivisions (c)(i)\u2013(iv) of this note. Heading 9903.82.05 applies to such products classifiable in the provisions enumerated in subdivisions (c)(vi)\u2013(vii) of this note. (e) Headings 9903.82.06, 9903.82.07, 9903.82.08, 9903.82.15, 9903.82.23 and 9903.82.24 apply to certain articles of copper and derivative aluminum and steel articles provided for in subdivision (c) of this note. For derivative articles provided for in subdivisions (c)(ii), (vi), and (ix), at least 85 percent of the aluminum content of the article must be composed of aluminum that was smelted and cast in the United States. For derivative articles provided for in subdivisions (c)(iv), (vii), (x) and (xi), at least 85 percent of the steel content of the article must be composed of steel that was melted and poured in the United States. For articles provided for in subdivision (c)(viii), at least 85 percent of the copper content of the article must be composed of copper that was smelt and cast in the United States.These requirements are cumulative such that a derivative article in more than one subdivision must satisfy each requirement. Except as provided for in headings 9903.82.12 and 9903.82.17, headings 9903.82.07 and 9903.82.08 apply to derivative articles classifiable in the provisions provided for in subdivisions (c)(ix)\u2013(x) of this note. Headings 9903.82.23 and 9903.82.24 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 69",
+        "citation_path": "us/statute/hts/chapter-99/page-241",
+        "physical_jsonl_line": 251
+      },
+      {
+        "body": "U.S. Notes (con.) (k) The rates of duty in heading 9903.85.08 apply to all entries of derivative aluminum products classifiable in the following HTSUS provisions, unless the derivative aluminum product was processed in another country from aluminum articles that were smelted and cast in the United States: 0402.99.68; 0402.99.70; 0402.99.90; 2106.90.9998; 2203.00.00; 2710.19.3050; 2903.43.10; 2903.45.10; 2903.49.00; 2903.51.10; 2903.59.90; 3004.90.9244; 3208.10.00; 3208.20.00; 3208.90.00; 3209.10.00; 3209.90.00; 3213.90.00; 3214.10.00; 3303.00.10; 3303.00.20; 3303.00.30; 3304.30.00; 3304.99.50; 3305.10.00; 3305.30.00; 3305.90.00; 3306.90.00; 3307.10.10; 3307.10.20; 3307.20.00; 3307.49.00; 3307.90.00; 3401.30.10; 3401.30.50; 3402.31.90; 3402.49.90; 3402.50.11; 3402.50.51; 3402.90.10; 3402.90.30; 3402.90.50; 3403.19.10; 3403.19.50; 3403.99.00; 3405.10.00; 3405.20.00; 3405.40.00; 3405.90.00; 3506.10.50; 3506.91.10; 3506.91.50; 3506.99.00; 3701.30.0000; 3808.59.10; 3808.59.40; 3808.61.10; 3808.61.50; 3808.62.10; 3808.62.50; 3808.69.10; 3808.69.50; 3808.91.15; 3808.91.25; 3808.91.30; 3808.91.50; 3808.94.10; 3808.94.50; 3809.91.00; 3810.10.00; 3811.19.00; 3811.21.00; 3814.00.10; 3814.00.20; 3814.00.50; 3820.00.00; 3824.99.9397; 6603.90.8100; 7308.20.0035; 8302.10.3000; 8302.10.6030; 8302.10.6060; 8302.10.6090; 8302.20.0000; 8302.30.3010; 8302.30.3060; 8302.41.3000; 8302.41.6015; 8302.41.6045; 8302.41.6050; 8302.41.6080; 8302.42.3010; 8302.42.3015; 8302.42.3065; 8302.49.6035; 8302.49.6045; 8302.49.6055; 8302.49.6085; 8302.50.0000; 8302.60.3000; 8302.60.9000; 8305.10.0050; 8306.30.0000; 8307.90.6000; 8309.90.0020; 8309.90.0025; 8412.90.9070; 8412.90.9075; 8414.59.6590; 8414.80.16; 8415.90.8025; 8415.90.8045; 8415.90.8085; 8418.10.00; 8418.99.8005; 8418.99.8050; 8418.99.8060; 8419.50.1000; 8419.50.5000; 8419.90.1000; 8422.90.0640; 8424.89.90; 8424.90.9080; 8443.16.0000; 8450.11.00; 8451.21.00; 8467.22.00; 8467.29.00; 8467.81.00; 8467.89.50; 8473.30.2000; 8473.30.5100; 8479.89.9599; 8479.90.8500; 8479.90.9596; 8481.90.9060; 8481.90.9085; 8483.40.5020; 8483.90.5020; 8486.90.0000; 8487.90.0080; 8501.64.0110; 8502.20.00; 8502.31.0000; 8503.00.9520; 8503.00.9546; 8503.00.9570; 8504.31.20; 8504.31.40; 8504.31.60; 8504.33.00; 8504.34.00; 8504.90.20; 8504.90.41; 8504.90.65; 8504.90.75; 8504.90.96; 8508.70.0000; 8513.90.2000; 8515.90.2000; 8516.90.5000; 8516.90.8050; 8517.71.0000; 8517.79.0000; 8529.90.7300; 8529.90.9760; 8536.90.8585; 8538.10.0000; 8541.90.0000; 8543.90.8885; 8544.19.00; 8544.42.90; 8544.49.2000; 8544.49.9000; 8544.60.2000; 8544.60.6000; 8547.90.0020; 8547.90.0030; 8547.90.0040; 8708.10.3050; 8708.10.60; 8708.29.5160; 8708.80.6590; 8708.99.6890; 8716.39.0040; 8716.80.5010; 8807.30.0060; 9013.90.8000; 9031.90.9195; 9401.79.00; 9401.99.9030; 9401.99.9070; 9403.10.00; 9403.20.00; 9403.99.1040; 9403.99.9010; 9403.99.9015; 9403.99.9020; 9403.99.9040; 9403.99.9045; 9405.99.4020; 9506.11.4080; 9506.51.4000; 9506.51.6000; 9506.59.4040; 9506.70.2090; 9506.91.0010; 9506.91.0020; 9506.91.0030; 9506.99.0510; 9506.99.0520; 9506.99.0530; 9506.99.1500; 9506.99.2000; 9506.99.2580; 9506.99.2800; 9506.99.5500; 9506.99.6080; 9507.30.2000; 9507.30.4000; 9507.30.6000; 9507.30.8000; 9507.90.6000; 9603.90.8050. For any derivative aluminum product that is classified in one of the HTSUS provisions that is listed in this subdivision, the additional ad valorem duty imposed by heading 9903.85.08 shall only apply to the declared value of the aluminum content of the derivative article. The quantity of the aluminum content shall be reported in kg for heading 9903.85.08, in addition to the units provided in chapters 1 through 97 for the derivative aluminum article, in accordance with Statistical Note 1(b) of Chapter 99. (l) Any importer entering the aluminum products covered by this note under heading 9903.85.02, or derivative aluminum products under headings 9903.85.04, 9903.85.07, 9903.85.08 or 9903.85.09 shall provide any information that may be required, and in such form, as is deemed necessary by CBP in order to permit the administration of these headings. (m) (A) Effective with respect to goods entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern daylight time on March 12, 2025, headings 9903.85.67 and 9903.85.69 provides the ordinary duty treatment of aluminum articles that are products of Russia, as enumerated in subdivision (g) of this note, or where any amount of primary aluminum used in the manufacture of the aluminum articles is smelted in Russia, or where the aluminum articles are cast in Russia. For any such goods that are eligible for special tariff treatment under any of the free trade agreements or preference programs listed in general note 3(c)(i) to the tariff schedule, the duty provided in such headings shall be collected in addition to any special rate of duty otherwise applicable under the appropriate tariff subheading, except where prohibited by law. Any such goods for which entry is claimed under a provision of chapter 98 and which are subject to the additional duties prescribed herein shall be eligible for and subject to the terms of such provision and applicable CBP regulations, except that duties under subheading 9802.00.60 shall be assessed based upon the full value of the imported article. No claim for entry or for any duty exemption or reduction shall be allowed for the aluminum products enumerated in subdivision (g) of this note under a provision of chapter 99 that may set forth a lower rate of duty or provide duty-free treatment, taking into account information supplied by CBP, but any additional duty prescribed in any provision of this subchapter or subchapter IV of chapter 99 shall be imposed in addition to the duty in heading 9903.85.67 or 9903.85.69. All shipments of any such article that is otherwise eligible to be entered under a provision that is subject to quantitative limitations, and where any amount of primary aluminum used in the manufacture of the article is smelted in Russia, or the articles are cast in Russia, shall be entered under headings 9903.85.67 through 9903.85.70. Except as otherwise provided in this subdivision, the duty provided in these headings shall be collected on the full value of the article that contains primary aluminum smelted in Russia, or contains articles cast in Russia. (B) Effective with respect to goods entered for consumption, or withdrawn from warehouse for consumption, on or after 12:01 a.m. eastern daylight time on March 12, 2025, headings 9903.85.68 and 9903.85.70 provides the ordinary duty treatment of derivative aluminum articles, as enumerated in subdivisions (i), (j) and (k) of this note, that are the product of Russia, or where any amount of primary aluminum used in the manufacture of the derivative aluminum articles is smelted in Russia, or where the derivative aluminum articles are cast in Russia. For any such products that are eligible for special tariff treatment under Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 84",
+        "citation_path": "us/statute/hts/chapter-99/page-256",
+        "physical_jsonl_line": 266
+      },
+      {
+        "body": "U.S. Notes (con.) (d) Heading 9903.04.60 applies to patented pharmaceutical articles provided for in subdivision (c) of this note. For articles for which the applicable column 1 tariff rate is less than the additional duties provided by heading 9903.04.60, the sum of the column 1 duty rate and the additional ad valorem rate of duty shall be the rate of duty provided by heading 9903.04.60. For articles for which the applicable column 1 tariff rate is greater than the additional duties provided by heading 9903.04.60, then no additional duty is due pursuant to heading 9903.04.60. (e) Heading 9903.04.61 applies to patented pharmaceutical articles imported for companies identified by the Secretary and imported before 12:01 am eastern time on September 29, 2026. The Secretary shall notify CBP of all such companies. (f) Heading 9903.04.62 applies to patented pharmaceutical articles that are the product of Japan, of a member country of the European Union, of South Korea, of Switzerland, or of Liechtenstein that would otherwise be subject to the additional duties imposed under heading 9903.04.60. For articles for which the applicable column 1 tariff rate is less than the additional duties provided by heading 9903.04.62, the sum of the column 1 duty rate and the additional ad valorem rate of duty shall be the rate of duty provided by heading 9903.04.62. For articles for which the applicable column 1 tariff rate is greater than the additional duties provided by heading 9903.04.62, no additional duty is due pursuant to heading 9903.04.62. (g) Heading 9903.04.63 applies to patented pharmaceutical articles that are the product of the United Kingdom that would otherwise be subject to the additional duties imposed under heading 9903.04.60. (h) Headings 9903.04.64\u20139903.04.66 apply to patented pharmaceutical articles described in this subdivision. Any importer entering pharmaceutical articles under any of these headings shall provide any information that may be required, and in such form, as is deemed necessary by CBP to permit the administration of these headings. (i) Heading 9903.04.64 applies to patented pharmaceutical articles imported for companies subject to an onshoring plan approved by the Secretary of Commerce in accordance with a process to be established in a Federal Register notice. The Secretary shall notify CBP of all such agreements. (ii) Heading 9903.04.65 applies to patented pharmaceutical articles that meet the requirements of subdivision (h)(i) of this note and are imported for companies that have entered into a Most-Favored-Nation pharmaceutical pricing agreement with the Secretary of Health and Human Services.The Secretary of Commerce shall notify CBP of all such agreements. (iii) Heading 9903.04.66 applies to drugs and associated ingredients for all approved indications that are designated as orphan pursuant to the Orphan Drug Act, 21 U.S.C. 360aa et seq. and its implementing regulations; nuclear medicines; plasma-derived therapies; fertility treatments; cell and gene therapies; antibody drug conjugates; medical countermeasures related to chemical, biological, radiological and nuclear threats; or other specialty pharmaceutical products identified by the Secretary of Commerce or pharmaceutical products for animal health imported from a jurisdiction that has a current or forthcoming trade and security framework or that meet an urgent U.S. health need. The Secretary shall publish a Federal Register notice when the conditions above are met and shall notify CBP of all such products. (i) Heading 9903.04.69 applies to entries of articles that are classifiable under provisions of the HTSUS enumerated in subdivision (c) of this note but that are not pharmaceutical articles described in subdivisions (c)(i)\u2013(iii) of this note. 50. (a) (i) Except as provided in headings 9903.05.02\u20139903.05.09 and in subdivisions (a)(ii) through (a)(vi) of this note, and other than products for personal use included in accompanied baggage of persons arriving in the United States, heading 9903.05.01 imposes an additional ad valorem rate of duty on imports of all products of Brazil. Notwithstanding U.S. note 1 to this subchapter, all products that are subject to the additional ad valorem rate of duty imposed by this heading shall also be subject to the general rates of duty imposed under subheadings in chapters 1 to 97 of the tariff schedule. Except as provided in subdivisions (a)(ii) through (a)(vi) of this note, all products that are subject to the additional ad valorem rate of duty imposed by heading 9903.05.01 shall also be subject to any additional duty provided for in this subchapter or in subchapter IV of chapter 99. Products that are eligible for special tariff treatment under general note 3(c)(i) to the tariff schedule, or that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional ad valorem rate of duty imposed by heading 9903.05.01, except as otherwise provided in this subdivision. The additional duty imposed by heading 9903.05.01 shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection (\u201cCBP\u201d), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under heading 9802.00.80 or subheadings 9802.00.40, 9802.00.50 or 9802.00.60. For goods entered under subheadings 9802.00.40, 9802.00.50 and 9802.00.60, the additional duty applies to the value of repairs, alterations or processing Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 368",
+        "citation_path": "us/statute/hts/chapter-99/page-540",
+        "physical_jsonl_line": 550
+      },
+      {
+        "body": "U.S. Notes (con.) 0201.20.04 0201.20.02 0201.10.50 0201.10.10 0201.10.05 0201.20.80 0201.20.50 0201.20.30 0201.20.10 0201.20.06 0201.30.30 0201.30.10 0201.30.06 0201.30.04 0201.30.02 0202.10.50 0202.10.10 0202.10.05 0201.30.80 0201.30.50 0202.20.30 0202.20.10 0202.20.06 0202.20.04 0202.20.02 0202.30.06 0202.30.04 0202.30.02 0202.20.80 0202.20.50 0206.10.00 0202.30.80 0202.30.50 0202.30.30 0202.30.10 0302.32.00 0210.20.00 0206.29.00 0206.22.00 0206.21.00 0302.71.50 0302.71.11 0302.47.00 0302.44.00 0302.34.00 0306.11.00 0304.31.00 0303.89.00 0303.23.00 0302.89.50 0702.00.60 0702.00.40 0702.00.20 0508.00.00 0409.00.0005 0712.32.00 0711.90.30 0710.80.15 0709.99.10 0709.99.05 0714.10.10 0713.34.40 0713.34.20 0712.34.20 0712.34.10 0714.40.60 0714.40.50 0714.40.20 0714.40.10 0714.10.20 0714.90.44 0714.90.42 0714.50.60 0714.50.20 0714.50.10 0801.12.00 0801.11.00 0714.90.61 0714.90.48 0714.90.46 0801.32.00 0801.31.00 0801.22.00 0801.21.00 0801.19.01 0802.70.10 0802.62.00 0802.61.00 0802.42.00 0802.41.00 0802.91.90 0802.91.10 0802.80.20 0802.80.10 0802.70.20 0803.90.00 0803.10.20 0803.10.10 0802.92.90 0802.92.10 0804.50.40 0804.40.00 0804.30.60 0804.30.40 0804.30.20 0805.50.40 0805.50.30 0805.10.00 0804.50.80 0804.50.60 0810.60.00 0810.50.00 0808.40.40 0808.40.20 0807.20.00 0811.90.30 0811.90.25 0811.90.10 0810.90.46 0810.90.27 0901.11.00 0812.90.40 0811.90.52 0811.90.50 0811.90.40 0901.90.20 0901.90.10 0901.22.00 0901.21.00 0901.12.00 0902.30.00 0902.20.90 0902.20.10 0902.10.90 0902.10.10 0904.21.20 0904.12.00 0904.11.00 0903.00.00 0902.40.00 0904.22.40 0904.22.20 0904.21.80 0904.21.60 0904.21.40 0905.20.00 0905.10.00 0904.22.80 0904.22.76 0904.22.73 0907.20.00 0907.10.00 0906.20.00 0906.19.00 0906.11.00 0908.22.40 0908.22.20 0908.21.00 0908.12.00 0908.11.00 0909.31.00 0909.22.00 0909.21.00 0908.32.00 0908.31.00 0910.12.00 0910.11.00 0909.62.00 0909.61.00 0909.32.00 0910.99.10 0910.99.07 0910.91.00 0910.30.00 0910.20.00 1003.90.40 0910.99.60 0910.99.50 0910.99.40 0910.99.20 1106.30.20 1106.20.90 1008.60.00 1008.40.00 1008.30.00 1513.11.00 1207.91.00 1203.00.00 1108.19.00 1108.14.00 1602.50.07 1602.50.05 1521.90.20 1521.10.00 1513.19.00 1801.00.00 1602.50.90 1602.50.60 1602.50.21 1602.50.08 1805.00.00 1804.00.00 1803.20.00 1803.10.00 1802.00.00 2006.00.40 2005.91.60 2001.90.45 1903.00.40 1903.00.20 2008.30.35 2008.20.00 2008.19.15 2007.99.50 2007.99.40 2008.99.45 2008.99.40 2008.99.15 2008.99.13 2008.91.00 2009.19.00 2009.12.45 2009.12.25 2009.11.00 2008.99.91 2101.12.90 2101.11.29 2101.11.21 2009.49.40 2009.39.20 2504.10.10 2202.99.35 2202.99.30 2106.90.48 2101.20.20 2510.20.00 2510.10.00 2507.00.00 2504.90.00 2504.10.50 2519.90.20 2519.90.10 2519.10.00 2511.10.50 2511.10.10 2530.20.10 2529.22.00 2529.21.00 2525.10.00 2524.90.00 2601.11.00 2530.90.80 2530.90.20 2530.90.10 2530.20.20 2605.00.00 2604.00.00 2603.00.00 2602.00.00 2601.12.00 2611.00.30 2610.00.00 2609.00.00 2608.00.00 2606.00.00 2614.00.30 2613.90.00 2612.20.00 2612.10.00 2611.00.60 2617.10.00 2616.10.00 2615.90.60 2615.90.30 2614.00.60 2701.19.00 2701.12.00 2701.11.00 2620.99.50 2620.30.00 2704.00.00 2703.00.00 2702.20.00 2702.10.00 2701.20.00 2707.30.00 2707.20.00 2707.10.00 2706.00.00 2705.00.00 2707.99.20 2707.99.10 2707.91.00 2707.50.00 2707.40.00 2707.99.90 2707.99.59 2707.99.55 2707.99.51 2707.99.40 2710.12.15 2709.00.20 2709.00.10 2708.20.00 2708.10.00 2710.19.06 2710.12.90 2710.12.45 2710.12.25 2710.12.18 2710.19.26 2710.19.25 2710.19.24 2710.19.16 2710.19.11 2710.19.90 2710.19.45 2710.19.40 2710.19.35 2710.19.30 2710.91.00 2710.20.25 2710.20.15 2710.20.10 2710.20.05 2710.99.31 2710.99.21 2710.99.16 2710.99.10 2710.99.05 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 371",
+        "citation_path": "us/statute/hts/chapter-99/page-543",
+        "physical_jsonl_line": 553
+      },
+      {
+        "body": "U.S. Notes (con.) 2711.11.00 2710.99.90 2710.99.45 2710.99.39 2710.99.32 2711.21.00 2711.19.00 2711.14.00 2711.13.00 2711.12.00 2712.90.20 2712.90.10 2712.20.00 2712.10.00 2711.29.00 2714.10.00 2713.90.00 2713.20.00 2713.12.00 2713.11.00 2804.29.00 2801.20.00 2716.00.00 2715.00.00 2714.90.00 2804.80.00 2804.69.50 2804.69.10 2804.61.00 2804.50.00 2805.30.00 2805.19.90 2805.19.20 2805.19.10 2804.90.00 2812.19.00 2811.29.20 2811.29.10 2811.19.10 2811.11.00 2816.40.20 2816.40.10 2816.10.00 2815.20.00 2813.90.10 2818.30.00 2818.20.00 2818.10.20 2818.10.10 2817.00.00 2823.00.00 2822.00.00 2821.20.00 2821.10.00 2820.10.00 2825.60.00 2825.50.30 2825.40.00 2825.30.00 2825.20.00 2825.90.90 2825.90.30 2825.90.20 2825.90.15 2825.80.00 2827.39.25 2827.31.00 2826.90.90 2826.30.00 2826.12.00 2827.49.50 2827.41.00 2827.39.90 2827.39.60 2827.39.45 2833.24.00 2833.21.00 2827.60.51 2827.60.10 2827.59.51 2833.29.51 2833.29.45 2833.29.10 2833.27.00 2833.25.00 2836.91.00 2836.60.00 2834.29.51 2834.29.20 2834.21.00 2841.80.00 2839.19.00 2836.99.50 2836.99.10 2836.92.00 2844.30.20 2844.20.00 2844.10.20 2844.10.10 2841.90.20 2846.90.80 2846.90.40 2846.90.20 2846.10.00 2844.30.50 2853.90.90 2853.90.10 2849.90.30 2849.20.20 2849.20.10 2915.29.30 2903.19.60 2903.19.30 2903.19.10 2903.19.05 2936.25.00 2936.24.01 2936.23.00 2936.22.00 2936.21.00 2936.29.16 2936.29.10 2936.28.00 2936.27.00 2936.26.00 2937.12.00 2937.11.00 2936.90.01 2936.29.50 2936.29.20 2937.23.25 2937.23.10 2937.22.00 2937.21.00 2937.19.00 2937.90.05 2937.50.00 2937.29.90 2937.29.10 2937.23.50 2937.90.90 2937.90.45 2937.90.40 2937.90.20 2937.90.10 2939.20.00 2939.19.50 2939.19.20 2939.19.10 2939.11.00 2939.45.00 2939.44.00 2939.42.00 2939.41.00 2939.30.00 2939.69.00 2939.63.00 2939.62.00 2939.59.00 2939.49.03 2941.10.30 2941.10.20 2941.10.10 2939.79.00 2939.72.00 2941.40.00 2941.30.00 2941.20.50 2941.20.10 2941.10.50 3001.20.00 2941.90.50 2941.90.30 2941.90.10 2941.50.00 3002.15.00 3002.14.00 3002.13.00 3002.12.00 3001.90.01 3002.59.00 3002.51.00 3002.49.00 3002.42.00 3002.41.00 3003.39.10 3003.20.00 3003.10.00 3002.90.52 3002.90.10 3003.90.01 3003.49.00 3003.42.00 3003.41.00 3003.39.50 3004.32.00 3004.31.00 3004.20.00 3004.10.50 3004.10.10 3004.50.10 3004.49.00 3004.42.00 3004.41.00 3004.39.00 3004.60.00 3004.50.50 3004.50.40 3004.50.30 3004.50.20 3006.60.00 3006.30.50 3006.30.10 3004.90.92 3004.90.10 3101.00.00 3006.93.60 3006.93.50 3006.93.20 3006.93.10 3102.40.00 3102.30.00 3102.29.00 3102.21.00 3102.10.00 3103.11.00 3102.90.01 3102.80.00 3102.60.00 3102.50.00 3104.90.01 3104.30.00 3104.20.00 3103.90.01 3103.19.00 3105.51.00 3105.40.00 3105.30.00 3105.20.00 3105.10.00 3206.11.00 3204.17.20 3105.90.00 3105.60.00 3105.59.00 3818.00.00 3606.90.30 3301.90.50 3301.12.00 3206.19.00 4001.30.00 4001.29.00 4001.22.00 4001.21.00 4001.10.00 4107.11.20 4104.49.50 4104.49.10 4104.41.50 4104.11.20 4403.49.02 4403.42.00 4403.41.00 4302.19.60 4107.12.20 4407.26.00 4407.25.00 4407.23.01 4407.22.00 4407.21.00 4408.31.01 4407.99.0295 4407.29.02 4407.28.00 4407.27.00 4409.22.40 4409.22.25 4409.22.10 4409.22.05 4408.39.02 4412.31.06 4409.22.90 4409.22.65 4409.22.60 4409.22.50 4412.31.52 4412.31.48 4412.31.45 4412.31.42 4412.31.26 4412.51.31 4412.51.10 4412.41.00 4412.31.92 4412.31.61 4412.91.31 4412.91.10 4412.91.06 4412.51.51 4412.51.41 4601.22.90 4601.22.80 4601.22.40 4412.91.51 4412.91.41 4602.12.05 4601.93.20 4601.93.05 4601.93.01 4601.29.40 4602.12.35 4602.12.25 4602.12.23 4602.12.16 4602.12.14 4703.29.00 4703.21.00 4703.19.00 4703.11.00 4602.12.45 4705.00.00 4704.29.00 4704.21.00 4704.19.00 4704.11.00 4706.92.01 4706.91.00 4706.30.00 4706.20.00 4706.10.00 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 372",
+        "citation_path": "us/statute/hts/chapter-99/page-544",
+        "physical_jsonl_line": 554
+      },
+      {
+        "body": "U.S. Notes (con.) 7103.10.20 6802.99.00 6309.00.00 5607.21.00 4706.93.01 7108.12.50 7108.12.10 7108.11.00 7106.91.10 7103.10.40 7110.11.00 7108.20.00 7108.13.70 7108.13.55 7108.13.10 7110.39.00 7110.31.00 7110.29.00 7110.21.00 7110.19.00 7115.90.05 7112.92.01 7112.30.01 7110.49.00 7110.41.00 7201.50.30 7201.20.00 7201.10.00 7118.90.00 7115.90.30 7202.19.50 7202.19.10 7202.11.50 7202.11.10 7201.50.60 7202.50.00 7202.49.50 7202.49.10 7202.41.00 7202.30.00 7202.93.80 7202.93.40 7202.91.00 7202.80.00 7202.60.00 7204.30.00 7204.21.00 7203.90.00 7203.10.00 7202.99.20 7403.11.00 7402.00.00 7401.00.00 7314.19.01 7204.41.00 7403.22.00 7403.21.00 7403.19.00 7403.13.00 7403.12.00 7405.00.60 7405.00.10 7404.00.60 7404.00.30 7403.29.01 7504.00.00 7503.00.00 7502.20.00 7502.10.00 7501.10.00 7901.20.00 7901.12.50 7901.12.10 7901.11.00 7508.90.50 8001.20.00 8001.10.00 7907.00.60 7903.90.30 7902.00.00 8103.20.00 8101.97.00 8101.10.00 8007.00.50 8002.00.00 8104.19.00 8104.11.00 8103.99.00 8103.91.00 8103.30.00 8105.20.60 8105.20.30 8104.90.00 8104.30.00 8104.20.00 8106.90.00 8106.10.00 8105.90.00 8105.30.00 8105.20.90 8110.10.00 8108.90.60 8108.90.30 8108.30.00 8108.20.00 8112.21.00 8111.00.49 8111.00.47 8110.90.00 8110.20.00 8112.49.00 8112.41.50 8112.41.10 8112.29.00 8112.22.00 8112.92.60 8112.92.40 8112.92.30 8112.92.10 8112.59.00 8422.40.9181 8112.99.91 8112.99.20 8112.99.10 8112.92.65 8471.60.10 8471.50.01 8471.49.00 8471.41.01 8471.30.01 8471.70.10 8471.60.90 8471.60.80 8471.60.70 8471.60.20 8471.70.60 8471.70.50 8471.70.40 8471.70.30 8471.70.20 8471.90.00 8471.80.90 8471.80.40 8471.80.10 8471.70.90 8486.10.00 8473.30.91 8473.30.51 8473.30.20 8473.30.11 8505.11.0070 8486.90.00 8486.40.00 8486.30.00 8486.20.00 8524.11.90 8524.11.10 8523.51.00 8517.62.00 8517.13.00 8524.92.00 8524.91.90 8524.91.10 8524.19.00 8524.12.00 8541.21.00 8541.10.00 8537.10.9170 8528.52.00 8524.99.00 8541.49.70 8541.49.10 8541.41.00 8541.30.00 8541.29.00 8541.90.00 8541.59.00 8541.51.00 8541.49.95 8541.49.80 8542.90.00 8542.39.00 8542.33.00 8542.32.00 8542.31.00 9701.92.00 9701.91.00 9701.29.00 9701.22.00 9701.21.00 9703.90.00 9703.10.00 9702.90.00 9702.10.00 9701.99.00 9705.29.00 9705.22.00 9705.21.00 9705.10.00 9704.00.00 9706.90.00 9706.10.00 9705.39.00 9705.31.00 (iii) As provided in heading 9903.05.04, the additional duty imposed by heading 9903.05.01 shall not apply to the following particular articles the product of Brazil: (1) Etrogs (classifiable in subheading 0805.90.01); (2) Tropical fruit, nesoi, frozen, whether or not previously steamed or boiled (classifiable in subheading 0811.90.80); (3) Date palm branches, Myrtus branches or other vegetable material, for religious purposes only (classifiable in subheading 1404.90.90); (4) Bread, pastry, cakes, biscuits and similar baked products nesoi, and puddings, whether or not containing chocolate, fruit, nuts or confectionery, for religious purposes only (classifiable in subheading 1905.90.10); (5) Bakers\u2019 wares, communion wafers, sealing wafers, rice paper and similar products, nesoi, for religious purposes only (classifiable in subheading 1905.90.90); (6) Acai (classifiable in subheading 2008.99.21); (7) Citrus juice of any single citrus fruit (other than orange, grapefruit or lime), of a Brix value not exceeding 20, concentrated, unfermented, except for lemon juice (classifiable in subheading 2009.31.60); (8) Coconut water or juice of acai (classifiable in subheading 2009.89.70); Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 373",
+        "citation_path": "us/statute/hts/chapter-99/page-545",
+        "physical_jsonl_line": 555
+      },
+      {
+        "body": "U.S. Notes (con.) 3824.99.29 3824.99.25 3824.92.00 3824.91.00 3824.89.00 3826.00.30 3824.99.93 3824.99.55 3824.99.50 3824.99.49 3902.90.00 3901.90.90 3827.40.00 3827.14.00 3827.13.00 3906.90.50 3905.99.80 3905.91.50 3905.91.10 3904.61.00 3907.61.00 3907.30.00 3907.29.00 3907.21.00 3907.10.00 3908.90.20 3908.10.00 3907.99.50 3907.70.00 3907.69.00 3911.90.25 3911.20.00 3910.00.00 3909.40.00 3909.10.00 3912.39.00 3912.31.00 3912.20.00 3911.90.91 3911.90.45 3914.00.60 3914.00.20 3913.90.50 3913.90.20 3912.90.00 (vi) As provided in heading 9903.05.07, the additional duty imposed by heading 9903.05.01 shall not apply to: (1) articles of aluminum, of steel or of copper, nor to derivative aluminum or steel articles provided for in headings 9903.82.02 and 9903.82.04\u20139903.82.26; (2) passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans and cargo vans) and light trucks provided for in headings 9903.94.01, 9903.94.02 (as applied to the U.S. content of passenger vehicles and light trucks described in subdivision 33(d) of this subchapter upon approval from the Secretary of Commerce), 9903.94.03, 9903.94.31, 9903.94.40, 9903.94.41, 9903.94.50, 9903.94.51, 9903.94.60 and 9903.94.61; (3) parts of passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans and cargo vans) and parts of light trucks provided for in headings 9903.94.05, 9903.94.06 (as applied to parts of passenger vehicles that are eligible for special tariff treatment under the United States-Mexico-Canada Agreement (USMCA) other than automobile knock-down kits or parts compilations), 9903.94.07, 9903.94.32, 9903.94.33, 9903.94.42, 9903.94.43, 9903.94.44, 9903.94.45, 9903.94.52, 9903.94.53, 9903.94.54, 9903.94.55, 9903.94.62, 9903.94.63, 9903.94.64, 9903.94.65, 9903.94.66, 9903.94.67, 9903.94.68 and 9903.94.69, and parts of passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans and cargo vans) and parts of light trucks subject to an import adjustment offset pursuant to Proclamation 10925 of April 29, 2025 (90 FR 18899), as amended; (4) wood products provided for in headings 9903.76.01, 9903.76.02, 9903.76.03, 9903.76.20, 9903.76.21, 9903.76.22, 9903.76.23 and 9903.76.24; (5) medium- and heavy-duty vehicles, buses and other vehicles provided for in headings 9903.74.01, 9903.74.02, 9903.74.03 and 9903.74.06; (6) medium- and heavy-duty vehicle parts provided for in headings 9903.74.08, 9903.74.09 and 9903.74.10, and parts of medium- and heavy-duty vehicles subject to an import adjustment offset pursuant to Proclamation 10984 of October 17, 2025 (90 FR 48451); (7) semiconductor articles provided for in heading 9903.79.01; and (8) patented pharmaceutical articles provided for in headings 9903.04.60\u20139903.04.66. 52. (a) Except as provided in headings 9903.05.85\u20139903.06.21 and in subdivisions (b) through (k) of this note, and other than products for personal use included in accompanied baggage of persons arriving in the United States, headings 9903.05.20\u20139903.05.84 impose additional ad valorem rates of duty on imports of all products of the countries provided for in these headings. Notwithstanding U.S. note 1 to this subchapter, all products that are subject to the additional ad valorem rates of duty imposed by these headings shall also be subject to the general rates of duty imposed under subheadings in chapters 1 to 97 of the tariff schedule. Except as provided in subdivisions (b) through (k) of this note, all products that are subject to the additional ad valorem rates of duty imposed by headings 9903.05.20\u20139903.05.84 shall also be subject to any additional duty provided for in this subchapter or in subchapter IV of chapter 99. Products that are eligible for special tariff treatment under general note 3(c)(i) to the tariff schedule, or that are eligible for temporary duty exemptions or reductions under subchapter II to chapter 99, shall be subject to the additional ad valorem rates of duty imposed by headings 9903.05.20\u20139903.05.84, except as otherwise provided in this note. The additional duties imposed by headings 9903.05.20\u20139903.05.84 shall not apply to goods for which entry is properly claimed under a provision of chapter 98 of the tariff schedule pursuant to applicable regulations of U.S. Customs and Border Protection (\u201cCBP\u201d), and whenever CBP agrees that entry under such a provision is appropriate, except for goods entered under subheadings 9802.00.40, 9802.00.50 or 9802.00.60 or heading 9802.00.80. For goods entered under subheadings 9802.00.40, 9802.00.50 and 9802.00.60, the additional duties apply to the value of repairs, alterations or processing performed, as Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 381",
+        "citation_path": "us/statute/hts/chapter-99/page-553",
+        "physical_jsonl_line": 563
+      },
+      {
+        "body": "U.S. Notes (con.) 3826.00.30 3824.99.93 3824.99.55 3824.99.50 3824.99.49 3902.90.00 3901.90.90 3827.40.00 3827.14.00 3827.13.00 3906.90.50 3905.99.80 3905.91.50 3905.91.10 3904.61.00 3907.61.00 3907.30.00 3907.29.00 3907.21.00 3907.10.00 3908.90.20 3908.10.00 3907.99.50 3907.70.00 3907.69.00 3911.90.25 3911.20.00 3910.00.00 3909.40.00 3909.10.00 3912.39.00 3912.31.00 3912.20.00 3911.90.91 3911.90.45 3914.00.60 3914.00.20 3913.90.50 3913.90.20 3912.90.00 (f) As provided in heading 9903.05.90, the additional duties imposed by headings 9903.05.20\u20139903.05.84 shall not apply to: (1) articles of aluminum, of steel or of copper, nor to derivative aluminum or steel articles provided for in headings 9903.82.02 and 9903.82.04\u20139903.82.26; (2) passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans and cargo vans) and light trucks provided for in headings 9903.94.01, 9903.94.02 (as applied to the U.S. content of passenger vehicles and light trucks described in subdivision 33(d) of this subchapter upon approval from the Secretary of Commerce), 9903.94.03, 9903.94.31, 9903.94.40, 9903.94.41, 9903.94.50, 9903.94.51, 9903.94.60 and 9903.94.61; (3) parts of passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans and cargo vans) and parts of light trucks provided for in headings 9903.94.05, 9903.94.06 (as applied to parts of passenger vehicles that are eligible for special tariff treatment under the United States-Mexico-Canada Agreement (USMCA) other than automobile knock-down kits or parts compilations), 9903.94.07, 9903.94.32, 9903.94.33, 9903.94.42, 9903.94.43, 9903.94.44, 9903.94.45, 9903.94.52, 9903.94.53, 9903.94.54, 9903.94.55, 9903.94.62, 9903.94.63, 9903.94.64, 9903.94.65, 9903.94.66, 9903.94.67, 9903.94.68 and 9903.94.69, and parts of passenger vehicles (sedans, sport utility vehicles, crossover utility vehicles, minivans and cargo vans) and parts of light trucks subject to an import adjustment offset pursuant to Proclamation 10925 of April 29, 2025 (90 FR 18899), as amended; (4) wood products provided for in headings 9903.76.01, 9903.76.02, 9903.76.03, 9903.76.20, 9903.76.21, 9903.76.22, 9903.76.23 and 9903.76.24; (5) medium- and heavy-duty vehicles, buses and other vehicles provided for in headings 9903.74.01, 9903.74.02, 9903.74.03 and 9903.74.06; (6) medium- and heavy-duty vehicle parts provided for in headings 9903.74.08, 9903.74.09 and 9903.74.10, and parts of medium- and heavy-duty vehicles subject to an import adjustment offset pursuant to Proclamation 10984 of October 17, 2025 (90 FR 48451); (7) semiconductor articles provided for in heading 9903.79.01; and (8) patented pharmaceutical articles provided for in headings 9903.04.60\u20139903.04.66 (g) As provided in heading 9903.05.93, the additional duties imposed by heading 9903.05.29 shall not apply to any products of Canada entered free of duty under the United States-Mexico-Canada Agreement, including any treatment set forth in subchapter XXIII of chapter 98 and subchapter XXII of chapter 99 of the HTSUS, but regardless of whether a product is entered under a provision for which the rate of duty \u201cS or S+\u201d appears in the \u201cSpecial\u201d sub-column. (h) As provided in heading 9903.05.94, the additional duties imposed by heading 9903.05.55 shall not apply to any products of Mexico entered free of duty under the United States-Mexico-Canada Agreement, including any treatment set forth in subchapter XXIII of chapter 98 and subchapter XXII of chapter 99 of the HTSUS, but regardless of whether a product is entered under a provision for which the rate of duty \u201cS or S+\u201d appears in the \u201cSpecial\u201d sub-column. (i) As provided in heading 9903.05.95, the additional duties imposed by headings 9903.05.33, 9903.05.34, 9903.05.37, 9903.05.40, 9903.05.42 and 9903.05.58 shall not apply to a textile or apparel good as defined in subdivision (d)(v) of general note 29 of the HTSUS which is the product of Costa Rica, the Dominican Republic, El Salvador, Guatemala, Honduras or Nicaragua, entered free of duty under the Dominican Republic-Central America-United States Free Trade Agreement, including any treatment set forth in subchapter XXII of chapter 98 of the HTSUS. (j) Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 394",
+        "citation_path": "us/statute/hts/chapter-99/page-566",
+        "physical_jsonl_line": 576
+      }
+    ],
+    "path": "data/corpus/provisions/us/statute/2026-08-04-usitc-hts-2026-rev15-notes.jsonl",
+    "repo": "/Users/maxghenis/TheAxiomFoundation/axiom-corpus",
+    "selected_excerpts": [
+      {
+        "body": "U.S. Notes (con.) (c) The quantitative limitations that may be established under any of subheadings 9903.18.01 through 9903.18.10 shall apply to sugar, syrups and molasses described therein during any effective period announced in the Federal Register by the United States Trade Representative for such a subheading in any year, during which period only the aggregate quantity of the specified goods shall be allowed entry into the customs territory of the United States. Such limitation shall apply notwithstanding any other quantitative limitation on such goods that may be provided for in the tariff schedule and the availability of any quantitative limitation set forth for such goods in chapter 17 or chapter 21 of the tariff schedule or allocation thereof. Any quantity set forth in a notice issued by the United States Trade Representative for any subheading specified herein may be allocated among supplying countries and areas and shall thereby supersede any quantity or allocation that may have been announced under additional U.S. note 5 to chapter 17. 16. (a) Except as provided in headings 9903.82.01, 9903.85.67, and 9903.85.68, headings 9903.82.02\u20139903.82.26 provide the ordinary customs duty treatment of certain articles of aluminum, of steel, or of copper and certain derivative aluminum or steel articles as provided for in subdivision (c) of this note. These headings are mutually exclusive, such that an imported article will be subject to no more than one of these headings. (b) For imported articles provided for in headings 9903.82.02\u20139903.82.26 that are eligible for special tariff treatment under any of the free trade agreements or preference programs listed in general note 3(c)(i) to the tariff schedule, the duties provided in these headings shall be collected in addition to any special rate of duty otherwise applicable under the appropriate tariff subheading. Goods for which entry is claimed under a provision of chapter 98 to the HTSUS and that are subject to the additional duties prescribed herein shall be eligible for and subject to the terms of such provision and applicable U.S. Customs and Border Protection (CBP) regulations, except that duties under subheading 9802.00.60 shall be assessed based upon the full value of the imported article. No claim for entry or for any duty exemption or reduction shall be allowed under a provision of chapter 99 to the HTSUS that may set forth a lower rate of duty or provide duty-free treatment, taking into account information supplied by CBP. All antidumping, countervailing or other duties and charges applicable to such goods shall continue to be imposed. (c) Headings 9903.82.02\u20139903.82.26 apply to the full customs value of articles classifiable in the provisions of the HTSUS enumerated in the following lists. For articles classified in the listed provisions that are not in chapters 72, 73, 74 or 76 of the HTSUS, headings 9903.82.02, 9903.82.04\u20139903.82.17 and 9903.82.20\u20139903.82.26 only apply where the weight of the applicable metal is at least 15 percent of the weight of the imported article. The applicable metal is identified in the title of each of the lists below. If an article is classified in a provision that is present on multiple lists, use the aggregate weight of the listed metals. [Compiler's note: List continues on subsequent pages. read numbers from left to right.] (i) Articles of aluminum: 7606 7605 7604 7601 7616.99.5160 7609 7608 7607 7616.99.5170 (ii) Derivative aluminum articles: 7612.10.00 7610.90.00 7610.10.00 7308.20.0035 7614.10.10 7613.00.00 7612.90.50 7612.90.10 7614.90.50 7614.90.40 7614.90.20 7614.10.50 7616.99.5175 7616.99.5150 7616.99.5120 7616.10.9090 7616.99.5190 (iii) Articles of steel: 7209 7208 7207 7206 7213 7212 7211 7210 7216.21.00 7216.10.00 7215 7214 7216.33.00 7216.32.00 7216.31.00 7216.22.00 7217 7216.99.00 7216.50.00 7216.40.00 7221 7220 7219 7218 7225 7224 7223 7222 7229 7228 7227 7226 7302.90 7302.40.00 7302.10 7301.10.00 7306 7305 7304 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 64",
+        "citation_path": "us/statute/hts/chapter-99/page-236",
+        "physical_jsonl_line": 246
+      },
+      {
+        "body_prefix": "U.S. Notes (con.) (vi) Derivative aluminum articles: 3701.30.00 7615.10.3025 7615.10.3015 7615.10.2025 7615.10.2015 7615.10.7130 7615.10.7125 7615.10.5040 7615.10.5020 7615.20.00 7615.10.91 7615.10.7180 7615.10.7155 8302.10.30 7616.99.5140 7616.99.5130 7616.99.10 8302.30.3060 8302.30.3010 8302.20.00 8302.10.60 8302.41.6050 8302.41.6045 8302.41.6015 8302.41.30 8302.50.00 8302.49.60 8302.42.30 8302.41.6080 8306.30.00 8305.10.0050 8302.60.90 8302.60.30 8412.90.9070 8309.90.0025 8309.90.0020 8307.90.60 8418.10.00 8414.80.16 8414.59.6590 8412.90.9075 8419.50.10 8418.99.8060 8418.99.8050 8418.99.8005 8424.90.9080 8422.90.0640 8419.90.10 8419.50.50 8467.22.00 8451.21.00 8450.11.00 8443.16.00 8479.9",
+        "citation_path": "us/statute/hts/chapter-99/page-238",
+        "physical_jsonl_line": 248,
+        "sample_context": "4.90.9080 8422.90.0640 8419.90.10 8419.50.50 8467.22.00 8451.21.00 8450.11.00 8443.16.00 8479.90.85 8467.89.50 8467.81.00 8467.29.00 8483.90.5020 8483.40.5020 8481.90.9085 8481.90.9060 8502.31.00 8502.20.00 8501.64.0110 8487.90.0080 8504.31.20 8503.00.9570 850"
+      },
+      {
+        "body": "U.S. Notes (con.) 8716.10.00 8708.99.81 8716.80.50 8716.39.00 9403.20.0082 9403.20.0075 8716.90.50 8716.90.30 9406.90.01 9406.20.00 9403.99.9040 9403.99.9020 (viii) Articles of copper: 8544.49.10 8544.42.90 8544.42.20 8544.42.10 (ix) Derivative aluminum articles: 8415.90.8085 8415.90.8045 8415.90.8020 8415.90.8010 8504.34.00 8479.90.9596 8479.89.9599 8424.89.90 8504.90.9610 8504.90.75 8504.90.65 8504.90.20 8504.90.9690 8504.90.9650 8504.90.9646 8504.90.9630 9013.90.80 8708.29.2130 (x) Derivative steel articles: 8401.40.00 8207.30.6095 8207.30.6062 8207.20.0070 8415.81.01 8415.10.90 8415.10.60 8407.90.10 8419.81.50 8417.90.00 8415.90.80 8415.82.01 8428.33.00 8428.32.00 8424.89.90 8421.29.00 8428.90.03 8428.70.00 8428.60.00 8428.39.00 8432.90.00 8432.10.00 8431.41.00 8431.39.00 8433.90.50 8433.59.00 8433.51.00 8433.20.00 8455.90.40 8455.30.00 8454.20.0060 8454.20.0010 8477.10.30 8474.90.00 8457.10.00 8455.90.80 8477.90.8601 8477.90.25 8477.10.90 8477.10.40 8480.49.0010 8479.90.95 8479.89.65 8479.89.55 8483.60.80 8480.79.9010 8480.71.8060 8480.71.8045 8701.30.10 8516.29.00 8504.23.00 8483.90.20 8701.94.10 8701.93.10 8701.92.10 8701.91.10 8706.00.30 8703.21.01 8701.95.10 8708.92.10 8708.40.60 8708.40.30 8708.29.2120 8708.99.23 8708.93.30 8708.93.15 8708.92.60 8716.90.10 8716.80.10 (xi) Derivative steel articles: 8427.20.80 8427.20.40 8427.10.80 8427.10.40 8429.20.00 8429.19.00 8429.11.00 8427.90.00 8429.51.50 8429.51.10 8429.40.00 8429.30.00 8429.59.50 8429.59.10 8429.52.50 8429.52.10 8701.10.01 8431.49.90 8431.42.00 8431.20.00 8701.93.50 8701.92.50 8701.91.50 8701.30.50 8705.20.00 8705.10.00 8701.95.50 8701.94.50 (d) Headings 9903.82.04 and 9903.82.05 apply to articles the product of the United Kingdom in which at least 95 percent of the aluminum was smelted or most recently cast in the United Kingdom, or in which at least 95 percent of the steel was melted and poured in the United Kingdom. Heading 9903.82.04 applies to such products classifiable in the provisions enumerated in subdivisions (c)(i)\u2013(iv) of this note. Heading 9903.82.05 applies to such products classifiable in the provisions enumerated in subdivisions (c)(vi)\u2013(vii) of this note. (e) Headings 9903.82.06, 9903.82.07, 9903.82.08, 9903.82.15, 9903.82.23 and 9903.82.24 apply to certain articles of copper and derivative aluminum and steel articles provided for in subdivision (c) of this note. For derivative articles provided for in subdivisions (c)(ii), (vi), and (ix), at least 85 percent of the aluminum content of the article must be composed of aluminum that was smelted and cast in the United States. For derivative articles provided for in subdivisions (c)(iv), (vii), (x) and (xi), at least 85 percent of the steel content of the article must be composed of steel that was melted and poured in the United States. For articles provided for in subdivision (c)(viii), at least 85 percent of the copper content of the article must be composed of copper that was smelt and cast in the United States.These requirements are cumulative such that a derivative article in more than one subdivision must satisfy each requirement. Except as provided for in headings 9903.82.12 and 9903.82.17, headings 9903.82.07 and 9903.82.08 apply to derivative articles classifiable in the provisions provided for in subdivisions (c)(ix)\u2013(x) of this note. Headings 9903.82.23 and 9903.82.24 Harmonized Tariff Schedule of the United States Revision 15 (2026) Annotated for Statistical Reporting Purposes XXII 99 - III - 69",
+        "citation_path": "us/statute/hts/chapter-99/page-241",
+        "physical_jsonl_line": 251
+      },
+      {
+        "body_prefix": "U.S. Notes (con.) (k) The rates of duty in heading 9903.85.08 apply to all entries of derivative aluminum products classifiable in the following HTSUS provisions, unless the derivative aluminum product was processed in another country from aluminum articles that were smelted and cast in the United States: 0402.99.68; 0402.99.70; 0402.99.90; 2106.90.9998; 2203.00.00; 2710.19.3050; 2903.43.10; 2903.45.10; 2903.49.00; 2903.51.10; 2903.59.90; 3004.90.9244; 3208.10.00; 3208.20.00; 3208.90.00; 3209.10.00; 3209.90.00; 3213.90.00; 3214.10.00; 3303.00.10; 3303.00.20; 3303.00.30; 3304.30.00; 3304.99.50; 3305.10.00; 3305.30.00; 3305.90.00; 3306.90.00; 3307.10.10; 3307.10.20; 3307.20.00; 3307.49.00; 330",
+        "citation_path": "us/statute/hts/chapter-99/page-256",
+        "physical_jsonl_line": 266,
+        "sample_context": "8424.89.90; 8424.90.9080; 8443.16.0000; 8450.11.00; 8451.21.00; 8467.22.00; 8467.29.00; 8467.81.00; 8467.89.50; 8473.30.2000; 8473.30.5100; 8479.89.9599; 8479.90.8500; 8479.90.9596; 8481.90.9060; 8481.90.9085; 8483.40.5020; 8483.90.5020; 8486.90.0000; 8487.90."
+      },
+      {
+        "body_prefix": "U.S. Notes (con.) (s) The rates of duty set forth in heading 9903.85.15 apply to all entries of derivative aluminum products of the United Kingdom classifiable in the following provisions of the HTSUS, unless the derivative aluminum product was processed in another country from aluminum articles that were smelted and cast in the United States:0402.99.68; 0402.99.70; 0402.99.90; 2106.90.9998; 2203.00.00; 2710.19.3050; 2903.43.10; 2903.45.10; 2903.49.00; 2903.51.10; 2903.59.90; 3004.90.9244; 3208.10.00; 3208.20.00; 3208.90.00; 3209.10.00; 3209.90.00; 3213.90.00; 3214.10.00; 3303.00.10; 3303.00.20; 3303.00.30; 3304.30.00; 3304.99.50; 3305.10.00; 3305.30.00; 3305.90.00; 3306.90.00; 3307.10.10; 3",
+        "citation_path": "us/statute/hts/chapter-99/page-259",
+        "physical_jsonl_line": 269,
+        "sample_context": "8424.89.90; 8424.90.9080; 8443.16.0000; 8450.11.00; 8451.21.00; 8467.22.00; 8467.29.00; 8467.81.00; 8467.89.50; 8473.30.2000; 8473.30.5100; 8479.89.9599; 8479.90.8500; 8479.90.9596; 8481.90.9060; 8481.90.9085; 8483.40.5020; 8483.90.5020; 8486.90.0000; 8487.90."
+      }
+    ],
+    "sha256": "0f3ed7ef2efb64383825db65e615959200770e8511c8d4834b16e02892cb9ec8"
+  },
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full",
+  "joins": [
+    {
+      "heading_families": [],
+      "hts10": "9403999020",
+      "probe": "2026-07-22",
+      "yale_annex_tier": "annex_2"
+    },
+    {
+      "heading_families": [],
+      "hts10": "9403999020",
+      "probe": "2026-07-24",
+      "yale_annex_tier": "annex_2"
+    },
+    {
+      "heading_families": [],
+      "hts10": "8467895030",
+      "probe": "2026-07-30",
+      "yale_annex_tier": "annex_1b"
+    },
+    {
+      "heading_families": [
+        "auto_parts",
+        "mhd_parts"
+      ],
+      "hts10": "8414308030",
+      "probe": "2026-07-22",
+      "yale_annex_tier": null
+    },
+    {
+      "heading_families": [
+        "auto_parts",
+        "mhd_parts"
+      ],
+      "hts10": "8407344400",
+      "probe": "2026-07-24",
+      "yale_annex_tier": "annex_2"
+    }
+  ],
+  "line9403999020_raw_record_census": {
+    "brazil_component_mismatches": 6,
+    "cases": 198,
+    "cases_with_either_overlay_mismatch": 82,
+    "note52_component_mismatches": 80,
+    "section232_actual_values": [
+      0.5
+    ],
+    "section232_expected_values": [
+      0.0
+    ]
+  },
+  "prior_verifier_sha256": "02834cca2020fcc957ef205409c6302ef769053498e529c98d8502335c7b9141",
+  "reproduced_partial_current_selector_census": {
+    "29": {
+      "attribution_census": {
+        "derived": 239,
+        "reference-behavior": 223,
+        "upstream-methodology": 75
+      },
+      "cases": 800,
+      "class_census": {
+        "__derived_total__": 239,
+        "column2-gn3b": 75,
+        "pharma-utilization-proxy-brazil": 77,
+        "pharma-utilization-proxy-forced-labor-non035": 114,
+        "yale-zero-pharma-brazil": 10,
+        "yale-zero-pharma-forced-labor": 22
+      },
+      "class_per_slot": {
+        "__derived_total__": {
+          "total": 239
+        },
+        "column2-gn3b": {
+          "base": 75
+        },
+        "pharma-utilization-proxy-brazil": {
+          "brazil_section_301": 77
+        },
+        "pharma-utilization-proxy-forced-labor-non035": {
+          "forced_labor_section_301": 114
+        },
+        "yale-zero-pharma-brazil": {
+          "brazil_section_301": 10
+        },
+        "yale-zero-pharma-forced-labor": {
+          "forced_labor_section_301": 22
+        }
+      },
+      "per_slot": {
+        "axiom_total_reconciliation": {
+          "match": 698
+        },
+        "base": {
+          "explained": 75,
+          "match": 623,
+          "mismatch": 75
+        },
+        "brazil_section_301": {
+          "explained": 87,
+          "match": 713,
+          "mismatch": 87
+        },
+        "china_section_301": {
+          "match": 800
+        },
+        "forced_labor_section_301": {
+          "explained": 136,
+          "match": 562,
+          "mismatch": 136
+        },
+        "ieepa": {
+          "match": 698
+        },
+        "section_122": {
+          "match": 800
+        },
+        "section_201": {
+          "match": 800
+        },
+        "section_232": {
+          "match": 800
+        },
+        "section_338": {
+          "match": 800
+        },
+        "total": {
+          "explained": 239,
+          "match": 459,
+          "mismatch": 239
+        },
+        "yale_total_reconciliation": {
+          "match": 698
+        }
+      },
+      "summary": {
+        "axiom_attributed_open": 0,
+        "comparisons": 8988,
+        "derived_total_units": 239,
+        "engine_errors": 0,
+        "matches": 8451,
+        "mismatches": 537,
+        "unexplained": 0,
+        "unexplained_total_units": 0
+      },
+      "verified_shard_sha256": "74a6286454dbf93cc4a7dc293a777d8a815d2f83a6f6cfb3a31d3c918b26afcb"
+    },
+    "62": {
+      "attribution_census": {
+        "axiom-attributed-open": 5,
+        "derived": 169,
+        "upstream-methodology": 164
+      },
+      "cases": 640,
+      "class_census": {
+        "__derived_total__": 169,
+        "cafta-52i-deferred": 5,
+        "column2-gn3b": 164
+      },
+      "class_per_slot": {
+        "__derived_total__": {
+          "total": 169
+        },
+        "cafta-52i-deferred": {
+          "forced_labor_section_301": 5
+        },
+        "column2-gn3b": {
+          "base": 164
+        }
+      },
+      "per_slot": {
+        "axiom_total_reconciliation": {
+          "match": 555
+        },
+        "base": {
+          "explained": 164,
+          "match": 391,
+          "mismatch": 164
+        },
+        "brazil_section_301": {
+          "match": 640
+        },
+        "china_section_301": {
+          "match": 640
+        },
+        "forced_labor_section_301": {
+          "explained": 5,
+          "match": 550,
+          "mismatch": 5
+        },
+        "ieepa": {
+          "match": 555
+        },
+        "section_122": {
+          "match": 640
+        },
+        "section_201": {
+          "match": 640
+        },
+        "section_232": {
+          "match": 640
+        },
+        "section_338": {
+          "match": 640
+        },
+        "total": {
+          "explained": 169,
+          "match": 386,
+          "mismatch": 169
+        },
+        "yale_total_reconciliation": {
+          "match": 555
+        }
+      },
+      "summary": {
+        "axiom_attributed_open": 5,
+        "comparisons": 7170,
+        "derived_total_units": 169,
+        "engine_errors": 0,
+        "matches": 6832,
+        "mismatches": 338,
+        "unexplained": 0,
+        "unexplained_total_units": 0
+      },
+      "verified_shard_sha256": "6fc125657874723c7f6838e27ca62d3ce47cb842150970608887ffce8d6b14b8"
+    },
+    "84": {
+      "attribution_census": {
+        "axiom-attributed-open": 78,
+        "derived": 473,
+        "input-comparability": 391,
+        "reference-behavior": 48,
+        "reference-defect": 16,
+        "upstream-methodology": 169
+      },
+      "cases": 800,
+      "class_census": {
+        "__derived_total__": 473,
+        "aircraft-utilization-proxy-brazil": 14,
+        "aircraft-utilization-proxy-forced-labor": 34,
+        "column2-gn3b": 169,
+        "non-metal-232-family": 89,
+        "s122-entry-status-lines": 60,
+        "s122-gn6-lines": 32,
+        "section232-annex-brazil": 33,
+        "section232-annex-forced-labor": 35,
+        "section232-heading-brazil": 2,
+        "section232-heading-forced-labor": 8,
+        "vintage-revision-232": 209,
+        "vintage-revision-301": 1,
+        "yale-hts8-broadening-brazil": 16
+      },
+      "class_per_slot": {
+        "__derived_total__": {
+          "total": 473
+        },
+        "aircraft-utilization-proxy-brazil": {
+          "brazil_section_301": 14
+        },
+        "aircraft-utilization-proxy-forced-labor": {
+          "forced_labor_section_301": 34
+        },
+        "column2-gn3b": {
+          "base": 169
+        },
+        "non-metal-232-family": {
+          "section_232": 89
+        },
+        "s122-entry-status-lines": {
+          "section_122": 60
+        },
+        "s122-gn6-lines": {
+          "section_122": 32
+        },
+        "section232-annex-brazil": {
+          "brazil_section_301": 33
+        },
+        "section232-annex-forced-labor": {
+          "forced_labor_section_301": 35
+        },
+        "section232-heading-brazil": {
+          "brazil_section_301": 2
+        },
+        "section232-heading-forced-labor": {
+          "forced_labor_section_301": 8
+        },
+        "vintage-revision-232": {
+          "section_232": 209
+        },
+        "vintage-revision-301": {
+          "china_section_301": 1
+        },
+        "yale-hts8-broadening-brazil": {
+          "brazil_section_301": 16
+        }
+      },
+      "per_slot": {
+        "axiom_total_reconciliation": {
+          "match": 798
+        },
+        "base": {
+          "explained": 169,
+          "match": 629,
+          "mismatch": 169
+        },
+        "brazil_section_301": {
+          "explained": 65,
+          "match": 735,
+          "mismatch": 65
+        },
+        "china_section_301": {
+          "explained": 1,
+          "match": 799,
+          "mismatch": 1
+        },
+        "forced_labor_section_301": {
+          "explained": 77,
+          "match": 721,
+          "mismatch": 77
+        },
+        "ieepa": {
+          "match": 798
+        },
+        "section_122": {
+          "explained": 92,
+          "match": 708,
+          "mismatch": 92
+        },
+        "section_201": {
+          "match": 800
+        },
+        "section_232": {
+          "explained": 298,
+          "match": 502,
+          "mismatch": 298
+        },
+        "section_338": {
+          "match": 800
+        },
+        "total": {
+          "explained": 473,
+          "match": 325,
+          "mismatch": 473
+        },
+        "yale_total_reconciliation": {
+          "match": 798
+        }
+      },
+      "summary": {
+        "axiom_attributed_open": 78,
+        "comparisons": 9588,
+        "derived_total_units": 473,
+        "engine_errors": 0,
+        "matches": 8413,
+        "mismatches": 1175,
+        "unexplained": 0,
+        "unexplained_total_units": 0
+      },
+      "verified_shard_sha256": "4a74078e8e723f97ae6d30a475c093e04a23ca2ecabcb85717b82c04a255c325"
+    },
+    "94": {
+      "attribution_census": {
+        "derived": 116,
+        "input-comparability": 272,
+        "unexplained": 168,
+        "upstream-methodology": 12
+      },
+      "cases": 198,
+      "class_census": {
+        "__derived_total__": 116,
+        "__unexplained_component__": 86,
+        "__unexplained_total__": 82,
+        "column2-gn3b": 12,
+        "s122-entry-status-lines": 74,
+        "vintage-revision-232": 198
+      },
+      "class_per_slot": {
+        "__derived_total__": {
+          "total": 116
+        },
+        "__unexplained_component__": {
+          "brazil_section_301": 6,
+          "forced_labor_section_301": 80
+        },
+        "__unexplained_total__": {
+          "total": 82
+        },
+        "column2-gn3b": {
+          "base": 12
+        },
+        "s122-entry-status-lines": {
+          "section_122": 74
+        },
+        "vintage-revision-232": {
+          "section_232": 198
+        }
+      },
+      "per_slot": {
+        "axiom_total_reconciliation": {
+          "match": 198
+        },
+        "base": {
+          "explained": 12,
+          "match": 186,
+          "mismatch": 12
+        },
+        "brazil_section_301": {
+          "match": 192,
+          "mismatch": 6,
+          "unexplained": 6
+        },
+        "china_section_301": {
+          "match": 198
+        },
+        "forced_labor_section_301": {
+          "match": 118,
+          "mismatch": 80,
+          "unexplained": 80
+        },
+        "ieepa": {
+          "match": 198
+        },
+        "section_122": {
+          "explained": 74,
+          "match": 124,
+          "mismatch": 74
+        },
+        "section_201": {
+          "match": 198
+        },
+        "section_232": {
+          "explained": 198,
+          "mismatch": 198
+        },
+        "section_338": {
+          "match": 198
+        },
+        "total": {
+          "explained": 116,
+          "mismatch": 198,
+          "unexplained": 82
+        },
+        "yale_total_reconciliation": {
+          "match": 198
+        }
+      },
+      "summary": {
+        "axiom_attributed_open": 0,
+        "comparisons": 2376,
+        "derived_total_units": 116,
+        "engine_errors": 0,
+        "matches": 1808,
+        "mismatches": 568,
+        "unexplained": 168,
+        "unexplained_total_units": 82
+      },
+      "verified_shard_sha256": "e77a5dcc0265065e532f1b44d574e6ae71bc9af8cdf7ec01d407b1516c898f16"
+    }
+  },
+  "rulespec_head": "c62645022a8b2fcb5f9e6afdc2def2c8d68c2baf",
+  "sample_engine_records": [
+    {
+      "actual": {
+        "brazil_section_301_component_rate": 0.0,
+        "china_section_301_component_rate": 0.0,
+        "forced_labor_section_301_component_rate": 0.125,
+        "ieepa_component_rate": 0.0,
+        "mfn_ad_valorem_rate": 0.22,
+        "schedule_statutory_stack": 0.345,
+        "section_122_component_rate": 0.0,
+        "section_201_component_rate": 0.0,
+        "section_232_aluminum_component_rate": 0.0,
+        "section_232_steel_component_rate": 0.0,
+        "section_338_component_rate": 0.0
+      },
+      "case_id": "schedule-2bb4896924ba3f09c387092d",
+      "chapter": "62",
+      "country": "2230",
+      "engine_errors": [],
+      "expected": {
+        "statutory_base_rate": "0.22",
+        "statutory_rate_232": "0",
+        "statutory_rate_301": "0",
+        "statutory_rate_301_cs": "0",
+        "statutory_rate_ieepa_fent": "0",
+        "statutory_rate_ieepa_recip": "0",
+        "statutory_rate_other": "0",
+        "statutory_rate_s122": "0",
+        "statutory_rate_s301br": "0",
+        "statutory_rate_s301fl": "0",
+        "statutory_rate_s338": "0",
+        "statutory_rate_section_201": "0"
+      },
+      "flags": {
+        "entry_is_brazil_301_listed": true,
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": false,
+        "entry_is_china_301_list4a": true,
+        "entry_is_china_301_solar": false,
+        "entry_is_forced_labor_301_listed": true,
+        "entry_is_line_a": false,
+        "entry_is_line_b": false,
+        "entry_is_line_d": false,
+        "entry_is_section_122_exempt": false,
+        "entry_is_section_201_cspv": false,
+        "entry_is_section_232_aluminum": false,
+        "entry_is_section_232_covered": false,
+        "entry_is_section_232_steel": false
+      },
+      "hts10": "6203331040",
+      "hts_line": "6203331000",
+      "interval": [
+        "2026-07-31",
+        "2026-08-01"
+      ],
+      "iso2": "CR",
+      "origin_regime": "0000000000000000",
+      "plan": {
+        "base": "compare",
+        "component_exclusion_reason": null,
+        "components": [
+          "ieepa",
+          "section_122",
+          "section_201",
+          "section_232",
+          "china_section_301",
+          "brazil_section_301",
+          "forced_labor_section_301",
+          "section_338"
+        ],
+        "excluded_components": [],
+        "reason": null,
+        "total": "compare"
+      },
+      "probe": "2026-08-01",
+      "revision": "bnd_2026-07-31",
+      "schema": "measurement.bounded_endpoint_eval_record.v1",
+      "selection_stratum": "62|BR0_FL0|other|July24_or_later"
+    },
+    {
+      "actual": {
+        "brazil_section_301_component_rate": 0.0,
+        "china_section_301_component_rate": 0.0,
+        "forced_labor_section_301_component_rate": 0.125,
+        "ieepa_component_rate": 0.0,
+        "mfn_ad_valorem_rate": 0.35,
+        "schedule_statutory_stack": 0.475,
+        "section_122_component_rate": 0.0,
+        "section_201_component_rate": 0.0,
+        "section_232_aluminum_component_rate": 0.0,
+        "section_232_steel_component_rate": 0.0,
+        "section_338_component_rate": 0.0
+      },
+      "case_id": "schedule-0075db845dc82240cbe303fc",
+      "chapter": "84",
+      "country": "4621",
+      "engine_errors": [],
+      "expected": {
+        "statutory_base_rate": "0.025",
+        "statutory_rate_232": "0.237625",
+        "statutory_rate_301": "0",
+        "statutory_rate_301_cs": "0",
+        "statutory_rate_ieepa_fent": "0",
+        "statutory_rate_ieepa_recip": "0",
+        "statutory_rate_other": "0",
+        "statutory_rate_s122": "0",
+        "statutory_rate_s301br": "0",
+        "statutory_rate_s301fl": "0",
+        "statutory_rate_s338": "0",
+        "statutory_rate_section_201": "0"
+      },
+      "flags": {
+        "entry_is_brazil_301_listed": true,
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_forced_labor_301_listed": true,
+        "entry_is_line_a": false,
+        "entry_is_line_b": false,
+        "entry_is_line_d": false,
+        "entry_is_section_122_exempt": false,
+        "entry_is_section_201_cspv": false,
+        "entry_is_section_232_aluminum": false,
+        "entry_is_section_232_covered": false,
+        "entry_is_section_232_steel": false
+      },
+      "hts10": "8407344400",
+      "hts_line": "8407344400",
+      "interval": [
+        "2026-07-24",
+        "2026-07-30"
+      ],
+      "iso2": "RU",
+      "origin_regime": "1000000000100000",
+      "plan": {
+        "base": "compare",
+        "component_exclusion_reason": null,
+        "components": [
+          "ieepa",
+          "section_122",
+          "section_201",
+          "section_232",
+          "china_section_301",
+          "brazil_section_301",
+          "forced_labor_section_301",
+          "section_338"
+        ],
+        "excluded_components": [],
+        "reason": null,
+        "total": "compare"
+      },
+      "probe": "2026-07-30",
+      "revision": "bnd_2026-07-24",
+      "schema": "measurement.bounded_endpoint_eval_record.v1",
+      "selection_stratum": "84|BR0_FL0|column2|July24_or_later"
+    },
+    {
+      "actual": {
+        "brazil_section_301_component_rate": 0.25,
+        "china_section_301_component_rate": 0.0,
+        "forced_labor_section_301_component_rate": 0.125,
+        "ieepa_component_rate": 0.0,
+        "mfn_ad_valorem_rate": 0.0,
+        "schedule_statutory_stack": 0.375,
+        "section_122_component_rate": 0.0,
+        "section_201_component_rate": 0.0,
+        "section_232_aluminum_component_rate": 0.0,
+        "section_232_steel_component_rate": 0.0,
+        "section_338_component_rate": 0.0
+      },
+      "case_id": "schedule-09f6a90b0c7f078ca9c769b9",
+      "chapter": "84",
+      "country": "3510",
+      "engine_errors": [],
+      "expected": {
+        "statutory_base_rate": "0",
+        "statutory_rate_232": "0.25",
+        "statutory_rate_301": "0",
+        "statutory_rate_301_cs": "0",
+        "statutory_rate_ieepa_fent": "0",
+        "statutory_rate_ieepa_recip": "0",
+        "statutory_rate_other": "0",
+        "statutory_rate_s122": "0",
+        "statutory_rate_s301br": "0",
+        "statutory_rate_s301fl": "0",
+        "statutory_rate_s338": "0",
+        "statutory_rate_section_201": "0"
+      },
+      "flags": {
+        "entry_is_brazil_301_listed": true,
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": false,
+        "entry_is_china_301_list4a": true,
+        "entry_is_china_301_solar": false,
+        "entry_is_forced_labor_301_listed": true,
+        "entry_is_line_a": false,
+        "entry_is_line_b": false,
+        "entry_is_line_d": false,
+        "entry_is_section_122_exempt": false,
+        "entry_is_section_201_cspv": false,
+        "entry_is_section_232_aluminum": false,
+        "entry_is_section_232_covered": false,
+        "entry_is_section_232_steel": false
+      },
+      "hts10": "8467895030",
+      "hts_line": "8467895000",
+      "interval": [
+        "2026-07-24",
+        "2026-07-30"
+      ],
+      "iso2": "BR",
+      "origin_regime": "0000000001000000",
+      "plan": {
+        "base": "compare",
+        "component_exclusion_reason": null,
+        "components": [
+          "ieepa",
+          "section_122",
+          "section_201",
+          "section_232",
+          "china_section_301",
+          "brazil_section_301",
+          "forced_labor_section_301",
+          "section_338"
+        ],
+        "excluded_components": [],
+        "reason": null,
+        "total": "compare"
+      },
+      "probe": "2026-07-30",
+      "revision": "bnd_2026-07-24",
+      "schema": "measurement.bounded_endpoint_eval_record.v1",
+      "selection_stratum": "84|BR0_FL0|BR|July24_or_later"
+    },
+    {
+      "actual": {
+        "brazil_section_301_component_rate": 0.25,
+        "china_section_301_component_rate": 0.0,
+        "forced_labor_section_301_component_rate": 0.0,
+        "ieepa_component_rate": 0.0,
+        "mfn_ad_valorem_rate": 0.0,
+        "schedule_statutory_stack": 0.35,
+        "section_122_component_rate": 0.1,
+        "section_201_component_rate": 0.0,
+        "section_232_aluminum_component_rate": 0.0,
+        "section_232_steel_component_rate": 0.0,
+        "section_338_component_rate": 0.0
+      },
+      "case_id": "schedule-1f595ffb512f92ce8ffbecf0",
+      "chapter": "84",
+      "country": "3510",
+      "engine_errors": [],
+      "expected": {
+        "statutory_base_rate": "0",
+        "statutory_rate_232": "0.237625",
+        "statutory_rate_301": "0",
+        "statutory_rate_301_cs": "0",
+        "statutory_rate_ieepa_fent": "0",
+        "statutory_rate_ieepa_recip": "0",
+        "statutory_rate_other": "0",
+        "statutory_rate_s122": "0.0828856283835881",
+        "statutory_rate_s301br": "0",
+        "statutory_rate_s301fl": "0",
+        "statutory_rate_s338": "0",
+        "statutory_rate_section_201": "0"
+      },
+      "flags": {
+        "entry_is_brazil_301_listed": true,
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_forced_labor_301_listed": true,
+        "entry_is_line_a": false,
+        "entry_is_line_b": false,
+        "entry_is_line_d": false,
+        "entry_is_section_122_exempt": false,
+        "entry_is_section_201_cspv": false,
+        "entry_is_section_232_aluminum": false,
+        "entry_is_section_232_covered": false,
+        "entry_is_section_232_steel": false
+      },
+      "hts10": "8414308030",
+      "hts_line": "8414308000",
+      "interval": [
+        "2026-07-22",
+        "2026-07-23"
+      ],
+      "iso2": "BR",
+      "origin_regime": "0000000001000000",
+      "plan": {
+        "base": "compare",
+        "component_exclusion_reason": null,
+        "components": [
+          "ieepa",
+          "section_122",
+          "section_201",
+          "section_232",
+          "china_section_301",
+          "brazil_section_301",
+          "forced_labor_section_301",
+          "section_338"
+        ],
+        "excluded_components": [],
+        "reason": null,
+        "total": "compare"
+      },
+      "probe": "2026-07-23",
+      "revision": "bnd_2026-07-22",
+      "schema": "measurement.bounded_endpoint_eval_record.v1",
+      "selection_stratum": "84|BR0_FL0|BR|July22_23"
+    },
+    {
+      "actual": {
+        "brazil_section_301_component_rate": 0.0,
+        "china_section_301_component_rate": 0.0,
+        "forced_labor_section_301_component_rate": 0.0,
+        "ieepa_component_rate": 0.0,
+        "mfn_ad_valorem_rate": 0.0,
+        "schedule_statutory_stack": 0.5,
+        "section_122_component_rate": 0.0,
+        "section_201_component_rate": 0.0,
+        "section_232_aluminum_component_rate": 0.0,
+        "section_232_steel_component_rate": 0.5,
+        "section_338_component_rate": 0.0
+      },
+      "case_id": "schedule-04b399eb2e1c04ee96c0fa65",
+      "chapter": "94",
+      "country": "2010",
+      "engine_errors": [],
+      "expected": {
+        "statutory_base_rate": "0",
+        "statutory_rate_232": "0",
+        "statutory_rate_301": "0",
+        "statutory_rate_301_cs": "0",
+        "statutory_rate_ieepa_fent": "0",
+        "statutory_rate_ieepa_recip": "0",
+        "statutory_rate_other": "0",
+        "statutory_rate_s122": "0",
+        "statutory_rate_s301br": "0",
+        "statutory_rate_s301fl": "0.1",
+        "statutory_rate_s338": "0",
+        "statutory_rate_section_201": "0"
+      },
+      "flags": {
+        "entry_is_brazil_301_listed": false,
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_forced_labor_301_listed": false,
+        "entry_is_line_a": false,
+        "entry_is_line_b": false,
+        "entry_is_line_d": false,
+        "entry_is_section_122_exempt": false,
+        "entry_is_section_201_cspv": false,
+        "entry_is_section_232_aluminum": false,
+        "entry_is_section_232_covered": true,
+        "entry_is_section_232_steel": true
+      },
+      "hts10": "9403999020",
+      "hts_line": "9403999000",
+      "interval": [
+        "2026-07-24",
+        "2026-07-30"
+      ],
+      "iso2": "MX",
+      "origin_regime": "0000100000000000",
+      "plan": {
+        "base": "compare",
+        "component_exclusion_reason": null,
+        "components": [
+          "ieepa",
+          "section_122",
+          "section_201",
+          "section_232",
+          "china_section_301",
+          "brazil_section_301",
+          "forced_labor_section_301",
+          "section_338"
+        ],
+        "excluded_components": [],
+        "reason": null,
+        "total": "compare"
+      },
+      "probe": "2026-07-24",
+      "revision": "bnd_2026-07-24",
+      "schema": "measurement.bounded_endpoint_eval_record.v1",
+      "selection_stratum": "94|BR0_FL1|CA_MX|July24_or_later"
+    },
+    {
+      "actual": {
+        "brazil_section_301_component_rate": 0.0,
+        "china_section_301_component_rate": 0.0,
+        "forced_labor_section_301_component_rate": 0.0,
+        "ieepa_component_rate": 0.0,
+        "mfn_ad_valorem_rate": 0.0,
+        "schedule_statutory_stack": 0.5,
+        "section_122_component_rate": 0.0,
+        "section_201_component_rate": 0.0,
+        "section_232_aluminum_component_rate": 0.0,
+        "section_232_steel_component_rate": 0.5,
+        "section_338_component_rate": 0.0
+      },
+      "case_id": "schedule-1f1c43509f3c06df9d5a04b3",
+      "chapter": "94",
+      "country": "3510",
+      "engine_errors": [],
+      "expected": {
+        "statutory_base_rate": "0",
+        "statutory_rate_232": "0",
+        "statutory_rate_301": "0",
+        "statutory_rate_301_cs": "0",
+        "statutory_rate_ieepa_fent": "0",
+        "statutory_rate_ieepa_recip": "0",
+        "statutory_rate_other": "0",
+        "statutory_rate_s122": "0.1",
+        "statutory_rate_s301br": "0.25",
+        "statutory_rate_s301fl": "0",
+        "statutory_rate_s338": "0",
+        "statutory_rate_section_201": "0"
+      },
+      "flags": {
+        "entry_is_brazil_301_listed": false,
+        "entry_is_china_301_2024_action": false,
+        "entry_is_china_301_list123": true,
+        "entry_is_china_301_list4a": false,
+        "entry_is_china_301_solar": false,
+        "entry_is_forced_labor_301_listed": false,
+        "entry_is_line_a": false,
+        "entry_is_line_b": false,
+        "entry_is_line_d": false,
+        "entry_is_section_122_exempt": false,
+        "entry_is_section_201_cspv": false,
+        "entry_is_section_232_aluminum": false,
+        "entry_is_section_232_covered": true,
+        "entry_is_section_232_steel": true
+      },
+      "hts10": "9403999020",
+      "hts_line": "9403999000",
+      "interval": [
+        "2026-07-22",
+        "2026-07-23"
+      ],
+      "iso2": "BR",
+      "origin_regime": "0000000001000000",
+      "plan": {
+        "base": "compare",
+        "component_exclusion_reason": null,
+        "components": [
+          "ieepa",
+          "section_122",
+          "section_201",
+          "section_232",
+          "china_section_301",
+          "brazil_section_301",
+          "forced_labor_section_301",
+          "section_338"
+        ],
+        "excluded_components": [],
+        "reason": null,
+        "total": "compare"
+      },
+      "probe": "2026-07-22",
+      "revision": "bnd_2026-07-22",
+      "schema": "measurement.bounded_endpoint_eval_record.v1",
+      "selection_stratum": "94|BR1_FL0|BR|July22_23"
+    }
+  ],
+  "schema": "measurement.bounded_gap_source_audit.v1",
+  "scope": "Prior partial probes only, independently reread and reclassified; not new campaign coverage.",
+  "verification": "PASS",
+  "verification_basis": "Bounded fresh shard hashes and pinned local source identities; no new engine evaluation or statutory correctness verdict.",
+  "verification_script": {
+    "path": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/audit_known_gap_sources.py",
+    "sha256": "ae7a7dfe146bc907afaa7524038ee9129e4010a39ffdbfd729d527217b064bcf"
+  },
+  "yale_sources": {
+    "commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+    "files": {
+      "config/policy_params.yaml": {
+        "bytes": 50577,
+        "sha256": "5f3d79b192b9fb6079e5ad10a1969e12f397567fc9f89d4e202403116ecb6346"
+      },
+      "resources/ieepa_exempt_products.csv": {
+        "bytes": 64768,
+        "sha256": "41cbdc517406ce297f856ca109064745fa41de930735dbeba36fc0d890f121d5"
+      },
+      "resources/s232_annex_products.csv": {
+        "bytes": 44677,
+        "sha256": "90b800fc3556b25cbf4cef982dc3232c86e367e1b7ec6f53621a116fc7b4a68d"
+      },
+      "resources/s232_auto_parts.txt": {
+        "bytes": 1182,
+        "sha256": "8d2214ecb718bdd3db9e21a313665e4815972c0f7a099115c843e5254569411b"
+      },
+      "resources/s232_copper_products.csv": {
+        "bytes": 1616,
+        "sha256": "bfb8ef9c3371e7b065da5eba5d6cb05a76189838e9a25dd1d2772d581930ce21"
+      },
+      "resources/s232_derivative_products.csv": {
+        "bytes": 25415,
+        "sha256": "4502c782a356b2843cf7652ccaf3dcb2c7af1ac1556fec16e00062acc844a0bb"
+      },
+      "resources/s232_mhd_parts.txt": {
+        "bytes": 1712,
+        "sha256": "1411bac1b64b0510343a3d9b437b538357fceed13dffd480eee464f746a49cfb"
+      },
+      "resources/s232_pharma_products.csv": {
+        "bytes": 1447,
+        "sha256": "eb5f888ef3967c699b4f85618859d3556a9552e7d636ead2bbdc09256edcca04"
+      },
+      "resources/s232_semi_products.csv": {
+        "bytes": 650,
+        "sha256": "80ed04fac77a55546d95551f8c26e0326ac0278cb9d6f1f6d3cd9dbe78ec6330"
+      },
+      "src/model/data_loaders.R": {
+        "bytes": 43137,
+        "sha256": "a088811f84ff19eaf6fce28f2587152c69ed50e53435ddedd2425fd369b62ccc"
+      },
+      "src/pipeline/06_calculate_rates.R": {
+        "bytes": 179892,
+        "sha256": "2620a122159c11cc2b116786925ccbc6d801cb274982034cd8105657ae13a76a"
+      }
+    },
+    "tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "verification": "PASS",
+  "sample_records": 6,
+  "source_joins": 5,
+  "yale_files_hash_verified": 11,
+  "extra_yale_files_equal_git_blobs": 2,
+  "corpus_sha256": "0f3ed7ef2efb64383825db65e615959200770e8511c8d4834b16e02892cb9ec8",
+  "output": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/gap-cause-audit-evidence.json"
+}
+{"axiom_attributed_open": 83, "cases": 2438, "chapters": ["29", "62", "84", "94"], "output": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/gap-cause-audit-evidence.json", "scope": "prior partial probes", "unexplained": 168, "verification": "PASS"}

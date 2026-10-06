@@ -1,0 +1,20 @@
+{
+  "command": [
+    "nice",
+    "-n",
+    "10",
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "yale-b-full/check_priority.py"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full",
+  "environment_overrides": {},
+  "started_at": "2026-09-24T02:42:57.535996+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/logs/B-priority-preflight.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full/logs/B-priority-preflight.stderr",
+  "pid": 9201,
+  "timeout_seconds": null,
+  "status": "complete",
+  "returncode": 2,
+  "elapsed_seconds": 0.106,
+  "finished_at": "2026-09-24T02:42:57.641967+00:00"
+}

@@ -1,0 +1,882 @@
+{
+  "schema": "measurement.b_checkpoint_artifacts.v1",
+  "root": "/Users/maxghenis/.subfleet/worktrees/20260923-222653-yale-campaign-b-full/yale-b-full",
+  "artifacts": [
+    {
+      "path": "B/cache/eval/96/962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3.jsonl.gz",
+      "bytes": 37595786,
+      "sha256": "24bda301e144abc4cd1e7c8d2868d91a9edfbd1ca0d83ecc803e63f110ca5d1c"
+    },
+    {
+      "path": "B/cache/eval/b3/b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808.jsonl.gz",
+      "bytes": 307343,
+      "sha256": "d0dbcb414a8314765aa75ad1d24f216d464614a5972fbdd49c8baf597a0f5704"
+    },
+    {
+      "path": "B/committed/MANIFEST.json",
+      "bytes": 50282,
+      "sha256": "5123e201a32c3965d82440c515525c854e9113d7efc84e820bbe878617a83a39"
+    },
+    {
+      "path": "B/committed/classification-receipt.json",
+      "bytes": 13421,
+      "sha256": "8890874d6162ae5acd17c300aa7567101aa77cd151687fa86b67036607748e2f"
+    },
+    {
+      "path": "B/committed/comparison-summary.json",
+      "bytes": 1293,
+      "sha256": "5981a1cb92e76d03b5f88692062311093b04db2aff5373cea29f52a3057cce98"
+    },
+    {
+      "path": "B/committed/declared-input-contract-receipt.json",
+      "bytes": 103398,
+      "sha256": "bdd258d7e86a81d4ffd472149d14033b75c11ceb490ae13685592c06475da717"
+    },
+    {
+      "path": "B/committed/disposition-routing-receipt.json",
+      "bytes": 18965,
+      "sha256": "1d43f9254c834a9caf7be3df08f7b1cb53f729a60959963f42628ac81681ef04"
+    },
+    {
+      "path": "B/committed/evaluation-projection-receipt.json",
+      "bytes": 798,
+      "sha256": "6a7947a0a6f862d0a6ef285889e7890c61eacb919a83c7ecf42cedbf57e1d129"
+    },
+    {
+      "path": "B/oracles/reference/us-tariff-schedule/declared-input-contract-receipt.json",
+      "bytes": 103336,
+      "sha256": "8494896f42fff6a6a24700d979bef4fd4f6f57a88c783b19bd4f139eed196e8a"
+    },
+    {
+      "path": "B/oracles/reference/us-tariff-schedule/disposition-routing-receipt.json",
+      "bytes": 18966,
+      "sha256": "9266f31772dcd66be293fbfdec98237df2114e69b18ffe25a4d9a3656e3c649c"
+    },
+    {
+      "path": "B/oracles/reference/us-tariff-schedule/disposition-routing.csv.gz",
+      "bytes": 94243,
+      "sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3"
+    },
+    {
+      "path": "B/oracles/reference/us-tariff-schedule/eval/MANIFEST.json",
+      "bytes": 1173,
+      "sha256": "b1bd7699a3a35cfd63b14b3d4b6ff511dc0565fed90d14dc73f3e9c881f28193"
+    },
+    {
+      "path": "B/oracles/reference/us-tariff-schedule/evaluation-projection-receipt.json",
+      "bytes": 802,
+      "sha256": "5cdf2bbda9e52ecb69ac44f75dd1a992eda1fca2d5f9fc9c0cf6fafadec43ff0"
+    },
+    {
+      "path": "B/oracles/reference/us-tariff-schedule/selected-intervals.csv.gz",
+      "bytes": 75405367,
+      "sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
+    },
+    {
+      "path": "B-completed-gap-inventory-chapters/ch29.json",
+      "bytes": 56865,
+      "sha256": "7fa28746014ec0454a93fe7e892075f00abdb52587ee9a43f3693aed9a3f0795"
+    },
+    {
+      "path": "B-completed-gap-inventory-chapters/ch79.json",
+      "bytes": 25412,
+      "sha256": "0e160392dec327b93b6ed270cbc89034ac84512966fe96426565b701eed5def9"
+    },
+    {
+      "path": "B-completed-gap-inventory.json",
+      "bytes": 62274,
+      "sha256": "603faa46cd929d3ba30e920059b33247b3db390f7ca4a35efaab94def9305bf0"
+    },
+    {
+      "path": "B-completed-gap-inventory.md",
+      "bytes": 841,
+      "sha256": "aa6c07428b9ba2a6bb4f2bae3e2541a28802f0a57f1da47b17d76571061402bb"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 3414,
+      "sha256": "b88b17ec1fe27994e8ea2fdbdf529cf11ccf11813f9532d97d73c066621f16e4"
+    },
+    {
+      "path": "CONTINUATION.md",
+      "bytes": 3034,
+      "sha256": "c83f70b9772d635dc6a39b7e2051e9666611f2468600ac85b876b1556b13acaa"
+    },
+    {
+      "path": "RESULT.md",
+      "bytes": 12043,
+      "sha256": "e6fcf5a8d7d2026a5b3cfe0affed24a89f231b2de64673c707ab55bca6b7c1fb"
+    },
+    {
+      "path": "SETUP_COMMANDS.md",
+      "bytes": 3710,
+      "sha256": "518b1133831fb51873964c296a2ebf0dbe7b377ef1c53e54c9128e1ea67ff7b4"
+    },
+    {
+      "path": "audit_historical_eligibility.py",
+      "bytes": 10547,
+      "sha256": "9fe6964d1511454baa6c2d1535c1e62f2f52713bd1ae86e2c4fb5487a81d31ef"
+    },
+    {
+      "path": "audit_known_gap_sources.py",
+      "bytes": 5508,
+      "sha256": "ae7a7dfe146bc907afaa7524038ee9129e4010a39ffdbfd729d527217b064bcf"
+    },
+    {
+      "path": "build_artifacts.py",
+      "bytes": 1552,
+      "sha256": "562abaa698206563b922dd1b9bf3966d6f9d38ac8a360a5aada81dcedee19b3a"
+    },
+    {
+      "path": "check_priority.py",
+      "bytes": 674,
+      "sha256": "bcad668d9b4ebf27bf1c162d216f37eb20cb64a8e2f1a9c354113296a1797ada"
+    },
+    {
+      "path": "copy-recovery.json",
+      "bytes": 623,
+      "sha256": "f9be1e9d08805aae679de077aaa926df14bd80f92d5a10b4d999c38ebafceb42"
+    },
+    {
+      "path": "diagnostic-helper-static-check.json",
+      "bytes": 709,
+      "sha256": "8ae45a514fb2e270f88bb2c199fdbe1304fc0d4ad215d2f22fe20bc36ddfb49a"
+    },
+    {
+      "path": "gap-cause-audit-evidence.json",
+      "bytes": 92615,
+      "sha256": "4424889ad71d71bf7e659e17804aff04b50c1625a577159a11992065738c9944"
+    },
+    {
+      "path": "gap-cause-audit-verification.stderr",
+      "bytes": 43,
+      "sha256": "1ae2ce53f6c4a3265acd385e7e4a21d827a2b5594337d0d9ae68b92a856b30dc"
+    },
+    {
+      "path": "gap-cause-audit-verification.stdout",
+      "bytes": 655,
+      "sha256": "12975340887423791a74baec38e910c270b425fdcb8c60d3b534b23d34cb931c"
+    },
+    {
+      "path": "gap-cause-audit.md",
+      "bytes": 15938,
+      "sha256": "328477062d1453d23ea428dd423f8efb8cf7557ec862574b03c202573f3e7e73"
+    },
+    {
+      "path": "gap-cause-current-copy-verification.json",
+      "bytes": 3043,
+      "sha256": "52f432cb142ce9ca743dc59584e219b8f14955f02190199c5519be9e010cbc04"
+    },
+    {
+      "path": "helpers/DIAGNOSTIC_USAGE.md",
+      "bytes": 2956,
+      "sha256": "de2c8eaf344f53cf3a5e26e321ce22d1dc94361271c4650c7a41175a79b957fd"
+    },
+    {
+      "path": "helpers/build_inventory.py",
+      "bytes": 2495,
+      "sha256": "99045ee67f5fdccd6bb393f594da31ee73c9750da6b8aaa395dc88a9b596794c"
+    },
+    {
+      "path": "helpers/inventory_completed.py",
+      "bytes": 16187,
+      "sha256": "19dea4290a9d6b7674f42df9c93b2fbf6cc759c633adebfd1c4e54c9bcdce57c"
+    },
+    {
+      "path": "helpers/measure_shards.py",
+      "bytes": 13214,
+      "sha256": "220c5821cc5bc1ce73e7101c25a31a727af11c31b1d67012b2673b7ed0251cfc"
+    },
+    {
+      "path": "helpers/pair_shards.py",
+      "bytes": 8727,
+      "sha256": "ccafc9cf3cda71658edbe66244ab77496aa69f069fef5c5f2f58a8d2412a10ed"
+    },
+    {
+      "path": "historical-eligibility.json",
+      "bytes": 114172,
+      "sha256": "fab9a83c2fbf07a3bb12c9056a7759d91449d23aa66323342f57a412b20a8df3"
+    },
+    {
+      "path": "historical-eligibility.md",
+      "bytes": 4874,
+      "sha256": "44aa9da7355d408dc9578dc0191a35d7998e769785de8e9152d2c5b48a172afb"
+    },
+    {
+      "path": "logs/B-census-resume-check.json",
+      "bytes": 1144,
+      "sha256": "fcc6858d3ad40f7a4b24ecc2bf9c9c2523adc176656966e94d8d7c6c27c1c3da"
+    },
+    {
+      "path": "logs/B-census-resume-check.stderr",
+      "bytes": 43,
+      "sha256": "1ae2ce53f6c4a3265acd385e7e4a21d827a2b5594337d0d9ae68b92a856b30dc"
+    },
+    {
+      "path": "logs/B-census-resume-check.stdout",
+      "bytes": 496,
+      "sha256": "6e870da9187a6da9166cfabbe287b5fd5f8c2a0224162e5f2febc3aa5b95d6e6"
+    },
+    {
+      "path": "logs/B-completed-census.json",
+      "bytes": 1117,
+      "sha256": "18cfe3979487f13a448ff7d68de3064c2a927813d756e2420124aaa864d55dfc"
+    },
+    {
+      "path": "logs/B-completed-census.stderr",
+      "bytes": 43,
+      "sha256": "1ae2ce53f6c4a3265acd385e7e4a21d827a2b5594337d0d9ae68b92a856b30dc"
+    },
+    {
+      "path": "logs/B-completed-census.stdout",
+      "bytes": 498,
+      "sha256": "593728d471ff99f4a400ef6d9bf2f13d7ee2f3880be3ddf1519fbdabc27e3b71"
+    },
+    {
+      "path": "logs/B-priority-preflight.json",
+      "bytes": 768,
+      "sha256": "09c48315f7b1415ce887f8d2d074e467648e19cc058ae4c347dff96e3cfc91b8"
+    },
+    {
+      "path": "logs/B-priority-preflight.stderr",
+      "bytes": 43,
+      "sha256": "1ae2ce53f6c4a3265acd385e7e4a21d827a2b5594337d0d9ae68b92a856b30dc"
+    },
+    {
+      "path": "logs/B-priority-preflight.stdout",
+      "bytes": 71,
+      "sha256": "79a7d4130bb711ba3a8acf221b61e1f1d5cc7fa6ccb5d73a26c01172ae0798b4"
+    },
+    {
+      "path": "logs/B-relocated-resume-check.json",
+      "bytes": 1354,
+      "sha256": "85f22314ccff596bdb29989e07df2f3bbe1694894a71ed3cbec1b9c7b6e890a0"
+    },
+    {
+      "path": "logs/B-relocated-resume-check.stderr",
+      "bytes": 43,
+      "sha256": "1ae2ce53f6c4a3265acd385e7e4a21d827a2b5594337d0d9ae68b92a856b30dc"
+    },
+    {
+      "path": "logs/B-relocated-resume-check.stdout",
+      "bytes": 1247,
+      "sha256": "d9c6b0e304ebfe7d7ca4053964df0c74e4e2720f66f40ef2a0d39fd31ff9d41e"
+    },
+    {
+      "path": "logs/setup-verification.json",
+      "bytes": 732,
+      "sha256": "dd5f6c60d8c6b40bbec459aa1630ea17eb48cdaa499f327ee3047e6c1ac348f5"
+    },
+    {
+      "path": "logs/setup-verification.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/setup-verification.stdout",
+      "bytes": 3765,
+      "sha256": "85063f479d0ce83b216cad1aa86d419db10ca6165ec88733f554cff312e2f0ed"
+    },
+    {
+      "path": "prior-checkpoint/B-MANIFEST.json",
+      "bytes": 1179,
+      "sha256": "11a722f898e8fd3ce23a33f175acdf4ad2bf9e66e178f8d6e2c960f783cbad42"
+    },
+    {
+      "path": "prior-checkpoint/B-ch79-census.json",
+      "bytes": 6069,
+      "sha256": "91ef544c3203f42ecb4ab7cc1943e0eb5320ac4d64ff311f0b258327ed6ddea6"
+    },
+    {
+      "path": "prior-checkpoint/B-fresh-ch29-census.json",
+      "bytes": 8445,
+      "sha256": "beae5e8e0a15aaabcc23c30968f30a98eaaf72af51d1494a2b4ba68f1fc4042a"
+    },
+    {
+      "path": "prior-checkpoint/RESULT.md",
+      "bytes": 33918,
+      "sha256": "5d6acb40a3463d1b58d190b0265066096e2d8e9fc0653a57e603446c0b65fa1b"
+    },
+    {
+      "path": "prior-checkpoint/SETUP_COMMANDS.md",
+      "bytes": 3346,
+      "sha256": "ccc156899a02448b21a1b20f1f356b7ab755556ba89f75e35d1a5623d9ade0f1"
+    },
+    {
+      "path": "prior-checkpoint/baseline-cache-key-audit.json",
+      "bytes": 21627,
+      "sha256": "eab5bad198492ed06fade969dce23895d21004571efe822cf088d68b11db3de3"
+    },
+    {
+      "path": "prior-checkpoint/baseline-historical-cache-audit.json",
+      "bytes": 11665,
+      "sha256": "f8765d3f14919decd4c3b8e926978de8cc46a328c2b4c72facfb7c40dd51af0a"
+    },
+    {
+      "path": "prior-checkpoint/cache-audit.md",
+      "bytes": 13066,
+      "sha256": "8ef3577393cb57d8c376b351913b648b7da5dad707ed459b376f59d9be403d5a"
+    },
+    {
+      "path": "prior-checkpoint/chapter-exposure-ranking.json",
+      "bytes": 17952,
+      "sha256": "966e21667f1ccf83722938990af67e95330eb2695009a28960b6f5e9068f04c9"
+    },
+    {
+      "path": "prior-checkpoint/checkpoint-validation.json",
+      "bytes": 2566,
+      "sha256": "ff3ef570f83728b7882abc10746840773e8e636b4b4d892090e330ec95a1828b"
+    },
+    {
+      "path": "prior-checkpoint/fresh-combined-census.json",
+      "bytes": 35764,
+      "sha256": "d08f28f21db10c62e231d8995703b129573cc5d9f472eaec07285cf45448894c"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-classify-historical-comparison.json",
+      "bytes": 1115,
+      "sha256": "5ed5409737dd75e7454671a9af8791729fd51226cdbc48159dfd1400d027caf6"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-classify-historical-comparison.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-classify-historical-comparison.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-compare-partial.json",
+      "bytes": 1051,
+      "sha256": "865c3fe841f3632bfcf9040398f5eaea155832261a6d056eab5e81f98aac5e99"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-compare-partial.stderr",
+      "bytes": 1100,
+      "sha256": "9771c4844e3e4e9e5c159a445c56d2e39fbf4d1d4bd34a5558b137737edb06a9"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-compare-partial.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-evaluate-ch79.json",
+      "bytes": 1301,
+      "sha256": "800bd7e6ba37a036296a051ec1e3e3d5f925288d7b80000b62114d7cfcf932d2"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-evaluate-ch79.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-evaluate-ch79.stdout",
+      "bytes": 677,
+      "sha256": "76cb793e86db3ff0ff547507835cca025a9507718c4b341bc14e5943efedd61d"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-fresh-ch79-census.json",
+      "bytes": 1113,
+      "sha256": "0325d5044fca7683b8cbacfca6e3308839b434842674e0e43275dbca7eaa08f2"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-fresh-ch79-census.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-fresh-ch79-census.stdout",
+      "bytes": 248,
+      "sha256": "e7e7bcb5c78b181e8a3ba606fe33a19adf6ee95c5a5a248f2fdb082471ea23a7"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-historical-diagnostic-priority.json",
+      "bytes": 1131,
+      "sha256": "19974e7b2301ad8b41586c2f9eae6f3bda48a0f98fcc6a95894605285eccc83c"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-historical-diagnostic-priority.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-historical-diagnostic-priority.stdout",
+      "bytes": 1052,
+      "sha256": "1f1c63ae0acdc94aa026d3884300cfc67d0dbe8146508df8ea7a401e363340cb"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-input-contract.json",
+      "bytes": 1168,
+      "sha256": "96226e139c2ae73b6c3341b3deaba14c3febaf2b212989c9a5a83e2920376484"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-input-contract.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-input-contract.stdout",
+      "bytes": 103337,
+      "sha256": "8b043af60d2b7c3be4b54072d1ebadb95ed3bd8e68dd793fffa0ed8ccf0c9d64"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-prepass.json",
+      "bytes": 1149,
+      "sha256": "a0f6a1174bf6709c47cd92e98d7f72b73a6fefec10d1f7096a6772bfa085bbd7"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-prepass.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-prepass.stdout",
+      "bytes": 18966,
+      "sha256": "567e22c3650286e0f2329b28cc5300fe58131f3f97337350b080321bb76f405d"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-projection.json",
+      "bytes": 1157,
+      "sha256": "2e5f5b4109a963b74c7e84671e160cb23dc71b2a5a78c15d22a0d4b728fdb05a"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-projection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-projection.stdout",
+      "bytes": 800,
+      "sha256": "93274aa3bc7adb3278f748f1b95763b926608b318e5bc2a3489e0d31595784d5"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-report-existing-v1.json",
+      "bytes": 1056,
+      "sha256": "c015bbe574905fe859aedbb606d3f65aa8e9f5ae3923c23d5deec9d16866ed13"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-report-existing-v1.stderr",
+      "bytes": 1633,
+      "sha256": "02092fdb6647f1604be8e1f3215ed7580d2dbece5400a1a774b4a95b86bd0221"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-report-existing-v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-resume-check-ch79.json",
+      "bytes": 1305,
+      "sha256": "f4f5b1186fed4c2f02501dd05d0ef40d7d89b42a744809c1baa1d33c369baac6"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-resume-check-ch79.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/A-resume-check-ch79.stdout",
+      "bytes": 667,
+      "sha256": "725a9418cf49bcde657dcea8ad2275be6ce2517245b32266f9b2ed0889906ee4"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-ch79-census.json",
+      "bytes": 1097,
+      "sha256": "b3c22d84df58e5952d6522127780afc4c4a063c826f738b5ffe63c5d223a0248"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-ch79-census.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-ch79-census.stdout",
+      "bytes": 243,
+      "sha256": "e1ebb8e2c0af184ecba9817582206fd81f267cf070c48946f8ab04acd88d81c8"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-compare-final-partial.json",
+      "bytes": 1063,
+      "sha256": "a52ca7998a2f6734c65e8f76fbc744d5cafc25de087156c2e0e696894fb86381"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-compare-final-partial.stderr",
+      "bytes": 1100,
+      "sha256": "64a7385f3752364f38d76c842da4b1c5c9a72a7f616ab0f204fb135a6789645d"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-compare-final-partial.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-compare-partial.json",
+      "bytes": 1050,
+      "sha256": "64dd355e95aad0931c6e979835b40c17660054999fa454ba6bd3d13fd838d3d1"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-compare-partial.stderr",
+      "bytes": 1100,
+      "sha256": "64a7385f3752364f38d76c842da4b1c5c9a72a7f616ab0f204fb135a6789645d"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-compare-partial.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-evaluate-ch29-isolated.json",
+      "bytes": 1373,
+      "sha256": "d906670f9e71ead1c351bc6a27db981763943321b8c154d48a3a976a5454bc2e"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-evaluate-ch29-isolated.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-evaluate-ch29-isolated.stdout",
+      "bytes": 683,
+      "sha256": "af2181db40443306e4178aa75767441844b3742d10bb5c099d835c3d0eede4d0"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-evaluate-priority.json",
+      "bytes": 1344,
+      "sha256": "b2a043fe135b115df9ac51f8b8b03806b73e4cf39201c27b0f8c8acc8865c591"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-evaluate-priority.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-evaluate-priority.stdout",
+      "bytes": 48,
+      "sha256": "89792471034a6c632fc28729d6a72923c965d1d18ebdbcb4cce19b6cd0817f34"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-fresh-ch29-census.json",
+      "bytes": 1014,
+      "sha256": "1239ac388fe1e84a760597f3fa1b6efd2db46a1303a61fdab87c109af573dd78"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-fresh-ch29-census.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-fresh-ch29-census.stdout",
+      "bytes": 256,
+      "sha256": "bba62e5a32cf395e315fb8b1b3e7ec82c6df0e7370ad2282e37282203e7db249"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-helper-tests.json",
+      "bytes": 728,
+      "sha256": "4997b11702b066e30c1cf6621e678be16db61f02ba161c3cb181b5e8716da197"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-helper-tests.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-helper-tests.stdout",
+      "bytes": 100,
+      "sha256": "1bc19fb19f9fb855da415343efbce3525976e4bb3532b5506a740a914f2797ff"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-input-contract.json",
+      "bytes": 1169,
+      "sha256": "fa83171ef535b2e808c6036e239c92898eff16a674bcf5cbe2d435e765c04ac6"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-input-contract.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-input-contract.stdout",
+      "bytes": 103336,
+      "sha256": "8494896f42fff6a6a24700d979bef4fd4f6f57a88c783b19bd4f139eed196e8a"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-merge-ch29-checkpoint.json",
+      "bytes": 778,
+      "sha256": "04fb416bf8743e6d4b3f337339df81118f826dd8656862c537eb95a19b689792"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-merge-ch29-checkpoint.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-merge-ch29-checkpoint.stdout",
+      "bytes": 464,
+      "sha256": "831af580a09727e145597e24f3b2fd22f812cb6989b31f08316b5e3a53b0aabd"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-prepass.json",
+      "bytes": 1149,
+      "sha256": "90f7563dd0635fdb0d239388196cae87b4c66bb3fab853581b7b16eaf7fbe592"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-prepass.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-prepass.stdout",
+      "bytes": 18966,
+      "sha256": "9266f31772dcd66be293fbfdec98237df2114e69b18ffe25a4d9a3656e3c649c"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-projection.json",
+      "bytes": 1157,
+      "sha256": "7376ff8860bd869763b252849e76eef36100c7f4ef9c03b7b0662131fe9c1f64"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-projection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-projection.stdout",
+      "bytes": 802,
+      "sha256": "5cdf2bbda9e52ecb69ac44f75dd1a992eda1fca2d5f9fc9c0cf6fafadec43ff0"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-report-existing-v1.json",
+      "bytes": 1055,
+      "sha256": "0bb3a01bb284837c94a57ed6dd3501cf63350ac370a14964548438ee9dfae023"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-report-existing-v1.stderr",
+      "bytes": 1633,
+      "sha256": "08f2c443cc95933cba0f08879d3cf28b2e63893f8696a2e0ec0d953f02ff7db5"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-report-existing-v1.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-resume-check-ch79.json",
+      "bytes": 1305,
+      "sha256": "054f93ed195c96419aadbeef1f3f1846660fa4ce724333bd31ef81b048191964"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-resume-check-ch79.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-resume-check-ch79.stdout",
+      "bytes": 667,
+      "sha256": "b70d8f2548312c775c496107811caef1ef52a840530370b83fb204bf83863ea0"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-resume-check-final.json",
+      "bytes": 1310,
+      "sha256": "9bb4d018769018954640a577db2e7ddae73c499ba11f718a918c4c7c101ba151"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-resume-check-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/B-resume-check-final.stdout",
+      "bytes": 1253,
+      "sha256": "fad2aaa2e8ee9c2afd1c07e40cac099aa415cc2069d454e1de8ea9e6328659e3"
+    },
+    {
+      "path": "prior-checkpoint/logs/campaign-tests.json",
+      "bytes": 1005,
+      "sha256": "58fd9a64e582d372acbff965a807bd263ca5df442ff07ceaca6f3be0380a3c49"
+    },
+    {
+      "path": "prior-checkpoint/logs/campaign-tests.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/campaign-tests.stdout",
+      "bytes": 110,
+      "sha256": "3977bdcd52814efe3dde8f133aec4d64c0a8d0eabcc89d44fcb86a0736b61760"
+    },
+    {
+      "path": "prior-checkpoint/logs/fresh-combined.json",
+      "bytes": 838,
+      "sha256": "6619f51ef1ac2f2051d63e72b53cf920d3024e118e5fd579b283d1b7b6155721"
+    },
+    {
+      "path": "prior-checkpoint/logs/fresh-combined.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/fresh-combined.stdout",
+      "bytes": 780,
+      "sha256": "d31f1a4b91bcbfba46bf1f170bd3e6b7f95361d75b672e9d99d041420b59a305"
+    },
+    {
+      "path": "prior-checkpoint/logs/log-wrapper-timeout-test.json",
+      "bytes": 728,
+      "sha256": "78c23d3501c13ea7ae692bbea59a2d8d4af10260bad59333456e5c061fca2450"
+    },
+    {
+      "path": "prior-checkpoint/logs/log-wrapper-timeout-test.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/log-wrapper-timeout-test.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/paired-ch29-historical-A-fresh-B.json",
+      "bytes": 1137,
+      "sha256": "d0cf360be27957427bfc0e9944bcb3957cf67829befab9254e9ab486d2c2f295"
+    },
+    {
+      "path": "prior-checkpoint/logs/paired-ch29-historical-A-fresh-B.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/paired-ch29-historical-A-fresh-B.stdout",
+      "bytes": 289,
+      "sha256": "c3eab2574ff7021ec2117c566bbace5e204cef297189c305c88945902a88c8a0"
+    },
+    {
+      "path": "prior-checkpoint/logs/paired-ch79-historical-A-fresh-B.json",
+      "bytes": 1234,
+      "sha256": "2f828f837c6780c57f57de64a092c74e34e2efc9b3cb48199763612347969421"
+    },
+    {
+      "path": "prior-checkpoint/logs/paired-ch79-historical-A-fresh-B.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/paired-ch79-historical-A-fresh-B.stdout",
+      "bytes": 245,
+      "sha256": "c50be308e282954230519fabbdc5b9ab89f6dd12be0e930a43a4e4dd47192024"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-A-evaluate.json",
+      "bytes": 1396,
+      "sha256": "f0e893081364d9bd5b76ec1a733021b74ff8ebccd18db91a823d24c48a451f53"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-A-evaluate.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-A-evaluate.stdout",
+      "bytes": 1176,
+      "sha256": "e2df9f5d87305743733f2d95cbd8faac53affdda3a0309a998c8ab77686bdafb"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-B-evaluate.json",
+      "bytes": 1396,
+      "sha256": "a62693a066921f52a658956afed66edb51e570a49f243212f0481235003e0d39"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-B-evaluate.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-B-evaluate.stdout",
+      "bytes": 1166,
+      "sha256": "70c34e879bbb0246ccdca1a53fc07a5d4a767e7e5375d78457f1746fc3f09e1b"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-pair.json",
+      "bytes": 1021,
+      "sha256": "a63f4c30e65d25f54197dcf5acaf93a3cff2d3a57ba396390a2cd3338ce1f930"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-pair.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-pair.stdout",
+      "bytes": 1370,
+      "sha256": "589ac115180523a3b4903354cabcbe7f4a2cf3561d39c6195ff0df6fcd600166"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-selection.json",
+      "bytes": 877,
+      "sha256": "822a2355ab7916651ef6060a65c5a72cf85ab009cda091c899e44753eace84ce"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-selection.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "prior-checkpoint/logs/targeted-selection.stdout",
+      "bytes": 840,
+      "sha256": "958fcc0bd0b12d2746ff6eb8cf05da8129ca191b2e108cf041fd748b1b738d99"
+    },
+    {
+      "path": "prior-checkpoint/measured-gap-audit.md",
+      "bytes": 11719,
+      "sha256": "20f30386fae955ac1ee4ed67d150b20ad263dce8293a950a34ae31067360b5db"
+    },
+    {
+      "path": "prior-checkpoint/measured-gap-evidence.json",
+      "bytes": 35046,
+      "sha256": "8c70bcc7466a6648622371d79a23767e692f17f88caa89b3e19672284fa40195"
+    },
+    {
+      "path": "prior-checkpoint/source-audit.md",
+      "bytes": 24055,
+      "sha256": "351eb8107507a5ecf9f50310817fe63ca666899febc6574033035e0bbf786130"
+    },
+    {
+      "path": "prior-checkpoint/targeted-A-B-paired.json",
+      "bytes": 239844,
+      "sha256": "3dd97d1d4d5e2d6346fb4cc2500bc52e12b3fb8ba950a542dae49e1174abe41f"
+    },
+    {
+      "path": "resume_pipeline.sh",
+      "bytes": 1607,
+      "sha256": "6dc88379fa3c4d580c423889fc2602d857df82643a2bbf8255cc1aa947e7fbf0"
+    },
+    {
+      "path": "run_logged.py",
+      "bytes": 2402,
+      "sha256": "f2b55f2723e4ad8c9e8dd5e3e3e693c1ea62b3d5361dab30886031aa306ebf96"
+    },
+    {
+      "path": "setup-verification.json",
+      "bytes": 3765,
+      "sha256": "85063f479d0ce83b216cad1aa86d419db10ca6165ec88733f554cff312e2f0ed"
+    },
+    {
+      "path": "snapshot_artifacts.py",
+      "bytes": 953,
+      "sha256": "0c0ee7026c74bbc1a48d5d3dd81576f8ab8273455ed12a189b0a4ac5b58a9cee"
+    },
+    {
+      "path": "verify_setup.py",
+      "bytes": 3126,
+      "sha256": "d78a9b87265b7720242410470f54d3604fabf657dffa26ec0d619122ab7da3aa"
+    },
+    {
+      "path": "write_checkpoint.py",
+      "bytes": 13747,
+      "sha256": "81c17c5948f9d02c24724647996a08912f928cd3a64f3398fabed463c956727a"
+    }
+  ],
+  "excluded": "Git metadata, source checkout bodies, mirrored review evidence, and this self-referential index. Source identities are in setup-verification.json."
+}

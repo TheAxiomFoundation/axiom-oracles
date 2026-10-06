@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "scripts/us_tariff_schedule_campaign.py",
+    "report"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/oracles",
+  "environment_overrides": {
+    "AXIOM_TARIFF_C1_CACHE": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/cache",
+    "RULESPEC_US_CHECKOUT": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/rulespec-us"
+  },
+  "started_at": "2026-09-23T19:38:36.999320+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/A-report-existing-v1.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/A-report-existing-v1.stderr",
+  "pid": 67349,
+  "timeout_seconds": null,
+  "status": "complete",
+  "returncode": 1,
+  "elapsed_seconds": 0.534,
+  "finished_at": "2026-09-23T19:38:37.535017+00:00"
+}
