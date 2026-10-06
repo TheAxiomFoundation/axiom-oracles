@@ -32,8 +32,10 @@ NODE = shutil.which("node")
 CONCEPT = "us:policies/example#amount"
 PROPERTY_SETTINGS = settings(max_examples=100, deadline=None, derandomize=True)
 
-# Execute the actual dashboard ledger bucket builder and causeFor. The four
+# Execute the actual dashboard ledger bucket builder and causeFor. The five
 # stubs only supply presentation metadata; none participates in selection.
+# displayEngines returns the raw engine pair: the dashboard maps it through
+# platformOracle for row labels only, and cause matching keeps report.engines.
 JS_BUCKETS = r"""
 const fs = require("fs");
 const helpers = fs.readFileSync("dashboard/src/utils/programs.js", "utf8");
@@ -49,6 +51,7 @@ function topLevelAggregates(aggregates) { return aggregates || []; }
 function suiteLabel(suite) { return suite; }
 function suiteMeta() { return {}; }
 function otherOracle() { return ""; }
+function displayEngines(report) { return (report && report.engines) || {}; }
 eval(helpers.slice(causeBegin, causeEnd).replace("export ", ""));
 eval(ledger.slice(begin, end));
 const [reports, causes] = JSON.parse(fs.readFileSync(0, "utf8"));
