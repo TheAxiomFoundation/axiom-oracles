@@ -1851,6 +1851,16 @@ concepts:
       axiom: de_tanf_annual_benefit
       policyengine: de_tanf
 
+  us-me:statutes/title-22/3762#me_tanf_benefit:
+    description: ME TANF benefit (annualized)
+    category: cash
+    comparison: amount
+    tolerance: 25
+    priority: high
+    targets:
+      axiom: me_tanf_annual_benefit
+      policyengine: me_tanf
+
   us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit:
     description: KS TANF maximum benefit standard (annualized)
     category: cash

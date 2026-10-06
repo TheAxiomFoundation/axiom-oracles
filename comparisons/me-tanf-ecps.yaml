@@ -1,0 +1,40 @@
+# Maine TANF -- Axiom vs PolicyEngine on Enhanced CPS, Maine households.
+
+name: me-tanf-ecps
+title: Maine TANF -- Axiom vs PolicyEngine
+description: >-
+  Compares the monthly Maine TANF benefit from the composed us-me/tanf program
+  (TANF Rule 125A standard-of-need and maximum-grant charts by household size,
+  the 22 M.R.S. 3762(3)(B)(7-D) $108 + 50% earned-income disregard and $50
+  child-support disregard, and the benefit = min(maximum grant,
+  standard-of-need deficit)) against PolicyEngine's me_tanf on Enhanced CPS
+  households in Maine. Refresh the rulespec root after pulling ~/rulespec-us with:
+  rsync -a --delete --exclude .axiom ~/rulespec-us/us-me/ ~/.axiom-oracles/roots/rulespec-us-me/
+
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine
+  parameters:
+    left: axiom
+    right: policyengine
+    suite: me-tanf-ecps
+    concepts:
+      - us-me:statutes/title-22/3762#me_tanf_benefit
+    sample_size: 0
+    period: 2026-01
+    population: enhanced-cps
+    jurisdiction_fips: "23"
+    axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
+    axiom_program: $HOME/axiom-oracles/programs/us-me/tanf/fy-2026.yaml
+    axiom_composed_program: /tmp/me-tanf-composed.yaml
+    axiom_compiled_program: /tmp/me-tanf-compiled.json
+    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    rulespec_roots:
+      - $HOME/.axiom-oracles/roots/rulespec-us-me
+
+artifacts:
+  report_basename: axiom-policyengine-me-tanf-ecps
+
+dashboard:
+  filename: axiom-policyengine-me-tanf-ecps.json
+  suite: me-tanf-ecps

@@ -602,7 +602,8 @@ policies:
     output_vars:
       - me_tanf
     in_scope: true
-    suite: null
+    suite: me-tanf-ecps
+    note: "Covered by me-tanf-ecps — Maine TANF (me_tanf) vs PE-2026 at population scale (509/520 = 97.9% raw; explained 100%, 0 unexplained). The 11 residuals are upstream PolicyEngine chart-vintage staleness: the composed slice uses the TANF Rule 125A FFY 2026 charts (effective 2025-10-01, correct for benefit month 2026-01) while PE 1.752.2 carries me_tanf's maximum-grant/standard-of-need only through FFY 2025 (2024-10-01); each mismatch equals the annualized per-size FFY2026-FFY2025 maximum-grant increment (upstream_engine_gap), not a rulespec defect."
   - id: us-pe:medicaid
     oracle_policy_name: medicaid
     oracle_policy_type: rules

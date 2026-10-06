@@ -1,0 +1,62 @@
+# Maine TANF (me-tanf-ecps) residual dispositions.
+# Composed us-me/tanf vs PolicyEngine me_tanf on Enhanced CPS Maine households
+# (PE pin 1.752.2, populace-us 2024, FIPS 23): 509/520 raw match, 11 residuals.
+#
+# Every residual is upstream PolicyEngine chart vintage staleness. The composed
+# slice imports the TANF Rule 125A FFY 2026 standard-of-need and maximum-grant
+# charts (effective 2025-10-01, correct for the 2026-01 benefit month) from
+# rulespec-us us-me/regulations/dhhs/ofi/chapter-331/tanf-rule-125a. PolicyEngine
+# 1.752.2 carries gov.states.me.dhhs.tanf.maximum_benefit.amount and
+# .standard_of_need.amount only through FFY 2025 (effective 2024-10-01) and has
+# not ingested the FFY 2026 (2025-10-01) COLA. Every mismatch equals exactly the
+# annualized per-household-size maximum-grant increment between the two vintages,
+# so the composed slice reproduces PolicyEngine's me_tanf on the FFY 2025 base
+# and diverges only by the FFY 2026 update PolicyEngine lacks — an upstream engine
+# gap, not a rulespec encoding defect. Not absorbed by tolerance.
+schema: axiom_oracles.dispositions.v1
+suite: me-tanf-ecps
+updated: '2026-07-10'
+entries:
+- id: me-tanf-ecps-me_tanf_benefit-rule125a-ffy2026-vs-pe-ffy2025-chart-vintage
+  concept: us-me:statutes/title-22/3762#me_tanf_benefit
+  kind: amount_difference
+  case_selector:
+    case_ids:
+      - ecps-24
+      - ecps-89
+      - ecps-196
+      - ecps-215
+      - ecps-260
+      - ecps-299
+      - ecps-318
+      - ecps-384
+      - ecps-433
+      - ecps-461
+      - ecps-465
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: >-
+      TANF Rule 125A raised the Adult-Included maximum-grant and standard-of-need
+      charts for FFY 2026 (effective 2025-10-01). The composed us-me/tanf slice
+      uses the FFY 2026 chart (correct for the 2026-01 benefit month);
+      PolicyEngine 1.752.2's gov.states.me.dhhs.tanf.maximum_benefit.amount and
+      standard_of_need.amount stop at FFY 2025 (effective 2024-10-01). Each
+      residual equals the annualized per-size maximum-grant increment between the
+      two vintages: size 1 = 12*(436-425) = 132/yr (ecps-384); size 2 =
+      12*(686-669) = 204/yr (ecps-465); size 3 = 12*(917-895) = 264/yr (ecps-89,
+      ecps-433); size 4 = 12*(1155-1127) = 336/yr (ecps-196, ecps-461, ecps-299);
+      size 5 = 408/yr (ecps-215, ecps-260); size 6 = 480/yr (ecps-24, ecps-318).
+      The composed slice reproduces me_tanf exactly on the FFY 2025 base and
+      diverges only by the FFY 2026 COLA PolicyEngine has not ingested. Axiom is
+      the more current figure; the gap is an upstream PolicyEngine vintage lag,
+      not a rulespec defect.
+    arithmetic:
+      - expression: "13860.0 - 13524.0"
+        equals: 336.0
+        tolerance: 0.01
+      - expression: "12 * (1155 - 1127)"
+        equals: 336.0
+        tolerance: 0.01
+    sources:
+      - dashboard/public/data/axiom-policyengine-me-tanf-ecps.json
+  expires_on_source_change: true
