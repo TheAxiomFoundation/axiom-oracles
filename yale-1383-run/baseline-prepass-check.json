@@ -1,0 +1,10 @@
+{
+  "receipt_differences": {
+    "stage_wall_clock_seconds": {
+      "committed": 60.018,
+      "fresh": 440.833
+    }
+  },
+  "routing_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3",
+  "routing_sha256_matches_committed": true
+}

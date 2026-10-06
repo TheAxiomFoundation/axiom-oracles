@@ -1,0 +1,180 @@
+{
+  "schema": "measurement.artifact_inventory.v1",
+  "artifacts": [
+    {
+      "path": "RESULT.md",
+      "bytes": 9520,
+      "sha256": "723a9ee46762e8d6a38f13257ed2c835343b2480b4dd75055448f445f08aa3fa"
+    },
+    {
+      "path": "baseline-ch01-compile.json",
+      "bytes": 1671104,
+      "sha256": "f95a4d58f5447bceaa33f9954adc046de8e16732e650cf70d4c31f8578cba0d8"
+    },
+    {
+      "path": "baseline-prepass-check.json",
+      "bytes": 257,
+      "sha256": "894ca81f4d6c097b18050ed474851fe90b9b7759eb7c8a3ee46d7033a1cbd20d"
+    },
+    {
+      "path": "baseline-prepass-receipt.json",
+      "bytes": 18966,
+      "sha256": "11dcac2a0a6fc2c3054c2286f9f69b3fc53e69749330ac7c84d520a8b1451718"
+    },
+    {
+      "path": "baseline-report-stage.log",
+      "bytes": 1598,
+      "sha256": "4f09c523e7c42f2b979597cc285a505487eb060d188ffd6b87707a7fcc8e29d7"
+    },
+    {
+      "path": "campaign-baseline-audit.md",
+      "bytes": 5012,
+      "sha256": "00733dec0ca3f6e990877e8e6a8ba1102c9fdb7b36b0d5a5ecdfb89c53883feb"
+    },
+    {
+      "path": "chapter_census.py",
+      "bytes": 5580,
+      "sha256": "3a1ce542ed8ca22241f642693ac304d9737567be5dddca27a5ef8ba8178adc02"
+    },
+    {
+      "path": "committed-ch79-census.json",
+      "bytes": 8235,
+      "sha256": "78a06ad1392d8dab3eb353f1652c8f9f383cec631dfd3a38e98453627f8ef715"
+    },
+    {
+      "path": "committed-ch79-target-samples.json",
+      "bytes": 1267,
+      "sha256": "1cc39cf44b15b6d7264c71582f4df5ec7cda799c30582fa5a8ddf590fbd71523"
+    },
+    {
+      "path": "committed-main/certificates/us-tariff-duty.json",
+      "bytes": 63113,
+      "sha256": "111053440f958676b5d17721f193ac2a22d8935e5788afddcd29dc2ad9fa342a"
+    },
+    {
+      "path": "committed-main/conformance/detail/us-tariff-schedule.json",
+      "bytes": 36462,
+      "sha256": "ac6152975c4f33f7ada883ca6ccd8eb9c3510d53f54a0ec57a49763181e7af72"
+    },
+    {
+      "path": "committed-main/reference/us-tariff-schedule/classification-receipt.json",
+      "bytes": 13421,
+      "sha256": "8890874d6162ae5acd17c300aa7567101aa77cd151687fa86b67036607748e2f"
+    },
+    {
+      "path": "committed-main/reference/us-tariff-schedule/comparison-summary.json",
+      "bytes": 1293,
+      "sha256": "5981a1cb92e76d03b5f88692062311093b04db2aff5373cea29f52a3057cce98"
+    },
+    {
+      "path": "committed-main/reference/us-tariff-schedule/declared-input-contract-receipt.json",
+      "bytes": 103398,
+      "sha256": "bdd258d7e86a81d4ffd472149d14033b75c11ceb490ae13685592c06475da717"
+    },
+    {
+      "path": "committed-main/reference/us-tariff-schedule/disposition-routing-receipt.json",
+      "bytes": 18965,
+      "sha256": "1d43f9254c834a9caf7be3df08f7b1cb53f729a60959963f42628ac81681ef04"
+    },
+    {
+      "path": "committed-main/reference/us-tariff-schedule/eval/MANIFEST.json",
+      "bytes": 50282,
+      "sha256": "5123e201a32c3965d82440c515525c854e9113d7efc84e820bbe878617a83a39"
+    },
+    {
+      "path": "committed-main/reference/us-tariff-schedule/evaluation-projection-receipt.json",
+      "bytes": 798,
+      "sha256": "6a7947a0a6f862d0a6ef285889e7890c61eacb919a83c7ecf42cedbf57e1d129"
+    },
+    {
+      "path": "logs/baseline-compile-diagnostic.json",
+      "bytes": 1167,
+      "sha256": "b4e09205b2f5f4f15d2354eb9a845efecb3d9844d3f79b4f7c68b50cef8a5a64"
+    },
+    {
+      "path": "logs/baseline-compile-diagnostic.stderr",
+      "bytes": 445,
+      "sha256": "bea01dcbb0158f47dc36b1ea437820d431c6b98a675dd51fee5b85398c07d02c"
+    },
+    {
+      "path": "logs/baseline-compile-diagnostic.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/baseline-compile-layout-fix.json",
+      "bytes": 1167,
+      "sha256": "f05d4976a8e39dc01e1a363339b15654326ddfc1985504a74371a162ca86ca18"
+    },
+    {
+      "path": "logs/baseline-compile-layout-fix.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/baseline-compile-layout-fix.stdout",
+      "bytes": 30944,
+      "sha256": "023ddfb058df9c481ca74f762aa965429b2887d9aa6471e537fb7ac87f8d581f"
+    },
+    {
+      "path": "logs/baseline-input-contract.json",
+      "bytes": 1192,
+      "sha256": "3cc023c1b5bc7c27881e2ef8df1b045c678829c8b422182fc8ac3548aff5c673"
+    },
+    {
+      "path": "logs/baseline-input-contract.stderr",
+      "bytes": 1838,
+      "sha256": "c0c54c1cdf3942c780d182916feadc41cfd021af3ee46e3916d354e4d858729a"
+    },
+    {
+      "path": "logs/baseline-input-contract.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/baseline-prepass.json",
+      "bytes": 1171,
+      "sha256": "b3a3b80459fbeb9a6744b51d116cf1b4b2c07fbefbff9dae6b3990f1eb41b687"
+    },
+    {
+      "path": "logs/baseline-prepass.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "logs/baseline-prepass.stdout",
+      "bytes": 18966,
+      "sha256": "11dcac2a0a6fc2c3054c2286f9f69b3fc53e69749330ac7c84d520a8b1451718"
+    },
+    {
+      "path": "logs/baseline-report-replay.json",
+      "bytes": 995,
+      "sha256": "9855f0b646afbfafb4d864a2bc9486688c15e5ac638f5301f5786412be5b3efa"
+    },
+    {
+      "path": "logs/baseline-report-replay.stderr",
+      "bytes": 1598,
+      "sha256": "4f09c523e7c42f2b979597cc285a505487eb060d188ffd6b87707a7fcc8e29d7"
+    },
+    {
+      "path": "logs/baseline-report-replay.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "measurement.json",
+      "bytes": 8186,
+      "sha256": "68437ecbf67e7271ecd0d73bc5bdf4d77db8919ae3d9ce468e75ce6343b4e167"
+    },
+    {
+      "path": "preflight.json",
+      "bytes": 996,
+      "sha256": "8b382664eaf3fb87ac61a0e7324f9b2ddcec97ed2dd12c263d1a2eb9ba79ad4e"
+    },
+    {
+      "path": "run_logged.py",
+      "bytes": 1468,
+      "sha256": "bccbbeac2dfccaf2b34e471e7c59dda29460a2207c8a5319bfb269f56680989b"
+    }
+  ]
+}

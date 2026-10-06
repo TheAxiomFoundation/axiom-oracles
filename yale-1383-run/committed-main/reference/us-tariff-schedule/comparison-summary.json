@@ -1,0 +1,56 @@
+{
+  "comparison_artifact": {
+    "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/compare/8a/8a68e82033bdcdd523f4a453937efa8061c80fbb466821037023e461cb75f461.jsonl.gz",
+    "sha256": "514ac782f630b0d7300c07f0b9737c311a00aafa13364b717fa941e5caf27a6c"
+  },
+  "engine_errors": 0,
+  "per_slot": {
+    "axiom_total_reconciliation": {
+      "match": 16899903
+    },
+    "base": {
+      "match": 16210860,
+      "mismatch": 689043
+    },
+    "brazil_section_301": {
+      "match": 19025421,
+      "mismatch": 93198
+    },
+    "china_section_301": {
+      "match": 19087173,
+      "mismatch": 31446
+    },
+    "forced_labor_section_301": {
+      "match": 15400865,
+      "mismatch": 1499038
+    },
+    "ieepa": {
+      "match": 16861267,
+      "mismatch": 38636
+    },
+    "section_122": {
+      "match": 17632730,
+      "mismatch": 1485889
+    },
+    "section_201": {
+      "match": 19109235,
+      "mismatch": 9384
+    },
+    "section_232": {
+      "match": 17850605,
+      "mismatch": 1268014
+    },
+    "section_338": {
+      "match": 19118619
+    },
+    "total": {
+      "match": 12510858,
+      "mismatch": 4389045
+    },
+    "yale_total_reconciliation": {
+      "match": 16899903
+    }
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.comparison_summary.v1",
+  "tolerance": 1e-12
+}

@@ -1,0 +1,20 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+    "compile",
+    "--program",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/rulespec-baseline/us/policies/cbp/us-tariff-schedule/generated/ch01/ch01.yaml",
+    "--output",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/baseline-ch01-compile.json"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout",
+  "environment_overrides": {
+    "AXIOM_RULESPEC_REPO_ROOTS": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure"
+  },
+  "started_at": "2026-09-23T16:40:53.488324+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-compile-layout-fix.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-compile-layout-fix.stderr",
+  "returncode": 0,
+  "elapsed_seconds": 7.107,
+  "finished_at": "2026-09-23T16:41:00.602284+00:00"
+}

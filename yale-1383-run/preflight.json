@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-09-23T16:38:27.037811+00:00",
+  "engine_path": "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+  "engine_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7",
+  "revisions": {
+    "main-checkout": "c52688619542c5e4a581c84d83283a0b0a5bf1b7",
+    "rulespec-baseline": "96d5e7c1e6309dc205b7320bbddaae8dd5d410df",
+    "rulespec-candidate": "c62645022a8b2fcb5f9e6afdc2def2c8d68c2baf"
+  },
+  "artifact_directory": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run",
+  "requested_artifact_directory": "/Users/maxghenis/TheAxiomFoundation/_worktrees/_briefs/tariff-2026-09-22/yale-1383-run",
+  "requested_directory_outside_writable_roots": true,
+  "assigned_checkout_switch_failure": "fatal: Unable to create '/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.git/worktrees/20260923-093102-yale-parity-1383-measure/index.lock': Operation not permitted"
+}

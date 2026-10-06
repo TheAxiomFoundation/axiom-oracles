@@ -1,0 +1,162 @@
+{
+  "status": "stopped_baseline_report_not_reproducible",
+  "recorded_at": "2026-09-23T16:45:18.689326+00:00",
+  "revisions": {
+    "main-checkout": "c52688619542c5e4a581c84d83283a0b0a5bf1b7",
+    "rulespec-baseline": "96d5e7c1e6309dc205b7320bbddaae8dd5d410df",
+    "rulespec-candidate": "c62645022a8b2fcb5f9e6afdc2def2c8d68c2baf"
+  },
+  "engine_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7",
+  "main_committed": {
+    "summary": {
+      "engine_errors": 0,
+      "explained": 9503693,
+      "matches": 206607439,
+      "mismatches": 9503693,
+      "total": 216111132,
+      "unexplained": 0
+    },
+    "open_class_units": {
+      "fed-false-family-brazil": 93198,
+      "fed-false-family-forced-labor": 1499038
+    },
+    "certificate_conformant": false
+  },
+  "candidate": {
+    "evaluated": false,
+    "summary": null,
+    "new_mismatch_classes": null,
+    "conformant": null
+  },
+  "fresh_engine_baseline_chapter_evaluated": false,
+  "baseline_report_error": "ValueError: classification receipt schema is stale",
+  "committed_classification_schema": "axiom_oracles.us_tariff_schedule.classification.v1",
+  "required_classification_schema": "axiom_oracles.us_tariff_schedule.classification.v2",
+  "committed_ch79_replay": {
+    "summary": {
+      "comparisons": 90072,
+      "derived_total_units": 495,
+      "engine_errors": 0,
+      "matches": 87762,
+      "mismatches": 2310,
+      "unexplained": 1286
+    },
+    "class_census": {
+      "__unexplained__": 656,
+      "column2-gn3b": 351,
+      "legal-date-boundary-ieepa": 70,
+      "vintage-revision-301-removed-lines": 108
+    },
+    "direct_brazil_mismatches": 36,
+    "direct_note52_mismatches": 620,
+    "scope": "Read-only replay of hash-verified committed engine records, not fresh evaluation"
+  },
+  "stage_receipts": {
+    "baseline-compile-diagnostic": {
+      "command": [
+        "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+        "compile",
+        "--program",
+        "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/rulespec-baseline/us/policies/cbp/us-tariff-schedule/generated/ch01/ch01.yaml",
+        "--output",
+        "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/baseline-ch01-compile.json"
+      ],
+      "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout",
+      "environment_overrides": {
+        "AXIOM_RULESPEC_REPO_ROOTS": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure"
+      },
+      "started_at": "2026-09-23T16:39:19.002827+00:00",
+      "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-compile-diagnostic.stdout",
+      "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-compile-diagnostic.stderr",
+      "returncode": 1,
+      "elapsed_seconds": 1.127,
+      "finished_at": "2026-09-23T16:39:20.426388+00:00"
+    },
+    "baseline-compile-layout-fix": {
+      "command": [
+        "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+        "compile",
+        "--program",
+        "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/rulespec-baseline/us/policies/cbp/us-tariff-schedule/generated/ch01/ch01.yaml",
+        "--output",
+        "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/baseline-ch01-compile.json"
+      ],
+      "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout",
+      "environment_overrides": {
+        "AXIOM_RULESPEC_REPO_ROOTS": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure"
+      },
+      "started_at": "2026-09-23T16:40:53.488324+00:00",
+      "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-compile-layout-fix.stdout",
+      "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-compile-layout-fix.stderr",
+      "returncode": 0,
+      "elapsed_seconds": 7.107,
+      "finished_at": "2026-09-23T16:41:00.602284+00:00"
+    },
+    "baseline-input-contract": {
+      "command": [
+        "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+        "scripts/us_tariff_schedule_campaign.py",
+        "input-contract",
+        "--rulespec-root",
+        "../rulespec-baseline",
+        "--engine-binary",
+        "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine"
+      ],
+      "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout",
+      "environment_overrides": {
+        "AXIOM_TARIFF_C1_CACHE": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/baseline-cache",
+        "RULESPEC_US_CHECKOUT": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/rulespec-baseline"
+      },
+      "started_at": "2026-09-23T16:35:58.341961+00:00",
+      "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-input-contract.stdout",
+      "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-input-contract.stderr",
+      "returncode": 1,
+      "elapsed_seconds": 123.346,
+      "finished_at": "2026-09-23T16:38:01.704554+00:00"
+    },
+    "baseline-prepass": {
+      "command": [
+        "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+        "scripts/us_tariff_schedule_campaign.py",
+        "prepass",
+        "--rulespec-root",
+        "../rulespec-baseline",
+        "--engine-binary",
+        "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine"
+      ],
+      "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout",
+      "environment_overrides": {
+        "AXIOM_TARIFF_C1_CACHE": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/baseline-cache",
+        "RULESPEC_US_CHECKOUT": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/rulespec-baseline"
+      },
+      "started_at": "2026-09-23T16:35:58.341961+00:00",
+      "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-prepass.stdout",
+      "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-prepass.stderr",
+      "returncode": 0,
+      "elapsed_seconds": 445.191,
+      "finished_at": "2026-09-23T16:43:23.535425+00:00"
+    },
+    "baseline-report-replay": {
+      "command": [
+        "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+        "scripts/us_tariff_schedule_campaign.py",
+        "report"
+      ],
+      "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout",
+      "environment_overrides": {
+        "AXIOM_TARIFF_C1_CACHE": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/baseline-cache",
+        "RULESPEC_US_CHECKOUT": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/rulespec-baseline"
+      },
+      "started_at": "2026-09-23T16:43:07.288263+00:00",
+      "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-report-replay.stdout",
+      "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/yale-1383-run/logs/baseline-report-replay.stderr",
+      "returncode": 1,
+      "elapsed_seconds": 2.192,
+      "finished_at": "2026-09-23T16:43:09.480917+00:00"
+    }
+  },
+  "source_changes_made": false,
+  "default_cache_written": false,
+  "network_publications": false,
+  "openai_api_used": false
+}

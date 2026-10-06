@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout/scripts/us_tariff_schedule_campaign.py", line 2155, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout/scripts/us_tariff_schedule_campaign.py", line 2139, in main
+    receipt = build_input_contract_receipt(
+        rulespec_root=args.rulespec_root.resolve(),
+        engine_binary=args.engine_binary.resolve(),
+    )
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout/scripts/us_tariff_schedule_campaign.py", line 317, in build_input_contract_receipt
+    subprocess.run(
+    ~~~~~~~~~~~~~~^
+        [str(engine_binary), "compile", "--program", str(module.resolve()), "--output", str(artifact)],
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        check=True, capture_output=True, text=True, env=env,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/maxghenis/.local/share/uv/python/cpython-3.13-macos-aarch64-none/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/Users/maxghenis/TheAxiomFoundation/_tariff-t0/wt-engine/target/release/axiom-rules-engine', 'compile', '--program', '/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/rulespec-baseline/us/policies/cbp/us-tariff-schedule/generated/ch01/ch01.yaml', '--output', '/var/folders/9l/_wztzgbx7mgc7l1r0416cy7m0000gn/T/tariff-input-contract-yl9febcd/chapter-000.json']' returned non-zero exit status 1.

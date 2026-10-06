@@ -1,0 +1,24 @@
+Traceback (most recent call last):
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout/scripts/us_tariff_schedule_campaign.py", line 2155, in <module>
+    raise SystemExit(main())
+                     ~~~~^^
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout/scripts/us_tariff_schedule_campaign.py", line 2132, in main
+    print(_render(build_report()), end="")
+                  ~~~~~~~~~~~~^^
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout/scripts/us_tariff_schedule_campaign.py", line 2007, in build_report
+    _validate_classification_handoff(comparison, classification, ledger_entries)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout/scripts/us_tariff_schedule_campaign.py", line 1549, in _validate_classification_handoff
+    _require(
+    ~~~~~~~~^
+        classification.get("schema")
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        == "axiom_oracles.us_tariff_schedule.classification.v2",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        "classification receipt schema is stale",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/maxghenis/.subfleet/worktrees/20260923-093102-yale-parity-1383-measure/main-checkout/scripts/us_tariff_schedule_campaign.py", line 179, in _require
+    raise ValueError(message)
+ValueError: classification receipt schema is stale
