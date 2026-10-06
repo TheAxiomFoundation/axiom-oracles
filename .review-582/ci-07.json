@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/emit_case_artifacts.py --check de-worker-dual-oracle",
+  "exit_code": 0,
+  "seconds": 64.0,
+  "output": "case-artifacts OK: 1 suites, 12 mismatch rows, 12 annotated, 0 silent classifications\n"
+}

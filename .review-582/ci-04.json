@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/apply_dispositions.py --check",
+  "exit_code": 0,
+  "seconds": 1751.5,
+  "output": "Validated 102 dispositions files\nnote: dispositions/be-worker-ssc.yaml entry 'dataset-uprating-bridge-artifact-resolved' is expired (source values changed or mismatch cleared)\nDispositions are consistent with the committed dashboard data\n"
+}

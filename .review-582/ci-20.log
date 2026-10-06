@@ -1,0 +1,2 @@
+uv run python scripts/us_tariff_capture_integrity.py
+tariff capture integrity: 40 committed capture files match every recorded receipt/manifest digest

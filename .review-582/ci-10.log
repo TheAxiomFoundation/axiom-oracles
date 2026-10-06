@@ -1,0 +1,2 @@
+uv run python scripts/de_closure.py --check
+DE closure summary up to date

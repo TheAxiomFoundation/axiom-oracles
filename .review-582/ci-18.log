@@ -1,0 +1,2 @@
+uv run python scripts/nz_exercise_denominator.py --check
+NZ exercise denominator OK: 328 slots from the committed artifact (150 supplied, 178 never supplied), 883 committed evaluation traces

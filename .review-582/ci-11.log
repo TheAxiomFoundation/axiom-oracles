@@ -1,0 +1,2 @@
+uv run python scripts/de_executable.py --check
+DE Kindergeld executable status drifted; regenerate with `python scripts/de_executable.py`

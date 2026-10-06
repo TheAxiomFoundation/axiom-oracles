@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/check_rule_verification.py",
+  "exit_code": 0,
+  "seconds": 35.5,
+  "output": "rule_verification OK: 34810 rules, 79.5% grounded, 97.5% manifest-backed, 34/130 executable surfaces (commit 54d90a7251af)\n"
+}

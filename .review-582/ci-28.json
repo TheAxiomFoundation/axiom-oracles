@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/generate_conformance_universe.py --all --check",
+  "exit_code": 0,
+  "seconds": 478.9,
+  "output": "conformance[uk] OK: 67 policies (21 in scope, 46 excluded) match UKMOD_PUBLIC_B2026.03/UK_2026\nconformance[be] OK: 43 policies (23 in scope, 20 excluded) match EUROMOD_J2.0/BE_2025\nconformance[dk] OK: 44 policies (22 in scope, 22 excluded) match EUROMOD_J2.0/DK_2025\nconformance[uk-pe] --check: checkout at /Users/maxghenis/PolicyEngine/policyengine-uk is policyengine-uk@2.88.52, not the pinned 2.89.2; committed universe left unverified this run (no-op clean \u2014 pin a matching checkout to enforce).\nconformance[us-pe] --check: checkout at /Users/maxghenis/PolicyEngine/policyengine-us is policyengine-us@1.822.5, not the pinned 1.767.3; committed universe left unverified this run (no-op clean \u2014 pin a matching checkout to enforce).\nconformance[us-tariff-yale] OK: 14 policies (10 in scope, 4 excluded) match tariff-rate-tracker_c4307e514196618afcbf88cf7fd33746417eeabf/statutory_panel\n"
+}

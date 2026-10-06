@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/exercise_census.py --check",
+  "exit_code": 0,
+  "seconds": 498.0,
+  "output": "exercise census up to date\n"
+}

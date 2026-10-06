@@ -1,0 +1,2 @@
+uv run python scripts/emit_disposition_artifacts.py --check de-worker-dual-oracle
+disposition-artifacts OK: 1 suites, 3 entries, exact YAML parity

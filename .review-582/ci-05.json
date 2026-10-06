@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/nz_incomeexplorer.py --check",
+  "exit_code": 0,
+  "seconds": 70.1,
+  "output": "NZ IncomeExplorer unified record and bound case evidence up to date\n"
+}

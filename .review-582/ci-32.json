@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/conformance_ratchet.py --check",
+  "exit_code": 0,
+  "seconds": 36.5,
+  "output": "conformance ratchet OK: 6 jurisdiction(s), no invariant regressed\n"
+}

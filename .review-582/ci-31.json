@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/conformance_scoreboard.py --check",
+  "exit_code": 0,
+  "seconds": 44.0,
+  "output": "conformance scoreboard OK: 6 jurisdiction(s), 4 conformant\n"
+}

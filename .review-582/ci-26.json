@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/check_vacuous_gate.py --check",
+  "exit_code": 0,
+  "seconds": 122.7,
+  "output": "vacuous-gate OK: 151 configs oracle-backed; 228 suites, 34 executable surfaces, 83 suite(s) awaiting provenance\n"
+}

@@ -1,0 +1,2 @@
+uv run python scripts/exercise_census.py --check
+exercise census up to date

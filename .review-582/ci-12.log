@@ -1,0 +1,2 @@
+uv run python scripts/de_certificate_census.py --check
+DE certificate census up to date

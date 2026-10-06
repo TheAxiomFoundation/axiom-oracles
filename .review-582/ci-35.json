@@ -1,0 +1,6 @@
+{
+  "command": "uv build",
+  "exit_code": -2,
+  "seconds": 416.1,
+  "output": "Building source distribution...\n"
+}

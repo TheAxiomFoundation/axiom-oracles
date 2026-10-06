@@ -1,0 +1,2 @@
+uv run python scripts/nz_executable_reproduction.py --check
+NZ executable receipt OK (hermetic full-response reduction): 19 requests, 22 independently reconstructed cells

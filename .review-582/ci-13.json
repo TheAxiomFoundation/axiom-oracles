@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/generate_chunk_indexes.py --check",
+  "exit_code": 0,
+  "seconds": 19.7,
+  "output": "OK co-snap-ecps: bound/full\nOK co-snap-qc: bound/cardinality\nOK nz-treasury-incomeexplorer: bound/full\n"
+}

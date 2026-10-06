@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/us_tariff_capture_integrity.py",
+  "exit_code": 0,
+  "seconds": 29.8,
+  "output": "tariff capture integrity: 40 committed capture files match every recorded receipt/manifest digest\n"
+}

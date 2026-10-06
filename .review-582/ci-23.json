@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/extract_grids.py --check",
+  "exit_code": 0,
+  "seconds": 68.6,
+  "output": "Grids up to date.\n"
+}

@@ -1,0 +1,3 @@
+uv run python scripts/de_axiom_legs.py --check
+Verified: comparisons/de-worker-dual-oracle/axiom-euromod.json
+Verified: comparisons/de-worker-dual-oracle/axiom-gettsim.json

@@ -1,0 +1,2 @@
+uv run python scripts/de_unified_comparison.py --check
+DE unified comparison record up to date

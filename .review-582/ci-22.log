@@ -1,0 +1,2 @@
+uv run scripts/emit_disposition_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps
+disposition-artifacts OK: 5 suites, 215 entries, exact YAML parity

@@ -1,0 +1,2 @@
+uv run python scripts/emit_case_artifacts.py --check de-worker-dual-oracle
+case-artifacts OK: 1 suites, 12 mismatch rows, 12 annotated, 0 silent classifications

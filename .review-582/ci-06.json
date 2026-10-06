@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/emit_disposition_artifacts.py --check de-worker-dual-oracle",
+  "exit_code": 0,
+  "seconds": 11.0,
+  "output": "disposition-artifacts OK: 1 suites, 3 entries, exact YAML parity\n"
+}

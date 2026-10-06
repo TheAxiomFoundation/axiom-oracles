@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/de_unified_comparison.py --check",
+  "exit_code": 0,
+  "seconds": 44.9,
+  "output": "DE unified comparison record up to date\n"
+}

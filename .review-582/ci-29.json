@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/closure_universe.py --check",
+  "exit_code": 0,
+  "seconds": 114.6,
+  "output": "closure universes OK: 3 roots, 1156 provisions, 290 pending, closed=false\n"
+}

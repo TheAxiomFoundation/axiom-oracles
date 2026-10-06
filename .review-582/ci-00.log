@@ -1,0 +1,2 @@
+uv run ruff check .
+All checks passed!

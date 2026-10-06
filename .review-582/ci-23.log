@@ -1,0 +1,2 @@
+uv run scripts/extract_grids.py --check
+Grids up to date.

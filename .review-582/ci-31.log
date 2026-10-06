@@ -1,0 +1,2 @@
+uv run scripts/conformance_scoreboard.py --check
+conformance scoreboard OK: 6 jurisdiction(s), 4 conformant

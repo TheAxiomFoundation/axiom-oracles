@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/validate_bridge_manifests.py --strict",
+  "exit_code": 0,
+  "seconds": 156.8,
+  "output": "FINDING co-snap-populace.yaml: bridged binding [4] covered_by entry 'rulespec-us us-co/regulations/10-ccr-2506-1/4.407.4.test.yam' is not verifiable from this repository (cross-repo evidence \u2014 audit debt)\nFINDING co-snap-populace.yaml: non-synthetic population family 'populace-us' has no revision + sha256 identity in dashboard/public/data/axiom-policyengine-co-snap-ecps.json; revision must be a non-empty string and sha256 a full lowercase digest\nFINDING co-snap-populace.yaml: 3 binding(s) audit=partial \u2014 audit debt\nFINDING co-snap-populace.yaml: completeness=unverified \u2014 input-catalog verification pending (engine main's metadata.input_catalog)\n6 manifest(s): 0 error(s), 4 finding(s)\nstrict enforcement: 5 strict-declared manifest(s), 0 enforced finding(s); 4 audit-debt finding(s) on non-strict manifests (visible, not enforced)\n"
+}

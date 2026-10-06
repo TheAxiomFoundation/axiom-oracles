@@ -1,0 +1,2 @@
+uv run python scripts/nz_closure.py --check
+NZ closure summary up to date

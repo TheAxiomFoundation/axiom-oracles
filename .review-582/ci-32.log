@@ -1,0 +1,2 @@
+uv run scripts/conformance_ratchet.py --check
+conformance ratchet OK: 6 jurisdiction(s), no invariant regressed

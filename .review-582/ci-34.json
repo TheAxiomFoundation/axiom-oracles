@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/conformance_burndown.py --check",
+  "exit_code": 0,
+  "seconds": 80.1,
+  "output": "conformance burn-down OK: 6 series, 401 point(s)\n"
+}

@@ -1,0 +1,2 @@
+uv run scripts/generate_conformance_compositions.py --all --check
+conformance compositions[be] OK: 23 covered suite(s)

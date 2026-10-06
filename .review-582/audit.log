@@ -1,0 +1,130 @@
+{
+  "reports": 139,
+  "heroOracles": 6,
+  "heroHouseholds": 992281,
+  "byKind": {
+    "household": {
+      "reports": 113,
+      "cases": 991956
+    },
+    "parameter": {
+      "reports": 25,
+      "cases": 325
+    },
+    "coverage": {
+      "reports": 1,
+      "cases": 0
+    }
+  }
+}
+{
+  "suite": "medicaid-thresholds-states",
+  "kind": "parameter",
+  "population": "rulespec-parameters",
+  "caseCount": 196,
+  "firstCase": {
+    "case_id": "medicaid-thresholds-states-ak-infant",
+    "left_engine": "axiom",
+    "left_errors": [],
+    "match_rate": 100,
+    "metadata": {
+      "axiom_rule": "alaska_children_medicaid_ages_0_to_1_effective_fpl_limit",
+      "axiom_source": "rulespec-us/us-ak/policies/cms/alaska-medicaid-chip-bhp-eligibility-levels.yaml",
+      "dataset": "encoded_parameter_oracle",
+      "period": "2026-01-01",
+      "policyengine_parameter": "gov.hhs.medicaid.eligibility.categories.infant.income_limit.AK",
+      "population": "rulespec-parameters",
+      "state": "AK"
+    },
+    "mismatches": [],
+    "right_engine": "policyengine",
+    "right_errors": []
+  },
+  "mismatches": 12,
+  "publicMismatchRows": 12,
+  "hasCaseIndex": false
+}
+{
+  "suite": "pell-parameters",
+  "kind": "parameter",
+  "population": "rulespec-parameters",
+  "caseCount": 2,
+  "firstCase": {
+    "case_id": "pell-parameters-maximum_pell_grant_award",
+    "left_engine": "axiom",
+    "left_errors": [],
+    "match_rate": 100,
+    "metadata": {
+      "axiom_formula": null,
+      "axiom_rule": "maximum_pell_grant_award",
+      "axiom_source": "rulespec-us origin/main: us/policies/ed/fsa/gen-26-01-pell-award-amounts/block-1.yaml",
+      "dataset": "encoded_parameter_oracle",
+      "period": "2026-01-01",
+      "policyengine_parameter": "gov.ed.pell_grant.amount.max",
+      "population": "rulespec-parameters"
+    },
+    "mismatches": [],
+    "right_engine": "policyengine",
+    "right_errors": []
+  },
+  "mismatches": 0,
+  "publicMismatchRows": 0,
+  "hasCaseIndex": false
+}
+{
+  "suite": "fiit-ecps",
+  "kind": "household",
+  "population": "enhanced-cps",
+  "caseCount": 87519,
+  "firstCase": {
+    "case_id": "ecps-tax_unit_154297",
+    "left_engine": "axiom",
+    "left_errors": [],
+    "match_rate": 0,
+    "metadata": {
+      "case_unit": "tax_unit",
+      "dataset": "populace-us@populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+      "dataset_identity": {
+        "built_with": "1.729.0",
+        "country": "us",
+        "path": "/Users/maxghenis/.cache/huggingface/hub/datasets--policyengine--populace-us/snapshots/d8f5cff65f36205a613cb144fd97db3087bbd82a/populace_us_2024.h5",
+        "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+        "sha256": "16be6338f9d0",
+        "source": "pinned"
+      },
+      "entity_id": "tax_unit_154297",
+      "population": "enhanced-cps",
+      "suite": "fiit-ecps"
+    },
+    "mismatches": [
+      {
+        "case_id": "ecps-tax_unit_154297",
+        "concept": "us:tax/federal-income-tax#ctc",
+        "description": "Child Tax Credit value — output=ctc_phaseout_amount",
+        "difference": 50,
+        "kind": "amount_difference",
+        "left": 13929800,
+        "parent": "us:tax/federal-income-tax#liability",
+        "right": 13929750,
+        "tolerance": 5
+      }
+    ],
+    "right_engine": "policyengine",
+    "right_errors": []
+  },
+  "mismatches": 18791,
+  "publicMismatchRows": 1000,
+  "hasCaseIndex": true
+}
+{
+  "suite": "ca-federal-schedule-tax-spsm",
+  "kind": "household",
+  "population": "spsd-synthetic-2022",
+  "caseCount": 327970,
+  "mismatches": 8702,
+  "publicMismatchRows": 50,
+  "hasCaseIndex": false
+}
+Concrete input: Medicaid threshold report alone renders 196 households; actual unit = rulespec-parameters.
+Non-Axiom pair excluded: true
+Coverage context: {"rules":{"total":34810,"grounded":27658,"grounded_pct":79.5,"manifest_backed":33931,"manifest_backed_pct":97.5,"on_oracle_surface":14030,"on_oracle_surface_pct":40.3,"on_executable_surface":13788,"on_executable_surface_pct":39.6},"surfaces":{"total":130,"executable":34,"executable_pct":26.2,"any_oracle":40,"any_oracle_pct":30.8,"coverage_only":90,"by_status":{"coverageOnly":90,"executable":34,"parameter":5,"partial":1}}}

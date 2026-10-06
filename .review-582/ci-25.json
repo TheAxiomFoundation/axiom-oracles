@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/generate_affected_map.py --check",
+  "exit_code": 0,
+  "seconds": 63.8,
+  "output": "affected_map OK: 187 suites, 190 suite-repo edges\n"
+}

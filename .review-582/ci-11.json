@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/de_executable.py --check",
+  "exit_code": 1,
+  "seconds": 194.1,
+  "output": "DE Kindergeld executable status drifted; regenerate with `python scripts/de_executable.py`\n"
+}

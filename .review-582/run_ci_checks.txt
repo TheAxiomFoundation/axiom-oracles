@@ -1,0 +1,72 @@
+"""Run the local, read-only CI checks and preserve exact command/output logs."""
+import concurrent.futures
+import json
+import os
+from pathlib import Path
+import subprocess
+import time
+
+root = Path(__file__).resolve().parents[1]
+scratch = root / '.review-582'
+env = os.environ.copy()
+env['UV_CACHE_DIR'] = str(scratch / 'uv-cache')
+env['UV_PYTHON_INSTALL_DIR'] = str(scratch / 'python')
+env['PYTHONDONTWRITEBYTECODE'] = '1'
+commands = [
+    'uv run ruff check .',
+    'uv run scripts/run_comparison.py --list',
+    'uv run scripts/check_rule_verification.py',
+    'uv run scripts/check_state_tax_populace_contract.py',
+    'uv run scripts/apply_dispositions.py --check',
+    'uv run python scripts/nz_incomeexplorer.py --check',
+    'uv run python scripts/emit_disposition_artifacts.py --check de-worker-dual-oracle',
+    'uv run python scripts/emit_case_artifacts.py --check de-worker-dual-oracle',
+    'uv run python scripts/de_axiom_legs.py --check',
+    'uv run python scripts/de_unified_comparison.py --check',
+    'uv run python scripts/de_closure.py --check',
+    'uv run python scripts/de_executable.py --check',
+    'uv run python scripts/de_certificate_census.py --check',
+    'uv run python scripts/generate_chunk_indexes.py --check',
+    'uv run python scripts/exercise_census.py --check',
+    'uv run python scripts/validate_bridge_manifests.py --strict',
+    'uv run python scripts/nz_executable_reproduction.py --check',
+    'uv run python scripts/nz_closure.py --check',
+    'uv run python scripts/nz_exercise_denominator.py --check',
+    'uv run python scripts/certify.py --check',
+    'uv run python scripts/us_tariff_capture_integrity.py',
+    'uv run scripts/emit_case_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps',
+    'uv run scripts/emit_disposition_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps',
+    'uv run scripts/extract_grids.py --check',
+    'uv run scripts/generate_boundary_cases.py --check',
+    'uv run scripts/generate_affected_map.py --check',
+    'uv run scripts/check_vacuous_gate.py --check',
+    'uv run scripts/generate_dashboard_overview.py --check',
+    'uv run scripts/generate_conformance_universe.py --all --check',
+    'uv run scripts/closure_universe.py --check',
+    'uv run scripts/generate_conformance_compositions.py --all --check',
+    'uv run scripts/conformance_scoreboard.py --check',
+    'uv run scripts/conformance_ratchet.py --check',
+    'uv run scripts/unexplained_ratchet.py --check',
+    'uv run scripts/conformance_burndown.py --check',
+    'uv build',
+]
+
+def run(item):
+    index, command = item
+    start = time.monotonic()
+    result = subprocess.run(command, cwd=root, env=env, shell=True,
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    record = dict(command=command, exit_code=result.returncode,
+                  seconds=round(time.monotonic() - start, 1), output=result.stdout)
+    (scratch / f'ci-{index:02}.log').write_text(command + '\n' + result.stdout)
+    (scratch / f'ci-{index:02}.json').write_text(json.dumps(record, indent=2))
+    print(json.dumps({k: v for k, v in record.items() if k != 'output'}), flush=True)
+    if result.returncode:
+        print(result.stdout[-3500:], flush=True)
+    return record
+
+with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+    records = list(pool.map(run, enumerate(commands)))
+(scratch / 'ci-results.json').write_text(json.dumps(records, indent=2))
+print(f"CHECKS: {sum(r['exit_code'] == 0 for r in records)} passed, "
+      f"{sum(r['exit_code'] != 0 for r in records)} failed", flush=True)

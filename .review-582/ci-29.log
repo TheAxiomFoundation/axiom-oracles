@@ -1,0 +1,2 @@
+uv run scripts/closure_universe.py --check
+closure universes OK: 3 roots, 1156 provisions, 290 pending, closed=false

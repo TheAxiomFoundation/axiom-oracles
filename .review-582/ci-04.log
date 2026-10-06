@@ -1,0 +1,4 @@
+uv run scripts/apply_dispositions.py --check
+Validated 102 dispositions files
+note: dispositions/be-worker-ssc.yaml entry 'dataset-uprating-bridge-artifact-resolved' is expired (source values changed or mismatch cleared)
+Dispositions are consistent with the committed dashboard data

@@ -1,0 +1,218 @@
+[
+  {
+    "command": "uv run ruff check .",
+    "exit_code": 0,
+    "seconds": 35.6,
+    "output": "All checks passed!\n"
+  },
+  {
+    "command": "uv run scripts/run_comparison.py --list",
+    "exit_code": 0,
+    "seconds": 87.1,
+    "output": "al-snap-ecps              Alabama SNAP -- Axiom vs PolicyEngine\nal-tanf-ecps              Alabama TANF -- Axiom vs PolicyEngine\naz-income-tax-liability   Arizona income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\naz-snap-ecps              Arizona SNAP -- Axiom vs PolicyEngine\naz-snap-qc                Arizona SNAP \u2014 Axiom vs USDA SNAP QC administrative data\naz-tanf-ecps              Arizona Cash Assistance -- Axiom vs PolicyEngine\nbe-article-51-forfait     Belgium Article 51 employee professional-expense forfait (tintace) \u2014 Axiom vs EUROMOD\nbe-capital-income-tax     Belgium separately-taxed capital-income tax (tinkt) \u2014 Axiom vs EUROMOD\nbe-elderly-income-support  Belgium income guarantee for elderly people (GRAPA/IGO) \u2014 Axiom vs EUROMOD\nbe-local-municipal-pit    Belgium local/municipal PIT additional tax (tinmu) \u2014 Axiom vs EUROMOD\nbe-marital-quotient       Belgium single-earner-couple marital-quotient PIT (tintb) \u2014 Axiom vs EUROMOD\nbe-pensioner-contributions  Belgium pensioner health/disability + solidarity contribution \u2014 Axiom vs EUROMOD\nbe-pensioner-pit          Belgium pensioner PIT \u2014 Axiom vs EUROMOD\nbe-regional-pit-surcharge  Belgium regional PIT additional tax (tinrg) \u2014 Axiom vs EUROMOD\nbe-replacement-income-pit  Belgium replacement-income PIT \u2014 Axiom vs EUROMOD\nbe-self-employment-pit    Belgium self-employment PIT \u2014 Axiom vs EUROMOD\nbe-study-allowance        Belgium study allowances (bed_s) \u2014 Axiom vs EUROMOD\nbe-work-bonus-credit      Belgium Article 289ter/1 low-wage work-bonus credit (tintcly) \u2014 Axiom vs EUROMOD\nca-federal-schedule-tax-spsm  Canada federal schedule tax \u2014 Axiom vs SPSD/M\nca-income-tax-liability   California income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nca-snap-ecps              California SNAP -- Axiom vs PolicyEngine\nca-snap-qc                California CalFresh \u2014 Axiom vs USDA SNAP QC administrative data\nca-tanf-ecps              California TANF -- Axiom vs PolicyEngine\nco-income-tax-liability   Colorado section 39-22-104 base tax \u2014 Axiom vs PolicyEngine and TAXSIM\nco-snap-ecps              Colorado SNAP \u2014 Axiom vs PolicyEngine\nco-snap-qc                Colorado SNAP \u2014 Axiom vs USDA SNAP QC administrative data\nco-state-income-tax-ecps  Colorado state income tax \u2014 Axiom vs PolicyEngine\nco-state-income-tax-taxsim  Colorado income tax -- Axiom vs TAXSIM\nco-tanf-ecps              Colorado TANF -- Axiom vs PolicyEngine\nco-tax-intersection-taxsim  Shared tax concepts \u2014 Axiom vs TAXSIM\ndc-income-tax-liability   District of Columbia income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nde-kindergeld-eligibility  Germany Kindergeld child eligibility \u2014 EUROMOD vs GETTSIM\nde-tanf-ecps              Delaware TANF -- Axiom vs PolicyEngine\nde-worker-dual-oracle-axiom-euromod  Germany workers \u2014 Axiom vs EUROMOD\nde-worker-dual-oracle-axiom-gettsim  Germany workers \u2014 Axiom vs GETTSIM\nde-worker-dual-oracle     Germany workers \u2014 EUROMOD vs GETTSIM\ndk-child-youth-benefit-2023-euromod  Denmark 2023 Child and Youth Benefit Supplement \u2014 Axiom vs EUROMOD\ndk-child-youth-benefit-couple-euromod  Denmark Couple Child and Youth Benefit \u2014 Axiom vs EUROMOD\ndk-child-youth-benefit-euromod  Denmark Child and Youth Benefit \u2014 Axiom vs EUROMOD\nfiit-ecps                 Federal income tax \u2014 Axiom vs PolicyEngine\nfiit-taxsim-ecps          Federal income tax \u2014 Axiom vs TAXSIM (national)\nfl-snap-ecps              Florida SNAP -- Axiom vs PolicyEngine\nga-income-tax-liability   Georgia section 48-7-20 tax before nonrefundable credits \u2014 Axiom vs PolicyEngine and TAXSIM\nga-snap-ecps              Georgia SNAP -- Axiom vs PolicyEngine\nga-snap-qc                Georgia SNAP \u2014 Axiom vs USDA SNAP QC administrative data\nga-tanf-ecps              Georgia TANF -- Axiom vs PolicyEngine\nhi-income-tax-liability   Hawaii income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nia-income-tax-liability   Iowa income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nid-income-tax-liability   Idaho income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nil-income-tax-liability   Illinois income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nin-income-tax-liability   Indiana income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nks-income-tax-liability   Kansas income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nks-tanf-ecps              Kansas TANF maximum benefit -- Axiom vs PolicyEngine\nky-income-tax-liability   Kentucky KRS 141.020 schedule before credits \u2014 Axiom vs PolicyEngine and TAXSIM\nla-income-tax-liability   Louisiana income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nma-income-tax-liability   Massachusetts income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nma-snap-ecps              Massachusetts SNAP \u2014 Axiom vs PolicyEngine\nmd-income-tax-liability   Maryland income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nmd-snap-qc                Maryland SNAP \u2014 Axiom vs USDA SNAP QC administrative data\nme-income-tax-liability   Maine income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nmedicaid-magi-co-ecps     Medicaid eligibility groups (CO) -- Axiom vs PolicyEngine\nmi-income-tax-liability   Michigan income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nmn-income-tax-liability   Minnesota income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nmn-tanf-ecps              Minnesota TANF -- Axiom vs PolicyEngine\nmo-income-tax-liability   Missouri income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nms-income-tax-liability   Mississippi section 27-7-5 Person schedule tax \u2014 Axiom vs PolicyEngine and TAXSIM\nmt-income-tax-liability   Montana income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nnc-income-tax-liability   North Carolina income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nnc-snap-ecps              North Carolina SNAP -- Axiom vs PolicyEngine\nnd-income-tax-liability   North Dakota income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nne-income-tax-liability   Nebraska income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nnj-income-tax-liability   New Jersey gross income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nnm-income-tax-liability   New Mexico income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nny-income-tax-liability   New York main income tax \u2014 Axiom vs PolicyEngine and TAXSIM\nny-snap-ecps              New York SNAP -- Axiom vs PolicyEngine\nny-snap-qc                New York SNAP \u2014 Axiom vs USDA SNAP QC administrative data\nny-tanf-ecps              New York TANF -- Axiom vs PolicyEngine\noh-income-tax-liability   Ohio income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nok-income-tax-liability   Oklahoma income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nor-income-tax-liability   Oregon income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nor-snap-ecps              Oregon SNAP -- Axiom vs PolicyEngine\npa-income-tax-liability   Pennsylvania income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nparameter-oracles         (22 parameter suites)\nri-income-tax-liability   Rhode Island income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nsc-income-tax-liability   South Carolina income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nsc-snap-ecps              South Carolina SNAP -- Axiom vs PolicyEngine\nssi-ecps                  SSI -- Axiom vs PolicyEngine\nstate-income-tax-populace  (non-registry config)\ntaxcalc-fiit-ecps         Federal income tax \u2014 Tax-Calculator vs PolicyEngine\ntn-snap-ecps              Tennessee SNAP -- Axiom vs PolicyEngine\ntx-snap-qc                Texas SNAP \u2014 Axiom vs USDA SNAP QC administrative data\nuk-attendance-allowance-pe  UK Attendance Allowance \u2014 Axiom vs PolicyEngine\nuk-benefit-cap-ukmod      UK benefit cap (Universal Credit reduction) \u2014 Axiom vs UKMOD\nuk-best-start-foods-ukmod  UK Best Start Foods \u2014 Axiom vs UKMOD\nuk-business-rates         UK Business Rates \u2014 Axiom vs PolicyEngine\nuk-capital-gains-tax      UK Capital Gains Tax \u2014 Axiom vs PolicyEngine\nuk-child-benefit-ukmod    UK Child Benefit \u2014 Axiom vs UKMOD\nuk-child-winter-heating-payment-ukmod  UK Child Winter Heating Payment \u2014 Axiom vs UKMOD\nuk-contribution-based-jsa-ukmod  UK contribution-based JSA \u2014 Axiom vs UKMOD\nuk-council-tax-reduction  UK Council Tax Reduction \u2014 Axiom vs PolicyEngine\nuk-employer-nic-ukmod     UK employer secondary NIC \u2014 Axiom vs UKMOD\nuk-fuel-duty              UK fuel duty \u2014 Axiom vs PolicyEngine\nuk-healthy-start-ukmod    UK Healthy Start \u2014 Axiom vs UKMOD\nuk-housing-benefit-ukmod  UK Housing Benefit \u2014 Axiom vs UKMOD\nuk-income-tax-dividend-ukmod  UK dividend income tax \u2014 Axiom vs UKMOD\nuk-income-tax-mixed-ukmod  UK mixed savings and dividend income tax \u2014 Axiom vs UKMOD\nuk-income-tax-savings-ukmod  UK savings income tax \u2014 Axiom vs UKMOD\nuk-income-tax-scottish-ukmod  Scottish income tax \u2014 Axiom vs UKMOD\nuk-lbtt-ltt               UK devolved property transaction taxes \u2014 Axiom vs PolicyEngine\nuk-maternity-allowance-ukmod  UK Maternity Allowance \u2014 Axiom vs UKMOD\nuk-pension-credit-ukmod   UK Pension Credit \u2014 Axiom vs UKMOD\nuk-personal-allowance-ukmod  UK personal allowance \u2014 Axiom vs UKMOD\nuk-scottish-carer-supplement-ukmod  UK Scottish Carer Supplement \u2014 Axiom vs UKMOD\nuk-scottish-child-payment-ukmod  UK Scottish Child Payment \u2014 Axiom vs UKMOD\nuk-self-employed-nic-ukmod  UK self-employed NIC \u2014 Axiom vs UKMOD\nuk-statutory-maternity-pay-ukmod  UK Statutory Maternity Pay \u2014 Axiom vs UKMOD\nuk-statutory-paternity-pay-ukmod  UK Statutory Paternity Pay \u2014 Axiom vs UKMOD\nuk-sure-start-maternity-grant-ukmod  UK Sure Start Maternity Grant \u2014 Axiom vs UKMOD\nuk-tax-benefits-efrs      UK tax and benefits \u2014 Axiom vs PolicyEngine\nuk-tax-free-childcare-pe  UK Tax-Free Childcare \u2014 Axiom vs PolicyEngine\nuk-tv-licence             UK TV licence \u2014 Axiom vs PolicyEngine\nuk-universal-credit-efrs  UK Universal Credit \u2014 Axiom vs PolicyEngine\nuk-universal-credit-ukmod  UK Universal Credit \u2014 Axiom vs UKMOD\nuk-vat                    UK VAT \u2014 Axiom vs PolicyEngine\nuk-winter-fuel-payment-pe  UK Winter Fuel Payment \u2014 Axiom vs PolicyEngine\nuk-winter-fuel-ukmod      UK Winter Fuel Payment \u2014 Axiom vs UKMOD\nuk-worker-nic-ukmod       UK worker employee NIC \u2014 Axiom vs UKMOD\nuk-worker-pit-ukmod       UK worker income tax \u2014 Axiom vs UKMOD\nus-aca-ptc-grid           Federal ACA premium tax credit \u2014 Axiom vs PolicyEngine\nus-additional-medicare-grid  Federal Additional Medicare Tax \u2014 Axiom vs PolicyEngine\nus-elderly-disabled-grid  Federal elderly or disabled credit \u2014 Axiom vs PolicyEngine\nus-itemized-taxable-income-deductions-grid  Federal itemized taxable-income deductions \u2014 Axiom vs PolicyEngine\nus-llc-grid               Federal Lifetime Learning Credit \u2014 Axiom vs PolicyEngine\nus-niit-grid              Federal net investment income tax \u2014 Axiom vs PolicyEngine\nus-qbid-grid              Federal qualified business income deduction \u2014 Axiom vs PolicyEngine\nus-salt-deduction-grid    Federal SALT deduction \u2014 Axiom vs PolicyEngine\nus-savers-grid            Federal saver\u2019s credit \u2014 Axiom vs PolicyEngine\nus-seca-grid              Federal self-employment tax \u2014 Axiom vs PolicyEngine\nus-snap-abawd-grid        SNAP ABAWD post-P.L. 119-21 boundaries \u2014 Axiom vs PolicyEngine\nus-tariff-panel           US tariff panel \u2014 Axiom vs Yale Budget Lab statutory panel\nus-tariff-schedule        US tariff full schedule \u2014 Axiom bulk path vs Yale statutory panel\nus-tariff                 US tariff duty \u2014 Axiom vs USITC statutory schedule\nut-income-tax-liability   Utah resident income tax before credits \u2014 Axiom vs PolicyEngine and TAXSIM\nut-snap-ecps              Utah SNAP -- Axiom vs PolicyEngine\nva-income-tax-liability   Virginia income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nvt-income-tax-liability   Vermont income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nwa-income-tax-liability   Washington capital-gains income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nwa-tanf-ecps              Washington TANF -- Axiom vs PolicyEngine\nwi-income-tax-liability   Wisconsin income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\nwv-income-tax-liability   West Virginia income tax liability \u2014 Axiom vs PolicyEngine and TAXSIM\n"
+  },
+  {
+    "command": "uv run scripts/check_rule_verification.py",
+    "exit_code": 0,
+    "seconds": 35.5,
+    "output": "rule_verification OK: 34810 rules, 79.5% grounded, 97.5% manifest-backed, 34/130 executable surfaces (commit 54d90a7251af)\n"
+  },
+  {
+    "command": "uv run scripts/check_state_tax_populace_contract.py",
+    "exit_code": 0,
+    "seconds": 59.2,
+    "output": "state-tax-populace contract OK: 43 jurisdictions, 32 ready, 11 blocked, 134 explicit inputs, 0 explicit relations\n"
+  },
+  {
+    "command": "uv run scripts/apply_dispositions.py --check",
+    "exit_code": 0,
+    "seconds": 1751.5,
+    "output": "Validated 102 dispositions files\nnote: dispositions/be-worker-ssc.yaml entry 'dataset-uprating-bridge-artifact-resolved' is expired (source values changed or mismatch cleared)\nDispositions are consistent with the committed dashboard data\n"
+  },
+  {
+    "command": "uv run python scripts/nz_incomeexplorer.py --check",
+    "exit_code": 0,
+    "seconds": 70.1,
+    "output": "NZ IncomeExplorer unified record and bound case evidence up to date\n"
+  },
+  {
+    "command": "uv run python scripts/emit_disposition_artifacts.py --check de-worker-dual-oracle",
+    "exit_code": 0,
+    "seconds": 11.0,
+    "output": "disposition-artifacts OK: 1 suites, 3 entries, exact YAML parity\n"
+  },
+  {
+    "command": "uv run python scripts/emit_case_artifacts.py --check de-worker-dual-oracle",
+    "exit_code": 0,
+    "seconds": 64.0,
+    "output": "case-artifacts OK: 1 suites, 12 mismatch rows, 12 annotated, 0 silent classifications\n"
+  },
+  {
+    "command": "uv run python scripts/de_axiom_legs.py --check",
+    "exit_code": 0,
+    "seconds": 69.3,
+    "output": "Verified: comparisons/de-worker-dual-oracle/axiom-euromod.json\nVerified: comparisons/de-worker-dual-oracle/axiom-gettsim.json\n"
+  },
+  {
+    "command": "uv run python scripts/de_unified_comparison.py --check",
+    "exit_code": 0,
+    "seconds": 44.9,
+    "output": "DE unified comparison record up to date\n"
+  },
+  {
+    "command": "uv run python scripts/de_closure.py --check",
+    "exit_code": 0,
+    "seconds": 11.6,
+    "output": "DE closure summary up to date\n"
+  },
+  {
+    "command": "uv run python scripts/de_executable.py --check",
+    "exit_code": 1,
+    "seconds": 194.1,
+    "output": "DE Kindergeld executable status drifted; regenerate with `python scripts/de_executable.py`\n"
+  },
+  {
+    "command": "uv run python scripts/de_certificate_census.py --check",
+    "exit_code": 0,
+    "seconds": 109.4,
+    "output": "DE certificate census up to date\n"
+  },
+  {
+    "command": "uv run python scripts/generate_chunk_indexes.py --check",
+    "exit_code": 0,
+    "seconds": 19.7,
+    "output": "OK co-snap-ecps: bound/full\nOK co-snap-qc: bound/cardinality\nOK nz-treasury-incomeexplorer: bound/full\n"
+  },
+  {
+    "command": "uv run python scripts/exercise_census.py --check",
+    "exit_code": 0,
+    "seconds": 498.0,
+    "output": "exercise census up to date\n"
+  },
+  {
+    "command": "uv run python scripts/validate_bridge_manifests.py --strict",
+    "exit_code": 0,
+    "seconds": 156.8,
+    "output": "FINDING co-snap-populace.yaml: bridged binding [4] covered_by entry 'rulespec-us us-co/regulations/10-ccr-2506-1/4.407.4.test.yam' is not verifiable from this repository (cross-repo evidence \u2014 audit debt)\nFINDING co-snap-populace.yaml: non-synthetic population family 'populace-us' has no revision + sha256 identity in dashboard/public/data/axiom-policyengine-co-snap-ecps.json; revision must be a non-empty string and sha256 a full lowercase digest\nFINDING co-snap-populace.yaml: 3 binding(s) audit=partial \u2014 audit debt\nFINDING co-snap-populace.yaml: completeness=unverified \u2014 input-catalog verification pending (engine main's metadata.input_catalog)\n6 manifest(s): 0 error(s), 4 finding(s)\nstrict enforcement: 5 strict-declared manifest(s), 0 enforced finding(s); 4 audit-debt finding(s) on non-strict manifests (visible, not enforced)\n"
+  },
+  {
+    "command": "uv run python scripts/nz_executable_reproduction.py --check",
+    "exit_code": 0,
+    "seconds": 91.8,
+    "output": "NZ executable receipt OK (hermetic full-response reduction): 19 requests, 22 independently reconstructed cells\n"
+  },
+  {
+    "command": "uv run python scripts/nz_closure.py --check",
+    "exit_code": 0,
+    "seconds": 54.9,
+    "output": "NZ closure summary up to date\n"
+  },
+  {
+    "command": "uv run python scripts/nz_exercise_denominator.py --check",
+    "exit_code": 0,
+    "seconds": 17.0,
+    "output": "NZ exercise denominator OK: 328 slots from the committed artifact (150 supplied, 178 never supplied), 883 committed evaluation traces\n"
+  },
+  {
+    "command": "uv run python scripts/certify.py --check",
+    "exit_code": 130,
+    "seconds": 1769.8,
+    "output": "Traceback (most recent call last):\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py\", line 2808, in <module>\n    raise SystemExit(main())\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py\", line 2756, in main\n    else build_all(verify_producers=args.verify_producers)\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py\", line 2715, in build_all\n    program: build_certificate(\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py\", line 2476, in build_certificate\n    closed_block = _closed_verdict(\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py\", line 1565, in _closed_verdict\n    produced = _producer_closed_verdict(\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py\", line 1223, in _producer_closed_verdict\n    producer.validate_artifact(document, repo_root=REPO_ROOT)\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py\", line 963, in validate_artifact\n    expected = build(load_source())\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py\", line 743, in build\n    denominator_ratchet = load_denominator_ratchet(\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py\", line 596, in load_denominator_ratchet\n    _validate_ancestor_monotonicity(programs, ancestors=ancestor_ratchets)\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py\", line 562, in _validate_ancestor_monotonicity\n    ancestors = _load_ancestor_denominator_ratchets()\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py\", line 509, in _load_ancestor_denominator_ratchets\n    strict_history = _git_history(\n  File \"/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py\", line 456, in _git_history\n    return subprocess.run(\n  File \"/Users/maxghenis/.local/share/uv/python/cpython-3.14.7+freethreaded-macos-aarch64-none/lib/python3.14t/subprocess.py\", line 557, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n  File \"/Users/maxghenis/.local/share/uv/python/cpython-3.14.7+freethreaded-macos-aarch64-none/lib/python3.14t/subprocess.py\", line 1221, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n  File \"/Users/maxghenis/.local/share/uv/python/cpython-3.14.7+freethreaded-macos-aarch64-none/lib/python3.14t/subprocess.py\", line 2153, in _communicate\n    ready = selector.select(timeout)\n  File \"/Users/maxghenis/.local/share/uv/python/cpython-3.14.7+freethreaded-macos-aarch64-none/lib/python3.14t/selectors.py\", line 398, in select\n    fd_event_list = self._selector.poll(timeout)\nKeyboardInterrupt\n"
+  },
+  {
+    "command": "uv run python scripts/us_tariff_capture_integrity.py",
+    "exit_code": 0,
+    "seconds": 29.8,
+    "output": "tariff capture integrity: 40 committed capture files match every recorded receipt/manifest digest\n"
+  },
+  {
+    "command": "uv run scripts/emit_case_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps",
+    "exit_code": 0,
+    "seconds": 78.5,
+    "output": "case-artifacts OK: 5 suites, 597 mismatch rows, 597 annotated, 0 silent classifications\n"
+  },
+  {
+    "command": "uv run scripts/emit_disposition_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps",
+    "exit_code": 0,
+    "seconds": 31.7,
+    "output": "disposition-artifacts OK: 5 suites, 215 entries, exact YAML parity\n"
+  },
+  {
+    "command": "uv run scripts/extract_grids.py --check",
+    "exit_code": 0,
+    "seconds": 68.6,
+    "output": "Grids up to date.\n"
+  },
+  {
+    "command": "uv run scripts/generate_boundary_cases.py --check",
+    "exit_code": 0,
+    "seconds": 299.9,
+    "output": "Suggestions up to date.\n"
+  },
+  {
+    "command": "uv run scripts/generate_affected_map.py --check",
+    "exit_code": 0,
+    "seconds": 63.8,
+    "output": "affected_map OK: 187 suites, 190 suite-repo edges\n"
+  },
+  {
+    "command": "uv run scripts/check_vacuous_gate.py --check",
+    "exit_code": 0,
+    "seconds": 122.7,
+    "output": "vacuous-gate OK: 151 configs oracle-backed; 228 suites, 34 executable surfaces, 83 suite(s) awaiting provenance\n"
+  },
+  {
+    "command": "uv run scripts/generate_dashboard_overview.py --check",
+    "exit_code": 0,
+    "seconds": 61.5,
+    "output": "overview OK: 229 reports bundled\n"
+  },
+  {
+    "command": "uv run scripts/generate_conformance_universe.py --all --check",
+    "exit_code": 0,
+    "seconds": 478.9,
+    "output": "conformance[uk] OK: 67 policies (21 in scope, 46 excluded) match UKMOD_PUBLIC_B2026.03/UK_2026\nconformance[be] OK: 43 policies (23 in scope, 20 excluded) match EUROMOD_J2.0/BE_2025\nconformance[dk] OK: 44 policies (22 in scope, 22 excluded) match EUROMOD_J2.0/DK_2025\nconformance[uk-pe] --check: checkout at /Users/maxghenis/PolicyEngine/policyengine-uk is policyengine-uk@2.88.52, not the pinned 2.89.2; committed universe left unverified this run (no-op clean \u2014 pin a matching checkout to enforce).\nconformance[us-pe] --check: checkout at /Users/maxghenis/PolicyEngine/policyengine-us is policyengine-us@1.822.5, not the pinned 1.767.3; committed universe left unverified this run (no-op clean \u2014 pin a matching checkout to enforce).\nconformance[us-tariff-yale] OK: 14 policies (10 in scope, 4 excluded) match tariff-rate-tracker_c4307e514196618afcbf88cf7fd33746417eeabf/statutory_panel\n"
+  },
+  {
+    "command": "uv run scripts/closure_universe.py --check",
+    "exit_code": 0,
+    "seconds": 114.6,
+    "output": "closure universes OK: 3 roots, 1156 provisions, 290 pending, closed=false\n"
+  },
+  {
+    "command": "uv run scripts/generate_conformance_compositions.py --all --check",
+    "exit_code": 0,
+    "seconds": 44.1,
+    "output": "conformance compositions[be] OK: 23 covered suite(s)\n"
+  },
+  {
+    "command": "uv run scripts/conformance_scoreboard.py --check",
+    "exit_code": 0,
+    "seconds": 44.0,
+    "output": "conformance scoreboard OK: 6 jurisdiction(s), 4 conformant\n"
+  },
+  {
+    "command": "uv run scripts/conformance_ratchet.py --check",
+    "exit_code": 0,
+    "seconds": 36.5,
+    "output": "conformance ratchet OK: 6 jurisdiction(s), no invariant regressed\n"
+  },
+  {
+    "command": "uv run scripts/unexplained_ratchet.py --check",
+    "exit_code": 0,
+    "seconds": 38.8,
+    "output": "unexplained ratchet OK: 222 suites gated, 0 unexplained within pinned ceilings\n"
+  },
+  {
+    "command": "uv run scripts/conformance_burndown.py --check",
+    "exit_code": 0,
+    "seconds": 80.1,
+    "output": "conformance burn-down OK: 6 series, 401 point(s)\n"
+  },
+  {
+    "command": "uv build",
+    "exit_code": -2,
+    "seconds": 416.1,
+    "output": "Building source distribution...\n"
+  }
+]

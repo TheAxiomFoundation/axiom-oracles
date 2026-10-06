@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/de_axiom_legs.py --check",
+  "exit_code": 0,
+  "seconds": 69.3,
+  "output": "Verified: comparisons/de-worker-dual-oracle/axiom-euromod.json\nVerified: comparisons/de-worker-dual-oracle/axiom-gettsim.json\n"
+}

@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/generate_conformance_compositions.py --all --check",
+  "exit_code": 0,
+  "seconds": 44.1,
+  "output": "conformance compositions[be] OK: 23 covered suite(s)\n"
+}

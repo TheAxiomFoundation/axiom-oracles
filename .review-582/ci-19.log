@@ -1,0 +1,35 @@
+uv run python scripts/certify.py --check
+Traceback (most recent call last):
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py", line 2808, in <module>
+    raise SystemExit(main())
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py", line 2756, in main
+    else build_all(verify_producers=args.verify_producers)
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py", line 2715, in build_all
+    program: build_certificate(
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py", line 2476, in build_certificate
+    closed_block = _closed_verdict(
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py", line 1565, in _closed_verdict
+    produced = _producer_closed_verdict(
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/certify.py", line 1223, in _producer_closed_verdict
+    producer.validate_artifact(document, repo_root=REPO_ROOT)
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py", line 963, in validate_artifact
+    expected = build(load_source())
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py", line 743, in build
+    denominator_ratchet = load_denominator_ratchet(
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py", line 596, in load_denominator_ratchet
+    _validate_ancestor_monotonicity(programs, ancestors=ancestor_ratchets)
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py", line 562, in _validate_ancestor_monotonicity
+    ancestors = _load_ancestor_denominator_ratchets()
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py", line 509, in _load_ancestor_denominator_ratchets
+    strict_history = _git_history(
+  File "/Users/maxghenis/TheAxiomFoundation/_worktrees/hub-review-axiom-oracles-582/scripts/nz_closure.py", line 456, in _git_history
+    return subprocess.run(
+  File "/Users/maxghenis/.local/share/uv/python/cpython-3.14.7+freethreaded-macos-aarch64-none/lib/python3.14t/subprocess.py", line 557, in run
+    stdout, stderr = process.communicate(input, timeout=timeout)
+  File "/Users/maxghenis/.local/share/uv/python/cpython-3.14.7+freethreaded-macos-aarch64-none/lib/python3.14t/subprocess.py", line 1221, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+  File "/Users/maxghenis/.local/share/uv/python/cpython-3.14.7+freethreaded-macos-aarch64-none/lib/python3.14t/subprocess.py", line 2153, in _communicate
+    ready = selector.select(timeout)
+  File "/Users/maxghenis/.local/share/uv/python/cpython-3.14.7+freethreaded-macos-aarch64-none/lib/python3.14t/selectors.py", line 398, in select
+    fd_event_list = self._selector.poll(timeout)
+KeyboardInterrupt

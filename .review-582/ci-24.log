@@ -1,0 +1,2 @@
+uv run scripts/generate_boundary_cases.py --check
+Suggestions up to date.

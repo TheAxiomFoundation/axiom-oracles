@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/generate_boundary_cases.py --check",
+  "exit_code": 0,
+  "seconds": 299.9,
+  "output": "Suggestions up to date.\n"
+}

@@ -1,0 +1,6 @@
+{
+  "command": "uv run scripts/emit_case_artifacts.py --check al-snap-ecps ma-snap-ecps nc-snap-ecps sc-snap-ecps tn-snap-ecps",
+  "exit_code": 0,
+  "seconds": 78.5,
+  "output": "case-artifacts OK: 5 suites, 597 mismatch rows, 597 annotated, 0 silent classifications\n"
+}

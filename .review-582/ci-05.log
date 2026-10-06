@@ -1,0 +1,2 @@
+uv run python scripts/nz_incomeexplorer.py --check
+NZ IncomeExplorer unified record and bound case evidence up to date

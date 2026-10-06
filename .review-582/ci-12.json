@@ -1,0 +1,6 @@
+{
+  "command": "uv run python scripts/de_certificate_census.py --check",
+  "exit_code": 0,
+  "seconds": 109.4,
+  "output": "DE certificate census up to date\n"
+}

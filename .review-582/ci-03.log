@@ -1,0 +1,2 @@
+uv run scripts/check_state_tax_populace_contract.py
+state-tax-populace contract OK: 43 jurisdictions, 32 ready, 11 blocked, 134 explicit inputs, 0 explicit relations
