@@ -39,7 +39,8 @@ import {
  *
  * The oracle is the first-class object: trust comes from WHO checked the
  * work. The page is one argument, top to bottom:
- *   1. Thesis — every encoding is checked against independent engines.
+ *   1. Thesis — encodings are checked against other engines and datasets
+ *      where a comparison exists.
  *   2. The roster — one card per oracle: identity, scope, verdict, and
  *      validation state. A card opens into the oracle's full record, where
  *      every discrepancy class ends in an action — a filed issue, a
@@ -315,7 +316,7 @@ function OracleCard({ oracle, selected, onSelect }) {
       aria-expanded={selected}
     >
       <div className="mono v2-card-eyebrow">
-        {id.org || "Independent engine"}
+        {id.org || "Oracle"}
         <span className="v2-card-regions">
           {[...oracle.regions].map((r) => (
             <span key={r} className="mono v2-region">
@@ -328,9 +329,9 @@ function OracleCard({ oracle, selected, onSelect }) {
       <p className="v2-card-what">{id.what}</p>
       <div
         className="v2-card-stats"
-        title={`${oracle.checks.toLocaleString()} individual checks across these households`}
+        title={`${oracle.checks.toLocaleString()} individual checks across these comparison cases`}
       >
-        <Stat value={oracle.households.toLocaleString()} label="households" />
+        <Stat value={oracle.households.toLocaleString()} label="comparison cases" />
         <Stat value={oracle.programs.size} label="programs" />
       </div>
       <div className="mono v2-card-foot">
@@ -375,10 +376,10 @@ function ProgRow({ p, onOpenProgram }) {
       </span>
       <span
         className="mono v2-prog-checks"
-        title={`${p.households.toLocaleString()} households · ${p.total.toLocaleString()} checks`}
+        title={`${p.households.toLocaleString()} comparison cases · ${p.total.toLocaleString()} checks`}
       >
         {p.households.toLocaleString()}
-        <span className="v2-prog-unit"> households</span>
+        <span className="v2-prog-unit"> comparison cases</span>
       </span>
       <span className="mono v2-prog-rate">
         <span className="v2-prog-rate-part">
@@ -885,7 +886,7 @@ export default function OraclesV2() {
                 <span className="mono pp-where">
                   {" "}
                   · {(ORACLE_IDENTITY[routeOracle.id] || {}).org ||
-                    "independent engine"}
+                    "oracle"}
                 </span>
               </h1>
               <p className="v2-oracle-what">
@@ -945,10 +946,9 @@ export default function OraclesV2() {
                 className="v2-thesis"
                 title={`${compactCount(totals.checks)} concept-level checks behind these figures${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
               >
-                Axiom never grades its own work —{" "}
-                <em>{compactCount(totals.households)}</em> households checked
-                against <em>{oracles.length}</em> independent engines, every
-                disagreement tracked in the open.
+                <em>{compactCount(totals.households)}</em> comparison cases checked
+                against <em>{oracles.length}</em> other engines and datasets,
+                with disagreements tracked in the open.
               </h1>
             </section>
 
