@@ -1,0 +1,811 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 12,
+      "comparison_weight": 12,
+      "components": [],
+      "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+      "description": "Uganda salaried-employee Local Service Tax (Act 8 of 2008, regulation 3 graduated table)",
+      "left_weighted_sum": 565000,
+      "match_rate": 100,
+      "match_weight": 12,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 565000,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 12,
+  "cases": [
+    {
+      "case_id": "ug-lst-below-100k-no-tax",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 80000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 77103.78117457764,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 80000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band1-150k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 5000.0,
+          "right": 5000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 150000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 144569.5897023331,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 150000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band2-250k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 10000.0,
+          "right": 10000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 250000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 240949.31617055513,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 250000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band3-350k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 20000.0,
+          "right": 20000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 350000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 337329.0426387772,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 350000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band4-450k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 30000.0,
+          "right": 30000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 450000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 433708.7691069993,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 450000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band5-550k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 40000.0,
+          "right": 40000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 550000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 530088.4955752214,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 550000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band6-610k-just-above-edge",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 60000.0,
+          "right": 60000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 610000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 587916.3314561546,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 610000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band6-650k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 60000.0,
+          "right": 60000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 650000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 626468.2220434434,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 650000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band7-750k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 70000.0,
+          "right": 70000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 750000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 722847.9485116655,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 750000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band8-850k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 80000.0,
+          "right": 80000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 850000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 819227.6749798874,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 850000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-band9-950k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 90000.0,
+          "right": 90000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 950000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 915607.4014481095,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 950000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-lst-top-band-1500k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+          "left": 99999.99999999999,
+          "right": 100000
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#input.monthly_take_home_income": 1500000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "loc01": 1,
+            "yem": 1445695.897023331,
+            "yem00": 0.0
+          }
+        ],
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "monthly_gross_employment_income": 1500000.0,
+        "scenario": "formal-employee-local-service-tax",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Uganda salaried-employee Local Service Tax (Act 8 of 2008, regulation 3 graduated table)",
+      "id": "ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "UG"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:15:43Z",
+    "generated_by": "scripts/run_comparison.py::ug-lst",
+    "oracle": {
+      "euromod_country": "UG",
+      "euromod_dataset": "ug_2024_a1",
+      "euromod_system": "UG_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-ug",
+        "sha": "c0b6597047472a1277a0eeb4b4fe7837079f68b3"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "ug-lst",
+  "summary": {
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 12,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 12,
+      "match_rate": 100,
+      "match_weight": 12,
+      "mismatch_weight": 0
+    }
+  }
+}

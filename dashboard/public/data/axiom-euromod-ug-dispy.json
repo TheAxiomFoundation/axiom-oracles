@@ -1,0 +1,845 @@
+{
+  "aggregates": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "comparison_count": 10,
+      "comparison_weight": 10,
+      "components": [],
+      "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+      "description": "Uganda composed single-employee disposable income (gross + benefits - income tax - employee NSSF share)",
+      "left_weighted_sum": 205050496.04,
+      "match_rate": 100,
+      "match_weight": 10,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 205050494.14,
+      "weighted_difference": 1.9,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 10,
+  "cases": [
+    {
+      "case_id": "ug-dispy-2m-nil-interior",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 1899999.9999999998,
+          "right": 1900000.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 2000000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 2000000.0,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 160632.87744703676,
+            "yem00": 160632.87744703676
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 2000000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 2000000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            2000000.0
+          ],
+          "yearly_earned_income_total": 2000000.0
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 2000000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-dispy-2820000-nil-band-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 2679000.0,
+          "right": 2679000.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 2820000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 2820000.0,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 226492.35720032183,
+            "yem00": 226492.35720032183
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 2820000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 2820000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            2820000.0
+          ],
+          "yearly_earned_income_total": 2820000.0
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 2820000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-dispy-3420000-10pct-interior",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 3189000.0999999996,
+          "right": 3189000.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 3420000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 3420000.0,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 274682.22043443285,
+            "yem00": 274682.22043443285
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 3420000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 3420000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            3420000.0
+          ],
+          "yearly_earned_income_total": 3420000.0
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 3420000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-dispy-4020000-10pct-band-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 3699000.0999999996,
+          "right": 3699000.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 4020000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 4020000.0,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 322872.0836685439,
+            "yem00": 322872.0836685439
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 4020000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 4020000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            4020000.0
+          ],
+          "yearly_earned_income_total": 4020000.0
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 4020000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-dispy-4500000-20pct-interior",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 4059000.1999999993,
+          "right": 4058999.999999999
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 4499999.999999999,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 4499999.999999999,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 361423.97425583267,
+            "yem00": 361423.97425583267
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 4499999.999999999,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 4499999.999999999
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            4500000.0
+          ],
+          "yearly_earned_income_total": 4500000.0
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 4500000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-dispy-4920000-20pct-band-top",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 4374000.2,
+          "right": 4374000.0
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 4920000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 4920000.0,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 395156.87851971044,
+            "yem00": 395156.87851971044
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 4920000.0,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 4920000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            4920000.0
+          ],
+          "yearly_earned_income_total": 4920000.0
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 4920000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-dispy-6m-30pct-interior",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 5076000.300000001,
+          "right": 5076000.000000001
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 6000000.000000001,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 6000000.000000001,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 481898.6323411103,
+            "yem00": 481898.6323411103
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 6000000.000000001,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 6000000.000000001
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            6000000.0
+          ],
+          "yearly_earned_income_total": 6000000.0
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 6000000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-dispy-probe-income-30pct",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 5222494.4399999995,
+          "right": 5222494.14
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 6225375.6,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 6225375.6,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 499999.99790828646,
+            "yem00": 499999.99790828646
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 6225375.6,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 6225375.6
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            6225375.6
+          ],
+          "yearly_earned_income_total": 6225375.6
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 6225375.6
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-dispy-120m-additional-rate-boundary",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 79176000.29999998,
+          "right": 79175999.99999999
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 119999999.99999997,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 119999999.99999997,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 9637972.646822205,
+            "yem00": 9637972.646822205
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 119999999.99999997,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 119999999.99999997
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            120000000.0
+          ],
+          "yearly_earned_income_total": 120000000.0
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 120000000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-dispy-150m-additional-rate-interior",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 95676000.40000002,
+          "right": 95676000.00000001
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 6,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 150000000.00000003,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 150000000.00000003,
+          "ug:statutes/composed/pilot-worker-disposable-income-pipeline#input.benefits_received": 0.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 12047465.808527758,
+            "yem00": 12047465.808527758
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income",
+            "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#input.chargeable_income": 150000000.00000003,
+          "ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#input.total_wages": 150000000.00000003
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            150000000.0
+          ],
+          "yearly_earned_income_total": 150000000.0
+        },
+        "locale": "UG",
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "yearly_earned_income": 150000000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "components": [],
+      "description": "Uganda composed single-employee disposable income (gross + benefits - income tax - employee NSSF share)",
+      "id": "ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "UG"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:16:09Z",
+    "generated_by": "scripts/run_comparison.py::ug-dispy",
+    "oracle": {
+      "euromod_country": "UG",
+      "euromod_dataset": "ug_2024_a1",
+      "euromod_system": "UG_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-ug",
+        "sha": "c0b6597047472a1277a0eeb4b4fe7837079f68b3"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "ug-dispy",
+  "summary": {
+    "comparison_count": 10,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 10,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 10,
+      "match_rate": 100,
+      "match_weight": 10,
+      "mismatch_weight": 0
+    }
+  }
+}

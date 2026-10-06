@@ -468,6 +468,60 @@
       "source": "comparisons/dk-child-youth-benefit-couple-euromod.yaml"
     },
     {
+      "suite": "et-business-mat",
+      "name": null,
+      "report": "axiom-euromod-et-business-mat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-business-mat.yaml"
+    },
+    {
+      "suite": "et-dispy",
+      "name": null,
+      "report": "axiom-euromod-et-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-dispy.yaml"
+    },
+    {
+      "suite": "et-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-et-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "et-pension-contributions",
+      "name": null,
+      "report": "axiom-euromod-et-pension-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-pension-contributions.yaml"
+    },
+    {
+      "suite": "et-presumptive",
+      "name": null,
+      "report": "axiom-euromod-et-presumptive.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-presumptive.yaml"
+    },
+    {
+      "suite": "et-vat",
+      "name": null,
+      "report": "axiom-euromod-et-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-vat.yaml"
+    },
+    {
       "suite": "fiit-ecps",
       "name": null,
       "report": "axiom-policyengine-fiit-ecps.json",
@@ -568,6 +622,87 @@
         "TheAxiomFoundation/rulespec-us-ga"
       ],
       "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
+      "suite": "gh-capital-income",
+      "name": null,
+      "report": "axiom-euromod-gh-capital-income.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-capital-income.yaml"
+    },
+    {
+      "suite": "gh-dispy",
+      "name": null,
+      "report": "axiom-euromod-gh-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-dispy.yaml"
+    },
+    {
+      "suite": "gh-excise",
+      "name": null,
+      "report": "axiom-euromod-gh-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-excise.yaml"
+    },
+    {
+      "suite": "gh-income-tax-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-gh-income-tax-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-income-tax-rate-schedule.yaml"
+    },
+    {
+      "suite": "gh-personal-reliefs",
+      "name": null,
+      "report": "axiom-euromod-gh-personal-reliefs.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-personal-reliefs.yaml"
+    },
+    {
+      "suite": "gh-presumptive-turnover",
+      "name": null,
+      "report": "axiom-euromod-gh-presumptive-turnover.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-presumptive-turnover.yaml"
+    },
+    {
+      "suite": "gh-ssnit-contributions",
+      "name": null,
+      "report": "axiom-euromod-gh-ssnit-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-ssnit-contributions.yaml"
+    },
+    {
+      "suite": "gh-transfers",
+      "name": null,
+      "report": "axiom-euromod-gh-transfers.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-transfers.yaml"
+    },
+    {
+      "suite": "gh-vat-levies",
+      "name": null,
+      "report": "axiom-euromod-gh-vat-levies.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-vat-levies.yaml"
     },
     {
       "suite": "hi-income-tax-liability",
@@ -1069,6 +1204,78 @@
       "source": "comparisons/ri-income-tax-liability.yaml"
     },
     {
+      "suite": "rw-cbhi-tiers",
+      "name": null,
+      "report": "axiom-euromod-rw-cbhi-tiers.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-cbhi-tiers.yaml"
+    },
+    {
+      "suite": "rw-contributions",
+      "name": null,
+      "report": "axiom-euromod-rw-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-contributions.yaml"
+    },
+    {
+      "suite": "rw-dispy",
+      "name": null,
+      "report": "axiom-euromod-rw-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-dispy.yaml"
+    },
+    {
+      "suite": "rw-excise",
+      "name": null,
+      "report": "axiom-euromod-rw-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-excise.yaml"
+    },
+    {
+      "suite": "rw-lump-sum",
+      "name": null,
+      "report": "axiom-euromod-rw-lump-sum.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-lump-sum.yaml"
+    },
+    {
+      "suite": "rw-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-rw-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "rw-rental",
+      "name": null,
+      "report": "axiom-euromod-rw-rental.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-rental.yaml"
+    },
+    {
+      "suite": "rw-vat",
+      "name": null,
+      "report": "axiom-euromod-rw-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-vat.yaml"
+    },
+    {
       "suite": "sc-income-tax-liability",
       "name": null,
       "report": "axiom-policyengine-taxsim-sc-income-tax-liability.json",
@@ -1146,6 +1353,87 @@
         "TheAxiomFoundation/rulespec-us-tx"
       ],
       "source": "comparisons/parameter-oracles.yaml"
+    },
+    {
+      "suite": "ug-dispy",
+      "name": null,
+      "report": "axiom-euromod-ug-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-dispy.yaml"
+    },
+    {
+      "suite": "ug-fuel-excise",
+      "name": null,
+      "report": "axiom-euromod-ug-fuel-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-fuel-excise.yaml"
+    },
+    {
+      "suite": "ug-lst",
+      "name": null,
+      "report": "axiom-euromod-ug-lst.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-lst.yaml"
+    },
+    {
+      "suite": "ug-nssf-contributions",
+      "name": null,
+      "report": "axiom-euromod-ug-nssf-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-nssf-contributions.yaml"
+    },
+    {
+      "suite": "ug-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-ug-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "ug-presumptive",
+      "name": null,
+      "report": "axiom-euromod-ug-presumptive.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-presumptive.yaml"
+    },
+    {
+      "suite": "ug-rental",
+      "name": null,
+      "report": "axiom-euromod-ug-rental.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-rental.yaml"
+    },
+    {
+      "suite": "ug-scg",
+      "name": null,
+      "report": "axiom-euromod-ug-scg.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-scg.yaml"
+    },
+    {
+      "suite": "ug-vat",
+      "name": null,
+      "report": "axiom-euromod-ug-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-vat.yaml"
     },
     {
       "suite": "uk-attendance-allowance-pe",
@@ -1725,6 +2013,78 @@
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/wv-income-tax-liability.yaml"
+    },
+    {
+      "suite": "zm-dispy",
+      "name": null,
+      "report": "axiom-euromod-zm-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-dispy.yaml"
+    },
+    {
+      "suite": "zm-excise-ad-valorem",
+      "name": null,
+      "report": "axiom-euromod-zm-excise-ad-valorem.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-excise-ad-valorem.yaml"
+    },
+    {
+      "suite": "zm-napsa-contributions",
+      "name": null,
+      "report": "axiom-euromod-zm-napsa-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-napsa-contributions.yaml"
+    },
+    {
+      "suite": "zm-nhima-contributions",
+      "name": null,
+      "report": "axiom-euromod-zm-nhima-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-nhima-contributions.yaml"
+    },
+    {
+      "suite": "zm-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-zm-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "zm-sct",
+      "name": null,
+      "report": "axiom-euromod-zm-sct.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-sct.yaml"
+    },
+    {
+      "suite": "zm-turnover",
+      "name": null,
+      "report": "axiom-euromod-zm-turnover.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-turnover.yaml"
+    },
+    {
+      "suite": "zm-vat",
+      "name": null,
+      "report": "axiom-euromod-zm-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-vat.yaml"
     }
   ]
 }

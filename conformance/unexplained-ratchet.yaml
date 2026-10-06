@@ -150,6 +150,18 @@ ratchets:
   unexplained_max: 0
 - suite: dk-child-youth-benefit-couple
   unexplained_max: 0
+- suite: et-business-mat
+  unexplained_max: 0
+- suite: et-dispy
+  unexplained_max: 0
+- suite: et-paye-rate-schedule
+  unexplained_max: 0
+- suite: et-pension-contributions
+  unexplained_max: 0
+- suite: et-presumptive
+  unexplained_max: 0
+- suite: et-vat
+  unexplained_max: 0
 - suite: fiit-ecps
   unexplained_max: 0
 - suite: fiit-taxsim-ecps
@@ -171,6 +183,24 @@ ratchets:
 - suite: ga-tanf-ecps
   unexplained_max: 0
 - suite: ga-tanf-standards
+  unexplained_max: 0
+- suite: gh-capital-income
+  unexplained_max: 0
+- suite: gh-dispy
+  unexplained_max: 0
+- suite: gh-excise
+  unexplained_max: 0
+- suite: gh-income-tax-rate-schedule
+  unexplained_max: 0
+- suite: gh-personal-reliefs
+  unexplained_max: 0
+- suite: gh-presumptive-turnover
+  unexplained_max: 0
+- suite: gh-ssnit-contributions
+  unexplained_max: 0
+- suite: gh-transfers
+  unexplained_max: 0
+- suite: gh-vat-levies
   unexplained_max: 0
 - suite: hi-income-tax-liability
   unexplained_max: 0
@@ -304,6 +334,22 @@ ratchets:
   unexplained_max: 0
 - suite: ri-income-tax-liability
   unexplained_max: 0
+- suite: rw-cbhi-tiers
+  unexplained_max: 0
+- suite: rw-contributions
+  unexplained_max: 0
+- suite: rw-dispy
+  unexplained_max: 0
+- suite: rw-excise
+  unexplained_max: 0
+- suite: rw-lump-sum
+  unexplained_max: 0
+- suite: rw-paye-rate-schedule
+  unexplained_max: 0
+- suite: rw-rental
+  unexplained_max: 0
+- suite: rw-vat
+  unexplained_max: 0
 - suite: sc-income-tax-liability
   unexplained_max: 0
 - suite: sc-income-tax-populace
@@ -321,6 +367,24 @@ ratchets:
 - suite: tx-snap-qc
   unexplained_max: 0
 - suite: tx-tanf-parameters
+  unexplained_max: 0
+- suite: ug-dispy
+  unexplained_max: 0
+- suite: ug-fuel-excise
+  unexplained_max: 0
+- suite: ug-lst
+  unexplained_max: 0
+- suite: ug-nssf-contributions
+  unexplained_max: 0
+- suite: ug-paye-rate-schedule
+  unexplained_max: 0
+- suite: ug-presumptive
+  unexplained_max: 0
+- suite: ug-rental
+  unexplained_max: 0
+- suite: ug-scg
+  unexplained_max: 0
+- suite: ug-vat
   unexplained_max: 0
 - suite: uk-attendance-allowance-pe
   unexplained_max: 0
@@ -447,4 +511,20 @@ ratchets:
 - suite: wv-income-tax-liability
   unexplained_max: 0
 - suite: wv-income-tax-populace
+  unexplained_max: 0
+- suite: zm-dispy
+  unexplained_max: 0
+- suite: zm-excise-ad-valorem
+  unexplained_max: 0
+- suite: zm-napsa-contributions
+  unexplained_max: 0
+- suite: zm-nhima-contributions
+  unexplained_max: 0
+- suite: zm-paye-rate-schedule
+  unexplained_max: 0
+- suite: zm-sct
+  unexplained_max: 0
+- suite: zm-turnover
+  unexplained_max: 0
+- suite: zm-vat
   unexplained_max: 0

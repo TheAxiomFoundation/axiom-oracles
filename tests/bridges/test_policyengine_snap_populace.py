@@ -166,6 +166,56 @@ def test_california_projectors_use_california_snap_input_surface():
     assert snap_populace.medical_expenses_for_deduction(150) == 185
 
 
+def test_arizona_projection_uses_composed_financial_outputs_not_pe_values():
+    config = JURISDICTION_CONFIGS["us-az"]
+    values = {
+        "snap_unit_size": [1],
+        "is_snap_eligible": [True],
+        "snap_max_allotment": [298],
+        "snap_min_allotment": [24],
+        "snap_dependent_care_deduction": [0],
+    }
+
+    projected = project_jurisdiction_household_inputs(config, values, 0)
+
+    assert projected["na_budgetary_unit_is_eligible"] is True
+    assert projected["az_utility_allowance_participant_count"] == 1
+    assert "na_net_income" not in projected
+    assert "snap_excess_shelter_deduction_for_net_income" not in projected
+
+
+def test_arizona_raw_utility_projection_uses_arizona_input_surface():
+    config = JURISDICTION_CONFIGS["us-az"]
+    values = {
+        "heating_cooling_expense": [20],
+        "pre_subsidy_electricity_expense": [0],
+        "water_expense": [0],
+        "sewage_expense": [0],
+        "trash_expense": [0],
+        "gas_expense": [0],
+        "phone_expense": [0],
+        "has_usda_elderly_disabled": [False],
+    }
+
+    projected = project_raw_utility_inputs(config, values, 0, "")
+
+    assert projected["budgetary_unit_billed_separately_for_utility_expenses"] is True
+    assert (
+        projected[
+            "budgetary_unit_obligated_to_pay_heating_or_cooling_expense_separately_from_rent_or_mortgage_on_regular_basis"
+        ]
+        is True
+    )
+    assert projected["budgetary_unit_received_liheap_payment"] is False
+    assert "household_pays_electricity_utility_cost" not in projected
+    assert (
+        project_utility_allowance_type(config, "TUA", "")[
+            "budgetary_unit_obligated_to_pay_only_telephone_expense"
+        ]
+        is True
+    )
+
+
 def test_run_axiom_cases_uses_configured_california_member_entity(
     monkeypatch, tmp_path
 ):

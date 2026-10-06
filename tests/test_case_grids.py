@@ -114,6 +114,10 @@ def _suite_jurisdiction(suite_name: str) -> str:
     locales = {case.locale for case in cases}
     if locales == {"BE"}:
         return "be"
+    if locales == {"GH"}:
+        return "gh"
+    if locales == {"UG"}:
+        return "ug"
     if locales == {"CA-ON"}:
         return "ca"
     if locales == {"DK"}:
@@ -122,6 +126,12 @@ def _suite_jurisdiction(suite_name: str) -> str:
         return "de"
     if locales == {"UK"}:
         return "uk"
+    if locales == {"ZM"}:
+        return "zm"
+    if locales == {"ET"}:
+        return "et"
+    if locales == {"RW"}:
+        return "rw"
     if locales <= {"US-NY-NYC", "US-NY", "US"}:
         return "us"
     raise AssertionError(f"unmapped locales for {suite_name}: {locales}")
