@@ -99,7 +99,6 @@ runner:
       - us:tax/federal-income-tax#tax_before_credits
       - us:tax/federal-income-tax#eitc
       - us:tax/federal-income-tax#ctc
-      - us:tax/payroll#employee_fica
       - us:tax/payroll#additional_medicare_tax
 
 artifacts:

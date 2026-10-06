@@ -24,8 +24,13 @@
 #   225; the $250k/$450k/$750k rows differ by the threshold and the 0.9235
 #   factor. See us:tax/payroll#additional_medicare_tax in
 #   axiom_oracles/config/concept_mappings.yaml.
-# - employee_fica: `tfica` includes `addmed` while the axiom target list
-#   does not, so rows with addmed > 0 carry that residual here as well.
+# - employee_fica is not graded. Its OASDI and HI legs do not depend on
+#   filing status, and on these synthetic Cases the Axiom leg returns no
+#   value for its summed 3101(a)/3101(b)(1)/1401 target (every row was
+#   missing_left on 2026-09-27), while the ECPS lanes do get one. The
+#   separate-return payroll question is the 3101(b)(2) threshold, graded
+#   directly by us:tax/payroll#additional_medicare_tax. Note too that
+#   `tfica` includes `addmed` while the axiom target list does not.
 # - Social Security: the TAXSIM input row has no spouse-residence column
 #   (policyengine-taxsim's TaxsimRunner writes only its REQUIRED, dependent
 #   age, INCOME and OPTION columns), so the lived-apart case gets the same
@@ -46,7 +51,7 @@ name: us-mfs-taxsim
 title: Married filing separately — Axiom vs TAXSIM
 description: >-
   Compares federal liability, standard deduction, taxable income, tax before
-  credits, EITC, CTC, employee-side FICA and Additional Medicare Tax on
+  credits, EITC, CTC and Additional Medicare Tax on
   thirteen synthetic Colorado married-filing-separately returns (TAXSIM mstat
   6) at the 2026 law year.
 
@@ -85,7 +90,6 @@ runner:
       - us:tax/federal-income-tax#tax_before_credits
       - us:tax/federal-income-tax#eitc
       - us:tax/federal-income-tax#ctc
-      - us:tax/payroll#employee_fica
       - us:tax/payroll#additional_medicare_tax
     axiom_rulespec_repo_roots: $HOME/oracle-pins
     axiom_rulespec_repo_roots_revision: ca2d424f

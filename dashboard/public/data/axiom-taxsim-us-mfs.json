@@ -1,0 +1,1897 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [
+        "us:tax/federal-income-tax#agi",
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#taxable_income",
+        "us:tax/federal-income-tax#tax_before_credits",
+        "us:tax/federal-income-tax#nonrefundable_credits",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#cdcc",
+        "us:tax/federal-income-tax#aotc",
+        "us:tax/federal-income-tax#amt",
+        "us:tax/federal-income-tax#capital_gain",
+        "us:tax/payroll#employee_oasdi",
+        "us:tax/payroll#employee_medicare",
+        "us:tax/payroll#employer_oasdi",
+        "us:tax/payroll#employer_medicare",
+        "us:tax/payroll#employee_fica",
+        "us:tax/payroll#additional_medicare_tax"
+      ],
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "left_weighted_sum": 428720.878,
+      "match_rate": 61.538462,
+      "match_weight": 8,
+      "mismatch_count": 5,
+      "mismatch_weight": 5,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 436266.21,
+      "weighted_difference": -7545.332,
+      "weighted_match_rate": 61.538462
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#standard_deduction",
+      "description": "Federal standard deduction",
+      "left_weighted_sum": 230350,
+      "match_rate": 100,
+      "match_weight": 13,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 230350,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "left_weighted_sum": 1608750,
+      "match_rate": 76.923077,
+      "match_weight": 10,
+      "mismatch_count": 3,
+      "mismatch_weight": 3,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 1609750,
+      "weighted_difference": -1000,
+      "weighted_match_rate": 76.923077
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "left_weighted_sum": 438101.5,
+      "match_rate": 76.923077,
+      "match_weight": 10,
+      "mismatch_count": 3,
+      "mismatch_weight": 3,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 437113.5,
+      "weighted_difference": 988,
+      "weighted_match_rate": 76.923077
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "left_weighted_sum": 5480.622,
+      "match_rate": 84.615385,
+      "match_weight": 11,
+      "mismatch_count": 2,
+      "mismatch_weight": 2,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 347.29,
+      "weighted_difference": 5133.332,
+      "weighted_match_rate": 84.615385
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "us:tax/federal-income-tax#ctc",
+      "description": "Child Tax Credit value",
+      "left_weighted_sum": 4075,
+      "match_rate": 84.615385,
+      "match_weight": 11,
+      "mismatch_count": 2,
+      "mismatch_weight": 2,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 500,
+      "weighted_difference": 3575,
+      "weighted_match_rate": 84.615385
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 13,
+      "comparison_weight": 13,
+      "components": [],
+      "concept": "us:tax/payroll#additional_medicare_tax",
+      "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+      "left_weighted_sum": 9900,
+      "match_rate": 69.230769,
+      "match_weight": 9,
+      "mismatch_count": 4,
+      "mismatch_weight": 4,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "right_weighted_sum": 6651.66,
+      "weighted_difference": 3248.34,
+      "weighted_match_rate": 69.230769
+    }
+  ],
+  "case_count": 13,
+  "cases": [
+    {
+      "case_id": "mfs-wages-40000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            40000.0
+          ],
+          "yearly_earned_income_total": 40000.0
+        },
+        "locale": "US",
+        "scenario": "childless-wages",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 40,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 40000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 1,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-wages-150000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 85.71428571428571,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            150000.0
+          ],
+          "yearly_earned_income_total": 150000.0
+        },
+        "locale": "US",
+        "scenario": "childless-wages",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 40,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 150000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 2,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/payroll#additional_medicare_tax",
+          "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+          "difference": 225.0,
+          "kind": "amount_difference",
+          "left": 225.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-wages-250000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 85.71428571428571,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            250000.0
+          ],
+          "yearly_earned_income_total": 250000.0
+        },
+        "locale": "US",
+        "scenario": "childless-wages",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 40,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 250000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 3,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/payroll#additional_medicare_tax",
+          "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+          "difference": 847.13,
+          "kind": "amount_difference",
+          "left": 1125.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 277.87,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-wages-450000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 42.857142857142854,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            450000.0
+          ],
+          "yearly_earned_income_total": 450000.0
+        },
+        "locale": "US",
+        "scenario": "childless-wages",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 40,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 450000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 4,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": 1443.0,
+          "kind": "amount_difference",
+          "left": 121625.25,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 120182.25,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": 3900.0,
+          "kind": "amount_difference",
+          "left": 433900.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 430000.0,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": 1443.0,
+          "kind": "amount_difference",
+          "left": 121625.25,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 120182.25,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/payroll#additional_medicare_tax",
+          "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+          "difference": 984.8299999999999,
+          "kind": "amount_difference",
+          "left": 2925.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 1940.17,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-wages-750000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 85.71428571428571,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            750000.0
+          ],
+          "yearly_earned_income_total": 750000.0
+        },
+        "locale": "US",
+        "scenario": "childless-wages",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 40,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 750000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 5,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/payroll#additional_medicare_tax",
+          "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+          "difference": 1191.38,
+          "kind": "amount_difference",
+          "left": 5625.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 4433.62,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-child-wages-15000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 57.14285714285714,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 919,
+        "axiom_relations_count": 20,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            8
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            15000.0
+          ],
+          "yearly_earned_income_total": 15000.0
+        },
+        "locale": "US",
+        "scenario": "child-lived-apart",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "age1": 8,
+          "childcare": 0.0,
+          "dep13": 1,
+          "dep17": 1,
+          "dep18": 1,
+          "depx": 1,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 35,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 15000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 6,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": -5779.71,
+          "kind": "amount_difference",
+          "left": -6127.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": -347.29,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit",
+          "difference": 4079.71,
+          "kind": "amount_difference",
+          "left": 4427.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 347.29,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "description": "Child Tax Credit value",
+          "difference": 1875.0,
+          "kind": "amount_difference",
+          "left": 1875.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-child-wages-45000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 57.14285714285714,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 919,
+        "axiom_relations_count": 20,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            35,
+            8
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            45000.0
+          ],
+          "yearly_earned_income_total": 45000.0
+        },
+        "locale": "US",
+        "scenario": "child-lived-apart",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "age1": 8,
+          "childcare": 0.0,
+          "dep13": 1,
+          "dep17": 1,
+          "dep18": 1,
+          "depx": 1,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 35,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 45000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 7,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": -2753.6220000000003,
+          "kind": "amount_difference",
+          "left": -1105.622,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1648.0,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit",
+          "difference": 1053.622,
+          "kind": "amount_difference",
+          "left": 1053.622,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 0.0,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#ctc",
+          "description": "Child Tax Credit value",
+          "difference": 1700.0,
+          "kind": "amount_difference",
+          "left": 2200.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 500.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-ss-cohabiting-wages-20000-ss-24000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 57.14285714285714,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            70
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            20000.0
+          ],
+          "yearly_earned_income_total": 20000.0
+        },
+        "locale": "US",
+        "scenario": "social-security",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 24000.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 70,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 20000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 8,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": 720.0,
+          "kind": "amount_difference",
+          "left": 2470.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1750.0,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": 6000.0,
+          "kind": "amount_difference",
+          "left": 22650.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 16650.0,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": 720.0,
+          "kind": "amount_difference",
+          "left": 2470.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 1750.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-ss-cohabiting-ss-30000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            70
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            0.0
+          ],
+          "yearly_earned_income_total": 0.0
+        },
+        "locale": "US",
+        "scenario": "social-security",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 30000.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 70,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 0.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 9,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-ss-lived-apart-wages-20000-ss-24000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 57.14285714285714,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            70
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            20000.0
+          ],
+          "yearly_earned_income_total": 20000.0
+        },
+        "locale": "US",
+        "scenario": "social-security",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 24000.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 70,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 20000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 10,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#liability",
+          "description": "Federal income tax liability",
+          "difference": -1175.0,
+          "kind": "amount_difference",
+          "left": 575.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 1750.0,
+          "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": -10900.0,
+          "kind": "amount_difference",
+          "left": 5750.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 16650.0,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": -1175.0,
+          "kind": "amount_difference",
+          "left": 575.0,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 1750.0,
+          "tolerance": 5
+        }
+      ],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-eitc-wages-6000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            30
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            6000.0
+          ],
+          "yearly_earned_income_total": 6000.0
+        },
+        "locale": "US",
+        "scenario": "childless-eitc",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 30,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 6000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 11,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-eitc-wages-11000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            30
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            11000.0
+          ],
+          "yearly_earned_income_total": 11000.0
+        },
+        "locale": "US",
+        "scenario": "childless-eitc",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 30,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 11000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 12,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [],
+      "right_engine": "taxsim",
+      "right_errors": []
+    },
+    {
+      "case_id": "mfs-eitc-wages-16000",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "metadata": {
+        "axiom_input_record_overlays_count": 2,
+        "axiom_input_records_count": 620,
+        "axiom_relations_count": 9,
+        "axiom_result_selection": {
+          "output": "us:statutes/26/6401#income_tax",
+          "strategy": "min"
+        },
+        "household_summary": {
+          "ages": [
+            30
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            16000.0
+          ],
+          "yearly_earned_income_total": 16000.0
+        },
+        "locale": "US",
+        "scenario": "childless-eitc",
+        "scope": {
+          "geoid": "08",
+          "type": "census_state"
+        },
+        "suite": "us-mfs",
+        "taxsim_input": {
+          "childcare": 0.0,
+          "dep13": 0,
+          "dep17": 0,
+          "dep18": 0,
+          "depx": 0,
+          "dividends": 0.0,
+          "gssi": 0.0,
+          "idtl": 2,
+          "intrec": 0.0,
+          "ltcg": 0.0,
+          "mortgage": 0.0,
+          "mstat": 6,
+          "nonprop": 0,
+          "otheritem": 0.0,
+          "otherprop": 0.0,
+          "page": 30,
+          "pensions": 0.0,
+          "proptax": 0.0,
+          "psemp": 0.0,
+          "pui": 0.0,
+          "pwages": 16000.0,
+          "rentpaid": 0.0,
+          "sage": 0,
+          "scorp": 0,
+          "ssemp": 0,
+          "state": 6,
+          "stcg": 0.0,
+          "sui": 0,
+          "swages": 0,
+          "taxsimid": 13,
+          "transfers": 0,
+          "year": 2026
+        }
+      },
+      "mismatches": [],
+      "right_engine": "taxsim",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [
+        "us:tax/federal-income-tax#agi",
+        "us:tax/federal-income-tax#standard_deduction",
+        "us:tax/federal-income-tax#taxable_income",
+        "us:tax/federal-income-tax#tax_before_credits",
+        "us:tax/federal-income-tax#nonrefundable_credits",
+        "us:tax/federal-income-tax#eitc",
+        "us:tax/federal-income-tax#ctc",
+        "us:tax/federal-income-tax#cdcc",
+        "us:tax/federal-income-tax#aotc",
+        "us:tax/federal-income-tax#amt",
+        "us:tax/federal-income-tax#capital_gain",
+        "us:tax/payroll#employee_oasdi",
+        "us:tax/payroll#employee_medicare",
+        "us:tax/payroll#employer_oasdi",
+        "us:tax/payroll#employer_medicare",
+        "us:tax/payroll#employee_fica",
+        "us:tax/payroll#additional_medicare_tax"
+      ],
+      "description": "Federal income tax liability",
+      "id": "us:tax/federal-income-tax#liability",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 15
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal standard deduction",
+      "id": "us:tax/federal-income-tax#standard_deduction",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal taxable income",
+      "id": "us:tax/federal-income-tax#taxable_income",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Federal tax before credits",
+      "id": "us:tax/federal-income-tax#tax_before_credits",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Earned Income Tax Credit",
+      "id": "us:tax/federal-income-tax#eitc",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Child Tax Credit value",
+      "id": "us:tax/federal-income-tax#ctc",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    },
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+      "id": "us:tax/payroll#additional_medicare_tax",
+      "parent": "us:tax/federal-income-tax#liability",
+      "priority": "normal",
+      "relative_tolerance": 0,
+      "tolerance": 5
+    }
+  ],
+  "engines": {
+    "left": "axiom",
+    "right": "taxsim",
+    "versions": {
+      "axiom_rules_engine": "0.1.0",
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.28.0",
+      "policyengine_us": "1.752.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "US"
+  ],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "mfs-wages-150000",
+      "concept": "us:tax/payroll#additional_medicare_tax",
+      "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+      "difference": 225.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-additional-medicare-200k-threshold-and-wage-factor"
+      },
+      "kind": "amount_difference",
+      "left": 225.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": "childless-wages",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-wages-250000",
+      "concept": "us:tax/payroll#additional_medicare_tax",
+      "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+      "difference": 847.13,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-additional-medicare-200k-threshold-and-wage-factor"
+      },
+      "kind": "amount_difference",
+      "left": 1125.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 277.87,
+      "scenario": "childless-wages",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-wages-450000",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": 1443.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-salt-phasedown-not-halved-liability"
+      },
+      "kind": "amount_difference",
+      "left": 121625.25,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 120182.25,
+      "scenario": "childless-wages",
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-wages-450000",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": 3900.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-salt-phasedown-not-halved-taxable-income"
+      },
+      "kind": "amount_difference",
+      "left": 433900.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 430000.0,
+      "scenario": "childless-wages",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-wages-450000",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": 1443.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-salt-phasedown-not-halved-tax-before-credits"
+      },
+      "kind": "amount_difference",
+      "left": 121625.25,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 120182.25,
+      "scenario": "childless-wages",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-wages-450000",
+      "concept": "us:tax/payroll#additional_medicare_tax",
+      "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+      "difference": 984.8299999999999,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-additional-medicare-200k-threshold-and-wage-factor"
+      },
+      "kind": "amount_difference",
+      "left": 2925.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1940.17,
+      "scenario": "childless-wages",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-wages-750000",
+      "concept": "us:tax/payroll#additional_medicare_tax",
+      "description": "Additional Medicare Tax on wages, 26 USC 3101(b)(2)",
+      "difference": 1191.38,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-additional-medicare-200k-threshold-and-wage-factor"
+      },
+      "kind": "amount_difference",
+      "left": 5625.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 4433.62,
+      "scenario": "childless-wages",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-child-wages-15000",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": -5779.71,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-child-credit-machinery-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
+      "kind": "amount_difference",
+      "left": -6127.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": -347.29,
+      "scenario": "child-lived-apart",
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-child-wages-15000",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "difference": 4079.71,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
+      "kind": "amount_difference",
+      "left": 4427.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 347.29,
+      "scenario": "child-lived-apart",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-child-wages-15000",
+      "concept": "us:tax/federal-income-tax#ctc",
+      "description": "Child Tax Credit value",
+      "difference": 1875.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-child-credit-machinery-absent",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
+      "kind": "amount_difference",
+      "left": 1875.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": "child-lived-apart",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-child-wages-45000",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": -2753.6220000000003,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-child-credit-machinery-liability",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
+      "kind": "amount_difference",
+      "left": -1105.622,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1648.0,
+      "scenario": "child-lived-apart",
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-child-wages-45000",
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "difference": 1053.622,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-eitc-childless-schedule-applied",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
+      "kind": "amount_difference",
+      "left": 1053.622,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 0.0,
+      "scenario": "child-lived-apart",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-child-wages-45000",
+      "concept": "us:tax/federal-income-tax#ctc",
+      "description": "Child Tax Credit value",
+      "difference": 1700.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-2026-ctc-child-credit-machinery-absent",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+      },
+      "kind": "amount_difference",
+      "left": 2200.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 500.0,
+      "scenario": "child-lived-apart",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-ss-cohabiting-wages-20000-ss-24000",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": 720.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-senior-deduction-on-separate-return-liability"
+      },
+      "kind": "amount_difference",
+      "left": 2470.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1750.0,
+      "scenario": "social-security",
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-ss-cohabiting-wages-20000-ss-24000",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": 6000.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-senior-deduction-on-separate-return-taxable-income"
+      },
+      "kind": "amount_difference",
+      "left": 22650.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 16650.0,
+      "scenario": "social-security",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-ss-cohabiting-wages-20000-ss-24000",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": 720.0,
+      "disposition": {
+        "disposition": "upstream_engine_gap",
+        "id": "taxsim-mfs-senior-deduction-on-separate-return-tax-before-credits"
+      },
+      "kind": "amount_difference",
+      "left": 2470.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1750.0,
+      "scenario": "social-security",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-ss-lived-apart-wages-20000-ss-24000",
+      "concept": "us:tax/federal-income-tax#liability",
+      "description": "Federal income tax liability",
+      "difference": -1175.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-mstat6-cannot-express-lived-apart-liability"
+      },
+      "kind": "amount_difference",
+      "left": 575.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1750.0,
+      "scenario": "social-security",
+      "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-ss-lived-apart-wages-20000-ss-24000",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": -10900.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-mstat6-cannot-express-lived-apart-taxable-income"
+      },
+      "kind": "amount_difference",
+      "left": 5750.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 16650.0,
+      "scenario": "social-security",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "mfs-ss-lived-apart-wages-20000-ss-24000",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": -1175.0,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "taxsim-mstat6-cannot-express-lived-apart-tax-before-credits"
+      },
+      "kind": "amount_difference",
+      "left": 575.0,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 1750.0,
+      "scenario": "social-security",
+      "tolerance": 5,
+      "yearly_earned_income": null
+    }
+  ],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "0c39023e0d0b82aee9ec561f37a1b73547b66d86",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-09-27T19:57:55Z",
+    "generated_by": "scripts/run_comparison.py::us-mfs-taxsim",
+    "oracle": {
+      "name": "taxsim",
+      "policyengine_core": "3.28.0",
+      "policyengine_package": "policyengine==4.18.9",
+      "policyengine_us": "1.752.2"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-us",
+        "sha": "ca2d424fcb85ce8c3a8f4706113331710f114460"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": {
+    "geoid": "US",
+    "type": "country"
+  },
+  "suite": "us-mfs-taxsim",
+  "summary": {
+    "comparison_count": 91,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 3,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 16
+      },
+      "dispositions_file": "dispositions/us-mfs-taxsim.yaml",
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 79.120879,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 72,
+    "mismatch_count": 19,
+    "mismatches_by_concept": [
+      {
+        "count": 5,
+        "value": "us:tax/federal-income-tax#liability"
+      },
+      {
+        "count": 4,
+        "value": "us:tax/payroll#additional_medicare_tax"
+      },
+      {
+        "count": 3,
+        "value": "us:tax/federal-income-tax#tax_before_credits"
+      },
+      {
+        "count": 3,
+        "value": "us:tax/federal-income-tax#taxable_income"
+      },
+      {
+        "count": 2,
+        "value": "us:tax/federal-income-tax#ctc"
+      },
+      {
+        "count": 2,
+        "value": "us:tax/federal-income-tax#eitc"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 19,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 7,
+        "value": "childless-wages"
+      },
+      {
+        "count": 6,
+        "value": "child-lived-apart"
+      },
+      {
+        "count": 6,
+        "value": "social-security"
+      }
+    ],
+    "weighted": {
+      "comparison_weight": 91,
+      "match_rate": 79.120879,
+      "match_weight": 72,
+      "mismatch_weight": 19
+    }
+  }
+}

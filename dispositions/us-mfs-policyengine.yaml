@@ -1,0 +1,66 @@
+schema: axiom_oracles.dispositions.v1
+suite: us-mfs-policyengine
+updated: '2026-09-27'
+entries:
+- id: policyengine-eitc-childless-separate-filer
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - mfs-eitc-wages-6000
+    - mfs-eitc-wages-11000
+    - mfs-eitc-wages-16000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: &eitc_mechanism >-
+      Since 2021, 26 USC 32(d)(1) allows the EITC to a married individual
+      (under 7703) only on a joint return. The one exception, 32(d)(2)(B),
+      needs a qualifying child who lived with the filer for more than half
+      the year (mfs-statute-extracts.md section 6). A childless separate
+      filer therefore gets $0, which is what axiom reports. PolicyEngine-US
+      1.752.2 sets gov.irs.credits.eitc.eligibility.separate_filer to true
+      from 2021, and eitc_eligible returns eligibility without checking for a
+      qualifying child. It therefore pays these filers the childless
+      schedule: 7.65 percent phase-in, $664 maximum, phase-out above $10,860.
+      Filed upstream as PolicyEngine/policyengine-us#9607. TAXSIM gives $0
+      on these rows, agreeing with axiom.
+    arithmetic:
+    - expression: 0 - 0.0765 * 6000
+      equals: -459.0
+      tolerance: 0.01
+    - expression: 0 - (664 - 0.0765 * (11000 - 10860))
+      equals: -653.29
+      tolerance: 0.01
+    - expression: 0 - (664 - 0.0765 * (16000 - 10860))
+      equals: -270.79
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+    - docs/mfs-evidence/mfs-statutory-hand-computation.md
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9607
+  expires_on_source_change: true
+- id: policyengine-eitc-childless-separate-filer-liability
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - mfs-eitc-wages-6000
+    - mfs-eitc-wages-11000
+    - mfs-eitc-wages-16000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: *eitc_mechanism
+    arithmetic:
+    - expression: 0 - (0 - 0.0765 * 6000)
+      equals: 459.0
+      tolerance: 0.01
+    - expression: 0 - (0 - (664 - 0.0765 * (11000 - 10860)))
+      equals: 653.29
+      tolerance: 0.01
+    - expression: 0 - (0 - (664 - 0.0765 * (16000 - 10860)))
+      equals: 270.79
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9607
+  expires_on_source_change: true

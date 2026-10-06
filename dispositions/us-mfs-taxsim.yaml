@@ -1,0 +1,349 @@
+schema: axiom_oracles.dispositions.v1
+suite: us-mfs-taxsim
+updated: '2026-09-27'
+entries:
+- id: taxsim-mfs-additional-medicare-200k-threshold-and-wage-factor
+  concept: us:tax/payroll#additional_medicare_tax
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - mfs-wages-150000
+    - mfs-wages-250000
+    - mfs-wages-450000
+    - mfs-wages-750000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: >-
+      26 USC 3101(b)(2)(B) (docs/mfs-evidence/mfs-statute-extracts.md, section
+      7) taxes a married taxpayer filing a separate return at 0.9 percent of
+      wages above half of the $250,000 joint amount, i.e. $125,000. The axiom
+      value on each selected row is 0.009 x (wages - 125,000), the same as the
+      statutory hand computation (docs/mfs-evidence/mfs-statutory-hand-computation.md).
+      The pinned TAXSIM 2.30.0 binary (cdate-20260521) reports addmed =
+      0.009 x max(0, 0.9235 x wages - 200,000) at mstat 6, identical to its
+      mstat 1 value. It therefore applies the $200,000 "any other case"
+      threshold to a separate return, and it scales W-2 wages by the 0.9235
+      self-employment factor. This was observed by replaying the persisted
+      rows through the binary on 2026-09-27; the cd2026081819 build drops the
+      factor but keeps the $200,000 threshold. Both departures are on the
+      TAXSIM side. PolicyEngine's additional_medicare_tax matches axiom on
+      every row of this suite.
+    arithmetic:
+    - expression: 0.009 * (150000 - 125000) - 0
+      equals: 225.0
+      tolerance: 0.01
+    - expression: 0.009 * (250000 - 125000) - 0.009 * (0.9235 * 250000 - 200000)
+      equals: 847.13
+      tolerance: 0.01
+    - expression: 0.009 * (450000 - 125000) - 0.009 * (0.9235 * 450000 - 200000)
+      equals: 984.83
+      tolerance: 0.01
+    - expression: 0.009 * (750000 - 125000) - 0.009 * (0.9235 * 750000 - 200000)
+      equals: 1191.38
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+    - docs/mfs-evidence/mfs-statutory-hand-computation.md
+  expires_on_source_change: true
+- id: taxsim-mfs-salt-phasedown-not-halved-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_id: mfs-wages-450000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: &salt_mechanism >-
+      Under 26 USC 164(b)(6)(B) and (b)(7) (mfs-statute-extracts.md section
+      16), a separate filer deducts at most half of the applicable limitation
+      amount ($40,400 for 2026). That amount is first reduced by 30 percent of
+      MAGI above half of the $505,000 threshold, and the reduction cannot take
+      it below $10,000 before the halving. At MAGI 450,000 the limit is
+      therefore 5,000, which is below the 16,100 standard deduction. Axiom
+      and PolicyEngine both take the standard deduction, giving taxable income
+      433,900. Replaying the persisted row through the pinned TAXSIM binary
+      gives siitax 20,072.30 and v17 (itemized deductions) 20,000, so TAXSIM
+      itemizes Colorado income tax under a flat $20,000 separate-return cap
+      with no phasedown at this MAGI. At 750,000 its v17 is 0, so its mstat 6
+      phasedown starts above 450,000.
+    arithmetic:
+    - expression: 20000 - 16100
+      equals: 3900.0
+      tolerance: 0.01
+    # The reduced amount is negative, so the (b)(7)(B)(iii) $10,000 floor
+    # binds and the separate filer takes half of it.
+    - expression: 40400 - 0.30 * (450000 - 505000 / 2)
+      equals: -18850.0
+      tolerance: 0.01
+    - expression: 10000 / 2
+      equals: 5000.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+    - docs/mfs-evidence/mfs-statutory-hand-computation.md
+  expires_on_source_change: true
+  pinned:
+    left: 433900.0
+    right: 430000.0
+- id: taxsim-mfs-salt-phasedown-not-halved-tax-before-credits
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_id: mfs-wages-450000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: *salt_mechanism
+    arithmetic:
+    - expression: 0.37 * (20000 - 16100)
+      equals: 1443.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+  expires_on_source_change: true
+  pinned:
+    left: 121625.25
+    right: 120182.25
+- id: taxsim-mfs-salt-phasedown-not-halved-liability
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_id: mfs-wages-450000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: *salt_mechanism
+    arithmetic:
+    - expression: 0.37 * (20000 - 16100)
+      equals: 1443.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+  expires_on_source_change: true
+  pinned:
+    left: 121625.25
+    right: 120182.25
+- id: taxsim-mfs-senior-deduction-on-separate-return-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_id: mfs-ss-cohabiting-wages-20000-ss-24000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: &senior_mechanism >-
+      26 USC 151(d)(5)(C)(v) (mfs-statute-extracts.md section 8) provides: "If
+      the taxpayer is a married individual (within the meaning of section
+      7703), this subparagraph shall apply only if the taxpayer and the
+      taxpayer's spouse file a joint return for the taxable year." A separate
+      filer therefore gets no $6,000 senior deduction. Axiom reports taxable
+      income 22,650 = AGI 40,400 - 17,750 (the 16,100 basic amount plus the
+      1,650 married 63(f) aged amount), the same as the statutory hand
+      computation. The pinned TAXSIM binary subtracts the $6,000 at mstat 6
+      as well (v18 = v10 - v13 - 6,000; the 2026-09-24 binary probes found
+      the same on the cd2026081819 build). PolicyEngine matches axiom on this
+      row.
+    arithmetic:
+    - expression: 22650 - 16650
+      equals: 6000.0
+      tolerance: 0.01
+    - expression: 40400 - 16100 - 1650
+      equals: 22650.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+    - docs/mfs-evidence/mfs-statutory-hand-computation.md
+  expires_on_source_change: true
+  pinned:
+    left: 22650.0
+    right: 16650.0
+- id: taxsim-mfs-senior-deduction-on-separate-return-tax-before-credits
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_id: mfs-ss-cohabiting-wages-20000-ss-24000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: *senior_mechanism
+    arithmetic:
+    - expression: (1240 + 0.12 * (22650 - 12400)) - (1240 + 0.12 * (16650 - 12400))
+      equals: 720.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+  expires_on_source_change: true
+  pinned:
+    left: 2470.0
+    right: 1750.0
+- id: taxsim-mfs-senior-deduction-on-separate-return-liability
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_id: mfs-ss-cohabiting-wages-20000-ss-24000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: *senior_mechanism
+    arithmetic:
+    - expression: 0.12 * 6000
+      equals: 720.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+  expires_on_source_change: true
+  pinned:
+    left: 2470.0
+    right: 1750.0
+- id: taxsim-mstat6-cannot-express-lived-apart-taxable-income
+  concept: us:tax/federal-income-tax#taxable_income
+  kind: amount_difference
+  case_id: mfs-ss-lived-apart-wages-20000-ss-24000
+  disposition: bridge_artifact
+  evidence:
+    mechanism: &lived_apart_mechanism >-
+      Under 26 USC 86(c)(1)(C)(ii) (mfs-statute-extracts.md section 5), the
+      zero base amount applies only to a separate filer who does not live
+      apart from their spouse at all times during the year. This case lived
+      apart all year, so the $25,000 base of 86(c)(1)(A) applies: taxable
+      Social Security is 3,500, AGI 23,500 and taxable income 5,750, which
+      is what axiom and PolicyEngine report. The TAXSIM input row has no
+      spouse-residence column, so the harness cannot give TAXSIM the
+      lived-apart fact. TAXSIM mstat 6 applies the zero base (taxable Social
+      Security 20,400, AGI 40,400, the same as the cohabiting case), and its
+      separate-return senior deduction (the upstream gap filed for the
+      cohabiting case) removes a further 6,000. Because the engines received
+      different facts, this is a harness input gap. The remaining 6,000 is
+      the TAXSIM senior-deduction gap.
+    arithmetic:
+    - expression: (3500 - 20400) + 6000
+      equals: -10900.0
+      tolerance: 0.01
+    - expression: 23500 - 16100 - 1650
+      equals: 5750.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+    - docs/mfs-evidence/mfs-statutory-hand-computation.md
+  expires_on_source_change: true
+  pinned:
+    left: 5750.0
+    right: 16650.0
+- id: taxsim-mstat6-cannot-express-lived-apart-tax-before-credits
+  concept: us:tax/federal-income-tax#tax_before_credits
+  kind: amount_difference
+  case_id: mfs-ss-lived-apart-wages-20000-ss-24000
+  disposition: bridge_artifact
+  evidence:
+    mechanism: *lived_apart_mechanism
+    arithmetic:
+    - expression: 0.10 * 5750 - (1240 + 0.12 * (16650 - 12400))
+      equals: -1175.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+  expires_on_source_change: true
+  pinned:
+    left: 575.0
+    right: 1750.0
+- id: taxsim-mstat6-cannot-express-lived-apart-liability
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_id: mfs-ss-lived-apart-wages-20000-ss-24000
+  disposition: bridge_artifact
+  evidence:
+    mechanism: *lived_apart_mechanism
+    arithmetic:
+    - expression: 0.10 * 5750 - (1240 + 0.12 * (16650 - 12400))
+      equals: -1175.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+  expires_on_source_change: true
+  pinned:
+    left: 575.0
+    right: 1750.0
+- id: taxsim-2026-ctc-child-credit-machinery-absent
+  concept: us:tax/federal-income-tax#ctc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - mfs-child-wages-15000
+    - mfs-child-wages-45000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: >-
+      Both child cases are separate filers whose spouse lived apart all year.
+      Under 26 USC 7703(b) and 2(c) they are heads of household, and TAXSIM
+      mstat 6 with the child returns exactly its mstat 1 (head of household)
+      output. The pinned binary's 2026 law year has no qualifying-child credit
+      machinery (docs/policyengine-taxsim.md; the standing class in
+      dispositions/co-tax-intersection-taxsim.yaml): v22 is the $500 other-
+      dependent amount when tax before credits allows it (45,000 row) and 0
+      otherwise (15,000 row, tax before credits 0). Axiom computes the enacted
+      26 USC 24 credit. On the 15,000 row the concept's axiom value
+      (oracle-bridge ctc_value, which PolicyEngine's ctc_value matches) is the
+      24(d)(1)(B) earned-income amount 0.15 x (15,000 - 2,500) = 1,875, while
+      axiom's liability applies the $1,700 refundable cap. This is an NBER
+      model gap, not an Axiom defect.
+    arithmetic:
+    - expression: 2200 - 500 * 1
+      equals: 1700.0
+      tolerance: 0.01
+    - expression: 0.15 * (15000 - 2500) - 0
+      equals: 1875.0
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+    - docs/policyengine-taxsim.md
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: taxsim-2026-eitc-childless-schedule-applied
+  concept: us:tax/federal-income-tax#eitc
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - mfs-child-wages-15000
+    - mfs-child-wages-45000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: >-
+      TAXSIM's 2026 EITC applies the childless schedule to a head of
+      household with a qualifying child, the same root as the CTC class above
+      (the standing class in dispositions/co-tax-intersection-taxsim.yaml).
+      Its 15,000 row sits on the childless phase-out: 664 - 0.0765 x (15,000
+      - 10,860) = 347.29. Its 45,000 row is past the childless phase-out and
+      is 0. Axiom applies the one-child schedule (26 USC 32(b); Rev. Proc.
+      2025-32 printed maximum $4,427): 4,427 at 15,000, and
+      4,427 - 0.1598 x (45,000 - 23,890) = 1,053.62 at 45,000.
+    arithmetic:
+    - expression: 664 - 0.0765 * (15000 - 10860)
+      equals: 347.29
+      tolerance: 0.01
+    - expression: 4427 - (664 - 0.0765 * (15000 - 10860))
+      equals: 4079.71
+      tolerance: 0.01
+    - expression: 4427 - 0.1598 * (45000 - 23890) - 0
+      equals: 1053.62
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statute-extracts.md
+    - docs/mfs-evidence/mfs-statutory-hand-computation.md
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true
+- id: taxsim-2026-child-credit-machinery-liability
+  concept: us:tax/federal-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - mfs-child-wages-15000
+    - mfs-child-wages-45000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: >-
+      This is the liability face of the two TAXSIM 2026 child-credit classes
+      above. Axiom's liability nets the full one-child EITC and the CTC:
+      -(4,427 + 1,700) = -6,127 at 15,000, and 2,148 - 2,148 - 52 - 1,053.62
+      = -1,105.62 at 45,000. TAXSIM nets only the childless EITC and the $500
+      other-dependent amount: -347.29 at 15,000, and 2,148 - 500 = 1,648 at
+      45,000. Each residual is the sum of the EITC and CTC residuals on its
+      row.
+    arithmetic:
+    - expression: -(4427 - 347.29) - 1700
+      equals: -5779.71
+      tolerance: 0.01
+    - expression: -(1053.622 - 0) - (2200 - 500)
+      equals: -2753.622
+      tolerance: 0.01
+    sources:
+    - docs/mfs-evidence/mfs-statutory-hand-computation.md
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304
+  expires_on_source_change: true

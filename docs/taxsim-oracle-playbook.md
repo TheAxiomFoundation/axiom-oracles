@@ -30,6 +30,7 @@ at the wrong law year — is why).
 | `co-state-income-tax-taxsim` | CO Populace slice | CO state liability | `siitax` |
 | `co-tax-intersection-taxsim` | CO Populace slice | 9 federal + CO state | per mapping |
 | `fiit-taxsim-ecps` | national Populace | std deduction, EITC, FICA | per mapping |
+| `us-mfs-taxsim` | 13-case synthetic MFS suite (CO) | 7 federal incl. Additional Medicare | per mapping |
 
 The national federal lane is scoped to itemization-*independent* concepts.
 Smoke-verified 2026-08-23: liability, taxable income, tax before credits,
@@ -126,6 +127,52 @@ gap; disposition it, do not chase the Axiom encoding):
   a sliver of childless credit when the netted figure would be ≤ 0).
   Four rows across the CO intersection and national lanes. Fixing the
   projection converts them to matches.
+
+## Married filing separately (mstat 6)
+
+A Case is one spouse's separate return when it sets
+`Concepts.MARRIED_FILING_SEPARATELY`. It holds the filer and their dependents
+and never the other spouse. `LIVED_APART_FROM_SPOUSE_ALL_YEAR` (26 USC
+86(c)(1)(C)(ii)) and `SPOUSE_ABSENT_LAST_SIX_MONTHS` (7703(b)(3),
+32(d)(2)(C)(i)) are optional. Every projection reads these facts through
+`axiom_oracles.core.filing.separate_filing`.
+
+- **TAXSIM**: mstat 6. TAXSIM-35 rejects a non-joint row that has a nonzero
+  `sage`, `swages`, `ssemp`, `sui`, `sbusinc` or `sprofinc`. That rejection
+  aborts the whole batch, and the runner deletes the diagnostics. For that
+  reason `validate_taxsim_row` refuses such a row before the binary runs,
+  including rows a Case supplies itself.
+- **Axiom**: filing status 2. It is 3 when a qualifying child lives with the
+  filer and the spouse was absent for the last six months (7703(b), 2(c)).
+  The same code feeds the bridge, 26/1401 and 26/151.
+- **PolicyEngine (direct runner)**: the head gets `is_separated`, and the tax
+  unit gets `cohabitating_spouses = not lived_apart`. PolicyEngine-US
+  derives SEPARATE or HEAD_OF_HOUSEHOLD from those inputs.
+- **PolicyEngine via the emulator** (`PolicyEngineTaxsimRunner`, used
+  whenever PolicyEngine is paired with TAXSIM): the pinned
+  policyengine-taxsim 2.30.0 builds an mstat 6 row as a two-adult JOINT
+  unit. So mstat 6 rows run only when the installed emulator exports
+  `policyengine_taxsim.core.input_mapper.MSTAT_MARRIED_SEPARATE`. The export
+  arrives with PolicyEngine/policyengine-taxsim#1246. Until then those rows
+  come back as per-case errors naming the missing capability, and
+  `us-mfs-pe-taxsim` stays unrun. Re-pinning past 2.30.0 also swaps the
+  bundled NBER binary for every TAXSIM lane (see Identity).
+
+What the pinned binary does at mstat 6 (the `us-mfs-taxsim` dispositions, adjudicated against the verbatim statute in `docs/mfs-evidence/`):
+
+| Surface | TAXSIM mstat 6 | Statute | Class |
+| --- | --- | --- | --- |
+| Rate schedule, standard deduction, 63(f) aged amount | separate-return values | same | agrees |
+| Qualifying child, spouse absent | head of household | 7703(b), 2(c): head of household | agrees (2026 child credits are the standing NBER gap) |
+| Childless EITC | 0 | 32(d): 0 | agrees (PolicyEngine-US pays it: policyengine-us#9607) |
+| Additional Medicare | $200,000 threshold on 0.9235 × wages | 3101(b)(2)(B): $125,000 on wages | upstream_engine_gap |
+| Senior deduction | $6,000 allowed | 151(d)(5)(C)(v): joint return only | upstream_engine_gap |
+| SALT cap | flat $20,000, no phasedown at MAGI 450,000 | 164(b)(6)-(7): half of the phased-down amount, $5,000 there | upstream_engine_gap |
+| Social Security base when the spouses lived apart | zero (no input for the fact) | 86(c)(1)(A): $25,000 | bridge_artifact |
+
+The Populace loader does not yet carry separate-return status. Populace-based
+lanes send PolicyEngine-SEPARATE tax units to every engine as single filers
+(1,245 such units at 2026 in the populace-us artifact that was pinned on 2026-09-24).
 
 ## Status
 
