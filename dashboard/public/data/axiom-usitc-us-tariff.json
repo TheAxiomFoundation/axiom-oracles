@@ -915,17 +915,19 @@
   "mismatches": [],
   "population": "case-grid",
   "provenance": {
-    "engine": {},
-    "generated_at": "2026-09-24T05:05:53Z",
+    "engine": {
+      "axiom_rules_engine_sha": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+      "axiom_rules_engine_version": "0.1.0"
+    },
+    "generated_at": "2026-08-01T19:32:46Z",
     "generated_by": "scripts/run_comparison.py::us-tariff",
-    "reemitted_report": true,
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": null
+        "sha": "a614dea54b76658b9933fdd9b559825af5d6ecd6"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",
