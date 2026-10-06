@@ -74,6 +74,13 @@ _TAXSIM_STATE = {
     # Arizona (TAXSIM SOI code 3). Its rulespec-us composed pilot landed on main,
     # so an affected-rerun against rulespec-us main finds the companion fixtures.
     "AZ": 3,
+    # Georgia (11), Michigan (23), and North Carolina (34): each a single flat
+    # rate on taxable income (AGI less a standard deduction or personal
+    # exemptions). Their rulespec-us composed pilots land alongside this
+    # registration.
+    "GA": 11,
+    "MI": 23,
+    "NC": 34,
 }
 # PolicyEngine target per state. CA, IL, and OH use the before-refundable-credits
 # variable, the exact statutory analog of each core (the final ca_income_tax /
@@ -130,6 +137,15 @@ _PE_VAR = {
     # az_income_tax_before_refundable_credits on this childless grid (no refundable
     # credits active), so the final variable is the pipeline's exact target.
     "AZ": "az_income_tax",
+    # Georgia (48-7-20 flat 4.99% on AGI less the 48-7-27 standard deduction),
+    # Michigan (206.51 flat 4.25% on AGI less the 206.30 personal exemptions), and
+    # North Carolina (105-153.7 flat 3.99% on AGI less the 105-153.5 standard
+    # deduction). On this childless grid each final variable equals its
+    # before-(non-refundable-)credits value (no credits active), so the final
+    # variable is the pipeline's exact target.
+    "GA": "ga_income_tax",
+    "MI": "mi_income_tax",
+    "NC": "nc_income_tax",
 }
 # Ordered state list; new states append here so the grid, reports, and main loop
 # all pick them up. Derived from _TAXSIM_STATE insertion order.
@@ -322,6 +338,15 @@ _TOL = {
     # error without absorbing the 2024-to-2026 standard-deduction indexation on
     # the TAXSIM leg.
     "AZ": (1.0, 0.0),
+    # Georgia, Michigan, and North Carolina each reproduce PolicyEngine to the
+    # cent (single flat rate on the taxable base; residual is PolicyEngine's
+    # float32 rounding, under a tenth of a cent). A $1 absolute band catches any
+    # structural bracket error without absorbing the 2024-to-2026 rate/deduction
+    # vintage carried by the TAXSIM leg (North Carolina and Georgia both stepped
+    # their rate down between 2024 and 2026).
+    "GA": (1.0, 0.0),
+    "MI": (1.0, 0.0),
+    "NC": (1.0, 0.0),
 }
 
 

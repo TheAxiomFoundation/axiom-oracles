@@ -1,0 +1,154 @@
+schema: axiom_oracles.dispositions.v1
+suite: nc-income-tax-liability
+updated: '2026-07-09'
+# North Carolina composed flat-liability pipeline vs PolicyEngine (2026) and
+# TAXSIM (2024) on the six-case grid. The pipeline matches PolicyEngine
+# nc_income_tax to the cent on all six cases (the section 105-153.7 flat 3.99% tax
+# on North Carolina taxable income = North Carolina AGI less the section
+# 105-153.5(a) standard deduction), so the PolicyEngine leg needs no disposition.
+# North Carolina's section 105-153.7 rate stepped down from 4.5 per cent (2024) to
+# 3.99 per cent (2026) while the section 105-153.5(a) standard deduction held at
+# 12,750 single / 25,500 married, so every TAXSIM-2024 residual is the rate-step
+# vintage. The 2024 schedule 0.045*(AGI - 12,750 single / 25,500 married)
+# reproduces TAXSIM to the cent.
+entries:
+  - id: nc-taxsim-2024-rate-vintage-single-30000
+    concept: us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability
+    case_id: nc-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        TAXSIM runs at its latest 2024 law year. North Carolina's section 105-153.7
+        flat rate stepped down from 4.5 per cent (2024) to 3.99 per cent (2026)
+        while the section 105-153.5(a) standard deduction held at 12,750 single, so
+        TAXSIM's 2024 computation at the higher rate exceeds the 2026 pipeline. The
+        2024 schedule 0.045*(30000-12750) reproduces TAXSIM to the cent.
+        Pinned-2024-law-year vintage, not a pipeline defect; the pipeline matches
+        PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "688.275 - 776.25"
+          equals: -87.975
+          tolerance: 0.01
+        - expression: "0.045*(30000-12750)"
+          equals: 776.25
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 688.275
+      right: 776.25
+  - id: nc-taxsim-2024-rate-vintage-single-60000
+    concept: us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability
+    case_id: nc-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The section 105-153.7 rate stepped from 4.5 per cent (2024) to 3.99 per
+        cent (2026); the standard deduction held at 12,750. The 2024 schedule
+        0.045*(60000-12750) reproduces TAXSIM to the cent. The rate-step vintage,
+        not a pipeline defect; the pipeline matches PolicyEngine at 2026 to the
+        cent.
+      arithmetic:
+        - expression: "1885.275 - 2126.25"
+          equals: -240.975
+          tolerance: 0.01
+        - expression: "0.045*(60000-12750)"
+          equals: 2126.25
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1885.275
+      right: 2126.25
+  - id: nc-taxsim-2024-rate-vintage-single-150000
+    concept: us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability
+    case_id: nc-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The section 105-153.7 rate stepped from 4.5 per cent (2024) to 3.99 per
+        cent (2026); the standard deduction held at 12,750. The 2024 schedule
+        0.045*(150000-12750) reproduces TAXSIM to the cent. The rate-step vintage,
+        not a pipeline defect; the pipeline matches PolicyEngine at 2026 to the
+        cent.
+      arithmetic:
+        - expression: "5476.275 - 6176.25"
+          equals: -699.975
+          tolerance: 0.01
+        - expression: "0.045*(150000-12750)"
+          equals: 6176.25
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 5476.275
+      right: 6176.25
+  - id: nc-taxsim-2024-rate-vintage-married-60000
+    concept: us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability
+    case_id: nc-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Married filing jointly deducts the 25,500 standard deduction. The section
+        105-153.7 rate stepped from 4.5 per cent (2024) to 3.99 per cent (2026).
+        The 2024 schedule 0.045*(60000-25500) reproduces TAXSIM to the cent. The
+        rate-step vintage, not a pipeline defect; the pipeline matches PolicyEngine
+        at 2026 to the cent.
+      arithmetic:
+        - expression: "1376.55 - 1552.5"
+          equals: -175.95
+          tolerance: 0.01
+        - expression: "0.045*(60000-25500)"
+          equals: 1552.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1376.55
+      right: 1552.5
+  - id: nc-taxsim-2024-rate-vintage-married-120000
+    concept: us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability
+    case_id: nc-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The section 105-153.7 rate stepped from 4.5 per cent (2024) to 3.99 per
+        cent (2026); the married standard deduction held at 25,500. The 2024
+        schedule 0.045*(120000-25500) reproduces TAXSIM to the cent. The rate-step
+        vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026
+        to the cent.
+      arithmetic:
+        - expression: "3770.55 - 4252.5"
+          equals: -481.95
+          tolerance: 0.01
+        - expression: "0.045*(120000-25500)"
+          equals: 4252.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 3770.55
+      right: 4252.5
+  - id: nc-taxsim-2024-rate-vintage-married-300000
+    concept: us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability
+    case_id: nc-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The section 105-153.7 rate stepped from 4.5 per cent (2024) to 3.99 per
+        cent (2026); the married standard deduction held at 25,500. The 2024
+        schedule 0.045*(300000-25500) reproduces TAXSIM to the cent. The rate-step
+        vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026
+        to the cent.
+      arithmetic:
+        - expression: "10952.55 - 12352.5"
+          equals: -1399.95
+          tolerance: 0.01
+        - expression: "0.045*(300000-25500)"
+          equals: 12352.5
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 10952.55
+      right: 12352.5

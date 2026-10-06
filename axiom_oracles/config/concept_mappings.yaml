@@ -2409,3 +2409,79 @@ concepts:
           geoid: US
       policyengine: az_income_tax
       taxsim: siitax
+  us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability:
+    description: Georgia individual income tax liability (resident wage earner; the O.C.G.A. 48-7-20 flat 4.99 per cent tax on Georgia taxable net income = AGI less the section 48-7-27 standard deduction)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine ga_income_tax, which equals
+    # ga_income_tax_before_non_refundable_credits on this childless grid (no credits
+    # active); the pipeline reproduces it to the cent across the grid. Against TAXSIM
+    # 2024 every case diverges by the 2024-to-2026 vintage — the section 48-7-20(a.1)
+    # rate stepped from 5.39 per cent (2024) to 4.99 per cent (2026) and the section
+    # 48-7-27 standard deduction rose from 12,000/24,000 to 15,000/30,000 (HB463) —
+    # dispositioned in dispositions/ga-income-tax-liability.yaml. The tight absolute
+    # tolerance catches structural errors without absorbing the vintage.
+    tolerance: 1
+    priority: high
+    locales: [US-GA]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: ga_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: ga_income_tax
+      taxsim: siitax
+  us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability:
+    description: Michigan individual income tax liability (resident wage earner; the MCL 206.51 flat 4.25 per cent tax on Michigan taxable income = AGI less the section 206.30 personal exemptions)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine mi_income_tax, which equals
+    # mi_income_tax_before_non_refundable_credits on this childless grid (no credits
+    # active); the pipeline reproduces it to the cent across the grid. Against TAXSIM
+    # 2024 every case diverges by the flat rate on the 2024-to-2026 personal-exemption
+    # indexation (Michigan was already flat 4.25 per cent in 2024), dispositioned in
+    # dispositions/mi-income-tax-liability.yaml. The tight absolute tolerance catches
+    # structural errors without absorbing the vintage.
+    tolerance: 1
+    priority: high
+    locales: [US-MI]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: mi_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: mi_income_tax
+      taxsim: siitax
+  us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability:
+    description: North Carolina individual income tax liability (resident wage earner; the G.S. 105-153.7 flat 3.99 per cent tax on North Carolina taxable income = AGI less the section 105-153.5(a) standard deduction)
+    category: tax
+    comparison: amount
+    # Compared against PolicyEngine nc_income_tax, which equals
+    # nc_income_tax_before_credits on this childless grid (no credits active); the
+    # pipeline reproduces it to the cent across the grid. Against TAXSIM 2024 every
+    # case diverges by the section 105-153.7 rate step-down from 4.5 per cent (2024)
+    # to 3.99 per cent (2026) at the held 12,750/25,500 standard deduction,
+    # dispositioned in dispositions/nc-income-tax-liability.yaml. The tight absolute
+    # tolerance catches structural errors without absorbing the vintage.
+    tolerance: 1
+    priority: high
+    locales: [US-NC]
+    scope:
+      type: country
+      geoid: US
+    targets:
+      axiom:
+        name: nc_pit_pilot_income_tax_liability
+        scope:
+          type: country
+          geoid: US
+      policyengine: nc_income_tax
+      taxsim: siitax

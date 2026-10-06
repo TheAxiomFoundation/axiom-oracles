@@ -1,0 +1,165 @@
+schema: axiom_oracles.dispositions.v1
+suite: ga-income-tax-liability
+updated: '2026-07-09'
+# Georgia composed flat-liability pipeline vs PolicyEngine (2026) and TAXSIM
+# (2024) on the six-case grid. The pipeline matches PolicyEngine ga_income_tax to
+# the cent on all six cases (the section 48-7-20 flat 4.99% tax on Georgia taxable
+# net income = Georgia AGI less the section 48-7-27 standard deduction), so the
+# PolicyEngine leg needs no disposition. The TAXSIM-2024 residuals are the
+# 2024-to-2026 vintage: section 48-7-20(a.1) stepped the flat rate down from 5.39
+# per cent (2024, HB1015) to 4.99 per cent (2026, HB463) and section 48-7-27(a)(1)(B)
+# raised the standard deduction from 12,000/24,000 (2024) to 15,000/30,000 (2026,
+# HB463). TAXSIM's pinned 2024 law year computes 0.0539*(AGI - 12,000 single /
+# 24,000 married) less a fixed 250 single / 500 married 2024 offset, which
+# reproduces TAXSIM to the cent; at low income the 2026 pipeline exceeds TAXSIM
+# (the larger deduction and the retired offset dominate), at high income TAXSIM
+# exceeds the pipeline (the higher 2024 rate dominates).
+entries:
+  - id: ga-taxsim-2024-vintage-single-30000
+    concept: us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability
+    case_id: ga-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        TAXSIM runs at its latest 2024 law year. Georgia's section 48-7-20(a.1)
+        rate was 5.39 per cent in 2024 (HB1015) versus 4.99 per cent in 2026
+        (HB463), and the section 48-7-27 standard deduction was 12,000 single in
+        2024 versus 15,000 in 2026 (HB463); TAXSIM's 2024 law year also applies a
+        fixed 250-dollar single offset. The 2024 schedule 0.0539*(30000-12000)-250
+        reproduces TAXSIM to the cent. Here the larger 2026 deduction and the
+        retired 2024 offset outweigh the 2024 rate, so the pipeline is 28.30 above
+        TAXSIM. Pinned-2024-law-year vintage, not a pipeline defect; the pipeline
+        matches PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "748.5 - 720.2"
+          equals: 28.3
+          tolerance: 0.01
+        - expression: "0.0539*(30000-12000)-250"
+          equals: 720.2
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 748.5
+      right: 720.2
+  - id: ga-taxsim-2024-vintage-single-60000
+    concept: us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability
+    case_id: ga-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Section 48-7-20(a.1) rate 5.39 per cent (2024) versus 4.99 per cent (2026);
+        section 48-7-27 standard deduction 12,000 (2024) versus 15,000 (2026);
+        TAXSIM 2024 fixed 250-dollar single offset. The 2024 schedule
+        0.0539*(60000-12000)-250 reproduces TAXSIM to the cent. Here the higher
+        2024 rate dominates, so TAXSIM is above the pipeline. The vintage, not a
+        pipeline defect; the pipeline matches PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "2245.5 - 2337.2"
+          equals: -91.7
+          tolerance: 0.01
+        - expression: "0.0539*(60000-12000)-250"
+          equals: 2337.2
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2245.5
+      right: 2337.2
+  - id: ga-taxsim-2024-vintage-single-150000
+    concept: us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability
+    case_id: ga-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Section 48-7-20(a.1) rate 5.39 per cent (2024) versus 4.99 per cent (2026);
+        section 48-7-27 standard deduction 12,000 (2024) versus 15,000 (2026);
+        TAXSIM 2024 fixed 250-dollar single offset. The 2024 schedule
+        0.0539*(150000-12000)-250 reproduces TAXSIM to the cent. The higher 2024
+        rate dominates. The vintage, not a pipeline defect; the pipeline matches
+        PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "6736.5 - 7188.2"
+          equals: -451.7
+          tolerance: 0.01
+        - expression: "0.0539*(150000-12000)-250"
+          equals: 7188.2
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 6736.5
+      right: 7188.2
+  - id: ga-taxsim-2024-vintage-married-60000
+    concept: us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability
+    case_id: ga-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Married filing jointly. Section 48-7-20(a.1) rate 5.39 per cent (2024)
+        versus 4.99 per cent (2026); section 48-7-27 standard deduction 24,000
+        (2024) versus 30,000 (2026); TAXSIM 2024 fixed 500-dollar married offset.
+        The 2024 schedule 0.0539*(60000-24000)-500 reproduces TAXSIM to the cent.
+        Here the larger 2026 deduction and the retired offset outweigh the 2024
+        rate, so the pipeline is 56.60 above TAXSIM. The vintage, not a pipeline
+        defect; the pipeline matches PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "1497.0 - 1440.4"
+          equals: 56.6
+          tolerance: 0.01
+        - expression: "0.0539*(60000-24000)-500"
+          equals: 1440.4
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1497.0
+      right: 1440.4
+  - id: ga-taxsim-2024-vintage-married-120000
+    concept: us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability
+    case_id: ga-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Section 48-7-20(a.1) rate 5.39 per cent (2024) versus 4.99 per cent (2026);
+        section 48-7-27 standard deduction 24,000 (2024) versus 30,000 (2026);
+        TAXSIM 2024 fixed 500-dollar married offset. The 2024 schedule
+        0.0539*(120000-24000)-500 reproduces TAXSIM to the cent. The higher 2024
+        rate dominates. The vintage, not a pipeline defect; the pipeline matches
+        PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "4491.0 - 4674.4"
+          equals: -183.4
+          tolerance: 0.01
+        - expression: "0.0539*(120000-24000)-500"
+          equals: 4674.4
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 4491.0
+      right: 4674.4
+  - id: ga-taxsim-2024-vintage-married-300000
+    concept: us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability
+    case_id: ga-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Section 48-7-20(a.1) rate 5.39 per cent (2024) versus 4.99 per cent (2026);
+        section 48-7-27 standard deduction 24,000 (2024) versus 30,000 (2026);
+        TAXSIM 2024 fixed 500-dollar married offset. The 2024 schedule
+        0.0539*(300000-24000)-500 reproduces TAXSIM to the cent. The higher 2024
+        rate dominates. The vintage, not a pipeline defect; the pipeline matches
+        PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "13473.0 - 14376.4"
+          equals: -903.4
+          tolerance: 0.01
+        - expression: "0.0539*(300000-24000)-500"
+          equals: 14376.4
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 13473.0
+      right: 14376.4

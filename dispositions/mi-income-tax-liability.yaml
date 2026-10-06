@@ -1,0 +1,158 @@
+schema: axiom_oracles.dispositions.v1
+suite: mi-income-tax-liability
+updated: '2026-07-09'
+# Michigan composed flat-liability pipeline vs PolicyEngine (2026) and TAXSIM
+# (2024) on the six-case grid. The pipeline matches PolicyEngine mi_income_tax to
+# the cent on all six cases (the MCL 206.51 flat 4.25% tax on Michigan taxable
+# income = Michigan AGI less the section 206.30 personal exemptions), so the
+# PolicyEngine leg needs no disposition. Michigan applies the same flat 4.25%
+# rate in 2024 and 2026, so every TAXSIM-2024 residual is exactly the flat rate
+# on the 2024-to-2026 growth in the section 206.30 personal exemption (5,600 in
+# 2024 to 5,950 in 2026 per exemption): single 0.0425*(5,950-5,600)=14.875;
+# married 0.0425*2*(5,950-5,600)=29.75. TAXSIM's narrower 2024 exemption leaves
+# more taxable income, raising its 2024 tax above the 2026 value. The 2024
+# schedule 0.0425*(AGI - 5,600 single / 11,200 married) reproduces TAXSIM to the
+# cent.
+entries:
+  - id: mi-taxsim-2024-exemption-indexation-single-30000
+    concept: us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability
+    case_id: mi-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        TAXSIM runs at its latest 2024 law year. Michigan's MCL 206.51 flat rate
+        is 4.25 per cent in both 2024 and 2026; only the section 206.30 personal
+        exemption is indexed (5,600 in 2024 to 5,950 in 2026), so TAXSIM's 2024
+        computation on the narrower exemption exceeds the 2026 pipeline by the
+        flat rate on the 350-dollar exemption growth. The 2024 schedule
+        0.0425*(30000-5600) reproduces TAXSIM to the cent. Pinned-2024-law-year
+        vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026
+        to the cent.
+      arithmetic:
+        - expression: "1022.125 - 1037.0"
+          equals: -14.875
+          tolerance: 0.01
+        - expression: "0.0425*(30000-5600)"
+          equals: 1037.0
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 1022.125
+      right: 1037.0
+  - id: mi-taxsim-2024-exemption-indexation-single-60000
+    concept: us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability
+    case_id: mi-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Same flat 4.25 per cent rate in 2024 and 2026; the gap is the flat rate on
+        the 2024-to-2026 personal-exemption indexation (5,600 to 5,950). The 2024
+        schedule 0.0425*(60000-5600) reproduces TAXSIM to the cent. The indexation
+        vintage, not a pipeline defect; the pipeline matches PolicyEngine at 2026
+        to the cent.
+      arithmetic:
+        - expression: "2297.125 - 2312.0"
+          equals: -14.875
+          tolerance: 0.01
+        - expression: "0.0425*(60000-5600)"
+          equals: 2312.0
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2297.125
+      right: 2312.0
+  - id: mi-taxsim-2024-exemption-indexation-single-150000
+    concept: us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability
+    case_id: mi-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Same flat 4.25 per cent rate in 2024 and 2026; the gap is the flat rate on
+        the 2024-to-2026 personal-exemption indexation (5,600 to 5,950). The 2024
+        schedule 0.0425*(150000-5600) reproduces TAXSIM to the cent. The
+        indexation vintage, not a pipeline defect; the pipeline matches
+        PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "6122.125 - 6137.0"
+          equals: -14.875
+          tolerance: 0.01
+        - expression: "0.0425*(150000-5600)"
+          equals: 6137.0
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 6122.125
+      right: 6137.0
+  - id: mi-taxsim-2024-exemption-indexation-married-60000
+    concept: us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability
+    case_id: mi-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Married filing jointly claims two personal exemptions. Same flat 4.25 per
+        cent rate in 2024 and 2026; the gap is the flat rate on the 2024-to-2026
+        indexation of both exemptions (11,200 to 11,900 combined). The 2024
+        schedule 0.0425*(60000-11200) reproduces TAXSIM to the cent. The
+        indexation vintage, not a pipeline defect; the pipeline matches
+        PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "2044.25 - 2074.0"
+          equals: -29.75
+          tolerance: 0.01
+        - expression: "0.0425*(60000-11200)"
+          equals: 2074.0
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 2044.25
+      right: 2074.0
+  - id: mi-taxsim-2024-exemption-indexation-married-120000
+    concept: us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability
+    case_id: mi-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Same flat 4.25 per cent rate in 2024 and 2026; the gap is the flat rate on
+        the 2024-to-2026 indexation of both exemptions (11,200 to 11,900). The
+        2024 schedule 0.0425*(120000-11200) reproduces TAXSIM to the cent. The
+        indexation vintage, not a pipeline defect; the pipeline matches
+        PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "4594.25 - 4624.0"
+          equals: -29.75
+          tolerance: 0.01
+        - expression: "0.0425*(120000-11200)"
+          equals: 4624.0
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 4594.25
+      right: 4624.0
+  - id: mi-taxsim-2024-exemption-indexation-married-300000
+    concept: us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability
+    case_id: mi-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        Same flat 4.25 per cent rate in 2024 and 2026; the gap is the flat rate on
+        the 2024-to-2026 indexation of both exemptions (11,200 to 11,900). The
+        2024 schedule 0.0425*(300000-11200) reproduces TAXSIM to the cent. The
+        indexation vintage, not a pipeline defect; the pipeline matches
+        PolicyEngine at 2026 to the cent.
+      arithmetic:
+        - expression: "12244.25 - 12274.0"
+          equals: -29.75
+          tolerance: 0.01
+        - expression: "0.0425*(300000-11200)"
+          equals: 12274.0
+          tolerance: 0.02
+    expires_on_source_change: true
+    pinned:
+      left: 12244.25
+      right: 12274.0
