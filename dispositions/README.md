@@ -70,8 +70,8 @@ entries:
 
 ## PolicyEngine attributions carry their Axiom side
 
-Standard (2026-09-24): a PolicyEngine policy bug is not done until Axiom has
-the policy right.
+Standard (reported decision date: 2026-09-24): a PolicyEngine policy bug is
+not done until Axiom has the policy right.
 
 **Which entries blame PolicyEngine.** Attribution is computed from the
 committed data. It does not come from entry names: for example,

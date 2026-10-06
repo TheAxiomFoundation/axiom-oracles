@@ -38,7 +38,7 @@ from __future__ import annotations
 import copy
 
 import yaml
-from hypothesis import given, settings
+from hypothesis import example, given, settings
 from hypothesis import strategies as st
 
 from axiom_oracles.comparison.pe_axiom_standard import (
@@ -231,6 +231,10 @@ def test_bootstrap_passes_the_records_it_was_derived_from(records) -> None:
 
 
 @PROPERTY_SETTINGS
+@example(
+    records=[_record(SOURCES[0], "NEL\u0085id", CONCEPTS[0], False, "missing")],
+    current=([], _parse(derive_ratchet([], None))),
+)
 @given(records=any_records, current=committed_ratchets())
 def test_serialization_round_trips(records, current) -> None:
     for document in (
@@ -378,6 +382,35 @@ def test_an_accepted_document_is_bound_by_its_raise(current, data) -> None:
 # --------------------------------------------------------------------------
 # I12: parallel branches always merge
 # --------------------------------------------------------------------------
+
+
+@PROPERTY_SETTINGS
+@example(current_pe=False, historical_pe=True)
+@given(current_pe=st.booleans(), historical_pe=st.booleans())
+def test_merged_grandfather_status_keeps_highest_pe_issue(
+    current_pe, historical_pe
+) -> None:
+    """A merge preserves every recorded PE-issue improvement."""
+
+    missing = _record(SOURCES[0], "a", CONCEPTS[0], False, "missing")
+    current = _parse(
+        derive_ratchet(
+            [_record(SOURCES[0], "a", CONCEPTS[0], current_pe, "missing")], None
+        )
+    )
+    historical = _parse(
+        derive_ratchet(
+            [_record(SOURCES[0], "a", CONCEPTS[0], historical_pe, "missing")], None
+        )
+    )
+    merged = effective_ratchet(current, [("other-branch", historical)])
+    assert merged.grandfathered[missing.key]["pe_issue"] == (
+        "present" if current_pe or historical_pe else "missing"
+    )
+    problems = check_records([missing], merged)
+    assert any("grandfathered entry regressed" in p for p in problems) == (
+        current_pe or historical_pe
+    )
 
 
 @PROPERTY_SETTINGS
