@@ -1,8 +1,9 @@
 # SNAP QC administrative data oracle playbook
 
-The SNAP QC oracle validates Axiom SNAP encodings against administrative
-microdata. It replays the USDA SNAP Quality Control public-use file (PUF)
-through the Axiom RuleSpec SNAP composition and compares Axiom's benefit and
+The SNAP QC oracle checks the benefit arithmetic of Axiom SNAP encodings and
+leaves eligibility untested (§3). It replays the USDA SNAP Quality Control
+public-use file (PUF) through the Axiom RuleSpec SNAP composition and compares
+Axiom's benefit and
 stage intermediates with the values Mathematica calculated for USDA from each
 edited case record (`FSBEN` and its intermediates, §2).
 This playbook is the standing recipe — the one a future contributor follows to add
@@ -52,7 +53,7 @@ Step 1 (May p.28).
   reviewers gather each sampled unit's financial and demographic information from
   its case file, reinterview the participants, and determine whether the unit
   received the correct benefit; FNS regional offices re-review a subsample of each
-  state's sample (tech doc PDF p.15). No state had a stratified sample in FY 2024
+  state's sample (tech doc PDF p.15). No state's FY 2024 sample was stratified
   (chapter III.A, *Developing the SNAP QC file*, Step 7, PDF p.26). FY2024 pools
   the twelve monthly samples into 44,891
   unit records for sample months October 2023 through September 2024 (`YRMONTH`
@@ -124,7 +125,7 @@ Step 1 (May p.28).
   from each edited record, and the replay reproduces FSBEN for all 856 Colorado
   units from the file's own amounts under the conventions in §3 and §7 (track
   record below). Constructed intermediates travel with it
-  for stage-by-stage diagnosis — `FSGRINC` (gross), `FSNETINC` (net),
+  (the replay compares four of them; §3) — `FSGRINC` (gross), `FSNETINC` (net),
   `FSERNDED`/`FSSTDDED`/`FSMEDDED`/`FSDEPDED`/`FSCSDED`/`FSSLTDED` (deductions;
   `FSSLTDED` is the final calculated excess-shelter deduction — the reported
   `SHELDED` is pre-edit and the codebook redirects to `FSSLTDED`),
@@ -134,7 +135,7 @@ Step 1 (May p.28).
 
 ## 3. What the oracle validates — and what it does not
 
-- The replay scores the benefit computation, not the eligibility screening. The
+- The replay scores the benefit computation and leaves eligibility untested. The
   public file already dropped every incomplete review and every ineligible unit (§4),
   and the records carry no application dates for initial-month proration, so the
   mapper feeds the composition's passing defaults for the eligibility gates (work
@@ -621,13 +622,13 @@ mismatch taxonomy, so an encoding gap shows up as a dispositioned class against
 the file's calculated values. Colorado's first run scored 816/856 and surfaced
 two federal encoding findings (the stale homeless-cap literal, rulespec-us#765,
 and the whole-dollar computation, #826) plus one mapper fix before reaching
-856/856; every stage has been scored at zero tolerance since 2026-07-12
+856/856; all six compared values have been scored at zero tolerance since 2026-07-12
 (details at the end of this section).
 
 New York, California, Arizona, Georgia, and Maryland joined for FY2024 on
 the same arc. California's first committed run (2026-07-12, rulespec-us
-`b53ce208`) matched 883/883 benefits with every stage within the $1 stage
-tolerance then in force; the federal chain fixes Colorado surfaced carried
+`b53ce208`) matched 883/883 benefits, with the other five compared values
+within the $1 stage tolerance then in force; the federal chain fixes Colorado surfaced carried
 over intact. New York's first run, recorded in the #269 description and not
 committed, scored 814/847: all 33 divergences were the one-dollar
 whole-dollar class through the composition's statutory-chain surface (§7).
@@ -650,7 +651,7 @@ Every committed real Arizona run matched all 5,532 comparisons (922 reviews
 × six concepts) at zero tolerance.
 
 The Colorado pilot in detail. The first run (2026-07-08, rulespec-us
-`67cd1000`) matched 816 of 856 benefits (95.3%) with every residual
+`67cd1000`) matched 816 of 856 benefits with every residual
 classified; the classifications surfaced two defects in the federal 273.10
 encoding — the stale $143 homeless-deduction literal (rulespec-us#761 → #765)
 and the missing whole-dollar rounding steps (rulespec-us#762 → #826) — plus

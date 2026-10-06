@@ -1,7 +1,11 @@
-# PolicyEngine/TAXSIM Validation
+# PolicyEngine/TAXSIM comparison
 
 This page documents how `axiom-oracles` compares PolicyEngine against TAXSIM,
 how to reproduce the current smoke test, and how to triage residual mismatches.
+
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
 
 ## Comparison Path
 
