@@ -293,7 +293,13 @@ def _evidence(
     preview = {
         "schema": producer.PREVIEW_SCHEMA,
         "verdict": "PASS",
-        "producer": {"campaign_classifier": preview_campaign_receipt},
+        "producer": {
+            "script": producer.file_receipt(
+                transition.preview_builder.PRODUCER_SOURCE,
+                relative_to=root,
+            ),
+            "campaign_classifier": preview_campaign_receipt,
+        },
         "inputs": {
             producer.HISTORICAL_LOGICAL_PATH: {
                 "path": producer.HISTORICAL_LOGICAL_PATH,
