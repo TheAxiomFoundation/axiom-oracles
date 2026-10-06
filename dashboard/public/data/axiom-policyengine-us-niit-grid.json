@@ -58,7 +58,8 @@
       "policyengine": 0.0,
       "policyengine_components": {
         "net_investment_income_tax": 0.0
-      }
+      },
+      "scenario_id": "niit-under"
     },
     {
       "axiom": 1140.0,
@@ -102,7 +103,8 @@
       "policyengine": 1140.0,
       "policyengine_components": {
         "net_investment_income_tax": 1140.0
-      }
+      },
+      "scenario_id": "niit-single-mixed"
     },
     {
       "axiom": 1900.0,
@@ -146,7 +148,8 @@
       "policyengine": 1900.0,
       "policyengine_components": {
         "net_investment_income_tax": 1900.0
-      }
+      },
+      "scenario_id": "niit-joint-gains"
     },
     {
       "axiom": 1140.0,
@@ -190,7 +193,8 @@
       "policyengine": 1140.0,
       "policyengine_components": {
         "net_investment_income_tax": 1140.0
-      }
+      },
+      "scenario_id": "niit-mfs"
     },
     {
       "axiom": 11400.0,
@@ -234,7 +238,8 @@
       "policyengine": 11400.0,
       "policyengine_components": {
         "net_investment_income_tax": 11400.0
-      }
+      },
+      "scenario_id": "niit-inv-only"
     },
     {
       "axiom": 1900.0,
@@ -278,7 +283,8 @@
       "policyengine": 1900.0,
       "policyengine_components": {
         "net_investment_income_tax": 1900.0
-      }
+      },
+      "scenario_id": "niit-rental"
     }
   ],
   "concept": "us:policies/income_tax/net_investment_income_tax_pipeline#federal_net_investment_income_tax",
@@ -297,12 +303,19 @@
   ],
   "engine_bindings": {
     "axiom": {
+      "bridge_outputs": {},
+      "diagnostic_outputs": {},
       "fixture": "us/policies/income_tax/net_investment_income_tax_pipeline.test.yaml",
       "module": "us:policies/income_tax/net_investment_income_tax_pipeline",
-      "output": "us:policies/income_tax/net_investment_income_tax_pipeline#federal_net_investment_income_tax"
+      "output": "us:policies/income_tax/net_investment_income_tax_pipeline#federal_net_investment_income_tax",
+      "outputs": [
+        "us:policies/income_tax/net_investment_income_tax_pipeline#federal_net_investment_income_tax"
+      ],
+      "supplemental_fixtures": []
     },
     "policyengine": {
       "boundary": "TaxUnit section 1411 tax; AGI equals MAGI because the grid has no section 911 exclusions",
+      "comparison_bindings": [],
       "diagnostic_outputs": [],
       "outputs": [
         "net_investment_income_tax"
@@ -311,13 +324,18 @@
   },
   "engines": {
     "left": "axiom",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
   },
   "mismatches": [],
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-25T15:22:23Z",
+    "generated_at": "2026-09-24T17:02:46Z",
     "generated_by": "scripts/run_comparison.py::us-niit-grid",
     "oracle": {
       "name": "policyengine",
@@ -334,6 +352,7 @@
     "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
+  "scenario_count": 6,
   "schema_version": "axiom.comparison_report.v2.1",
   "suite": "us-niit-grid",
   "summary": {
