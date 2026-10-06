@@ -1,0 +1,21 @@
+{
+  "fresh": {
+    "cases": 8100,
+    "chapter": "79",
+    "elapsed_seconds": 153.706,
+    "engine_errors": 0,
+    "key": "afe26dac684df76304d52dae388aff67c51af5bbc223f19f0f63f1554953df6e",
+    "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/cache/eval/af/afe26dac684df76304d52dae388aff67c51af5bbc223f19f0f63f1554953df6e.jsonl.gz",
+    "sha256": "03624b9ab3ee7539ae7ef0333725e1a1e79211dbee08d035e07786ab44ee3e62"
+  },
+  "historical": {
+    "cases": 8100,
+    "chapter": "79",
+    "elapsed_seconds": 34.535,
+    "engine_errors": 0,
+    "key": "a1a7f1475b4dc03548b924aae7ce2ef77fdda158b866ed0c2b6dbf6f503d4761",
+    "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/a1/a1a7f1475b4dc03548b924aae7ce2ef77fdda158b866ed0c2b6dbf6f503d4761.jsonl.gz",
+    "sha256": "03624b9ab3ee7539ae7ef0333725e1a1e79211dbee08d035e07786ab44ee3e62"
+  },
+  "equal_gzip_sha256": true
+}

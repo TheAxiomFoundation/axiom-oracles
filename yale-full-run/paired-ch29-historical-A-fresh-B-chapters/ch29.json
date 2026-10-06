@@ -1,0 +1,2318 @@
+{
+  "baseline_shard": {
+    "cases": 991575,
+    "chapter": "29",
+    "elapsed_seconds": 1711.205,
+    "engine_errors": 0,
+    "key": "8d6adc4454cb3431104f3b1c6ae91f04e23e2c1a3e069d8c5c5969a00a2ecf13",
+    "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/c1-cache/eval/8d/8d6adc4454cb3431104f3b1c6ae91f04e23e2c1a3e069d8c5c5969a00a2ecf13.jsonl.gz",
+    "sha256": "c87a669598ee1412974542c1e7aa9a2bd47992e2db6e6c7e3cd21ed5066e8082"
+  },
+  "candidate_shard": {
+    "cases": 991575,
+    "chapter": "29",
+    "elapsed_seconds": 1730.683,
+    "engine_errors": 0,
+    "key": "962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3",
+    "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/cache/eval/96/962b26d924fec249d17cf76b5f1c479defa6368eab7d400e511c573508681ff3.jsonl.gz",
+    "sha256": "24bda301e144abc4cd1e7c8d2868d91a9edfbd1ca0d83ecc803e63f110ca5d1c"
+  },
+  "case_comparability": "PASS",
+  "cases": 991575,
+  "chapter": "29",
+  "delta_sign_transitions": {
+    "axiom_total_reconciliation|retained_match": {
+      "negative_to_negative": 39107,
+      "positive_to_positive": 4196,
+      "zero_to_zero": 806011
+    },
+    "axiom_total_reconciliation|retained_match_changed_actual": {
+      "negative_to_negative": 16,
+      "negative_to_zero": 76,
+      "positive_to_zero": 16,
+      "zero_to_negative": 2488,
+      "zero_to_positive": 232,
+      "zero_to_zero": 104558
+    },
+    "base|retained_match": {
+      "zero_to_zero": 930375
+    },
+    "base|retained_mismatch_same_actual": {
+      "positive_to_positive": 26325
+    },
+    "brazil_section_301|match_to_mismatch": {
+      "zero_to_positive": 82
+    },
+    "brazil_section_301|mismatch_to_match": {
+      "negative_to_zero": 2610
+    },
+    "brazil_section_301|retained_match": {
+      "zero_to_zero": 984747
+    },
+    "brazil_section_301|retained_mismatch_changed_actual": {
+      "negative_to_positive": 4136
+    },
+    "china_section_301|retained_match": {
+      "zero_to_zero": 991305
+    },
+    "china_section_301|retained_mismatch_same_actual": {
+      "negative_to_negative": 216,
+      "positive_to_positive": 54
+    },
+    "forced_labor_section_301|match_to_mismatch": {
+      "zero_to_positive": 1000
+    },
+    "forced_labor_section_301|mismatch_to_match": {
+      "negative_to_zero": 50600
+    },
+    "forced_labor_section_301|retained_match": {
+      "zero_to_zero": 851604
+    },
+    "forced_labor_section_301|retained_mismatch_changed_actual": {
+      "negative_to_positive": 53496
+    },
+    "ieepa|retained_match": {
+      "zero_to_zero": 944514
+    },
+    "ieepa|retained_mismatch_same_actual": {
+      "positive_to_positive": 12186
+    },
+    "section_122|retained_match": {
+      "zero_to_zero": 991575
+    },
+    "section_201|retained_match": {
+      "zero_to_zero": 991575
+    },
+    "section_232|retained_match": {
+      "zero_to_zero": 988367
+    },
+    "section_232|retained_mismatch_same_actual": {
+      "negative_to_negative": 3208
+    },
+    "section_338|retained_match": {
+      "zero_to_zero": 991575
+    },
+    "total|match_to_mismatch": {
+      "zero_to_positive": 984
+    },
+    "total|mismatch_to_match": {
+      "negative_to_zero": 50820
+    },
+    "total|retained_match": {
+      "zero_to_zero": 810313
+    },
+    "total|retained_mismatch_changed_actual": {
+      "negative_to_negative": 32,
+      "negative_to_positive": 53674,
+      "positive_to_positive": 1876
+    },
+    "total|retained_mismatch_same_actual": {
+      "negative_to_negative": 3392,
+      "positive_to_positive": 35609
+    },
+    "yale_total_reconciliation|retained_match": {
+      "zero_to_zero": 956700
+    }
+  },
+  "elapsed_seconds": 121.743,
+  "per_slot": {
+    "axiom_total_reconciliation": {
+      "retained_match": 849314,
+      "retained_match_changed_actual": 107386
+    },
+    "base": {
+      "retained_match": 930375,
+      "retained_mismatch_same_actual": 26325
+    },
+    "brazil_section_301": {
+      "match_to_mismatch": 82,
+      "mismatch_to_match": 2610,
+      "retained_match": 984747,
+      "retained_mismatch_changed_actual": 4136
+    },
+    "china_section_301": {
+      "retained_match": 991305,
+      "retained_mismatch_same_actual": 270
+    },
+    "forced_labor_section_301": {
+      "match_to_mismatch": 1000,
+      "mismatch_to_match": 50600,
+      "retained_match": 851604,
+      "retained_mismatch_changed_actual": 53496
+    },
+    "ieepa": {
+      "retained_match": 944514,
+      "retained_mismatch_same_actual": 12186
+    },
+    "section_122": {
+      "retained_match": 991575
+    },
+    "section_201": {
+      "retained_match": 991575
+    },
+    "section_232": {
+      "retained_match": 988367,
+      "retained_mismatch_same_actual": 3208
+    },
+    "section_338": {
+      "retained_match": 991575
+    },
+    "total": {
+      "match_to_mismatch": 984,
+      "mismatch_to_match": 50820,
+      "retained_match": 810313,
+      "retained_mismatch_changed_actual": 55582,
+      "retained_mismatch_same_actual": 39001
+    },
+    "yale_total_reconciliation": {
+      "retained_match": 956700
+    }
+  },
+  "samples_by_slot_transition_and_sign": {
+    "axiom_total_reconciliation|retained_match_changed_actual|negative_to_negative": [
+      {
+        "baseline": {
+          "actual": 0.284,
+          "delta": -5.551115123125783e-17,
+          "expected": 0.28400000000000003,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.409,
+          "delta": -5.551115123125783e-17,
+          "expected": 0.40900000000000003,
+          "match": true
+        },
+        "case_id": "schedule-51af6ff6457f34a37e35f63f",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2903230000",
+        "iso2": "CN",
+        "probe": "2026-07-24",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.284,
+          "delta": -5.551115123125783e-17,
+          "expected": 0.28400000000000003,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.409,
+          "delta": -5.551115123125783e-17,
+          "expected": 0.40900000000000003,
+          "match": true
+        },
+        "case_id": "schedule-baad5b091fc724ca7f1dfb2b",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2903230000",
+        "iso2": "CN",
+        "probe": "2026-07-30",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.284,
+          "delta": -5.551115123125783e-17,
+          "expected": 0.28400000000000003,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.409,
+          "delta": -5.551115123125783e-17,
+          "expected": 0.40900000000000003,
+          "match": true
+        },
+        "case_id": "schedule-6ad906f3c6b21dbc9f35ad20",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2903230000",
+        "iso2": "CN",
+        "probe": "2026-07-31",
+        "slot": "axiom_total_reconciliation"
+      }
+    ],
+    "axiom_total_reconciliation|retained_match_changed_actual|negative_to_zero": [
+      {
+        "baseline": {
+          "actual": 0.142,
+          "delta": -2.7755575615628914e-17,
+          "expected": 0.14200000000000002,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.392,
+          "delta": 0.0,
+          "expected": 0.392,
+          "match": true
+        },
+        "case_id": "schedule-1d2acc9d27689cfd23ad51e5",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2903220000",
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.142,
+          "delta": -2.7755575615628914e-17,
+          "expected": 0.14200000000000002,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.392,
+          "delta": 0.0,
+          "expected": 0.392,
+          "match": true
+        },
+        "case_id": "schedule-583e30de4312f2c8d1e018ee",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2903220000",
+        "iso2": "BR",
+        "probe": "2026-07-23",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.142,
+          "delta": -2.7755575615628914e-17,
+          "expected": 0.14200000000000002,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.392,
+          "delta": 0.0,
+          "expected": 0.392,
+          "match": true
+        },
+        "case_id": "schedule-a594453fe293a35c2500d09d",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2904105000",
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "axiom_total_reconciliation"
+      }
+    ],
+    "axiom_total_reconciliation|retained_match_changed_actual|positive_to_zero": [
+      {
+        "baseline": {
+          "actual": 0.112,
+          "delta": 1.3877787807814457e-17,
+          "expected": 0.11199999999999999,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.237,
+          "delta": 0.0,
+          "expected": 0.237,
+          "match": true
+        },
+        "case_id": "schedule-56f3591147d2dc6c752e23d7",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2920905110",
+        "iso2": "CN",
+        "probe": "2026-07-24",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.112,
+          "delta": 1.3877787807814457e-17,
+          "expected": 0.11199999999999999,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.237,
+          "delta": 0.0,
+          "expected": 0.237,
+          "match": true
+        },
+        "case_id": "schedule-28bfc447566dc149ab9d8446",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2920905110",
+        "iso2": "CN",
+        "probe": "2026-07-30",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.112,
+          "delta": 1.3877787807814457e-17,
+          "expected": 0.11199999999999999,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.237,
+          "delta": 0.0,
+          "expected": 0.237,
+          "match": true
+        },
+        "case_id": "schedule-e0959bd4d69cecfe8bba0f2a",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2920905110",
+        "iso2": "CN",
+        "probe": "2026-07-31",
+        "slot": "axiom_total_reconciliation"
+      }
+    ],
+    "axiom_total_reconciliation|retained_match_changed_actual|zero_to_negative": [
+      {
+        "baseline": {
+          "actual": 0.085,
+          "delta": 0.0,
+          "expected": 0.085,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.21,
+          "delta": -2.7755575615628914e-17,
+          "expected": 0.21000000000000002,
+          "match": true
+        },
+        "case_id": "schedule-579a765aea84e24442fac21b",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2903140000",
+        "iso2": "RU",
+        "probe": "2026-07-24",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.085,
+          "delta": 0.0,
+          "expected": 0.085,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.21,
+          "delta": -2.7755575615628914e-17,
+          "expected": 0.21000000000000002,
+          "match": true
+        },
+        "case_id": "schedule-25adc03463b009879ae2d261",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2903140000",
+        "iso2": "RU",
+        "probe": "2026-07-30",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.085,
+          "delta": 0.0,
+          "expected": 0.085,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.21,
+          "delta": -2.7755575615628914e-17,
+          "expected": 0.21000000000000002,
+          "match": true
+        },
+        "case_id": "schedule-68ac70108e900b2105509009",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2903140000",
+        "iso2": "RU",
+        "probe": "2026-07-31",
+        "slot": "axiom_total_reconciliation"
+      }
+    ],
+    "axiom_total_reconciliation|retained_match_changed_actual|zero_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.046,
+          "delta": 0.0,
+          "expected": 0.046,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.171,
+          "delta": 2.7755575615628914e-17,
+          "expected": 0.17099999999999999,
+          "match": true
+        },
+        "case_id": "schedule-5cadbfa8c2b56214ca6f5c31",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2905430000",
+        "iso2": "NI",
+        "probe": "2026-07-24",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.046,
+          "delta": 0.0,
+          "expected": 0.046,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.171,
+          "delta": 2.7755575615628914e-17,
+          "expected": 0.17099999999999999,
+          "match": true
+        },
+        "case_id": "schedule-9ff2ae86ce53704c589a6723",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2905430000",
+        "iso2": "NI",
+        "probe": "2026-07-30",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.046,
+          "delta": 0.0,
+          "expected": 0.046,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.171,
+          "delta": 2.7755575615628914e-17,
+          "expected": 0.17099999999999999,
+          "match": true
+        },
+        "case_id": "schedule-7c832d55790f6f722014c190",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2905430000",
+        "iso2": "NI",
+        "probe": "2026-07-31",
+        "slot": "axiom_total_reconciliation"
+      }
+    ],
+    "axiom_total_reconciliation|retained_match_changed_actual|zero_to_zero": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": 0.0,
+          "expected": 0.0,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.0,
+          "expected": 0.1,
+          "match": true
+        },
+        "case_id": "schedule-fa5e74b0afe63586d3585ced",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "CA",
+        "probe": "2026-07-24",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": 0.0,
+          "expected": 0.0,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.0,
+          "expected": 0.1,
+          "match": true
+        },
+        "case_id": "schedule-1b47a594f352d90ac9fede51",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "CA",
+        "probe": "2026-07-30",
+        "slot": "axiom_total_reconciliation"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": 0.0,
+          "expected": 0.0,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.0,
+          "expected": 0.1,
+          "match": true
+        },
+        "case_id": "schedule-3de408311d791db05356a401",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "CA",
+        "probe": "2026-07-31",
+        "slot": "axiom_total_reconciliation"
+      }
+    ],
+    "base|retained_mismatch_same_actual|positive_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-8e01d41c4a56991f8e364d82",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901103000",
+        "iso2": "RU",
+        "probe": "2026-02-15",
+        "slot": "base"
+      },
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-937c34ef23b766758d1ab1a6",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901103000",
+        "iso2": "RU",
+        "probe": "2026-02-19",
+        "slot": "base"
+      },
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-640251c452347f4d06c0154e",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901103000",
+        "iso2": "RU",
+        "probe": "2026-02-20",
+        "slot": "base"
+      }
+    ],
+    "brazil_section_301|match_to_mismatch|zero_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": 0.0,
+          "expected": 0.0,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-21475459723afdb3c1c419c9",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2918993000",
+        "iso2": "BR",
+        "probe": "2026-07-31",
+        "slot": "brazil_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": 0.0,
+          "expected": 0.0,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-cb84c4958bb9faef6be7907a",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2918993000",
+        "iso2": "BR",
+        "probe": "2026-08-01",
+        "slot": "brazil_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": 0.0,
+          "expected": 0.0,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-a9a2f5608b78dd7816fd059a",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2921493800",
+        "iso2": "BR",
+        "probe": "2026-07-31",
+        "slot": "brazil_section_301"
+      }
+    ],
+    "brazil_section_301|mismatch_to_match|negative_to_zero": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.25,
+          "expected": 0.25,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.0,
+          "expected": 0.25,
+          "match": true
+        },
+        "case_id": "schedule-8414063056b3cb8ae7f3cac7",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.25,
+          "expected": 0.25,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.0,
+          "expected": 0.25,
+          "match": true
+        },
+        "case_id": "schedule-6badea14d6d277ce6afd73eb",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "BR",
+        "probe": "2026-07-23",
+        "slot": "brazil_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.25,
+          "expected": 0.25,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.0,
+          "expected": 0.25,
+          "match": true
+        },
+        "case_id": "schedule-79d6108764715af07aadfba7",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "BR",
+        "probe": "2026-07-24",
+        "slot": "brazil_section_301"
+      }
+    ],
+    "brazil_section_301|retained_mismatch_changed_actual|negative_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.125,
+          "expected": 0.125,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.125,
+          "expected": 0.125,
+          "match": false
+        },
+        "case_id": "schedule-87e10801941042fa2f90dee8",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.125,
+          "expected": 0.125,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.125,
+          "expected": 0.125,
+          "match": false
+        },
+        "case_id": "schedule-efd944a505c5e5d5c78b149c",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "BR",
+        "probe": "2026-07-23",
+        "slot": "brazil_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.125,
+          "expected": 0.125,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.125,
+          "expected": 0.125,
+          "match": false
+        },
+        "case_id": "schedule-638cf8c59e4f984d5aa4d618",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "BR",
+        "probe": "2026-07-24",
+        "slot": "brazil_section_301"
+      }
+    ],
+    "china_section_301|retained_mismatch_same_actual|negative_to_negative": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.25,
+          "expected": 0.25,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.0,
+          "delta": -0.25,
+          "expected": 0.25,
+          "match": false
+        },
+        "case_id": "schedule-5a92164d8c9a36f5d6f3efc8",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2931909010",
+        "iso2": "CN",
+        "probe": "2026-02-15",
+        "slot": "china_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.25,
+          "expected": 0.25,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.0,
+          "delta": -0.25,
+          "expected": 0.25,
+          "match": false
+        },
+        "case_id": "schedule-aa170991a810572626fa0df8",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2931909010",
+        "iso2": "CN",
+        "probe": "2026-02-19",
+        "slot": "china_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.25,
+          "expected": 0.25,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.0,
+          "delta": -0.25,
+          "expected": 0.25,
+          "match": false
+        },
+        "case_id": "schedule-9193fa7a5e7719bbda7ae9c6",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2931909010",
+        "iso2": "CN",
+        "probe": "2026-02-20",
+        "slot": "china_section_301"
+      }
+    ],
+    "china_section_301|retained_mismatch_same_actual|positive_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.0875,
+          "expected": 0.1625,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.0875,
+          "expected": 0.1625,
+          "match": false
+        },
+        "case_id": "schedule-09555436ab9c278252b09138",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2917125000",
+        "iso2": "CN",
+        "probe": "2026-02-15",
+        "slot": "china_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.0875,
+          "expected": 0.1625,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.0875,
+          "expected": 0.1625,
+          "match": false
+        },
+        "case_id": "schedule-dc83ad9180d068a6de158830",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2917125000",
+        "iso2": "CN",
+        "probe": "2026-02-19",
+        "slot": "china_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.0875,
+          "expected": 0.1625,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.0875,
+          "expected": 0.1625,
+          "match": false
+        },
+        "case_id": "schedule-8975b55b40d40c1d5cc33a6a",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2917125000",
+        "iso2": "CN",
+        "probe": "2026-02-20",
+        "slot": "china_section_301"
+      }
+    ],
+    "forced_labor_section_301|match_to_mismatch|zero_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": 0.0,
+          "expected": 0.0,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.1,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-eb2978c3d121adf6e95f523f",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2918993000",
+        "iso2": "CA",
+        "probe": "2026-07-31",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": 0.0,
+          "expected": 0.0,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.1,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-6ebcc28e587fc6942adaf41b",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2918993000",
+        "iso2": "CA",
+        "probe": "2026-08-01",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": 0.0,
+          "expected": 0.0,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.1,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-908e005fe522634d92635e2f",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2918993000",
+        "iso2": "MX",
+        "probe": "2026-07-31",
+        "slot": "forced_labor_section_301"
+      }
+    ],
+    "forced_labor_section_301|mismatch_to_match|negative_to_zero": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.1,
+          "expected": 0.1,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.0,
+          "expected": 0.1,
+          "match": true
+        },
+        "case_id": "schedule-fa5e74b0afe63586d3585ced",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "CA",
+        "probe": "2026-07-24",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.1,
+          "expected": 0.1,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.0,
+          "expected": 0.1,
+          "match": true
+        },
+        "case_id": "schedule-1b47a594f352d90ac9fede51",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "CA",
+        "probe": "2026-07-30",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.1,
+          "expected": 0.1,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.0,
+          "expected": 0.1,
+          "match": true
+        },
+        "case_id": "schedule-3de408311d791db05356a401",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "CA",
+        "probe": "2026-07-31",
+        "slot": "forced_labor_section_301"
+      }
+    ],
+    "forced_labor_section_301|retained_mismatch_changed_actual|negative_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "case_id": "schedule-04abc493f2d20f6efd5e74da",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "CA",
+        "probe": "2026-07-24",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "case_id": "schedule-41aed2ff9fc9ef32f6474bfc",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "CA",
+        "probe": "2026-07-30",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "case_id": "schedule-67682058edf298060561a69c",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "CA",
+        "probe": "2026-07-31",
+        "slot": "forced_labor_section_301"
+      }
+    ],
+    "ieepa|retained_mismatch_same_actual|positive_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.15,
+          "delta": 0.15,
+          "expected": 0.0,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.15,
+          "delta": 0.15,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-c77c3bce9d23147aea46689b",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "BE",
+        "probe": "2026-02-15",
+        "slot": "ieepa"
+      },
+      {
+        "baseline": {
+          "actual": 0.15,
+          "delta": 0.15,
+          "expected": 0.0,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.15,
+          "delta": 0.15,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-f31589e12d33072de7b73d46",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "BE",
+        "probe": "2026-02-19",
+        "slot": "ieepa"
+      },
+      {
+        "baseline": {
+          "actual": 0.15,
+          "delta": 0.15,
+          "expected": 0.0,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.15,
+          "delta": 0.15,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-4d1a56949df146a16c9c27d9",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "LI",
+        "probe": "2026-02-15",
+        "slot": "ieepa"
+      }
+    ],
+    "section_232|retained_mismatch_same_actual|negative_to_negative": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.5,
+          "expected": 0.5,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.0,
+          "delta": -0.5,
+          "expected": 0.5,
+          "match": false
+        },
+        "case_id": "schedule-0907e14a1807e1d0d2d2f6d5",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901220000",
+        "iso2": "CA",
+        "probe": "2026-02-15",
+        "slot": "section_232"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.5,
+          "expected": 0.5,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.0,
+          "delta": -0.5,
+          "expected": 0.5,
+          "match": false
+        },
+        "case_id": "schedule-0deb8e743bbc2ba45a2fac19",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901220000",
+        "iso2": "CA",
+        "probe": "2026-02-19",
+        "slot": "section_232"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.5,
+          "expected": 0.5,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.0,
+          "delta": -0.5,
+          "expected": 0.5,
+          "match": false
+        },
+        "case_id": "schedule-31511b7ef5dd0c0c1a5b787f",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901220000",
+        "iso2": "CA",
+        "probe": "2026-02-20",
+        "slot": "section_232"
+      }
+    ],
+    "total|match_to_mismatch|zero_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.065,
+          "delta": 0.0,
+          "expected": 0.065,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.165,
+          "delta": 0.1,
+          "expected": 0.065,
+          "match": false
+        },
+        "case_id": "schedule-eb2978c3d121adf6e95f523f",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2918993000",
+        "iso2": "CA",
+        "probe": "2026-07-31",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.065,
+          "delta": 0.0,
+          "expected": 0.065,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.165,
+          "delta": 0.1,
+          "expected": 0.065,
+          "match": false
+        },
+        "case_id": "schedule-6ebcc28e587fc6942adaf41b",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2918993000",
+        "iso2": "CA",
+        "probe": "2026-08-01",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.065,
+          "delta": 0.0,
+          "expected": 0.065,
+          "match": true
+        },
+        "candidate": {
+          "actual": 0.165,
+          "delta": 0.1,
+          "expected": 0.065,
+          "match": false
+        },
+        "case_id": "schedule-908e005fe522634d92635e2f",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2918993000",
+        "iso2": "MX",
+        "probe": "2026-07-31",
+        "slot": "total"
+      }
+    ],
+    "total|mismatch_to_match|negative_to_zero": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.1,
+          "expected": 0.1,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.0,
+          "expected": 0.1,
+          "match": true
+        },
+        "case_id": "schedule-fa5e74b0afe63586d3585ced",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "CA",
+        "probe": "2026-07-24",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.1,
+          "expected": 0.1,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.0,
+          "expected": 0.1,
+          "match": true
+        },
+        "case_id": "schedule-1b47a594f352d90ac9fede51",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "CA",
+        "probe": "2026-07-30",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.1,
+          "expected": 0.1,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.0,
+          "expected": 0.1,
+          "match": true
+        },
+        "case_id": "schedule-3de408311d791db05356a401",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901101000",
+        "iso2": "CA",
+        "probe": "2026-07-31",
+        "slot": "total"
+      }
+    ],
+    "total|retained_mismatch_changed_actual|negative_to_negative": [
+      {
+        "baseline": {
+          "actual": 0.037,
+          "delta": -0.3125,
+          "expected": 0.3495,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.162,
+          "delta": -0.18749999999999997,
+          "expected": 0.3495,
+          "match": false
+        },
+        "case_id": "schedule-e0d43b4c747a6f175eadee18",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2931909010",
+        "iso2": "CN",
+        "probe": "2026-07-24",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.037,
+          "delta": -0.3125,
+          "expected": 0.3495,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.162,
+          "delta": -0.18749999999999997,
+          "expected": 0.3495,
+          "match": false
+        },
+        "case_id": "schedule-0eec60a0546d3e5c3b80cb36",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2931909010",
+        "iso2": "CN",
+        "probe": "2026-07-30",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.037,
+          "delta": -0.3125,
+          "expected": 0.3495,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.162,
+          "delta": -0.18749999999999997,
+          "expected": 0.3495,
+          "match": false
+        },
+        "case_id": "schedule-df2bb065ba4d501c52a11787",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2931909010",
+        "iso2": "CN",
+        "probe": "2026-07-31",
+        "slot": "total"
+      }
+    ],
+    "total|retained_mismatch_changed_actual|negative_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "case_id": "schedule-04abc493f2d20f6efd5e74da",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "CA",
+        "probe": "2026-07-24",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "case_id": "schedule-41aed2ff9fc9ef32f6474bfc",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "CA",
+        "probe": "2026-07-30",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.1,
+          "delta": 0.05,
+          "expected": 0.05,
+          "match": false
+        },
+        "case_id": "schedule-67682058edf298060561a69c",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901104000",
+        "iso2": "CA",
+        "probe": "2026-07-31",
+        "slot": "total"
+      }
+    ],
+    "total|retained_mismatch_changed_actual|positive_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.125,
+          "expected": 0.125,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.375,
+          "delta": 0.25,
+          "expected": 0.125,
+          "match": false
+        },
+        "case_id": "schedule-45f6e06ecac142c5857ff702",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901103000",
+        "iso2": "RU",
+        "probe": "2026-07-24",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.125,
+          "expected": 0.125,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.375,
+          "delta": 0.25,
+          "expected": 0.125,
+          "match": false
+        },
+        "case_id": "schedule-007d38712ce0f13cc3ee16a2",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901103000",
+        "iso2": "RU",
+        "probe": "2026-07-30",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.125,
+          "expected": 0.125,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.375,
+          "delta": 0.25,
+          "expected": 0.125,
+          "match": false
+        },
+        "case_id": "schedule-a2eb6ecde8c07f4179faec71",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901103000",
+        "iso2": "RU",
+        "probe": "2026-07-31",
+        "slot": "total"
+      }
+    ],
+    "total|retained_mismatch_same_actual|negative_to_negative": [
+      {
+        "baseline": {
+          "actual": 0.35,
+          "delta": -0.5,
+          "expected": 0.85,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.35,
+          "delta": -0.5,
+          "expected": 0.85,
+          "match": false
+        },
+        "case_id": "schedule-0907e14a1807e1d0d2d2f6d5",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901220000",
+        "iso2": "CA",
+        "probe": "2026-02-15",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.35,
+          "delta": -0.5,
+          "expected": 0.85,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.35,
+          "delta": -0.5,
+          "expected": 0.85,
+          "match": false
+        },
+        "case_id": "schedule-0deb8e743bbc2ba45a2fac19",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901220000",
+        "iso2": "CA",
+        "probe": "2026-02-19",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.0,
+          "delta": -0.5,
+          "expected": 0.5,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.0,
+          "delta": -0.5,
+          "expected": 0.5,
+          "match": false
+        },
+        "case_id": "schedule-31511b7ef5dd0c0c1a5b787f",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901220000",
+        "iso2": "CA",
+        "probe": "2026-02-20",
+        "slot": "total"
+      }
+    ],
+    "total|retained_mismatch_same_actual|positive_to_positive": [
+      {
+        "baseline": {
+          "actual": 0.35,
+          "delta": 0.24999999999999997,
+          "expected": 0.1,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.35,
+          "delta": 0.24999999999999997,
+          "expected": 0.1,
+          "match": false
+        },
+        "case_id": "schedule-8e01d41c4a56991f8e364d82",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901103000",
+        "iso2": "RU",
+        "probe": "2026-02-15",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.35,
+          "delta": 0.24999999999999997,
+          "expected": 0.1,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.35,
+          "delta": 0.24999999999999997,
+          "expected": 0.1,
+          "match": false
+        },
+        "case_id": "schedule-937c34ef23b766758d1ab1a6",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901103000",
+        "iso2": "RU",
+        "probe": "2026-02-19",
+        "slot": "total"
+      },
+      {
+        "baseline": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "candidate": {
+          "actual": 0.25,
+          "delta": 0.25,
+          "expected": 0.0,
+          "match": false
+        },
+        "case_id": "schedule-640251c452347f4d06c0154e",
+        "changed_flags": {
+          "entry_is_brazil_301_listed": [
+            false,
+            true
+          ],
+          "entry_is_forced_labor_301_listed": [
+            false,
+            true
+          ]
+        },
+        "hts10": "2901103000",
+        "iso2": "RU",
+        "probe": "2026-02-20",
+        "slot": "total"
+      }
+    ]
+  },
+  "shard_hash_verification": "PASS",
+  "transitions": {
+    "match_to_mismatch": 2066,
+    "mismatch_to_match": 104030,
+    "retained_match": 11281964,
+    "retained_match_changed_actual": 107386,
+    "retained_mismatch_changed_actual": 113214,
+    "retained_mismatch_same_actual": 80990
+  }
+}

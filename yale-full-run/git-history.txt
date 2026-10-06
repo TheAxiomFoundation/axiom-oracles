@@ -1,0 +1,5 @@
+75b334ae9da4a4bad2118218078a69990524570e test: checkpoint current Yale campaign and report fresh candidate results
+3869ba0c3853ed90a4a6f01e0253333c8731788c test: authenticate fresh CH79 results and trace remaining tariff gaps
+60fac6a5204dc2f8fab86356cbb4c327823bef29 test: measure fresh A/B tariff probes and remaining open gaps
+9c1df1eb83c4186d89f572a4d9d88040a0e15586 test: record tariff prerequisites and cache validity audit
+f07280b5f55b8321036fd33f619f8083ef8bbda7 chore: record isolated current-code Yale campaign setup

@@ -1,0 +1,92 @@
+{
+  "joins": [
+    {
+      "heading_families": [],
+      "hts10": "9403999020",
+      "probe": "2026-07-22",
+      "yale_annex_tier": "annex_2"
+    },
+    {
+      "heading_families": [],
+      "hts10": "9403999020",
+      "probe": "2026-07-24",
+      "yale_annex_tier": "annex_2"
+    },
+    {
+      "heading_families": [],
+      "hts10": "8467895030",
+      "probe": "2026-07-30",
+      "yale_annex_tier": "annex_1b"
+    },
+    {
+      "heading_families": [
+        "auto_parts",
+        "mhd_parts"
+      ],
+      "hts10": "8414308030",
+      "probe": "2026-07-22",
+      "yale_annex_tier": null
+    },
+    {
+      "heading_families": [
+        "auto_parts",
+        "mhd_parts"
+      ],
+      "hts10": "8407344400",
+      "probe": "2026-07-24",
+      "yale_annex_tier": "annex_2"
+    }
+  ],
+  "verification": "PASS: current producer verify_yale_sources returned normally",
+  "verification_basis": "yale_sources commit/tree/file hashes from committed preview-disposition-line-sets.json, adapted to producer audit shape",
+  "yale_sources": {
+    "commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+    "files": {
+      "config/policy_params.yaml": {
+        "bytes": 50577,
+        "sha256": "5f3d79b192b9fb6079e5ad10a1969e12f397567fc9f89d4e202403116ecb6346"
+      },
+      "resources/ieepa_exempt_products.csv": {
+        "bytes": 64768,
+        "sha256": "41cbdc517406ce297f856ca109064745fa41de930735dbeba36fc0d890f121d5"
+      },
+      "resources/s232_annex_products.csv": {
+        "bytes": 44677,
+        "sha256": "90b800fc3556b25cbf4cef982dc3232c86e367e1b7ec6f53621a116fc7b4a68d"
+      },
+      "resources/s232_auto_parts.txt": {
+        "bytes": 1182,
+        "sha256": "8d2214ecb718bdd3db9e21a313665e4815972c0f7a099115c843e5254569411b"
+      },
+      "resources/s232_copper_products.csv": {
+        "bytes": 1616,
+        "sha256": "bfb8ef9c3371e7b065da5eba5d6cb05a76189838e9a25dd1d2772d581930ce21"
+      },
+      "resources/s232_derivative_products.csv": {
+        "bytes": 25415,
+        "sha256": "4502c782a356b2843cf7652ccaf3dcb2c7af1ac1556fec16e00062acc844a0bb"
+      },
+      "resources/s232_mhd_parts.txt": {
+        "bytes": 1712,
+        "sha256": "1411bac1b64b0510343a3d9b437b538357fceed13dffd480eee464f746a49cfb"
+      },
+      "resources/s232_pharma_products.csv": {
+        "bytes": 1447,
+        "sha256": "eb5f888ef3967c699b4f85618859d3556a9552e7d636ead2bbdc09256edcca04"
+      },
+      "resources/s232_semi_products.csv": {
+        "bytes": 650,
+        "sha256": "80ed04fac77a55546d95551f8c26e0326ac0278cb9d6f1f6d3cd9dbe78ec6330"
+      },
+      "src/model/data_loaders.R": {
+        "bytes": 43137,
+        "sha256": "a088811f84ff19eaf6fce28f2587152c69ed50e53435ddedd2425fd369b62ccc"
+      },
+      "src/pipeline/06_calculate_rates.R": {
+        "bytes": 179892,
+        "sha256": "2620a122159c11cc2b116786925ccbc6d801cb274982034cd8105657ae13a76a"
+      }
+    },
+    "tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+  }
+}

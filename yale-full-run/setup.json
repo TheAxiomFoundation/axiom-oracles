@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-09-23T19:26:49.848843+00:00",
+  "oracles_commit": "16fe458fc46512b15c4580cb9f25596bd7cb6984",
+  "baseline": "96d5e7c1e6309dc205b7320bbddaae8dd5d410df",
+  "candidate": "c62645022a8b2fcb5f9e6afdc2def2c8d68c2baf",
+  "engine": "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+  "engine_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7",
+  "outer_checkout_branch_attempt": {
+    "command": "git -c core.fsmonitor=false switch -c subfleet/yale-campaign-full-v2 origin/main",
+    "exit": 128,
+    "stderr": "Unable to create outer shared git metadata index.lock: Operation not permitted"
+  },
+  "local_branch": "subfleet/yale-campaign-full-v2",
+  "candidate_manifest_reset": "archived committed manifest to B/committed/MANIFEST.json; initialized empty current-run manifest to prevent old/new shard mixing"
+}

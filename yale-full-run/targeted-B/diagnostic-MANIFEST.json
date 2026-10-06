@@ -1,0 +1,341 @@
+{
+  "aggregate": {
+    "arithmetic_closure_condition": false,
+    "attribution_census": {
+      "axiom-attributed-open": 83,
+      "derived": 997,
+      "input-comparability": 663,
+      "reference-behavior": 271,
+      "reference-defect": 16,
+      "unexplained": 168,
+      "upstream-methodology": 420
+    },
+    "cases": 2438,
+    "class_census": {
+      "__derived_total__": 997,
+      "__unexplained_component__": 86,
+      "__unexplained_total__": 82,
+      "aircraft-utilization-proxy-brazil": 14,
+      "aircraft-utilization-proxy-forced-labor": 34,
+      "cafta-52i-deferred": 5,
+      "column2-gn3b": 420,
+      "non-metal-232-family": 89,
+      "pharma-utilization-proxy-brazil": 77,
+      "pharma-utilization-proxy-forced-labor-non035": 114,
+      "s122-entry-status-lines": 134,
+      "s122-gn6-lines": 32,
+      "section232-annex-brazil": 33,
+      "section232-annex-forced-labor": 35,
+      "section232-heading-brazil": 2,
+      "section232-heading-forced-labor": 8,
+      "vintage-revision-232": 407,
+      "vintage-revision-301": 1,
+      "yale-hts8-broadening-brazil": 16,
+      "yale-zero-pharma-brazil": 10,
+      "yale-zero-pharma-forced-labor": 22
+    },
+    "class_per_slot": {
+      "__derived_total__": {
+        "total": 997
+      },
+      "__unexplained_component__": {
+        "brazil_section_301": 6,
+        "forced_labor_section_301": 80
+      },
+      "__unexplained_total__": {
+        "total": 82
+      },
+      "aircraft-utilization-proxy-brazil": {
+        "brazil_section_301": 14
+      },
+      "aircraft-utilization-proxy-forced-labor": {
+        "forced_labor_section_301": 34
+      },
+      "cafta-52i-deferred": {
+        "forced_labor_section_301": 5
+      },
+      "column2-gn3b": {
+        "base": 420
+      },
+      "non-metal-232-family": {
+        "section_232": 89
+      },
+      "pharma-utilization-proxy-brazil": {
+        "brazil_section_301": 77
+      },
+      "pharma-utilization-proxy-forced-labor-non035": {
+        "forced_labor_section_301": 114
+      },
+      "s122-entry-status-lines": {
+        "section_122": 134
+      },
+      "s122-gn6-lines": {
+        "section_122": 32
+      },
+      "section232-annex-brazil": {
+        "brazil_section_301": 33
+      },
+      "section232-annex-forced-labor": {
+        "forced_labor_section_301": 35
+      },
+      "section232-heading-brazil": {
+        "brazil_section_301": 2
+      },
+      "section232-heading-forced-labor": {
+        "forced_labor_section_301": 8
+      },
+      "vintage-revision-232": {
+        "section_232": 407
+      },
+      "vintage-revision-301": {
+        "china_section_301": 1
+      },
+      "yale-hts8-broadening-brazil": {
+        "brazil_section_301": 16
+      },
+      "yale-zero-pharma-brazil": {
+        "brazil_section_301": 10
+      },
+      "yale-zero-pharma-forced-labor": {
+        "forced_labor_section_301": 22
+      }
+    },
+    "derived_total_compositions": {
+      "aircraft-utilization-proxy-brazil": 1,
+      "aircraft-utilization-proxy-brazil + aircraft-utilization-proxy-forced-labor": 10,
+      "aircraft-utilization-proxy-brazil + s122-gn6-lines": 3,
+      "aircraft-utilization-proxy-forced-labor": 18,
+      "aircraft-utilization-proxy-forced-labor + column2-gn3b": 5,
+      "aircraft-utilization-proxy-forced-labor + vintage-revision-301": 1,
+      "cafta-52i-deferred": 5,
+      "column2-gn3b": 351,
+      "column2-gn3b + non-metal-232-family": 3,
+      "column2-gn3b + non-metal-232-family + section232-annex-forced-labor": 3,
+      "column2-gn3b + non-metal-232-family + section232-heading-forced-labor": 3,
+      "column2-gn3b + pharma-utilization-proxy-forced-labor-non035": 12,
+      "column2-gn3b + s122-entry-status-lines + vintage-revision-232": 10,
+      "column2-gn3b + s122-gn6-lines": 1,
+      "column2-gn3b + s122-gn6-lines + vintage-revision-232": 4,
+      "column2-gn3b + vintage-revision-232": 23,
+      "non-metal-232-family": 23,
+      "non-metal-232-family + s122-gn6-lines": 1,
+      "non-metal-232-family + s122-gn6-lines + section232-annex-brazil": 1,
+      "non-metal-232-family + s122-gn6-lines + section232-heading-brazil": 1,
+      "non-metal-232-family + section232-annex-brazil": 3,
+      "non-metal-232-family + section232-annex-brazil + section232-annex-forced-labor": 18,
+      "non-metal-232-family + section232-annex-forced-labor": 14,
+      "non-metal-232-family + section232-heading-brazil": 1,
+      "non-metal-232-family + section232-heading-forced-labor": 5,
+      "pharma-utilization-proxy-brazil": 40,
+      "pharma-utilization-proxy-brazil + pharma-utilization-proxy-forced-labor-non035": 37,
+      "pharma-utilization-proxy-forced-labor-non035": 65,
+      "s122-entry-status-lines + vintage-revision-232": 122,
+      "s122-gn6-lines": 9,
+      "s122-gn6-lines + vintage-revision-232": 11,
+      "vintage-revision-232": 155,
+      "yale-hts8-broadening-brazil": 16,
+      "yale-zero-pharma-brazil + yale-zero-pharma-forced-labor": 10,
+      "yale-zero-pharma-forced-labor": 12
+    },
+    "mismatch_delta_signs_per_slot": {
+      "base": {
+        "positive": 420
+      },
+      "brazil_section_301": {
+        "negative": 6,
+        "positive": 152
+      },
+      "china_section_301": {
+        "negative": 1
+      },
+      "forced_labor_section_301": {
+        "negative": 80,
+        "positive": 218
+      },
+      "section_122": {
+        "negative": 149,
+        "positive": 17
+      },
+      "section_232": {
+        "negative": 90,
+        "positive": 406
+      },
+      "total": {
+        "negative": 45,
+        "positive": 1034
+      }
+    },
+    "per_slot": {
+      "axiom_total_reconciliation": {
+        "match": 2249
+      },
+      "base": {
+        "explained": 420,
+        "match": 1829,
+        "mismatch": 420
+      },
+      "brazil_section_301": {
+        "explained": 152,
+        "match": 2280,
+        "mismatch": 158,
+        "unexplained": 6
+      },
+      "china_section_301": {
+        "explained": 1,
+        "match": 2437,
+        "mismatch": 1
+      },
+      "forced_labor_section_301": {
+        "explained": 218,
+        "match": 1951,
+        "mismatch": 298,
+        "unexplained": 80
+      },
+      "ieepa": {
+        "match": 2249
+      },
+      "section_122": {
+        "explained": 166,
+        "match": 2272,
+        "mismatch": 166
+      },
+      "section_201": {
+        "match": 2438
+      },
+      "section_232": {
+        "explained": 496,
+        "match": 1942,
+        "mismatch": 496
+      },
+      "section_338": {
+        "match": 2438
+      },
+      "total": {
+        "explained": 997,
+        "match": 1170,
+        "mismatch": 1079,
+        "unexplained": 82
+      },
+      "yale_total_reconciliation": {
+        "match": 2249
+      }
+    },
+    "summary": {
+      "axiom_attributed_open": 83,
+      "comparisons": 28122,
+      "derived_total_units": 997,
+      "engine_errors": 0,
+      "matches": 25504,
+      "mismatches": 2618,
+      "unexplained": 168,
+      "unexplained_total_units": 82
+    },
+    "unexplained_components_per_slot": {
+      "brazil_section_301": 6,
+      "forced_labor_section_301": 80
+    },
+    "unexplained_total_component_compositions": {
+      "brazil_section_301": 2,
+      "brazil_section_301 + forced_labor_section_301": 4,
+      "forced_labor_section_301": 76
+    },
+    "would_be_conformant": null,
+    "would_be_conformant_reason": "Diagnostic only; official coverage, input, projection and preview-selector population guards must pass."
+  },
+  "argv": [
+    "yale-full-run/run_targeted_probe.py",
+    "evaluate",
+    "--oracles-root",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles",
+    "--rulespec-root",
+    "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us",
+    "--engine-binary",
+    "/Users/maxghenis/TheAxiomFoundation/_tariff-parity/axiom-rules-engine/target/release/axiom-rules-engine",
+    "--selection",
+    "yale-full-run/targeted-selection.json",
+    "--output-dir",
+    "yale-full-run/targeted-B"
+  ],
+  "chapter_diagnostics": {
+    "29": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-B/diagnostic-ch29-census.json",
+      "sha256": "4a011c690947cdc1e6e1ace4d2670792d971028c9794ed55b984be2fefa87fcb"
+    },
+    "62": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-B/diagnostic-ch62-census.json",
+      "sha256": "96aab4db7d7c9fe9590cf7139c735e14f0f6cba4588458f12d9af4c5c8663af6"
+    },
+    "84": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-B/diagnostic-ch84-census.json",
+      "sha256": "071442c32286d950292224f01ce5b62c37034f5fcc021657118e239042ebfe80"
+    },
+    "94": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-B/diagnostic-ch94-census.json",
+      "sha256": "d3fbf32ba248f665d5860ba5f91470f56f2c58f3f3aa31fee8f5e27d7a757e9b"
+    }
+  },
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2",
+  "diagnostic_only": true,
+  "elapsed_seconds": 39.67,
+  "engine_reuse": "none; every selected case evaluated freshly",
+  "finished_utc": "2026-09-23T19:40:11.884326+00:00",
+  "inputs": {
+    "campaign_source_sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24",
+    "diagnostic_source_sha256": "60c10cbe85c0a80f43adef82e4603fb086ee51adf049407cdee5ecce1fdeb107",
+    "engine_sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7",
+    "entry_flags_sha256": "b0a0fe6aa5990c14becef5184e4096c95c22790909e72f11d1736b7fe827243d"
+  },
+  "official_campaign_evaluation": false,
+  "rulespec_root": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us",
+  "schema": "measurement.bounded_endpoint_eval_manifest.v1",
+  "selection_path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-selection.json",
+  "selection_sha256": "7d8dd5e3804502c8bbbc740330a00aa92a343a6ed5644ec3e548cae633eb5411",
+  "shards": {
+    "29": {
+      "cases": 800,
+      "chapter": "29",
+      "diagnostic_only": true,
+      "elapsed_seconds": 5.183,
+      "engine_errors": 0,
+      "engine_seconds": 4.413470208004583,
+      "module_sha256": "6b113f3eb5d922a23ab6c366b8ea866e5aef52b622db625aa9c13e5caaede023",
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-B/diagnostic-ch29.jsonl.gz",
+      "sha256": "74a6286454dbf93cc4a7dc293a777d8a815d2f83a6f6cfb3a31d3c918b26afcb"
+    },
+    "62": {
+      "cases": 640,
+      "chapter": "62",
+      "diagnostic_only": true,
+      "elapsed_seconds": 16.444,
+      "engine_errors": 0,
+      "engine_seconds": 5.220816583954729,
+      "module_sha256": "0b8ade106330aeeccb6e779a1ef22e10f29c0fa127fcb18f4e1b0d3595122aca",
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-B/diagnostic-ch62.jsonl.gz",
+      "sha256": "6fc125657874723c7f6838e27ca62d3ce47cb842150970608887ffce8d6b14b8"
+    },
+    "84": {
+      "cases": 800,
+      "chapter": "84",
+      "diagnostic_only": true,
+      "elapsed_seconds": 5.324,
+      "engine_errors": 0,
+      "engine_seconds": 4.645694083010312,
+      "module_sha256": "6b6b500ec468654020d3ffe0513818f27e0a6936309885a83a5a942e06b0c141",
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-B/diagnostic-ch84.jsonl.gz",
+      "sha256": "4a74078e8e723f97ae6d30a475c093e04a23ca2ecabcb85717b82c04a255c325"
+    },
+    "94": {
+      "cases": 198,
+      "chapter": "94",
+      "diagnostic_only": true,
+      "elapsed_seconds": 3.901,
+      "engine_errors": 0,
+      "engine_seconds": 3.2296125830034725,
+      "module_sha256": "38beb674441da532e00bb444f84e321cd8243d5e644d7167cd3cfee3b42e9eb3",
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-B/diagnostic-ch94.jsonl.gz",
+      "sha256": "e77a5dcc0265065e532f1b44d574e6ae71bc9af8cdf7ec01d407b1516c898f16"
+    }
+  },
+  "started_utc": "2026-09-23T19:39:32.400586+00:00",
+  "status": "complete"
+}

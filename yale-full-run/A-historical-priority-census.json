@@ -1,0 +1,470 @@
+{
+  "aggregate": {
+    "arithmetic_closure_condition": false,
+    "attribution_census": {
+      "derived": 769582,
+      "input-comparability": 909989,
+      "unexplained": 728194,
+      "upstream-methodology": 156132
+    },
+    "cases": 4224780,
+    "class_census": {
+      "__derived_total__": 769582,
+      "__unexplained_component__": 371198,
+      "__unexplained_total__": 356996,
+      "column2-gn3b": 156132,
+      "legal-date-boundary-ieepa": 16822,
+      "non-metal-232-family": 169521,
+      "s122-entry-status-lines": 178828,
+      "s122-gn6-lines": 240414,
+      "vintage-revision-232": 302892,
+      "vintage-revision-301": 1161,
+      "vintage-revision-301-removed-lines": 351
+    },
+    "class_per_slot": {
+      "__derived_total__": {
+        "total": 769582
+      },
+      "__unexplained_component__": {
+        "brazil_section_301": 20822,
+        "forced_labor_section_301": 350376
+      },
+      "__unexplained_total__": {
+        "total": 356996
+      },
+      "column2-gn3b": {
+        "base": 156132
+      },
+      "legal-date-boundary-ieepa": {
+        "ieepa": 16822
+      },
+      "non-metal-232-family": {
+        "section_232": 169521
+      },
+      "s122-entry-status-lines": {
+        "section_122": 178828
+      },
+      "s122-gn6-lines": {
+        "section_122": 240414
+      },
+      "vintage-revision-232": {
+        "section_232": 302892
+      },
+      "vintage-revision-301": {
+        "china_section_301": 1161
+      },
+      "vintage-revision-301-removed-lines": {
+        "china_section_301": 351
+      }
+    },
+    "derived_total_compositions": {
+      "column2-gn3b": 126122,
+      "column2-gn3b + legal-date-boundary-ieepa": 732,
+      "column2-gn3b + legal-date-boundary-ieepa + non-metal-232-family": 42,
+      "column2-gn3b + non-metal-232-family": 4872,
+      "column2-gn3b + non-metal-232-family + s122-gn6-lines": 915,
+      "column2-gn3b + s122-entry-status-lines": 868,
+      "column2-gn3b + s122-entry-status-lines + vintage-revision-232": 3412,
+      "column2-gn3b + s122-gn6-lines": 5014,
+      "column2-gn3b + s122-gn6-lines + vintage-revision-232": 2303,
+      "column2-gn3b + vintage-revision-232": 1548,
+      "legal-date-boundary-ieepa": 15438,
+      "legal-date-boundary-ieepa + non-metal-232-family": 502,
+      "legal-date-boundary-ieepa + vintage-revision-232": 8,
+      "legal-date-boundary-ieepa + vintage-revision-301": 12,
+      "legal-date-boundary-ieepa + vintage-revision-301-removed-lines": 24,
+      "non-metal-232-family": 137515,
+      "non-metal-232-family + s122-gn6-lines": 24953,
+      "non-metal-232-family + s122-gn6-lines + vintage-revision-301": 82,
+      "non-metal-232-family + vintage-revision-301": 93,
+      "s122-entry-status-lines": 35028,
+      "s122-entry-status-lines + vintage-revision-232": 139463,
+      "s122-entry-status-lines + vintage-revision-232 + vintage-revision-301": 45,
+      "s122-entry-status-lines + vintage-revision-301": 12,
+      "s122-gn6-lines": 113409,
+      "s122-gn6-lines + vintage-revision-232": 92750,
+      "s122-gn6-lines + vintage-revision-232 + vintage-revision-301": 35,
+      "s122-gn6-lines + vintage-revision-301": 248,
+      "vintage-revision-232": 63312,
+      "vintage-revision-232 + vintage-revision-301": 16,
+      "vintage-revision-301": 518,
+      "vintage-revision-301-removed-lines": 291
+    },
+    "mismatch_delta_signs_per_slot": {
+      "base": {
+        "positive": 156132
+      },
+      "brazil_section_301": {
+        "negative": 20822
+      },
+      "china_section_301": {
+        "negative": 594,
+        "positive": 918
+      },
+      "forced_labor_section_301": {
+        "negative": 350376
+      },
+      "ieepa": {
+        "positive": 16822
+      },
+      "section_122": {
+        "negative": 298548,
+        "positive": 120694
+      },
+      "section_232": {
+        "negative": 170290,
+        "positive": 302123
+      },
+      "total": {
+        "negative": 572093,
+        "positive": 554485
+      }
+    },
+    "per_slot": {
+      "axiom_total_reconciliation": {
+        "match": 3984273
+      },
+      "base": {
+        "explained": 156132,
+        "match": 3828141,
+        "mismatch": 156132
+      },
+      "brazil_section_301": {
+        "match": 4203958,
+        "mismatch": 20822,
+        "unexplained": 20822
+      },
+      "china_section_301": {
+        "explained": 1512,
+        "match": 4223268,
+        "mismatch": 1512
+      },
+      "forced_labor_section_301": {
+        "match": 3633897,
+        "mismatch": 350376,
+        "unexplained": 350376
+      },
+      "ieepa": {
+        "explained": 16822,
+        "match": 3967451,
+        "mismatch": 16822
+      },
+      "section_122": {
+        "explained": 419242,
+        "match": 3805538,
+        "mismatch": 419242
+      },
+      "section_201": {
+        "match": 4224780
+      },
+      "section_232": {
+        "explained": 472413,
+        "match": 3752367,
+        "mismatch": 472413
+      },
+      "section_338": {
+        "match": 4224780
+      },
+      "total": {
+        "explained": 769582,
+        "match": 2857695,
+        "mismatch": 1126578,
+        "unexplained": 356996
+      },
+      "yale_total_reconciliation": {
+        "match": 3984273
+      }
+    },
+    "summary": {
+      "axiom_attributed_open": 0,
+      "comparisons": 49254318,
+      "derived_total_units": 769582,
+      "engine_errors": 0,
+      "matches": 46690421,
+      "mismatches": 2563897,
+      "unexplained": 728194,
+      "unexplained_total_units": 356996
+    },
+    "unexplained_components_per_slot": {
+      "brazil_section_301": 20822,
+      "forced_labor_section_301": 350376
+    },
+    "unexplained_total_component_compositions": {
+      "brazil_section_301": 6624,
+      "brazil_section_301 + forced_labor_section_301": 13118,
+      "forced_labor_section_301": 337254
+    },
+    "would_be_conformant": null,
+    "would_be_conformant_reason": "Diagnostic only; official coverage, input, projection and preview-selector population guards must pass."
+  },
+  "argv": [
+    "yale-full-run/measure_shards.py",
+    "--oracles-root",
+    "yale-full-run/A/oracles",
+    "--rulespec-root",
+    "yale-full-run/A/rulespec-us",
+    "--manifest",
+    "yale-full-run/A/committed/MANIFEST.json",
+    "--chapters",
+    "79,62,84,29",
+    "--output",
+    "yale-full-run/A-historical-priority-census.json"
+  ],
+  "chapter_artifacts": {
+    "29": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A-historical-priority-census-chapters/ch29.json",
+      "sha256": "4675ea3d5e2ef059bd8b2348e63122ada30ebe0fef81139ec7848de2bd607270"
+    },
+    "62": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A-historical-priority-census-chapters/ch62.json",
+      "sha256": "cc2e4d70c50170d1fe454272663ee5c930bf64fb11ee70ee2c03762cd813d7fe"
+    },
+    "79": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A-historical-priority-census-chapters/ch79.json",
+      "sha256": "134503736a3fc7333087169945181182f98565963a373cc1935b2ecba4313ca6"
+    },
+    "84": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A-historical-priority-census-chapters/ch84.json",
+      "sha256": "790d770aaf1d1ea9a4f540599a8e0a4e43d433ff7ddbb3bdda23fef09e04bba0"
+    }
+  },
+  "completed_chapters": [
+    "79",
+    "62",
+    "84",
+    "29"
+  ],
+  "conformance_claim": false,
+  "coverage": "partial",
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2",
+  "diagnostic_only": true,
+  "elapsed_seconds": 1057.405,
+  "finished_utc": "2026-09-23T19:52:51.932730+00:00",
+  "hashes": {
+    "campaign_source_sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24",
+    "disposition_ledger_sha256": "de97837499bfc71a4c472b0e9c8b6b5cc78961d00cadbed9ad85985c27baa83b",
+    "input_contract_sha256": "8b043af60d2b7c3be4b54072d1ebadb95ed3bd8e68dd793fffa0ed8ccf0c9d64",
+    "manifest_sha256": "5123e201a32c3965d82440c515525c854e9113d7efc84e820bbe878617a83a39",
+    "measurement_source_sha256": "220c5821cc5bc1ce73e7101c25a31a727af11c31b1d67012b2673b7ed0251cfc",
+    "routing_rows_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3"
+  },
+  "input_contract_required_chapters": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "75",
+    "76",
+    "78",
+    "79",
+    "80",
+    "81",
+    "82",
+    "83",
+    "84",
+    "85",
+    "86",
+    "87",
+    "88",
+    "89",
+    "90",
+    "91",
+    "92",
+    "93",
+    "94",
+    "95",
+    "96",
+    "97",
+    "98",
+    "99a",
+    "99b",
+    "99c"
+  ],
+  "last_checkpoint_utc": "2026-09-23T19:52:51.842385+00:00",
+  "manifest_chapters": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "75",
+    "76",
+    "78",
+    "79",
+    "80",
+    "81",
+    "82",
+    "83",
+    "84",
+    "85",
+    "86",
+    "87",
+    "88",
+    "89",
+    "90",
+    "91",
+    "92",
+    "93",
+    "94",
+    "95",
+    "96",
+    "97",
+    "98",
+    "99a",
+    "99b",
+    "99c"
+  ],
+  "manifest_path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/committed/MANIFEST.json",
+  "official_classification": false,
+  "oracles_root": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/oracles",
+  "preview_selector_population_validation": "not performed; full official classify required",
+  "rulespec_root": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/rulespec-us",
+  "schema": "measurement.current_campaign_shard_census.v1",
+  "selected_chapters": [
+    "79",
+    "62",
+    "84",
+    "29"
+  ],
+  "started_utc": "2026-09-23T19:35:14.520267+00:00",
+  "status": "complete"
+}

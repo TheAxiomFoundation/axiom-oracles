@@ -1,0 +1,294 @@
+{
+  "aggregate": {
+    "arithmetic_closure_condition": false,
+    "attribution_census": {
+      "derived": 495,
+      "input-comparability": 178,
+      "unexplained": 1286,
+      "upstream-methodology": 351
+    },
+    "cases": 8100,
+    "class_census": {
+      "__derived_total__": 495,
+      "__unexplained_component__": 656,
+      "__unexplained_total__": 630,
+      "column2-gn3b": 351,
+      "legal-date-boundary-ieepa": 70,
+      "vintage-revision-301-removed-lines": 108
+    },
+    "class_per_slot": {
+      "__derived_total__": {
+        "total": 495
+      },
+      "__unexplained_component__": {
+        "brazil_section_301": 36,
+        "forced_labor_section_301": 620
+      },
+      "__unexplained_total__": {
+        "total": 630
+      },
+      "column2-gn3b": {
+        "base": 351
+      },
+      "legal-date-boundary-ieepa": {
+        "ieepa": 70
+      },
+      "vintage-revision-301-removed-lines": {
+        "china_section_301": 108
+      }
+    },
+    "derived_total_compositions": {
+      "column2-gn3b": 325,
+      "column2-gn3b + legal-date-boundary-ieepa": 6,
+      "legal-date-boundary-ieepa": 56,
+      "legal-date-boundary-ieepa + vintage-revision-301-removed-lines": 8,
+      "vintage-revision-301-removed-lines": 100
+    },
+    "mismatch_delta_signs_per_slot": {
+      "base": {
+        "positive": 351
+      },
+      "brazil_section_301": {
+        "negative": 36
+      },
+      "china_section_301": {
+        "negative": 108
+      },
+      "forced_labor_section_301": {
+        "negative": 620
+      },
+      "ieepa": {
+        "positive": 70
+      },
+      "total": {
+        "negative": 718,
+        "positive": 407
+      }
+    },
+    "per_slot": {
+      "axiom_total_reconciliation": {
+        "match": 6912
+      },
+      "base": {
+        "explained": 351,
+        "match": 6561,
+        "mismatch": 351
+      },
+      "brazil_section_301": {
+        "match": 8064,
+        "mismatch": 36,
+        "unexplained": 36
+      },
+      "china_section_301": {
+        "explained": 108,
+        "match": 7992,
+        "mismatch": 108
+      },
+      "forced_labor_section_301": {
+        "match": 6292,
+        "mismatch": 620,
+        "unexplained": 620
+      },
+      "ieepa": {
+        "explained": 70,
+        "match": 6842,
+        "mismatch": 70
+      },
+      "section_122": {
+        "match": 8100
+      },
+      "section_201": {
+        "match": 8100
+      },
+      "section_232": {
+        "match": 8100
+      },
+      "section_338": {
+        "match": 8100
+      },
+      "total": {
+        "explained": 495,
+        "match": 5787,
+        "mismatch": 1125,
+        "unexplained": 630
+      },
+      "yale_total_reconciliation": {
+        "match": 6912
+      }
+    },
+    "summary": {
+      "axiom_attributed_open": 0,
+      "comparisons": 90072,
+      "derived_total_units": 495,
+      "engine_errors": 0,
+      "matches": 87762,
+      "mismatches": 2310,
+      "unexplained": 1286,
+      "unexplained_total_units": 630
+    },
+    "unexplained_components_per_slot": {
+      "brazil_section_301": 36,
+      "forced_labor_section_301": 620
+    },
+    "unexplained_total_component_compositions": {
+      "brazil_section_301": 10,
+      "brazil_section_301 + forced_labor_section_301": 20,
+      "forced_labor_section_301": 600
+    },
+    "would_be_conformant": null,
+    "would_be_conformant_reason": "Diagnostic only; official coverage, input, projection and preview-selector population guards must pass."
+  },
+  "argv": [
+    "yale-full-run/measure_shards.py",
+    "--oracles-root",
+    "yale-full-run/A/oracles",
+    "--rulespec-root",
+    "yale-full-run/A/rulespec-us",
+    "--manifest",
+    "yale-full-run/A/oracles/reference/us-tariff-schedule/eval/MANIFEST.json",
+    "--chapters",
+    "79",
+    "--output",
+    "yale-full-run/A-fresh-ch79-census.json"
+  ],
+  "chapter_artifacts": {
+    "79": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A-fresh-ch79-census-chapters/ch79.json",
+      "sha256": "07d9d89510ae22bb6e31d3580e58df9a9d2ea77e52054e1fac246f54800907ff"
+    }
+  },
+  "completed_chapters": [
+    "79"
+  ],
+  "conformance_claim": false,
+  "coverage": "all_manifest_shards",
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2",
+  "diagnostic_only": true,
+  "elapsed_seconds": 17.801,
+  "finished_utc": "2026-09-23T19:45:54.640496+00:00",
+  "hashes": {
+    "campaign_source_sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24",
+    "disposition_ledger_sha256": "de97837499bfc71a4c472b0e9c8b6b5cc78961d00cadbed9ad85985c27baa83b",
+    "input_contract_sha256": "8b043af60d2b7c3be4b54072d1ebadb95ed3bd8e68dd793fffa0ed8ccf0c9d64",
+    "manifest_sha256": "e31cde40f807fa5984fb29ff9bc2d8016327b93b088a8ed17e9cf8d744540a88",
+    "measurement_source_sha256": "220c5821cc5bc1ce73e7101c25a31a727af11c31b1d67012b2673b7ed0251cfc",
+    "routing_rows_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3"
+  },
+  "input_contract_required_chapters": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "75",
+    "76",
+    "78",
+    "79",
+    "80",
+    "81",
+    "82",
+    "83",
+    "84",
+    "85",
+    "86",
+    "87",
+    "88",
+    "89",
+    "90",
+    "91",
+    "92",
+    "93",
+    "94",
+    "95",
+    "96",
+    "97",
+    "98",
+    "99a",
+    "99b",
+    "99c"
+  ],
+  "last_checkpoint_utc": "2026-09-23T19:45:54.637334+00:00",
+  "manifest_chapters": [
+    "79"
+  ],
+  "manifest_path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/oracles/reference/us-tariff-schedule/eval/MANIFEST.json",
+  "official_classification": false,
+  "oracles_root": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/oracles",
+  "preview_selector_population_validation": "not performed; full official classify required",
+  "rulespec_root": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/rulespec-us",
+  "schema": "measurement.current_campaign_shard_census.v1",
+  "selected_chapters": [
+    "79"
+  ],
+  "started_utc": "2026-09-23T19:45:36.839707+00:00",
+  "status": "complete"
+}

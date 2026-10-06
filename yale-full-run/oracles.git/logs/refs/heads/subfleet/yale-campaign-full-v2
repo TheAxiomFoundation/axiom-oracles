@@ -1,0 +1,5 @@
+16fe458fc46512b15c4580cb9f25596bd7cb6984 f07280b5f55b8321036fd33f619f8083ef8bbda7 Max Ghenis <mghenis@gmail.com> 1790191712 -0400	commit: chore: record isolated current-code Yale campaign setup
+f07280b5f55b8321036fd33f619f8083ef8bbda7 9c1df1eb83c4186d89f572a4d9d88040a0e15586 Max Ghenis <mghenis@gmail.com> 1790192073 -0400	commit: test: record tariff prerequisites and cache validity audit
+9c1df1eb83c4186d89f572a4d9d88040a0e15586 60fac6a5204dc2f8fab86356cbb4c327823bef29 Max Ghenis <mghenis@gmail.com> 1790192662 -0400	commit: test: measure fresh A/B tariff probes and remaining open gaps
+60fac6a5204dc2f8fab86356cbb4c327823bef29 3869ba0c3853ed90a4a6f01e0253333c8731788c Max Ghenis <mghenis@gmail.com> 1790193167 -0400	commit: test: authenticate fresh CH79 results and trace remaining tariff gaps
+3869ba0c3853ed90a4a6f01e0253333c8731788c 75b334ae9da4a4bad2118218078a69990524570e Max Ghenis <mghenis@gmail.com> 1790194982 -0400	commit: test: checkpoint current Yale campaign and report fresh candidate results

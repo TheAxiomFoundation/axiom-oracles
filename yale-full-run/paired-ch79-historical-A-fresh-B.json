@@ -1,0 +1,102 @@
+{
+  "argv": [
+    "yale-full-run/pair_shards.py",
+    "--oracles-root",
+    "yale-full-run/B/oracles",
+    "--rulespec-root",
+    "yale-full-run/B/rulespec-us",
+    "--baseline-manifest",
+    "yale-full-run/A/committed/MANIFEST.json",
+    "--candidate-manifest",
+    "yale-full-run/B/oracles/reference/us-tariff-schedule/eval/MANIFEST.json",
+    "--chapters",
+    "79",
+    "--output",
+    "yale-full-run/paired-ch79-historical-A-fresh-B.json"
+  ],
+  "baseline_manifest": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/A/committed/MANIFEST.json",
+  "baseline_provenance": "Historical cached engine results; this does not establish acceptance by current pipeline cache-key rules.",
+  "candidate_manifest": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/oracles/reference/us-tariff-schedule/eval/MANIFEST.json",
+  "candidate_provenance": "Hash-verified manifest shards; engine freshness is established separately by campaign logs.",
+  "cases": 8100,
+  "chapter_artifacts": {
+    "79": {
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/paired-ch79-historical-A-fresh-B-chapters/ch79.json",
+      "sha256": "9e30c45d773835bb942db934f6313fd8e15ddc278186e4de0004d0499cc20f61"
+    }
+  },
+  "completed_chapters": [
+    "79"
+  ],
+  "conformance_claim": false,
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2",
+  "diagnostic_only": true,
+  "elapsed_seconds": 1.792,
+  "finished_utc": "2026-09-23T19:40:03.281908+00:00",
+  "hashes": {
+    "baseline_manifest_sha256": "5123e201a32c3965d82440c515525c854e9113d7efc84e820bbe878617a83a39",
+    "campaign_source_sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24",
+    "candidate_manifest_sha256": "3cfb2674d2dded5c8c6ffe2807f57b3f8662a51f297e49b44abbf5192e638f63",
+    "measurement_source_sha256": "ccafc9cf3cda71658edbe66244ab77496aa69f069fef5c5f2f58a8d2412a10ed"
+  },
+  "per_slot": {
+    "axiom_total_reconciliation": {
+      "retained_match": 6282,
+      "retained_match_changed_actual": 630
+    },
+    "base": {
+      "retained_match": 6561,
+      "retained_mismatch_same_actual": 351
+    },
+    "brazil_section_301": {
+      "mismatch_to_match": 36,
+      "retained_match": 8064
+    },
+    "china_section_301": {
+      "retained_match": 7992,
+      "retained_mismatch_same_actual": 108
+    },
+    "forced_labor_section_301": {
+      "mismatch_to_match": 620,
+      "retained_match": 6292
+    },
+    "ieepa": {
+      "retained_match": 6842,
+      "retained_mismatch_same_actual": 70
+    },
+    "section_122": {
+      "retained_match": 8100
+    },
+    "section_201": {
+      "retained_match": 8100
+    },
+    "section_232": {
+      "retained_match": 8100
+    },
+    "section_338": {
+      "retained_match": 8100
+    },
+    "total": {
+      "mismatch_to_match": 610,
+      "retained_match": 5787,
+      "retained_mismatch_changed_actual": 20,
+      "retained_mismatch_same_actual": 495
+    },
+    "yale_total_reconciliation": {
+      "retained_match": 6912
+    }
+  },
+  "schema": "measurement.historical_baseline_candidate_pair.v1",
+  "selected_chapters": [
+    "79"
+  ],
+  "started_utc": "2026-09-23T19:40:01.490280+00:00",
+  "status": "complete",
+  "transitions": {
+    "mismatch_to_match": 1266,
+    "retained_match": 87132,
+    "retained_match_changed_actual": 630,
+    "retained_mismatch_changed_actual": 20,
+    "retained_mismatch_same_actual": 1024
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "schema": "axiom_oracles.us_tariff_schedule.eval_manifest.v1",
+  "shards": {
+    "b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808": {
+      "cases": 8100,
+      "chapter": "79",
+      "elapsed_seconds": 303.372,
+      "engine_errors": 0,
+      "key": "b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808",
+      "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/cache/eval/b3/b382f90e3c48c8366fc010add490d2e332a6fad672b009c9cc344c8e0ceae808.jsonl.gz",
+      "sha256": "d0dbcb414a8314765aa75ad1d24f216d464614a5972fbdd49c8baf597a0f5704"
+    }
+  }
+}

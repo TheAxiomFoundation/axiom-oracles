@@ -1,0 +1,1223 @@
+{
+  "attribution_census": {
+    "derived": 109,
+    "unexplained": 632,
+    "upstream-methodology": 164
+  },
+  "canonical_record_sha256": "eb434275b89b9fac130411c0d507aa68b37cd699626565d3864e7e965b32f746",
+  "cases": 640,
+  "chapter": "62",
+  "class_census": {
+    "__derived_total__": 109,
+    "__unexplained_component__": 352,
+    "__unexplained_total__": 280,
+    "column2-gn3b": 164
+  },
+  "class_per_slot": {
+    "__derived_total__": {
+      "total": 109
+    },
+    "__unexplained_component__": {
+      "brazil_section_301": 128,
+      "forced_labor_section_301": 224
+    },
+    "__unexplained_total__": {
+      "total": 280
+    },
+    "column2-gn3b": {
+      "base": 164
+    }
+  },
+  "derived_total_compositions": {
+    "column2-gn3b": 109
+  },
+  "elapsed_seconds": 0.187,
+  "mismatch_delta_signs_per_slot": {
+    "base": {
+      "positive": 164
+    },
+    "brazil_section_301": {
+      "negative": 128
+    },
+    "forced_labor_section_301": {
+      "negative": 224
+    },
+    "total": {
+      "negative": 226,
+      "positive": 163
+    }
+  },
+  "observed_component_signature_count": 514,
+  "per_slot": {
+    "axiom_total_reconciliation": {
+      "match": 555
+    },
+    "base": {
+      "explained": 164,
+      "match": 391,
+      "mismatch": 164
+    },
+    "brazil_section_301": {
+      "match": 512,
+      "mismatch": 128,
+      "unexplained": 128
+    },
+    "china_section_301": {
+      "match": 640
+    },
+    "forced_labor_section_301": {
+      "match": 331,
+      "mismatch": 224,
+      "unexplained": 224
+    },
+    "ieepa": {
+      "match": 555
+    },
+    "section_122": {
+      "match": 640
+    },
+    "section_201": {
+      "match": 640
+    },
+    "section_232": {
+      "match": 640
+    },
+    "section_338": {
+      "match": 640
+    },
+    "total": {
+      "explained": 109,
+      "match": 166,
+      "mismatch": 389,
+      "unexplained": 280
+    },
+    "yale_total_reconciliation": {
+      "match": 555
+    }
+  },
+  "samples_by_class_slot_and_delta_sign": {
+    "__derived_total__|total|positive": [
+      {
+        "actual": 0.86,
+        "attribution": "derived",
+        "case_id": "schedule-003fb0e5fd672643e82c5a9d",
+        "class": "__derived_total__",
+        "delta": 0.6,
+        "error": null,
+        "expected": 0.26,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6211339044",
+        "hts_line": "6211339000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "KP",
+        "probe": "2026-07-23",
+        "revision": "bnd_2026-07-22",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 1.0,
+        "attribution": "derived",
+        "case_id": "schedule-026b1a124e5fe6af6368a3d8",
+        "class": "__derived_total__",
+        "delta": 0.623,
+        "error": null,
+        "expected": 0.377,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6201402015",
+        "hts_line": "6201402000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BY",
+        "probe": "2026-07-23",
+        "revision": "bnd_2026-07-22",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 1.0,
+        "attribution": "derived",
+        "case_id": "schedule-05bb5b1023a0bb697b46aef3",
+        "class": "__derived_total__",
+        "delta": 0.7969999999999999,
+        "error": null,
+        "expected": 0.203,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6203420525",
+        "hts_line": "6203420500",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "RU",
+        "probe": "2026-07-22",
+        "revision": "bnd_2026-07-22",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.9,
+        "attribution": "derived",
+        "case_id": "schedule-08b92c5346f1dcef73f363d9",
+        "class": "__derived_total__",
+        "delta": 0.811,
+        "error": null,
+        "expected": 0.089,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6202308010",
+        "hts_line": "6202308000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "KP",
+        "probe": "2026-07-24",
+        "revision": "bnd_2026-07-24",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.44999999999999996,
+        "attribution": "derived",
+        "case_id": "schedule-0c5ee7ca73ff4e412015cda2",
+        "class": "__derived_total__",
+        "delta": 0.345,
+        "error": null,
+        "expected": 0.10500000000000001,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6211390750",
+        "hts_line": "6211390700",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "KP",
+        "probe": "2026-07-22",
+        "revision": "bnd_2026-07-22",
+        "signature": null,
+        "slot": "total"
+      }
+    ],
+    "__unexplained_component__|brazil_section_301|negative": [
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-0018ab3d183ac2cd5c8d4944",
+        "class": "__unexplained_component__",
+        "delta": -0.25,
+        "error": null,
+        "expected": 0.25,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6203195000",
+        "hts_line": "6203195000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "revision": "bnd_2026-07-22",
+        "signature": "ff9dd729120ea612c3a77d63a3107b0a48047803a2af977e06cff67ac9dad018",
+        "slot": "brazil_section_301"
+      },
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-0251f95538e39fcff944534a",
+        "class": "__unexplained_component__",
+        "delta": -0.25,
+        "error": null,
+        "expected": 0.25,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6202406511",
+        "hts_line": "6202406500",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "revision": "bnd_2026-07-22",
+        "signature": "8523a6fab04c04a1d3d4f9bf060a975de455a6e22214fa29b2f3dd5823a4254e",
+        "slot": "brazil_section_301"
+      },
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-043058d704f949a519f918fe",
+        "class": "__unexplained_component__",
+        "delta": -0.25,
+        "error": null,
+        "expected": 0.25,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6208920030",
+        "hts_line": "6208920000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-30",
+        "revision": "bnd_2026-07-24",
+        "signature": "dade51b24b24409434fcfbccd39d7cb790d39ff55d0b62c9158d6793fcc60651",
+        "slot": "brazil_section_301"
+      },
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-06902f8e625e621c8f9adf2d",
+        "class": "__unexplained_component__",
+        "delta": -0.25,
+        "error": null,
+        "expected": 0.25,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6204594040",
+        "hts_line": "6204594000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-30",
+        "revision": "bnd_2026-07-24",
+        "signature": "e4f8b439ff2b609c64f21218b6167c9c31cf6ac2a75b963a1c293eb1f9822b1d",
+        "slot": "brazil_section_301"
+      },
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-0bc414177a4021d95d8b28fc",
+        "class": "__unexplained_component__",
+        "delta": -0.25,
+        "error": null,
+        "expected": 0.25,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6211498080",
+        "hts_line": "6211498000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-24",
+        "revision": "bnd_2026-07-24",
+        "signature": "f32f41b6ae2a95b3ccb0a1ebf2596a3da24cf9bc6f92d379895df359a024bbd0",
+        "slot": "brazil_section_301"
+      }
+    ],
+    "__unexplained_component__|forced_labor_section_301|negative": [
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-013da8572eb22deb9178831b",
+        "class": "__unexplained_component__",
+        "delta": -0.1,
+        "error": null,
+        "expected": 0.1,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6208299010",
+        "hts_line": "6208299000",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "MX",
+        "probe": "2026-08-01",
+        "revision": "bnd_2026-07-31",
+        "signature": "bb82657130774a695136782a0de49b18badfb1d41764df3ff747e0e90b6a33ac",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-01b58baa244f32ed1cd59b5f",
+        "class": "__unexplained_component__",
+        "delta": -0.125,
+        "error": null,
+        "expected": 0.125,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6212900090",
+        "hts_line": "6212900000",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "KZ",
+        "probe": "2026-08-01",
+        "revision": "bnd_2026-07-31",
+        "signature": "2702437aca75fdfd6557278ae48862d6cee09e7cf64d1130cd8126550bdb1760",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-026543a236555fd1009c5be8",
+        "class": "__unexplained_component__",
+        "delta": -0.125,
+        "error": null,
+        "expected": 0.125,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6203399020",
+        "hts_line": "6203399000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "TH",
+        "probe": "2026-07-30",
+        "revision": "bnd_2026-07-24",
+        "signature": "6783dc65d0ec64b0623a134c03e9bf452a3bdb5d776498631be3812dfba8f007",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-043058d704f949a519f918fe",
+        "class": "__unexplained_component__",
+        "delta": -0.125,
+        "error": null,
+        "expected": 0.125,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6208920030",
+        "hts_line": "6208920000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-30",
+        "revision": "bnd_2026-07-24",
+        "signature": "ad47e3ff91efa8df1abe572f03989bc4f885a50f4c77ea6913f488f5f9de90fd",
+        "slot": "forced_labor_section_301"
+      },
+      {
+        "actual": 0.0,
+        "attribution": "unexplained",
+        "case_id": "schedule-0461e4d94be34933dd64e8aa",
+        "class": "__unexplained_component__",
+        "delta": -0.125,
+        "error": null,
+        "expected": 0.125,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6211201545",
+        "hts_line": "6211201500",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "NO",
+        "probe": "2026-07-24",
+        "revision": "bnd_2026-07-24",
+        "signature": "769d5356b2638825d33103c6cb882894e853122492d5b35440bdae1f2e06ac36",
+        "slot": "forced_labor_section_301"
+      }
+    ],
+    "__unexplained_total__|total|negative": [
+      {
+        "actual": 0.138,
+        "attribution": "unexplained",
+        "case_id": "schedule-0018ab3d183ac2cd5c8d4944",
+        "class": "__unexplained_total__",
+        "delta": -0.25,
+        "error": null,
+        "expected": 0.388,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6203195000",
+        "hts_line": "6203195000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "revision": "bnd_2026-07-22",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.071,
+        "attribution": "unexplained",
+        "case_id": "schedule-013da8572eb22deb9178831b",
+        "class": "__unexplained_total__",
+        "delta": -0.09999999999999999,
+        "error": null,
+        "expected": 0.17099999999999999,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6208299010",
+        "hts_line": "6208299000",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "MX",
+        "probe": "2026-08-01",
+        "revision": "bnd_2026-07-31",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.066,
+        "attribution": "unexplained",
+        "case_id": "schedule-01b58baa244f32ed1cd59b5f",
+        "class": "__unexplained_total__",
+        "delta": -0.125,
+        "error": null,
+        "expected": 0.191,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6212900090",
+        "hts_line": "6212900000",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "KZ",
+        "probe": "2026-08-01",
+        "revision": "bnd_2026-07-31",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.065,
+        "attribution": "unexplained",
+        "case_id": "schedule-026543a236555fd1009c5be8",
+        "class": "__unexplained_total__",
+        "delta": -0.125,
+        "error": null,
+        "expected": 0.19,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6203399020",
+        "hts_line": "6203399000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "TH",
+        "probe": "2026-07-30",
+        "revision": "bnd_2026-07-24",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.16,
+        "attribution": "unexplained",
+        "case_id": "schedule-043058d704f949a519f918fe",
+        "class": "__unexplained_total__",
+        "delta": -0.375,
+        "error": null,
+        "expected": 0.535,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6208920030",
+        "hts_line": "6208920000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-30",
+        "revision": "bnd_2026-07-24",
+        "signature": null,
+        "slot": "total"
+      }
+    ],
+    "__unexplained_total__|total|positive": [
+      {
+        "actual": 0.9,
+        "attribution": "unexplained",
+        "case_id": "schedule-06b0515b7665edee73edeac1",
+        "class": "__unexplained_total__",
+        "delta": 0.609,
+        "error": null,
+        "expected": 0.29100000000000004,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6203420721",
+        "hts_line": "6203420700",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "RU",
+        "probe": "2026-08-01",
+        "revision": "bnd_2026-07-31",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.76,
+        "attribution": "unexplained",
+        "case_id": "schedule-06d9ee7ce40e0c08ba12593b",
+        "class": "__unexplained_total__",
+        "delta": 0.522,
+        "error": null,
+        "expected": 0.238,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6204431000",
+        "hts_line": "6204431000",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "RU",
+        "probe": "2026-07-31",
+        "revision": "bnd_2026-07-31",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.585,
+        "attribution": "unexplained",
+        "case_id": "schedule-0a0271f54d5b525c822412d7",
+        "class": "__unexplained_total__",
+        "delta": 0.31999999999999995,
+        "error": null,
+        "expected": 0.265,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6202201900",
+        "hts_line": "6202201900",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "RU",
+        "probe": "2026-07-30",
+        "revision": "bnd_2026-07-24",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.9,
+        "attribution": "unexplained",
+        "case_id": "schedule-0a04cc3489d20e5a43bd5c6d",
+        "class": "__unexplained_total__",
+        "delta": 0.72,
+        "error": null,
+        "expected": 0.18,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6204422000",
+        "hts_line": "6204422000",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "RU",
+        "probe": "2026-08-01",
+        "revision": "bnd_2026-07-31",
+        "signature": null,
+        "slot": "total"
+      },
+      {
+        "actual": 0.9,
+        "attribution": "unexplained",
+        "case_id": "schedule-109719b4e4ab41e1d7704347",
+        "class": "__unexplained_total__",
+        "delta": 0.609,
+        "error": null,
+        "expected": 0.29100000000000004,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6203424556",
+        "hts_line": "6203424500",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "RU",
+        "probe": "2026-08-01",
+        "revision": "bnd_2026-07-31",
+        "signature": null,
+        "slot": "total"
+      }
+    ],
+    "column2-gn3b|base|positive": [
+      {
+        "actual": 0.76,
+        "attribution": "upstream-methodology",
+        "case_id": "schedule-003fb0e5fd672643e82c5a9d",
+        "class": "column2-gn3b",
+        "delta": 0.6,
+        "error": null,
+        "expected": 0.16,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6211339044",
+        "hts_line": "6211339000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "KP",
+        "probe": "2026-07-23",
+        "revision": "bnd_2026-07-22",
+        "signature": "298c3135470c82732da90a1e0252a9f64f44e1bd42aa504039df0a5101824c4b",
+        "slot": "base"
+      },
+      {
+        "actual": 0.9,
+        "attribution": "upstream-methodology",
+        "case_id": "schedule-026b1a124e5fe6af6368a3d8",
+        "class": "column2-gn3b",
+        "delta": 0.623,
+        "error": null,
+        "expected": 0.277,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6201402015",
+        "hts_line": "6201402000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BY",
+        "probe": "2026-07-23",
+        "revision": "bnd_2026-07-22",
+        "signature": "421840c081cd2424b0df5d4eeeb080e049c9512b974f0a3bc04dd229b6ce8fb2",
+        "slot": "base"
+      },
+      {
+        "actual": 0.9,
+        "attribution": "upstream-methodology",
+        "case_id": "schedule-05bb5b1023a0bb697b46aef3",
+        "class": "column2-gn3b",
+        "delta": 0.797,
+        "error": null,
+        "expected": 0.103,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6203420525",
+        "hts_line": "6203420500",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "RU",
+        "probe": "2026-07-22",
+        "revision": "bnd_2026-07-22",
+        "signature": "190822b3abcadd925e8d5f13fb3f773acd30520c5f96a6d01d36d0b26cca48e4",
+        "slot": "base"
+      },
+      {
+        "actual": 0.9,
+        "attribution": "upstream-methodology",
+        "case_id": "schedule-06b0515b7665edee73edeac1",
+        "class": "column2-gn3b",
+        "delta": 0.734,
+        "error": null,
+        "expected": 0.166,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6203420721",
+        "hts_line": "6203420700",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "RU",
+        "probe": "2026-08-01",
+        "revision": "bnd_2026-07-31",
+        "signature": "50b07d1b944ec9dca31da917f5629aa95a8ea96756c2b1e2a2035f9b67514882",
+        "slot": "base"
+      },
+      {
+        "actual": 0.76,
+        "attribution": "upstream-methodology",
+        "case_id": "schedule-06d9ee7ce40e0c08ba12593b",
+        "class": "column2-gn3b",
+        "delta": 0.647,
+        "error": null,
+        "expected": 0.113,
+        "flags": {
+          "entry_is_brazil_301_listed": false,
+          "entry_is_china_301_2024_action": false,
+          "entry_is_china_301_list123": false,
+          "entry_is_china_301_list4a": true,
+          "entry_is_china_301_solar": false,
+          "entry_is_forced_labor_301_listed": false,
+          "entry_is_line_a": false,
+          "entry_is_line_b": false,
+          "entry_is_line_d": false,
+          "entry_is_section_122_exempt": false,
+          "entry_is_section_201_cspv": false,
+          "entry_is_section_232_aluminum": false,
+          "entry_is_section_232_covered": false,
+          "entry_is_section_232_steel": false
+        },
+        "hts10": "6204431000",
+        "hts_line": "6204431000",
+        "interval": [
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "iso2": "RU",
+        "probe": "2026-07-31",
+        "revision": "bnd_2026-07-31",
+        "signature": "0d98d8cc0bf9ad7aa50d692ca554ebfa026f84bf8a3acc2428b6734566956028",
+        "slot": "base"
+      }
+    ]
+  },
+  "shard": {
+    "cases": 640,
+    "chapter": "62",
+    "diagnostic_only": true,
+    "elapsed_seconds": 12.731,
+    "engine_errors": 0,
+    "engine_seconds": 4.348742000001948,
+    "module_sha256": "0b8ade106330aeeccb6e779a1ef22e10f29c0fa127fcb18f4e1b0d3595122aca",
+    "path": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/targeted-A/diagnostic-ch62.jsonl.gz",
+    "sha256": "376c9a14d80941ba33f746c2098603c52977e91fddbf5029fb06ff1a4fdb1889"
+  },
+  "summary": {
+    "axiom_attributed_open": 0,
+    "comparisons": 7170,
+    "derived_total_units": 109,
+    "engine_errors": 0,
+    "matches": 6265,
+    "mismatches": 905,
+    "unexplained": 632,
+    "unexplained_total_units": 280
+  },
+  "unexplained_components_per_slot": {
+    "brazil_section_301": 128,
+    "forced_labor_section_301": 224
+  },
+  "unexplained_total_component_compositions": {
+    "brazil_section_301": 56,
+    "brazil_section_301 + forced_labor_section_301": 59,
+    "forced_labor_section_301": 165
+  },
+  "verified_shard_sha256": "376c9a14d80941ba33f746c2098603c52977e91fddbf5029fb06ff1a4fdb1889"
+}

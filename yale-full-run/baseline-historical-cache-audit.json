@@ -1,0 +1,511 @@
+{
+  "historical_input_contract_sha256": "48f9caf2ad8461035007a1ee3b0d38968abc4c3da6239d5383631bae9de2ba29",
+  "historical_receipt_tool_sha256": "d3f4b26e062e99349f656f7d9e39521db2897d565f5335e59e21b9aae7a5cc90",
+  "baseline_tool_sha256": "d3f4b26e062e99349f656f7d9e39521db2897d565f5335e59e21b9aae7a5cc90",
+  "matches_using_historical_receipt": 100,
+  "cache_files_sha256_verified": 100,
+  "cache_bytes": 722142701,
+  "elapsed_seconds": 4.332,
+  "checks": [
+    {
+      "chapter": "35",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "64",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "09",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "42",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "21",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "38",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "37",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "86",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "19",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "88",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "98",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "12",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "52",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "01",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "58",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "56",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "65",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "33",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "32",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "89",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "99b",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "63",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "69",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "53",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "07",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "66",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "60",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "97",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "99a",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "83",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "31",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "47",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "68",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "20",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "94",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "72",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "99c",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "48",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "81",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "05",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "67",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "02",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "10",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "17",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "27",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "73",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "44",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "24",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "91",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "06",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "50",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "26",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "11",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "74",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "14",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "29",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "78",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "96",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "30",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "59",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "75",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "90",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "15",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "62",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "55",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "18",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "23",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "82",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "36",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "79",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "16",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "49",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "41",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "80",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "25",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "76",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "93",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "87",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "46",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "85",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "03",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "51",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "57",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "71",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "34",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "22",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "92",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "28",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "54",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "45",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "39",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "04",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "43",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "13",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "61",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "40",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "95",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "84",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "08",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    },
+    {
+      "chapter": "70",
+      "historical_receipt_key_matches": true,
+      "sha256_verified": true
+    }
+  ]
+}

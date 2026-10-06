@@ -1,0 +1,17 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tools/test_b16_entry_flags.py"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/rulespec-us",
+  "environment_overrides": {},
+  "started_at": "2026-09-23T19:30:02.266312+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/B-helper-tests.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/B-helper-tests.stderr",
+  "returncode": 0,
+  "elapsed_seconds": 37.784,
+  "finished_at": "2026-09-23T19:30:40.050574+00:00"
+}

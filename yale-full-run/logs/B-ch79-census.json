@@ -1,0 +1,29 @@
+{
+  "command": [
+    "python3",
+    "yale-full-run/measure_shards.py",
+    "--oracles-root",
+    "yale-full-run/B/oracles",
+    "--rulespec-root",
+    "yale-full-run/B/rulespec-us",
+    "--manifest",
+    "yale-full-run/B/oracles/reference/us-tariff-schedule/eval/MANIFEST.json",
+    "--chapters",
+    "79",
+    "--output",
+    "yale-full-run/B-ch79-census.json"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2",
+  "environment_overrides": {
+    "AXIOM_TARIFF_C1_CACHE": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/B/cache"
+  },
+  "started_at": "2026-09-23T19:40:01.275389+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/B-ch79-census.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/B-ch79-census.stderr",
+  "pid": 74065,
+  "timeout_seconds": null,
+  "status": "complete",
+  "returncode": 0,
+  "elapsed_seconds": 12.269,
+  "finished_at": "2026-09-23T19:40:13.545101+00:00"
+}

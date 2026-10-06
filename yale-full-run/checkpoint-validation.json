@@ -1,0 +1,56 @@
+{
+  "created_utc": "2026-09-23T20:23:50.162700+00:00",
+  "source_and_old_artifact_checks": {
+    "A/scripts/us_tariff_schedule_campaign.py": {
+      "matches_origin_main": true,
+      "sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24"
+    },
+    "A/reference/us-tariff-schedule/campaign-dispositions.yaml": {
+      "matches_origin_main": true,
+      "sha256": "de97837499bfc71a4c472b0e9c8b6b5cc78961d00cadbed9ad85985c27baa83b"
+    },
+    "A/reference/us-tariff-schedule/output-semantics-ruling.md": {
+      "matches_origin_main": true,
+      "sha256": "955892542af0f5612b46f86b0dfbf3bc5043a984510bb3bae78e2806e8c82765"
+    },
+    "A/reference/us-tariff-schedule/classification-receipt.json": {
+      "matches_origin_main": true,
+      "sha256": "8890874d6162ae5acd17c300aa7567101aa77cd151687fa86b67036607748e2f"
+    },
+    "A/reference/us-tariff-schedule/comparison-summary.json": {
+      "matches_origin_main": true,
+      "sha256": "5981a1cb92e76d03b5f88692062311093b04db2aff5373cea29f52a3057cce98"
+    },
+    "A/conformance/detail/us-tariff-schedule.json": {
+      "matches_origin_main": true,
+      "sha256": "ac6152975c4f33f7ada883ca6ccd8eb9c3510d53f54a0ec57a49763181e7af72"
+    },
+    "B/scripts/us_tariff_schedule_campaign.py": {
+      "matches_origin_main": true,
+      "sha256": "b8f4588a14d5019c770bb0b1e0e3043a69aa646b6b12560d13a4545136464e24"
+    },
+    "B/reference/us-tariff-schedule/campaign-dispositions.yaml": {
+      "matches_origin_main": true,
+      "sha256": "de97837499bfc71a4c472b0e9c8b6b5cc78961d00cadbed9ad85985c27baa83b"
+    },
+    "B/reference/us-tariff-schedule/output-semantics-ruling.md": {
+      "matches_origin_main": true,
+      "sha256": "955892542af0f5612b46f86b0dfbf3bc5043a984510bb3bae78e2806e8c82765"
+    },
+    "B/reference/us-tariff-schedule/classification-receipt.json": {
+      "matches_origin_main": true,
+      "sha256": "8890874d6162ae5acd17c300aa7567101aa77cd151687fa86b67036607748e2f"
+    },
+    "B/reference/us-tariff-schedule/comparison-summary.json": {
+      "matches_origin_main": true,
+      "sha256": "5981a1cb92e76d03b5f88692062311093b04db2aff5373cea29f52a3057cce98"
+    },
+    "B/conformance/detail/us-tariff-schedule.json": {
+      "matches_origin_main": true,
+      "sha256": "ac6152975c4f33f7ada883ca6ccd8eb9c3510d53f54a0ec57a49763181e7af72"
+    }
+  },
+  "active_logged_commands": [],
+  "local_head": "75b334ae9da4a4bad2118218078a69990524570e",
+  "verification": "PASS: unchanged campaign/ledger/ruling and original v1 report/comparison/classification; no active logged commands"
+}

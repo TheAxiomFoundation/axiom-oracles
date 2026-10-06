@@ -1,0 +1,10 @@
+{"stage": "selection", "rows_scanned": 1000000, "elapsed_seconds": 12.927}
+{"stage": "selection", "rows_scanned": 2000000, "elapsed_seconds": 26.589}
+{"stage": "selection", "rows_scanned": 3000000, "elapsed_seconds": 50.774}
+{"stage": "selection", "rows_scanned": 4000000, "elapsed_seconds": 62.77}
+{"stage": "selection", "rows_scanned": 5000000, "elapsed_seconds": 75.455}
+{"stage": "selection", "rows_scanned": 6000000, "elapsed_seconds": 102.649}
+{"stage": "selection", "rows_scanned": 7000000, "elapsed_seconds": 115.989}
+{"stage": "selection", "rows_scanned": 8000000, "elapsed_seconds": 134.179}
+{"stage": "selection", "rows_scanned": 9000000, "elapsed_seconds": 151.5}
+{"selection_output": "yale-full-run/targeted-selection.json", "sample_cases_per_chapter": {"62": 640, "84": 800, "29": 800, "94": 198}, "elapsed_seconds": 159.906}

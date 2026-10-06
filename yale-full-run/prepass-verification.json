@@ -1,0 +1,20 @@
+{
+  "A": {
+    "routing_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3",
+    "recorded_routing_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3",
+    "selected_cells": 9913304,
+    "stage_seconds": 451.455,
+    "wrapper_seconds": 452.701,
+    "finished_at": "2026-09-23T19:35:00.299264+00:00",
+    "returncode": 0
+  },
+  "B": {
+    "routing_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3",
+    "recorded_routing_sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3",
+    "selected_cells": 9913304,
+    "stage_seconds": 488.904,
+    "wrapper_seconds": 491.184,
+    "finished_at": "2026-09-23T19:34:01.674747+00:00",
+    "returncode": 0
+  }
+}

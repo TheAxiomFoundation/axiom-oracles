@@ -1,0 +1,21 @@
+{
+  "command": [
+    "/Users/maxghenis/TheAxiomFoundation/axiom-oracles/.venv/bin/python",
+    "yale-full-run/combine_fresh.py",
+    "--run-root",
+    "yale-full-run",
+    "--output",
+    "yale-full-run/fresh-combined-census.json"
+  ],
+  "cwd": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2",
+  "environment_overrides": {},
+  "started_at": "2026-09-23T19:51:03.942545+00:00",
+  "stdout": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/fresh-combined.stdout",
+  "stderr": "/Users/maxghenis/.subfleet/worktrees/20260923-140123-yale-campaign-full-v2/yale-full-run/logs/fresh-combined.stderr",
+  "pid": 47002,
+  "timeout_seconds": 300.0,
+  "status": "complete",
+  "returncode": 0,
+  "elapsed_seconds": 13.359,
+  "finished_at": "2026-09-23T19:51:17.301475+00:00"
+}
