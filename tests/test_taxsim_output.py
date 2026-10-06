@@ -18,6 +18,8 @@ import subprocess
 from pathlib import Path
 
 import pytest
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from axiom_oracles.adapters.taxsim import (
     DIAGNOSTICS_KEY,
@@ -303,6 +305,93 @@ def test_runner_reports_a_nonzero_exit_with_stderr() -> None:
         r"available 1960 - 2024 only.'",
     ):
         runner.run_cases(_cases("utah_elderly_idtl2_input.csv"))
+
+
+@pytest.mark.parametrize("output_id", [{}, {"taxsimid": None}])
+def test_legacy_runner_without_output_ids_uses_submitted_ids(output_id) -> None:
+    class FakeTaxsimRunner:
+        def __init__(self, input_frame):
+            del input_frame
+
+        def run(self, show_progress=False):
+            del show_progress
+            return [{**output_id, "fiitax": 100}]
+
+    case = Case(
+        case_id="case-1",
+        period="2024",
+        metadata={"taxsim_input": {"taxsimid": 1, "year": 2024}},
+    )
+
+    [result] = TaxsimPackageRunner(runner_factory=FakeTaxsimRunner).run_cases(
+        [case], variables=["fiitax"]
+    )
+
+    assert result.household_id == "case-1"
+    assert result.values == {"fiitax": 100}
+    assert result.errors == ()
+    assert result.raw == {**output_id, "fiitax": 100}
+
+
+@settings(max_examples=100, deadline=None, derandomize=True)
+@given(
+    batch=st.lists(
+        st.tuples(
+            st.integers(min_value=1, max_value=1_000_000),
+            st.integers(min_value=-100_000, max_value=100_000),
+        ),
+        min_size=1,
+        max_size=8,
+        unique_by=lambda row: row[0],
+    ),
+    id_column=st.sampled_from(["taxsimid", "legacy_id"]),
+    id_type=st.sampled_from([int, float, str]),
+)
+def test_property_legacy_output_id_omission_preserves_attribution(
+    batch, id_column, id_type
+) -> None:
+    """Dropping output IDs preserves case attribution, values, and errors."""
+    cases = [
+        Case(
+            case_id=f"case-{index}",
+            period="2024",
+            metadata={"taxsim_input": {id_column: id_type(submitted), "year": 2024}},
+        )
+        for index, (submitted, _) in enumerate(batch)
+    ]
+
+    def run(include_ids):
+        class FakeTaxsimRunner:
+            def __init__(self, input_frame):
+                del input_frame
+
+            def run(self, show_progress=False):
+                del show_progress
+                return [
+                    {
+                        **({id_column: id_type(submitted)} if include_ids else {}),
+                        "fiitax": amount,
+                    }
+                    for submitted, amount in batch
+                ]
+
+        return TaxsimPackageRunner(
+            runner_factory=FakeTaxsimRunner, id_column=id_column
+        ).run_cases(cases, variables=["fiitax"])
+
+    with_ids = run(True)
+    without_ids = run(False)
+
+    assert [result.household_id for result in without_ids] == [
+        case.case_id for case in cases
+    ]
+    assert [result.values for result in without_ids] == [
+        {"fiitax": amount} for _, amount in batch
+    ]
+    assert all(result.errors == () for result in without_ids)
+    assert [
+        (result.household_id, result.values, result.errors) for result in without_ids
+    ] == [(result.household_id, result.values, result.errors) for result in with_ids]
 
 
 def test_legacy_runner_output_with_nan_id_is_rejected() -> None:
