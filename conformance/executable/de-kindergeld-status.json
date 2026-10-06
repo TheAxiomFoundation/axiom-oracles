@@ -1,5 +1,7 @@
 {
-  "blockers": [],
+  "blockers": [
+    "release-binary-replay-receipt: host target aarch64-apple-darwin cannot execute the pinned x86_64-unknown-linux-gnu archive; provide axiom-rules-engine-aarch64-apple-darwin.tar.xz (sha256 42cd7441d15fd07420065ce4e005b71fbbae290d570448b7f761bc263c63a7d8) via $AXIOM_RULES_ENGINE_HOST_ARCHIVE or run `python scripts/de_executable.py --fetch-host-engine`"
+  ],
   "comparison_record": {
     "path": "comparisons/de-worker-dual-oracle/unified-record.json",
     "sha256": "249baac9cb2a2d868f53b7a2bdc4635a9c14854e1afc11b837edbd01cd0aa8f4"
@@ -19,7 +21,9 @@
     "source_aggregate_allowed": false,
     "verification": "fresh_replay_from_embedded_release_archive"
   },
-  "invalid_inputs": [],
+  "invalid_inputs": [
+    "release-binary-replay-receipt"
+  ],
   "manifest": {
     "path": "conformance/executable/de-kindergeld-manifest.json",
     "sha256": "5964df57b89a9d4d14592c062f23244d6ab51065ac116af142a5cc3ce4268e13"
@@ -71,23 +75,19 @@
       "trusted_key_id": "sha256:24a78725a23b1c83cfc38bdc22f75401d8008e7a8477796b55179d1fc79c4d9a"
     },
     {
-      "fresh_binary_sha256": "d05c521f6fede3491856f22a4b624b4d2ad22685271c8f7f619d811f34afbb21",
-      "fresh_observed_results_sha256": "b25b52e3afd08dac883b86ca724bf298e42151488656e5117c236f7b60621b05",
       "id": "release-binary-replay-receipt",
       "path": "conformance/executable/de-kindergeld-replay-receipt.json",
-      "reason": "verifier freshly reran pinned release bytes and reproduced exact Axiom-leg result rows",
-      "sha256": "8f07b388af0a670a180f69d1e1ec1dc9684334e002ee2e6deb31e32cd830f8b4",
-      "state": "valid",
-      "verification_mode": "fresh_replay_from_embedded_release_archive"
+      "reason": "host target aarch64-apple-darwin cannot execute the pinned x86_64-unknown-linux-gnu archive; provide axiom-rules-engine-aarch64-apple-darwin.tar.xz (sha256 42cd7441d15fd07420065ce4e005b71fbbae290d570448b7f761bc263c63a7d8) via $AXIOM_RULES_ENGINE_HOST_ARCHIVE or run `python scripts/de_executable.py --fetch-host-engine`",
+      "state": "invalid"
     }
   ],
   "schema": "axiom_oracles.de_executable_status.v1",
-  "state": "computed_pass",
+  "state": "computed_invalid",
   "subgraph": {
     "root_nodes": [
       "de:statutes/estg/66#monthly_kindergeld_per_child"
     ],
     "scope": "amount"
   },
-  "value": true
+  "value": false
 }

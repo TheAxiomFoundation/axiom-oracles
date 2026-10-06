@@ -9,13 +9,14 @@
     "claim_mode": "computed",
     "manifest": "conformance/executable/de-kindergeld-manifest.json",
     "manifest_sha256": "5964df57b89a9d4d14592c062f23244d6ab51065ac116af142a5cc3ce4268e13",
-    "state": "computed_pass",
-    "value": true
+    "state": "computed_invalid",
+    "value": false
   },
   "generated_by": "scripts/de_certificate_census.py",
   "programs": {
     "de/kindergeld": {
       "blockers": [
+        "release-binary-replay-receipt: host target aarch64-apple-darwin cannot execute the pinned x86_64-unknown-linux-gnu archive; provide axiom-rules-engine-aarch64-apple-darwin.tar.xz (sha256 42cd7441d15fd07420065ce4e005b71fbbae290d570448b7f761bc263c63a7d8) via $AXIOM_RULES_ENGINE_HOST_ARCHIVE or run `python scripts/de_executable.py --fetch-host-engine`",
         "closed: instrument frontier incomplete — 4 of 492 subordinate/bearing instruments pending disposition (oracles#491)",
         "closed: dependency closure open — 145 open dependencies (8 law-derived inputs, 0 unclassified inputs, 137 bearing instruments) (CERTIFIED.md v3)"
       ],
