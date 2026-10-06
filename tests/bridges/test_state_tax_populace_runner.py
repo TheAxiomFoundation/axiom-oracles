@@ -2961,14 +2961,14 @@ def test_mississippi_request_emits_canonical_person_schedule_without_relation() 
     assert request["dataset"]["inputs"] == [
         {
             "name": slot,
-            "entity": "Person",
+            "entity": "Entity",
             "entity_id": "state-tax-person-11",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},
         },
         {
             "name": slot,
-            "entity": "Person",
+            "entity": "Entity",
             "entity_id": "state-tax-person-12",
             "interval": interval,
             "value": {"kind": "decimal", "value": "20000.0"},
@@ -3009,11 +3009,12 @@ def test_dc_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None:
 
 @pytest.mark.parametrize("current_slot", [0, 1])
 @pytest.mark.parametrize("typed", [False, True])
-def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
+def test_dc_request_keeps_historical_labels_and_binds_typed_executable_slots(
     current_slot: int,
     typed: bool,
 ) -> None:
     from axiom_oracles.bridges.relation_binding import bind_request_relations
+    from axiom_oracles.bridges.input_binding import bind_typed_input_entities
 
     prefix = "us-dc:policies/income_tax/pilot_liability_pipeline"
     relation = f"{prefix}#relation.dc_pit_pilot_taxpayer_of_tax_unit"
@@ -3040,9 +3041,9 @@ def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
         for record in request["dataset"]["inputs"]
     }
     assert kinds == {
-        "state-tax-unit-1": "TaxUnit",
-        "state-tax-person-11": "Person",
-        "state-tax-person-12": "Person",
+        "state-tax-unit-1": "Entity",
+        "state-tax-person-11": "Entity",
+        "state-tax-person-12": "Entity",
     }
     artifact = {
         "program": {
@@ -3056,6 +3057,7 @@ def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
             "derived": [
                 {
                     "name": "tax",
+                    "id": f"{prefix}#tax",
                     "entity": "TaxUnit",
                     "expr": {
                         "kind": "sum_related",
@@ -3067,7 +3069,21 @@ def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
             ],
         }
     }
-    runtime_request = bind_request_relations(request, artifact)
+    runtime_request = bind_request_relations(
+        bind_typed_input_entities(request, artifact), artifact
+    )
+    if not typed:
+        assert runtime_request == request
+        return
+    kinds = {
+        record["entity_id"]: record["entity"]
+        for record in runtime_request["dataset"]["inputs"]
+    }
+    assert kinds == {
+        "state-tax-unit-1": "TaxUnit",
+        "state-tax-person-11": "Person",
+        "state-tax-person-12": "Person",
+    }
     for record in runtime_request["dataset"]["relations"]:
         assert kinds[record["tuple"][current_slot]] == "TaxUnit"
         assert kinds[record["tuple"][1 - current_slot]] == "Person"
@@ -3103,14 +3119,14 @@ def test_delaware_request_emits_canonical_person_schedule_without_relation() -> 
     assert request["dataset"]["inputs"] == [
         {
             "name": separate_slot,
-            "entity": "Person",
+            "entity": "Entity",
             "entity_id": "state-tax-person-21",
             "interval": interval,
             "value": {"kind": "decimal", "value": "20000.0"},
         },
         {
             "name": separate_slot,
-            "entity": "Person",
+            "entity": "Entity",
             "entity_id": "state-tax-person-22",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},

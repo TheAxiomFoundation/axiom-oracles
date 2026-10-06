@@ -16,6 +16,14 @@ class RelationBindingError(ValueError):
     """A producer cannot determine a safe tuple order from the artifact."""
 
 
+def artifact_has_typed_relations(artifact: dict[str, Any] | None) -> bool:
+    """Whether the artifact declares entity kinds for any relation slots."""
+    if artifact is None:
+        return False
+    program = artifact.get("program", artifact)
+    return any(schema.get("slot_entities") for schema in program.get("relations", []))
+
+
 def _fragment(name: str) -> str:
     return name.rsplit("#", 1)[-1].removeprefix("relation.")
 
@@ -152,12 +160,16 @@ class _ArtifactRelations:
         elif isinstance(node, dict):
             kind = node.get("kind")
             if kind in {"count_related", "sum_related", "relation_member"}:
+                # Membership has two IDs only in a derived predicate. Outside
+                # that scope the evaluator rejects it, so it implies no order.
+                if kind == "relation_member" and context is None:
+                    return
                 current, related = self._slots(node)
                 owner = entity
                 member = None
                 schema = self.schema(node["relation"])
                 if kind == "relation_member":
-                    owner, member = context or (entity, None)
+                    owner, member = context
                 else:
                     derivation = (schema or {}).get("derivation") or {}
                     if entity is not None and derivation.get("entity") == entity:
@@ -173,10 +185,14 @@ class _ArtifactRelations:
                 if kind != "relation_member":
                     self._walk(node.get("where"), kinds[related])
                 return
-            # A derivation's pair context belongs to judgment membership.
-            # Comparisons enter scalar expressions, whose conditional
-            # judgments use the current entity, not that outer pair context.
-            child_context = None if kind in {"comparison", "if"} else context
+            if kind == "no_match":
+                # Patterns label the fallback error; only the subject runs.
+                self._walk(node.get("subject"), entity, context)
+                return
+            # Scalar operands, comparisons and if branches keep the two IDs.
+            # Period reductions cannot run in a derived predicate; like an
+            # aggregation's where clause, their operands have no pair context.
+            child_context = None if kind == "over_periods" else context
             for child in node.values():
                 self._walk(child, entity, child_context)
 
@@ -217,7 +233,7 @@ def _ordered_tuple(
         for order in ([0, 1], [1, 0])
         if all(
             expected[slot] is None
-            or (preserve_ambiguous and kinds[index] is None)
+            or kinds[index] is None
             or expected[slot] == kinds[index]
             for slot, index in enumerate(order)
         )
@@ -242,6 +258,7 @@ def _ordered_tuple(
             return list(ids)
     if (
         len(candidates) == 2
+        and kinds[0] is not None
         and kinds[0] == kinds[1]
         and any(kind is not None for kind in expected)
     ):
@@ -289,8 +306,8 @@ def bind_request_relations(
 
     Call after resolving request relation names against the artifact. Released
     untyped artifacts retain their related-first order through executable slots.
-    Input labels are authoritative; conflicting or missing kinds are errors for
-    typed tuples because the producer cannot safely infer an order from ids.
+    Input labels are authoritative; conflicting kinds are errors. Unknown
+    endpoints are allowed when the known labels determine exactly one order.
     Untyped artifacts can count members without member inputs: use the known
     labels when they determine an order, otherwise retain the supplied tuple.
     """
@@ -318,12 +335,16 @@ def bind_request_relations(
         untyped = not schema.get("slot_entities")
         for entity_id in ids:
             possible = labels.get(entity_id, set())
-            if len(possible) > 1 or (not possible and not untyped):
+            if len(possible) > 1:
                 raise RelationBindingError(
                     f"Relation {name!r} entity {entity_id!r} needs one input entity "
                     f"kind; got {sorted(possible)!r}"
                 )
-            kinds.append(next(iter(possible)) if possible else None)
+            kind = next(iter(possible)) if possible else None
+            # Historical producers labelled all inputs Entity. An untyped
+            # artifact supplies no entity declaration against which to check
+            # that placeholder, and the original wire labels must survive.
+            kinds.append(None if untyped and kind == "Entity" else kind)
         record["tuple"] = _ordered_tuple(
             name, expected, ids, kinds, preserve_ambiguous=untyped
         )

@@ -26,7 +26,8 @@ from typing import Any
 import yaml
 
 from .jurisdiction import jurisdiction_prefix
-from .relation_binding import bind_request_relations
+from .input_binding import bind_typed_input_entities
+from .relation_binding import artifact_has_typed_relations, bind_request_relations
 from .rulespec_paths import (
     _canonical_rulespec_compile_path,
     _rulespec_public_item_keys,
@@ -1164,6 +1165,7 @@ def build_ctc_request(
                     interval,
                     value,
                     entity="TaxUnit",
+                    artifact=artifact,
                 )
             )
         inputs.append(
@@ -1173,6 +1175,7 @@ def build_ctc_request(
                 interval,
                 ctc_h_filing_status_code(str(row["filing_status"])),
                 entity="TaxUnit",
+                artifact=artifact,
             )
         )
         tax_unit_persons = persons_by_tax_unit.get(tax_unit_id, [])
@@ -1203,6 +1206,7 @@ def build_ctc_request(
                         interval,
                         value,
                         entity="Person",
+                        artifact=artifact,
                     )
                 )
             for name, value in project_ctc_h_person_inputs(person, context).items():
@@ -1213,6 +1217,7 @@ def build_ctc_request(
                         interval,
                         value,
                         entity="Person",
+                        artifact=artifact,
                     )
                 )
 
@@ -1258,6 +1263,7 @@ def build_cdcc_request(
                     interval,
                     value,
                     entity="TaxUnit",
+                    artifact=artifact,
                 )
             )
 
@@ -1280,6 +1286,7 @@ def build_cdcc_request(
                         interval,
                         value,
                         entity="Person",
+                        artifact=artifact,
                     )
                 )
 
@@ -1325,6 +1332,7 @@ def build_aotc_request(
                     interval,
                     value,
                     entity="TaxUnit",
+                    artifact=artifact,
                 )
             )
 
@@ -1347,6 +1355,7 @@ def build_aotc_request(
                         interval,
                         value,
                         entity="Person",
+                        artifact=artifact,
                     )
                 )
 
@@ -1627,6 +1636,7 @@ def build_eitc_request(
                     interval,
                     value,
                     entity="TaxUnit",
+                    artifact=artifact,
                 )
             )
         for name, value in project_section_7703_tax_unit_inputs(row=row).items():
@@ -1637,6 +1647,7 @@ def build_eitc_request(
                     interval,
                     value,
                     entity="TaxUnit",
+                    artifact=artifact,
                 )
             )
         for name, value in project_section_32_c_2_tax_unit_inputs(
@@ -1650,6 +1661,7 @@ def build_eitc_request(
                     interval,
                     value,
                     entity="TaxUnit",
+                    artifact=artifact,
                 )
             )
         for name, value in project_section_112_tax_unit_inputs().items():
@@ -1660,6 +1672,7 @@ def build_eitc_request(
                     interval,
                     value,
                     entity="TaxUnit",
+                    artifact=artifact,
                 )
             )
         # The generated EITC re-encode grounds earned income in 32(c)(2)'s
@@ -1686,6 +1699,7 @@ def build_eitc_request(
                         interval,
                         value,
                         entity="Person",
+                        artifact=artifact,
                     )
                 )
             for name, value in project_section_152_c_person_inputs(
@@ -1699,6 +1713,7 @@ def build_eitc_request(
                         interval,
                         value,
                         entity="Person",
+                        artifact=artifact,
                     )
                 )
 
@@ -2929,6 +2944,7 @@ def _runtime_axiom_request(
         query["outputs"] = runtime_outputs
     # Bind only after compilation and name resolution: declarations alone may
     # disagree with the executable slots of historical artifacts.
+    runtime_request = bind_typed_input_entities(runtime_request, artifact_payload)
     runtime_request = bind_request_relations(runtime_request, artifact_payload)
     return runtime_request, public_output_by_runtime
 
@@ -3212,12 +3228,18 @@ def person_money_sum(persons: list[Any], column: str | tuple[str, ...]) -> float
 
 
 def input_record(
-    name: str, entity_id: str, interval: dict[str, str], value: Any, *, entity: str
+    name: str,
+    entity_id: str,
+    interval: dict[str, str],
+    value: Any,
+    *,
+    entity: str = "Entity",
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Label inputs explicitly; the engine uses this kind to bind relations."""
+    """Keep historical labels until a typed artifact requires scoped kinds."""
     return {
         "name": name,
-        "entity": entity,
+        "entity": entity if artifact_has_typed_relations(artifact) else "Entity",
         "entity_id": entity_id,
         "interval": interval,
         "value": scalar_value(value),

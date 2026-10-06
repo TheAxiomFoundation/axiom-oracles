@@ -322,7 +322,7 @@ def test_national_insurance_class_1_request_projects_weekly_inputs(monkeypatch):
         record["entity_id"]: record["entity"]
         for record in request["dataset"]["inputs"]
     } == {
-        "person_7": "Person",
+        "person_7": "Entity",
     }
     assert inputs[
         f"{NATIONAL_INSURANCE_SECTION_8_BASE}#input.primary_class_1_contribution_payable_as_mentioned_in_section_6_1_a:person_7"
@@ -1045,9 +1045,9 @@ def test_income_tax_income_base_request_projects_section_23_relation():
         record["entity_id"]: record["entity"]
         for record in request["dataset"]["inputs"]
     } == {
-        "person_7": "Person",
-        "person_7_income_employment_income": "Payment",
-        "person_7_income_private_pension_income": "Payment",
+        "person_7": "Entity",
+        "person_7_income_employment_income": "Entity",
+        "person_7_income_private_pension_income": "Entity",
     }
     assert inputs[
         f"{INCOME_TAX_SECTION_23_BASE}#input.relief_deducted_under_section_24:person_7_income_employment_income"
@@ -1438,7 +1438,7 @@ def test_benefit_cap_relevant_amount_request_filters_to_finite_caps():
 
     assert request["mode"] == "explain"
     assert {record["entity"] for record in request["dataset"]["inputs"]} == {
-        "Family"
+        "Entity"
     }
     assert request["queries"] == [
         {

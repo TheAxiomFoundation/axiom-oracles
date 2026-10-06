@@ -23,7 +23,7 @@ def artifact_for(
         schema["slot_entities"] = (
             [owner, "Person"] if declared_owner_slot == 0 else ["Person", owner]
         )
-    return {
+    artifact = {
         "program": {
             "relations": [schema],
             "derived": [
@@ -40,6 +40,26 @@ def artifact_for(
             ],
         }
     }
+    if kind == "relation_member":
+        # Membership supplies orientation only inside a derived predicate.
+        structural = (
+            [owner, "Person"] if current_slot == 0 else ["Person", owner]
+        )
+        artifact["program"]["relations"].extend([
+            {"name": "source", "arity": 2, "slot_entities": structural},
+            {
+                "name": "filtered", "arity": 2,
+                "derivation": {
+                    "source_relation": "source",
+                    "current_slot": current_slot,
+                    "related_slot": 1 - current_slot,
+                    "slot_entities": structural,
+                    "predicate": artifact["program"]["derived"][0]["expr"],
+                },
+            },
+        ])
+        artifact["program"]["derived"] = []
+    return artifact
 
 
 def tuple_for(artifact, name="members", **kwargs):
@@ -168,8 +188,10 @@ def test_derived_relation_source_and_membership_follow_structural_context():
     assert tuple_for(artifact, "eligible") == ["child-1", "unit-1"]
 
 
-@pytest.mark.parametrize("wrapper", ["direct", "and", "or", "not", "scalar_if"])
-def test_derivation_pair_context_stops_at_scalar_expression_boundaries(wrapper):
+@pytest.mark.parametrize(
+    "wrapper", ["direct", "and", "or", "not", "scalar_if", "if_branch", "arithmetic"]
+)
+def test_derivation_pair_context_survives_scalar_expressions(wrapper):
     artifact = artifact_for()
     program = artifact["program"]
     program["derived"] = []
@@ -184,17 +206,27 @@ def test_derivation_pair_context_stops_at_scalar_expression_boundaries(wrapper):
         predicate = {"kind": wrapper, "items": [membership]}
     elif wrapper == "not":
         predicate = {"kind": "not", "item": membership}
-    elif wrapper == "scalar_if":
+    elif wrapper in {"scalar_if", "if_branch", "arithmetic"}:
         one = {"kind": "literal", "value": {"kind": "integer", "value": 1}}
         zero = {"kind": "literal", "value": {"kind": "integer", "value": 0}}
-        predicate = {
-            "kind": "comparison",
-            "left": {
+        scalar = {
                 "kind": "if",
                 "condition": membership,
                 "then_expr": one,
                 "else_expr": zero,
-            },
+        }
+        if wrapper == "if_branch":
+            scalar = {
+                "kind": "if",
+                "condition": {"kind": "comparison", "left": one, "op": "eq", "right": one},
+                "then_expr": scalar,
+                "else_expr": zero,
+            }
+        elif wrapper == "arithmetic":
+            scalar = {"kind": "add", "items": [scalar, zero]}
+        predicate = {
+            "kind": "comparison",
+            "left": scalar,
             "op": "eq",
             "right": one,
         }
@@ -214,9 +246,55 @@ def test_derivation_pair_context_stops_at_scalar_expression_boundaries(wrapper):
             },
         ]
     )
-    assert tuple_for(artifact, "eligible") == (
-        ["child-1", "unit-1"] if wrapper == "scalar_if" else ["unit-1", "child-1"]
-    )
+    assert tuple_for(artifact, "eligible") == ["unit-1", "child-1"]
+
+
+@pytest.mark.parametrize("wrapper", ["direct", "if", "where"])
+def test_membership_without_pair_context_implies_no_orientation(wrapper):
+    artifact = artifact_for(current_slot=0)
+    member = {
+        "kind": "relation_member", "relation": "members",
+        "current_slot": 1, "related_slot": 0,
+    }
+    if wrapper == "if":
+        member = {"kind": "if", "condition": member}
+    elif wrapper == "where":
+        member = dict(artifact["program"]["derived"][0]["expr"], where=member)
+    artifact["program"]["derived"].append({
+        "name": "out_of_context", "entity": "TaxUnit", "expr": member,
+    })
+    assert tuple_for(artifact) == ["unit-1", "child-1"]
+
+
+def test_no_match_only_executes_subject():
+    artifact = artifact_for(current_slot=1)
+    expr = artifact["program"]["derived"][0]["expr"]
+    artifact["program"]["derived"][0]["expr"] = {
+        "kind": "no_match", "subject": expr,
+        "patterns": [dict(expr, current_slot=0, related_slot=1)],
+    }
+    assert tuple_for(artifact) == ["child-1", "unit-1"]
+
+
+@pytest.mark.parametrize("boundary", ["where", "over_periods"])
+def test_membership_context_drops_at_runtime_rejected_boundaries(boundary):
+    artifact = artifact_for(kind="relation_member", current_slot=0, declared_owner_slot=1)
+    derivation = artifact["program"]["relations"][-1]["derivation"]
+    membership = derivation["predicate"]
+    if boundary == "where":
+        scalar = {
+            "kind": "count_related", "relation": "source",
+            "current_slot": 1, "related_slot": 0, "where": membership,
+        }
+    else:
+        scalar = {
+            "kind": "over_periods",
+            "value": {"kind": "if", "condition": membership},
+        }
+    derivation["predicate"] = {"kind": "comparison", "left": scalar}
+    # Neither site has the two IDs needed to evaluate membership. Nothing
+    # executable constrains members, so its declaration determines the order.
+    assert tuple_for(artifact) == ["child-1", "unit-1"]
 
 
 def test_canonical_relation_name_resolves_to_unique_artifact_symbol():
@@ -276,16 +354,41 @@ def test_incorrect_input_label_is_not_silently_accepted(invalid_kind):
         bind_request_relations(request, artifact_for())
 
 
-@pytest.mark.parametrize("conflicting", [True, False])
-def test_missing_or_conflicting_input_kind_fails(conflicting):
+def test_conflicting_input_kind_fails():
     request = request_for(["child-1"])
-    if conflicting:
-        request["dataset"]["inputs"].append(
-            {"entity_id": "child-1", "entity": "TaxUnit"}
-        )
-    else:
-        request["dataset"]["inputs"].pop()
+    request["dataset"]["inputs"].append(
+        {"entity_id": "child-1", "entity": "TaxUnit"}
+    )
     with pytest.raises(RelationBindingError, match="needs one input entity kind"):
+        bind_request_relations(request, artifact_for())
+
+
+@pytest.mark.parametrize("current_slot", [0, 1])
+@pytest.mark.parametrize("supplied_owner_slot", [0, 1])
+def test_typed_unknown_member_uses_unique_known_owner(current_slot, supplied_owner_slot):
+    request = request_for(["child-1"])
+    request["dataset"]["inputs"].pop()
+    if supplied_owner_slot == 0:
+        request["dataset"]["relations"][0]["tuple"].reverse()
+    before = deepcopy(request)
+    bound = bind_request_relations(request, artifact_for(current_slot=current_slot))
+    assert bound["dataset"]["relations"][0]["tuple"][current_slot] == "unit-1"
+    assert bound["dataset"]["inputs"] == before["dataset"]["inputs"]
+    assert request == before
+
+
+def test_typed_unknown_endpoints_cannot_decide_order():
+    request = request_for(["child-1"])
+    request["dataset"]["inputs"] = []
+    with pytest.raises(RelationBindingError, match="Cannot unambiguously order"):
+        bind_request_relations(request, artifact_for())
+
+
+def test_typed_unknown_member_does_not_hide_incompatible_label():
+    request = request_for(["child-1"])
+    request["dataset"]["inputs"].pop()
+    request["dataset"]["inputs"][0]["entity"] = "Household"
+    with pytest.raises(RelationBindingError, match="Cannot unambiguously order"):
         bind_request_relations(request, artifact_for())
 
 
@@ -357,6 +460,13 @@ def test_untyped_unlabelled_ids_preserve_existing_tuple(current_slot):
     assert bind_request_relations(
         request, artifact_for(typed=False, current_slot=current_slot)
     ) == request
+
+
+def test_untyped_historical_generic_labels_preserve_request():
+    request = request_for(["child-1"])
+    for record in request["dataset"]["inputs"]:
+        record["entity"] = "Entity"
+    assert bind_request_relations(request, artifact_for(typed=False, current_slot=1)) == request
 
 
 def test_untyped_conflicting_input_kinds_still_fail():
@@ -452,6 +562,7 @@ def test_every_generated_member_occupies_its_expected_kind_slot(
     )
     if not used:
         artifact["program"]["derived"] = []
+        artifact["program"]["relations"] = artifact["program"]["relations"][:1]
     member_ids = [f"member-{number}" for number in member_numbers]
     legacy = request_for(member_ids, owner)
     bound = bind_request_relations(legacy, artifact)

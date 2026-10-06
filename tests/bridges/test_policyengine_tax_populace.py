@@ -2394,7 +2394,7 @@ def test_build_oasdi_payroll_request_feeds_3121_taxable_wages():
     assert request["dataset"]["inputs"] == [
         {
             "name": "us:statutes/26/3101/a#input.wages",
-            "entity": "Person",
+            "entity": "Entity",
             "entity_id": "person_7",
             "interval": {
                 "period_kind": "tax_year",
