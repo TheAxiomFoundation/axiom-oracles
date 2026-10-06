@@ -191,7 +191,7 @@ it documents them. The loader's own exclusions are each counted by reason in
 
 | exclusion | flag / field | removed by | why |
 |---|---|---|---|
-| listed-in-error actives | — | outside the active case universe before sampling (already absent) | not participating in the sample month (tech doc PDF p.16) |
+| listed-in-error actives | — | excluded from the active case universe (already absent) | listed in error as active cases, among them cases that did not participate in SNAP for the sample month (tech doc PDF p.16) |
 | incomplete or deselected reviews | `REVDISP = 3` or `4` | Mathematica, preliminary processing (already absent) | not a completed benefit computation (PDF p.17–18) |
 | not subject to review | `REVDISP = 2` | Mathematica, preliminary processing (already absent) | outside the active QC universe (PDF p.16–17) |
 | ineligible, non-compliance, or unknown-eligibility findings | `STATUS = 4` or `5`; `STATUS = 2` with `RAWBEN <= AMTERR`; `STATUS` missing | Mathematica, preliminary processing and editing Step 1 (already absent) | no positive benefit to reproduce (PDF p.17–18, p.27–28) |
