@@ -1,0 +1,12 @@
+Fix PolicyEngine attribution review findings
+
+Carry selected known-cause case IDs, Axiom values, and actual mismatch types
+into companion validation. Clear stale disposition annotations and reject
+empty known-cause engine mappings. Verify cited PolicyEngine issue payloads
+with read-only GitHub requests and reject PR aliases or unverifiable reads.
+
+Add offline review counterexamples and Hypothesis coverage for companion
+values, types, issue identity, and ASCII ratchet round-trips. Regenerate the
+ASCII header.
+
+Co-Authored-By: GPT-6.1 Sol <noreply@openai.com>
