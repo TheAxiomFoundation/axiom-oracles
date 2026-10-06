@@ -65,12 +65,16 @@ Merge semantics
 disposition and adds ``summary.dispositioned``::
 
     raw_match_rate    match_count / comparison_count
-    explained_rate    (match_count + explained rows) / comparison_count,
-                      where explained = explained_residual,
-                      upstream_engine_gap, bridge_artifact
+    explained_rate    (match_count + classified rows) / comparison_count,
+                      where classified = explained_residual,
+                      upstream_engine_gap, bridge_artifact, and
+                      axiom_encoding_gap — a bug we can name, reproduce,
+                      and have filed upstream IS explained (owner
+                      decision, 2026-08-24); the encoding-gap count stays
+                      broken out in ``counts`` so our own open bugs
+                      remain visible until fixed
     unexplained_count mismatch_count minus rows classified as any of the
-                      four explanatory kinds (axiom_encoding_gap counts as
-                      classified but never as explained)
+                      four explanatory kinds
 
 The result is additive over ``axiom.comparison_report.v2``; merged reports
 are stamped ``axiom.comparison_report.v2.1``. Reports that slim their
@@ -108,6 +112,7 @@ _ENTRY_KEYS = {
     "concept",
     "case_id",
     "case_selector",
+    "signatures",
     "kind",
     "disposition",
     "evidence",
@@ -116,8 +121,15 @@ _ENTRY_KEYS = {
     "pinned",
     "selector_binding",
     "notes",
+    "attribution",
+    "receipt",
+    "reason",
+    "comment",
 }
-_EVIDENCE_KEYS = {"mechanism", "arithmetic", "upstream_url", "sources"}
+_EVIDENCE_KEYS = {
+    "mechanism", "arithmetic", "upstream_url", "sources",
+    "receipt_type", "instrument_receipt",
+}
 _SELECTOR_KEYS = {"case_ids", "case_id_prefix"}
 _PINNED_KEYS = {"left", "right", "difference"}
 
@@ -293,10 +305,16 @@ def _validate_entry(
 
     case_id = entry.get("case_id")
     case_selector = entry.get("case_selector")
-    if (case_id is None) == (case_selector is None):
+    signatures = entry.get("signatures")
+    if sum(value is not None for value in (case_id, case_selector, signatures)) != 1:
         errors.append(
-            f"{label} needs exactly one of `case_id` or `case_selector`"
+            f"{label} needs exactly one of `case_id`, `case_selector`, or `signatures`"
         )
+    if signatures is not None and (
+        not isinstance(signatures, list)
+        or any(not isinstance(value, str) or not value for value in signatures)
+    ):
+        errors.append(f"{label} `signatures` must be a list of non-empty strings")
     if case_id is not None and (
         not isinstance(case_id, str | int) or str(case_id).strip() == ""
     ):
@@ -562,6 +580,9 @@ def _entry_selects_row(entry: dict, row: dict) -> bool:
     case_id = entry.get("case_id")
     if case_id is not None:
         return row_case == str(case_id)
+    signatures = entry.get("signatures")
+    if signatures is not None:
+        return row.get("signature") in signatures
     selector = entry.get("case_selector") or {}
     case_ids = selector.get("case_ids")
     if case_ids is not None and row_case not in {
@@ -686,9 +707,6 @@ def apply_dispositions(
         else:
             orphaned.append(entry_id)
 
-    explained_rows = sum(
-        counts[kind] for kind in EXPLAINED_DISPOSITION_KINDS
-    )
     classified_rows = sum(
         counts[kind] for kind in CLASSIFIED_DISPOSITION_KINDS
     )
@@ -696,8 +714,14 @@ def apply_dispositions(
         "schema_version": DISPOSITIONS_SCHEMA_VERSION,
         "dispositions_file": dispositions_file,
         "raw_match_rate": _percentage(match_count, comparison_count),
+        # Explained = every row whose cause is verified — including rows
+        # classified axiom_encoding_gap: a bug we can name, reproduce to
+        # the cent, and have filed upstream IS explained (owner decision,
+        # 2026-08-24). The encoding-gap count stays broken out separately
+        # in `counts` and on the dashboard so our own bugs remain visible
+        # until fixed and regenerated away.
         "explained_rate": _percentage(
-            match_count + explained_rows, comparison_count
+            match_count + classified_rows, comparison_count
         ),
         "unexplained_count": max(mismatch_count - classified_rows, 0),
         "counts": counts,
@@ -802,7 +826,7 @@ def dispositioned_rollup(reports: list[dict]) -> dict:
         comparison_count += comparisons
         match_count += matches
         explained_mismatches += sum(
-            counts.get(kind, 0) for kind in EXPLAINED_DISPOSITION_KINDS
+            counts.get(kind, 0) for kind in CLASSIFIED_DISPOSITION_KINDS
         )
         if "unexplained_count" in block:
             unexplained_count += block["unexplained_count"]

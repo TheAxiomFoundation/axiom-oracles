@@ -17,6 +17,8 @@ import {
   suiteMeta,
   suiteLabel,
   reportMetric,
+  accumulateExplainedRate,
+  resolveExplainedRate,
   topLevelAggregates,
   isAxiomPair,
   otherOracle,
@@ -78,8 +80,8 @@ const ORACLE_IDENTITY = {
   },
   "snap-qc": {
     org: "USDA Food and Nutrition Service",
-    what: "SNAP Quality Control microdata — the USDA's annual audit sample of real SNAP cases, re-verified case by case by state reviewers. Administrative records of benefits actually issued, not a simulation.",
-    url: "https://snapqcdata.us",
+    what: "SNAP Quality Control public-use file — the USDA's national sample of active SNAP cases, each reviewed by state QC reviewers who reinterview the household. Axiom is compared with FSBEN, the file's final calculated benefit, which Mathematica computes for USDA from each edited case record; the benefit received is a separate field (RAWBEN).",
+    url: "https://snapqcdata.net/datafiles",
   },
   spsm: {
     org: "Statistics Canada",
@@ -99,7 +101,11 @@ const REGION_LABELS = { us: "US", ca: "CA", uk: "UK", be: "BE", de: "DE", dk: "D
  * still gates its reports at the data level regardless of UI visibility.
  * Delete an entry to restore the oracle.
  */
-const HIDDEN_ORACLES = new Set(["taxsim"]);
+// TAXSIM re-enabled 2026-08-24: its comparison surface is rebuilt — full
+// mismatch persistence (#439), 10 verified disposition classes on the
+// national federal lane (99.75% classified), and the intersection lane's
+// residue characterized. Ratchets pin every remaining unexplained count.
+const HIDDEN_ORACLES = new Set([]);
 
 /**
  * The unit of counting is the household case: one household compared once,
@@ -472,17 +478,18 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
       }
       const entry = byProgram.get(key);
       const m = reportMetric(report);
+      const reportUnexplained = countUnexplained([report], knownCauses || []);
       entry.total += m.total;
       entry.mismatches += m.mismatches;
-      entry.unexplained += countUnexplained([report], knownCauses || []);
+      entry.unexplained += reportUnexplained;
       entry.households += reportHouseholds(report);
+      accumulateExplainedRate(entry, m, reportUnexplained);
     }
     return [...byProgram.values()]
       .map((p) => ({
         ...p,
         rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
-        explainedRate:
-          p.total > 0 ? ((p.total - p.unexplained) / p.total) * 100 : null,
+        explainedRate: resolveExplainedRate(p),
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [regionScoped, knownCauses]);
@@ -746,17 +753,24 @@ export default function OraclesV2() {
       }
       const entry = byProgram.get(key);
       const m = reportMetric(report);
+      const reportUnexplained = countUnexplained(
+        [report],
+        data.knownCauses || [],
+      );
       entry.total += m.total;
       entry.mismatches += m.mismatches;
-      entry.unexplained += countUnexplained([report], data.knownCauses || []);
+      entry.unexplained += reportUnexplained;
       entry.households += reportHouseholds(report);
       entry.oracles.add(otherOracle(report));
+      // Canonical disposition-merge rate when present (visible-row
+      // arithmetic overstated truncated premerged-slim suites — see
+      // accumulateExplainedRate in utils/suites.js).
+      accumulateExplainedRate(entry, m, reportUnexplained);
     }
     return [...byProgram.values()].map((p) => ({
       ...p,
       rate: p.total > 0 ? ((p.total - p.mismatches) / p.total) * 100 : null,
-      explainedRate:
-        p.total > 0 ? ((p.total - p.unexplained) / p.total) * 100 : null,
+      explainedRate: resolveExplainedRate(p),
     }));
   }, [model]);
 

@@ -82,6 +82,57 @@ The fixed grid is defined in `axiom_oracles/suites/de_worker.py`:
 Do not duplicate this grid in a runner or live test. Both engine anchor tests
 select cases from the canonical builder.
 
+## Child-eligibility grid (`de-kindergeld-eligibility`)
+
+The canonical grid fixes its children at ages 7 and 10, so the § 32 EStG
+conditions behind `qualifying_child_count` are never exercised. The second DE
+case set, defined in `axiom_oracles/suites/de_kindergeld.py`, varies one
+threshold per case on a single-parent West household at EUR 4,000: age 17;
+age 18 in and not in training; age 24 and 25 in training; age 22 in training
+working 20 and 25 hours a week; and one eligible plus one ineligible child. It
+compares `kindergeld_monthly` and the new concept
+`de:policies/kindergeld_eligibility_baseline#kindergeld_qualifying_child_count`
+(GETTSIM `kindergeld.anzahl_ansprüche`; EUROMOD has no per-child eligibility
+output, so its leg is the household amount).
+
+GETTSIM 1.2.1 inputs are `kindergeld__in_ausbildung` and `arbeitsstunden_w` on
+the child; its rule is `alter < 18 or (alter < 25 and in_ausbildung and
+arbeitsstunden_w <= 20)`. EUROMOD receives `les = 6` / `dec = 1` for a child in
+training, `les = 1` / `dec = 0` otherwise, and `lhw`/`liwwh` for the working
+child. Live GETTSIM anchors are pinned in
+`tests/test_gettsim_adapter.py::TestGettsimKindergeldEligibilityGridLive`.
+
+Known oracle limits, recorded so they are not mistaken for findings:
+
+- GETTSIM applies the 20-hour rule to every child in training; § 32 Abs. 4
+  Satz 2–3 applies it only after a first training or degree is completed
+  (DA-KG A 20.1). The 25-hour case pins the engine, not the statute.
+- Neither oracle models the job-seeking ground for 18–20-year-olds (§ 32
+  Abs. 4 Satz 1 Nr. 1), the disability ground (Nr. 3), foster children, the
+  § 62 residence-title conditions, § 64 priority or § 65 exclusions. Those
+  parts of the rulespec-de encoding will rest on statute-bound proof atoms.
+
+The comparison config is `comparisons/de-kindergeld-eligibility.yaml`
+(runner `gettsim-synthetic-compare`, same engine contract as the canonical
+grid); its committed report is
+`dashboard/public/data/euromod-gettsim-de-kindergeld-eligibility.json`.
+First run (2026-09-08, EUROMOD J2.0+ DE_2025 and GETTSIM 1.2.1): 8 of 8
+household amounts match to the cent — both engines pay EUR 255 for the
+17-year-old, the 18- and 24-year-olds in training and the 20-hour worker, and
+nothing for the 18-year-old not in training, the 25-year-old and the 25-hour
+worker. The dual-oracle grid compares the household amount only, because
+EUROMOD has no per-child eligibility output; GETTSIM's claim count is pinned
+by the live anchors and attaches to the Axiom leg as
+`kindergeld_qualifying_child_count` when rulespec-de encodes §§ 63/32 (the
+concept id is named for the ledger's law-derived input for that reason).
+
+Apple Silicon note for the EUROMOD leg: `/usr/local/bin/python3-intel64`
+builds a venv whose `bin/python` is a universal binary that still launches
+as arm64, so `EUROMOD_PYTHON` must point at a wrapper that runs
+`exec arch -x86_64 <venv>/bin/python "$@"`, and the venv's wheels must be
+installed through that wrapper. The JRC download rejects plain `curl`; send
+browser-like `User-Agent`, `Accept` and `Referer` headers.
+
 ## Filed model findings
 
 The 12 non-matching rows are not widened away. They retain the one-cent
@@ -97,13 +148,33 @@ the repository-supported `upstream_engine_gap` type:
    DE_2025 deducts §32(6) child allowances while paying full Kindergeld without
    the §31 sentence 4 add-back. The one- and two-child tax rows differ by
    EUR -1,476.17 and EUR -2,824.99. Finding against EUROMOD.
-3. [GETTSIM #1215](https://github.com/ttsim-dev/gettsim/issues/1215):
-   GETTSIM applies the childless Pflegeversicherung surcharge to the total
-   reduced Midijob base instead of the SGB IV §20(2a) sentence 6 employee base.
-   At EUR 1,200/month, EUROMOD−GETTSIM is EUR -1.06973/month. Finding against
-   GETTSIM; EUROMOD is statute-consistent.
+3. [JRC EUROMOD #23](https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/23)
+   (re-adjudicated 2026-08-19; supersedes the retracted
+   [GETTSIM #1215](https://github.com/ttsim-dev/gettsim/issues/1215)):
+   the childless Pflegeversicherung surcharge in the Midijob zone is an
+   employee-only component computed on the SGB IV §20(2a) sentence 1 total
+   base per BVV §2(2) sentences 3 and 6; EUROMOD applies it to the sentence 6
+   employee base. At the committed EUR 1,200 grid row, EUROMOD−GETTSIM is
+   EUR -1.06973/month. Finding against EUROMOD; GETTSIM is
+   regulation-consistent. Our original #1215 filing against GETTSIM was
+   rejected by the maintainer and retracted — the adjudication had not reached
+   the controlling BVV provision.
 
 All other grid comparisons match to the cent.
+
+## Rule: encode before filing oracle findings (Max, 2026-08-19)
+
+Never file an issue against an external oracle until we have encoded the
+provision ourselves. A divergence discovered before our signed encoding exists
+is recorded in dispositions as `unexplained` (or a neutral divergence record),
+never as a filed upstream finding. File upstream only when our encoding exists
+and the divergence survives against it: the complete-source-unit gate forces
+the full mechanism — every base, every rounding rule, the procedural
+regulations (the #1215 lesson: BVV §2(2)) — so the finding carries an
+independent legal derivation by construction. The certification layer is
+unchanged: `upstream_engine_gap` still requires maintainer acceptance or an
+independent legal derivation; this rule gates the filing, that one gates the
+classification.
 
 ## Run and validate
 

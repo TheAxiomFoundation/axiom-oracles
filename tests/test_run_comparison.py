@@ -8,9 +8,24 @@ from types import SimpleNamespace
 import pytest
 
 
+def assert_pe_companion_pinned(cmd):
+    """A `uv run` that installs PolicyEngine-US must also pin spm-calculator."""
+    assert any(arg.startswith("policyengine-us==") for arg in cmd), cmd
+    assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with", cmd
+
+
 def load_run_comparison_module():
     module_path = Path(__file__).parents[1] / "scripts" / "run_comparison.py"
     spec = importlib.util.spec_from_file_location("run_comparison", module_path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+def load_script_module(name: str):
+    module_path = Path(__file__).parents[1] / "scripts" / f"{name}.py"
+    spec = importlib.util.spec_from_file_location(name, module_path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
@@ -93,6 +108,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     # the old 1.705.16 pin was below the floor and failed hard.
     assert "policyengine-us==1.729.0" in cmd
     assert "policyengine-core==3.26.11" in cmd
+    assert_pe_companion_pinned(cmd)
     assert "--data-folder" not in cmd
     assert "--allow-policyengine-us-version" in cmd
     assert "--allow-uncertified-policyengine-data" in cmd
@@ -309,6 +325,146 @@ def test_snap_qc_runner_registered_and_reemits_committed_report(monkeypatch, tmp
     assert output.read_text() == committed.read_text()
 
 
+def test_require_live_refuses_a_reemit_and_publishes_nothing(monkeypatch, tmp_path):
+    """--require-live turns a skip-capable runner's graceful re-emit into a hard
+    failure before anything is published: no reports/ file, no dashboard
+    write. The live SNAP QC CI lane depends on this."""
+    run_comparison = load_run_comparison_module()
+    dashboard_dir = tmp_path / "dashboard-data"
+    dashboard_dir.mkdir()
+    committed = dashboard_dir / "axiom-snapqc-ga-snap.json"
+    committed.write_text('{"schema_version": "axiom.comparison_report.v2"}')
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", dashboard_dir)
+    monkeypatch.setattr(
+        run_comparison, "_snap_qc_skip_reason", lambda *_a, **_k: "no engine here"
+    )
+    output_dir = tmp_path / "reports"
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "run_comparison.py",
+            "ga-snap-qc",
+            "--require-live",
+            "--output-dir",
+            str(output_dir),
+        ],
+    )
+
+    with pytest.raises(SystemExit) as excinfo:
+        run_comparison.main()
+
+    assert "ga-snap-qc: --require-live" in str(excinfo.value.code)
+    assert list(output_dir.iterdir()) == []  # staging file dropped, nothing published
+    assert sorted(path.name for path in dashboard_dir.iterdir()) == [committed.name]
+    assert committed.read_text() == '{"schema_version": "axiom.comparison_report.v2"}'
+
+
+def test_require_live_does_not_affect_a_live_run(monkeypatch, tmp_path):
+    """A runner that really executed publishes normally under --require-live."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path / "dashboard")
+    comparisons = tmp_path / "comparisons"
+    comparisons.mkdir()
+    (comparisons / "live-suite.yaml").write_text(
+        "name: live-suite\n"
+        "runner:\n"
+        "  type: fake-live\n"
+        "  parameters: {sample_size: 0}\n"
+        "artifacts:\n"
+        "  report_basename: live-suite\n"
+    )
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", comparisons)
+
+    def fake_live_runner(runner, output):
+        output.write_text(json.dumps({"compared_values": 1, "mismatch_count": 0}))
+
+    monkeypatch.setitem(run_comparison.RUNNERS, "fake-live", fake_live_runner)
+    output_dir = tmp_path / "reports"
+    monkeypatch.setattr(
+        "sys.argv",
+        ["run_comparison.py", "live-suite", "--require-live", "--output-dir", str(output_dir)],
+    )
+
+    assert run_comparison.main() == 0
+    [published] = [p for p in output_dir.iterdir() if not p.name.startswith(".")]
+    report = json.loads(published.read_text())
+    assert report["mismatch_count"] == 0
+    assert not report["provenance"].get("reemitted_report")
+
+
+_UK_GRID_RUNNERS = {
+    "_run_uk_council_tax_reduction_grid": "axiom-policyengine-uk-council-tax-reduction",
+    "_run_uk_capital_gains_tax_grid": "axiom-policyengine-uk-capital-gains-tax",
+    "_run_uk_business_rates_grid": "axiom-policyengine-uk-business-rates",
+    "_run_uk_lbtt_ltt_grid": "axiom-policyengine-uk-lbtt-ltt",
+    "_run_uk_winter_fuel_payment_pe_grid": "axiom-policyengine-uk-winter-fuel-payment-pe",
+    "_run_uk_attendance_allowance_pe_grid": "axiom-policyengine-uk-attendance-allowance-pe",
+    "_run_uk_tax_free_childcare_pe_grid": "axiom-policyengine-uk-tax-free-childcare-pe",
+    "_run_uk_vat_grid": "axiom-policyengine-uk-vat",
+    "_run_uk_fuel_duty_grid": "axiom-policyengine-uk-fuel-duty",
+    "_run_uk_tv_licence_grid": "axiom-policyengine-uk-tv-licence",
+}
+
+
+def _uk_grid_sandbox(monkeypatch, tmp_path, basename):
+    """A throwaway repo root holding one committed UK grid report."""
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", tmp_path)
+    committed = tmp_path / "dashboard" / "public" / "data" / f"{basename}.json"
+    committed.parent.mkdir(parents=True)
+    committed.write_text('{"committed": true}')
+    return run_comparison, committed
+
+
+@pytest.mark.parametrize("runner_name,basename", _UK_GRID_RUNNERS.items())
+def test_uk_grid_fallback_is_marked_as_a_reemit(monkeypatch, tmp_path, runner_name, basename):
+    """When a UK grid generator cannot run, the committed report it reuses is
+    a re-emit: it carries the us-tariff grid's marker, so provenance never
+    stamps it fresh and --require-live refuses it."""
+    run_comparison, committed = _uk_grid_sandbox(monkeypatch, tmp_path, basename)
+
+    def unavailable(*_args, **_kwargs):
+        raise FileNotFoundError("uv")
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", unavailable)
+    runner: dict = {}
+    output = tmp_path / "report.json"
+    getattr(run_comparison, runner_name)(runner, output)
+
+    assert runner.get("_reemitted_report") is True
+    assert output.read_text() == '{"committed": true}'
+
+
+@pytest.mark.parametrize("runner_name,basename", _UK_GRID_RUNNERS.items())
+def test_uk_grid_fresh_report_with_mismatches_is_not_a_reemit(
+    monkeypatch, tmp_path, runner_name, basename
+):
+    """Some generators write fresh artifacts and then exit 1 on mismatches;
+    those numbers are new, so they must not be labeled re-emitted."""
+    run_comparison, committed = _uk_grid_sandbox(monkeypatch, tmp_path, basename)
+
+    def wrote_then_failed(cmd, **_kwargs):
+        committed.write_text('{"fresh": true, "mismatch_count": 2}')
+        raise run_comparison.subprocess.CalledProcessError(1, cmd)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", wrote_then_failed)
+    runner: dict = {}
+    output = tmp_path / "report.json"
+    getattr(run_comparison, runner_name)(runner, output)
+
+    assert "_reemitted_report" not in runner
+    assert output.read_text() == '{"fresh": true, "mismatch_count": 2}'
+
+
+@pytest.mark.parametrize("runner_name,basename", _UK_GRID_RUNNERS.items())
+def test_uk_grid_live_generation_is_not_marked(monkeypatch, tmp_path, runner_name, basename):
+    run_comparison, _ = _uk_grid_sandbox(monkeypatch, tmp_path, basename)
+    monkeypatch.setattr(run_comparison.subprocess, "run", lambda *_a, **_k: None)
+    runner: dict = {}
+    getattr(run_comparison, runner_name)(runner, tmp_path / "report.json")
+    assert "_reemitted_report" not in runner
+
+
 def test_snap_qc_runner_writes_v2_shell_when_no_committed_report(monkeypatch, tmp_path):
     """With nothing committed yet, the skip path writes a valid empty v2 report
     recording the skip reason, so the weekly matrix never crashes on a first run."""
@@ -366,10 +522,14 @@ def test_gettsim_synthetic_runner_registered_and_reemits_committed_report(
     assert output.read_text() == committed.read_text()
 
 
-def test_gettsim_synthetic_runner_compares_requested_sample(monkeypatch, tmp_path):
+@pytest.mark.parametrize("concept_subset", [False, True])
+def test_gettsim_synthetic_runner_compares_requested_sample(
+    concept_subset, monkeypatch, tmp_path
+):
     from axiom_oracles.adapters.euromod import EuromodPlatformRunner
     from axiom_oracles.adapters.gettsim import GettsimRunner
     from axiom_oracles.core.results import EngineResult
+    from axiom_oracles.suites.de_worker import DE_WORKER_OUTPUTS
 
     run_comparison = load_run_comparison_module()
     monkeypatch.setenv("EUROMOD_PYTHON", "/fake/euromod-python")
@@ -382,7 +542,7 @@ def test_gettsim_synthetic_runner_compares_requested_sample(monkeypatch, tmp_pat
     def fake_euromod_run(self, cases, variables):
         assert len(cases) == 1
         assert self.extra_columns == ("drgn1",)
-        assert set(variables) == {
+        expected_variables = {"tsceehl_s"} if concept_subset else {
             "tsceehl_s",
             "tsceepi_s",
             "tsceeui_s",
@@ -390,6 +550,7 @@ def test_gettsim_synthetic_runner_compares_requested_sample(monkeypatch, tmp_pat
             "tin_s",
             "bch00_s",
         }
+        assert set(variables) == expected_variables
         return [
             EngineResult(
                 engine="euromod",
@@ -420,21 +581,22 @@ def test_gettsim_synthetic_runner_compares_requested_sample(monkeypatch, tmp_pat
     )
 
     output = tmp_path / "report.json"
+    parameters = {
+        "suite": "de-worker-dual-oracle",
+        "sample_size": 1,
+        "euromod_extra_columns": ["drgn1"],
+    }
+    if concept_subset:
+        parameters["concepts"] = [DE_WORKER_OUTPUTS[0]]
     run_comparison._run_gettsim_synthetic_compare(
-        {
-            "parameters": {
-                "suite": "de-worker-dual-oracle",
-                "sample_size": 1,
-                "euromod_extra_columns": ["drgn1"],
-            }
-        },
+        {"parameters": parameters},
         output,
     )
 
     report = json.loads(output.read_text())
     assert report["engines"] == {"left": "euromod", "right": "gettsim"}
     assert report["case_count"] == 1
-    assert report["summary"]["comparison_count"] == 6
+    assert report["summary"]["comparison_count"] == (1 if concept_subset else 6)
     assert report["summary"]["mismatch_count"] == 0
     assert report["summary"]["error_count"] == 0
     assert report["engine_metadata"]["euromod"]["extra_columns"] == ["drgn1"]
@@ -462,9 +624,7 @@ def test_gettsim_synthetic_first_run_shell_attributes_unavailable_engine(tmp_pat
             "error": "skipped: EUROMOD_PYTHON unset",
         }
     ]
-    assert euromod_report["summary"]["errors_by_engine"] == [
-        {"value": "euromod", "count": 1}
-    ]
+    assert euromod_report["summary"]["errors_by_engine"] == {"euromod": 1}
 
     gettsim_output = tmp_path / "gettsim-missing.json"
     run_comparison._reemit_gettsim_synthetic_report(
@@ -518,6 +678,155 @@ def test_de_dual_oracle_registry_config_shape() -> None:
     assert config["dashboard"]["filename"] == (
         "euromod-gettsim-de-worker-dual-oracle.json"
     )
+
+
+def test_de_axiom_pair_runner_is_registered() -> None:
+    run_comparison = load_run_comparison_module()
+
+    assert run_comparison.RUNNERS["de-axiom-oracle-compare"] is (
+        run_comparison._run_de_axiom_oracle_compare
+    )
+
+
+@pytest.mark.parametrize(
+    ("name", "oracle", "canonical_record"),
+    [
+        (
+            "de-worker-dual-oracle-axiom-euromod",
+            "euromod",
+            "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+        ),
+        (
+            "de-worker-dual-oracle-axiom-gettsim",
+            "gettsim",
+            "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+        ),
+    ],
+)
+def test_de_axiom_pair_configs_have_exact_names_and_synchronized_pins(
+    name, oracle, canonical_record
+) -> None:
+    run_comparison = load_run_comparison_module()
+    executable = load_script_module("de_executable")
+    unified = load_script_module("de_unified_comparison")
+    config_path = COMPARISONS_DIR / f"{name}.yaml"
+    config = run_comparison._load_comparison(name)
+    params = config["runner"]["parameters"]
+
+    assert config_path.stem == config["name"] == name
+    assert config["runner"]["type"] == "de-axiom-oracle-compare"
+    assert params["suite"] == name
+    assert params["oracle"] == oracle
+    assert config["artifacts"]["canonical_record"] == canonical_record
+    assert config["selector"]["report"] == canonical_record
+
+    configured_pin = {
+        "commit": params["rulespec_upstream_sha"],
+        "tree": params["rulespec_upstream_tree"],
+    }
+    assert configured_pin == unified.RULESPEC_REF_PIN
+    assert configured_pin == {
+        "commit": executable.RULESPEC_PIN["commit"],
+        "tree": executable.RULESPEC_PIN["tree"],
+    }
+    assert all(
+        len(value) == 40 and set(value) <= set("0123456789abcdef")
+        for value in configured_pin.values()
+    )
+
+
+def test_load_comparison_rejects_internal_name_drift(monkeypatch, tmp_path):
+    """A selector name must resolve to a config declaring that exact name;
+    silently running a differently named config repeats the #295 failure."""
+
+    run_comparison = load_run_comparison_module()
+    comparisons = tmp_path / "comparisons"
+    comparisons.mkdir()
+    (comparisons / "expected-name.yaml").write_text(
+        "name: different-name\n"
+        "runner:\n"
+        "  type: de-axiom-oracle-compare\n"
+        "  parameters: {}\n"
+    )
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", comparisons)
+
+    with pytest.raises(SystemExit, match="config.*name|name.*config"):
+        run_comparison._load_comparison("expected-name")
+
+
+def test_canonical_record_path_accepts_only_comparisons_descendants(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    comparisons = repo / "comparisons"
+    comparisons.mkdir(parents=True)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+
+    assert run_comparison._canonical_record_path({}) is None
+    assert run_comparison._canonical_record_path(
+        {
+            "artifacts": {
+                "canonical_record": (
+                    "comparisons/de-worker-dual-oracle/axiom-euromod.json"
+                )
+            }
+        }
+    ) == (comparisons / "de-worker-dual-oracle" / "axiom-euromod.json").resolve()
+
+    for unsafe in (
+        "",
+        str(tmp_path / "absolute.json"),
+        "../outside.json",
+        "dashboard/public/data/not-canonical.json",
+        "comparisons/../../outside.json",
+    ):
+        with pytest.raises(SystemExit, match="canonical_record"):
+            run_comparison._canonical_record_path(
+                {"artifacts": {"canonical_record": unsafe}}
+            )
+
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (comparisons / "escape").symlink_to(outside, target_is_directory=True)
+    with pytest.raises(SystemExit, match="canonical_record"):
+        run_comparison._canonical_record_path(
+            {
+                "artifacts": {
+                    "canonical_record": "comparisons/escape/record.json"
+                }
+            }
+        )
+
+
+def test_write_canonical_record_publishes_exact_bytes_atomically(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    source = tmp_path / "reports" / "source.json"
+    target = tmp_path / "comparisons" / "de" / "record.json"
+    source.parent.mkdir()
+    source.write_bytes(b'{"suite":"de-pair","revision":1}\n')
+    replaced = []
+    real_replace = run_comparison.os.replace
+
+    def recording_replace(staging, destination):
+        replaced.append((Path(staging), Path(destination)))
+        real_replace(staging, destination)
+
+    monkeypatch.setattr(run_comparison.os, "replace", recording_replace)
+
+    run_comparison._write_canonical_record(source, target)
+
+    assert target.read_bytes() == source.read_bytes()
+    assert len(replaced) == 1
+    assert replaced[0][1] == target
+    assert replaced[0][0].parent == target.parent
+    assert not list(target.parent.glob(f".{target.name}.*.tmp"))
+
+    source.write_bytes(b'{"suite":"de-pair","revision":2}\n')
+    run_comparison._write_canonical_record(source, target)
+    assert target.read_bytes() == source.read_bytes()
 
 
 def test_uk_efrs_runner_merges_universal_credit_surfaces(monkeypatch, tmp_path):
@@ -879,6 +1188,232 @@ def test_tax_ecps_dashboard_adapter_keeps_identity_when_all_cases_match():
     assert slim["dataset_identity"] == identity
 
 
+def test_slim_report_honors_per_suite_mismatch_cap_override():
+    """dashboard.max_mismatches lifts the default 1,000-row cap (#439).
+
+    The triage pipeline reads the committed dashboard copy; a suite whose
+    unexplained rows sit past the default cap declares a higher cap in its
+    comparison YAML so every mismatch row persists.
+    """
+    run_comparison = load_run_comparison_module()
+
+    mismatches = [
+        {"case_id": f"case-{i}", "kind": "amount_difference"}
+        for i in range(1500)
+    ]
+    report = {
+        "schema_version": "axiom.comparison_report.v2.1",
+        "summary": {"mismatch_count": len(mismatches)},
+        "mismatches": mismatches,
+        "cases": [],
+    }
+
+    # Default cap truncates and declares it.
+    slim = run_comparison._slim_report_for_dashboard(dict(report))
+    assert len(slim["mismatches"]) == 1000
+    assert slim["dashboard_truncation"]["total_mismatches"] == 1500
+
+    # A per-suite override above the total keeps every row, no truncation.
+    full = run_comparison._slim_report_for_dashboard(
+        dict(report), max_mismatches=4000
+    )
+    assert len(full["mismatches"]) == 1500
+    assert "dashboard_truncation" not in full
+
+    # An override below the total still truncates at the override.
+    tighter = run_comparison._slim_report_for_dashboard(
+        dict(report), max_mismatches=1200
+    )
+    assert len(tighter["mismatches"]) == 1200
+    assert tighter["dashboard_truncation"]["shown_mismatches"] == 1200
+
+
+def test_versioned_chunk_storage_removes_inline_case_mirrors(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    (suite_dir / "index.json").write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    report = {
+        "suite": "bound-suite",
+        "case_count": 1,
+        "mismatches": [],
+        "cases": [{"case_id": "mirrored", "matched": True}],
+        "summary": {
+            "comparison_count": 1,
+            "match_count": 1,
+            "mismatch_count": 0,
+        },
+    }
+
+    slim = run_comparison._slim_report_for_dashboard(report)
+
+    assert slim["cases"] == []
+    assert slim["dashboard_truncation"] == {
+        "total_mismatches": 0,
+        "shown_mismatches": 0,
+        "total_case_rows": 1,
+        "shown_case_rows": 0,
+    }
+    assert report["cases"], "slimming must not mutate the full report"
+
+
+def test_dashboard_writer_refreshes_versioned_chunks_before_slimming(
+    monkeypatch, tmp_path
+):
+    from axiom_oracles.evidence import validate_suite_evidence
+
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    (suite_dir / "chunk-0.json").write_text(
+        '[{"id":"stale","r":100,"h":{},"m":[],"v":[]}]'
+    )
+    (suite_dir / "index.json").write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    report = {
+        "suite": "bound-suite",
+        "case_count": 1,
+        "engines": {"left": "axiom", "right": "oracle"},
+        "concepts": [
+            {
+                "id": "benefit",
+                "comparison": "amount",
+                "tolerance": 0,
+                "relative_tolerance": 0,
+            }
+        ],
+        "aggregates": [
+            {
+                "concept": "benefit",
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+            }
+        ],
+        "mismatches": [],
+        "cases": [
+            {
+                "case_id": "fresh",
+                "match_rate": 100,
+                "matches": [{"concept": "benefit", "left": 2, "right": 2}],
+                "mismatches": [],
+                "metadata": {
+                    "household_summary": {"household_size": 1},
+                    "axiom_input_records": [
+                        {"name": "income", "value": 5, "entity_id": "household"}
+                    ],
+                    "axiom_all_outputs": {"benefit": 2},
+                },
+            }
+        ],
+        "summary": {
+            "comparison_count": 1,
+            "match_count": 1,
+            "mismatch_count": 0,
+        },
+    }
+
+    run_comparison._write_dashboard_report(report, "bound-report.json")
+
+    dashboard_report = tmp_path / "bound-report.json"
+    stored = json.loads(dashboard_report.read_text())
+    chunk = json.loads((suite_dir / "chunk-0.json").read_text())
+    index = json.loads((suite_dir / "index.json").read_text())
+    evidence = validate_suite_evidence(dashboard_report)
+    generator = load_script_module("generate_chunk_indexes")
+    index_current, _message = generator.generate(
+        dashboard_report,
+        check=True,
+        strip_inline=False,
+    )
+    assert stored["cases"] == []
+    assert chunk[0]["id"] == "fresh"
+    assert chunk[0]["v"] == [{"c": "benefit", "l": 2, "x": 2}]
+    assert index["input_slots"] == ["income"]
+    assert index["output_slots"] == ["benefit"]
+    assert evidence.valid is True
+    assert evidence.binding == "bound"
+    assert evidence.reconciliation == "full"
+    assert index_current is True
+
+
+def test_compact_full_evidence_preserves_explicit_zero_matches():
+    from scripts.emit_case_artifacts import compact_case
+
+    all_mismatch = compact_case(
+        {
+            "case_id": "all-mismatch",
+            "matches": [],
+            "mismatches": [
+                {"concept": "benefit", "left": 1, "right": 2}
+            ],
+        },
+        {},
+    )
+    all_match = compact_case(
+        {
+            "case_id": "all-match",
+            "match_rate": 99.9999995,
+            "matches": [{"concept": "benefit", "left": 1, "right": 1}],
+            "mismatches": [],
+        },
+        {},
+    )
+    verdict_free = compact_case(
+        {"case_id": "qc-shape", "matched": True, "mismatches": []},
+        {},
+    )
+
+    assert all_mismatch["v"] == []
+    assert all_mismatch["m"][0]["d"] == 1
+    assert all_mismatch["r"] == 0.0
+    assert all_match["r"] == 100.0
+    assert "v" not in verdict_free
+
+
+def test_skipped_versioned_run_preserves_existing_bound_artifacts(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "DASHBOARD_DATA_DIR", tmp_path)
+    suite_dir = tmp_path / "cases" / "bound-suite"
+    suite_dir.mkdir(parents=True)
+    target = tmp_path / "bound-report.json"
+    index_path = suite_dir / "index.json"
+    chunk_path = suite_dir / "chunk-0.json"
+    target.write_text('{"existing":"report"}')
+    index_path.write_text(
+        json.dumps({"schema_version": "axiom_oracles.chunk_index.v1"})
+    )
+    chunk_path.write_text('[{"id":"existing"}]')
+    before = tuple(
+        path.read_bytes() for path in (target, index_path, chunk_path)
+    )
+
+    run_comparison._write_dashboard_report(
+        {
+            "suite": "bound-suite",
+            "case_count": 1,
+            "cases": [],
+            "summary": {
+                "comparison_count": 1,
+                "match_count": 1,
+                "mismatch_count": 0,
+            },
+        },
+        target.name,
+        preserve_existing_versioned=True,
+    )
+
+    after = tuple(path.read_bytes() for path in (target, index_path, chunk_path))
+    assert after == before
+
+
 def test_dataset_label_from_identity_falls_back_without_revision():
     run_comparison = load_run_comparison_module()
 
@@ -1190,6 +1725,40 @@ def test_be_elderly_income_support_registry_config_shape():
     )
 
 
+def test_euromod_synthetic_runner_forwards_extra_template_columns(
+    monkeypatch, tmp_path
+):
+    run_comparison = load_run_comparison_module()
+    model_root = tmp_path / "model"
+    model_root.mkdir()
+    engine_repo = tmp_path / "engine"
+    engine_binary = engine_repo / "target" / "release" / "axiom-rules-engine"
+    engine_binary.parent.mkdir(parents=True)
+    engine_binary.write_text("")
+    monkeypatch.setenv("EUROMOD_PYTHON", "/fake/euromod-python")
+    captured = {}
+
+    def fake_run(command, *, check, cwd, env):
+        captured.update({"command": command, "check": check, "cwd": cwd, "env": env})
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    run_comparison._run_euromod_synthetic_compare(
+        {
+            "axiom_rules_repo": str(engine_repo),
+            "parameters": {
+                "suite": "be-replacement-income-pit",
+                "period": 2025,
+                "sample_size": 0,
+                "euromod_model_root": str(model_root),
+                "euromod_extra_columns": ["drgn1", "bhl"],
+            },
+        },
+        tmp_path / "report.json",
+    )
+
+    assert captured["env"]["EUROMOD_EXTRA_COLUMNS"] == "drgn1,bhl"
+
+
 # ---------------------------------------------------------------------------
 # UK fiscal-year eval-date invariant
 #
@@ -1417,6 +1986,126 @@ def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
     # The explicit numba floor keeps the resolver off the sdist-only numba
     # 0.53.1 whose build fails on any current Python (#296).
     assert "numba>=0.60" in cmd
+    # spm-calculator 1.0.0 removed spm_calculator.geoadj, which every pinned
+    # PolicyEngine-US imports; the isolated env must pin the companion.
+    assert_pe_companion_pinned(cmd)
+
+
+def test_pe_us_companion_pins_match_uv_lock():
+    """Every place that pins spm-calculator agrees with uv.lock."""
+    run_comparison = load_run_comparison_module()
+    root = Path(__file__).resolve().parents[1]
+    lock = (root / "uv.lock").read_text()
+    debug = load_script_module("debug_policyengine_env")
+    for pin in run_comparison._PE_US_COMPANION_PINS:
+        name, version = pin.split("==")
+        assert f'name = "{name}"\nversion = "{version}"\n' in lock, pin
+        assert pin in debug.PE_ORACLE_PINS
+    # CI installs the extra with `uv pip install -e '.[policyengine]'`, which
+    # ignores uv.lock, so the extra itself must exclude spm-calculator 1.x.
+    pyproject = (root / "pyproject.toml").read_text()
+    assert '"spm-calculator>=0.2.0,<1",' in pyproject
+
+
+def test_pe_oracle_with_args_appends_the_companion_pins():
+    run_comparison = load_run_comparison_module()
+    assert run_comparison._pe_oracle_with_args(
+        run_comparison._resolve_pe_oracle_pins({})
+    ) == [
+        "--with",
+        "policyengine==4.18.9",
+        "--with",
+        "policyengine-us==1.752.2",
+        "--with",
+        "policyengine-core==3.28.0",
+        "--with",
+        "spm-calculator==0.3.1",
+    ]
+
+
+def test_snap_ecps_compare_pins_the_companion(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    axiom_encode = tmp_path / "axiom-encode"
+    axiom_encode.mkdir()
+    calls = []
+
+    def fake_run(cmd, *, check, cwd):
+        del check, cwd
+        calls.append(cmd)
+        csv_path = Path(cmd[cmd.index("--write-csv") + 1])
+        csv_path.write_text("")
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        run_comparison, "_adapt_snap_ecps_csv_to_v2", lambda rows, runner: {}
+    )
+    run_comparison._run_axiom_encode_snap_ecps_compare(
+        {"axiom_encode_repo": str(axiom_encode), "parameters": {}},
+        tmp_path / "out.json",
+    )
+    assert "snap-populace-compare" in calls[-1]
+    assert_pe_companion_pinned(calls[-1])
+
+
+def test_sanity_pins_the_companion(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    (tmp_path / "demo.fixtures.yaml").write_text("fixtures: []\n")
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", tmp_path)
+    monkeypatch.setattr(
+        run_comparison,
+        "_load_comparison",
+        lambda name: {
+            "runner": {
+                "axiom_rules_repo": str(tmp_path),
+                "parameters": {"left": "axiom", "right": "policyengine"},
+            }
+        },
+    )
+    calls = []
+
+    def fake_run(cmd, *, cwd):
+        del cwd
+        calls.append(cmd)
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    assert run_comparison._run_sanity("demo") == 0
+    assert "sanity" in calls[-1]
+    assert_pe_companion_pinned(calls[-1])
+
+
+def test_snap_abawd_boundary_grid_pins_the_companion(monkeypatch, tmp_path):
+    run_comparison = load_run_comparison_module()
+    rulespec = tmp_path / "rulespec-us"
+    rulespec.mkdir()
+    monkeypatch.setattr(
+        run_comparison, "_rulespec_checkout_unclean_reason", lambda _path: None
+    )
+    monkeypatch.setattr(
+        run_comparison, "_verify_federal_rulespec_snapshot", lambda *_args: None
+    )
+    calls = []
+
+    def fake_run(cmd, *, check, cwd):
+        del check, cwd
+        calls.append(cmd)
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    run_comparison._run_snap_abawd_boundary_grid(
+        {
+            "parameters": {
+                "policyengine_version": "4.18.9",
+                "policyengine_us_version": "1.767.3",
+                "policyengine_core_version": "3.30.3",
+                "rulespec_roots": [str(rulespec)],
+            }
+        },
+        tmp_path / "out.json",
+    )
+    assert "policyengine-us==1.767.3" in calls[-1]
+    assert_pe_companion_pinned(calls[-1])
 
 
 def test_completion_never_applies_to_skip_capable_lanes(monkeypatch, tmp_path):
@@ -1540,6 +2229,7 @@ def test_state_income_tax_grid_exposes_actual_repos_to_provenance(
     assert "policyengine==4.18.9" in cmd
     assert "policyengine-us==1.784.4" in cmd
     assert "policyengine-core==3.30.3" in cmd
+    assert_pe_companion_pinned(cmd)
     assert run_comparison._PE_ORACLE_PINS[1] not in cmd
     assert env["RULESPEC_US_REPO"] == str(rulespec)
     assert env["AXIOM_RULES_REPO"] == str(engine)

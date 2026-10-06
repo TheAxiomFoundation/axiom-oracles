@@ -9,6 +9,11 @@ ratchets:
   unexplained_max: 0
   axiom_attributed_open_max: 0
   policies_in_scope: 23
+- jurisdiction: dk
+  covered_min: 1
+  unexplained_max: 0
+  axiom_attributed_open_max: 0
+  policies_in_scope: 22
 - jurisdiction: uk
   covered_min: 21
   unexplained_max: 0
@@ -21,7 +26,7 @@ ratchets:
   policies_in_scope: 23
 - jurisdiction: us-pe
   covered_min: 36
-  unexplained_max: 4
+  unexplained_max: 0
   axiom_attributed_open_max: 0
   policies_in_scope: 127
 - jurisdiction: us-tariff-yale

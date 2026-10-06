@@ -693,6 +693,8 @@ def test_eitc_projection_uses_ecps_income_and_demographic_inputs():
     assert projected["filing_status"] == 3
     assert "earned_income" not in projected
     assert projected["adjusted_gross_income"] == 22_000
+    # Pub. 596 Worksheet 1 over the filer only: lines 1-3 = 40 + 20 + 100 +
+    # 50; line 7 = max(0, 400 - 100) = 300; line 13 = max(0, 0) = 0.
     assert projected["eitc_relevant_investment_income"] == 510
     assert projected["childless_taxpayer_or_spouse_age_eligible_for_eitc"] is True
     assert (
@@ -985,6 +987,8 @@ def test_section_152_c_projection_uses_leaf_child_facts():
 
 
 def test_eitc_relevant_investment_income_replaces_limited_loss_with_nonnegative_gain():
+    """Pub. 596 Worksheet 1: lines 1-3 = 10 + 20 + 30 + 40; line 5 is a loss
+    (200 - 1,000), so line 7 = 0; line 13 = max(0, 50) = 50; line 14 = 150."""
     assert (
         project_eitc_relevant_investment_income(
             row={"filing_status": "SINGLE"},
@@ -2390,7 +2394,7 @@ def test_build_oasdi_payroll_request_feeds_3121_taxable_wages():
     assert request["dataset"]["inputs"] == [
         {
             "name": "us:statutes/26/3101/a#input.wages",
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "person_7",
             "interval": {
                 "period_kind": "tax_year",

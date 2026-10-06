@@ -74,6 +74,7 @@ export const FAMILY_LABELS = {
   be_study_allowance: "Belgium study allowance",
   be_disposable_income: "Belgium disposable income",
   de_worker_tax_contributions: "Germany worker tax and social insurance",
+  de_kindergeld: "Germany Kindergeld",
   canada_personal_income_tax: "Canada personal income tax",
   canada_family_benefits: "Canada family and disability benefits",
 };
@@ -94,6 +95,22 @@ const SUITE_OVERRIDES = {
     region: "us",
     kind: "household",
     order: 10,
+  },
+  "fiit-taxsim-ecps": {
+    family: "federal_income_tax",
+    jurisdiction: "US",
+    label: "Federal income tax (vs TAXSIM)",
+    region: "us",
+    kind: "household",
+    order: 12,
+  },
+  "co-tax-intersection-taxsim": {
+    family: "federal_income_tax",
+    jurisdiction: "CO",
+    label: "Full federal tax, with Colorado for the SALT deduction (vs TAXSIM)",
+    region: "us",
+    kind: "household",
+    order: 202,
   },
   "taxcalc-fiit-ecps": {
     family: "federal_income_tax",
@@ -815,6 +832,14 @@ const SUITE_OVERRIDES = {
     kind: "household",
     order: 600,
   },
+  "de-kindergeld-eligibility": {
+    family: "de_kindergeld",
+    jurisdiction: "DEU",
+    label: "Germany Kindergeld child eligibility",
+    region: "de",
+    kind: "household",
+    order: 601,
+  },
   "nyc-income-tax-gap": {
     family: "nyc_income_tax",
     jurisdiction: "NYC",
@@ -1073,6 +1098,33 @@ export function reportMetric(report) {
       dispositioned && total > 0 ? dispositioned.explained_rate : null,
     unexplainedCount: dispositioned ? dispositioned.unexplained_count : null,
   };
+}
+
+/**
+ * Accumulate one report's contribution to a group's weighted explained
+ * rate. A report carrying a disposition merge contributes its canonical
+ * explained_rate (visible-row arithmetic overstates truncated
+ * premerged-slim suites); a report without one contributes its
+ * known-causes rate over `unexplained`. Every compared row stays in the
+ * denominator either way — a raw suite grouped with a dispositioned one
+ * must not vanish from the headline (its unexplained mass would silently
+ * drop out, re-creating the false-100% this rate work removed).
+ */
+export function accumulateExplainedRate(entry, metric, unexplained) {
+  if (metric.total <= 0) return;
+  const rate =
+    metric.explainedRate != null
+      ? metric.explainedRate
+      : ((metric.total - unexplained) / metric.total) * 100;
+  entry.explainedWeighted = (entry.explainedWeighted || 0) + rate * metric.total;
+  entry.explainedTotal = (entry.explainedTotal || 0) + metric.total;
+}
+
+/** Finalize a group's weighted explained rate (null when nothing compared). */
+export function resolveExplainedRate(entry) {
+  return entry.explainedTotal > 0
+    ? entry.explainedWeighted / entry.explainedTotal
+    : null;
 }
 
 /**

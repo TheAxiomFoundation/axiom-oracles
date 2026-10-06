@@ -1414,7 +1414,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "min("
             "amt_capital_gain_line_22_smaller_income_or_gain, "
             "amt_capital_gain_line_21_reduced_zero_rate_bracket"
-            ") * capital_gains_zero_rate"
+            ")"
         ),
     ),
     _generated_tax_unit_rule(
@@ -1439,8 +1439,8 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "max("
             "0, "
             "capital_gains_fifteen_percent_threshold "
-            "- (loss_limited_net_capital_gains "
-            "+ amt_capital_gain_line_21_reduced_zero_rate_bracket)"
+            "- (capital_gains_worksheet_line_14 "
+            "+ amt_capital_gain_line_23_zero_rate_amount)"
             ")"
         ),
     ),
@@ -3480,6 +3480,33 @@ def _sum_dividends(entities) -> float:
     )
 
 
+def _eitc_relevant_investment_income(
+    *,
+    interest_and_dividends: float,
+    capital_gain_net_income: float,
+    passive_activity_income: float,
+) -> float:
+    """26 USC 32(i)(2) disqualified income from Pub. 596 Worksheet 1 baskets.
+
+    Each argument is one basket summed over the filers (head and spouse);
+    a dependent's income enters Worksheet 1 only through Form 8814. The
+    capital (lines 5-7) and passive (lines 11-13) baskets are floored at
+    zero before the baskets are added, so a loss in one basket never
+    offsets income in another. On the Case surface, interest and dividends
+    (lines 1-3) are taxable interest plus ordinary dividends, since the
+    Case has no tax-exempt interest concept; capital gain net income is
+    short- plus long-term gains; and passive activity income is rental
+    income, since the Case has no partnership/S-corp or farm-rental
+    concept. Form 4797 amounts, royalties, and estate/trust passive income
+    are not modeled either.
+    """
+    return (
+        interest_and_dividends
+        + max(0.0, capital_gain_net_income)
+        + max(0.0, passive_activity_income)
+    )
+
+
 def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, Any]]:
     head, spouse = _tax_filers(people)
     dependents = _tax_dependents(people, head, spouse)
@@ -3539,6 +3566,19 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
             any(_eitc_childless_age_eligible(person) for person in people)
         ),
         "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": True,
+        # 32(i) disqualified income in Pub. 596 Worksheet 1 baskets, the same
+        # arithmetic as the populace lane's
+        # project_eitc_relevant_investment_income. Leaving it to
+        # _TAX_UNIT_NUMERIC_DEFAULTS zeroed the input and granted EITC to
+        # units above the $12,200 limit — the
+        # ecps-projection-defaults-eitc-investment-income class.
+        "eitc_relevant_investment_income": _eitc_relevant_investment_income(
+            interest_and_dividends=filer_interest + filer_dividends,
+            capital_gain_net_income=(
+                filer_short_capital_gains + filer_long_capital_gains
+            ),
+            passive_activity_income=filer_rental,
+        ),
         "filer_meets_eitc_identification_requirements": True,
         "filing_status": filing_status,
         "filing_status_is_joint_return": spouse is not None,
@@ -3707,6 +3747,29 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         records.append(
             _input_record_for_ref(
                 f"us:statutes/26/151#input.{name}",
+                "TaxUnit",
+                _TAX_UNIT_ID,
+                value,
+            )
+        )
+    # Raw section 112 combat-zone inputs, zero-defaulted from the populace
+    # bridge's shared table. Compositions built from rulespec-us vintages
+    # whose 26/32 EITC closure imports the raw 26/112 machinery (e.g. the
+    # pinned ca2d424f snapshot) require these on every tax unit; newer
+    # vintages take the aggregate section-112 exclusion input instead and
+    # the runner prunes these unsupported records, so carrying them is
+    # vintage-safe in both directions — PROVIDED pruning is on. The runner
+    # defaults prune_unsupported_inputs=False, and cli.py enables it only
+    # when it derives program_imports itself: a future tax suite passing an
+    # explicit axiom_program/axiom_compiled_program on a newer vintage
+    # would receive these records unpruned and must enable pruning (or
+    # strip them) explicitly.
+    from ...bridges.tax_populace import project_section_112_tax_unit_inputs
+
+    for name, value in project_section_112_tax_unit_inputs().items():
+        records.append(
+            _input_record_for_ref(
+                f"us:statutes/26/112#input.{name}",
                 "TaxUnit",
                 _TAX_UNIT_ID,
                 value,

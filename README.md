@@ -203,6 +203,20 @@ The report also includes a `schema_version`, left/right engine names, concept
 tolerances and priorities, and `mismatches_by_kind` so downstream apps can render
 the same report without duplicating comparison logic.
 
+Comparison mappings define the requested output surface, independently of which
+values the engines return. A missing value on either or both sides remains a
+mismatch; a summed target requires every component, including explicit zeroes.
+Duplicate or unpaired result IDs and non-finite values raise `ValueError` instead
+of producing a partial agreement report. The report accumulator also checks that
+each submitted case and each requested output appears exactly once, including
+case IDs across streaming batches. The CLI scopes value validation to `Case.outputs`
+before comparing, so unrequested values cannot invalidate a case. Direct comparator
+callers can supply the same scope through `outputs_by_case`; otherwise their selected
+mappings define the requested surface. An empty comparison is not a successful case.
+The CLI reports these validation failures and does not write the incomplete report.
+This validates
+comparison completeness, not the independence or authority of either engine.
+
 TAXSIM and PRD are exposed as package adapters rather than separate comparison
 systems. The TAXSIM adapter projects thin `Case` objects to TAXSIM rows from
 period, geography, age, relation, and earned-income facts, while still accepting
@@ -431,19 +445,22 @@ The SNAP QC oracle validates Axiom SNAP encodings against real administrative
 microdata rather than another engine. It replays the USDA SNAP Quality Control
 public-use file — a nationally representative sample of completed active-case
 reviews, 44,891 units in FY2024 — through the Axiom RuleSpec SNAP composition and
-compares the file's own constructed benefit (`FSBEN`) and stage intermediates
-(gross income, each deduction, net income, income screens, maximum allotment)
-against Axiom's. `FSBEN` is FNS/Mathematica's QC Minimodel recomputation from
-edited, internally consistent inputs, so agreement is admin-grade
-benefit-computation parity — the US analogue of the BEAMM full-admin-returns
-income-tax check. The oracle scores the benefit calculation, not the eligibility
-screening: the public file already dropped every incomplete or ineligible review,
-so the replay feeds eligibility gates the composition's passing defaults.
+compares six values per review: the benefit against `FSBEN`, and gross income,
+the standard deduction, the excess-shelter deduction, and net income against the
+file's constructed values, plus the maximum allotment against the oracle's FY2024
+table. `FSBEN` is the file's final calculated benefit, which Mathematica computes
+for USDA from each edited case record; the benefit received is a separate field
+(`RAWBEN`). The replay takes the medical, dependent-care, and child-support
+deduction amounts and the utility amount from the file, so a match shows that
+Axiom's arithmetic from those amounts reproduces the file's benefit. The oracle
+scores the benefit calculation, not the eligibility screening: the public file
+already dropped every incomplete or ineligible review, so the replay feeds
+eligibility gates passing values.
 
-The first jurisdiction is Colorado FY2024, currently 856/856 (100%)
-benefit-exact with every stage intermediate exact — a state reached by fixing
-two encoding defects the suite's first run surfaced (the playbook's
-track-record section has the path):
+Six FY2024 suites run against rulespec-us main — Colorado (the pilot), New York,
+California, Arizona, Georgia, and Maryland — each scored at zero tolerance on
+the benefit and every compared stage (the playbook's track-record section has
+the results; a seventh suite, Texas, depends on the unmerged rulespec-us#891):
 
 ```bash
 uv run scripts/run_comparison.py co-snap-qc --summary

@@ -2,24 +2,37 @@ name: co-snap-qc
 title: Colorado SNAP — Axiom vs USDA SNAP QC administrative data
 description: >-
   Replays Colorado SNAP Quality Control public-use reviews (FY2024, 856 CO
-  active-case reviews) through the Axiom RuleSpec SNAP composition and compares
-  the constructed benefit (FSBEN) and its stage intermediates — gross income,
-  standard/earned-income/medical/dependent-care/child-support/excess-shelter
-  deductions, net income, income screens, and maximum allotment — against the QC
-  file's own recomputed values. FSBEN is FNS/Mathematica's Minimodel recomputation
-  from edited, internally consistent inputs, so this is admin-grade benefit-computation
-  parity, the US analogue of the BEAMM full-admin-returns PIT check. The oracle
-  validates the benefit calculation, not the eligibility screening: the public file
-  contains only complete, eligible, internally consistent active-case reviews, so
-  eligibility gates are fed the composition's passing defaults. FY2024 law is
-  evaluated through a sparse compile-time overlay (fy-2026 SNAP COLA module ids
-  rewritten to fy-2024-cola plus four Colorado SUA amount patches) at the nominal
-  period 2026-01, because the entire federal-regulation and Colorado-manual chain
-  is snapshot-dated 2025-10-01 and true-period FY2024 evaluation is impossible today
-  (TheAxiomFoundation/rulespec-us#759 inverts the chain and retires the overlay).
-  This suite runs where the axiom-rules-engine binary, a rulespec-us checkout with
-  the fy-2024-cola modules, and the downloaded QC public-use file all exist; on
-  runners without them the registry re-emits the committed dashboard report.
+  active-case reviews) through the Axiom RuleSpec SNAP composition and
+  compares six values per review: the benefit against FSBEN and five stage
+  intermediates, namely gross income (FSGRINC, net of the child-support
+  deduction because Colorado excludes child support paid), the standard
+  deduction (FSSTDDED), the excess-shelter deduction (FSSLTDED), net income
+  (FSNETINC), and the maximum allotment, which is checked against the oracle's
+  own FY2024 table by certified household size rather than against the file's
+  BENMAX field. The earned-income, medical, dependent-care, and child-support
+  deductions and the income screens are not compared separately; a divergence
+  there first shows at the standard-deduction, shelter, or net-income stage.
+  FSBEN is the file's final calculated benefit, which Mathematica computes for
+  USDA from each edited case record; the benefit received, as recorded in the
+  review, is a separate field (RAWBEN). The replay takes the medical
+  (FSMEDDED, entered as FSMEDDED + 35 of expenses so the engine's $35
+  threshold returns it), dependent-care (FSDEPDED), and child-support
+  (FSCSDED) deduction amounts from the file and treats the file's utility
+  amount (UTIL) as authoritative, so it tests the arithmetic from those
+  amounts onward, not how they were derived. It validates the benefit
+  calculation, not the eligibility screening: the public file contains only
+  complete, eligible, internally consistent active-case reviews, so
+  eligibility gates are fed passing values. FY2024 law is evaluated through a
+  compile-time overlay, materialized as one self-contained rulespec root
+  (fy-2026 SNAP COLA module ids rewritten to fy-2024-cola plus four Colorado
+  SUA amount patches), at the nominal period 2026-01, because the entire
+  federal-regulation and Colorado-manual chain is snapshot-dated 2025-10-01
+  and true-period FY2024 evaluation is impossible today
+  (TheAxiomFoundation/rulespec-us#759 inverts the chain and retires the
+  overlay). This suite runs where the axiom-rules-engine binary, a rulespec-us
+  checkout with the fy-2024-cola modules, and the downloaded QC public-use
+  file all exist; on runners without them the registry re-emits the committed
+  dashboard report.
 documentation: docs/snap-qc-oracle-playbook.md
 
 runner:

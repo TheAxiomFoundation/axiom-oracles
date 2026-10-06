@@ -85,6 +85,43 @@ DIALOGUE_CONTROL = "$spsd/ba25"
 DIALOGUE_SAMPLE = None  # None = full database
 
 
+def _dispositioned_block(
+    *,
+    counts: dict[str, int],
+    comparison_count: int,
+    match_count: int,
+    unexplained_count: int,
+) -> dict:
+    """A ``summary.dispositioned`` block under the canonical semantics.
+
+    ``explained_rate`` counts every classified row — the same
+    ``CLASSIFIED_DISPOSITION_KINDS`` formula ``apply_dispositions`` uses —
+    so a future encoding-gap classification here cannot silently diverge
+    from the merge pipeline's definition of "explained".
+    """
+    from axiom_oracles.comparison.dispositions import (
+        CLASSIFIED_DISPOSITION_KINDS,
+        DISPOSITIONS_SCHEMA_VERSION,
+    )
+
+    classified = sum(
+        counts.get(kind, 0) for kind in CLASSIFIED_DISPOSITION_KINDS
+    )
+    n = comparison_count
+    return {
+        "schema_version": DISPOSITIONS_SCHEMA_VERSION,
+        "dispositions_file": None,
+        "counts": counts,
+        "unexplained_count": unexplained_count,
+        "raw_match_rate": round(100.0 * match_count / n, 2) if n else 0,
+        "explained_rate": (
+            round(100.0 * (match_count + classified) / n, 2) if n else 0
+        ),
+        "expired_entries": [],
+        "orphaned_entries": [],
+    }
+
+
 def run_spsm(output_name: str) -> Path:
     runner = SpsmRunner()
     WORK.mkdir(parents=True, exist_ok=True)
@@ -343,26 +380,18 @@ def main() -> int:
             # row 94 replaces imfedtax with netminamt) and attributed to
             # the oracle's variable semantics — an upstream engine
             # behavior, not a rules disagreement.
-            "dispositioned": {
-                "schema_version": "axiom_oracles.dispositions.v1",
-                "dispositions_file": None,
-                "counts": {
+            "dispositioned": _dispositioned_block(
+                counts={
                     "axiom_encoding_gap": 0,
                     "bridge_artifact": 0,
                     "explained_residual": 0,
                     "unexplained": 0,
                     "upstream_engine_gap": amt_class + split_class,
                 },
-                "unexplained_count": len(other),
-                "raw_match_rate": round(100.0 * matches / n, 2) if n else 0,
-                "explained_rate": round(
-                    100.0 * (matches + amt_class + split_class) / n, 2
-                )
-                if n
-                else 0,
-                "expired_entries": [],
-                "orphaned_entries": [],
-            },
+                comparison_count=n,
+                match_count=matches,
+                unexplained_count=len(other),
+            ),
         },
         "mismatches": other[:50],
         "provenance": {

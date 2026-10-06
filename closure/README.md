@@ -82,6 +82,30 @@ This file-path join is evidence of repository coverage, not proof that every
 legal subrule is faithfully implemented. A later node/citation join can replace
 the v1 shim without changing the universe or ratchet discipline.
 
+## New Zealand corpus release
+
+`scripts/nz_closure.py` keeps a jurisdiction ledger over the complete
+`nz/statutes`, `nz/regulations`, and `nz/policies` file inventory at RuleSpec
+commit `89a7d25dc03a4d045348620283332de10b1047da`. It also computes a separate
+closure verdict for each IncomeExplorer certificate. Each certificate starts
+at the exact RuleSpec output nodes its comparison calls, follows formula
+dependencies through the encoded node graph, and collects the reached nodes'
+`corpus_citation_path` values. A pending path therefore binds a certificate
+only when that program subgraph cites it. Filenames are never used as a
+membership filter or as evidence of coverage.
+
+The versioned denominator and node graph are `closure/nz/source.json`, pinned
+in the generator and populated from corpus release `nz-rulespec-2026-07-18`.
+Per-node citation and dependency commitments make a silently dropped path or
+edge fail closed, while the ratified program-root sets are checked exactly.
+
+The source snapshot also embeds the pinned `known-missing-money-atoms.yaml`
+ledger. Its `total_allowed: 0` is a ceiling: the generator fails if it rises.
+`closure/nz/summary.json` remains honestly open at jurisdiction level while any
+declared citation is absent from the pinned corpus release. Its `programs`
+entries carry the independently scoped certificate verdicts. `--check` fails
+on source-pin, node/root commitments, or summary drift.
+
 ## Known pinned-data shape defects
 
 - The chapter 51 projection has no `heading` field on 287 subsection/paragraph

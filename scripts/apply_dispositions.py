@@ -47,6 +47,11 @@ from axiom_oracles.comparison.dispositions import (  # noqa: E402
 
 DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
+# This ledger is consumed and validated by us_tariff_schedule_campaign.py.
+# Its structured ``match`` selectors are intentionally outside the shared
+# case-id/case-selector dispositions schema, so the shared merge must not
+# attempt to load it.
+CAMPAIGN_LOCAL_DISPOSITIONS_FILES = frozenset({"us-tariff-schedule.yaml"})
 BE_COVERAGE_SOURCES = (
     REPO_ROOT / "axiom_oracles" / "data" / "euromod_be_coverage.json",
     DASHBOARD_DATA_DIR / "euromod-be-coverage.json",
@@ -60,11 +65,13 @@ BE_ROLLUP_NOTE = (
 
 
 def _load_dispositions_files() -> tuple[dict[str, dict], list[str]]:
-    """Load every dispositions file, returning {suite: doc} and errors."""
+    """Load every shared dispositions file, returning {suite: doc} and errors."""
 
     by_suite: dict[str, dict] = {}
     errors: list[str] = []
     for path in sorted(DISPOSITIONS_DIR.glob("*.yaml")):
+        if path.name in CAMPAIGN_LOCAL_DISPOSITIONS_FILES:
+            continue
         try:
             by_suite[path.stem] = load_dispositions(path, repo_root=REPO_ROOT)
         except DispositionError as exc:

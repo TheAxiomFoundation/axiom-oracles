@@ -1,7 +1,8 @@
 """Enumerate the policy universe an oracle simulates, from its model spine.
 
 Universe facts are never hand-invented: they come from parsing the oracle's own
-model definition. Two backends live here.
+model definition. The backends here preserve that provenance in either live or
+committed form.
 
 * :class:`EuromodUniverseBackend` parses a EUROMOD-platform country XML
   (UKMOD or the JRC EUROMOD release) — the same ``XMLParam/Countries/<CC>/<CC>.xml``
@@ -10,6 +11,11 @@ model definition. Two backends live here.
   those into *queryable* outputs (present in ``VARCONFIG``, the model's variable
   registry) and *internal-only* locals (absent from ``VARCONFIG``). A pure XML
   parse — no engine, no .NET, no licensed data — so it is CI-friendly.
+
+* :class:`EuromodSpineArtifactBackend` consumes a reviewed single-system JSON
+  extract produced by the live EUROMOD backend. It lets CI enforce the real
+  model row/output facts when the external model checkout is unavailable,
+  rather than turning the drift gate into a no-op.
 
 * :class:`PolicyEngineUniverseBackend` enumerates PolicyEngine-UK's *simulated*
   surface from a pinned ``policyengine-uk`` checkout — the PolicyEngine analogue
@@ -41,6 +47,7 @@ the *facts* (policy list, outputs) and keeps the *decisions*.
 
 from __future__ import annotations
 
+import json
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
@@ -49,6 +56,11 @@ from axiom_oracles.conformance.schema import UniversePolicy
 
 _CC_NS = "{http://euromod.com/CountryConfig.xsd}"
 _VAR_NS = "{http://euromod.com/VarConfig.xsd}"
+
+#: Schema stamped on committed, single-system EUROMOD spine extracts. These
+#: artifacts let CI verify an externally sourced model spine without requiring
+#: the licensed/local model checkout itself.
+EUROMOD_SPINE_ARTIFACT_SCHEMA = "axiom_oracles.euromod_spine.v1"
 
 #: Function ``Parameter`` names that declare where a function writes its result.
 #: EUROMOD is case-insensitive on parameter names, so we lower-case before test.
@@ -102,6 +114,163 @@ class RawPolicy:
     #: Outputs the policy writes that are shaped like intermediates or are
     #: absent from the variable registry — evidence for exclusion classifying.
     internal_outputs: tuple[str, ...]
+
+
+class EuromodSpineArtifactBackend:
+    """Read a committed, single-system EUROMOD policy-spine extract.
+
+    The live :class:`EuromodUniverseBackend` remains the extraction authority.
+    This backend consumes its committed JSON result so ``--check`` can compare
+    real model facts in CI even when the external EUROMOD checkout is absent.
+    Identity checks prevent a DK_2025 extract, for example, from being scored as
+    another country, release, or system.
+    """
+
+    backend = "euromod"
+
+    def __init__(
+        self,
+        artifact_path: str | Path,
+        *,
+        model: str,
+        release: str,
+        country: str,
+        system: str,
+    ) -> None:
+        self.artifact_path = Path(artifact_path)
+        self.model = model
+        self.release = release
+        self.country = country.upper()
+        self.system = system
+
+    def _document(self) -> dict:
+        if not self.artifact_path.exists():
+            raise FileNotFoundError(
+                f"committed EUROMOD spine artifact not found at "
+                f"{self.artifact_path}"
+            )
+        try:
+            document = json.loads(self.artifact_path.read_text())
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                f"{self.artifact_path}: invalid JSON ({exc})"
+            ) from exc
+        if document.get("schema") != EUROMOD_SPINE_ARTIFACT_SCHEMA:
+            raise ValueError(
+                f"{self.artifact_path}: expected schema "
+                f"{EUROMOD_SPINE_ARTIFACT_SCHEMA!r}, got "
+                f"{document.get('schema')!r}"
+            )
+
+        oracle = document.get("oracle") or {}
+        expected_identity = {
+            "model": self.model,
+            "release": self.release,
+            "country": self.country,
+        }
+        actual_identity = {
+            key: oracle.get(key) for key in expected_identity
+        }
+        if actual_identity != expected_identity:
+            raise ValueError(
+                f"{self.artifact_path}: oracle identity {actual_identity!r} does "
+                f"not match configured identity {expected_identity!r}"
+            )
+
+        systems = document.get("systems")
+        if not isinstance(systems, list):
+            raise ValueError(f"{self.artifact_path}: systems must be a list")
+        system_names = {
+            row.get("name") for row in systems if isinstance(row, dict)
+        }
+        if system_names != {self.system} or len(systems) != 1:
+            raise ValueError(
+                f"{self.artifact_path}: expected the single-system set "
+                f"{{{self.system!r}}}, got {system_names!r}"
+            )
+        if not systems[0].get("id"):
+            raise ValueError(
+                f"{self.artifact_path}: {self.system} is missing its model id"
+            )
+        return document
+
+    @staticmethod
+    def _outputs(row: dict, key: str, artifact_path: Path) -> tuple[str, ...]:
+        values = row.get(key)
+        if not isinstance(values, list) or not all(
+            isinstance(value, str) and value for value in values
+        ):
+            raise ValueError(
+                f"{artifact_path}: policy {row.get('name')!r} field {key!r} "
+                "must be a list of non-empty strings"
+            )
+        if len(values) != len(set(values)):
+            raise ValueError(
+                f"{artifact_path}: policy {row.get('name')!r} field {key!r} "
+                "contains duplicates"
+            )
+        return tuple(values)
+
+    def raw_policies(self) -> list[RawPolicy]:
+        """Return the exact raw policy facts recorded in the artifact."""
+        document = self._document()
+        rows = document.get("policies")
+        if not isinstance(rows, list):
+            raise ValueError(f"{self.artifact_path}: policies must be a list")
+
+        policies: list[RawPolicy] = []
+        seen_names: set[str] = set()
+        for row in rows:
+            if not isinstance(row, dict):
+                raise ValueError(
+                    f"{self.artifact_path}: every policy must be an object"
+                )
+            name = row.get("name")
+            if not isinstance(name, str) or not name:
+                raise ValueError(
+                    f"{self.artifact_path}: policy is missing a non-empty name"
+                )
+            if name in seen_names:
+                raise ValueError(
+                    f"{self.artifact_path}: duplicate policy name {name!r}"
+                )
+            seen_names.add(name)
+
+            policy_type = row.get("policy_type")
+            switch = row.get("switch")
+            if policy_type is not None and not isinstance(policy_type, str):
+                raise ValueError(
+                    f"{self.artifact_path}: {name} policy_type must be a string"
+                )
+            if switch is not None and not isinstance(switch, str):
+                raise ValueError(
+                    f"{self.artifact_path}: {name} switch must be a string"
+                )
+            all_outputs = self._outputs(row, "all_outputs", self.artifact_path)
+            queryable_outputs = self._outputs(
+                row, "queryable_outputs", self.artifact_path
+            )
+            internal_outputs = self._outputs(
+                row, "internal_outputs", self.artifact_path
+            )
+            if set(queryable_outputs) & set(internal_outputs) or set(
+                queryable_outputs + internal_outputs
+            ) != set(all_outputs):
+                raise ValueError(
+                    f"{self.artifact_path}: {name} queryable/internal outputs "
+                    "must be a disjoint partition of all_outputs"
+                )
+            policies.append(
+                RawPolicy(
+                    name=name,
+                    policy_type=policy_type,
+                    switch=switch,
+                    all_outputs=all_outputs,
+                    queryable_outputs=queryable_outputs,
+                    internal_outputs=internal_outputs,
+                )
+            )
+        return policies
 
 
 class EuromodUniverseBackend:
@@ -181,6 +350,10 @@ class EuromodUniverseBackend:
             "systems can be listed with the euromod connector or by inspecting "
             "the XML <System><Name> elements."
         )
+
+    def system_id(self) -> str:
+        """Return the model GUID for the selected system."""
+        return self._system_id()
 
     def available_systems(self) -> list[str]:
         """List system names in the country XML (for error messages / probing)."""
@@ -273,9 +446,9 @@ def propose_scope(policy: RawPolicy) -> tuple[bool, str | None]:
       ``def`` block it is ``technical``; otherwise it is proposed
       ``unobservable_boundary`` (it simulates something, but not at a queryable
       surface) so a human looks at it rather than it defaulting to covered.
-    * A policy with queryable outputs is proposed in-scope with no suite yet —
-      which is intentionally *invalid* until a reviewer names the covering
-      suite, so it surfaces loudly in ``--check`` instead of passing vacuously.
+    * A policy with queryable outputs is proposed in-scope with no suite yet.
+      This is the valid, honest uncovered state: it enters the denominator and
+      remains visible in the scoreboard burn-down until a live suite covers it.
     """
     if not policy.queryable_outputs:
         if (policy.policy_type or "").lower() in _DEF_LIKE_TYPES:
@@ -319,6 +492,7 @@ def raw_to_universe_policy(
         note=note,
         comparability=comparability if in_scope else "full",
         oracle_policy_type=policy.policy_type,
+        oracle_switch=policy.switch,
         internal_only_vars=policy.internal_outputs,
     )
 

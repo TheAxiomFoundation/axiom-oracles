@@ -38,6 +38,7 @@ from .population import (
     load_populace_dataset,
     populace_data_requirement,
 )
+from .relation_binding import bind_request_relations
 
 try:
     import numpy as np
@@ -1767,6 +1768,7 @@ def run_axiom_cases(
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": queries,
     }
+    request = bind_request_relations(request, json.loads(artifact.read_text()))
     result = subprocess.run(
         [str(binary), "run-compiled", "--artifact", str(artifact)],
         input=json.dumps(request),

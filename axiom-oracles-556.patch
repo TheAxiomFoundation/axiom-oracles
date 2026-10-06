@@ -1,0 +1,2447 @@
+diff --git a/axiom_oracles/adapters/axiom/runner.py b/axiom_oracles/adapters/axiom/runner.py
+index ba205cf4c..4d60141d1 100644
+--- a/axiom_oracles/adapters/axiom/runner.py
++++ b/axiom_oracles/adapters/axiom/runner.py
+@@ -14,6 +14,7 @@ from typing import Any
+ 
+ import yaml
+ 
++from ...bridges.relation_binding import bind_request_relations
+ from ...comparison.mappings import engine_targets_for_concepts
+ from ...core.engine import EngineAdapter
+ from ...core.household import Household
+@@ -462,6 +463,10 @@ class AxiomRulesRunner(EngineAdapter):
+             allowed_program_refs=allowed_program_refs,
+             input_record_overlays=input_record_overlays,
+         )
++        if request["dataset"]["relations"]:
++            request = bind_request_relations(
++                request, json.loads(artifact_path.read_text())
++            )
+         process = self._subprocess_run(
+             [
+                 str(self.binary_path),
+@@ -549,6 +554,10 @@ class AxiomRulesRunner(EngineAdapter):
+             allowed_program_refs=allowed_program_refs,
+             input_record_overlay=input_record_overlay,
+         )
++        if request["dataset"]["relations"]:
++            request = bind_request_relations(
++                request, json.loads(artifact_path.read_text())
++            )
+         process = self._subprocess_run(
+             [
+                 str(self.binary_path),
+diff --git a/axiom_oracles/bridges/efrs_uk.py b/axiom_oracles/bridges/efrs_uk.py
+index 7b7096901..f0266c6d6 100644
+--- a/axiom_oracles/bridges/efrs_uk.py
++++ b/axiom_oracles/bridges/efrs_uk.py
+@@ -4184,6 +4184,9 @@ def build_axiom_request(
+     raise ValueError(f"unsupported UK Populace surface: {surface}")
+ 
+ 
++# Input entity kinds follow each RuleSpec's scope. A benefit-unit projection
++# can represent a statutory Person (the claimant), so its ID prefix alone
++# does not determine whether its inputs belong to Person or Family.
+ def build_national_insurance_class_1_request(
+     *, pe_data: dict[str, Any], year: int
+ ) -> dict[str, Any]:
+@@ -4217,6 +4220,7 @@ def build_national_insurance_class_1_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4252,6 +4256,7 @@ def build_national_insurance_class_4_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4292,6 +4297,7 @@ def build_national_insurance_class_4_final_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4327,6 +4333,7 @@ def build_national_insurance_final_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4361,6 +4368,7 @@ def build_personal_allowance_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4415,6 +4423,7 @@ def build_marriage_allowance_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4462,6 +4471,7 @@ def build_income_tax_income_base_request(
+                     payment_id,
+                     interval,
+                     money(component["amount_charged_to_income_tax"]),
++                    entity="Payment",
+                 )
+             )
+             inputs.append(
+@@ -4470,6 +4480,7 @@ def build_income_tax_income_base_request(
+                     payment_id,
+                     interval,
+                     money(component["relief_deducted_under_section_24"]),
++                    entity="Payment",
+                 )
+             )
+         for name, value in project_income_tax_section_23_inputs(row).items():
+@@ -4479,6 +4490,7 @@ def build_income_tax_income_base_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4517,6 +4529,7 @@ def build_income_tax_section_10_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4555,6 +4568,7 @@ def build_income_tax_section_11d_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4593,6 +4607,7 @@ def build_income_tax_section_13_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4627,6 +4642,7 @@ def build_child_benefit_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4659,6 +4675,7 @@ def build_benefit_cap_relevant_amount_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -4696,6 +4713,7 @@ def build_state_pension_credit_qualifying_age_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4731,6 +4749,7 @@ def build_pension_credit_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4763,6 +4782,7 @@ def build_pension_credit_child_addition_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4798,6 +4818,7 @@ def build_pension_credit_deemed_income_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4839,6 +4860,7 @@ def build_legacy_weekly_tariff_income_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -4936,6 +4958,7 @@ def build_housing_benefit_applicable_amount_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -4973,6 +4996,7 @@ def build_housing_benefit_non_dependant_deductions_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -5008,6 +5032,7 @@ def build_housing_benefit_entitlement_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -5045,6 +5070,7 @@ def build_state_pension_credit_guarantee_credit_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -5084,6 +5110,7 @@ def build_state_pension_credit_savings_credit_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -5147,6 +5174,7 @@ def build_universal_credit_childcare_element_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -5184,6 +5212,7 @@ def build_universal_credit_childcare_work_condition_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -5219,6 +5248,7 @@ def build_universal_credit_award_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -5253,6 +5283,7 @@ def build_universal_credit_housing_costs_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -5290,6 +5321,7 @@ def build_universal_credit_income_deduction_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -5327,6 +5359,7 @@ def build_universal_credit_assessable_capital_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -5362,6 +5395,7 @@ def build_universal_credit_tariff_income_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -5397,6 +5431,7 @@ def build_universal_credit_work_allowance_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Family",
+                 )
+             )
+         queries.append(
+@@ -5432,6 +5467,7 @@ def build_student_loan_repayment_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -5469,6 +5505,7 @@ def build_carers_allowance_final_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -5506,6 +5543,7 @@ def build_carer_support_payment_final_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -5541,6 +5579,7 @@ def build_scottish_child_payment_final_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -5574,6 +5613,7 @@ def build_dla_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str,
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+         queries.append(
+@@ -5598,7 +5638,9 @@ def build_pip_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str,
+     for row in rows_for_surface(pe_data, "personal-independence-payment-final"):
+         entity_id = person_entity_id(int(row_value(row, "person_id")))
+         for name, value in project_pip_final_inputs(row).items():
+-            inputs.append(input_record(name, entity_id, interval, value))
++            inputs.append(
++                input_record(name, entity_id, interval, value, entity="Person")
++            )
+         queries.append(
+             {
+                 "entity_id": entity_id,
+diff --git a/axiom_oracles/bridges/relation_binding.py b/axiom_oracles/bridges/relation_binding.py
+new file mode 100644
+index 000000000..0fbe06552
+--- /dev/null
++++ b/axiom_oracles/bridges/relation_binding.py
+@@ -0,0 +1,330 @@
++"""Order relation tuples using the target artifact's executable entity slots.
++
++Declarations are positional only for unused relations. In particular, an older
++artifact can declare [TaxUnit, Person] while its count still uses current_slot=1.
++This module reads that executable metadata; it does not evaluate any rules.
++"""
++
++from __future__ import annotations
++
++from collections import defaultdict
++from copy import deepcopy
++from typing import Any
++
++
++class RelationBindingError(ValueError):
++    """A producer cannot determine a safe tuple order from the artifact."""
++
++
++def _fragment(name: str) -> str:
++    return name.rsplit("#", 1)[-1].removeprefix("relation.")
++
++
++class _ArtifactRelations:
++    def __init__(self, artifact: dict[str, Any]):
++        program = artifact.get("program", artifact)
++        self.schemas = {
++            relation["name"]: relation for relation in program.get("relations", [])
++        }
++        self.rules = {}
++        for rule in program.get("derived", []):
++            self.rules[rule["name"]] = rule
++            if rule.get("id"):
++                self.rules[rule["id"]] = rule
++        self.usages: dict[str, list[list[str | None]]] = defaultdict(list)
++        for rule in program.get("derived", []):
++            # The engine ignores base semantics when explicit versions exist.
++            for version in rule.get("versions") or [rule]:
++                self._walk(version.get("expr", {}), rule.get("entity"))
++        for schema in self.schemas.values():
++            derivation = schema.get("derivation")
++            if derivation:
++                current, related = self._slots(derivation)
++                kinds = derivation.get("slot_entities", [])
++                owner = kinds[current] if current < len(kinds) else None
++                member = kinds[related] if related < len(kinds) else None
++                self._record(
++                    derivation["source_relation"], current, related, owner, member
++                )
++                self._walk(
++                    derivation.get("predicate", {}), member, (owner, member)
++                )
++
++    def schema(self, name: str) -> dict[str, Any] | None:
++        if name in self.schemas:
++            return self.schemas[name]
++        matches = [
++            schema
++            for key, schema in self.schemas.items()
++            if schema.get("id") == name or _fragment(key) == _fragment(name)
++        ]
++        if len(matches) > 1:
++            raise RelationBindingError(f"Ambiguous artifact relation {name!r}")
++        return matches[0] if matches else None
++
++    @staticmethod
++    def _slots(node: dict[str, Any]) -> tuple[int, int]:
++        current, related = node.get("current_slot"), node.get("related_slot")
++        if (
++            not isinstance(current, int)
++            or not isinstance(related, int)
++            or min(current, related) < 0
++            or current == related
++        ):
++            raise RelationBindingError(
++                f"Expected distinct nonnegative relation slots, got "
++                f"{current!r} and {related!r}"
++            )
++        return current, related
++
++    def _record(
++        self,
++        name: str,
++        current: int,
++        related: int,
++        owner: str | None,
++        member: str | None,
++        stack: tuple[str, ...] = (),
++    ) -> list[str | None]:
++        schema = self.schema(name)
++        arity = schema.get("arity", 2) if schema else max(current, related) + 1
++        if max(current, related) >= arity:
++            raise RelationBindingError(f"Executable slots exceed arity for {name!r}")
++        kinds: list[str | None] = [None] * arity
++        kinds[current], kinds[related] = owner, member
++        if schema is None:
++            return kinds
++        declared = schema.get("slot_entities", [])
++        if len(declared) == arity and kinds.count(None) == 1:
++            remaining = list(declared)
++            for known in (kind for kind in kinds if kind is not None):
++                if known not in remaining:
++                    break
++                remaining.remove(known)
++            else:
++                kinds[kinds.index(None)] = remaining[0]
++        key = schema["name"]
++        self.usages[key].append(kinds)
++        derivation = schema.get("derivation")
++        if derivation and key not in stack:
++            source_current, source_related = self._slots(derivation)
++            self._record(
++                derivation["source_relation"],
++                source_current,
++                source_related,
++                kinds[current],
++                kinds[related],
++                (*stack, key),
++            )
++        return kinds
++
++    def _referenced_kind(self, node: Any) -> str | None:
++        kinds: set[str] = set()
++
++        def collect(value: Any) -> None:
++            if isinstance(value, dict):
++                kind = value.get("kind")
++                if kind in {"count_related", "sum_related", "relation_member"}:
++                    return
++                if kind == "derived":
++                    rule = self.rules.get(value.get("name"), {})
++                    entity = rule.get("entity")
++                    if entity and entity != "Scalar":
++                        kinds.add(entity)
++                for child in value.values():
++                    collect(child)
++            elif isinstance(value, list):
++                for child in value:
++                    collect(child)
++
++        collect(node)
++        return next(iter(kinds)) if len(kinds) == 1 else None
++
++    def _walk(
++        self,
++        node: Any,
++        entity: str | None,
++        context: tuple[str | None, str | None] | None = None,
++    ) -> None:
++        if isinstance(node, list):
++            for child in node:
++                self._walk(child, entity, context)
++        elif isinstance(node, dict):
++            kind = node.get("kind")
++            if kind in {"count_related", "sum_related", "relation_member"}:
++                current, related = self._slots(node)
++                owner = entity
++                member = None
++                schema = self.schema(node["relation"])
++                if kind == "relation_member":
++                    owner, member = context or (entity, None)
++                else:
++                    derivation = (schema or {}).get("derivation") or {}
++                    if entity is not None and derivation.get("entity") == entity:
++                        structural = derivation.get("slot_entities", [])
++                        if current < len(structural):
++                            owner = structural[current]
++                    member = self._referenced_kind(
++                        [node.get("value"), node.get("where")]
++                    )
++                kinds = self._record(
++                    node["relation"], current, related, owner, member
++                )
++                if kind != "relation_member":
++                    self._walk(node.get("where"), kinds[related])
++                return
++            # A derivation's pair context belongs to judgment membership.
++            # Comparisons enter scalar expressions, whose conditional
++            # judgments use the current entity, not that outer pair context.
++            child_context = None if kind in {"comparison", "if"} else context
++            for child in node.values():
++                self._walk(child, entity, child_context)
++
++    def expected(self, name: str) -> list[str | None] | None:
++        schema = self.schema(name)
++        if schema is None:
++            return None
++        if schema.get("arity", 2) != 2:
++            raise RelationBindingError(f"Relation {name!r} is not a two-slot relation")
++        declared = schema.get("slot_entities", [])
++        if declared and len(declared) != 2:
++            raise RelationBindingError(f"Invalid slot_entities for relation {name!r}")
++        usages = self.usages.get(schema["name"])
++        if not usages:
++            return list(declared) if declared else None
++        result: list[str | None] = []
++        for slot in range(2):
++            candidates = {kinds[slot] for kinds in usages if kinds[slot] is not None}
++            if len(candidates) > 1:
++                raise RelationBindingError(
++                    f"Conflicting executable kinds for relation {name!r} "
++                    f"slot {slot}: {sorted(candidates)!r}"
++                )
++            result.append(next(iter(candidates)) if candidates else None)
++        return result
++
++
++def _ordered_tuple(
++    name: str,
++    expected: list[str | None],
++    ids: list[str],
++    kinds: list[str | None],
++    *,
++    preserve_ambiguous: bool = False,
++) -> list[str]:
++    candidates = [
++        order
++        for order in ([0, 1], [1, 0])
++        if all(
++            expected[slot] is None
++            or (preserve_ambiguous and kinds[index] is None)
++            or expected[slot] == kinds[index]
++            for slot, index in enumerate(order)
++        )
++    ]
++    if preserve_ambiguous and candidates:
++        # Old artifacts can count members without reading any member inputs.
++        # Prefer the orientation supported by known labels, while retaining
++        # the existing tuple if absent labels leave both orders unresolved.
++        scores = [
++            sum(
++                expected[slot] is not None and expected[slot] == kinds[index]
++                for slot, index in enumerate(order)
++            )
++            for order in candidates
++        ]
++        candidates = [
++            order
++            for order, score in zip(candidates, scores, strict=True)
++            if score == max(scores)
++        ]
++        if len(candidates) == 2:
++            return list(ids)
++    if (
++        len(candidates) == 2
++        and kinds[0] == kinds[1]
++        and any(kind is not None for kind in expected)
++    ):
++        # Equal-kind slots carry no evidence for exchanging the existing ids.
++        return list(ids)
++    if len(candidates) != 1:
++        raise RelationBindingError(
++            f"Cannot unambiguously order relation {name!r}: executable slot kinds "
++            f"{expected!r}, supplied entity kinds {kinds!r}"
++        )
++    return [ids[index] for index in candidates[0]]
++
++
++def relation_tuple(
++    artifact: dict[str, Any] | None,
++    name: str,
++    *,
++    owner_id: str,
++    owner_kind: str,
++    related_id: str,
++    related_kind: str,
++    legacy_owner_slot: int = 1,
++) -> list[str]:
++    """Build a two-slot tuple, retaining the legacy order without metadata."""
++    if legacy_owner_slot not in (0, 1):
++        raise RelationBindingError("legacy_owner_slot must be 0 or 1")
++    ids = [related_id, owner_id] if legacy_owner_slot == 1 else [owner_id, related_id]
++    if artifact is None:
++        return ids
++    expected = _ArtifactRelations(artifact).expected(name)
++    if expected is None:
++        return ids
++    kinds = (
++        [related_kind, owner_kind]
++        if legacy_owner_slot == 1
++        else [owner_kind, related_kind]
++    )
++    return _ordered_tuple(name, expected, ids, kinds)
++
++
++def bind_request_relations(
++    request: dict[str, Any], artifact: dict[str, Any]
++) -> dict[str, Any]:
++    """Return a copy with typed relation records ordered by executable usage.
++
++    Call after resolving request relation names against the artifact. Released
++    untyped artifacts retain their related-first order through executable slots.
++    Input labels are authoritative; conflicting or missing kinds are errors for
++    typed tuples because the producer cannot safely infer an order from ids.
++    Untyped artifacts can count members without member inputs: use the known
++    labels when they determine an order, otherwise retain the supplied tuple.
++    """
++    result = deepcopy(request)
++    records = result.get("dataset", {}).get("relations", [])
++    if not records:
++        return result
++    relations = _ArtifactRelations(artifact)
++    labels: dict[str, set[str]] = defaultdict(set)
++    for record in result.get("dataset", {}).get("inputs", []):
++        if "entity_id" in record and "entity" in record:
++            labels[record["entity_id"]].add(record["entity"])
++    for record in records:
++        name = record["name"]
++        schema = relations.schema(name)
++        if schema is None or schema.get("arity", 2) != 2:
++            continue
++        expected = relations.expected(name)
++        if expected is None:
++            continue
++        ids = record["tuple"]
++        if len(ids) != 2:
++            raise RelationBindingError(f"Relation {name!r} requires a two-slot tuple")
++        kinds = []
++        untyped = not schema.get("slot_entities")
++        for entity_id in ids:
++            possible = labels.get(entity_id, set())
++            if len(possible) > 1 or (not possible and not untyped):
++                raise RelationBindingError(
++                    f"Relation {name!r} entity {entity_id!r} needs one input entity "
++                    f"kind; got {sorted(possible)!r}"
++                )
++            kinds.append(next(iter(possible)) if possible else None)
++        record["tuple"] = _ordered_tuple(
++            name, expected, ids, kinds, preserve_ambiguous=untyped
++        )
++    return result
+diff --git a/axiom_oracles/bridges/snap_populace.py b/axiom_oracles/bridges/snap_populace.py
+index e6ae03655..ff7532e95 100644
+--- a/axiom_oracles/bridges/snap_populace.py
++++ b/axiom_oracles/bridges/snap_populace.py
+@@ -38,6 +38,7 @@ from .population import (
+     load_populace_dataset,
+     populace_data_requirement,
+ )
++from .relation_binding import bind_request_relations
+ 
+ try:
+     import numpy as np
+@@ -1767,6 +1768,7 @@ def run_axiom_cases(
+         "dataset": {"inputs": inputs, "relations": relations},
+         "queries": queries,
+     }
++    request = bind_request_relations(request, json.loads(artifact.read_text()))
+     result = subprocess.run(
+         [str(binary), "run-compiled", "--artifact", str(artifact)],
+         input=json.dumps(request),
+diff --git a/axiom_oracles/bridges/state_tax_populace_runner.py b/axiom_oracles/bridges/state_tax_populace_runner.py
+index 60e8d5ced..14d1e3ed1 100644
+--- a/axiom_oracles/bridges/state_tax_populace_runner.py
++++ b/axiom_oracles/bridges/state_tax_populace_runner.py
+@@ -213,9 +213,9 @@ _REVIEWED_PERSON_INPUT_SLOTS_BY_STATE = {
+ }
+ 
+ # A relation is emitted only when its complete state/legal ID is declared and
+-# reviewed here. Runtime tuple order is explicit because the pinned engine's
+-# aggregation lowering currently uses slot 1 as the current TaxUnit and slot 0
+-# as the related Person; it does not preserve RuleSpec argument labels.
++# reviewed here. These reviewed argument orders preserve the projection
++# contract; run_axiom_program binds tuples to the actual compiled artifact
++# before execution, including artifacts with older aggregation directions.
+ _REVIEWED_PERSON_TAX_UNIT_RELATIONS_BY_STATE = {
+     "DC": {
+         "us-dc:policies/income_tax/pilot_liability_pipeline#relation."
+@@ -2890,6 +2890,7 @@ def _state_request(
+                         _tax_unit_entity_id(route.tax_unit_id),
+                         interval,
+                         value,
++                        entity="TaxUnit",
+                     )
+                 )
+             for person_id in persons_by_tax_unit.get(route.tax_unit_id, ()):
+@@ -2909,6 +2910,7 @@ def _state_request(
+                             _person_entity_id(person_id),
+                             interval,
+                             value,
++                            entity="Person",
+                         )
+                     )
+ 
+diff --git a/axiom_oracles/bridges/tax_populace.py b/axiom_oracles/bridges/tax_populace.py
+index 93d0437af..0a9741158 100644
+--- a/axiom_oracles/bridges/tax_populace.py
++++ b/axiom_oracles/bridges/tax_populace.py
+@@ -26,6 +26,7 @@ from typing import Any
+ import yaml
+ 
+ from .jurisdiction import jurisdiction_prefix
++from .relation_binding import bind_request_relations
+ from .rulespec_paths import (
+     _canonical_rulespec_compile_path,
+     _rulespec_public_item_keys,
+@@ -1103,9 +1104,10 @@ def build_axiom_request(
+     surface: str = "ctc",
+     oasdi_wage_base_results: list[dict[str, Any]] | None = None,
+     contribution_base: float | None = None,
++    artifact: dict[str, Any] | None = None,
+ ) -> dict[str, Any]:
+     if surface == "ctc":
+-        return build_ctc_request(pe_data=pe_data, year=year)
++        return build_ctc_request(pe_data=pe_data, year=year, artifact=artifact)
+     if surface == "standard-deduction":
+         return build_standard_deduction_request(pe_data=pe_data, year=year)
+     if surface == "capital-gain-definitions":
+@@ -1119,11 +1121,12 @@ def build_axiom_request(
+             pe_data=pe_data,
+             year=year,
+             contribution_base=contribution_base,
++            artifact=artifact,
+         )
+     if surface == "cdcc":
+-        return build_cdcc_request(pe_data=pe_data, year=year)
++        return build_cdcc_request(pe_data=pe_data, year=year, artifact=artifact)
+     if surface == "aotc":
+-        return build_aotc_request(pe_data=pe_data, year=year)
++        return build_aotc_request(pe_data=pe_data, year=year, artifact=artifact)
+     if surface == "nonrefundable-credits":
+         return build_nonrefundable_credits_request(pe_data=pe_data, year=year)
+     if surface == "income-tax":
+@@ -1138,7 +1141,9 @@ def build_axiom_request(
+     raise ValueError(f"unsupported tax surface: {surface}")
+ 
+ 
+-def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
++def build_ctc_request(
++    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
++) -> dict[str, Any]:
+     interval = {
+         "period_kind": "tax_year",
+         "start": f"{year:04d}-01-01",
+@@ -1153,7 +1158,13 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+         entity_id = tax_entity_id(tax_unit_id)
+         for name, value in project_tax_unit_inputs(row).items():
+             inputs.append(
+-                input_record(f"{CTC_BASE}#input.{name}", entity_id, interval, value)
++                input_record(
++                    f"{CTC_BASE}#input.{name}",
++                    entity_id,
++                    interval,
++                    value,
++                    entity="TaxUnit",
++                )
+             )
+         inputs.append(
+             input_record(
+@@ -1161,6 +1172,7 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+                 entity_id,
+                 interval,
+                 ctc_h_filing_status_code(str(row["filing_status"])),
++                entity="TaxUnit",
+             )
+         )
+         tax_unit_persons = persons_by_tax_unit.get(tax_unit_id, [])
+@@ -1185,16 +1197,26 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+             )
+             for name, value in project_ctc_person_inputs(person, context).items():
+                 inputs.append(
+-                    input_record(f"{CTC_BASE}#input.{name}", person_id, interval, value)
++                    input_record(
++                        f"{CTC_BASE}#input.{name}",
++                        person_id,
++                        interval,
++                        value,
++                        entity="Person",
++                    )
+                 )
+             for name, value in project_ctc_h_person_inputs(person, context).items():
+                 inputs.append(
+                     input_record(
+-                        f"{CTC_H_BASE}#input.{name}", person_id, interval, value
++                        f"{CTC_H_BASE}#input.{name}",
++                        person_id,
++                        interval,
++                        value,
++                        entity="Person",
+                     )
+                 )
+ 
+-    return {
++    request = {
+         "mode": "explain",
+         "dataset": {"inputs": inputs, "relations": relations},
+         "queries": [
+@@ -1206,9 +1228,14 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+             for tax_unit_id in pe_data["tax_unit_ids"]
+         ],
+     }
++    return (
++        bind_request_relations(request, artifact) if artifact is not None else request
++    )
+ 
+ 
+-def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
++def build_cdcc_request(
++    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
++) -> dict[str, Any]:
+     interval = {
+         "period_kind": "tax_year",
+         "start": f"{year:04d}-01-01",
+@@ -1225,7 +1252,13 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+         contexts = project_tax_unit_person_contexts(tax_unit_persons)
+         for name, value in project_cdcc_tax_unit_inputs(row=row).items():
+             inputs.append(
+-                input_record(f"{CDCC_BASE}#input.{name}", entity_id, interval, value)
++                input_record(
++                    f"{CDCC_BASE}#input.{name}",
++                    entity_id,
++                    interval,
++                    value,
++                    entity="TaxUnit",
++                )
+             )
+ 
+         for person_index, (person, context) in enumerate(
+@@ -1246,10 +1279,11 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+                         person_id,
+                         interval,
+                         value,
++                        entity="Person",
+                     )
+                 )
+ 
+-    return {
++    request = {
+         "mode": "explain",
+         "dataset": {"inputs": inputs, "relations": relations},
+         "queries": [
+@@ -1261,9 +1295,14 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+             for tax_unit_id in pe_data["tax_unit_ids"]
+         ],
+     }
++    return (
++        bind_request_relations(request, artifact) if artifact is not None else request
++    )
+ 
+ 
+-def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
++def build_aotc_request(
++    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
++) -> dict[str, Any]:
+     interval = {
+         "period_kind": "tax_year",
+         "start": f"{year:04d}-01-01",
+@@ -1280,7 +1319,13 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+         contexts = project_tax_unit_person_contexts(tax_unit_persons)
+         for name, value in project_aotc_tax_unit_inputs(row=row).items():
+             inputs.append(
+-                input_record(f"{AOTC_BASE}#input.{name}", entity_id, interval, value)
++                input_record(
++                    f"{AOTC_BASE}#input.{name}",
++                    entity_id,
++                    interval,
++                    value,
++                    entity="TaxUnit",
++                )
+             )
+ 
+         for person_index, (person, context) in enumerate(
+@@ -1297,11 +1342,15 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+             for name, value in project_aotc_person_inputs(person, context).items():
+                 inputs.append(
+                     input_record(
+-                        f"{AOTC_BASE}#input.{name}", person_id, interval, value
++                        f"{AOTC_BASE}#input.{name}",
++                        person_id,
++                        interval,
++                        value,
++                        entity="Person",
+                     )
+                 )
+ 
+-    return {
++    request = {
+         "mode": "explain",
+         "dataset": {"inputs": inputs, "relations": relations},
+         "queries": [
+@@ -1313,6 +1362,9 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+             for tax_unit_id in pe_data["tax_unit_ids"]
+         ],
+     }
++    return (
++        bind_request_relations(request, artifact) if artifact is not None else request
++    )
+ 
+ 
+ def build_nonrefundable_credits_request(
+@@ -1335,6 +1387,7 @@ def build_nonrefundable_credits_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+ 
+@@ -1372,6 +1425,7 @@ def build_income_tax_request(*, pe_data: dict[str, Any], year: int) -> dict[str,
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+ 
+@@ -1413,6 +1467,7 @@ def build_standard_deduction_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+ 
+@@ -1456,6 +1511,7 @@ def build_capital_gain_definitions_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+ 
+@@ -1496,6 +1552,7 @@ def build_tax_before_credits_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+             inputs.append(
+@@ -1504,6 +1561,7 @@ def build_tax_before_credits_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+         tax_unit_persons = persons_by_tax_unit.get(tax_unit_id, [])
+@@ -1517,6 +1575,7 @@ def build_tax_before_credits_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+ 
+@@ -1537,7 +1596,11 @@ def build_tax_before_credits_request(
+ 
+ 
+ def build_eitc_request(
+-    *, pe_data: dict[str, Any], year: int, contribution_base: float
++    *,
++    pe_data: dict[str, Any],
++    year: int,
++    contribution_base: float,
++    artifact: dict[str, Any] | None = None,
+ ) -> dict[str, Any]:
+     interval = {
+         "period_kind": "tax_year",
+@@ -1558,7 +1621,13 @@ def build_eitc_request(
+             persons=tax_unit_persons,
+         ).items():
+             inputs.append(
+-                input_record(f"{EITC_BASE}#input.{name}", entity_id, interval, value)
++                input_record(
++                    f"{EITC_BASE}#input.{name}",
++                    entity_id,
++                    interval,
++                    value,
++                    entity="TaxUnit",
++                )
+             )
+         for name, value in project_section_7703_tax_unit_inputs(row=row).items():
+             inputs.append(
+@@ -1567,6 +1636,7 @@ def build_eitc_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+         for name, value in project_section_32_c_2_tax_unit_inputs(
+@@ -1579,6 +1649,7 @@ def build_eitc_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+         for name, value in project_section_112_tax_unit_inputs().items():
+@@ -1588,6 +1659,7 @@ def build_eitc_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="TaxUnit",
+                 )
+             )
+         # The generated EITC re-encode grounds earned income in 32(c)(2)'s
+@@ -1609,7 +1681,11 @@ def build_eitc_request(
+             for name, value in project_eitc_person_inputs(person, context).items():
+                 inputs.append(
+                     input_record(
+-                        f"{EITC_BASE}#input.{name}", person_id, interval, value
++                        f"{EITC_BASE}#input.{name}",
++                        person_id,
++                        interval,
++                        value,
++                        entity="Person",
+                     )
+                 )
+             for name, value in project_section_152_c_person_inputs(
+@@ -1622,10 +1698,11 @@ def build_eitc_request(
+                         person_id,
+                         interval,
+                         value,
++                        entity="Person",
+                     )
+                 )
+ 
+-    return {
++    request = {
+         "mode": "explain",
+         "dataset": {"inputs": inputs, "relations": relations},
+         "queries": [
+@@ -1637,6 +1714,9 @@ def build_eitc_request(
+             for tax_unit_id in pe_data["tax_unit_ids"]
+         ],
+     }
++    return (
++        bind_request_relations(request, artifact) if artifact is not None else request
++    )
+ 
+ 
+ def build_payroll_request(
+@@ -1680,6 +1760,7 @@ def build_payroll_request(
+                 person_entity_id(person_id),
+                 interval,
+                 wages,
++                entity="Person",
+             )
+         )
+ 
+@@ -1815,6 +1896,7 @@ def build_oasdi_wage_base_request(
+                     entity_id,
+                     interval,
+                     value,
++                    entity="Person",
+                 )
+             )
+ 
+@@ -2845,6 +2927,9 @@ def _runtime_axiom_request(
+             runtime_outputs.append(runtime_output)
+             public_output_by_runtime[runtime_output] = output
+         query["outputs"] = runtime_outputs
++    # Bind only after compilation and name resolution: declarations alone may
++    # disagree with the executable slots of historical artifacts.
++    runtime_request = bind_request_relations(runtime_request, artifact_payload)
+     return runtime_request, public_output_by_runtime
+ 
+ 
+@@ -3127,11 +3212,12 @@ def person_money_sum(persons: list[Any], column: str | tuple[str, ...]) -> float
+ 
+ 
+ def input_record(
+-    name: str, entity_id: str, interval: dict[str, str], value: Any
++    name: str, entity_id: str, interval: dict[str, str], value: Any, *, entity: str
+ ) -> dict[str, Any]:
++    """Label inputs explicitly; the engine uses this kind to bind relations."""
+     return {
+         "name": name,
+-        "entity": "Entity",
++        "entity": entity,
+         "entity_id": entity_id,
+         "interval": interval,
+         "value": scalar_value(value),
+diff --git a/axiom_oracles/bridges/us_populace.py b/axiom_oracles/bridges/us_populace.py
+index f2e8fd1a7..cf55b563d 100644
+--- a/axiom_oracles/bridges/us_populace.py
++++ b/axiom_oracles/bridges/us_populace.py
+@@ -409,7 +409,13 @@ def build_variable_request(
+                     continue
+                 base = input_bases[name]
+                 inputs.append(
+-                    input_record(f"{base}#input.{name}", entity_id, interval, value)
++                    input_record(
++                        f"{base}#input.{name}",
++                        entity_id,
++                        interval,
++                        value,
++                        entity="Person",
++                    )
+                 )
+     return {
+         "mode": "explain",
+diff --git a/tests/bridges/test_policyengine_efrs_uk.py b/tests/bridges/test_policyengine_efrs_uk.py
+index a0bdcd189..5a9021978 100644
+--- a/tests/bridges/test_policyengine_efrs_uk.py
++++ b/tests/bridges/test_policyengine_efrs_uk.py
+@@ -318,6 +318,12 @@ def test_national_insurance_class_1_request_projects_weekly_inputs(monkeypatch):
+         record["name"] + ":" + record["entity_id"]: record["value"]
+         for record in request["dataset"]["inputs"]
+     }
++    assert {
++        record["entity_id"]: record["entity"]
++        for record in request["dataset"]["inputs"]
++    } == {
++        "person_7": "Person",
++    }
+     assert inputs[
+         f"{NATIONAL_INSURANCE_SECTION_8_BASE}#input.primary_class_1_contribution_payable_as_mentioned_in_section_6_1_a:person_7"
+     ] == {"kind": "bool", "value": True}
+@@ -1035,6 +1041,14 @@ def test_income_tax_income_base_request_projects_section_23_relation():
+     assert inputs[
+         f"{INCOME_TAX_SECTION_23_BASE}#input.amount_charged_to_income_tax:person_7_income_employment_income"
+     ] == {"kind": "decimal", "value": "30000.0"}
++    assert {
++        record["entity_id"]: record["entity"]
++        for record in request["dataset"]["inputs"]
++    } == {
++        "person_7": "Person",
++        "person_7_income_employment_income": "Payment",
++        "person_7_income_private_pension_income": "Payment",
++    }
+     assert inputs[
+         f"{INCOME_TAX_SECTION_23_BASE}#input.relief_deducted_under_section_24:person_7_income_employment_income"
+     ] == {"kind": "decimal", "value": "750.0"}
+@@ -1423,6 +1437,9 @@ def test_benefit_cap_relevant_amount_request_filters_to_finite_caps():
+     )
+ 
+     assert request["mode"] == "explain"
++    assert {record["entity"] for record in request["dataset"]["inputs"]} == {
++        "Family"
++    }
+     assert request["queries"] == [
+         {
+             "entity_id": "benunit_12",
+diff --git a/tests/bridges/test_policyengine_snap_populace.py b/tests/bridges/test_policyengine_snap_populace.py
+index c12e474dc..c24b51bb4 100644
+--- a/tests/bridges/test_policyengine_snap_populace.py
++++ b/tests/bridges/test_policyengine_snap_populace.py
+@@ -166,8 +166,9 @@ def test_california_projectors_use_california_snap_input_surface():
+     assert snap_populace.medical_expenses_for_deduction(150) == 185
+ 
+ 
+-def test_run_axiom_cases_uses_configured_california_member_entity(
+-    monkeypatch, tmp_path
++@pytest.mark.parametrize("typed", [False, True])
++def test_run_axiom_cases_uses_artifact_order_and_configured_member_entity(
++    monkeypatch, tmp_path, typed
+ ):
+     runtime_requests = []
+ 
+@@ -190,10 +191,41 @@ def test_run_axiom_cases_uses_configured_california_member_entity(
+         end=date(2026, 1, 31),
+     )
+     config = JURISDICTION_CONFIGS["us-ca"]
++    relation_ids = (config.relation_id, *config.additional_relation_ids)
++    artifact = tmp_path / "program.json"
++    artifact.write_text(
++        snap_populace.json.dumps(
++            {
++                "program": {
++                    "relations": [
++                        {
++                            "name": name,
++                            "arity": 2,
++                            **({"slot_entities": ["Household", "Person"]} if typed else {}),
++                        }
++                        for name in relation_ids
++                    ],
++                    "derived": [
++                        {
++                            "name": f"count-{index}",
++                            "entity": "Household",
++                            "expr": {
++                                "kind": "count_related",
++                                "relation": name,
++                                "current_slot": 0 if typed else 1,
++                                "related_slot": 1 if typed else 0,
++                            },
++                        }
++                        for index, name in enumerate(relation_ids)
++                    ],
++                }
++            }
++        )
++    )
+ 
+     run_axiom_cases(
+         binary=tmp_path / "axiom-rules-engine",
+-        artifact=tmp_path / "program.json",
++        artifact=artifact,
+         cases=[
+             ProjectedCase(
+                 spm_unit_id=42,
+@@ -213,15 +245,20 @@ def test_run_axiom_cases_uses_configured_california_member_entity(
+ 
+     assert config.member_entity_type == "Person"
+     request = runtime_requests[0]
++    expected_tuple = (
++        ["spm-42", "spm-42-member-1"]
++        if typed
++        else ["spm-42-member-1", "spm-42"]
++    )
+     assert request["dataset"]["relations"] == [
+         {
+             "name": config.relation_id,
+-            "tuple": ["spm-42-member-1", "spm-42"],
++            "tuple": expected_tuple,
+             "interval": {"start": "2026-01-01", "end": "2026-01-31"},
+         },
+         {
+             "name": "us:statutes/7/2012/j#relation.member_of_household",
+-            "tuple": ["spm-42-member-1", "spm-42"],
++            "tuple": expected_tuple,
+             "interval": {"start": "2026-01-01", "end": "2026-01-31"},
+         },
+     ]
+diff --git a/tests/bridges/test_policyengine_tax_populace.py b/tests/bridges/test_policyengine_tax_populace.py
+index 3f5b48009..8e844340a 100644
+--- a/tests/bridges/test_policyengine_tax_populace.py
++++ b/tests/bridges/test_policyengine_tax_populace.py
+@@ -2394,7 +2394,7 @@ def test_build_oasdi_payroll_request_feeds_3121_taxable_wages():
+     assert request["dataset"]["inputs"] == [
+         {
+             "name": "us:statutes/26/3101/a#input.wages",
+-            "entity": "Entity",
++            "entity": "Person",
+             "entity_id": "person_7",
+             "interval": {
+                 "period_kind": "tax_year",
+diff --git a/tests/bridges/test_relation_binding.py b/tests/bridges/test_relation_binding.py
+new file mode 100644
+index 000000000..371bb743e
+--- /dev/null
++++ b/tests/bridges/test_relation_binding.py
+@@ -0,0 +1,479 @@
++from copy import deepcopy
++
++import pytest
++from hypothesis import given, settings, strategies as st
++
++from axiom_oracles.bridges.relation_binding import (
++    RelationBindingError,
++    bind_request_relations,
++    relation_tuple,
++)
++
++
++def artifact_for(
++    *,
++    owner="TaxUnit",
++    typed=True,
++    current_slot=0,
++    declared_owner_slot=0,
++    kind="count_related",
++):
++    schema = {"name": "members", "arity": 2}
++    if typed:
++        schema["slot_entities"] = (
++            [owner, "Person"] if declared_owner_slot == 0 else ["Person", owner]
++        )
++    return {
++        "program": {
++            "relations": [schema],
++            "derived": [
++                {
++                    "name": "member_count",
++                    "entity": owner,
++                    "expr": {
++                        "kind": kind,
++                        "relation": "members",
++                        "current_slot": current_slot,
++                        "related_slot": 1 - current_slot,
++                    },
++                }
++            ],
++        }
++    }
++
++
++def tuple_for(artifact, name="members", **kwargs):
++    return relation_tuple(
++        artifact,
++        name,
++        owner_id="unit-1",
++        owner_kind="TaxUnit",
++        related_id="child-1",
++        related_kind="Person",
++        **kwargs,
++    )
++
++
++@pytest.mark.parametrize("kind", ["count_related", "sum_related", "relation_member"])
++@pytest.mark.parametrize("current_slot", [0, 1])
++@pytest.mark.parametrize("declared_owner_slot", [0, 1])
++def test_executable_usage_takes_precedence_over_declared_order(
++    kind, current_slot, declared_owner_slot
++):
++    artifact = artifact_for(
++        kind=kind,
++        current_slot=current_slot,
++        declared_owner_slot=declared_owner_slot,
++    )
++    emitted = tuple_for(artifact)
++    assert emitted[current_slot] == "unit-1"
++    assert emitted[1 - current_slot] == "child-1"
++
++
++def test_old_untyped_artifact_keeps_legacy_related_first_tuple():
++    assert tuple_for(artifact_for(typed=False, current_slot=1)) == [
++        "child-1",
++        "unit-1",
++    ]
++    assert tuple_for(None) == ["child-1", "unit-1"]
++    assert tuple_for(None, legacy_owner_slot=0) == ["unit-1", "child-1"]
++
++
++@pytest.mark.parametrize("declared_owner_slot", [0, 1])
++def test_only_unused_relations_use_declared_position_order(declared_owner_slot):
++    artifact = artifact_for(declared_owner_slot=declared_owner_slot)
++    artifact["program"]["derived"] = []
++    assert tuple_for(artifact)[declared_owner_slot] == "unit-1"
++
++
++def test_versions_replace_base_semantics_and_nested_nodes_are_read():
++    artifact = artifact_for(current_slot=1)
++    rule = artifact["program"]["derived"][0]
++    active = deepcopy(rule["expr"])
++    active.update(current_slot=0, related_slot=1)
++    rule["versions"] = [
++        {"effective_from": "2024-01-01", "expr": {"kind": "add", "items": [active]}}
++    ]
++    assert tuple_for(artifact) == ["unit-1", "child-1"]
++
++
++def test_conflicting_executable_versions_fail_instead_of_using_declaration():
++    artifact = artifact_for()
++    rule = artifact["program"]["derived"][0]
++    reversed_expr = dict(rule["expr"], current_slot=1, related_slot=0)
++    rule["versions"] = [{"expr": rule["expr"]}, {"expr": reversed_expr}]
++    with pytest.raises(RelationBindingError, match="Conflicting executable kinds"):
++        tuple_for(artifact)
++
++
++def test_nested_aggregate_uses_related_entity_context():
++    artifact = artifact_for(owner="Household")
++    program = artifact["program"]
++    program["relations"].append(
++        {"name": "parents", "arity": 2, "slot_entities": ["TaxUnit", "Person"]}
++    )
++    program["derived"][0]["expr"]["where"] = {
++        "kind": "comparison",
++        "left": {
++            "kind": "count_related",
++            "relation": "parents",
++            "current_slot": 1,
++            "related_slot": 0,
++        },
++    }
++    assert tuple_for(artifact, "parents") == ["unit-1", "child-1"]
++
++
++def test_sum_related_value_rule_supplies_related_kind():
++    artifact = artifact_for(kind="sum_related")
++    # An incomplete declaration cannot identify Person, but the sum's value can.
++    artifact["program"]["relations"][0].pop("slot_entities")
++    artifact["program"]["derived"][0]["expr"]["value"] = {
++        "kind": "derived",
++        "name": "earnings",
++    }
++    artifact["program"]["derived"].append(
++        {"name": "earnings", "entity": "Person", "expr": {"kind": "input"}}
++    )
++    assert tuple_for(artifact) == ["unit-1", "child-1"]
++
++
++def test_derived_relation_source_and_membership_follow_structural_context():
++    artifact = artifact_for()
++    program = artifact["program"]
++    program["derived"] = []
++    program["relations"].extend(
++        [
++            {"name": "eligible", "arity": 2, "slot_entities": ["TaxUnit", "Person"]},
++            {
++                "name": "filtered_members",
++                "arity": 2,
++                "slot_entities": ["Person", "TaxUnit"],
++                "derivation": {
++                    "source_relation": "members",
++                    "current_slot": 1,
++                    "related_slot": 0,
++                    "slot_entities": ["Person", "TaxUnit"],
++                    "predicate": {
++                        "kind": "relation_member",
++                        "relation": "eligible",
++                        "current_slot": 1,
++                        "related_slot": 0,
++                    },
++                },
++            },
++        ]
++    )
++    assert tuple_for(artifact) == ["child-1", "unit-1"]
++    assert tuple_for(artifact, "eligible") == ["child-1", "unit-1"]
++
++
++@pytest.mark.parametrize("wrapper", ["direct", "and", "or", "not", "scalar_if"])
++def test_derivation_pair_context_stops_at_scalar_expression_boundaries(wrapper):
++    artifact = artifact_for()
++    program = artifact["program"]
++    program["derived"] = []
++    membership = {
++        "kind": "relation_member",
++        "relation": "eligible",
++        "current_slot": 0,
++        "related_slot": 1,
++    }
++    predicate = membership
++    if wrapper in {"and", "or"}:
++        predicate = {"kind": wrapper, "items": [membership]}
++    elif wrapper == "not":
++        predicate = {"kind": "not", "item": membership}
++    elif wrapper == "scalar_if":
++        one = {"kind": "literal", "value": {"kind": "integer", "value": 1}}
++        zero = {"kind": "literal", "value": {"kind": "integer", "value": 0}}
++        predicate = {
++            "kind": "comparison",
++            "left": {
++                "kind": "if",
++                "condition": membership,
++                "then_expr": one,
++                "else_expr": zero,
++            },
++            "op": "eq",
++            "right": one,
++        }
++    program["relations"].extend(
++        [
++            {"name": "eligible", "arity": 2, "slot_entities": ["TaxUnit", "Person"]},
++            {
++                "name": "filtered_members",
++                "arity": 2,
++                "derivation": {
++                    "source_relation": "members",
++                    "current_slot": 1,
++                    "related_slot": 0,
++                    "slot_entities": ["Person", "TaxUnit"],
++                    "predicate": predicate,
++                },
++            },
++        ]
++    )
++    assert tuple_for(artifact, "eligible") == (
++        ["child-1", "unit-1"] if wrapper == "scalar_if" else ["unit-1", "child-1"]
++    )
++
++
++def test_canonical_relation_name_resolves_to_unique_artifact_symbol():
++    assert tuple_for(artifact_for(), "us:statutes/26/21#relation.members") == [
++        "unit-1",
++        "child-1",
++    ]
++
++
++def test_ambiguous_short_relation_name_is_rejected():
++    artifact = artifact_for()
++    schema = artifact["program"]["relations"][0]
++    schema["name"] = "us:statutes/26/21#relation.members"
++    artifact["program"]["relations"].append(
++        dict(schema, name="us:statutes/26/24#relation.members")
++    )
++    with pytest.raises(RelationBindingError, match="Ambiguous artifact relation"):
++        tuple_for(artifact)
++
++
++def request_for(member_ids, owner="TaxUnit"):
++    return {
++        "dataset": {
++            "inputs": [
++                {"entity_id": "unit-1", "entity": owner},
++                *({"entity_id": member, "entity": "Person"} for member in member_ids),
++            ],
++            "relations": [
++                {
++                    "name": "members",
++                    "tuple": [member, "unit-1"],
++                    "interval": {"start": "2024-01-01", "end": "2025-01-01"},
++                }
++                for member in member_ids
++            ],
++        },
++        "targets": [{"entity_id": "unit-1", "rule": "member_count"}],
++    }
++
++
++def test_binding_returns_independent_copy_without_lenient_opt_out():
++    request = request_for(["child-1"])
++    before = deepcopy(request)
++    bound = bind_request_relations(request, artifact_for())
++    assert request == before
++    assert bound["dataset"]["relations"][0]["tuple"] == ["unit-1", "child-1"]
++    assert "relation_binding" not in bound
++    bound["dataset"]["inputs"][0]["entity"] = "changed"
++    assert request == before
++
++
++@pytest.mark.parametrize("invalid_kind", ["Entity", "Household"])
++def test_incorrect_input_label_is_not_silently_accepted(invalid_kind):
++    request = request_for(["child-1"])
++    request["dataset"]["inputs"][0]["entity"] = invalid_kind
++    with pytest.raises(RelationBindingError, match="Cannot unambiguously order"):
++        bind_request_relations(request, artifact_for())
++
++
++@pytest.mark.parametrize("conflicting", [True, False])
++def test_missing_or_conflicting_input_kind_fails(conflicting):
++    request = request_for(["child-1"])
++    if conflicting:
++        request["dataset"]["inputs"].append(
++            {"entity_id": "child-1", "entity": "TaxUnit"}
++        )
++    else:
++        request["dataset"]["inputs"].pop()
++    with pytest.raises(RelationBindingError, match="needs one input entity kind"):
++        bind_request_relations(request, artifact_for())
++
++
++@pytest.mark.parametrize("typed", [True, False])
++def test_equal_kind_slots_keep_existing_order(typed):
++    artifact = artifact_for(owner="Person", typed=typed, current_slot=1)
++    assert relation_tuple(
++        artifact,
++        "members",
++        owner_id="parent",
++        owner_kind="Person",
++        related_id="child",
++        related_kind="Person",
++    ) == ["child", "parent"]
++
++
++def test_unrelated_higher_arity_relation_does_not_block_two_slot_binding():
++    artifact = artifact_for()
++    artifact["program"]["relations"].append(
++        {"name": "other", "arity": 3, "slot_entities": ["Person", "Other", "TaxUnit"]}
++    )
++    artifact["program"]["derived"].append(
++        {
++            "name": "other_count",
++            "entity": "TaxUnit",
++            "expr": {
++                "kind": "count_related",
++                "relation": "other",
++                "current_slot": 2,
++                "related_slot": 0,
++            },
++        }
++    )
++    assert tuple_for(artifact) == ["unit-1", "child-1"]
++
++
++def test_untyped_artifact_with_explicit_owner_first_usage_is_honored():
++    request = request_for(["child-1"])
++    bound = bind_request_relations(request, artifact_for(typed=False, current_slot=0))
++    assert bound["dataset"]["relations"][0]["tuple"] == ["unit-1", "child-1"]
++
++
++@pytest.mark.parametrize("current_slot", [0, 1])
++@pytest.mark.parametrize("supplied_owner_slot", [0, 1])
++def test_untyped_member_without_inputs_uses_known_owner_kind(
++    current_slot, supplied_owner_slot
++):
++    request = request_for(["child-1"])
++    request["dataset"]["inputs"].pop()
++    if supplied_owner_slot == 0:
++        request["dataset"]["relations"][0]["tuple"].reverse()
++    before = deepcopy(request)
++    bound = bind_request_relations(
++        request, artifact_for(typed=False, current_slot=current_slot)
++    )
++    emitted = bound["dataset"]["relations"][0]["tuple"]
++    assert emitted[current_slot] == "unit-1"
++    assert emitted[1 - current_slot] == "child-1"
++    assert bound["dataset"]["inputs"] == before["dataset"]["inputs"]
++    assert request == before
++    if current_slot == supplied_owner_slot:
++        assert bound == before
++
++
++@pytest.mark.parametrize("current_slot", [0, 1])
++def test_untyped_unlabelled_ids_preserve_existing_tuple(current_slot):
++    request = request_for(["child-1"])
++    request["dataset"]["inputs"] = []
++    assert bind_request_relations(
++        request, artifact_for(typed=False, current_slot=current_slot)
++    ) == request
++
++
++def test_untyped_conflicting_input_kinds_still_fail():
++    request = request_for(["child-1"])
++    request["dataset"]["inputs"].append(
++        {"entity_id": "unit-1", "entity": "Household"}
++    )
++    with pytest.raises(RelationBindingError, match="needs one input entity kind"):
++        bind_request_relations(request, artifact_for(typed=False, current_slot=1))
++
++
++def test_unknown_nested_scope_does_not_borrow_derived_relation_structural_kind():
++    artifact = artifact_for(typed=False, current_slot=1)
++    program = artifact["program"]
++    program["relations"].extend(
++        [
++            {"name": "source_members", "arity": 2},
++            {
++                "name": "filtered_members",
++                "arity": 2,
++                "derivation": {
++                    "source_relation": "source_members",
++                    "current_slot": 1,
++                    "related_slot": 0,
++                    "slot_entities": ["Person", "TaxUnit"],
++                    "predicate": {"kind": "derived", "name": "eligible"},
++                },
++            },
++        ]
++    )
++    program["derived"][0]["expr"]["where"] = {
++        "kind": "comparison",
++        "left": {
++            "kind": "count_related",
++            "relation": "filtered_members",
++            "current_slot": 1,
++            "related_slot": 0,
++        },
++    }
++    # The outer untyped count has no evidence identifying its member kind.
++    # A derived relation's structural kinds describe its source context; an
++    # absent derivation.entity must not match that unknown enclosing scope.
++    request = request_for(["child-1"])
++    request["dataset"]["relations"] = [
++        {"name": "filtered_members", "tuple": ["unit-1", "child-1"]}
++    ]
++    assert bind_request_relations(request, artifact) == request
++
++
++def test_request_binding_leaves_higher_arity_records_untouched():
++    artifact = artifact_for()
++    artifact["program"]["relations"].append(
++        {"name": "triplet", "arity": 3, "slot_entities": ["Person", "Person", "TaxUnit"]}
++    )
++    request = request_for(["child-1"])
++    triplet = {"name": "triplet", "tuple": ["unknown-1", "unknown-2", "unknown-3"]}
++    request["dataset"]["relations"].append(triplet)
++    bound = bind_request_relations(request, artifact)
++    assert bound["dataset"]["relations"][0]["tuple"] == ["unit-1", "child-1"]
++    assert bound["dataset"]["relations"][1] == triplet
++    with pytest.raises(RelationBindingError, match="not a two-slot relation"):
++        tuple_for(artifact, "triplet")
++
++
++@settings(deadline=None)
++@given(
++    owner=st.sampled_from(["Household", "TaxUnit"]),
++    member_numbers=st.lists(st.integers(min_value=0), unique=True, max_size=30),
++    typed=st.booleans(),
++    declared_owner_slot=st.integers(min_value=0, max_value=1),
++    executable_owner_slot=st.integers(min_value=0, max_value=1),
++    used=st.booleans(),
++    kind=st.sampled_from(["count_related", "sum_related", "relation_member"]),
++)
++def test_every_generated_member_occupies_its_expected_kind_slot(
++    owner,
++    member_numbers,
++    typed,
++    declared_owner_slot,
++    executable_owner_slot,
++    used,
++    kind,
++):
++    # Old released artifacts have related-first executable slots. Typed ones
++    # may retain either orientation, independently of their declaration order.
++    current = executable_owner_slot if typed else 1
++    artifact = artifact_for(
++        owner=owner,
++        typed=typed,
++        current_slot=current,
++        declared_owner_slot=declared_owner_slot,
++        kind=kind,
++    )
++    if not used:
++        artifact["program"]["derived"] = []
++    member_ids = [f"member-{number}" for number in member_numbers]
++    legacy = request_for(member_ids, owner)
++    bound = bind_request_relations(legacy, artifact)
++    labels = {
++        record["entity_id"]: record["entity"]
++        for record in bound["dataset"]["inputs"]
++    }
++    expected_owner_slot = (current if used else declared_owner_slot) if typed else 1
++    expected_kinds = (
++        [owner, "Person"] if expected_owner_slot == 0 else ["Person", owner]
++    )
++    for member, record in zip(member_ids, bound["dataset"]["relations"], strict=True):
++        emitted = relation_tuple(
++            artifact,
++            "members",
++            owner_id="unit-1",
++            owner_kind=owner,
++            related_id=member,
++            related_kind="Person",
++        )
++        assert emitted == record["tuple"]
++        assert [labels[entity_id] for entity_id in emitted] == expected_kinds
++        assert emitted[expected_owner_slot] == "unit-1"
++    if not typed:
++        assert bound == legacy
+diff --git a/tests/bridges/test_state_tax_populace_runner.py b/tests/bridges/test_state_tax_populace_runner.py
+index 8fcdab0c4..7f3931cac 100644
+--- a/tests/bridges/test_state_tax_populace_runner.py
++++ b/tests/bridges/test_state_tax_populace_runner.py
+@@ -2961,14 +2961,14 @@ def test_mississippi_request_emits_canonical_person_schedule_without_relation()
+     assert request["dataset"]["inputs"] == [
+         {
+             "name": slot,
+-            "entity": "Entity",
++            "entity": "Person",
+             "entity_id": "state-tax-person-11",
+             "interval": interval,
+             "value": {"kind": "decimal", "value": "30000.0"},
+         },
+         {
+             "name": slot,
+-            "entity": "Entity",
++            "entity": "Person",
+             "entity_id": "state-tax-person-12",
+             "interval": interval,
+             "value": {"kind": "decimal", "value": "20000.0"},
+@@ -3007,6 +3007,72 @@ def test_dc_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None:
+         )
+ 
+ 
++@pytest.mark.parametrize("current_slot", [0, 1])
++@pytest.mark.parametrize("typed", [False, True])
++def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
++    current_slot: int,
++    typed: bool,
++) -> None:
++    from axiom_oracles.bridges.relation_binding import bind_request_relations
++
++    prefix = "us-dc:policies/income_tax/pilot_liability_pipeline"
++    relation = f"{prefix}#relation.dc_pit_pilot_taxpayer_of_tax_unit"
++    request = state_tax_runner._state_request(
++        state="DC",
++        routes=(TaxUnitRoute(1, 1, "DC", "11", 1, DISPOSITION_READY),),
++        year=2026,
++        output=f"{prefix}#tax",
++        projected_inputs={
++            f"{prefix}#input.dc_pit_pilot_supplied_separate_taxable_income": {
++                11: 30_000.0,
++                12: 20_000.0,
++            },
++            f"{prefix}#input.dc_pit_pilot_taxpayer_is_included": {11: True, 12: True},
++            f"{prefix}#input.dc_pit_pilot_supplied_joint_taxable_income": {1: 50_000.0},
++        },
++        declared_relations=(relation,),
++        raw_persons=pd.DataFrame(
++            {"person_id": [11, 12], "person_tax_unit_id": [1, 1]}
++        ),
++    )
++    kinds = {
++        record["entity_id"]: record["entity"]
++        for record in request["dataset"]["inputs"]
++    }
++    assert kinds == {
++        "state-tax-unit-1": "TaxUnit",
++        "state-tax-person-11": "Person",
++        "state-tax-person-12": "Person",
++    }
++    artifact = {
++        "program": {
++            "relations": [
++                {
++                    "name": relation,
++                    "arity": 2,
++                    **({"slot_entities": ["TaxUnit", "Person"]} if typed else {}),
++                }
++            ],
++            "derived": [
++                {
++                    "name": "tax",
++                    "entity": "TaxUnit",
++                    "expr": {
++                        "kind": "sum_related",
++                        "relation": relation,
++                        "current_slot": current_slot,
++                        "related_slot": 1 - current_slot,
++                    },
++                }
++            ],
++        }
++    }
++    runtime_request = bind_request_relations(request, artifact)
++    for record in runtime_request["dataset"]["relations"]:
++        assert kinds[record["tuple"][current_slot]] == "TaxUnit"
++        assert kinds[record["tuple"][1 - current_slot]] == "Person"
++
++
+ def test_delaware_request_emits_canonical_person_schedule_without_relation() -> None:
+     prefix = "us-de:policies/income_tax/pilot_liability_pipeline"
+     separate_slot = f"{prefix}#input.de_pit_pilot_supplied_separate_taxable_income"
+@@ -3037,14 +3103,14 @@ def test_delaware_request_emits_canonical_person_schedule_without_relation() ->
+     assert request["dataset"]["inputs"] == [
+         {
+             "name": separate_slot,
+-            "entity": "Entity",
++            "entity": "Person",
+             "entity_id": "state-tax-person-21",
+             "interval": interval,
+             "value": {"kind": "decimal", "value": "20000.0"},
+         },
+         {
+             "name": separate_slot,
+-            "entity": "Entity",
++            "entity": "Person",
+             "entity_id": "state-tax-person-22",
+             "interval": interval,
+             "value": {"kind": "decimal", "value": "30000.0"},
+diff --git a/tests/bridges/test_tax_relation_engine.py b/tests/bridges/test_tax_relation_engine.py
+new file mode 100644
+index 000000000..1c73471ce
+--- /dev/null
++++ b/tests/bridges/test_tax_relation_engine.py
+@@ -0,0 +1,289 @@
++"""Optional real-engine regression for the federal relation producer.
++
++Set AXIOM_STRICT_RELATION_ENGINE_BIN to a #190 strict-binding engine and
++AXIOM_RULESPEC_ROOT to a rulespec-us checkout. AXIOM_LEGACY_RELATION_ENGINE_BIN
++optionally reproduces the silent zero with the post-#179, pre-#190 engine.
++The compiled law and the reference case come unchanged from rulespec-us.
++"""
++
++from __future__ import annotations
++
++import copy
++import json
++import os
++from pathlib import Path
++import shutil
++import subprocess
++
++import pandas as pd
++import pytest
++import yaml
++
++from axiom_oracles.bridges.tax_populace import (
++    CDCC_BASE,
++    CTC_BASE,
++    _runtime_axiom_request,
++    build_cdcc_request,
++    build_ctc_request,
++    output_number,
++    scalar_value,
++)
++
++
++_RELATION = f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit"
++_OUTPUT = f"{CDCC_BASE}#cdcc"
++_CTC_OUTPUT = f"{CTC_BASE}#ctc_before_advance_payments"
++
++
++def _configured_path(variable: str) -> Path:
++    value = os.environ.get(variable)
++    if not value or not Path(value).exists():
++        pytest.skip(f"{variable} must point to an existing live-test prerequisite")
++    return Path(value).resolve()
++
++
++@pytest.fixture(scope="module")
++def live_cdcc(tmp_path_factory):
++    binary = _configured_path("AXIOM_STRICT_RELATION_ENGINE_BIN")
++    source_root = _configured_path("AXIOM_RULESPEC_ROOT")
++    relative = Path("us/statutes/26/21.yaml")
++    source = source_root / relative
++    if not source.is_file():
++        pytest.skip(f"The canonical CDCC RuleSpec is unavailable: {source}")
++    examples = yaml.safe_load(source.with_suffix(".test.yaml").read_text())
++    example = next(
++        case for case in examples if case["name"] == "single_one_child_low_agi_credit"
++    )
++    directory = tmp_path_factory.mktemp("tax-relation-engine")
++    rulespec_root = directory / "rulespec-us"
++    program = rulespec_root / relative
++    program.parent.mkdir(parents=True)
++    # Use the existing encoded module verbatim in a clean canonical layout.
++    # Some local checkouts retain root-level statutes/ rejected by new engines.
++    shutil.copyfile(source, program)
++    artifact_path = directory / "cdcc.compiled.json"
++    compiled = subprocess.run(
++        [
++            str(binary), "compile", "--program", str(program),
++            "--rulespec-root", str(rulespec_root), "--output", str(artifact_path),
++        ],
++        capture_output=True,
++        text=True,
++        check=False,
++        timeout=60,
++    )
++    assert compiled.returncode == 0, compiled.stderr
++    artifact = json.loads(artifact_path.read_text())
++    assert artifact["program"]["relations"][0]["slot_entities"] == [
++        "TaxUnit", "Person",
++    ]
++    return binary, artifact_path, artifact, rulespec_root, example
++
++
++@pytest.fixture(scope="module")
++def live_ctc(tmp_path_factory):
++    binary = _configured_path("AXIOM_STRICT_RELATION_ENGINE_BIN")
++    source_root = _configured_path("AXIOM_RULESPEC_ROOT")
++    directory = tmp_path_factory.mktemp("ctc-relation-engine")
++    rulespec_root = directory / "rulespec-us"
++    for relative in ("us/statutes/26/24.yaml", "us/statutes/26/24/h.yaml"):
++        source = source_root / relative
++        if not source.is_file():
++            pytest.skip(f"The canonical CTC RuleSpec is unavailable: {source}")
++        target = rulespec_root / relative
++        target.parent.mkdir(parents=True, exist_ok=True)
++        shutil.copyfile(source, target)
++    artifact_path = directory / "ctc.compiled.json"
++    compiled = subprocess.run(
++        [
++            str(binary), "compile", "--program",
++            str(rulespec_root / "us/statutes/26/24.yaml"),
++            "--rulespec-root", str(rulespec_root), "--output", str(artifact_path),
++        ],
++        capture_output=True,
++        text=True,
++        check=False,
++        timeout=60,
++    )
++    assert compiled.returncode == 0, compiled.stderr
++    artifact = json.loads(artifact_path.read_text())
++    return binary, artifact_path, artifact
++
++
++def _one_child_data():
++    return {
++        "tax_units": pd.DataFrame([
++            {
++                "tax_unit_id": 1,
++                "filing_status": "SINGLE",
++                "adjusted_gross_income": 15_000,
++                "min_head_spouse_earned": 10_000,
++                "tax_unit_childcare_expenses": 5_000,
++                "cdcc_credit_limit": 5_000,
++            }
++        ]),
++        "persons": pd.DataFrame([
++            {
++                "person_id": 7,
++                "person_tax_unit_id": 1,
++                "age": 38,
++                "ssn_card_type": "CITIZEN",
++                "is_tax_unit_head": True,
++                "is_tax_unit_spouse": False,
++            },
++            {
++                "person_id": 8,
++                "person_tax_unit_id": 1,
++                "age": 8,
++                "ssn_card_type": "CITIZEN",
++                "is_tax_unit_head": False,
++                "is_tax_unit_spouse": False,
++            },
++        ]),
++        "tax_unit_ids": [1],
++    }
++
++
++def _run(binary, artifact_path, request):
++    assert "relation_binding" not in request
++    return subprocess.run(
++        [str(binary), "run-compiled", "--artifact", str(artifact_path)],
++        input=json.dumps(request),
++        capture_output=True,
++        text=True,
++        check=False,
++        timeout=60,
++    )
++
++
++def _credit(result, output=_OUTPUT):
++    assert result.returncode == 0, result.stderr
++    response = json.loads(result.stdout)
++    return output_number(response["results"][0]["outputs"][output])
++
++
++def _owner_first_reference(example):
++    """Turn the encoded module's existing companion case into a wire request."""
++    interval = example["period"]
++    inputs = []
++    relations = []
++
++    def append_inputs(values, entity_id, entity):
++        for name, value in values.items():
++            inputs.append({
++                "name": name,
++                "entity_id": entity_id,
++                "entity": entity,
++                "interval": interval,
++                "value": scalar_value(value),
++            })
++
++    owner_inputs = dict(example["input"])
++    for index, person in enumerate(owner_inputs.pop(_RELATION)):
++        person_id = f"reference_person_{index}"
++        append_inputs(person, person_id, "Person")
++        relations.append({
++            "name": _RELATION,
++            "tuple": ["reference_tax_unit", person_id],
++            "interval": interval,
++        })
++    append_inputs(owner_inputs, "reference_tax_unit", "TaxUnit")
++    return {
++        "mode": "explain",
++        "dataset": {"inputs": inputs, "relations": relations},
++        "queries": [{
++            "entity_id": "reference_tax_unit",
++            "period": interval,
++            "outputs": [_OUTPUT],
++        }],
++    }
++
++
++@pytest.mark.parametrize("entrypoint", ["builder", "compiled_runtime"])
++def test_cdcc_strict_binding_matches_encoded_owner_first_reference(
++    live_cdcc, entrypoint,
++):
++    binary, artifact_path, artifact, rulespec_root, example = live_cdcc
++    if entrypoint == "builder":
++        request = build_cdcc_request(
++            pe_data=_one_child_data(), year=2026, artifact=artifact,
++        )
++    else:
++        legacy_request = build_cdcc_request(pe_data=_one_child_data(), year=2026)
++        request, _ = _runtime_axiom_request(
++            legacy_request, artifact_payload=artifact, rulespec_root=rulespec_root,
++        )
++    assert all(
++        relation["tuple"][0] == "tax_unit_1"
++        for relation in request["dataset"]["relations"]
++    )
++    assert {record["entity"] for record in request["dataset"]["inputs"]} == {
++        "TaxUnit", "Person",
++    }
++    result = _run(binary, artifact_path, request)
++    reference = _run(binary, artifact_path, _owner_first_reference(example))
++    assert _credit(result) == _credit(reference) == example["output"][_OUTPUT] == 1500
++    assert json.loads(result.stdout)["metadata"]["relation_binding"] == "strict"
++
++    # The same real engine must reject both defects in the previous producer.
++    reversed_request = copy.deepcopy(request)
++    for relation in reversed_request["dataset"]["relations"]:
++        relation["tuple"].reverse()
++    reversed_result = _run(binary, artifact_path, reversed_request)
++    assert reversed_result.returncode != 0
++    assert "relation" in reversed_result.stderr.lower()
++
++    generic_kinds = copy.deepcopy(request)
++    for record in generic_kinds["dataset"]["inputs"]:
++        record["entity"] = "Entity"
++    generic_result = _run(binary, artifact_path, generic_kinds)
++    assert generic_result.returncode != 0
++    assert "Entity" in generic_result.stderr
++
++
++def test_cdcc_pre_strict_engine_reproduces_silent_zero(live_cdcc):
++    _, artifact_path, artifact, _, _ = live_cdcc
++    binary = _configured_path("AXIOM_LEGACY_RELATION_ENGINE_BIN")
++    corrected = build_cdcc_request(
++        pe_data=_one_child_data(), year=2026, artifact=artifact,
++    )
++    legacy = copy.deepcopy(corrected)
++    for relation in legacy["dataset"]["relations"]:
++        relation["tuple"].reverse()
++    for record in legacy["dataset"]["inputs"]:
++        record["entity"] = "Entity"
++    assert _credit(_run(binary, artifact_path, legacy)) == 0
++    assert _credit(_run(binary, artifact_path, corrected)) == 1500
++
++
++def test_ctc_strict_binding_counts_child_in_both_statutory_relations(live_ctc):
++    binary, artifact_path, artifact = live_ctc
++    request = build_ctc_request(
++        pe_data=_one_child_data(), year=2026, artifact=artifact,
++    )
++    assert {record["entity"] for record in request["dataset"]["inputs"]} == {
++        "TaxUnit", "Person",
++    }
++    assert len({relation["name"] for relation in request["dataset"]["relations"]}) == 2
++    assert all(
++        relation["tuple"][0] == "tax_unit_1"
++        for relation in request["dataset"]["relations"]
++    )
++    result = _run(binary, artifact_path, request)
++    assert _credit(result, f"{CTC_BASE}#ctc_qualifying_children_count") == 1
++    assert _credit(result, f"{CTC_BASE}#ctc_maximum_before_phaseout") == 2200
++    assert _credit(result, _CTC_OUTPUT) == 2200
++    assert json.loads(result.stdout)["metadata"]["relation_binding"] == "strict"
++
++
++def test_ctc_pre_strict_engine_reproduces_silent_zero(live_ctc):
++    _, artifact_path, artifact = live_ctc
++    binary = _configured_path("AXIOM_LEGACY_RELATION_ENGINE_BIN")
++    corrected = build_ctc_request(
++        pe_data=_one_child_data(), year=2026, artifact=artifact,
++    )
++    legacy = build_ctc_request(pe_data=_one_child_data(), year=2026)
++    for record in legacy["dataset"]["inputs"]:
++        record["entity"] = "Entity"
++    assert _credit(_run(binary, artifact_path, legacy), _CTC_OUTPUT) == 0
++    assert _credit(_run(binary, artifact_path, corrected), _CTC_OUTPUT) == 2200
+diff --git a/tests/bridges/test_tax_relation_requests.py b/tests/bridges/test_tax_relation_requests.py
+new file mode 100644
+index 000000000..5fd519ebd
+--- /dev/null
++++ b/tests/bridges/test_tax_relation_requests.py
+@@ -0,0 +1,157 @@
++"""Producer contract tests; engine value assertions live in test_tax_relation_engine."""
++
++from copy import deepcopy
++
++import pandas as pd
++import pytest
++from hypothesis import given, settings, strategies as st
++
++from axiom_oracles.bridges.tax_populace import (
++    AOTC_BASE,
++    CDCC_BASE,
++    CTC_BASE,
++    CTC_H_BASE,
++    EITC_BASE,
++    build_axiom_request,
++)
++
++RELATIONS = {
++    "ctc": [
++        f"{CTC_BASE}#relation.ctc_qualifying_child_of_tax_unit",
++        f"{CTC_H_BASE}#relation.dependent_of_tax_unit",
++    ],
++    "cdcc": [f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit"],
++    "aotc": [f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit"],
++    "eitc": [f"{EITC_BASE}#relation.qualifying_child_of_tax_unit"],
++}
++
++
++def population(member_ages):
++    units, persons = [], []
++    for unit_id, ages in enumerate(member_ages, start=1):
++        units.append(
++            {
++                "tax_unit_id": unit_id,
++                "filing_status": "SINGLE",
++                "adjusted_gross_income": 15_000,
++                "min_head_spouse_earned": 15_000,
++                "tax_unit_childcare_expenses": 3_000,
++                "cdcc_credit_limit": 5_000,
++                "income_tax_before_credits": 5_000,
++            }
++        )
++        for index, age in enumerate(ages):
++            persons.append(
++                {
++                    "person_id": len(persons) + 1,
++                    "person_tax_unit_id": unit_id,
++                    "age": age,
++                    "ssn_card_type": "CITIZEN",
++                    "is_tax_unit_head": index == 0,
++                    "is_tax_unit_spouse": False,
++                }
++            )
++    return {
++        "tax_units": pd.DataFrame(units),
++        "persons": pd.DataFrame(persons),
++        "tax_unit_ids": [unit["tax_unit_id"] for unit in units],
++    }
++
++
++def artifact_for(surface, declarations):
++    relations, derived = [], []
++    expected = {}
++    for name, (typed, current, declared_current) in zip(
++        RELATIONS[surface], declarations, strict=True
++    ):
++        # Historical untyped artifacts execute related-first. Typed declarations
++        # may disagree with usage (the engine preserves them for source fidelity).
++        current = current if typed else 1
++        schema = {"name": name, "arity": 2}
++        if typed:
++            schema["slot_entities"] = (
++                ["TaxUnit", "Person"]
++                if declared_current == 0
++                else ["Person", "TaxUnit"]
++            )
++        relations.append(schema)
++        derived.append(
++            {
++                "name": name + "_count",
++                "entity": "TaxUnit",
++                "expr": {
++                    "kind": "scalar",
++                    "expr": {
++                        "kind": "count_related",
++                        "relation": name,
++                        "current_slot": current,
++                        "related_slot": 1 - current,
++                    },
++                },
++            }
++        )
++        expected[name] = current
++    return {"program": {"relations": relations, "derived": derived}}, expected
++
++
++@pytest.mark.parametrize("surface", RELATIONS)
++@pytest.mark.parametrize("typed", [False, True])
++def test_tax_requests_follow_artifact_slots(surface, typed):
++    artifact, slots = artifact_for(surface, [(typed, 0, 0)] * len(RELATIONS[surface]))
++    data = population([[35, 8], [50]])
++    request = build_axiom_request(
++        pe_data=data,
++        year=2026,
++        surface=surface,
++        contribution_base=184_500,
++        artifact=artifact,
++    )
++    kinds = {item["entity_id"]: item["entity"] for item in request["dataset"]["inputs"]}
++    assert set(kinds.values()) == {"TaxUnit", "Person"}
++    for relation in request["dataset"]["relations"]:
++        owner_slot = slots[relation["name"]]
++        assert kinds[relation["tuple"][owner_slot]] == "TaxUnit"
++        assert kinds[relation["tuple"][1 - owner_slot]] == "Person"
++    assert "relation_binding" not in request
++
++
++@pytest.mark.parametrize("surface", RELATIONS)
++@settings(max_examples=60, deadline=None)
++@given(
++    member_ages=st.lists(
++        st.lists(st.integers(0, 100), max_size=12), min_size=1, max_size=4
++    ),
++    declarations=st.lists(
++        st.tuples(st.booleans(), st.integers(0, 1), st.integers(0, 1)),
++        min_size=2,
++        max_size=2,
++    ),
++)
++def test_generated_tax_units_keep_entity_kinds_in_executable_slots(
++    surface, member_ages, declarations
++):
++    data = population(member_ages)
++    artifact, slots = artifact_for(surface, declarations[: len(RELATIONS[surface])])
++    original_artifact = deepcopy(artifact)
++    kwargs = dict(pe_data=data, year=2026, surface=surface, contribution_base=184_500)
++    legacy = build_axiom_request(**kwargs)
++    request = build_axiom_request(**kwargs, artifact=artifact)
++    kinds = {item["entity_id"]: item["entity"] for item in request["dataset"]["inputs"]}
++    assert all(kind in {"TaxUnit", "Person"} for kind in kinds.values())
++    assert len(request["dataset"]["relations"]) == sum(map(len, member_ages)) * len(
++        RELATIONS[surface]
++    )
++    for relation in request["dataset"]["relations"]:
++        current = slots[relation["name"]]
++        assert kinds[relation["tuple"][current]] == "TaxUnit"
++        assert kinds[relation["tuple"][1 - current]] == "Person"
++    # Restore only the known legacy orientation: every input, value, interval,
++    # query, relation multiplicity and relation name must remain identical.
++    legacy_oriented = deepcopy(request)
++    for relation in legacy_oriented["dataset"]["relations"]:
++        if slots[relation["name"]] == 0:
++            relation["tuple"].reverse()
++    assert legacy_oriented == legacy
++    if all(slot == 1 for slot in slots.values()):
++        assert request == legacy
++    assert artifact == original_artifact
+diff --git a/tests/test_axiom_adapter.py b/tests/test_axiom_adapter.py
+index eeddfcf67..9b24f1725 100644
+--- a/tests/test_axiom_adapter.py
++++ b/tests/test_axiom_adapter.py
+@@ -349,6 +349,97 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
+     assert result.errors == ()
+ 
+ 
++@pytest.mark.parametrize(
++    ("typed", "member_inputs"), [(False, False), (False, True), (True, True)]
++)
++@pytest.mark.parametrize("batched", [False, True])
++def test_axiom_runner_binds_relations_against_the_executed_artifact(
++    tmp_path: Path, typed: bool, member_inputs: bool, batched: bool
++) -> None:
++    artifact = tmp_path / "program.compiled.json"
++    artifact.write_text(
++        json.dumps(
++            {
++                "program": {
++                    "relations": [
++                        {
++                            "name": "child_of_unit",
++                            "arity": 2,
++                            **({"slot_entities": ["TaxUnit", "Person"]} if typed else {}),
++                        }
++                    ],
++                    "derived": [
++                        {
++                            "name": "child_count",
++                            "entity": "TaxUnit",
++                            "expr": {
++                                "kind": "count_related",
++                                "relation": "child_of_unit",
++                                "current_slot": 0 if typed else 1,
++                                "related_slot": 1 if typed else 0,
++                            },
++                        }
++                    ],
++                }
++            }
++        )
++    )
++    requests = []
++
++    def capture_request(args, **kwargs):
++        assert args[args.index("--artifact") + 1] == str(artifact)
++        request = json.loads(kwargs["input"])
++        requests.append(request)
++        return subprocess.CompletedProcess(
++            args,
++            0,
++            stdout=json.dumps({"results": [{"outputs": {}}]}),
++            stderr="",
++        )
++
++    runner = AxiomRulesRunner(
++        compiled_artifact_path=artifact,
++        binary_path=tmp_path / "axiom-rules",
++        subprocess_run=capture_request,
++    )
++    case = Case(
++        case_id="case-1",
++        period="2026",
++        metadata={
++            "axiom_input_records": [
++                {
++                    "name": "income",
++                    "entity": "TaxUnit",
++                    "entity_id": "tax_unit",
++                    "value": 0,
++                },
++                *(
++                    [{"name": "age", "entity": "Person", "entity_id": "child", "value": 5}]
++                    if member_inputs
++                    else []
++                ),
++            ],
++            "axiom_relations": [
++                {"name": "child_of_unit", "tuple": ["child", "tax_unit"]}
++            ],
++        },
++    )
++    if batched:
++        [result] = runner._run_case_batch_once([case], ["child_count"], artifact)
++    else:
++        result = runner._run_case_once(case, ["child_count"], artifact)
++    assert result.errors == ()
++    [request] = requests
++    namespace = "case-0::" if batched else ""
++    ids = [f"{namespace}tax_unit", f"{namespace}child"]
++    assert request["dataset"]["relations"][0]["tuple"] == (ids if typed else ids[::-1])
++    assert "relation_binding" not in request
++    if not member_inputs:
++        assert [record["entity_id"] for record in request["dataset"]["inputs"]] == [
++            f"{namespace}tax_unit"
++        ]
++
++
+ def test_snap_co_projection_uses_repaired_colorado_income_surface() -> None:
+     [case] = attach_axiom_snap_co_inputs(
+         [

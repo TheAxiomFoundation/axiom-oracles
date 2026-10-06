@@ -631,24 +631,27 @@ entries:
     - ecps-tax-unit-136404
     - ecps-tax-unit-58696
     - ecps-tax-unit-59285
-  disposition: unexplained
+  disposition: upstream_engine_gap
   evidence:
-    mechanism: 'Documented open investigation - these seven rows are exactly the
-      state-lane residuals where the vintage-class triangulation FAILS:
-      every one of these case ids appears in the 31-row axiom-vs-PE
-      mismatch set for the same population, so axiom''s own Colorado value
-      is unconfirmed and the rows cannot be attributed to TAXSIM. idtl=2
-      reruns of the pinned binary reproduce six of the seven TAXSIM values
-      to the cent (135552, a -425K self-employment-loss unit, does not
-      reproduce from the persisted input row) and decompose them as staxbc
-      - sctc - sptcr - 0.5 x v25: known TAXSIM-side ingredients include
-      the childless-EITC coupling (58696: Colorado EITC 332.00 = 0.5 x
-      664 childless v25 vs axiom 3,498.59 = 0.5 x 6,997.18), the mstat=1-
-      with-dependents head-of-household standard-deduction projection
-      (136208: v13 24,150 vs axiom single 16,100) and TAXSIM''s automatic
-      itemization of its computed state income tax (59285: v17 18,352.57
-      with v13 0) - but the axiom-vs-PE divergence on the same units must
-      be triaged first.'
+    mechanism: 'Formerly the open-investigation rows blocked on triangulation; both
+      blockers are now closed. (1) The axiom-vs-PE divergence on all seven
+      units is dispositioned bridge_artifact per row in
+      axiom-policyengine-co-state-income-tax-ecps (PE-leg input-projection
+      differences), so axiom''s Colorado value stands as the attributed
+      reference. (2) A fresh idtl=2 rerun of the pinned binary now
+      reproduces ALL SEVEN TAXSIM values to the cent from freshly projected
+      input rows - including 135552, which previously failed from the
+      persisted row - each decomposing exactly as staxbc - sctc - sptcr -
+      0.5 x v25 (135552: 0 - 2,528.67 - 41.20 = -2,569.87). The members are
+      the catalogued TAXSIM-side ingredients: the childless-EITC coupling
+      (58696: Colorado EITC 332.00 = 0.5 x 664 childless v25 vs axiom
+      3,498.59 = 0.5 x 6,997.18, the dispositioned
+      taxsim-2026-eitc-childless-schedule-applied class), the CO
+      child-credit and family-affordability vintage (dispositioned
+      taxsim-co-refundable-credit-vintage), the mstat=1-with-dependents
+      head-of-household standard-deduction projection (136208: v13 24,150
+      vs axiom single 16,100), and TAXSIM''s automatic itemization of its
+      computed state income tax (59285: v17 18,352.57 with v13 0).'
     arithmetic:
     - expression: 0.5 * 664.0
       equals: 332.0
@@ -657,7 +660,11 @@ entries:
     - expression: 10317.46 - 37.82
       equals: 10279.64
       tolerance: 0.02
+    - expression: 0 - 2528.67 - 41.20
+      equals: -2569.87
+      tolerance: 0.02
     sources:
     - dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json
+    - reports/axiom-taxsim-co-tax-intersection-ecps-member-decomposition-2026-08-31.json
   expires_on_source_change: true
   linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/304

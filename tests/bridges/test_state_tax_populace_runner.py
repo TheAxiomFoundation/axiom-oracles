@@ -2961,14 +2961,14 @@ def test_mississippi_request_emits_canonical_person_schedule_without_relation() 
     assert request["dataset"]["inputs"] == [
         {
             "name": slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-11",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},
         },
         {
             "name": slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-12",
             "interval": interval,
             "value": {"kind": "decimal", "value": "20000.0"},
@@ -3007,6 +3007,72 @@ def test_dc_filer_inclusion_rejects_ambiguous_policyengine_roles() -> None:
         )
 
 
+@pytest.mark.parametrize("current_slot", [0, 1])
+@pytest.mark.parametrize("typed", [False, True])
+def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
+    current_slot: int,
+    typed: bool,
+) -> None:
+    from axiom_oracles.bridges.relation_binding import bind_request_relations
+
+    prefix = "us-dc:policies/income_tax/pilot_liability_pipeline"
+    relation = f"{prefix}#relation.dc_pit_pilot_taxpayer_of_tax_unit"
+    request = state_tax_runner._state_request(
+        state="DC",
+        routes=(TaxUnitRoute(1, 1, "DC", "11", 1, DISPOSITION_READY),),
+        year=2026,
+        output=f"{prefix}#tax",
+        projected_inputs={
+            f"{prefix}#input.dc_pit_pilot_supplied_separate_taxable_income": {
+                11: 30_000.0,
+                12: 20_000.0,
+            },
+            f"{prefix}#input.dc_pit_pilot_taxpayer_is_included": {11: True, 12: True},
+            f"{prefix}#input.dc_pit_pilot_supplied_joint_taxable_income": {1: 50_000.0},
+        },
+        declared_relations=(relation,),
+        raw_persons=pd.DataFrame(
+            {"person_id": [11, 12], "person_tax_unit_id": [1, 1]}
+        ),
+    )
+    kinds = {
+        record["entity_id"]: record["entity"]
+        for record in request["dataset"]["inputs"]
+    }
+    assert kinds == {
+        "state-tax-unit-1": "TaxUnit",
+        "state-tax-person-11": "Person",
+        "state-tax-person-12": "Person",
+    }
+    artifact = {
+        "program": {
+            "relations": [
+                {
+                    "name": relation,
+                    "arity": 2,
+                    **({"slot_entities": ["TaxUnit", "Person"]} if typed else {}),
+                }
+            ],
+            "derived": [
+                {
+                    "name": "tax",
+                    "entity": "TaxUnit",
+                    "expr": {
+                        "kind": "sum_related",
+                        "relation": relation,
+                        "current_slot": current_slot,
+                        "related_slot": 1 - current_slot,
+                    },
+                }
+            ],
+        }
+    }
+    runtime_request = bind_request_relations(request, artifact)
+    for record in runtime_request["dataset"]["relations"]:
+        assert kinds[record["tuple"][current_slot]] == "TaxUnit"
+        assert kinds[record["tuple"][1 - current_slot]] == "Person"
+
+
 def test_delaware_request_emits_canonical_person_schedule_without_relation() -> None:
     prefix = "us-de:policies/income_tax/pilot_liability_pipeline"
     separate_slot = f"{prefix}#input.de_pit_pilot_supplied_separate_taxable_income"
@@ -3037,14 +3103,14 @@ def test_delaware_request_emits_canonical_person_schedule_without_relation() -> 
     assert request["dataset"]["inputs"] == [
         {
             "name": separate_slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-21",
             "interval": interval,
             "value": {"kind": "decimal", "value": "20000.0"},
         },
         {
             "name": separate_slot,
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "state-tax-person-22",
             "interval": interval,
             "value": {"kind": "decimal", "value": "30000.0"},
@@ -3435,3 +3501,265 @@ def test_ready_comparison_rejects_a_different_policy_year(tmp_path) -> None:
             rulespec_root=tmp_path,
             axiom_rules_path=tmp_path,
         )
+
+
+# ---------------------------------------------------------------------------
+# TAXSIM oracle leg
+
+
+def _fake_axiom_zero_runner(**kwargs):
+    output = kwargs["request"]["queries"][0]["outputs"][0]
+    return [
+        {
+            "entity_id": query["entity_id"],
+            "outputs": {output: {"value": {"value": "0"}}},
+        }
+        for query in kwargs["request"]["queries"]
+    ]
+
+
+def test_compare_grades_taxsim_leg_and_reports_mismatches(tmp_path) -> None:
+    routes = (
+        TaxUnitRoute(2, 1, "UT", "49", 2.5, DISPOSITION_READY),
+        TaxUnitRoute(5, 2, "UT", "49", 3.5, DISPOSITION_READY),
+    )
+
+    report = compare_ready_state_tax_units(
+        routes=routes,
+        policyengine_targets={"UT": {2: 0.0, 5: 0.0}},
+        policyengine_projection_inputs={"UT": _ut_inputs({2: 0.0, 5: 0.0})},
+        taxsim_targets={"UT": {2: 0.0, 5: 123.0}},
+        year=2026,
+        rulespec_root=tmp_path / "rulespec-us",
+        axiom_rules_path=tmp_path / "axiom-rules",
+        axiom_runner=_fake_axiom_zero_runner,
+    )
+
+    ut = report["states"]["UT"]
+    # UT's populace concept is a pre-credit schedule; the graded TAXSIM
+    # column must resolve to staxbc via the concept mapping.
+    assert ut["taxsim_target"] == "staxbc"
+    assert ut["taxsim_mismatch_count"] == 1
+    assert ut["taxsim_mismatches"][0]["tax_unit_id"] == 5
+    assert ut["taxsim_mismatches"][0]["taxsim"] == 123.0
+    by_id = {row["tax_unit_id"]: row for row in ut["cases"]}
+    assert by_id[2]["taxsim"] == 0.0 and by_id[2]["taxsim_matched"] is True
+    assert by_id[5]["taxsim"] == 123.0 and by_id[5]["taxsim_matched"] is False
+    # PolicyEngine grading is untouched by the second leg.
+    assert ut["mismatch_count"] == 0
+    assert report["taxsim_state_count"] == 1
+    assert report["taxsim_mismatch_count"] == 1
+    assert report["taxsim_skipped_states"] == []
+
+
+def test_compare_without_taxsim_targets_keeps_prior_shape(tmp_path) -> None:
+    routes = (TaxUnitRoute(2, 1, "UT", "49", 2.5, DISPOSITION_READY),)
+
+    report = compare_ready_state_tax_units(
+        routes=routes,
+        policyengine_targets={"UT": {2: 0.0}},
+        policyengine_projection_inputs={"UT": _ut_inputs({2: 0.0})},
+        year=2026,
+        rulespec_root=tmp_path / "rulespec-us",
+        axiom_rules_path=tmp_path / "axiom-rules",
+        axiom_runner=_fake_axiom_zero_runner,
+    )
+
+    assert "taxsim_state_count" not in report
+    assert "taxsim_target" not in report["states"]["UT"]
+    assert "taxsim" not in report["states"]["UT"]["cases"][0]
+
+
+def test_compare_fails_closed_when_taxsim_leg_omits_a_selected_unit(
+    tmp_path,
+) -> None:
+    routes = (
+        TaxUnitRoute(2, 1, "UT", "49", 2.5, DISPOSITION_READY),
+        TaxUnitRoute(5, 2, "UT", "49", 3.5, DISPOSITION_READY),
+    )
+
+    with pytest.raises(
+        StateTaxPopulationRoutingError, match="TAXSIM target omitted"
+    ):
+        compare_ready_state_tax_units(
+            routes=routes,
+            policyengine_targets={"UT": {2: 0.0, 5: 0.0}},
+            policyengine_projection_inputs={
+                "UT": _ut_inputs({2: 0.0, 5: 0.0})
+            },
+            taxsim_targets={"UT": {2: 0.0}},
+            year=2026,
+            rulespec_root=tmp_path / "rulespec-us",
+            axiom_rules_path=tmp_path / "axiom-rules",
+            axiom_runner=_fake_axiom_zero_runner,
+        )
+
+
+def test_compare_reports_states_skipped_by_the_taxsim_leg(
+    tmp_path, monkeypatch
+) -> None:
+    # A state may only be reported as skipped when its output concept
+    # genuinely resolves no TAXSIM column (CA-BHST style).
+    monkeypatch.setattr(
+        state_tax_runner, "taxsim_target_column", lambda _output: None
+    )
+    routes = (TaxUnitRoute(2, 1, "UT", "49", 2.5, DISPOSITION_READY),)
+
+    report = compare_ready_state_tax_units(
+        routes=routes,
+        policyengine_targets={"UT": {2: 0.0}},
+        policyengine_projection_inputs={"UT": _ut_inputs({2: 0.0})},
+        taxsim_targets={},
+        year=2026,
+        rulespec_root=tmp_path / "rulespec-us",
+        axiom_rules_path=tmp_path / "axiom-rules",
+        axiom_runner=_fake_axiom_zero_runner,
+    )
+
+    assert report["taxsim_state_count"] == 0
+    assert report["taxsim_skipped_states"] == ["UT"]
+    assert "taxsim" not in report["states"]["UT"]["cases"][0]
+
+
+def test_compare_fails_loudly_when_a_mapped_state_loses_its_taxsim_leg(
+    tmp_path,
+) -> None:
+    # UT's concept maps staxbc, so an empty TAXSIM targets mapping means
+    # the leg was lost — a producer regression or a stale/filtered dict —
+    # and must not masquerade as an intentional skip.
+    routes = (TaxUnitRoute(2, 1, "UT", "49", 2.5, DISPOSITION_READY),)
+
+    with pytest.raises(
+        StateTaxPopulationRoutingError, match="TAXSIM targets missing"
+    ):
+        compare_ready_state_tax_units(
+            routes=routes,
+            policyengine_targets={"UT": {2: 0.0}},
+            policyengine_projection_inputs={"UT": _ut_inputs({2: 0.0})},
+            taxsim_targets={},
+            year=2026,
+            rulespec_root=tmp_path / "rulespec-us",
+            axiom_rules_path=tmp_path / "axiom-rules",
+            axiom_runner=_fake_axiom_zero_runner,
+        )
+
+
+def test_taxsim_target_column_is_mapping_declared_or_none() -> None:
+    from axiom_oracles.bridges.state_tax_populace import (
+        load_state_tax_populace_contract,
+    )
+    from axiom_oracles.bridges.state_tax_populace_runner import (
+        taxsim_target_column,
+    )
+
+    contract = load_state_tax_populace_contract()
+    by_state = contract.by_state()
+    # Pre-credit schedule concepts grade staxbc.
+    assert taxsim_target_column(by_state["UT"].output) == "staxbc"
+    # Final-liability pipelines grade siitax.
+    assert taxsim_target_column(by_state["IL"].output) == "siitax"
+    # CA's Behavioral Health Services Tax has no truthful TAXSIM surface:
+    # the leg must skip it, never guess a column.
+    assert taxsim_target_column(by_state["CA"].output) is None
+
+
+def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period, map_to=None):
+            person_values = {
+                "person_id": [1, 2, 3],
+                "age": [40, 38, 10],
+                "is_tax_unit_head": [True, False, False],
+                "is_tax_unit_spouse": [False, True, False],
+                "employment_income": [60000.0, 15000.0, 0.0],
+            }
+            if variable == "tax_unit_id" and map_to == "person":
+                return [7, 7, 7]
+            if variable in person_values:
+                return person_values[variable]
+            # Every non-wage income variable defaults to zero.
+            return [0.0, 0.0, 0.0]
+
+    captured: dict = {}
+
+    class FakeResult:
+        def to_dict(self, orient):
+            assert orient == "records"
+            return [{"taxsimid": 7, "staxbc": 2700.0, "siitax": 2270.13}]
+
+    class FakeRunner:
+        def __init__(self, frame):
+            captured["frame"] = frame
+
+        def run(self, show_progress=False):
+            return FakeResult()
+
+    routes = (TaxUnitRoute(7, 1, "UT", "49", 2.5, DISPOSITION_READY),)
+    raw_tax_units = pd.DataFrame({"tax_unit_id": [7]})
+    raw_persons = pd.DataFrame(
+        {"person_id": [1, 2, 3], "person_tax_unit_id": [7, 7, 7]}
+    )
+
+    targets = state_tax_runner.calculate_taxsim_targets(
+        dataset="dataset",
+        raw_tax_units=raw_tax_units,
+        raw_persons=raw_persons,
+        routes=routes,
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+        taxsim_runner_factory=FakeRunner,
+    )
+
+    # UT's concept maps staxbc — the pre-credit value, not siitax.
+    assert targets == {"UT": {7: 2700.0}}
+    row = captured["frame"].to_dict(orient="records")[0]
+    # The projected row carries the contract's SOI state code and the
+    # head/spouse wage split from the certified person links.
+    assert row["state"] == 45
+    assert row["mstat"] == 2
+    assert row["pwages"] == 60000.0
+    assert row["swages"] == 15000.0
+    assert row["depx"] == 1
+    assert row["page"] == 40 and row["sage"] == 38
+    assert row["idtl"] == 2
+
+
+def test_calculate_taxsim_targets_skips_unmapped_jurisdictions() -> None:
+    class FakeSimulation:
+        def __init__(self, dataset):
+            pass
+
+        def calculate(self, variable, period, map_to=None):
+            if variable == "person_id":
+                return [1]
+            if variable == "tax_unit_id" and map_to == "person":
+                return [7]
+            if variable == "age":
+                return [40]
+            if variable == "is_tax_unit_head":
+                return [True]
+            if variable == "is_tax_unit_spouse":
+                return [False]
+            return [0.0]
+
+    def forbidden_runner(frame):
+        raise AssertionError("TAXSIM must not run for unmapped CA")
+
+    routes = (TaxUnitRoute(7, 1, "CA", "06", 2.5, DISPOSITION_READY),)
+
+    targets = state_tax_runner.calculate_taxsim_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [7]}),
+        raw_persons=pd.DataFrame(
+            {"person_id": [1], "person_tax_unit_id": [7]}
+        ),
+        routes=routes,
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+        taxsim_runner_factory=forbidden_runner,
+    )
+
+    assert targets == {}

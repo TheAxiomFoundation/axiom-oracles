@@ -1,0 +1,34 @@
+name: be-self-employment-pit
+title: Belgium self-employment PIT — Axiom vs EUROMOD
+description: >-
+  Compares the merged rulespec-be self-employment PIT pipeline against EUROMOD
+  BE_2025 on gross yse of 25k, 45k, and 70k, a mixed 30k wage plus 20k yse
+  case, and the Article 23 negative-net-income diagnostic. Normal rows compare
+  final tin_s; the negative row compares il_taxabley because EUROMOD clips
+  negative yse to zero while RuleSpec nets 1k gross less 2k justified expenses
+  against the worker activity. All RuleSpec inputs are Person records, with
+  post-uprating yse, yem, and yemeq_s bridged per case.
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: be-self-employment-pit
+    population: synthetic
+    sample_size: 0
+    period: 2025
+    euromod_model_root: $HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+
+    euromod_country: BE
+    euromod_system: BE_2025
+    euromod_dataset: BE_2024_c1_2015_03_e2
+    euromod_template_dataset: BE_training_data
+    euromod_extra_columns: [drgn1]
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-be-self-employment-pit.json
+
+artifacts:
+  report_basename: axiom-euromod-be-self-employment-pit
+
+dashboard:
+  filename: axiom-euromod-be-self-employment-pit.json
+  suite: be-self-employment-pit

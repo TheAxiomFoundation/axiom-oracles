@@ -4,23 +4,28 @@
 Universe facts are read from the oracle model, never hand-invented: for UKMOD /
 EUROMOD this parses the country policy XML (``XMLParam/Countries/<CC>/<CC>.xml``)
 and the variable registry (``VARCONFIG.xml``) — a pure XML parse, so no engine,
-.NET, or licensed microdata is needed and it runs in CI. Scope *decisions*
+.NET, or licensed microdata is needed. DK commits that pure-XML extract and
+reads it in CI; the other EUROMOD jurisdictions read a local model checkout.
+Scope *decisions*
 (``in_scope`` / ``exclusion_reason`` / ``suite`` / ``note``) already committed in
 the file are preserved; only the generated facts are refreshed.
 
-``--check`` re-derives the facts and fails if the committed universe drifts from
-the model (the ``generate_affected_map --check`` pattern), so a new oracle
-policy cannot silently disappear from the "all programs covered" accounting.
+``--check`` re-derives the facts from the configured source and fails if the
+committed universe drifts (the ``generate_affected_map --check`` pattern), so a
+new oracle policy cannot silently disappear from the "all programs covered"
+accounting.
 
-When the model checkout is absent (a runner without the UKMOD clone) ``--check``
-is a clean no-op: the committed universe stands alone, exactly like the
-boundary-case gate. Set the model root explicitly or via the environment.
+For external-checkout jurisdictions, an absent model makes ``--check`` a clean
+no-op. Artifact-backed DK is intentionally different: it always consumes the
+committed spine, so CI verifies real content without the external model.
 
 Usage::
 
     uv run scripts/generate_conformance_universe.py uk            # write uk.yaml
     uv run scripts/generate_conformance_universe.py uk --check    # verify; nonzero on drift
     uv run scripts/generate_conformance_universe.py --all --check # every configured jurisdiction
+    # Refresh DK's reviewed, committed single-system extract from the local model:
+    python scripts/generate_conformance_universe.py dk --extract-spine --model-root PATH
 
 Model roots resolve from (in order): ``--model-root``, ``$UKMOD_MODEL_ROOT`` /
 ``$EUROMOD_MODEL_ROOT``, then the per-jurisdiction default recorded below.
@@ -29,8 +34,11 @@ Model roots resolve from (in order): ``--model-root``, ``$UKMOD_MODEL_ROOT`` /
 from __future__ import annotations
 
 import argparse
+import hashlib
+import json
 import os
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -44,8 +52,10 @@ from axiom_oracles.conformance.loader import (  # noqa: E402
     serialize,
 )
 from axiom_oracles.conformance.universe import (  # noqa: E402
+    EUROMOD_SPINE_ARTIFACT_SCHEMA,
     PE_UK_PROGRAM_SPINE,
     PE_US_PROGRAM_SPINE,
+    EuromodSpineArtifactBackend,
     EuromodUniverseBackend,
     PolicyEngineUniverseBackend,
     YaleTariffUniverseBackend,
@@ -60,11 +70,10 @@ CONFORMANCE_DIR = REPO_ROOT / "conformance"
 _PE_SPINES = {"uk": PE_UK_PROGRAM_SPINE, "us": PE_US_PROGRAM_SPINE}
 
 
-#: Per-jurisdiction generation config. ``uk`` is implemented and committed now;
-#: ``be`` and ``pe-uk`` are documented TODO hooks — two scoper agents are
-#: enumerating those universes concurrently, so this generator provides the
-#: reproducible backend without pre-empting their row decisions. A jurisdiction
-#: with ``implemented: False`` is skipped by ``--all`` (and named in ``--list``).
+#: Per-jurisdiction generation config. A jurisdiction with ``implemented: False``
+#: is skipped by ``--all`` (and named in ``--list``). ``dk`` deliberately reads a
+#: reviewed committed extract: unlike the external-checkout path used by UK/BE,
+#: its CI drift check must never become a clean no-op when the model is absent.
 JURISDICTIONS: dict[str, dict] = {
     "uk": {
         "implemented": True,
@@ -83,6 +92,17 @@ JURISDICTIONS: dict[str, dict] = {
         "model": "EUROMOD",
         "release": "J2.0",
         "system": "BE_2025",
+        "env_roots": ("EUROMOD_MODEL_ROOT",),
+        "default_root": "$HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+",
+    },
+    "dk": {
+        "implemented": True,
+        "backend": "euromod",
+        "country": "DK",
+        "model": "EUROMOD",
+        "release": "J2.0",
+        "system": "DK_2025",
+        "spine_artifact": "conformance/spines/dk-DK_2025.json",
         "env_roots": ("EUROMOD_MODEL_ROOT",),
         "default_root": "$HOME/Downloads/EUROMOD_J2.0/EUROMOD_RELEASES_J2.0+",
     },
@@ -160,17 +180,38 @@ def _rel(path: Path) -> str:
         return str(path)
 
 
-def generate_universe(jurisdiction: str, model_root: Path) -> Universe:
+def _artifact_path(config: dict) -> Path:
+    path = Path(config["spine_artifact"])
+    return path if path.is_absolute() else REPO_ROOT / path
+
+
+def generate_universe(
+    jurisdiction: str, model_root: Path | None = None
+) -> Universe:
     """Regenerate one jurisdiction's universe (facts fresh, decisions preserved)."""
     config = JURISDICTIONS[jurisdiction]
     release = config["release"]
-    if config["backend"] == "euromod":
+    if config.get("spine_artifact"):
+        backend = EuromodSpineArtifactBackend(
+            _artifact_path(config),
+            model=config["model"],
+            release=release,
+            country=config["country"],
+            system=config["system"],
+        )
+    elif config["backend"] == "euromod":
+        if model_root is None:
+            raise ValueError(f"{jurisdiction}: EUROMOD model root is required")
         backend = EuromodUniverseBackend(
             model_root=model_root,
             country=config["country"],
             system=config["system"],
         )
     elif config["backend"] == "policyengine":
+        if model_root is None:
+            raise ValueError(
+                f"{jurisdiction}: PolicyEngine checkout root is required"
+            )
         backend = PolicyEngineUniverseBackend(
             checkout=model_root,
             package=config.get("package", "policyengine_uk"),
@@ -180,6 +221,8 @@ def generate_universe(jurisdiction: str, model_root: Path) -> Universe:
         # Pin the exact version enumerated, read from the checkout (not memory).
         release = backend.pinned_version()
     elif config["backend"] == "yale-tariff":
+        if model_root is None:
+            raise ValueError(f"{jurisdiction}: Yale checkout root is required")
         backend = YaleTariffUniverseBackend(checkout=model_root)
         # Pin the exact git commit enumerated — the same identity the committed
         # reference extract's provenance stamp pins.
@@ -210,6 +253,106 @@ def generate_universe(jurisdiction: str, model_root: Path) -> Universe:
     return Universe(jurisdiction=jurisdiction, oracle=oracle, policies=rows)
 
 
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _display_path(path: Path) -> str:
+    try:
+        return f"$HOME/{path.relative_to(Path.home())}"
+    except ValueError:
+        return str(path)
+
+
+def extract_euromod_spine(
+    jurisdiction: str,
+    model_root: Path,
+    *,
+    extracted_at: str | None = None,
+) -> Path:
+    """Refresh a configured committed spine from the local EUROMOD XML."""
+    config = JURISDICTIONS[jurisdiction]
+    if config["backend"] != "euromod" or not config.get("spine_artifact"):
+        raise ValueError(
+            f"{jurisdiction}: --extract-spine requires a configured committed "
+            "EUROMOD spine artifact"
+        )
+    model_root = model_root.expanduser().resolve()
+    backend = EuromodUniverseBackend(
+        model_root=model_root,
+        country=config["country"],
+        system=config["system"],
+    )
+    raw_policies = backend.raw_policies()
+    country_xml = (
+        model_root
+        / "XMLParam"
+        / "Countries"
+        / config["country"]
+        / f"{config['country']}.xml"
+    )
+    registry_xml = model_root / "XMLParam" / "Config" / "VARCONFIG.xml"
+    when = extracted_at or datetime.now(timezone.utc).isoformat(
+        timespec="seconds"
+    ).replace("+00:00", "Z")
+    command = (
+        "DOTNET_ROOT=$HOME/.dotnet-x64 PYTHONNET_RUNTIME=coreclr "
+        "$HOME/.venvs/axiom-euromod-x64/bin/python "
+        f"scripts/generate_conformance_universe.py {jurisdiction} "
+        f"--extract-spine --model-root {_display_path(model_root)}"
+    )
+    document = {
+        "schema": EUROMOD_SPINE_ARTIFACT_SCHEMA,
+        "jurisdiction": jurisdiction,
+        "oracle": {
+            "model": config["model"],
+            "release": config["release"],
+            "country": config["country"],
+        },
+        "systems": [
+            {
+                "name": config["system"],
+                "id": backend.system_id(),
+            }
+        ],
+        "provenance": {
+            "model_root": str(model_root),
+            "model_release": model_root.name,
+            "extraction_command": command,
+            "extracted_at": when,
+            "sources": [
+                {
+                    "path": str(country_xml.relative_to(model_root)),
+                    "sha256": _sha256(country_xml),
+                },
+                {
+                    "path": str(registry_xml.relative_to(model_root)),
+                    "sha256": _sha256(registry_xml),
+                },
+            ],
+        },
+        "policies": [
+            {
+                "name": policy.name,
+                "policy_type": policy.policy_type,
+                "switch": policy.switch,
+                "all_outputs": list(policy.all_outputs),
+                "queryable_outputs": list(policy.queryable_outputs),
+                "internal_outputs": list(policy.internal_outputs),
+            }
+            for policy in raw_policies
+        ],
+    }
+    output_path = _artifact_path(config)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(json.dumps(document, indent=2) + "\n")
+    return output_path
+
+
 def _process(
     jurisdiction: str, *, check: bool, model_root: str | None
 ) -> int:
@@ -221,8 +364,11 @@ def _process(
         print(f"conformance[{jurisdiction}]: TODO hook — {todo}")
         return 0
 
-    root = _resolve_root(config, model_root)
-    if root is None or not root.exists():
+    # Artifact-backed jurisdictions always read the committed extract. This is
+    # intentionally before root resolution: their CI check must fail on drift
+    # even on runners that do not have the external model checkout.
+    root = None if config.get("spine_artifact") else _resolve_root(config, model_root)
+    if not config.get("spine_artifact") and (root is None or not root.exists()):
         if check:
             # No model checkout on this runner: the committed universe stands
             # alone (like the boundary-case gate). Nothing to verify against.
@@ -272,6 +418,13 @@ def _process(
 
     try:
         universe = generate_universe(jurisdiction, root)
+    except (FileNotFoundError, ValueError) as exc:
+        if config.get("spine_artifact"):
+            sys.stderr.write(
+                f"conformance[{jurisdiction}] committed spine invalid: {exc}\n"
+            )
+            return 1
+        raise
     except ImportError as exc:
         # The policyengine backend imports the pinned checkout; a runner that has
         # the directory but not the package's installed dependencies cannot
@@ -346,13 +499,19 @@ def main() -> int:
     parser.add_argument(
         "jurisdiction",
         nargs="?",
-        help="Jurisdiction key (uk, be, pe-uk). Omit with --all.",
+        help="Jurisdiction key. Omit with --all.",
     )
     parser.add_argument("--all", action="store_true", help="Process every jurisdiction.")
-    parser.add_argument(
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument(
         "--check",
         action="store_true",
         help="Verify the committed universe matches a fresh regeneration.",
+    )
+    mode.add_argument(
+        "--extract-spine",
+        action="store_true",
+        help="Refresh a configured committed EUROMOD spine from the local model.",
     )
     parser.add_argument("--model-root", help="Override the oracle model checkout path.")
     parser.add_argument("--list", action="store_true", help="List configured jurisdictions.")
@@ -362,6 +521,33 @@ def main() -> int:
         for key, config in JURISDICTIONS.items():
             state = "implemented" if config.get("implemented") else "TODO hook"
             print(f"{key:8} {state:12} {config['model']} ({config['backend']})")
+        return 0
+
+    if args.extract_spine:
+        if args.all or not args.jurisdiction:
+            parser.error("--extract-spine requires exactly one jurisdiction")
+        if args.jurisdiction not in JURISDICTIONS:
+            parser.error(f"unknown jurisdiction {args.jurisdiction!r}")
+        config = JURISDICTIONS[args.jurisdiction]
+        root = _resolve_root(config, args.model_root)
+        if root is None or not root.exists():
+            sys.stderr.write(
+                f"conformance[{args.jurisdiction}]: model checkout not found; "
+                "set --model-root or the configured environment root.\n"
+            )
+            return 2
+        try:
+            output_path = extract_euromod_spine(args.jurisdiction, root)
+        except (FileNotFoundError, ValueError) as exc:
+            sys.stderr.write(
+                f"conformance[{args.jurisdiction}] spine extraction failed: "
+                f"{exc}\n"
+            )
+            return 1
+        print(
+            f"Wrote {_rel(output_path)} from {config['model']}_"
+            f"{config['release']}/{config['system']}"
+        )
         return 0
 
     if args.all:

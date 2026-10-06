@@ -56,7 +56,7 @@ def main() -> int:
         if not OUT.exists():
             print("overview.json missing; run scripts/generate_dashboard_overview.py")
             return 1
-        # Byte-exact against the canonical serialization this script would
+        # Raw-byte equality against the canonical serialization this script would
         # write. Parsed-value equality was not type-strict — Python's
         # `1 == True` accepted a numeric-to-boolean bundle edit (sol stack
         # review r5). Raw bytes, not read_text(): text-mode reads apply

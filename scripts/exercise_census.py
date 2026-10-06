@@ -34,7 +34,10 @@ v1 scope, stated plainly: most suites commit *stage evidence* (gross income,
 net income, shelter deduction, ...), not raw input records, so this measures
 variation in the evidence the suite chose to keep. A suite with no committed
 per-case evidence appears with ``cases_scanned: 0`` — that absence is a
-finding, not a skip.
+finding, not a skip.  Census generation makes one lightweight pass over every
+suite's chunks and checks only index identity plus cardinality.  It never
+claims full verdict reconciliation; certification performs the strict row and
+verdict validation for the suites in its program registry.
 
 Modes::
 
@@ -47,10 +50,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import sys
 from collections import defaultdict
 from decimal import Decimal, InvalidOperation, localcontext
+from functools import lru_cache
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -58,13 +63,35 @@ DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 CASES_DIR = DATA_DIR / "cases"
 OUTPUT_PATH = REPO_ROOT / "conformance" / "exercise-census.json"
 
+# Direct script execution puts ``scripts/`` rather than the repository root at
+# the front of sys.path.
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.evidence import (  # noqa: E402
+    EvidenceChunk,
+    is_safe_suite_name,
+    strict_json_loads,
+    validate_chunk_binding,
+)
+
 SCHEMA = "axiom_oracles.exercise_census.v1"
 
 MANIFEST_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "manifests"
+EXERCISE_RECEIPT_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "exercise_receipts"
+EXERCISE_RECEIPT_SCHEMA = "axiom_oracles.committed_exercise_receipt.v1"
 
 
 def _manifest_strict_clean() -> dict[str, bool]:
-    """Which manifests are strict-clean, per the validator itself.
+    """Which manifests are strict-clean, per the validator itself (see
+    ``_manifest_strict_audit`` for the identity-bound form)."""
+    return {name: row["clean"] for name, row in _manifest_strict_audit().items()}
+
+
+def _manifest_strict_audit() -> dict[str, dict]:
+    """Per suite: ``{"clean": bool, "manifest_sha256": str, "manifest": path}``.
+
+    Which manifests are strict-clean, per the validator itself.
 
     `bridge_audited` previously meant only "a manifest exists", so an unpinned
     manifest with partial catchalls and unverified completeness still reported
@@ -80,13 +107,25 @@ def _manifest_strict_clean() -> dict[str, bool]:
     spec.loader.exec_module(module)
     manifests = module.load_manifests()
     collisions = module.global_collisions(manifests)
-    clean: dict[str, bool] = {}
+    clean: dict[str, dict] = {}
     for path, manifest in manifests.items():
         errors, findings = module.validate(path, manifest)
+        # The manifest's own bytes are part of the audited claim: the census
+        # binds their sha so an evidence edit that keeps the validator green
+        # (delta-audit #2, item 7) can never leave census/certificate bytes
+        # identical — every manifest change is visible downstream.
+        manifest_sha = hashlib.sha256(Path(path).read_bytes()).hexdigest()
         # Global collisions are a property of the SET, so a per-manifest
         # validate() cannot see them; without this a colliding manifest could
         # still report audited (round-2 audit finding 5).
-        ok = not errors and not findings and not collisions
+        # A lane counts as audited only when it has OPTED IN to strict
+        # enforcement (`strict: true`) AND is clean. Without the flag
+        # requirement a strict-clean lane could drop the opt-in — silencing
+        # future --strict CI enforcement — while its census row kept
+        # bridge_audited=true and its certificate kept exercised=true
+        # (delta-audit finding). The opt-in is part of the certified claim.
+        declared_strict = isinstance(manifest, dict) and manifest.get("strict") is True
+        ok = declared_strict and not errors and not findings and not collisions
         if isinstance(manifest, dict):
             names = [manifest.get("suite")]
             aliases = manifest.get("aliases")
@@ -94,7 +133,11 @@ def _manifest_strict_clean() -> dict[str, bool]:
                 names.extend(aliases)
             for name in names:
                 if name:
-                    clean[str(name)] = ok
+                    clean[str(name)] = {
+                        "clean": ok,
+                        "manifest_sha256": manifest_sha,
+                        "manifest": str(Path(path).relative_to(REPO_ROOT)),
+                    }
     return clean
 
 
@@ -134,18 +177,25 @@ def _bridged_through_by_suite() -> dict[str, dict[str, str]]:
 
 
 BRIDGED_THROUGH: dict[str, dict[str, str]] = _bridged_through_by_suite()
-MANIFEST_STRICT_CLEAN: dict[str, bool] = _manifest_strict_clean()
+MANIFEST_STRICT_AUDIT: dict[str, dict] = _manifest_strict_audit()
+MANIFEST_STRICT_CLEAN: dict[str, bool] = {
+    name: row["clean"] for name, row in MANIFEST_STRICT_AUDIT.items()
+}
 
 
 def _iter_suite_reports() -> list[tuple[str, dict, Path]]:
     reports = []
     for path in sorted(DATA_DIR.glob("*.json")):
         try:
-            payload = json.loads(path.read_text())
-        except (OSError, json.JSONDecodeError):
+            payload = strict_json_loads(path.read_text())
+        except (OSError, UnicodeDecodeError, ValueError):
             continue
-        if isinstance(payload, dict) and payload.get("suite"):
-            reports.append((str(payload["suite"]), payload, path))
+        if (
+            isinstance(payload, dict)
+            and isinstance(payload.get("suite"), str)
+            and payload["suite"]
+        ):
+            reports.append((payload["suite"], payload, path))
     return reports
 
 
@@ -181,32 +231,140 @@ def _canonical_value(raw) -> str:
     return json.dumps(raw, sort_keys=True, default=str)
 
 
-def _chunk_cases(suite: str) -> tuple[list[dict], list[dict]]:
-    """Return (cases, chunk_manifest) — each chunk named and sha-bound so a
-    census row is pinned to the exact evidence it counted (finding 10)."""
+def _chunk_cases(
+    suite: str,
+) -> tuple[list[dict], list[dict], tuple[EvidenceChunk, ...]]:
+    """Return cases plus identities from the census's existing chunk pass.
+
+    ``EvidenceChunk`` descriptors retain the raw JSON row cardinality, while
+    ``cases`` contains only mappings the variation census can inspect.  This
+    lets the shared binding validator compare the index without opening every
+    chunk a second time.
+    """
     cases: list[dict] = []
     manifest: list[dict] = []
+    descriptors: list[EvidenceChunk] = []
+    if not is_safe_suite_name(suite):
+        return cases, manifest, ()
     suite_dir = CASES_DIR / suite
     if not suite_dir.is_dir():
-        return cases, manifest
+        return cases, manifest, ()
     for chunk in sorted(suite_dir.glob("chunk-*.json")):
         try:
-            raw = chunk.read_text()
-            payload = json.loads(raw)
-        except (OSError, json.JSONDecodeError):
+            raw = chunk.read_bytes()
+            payload = strict_json_loads(raw)
+        except OSError:
             continue
+        except (UnicodeDecodeError, ValueError):
+            rows = []
+        else:
+            if isinstance(payload, list):
+                rows = payload
+            elif isinstance(payload, dict) and isinstance(payload.get("cases"), list):
+                rows = payload["cases"]
+            else:
+                rows = []
+        digest = hashlib.sha256(raw).hexdigest()
+        descriptor = EvidenceChunk(chunk.name, digest, len(rows))
+        descriptors.append(descriptor)
         manifest.append(
             {
                 "chunk": str(chunk.relative_to(REPO_ROOT)),
-                "sha256": hashlib.sha256(raw.encode()).hexdigest(),
+                "sha256": digest,
+                "cases": len(rows),
             }
         )
-        rows = payload if isinstance(payload, list) else payload.get("cases") or []
         cases.extend(row for row in rows if isinstance(row, dict))
-    return cases, manifest
+    return cases, manifest, tuple(descriptors)
 
 
-def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
+def _cardinality_reconciliation(report: dict, chunks: tuple[EvidenceChunk, ...]) -> str:
+    """State the strongest reconciliation the census itself establishes.
+
+    The census does not interpret per-case verdicts.  It may therefore claim
+    only ``cardinality``, and only when all three summary counts are
+    non-negative integers, conserve, and comparison_count equals the raw
+    number of rows across chunks.
+    """
+
+    chunk_case_count = sum(chunk.cases for chunk in chunks)
+    if not chunks or chunk_case_count == 0:
+        return "none"
+    summary = report.get("summary")
+    if not isinstance(summary, dict):
+        return "none"
+    counts = [
+        summary.get("comparison_count"),
+        summary.get("match_count"),
+        summary.get("mismatch_count"),
+    ]
+    if any(
+        isinstance(value, bool) or not isinstance(value, int) or value < 0
+        for value in counts
+    ):
+        return "none"
+    comparison_count, match_count, mismatch_count = counts
+    if match_count + mismatch_count != comparison_count:
+        return "none"
+    return "cardinality" if comparison_count == chunk_case_count else "none"
+
+
+def _census_suite(
+    suite: str,
+    report: dict,
+    report_path: Path,
+    view: str | None = None,
+) -> dict:
+    # Unified records can carry a verifier-produced experiment receipt over
+    # the engine's complete active input catalog. This is stronger than
+    # inferring inputs from case metadata and avoids inventing a bridge
+    # manifest for a harness whose measured input states are already present.
+    experiment = report.get("experiment")
+    if report.get("record_schema") == "axiom.unified_comparison_record.v1":
+        if view is not None:
+            fields, receipt = _unified_view_fields(suite, view, experiment)
+            varied = sum(field["state"] == "varied" for field in fields.values())
+            trace = experiment["trace"]
+            return {
+                "evaluations_scanned": receipt["evaluation_count"],
+                "report": str(report_path.relative_to(REPO_ROOT)),
+                "report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
+                "evidence_source": "view-scoped-evaluation-traces",
+                "view": view,
+                "inline_cases_not_counted": 0,
+                "chunk_manifest": [],
+                "evidence_fields": fields,
+                "verdict_concepts": {},
+                "varied_fields": varied,
+                "constant_fields": len(fields) - varied,
+                "bridged_through": {},
+                "requested_output_roots": receipt["requested_output_roots"],
+                "requested_output_root_sets": receipt[
+                    "requested_output_root_sets"
+                ],
+                "root_set_receipts": receipt["root_set_receipts"],
+                "root_reconciliation": receipt["root_reconciliation"],
+                "trace_artifact": trace["artifact"],
+                "trace_sha256": trace["sha256"],
+                "trace_binding": receipt["trace_binding"],
+                "capture_lineage_mode": trace["capture_lineage_mode"],
+            }
+        fields, bridged = _unified_experiment_fields(suite, experiment)
+        cases = [case for case in report.get("cases") or [] if isinstance(case, dict)]
+        varied = sum(field["state"] == "varied" for field in fields.values())
+        return {
+            "cases_scanned": len(cases),
+            "report": str(report_path.relative_to(REPO_ROOT)),
+            "report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
+            "evidence_source": "unified-experiment-receipt",
+            "inline_cases_not_counted": 0,
+            "chunk_manifest": [],
+            "evidence_fields": fields,
+            "verdict_concepts": {},
+            "varied_fields": varied,
+            "constant_fields": len(fields) - varied,
+            "bridged_through": bridged,
+        }
     field_values: dict[str, set[str]] = defaultdict(set)
     concept_values: dict[str, set[str]] = defaultdict(set)
     scanned = 0
@@ -225,6 +383,21 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
                 concept_values[str(verdict["c"])].add(
                     _canonical_value(verdict.get("l"))
                 )
+        # Reference-oracle chunks may carry the exact runner inputs used for
+        # executable reproduction outside the dashboard-oriented ``i`` rows.
+        # Count those inputs as case evidence too: they are report-bound chunk
+        # bytes, and omitting them makes a genuinely exercised suite appear
+        # evidence-free after inline mirrors are stripped.
+        execution = case.get("execution")
+        if (
+            isinstance(execution, dict)
+            and execution.get("schema_version")
+            == "axiom_oracles.case_execution.v1"
+        ):
+            axiom_inputs = execution.get("axiom_inputs")
+            if isinstance(axiom_inputs, dict):
+                for key, value in axiom_inputs.items():
+                    field_values[str(key)].add(_canonical_value(value))
         # Inline report cases: scalar metadata entries are stage evidence.
         metadata = case.get("metadata")
         if isinstance(metadata, dict):
@@ -241,14 +414,17 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
     # chunks belong to only one of them. Counting them under the other is the
     # substitution the census must not perform silently (round-2 finding 4);
     # the contested flag set in build_census() makes the certificate refuse.
-    chunk_cases, chunk_manifest = _chunk_cases(suite)
+    chunk_cases, chunk_manifest, chunks = _chunk_cases(suite)
     inline_cases = [c for c in report.get("cases") or [] if isinstance(c, dict)]
-    if chunk_cases:
+    if chunks:
         for case in chunk_cases:
             eat_case(case)
     else:
         for case in inline_cases:
             eat_case(case)
+
+    binding, binding_defects = validate_chunk_binding(report_path, chunks, suite=suite)
+    reconciliation = _cardinality_reconciliation(report, chunks)
 
     fields = {
         name: {
@@ -269,8 +445,14 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
         # inherit the other's evidence (audit finding 4).
         "report": str(report_path.relative_to(REPO_ROOT)),
         "report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
-        "evidence_source": "chunks" if chunk_cases else "inline",
-        "inline_cases_not_counted": len(inline_cases) if chunk_cases else 0,
+        "binding": binding,
+        "binding_defects": list(binding_defects),
+        # Census-wide validation is intentionally capped at cardinality.
+        # Certification reparses program-registry suites and may establish
+        # full per-verdict reconciliation.
+        "reconciliation": reconciliation,
+        "evidence_source": "chunks" if chunks else "inline",
+        "inline_cases_not_counted": len(inline_cases) if chunks else 0,
         "chunk_manifest": chunk_manifest,
         "evidence_fields": fields,
         "verdict_concepts": concepts,
@@ -281,13 +463,243 @@ def _census_suite(suite: str, report: dict, report_path: Path) -> dict:
         # Audited means the validator finds nothing outstanding — not merely
         # that a manifest file exists (audit finding 5).
         "bridge_audited": MANIFEST_STRICT_CLEAN.get(suite, False),
+        # Identity of the audited manifest, so the certificate's census
+        # evidence sha moves whenever the manifest bytes move.
+        "bridge_manifest_sha256": (
+            MANIFEST_STRICT_AUDIT.get(suite, {}).get("manifest_sha256")
+            if MANIFEST_STRICT_CLEAN.get(suite, False)
+            else None
+        ),
     }
+
+
+def _unified_experiment_fields(
+    suite: str, experiment: object
+) -> tuple[dict[str, dict], dict[str, str]]:
+    """Validate and normalize a unified record's measured input receipt."""
+
+    if not isinstance(experiment, dict):
+        raise ValueError(f"{suite}: unified record lacks an experiment receipt")
+    if experiment.get("schema") != "axiom.experiment_boundary_receipt.v1":
+        raise ValueError(f"{suite}: unsupported experiment receipt schema")
+    active = experiment.get("active_inputs")
+    if not isinstance(active, dict) or not active:
+        raise ValueError(f"{suite}: experiment receipt has no active inputs")
+    fields: dict[str, dict] = {}
+    for name, row in sorted(active.items()):
+        if not isinstance(row, dict):
+            raise ValueError(f"{suite}: active input {name!r} is not a mapping")
+        state = row.get("state")
+        distinct = row.get("distinct")
+        values = row.get("observed_values")
+        if state not in {"varied", "constant"}:
+            raise ValueError(f"{suite}: active input {name!r} has invalid state {state!r}")
+        if not isinstance(values, list) or not values:
+            raise ValueError(f"{suite}: active input {name!r} has no observations")
+        observed_distinct = len(set(map(str, values)))
+        expected_state = "varied" if observed_distinct > 1 else "constant"
+        if distinct != observed_distinct or state != expected_state:
+            raise ValueError(
+                f"{suite}: active input {name!r} state/count contradicts its observations"
+            )
+        fields[str(name)] = {"distinct": distinct, "state": state}
+    bridged = experiment.get("bridged_through")
+    if not isinstance(bridged, dict):
+        raise ValueError(f"{suite}: bridged_through must be a mapping")
+    return fields, {str(name): str(value) for name, value in bridged.items()}
+
+
+@lru_cache(maxsize=1)
+def _bound_nz_trace_contract() -> tuple[dict[str, dict], dict]:
+    """Load the NZ producer and rederive trace receipts from committed bytes."""
+
+    module_path = REPO_ROOT / "scripts" / "nz_incomeexplorer.py"
+    spec = importlib.util.spec_from_file_location("_exercise_nz_producer", module_path)
+    if spec is None or spec.loader is None:
+        raise ValueError("cannot load the NZ trace producer")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    views = module.derive_bound_trace_views()
+    trace = {
+        "artifact": str(module.TRACE_PATH.relative_to(REPO_ROOT)),
+        "sha256": module.TRACE_SHA256,
+        "schema": module.TRACE_SCHEMA,
+        "capture_lineage_mode": "attested",
+    }
+    return views, trace
+
+
+def _unified_view_fields(
+    suite: str,
+    view: str,
+    experiment: object,
+) -> tuple[dict[str, dict], dict]:
+    """Validate one trace-derived certificate-view exercise receipt."""
+
+    if not isinstance(experiment, dict):
+        raise ValueError(f"{suite}: unified record lacks an experiment receipt")
+    if experiment.get("schema") != "axiom.experiment_boundary_receipt.v1":
+        raise ValueError(f"{suite}: unsupported experiment receipt schema")
+    trace = experiment.get("trace")
+    if not isinstance(trace, dict):
+        raise ValueError(f"{suite}: unified record lacks a bound trace artifact")
+    views = experiment.get("views")
+    derived_views, expected_trace = _bound_nz_trace_contract()
+    if trace != expected_trace:
+        raise ValueError(f"{suite}: trace reference diverges from committed bytes")
+    if views != derived_views:
+        raise ValueError(f"{suite}: embedded view receipts diverge from traces")
+    if not isinstance(views, dict) or not isinstance(derived_views.get(view), dict):
+        raise ValueError(f"{suite}: experiment receipt has no view {view!r}")
+    receipt = derived_views[view]
+    count = receipt.get("evaluation_count")
+    if isinstance(count, bool) or not isinstance(count, int) or count <= 0:
+        raise ValueError(f"{suite}: view {view!r} has no evaluation traces")
+    fields = receipt.get("evidence_fields")
+    if not isinstance(fields, dict) or not fields:
+        raise ValueError(f"{suite}: view {view!r} has no traced input fields")
+    normalized: dict[str, dict] = {}
+    for name, row in sorted(fields.items()):
+        if not isinstance(row, dict):
+            raise ValueError(f"{suite}: view input {name!r} is not a mapping")
+        state = row.get("state")
+        distinct = row.get("distinct")
+        expected_state = (
+            "varied"
+            if isinstance(distinct, int) and not isinstance(distinct, bool) and distinct > 1
+            else "constant"
+            if distinct == 1
+            else None
+        )
+        if state != expected_state:
+            raise ValueError(
+                f"{suite}: view input {name!r} state/count contradicts its traces"
+            )
+        normalized[str(name)] = {"distinct": distinct, "state": state}
+    roots = receipt.get("requested_output_roots")
+    root_sets = receipt.get("requested_output_root_sets")
+    root_set_receipts = receipt.get("root_set_receipts")
+    if (
+        not isinstance(roots, list)
+        or not roots
+        or len(set(roots)) != len(roots)
+        or not isinstance(root_sets, list)
+        or not root_sets
+        or any(not isinstance(root_set, list) or not root_set for root_set in root_sets)
+        or {root for root_set in root_sets for root in root_set} != set(roots)
+        or not isinstance(root_set_receipts, list)
+        or any(not isinstance(row, dict) for row in root_set_receipts)
+        or [row.get("requested_output_roots") for row in root_set_receipts]
+        != root_sets
+        or sum(row.get("evaluation_count", 0) for row in root_set_receipts) != count
+    ):
+        raise ValueError(f"{suite}: view {view!r} requested-root receipt is not exact")
+    if (
+        receipt.get("trace_binding") != "bound"
+        or receipt.get("root_reconciliation") != "exact"
+    ):
+        raise ValueError(f"{suite}: view {view!r} trace/root binding is incomplete")
+    return normalized, receipt
+
+
+def _committed_exercise_rows() -> dict[str, dict]:
+    """Load hash-bound campaign receipts that are too large for chunk storage."""
+    rows: dict[str, dict] = {}
+    for path in sorted(EXERCISE_RECEIPT_DIR.glob("*.json")):
+        receipt = strict_json_loads(path.read_text())
+        if not isinstance(receipt, dict) or receipt.get("schema") != EXERCISE_RECEIPT_SCHEMA:
+            raise ValueError(f"{path.name}: unsupported committed exercise receipt")
+        suite = receipt.get("suite")
+        report_name = receipt.get("report")
+        if not isinstance(suite, str) or not suite or not isinstance(report_name, str):
+            raise ValueError(f"{path.name}: receipt lacks suite/report identity")
+        report_path = REPO_ROOT / report_name
+        if not report_path.is_file():
+            raise ValueError(f"{path.name}: receipt report is missing")
+        report_sha = hashlib.sha256(report_path.read_bytes()).hexdigest()
+        if receipt.get("report_sha256") != report_sha:
+            raise ValueError(f"{path.name}: receipt report sha256 drifted")
+        artifacts = receipt.get("evidence_artifacts")
+        if not isinstance(artifacts, list) or not artifacts:
+            raise ValueError(f"{path.name}: receipt has no evidence artifacts")
+        for artifact in artifacts:
+            if not isinstance(artifact, dict) or not isinstance(artifact.get("path"), str):
+                raise ValueError(f"{path.name}: malformed evidence artifact")
+            artifact_path = REPO_ROOT / artifact["path"]
+            if not artifact_path.is_file() or artifact.get("sha256") != hashlib.sha256(
+                artifact_path.read_bytes()
+            ).hexdigest():
+                raise ValueError(f"{path.name}: evidence artifact drifted")
+        fields = receipt.get("evidence_fields")
+        if not isinstance(fields, dict) or not fields:
+            raise ValueError(f"{path.name}: receipt has no evidence fields")
+        normalized: dict[str, dict] = {}
+        for name, field in sorted(fields.items()):
+            if not isinstance(field, dict):
+                raise ValueError(f"{path.name}: malformed field {name!r}")
+            distinct = field.get("distinct")
+            state = field.get("state")
+            expected = (
+                "varied"
+                if isinstance(distinct, int) and not isinstance(distinct, bool) and distinct > 1
+                else "constant" if distinct == 1 else None
+            )
+            if state != expected:
+                raise ValueError(f"{path.name}: field {name!r} state/count disagree")
+            normalized[str(name)] = {"distinct": distinct, "state": state}
+        cases = receipt.get("cases")
+        if isinstance(cases, bool) or not isinstance(cases, int) or cases <= 0:
+            raise ValueError(f"{path.name}: receipt has no positive case count")
+        varied = sum(field["state"] == "varied" for field in normalized.values())
+        bridge_audited = MANIFEST_STRICT_CLEAN.get(suite, False)
+        per_case_evidence = bool(normalized) and cases > 0
+        rows[suite] = {
+            "cases_scanned": cases,
+            "report": report_name,
+            "report_sha256": report_sha,
+            "binding": "bound",
+            "binding_defects": [],
+            "reconciliation": "content-addressed-receipt",
+            "evidence_source": receipt.get("evidence_mode"),
+            "inline_cases_not_counted": 0,
+            "chunk_manifest": artifacts,
+            "evidence_receipt": str(path.relative_to(REPO_ROOT)),
+            "evidence_receipt_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+            "evidence_fields": normalized,
+            "per_case_evidence_committed": per_case_evidence,
+            "verdict_concepts": {},
+            "varied_fields": varied,
+            "constant_fields": len(normalized) - varied,
+            "bridged_through": BRIDGED_THROUGH.get(suite, {}),
+            "bridge_declared": suite in BRIDGED_THROUGH,
+            "bridge_audited": bridge_audited,
+            # Match certification's computed premise: variation is disclosed
+            # field-by-field, while a suite counts as exercised when its
+            # per-case evidence is committed and its complete bridge/input
+            # boundary is strict-clean. Constants remain honest scope limits.
+            "exercised": bridge_audited and per_case_evidence,
+            "bridge_manifest_sha256": (
+                MANIFEST_STRICT_AUDIT.get(suite, {}).get("manifest_sha256")
+                if MANIFEST_STRICT_CLEAN.get(suite, False)
+                else None
+            ),
+        }
+    return rows
 
 
 def build_census() -> dict:
     suites: dict[str, dict] = {}
     contested: dict[str, list[str]] = defaultdict(list)
     for suite, report, path in _iter_suite_reports():
+        # Unified records carry their own complete, verifier-produced
+        # experiment receipt and can expose several program views over one
+        # run.  Their exercise evidence is consumed directly by certify.py.
+        # Keeping it certificate-scoped prevents an unrelated unified record
+        # from changing the global-census hash in every existing program
+        # certificate (and therefore preserves those certificates' evidence
+        # identity when none of their suites changed).
+        if report.get("record_schema") == "axiom.unified_comparison_record.v1":
+            continue
         contested[suite].append(str(path.relative_to(REPO_ROOT)))
         suites[suite] = _census_suite(suite, report, path)
     # A suite claimed by more than one report is an ambiguity the census must
@@ -297,6 +709,9 @@ def build_census() -> dict:
     for suite, paths in contested.items():
         if len(paths) > 1:
             suites[suite]["contested_reports"] = sorted(paths)
+    # Large supervised campaigns commit bounded, hash-bound census receipts
+    # instead of duplicating millions of raw rows into dashboard chunks.
+    suites.update(_committed_exercise_rows())
     return {
         "schema": SCHEMA,
         "_comment": (
@@ -308,7 +723,12 @@ def build_census() -> dict:
             "(declared per audited bridge). cases_scanned: 0 means the suite "
             "commits no per-case rows; nonzero cases with zero evidence "
             "fields means the committed rows carry verdicts only. Either "
-            "way, the absence is the finding."
+            "way, the absence is the finding. Binding checks the versioned "
+            "chunk index against the exact report and chunk identities; "
+            "unbound evidence is recorded but does not stop census "
+            "generation. Reconciliation here is cardinality-only; strict "
+            "full verdict reconciliation is limited to certification's "
+            "program-registry suites."
         ),
         "suites": suites,
     }

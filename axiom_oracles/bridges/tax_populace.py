@@ -26,6 +26,7 @@ from typing import Any
 import yaml
 
 from .jurisdiction import jurisdiction_prefix
+from .relation_binding import bind_request_relations
 from .rulespec_paths import (
     _canonical_rulespec_compile_path,
     _rulespec_public_item_keys,
@@ -83,6 +84,19 @@ CAPITAL_GAINS_BASE = "us:statutes/26/1/h"
 LONG_TERM_CAPITAL_GAINS_COLUMNS = (
     "long_term_capital_gains_before_response",
     "long_term_capital_gains",
+)
+# IRS Pub. 596 Worksheet 1 ("Investment Income") baskets for the 26 USC
+# 32(i)(2) disqualified-income input; see project_eitc_relevant_investment_income.
+EITC_INTEREST_AND_DIVIDEND_COLUMNS = (
+    "taxable_interest_income",  # line 1: Form 1040 line 2b
+    "tax_exempt_interest_income",  # line 2: Form 1040 line 2a
+    "qualified_dividend_income",  # line 3: Form 1040 line 3b, ordinary
+    "non_qualified_dividend_income",  # dividends (qualified + non-qualified)
+)
+EITC_PASSIVE_INCOME_COLUMNS = (
+    "rental_income",  # lines 11-12: Schedule E line 26
+    "passive_partnership_s_corp_income",  # Schedule E lines 29a/29b
+    "farm_rent_income",  # Schedule E line 40 (Form 4835)
 )
 TAX_BEFORE_CREDITS_PROGRAM_PATH = Path("statutes/26/1/j.yaml")
 TAX_BEFORE_CREDITS_BASE = "us:statutes/26/1/j"
@@ -482,6 +496,7 @@ PE_PERSON_VARIABLES = tuple(
             "employment_income_before_lsr",
             "irs_employment_income",
             "farm_operations_income",
+            "farm_rent_income",
             "has_american_opportunity_credit_1098_t_or_exception",
             "has_american_opportunity_credit_institution_ein",
             "has_completed_first_four_years_of_postsecondary_education",
@@ -497,6 +512,7 @@ PE_PERSON_VARIABLES = tuple(
             "long_term_capital_gains_on_collectibles",
             "long_term_capital_gains_on_small_business_stock",
             "non_qualified_dividend_income",
+            "non_sch_d_capital_gains",
             "payroll_tax_gross_wages",
             "pre_tax_health_insurance_premiums",
             "qualified_tuition_expenses",
@@ -1088,9 +1104,10 @@ def build_axiom_request(
     surface: str = "ctc",
     oasdi_wage_base_results: list[dict[str, Any]] | None = None,
     contribution_base: float | None = None,
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if surface == "ctc":
-        return build_ctc_request(pe_data=pe_data, year=year)
+        return build_ctc_request(pe_data=pe_data, year=year, artifact=artifact)
     if surface == "standard-deduction":
         return build_standard_deduction_request(pe_data=pe_data, year=year)
     if surface == "capital-gain-definitions":
@@ -1104,11 +1121,12 @@ def build_axiom_request(
             pe_data=pe_data,
             year=year,
             contribution_base=contribution_base,
+            artifact=artifact,
         )
     if surface == "cdcc":
-        return build_cdcc_request(pe_data=pe_data, year=year)
+        return build_cdcc_request(pe_data=pe_data, year=year, artifact=artifact)
     if surface == "aotc":
-        return build_aotc_request(pe_data=pe_data, year=year)
+        return build_aotc_request(pe_data=pe_data, year=year, artifact=artifact)
     if surface == "nonrefundable-credits":
         return build_nonrefundable_credits_request(pe_data=pe_data, year=year)
     if surface == "income-tax":
@@ -1123,7 +1141,9 @@ def build_axiom_request(
     raise ValueError(f"unsupported tax surface: {surface}")
 
 
-def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+def build_ctc_request(
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
+) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1138,7 +1158,13 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
         entity_id = tax_entity_id(tax_unit_id)
         for name, value in project_tax_unit_inputs(row).items():
             inputs.append(
-                input_record(f"{CTC_BASE}#input.{name}", entity_id, interval, value)
+                input_record(
+                    f"{CTC_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                    entity="TaxUnit",
+                )
             )
         inputs.append(
             input_record(
@@ -1146,6 +1172,7 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
                 entity_id,
                 interval,
                 ctc_h_filing_status_code(str(row["filing_status"])),
+                entity="TaxUnit",
             )
         )
         tax_unit_persons = persons_by_tax_unit.get(tax_unit_id, [])
@@ -1170,16 +1197,26 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
             )
             for name, value in project_ctc_person_inputs(person, context).items():
                 inputs.append(
-                    input_record(f"{CTC_BASE}#input.{name}", person_id, interval, value)
+                    input_record(
+                        f"{CTC_BASE}#input.{name}",
+                        person_id,
+                        interval,
+                        value,
+                        entity="Person",
+                    )
                 )
             for name, value in project_ctc_h_person_inputs(person, context).items():
                 inputs.append(
                     input_record(
-                        f"{CTC_H_BASE}#input.{name}", person_id, interval, value
+                        f"{CTC_H_BASE}#input.{name}",
+                        person_id,
+                        interval,
+                        value,
+                        entity="Person",
                     )
                 )
 
-    return {
+    request = {
         "mode": "explain",
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
@@ -1191,9 +1228,14 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
+    return (
+        bind_request_relations(request, artifact) if artifact is not None else request
+    )
 
 
-def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+def build_cdcc_request(
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
+) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1210,7 +1252,13 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
         contexts = project_tax_unit_person_contexts(tax_unit_persons)
         for name, value in project_cdcc_tax_unit_inputs(row=row).items():
             inputs.append(
-                input_record(f"{CDCC_BASE}#input.{name}", entity_id, interval, value)
+                input_record(
+                    f"{CDCC_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                    entity="TaxUnit",
+                )
             )
 
         for person_index, (person, context) in enumerate(
@@ -1231,10 +1279,11 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
                         person_id,
                         interval,
                         value,
+                        entity="Person",
                     )
                 )
 
-    return {
+    request = {
         "mode": "explain",
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
@@ -1246,9 +1295,14 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
+    return (
+        bind_request_relations(request, artifact) if artifact is not None else request
+    )
 
 
-def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+def build_aotc_request(
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
+) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1265,7 +1319,13 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
         contexts = project_tax_unit_person_contexts(tax_unit_persons)
         for name, value in project_aotc_tax_unit_inputs(row=row).items():
             inputs.append(
-                input_record(f"{AOTC_BASE}#input.{name}", entity_id, interval, value)
+                input_record(
+                    f"{AOTC_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                    entity="TaxUnit",
+                )
             )
 
         for person_index, (person, context) in enumerate(
@@ -1282,11 +1342,15 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
             for name, value in project_aotc_person_inputs(person, context).items():
                 inputs.append(
                     input_record(
-                        f"{AOTC_BASE}#input.{name}", person_id, interval, value
+                        f"{AOTC_BASE}#input.{name}",
+                        person_id,
+                        interval,
+                        value,
+                        entity="Person",
                     )
                 )
 
-    return {
+    request = {
         "mode": "explain",
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
@@ -1298,6 +1362,9 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
+    return (
+        bind_request_relations(request, artifact) if artifact is not None else request
+    )
 
 
 def build_nonrefundable_credits_request(
@@ -1320,6 +1387,7 @@ def build_nonrefundable_credits_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1357,6 +1425,7 @@ def build_income_tax_request(*, pe_data: dict[str, Any], year: int) -> dict[str,
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1398,6 +1467,7 @@ def build_standard_deduction_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1441,6 +1511,7 @@ def build_capital_gain_definitions_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1481,6 +1552,7 @@ def build_tax_before_credits_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
             inputs.append(
@@ -1489,6 +1561,7 @@ def build_tax_before_credits_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
         tax_unit_persons = persons_by_tax_unit.get(tax_unit_id, [])
@@ -1502,6 +1575,7 @@ def build_tax_before_credits_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1522,7 +1596,11 @@ def build_tax_before_credits_request(
 
 
 def build_eitc_request(
-    *, pe_data: dict[str, Any], year: int, contribution_base: float
+    *,
+    pe_data: dict[str, Any],
+    year: int,
+    contribution_base: float,
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
@@ -1543,7 +1621,13 @@ def build_eitc_request(
             persons=tax_unit_persons,
         ).items():
             inputs.append(
-                input_record(f"{EITC_BASE}#input.{name}", entity_id, interval, value)
+                input_record(
+                    f"{EITC_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                    entity="TaxUnit",
+                )
             )
         for name, value in project_section_7703_tax_unit_inputs(row=row).items():
             inputs.append(
@@ -1552,6 +1636,7 @@ def build_eitc_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
         for name, value in project_section_32_c_2_tax_unit_inputs(
@@ -1564,6 +1649,7 @@ def build_eitc_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
         for name, value in project_section_112_tax_unit_inputs().items():
@@ -1573,6 +1659,7 @@ def build_eitc_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
         # The generated EITC re-encode grounds earned income in 32(c)(2)'s
@@ -1594,7 +1681,11 @@ def build_eitc_request(
             for name, value in project_eitc_person_inputs(person, context).items():
                 inputs.append(
                     input_record(
-                        f"{EITC_BASE}#input.{name}", person_id, interval, value
+                        f"{EITC_BASE}#input.{name}",
+                        person_id,
+                        interval,
+                        value,
+                        entity="Person",
                     )
                 )
             for name, value in project_section_152_c_person_inputs(
@@ -1607,10 +1698,11 @@ def build_eitc_request(
                         person_id,
                         interval,
                         value,
+                        entity="Person",
                     )
                 )
 
-    return {
+    request = {
         "mode": "explain",
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
@@ -1622,6 +1714,9 @@ def build_eitc_request(
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
+    return (
+        bind_request_relations(request, artifact) if artifact is not None else request
+    )
 
 
 def build_payroll_request(
@@ -1665,6 +1760,7 @@ def build_payroll_request(
                 person_entity_id(person_id),
                 interval,
                 wages,
+                entity="Person",
             )
         )
 
@@ -1800,6 +1896,7 @@ def build_oasdi_wage_base_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
 
@@ -2161,7 +2258,7 @@ def project_eitc_tax_unit_inputs(row: Any, persons: list[Any]) -> dict[str, Any]
         "adjusted_gross_income": money(row["adjusted_gross_income"]),
         "eitc_relevant_investment_income": project_eitc_relevant_investment_income(
             row=row,
-            persons=persons,
+            persons=tax_unit_filers(persons),
         ),
         "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": True,
         "childless_taxpayer_or_spouse_age_eligible_for_eitc": any(
@@ -2335,17 +2432,50 @@ def project_section_1401_tax_unit_inputs(
 
 
 def project_eitc_relevant_investment_income(row: Any, persons: list[Any]) -> float:
-    net_capital_gains = person_money_sum(
-        persons,
-        LONG_TERM_CAPITAL_GAINS_COLUMNS,
-    ) + person_money_sum(persons, "short_term_capital_gains")
+    """26 USC 32(i)(2) disqualified income, basketed as in Pub. 596 Worksheet 1.
+
+    ``persons`` must be the filers (head and spouse): Worksheet 1 lines 1-3
+    read the filer's own Form 1040, and a dependent's interest and dividends
+    enter only through Form 8814, which this surface does not model.
+    ``project_eitc_tax_unit_inputs`` passes ``tax_unit_filers(persons)``.
+
+    Each basket is netted across the filers, and the capital and passive
+    baskets are floored at zero before the baskets are added, so a loss in
+    one basket never offsets income in another:
+
+    - interest and dividends (lines 1-3): taxable interest, tax-exempt
+      interest, and ordinary dividends (qualified plus non-qualified);
+    - capital gain net income (lines 5-7): max(0, net short- and long-term
+      gains plus capital gain distributions reported without Schedule D);
+    - passive activities (lines 11-13): max(0, rental income plus passive
+      partnership/S-corp income plus farm rental income).
+
+    ``rental_income`` does not separate royalties (lines 8-10) from rental
+    real estate, so it is treated as passive rental income, as
+    PolicyEngine-US does after PolicyEngine/policyengine-us#9572. Only the
+    passive subset of partnership/S-corp income belongs in lines 11-13, so
+    the undifferentiated ``partnership_income`` column is not read;
+    ``passive_partnership_s_corp_income`` counts only when the row carries
+    it (the pinned Populace artifact and PolicyEngine-US 1.764.6 do not).
+    Form 4797 amounts (lines 6 and 11-12) and estate/trust passive income
+    (Schedule E line 34) have no source column and are not modeled.
+    """
+    interest_and_dividends = sum(
+        person_money_sum(persons, column)
+        for column in EITC_INTEREST_AND_DIVIDEND_COLUMNS
+    )
+    capital_gain_net_income = (
+        person_money_sum(persons, LONG_TERM_CAPITAL_GAINS_COLUMNS)
+        + person_money_sum(persons, "short_term_capital_gains")
+        + person_money_sum(persons, "non_sch_d_capital_gains")
+    )
+    passive_activity_income = sum(
+        person_money_sum(persons, column) for column in EITC_PASSIVE_INCOME_COLUMNS
+    )
     return (
-        person_money_sum(persons, "taxable_interest_income")
-        + person_money_sum(persons, "tax_exempt_interest_income")
-        + person_money_sum(persons, "qualified_dividend_income")
-        + person_money_sum(persons, "non_qualified_dividend_income")
-        + person_money_sum(persons, "rental_income")
-        + max(0.0, net_capital_gains)
+        interest_and_dividends
+        + max(0.0, capital_gain_net_income)
+        + max(0.0, passive_activity_income)
     )
 
 
@@ -2551,6 +2681,44 @@ def tax_unit_head_spouse_indices(persons: list[Any]) -> tuple[int | None, int | 
         else None
     )
     return head_index, spouse_index
+
+
+def tax_unit_filers(persons: list[Any]) -> list[Any]:
+    """The tax unit's head and spouse, in that order; dependents are dropped.
+
+    Every tax unit files a return, so when neither the role flags nor the
+    adult-age fallback name a head (a 17-year-old filing alone, whose
+    PolicyEngine role flags are all false), the head is the source
+    ``tax_unit_role_input`` HEAD row, and failing that the oldest member not
+    already known to be the spouse or a source DEPENDENT. A spouse the flags
+    already identify is kept; otherwise a source SPOUSE row is the spouse.
+    """
+    head_index, spouse_index = tax_unit_head_spouse_indices(persons)
+    if head_index is None:
+        roles = [
+            str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
+            for person in persons
+        ]
+        candidates = [
+            index
+            for index in range(len(persons))
+            if index != spouse_index and roles[index] != "DEPENDENT"
+        ]
+        pool = [index for index in candidates if roles[index] == "HEAD"] or candidates
+        if pool:
+            head_index = max(
+                pool, key=lambda index: money(row_value(persons[index], "age", 0))
+            )
+        if spouse_index is None:
+            spouse_index = next(
+                (
+                    index
+                    for index, role in enumerate(roles)
+                    if role == "SPOUSE" and index != head_index
+                ),
+                None,
+            )
+    return [persons[index] for index in (head_index, spouse_index) if index is not None]
 
 
 def filer_meets_eitc_identification_requirements(persons: list[Any]) -> bool:
@@ -2759,6 +2927,9 @@ def _runtime_axiom_request(
             runtime_outputs.append(runtime_output)
             public_output_by_runtime[runtime_output] = output
         query["outputs"] = runtime_outputs
+    # Bind only after compilation and name resolution: declarations alone may
+    # disagree with the executable slots of historical artifacts.
+    runtime_request = bind_request_relations(runtime_request, artifact_payload)
     return runtime_request, public_output_by_runtime
 
 
@@ -3041,11 +3212,12 @@ def person_money_sum(persons: list[Any], column: str | tuple[str, ...]) -> float
 
 
 def input_record(
-    name: str, entity_id: str, interval: dict[str, str], value: Any
+    name: str, entity_id: str, interval: dict[str, str], value: Any, *, entity: str
 ) -> dict[str, Any]:
+    """Label inputs explicitly; the engine uses this kind to bind relations."""
     return {
         "name": name,
-        "entity": "Entity",
+        "entity": entity,
         "entity_id": entity_id,
         "interval": interval,
         "value": scalar_value(value),

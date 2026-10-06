@@ -85,7 +85,7 @@ def test_edited_bundle_itself_fails_check(tmp_path, monkeypatch):
 
 def test_numeric_to_boolean_bundle_edit_fails_check(tmp_path, monkeypatch):
     """Python's `1 == True`: parsed-value equality accepted a type-only
-    bundle edit (sol stack review r5). The byte-exact check must not."""
+    bundle edit (sol stack review r5). The raw-byte identity check must not."""
     module, data = _seed(tmp_path, monkeypatch)
     assert _run(module, monkeypatch) == 0
     out = data / "overview.json"

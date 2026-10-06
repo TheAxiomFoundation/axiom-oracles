@@ -6509,7 +6509,7 @@
       },
       "dispositions_file": "dispositions/medicaid-thresholds-states.yaml",
       "expired_entries": [],
-      "explained_rate": 96.428571,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 93.877551,
       "schema_version": "axiom_oracles.dispositions.v1",

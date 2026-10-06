@@ -1,0 +1,28 @@
+{
+  "schema_version": "axiom.comparison_report.v2",
+  "suite": "duplicate-case",
+  "case_count": 2,
+  "concepts": [
+    {
+      "id": "benefit",
+      "comparison": "amount",
+      "tolerance": 0,
+      "relative_tolerance": 0
+    }
+  ],
+  "summary": {
+    "comparison_count": 2,
+    "match_count": 2,
+    "mismatch_count": 0
+  },
+  "aggregates": [
+    {
+      "concept": "benefit",
+      "comparison_count": 2,
+      "match_count": 2,
+      "mismatch_count": 0
+    }
+  ],
+  "mismatches": [],
+  "cases": []
+}

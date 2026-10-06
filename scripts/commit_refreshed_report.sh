@@ -6,11 +6,23 @@
 # derived, CI-validated artifacts:
 #
 #   dispositioned reports (dispositions merged)     apply_dispositions.py
+#   DE served dispositions/case chunks               emit_*_artifacts.py
+#   DE pinned Axiom comparison legs                  de_axiom_legs.py
+#   comparison registry dependency map                generate_affected_map.py
+#   DE worker unified comparison record              de_unified_comparison.py
+#   DE exact-citation closure summary                 de_closure.py
+#   DE Kindergeld executable status                  de_executable.py
+#   DE certificate-candidate census                  de_certificate_census.py
+#   NZ IncomeExplorer unified record                 nz_incomeexplorer.py
+#   NZ bound case chunks + trace-derived view receipts nz_incomeexplorer.py
+#   NZ single-person attestations                    nz_incomeexplorer.py
+#   NZ closure census                                nz_closure.py
 #   axiom_oracles/data/euromod_be_coverage.json      …same (BE parity rollup)
 #   conformance/scoreboard.json + conformance/detail/<jur>.json
 #     (+ their dashboard/public/data mirrors)      conformance_scoreboard.py
 #   conformance/history/<jur>/<YYYY-MM-DD>.json    …with --snapshot (per-day)
 #   dashboard/public/data/conformance_burndown.json  conformance_burndown.py
+#   dashboard/public/data/cases/*/index.json         generate_chunk_indexes.py
 #   conformance/exercise-census.json               exercise_census.py
 #   certificates/*.json                            certify.py
 #   dashboard/public/data/freshness.json             check_vacuous_gate.py
@@ -22,7 +34,7 @@
 # state unpushable: every push attempt rebuilds the commit FROM SCRATCH on the
 # current remote tip — restore this run's PRIVATE comparison outputs (the
 # refreshed report files), replay this run's manifest.json additions, then
-# regenerate every derived artifact and verify the tree passes the same four
+# regenerate every derived artifact and verify the tree passes the same
 # staleness gates ci.yml runs before pushing. Sibling matrix jobs pushing
 # between attempts can therefore never cause a conflict (nothing is ever
 # rebased) nor an inconsistent tree (derivations are recomputed on whatever
@@ -63,6 +75,11 @@ PYTHON="${PYTHON:-python3}"
 MAX_ATTEMPTS="${MAX_ATTEMPTS:-60}"
 
 cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+# Direct ``python scripts/foo.py`` execution puts ``scripts/`` rather than the
+# checkout root on sys.path. Production often masks that because the package is
+# installed in the uv environment, but the bot's hermetic clone test (and any
+# minimally provisioned runner) must still execute the same refresh chain.
+export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
 
 # Every tree holding a report or report-derived artifact this script may
 # refresh, regenerate, and commit. The EUROMOD-BE coverage rollup lives
@@ -78,6 +95,11 @@ derived_paths=(
   dashboard/public/data/
   conformance/
   certificates/
+  closure/de/summary.json
+  closure/nz/summary.json
+  comparisons/de-worker-dual-oracle/
+  comparisons/affected_map.json
+  comparisons/nz-treasury-incomeexplorer/single-person-attestations.json
   axiom_oracles/data/euromod_be_coverage.json
 )
 manifest="dashboard/public/data/manifest.json"
@@ -89,6 +111,25 @@ git config user.email >/dev/null 2>&1 ||
   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
 regenerate_derived() {
+  # Registry-derived affected-run metadata is cheap and hermetic. Keep it in
+  # the same write/check/stage transaction as reports so a newly registered
+  # pair leg can never be committed without becoming selectable.
+  "$PYTHON" scripts/generate_affected_map.py
+  # Rebuild the NZ unified tuple record, bound verdict chunks, trace-derived
+  # exercise views, executable receipt binding, and closure census before
+  # their downstream disposition, exercise, and certificate consumers. All
+  # generators pin and validate their source inputs before writing. The
+  # existence checks preserve the refresh script's small hermetic test seeds
+  # and old release branches that predate the NZ inputs.
+  if [ -f comparisons/nz-treasury-incomeexplorer/source-comparison.json ]; then
+    "$PYTHON" scripts/nz_incomeexplorer.py
+  fi
+  if [ -f conformance/executable/nz-treasury-incomeexplorer.json ]; then
+    "$PYTHON" scripts/nz_executable_reproduction.py --refresh-receipt
+  fi
+  if [ -f closure/nz/source.json ]; then
+    "$PYTHON" scripts/nz_closure.py
+  fi
   # Dispositions merge + the EUROMOD-BE coverage rollup
   # (axiom_oracles/data/euromod_be_coverage.json). run_comparison.py merges
   # dispositions into the reports it writes, but the rollup is maintained ONLY
@@ -99,6 +140,53 @@ regenerate_derived() {
   # dispositions schema problem (nothing was written) — not derivation lag —
   # so under `set -e` the refresh aborts loudly with nothing pushed.
   "$PYTHON" scripts/apply_dispositions.py
+  # The DE report has a public case explorer and a public disposition mirror.
+  # Both are generated from the just-rewritten canonical
+  # report/YAML, so refresh them before downstream DE certification artifacts
+  # cite the report. Without these two writes the affected-rerun bot can push a
+  # report whose served claims still carry the prior dispositions.
+  if [ -f dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json ]; then
+    if [ -f scripts/emit_disposition_artifacts.py ]; then
+      "$PYTHON" scripts/emit_disposition_artifacts.py de-worker-dual-oracle
+    fi
+    if [ -f scripts/emit_case_artifacts.py ]; then
+      "$PYTHON" scripts/emit_case_artifacts.py de-worker-dual-oracle
+    fi
+  fi
+  # DE certification chain. The two pinned Axiom pair records inspect the
+  # configured RuleSpec-DE ref first, emitting explicit module-not-on-main
+  # pending records until EStG 66 is signed there. The unified record MUST
+  # follow those legs and disposition application because its source report is
+  # rewritten above. Closure and executable status then precede the census,
+  # which aligns exact root declarations with the freshly computed input
+  # states. Certificates run later, after the shared exercise census is
+  # current. Guards retain compatibility with small hermetic fixtures and
+  # release branches that predate the DE lane.
+  if [ -f dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json ] &&
+    [ -f scripts/de_axiom_legs.py ]; then
+    "$PYTHON" scripts/de_axiom_legs.py
+  fi
+  if [ -f dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json ] &&
+    [ -f scripts/de_unified_comparison.py ]; then
+    "$PYTHON" scripts/de_unified_comparison.py
+  fi
+  if [ -f closure/de/source.json ] && [ -f scripts/de_closure.py ]; then
+    "$PYTHON" scripts/de_closure.py
+  fi
+  if [ -f conformance/executable/de-kindergeld-manifest.json ] &&
+    [ -f scripts/de_executable.py ]; then
+    "$PYTHON" scripts/de_executable.py
+  fi
+  if [ -f comparisons/de-worker-dual-oracle/unified-record.json ] &&
+    [ -f closure/de/source.json ] && [ -f scripts/de_certificate_census.py ]; then
+    "$PYTHON" scripts/de_certificate_census.py
+  fi
+  # Certified per-case chunks are refreshed and bound by run_comparison while
+  # it still holds the full case corpus. Here the generator validates that
+  # identity (or performs an initial legacy migration); it refuses to rebind
+  # changed report/chunk identities, so stale/foreign chunks cannot inherit a
+  # new report.
+  "$PYTHON" scripts/generate_chunk_indexes.py
   # Freshness register. Write mode exits 1 when a registry config has a schema
   # problem but STILL writes freshness.json — that is a content alarm for
   # verify_derived's --check (the same arbiter ci.yml uses) to rule on, not a
@@ -138,7 +226,48 @@ verify_derived() {
   # artifact, so it cannot go stale from a refresh. Its errors are authoring
   # mistakes for ci.yml to catch on the PR that makes them, not a reason to
   # drop a data refresh.
-  "$PYTHON" scripts/apply_dispositions.py --check &&
+  "$PYTHON" scripts/generate_affected_map.py --check || return
+  if [ -f comparisons/nz-treasury-incomeexplorer/source-comparison.json ]; then
+    "$PYTHON" scripts/nz_incomeexplorer.py --check || return
+  fi
+  if [ -f conformance/executable/nz-treasury-incomeexplorer.json ]; then
+    "$PYTHON" scripts/nz_executable_reproduction.py --check || return
+    "$PYTHON" scripts/nz_exercise_denominator.py --check || return
+  fi
+  if [ -f closure/nz/source.json ]; then
+    "$PYTHON" scripts/nz_closure.py --check || return
+  fi
+  "$PYTHON" scripts/apply_dispositions.py --check || return
+  if [ -f dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json ]; then
+    if [ -f scripts/emit_disposition_artifacts.py ]; then
+      "$PYTHON" scripts/emit_disposition_artifacts.py --check \
+        de-worker-dual-oracle || return
+    fi
+    if [ -f scripts/emit_case_artifacts.py ]; then
+      "$PYTHON" scripts/emit_case_artifacts.py --check \
+        de-worker-dual-oracle || return
+    fi
+  fi
+  if [ -f dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json ] &&
+    [ -f scripts/de_axiom_legs.py ]; then
+    "$PYTHON" scripts/de_axiom_legs.py --check || return
+  fi
+  if [ -f dashboard/public/data/euromod-gettsim-de-worker-dual-oracle.json ] &&
+    [ -f scripts/de_unified_comparison.py ]; then
+    "$PYTHON" scripts/de_unified_comparison.py --check || return
+  fi
+  if [ -f closure/de/source.json ] && [ -f scripts/de_closure.py ]; then
+    "$PYTHON" scripts/de_closure.py --check || return
+  fi
+  if [ -f conformance/executable/de-kindergeld-manifest.json ] &&
+    [ -f scripts/de_executable.py ]; then
+    "$PYTHON" scripts/de_executable.py --check || return
+  fi
+  if [ -f comparisons/de-worker-dual-oracle/unified-record.json ] &&
+    [ -f closure/de/source.json ] && [ -f scripts/de_certificate_census.py ]; then
+    "$PYTHON" scripts/de_certificate_census.py --check || return
+  fi
+  "$PYTHON" scripts/generate_chunk_indexes.py --check &&
     "$PYTHON" scripts/check_vacuous_gate.py --check &&
     "$PYTHON" scripts/conformance_scoreboard.py --check &&
     "$PYTHON" scripts/conformance_burndown.py --check &&
@@ -146,6 +275,16 @@ verify_derived() {
     "$PYTHON" scripts/exercise_census.py --check &&
     "$PYTHON" scripts/certify.py --check
 }
+
+# Safe proof of the exact regeneration path. It exits before collecting
+# private report output, fetching, resetting, committing, or pushing.
+if [ "${SIMULATE_DERIVED_REFRESH:-0}" = "1" ]; then
+  regenerate_derived
+  verify_derived
+  "$PYTHON" scripts/unexplained_ratchet.py --check
+  echo "simulated derived refresh passed for $suite"
+  exit 0
+fi
 
 # Collect this run's PRIVATE outputs — what run_comparison.py itself wrote
 # (the refreshed report + any fixture reports), BEFORE any regeneration, so
@@ -271,8 +410,9 @@ PY
   git commit --quiet \
     -m "data: refresh $suite (affected rerun $(date -u +%Y-%m-%d))" \
     -m "Includes the regenerated derived conformance artifacts (dispositioned
-reports + EUROMOD-BE coverage rollup, scoreboard, detail, daily history
-snapshot, burn-down, freshness) so main CI's staleness gates stay green.
+reports + EUROMOD-BE coverage rollup, DE unified/closure/census/executable
+status, scoreboard, detail, daily history snapshot, burn-down, freshness) so
+main CI's staleness gates stay green.
 Committed by scripts/commit_refreshed_report.sh; the ratchet is never
 re-pinned here."
 

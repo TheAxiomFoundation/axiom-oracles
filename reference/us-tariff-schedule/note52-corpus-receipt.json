@@ -1,0 +1,22 @@
+{
+  "availability": {
+    "b1_6_generated_incidence_table": false,
+    "corpus_note_52": true
+  },
+  "corpus_path": "/Users/maxghenis/TheAxiomFoundation/axiom-corpus-b1-full/data/corpus/provisions/us/statute/2026-08-04-usitc-hts-2026-rev15-notes.jsonl",
+  "finding": "U.S. note 52 is present at chapter-99/page-553 and its complete country tier and ceiling structure is present at pages 639-652. The B1.6 generated incidence directory has no note-52 membership table, so the forced-labor/federal-false class is bounded to the exact fixed-tier and tier-minus-ceiling delta values censused in note52-delta-census.json, plus the effective date.",
+  "exact_delta_census": "reference/us-tariff-schedule/note52-delta-census.json",
+  "rate_receipts": {
+    "10_percent": [
+      "us/statute/hts/chapter-99/page-639",
+      "us/statute/hts/chapter-99/page-640"
+    ],
+    "12_5_percent": [
+      "us/statute/hts/chapter-99/page-639",
+      "us/statute/hts/chapter-99/page-640"
+    ],
+    "brazil_12_5_percent": "us/statute/hts/chapter-99/page-640",
+    "note_text": "us/statute/hts/chapter-99/page-553"
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.note52_corpus_receipt.v1"
+}

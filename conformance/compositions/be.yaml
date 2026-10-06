@@ -1,12 +1,12 @@
-# axiom_oracles.compositions.v1 — GENERATED, do NOT hand-edit.
+# axiom_oracles.compositions.v2 — GENERATED, do NOT hand-edit.
 # The runnable Axiom program behind each conformance-covered suite: the
 # RuleSpec import-set the harness composes (identical to what
 # axiom_oracles.cli builds when --axiom-program is omitted), its
-# repo-relative files, the query entity, the supplied-input surface, and
-# the engine->input bridge. Regenerate with
+# repo-relative files, query entity, supplied flat/record inputs,
+# relations, and flat/record-target engine bridges. Regenerate with
 # `uv run scripts/generate_conformance_compositions.py <jur>`; CI fails if
 # this drifts from the suites (scripts/generate_conformance_compositions.py --check).
-schema: axiom_oracles.compositions.v1
+schema: axiom_oracles.compositions.v2
 jurisdiction: be
 oracle:
   model: EUROMOD
@@ -59,8 +59,10 @@ compositions:
       - be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration
     input_bridge:
       yem:
-        - divide_by
-        - inputs
+        inputs:
+          - be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_lost_daily_remuneration_after_article_87_cap
+          - be:regulations/health_insurance/birth_leave/indemnity_rates#input.belgium_birth_leave_uncapped_lost_daily_remuneration
+        divide_by: 312
   - suite: be-capital-income-tax
     policy: be:tinkt_be
     entity: Person
@@ -172,8 +174,9 @@ compositions:
       - be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction
     input_bridge:
       yemeq_s:
-        - divide_by
-        - inputs
+        inputs:
+          - be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time
+        divide_by: 12
   - suite: be-flemish-social-protection-premium
     policy: be:tci_be
     entity: Person
@@ -232,8 +235,11 @@ compositions:
     outputs:
       - be:statutes/income_tax/individual/couple_pit_oracle_pipeline#belgium_pit_couple_federal_and_local_tax_before_withholding
     supplied_input_boundaries:
+      - be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration
       - be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_agglomeration_additional_tax_rate
       - be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_communal_additional_tax_rate
+      - be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_worker_is_spouse_a
+      - be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_worker_is_spouse_b
       - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_dissolution_by_death
       - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_factual_separation_effective_for_entire_taxable_period_after_separation_year
       - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_legal_cohabitants_marry_after_prior_year_declaration
@@ -243,12 +249,54 @@ compositions:
       - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_126_year_of_marriage_or_legal_cohabitation_declaration
       - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_article_87_88_no_tax_increase_condition_met
       - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_convention_exempt_professional_income_not_counted_for_other_tax
-      - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions
       - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_b_convention_exempt_professional_income_not_counted_for_other_tax
-      - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_b_professional_income_after_article_89_exclusions
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration
+      - be:statutes/income_tax/individual/tax_free_amount_tax#input.belgium_pit_article_134_joint_lower_income_spouse_supplement_assignment_reduces_joint_state_tax
+    axiom_input_records:
+      - name: be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration
+        entity: Person
+        entity_id: head
+      - name: be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_worker_is_spouse_a
+        entity: Person
+        entity_id: head
+      - name: be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_worker_is_spouse_b
+        entity: Person
+        entity_id: head
+      - name: be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration
+        entity: Person
+        entity_id: head
+      - name: be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration
+        entity: Person
+        entity_id: spouse
+      - name: be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_worker_is_spouse_a
+        entity: Person
+        entity_id: spouse
+      - name: be:statutes/income_tax/individual/couple_pit_oracle_pipeline#input.belgium_pit_couple_worker_is_spouse_b
+        entity: Person
+        entity_id: spouse
+      - name: be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration
+        entity: Person
+        entity_id: spouse
+    axiom_relations:
+      - name: be:statutes/income_tax/individual/couple_pit_oracle_pipeline#relation.belgium_pit_couple_spouse_of_tax_unit
+        tuple:
+          - head
+          - taxunit
+      - name: be:statutes/income_tax/individual/couple_pit_oracle_pipeline#relation.belgium_pit_couple_spouse_of_tax_unit
+        tuple:
+          - spouse
+          - taxunit
     input_bridge:
       yem:
-        - be:statutes/income_tax/individual/joint_assessment#input.belgium_pit_spouse_a_professional_income_after_article_89_exclusions
+        records:
+          - name: be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration
+            entity: Person
+            entity_id: head
+      yemeq_s:
+        records:
+          - name: be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration
+            entity: Person
+            entity_id: head
   - suite: be-maternity-leave
     policy: be:bmact_be
     entity: Person
@@ -269,8 +317,10 @@ compositions:
       - be:regulations/health_insurance/maternity/indemnity_rates#input.belgium_maternity_uncapped_lost_daily_remuneration
     input_bridge:
       yem:
-        - divide_by
-        - inputs
+        inputs:
+          - be:regulations/health_insurance/maternity/indemnity_rates#input.belgium_maternity_lost_daily_remuneration_after_article_113_cap
+          - be:regulations/health_insurance/maternity/indemnity_rates#input.belgium_maternity_uncapped_lost_daily_remuneration
+        divide_by: 312
   - suite: be-pensioner-contributions
     policy: be:tscpe_be
     entity: Family
@@ -462,8 +512,9 @@ compositions:
       - be:regulations/unemployment/payable_amount#input.belgium_unemployment_monthly_compensable_days
     input_bridge:
       yempv_s:
-        - divide_by
-        - inputs
+        inputs:
+          - be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage
+        divide_by: 312
   - suite: be-work-bonus-credit
     policy: be:tinfe_be
     entity: Person
