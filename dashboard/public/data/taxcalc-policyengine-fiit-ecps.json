@@ -34,8 +34,8 @@
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 1736457358749.084,
-      "weighted_difference": -19594086487.552246,
+      "right_weighted_sum": 1810014769941.7104,
+      "weighted_difference": -93151497680.17871,
       "weighted_match_rate": 87.096774
     },
     {
@@ -47,17 +47,17 @@
       "concept": "us:tax/federal-income-tax#agi",
       "description": "Federal adjusted gross income",
       "left_weighted_sum": 16231061588210.676,
-      "match_rate": 100,
-      "match_weight": 183559168.5,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "match_rate": 80.645161,
+      "match_weight": 148031587.5,
+      "mismatch_count": 6,
+      "mismatch_weight": 35527581,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": "us:tax/federal-income-tax#liability",
-      "right_weighted_sum": 16231061570156.57,
-      "weighted_difference": 18054.105469,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 16608746392475.79,
+      "weighted_difference": -377684804265.1133,
+      "weighted_match_rate": 80.645161
     },
     {
       "category": "tax",
@@ -89,17 +89,17 @@
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
       "left_weighted_sum": 12199247706756.29,
-      "match_rate": 96.774194,
-      "match_weight": 177637905,
-      "mismatch_count": 1,
-      "mismatch_weight": 5921263.5,
+      "match_rate": 87.096774,
+      "match_weight": 159874114.5,
+      "mismatch_count": 4,
+      "mismatch_weight": 23685054,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": "us:tax/federal-income-tax#liability",
-      "right_weighted_sum": 12200014876080.932,
-      "weighted_difference": -767169324.642578,
-      "weighted_match_rate": 96.774194
+      "right_weighted_sum": 12488314187525.459,
+      "weighted_difference": -289066480769.1699,
+      "weighted_match_rate": 87.096774
     },
     {
       "category": "tax",
@@ -118,8 +118,8 @@
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": "us:tax/federal-income-tax#liability",
-      "right_weighted_sum": 1828530312765.3706,
-      "weighted_difference": 1900129791.366943,
+      "right_weighted_sum": 1886278111961.1406,
+      "weighted_difference": -55847669404.403076,
       "weighted_match_rate": 90.322581
     },
     {
@@ -131,17 +131,17 @@
       "concept": "us:tax/federal-income-tax#eitc",
       "description": "Earned Income Tax Credit",
       "left_weighted_sum": 82734648502.7657,
-      "match_rate": 100,
-      "match_weight": 183559168.5,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "match_rate": 96.774194,
+      "match_weight": 177637905,
+      "mismatch_count": 1,
+      "mismatch_weight": 5921263.5,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": "us:tax/federal-income-tax#liability",
-      "right_weighted_sum": 82734648975.57202,
-      "weighted_difference": -472.80632,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 82121681108.02332,
+      "weighted_difference": 612967394.742386,
+      "weighted_match_rate": 96.774194
     },
     {
       "category": "tax",
@@ -181,8 +181,8 @@
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": "us:tax/federal-income-tax#liability",
-      "right_weighted_sum": 21494186505,
-      "weighted_difference": -21494186505,
+      "right_weighted_sum": 26269685517.75,
+      "weighted_difference": -26269685517.75,
       "weighted_match_rate": 96.774194
     }
   ],
@@ -300,17 +300,12 @@
       "case_id": "ecps-tax-unit-5706",
       "left_engine": "taxcalc",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 87.5,
       "matches": [
         {
           "concept": "us:tax/federal-income-tax#liability",
           "left": 0.0,
           "right": 0.0
-        },
-        {
-          "concept": "us:tax/federal-income-tax#agi",
-          "left": 27521.752358365058,
-          "right": 27521.75
         },
         {
           "concept": "us:tax/federal-income-tax#standard_deduction",
@@ -402,7 +397,19 @@
           "s006": 1.0
         }
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "description": "Federal adjusted gross income",
+          "difference": -906.9312353849418,
+          "kind": "amount_difference",
+          "left": 27521.752358365058,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 28428.68359375,
+          "tolerance": 5
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -1190,17 +1197,12 @@
       "case_id": "ecps-tax-unit-27798",
       "left_engine": "taxcalc",
       "left_errors": [],
-      "match_rate": 100.0,
+      "match_rate": 87.5,
       "matches": [
         {
           "concept": "us:tax/federal-income-tax#liability",
           "left": 0.0,
           "right": 0.0
-        },
-        {
-          "concept": "us:tax/federal-income-tax#agi",
-          "left": 696.7603759765625,
-          "right": 696.7603759765625
         },
         {
           "concept": "us:tax/federal-income-tax#standard_deduction",
@@ -1290,7 +1292,19 @@
           "s006": 1.0
         }
       },
-      "mismatches": [],
+      "mismatches": [
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "description": "Federal adjusted gross income",
+          "difference": -14059.185913085938,
+          "kind": "amount_difference",
+          "left": 696.7603759765625,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 14755.9462890625,
+          "tolerance": 5
+        }
+      ],
       "right_engine": "policyengine",
       "right_errors": []
     },
@@ -1514,27 +1528,12 @@
       "case_id": "ecps-tax-unit-38771",
       "left_engine": "taxcalc",
       "left_errors": [],
-      "match_rate": 75.0,
+      "match_rate": 37.5,
       "matches": [
-        {
-          "concept": "us:tax/federal-income-tax#agi",
-          "left": 683879.4707554817,
-          "right": 683879.4375
-        },
         {
           "concept": "us:tax/federal-income-tax#standard_deduction",
           "left": 18150.0,
           "right": 18150.0
-        },
-        {
-          "concept": "us:tax/federal-income-tax#taxable_income",
-          "left": 665729.4707554817,
-          "right": 665729.4375
-        },
-        {
-          "concept": "us:tax/federal-income-tax#tax_before_credits",
-          "left": 98453.39415109635,
-          "right": 98453.390625
         },
         {
           "concept": "us:tax/federal-income-tax#eitc",
@@ -1608,23 +1607,56 @@
         {
           "concept": "us:tax/federal-income-tax#liability",
           "description": "Federal income tax liability",
-          "difference": -3629.9984601953474,
+          "difference": -15334.373460195347,
           "kind": "amount_difference",
           "left": 116840.81403980465,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 120470.8125,
+          "right": 132175.1875,
           "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "description": "Federal adjusted gross income",
+          "difference": -45789.40424451826,
+          "kind": "amount_difference",
+          "left": 683879.4707554817,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 729668.875,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": -45789.40424451826,
+          "kind": "amount_difference",
+          "left": 665729.4707554817,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 711518.875,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "description": "Federal tax before credits",
+          "difference": -9157.879286403651,
+          "kind": "amount_difference",
+          "left": 98453.39415109635,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 107611.2734375,
+          "tolerance": 5
         },
         {
           "concept": "us:tax/federal-income-tax#amt",
           "description": "Alternative Minimum Tax",
-          "difference": -3630.0,
+          "difference": -4436.5,
           "kind": "amount_difference",
           "left": 0.0,
           "parent": "us:tax/federal-income-tax#liability",
           "relative_tolerance": 0,
-          "right": 3630.0,
+          "right": 4436.5,
           "tolerance": 5
         }
       ],
@@ -2187,22 +2219,12 @@
       "case_id": "ecps-tax-unit-127720",
       "left_engine": "taxcalc",
       "left_errors": [],
-      "match_rate": 75.0,
+      "match_rate": 50.0,
       "matches": [
-        {
-          "concept": "us:tax/federal-income-tax#agi",
-          "left": 64988.39772605896,
-          "right": 64988.3984375
-        },
         {
           "concept": "us:tax/federal-income-tax#standard_deduction",
           "left": 16100.0,
           "right": 16100.0
-        },
-        {
-          "concept": "us:tax/federal-income-tax#taxable_income",
-          "left": 48888.39772605896,
-          "right": 48888.3984375
         },
         {
           "concept": "us:tax/federal-income-tax#eitc",
@@ -2281,23 +2303,45 @@
         {
           "concept": "us:tax/federal-income-tax#liability",
           "description": "Federal income tax liability",
-          "difference": 222.70587165832512,
+          "difference": -194.14227287292488,
           "kind": "amount_difference",
           "left": 5618.607727127075,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 5395.90185546875,
+          "right": 5812.75,
           "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "description": "Federal adjusted gross income",
+          "difference": -1855.88352394104,
+          "kind": "amount_difference",
+          "left": 64988.39772605896,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 66844.28125,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": -1855.88352394104,
+          "kind": "amount_difference",
+          "left": 48888.39772605896,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 50744.28125,
+          "tolerance": 5
         },
         {
           "concept": "us:tax/federal-income-tax#tax_before_credits",
           "description": "Federal tax before credits",
-          "difference": 222.70587165832512,
+          "difference": -194.14233390808113,
           "kind": "amount_difference",
           "left": 5618.607727127075,
           "parent": "us:tax/federal-income-tax#liability",
           "relative_tolerance": 0,
-          "right": 5395.90185546875,
+          "right": 5812.750061035156,
           "tolerance": 5
         }
       ],
@@ -2308,22 +2352,12 @@
       "case_id": "ecps-tax-unit-51995",
       "left_engine": "taxcalc",
       "left_errors": [],
-      "match_rate": 75.0,
+      "match_rate": 50.0,
       "matches": [
-        {
-          "concept": "us:tax/federal-income-tax#agi",
-          "left": 305643.54052734375,
-          "right": 305643.5625
-        },
         {
           "concept": "us:tax/federal-income-tax#standard_deduction",
           "left": 32200.0,
           "right": 32200.0
-        },
-        {
-          "concept": "us:tax/federal-income-tax#taxable_income",
-          "left": 273443.54052734375,
-          "right": 273443.5625
         },
         {
           "concept": "us:tax/federal-income-tax#eitc",
@@ -2406,23 +2440,45 @@
         {
           "concept": "us:tax/federal-income-tax#liability",
           "description": "Federal income tax liability",
-          "difference": 46.366110351562384,
+          "difference": -99.65342089843762,
           "kind": "amount_difference",
           "left": 49315.60048535156,
           "parent": null,
           "relative_tolerance": 0,
-          "right": 49269.234375,
+          "right": 49415.25390625,
           "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "description": "Federal adjusted gross income",
+          "difference": -525.27197265625,
+          "kind": "amount_difference",
+          "left": 305643.54052734375,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 306168.8125,
+          "tolerance": 5
+        },
+        {
+          "concept": "us:tax/federal-income-tax#taxable_income",
+          "description": "Federal taxable income",
+          "difference": -525.27197265625,
+          "kind": "amount_difference",
+          "left": 273443.54052734375,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 273968.8125,
+          "tolerance": 5
         },
         {
           "concept": "us:tax/federal-income-tax#tax_before_credits",
           "description": "Federal tax before credits",
-          "difference": 46.367719726564246,
+          "difference": -79.69087402343575,
           "kind": "amount_difference",
           "left": 50821.5497265625,
           "parent": "us:tax/federal-income-tax#liability",
           "relative_tolerance": 0,
-          "right": 50775.18200683594,
+          "right": 50901.24060058594,
           "tolerance": 5
         }
       ],
@@ -2873,22 +2929,17 @@
       "case_id": "ecps-tax-unit-67376",
       "left_engine": "taxcalc",
       "left_errors": [],
-      "match_rate": 62.5,
+      "match_rate": 50.0,
       "matches": [
-        {
-          "concept": "us:tax/federal-income-tax#agi",
-          "left": 50369.47667557324,
-          "right": 50369.4765625
-        },
         {
           "concept": "us:tax/federal-income-tax#standard_deduction",
           "left": 32200.0,
           "right": 32200.0
         },
         {
-          "concept": "us:tax/federal-income-tax#eitc",
-          "left": 1357.325627243396,
-          "right": 1357.32568359375
+          "concept": "us:tax/federal-income-tax#tax_before_credits",
+          "left": 1453.5581340458593,
+          "right": 1453.5584350585923
         },
         {
           "concept": "us:tax/federal-income-tax#ctc",
@@ -2966,34 +3017,45 @@
         {
           "concept": "us:tax/federal-income-tax#liability",
           "description": "Federal income tax liability",
-          "difference": 51.82430367746338,
+          "difference": -103.52005667409912,
           "kind": "amount_difference",
           "left": -2103.7674931975366,
           "parent": null,
           "relative_tolerance": 0,
-          "right": -2155.591796875,
+          "right": -2000.2474365234375,
           "tolerance": 15
+        },
+        {
+          "concept": "us:tax/federal-income-tax#agi",
+          "description": "Federal adjusted gross income",
+          "difference": -647.8084806767583,
+          "kind": "amount_difference",
+          "left": 50369.47667557324,
+          "parent": "us:tax/federal-income-tax#liability",
+          "relative_tolerance": 0,
+          "right": 51017.28515625,
+          "tolerance": 5
         },
         {
           "concept": "us:tax/federal-income-tax#taxable_income",
           "description": "Federal taxable income",
-          "difference": -129.56319079140667,
+          "difference": -647.8092845414067,
           "kind": "amount_difference",
           "left": 14535.581340458593,
           "parent": "us:tax/federal-income-tax#liability",
           "relative_tolerance": 0,
-          "right": 14665.14453125,
+          "right": 15183.390625,
           "tolerance": 5
         },
         {
-          "concept": "us:tax/federal-income-tax#tax_before_credits",
-          "description": "Federal tax before credits",
-          "difference": 51.82440601851704,
+          "concept": "us:tax/federal-income-tax#eitc",
+          "description": "Earned Income Tax Credit",
+          "difference": 103.51971904027096,
           "kind": "amount_difference",
-          "left": 1453.5581340458593,
+          "left": 1357.325627243396,
           "parent": "us:tax/federal-income-tax#liability",
           "relative_tolerance": 0,
-          "right": 1401.7337280273423,
+          "right": 1253.805908203125,
           "tolerance": 5
         }
       ],
@@ -3766,11 +3828,33 @@
   ],
   "engines": {
     "left": "taxcalc",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "axiom_rules_engine": "0.2.2",
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.28.0",
+      "policyengine_us": "1.752.2"
+    }
   },
   "errors": [],
   "locales": [],
   "mismatches": [
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-5706",
+      "concept": "us:tax/federal-income-tax#agi",
+      "description": "Federal adjusted gross income",
+      "difference": -906.9312353849418,
+      "kind": "amount_difference",
+      "left": 27521.752358365058,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 28428.68359375,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
     {
       "ages": null,
       "case_id": "ecps-tax-unit-15955",
@@ -3793,22 +3877,82 @@
     },
     {
       "ages": null,
+      "case_id": "ecps-tax-unit-27798",
+      "concept": "us:tax/federal-income-tax#agi",
+      "description": "Federal adjusted gross income",
+      "difference": -14059.185913085938,
+      "kind": "amount_difference",
+      "left": 696.7603759765625,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 14755.9462890625,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
       "case_id": "ecps-tax-unit-38771",
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
-      "difference": -3629.9984601953474,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "38771-liability-propagates-amt"
-      },
+      "difference": -15334.373460195347,
       "kind": "amount_difference",
       "left": 116840.81403980465,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 120470.8125,
+      "right": 132175.1875,
       "scenario": null,
       "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-38771",
+      "concept": "us:tax/federal-income-tax#agi",
+      "description": "Federal adjusted gross income",
+      "difference": -45789.40424451826,
+      "kind": "amount_difference",
+      "left": 683879.4707554817,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 729668.875,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-38771",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": -45789.40424451826,
+      "kind": "amount_difference",
+      "left": 665729.4707554817,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 711518.875,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-38771",
+      "concept": "us:tax/federal-income-tax#tax_before_credits",
+      "description": "Federal tax before credits",
+      "difference": -9157.879286403651,
+      "kind": "amount_difference",
+      "left": 98453.39415109635,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 107611.2734375,
+      "scenario": null,
+      "tolerance": 5,
       "yearly_earned_income": null
     },
     {
@@ -3816,17 +3960,13 @@
       "case_id": "ecps-tax-unit-38771",
       "concept": "us:tax/federal-income-tax#amt",
       "description": "Alternative Minimum Tax",
-      "difference": -3630.0,
-      "disposition": {
-        "disposition": "unexplained",
-        "id": "38771-amt-large-capital-gains-open"
-      },
+      "difference": -4436.5,
       "kind": "amount_difference",
       "left": 0.0,
       "parent": "us:tax/federal-income-tax#liability",
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 3630.0,
+      "right": 4436.5,
       "scenario": null,
       "tolerance": 5,
       "yearly_earned_income": null
@@ -3836,17 +3976,13 @@
       "case_id": "ecps-tax-unit-127720",
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
-      "difference": 222.70587165832512,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "127720-liability-propagates-before-credits"
-      },
+      "difference": -194.14227287292488,
       "kind": "amount_difference",
       "left": 5618.607727127075,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 5395.90185546875,
+      "right": 5812.75,
       "scenario": null,
       "tolerance": 15,
       "yearly_earned_income": null
@@ -3854,19 +3990,47 @@
     {
       "ages": null,
       "case_id": "ecps-tax-unit-127720",
+      "concept": "us:tax/federal-income-tax#agi",
+      "description": "Federal adjusted gross income",
+      "difference": -1855.88352394104,
+      "kind": "amount_difference",
+      "left": 64988.39772605896,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 66844.28125,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-127720",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": -1855.88352394104,
+      "kind": "amount_difference",
+      "left": 48888.39772605896,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 50744.28125,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-127720",
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
-      "difference": 222.70587165832512,
-      "disposition": {
-        "disposition": "unexplained",
-        "id": "127720-before-credits-open"
-      },
+      "difference": -194.14233390808113,
       "kind": "amount_difference",
       "left": 5618.607727127075,
       "parent": "us:tax/federal-income-tax#liability",
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 5395.90185546875,
+      "right": 5812.750061035156,
       "scenario": null,
       "tolerance": 5,
       "yearly_earned_income": null
@@ -3876,17 +4040,13 @@
       "case_id": "ecps-tax-unit-51995",
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
-      "difference": 46.366110351562384,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "51995-liability-propagates-before-credits"
-      },
+      "difference": -99.65342089843762,
       "kind": "amount_difference",
       "left": 49315.60048535156,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 49269.234375,
+      "right": 49415.25390625,
       "scenario": null,
       "tolerance": 15,
       "yearly_earned_income": null
@@ -3894,19 +4054,47 @@
     {
       "ages": null,
       "case_id": "ecps-tax-unit-51995",
+      "concept": "us:tax/federal-income-tax#agi",
+      "description": "Federal adjusted gross income",
+      "difference": -525.27197265625,
+      "kind": "amount_difference",
+      "left": 305643.54052734375,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 306168.8125,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-51995",
+      "concept": "us:tax/federal-income-tax#taxable_income",
+      "description": "Federal taxable income",
+      "difference": -525.27197265625,
+      "kind": "amount_difference",
+      "left": 273443.54052734375,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 273968.8125,
+      "scenario": null,
+      "tolerance": 5,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-51995",
       "concept": "us:tax/federal-income-tax#tax_before_credits",
       "description": "Federal tax before credits",
-      "difference": 46.367719726564246,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "51995-tax-before-credits-rounding-residual"
-      },
+      "difference": -79.69087402343575,
       "kind": "amount_difference",
       "left": 50821.5497265625,
       "parent": "us:tax/federal-income-tax#liability",
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 50775.18200683594,
+      "right": 50901.24060058594,
       "scenario": null,
       "tolerance": 5,
       "yearly_earned_income": null
@@ -3916,19 +4104,31 @@
       "case_id": "ecps-tax-unit-67376",
       "concept": "us:tax/federal-income-tax#liability",
       "description": "Federal income tax liability",
-      "difference": 51.82430367746338,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "67376-liability-propagates-taxable-income"
-      },
+      "difference": -103.52005667409912,
       "kind": "amount_difference",
       "left": -2103.7674931975366,
       "parent": null,
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": -2155.591796875,
+      "right": -2000.2474365234375,
       "scenario": null,
       "tolerance": 15,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-tax-unit-67376",
+      "concept": "us:tax/federal-income-tax#agi",
+      "description": "Federal adjusted gross income",
+      "difference": -647.8084806767583,
+      "kind": "amount_difference",
+      "left": 50369.47667557324,
+      "parent": "us:tax/federal-income-tax#liability",
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 51017.28515625,
+      "scenario": null,
+      "tolerance": 5,
       "yearly_earned_income": null
     },
     {
@@ -3936,17 +4136,13 @@
       "case_id": "ecps-tax-unit-67376",
       "concept": "us:tax/federal-income-tax#taxable_income",
       "description": "Federal taxable income",
-      "difference": -129.56319079140667,
-      "disposition": {
-        "disposition": "unexplained",
-        "id": "67376-taxable-income-self-employment-open"
-      },
+      "difference": -647.8092845414067,
       "kind": "amount_difference",
       "left": 14535.581340458593,
       "parent": "us:tax/federal-income-tax#liability",
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 14665.14453125,
+      "right": 15183.390625,
       "scenario": null,
       "tolerance": 5,
       "yearly_earned_income": null
@@ -3954,19 +4150,15 @@
     {
       "ages": null,
       "case_id": "ecps-tax-unit-67376",
-      "concept": "us:tax/federal-income-tax#tax_before_credits",
-      "description": "Federal tax before credits",
-      "difference": 51.82440601851704,
-      "disposition": {
-        "disposition": "explained_residual",
-        "id": "67376-before-credits-propagates-taxable-income"
-      },
+      "concept": "us:tax/federal-income-tax#eitc",
+      "description": "Earned Income Tax Credit",
+      "difference": 103.51971904027096,
       "kind": "amount_difference",
-      "left": 1453.5581340458593,
+      "left": 1357.325627243396,
       "parent": "us:tax/federal-income-tax#liability",
       "pregnant_head": null,
       "relative_tolerance": 0,
-      "right": 1401.7337280273423,
+      "right": 1253.805908203125,
       "scenario": null,
       "tolerance": 5,
       "yearly_earned_income": null
@@ -3979,13 +4171,14 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "e5e40d40353f8459da4e46a9feae7279c2fecccc",
-      "axiom_rules_engine_version": "0.1.0"
+      "axiom_rules_engine_sha": "2840b57ecd5712b4672f872a1c2666fdcd28dfb9",
+      "axiom_rules_engine_version": "0.2.2"
     },
-    "generated_at": "2026-07-24T12:05:38Z",
+    "generated_at": "2026-09-26T02:32:26Z",
     "generated_by": "scripts/run_comparison.py::taxcalc-fiit-ecps",
     "oracle": {
       "name": "policyengine",
+      "policyengine_core": "3.28.0",
       "policyengine_package": "policyengine==4.18.9",
       "policyengine_us": "1.752.2",
       "taxcalc": "6.7.1"
@@ -4005,26 +4198,44 @@
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
-        "explained_residual": 6,
-        "unexplained": 4,
+        "explained_residual": 0,
+        "unexplained": 1,
         "upstream_engine_gap": 0
       },
       "dispositions_file": "dispositions/taxcalc-fiit-ecps.yaml",
-      "expired_entries": [],
-      "explained_rate": 98.387097,
+      "expired_entries": [
+        "51995-tax-before-credits-rounding-residual",
+        "51995-liability-propagates-before-credits",
+        "127720-before-credits-open",
+        "127720-liability-propagates-before-credits",
+        "67376-taxable-income-self-employment-open",
+        "67376-liability-propagates-taxable-income",
+        "67376-before-credits-propagates-taxable-income",
+        "38771-amt-large-capital-gains-open",
+        "38771-liability-propagates-amt"
+      ],
+      "explained_rate": 91.935484,
       "orphaned_entries": [],
-      "raw_match_rate": 95.967742,
+      "raw_match_rate": 91.935484,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 4
+      "unexplained_count": 20
     },
     "error_count": 0,
-    "errors_by_engine": [],
-    "match_count": 238,
-    "mismatch_count": 10,
+    "errors_by_engine": {},
+    "match_count": 228,
+    "mismatch_count": 20,
     "mismatches_by_concept": [
+      {
+        "count": 6,
+        "value": "us:tax/federal-income-tax#agi"
+      },
       {
         "count": 4,
         "value": "us:tax/federal-income-tax#liability"
+      },
+      {
+        "count": 4,
+        "value": "us:tax/federal-income-tax#taxable_income"
       },
       {
         "count": 3,
@@ -4040,26 +4251,26 @@
       },
       {
         "count": 1,
-        "value": "us:tax/federal-income-tax#taxable_income"
+        "value": "us:tax/federal-income-tax#eitc"
       }
     ],
     "mismatches_by_kind": [
       {
-        "count": 10,
+        "count": 20,
         "value": "amount_difference"
       }
     ],
     "mismatches_by_scenario": [
       {
-        "count": 10,
+        "count": 20,
         "value": null
       }
     ],
     "weighted": {
       "comparison_weight": 1468473348,
-      "match_rate": 95.967742,
-      "match_weight": 1409260713,
-      "mismatch_weight": 59212635
+      "match_rate": 91.935484,
+      "match_weight": 1350048078,
+      "mismatch_weight": 118425270
     }
   }
 }
