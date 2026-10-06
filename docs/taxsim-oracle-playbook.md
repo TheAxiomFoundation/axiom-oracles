@@ -90,6 +90,19 @@ gap; disposition it, do not chase the Axiom encoding):
   benefits (`gssi`) follow the same rule: the §86 member is exactly
   0.85 × the non-earner members' benefits, plus the H.R.1 §70103
   senior-deduction phaseout knock-on of the shifted MAGI.
+- Units with **tax-exempt interest** (Form 1040 line 2a): TAXSIM-35 has
+  no input for it (`intrec` is "Taxable Interest Received", the
+  documentation says "It is an error to include a variable not named
+  above", and the pinned binary stops with `STOP 901` on an unknown
+  column), so the shared projection leaves
+  `Concepts.TAX_EXEMPT_INTEREST_INCOME` out of the row and records the
+  dropped head+spouse amount under the case's
+  `metadata.taxsim_unprojected_inputs`. TAXSIM therefore computes as if
+  line 2a were 0: its taxable Social Security (`v12`) omits the §86(b)(2)(B)
+  add-back to modified AGI, and its EITC investment-income test omits
+  Pub. 596 Worksheet 1 line 2 (§32(i)(2)(B)), while the Axiom side counts
+  both. Axiom-vs-TAXSIM rows driven by it are projection-surface
+  limitations (`bridge_artifact`), not oracle disagreements.
 - **SE-tax ALD**: the pinned binary deducts half of the §1401(b)(2)
   additional Medicare tax in its self-employment-tax ALD, which §164(f)(1)
   excludes (isolated probe: w=0, se=810,431 → ALD 24,759.23 = 22,291.28

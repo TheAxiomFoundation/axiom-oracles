@@ -11,6 +11,8 @@ from axiom_oracles.populations.populace_us import (
     POPULACE_US_DATASET,
     PopulacePin,
     PopulaceUsCaseLoader,
+    _PERSON_NON_WAGE_VARIABLES,
+    _TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
     _clean_number,
     _resolve_populace_dataset,
     _scope_from_geography,
@@ -233,6 +235,103 @@ def test_loader_skips_geographically_unresolvable_records() -> None:
     assert [case.case_id for case in cases] == ["ecps-202"]
 
 
+def test_tax_unit_cases_carry_tax_exempt_interest_for_nonzero_persons() -> None:
+    cases = load_populace_us_cases(
+        period="2026",
+        case_unit="tax_unit",
+        microsimulation_factory=lambda dataset: FakeMicrosimulation(dataset),
+    )
+
+    head, child = cases[0].entities
+    (other_head,) = cases[1].entities
+    assert head.facts[Concepts.TAX_EXEMPT_INTEREST_INCOME] == 2_500
+    assert other_head.facts[Concepts.TAX_EXEMPT_INTEREST_INCOME] == 700
+    # Zeros are dropped, exactly like the shared non-wage table.
+    assert Concepts.TAX_EXEMPT_INTEREST_INCOME not in child.facts
+
+
+def test_tax_unit_tax_exempt_interest_keeps_the_sign_it_is_given() -> None:
+    """Same cleaning as the shared table: the loader never floors (the
+    pinned artifact has no negative tax-exempt interest; floors belong to
+    the projections)."""
+
+    def factory(dataset):
+        sim = FakeMicrosimulation(dataset)
+        sim.person_data["tax_exempt_interest_income"] = [-40.0, 0.0, 700.0]
+        return sim
+
+    cases = load_populace_us_cases(
+        period="2026",
+        case_unit="tax_unit",
+        microsimulation_factory=factory,
+    )
+
+    assert cases[0].entities[0].facts[Concepts.TAX_EXEMPT_INTEREST_INCOME] == -40
+
+
+def test_household_cases_never_carry_or_load_tax_exempt_interest() -> None:
+    """Household Cases feed the benefit lanes, where the Axiom encodings do
+    not read tax-exempt interest yet; the loader must neither attach it nor
+    pay for calculating it."""
+    sims = []
+
+    def factory(dataset):
+        sim = FakeMicrosimulation(dataset)
+        sims.append(sim)
+        return sim
+
+    cases = load_populace_us_cases(
+        period="2026",
+        case_unit="household",
+        microsimulation_factory=factory,
+    )
+
+    assert cases
+    assert all(
+        Concepts.TAX_EXEMPT_INTEREST_INCOME not in entity.facts
+        for case in cases
+        for entity in case.entities
+    )
+    assert "tax_exempt_interest_income" not in sims[0].calls
+
+
+def test_tax_unit_loader_fails_closed_when_tax_exempt_interest_is_missing() -> None:
+    """A renamed or missing PolicyEngine variable must stop a tax-unit load,
+    not load every unit's tax-exempt interest as zero."""
+
+    def factory(dataset):
+        sim = FakeMicrosimulation(dataset)
+        del sim.person_data["tax_exempt_interest_income"]
+        return sim
+
+    with pytest.raises(RuntimeError, match="'tax_exempt_interest_income'"):
+        load_populace_us_cases(
+            period="2026",
+            case_unit="tax_unit",
+            microsimulation_factory=factory,
+        )
+
+
+def test_tax_exempt_interest_reads_the_policyengine_us_person_input() -> None:
+    """The loader asks for exactly ``tax_exempt_interest_income``, which the
+    installed policyengine-us defines as a Person, yearly, stored float input
+    (no formula, so no aggregate alias can double-count it)."""
+    assert _TAX_UNIT_PERSON_NON_WAGE_VARIABLES == {
+        Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
+    }
+    assert Concepts.TAX_EXEMPT_INTEREST_INCOME not in _PERSON_NON_WAGE_VARIABLES
+
+    policyengine_us = pytest.importorskip("policyengine_us")
+    variable = policyengine_us.CountryTaxBenefitSystem().variables[
+        "tax_exempt_interest_income"
+    ]
+    assert variable.entity.key == "person"
+    assert variable.definition_period == "year"
+    assert variable.value_type is float
+    assert not variable.formulas
+    assert not getattr(variable, "adds", None)
+
+
 def test_scope_from_geography_combines_state_and_county_components() -> None:
     assert _scope_from_geography(29, 135, "") == GeographyScope(
         type="census_county",
@@ -291,6 +390,7 @@ class FakeMicrosimulation:
     def __init__(self, dataset, *, place_fips=None):
         self.dataset = dataset
         self.subsample_size = None
+        self.calls = []
         self.household_data = {
             "household_id": [101, 202],
             "household_weight": [12.5, 34.0],
@@ -312,6 +412,7 @@ class FakeMicrosimulation:
             "is_blind": [False, False, False],
             "is_veteran": [False, False, True],
             "has_medicaid_health_coverage_at_interview": [True, False, False],
+            "tax_exempt_interest_income": [2_500.0, 0.0, 700.0],
         }
 
     def subsample(self, sample_size):
@@ -319,6 +420,7 @@ class FakeMicrosimulation:
 
     def calculate(self, variable, period, map_to=None):
         del period
+        self.calls.append(variable)
         data = self.person_data if map_to == "person" else self.household_data
         if variable not in data:
             raise ValueError(variable)

@@ -202,7 +202,11 @@ class PopulaceUsCaseLoader:
 
         calculation_period = _year(period)
         households = self._households(sim, calculation_period)
-        people_by_household = self._people_by_household(sim, calculation_period)
+        people_by_household = self._people_by_household(
+            sim,
+            calculation_period,
+            case_unit=case_unit,
+        )
         cases = []
         for household in households:
             household_scope = household.scope
@@ -347,6 +351,8 @@ class PopulaceUsCaseLoader:
         self,
         sim,
         period: int,
+        *,
+        case_unit: CaseUnit = "household",
     ) -> dict[int | str, list["_PersonRow"]]:
         household_ids = _values(
             sim.calculate("household_id", period=period, map_to="person")
@@ -453,6 +459,25 @@ class PopulaceUsCaseLoader:
             )
             for concept, pe_variable in _PERSON_NON_WAGE_VARIABLES.items()
         }
+        if case_unit == "tax_unit":
+            # Tax-unit-only sources fail closed: a renamed or missing
+            # variable must stop the load, not zero the concept.
+            non_wage_income.update(
+                {
+                    concept: _calculate_values(
+                        sim,
+                        pe_variable,
+                        period,
+                        map_to="person",
+                        default=0,
+                        size=size,
+                        strict=True,
+                    )
+                    for concept, pe_variable in (
+                        _TAX_UNIT_PERSON_NON_WAGE_VARIABLES.items()
+                    )
+                }
+            )
 
         people_by_household: dict[int | str, list[_PersonRow]] = defaultdict(list)
         for index, household_id in enumerate(household_ids):
@@ -516,6 +541,19 @@ _PERSON_NON_WAGE_VARIABLES = {
     # lives in the axiom:resources/person namespace, so it never mixes with the
     # income concepts downstream — only the SSI resource input slot reads it.
     Concepts.SSI_COUNTABLE_RESOURCES: "ssi_countable_resources",
+    # The Case deliberately carries no farm-rent concept: the Axiom federal
+    # oracle bridge has no gross-income slot for it (axiom-oracles issue
+    # FARM_RENT_GAP_ISSUE), so loading it would hand the other engines income
+    # Axiom never sees.
+}
+
+# Loaded only for case_unit == "tax_unit" Cases. Household Cases feed the
+# benefit lanes (SNAP/TANF/SSI/Medicaid), where PolicyEngine counts tax-exempt
+# interest (through interest_income and MAGI) but the Axiom benefit encodings
+# do not read it yet, so carrying it on household Cases would hand
+# PolicyEngine income Axiom never sees (axiom-oracles issue BENEFIT_GAP_ISSUE).
+_TAX_UNIT_PERSON_NON_WAGE_VARIABLES = {
+    Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
 }
 
 
@@ -595,6 +633,7 @@ def _calculate_values(
     map_to: str | None = None,
     default: Any,
     size: int,
+    strict: bool = False,
 ) -> list[Any]:
     try:
         kwargs = {"period": period}
@@ -606,7 +645,11 @@ def _calculate_values(
             value = sim.calculate(variable, period=period)
         else:
             raise
-    except Exception:
+    except Exception as exc:
+        if strict:
+            raise RuntimeError(
+                f"PolicyEngine could not calculate {variable!r} for {period}: {exc}"
+            ) from exc
         return [default] * size
     return _values(value)
 

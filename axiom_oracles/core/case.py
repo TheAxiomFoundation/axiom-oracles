@@ -79,6 +79,10 @@ class Concepts:
     DIVIDEND_INCOME = "axiom:income/person#dividend_income"
     QUALIFIED_DIVIDEND_INCOME = "axiom:income/person#qualified_dividend_income"
     INTEREST_INCOME = "axiom:income/person#interest_income"
+    # Form 1040 line 2a: interest that 26 USC 103 excludes from gross income
+    # (INTEREST_INCOME is the taxable line 2b). It still enters 26 USC
+    # 86(b)(2)(B) modified AGI and 26 USC 32(i)(2)(B) disqualified income.
+    TAX_EXEMPT_INTEREST_INCOME = "axiom:income/person#tax_exempt_interest_income"
     SHORT_TERM_CAPITAL_GAINS = "axiom:income/person#short_term_capital_gains"
     LONG_TERM_CAPITAL_GAINS = "axiom:income/person#long_term_capital_gains"
     PENSION_INCOME = "axiom:income/person#pension_income"
