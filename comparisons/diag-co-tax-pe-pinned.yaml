@@ -1,0 +1,36 @@
+# DIAGNOSTIC ONLY (not committed): the co-tax-intersection-taxsim concept set
+# graded Axiom vs PolicyEngine on the pinned engine/rulespec stack, so the
+# Case-surface tax-exempt-interest wiring can be checked on a lane where both
+# engines see the fact. Copied into the A/B worktrees for the run, then removed.
+name: diag-co-tax-pe-pinned
+title: DIAGNOSTIC Colorado tax concepts — Axiom vs PolicyEngine (pinned stack)
+description: Diagnostic A/B run for the TAX_EXEMPT_INTEREST_INCOME Case concept.
+ci: manual
+runner:
+  type: axiom-oracles-compare
+  axiom_rules_repo: $HOME/axiom-rules-engine-0c39023e
+  axiom_rules_repo_revision: 0c39023e
+  parameters:
+    left: axiom
+    right: policyengine
+    population: enhanced-cps
+    sample_size: 0
+    period: "2026"
+    suite: diag-co-tax-pe-pinned
+    concepts:
+      - us:tax/federal-income-tax#liability
+      - us:tax/federal-income-tax#agi
+      - us:tax/federal-income-tax#standard_deduction
+      - us:tax/federal-income-tax#taxable_income
+      - us:tax/federal-income-tax#tax_before_credits
+      - us:tax/federal-income-tax#eitc
+      - us:tax/federal-income-tax#ctc
+      - us:tax/federal-income-tax#cdcc
+      - us:tax/federal-income-tax#amt
+      - us:tax/payroll#employee_fica
+      - us:tax/state-income-tax#liability
+    axiom_rulespec_repo_roots: $HOME/oracle-pins
+    axiom_rulespec_repo_roots_revision: ca2d424f
+    include_case_inputs: true
+artifacts:
+  report_basename: diag-axiom-policyengine-co-tax-pinned
