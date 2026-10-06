@@ -1,0 +1,12 @@
+fix: close PolicyEngine attribution gate bypasses
+
+Validate encoding debt against the final GitHub issue identity, requiring an
+open TheAxiomFoundation rulespec-* issue with the declared number and no
+pull_request key. Preserve the existing PolicyEngine issue identity checks.
+
+Require supplied known-cause engines to contain a nonempty left/right string
+mapping and match dashboard cause selection for malformed JSON values.
+Add offline resolver regressions and Hypothesis properties, including Node
+differential coverage and a clean skip when Node is unavailable.
+
+Co-Authored-By: GPT-6.1 Sol <noreply@openai.com>
