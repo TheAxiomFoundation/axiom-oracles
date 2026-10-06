@@ -1,0 +1,946 @@
+nice: setpriority: Operation not permitted
+01: resume skip cases=79974 errors=0
+02: resume skip cases=108135 errors=0
+03: resume skip cases=567621 errors=0
+04: resume skip cases=288657 errors=0
+05: resume skip cases=38394 errors=0
+06: resume skip cases=89856 errors=0
+07: resume skip cases=372492 errors=0
+08: resume skip cases=176328 errors=0
+09: resume skip cases=16578 errors=0
+10: resume skip cases=62316 errors=0
+11: resume skip cases=50247 errors=0
+12: resume skip cases=135153 errors=0
+13: resume skip cases=24696 errors=0
+14: resume skip cases=12474 errors=0
+15: resume skip cases=111096 errors=0
+16: resume skip cases=184437 errors=0
+17: resume skip cases=94167 errors=0
+18: resume skip cases=81189 errors=0
+19: resume skip cases=102699 errors=0
+20: resume skip cases=269109 errors=0
+21: resume skip cases=105858 errors=0
+22: resume skip cases=116100 errors=0
+23: resume skip cases=64692 errors=0
+24: resume skip cases=211437 errors=0
+25: resume skip cases=81027 errors=0
+26: resume skip cases=62829 errors=0
+28: resume skip cases=250722 errors=0
+29: resume skip cases=991575 errors=0
+30: resume skip cases=47286 errors=0
+32: resume skip cases=186408 errors=0
+33: resume skip cases=58347 errors=0
+34: resume skip cases=49572 errors=0
+35: resume skip cases=33912 errors=0
+36: resume skip cases=20061 errors=0
+37: resume skip cases=66933 errors=0
+38: resume skip cases=230409 errors=0
+39: resume skip cases=346617 errors=0
+40: resume skip cases=197397 errors=0
+41: resume skip cases=194400 errors=0
+42: resume skip cases=134865 errors=0
+43: resume skip cases=42363 errors=0
+45: resume skip cases=20601 errors=0
+46: resume skip cases=55188 errors=0
+47: resume skip cases=21465 errors=0
+48: resume skip cases=312471 errors=0
+49: resume skip cases=14850 errors=0
+50: resume skip cases=33588 errors=0
+51: resume skip cases=133920 errors=0
+53: cases=64125 errors=0 elapsed=158.2s ETA=7159s
+54: cases=294111 errors=0 elapsed=280.7s ETA=9748s
+44: cases=534303 errors=0 elapsed=617.5s ETA=8938s
+52: cases=596970 errors=0 elapsed=707.7s ETA=7493s
+56: cases=87426 errors=0 elapsed=136.5s ETA=6241s
+57: cases=80568 errors=0 elapsed=107.7s ETA=5480s
+58: cases=122715 errors=0 elapsed=143.6s ETA=5048s
+59: cases=83106 errors=0 elapsed=119.4s ETA=4476s
+55: cases=442233 errors=0 elapsed=585.4s ETA=4242s
+60: cases=119853 errors=0 elapsed=247.1s ETA=4154s
+63: cases=258228 errors=0 elapsed=246.1s ETA=4466s
+64: cases=433269 errors=0 elapsed=442.6s ETA=5244s
+65: cases=70902 errors=0 elapsed=73.6s ETA=4888s
+66: cases=8802 errors=0 elapsed=24.9s ETA=4460s
+61: cases=936549 errors=0 elapsed=1040.9s ETA=4118s
+67: cases=14040 errors=0 elapsed=66.1s ETA=3783s
+68: cases=105057 errors=0 elapsed=118.5s ETA=3605s
+69: cases=133029 errors=0 elapsed=159.3s ETA=3388s
+71: cases=120114 errors=0 elapsed=117.6s ETA=3264s
+70: cases=308421 errors=0 elapsed=327.6s ETA=3177s
+62: cases=1403865 errors=0 elapsed=1532.8s ETA=3068s
+74: cases=80244 errors=0 elapsed=78.5s ETA=2898s
+75: cases=26703 errors=0 elapsed=37.9s ETA=2695s
+72: cases=362061 errors=0 elapsed=412.7s ETA=2494s
+78: cases=14121 errors=0 elapsed=29.2s ETA=2310s
+79: cases=8100 errors=0 elapsed=23.6s ETA=2134s
+80: cases=9234 errors=0 elapsed=23.5s ETA=1969s
+81: cases=45063 errors=0 elapsed=55.0s ETA=1834s
+76: cases=93663 errors=0 elapsed=183.8s ETA=1688s
+73: cases=387288 errors=0 elapsed=509.4s ETA=1577s
+83: cases=83214 errors=0 elapsed=164.8s ETA=1474s
+82: cases=188757 errors=0 elapsed=329.4s ETA=1393s
+86: cases=31401 errors=0 elapsed=44.7s ETA=1272s
+87: cases=319446 errors=0 elapsed=300.5s ETA=1247s
+88: cases=73737 errors=0 elapsed=99.2s ETA=1142s
+89: cases=64098 errors=0 elapsed=78.0s ETA=1031s
+85: cases=928638 errors=0 elapsed=1052.2s ETA=999s
+90: cases=446985 errors=0 elapsed=506.2s ETA=889s
+91: cases=183330 errors=0 elapsed=174.3s ETA=769s
+92: cases=70335 errors=0 elapsed=106.2s ETA=649s
+93: cases=71145 errors=0 elapsed=117.1s ETA=537s
+95: cases=126063 errors=0 elapsed=146.1s ETA=433s
+94: cases=282654 errors=0 elapsed=331.8s ETA=325s
+98: cases=26784 errors=0 elapsed=40.0s ETA=214s
+96: cases=173043 errors=0 elapsed=181.4s ETA=105s
+84: cases=1821240 errors=0 elapsed=1911.2s ETA=0s
+{
+  "schema": "axiom_oracles.us_tariff_schedule.eval_manifest.v1",
+  "shards": {
+    "02525bfc8a0ee19a1fa30175e87354405496038c058028aa555d9e049240b891": {
+      "cases": 116100,
+      "chapter": "22",
+      "elapsed_seconds": 162.742,
+      "engine_errors": 0,
+      "key": "02525bfc8a0ee19a1fa30175e87354405496038c058028aa555d9e049240b891",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/02/02525bfc8a0ee19a1fa30175e87354405496038c058028aa555d9e049240b891.jsonl.gz",
+      "sha256": "6a18515a1b0e1c4afb299f46285186d1c6adef2a671e5b8a8f994e9aa126f112"
+    },
+    "0252a61f2fdc242ddfc99b4ec2881bd9aa8376e12038ba9a9686d9b63a63ad6e": {
+      "cases": 70335,
+      "chapter": "92",
+      "elapsed_seconds": 106.164,
+      "engine_errors": 0,
+      "key": "0252a61f2fdc242ddfc99b4ec2881bd9aa8376e12038ba9a9686d9b63a63ad6e",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/02/0252a61f2fdc242ddfc99b4ec2881bd9aa8376e12038ba9a9686d9b63a63ad6e.jsonl.gz",
+      "sha256": "bf855b149ed8a17dce17f674d07a2a906316d68b98d3851f22ddd45a3954d126"
+    },
+    "027dd9c9d220e1a66d4a5f2cba43d0aaa504dbe81b27b59f73db8c1061ff4211": {
+      "cases": 8100,
+      "chapter": "79",
+      "elapsed_seconds": 23.629,
+      "engine_errors": 0,
+      "key": "027dd9c9d220e1a66d4a5f2cba43d0aaa504dbe81b27b59f73db8c1061ff4211",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/02/027dd9c9d220e1a66d4a5f2cba43d0aaa504dbe81b27b59f73db8c1061ff4211.jsonl.gz",
+      "sha256": "a253c93a4db0405d61418e83b04e9769b3c914ac952e4723ad8bbb733bce1a6c"
+    },
+    "05be2e09aff06b236b003bd33e2b61b63b8fedd0eb162963127bfc2bed056121": {
+      "cases": 42363,
+      "chapter": "43",
+      "elapsed_seconds": 91.603,
+      "engine_errors": 0,
+      "key": "05be2e09aff06b236b003bd33e2b61b63b8fedd0eb162963127bfc2bed056121",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/05/05be2e09aff06b236b003bd33e2b61b63b8fedd0eb162963127bfc2bed056121.jsonl.gz",
+      "sha256": "2d6bf934b2f892bfb4db0da571d11312bae69958dd56b0f5d8873ad701480f86"
+    },
+    "0650190319e6864ced007f625c3a24070f0d2421d4585e2a0ce310db3d2d6801": {
+      "cases": 62829,
+      "chapter": "26",
+      "elapsed_seconds": 100.515,
+      "engine_errors": 0,
+      "key": "0650190319e6864ced007f625c3a24070f0d2421d4585e2a0ce310db3d2d6801",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/06/0650190319e6864ced007f625c3a24070f0d2421d4585e2a0ce310db3d2d6801.jsonl.gz",
+      "sha256": "4f6f0bcb558dbaf699df869a9fb5695b23ad3630ef5cade093e7c54dff318aa0"
+    },
+    "06c5cd25d53abd78f4a870943ad11fcacfb3f3bfa99adcc4f66bc3bd94cf902b": {
+      "cases": 62316,
+      "chapter": "10",
+      "elapsed_seconds": 136.952,
+      "engine_errors": 0,
+      "key": "06c5cd25d53abd78f4a870943ad11fcacfb3f3bfa99adcc4f66bc3bd94cf902b",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/06/06c5cd25d53abd78f4a870943ad11fcacfb3f3bfa99adcc4f66bc3bd94cf902b.jsonl.gz",
+      "sha256": "566e51968ac29372bca38cd2d06c075ad6f0f7c5ddc8ffa74f50e0371bfa5fca"
+    },
+    "0df482acc8e3481b4067d97c84abf611e2bf13ea28c2605c416e359d0e76a616": {
+      "cases": 211437,
+      "chapter": "24",
+      "elapsed_seconds": 309.777,
+      "engine_errors": 0,
+      "key": "0df482acc8e3481b4067d97c84abf611e2bf13ea28c2605c416e359d0e76a616",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/0d/0df482acc8e3481b4067d97c84abf611e2bf13ea28c2605c416e359d0e76a616.jsonl.gz",
+      "sha256": "d909ff14a0ef2ef0d0930bb53e4ef51bee390e11eac21d1241c9cc0dc32f9c0b"
+    },
+    "0eb22f30fb98ef5c9248e31c20ca1020bbf8b3fc25c01dce2bb647d812a0aede": {
+      "cases": 126063,
+      "chapter": "95",
+      "elapsed_seconds": 146.115,
+      "engine_errors": 0,
+      "key": "0eb22f30fb98ef5c9248e31c20ca1020bbf8b3fc25c01dce2bb647d812a0aede",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/0e/0eb22f30fb98ef5c9248e31c20ca1020bbf8b3fc25c01dce2bb647d812a0aede.jsonl.gz",
+      "sha256": "ef0f43febf101bc2faaf68da674aa82d25b3233cbd72c34388b5ca655ff8b41c"
+    },
+    "112fe18445d1194b5ff24f584af88ed77791d42c556361d60df5b6907dcb3eff": {
+      "cases": 362061,
+      "chapter": "72",
+      "elapsed_seconds": 412.658,
+      "engine_errors": 0,
+      "key": "112fe18445d1194b5ff24f584af88ed77791d42c556361d60df5b6907dcb3eff",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/11/112fe18445d1194b5ff24f584af88ed77791d42c556361d60df5b6907dcb3eff.jsonl.gz",
+      "sha256": "80fb49988b5597d661b4ae519a2c6833397972287aeb52b3e22b6f90204b03c2"
+    },
+    "1884992dbbffc53f5039b373e2fc7b80004e3a3c009cfb0f7186f52076469a9c": {
+      "cases": 81027,
+      "chapter": "25",
+      "elapsed_seconds": 113.607,
+      "engine_errors": 0,
+      "key": "1884992dbbffc53f5039b373e2fc7b80004e3a3c009cfb0f7186f52076469a9c",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/18/1884992dbbffc53f5039b373e2fc7b80004e3a3c009cfb0f7186f52076469a9c.jsonl.gz",
+      "sha256": "59289f5affbebb078b992858c5d610ceb9182ae84e1143704270d710650163ea"
+    },
+    "1972df650eea7113f443a9fa48a449bb52da7e54f37b8dc97718f2f8f0ecb37c": {
+      "cases": 319446,
+      "chapter": "87",
+      "elapsed_seconds": 300.513,
+      "engine_errors": 0,
+      "key": "1972df650eea7113f443a9fa48a449bb52da7e54f37b8dc97718f2f8f0ecb37c",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/19/1972df650eea7113f443a9fa48a449bb52da7e54f37b8dc97718f2f8f0ecb37c.jsonl.gz",
+      "sha256": "2f296a2a02d18bcf342bbae507967c3d009bed493d2199400158056d641d976c"
+    },
+    "19f8c947c06b67b8ec1bc34abab352756ec997e51af7a759faf401e536f576eb": {
+      "cases": 80568,
+      "chapter": "57",
+      "elapsed_seconds": 107.668,
+      "engine_errors": 0,
+      "key": "19f8c947c06b67b8ec1bc34abab352756ec997e51af7a759faf401e536f576eb",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/19/19f8c947c06b67b8ec1bc34abab352756ec997e51af7a759faf401e536f576eb.jsonl.gz",
+      "sha256": "15926220827c898a4b408cf993aff829d6f6d5fd51daab4ca5a2190003ceb414"
+    },
+    "1d426bd19d40031111821c115582803614fd552cd0013ffd28d576f16a7b6463": {
+      "cases": 346617,
+      "chapter": "39",
+      "elapsed_seconds": 411.2,
+      "engine_errors": 0,
+      "key": "1d426bd19d40031111821c115582803614fd552cd0013ffd28d576f16a7b6463",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/1d/1d426bd19d40031111821c115582803614fd552cd0013ffd28d576f16a7b6463.jsonl.gz",
+      "sha256": "54433ecf149e943f1cb7e08f37be3c34a92a4015e90a1d04d5bda1c0a075bdec"
+    },
+    "1e324ff3744a88923bde79187d4a04f84f9014e6f1051094588e7f0db526fe89": {
+      "cases": 14850,
+      "chapter": "49",
+      "elapsed_seconds": 41.181,
+      "engine_errors": 0,
+      "key": "1e324ff3744a88923bde79187d4a04f84f9014e6f1051094588e7f0db526fe89",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/1e/1e324ff3744a88923bde79187d4a04f84f9014e6f1051094588e7f0db526fe89.jsonl.gz",
+      "sha256": "4baa3723069bfce958e4553c8449b5132801c2ad5a637c71ed0c6045f826b296"
+    },
+    "1fc483e440c35c5be851c4794d695f2afac95259ff24daa54a1b179f658e7f64": {
+      "cases": 83214,
+      "chapter": "83",
+      "elapsed_seconds": 164.762,
+      "engine_errors": 0,
+      "key": "1fc483e440c35c5be851c4794d695f2afac95259ff24daa54a1b179f658e7f64",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/1f/1fc483e440c35c5be851c4794d695f2afac95259ff24daa54a1b179f658e7f64.jsonl.gz",
+      "sha256": "cee50002cd398d5f5e62d00990629aae8b8e922575c108c72aa6b2aa90cdc9c9"
+    },
+    "2087d8abe37b2cd28456f0300642db23d168f2382315d2f7ee930b454278a659": {
+      "cases": 308421,
+      "chapter": "70",
+      "elapsed_seconds": 327.561,
+      "engine_errors": 0,
+      "key": "2087d8abe37b2cd28456f0300642db23d168f2382315d2f7ee930b454278a659",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/20/2087d8abe37b2cd28456f0300642db23d168f2382315d2f7ee930b454278a659.jsonl.gz",
+      "sha256": "d6ccec102f6850a05111947f66a8da2c2624130dca040976a310260d944fc257"
+    },
+    "20fa55634518a4aa599a04dff33e937baad0ff1a352e515d2f59a80047652a60": {
+      "cases": 184437,
+      "chapter": "16",
+      "elapsed_seconds": 242.381,
+      "engine_errors": 0,
+      "key": "20fa55634518a4aa599a04dff33e937baad0ff1a352e515d2f59a80047652a60",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/20/20fa55634518a4aa599a04dff33e937baad0ff1a352e515d2f59a80047652a60.jsonl.gz",
+      "sha256": "e6d879b2f13ce9b783208d012e3a23cd9909d7b8b5099bfc01a44d9e5f253d0c"
+    },
+    "216d493befc16c29018606fbedefcaee78caa76a1293a7418513991813245877": {
+      "cases": 55188,
+      "chapter": "46",
+      "elapsed_seconds": 112.879,
+      "engine_errors": 0,
+      "key": "216d493befc16c29018606fbedefcaee78caa76a1293a7418513991813245877",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/21/216d493befc16c29018606fbedefcaee78caa76a1293a7418513991813245877.jsonl.gz",
+      "sha256": "9d7c719d5acaa7b7d4ee9bec0c6fc8ac1e62cdf9f606b2416e96d735ddc93b75"
+    },
+    "21886a57be1fcb050ae2c60ebe94fe7dd4517daa03fd2bb57630fb4919f8fe89": {
+      "cases": 49572,
+      "chapter": "34",
+      "elapsed_seconds": 106.76,
+      "engine_errors": 0,
+      "key": "21886a57be1fcb050ae2c60ebe94fe7dd4517daa03fd2bb57630fb4919f8fe89",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/21/21886a57be1fcb050ae2c60ebe94fe7dd4517daa03fd2bb57630fb4919f8fe89.jsonl.gz",
+      "sha256": "94c77e2d155c2c79b83835b7acac7ebcd84d7bb192a0b3028296e2ad9a72b5b1"
+    },
+    "24b87ee8d4ca4f91270408b27eac1540dc7a4dddd73a47c0cb5fae8d35135451": {
+      "cases": 133029,
+      "chapter": "69",
+      "elapsed_seconds": 159.253,
+      "engine_errors": 0,
+      "key": "24b87ee8d4ca4f91270408b27eac1540dc7a4dddd73a47c0cb5fae8d35135451",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/24/24b87ee8d4ca4f91270408b27eac1540dc7a4dddd73a47c0cb5fae8d35135451.jsonl.gz",
+      "sha256": "490a3d5dbe28c5cb93dc9bd452f416726eeef2c007c30c9c1a858b7bf1b6ba1c"
+    },
+    "24bcb211edd0ec774ebd9932df20c19aab89728da20af46e092a3369c9bd3f72": {
+      "cases": 282654,
+      "chapter": "94",
+      "elapsed_seconds": 331.816,
+      "engine_errors": 0,
+      "key": "24bcb211edd0ec774ebd9932df20c19aab89728da20af46e092a3369c9bd3f72",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/24/24bcb211edd0ec774ebd9932df20c19aab89728da20af46e092a3369c9bd3f72.jsonl.gz",
+      "sha256": "06b720036af94688ae3b22c2aac488c94c35893b639b0353420fb9c5f743c38f"
+    },
+    "2a57ac8dbd92992df28ef020a93516618402295ecbbcffcad2ed533eeddef617": {
+      "cases": 26703,
+      "chapter": "75",
+      "elapsed_seconds": 37.896,
+      "engine_errors": 0,
+      "key": "2a57ac8dbd92992df28ef020a93516618402295ecbbcffcad2ed533eeddef617",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/2a/2a57ac8dbd92992df28ef020a93516618402295ecbbcffcad2ed533eeddef617.jsonl.gz",
+      "sha256": "9824398c674d83e7b8ca2ea8f2e154828ea8522cc7d1937e328aa301cc8cb577"
+    },
+    "2fcd3d7c515a7e60f33d03dcf1dc893cde011d2213896c913d377172135e9c4a": {
+      "cases": 372492,
+      "chapter": "07",
+      "elapsed_seconds": 446.422,
+      "engine_errors": 0,
+      "key": "2fcd3d7c515a7e60f33d03dcf1dc893cde011d2213896c913d377172135e9c4a",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/2f/2fcd3d7c515a7e60f33d03dcf1dc893cde011d2213896c913d377172135e9c4a.jsonl.gz",
+      "sha256": "fb7fdd9cf07b1935bbdf803f8b670446c7b44a4e22677c8c04f8b730c73bb855"
+    },
+    "30b9ff14535b649eabe595e1d9c441f69b17025333687d4d7946186e3ff79184": {
+      "cases": 534303,
+      "chapter": "44",
+      "elapsed_seconds": 617.505,
+      "engine_errors": 0,
+      "key": "30b9ff14535b649eabe595e1d9c441f69b17025333687d4d7946186e3ff79184",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/30/30b9ff14535b649eabe595e1d9c441f69b17025333687d4d7946186e3ff79184.jsonl.gz",
+      "sha256": "ae3659db555214f832b5cee8d106c3a7787d925b002d6d81d18a5053dd143867"
+    },
+    "337356b97065ef5417105289dca931af120a2ffeef0f99dd672453e877b9dfd9": {
+      "cases": 258228,
+      "chapter": "63",
+      "elapsed_seconds": 246.122,
+      "engine_errors": 0,
+      "key": "337356b97065ef5417105289dca931af120a2ffeef0f99dd672453e877b9dfd9",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/33/337356b97065ef5417105289dca931af120a2ffeef0f99dd672453e877b9dfd9.jsonl.gz",
+      "sha256": "1ed9fc761db654fe5553c2de7720e9c9a8d5b4e1c091778ff3996ace38a1a793"
+    },
+    "361472ab0681fc4bd6fe5c3f9e263d132fadc4d7532fd1667601103c534a0288": {
+      "cases": 134865,
+      "chapter": "42",
+      "elapsed_seconds": 144.682,
+      "engine_errors": 0,
+      "key": "361472ab0681fc4bd6fe5c3f9e263d132fadc4d7532fd1667601103c534a0288",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/36/361472ab0681fc4bd6fe5c3f9e263d132fadc4d7532fd1667601103c534a0288.jsonl.gz",
+      "sha256": "f6a56d7038bf79dc5f6f6670b91a3d34e6d6fe69e732bd0a7a348970f80fa963"
+    },
+    "376766aacf3731f8d587561bcdd2d12b216763e902ce6c4dac28b30ae549548b": {
+      "cases": 81189,
+      "chapter": "18",
+      "elapsed_seconds": 124.885,
+      "engine_errors": 0,
+      "key": "376766aacf3731f8d587561bcdd2d12b216763e902ce6c4dac28b30ae549548b",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/37/376766aacf3731f8d587561bcdd2d12b216763e902ce6c4dac28b30ae549548b.jsonl.gz",
+      "sha256": "6301b73c69826e9e9e28add59dd20d740cd57c31116280a1281b0f7e80339563"
+    },
+    "38bcb05781c89f35cf54228de7743082709a79dd31a1a5c7076bed371eb055db": {
+      "cases": 250722,
+      "chapter": "28",
+      "elapsed_seconds": 341.225,
+      "engine_errors": 0,
+      "key": "38bcb05781c89f35cf54228de7743082709a79dd31a1a5c7076bed371eb055db",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/38/38bcb05781c89f35cf54228de7743082709a79dd31a1a5c7076bed371eb055db.jsonl.gz",
+      "sha256": "461ebdd68d0a088a1c671d88c3b7db9179e0e2c805e4c09e5c4344ddcc46f59d"
+    },
+    "3a69638b5b9b072637a6dc86f232c9c9b0ddfb1cceb07f33fba79afda785f1a9": {
+      "cases": 80244,
+      "chapter": "74",
+      "elapsed_seconds": 78.51,
+      "engine_errors": 0,
+      "key": "3a69638b5b9b072637a6dc86f232c9c9b0ddfb1cceb07f33fba79afda785f1a9",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/3a/3a69638b5b9b072637a6dc86f232c9c9b0ddfb1cceb07f33fba79afda785f1a9.jsonl.gz",
+      "sha256": "9e5412e4a053ada82c5a1960b7cf7cfe3923d20ebe8712fb78ab2bce34647736"
+    },
+    "3c6154a7a8dc1fade44447662e89071028682560b1eb6caa5653f34bf47691dc": {
+      "cases": 105858,
+      "chapter": "21",
+      "elapsed_seconds": 155.639,
+      "engine_errors": 0,
+      "key": "3c6154a7a8dc1fade44447662e89071028682560b1eb6caa5653f34bf47691dc",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/3c/3c6154a7a8dc1fade44447662e89071028682560b1eb6caa5653f34bf47691dc.jsonl.gz",
+      "sha256": "0df622780f181e2b628f001b7eab51cd71921ca1006d3b9787349c873e2f88e3"
+    },
+    "3f2468fcef877d3f5a189ca1605fc425beaa4bd7754ed4383b25ffa14541487e": {
+      "cases": 47286,
+      "chapter": "30",
+      "elapsed_seconds": 64.906,
+      "engine_errors": 0,
+      "key": "3f2468fcef877d3f5a189ca1605fc425beaa4bd7754ed4383b25ffa14541487e",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/3f/3f2468fcef877d3f5a189ca1605fc425beaa4bd7754ed4383b25ffa14541487e.jsonl.gz",
+      "sha256": "ad08e450ef757b125da93944c2a1b0db6122d17f4290056537744d2145c9214c"
+    },
+    "41a494150948f4da1aebf291d5d3b5e0112cd524a9c1756b32dc0ce81b4595de": {
+      "cases": 188757,
+      "chapter": "82",
+      "elapsed_seconds": 329.374,
+      "engine_errors": 0,
+      "key": "41a494150948f4da1aebf291d5d3b5e0112cd524a9c1756b32dc0ce81b4595de",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/41/41a494150948f4da1aebf291d5d3b5e0112cd524a9c1756b32dc0ce81b4595de.jsonl.gz",
+      "sha256": "ca2d5215cc630b95491877c7e6d5f8929e09e86ed2e18d4525ca07db667dd4db"
+    },
+    "442bec29717f2e307b6437a4e9fc868aee90c4ee351742e628f926021badb986": {
+      "cases": 64098,
+      "chapter": "89",
+      "elapsed_seconds": 77.968,
+      "engine_errors": 0,
+      "key": "442bec29717f2e307b6437a4e9fc868aee90c4ee351742e628f926021badb986",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/44/442bec29717f2e307b6437a4e9fc868aee90c4ee351742e628f926021badb986.jsonl.gz",
+      "sha256": "5b6470b1c7be4bfafe9419c25d081eb86f0a121c9e5ca42738b5702660896d0e"
+    },
+    "4ad10c0d5fe428e781c4c01ce92cefdcdf279df0bf350e5d580ee1556d9b3dde": {
+      "cases": 73737,
+      "chapter": "88",
+      "elapsed_seconds": 99.174,
+      "engine_errors": 0,
+      "key": "4ad10c0d5fe428e781c4c01ce92cefdcdf279df0bf350e5d580ee1556d9b3dde",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/4a/4ad10c0d5fe428e781c4c01ce92cefdcdf279df0bf350e5d580ee1556d9b3dde.jsonl.gz",
+      "sha256": "61841573366e2fac9d5efb116820ac6404763c29efac3b7ac78f2d30cfa11b57"
+    },
+    "50da334619e122d781ed7c99f8696c9c39b2ea5fa79c19bc4d763de25e4a071c": {
+      "cases": 197397,
+      "chapter": "40",
+      "elapsed_seconds": 253.31,
+      "engine_errors": 0,
+      "key": "50da334619e122d781ed7c99f8696c9c39b2ea5fa79c19bc4d763de25e4a071c",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/50/50da334619e122d781ed7c99f8696c9c39b2ea5fa79c19bc4d763de25e4a071c.jsonl.gz",
+      "sha256": "82142350ee5f4c9c34aeb55eb12cb1d46511689d614396de9558925b780b8978"
+    },
+    "51e437f3da1d098bc9a1d60962e9a0a3cccb49ad9a81ddbe91156aec49345793": {
+      "cases": 122715,
+      "chapter": "58",
+      "elapsed_seconds": 143.578,
+      "engine_errors": 0,
+      "key": "51e437f3da1d098bc9a1d60962e9a0a3cccb49ad9a81ddbe91156aec49345793",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/51/51e437f3da1d098bc9a1d60962e9a0a3cccb49ad9a81ddbe91156aec49345793.jsonl.gz",
+      "sha256": "bb6043a3ce3589457099c3d82edbd0b47740cf7fea39011a4de7d9f415f76b62"
+    },
+    "52d51509accb9bbe754eef061f92fde809ae44899d8786c4e2e9d07d3deec746": {
+      "cases": 183330,
+      "chapter": "91",
+      "elapsed_seconds": 174.302,
+      "engine_errors": 0,
+      "key": "52d51509accb9bbe754eef061f92fde809ae44899d8786c4e2e9d07d3deec746",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/52/52d51509accb9bbe754eef061f92fde809ae44899d8786c4e2e9d07d3deec746.jsonl.gz",
+      "sha256": "31801755c11a3f343c47814785470a2fac072722ea0cae6e30ba0efa8040686f"
+    },
+    "5626de4d23fecd6e7a082bae786a306ffbc9239e18ea0a2419b01da095abdfc5": {
+      "cases": 991575,
+      "chapter": "29",
+      "elapsed_seconds": 1293.536,
+      "engine_errors": 0,
+      "key": "5626de4d23fecd6e7a082bae786a306ffbc9239e18ea0a2419b01da095abdfc5",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/56/5626de4d23fecd6e7a082bae786a306ffbc9239e18ea0a2419b01da095abdfc5.jsonl.gz",
+      "sha256": "4eb99ca05c439a619d6c850fda06b096d378e8456a0b9c7303c7d74e0b91b0dd"
+    },
+    "5d551595b15bed17671c72ecf7573ae1f3eb19919900ba4c9b887c6f82cbdd9e": {
+      "cases": 312471,
+      "chapter": "48",
+      "elapsed_seconds": 386.304,
+      "engine_errors": 0,
+      "key": "5d551595b15bed17671c72ecf7573ae1f3eb19919900ba4c9b887c6f82cbdd9e",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/5d/5d551595b15bed17671c72ecf7573ae1f3eb19919900ba4c9b887c6f82cbdd9e.jsonl.gz",
+      "sha256": "a4dca1b0bb11901619717addb44a89a7932041deed68005964ceb404130519c5"
+    },
+    "5f9277828756783e4dcb3c16fdf6ee93fbe9d95bb293e8f0720609cef757539c": {
+      "cases": 111096,
+      "chapter": "15",
+      "elapsed_seconds": 158.528,
+      "engine_errors": 0,
+      "key": "5f9277828756783e4dcb3c16fdf6ee93fbe9d95bb293e8f0720609cef757539c",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/5f/5f9277828756783e4dcb3c16fdf6ee93fbe9d95bb293e8f0720609cef757539c.jsonl.gz",
+      "sha256": "610ad9ac40ddbd5e03e884202447356730a21f94d823144a4067783f7b551a63"
+    },
+    "61067a1cfeb7bdc0d7ed19eda07b171ff3c82424b3a551d88ecf9a08cf16d78a": {
+      "cases": 173043,
+      "chapter": "96",
+      "elapsed_seconds": 181.438,
+      "engine_errors": 0,
+      "key": "61067a1cfeb7bdc0d7ed19eda07b171ff3c82424b3a551d88ecf9a08cf16d78a",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/61/61067a1cfeb7bdc0d7ed19eda07b171ff3c82424b3a551d88ecf9a08cf16d78a.jsonl.gz",
+      "sha256": "435bd193836e1be8cdb46502c0a70b004ff6ac5fb4641806cc10c156acf8b7eb"
+    },
+    "61a1e6b2ac89dbf44e771aa89b24204141c7c3831a358165c01b4411ab1fc60a": {
+      "cases": 45063,
+      "chapter": "81",
+      "elapsed_seconds": 54.994,
+      "engine_errors": 0,
+      "key": "61a1e6b2ac89dbf44e771aa89b24204141c7c3831a358165c01b4411ab1fc60a",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/61/61a1e6b2ac89dbf44e771aa89b24204141c7c3831a358165c01b4411ab1fc60a.jsonl.gz",
+      "sha256": "d28160a0e096dbd36eea22ef0490e709632825f125d02f963a31cbcc722ba877"
+    },
+    "623d790c8183254f883ba75f80a770959049052f2934665864e7376a79c9e3b7": {
+      "cases": 71145,
+      "chapter": "93",
+      "elapsed_seconds": 117.148,
+      "engine_errors": 0,
+      "key": "623d790c8183254f883ba75f80a770959049052f2934665864e7376a79c9e3b7",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/62/623d790c8183254f883ba75f80a770959049052f2934665864e7376a79c9e3b7.jsonl.gz",
+      "sha256": "13231b3ec52cb29377b22a07ff36076a2276bd2d1e99abf6fcbbdea22d958ea1"
+    },
+    "65684fb3cac2b2339e70923619d92ce883c1472ec640462f382b5dd513ef1296": {
+      "cases": 33588,
+      "chapter": "50",
+      "elapsed_seconds": 70.989,
+      "engine_errors": 0,
+      "key": "65684fb3cac2b2339e70923619d92ce883c1472ec640462f382b5dd513ef1296",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/65/65684fb3cac2b2339e70923619d92ce883c1472ec640462f382b5dd513ef1296.jsonl.gz",
+      "sha256": "0f11cf73bfd26fd1fa851e81b2c4cc52f2d96ae56dfdef73b2e78090e056be5a"
+    },
+    "6b3326832b9fea7651960d2229e0d674f9e23c36553e2ee5121ca76d778f1f9c": {
+      "cases": 12474,
+      "chapter": "14",
+      "elapsed_seconds": 31.473,
+      "engine_errors": 0,
+      "key": "6b3326832b9fea7651960d2229e0d674f9e23c36553e2ee5121ca76d778f1f9c",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/6b/6b3326832b9fea7651960d2229e0d674f9e23c36553e2ee5121ca76d778f1f9c.jsonl.gz",
+      "sha256": "baa09a51d97b03cbcfbe263c3723ac021f10b83737f7b3f85a735d5a7b531498"
+    },
+    "6bafed9c322ccfa3d73b11554c079ae2db1015c4b93592586b08eeed5b222af1": {
+      "cases": 50247,
+      "chapter": "11",
+      "elapsed_seconds": 70.088,
+      "engine_errors": 0,
+      "key": "6bafed9c322ccfa3d73b11554c079ae2db1015c4b93592586b08eeed5b222af1",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/6b/6bafed9c322ccfa3d73b11554c079ae2db1015c4b93592586b08eeed5b222af1.jsonl.gz",
+      "sha256": "8108bdd7f430f8d3fc26cc6aa7fb4dc9cc57eeb28f631d28a198e2dd37968f49"
+    },
+    "7752666b365fb5b5f32c93ec5952303c02f07ea3315a6d6ca507dcca68b5c787": {
+      "cases": 387288,
+      "chapter": "73",
+      "elapsed_seconds": 509.427,
+      "engine_errors": 0,
+      "key": "7752666b365fb5b5f32c93ec5952303c02f07ea3315a6d6ca507dcca68b5c787",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/77/7752666b365fb5b5f32c93ec5952303c02f07ea3315a6d6ca507dcca68b5c787.jsonl.gz",
+      "sha256": "8261cff5d8735eb1b4bc07dc07e42f684348b05b08d64dc79ac60689876a07b8"
+    },
+    "777a5d3df36ac21f8fb08fdb2e73c07c26cb4422f739e796a2d6fa55905fc967": {
+      "cases": 21465,
+      "chapter": "47",
+      "elapsed_seconds": 34.912,
+      "engine_errors": 0,
+      "key": "777a5d3df36ac21f8fb08fdb2e73c07c26cb4422f739e796a2d6fa55905fc967",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/77/777a5d3df36ac21f8fb08fdb2e73c07c26cb4422f739e796a2d6fa55905fc967.jsonl.gz",
+      "sha256": "150b00fecb4a02b2993d2490e305f144cfcab1e48d06d897434fc2450eebc76e"
+    },
+    "7940e6eca200b99649a15fc0b6aaa8399a28d6b74e7bcfc2fdd557a69794b1c4": {
+      "cases": 928638,
+      "chapter": "85",
+      "elapsed_seconds": 1052.164,
+      "engine_errors": 0,
+      "key": "7940e6eca200b99649a15fc0b6aaa8399a28d6b74e7bcfc2fdd557a69794b1c4",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/79/7940e6eca200b99649a15fc0b6aaa8399a28d6b74e7bcfc2fdd557a69794b1c4.jsonl.gz",
+      "sha256": "07a53937cd839ee45dff0e8033a29432e966af38f815857ea935e0bdcfd2d847"
+    },
+    "7d725c86e45f6c9345f534c529bb6d7d1a2ab63d0a9b777d99d42c3fd1fa6381": {
+      "cases": 936549,
+      "chapter": "61",
+      "elapsed_seconds": 1040.935,
+      "engine_errors": 0,
+      "key": "7d725c86e45f6c9345f534c529bb6d7d1a2ab63d0a9b777d99d42c3fd1fa6381",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/7d/7d725c86e45f6c9345f534c529bb6d7d1a2ab63d0a9b777d99d42c3fd1fa6381.jsonl.gz",
+      "sha256": "8b38b4fa0b17c81bfd0dfe8a2ba6782ae67021b23a0183cdaabcbca94551962e"
+    },
+    "7ef861793bfaf256869083b099686d5e1980875629197db80c718121d6abdafc": {
+      "cases": 288657,
+      "chapter": "04",
+      "elapsed_seconds": 348.533,
+      "engine_errors": 0,
+      "key": "7ef861793bfaf256869083b099686d5e1980875629197db80c718121d6abdafc",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/7e/7ef861793bfaf256869083b099686d5e1980875629197db80c718121d6abdafc.jsonl.gz",
+      "sha256": "1b1ffb1b81ac67021246379824cdcfdde16d806c53398445d4cdcf226b6928d8"
+    },
+    "809a4575b03fdb149e29daf9c8b8c0b058eefc3f0d968f9a3c842e786cb51eca": {
+      "cases": 83106,
+      "chapter": "59",
+      "elapsed_seconds": 119.431,
+      "engine_errors": 0,
+      "key": "809a4575b03fdb149e29daf9c8b8c0b058eefc3f0d968f9a3c842e786cb51eca",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/80/809a4575b03fdb149e29daf9c8b8c0b058eefc3f0d968f9a3c842e786cb51eca.jsonl.gz",
+      "sha256": "ad08a3361498feb0629d75ae086a46d99b87c3ebdb975ab6e74074e90a0892b7"
+    },
+    "82773ac7b52e07cc9edbd814b2a41c3a5b39378380a915f74943993595565104": {
+      "cases": 446985,
+      "chapter": "90",
+      "elapsed_seconds": 506.228,
+      "engine_errors": 0,
+      "key": "82773ac7b52e07cc9edbd814b2a41c3a5b39378380a915f74943993595565104",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/82/82773ac7b52e07cc9edbd814b2a41c3a5b39378380a915f74943993595565104.jsonl.gz",
+      "sha256": "b1af38e7408d87e33d6f936f238067148ab10cdf08422dd8df8c4a6328fd9df3"
+    },
+    "881112f85da67b43d93a1f3b84bfbae7b47d54664da1e6adcb10f710446696ac": {
+      "cases": 31401,
+      "chapter": "86",
+      "elapsed_seconds": 44.676,
+      "engine_errors": 0,
+      "key": "881112f85da67b43d93a1f3b84bfbae7b47d54664da1e6adcb10f710446696ac",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/88/881112f85da67b43d93a1f3b84bfbae7b47d54664da1e6adcb10f710446696ac.jsonl.gz",
+      "sha256": "c8fd6f1117b86d28d122af10fd6ae05a0c51ed72e0f36c55eadb26b7c417e2f4"
+    },
+    "88b1081885b799a0426559fc871281e20a1fff5bf8101cea87dcf51106ac69e9": {
+      "cases": 20601,
+      "chapter": "45",
+      "elapsed_seconds": 65.914,
+      "engine_errors": 0,
+      "key": "88b1081885b799a0426559fc871281e20a1fff5bf8101cea87dcf51106ac69e9",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/88/88b1081885b799a0426559fc871281e20a1fff5bf8101cea87dcf51106ac69e9.jsonl.gz",
+      "sha256": "b64fc9c05fc0e139b17965c8f337e13a6f1496e3480107553ad15c85c01971ba"
+    },
+    "89fb44ea6561b2ae55913330bad51f142f62a8bdd1ee6f24284b1e0cfe11fe26": {
+      "cases": 567621,
+      "chapter": "03",
+      "elapsed_seconds": 737.955,
+      "engine_errors": 0,
+      "key": "89fb44ea6561b2ae55913330bad51f142f62a8bdd1ee6f24284b1e0cfe11fe26",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/89/89fb44ea6561b2ae55913330bad51f142f62a8bdd1ee6f24284b1e0cfe11fe26.jsonl.gz",
+      "sha256": "1b4e0ac1f5bdf596375b4953cf76e261a72e6d48f14689eb021bd4cbabb8b4d4"
+    },
+    "8b05a8453831ac6f19d496b8ff022555c3564a7b48f9a358a897499877e13dcd": {
+      "cases": 119853,
+      "chapter": "60",
+      "elapsed_seconds": 247.081,
+      "engine_errors": 0,
+      "key": "8b05a8453831ac6f19d496b8ff022555c3564a7b48f9a358a897499877e13dcd",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/8b/8b05a8453831ac6f19d496b8ff022555c3564a7b48f9a358a897499877e13dcd.jsonl.gz",
+      "sha256": "15e2521608e70f59e4431c1a80aea312bec67868776f12846c32cc2e2e48bf36"
+    },
+    "8faa10623380bb5f622c6f793954d6fde845706aed665e5340286d0b68ac9c48": {
+      "cases": 89856,
+      "chapter": "06",
+      "elapsed_seconds": 101.108,
+      "engine_errors": 0,
+      "key": "8faa10623380bb5f622c6f793954d6fde845706aed665e5340286d0b68ac9c48",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/8f/8faa10623380bb5f622c6f793954d6fde845706aed665e5340286d0b68ac9c48.jsonl.gz",
+      "sha256": "34df1fa4d0a99fd6d213f0975b668f4533ecbdc5297de9d269495c993f465d2f"
+    },
+    "927aaa5000613865eea9b5035a7218ed038fab836dec1cbcc333e8f7a952d31f": {
+      "cases": 133920,
+      "chapter": "51",
+      "elapsed_seconds": 140.77,
+      "engine_errors": 0,
+      "key": "927aaa5000613865eea9b5035a7218ed038fab836dec1cbcc333e8f7a952d31f",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/92/927aaa5000613865eea9b5035a7218ed038fab836dec1cbcc333e8f7a952d31f.jsonl.gz",
+      "sha256": "819ec75addb4a2420e12f5e0b6e7793e58ef1d50fb291ac77292749f6712c25b"
+    },
+    "949431ee8b12c93e3c121bb2c4048514ae87db7c1e39c09ee211e154e23c01f7": {
+      "cases": 66933,
+      "chapter": "37",
+      "elapsed_seconds": 106.127,
+      "engine_errors": 0,
+      "key": "949431ee8b12c93e3c121bb2c4048514ae87db7c1e39c09ee211e154e23c01f7",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/94/949431ee8b12c93e3c121bb2c4048514ae87db7c1e39c09ee211e154e23c01f7.jsonl.gz",
+      "sha256": "1a60e0b8a2a1b1c58435ca707b4c0fd375309ba5afeccaaa51f2982d2b0ee389"
+    },
+    "9715c39ce43f3d13f091e31d79e64b1740614bdbeec7371d9a59b7b5c03dfc45": {
+      "cases": 9234,
+      "chapter": "80",
+      "elapsed_seconds": 23.46,
+      "engine_errors": 0,
+      "key": "9715c39ce43f3d13f091e31d79e64b1740614bdbeec7371d9a59b7b5c03dfc45",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/97/9715c39ce43f3d13f091e31d79e64b1740614bdbeec7371d9a59b7b5c03dfc45.jsonl.gz",
+      "sha256": "01b2353bad08c5581edd5c621840ac6e9e13ce115e105f632c8ae644fa6b5b62"
+    },
+    "98bab6183c71873f95541cb7ac98db6434d619ac61452126dd8f7fac0cb922e0": {
+      "cases": 294111,
+      "chapter": "54",
+      "elapsed_seconds": 280.651,
+      "engine_errors": 0,
+      "key": "98bab6183c71873f95541cb7ac98db6434d619ac61452126dd8f7fac0cb922e0",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/98/98bab6183c71873f95541cb7ac98db6434d619ac61452126dd8f7fac0cb922e0.jsonl.gz",
+      "sha256": "eeb283fe2ef3a4c6d3eb41c61fa2a59773b1b612b0e92a944dee2675d79eb8a0"
+    },
+    "9ab49cb6955f2c84290b08951a99df6f771562c26c6560fb16cd6a1280826469": {
+      "cases": 194400,
+      "chapter": "41",
+      "elapsed_seconds": 230.749,
+      "engine_errors": 0,
+      "key": "9ab49cb6955f2c84290b08951a99df6f771562c26c6560fb16cd6a1280826469",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/9a/9ab49cb6955f2c84290b08951a99df6f771562c26c6560fb16cd6a1280826469.jsonl.gz",
+      "sha256": "1a328980fa5fa09e2ee638721b8746310bc4ac079e27a5bc686b582bf7e58377"
+    },
+    "9abc607e5ffb73d02407aebf8318c90878179cc35acebe3c403c3a5657e007f1": {
+      "cases": 79974,
+      "chapter": "01",
+      "elapsed_seconds": 154.93,
+      "engine_errors": 0,
+      "key": "9abc607e5ffb73d02407aebf8318c90878179cc35acebe3c403c3a5657e007f1",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/9a/9abc607e5ffb73d02407aebf8318c90878179cc35acebe3c403c3a5657e007f1.jsonl.gz",
+      "sha256": "87220f37ce927cd3baea95e6ec1d0c293b38b25a3c31371272dcd032347a7ff6"
+    },
+    "9d6e68d7fc416081f5eed21660fb6921138059a07f63fa6763d0d15fb33330bb": {
+      "cases": 105057,
+      "chapter": "68",
+      "elapsed_seconds": 118.497,
+      "engine_errors": 0,
+      "key": "9d6e68d7fc416081f5eed21660fb6921138059a07f63fa6763d0d15fb33330bb",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/9d/9d6e68d7fc416081f5eed21660fb6921138059a07f63fa6763d0d15fb33330bb.jsonl.gz",
+      "sha256": "66ce11c32c3018ba5137f97d1b69484f81dad2bf40264263d53424c670a8c56a"
+    },
+    "a0145236c3789f593252da438ee06ff1830f8a231c7ce304f610e21bd3584a8d": {
+      "cases": 102699,
+      "chapter": "19",
+      "elapsed_seconds": 158.67,
+      "engine_errors": 0,
+      "key": "a0145236c3789f593252da438ee06ff1830f8a231c7ce304f610e21bd3584a8d",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/a0/a0145236c3789f593252da438ee06ff1830f8a231c7ce304f610e21bd3584a8d.jsonl.gz",
+      "sha256": "5ea6e5c27cc1ae97f31d7dc570d70aa2f68a87a1ca9c34c918c0c45ed2474d0b"
+    },
+    "ac499aaa77f0b47dc841f4d441ef2a103fd178cebc6a517e5e3e8cf7a376f71f": {
+      "cases": 120114,
+      "chapter": "71",
+      "elapsed_seconds": 117.563,
+      "engine_errors": 0,
+      "key": "ac499aaa77f0b47dc841f4d441ef2a103fd178cebc6a517e5e3e8cf7a376f71f",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/ac/ac499aaa77f0b47dc841f4d441ef2a103fd178cebc6a517e5e3e8cf7a376f71f.jsonl.gz",
+      "sha256": "7ee965872e6021e2e2b014a2a9e984fdefeb87b76cd5c40c09d099904e76ebbe"
+    },
+    "ac5303f0e2f4d7b5f8ee9d6c0200a566d0ca9f0df686e95fab690f698ba3eb32": {
+      "cases": 58347,
+      "chapter": "33",
+      "elapsed_seconds": 78.97,
+      "engine_errors": 0,
+      "key": "ac5303f0e2f4d7b5f8ee9d6c0200a566d0ca9f0df686e95fab690f698ba3eb32",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/ac/ac5303f0e2f4d7b5f8ee9d6c0200a566d0ca9f0df686e95fab690f698ba3eb32.jsonl.gz",
+      "sha256": "1598cebea1242cc826d854ef1f64f1de6ca5ae7b8566f681732322fb5bff3680"
+    },
+    "b0118e7aa3e0ea933ef03ed0f452c0278cf56621b899e6b05d70a07e6641474a": {
+      "cases": 14121,
+      "chapter": "78",
+      "elapsed_seconds": 29.183,
+      "engine_errors": 0,
+      "key": "b0118e7aa3e0ea933ef03ed0f452c0278cf56621b899e6b05d70a07e6641474a",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/b0/b0118e7aa3e0ea933ef03ed0f452c0278cf56621b899e6b05d70a07e6641474a.jsonl.gz",
+      "sha256": "c457e9e392bee7a6e962f1a758c335d376daa4f6606f38cc40d2adeb31d9a7c9"
+    },
+    "b193d970d6d0b8e748c66bf05bded21f03d63b62b062d576c295ac898331d49d": {
+      "cases": 33912,
+      "chapter": "35",
+      "elapsed_seconds": 53.024,
+      "engine_errors": 0,
+      "key": "b193d970d6d0b8e748c66bf05bded21f03d63b62b062d576c295ac898331d49d",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/b1/b193d970d6d0b8e748c66bf05bded21f03d63b62b062d576c295ac898331d49d.jsonl.gz",
+      "sha256": "0be34267874bc2a7cc3e4187e4ec41c5e9a85888037eb77dfe06a96477577c3e"
+    },
+    "b23a385a9354c66f6d06c1b9227e5113138bbc78ffda11b7f38f45192fe9d462": {
+      "cases": 269109,
+      "chapter": "20",
+      "elapsed_seconds": 350.182,
+      "engine_errors": 0,
+      "key": "b23a385a9354c66f6d06c1b9227e5113138bbc78ffda11b7f38f45192fe9d462",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/b2/b23a385a9354c66f6d06c1b9227e5113138bbc78ffda11b7f38f45192fe9d462.jsonl.gz",
+      "sha256": "8faa703e2731deca68fc8ca7eb94ea38fca64f62b0da838084940994e8cef29f"
+    },
+    "b3102936d8aec74f1d302dffef075ec4593cb2f4b46d9dc9b57a004f907613f4": {
+      "cases": 176328,
+      "chapter": "08",
+      "elapsed_seconds": 172.327,
+      "engine_errors": 0,
+      "key": "b3102936d8aec74f1d302dffef075ec4593cb2f4b46d9dc9b57a004f907613f4",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/b3/b3102936d8aec74f1d302dffef075ec4593cb2f4b46d9dc9b57a004f907613f4.jsonl.gz",
+      "sha256": "9e7267979f42871c0a1ec77c9300e9a52a8d929a4219a76b223a92d518682445"
+    },
+    "b4a49c8dd508c327bed7405b3364606d6297889e1d320191aa3e8ff9386f9665": {
+      "cases": 442233,
+      "chapter": "55",
+      "elapsed_seconds": 585.411,
+      "engine_errors": 0,
+      "key": "b4a49c8dd508c327bed7405b3364606d6297889e1d320191aa3e8ff9386f9665",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/b4/b4a49c8dd508c327bed7405b3364606d6297889e1d320191aa3e8ff9386f9665.jsonl.gz",
+      "sha256": "2fed51d2a663bdb51a7df0730938d02f6492081a230a48cf0fe9d33118390f18"
+    },
+    "b50831fee5e3546ef6c8f6d6e5188511a7c56d121d8b666df543a7c495a10832": {
+      "cases": 20061,
+      "chapter": "36",
+      "elapsed_seconds": 56.895,
+      "engine_errors": 0,
+      "key": "b50831fee5e3546ef6c8f6d6e5188511a7c56d121d8b666df543a7c495a10832",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/b5/b50831fee5e3546ef6c8f6d6e5188511a7c56d121d8b666df543a7c495a10832.jsonl.gz",
+      "sha256": "661146ee680a5d674d0a05f0739c7c21328d75f6e61ed602de6332825f053041"
+    },
+    "b7c0f9bbfccba01e579fbc04af26baa11e6db5872fd47bfdd05b8fde3ad75c18": {
+      "cases": 596970,
+      "chapter": "52",
+      "elapsed_seconds": 707.706,
+      "engine_errors": 0,
+      "key": "b7c0f9bbfccba01e579fbc04af26baa11e6db5872fd47bfdd05b8fde3ad75c18",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/b7/b7c0f9bbfccba01e579fbc04af26baa11e6db5872fd47bfdd05b8fde3ad75c18.jsonl.gz",
+      "sha256": "1777b5caf2bdaabf8ede396d6d38f8d527c20c11227148512c02696b8cb8d603"
+    },
+    "bc137150252ac1f69975faa875c1c96fc9b15eeb1aa917e34f3774cd992767d4": {
+      "cases": 38394,
+      "chapter": "05",
+      "elapsed_seconds": 55.159,
+      "engine_errors": 0,
+      "key": "bc137150252ac1f69975faa875c1c96fc9b15eeb1aa917e34f3774cd992767d4",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/bc/bc137150252ac1f69975faa875c1c96fc9b15eeb1aa917e34f3774cd992767d4.jsonl.gz",
+      "sha256": "2a60c2c523ab321eed410812d056f1a8cb79cc089a81b382a2509e3eab1d4576"
+    },
+    "bd8737dca5d462293872b0a80f01b780d499e37031e37ef31878d9b771f264ca": {
+      "cases": 16578,
+      "chapter": "09",
+      "elapsed_seconds": 33.822,
+      "engine_errors": 0,
+      "key": "bd8737dca5d462293872b0a80f01b780d499e37031e37ef31878d9b771f264ca",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/bd/bd8737dca5d462293872b0a80f01b780d499e37031e37ef31878d9b771f264ca.jsonl.gz",
+      "sha256": "470b44ed24b8f930b71562ff8049347c805d3758d7e8a72636c18178f4988c3c"
+    },
+    "bde5c59215fece9437016930511b609d92217e75eb7517f172205025fc0a6f79": {
+      "cases": 24696,
+      "chapter": "13",
+      "elapsed_seconds": 54.258,
+      "engine_errors": 0,
+      "key": "bde5c59215fece9437016930511b609d92217e75eb7517f172205025fc0a6f79",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/bd/bde5c59215fece9437016930511b609d92217e75eb7517f172205025fc0a6f79.jsonl.gz",
+      "sha256": "6294a1601d3080de213d85c65c6796e658ac3648a2e8610565e5ca30fd980464"
+    },
+    "c3d080de570433bb00a6071b86e89d44da373c7fb7dddeab1ffe9fadfb15ce33": {
+      "cases": 186408,
+      "chapter": "32",
+      "elapsed_seconds": 235.717,
+      "engine_errors": 0,
+      "key": "c3d080de570433bb00a6071b86e89d44da373c7fb7dddeab1ffe9fadfb15ce33",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/c3/c3d080de570433bb00a6071b86e89d44da373c7fb7dddeab1ffe9fadfb15ce33.jsonl.gz",
+      "sha256": "fb015b55602dd5cdcf6c7a38c2a964ef6c6e9bab50be88b1b2d9504036723bfa"
+    },
+    "ca3171f77c271ccd11ff22d34e1e820a274cb2f9d6c3e14ef9c3bf8f22965ff5": {
+      "cases": 87426,
+      "chapter": "56",
+      "elapsed_seconds": 136.516,
+      "engine_errors": 0,
+      "key": "ca3171f77c271ccd11ff22d34e1e820a274cb2f9d6c3e14ef9c3bf8f22965ff5",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/ca/ca3171f77c271ccd11ff22d34e1e820a274cb2f9d6c3e14ef9c3bf8f22965ff5.jsonl.gz",
+      "sha256": "44f78c65aad30bea008a9f6eef0ab00729b277f6fb1e7644a556e7eceddcaba9"
+    },
+    "ce06491649fc3ca88bd5a54c67fabaf65395cc10b610550a1bd096e1441159c9": {
+      "cases": 230409,
+      "chapter": "38",
+      "elapsed_seconds": 276.981,
+      "engine_errors": 0,
+      "key": "ce06491649fc3ca88bd5a54c67fabaf65395cc10b610550a1bd096e1441159c9",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/ce/ce06491649fc3ca88bd5a54c67fabaf65395cc10b610550a1bd096e1441159c9.jsonl.gz",
+      "sha256": "edae8eb9cc48ec2a7969b1c987a1a244ef8f8e345f9a587115a5950bf96c4322"
+    },
+    "cea36692b3ae8277951935c77ff014c07178f44d184538d48839aa98640b9361": {
+      "cases": 135153,
+      "chapter": "12",
+      "elapsed_seconds": 205.441,
+      "engine_errors": 0,
+      "key": "cea36692b3ae8277951935c77ff014c07178f44d184538d48839aa98640b9361",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/ce/cea36692b3ae8277951935c77ff014c07178f44d184538d48839aa98640b9361.jsonl.gz",
+      "sha256": "50f715ffd7b33411393739cfcfffd3cd3ef4700e5de2203797cb7cdcdb4e98ce"
+    },
+    "d08c7650d07bd63eda2e905140d5df90bb5801e448e296f58b39ff11ebab737c": {
+      "cases": 26784,
+      "chapter": "98",
+      "elapsed_seconds": 40.022,
+      "engine_errors": 0,
+      "key": "d08c7650d07bd63eda2e905140d5df90bb5801e448e296f58b39ff11ebab737c",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/d0/d08c7650d07bd63eda2e905140d5df90bb5801e448e296f58b39ff11ebab737c.jsonl.gz",
+      "sha256": "a81a874647f4a9dc02d34f063cc4d59814fd0c2ae143a246abed8755224840a5"
+    },
+    "d53484959ae666fa33024160557b1684be079e3f9a531cbc7118b8ae5add8111": {
+      "cases": 94167,
+      "chapter": "17",
+      "elapsed_seconds": 163.174,
+      "engine_errors": 0,
+      "key": "d53484959ae666fa33024160557b1684be079e3f9a531cbc7118b8ae5add8111",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/d5/d53484959ae666fa33024160557b1684be079e3f9a531cbc7118b8ae5add8111.jsonl.gz",
+      "sha256": "6c891d0c8460453346ae28c17933f16976e956eadf05fc08b5b448e923d51905"
+    },
+    "d7827cb0005173cd882639323047155670449b3bfd317ad2f63e05a8a6f97527": {
+      "cases": 93663,
+      "chapter": "76",
+      "elapsed_seconds": 183.792,
+      "engine_errors": 0,
+      "key": "d7827cb0005173cd882639323047155670449b3bfd317ad2f63e05a8a6f97527",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/d7/d7827cb0005173cd882639323047155670449b3bfd317ad2f63e05a8a6f97527.jsonl.gz",
+      "sha256": "e27b36b73993acb96c37dfba4f18a929d65113b2aed59da9a818221ec695db67"
+    },
+    "e1070b128f9313e2442f0409122e3fcf9c433f293f0460aeca9e29d8cfea1d12": {
+      "cases": 8802,
+      "chapter": "66",
+      "elapsed_seconds": 24.87,
+      "engine_errors": 0,
+      "key": "e1070b128f9313e2442f0409122e3fcf9c433f293f0460aeca9e29d8cfea1d12",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/e1/e1070b128f9313e2442f0409122e3fcf9c433f293f0460aeca9e29d8cfea1d12.jsonl.gz",
+      "sha256": "5bf58e6a235043e981bed0e02d8b6870f50cd0adb4c0e8df8dd41849407cb70e"
+    },
+    "e6e3527eb21cc87eae563afd6adb9f51c8d4e2e7f5df0d9689e8d9e13e65e689": {
+      "cases": 108135,
+      "chapter": "02",
+      "elapsed_seconds": 198.625,
+      "engine_errors": 0,
+      "key": "e6e3527eb21cc87eae563afd6adb9f51c8d4e2e7f5df0d9689e8d9e13e65e689",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/e6/e6e3527eb21cc87eae563afd6adb9f51c8d4e2e7f5df0d9689e8d9e13e65e689.jsonl.gz",
+      "sha256": "c4d607da8b0130424c647112ff9a5832357a2a8e4c52d4c0052c3182746cb50a"
+    },
+    "e89b63c6c098454ab72446762930c850fa4bb91d7bfe34b11595bc5683416082": {
+      "cases": 70902,
+      "chapter": "65",
+      "elapsed_seconds": 73.621,
+      "engine_errors": 0,
+      "key": "e89b63c6c098454ab72446762930c850fa4bb91d7bfe34b11595bc5683416082",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/e8/e89b63c6c098454ab72446762930c850fa4bb91d7bfe34b11595bc5683416082.jsonl.gz",
+      "sha256": "24f565c01cd458ef39fb7bf6452b7554e7e1ccee6fae943b09b88fe2dbcb9868"
+    },
+    "ecc24d8dfb31a160114375e18b3c1c7075f8adab759c7274199f7efeab182d4f": {
+      "cases": 64125,
+      "chapter": "53",
+      "elapsed_seconds": 158.172,
+      "engine_errors": 0,
+      "key": "ecc24d8dfb31a160114375e18b3c1c7075f8adab759c7274199f7efeab182d4f",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/ec/ecc24d8dfb31a160114375e18b3c1c7075f8adab759c7274199f7efeab182d4f.jsonl.gz",
+      "sha256": "13fbc409a8a65baf79d6aeb7de26b9f67dd4de15902a4e88cb19c93218f5ad02"
+    },
+    "ecefc3d025bf9f415eb3c7104d7f91b386f935687d61bf9f87457e87cc0146b5": {
+      "cases": 64692,
+      "chapter": "23",
+      "elapsed_seconds": 74.111,
+      "engine_errors": 0,
+      "key": "ecefc3d025bf9f415eb3c7104d7f91b386f935687d61bf9f87457e87cc0146b5",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/ec/ecefc3d025bf9f415eb3c7104d7f91b386f935687d61bf9f87457e87cc0146b5.jsonl.gz",
+      "sha256": "92c1e29ebd22da4f4b98e737963125adbe6a629a6b2bddc3ac67920e7806c615"
+    },
+    "f59c89b08ceb9a537bf03baf8d4608e32f4ddf6ec9649c2c9b62f5925debba66": {
+      "cases": 1403865,
+      "chapter": "62",
+      "elapsed_seconds": 1532.774,
+      "engine_errors": 0,
+      "key": "f59c89b08ceb9a537bf03baf8d4608e32f4ddf6ec9649c2c9b62f5925debba66",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/f5/f59c89b08ceb9a537bf03baf8d4608e32f4ddf6ec9649c2c9b62f5925debba66.jsonl.gz",
+      "sha256": "a4ba9258a0914f2254a32ed8c681cbfd1c44fa87c512da68492c683d28446dde"
+    },
+    "f79f87c52ba5f357d842ac4f77fe4b9693099c6a85dd5a0af4433d371a61a1d0": {
+      "cases": 433269,
+      "chapter": "64",
+      "elapsed_seconds": 442.586,
+      "engine_errors": 0,
+      "key": "f79f87c52ba5f357d842ac4f77fe4b9693099c6a85dd5a0af4433d371a61a1d0",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/f7/f79f87c52ba5f357d842ac4f77fe4b9693099c6a85dd5a0af4433d371a61a1d0.jsonl.gz",
+      "sha256": "e575823be2d97aa656fb098ed4c1f831c4e11d13d47095a47165a451c64609d9"
+    },
+    "f82a3c838eb8a385c359600b63a6596e21338231c166ef7532b54b7ee06ddf7d": {
+      "cases": 14040,
+      "chapter": "67",
+      "elapsed_seconds": 66.061,
+      "engine_errors": 0,
+      "key": "f82a3c838eb8a385c359600b63a6596e21338231c166ef7532b54b7ee06ddf7d",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/f8/f82a3c838eb8a385c359600b63a6596e21338231c166ef7532b54b7ee06ddf7d.jsonl.gz",
+      "sha256": "c1cfc8173878ee2c02a444074431f51ad5b4a00487c512b28211e95e14124092"
+    },
+    "fef8f470336f43d56509513b3fd99811c3fccfd7aa1f8ebbc6d52ee6dbd9c9ed": {
+      "cases": 1821240,
+      "chapter": "84",
+      "elapsed_seconds": 1911.204,
+      "engine_errors": 0,
+      "key": "fef8f470336f43d56509513b3fd99811c3fccfd7aa1f8ebbc6d52ee6dbd9c9ed",
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/cache/eval/fe/fef8f470336f43d56509513b3fd99811c3fccfd7aa1f8ebbc6d52ee6dbd9c9ed.jsonl.gz",
+      "sha256": "ff817f989c68f36ee4ccbea329bd31ffa55a2089c3bf1921482bb4ada528a917"
+    }
+  }
+}

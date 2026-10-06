@@ -1,0 +1,1008 @@
+{
+  "classification": {
+    "brazil_broadening_by_yale_parent": {
+      "04090000 -> legal 0409000005": {
+        "distinct_hts10": 5,
+        "effective_slot_cells": 5,
+        "interval_slot_cells": 15,
+        "per_slot": {
+          "brazil_section_301": 30
+        },
+        "units": 30
+      },
+      "44079902 -> legal 4407990295": {
+        "distinct_hts10": 3,
+        "effective_slot_cells": 3,
+        "interval_slot_cells": 9,
+        "per_slot": {
+          "brazil_section_301": 18
+        },
+        "units": 18
+      },
+      "84224091 -> legal 8422409181": {
+        "distinct_hts10": 4,
+        "effective_slot_cells": 4,
+        "interval_slot_cells": 12,
+        "per_slot": {
+          "brazil_section_301": 24
+        },
+        "units": 24
+      },
+      "85051100 -> legal 8505110070": {
+        "distinct_hts10": 4,
+        "effective_slot_cells": 4,
+        "interval_slot_cells": 12,
+        "per_slot": {
+          "brazil_section_301": 24
+        },
+        "units": 24
+      },
+      "85371091 -> legal 8537109170": {
+        "distinct_hts10": 4,
+        "effective_slot_cells": 4,
+        "interval_slot_cells": 12,
+        "per_slot": {
+          "brazil_section_301": 24
+        },
+        "units": 24
+      }
+    },
+    "exclusive_top_causes": {
+      "brazil_yale_hts8_statistical_broadening": {
+        "distinct_hts10": 20,
+        "effective_slot_cells": 20,
+        "interval_slot_cells": 60,
+        "per_slot": {
+          "brazil_section_301": 120
+        },
+        "units": 120
+      },
+      "yale_ch98_secondary_code_zeroing": {
+        "distinct_hts10": 290,
+        "effective_slot_cells": 378,
+        "interval_slot_cells": 757,
+        "per_slot": {
+          "brazil_section_301": 6,
+          "forced_labor_section_301": 1508
+        },
+        "units": 1514
+      },
+      "yale_section232_per_article_mask": {
+        "distinct_hts10": 2268,
+        "effective_slot_cells": 45363,
+        "interval_slot_cells": 92977,
+        "per_slot": {
+          "brazil_section_301": 13506,
+          "forced_labor_section_301": 172448
+        },
+        "units": 185954
+      }
+    },
+    "input_unmapped_units": 187588,
+    "overlaps": {
+      "brazil_broadening_with_positive_statutory_rate_232_units": 24,
+      "chapter98_in_yale_ch98_zero_list_units": 1514,
+      "patented_pharma_source_membership_units": 0
+    },
+    "section232_annex_tier_units": {
+      "annex_1a": 80070,
+      "annex_1b": 40952,
+      "annex_1b_inferred_derivative": 230,
+      "annex_1c": 8304,
+      "annex_2": 10600,
+      "annex_3": 23960,
+      "none": 21838
+    },
+    "section232_exclusive_subcauses": {
+      "engine_metal_fact_exposed_but_unconsumed": {
+        "distinct_hts10": 1476,
+        "effective_slot_cells": 29185,
+        "interval_slot_cells": 59841,
+        "per_slot": {
+          "brazil_section_301": 8826,
+          "forced_labor_section_301": 110856
+        },
+        "units": 119682
+      },
+      "unflagged_heading_program_source_membership": {
+        "distinct_hts10": 396,
+        "effective_slot_cells": 7915,
+        "interval_slot_cells": 16219,
+        "per_slot": {
+          "brazil_section_301": 2334,
+          "forced_labor_section_301": 30104
+        },
+        "units": 32438
+      },
+      "unflagged_in_scope_annex": {
+        "distinct_hts10": 396,
+        "effective_slot_cells": 8263,
+        "interval_slot_cells": 16917,
+        "per_slot": {
+          "brazil_section_301": 2346,
+          "forced_labor_section_301": 31488
+        },
+        "units": 33834
+      }
+    },
+    "section232_heading_source_combination_units_nonexclusive_population": {
+      "auto_parts": 6340,
+      "auto_parts+mhd_parts": 14054,
+      "auto_parts+mhd_parts+mhd_vehicle_bus": 344,
+      "auto_vehicle": 5942,
+      "copper": 8690,
+      "mhd_parts": 1090,
+      "mhd_vehicle_bus": 4556,
+      "none": 135780,
+      "wood": 9158
+    },
+    "section232_heading_source_membership_nonexclusive": {
+      "auto_parts": {
+        "distinct_hts10": 245,
+        "effective_slot_cells": 5067,
+        "interval_slot_cells": 10369,
+        "per_slot": {
+          "brazil_section_301": 1410,
+          "forced_labor_section_301": 19328
+        },
+        "units": 20738
+      },
+      "auto_vehicle": {
+        "distinct_hts10": 73,
+        "effective_slot_cells": 1449,
+        "interval_slot_cells": 2971,
+        "per_slot": {
+          "brazil_section_301": 438,
+          "forced_labor_section_301": 5504
+        },
+        "units": 5942
+      },
+      "copper": {
+        "distinct_hts10": 117,
+        "effective_slot_cells": 2114,
+        "interval_slot_cells": 4345,
+        "per_slot": {
+          "brazil_section_301": 702,
+          "forced_labor_section_301": 7988
+        },
+        "units": 8690
+      },
+      "mhd_parts": {
+        "distinct_hts10": 185,
+        "effective_slot_cells": 3781,
+        "interval_slot_cells": 7744,
+        "per_slot": {
+          "brazil_section_301": 1092,
+          "forced_labor_section_301": 14396
+        },
+        "units": 15488
+      },
+      "mhd_vehicle_bus": {
+        "distinct_hts10": 68,
+        "effective_slot_cells": 1191,
+        "interval_slot_cells": 2450,
+        "per_slot": {
+          "brazil_section_301": 408,
+          "forced_labor_section_301": 4492
+        },
+        "units": 4900
+      },
+      "semiconductor": {
+        "distinct_hts10": 0,
+        "effective_slot_cells": 0,
+        "interval_slot_cells": 0,
+        "per_slot": {},
+        "units": 0
+      },
+      "wood": {
+        "distinct_hts10": 113,
+        "effective_slot_cells": 2233,
+        "interval_slot_cells": 4579,
+        "per_slot": {
+          "brazil_section_301": 678,
+          "forced_labor_section_301": 8480
+        },
+        "units": 9158
+      }
+    },
+    "section232_subcause_conservation": {
+      "equals_section232_top": true,
+      "exclusive_sum": 185954
+    },
+    "top_conservation": {
+      "equals_input": true,
+      "exclusive_sum": 187588
+    },
+    "unflagged_heading_exclusive_population_combination_units": {
+      "auto_parts": 5124,
+      "auto_parts+mhd_parts": 9402,
+      "auto_parts+mhd_parts+mhd_vehicle_bus": 344,
+      "auto_vehicle": 5942,
+      "mhd_parts": 222,
+      "mhd_vehicle_bus": 2246,
+      "wood": 9158
+    }
+  },
+  "commands": {
+    "generate": ".venv/bin/python reference/us-tariff-schedule/preview-1311/unmapped_cause_audit.py"
+  },
+  "definitions": {
+    "effective_slot_cell": "unique slot+hts10+hts_line+iso2+origin_regime, ignoring interval/probe",
+    "exclusive_top_precedence": [
+      "Brazil Yale HTS8 statistical broadening",
+      "Chapter 98 secondary-code zeroing",
+      "selected-panel statutory_rate_232 > 0",
+      "unexplained"
+    ],
+    "interval_slot_cell": "unique slot+hts10+hts_line+iso2+revision+clipped interval+origin_regime",
+    "unit": "one campaign case-slot probe endpoint"
+  },
+  "inputs": {
+    "new_mismatch_cells": {
+      "bytes": 7491213,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/new-mismatch-cells.jsonl.gz",
+      "sha256": "7e26a7e746abd4d033b8dcc6b7d95efcece45b1405ac84238011500c84bbe029"
+    },
+    "selected_intervals": {
+      "bytes": 75405367,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/selected-intervals.csv.gz",
+      "sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
+    },
+    "static_footprint_receipt": {
+      "bytes": 35083,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/static-footprint-census-receipt.json",
+      "sha256": "ec97976d84b49ebc9220cc53d8f72449be2f02e3a4d63979370ff39a987ecc0a"
+    },
+    "taxonomy_receipt": {
+      "bytes": 96104096,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/mismatch-taxonomy-receipt.json",
+      "sha256": "3d1a7543d738d6e396e111ff909c245f082146aeeeeef27d57a5da38f30e25de"
+    }
+  },
+  "interpretation": {
+    "additional_pr_fact_surface_gap_units": 66272,
+    "country_rate_vintage_gap_units": 0,
+    "direct_pr_formula_gap_units": 119682,
+    "effective_date_gap_units": 0,
+    "notes": [
+      "The exposed entry_is_section_232_covered fact is true for the direct formula-gap population, but PR #1311's note-50/52 formulas do not consume it.",
+      "Unflagged annex and heading-program rows require a broader per-article Section 232 fact surface to reproduce Yale's mask.",
+      "The exact latest-effective-date, longest-prefix annex classifier leaves no positive-statutory row outside an in-scope annex tier or a heading-program source family.",
+      "Every Chapter 98 row is in Yale's Chapter 98 zero list. Rulespec deliberately keeps forced_labor_section_301_component_rate as a non-exempt panel projection and applies Chapter 98 only in the entry-level component, so these are panel/entry semantics rather than an effective-date failure.",
+      "The varying forced-labor actual rates below 10/12.5 percent are the intended net-of-MFN country-tier formulas. The same cells and rates persist across July 24 and July 31.",
+      "No unmapped row belongs to Yale's patented-pharma source list, so the July 31 patented-pharma gate creates no residual in this population."
+    ],
+    "panel_or_entry_semantics_units_exclusive": 1634,
+    "yale_positive_statutory_scope_review_units": 0
+  },
+  "join": {
+    "duplicate_selected_keys": 0,
+    "joined_keys": 89346,
+    "key": [
+      "hts10",
+      "iso2",
+      "revision",
+      "clipped_from",
+      "clipped_until",
+      "origin_regime"
+    ],
+    "mismatch_interval_keys": 89346,
+    "missing_keys": 0,
+    "selected_rows_scanned": 9913304
+  },
+  "receipt_payload_hash_scope": "all keys except receipt_payload_sha256",
+  "receipt_payload_sha256": "cd3577aef8ba83ca563a7b192ac0c4022583eb57c619327a37801a3a23c0d54a",
+  "representative_cells": {
+    "brazil_yale_hts8_statistical_broadening": [
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "0409000010",
+        "hts_line": "0409000000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.0
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "0409000035",
+        "hts_line": "0409000000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.0
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "0409000045",
+        "hts_line": "0409000000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.0
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "0409000056",
+        "hts_line": "0409000000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.0
+      }
+    ],
+    "engine_metal_fact_exposed_but_unconsumed": [
+      {
+        "actual": 0.25,
+        "annex_tier": "annex_1a",
+        "entry_is_section_232_covered": true,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "7206100000",
+        "hts_line": "7206100000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.5
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": "annex_1a",
+        "entry_is_section_232_covered": true,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "7206900000",
+        "hts_line": "7206900000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.5
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": "annex_1a",
+        "entry_is_section_232_covered": true,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "7207110000",
+        "hts_line": "7207110000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.5
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": "annex_1a",
+        "entry_is_section_232_covered": true,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "7207120010",
+        "hts_line": "7207120000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.5
+      }
+    ],
+    "unflagged_heading_program_source_membership": [
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "auto_parts"
+        ],
+        "hts10": "4011101010",
+        "hts_line": "4011101000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.237625
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "auto_parts"
+        ],
+        "hts10": "4011101020",
+        "hts_line": "4011101000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.237625
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "auto_parts"
+        ],
+        "hts10": "4011101030",
+        "hts_line": "4011101000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.237625
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "auto_parts"
+        ],
+        "hts10": "4011101040",
+        "hts_line": "4011101000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.237625
+      }
+    ],
+    "unflagged_in_scope_annex": [
+      {
+        "actual": 0.25,
+        "annex_tier": "annex_1b",
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "3701300000",
+        "hts_line": "3701300000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.25
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": "annex_1a",
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "copper"
+        ],
+        "hts10": "7406100000",
+        "hts_line": "7406100000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.5
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": "annex_1a",
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "copper"
+        ],
+        "hts10": "7406200000",
+        "hts_line": "7406200000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.5
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": "annex_1a",
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "copper"
+        ],
+        "hts10": "7407101500",
+        "hts_line": "7407101500",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.5
+      }
+    ],
+    "yale_ch98_secondary_code_zeroing": [
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "9823101800",
+        "hts_line": "9822060500",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.0
+      },
+      {
+        "actual": 0.1,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "9801001015",
+        "hts_line": "9801001000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "EE",
+        "probe": "2026-07-24",
+        "slot": "forced_labor_section_301",
+        "statutory_rate_232": 0.0
+      },
+      {
+        "actual": 0.125,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "9801001029",
+        "hts_line": "9801001000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "KR",
+        "probe": "2026-07-24",
+        "slot": "forced_labor_section_301",
+        "statutory_rate_232": 0.0
+      },
+      {
+        "actual": 0.125,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "9801001030",
+        "hts_line": "9801001000",
+        "interval": [
+          "2026-07-24",
+          "2026-07-30"
+        ],
+        "iso2": "KR",
+        "probe": "2026-07-24",
+        "slot": "forced_labor_section_301",
+        "statutory_rate_232": 0.0
+      }
+    ],
+    "yale_section232_per_article_mask": [
+      {
+        "actual": 0.25,
+        "annex_tier": "annex_1b",
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [],
+        "hts10": "3701300000",
+        "hts_line": "3701300000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.25
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "auto_parts"
+        ],
+        "hts10": "4011101010",
+        "hts_line": "4011101000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.237625
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "auto_parts"
+        ],
+        "hts10": "4011101020",
+        "hts_line": "4011101000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.237625
+      },
+      {
+        "actual": 0.25,
+        "annex_tier": null,
+        "entry_is_section_232_covered": false,
+        "expected": 0.0,
+        "heading_source_families": [
+          "auto_parts"
+        ],
+        "hts10": "4011101030",
+        "hts_line": "4011101000",
+        "interval": [
+          "2026-07-22",
+          "2026-07-23"
+        ],
+        "iso2": "BR",
+        "probe": "2026-07-22",
+        "slot": "brazil_section_301",
+        "statutory_rate_232": 0.237625
+      }
+    ]
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.preview_1311_unmapped_cause_audit.v1",
+  "script": {
+    "bytes": 29350,
+    "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/unmapped_cause_audit.py",
+    "sha256": "a6a5a0f960c63ef96ea6a85bf9dc912991566e9ed1c8a93772ee5349a7cec166"
+  },
+  "sources": {
+    "files": {
+      "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/tools/b16_entry_flags.py": {
+        "bytes": 8171,
+        "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/tools/b16_entry_flags.py",
+        "sha256": "8032dde5fe4a9bc14448cc84e338181a69b912e37b74331d89e9d5f9ef746c8a"
+      },
+      "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/cbp/us-tariff-duty/composition.yaml": {
+        "bytes": 171578,
+        "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/cbp/us-tariff-duty/composition.yaml",
+        "sha256": "0745c24a9c7ca8cd54d28bf4da5ea474f479a866daf59d4890824a2f79c82c02"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/config/policy_params.yaml": {
+        "bytes": 50577,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/config/policy_params.yaml",
+        "sha256": "5f3d79b192b9fb6079e5ad10a1969e12f397567fc9f89d4e202403116ecb6346"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/ieepa_exempt_products.csv": {
+        "bytes": 64768,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/ieepa_exempt_products.csv",
+        "sha256": "41cbdc517406ce297f856ca109064745fa41de930735dbeba36fc0d890f121d5"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_annex_products.csv": {
+        "bytes": 44677,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_annex_products.csv",
+        "sha256": "90b800fc3556b25cbf4cef982dc3232c86e367e1b7ec6f53621a116fc7b4a68d"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_auto_parts.txt": {
+        "bytes": 1182,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_auto_parts.txt",
+        "sha256": "8d2214ecb718bdd3db9e21a313665e4815972c0f7a099115c843e5254569411b"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_copper_products.csv": {
+        "bytes": 1616,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_copper_products.csv",
+        "sha256": "bfb8ef9c3371e7b065da5eba5d6cb05a76189838e9a25dd1d2772d581930ce21"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_derivative_products.csv": {
+        "bytes": 25415,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_derivative_products.csv",
+        "sha256": "4502c782a356b2843cf7652ccaf3dcb2c7af1ac1556fec16e00062acc844a0bb"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_mhd_parts.txt": {
+        "bytes": 1712,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_mhd_parts.txt",
+        "sha256": "1411bac1b64b0510343a3d9b437b538357fceed13dffd480eee464f746a49cfb"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_pharma_products.csv": {
+        "bytes": 1447,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_pharma_products.csv",
+        "sha256": "eb5f888ef3967c699b4f85618859d3556a9552e7d636ead2bbdc09256edcca04"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_semi_products.csv": {
+        "bytes": 650,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s232_semi_products.csv",
+        "sha256": "80ed04fac77a55546d95551f8c26e0326ac0278cb9d6f1f6d3cd9dbe78ec6330"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/src/model/data_loaders.R": {
+        "bytes": 43137,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/src/model/data_loaders.R",
+        "sha256": "a088811f84ff19eaf6fce28f2587152c69ed50e53435ddedd2425fd369b62ccc"
+      },
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/src/pipeline/06_calculate_rates.R": {
+        "bytes": 179892,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/src/pipeline/06_calculate_rates.R",
+        "sha256": "2620a122159c11cc2b116786925ccbc6d801cb274982034cd8105657ae13a76a"
+      }
+    },
+    "rulespec_repo": {
+      "commit": "3357f7dc710d18861b1fefdff115e2434e67b988",
+      "root": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us",
+      "scoped_status": [],
+      "tree": "c3d530c72344310aa2fdfcebe5aec286b1ad4869"
+    },
+    "yale_repo": {
+      "commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+      "root": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale",
+      "scoped_status": [],
+      "tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+    }
+  },
+  "timing_and_rates": {
+    "all_interval_sets_rates_and_causes_stable": true,
+    "forced_actual_rate_units_by_country_tier": {
+      "flat_10pct": {
+        "0.1": 50764
+      },
+      "flat_12_5pct": {
+        "0.125": 93516
+      },
+      "net_mfn_10pct": {
+        "0.001": 16,
+        "0.01": 100,
+        "0.014": 12,
+        "0.015": 52,
+        "0.018": 8,
+        "0.022": 4,
+        "0.032": 4,
+        "0.033": 4,
+        "0.035": 32,
+        "0.038": 100,
+        "0.04": 8,
+        "0.042": 176,
+        "0.043": 168,
+        "0.044": 36,
+        "0.045": 40,
+        "0.047": 68,
+        "0.05": 44,
+        "0.051": 32,
+        "0.054": 28,
+        "0.055": 136,
+        "0.056": 36,
+        "0.057": 36,
+        "0.058": 924,
+        "0.059": 4,
+        "0.06": 324,
+        "0.061": 284,
+        "0.062": 28,
+        "0.063": 376,
+        "0.064": 24,
+        "0.065": 36,
+        "0.066": 40,
+        "0.067": 152,
+        "0.068": 84,
+        "0.069": 2608,
+        "0.07": 652,
+        "0.071": 240,
+        "0.072": 200,
+        "0.073": 164,
+        "0.074": 100,
+        "0.075": 1572,
+        "0.076": 72,
+        "0.078": 36,
+        "0.08": 164,
+        "0.081": 68,
+        "0.082": 112,
+        "0.083": 28,
+        "0.084": 472,
+        "0.085": 40,
+        "0.086": 60,
+        "0.09": 80,
+        "0.096": 16,
+        "0.1": 7588
+      },
+      "net_mfn_12_5pct": {
+        "0.026": 8,
+        "0.035": 72,
+        "0.039": 12,
+        "0.04": 32,
+        "0.043": 4,
+        "0.047": 8,
+        "0.057": 4,
+        "0.058": 4,
+        "0.06": 24,
+        "0.063": 64,
+        "0.065": 4,
+        "0.067": 140,
+        "0.068": 120,
+        "0.069": 20,
+        "0.07": 24,
+        "0.072": 44,
+        "0.075": 36,
+        "0.076": 36,
+        "0.079": 16,
+        "0.08": 36,
+        "0.081": 20,
+        "0.082": 24,
+        "0.083": 116,
+        "0.084": 4,
+        "0.085": 276,
+        "0.086": 132,
+        "0.087": 24,
+        "0.088": 68,
+        "0.089": 12,
+        "0.09": 32,
+        "0.091": 36,
+        "0.092": 48,
+        "0.093": 48,
+        "0.094": 392,
+        "0.095": 408,
+        "0.096": 188,
+        "0.097": 68,
+        "0.098": 148,
+        "0.099": 76,
+        "0.1": 1384,
+        "0.101": 48,
+        "0.103": 20,
+        "0.104": 8,
+        "0.105": 128,
+        "0.106": 40,
+        "0.107": 12,
+        "0.108": 16,
+        "0.109": 64,
+        "0.11": 28,
+        "0.111": 36,
+        "0.115": 48,
+        "0.121": 8,
+        "0.125": 7320
+      }
+    },
+    "forced_country_tier_by_top_cause_units": {
+      "flat_10pct | yale_ch98_secondary_code_zeroing": 116,
+      "flat_10pct | yale_section232_per_article_mask": 50648,
+      "flat_12_5pct | yale_ch98_secondary_code_zeroing": 468,
+      "flat_12_5pct | yale_section232_per_article_mask": 93048,
+      "net_mfn_10pct | yale_ch98_secondary_code_zeroing": 192,
+      "net_mfn_10pct | yale_section232_per_article_mask": 17496,
+      "net_mfn_12_5pct | yale_ch98_secondary_code_zeroing": 732,
+      "net_mfn_12_5pct | yale_section232_per_article_mask": 11256
+    },
+    "interval_population_and_rate_stability": {
+      "brazil_section_301": {
+        "adjacent_comparisons": [
+          {
+            "actual_rate_changed_cells": 0,
+            "cause_changed_cells": 0,
+            "left": "2026-07-22..2026-07-23",
+            "left_only_cells": 0,
+            "right": "2026-07-24..2026-07-30",
+            "right_only_cells": 0,
+            "shared_cells": 2272
+          },
+          {
+            "actual_rate_changed_cells": 0,
+            "cause_changed_cells": 0,
+            "left": "2026-07-24..2026-07-30",
+            "left_only_cells": 0,
+            "right": "2026-07-31..2026-08-01",
+            "right_only_cells": 0,
+            "shared_cells": 2272
+          }
+        ],
+        "cells_per_interval": {
+          "2026-07-22..2026-07-23": 2272,
+          "2026-07-24..2026-07-30": 2272,
+          "2026-07-31..2026-08-01": 2272
+        }
+      },
+      "forced_labor_section_301": {
+        "adjacent_comparisons": [
+          {
+            "actual_rate_changed_cells": 0,
+            "cause_changed_cells": 0,
+            "left": "2026-07-24..2026-07-30",
+            "left_only_cells": 0,
+            "right": "2026-07-31..2026-08-01",
+            "right_only_cells": 0,
+            "shared_cells": 43489
+          }
+        ],
+        "cells_per_interval": {
+          "2026-07-24..2026-07-30": 43489,
+          "2026-07-31..2026-08-01": 43489
+        }
+      }
+    },
+    "patented_pharma_effective_2026_07_31_membership": {
+      "distinct_hts10": 0,
+      "effective_slot_cells": 0,
+      "interval_slot_cells": 0,
+      "per_slot": {},
+      "units": 0
+    }
+  },
+  "verdict": "PASS"
+}

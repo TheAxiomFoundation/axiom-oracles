@@ -1,0 +1,497 @@
+{
+  "campaign_inputs": {
+    "baseline_classification": {
+      "bytes": 13421,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/classification-receipt.json",
+      "sha256": "8890874d6162ae5acd17c300aa7567101aa77cd151687fa86b67036607748e2f"
+    },
+    "baseline_manifest": {
+      "bytes": 50282,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/eval/MANIFEST.json",
+      "sha256": "5123e201a32c3965d82440c515525c854e9113d7efc84e820bbe878617a83a39"
+    },
+    "campaign_source": {
+      "bytes": 68351,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/scripts/us_tariff_schedule_campaign.py",
+      "sha256": "8358f3e8994547b1a7a16a1818705cd72b75ea321a50c8f9db83e3fb01828150"
+    },
+    "certificate": {
+      "bytes": 34112,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/certificates/us-tariff-duty.json",
+      "sha256": "211588976fe5e416b982430ec40632731ae063fda4dfb96103e2fb67f509656f"
+    },
+    "disposition_ledger": {
+      "bytes": 15614,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/campaign-dispositions.yaml",
+      "sha256": "d24e578836db1f5c5e076af600a049140ed499567c8c8d6823074184a706db53"
+    },
+    "routing": {
+      "bytes": 94243,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/disposition-routing.csv.gz",
+      "sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3"
+    },
+    "selected_intervals": {
+      "bytes": 75405367,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/selected-intervals.csv.gz",
+      "sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
+    },
+    "yale_cafta_fta_list": {
+      "bytes": 140808,
+      "condition": "fta",
+      "country_code_group": "2050;2110;2150;2190;2230;2470",
+      "iso2_origins": [
+        "CR",
+        "DO",
+        "GT",
+        "HN",
+        "NI",
+        "SV"
+      ],
+      "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s301fl_final_country_exemptions.csv",
+      "sha256": "a38f8e42e9615b58dc09fd8a661b4a0fdb9d12e2121342a657fae69450215280",
+      "source_rows": 1737,
+      "unique_hts8": 1737,
+      "yale_commit": "c4307e514196618afcbf88cf7fd33746417eeabf"
+    }
+  },
+  "cert_baseline_commit": "903f5b8fba7ae80dcc7d3a5ba00c66ae3fa31da7",
+  "driver": {
+    "bytes": 43035,
+    "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/preview_driver.py",
+    "sha256": "c8b757d1447ce6abd21edf217490247b69649a861d23bddabde03bc2849e77dd"
+  },
+  "engine": {
+    "commit": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+    "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/axiom-rules-engine/target/release/axiom-rules-engine",
+    "resolved_path": "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine",
+    "sha256": "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7",
+    "status_porcelain": "",
+    "tree": "86e78cc74fffe774fe0ba010c0a951ca1dfcc000"
+  },
+  "partition": {
+    "chapter_count": 94,
+    "chapters": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "28",
+      "29",
+      "30",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50",
+      "51",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59",
+      "60",
+      "61",
+      "62",
+      "63",
+      "64",
+      "65",
+      "66",
+      "67",
+      "68",
+      "69",
+      "70",
+      "71",
+      "72",
+      "73",
+      "74",
+      "75",
+      "76",
+      "78",
+      "79",
+      "80",
+      "81",
+      "82",
+      "83",
+      "84",
+      "85",
+      "86",
+      "87",
+      "88",
+      "89",
+      "90",
+      "91",
+      "92",
+      "93",
+      "94",
+      "95",
+      "96",
+      "98"
+    ],
+    "omitted_chapters": [
+      "27",
+      "31",
+      "97",
+      "99a",
+      "99b",
+      "99c"
+    ],
+    "prior_endpoint_cases": 19085544,
+    "prior_sequential_shard_seconds": 36874.038
+  },
+  "preview_corpus_release": {
+    "activation_preview": {
+      "bytes": 690,
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/reviews/activation-preview-32637206404.md",
+      "sha256": "3fd0b8a90f362c9ff024b4f416c10f15a3f001275911b560c11db0a94aa2d449"
+    },
+    "general_note_29_inventory_items": 0,
+    "inventories_read": 274,
+    "missing_inventories": [],
+    "provenance_commit": "5cf7556ad3d68aa0596d58f7ac60942bb5db3120",
+    "release": "us-rulespec-2026-08-09-cutover-surface-union",
+    "rev15_notes_inventory_items": 815,
+    "rev15_notes_root_citations": [
+      "us/statute/hts/chapter-99",
+      "us/statute/hts/general-note-3"
+    ],
+    "selector_file_sha256": "392f99a9804b66b48bdc758d7f576fa47c8822d3c48da68125ec12769bf4c166",
+    "selector_path": "manifests/releases/us-rulespec-2026-08-09-cutover-surface-union.json",
+    "selector_scopes": 274,
+    "selector_sha256": "e8a66545095eff763e7e1dab473c9848e62a0407b83421bb0e879009e78a7fd9",
+    "signed_release_content_sha256": "9591ed6ade8f264f34a79e89b99ae05ac04b19cb1bf6b69480108bdfee1eb435"
+  },
+  "preview_projection": {
+    "dropped_undeclared_aliases": [
+      "entry_is_brazil_301",
+      "entry_is_forced_labor_301"
+    ],
+    "fed_declared_flags": [
+      "entry_is_brazil_301_listed",
+      "entry_is_forced_labor_301_listed"
+    ],
+    "source_edits": false
+  },
+  "rulespec": {
+    "commit": "3357f7dc710d18861b1fefdff115e2434e67b988",
+    "entry_flag_tool": {
+      "bytes": 8171,
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/tools/b16_entry_flags.py",
+      "sha256": "8032dde5fe4a9bc14448cc84e338181a69b912e37b74331d89e9d5f9ef746c8a"
+    },
+    "page_modules": [
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-543.test.yaml",
+        "sha256": "4cf2a9cdff708389326f086eb810421f46dfc2c1f0e5b91335c07e1bb5a8ae5c"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-543.yaml",
+        "sha256": "60e3fcb3e3c2bfa2600ea6de700ab33da569b7e80cdb42ff8372ed5259e3ec3f"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-544.test.yaml",
+        "sha256": "528954d2262158addcde226ae4f694689efbba1953c9d2598f0781be5901f5af"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-544.yaml",
+        "sha256": "5c81fb2bddf9c87961948769c868b544f023a280497d6267d00576a07fb4569d"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-545.test.yaml",
+        "sha256": "0e2773bf06f5f93a134f7bd748be98cff4e7d2b4ced4f161f1455724d992cef5"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-545.yaml",
+        "sha256": "126064dee272de73dfb907b5245390c9e83b753decf2b77292f1eb0365bbf621"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-546.test.yaml",
+        "sha256": "c129576f40f2929074a9f2d251d4ecc2f4db0573e162b8a78309f829d6c1030d"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-546.yaml",
+        "sha256": "5a5b6fef617e2320f25cf8dea932b36d434e3e4e9296b6df6c8ea2e2a15a8fb3"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-548.test.yaml",
+        "sha256": "23510841973e181097c8faf55fbca7a462b3c170d0180cb898b3a7c640955048"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-548.yaml",
+        "sha256": "72c42689c3eab3e7001be7817e57d956afc20521120c1efa27a5d099dff6a170"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-549.test.yaml",
+        "sha256": "9bad51ceef5888712f2f4a37861a4f906c5f0a898db08de4c86f1072e7006281"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-549.yaml",
+        "sha256": "ee6f3c86387444d397daf01cf4aecdb93a1ac36b30b1c90a495300fa30d6f122"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-551.test.yaml",
+        "sha256": "5438f0c6f0b6c9b7acb1e7afac94dd7b9b3379cff21efac7b39918dc66652f0d"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-551.yaml",
+        "sha256": "5bca5e53d1aa9d40a53beec09593ad0695f8545df547ff9110a9559825f466eb"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-552.test.yaml",
+        "sha256": "44853cbefa2120843c9be47d9007753e6bfbec120e3eeed239e2e185bdfacd53"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-552.yaml",
+        "sha256": "9a8960e8e2eafda19cda0ca1b278af80fdc51c305532efac1a4d7f61f36e600c"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-553.test.yaml",
+        "sha256": "bf9d2751b091c6d05bb3567ef05c6acda9bccf3be2be682c64b95fba680cb768"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-553.yaml",
+        "sha256": "e7e6594b35fe0c55a5ed0ca6df555e2d5655c9869b781fc17d7f303279913d60"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-556.test.yaml",
+        "sha256": "4437755f1de0f3306d6e394063024bcdd290e4b2ae1a58f8b5c1803eb6f2a118"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-556.yaml",
+        "sha256": "fdf788ab2cafb8ab4429564c3a6f505b9ad9de42c94166fefa7daec8a08e9245"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-557.test.yaml",
+        "sha256": "90a063c4ddfa6b50e35c62ca4f1e60448e82868efd9e13e1746adbaab9dfe953"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-557.yaml",
+        "sha256": "f29a42fd90c166d5441b3ecd9ee9b49fd7655e525c28966f748b383ffd47f126"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-558.test.yaml",
+        "sha256": "be1bb40147f194b7ef19bb3792337c6bc14c8659f02ed0d8c897ad921f2b362b"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-558.yaml",
+        "sha256": "654504a541360ee9f9be43a8b83e06c3bdba8070a7b378636155e4c1a7d0652d"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-559.test.yaml",
+        "sha256": "aab76e8f4b438eccf26d3fb3ba8c5347047c9c8b58fdae17b52a668dc9a33fda"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-559.yaml",
+        "sha256": "500d78ffa89113cf0d0d610e4820aa918a3860f4b97e4c03341c85522ae8b927"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-561.test.yaml",
+        "sha256": "c41b5e9564cd03805c903d77dc876727565ff5f26ebb1292d09b803086053077"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-561.yaml",
+        "sha256": "e3aa1593aac25e89cc1fcef2b97cbfbeb7a79c7eb9ff027e4b3c15ea9f584001"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-562.test.yaml",
+        "sha256": "6ab30d81c91936ecea4f5d79c6934b7df4aa5ef25dd2987ea3500c11102cb358"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-562.yaml",
+        "sha256": "7cf857b6567e1e4d01f0028d616a6756e82955c46b2e729481ed33953aca2e09"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-564.test.yaml",
+        "sha256": "c7f377be78543288fed0871a4ee3fbeaf71340ce4ef266e329abe0a2e6ddeb0e"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-564.yaml",
+        "sha256": "ca69256ead4b176447a306a3d3d778f37fabc719f308a1172e68f8665144b9bb"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-565.test.yaml",
+        "sha256": "5970103564abec9adaa0d850331149118d1d1c93e7f5a9d76f3b4bc9f9f281e4"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-565.yaml",
+        "sha256": "0e53eb83c76dc073cc503fb099c9bf7ef013c1022a2c516aa93f29a07b6f7784"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-566.test.yaml",
+        "sha256": "9b336ecddbdd98d7dedcb79cb7ba613c9c18899030f2bdf835f2c94b84e90d3b"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-566.yaml",
+        "sha256": "3fbc96605dd1ad23164d8a95c35ab519bb2fe41edb1fd5c6c8744d02c3effad9"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-567.test.yaml",
+        "sha256": "1461a5692367aad87c67f693d719e677e96118c96a253e4a38e10b15362efdb1"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-567.yaml",
+        "sha256": "c6b0c265203b13f841962252226a593767d7ceea41bcd02530616f39c98126b6"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-568.test.yaml",
+        "sha256": "bb359d108b5d6c7075610a85a70874ed66d5f1c12589a5b91c8a319fc2bfb8ec"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-568.yaml",
+        "sha256": "6ac9db7413b81b54b9cc896a287b84491e858c80313db9d6e1a184efee43238f"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-569.test.yaml",
+        "sha256": "9ddf81b3bbcef56fbe2e31447e00fa69e4467489e01f91d51786f2841994afb0"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-569.yaml",
+        "sha256": "d4181934bd6d4a979d5984e3782be6d2e58707991529af0f7ae7352653befa62"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-570.test.yaml",
+        "sha256": "2c1b69a8666073cbc539d9fea7c5ea24e5b377d6480904b62aa2e26185e0e4ba"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-570.yaml",
+        "sha256": "2e53d9f7dca086273a3526617bd2f4410c2363bc7b06606ba583ecca48c8f02c"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-577.test.yaml",
+        "sha256": "153b29f4cd374f7cd409958602cabdea3ad41fe69fdaa395113d5b300528d559"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-577.yaml",
+        "sha256": "98c5f974d0b8874e12e85e75d7b6b1fb8e3aa0bed1e0ed124cd7966b874ef426"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-584.test.yaml",
+        "sha256": "db57d3ce52990144684e2cee0d14fd4d0bb68eb62f058292e031475671a9040c"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-584.yaml",
+        "sha256": "835a1676f1511c4a8c041f17184a844530120040df22d57b7168e6adcfe82a10"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-585.test.yaml",
+        "sha256": "409a8e69ae9a192eb4385a08b3d4cccfa94de852f4337da2b9de74ff60c06b0f"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-585.yaml",
+        "sha256": "bf163e933107b24b5f20e7c54d38bc43a3f4f13ddf9ba052d433b3e832330986"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-586.test.yaml",
+        "sha256": "b551cce27c413d9a62ca14661ed94a70ceebef8563839d57f8ef350df96a51a4"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-586.yaml",
+        "sha256": "4fb6bcf8b69cac14211ed5852ac3c9b6f7dee342fae6a492717a5bba9cb4c284"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-587.test.yaml",
+        "sha256": "631d05fbf1c274e22c771a13011fd3354916ea57cb25fe5697f853ad20ef8c8f"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-587.yaml",
+        "sha256": "632182ff462edd4ee8438a74227faf56e4efc06f12b486d0fd69277eb774d80a"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-589.test.yaml",
+        "sha256": "d3b1d33deaf36c1a792ea1f564096f10abc1f810f24a55b5963d076fecb2e356"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-589.yaml",
+        "sha256": "01d5f9dcf9ddf8bd1ba2b2d9bc398cfbcb547c3563f8cb4348a27399cd2d6e43"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-590.test.yaml",
+        "sha256": "72cebfe622631bdad3e3f4983983ee7123e34e78b960ac5bcb0c68a570d8dbac"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-590.yaml",
+        "sha256": "362cff748d22a36795dee2d439930774d9719822e86e41754aa2aca0e064ecdd"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-591.test.yaml",
+        "sha256": "64328bdbe5f9c20dd2061286bc40cc03c2709a58c1decde918155469df2f64c0"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-591.yaml",
+        "sha256": "f92284efcc882a7df107c5ace8e7e998764d2e15f29a5d6e50fcea5e1d7c8b2b"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-592.test.yaml",
+        "sha256": "28a962101ad0710d0be750ccda7a3bc55560d381b294fc562973d21349cabcd4"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-592.yaml",
+        "sha256": "4db240f6e71f9b31c9313be351eb0ac6612d0d31e9f6b174bd8d953784c4a09b"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-593.test.yaml",
+        "sha256": "ce8e3f4e86b54c47e656c42714e914cc7e3d4440b1a336ed3066b14b9ad5c2c8"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-593.yaml",
+        "sha256": "1fe278754642a80b24f888b5d3c19879b77f1491ec94858482451302e57ea9cf"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-594.test.yaml",
+        "sha256": "a4bf81a3dbb9454b864e514f28dc5226e30f5c374760002c684025a353696c64"
+      },
+      {
+        "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-594.yaml",
+        "sha256": "e37aeb3534db21e242237d1f790089764e1ff80f2f21cf6461ca85ef203cfa2e"
+      }
+    ],
+    "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us",
+    "source_worktree": {
+      "commit": "3357f7dc710d18861b1fefdff115e2434e67b988",
+      "path": "/Users/maxghenis/TheAxiomFoundation/_b1wt/rulespec-us/.worktrees/rulespec-us-c6",
+      "status_porcelain": "",
+      "tree": "c3d530c72344310aa2fdfcebe5aec286b1ad4869"
+    },
+    "status_porcelain": "",
+    "tree": "c3d530c72344310aa2fdfcebe5aec286b1ad4869"
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.preview_1311_provenance.v1"
+}

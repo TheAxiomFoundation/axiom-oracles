@@ -1,0 +1,21 @@
+{
+  "elapsed_seconds": 10.938,
+  "full_contract": {
+    "bytes": 110026,
+    "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/declared-input-contract-full.json",
+    "sha256": "16a216bc48803e89e0ad9452f2bdc1c4fc78a06c4eaa4a958b39958c84fe0f85"
+  },
+  "full_contract_sha256_before_partition": "16a216bc48803e89e0ad9452f2bdc1c4fc78a06c4eaa4a958b39958c84fe0f85",
+  "partition_contract": {
+    "bytes": 105234,
+    "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/declared-input-contract-partition.json",
+    "sha256": "699b00217825e68cd9ee9e9b881d810ba4bb9cd087aee6351293f46c7122126f"
+  },
+  "provenance": {
+    "bytes": 19537,
+    "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/provenance-receipt.json",
+    "sha256": "4a2b408a4abec3fa173dc18571b9668f04199148645a7a4c6d7a46755e3e34d2"
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.preview_1311_input_contract_execution.v1",
+  "verdict": "PASS"
+}

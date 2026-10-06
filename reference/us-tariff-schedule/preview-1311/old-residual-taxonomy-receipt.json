@@ -1,0 +1,2407 @@
+{
+  "categories": {
+    "brazil_aircraft_conditional_proxy": {
+      "by_chapter": {
+        "39": 180,
+        "40": 114,
+        "45": 6,
+        "48": 66,
+        "68": 72,
+        "70": 6,
+        "83": 60,
+        "84": 804,
+        "85": 912,
+        "88": 360,
+        "90": 702,
+        "91": 72,
+        "94": 288,
+        "96": 12
+      },
+      "by_current_class": {
+        "__null__": 3654
+      },
+      "by_flag_signature": {
+        "entry_is_brazil_301_listed,entry_is_china_301_list123": 30,
+        "entry_is_brazil_301_listed,entry_is_china_301_list123,entry_is_forced_labor_301_listed": 3024,
+        "entry_is_brazil_301_listed,entry_is_china_301_list4a,entry_is_forced_labor_301_listed": 402,
+        "entry_is_brazil_301_listed,entry_is_forced_labor_301_listed": 198
+      },
+      "by_interval": {
+        "2026-07-22..2026-07-23": 1218,
+        "2026-07-24..2026-07-30": 1218,
+        "2026-07-31..2026-08-01": 1218
+      },
+      "by_origin": {
+        "BR": 3654
+      },
+      "by_origin_tier": {
+        "brazil-25": 3654
+      },
+      "by_probe": {
+        "2026-07-22": 609,
+        "2026-07-23": 609,
+        "2026-07-24": 609,
+        "2026-07-30": 609,
+        "2026-07-31": 609,
+        "2026-08-01": 609
+      },
+      "by_rate_pair": [
+        {
+          "actual": "0.25",
+          "delta_actual_minus_expected": "0.22500000000000001",
+          "expected": "0.025000000000000001",
+          "units": 3654
+        }
+      ],
+      "by_revision": {
+        "bnd_2026-07-22": 1218,
+        "bnd_2026-07-24": 1218,
+        "bnd_2026-07-31": 1218
+      },
+      "case_id_set_sha256": "8de4c9db96ba487c2dc81519e783b4395f2309feb9d52aaf2d967cce80b0dfee",
+      "cause_axis": "conditional-use model/input comparability",
+      "distinct": {
+        "case_ids": 3654,
+        "chapters": 14,
+        "hts10": 609,
+        "hts10_origin_cells": 609,
+        "hts_lines": 349,
+        "interval_cells": 1827,
+        "origins": 1,
+        "rate_pairs": 1
+      },
+      "expected_actual_relation": "expected = 0.10 * actual (Yale 90% exempt utilization proxy)",
+      "flag_true_counts": {
+        "entry_is_brazil_301_listed": 3654,
+        "entry_is_china_301_list123": 3054,
+        "entry_is_china_301_list4a": 402,
+        "entry_is_forced_labor_301_listed": 3624
+      },
+      "representatives_by_origin_tier": {
+        "brazil-25": {
+          "actual": 0.25,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-87e81541143d5b3c6e0434e6",
+          "chapter": "39",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.225,
+          "expected": 0.025,
+          "hts10": "3917210000",
+          "hts_line": "3917210000",
+          "interval": [
+            "2026-07-22",
+            "2026-07-23"
+          ],
+          "iso2": "BR",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-brazil",
+          "origin_regime": "0000000001000000",
+          "origin_tier": "brazil-25",
+          "probe": "2026-07-22",
+          "revision": "bnd_2026-07-22",
+          "slot": "brazil_section_301",
+          "true_flags": [
+            "entry_is_brazil_301_listed",
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        }
+      },
+      "units": 3654
+    },
+    "brazil_pharma_conditional_proxy": {
+      "by_chapter": {
+        "28": 318,
+        "29": 4136,
+        "30": 40,
+        "32": 30,
+        "34": 42,
+        "35": 12,
+        "38": 258,
+        "39": 246
+      },
+      "by_current_class": {
+        "__null__": 5082
+      },
+      "by_flag_signature": {
+        "entry_is_brazil_301_listed,entry_is_china_301_list123": 24,
+        "entry_is_brazil_301_listed,entry_is_china_301_list123,entry_is_forced_labor_301_listed": 1818,
+        "entry_is_brazil_301_listed,entry_is_china_301_list123,entry_is_forced_labor_301_listed,entry_is_section_122_exempt": 1412,
+        "entry_is_brazil_301_listed,entry_is_china_301_list123,entry_is_section_122_exempt": 6,
+        "entry_is_brazil_301_listed,entry_is_china_301_list4a,entry_is_forced_labor_301_listed": 66,
+        "entry_is_brazil_301_listed,entry_is_china_301_list4a,entry_is_forced_labor_301_listed,entry_is_section_122_exempt": 54,
+        "entry_is_brazil_301_listed,entry_is_forced_labor_301_listed": 400,
+        "entry_is_brazil_301_listed,entry_is_forced_labor_301_listed,entry_is_section_122_exempt": 1302
+      },
+      "by_interval": {
+        "2026-07-22..2026-07-23": 1722,
+        "2026-07-24..2026-07-30": 1722,
+        "2026-07-31..2026-08-01": 1638
+      },
+      "by_origin": {
+        "BR": 5082
+      },
+      "by_origin_tier": {
+        "brazil-25": 5082
+      },
+      "by_probe": {
+        "2026-07-22": 861,
+        "2026-07-23": 861,
+        "2026-07-24": 861,
+        "2026-07-30": 861,
+        "2026-07-31": 819,
+        "2026-08-01": 819
+      },
+      "by_rate_pair": [
+        {
+          "actual": "0.25",
+          "delta_actual_minus_expected": "0.125",
+          "expected": "0.125",
+          "units": 5082
+        }
+      ],
+      "by_revision": {
+        "bnd_2026-07-22": 1722,
+        "bnd_2026-07-24": 1722,
+        "bnd_2026-07-31": 1638
+      },
+      "case_id_set_sha256": "864c60b1fde89e4718bc5591196af0b17ace3f1e16cfb6e8d125b0e860587eef",
+      "cause_axis": "conditional-use model/input comparability",
+      "distinct": {
+        "case_ids": 5082,
+        "chapters": 8,
+        "hts10": 861,
+        "hts10_origin_cells": 861,
+        "hts_lines": 705,
+        "interval_cells": 2541,
+        "origins": 1,
+        "rate_pairs": 1
+      },
+      "expected_actual_relation": "expected = 0.50 * actual (Yale 50% exempt utilization proxy)",
+      "flag_true_counts": {
+        "entry_is_brazil_301_listed": 5082,
+        "entry_is_china_301_list123": 3260,
+        "entry_is_china_301_list4a": 120,
+        "entry_is_forced_labor_301_listed": 5052,
+        "entry_is_section_122_exempt": 2774
+      },
+      "representatives_by_origin_tier": {
+        "brazil-25": {
+          "actual": 0.25,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-1370faecafe768ccb034b6a1",
+          "chapter": "28",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.125,
+          "expected": 0.125,
+          "hts10": "2804100000",
+          "hts_line": "2804100000",
+          "interval": [
+            "2026-07-22",
+            "2026-07-23"
+          ],
+          "iso2": "BR",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-brazil",
+          "origin_regime": "0000000001000000",
+          "origin_tier": "brazil-25",
+          "probe": "2026-07-22",
+          "revision": "bnd_2026-07-22",
+          "slot": "brazil_section_301",
+          "true_flags": [
+            "entry_is_brazil_301_listed",
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        }
+      },
+      "units": 5082
+    },
+    "forced_aircraft_conditional_proxy": {
+      "by_chapter": {
+        "39": 3648,
+        "40": 2360,
+        "45": 96,
+        "48": 1320,
+        "68": 1440,
+        "70": 128,
+        "83": 1272,
+        "84": 16220,
+        "85": 17724,
+        "88": 7028,
+        "90": 13664,
+        "91": 16,
+        "94": 6004,
+        "96": 248
+      },
+      "by_current_class": {
+        "__null__": 71168
+      },
+      "by_flag_signature": {
+        "entry_is_brazil_301_listed,entry_is_china_301_list123,entry_is_forced_labor_301_listed": 1984,
+        "entry_is_brazil_301_listed,entry_is_china_301_list4a,entry_is_forced_labor_301_listed": 256,
+        "entry_is_brazil_301_listed,entry_is_forced_labor_301_listed": 128,
+        "entry_is_china_301_list123,entry_is_forced_labor_301_listed": 57644,
+        "entry_is_china_301_list4a,entry_is_forced_labor_301_listed": 7404,
+        "entry_is_forced_labor_301_listed": 3752
+      },
+      "by_interval": {
+        "2026-07-24..2026-07-30": 35584,
+        "2026-07-31..2026-08-01": 35584
+      },
+      "by_origin": {
+        "AE": 128,
+        "AO": 324,
+        "AR": 616,
+        "AT": 172,
+        "AU": 160,
+        "BD": 1404,
+        "BE": 184,
+        "BG": 180,
+        "BH": 176,
+        "BR": 2368,
+        "BS": 160,
+        "CA": 2348,
+        "CH": 2296,
+        "CL": 112,
+        "CN": 2368,
+        "CO": 100,
+        "CR": 296,
+        "CY": 148,
+        "CZ": 148,
+        "DE": 132,
+        "DK": 164,
+        "DO": 132,
+        "DZ": 1140,
+        "EC": 1568,
+        "EE": 176,
+        "EG": 132,
+        "ES": 184,
+        "FI": 176,
+        "FR": 172,
+        "GB": 2336,
+        "GR": 204,
+        "GT": 516,
+        "GY": 328,
+        "HK": 2332,
+        "HN": 712,
+        "HR": 188,
+        "HU": 168,
+        "ID": 1152,
+        "IE": 216,
+        "IL": 332,
+        "IN": 2332,
+        "IQ": 2340,
+        "IT": 164,
+        "JO": 1592,
+        "JP": 2308,
+        "KH": 1164,
+        "KR": 2348,
+        "KW": 160,
+        "KZ": 2332,
+        "LK": 1456,
+        "LT": 216,
+        "LU": 200,
+        "LV": 156,
+        "LY": 1192,
+        "MA": 180,
+        "MT": 156,
+        "MX": 2340,
+        "MY": 1184,
+        "NG": 260,
+        "NI": 2332,
+        "NL": 132,
+        "NO": 264,
+        "NZ": 316,
+        "OM": 176,
+        "PE": 152,
+        "PH": 2332,
+        "PK": 1160,
+        "PL": 172,
+        "PT": 176,
+        "QA": 196,
+        "RO": 172,
+        "RU": 2368,
+        "SA": 136,
+        "SE": 192,
+        "SG": 136,
+        "SI": 180,
+        "SK": 120,
+        "SV": 584,
+        "TH": 2336,
+        "TR": 368,
+        "TT": 1456,
+        "TW": 2348,
+        "UY": 120,
+        "VE": 352,
+        "VN": 2332,
+        "ZA": 2332
+      },
+      "by_origin_tier": {
+        "flat-10": 23920,
+        "flat-12.5": 33300,
+        "mfn-cap-10": 6996,
+        "mfn-cap-12.5": 6952
+      },
+      "by_probe": {
+        "2026-07-24": 17792,
+        "2026-07-30": 17792,
+        "2026-07-31": 17792,
+        "2026-08-01": 17792
+      },
+      "by_rate_pair": [
+        {
+          "actual": "0.024",
+          "delta_actual_minus_expected": "0.021600000000000001",
+          "expected": "0.0023999999999999998",
+          "units": 48
+        },
+        {
+          "actual": "0.040000000000000001",
+          "delta_actual_minus_expected": "0.036000000000000004",
+          "expected": "0.0040000000000000001",
+          "units": 60
+        },
+        {
+          "actual": "0.042999999999999997",
+          "delta_actual_minus_expected": "0.038699999999999998",
+          "expected": "0.0043",
+          "units": 36
+        },
+        {
+          "actual": "0.047",
+          "delta_actual_minus_expected": "0.042299999999999997",
+          "expected": "0.0047000000000000002",
+          "units": 220
+        },
+        {
+          "actual": "0.049000000000000002",
+          "delta_actual_minus_expected": "0.0441",
+          "expected": "0.0048999999999999998",
+          "units": 48
+        },
+        {
+          "actual": "0.050999999999999997",
+          "delta_actual_minus_expected": "0.045899999999999996",
+          "expected": "0.0051000000000000004",
+          "units": 12
+        },
+        {
+          "actual": "0.052999999999999999",
+          "delta_actual_minus_expected": "0.047699999999999999",
+          "expected": "0.0053",
+          "units": 60
+        },
+        {
+          "actual": "0.056000000000000001",
+          "delta_actual_minus_expected": "0.0504",
+          "expected": "0.0055999999999999999",
+          "units": 12
+        },
+        {
+          "actual": "0.060999999999999999",
+          "delta_actual_minus_expected": "0.054899999999999997",
+          "expected": "0.0061000000000000004",
+          "units": 108
+        },
+        {
+          "actual": "0.062",
+          "delta_actual_minus_expected": "0.055800000000000002",
+          "expected": "0.0061999999999999998",
+          "units": 24
+        },
+        {
+          "actual": "0.063",
+          "delta_actual_minus_expected": "0.0567",
+          "expected": "0.0063",
+          "units": 36
+        },
+        {
+          "actual": "0.065000000000000002",
+          "delta_actual_minus_expected": "0.058500000000000003",
+          "expected": "0.0064999999999999997",
+          "units": 164
+        },
+        {
+          "actual": "0.066000000000000003",
+          "delta_actual_minus_expected": "0.059400000000000001",
+          "expected": "0.0066",
+          "units": 72
+        },
+        {
+          "actual": "0.068000000000000005",
+          "delta_actual_minus_expected": "0.061200000000000004",
+          "expected": "0.0067999999999999996",
+          "units": 36
+        },
+        {
+          "actual": "0.069000000000000006",
+          "delta_actual_minus_expected": "0.062100000000000002",
+          "expected": "0.0068999999999999999",
+          "units": 120
+        },
+        {
+          "actual": "0.070000000000000007",
+          "delta_actual_minus_expected": "0.063",
+          "expected": "0.0070000000000000001",
+          "units": 12
+        },
+        {
+          "actual": "0.070999999999999994",
+          "delta_actual_minus_expected": "0.063899999999999998",
+          "expected": "0.0071000000000000004",
+          "units": 24
+        },
+        {
+          "actual": "0.071999999999999995",
+          "delta_actual_minus_expected": "0.064799999999999996",
+          "expected": "0.0071999999999999998",
+          "units": 220
+        },
+        {
+          "actual": "0.072999999999999995",
+          "delta_actual_minus_expected": "0.065699999999999995",
+          "expected": "0.0073000000000000001",
+          "units": 12
+        },
+        {
+          "actual": "0.073999999999999996",
+          "delta_actual_minus_expected": "0.066599999999999993",
+          "expected": "0.0074000000000000003",
+          "units": 12
+        },
+        {
+          "actual": "0.074999999999999997",
+          "delta_actual_minus_expected": "0.067500000000000004",
+          "expected": "0.0074999999999999997",
+          "units": 180
+        },
+        {
+          "actual": "0.075999999999999998",
+          "delta_actual_minus_expected": "0.068400000000000002",
+          "expected": "0.0076",
+          "units": 60
+        },
+        {
+          "actual": "0.078",
+          "delta_actual_minus_expected": "0.070199999999999999",
+          "expected": "0.0077999999999999996",
+          "units": 60
+        },
+        {
+          "actual": "0.080000000000000002",
+          "delta_actual_minus_expected": "0.072000000000000008",
+          "expected": "0.0080000000000000002",
+          "units": 24
+        },
+        {
+          "actual": "0.081000000000000003",
+          "delta_actual_minus_expected": "0.072900000000000006",
+          "expected": "0.0080999999999999996",
+          "units": 12
+        },
+        {
+          "actual": "0.083000000000000004",
+          "delta_actual_minus_expected": "0.074700000000000003",
+          "expected": "0.0083000000000000001",
+          "units": 240
+        },
+        {
+          "actual": "0.084000000000000005",
+          "delta_actual_minus_expected": "0.075600000000000001",
+          "expected": "0.0083999999999999995",
+          "units": 12
+        },
+        {
+          "actual": "0.085999999999999993",
+          "delta_actual_minus_expected": "0.077399999999999997",
+          "expected": "0.0086",
+          "units": 120
+        },
+        {
+          "actual": "0.086999999999999994",
+          "delta_actual_minus_expected": "0.078299999999999995",
+          "expected": "0.0086999999999999994",
+          "units": 96
+        },
+        {
+          "actual": "0.087999999999999995",
+          "delta_actual_minus_expected": "0.079199999999999993",
+          "expected": "0.0088000000000000005",
+          "units": 36
+        },
+        {
+          "actual": "0.088999999999999996",
+          "delta_actual_minus_expected": "0.080099999999999991",
+          "expected": "0.0088999999999999999",
+          "units": 24
+        },
+        {
+          "actual": "0.089999999999999997",
+          "delta_actual_minus_expected": "0.081000000000000003",
+          "expected": "0.0089999999999999993",
+          "units": 128
+        },
+        {
+          "actual": "0.090999999999999998",
+          "delta_actual_minus_expected": "0.081900000000000001",
+          "expected": "0.0091000000000000004",
+          "units": 72
+        },
+        {
+          "actual": "0.094",
+          "delta_actual_minus_expected": "0.084599999999999995",
+          "expected": "0.0094000000000000004",
+          "units": 120
+        },
+        {
+          "actual": "0.095000000000000001",
+          "delta_actual_minus_expected": "0.085500000000000007",
+          "expected": "0.0094999999999999998",
+          "units": 12
+        },
+        {
+          "actual": "0.096000000000000002",
+          "delta_actual_minus_expected": "0.086400000000000005",
+          "expected": "0.0095999999999999992",
+          "units": 24
+        },
+        {
+          "actual": "0.098000000000000004",
+          "delta_actual_minus_expected": "0.088200000000000001",
+          "expected": "0.0097999999999999997",
+          "units": 12
+        },
+        {
+          "actual": "0.099000000000000005",
+          "delta_actual_minus_expected": "0.089099999999999999",
+          "expected": "0.0099000000000000008",
+          "units": 12
+        },
+        {
+          "actual": "0.10000000000000001",
+          "delta_actual_minus_expected": "0.090000000000000011",
+          "expected": "0.01",
+          "units": 29488
+        },
+        {
+          "actual": "0.10100000000000001",
+          "delta_actual_minus_expected": "0.090900000000000009",
+          "expected": "0.0101",
+          "units": 48
+        },
+        {
+          "actual": "0.105",
+          "delta_actual_minus_expected": "0.094500000000000001",
+          "expected": "0.010500000000000001",
+          "units": 24
+        },
+        {
+          "actual": "0.108",
+          "delta_actual_minus_expected": "0.097199999999999995",
+          "expected": "0.010800000000000001",
+          "units": 240
+        },
+        {
+          "actual": "0.109",
+          "delta_actual_minus_expected": "0.098099999999999993",
+          "expected": "0.0109",
+          "units": 12
+        },
+        {
+          "actual": "0.111",
+          "delta_actual_minus_expected": "0.099900000000000003",
+          "expected": "0.0111",
+          "units": 12
+        },
+        {
+          "actual": "0.112",
+          "delta_actual_minus_expected": "0.1008",
+          "expected": "0.0112",
+          "units": 72
+        },
+        {
+          "actual": "0.114",
+          "delta_actual_minus_expected": "0.1026",
+          "expected": "0.0114",
+          "units": 24
+        },
+        {
+          "actual": "0.115",
+          "delta_actual_minus_expected": "0.10350000000000001",
+          "expected": "0.0115",
+          "units": 24
+        },
+        {
+          "actual": "0.125",
+          "delta_actual_minus_expected": "0.1125",
+          "expected": "0.012500000000000001",
+          "units": 38644
+        }
+      ],
+      "by_revision": {
+        "bnd_2026-07-24": 35584,
+        "bnd_2026-07-31": 35584
+      },
+      "case_id_set_sha256": "0eebaac8ff79b332264f3ef16768b86ec98ac700bfbd2049c7f8a9ee3e932e9b",
+      "cause_axis": "conditional-use model/input comparability",
+      "distinct": {
+        "case_ids": 71168,
+        "chapters": 14,
+        "hts10": 596,
+        "hts10_origin_cells": 17792,
+        "hts_lines": 336,
+        "interval_cells": 35584,
+        "origins": 86,
+        "rate_pairs": 48
+      },
+      "expected_actual_relation": "expected = 0.10 * actual (Yale 90% exempt utilization proxy)",
+      "flag_true_counts": {
+        "entry_is_brazil_301_listed": 2368,
+        "entry_is_china_301_list123": 59628,
+        "entry_is_china_301_list4a": 7660,
+        "entry_is_forced_labor_301_listed": 71168
+      },
+      "representatives_by_origin_tier": {
+        "flat-10": {
+          "actual": 0.1,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-c60c4ebca12a742854ef5c9b",
+          "chapter": "39",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.09000000000000001,
+          "expected": 0.01,
+          "hts10": "3917210000",
+          "hts_line": "3917210000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "BD",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000000000000",
+          "origin_tier": "flat-10",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        },
+        "flat-12.5": {
+          "actual": 0.125,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-bf816dac118397f05b04f559",
+          "chapter": "39",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.1125,
+          "expected": 0.0125,
+          "hts10": "3917210000",
+          "hts_line": "3917210000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "BR",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000001000000",
+          "origin_tier": "flat-12.5",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_brazil_301_listed",
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        },
+        "mfn-cap-10": {
+          "actual": 0.069,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-1841a9266ccd98c6a329d279",
+          "chapter": "39",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.0621,
+          "expected": 0.0069,
+          "hts10": "3917210000",
+          "hts_line": "3917210000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "DK",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000000010000",
+          "origin_tier": "mfn-cap-10",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        },
+        "mfn-cap-12.5": {
+          "actual": 0.094,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-f2e27ba5ba74209c7b52fde8",
+          "chapter": "39",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.0846,
+          "expected": 0.0094,
+          "hts10": "3917210000",
+          "hts_line": "3917210000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "CH",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000000000100",
+          "origin_tier": "mfn-cap-12.5",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        }
+      },
+      "units": 71168
+    },
+    "forced_mfn_cap_rate_input_parser": {
+      "by_chapter": {
+        "87": 68
+      },
+      "by_current_class": {
+        "fed-false-family-forced-labor": 68
+      },
+      "by_flag_signature": {
+        "entry_is_china_301_list123,entry_is_forced_labor_301_listed": 68
+      },
+      "by_interval": {
+        "2026-07-24..2026-07-30": 34,
+        "2026-07-31..2026-08-01": 34
+      },
+      "by_origin": {
+        "CH": 4,
+        "CZ": 4,
+        "HU": 4,
+        "IE": 4,
+        "JP": 8,
+        "KR": 12,
+        "PT": 4,
+        "SE": 4,
+        "SI": 8,
+        "TW": 16
+      },
+      "by_origin_tier": {
+        "mfn-cap-10": 44,
+        "mfn-cap-12.5": 24
+      },
+      "by_probe": {
+        "2026-07-24": 17,
+        "2026-07-30": 17,
+        "2026-07-31": 17,
+        "2026-08-01": 17
+      },
+      "by_rate_pair": [
+        {
+          "actual": "0",
+          "delta_actual_minus_expected": "-0.10000000000000001",
+          "expected": "0.10000000000000001",
+          "units": 12
+        },
+        {
+          "actual": "0.040000000000000001",
+          "delta_actual_minus_expected": "-0.060000000000000005",
+          "expected": "0.10000000000000001",
+          "units": 12
+        },
+        {
+          "actual": "0.050000000000000003",
+          "delta_actual_minus_expected": "-0.050000000000000003",
+          "expected": "0.10000000000000001",
+          "units": 8
+        },
+        {
+          "actual": "0.063",
+          "delta_actual_minus_expected": "-0.037000000000000005",
+          "expected": "0.10000000000000001",
+          "units": 12
+        },
+        {
+          "actual": "0.025000000000000001",
+          "delta_actual_minus_expected": "-0.10000000000000001",
+          "expected": "0.125",
+          "units": 8
+        },
+        {
+          "actual": "0.065000000000000002",
+          "delta_actual_minus_expected": "-0.059999999999999998",
+          "expected": "0.125",
+          "units": 8
+        },
+        {
+          "actual": "0.087999999999999995",
+          "delta_actual_minus_expected": "-0.037000000000000005",
+          "expected": "0.125",
+          "units": 8
+        }
+      ],
+      "by_revision": {
+        "bnd_2026-07-24": 34,
+        "bnd_2026-07-31": 34
+      },
+      "case_id_set_sha256": "167bd36330907e6af43a15368c1546a50da9da902572f498d55184e010dcbaec",
+      "cause_axis": "MFN-cap rate input/parser vintage",
+      "distinct": {
+        "case_ids": 68,
+        "chapters": 1,
+        "hts10": 4,
+        "hts10_origin_cells": 17,
+        "hts_lines": 4,
+        "interval_cells": 34,
+        "origins": 10,
+        "rate_pairs": 7
+      },
+      "expected_actual_relation": "Axiom actual = max(cap - current General rate, 0); Yale expected = full cap because its target-vintage statutory base is zero",
+      "flag_true_counts": {
+        "entry_is_china_301_list123": 68,
+        "entry_is_forced_labor_301_listed": 68
+      },
+      "representatives_by_origin_tier": {
+        "mfn-cap-10": {
+          "actual": 0.063,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-2d04de10e6dafcb21020a4ba",
+          "chapter": "87",
+          "current_class": "fed-false-family-forced-labor",
+          "delta_actual_minus_expected": -0.037000000000000005,
+          "expected": 0.1,
+          "hts10": "8712005000",
+          "hts_line": "8712005000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "IE",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000000010000",
+          "origin_tier": "mfn-cap-10",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        },
+        "mfn-cap-12.5": {
+          "actual": 0.088,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-5914354a6627ddb5a377330a",
+          "chapter": "87",
+          "current_class": "fed-false-family-forced-labor",
+          "delta_actual_minus_expected": -0.037000000000000005,
+          "expected": 0.125,
+          "hts10": "8712005000",
+          "hts_line": "8712005000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "JP",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000000001000",
+          "origin_tier": "mfn-cap-12.5",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        }
+      },
+      "units": 68
+    },
+    "forced_pharma_conditional_proxy": {
+      "by_chapter": {
+        "28": 5296,
+        "29": 53496,
+        "30": 626,
+        "32": 412,
+        "34": 500,
+        "35": 48,
+        "38": 4768,
+        "39": 3272
+      },
+      "by_current_class": {
+        "__null__": 68418
+      },
+      "by_flag_signature": {
+        "entry_is_brazil_301_listed,entry_is_china_301_list123,entry_is_forced_labor_301_listed": 1212,
+        "entry_is_brazil_301_listed,entry_is_china_301_list123,entry_is_forced_labor_301_listed,entry_is_section_122_exempt": 934,
+        "entry_is_brazil_301_listed,entry_is_china_301_list4a,entry_is_forced_labor_301_listed": 44,
+        "entry_is_brazil_301_listed,entry_is_china_301_list4a,entry_is_forced_labor_301_listed,entry_is_section_122_exempt": 36,
+        "entry_is_brazil_301_listed,entry_is_forced_labor_301_listed": 266,
+        "entry_is_brazil_301_listed,entry_is_forced_labor_301_listed,entry_is_section_122_exempt": 848,
+        "entry_is_china_301_list123,entry_is_forced_labor_301_listed": 36132,
+        "entry_is_china_301_list123,entry_is_forced_labor_301_listed,entry_is_section_122_exempt": 10576,
+        "entry_is_china_301_list4a,entry_is_forced_labor_301_listed": 1328,
+        "entry_is_china_301_list4a,entry_is_forced_labor_301_listed,entry_is_section_122_exempt": 400,
+        "entry_is_forced_labor_301_listed": 7960,
+        "entry_is_forced_labor_301_listed,entry_is_section_122_exempt": 8682
+      },
+      "by_interval": {
+        "2026-07-24..2026-07-30": 34738,
+        "2026-07-31..2026-08-01": 33680
+      },
+      "by_origin": {
+        "AE": 108,
+        "AO": 314,
+        "AR": 468,
+        "AT": 172,
+        "AU": 146,
+        "BD": 1540,
+        "BE": 184,
+        "BG": 202,
+        "BH": 120,
+        "BR": 3340,
+        "BS": 134,
+        "CA": 3272,
+        "CH": 2178,
+        "CL": 170,
+        "CN": 3284,
+        "CO": 120,
+        "CR": 398,
+        "CY": 184,
+        "CZ": 186,
+        "DE": 136,
+        "DK": 184,
+        "DO": 130,
+        "DZ": 878,
+        "EC": 1168,
+        "EE": 184,
+        "EG": 174,
+        "ES": 172,
+        "FI": 214,
+        "FR": 152,
+        "GB": 3112,
+        "GR": 170,
+        "GT": 534,
+        "GY": 358,
+        "HK": 3240,
+        "HN": 570,
+        "HR": 220,
+        "HU": 182,
+        "ID": 866,
+        "IE": 176,
+        "IL": 376,
+        "IN": 1644,
+        "IQ": 1564,
+        "IT": 160,
+        "JO": 1094,
+        "JP": 2130,
+        "KH": 896,
+        "KR": 3216,
+        "KW": 168,
+        "KZ": 1544,
+        "LK": 1474,
+        "LT": 148,
+        "LU": 188,
+        "LV": 210,
+        "LY": 732,
+        "MA": 134,
+        "MT": 160,
+        "MX": 3280,
+        "MY": 888,
+        "NG": 350,
+        "NI": 1586,
+        "NL": 184,
+        "NO": 328,
+        "NZ": 358,
+        "OM": 142,
+        "PE": 134,
+        "PH": 1566,
+        "PK": 858,
+        "PL": 182,
+        "PT": 166,
+        "QA": 196,
+        "RO": 172,
+        "RU": 1706,
+        "SA": 190,
+        "SE": 174,
+        "SG": 116,
+        "SI": 170,
+        "SK": 214,
+        "SV": 454,
+        "TH": 1558,
+        "TR": 324,
+        "TT": 1114,
+        "TW": 3148,
+        "UY": 144,
+        "VE": 330,
+        "VN": 1634,
+        "ZA": 1574
+      },
+      "by_origin_tier": {
+        "flat-10": 23232,
+        "flat-12.5": 29668,
+        "mfn-cap-10": 7994,
+        "mfn-cap-12.5": 7524
+      },
+      "by_probe": {
+        "2026-07-24": 17369,
+        "2026-07-30": 17369,
+        "2026-07-31": 16840,
+        "2026-08-01": 16840
+      },
+      "by_rate_pair": [
+        {
+          "actual": "0.035000000000000003",
+          "delta_actual_minus_expected": "0.017500000000000002",
+          "expected": "0.017500000000000002",
+          "units": 2660
+        },
+        {
+          "actual": "0.035999999999999997",
+          "delta_actual_minus_expected": "0.017999999999999999",
+          "expected": "0.017999999999999999",
+          "units": 16
+        },
+        {
+          "actual": "0.036999999999999998",
+          "delta_actual_minus_expected": "0.018499999999999999",
+          "expected": "0.018499999999999999",
+          "units": 20
+        },
+        {
+          "actual": "0.037999999999999999",
+          "delta_actual_minus_expected": "0.019",
+          "expected": "0.019",
+          "units": 32
+        },
+        {
+          "actual": "0.039",
+          "delta_actual_minus_expected": "0.0195",
+          "expected": "0.0195",
+          "units": 28
+        },
+        {
+          "actual": "0.040000000000000001",
+          "delta_actual_minus_expected": "0.02",
+          "expected": "0.02",
+          "units": 16
+        },
+        {
+          "actual": "0.041000000000000002",
+          "delta_actual_minus_expected": "0.020500000000000001",
+          "expected": "0.020500000000000001",
+          "units": 12
+        },
+        {
+          "actual": "0.042000000000000003",
+          "delta_actual_minus_expected": "0.021000000000000001",
+          "expected": "0.021000000000000001",
+          "units": 212
+        },
+        {
+          "actual": "0.044999999999999998",
+          "delta_actual_minus_expected": "0.022499999999999999",
+          "expected": "0.022499999999999999",
+          "units": 964
+        },
+        {
+          "actual": "0.047",
+          "delta_actual_minus_expected": "0.0235",
+          "expected": "0.0235",
+          "units": 44
+        },
+        {
+          "actual": "0.048000000000000001",
+          "delta_actual_minus_expected": "0.024",
+          "expected": "0.024",
+          "units": 28
+        },
+        {
+          "actual": "0.049000000000000002",
+          "delta_actual_minus_expected": "0.024500000000000001",
+          "expected": "0.024500000000000001",
+          "units": 12
+        },
+        {
+          "actual": "0.050000000000000003",
+          "delta_actual_minus_expected": "0.025000000000000001",
+          "expected": "0.025000000000000001",
+          "units": 252
+        },
+        {
+          "actual": "0.051999999999999998",
+          "delta_actual_minus_expected": "0.025999999999999999",
+          "expected": "0.025999999999999999",
+          "units": 184
+        },
+        {
+          "actual": "0.053999999999999999",
+          "delta_actual_minus_expected": "0.027",
+          "expected": "0.027",
+          "units": 12
+        },
+        {
+          "actual": "0.056000000000000001",
+          "delta_actual_minus_expected": "0.028000000000000001",
+          "expected": "0.028000000000000001",
+          "units": 8
+        },
+        {
+          "actual": "0.058000000000000003",
+          "delta_actual_minus_expected": "0.029000000000000001",
+          "expected": "0.029000000000000001",
+          "units": 192
+        },
+        {
+          "actual": "0.059999999999999998",
+          "delta_actual_minus_expected": "0.029999999999999999",
+          "expected": "0.029999999999999999",
+          "units": 2776
+        },
+        {
+          "actual": "0.060999999999999999",
+          "delta_actual_minus_expected": "0.030499999999999999",
+          "expected": "0.030499999999999999",
+          "units": 24
+        },
+        {
+          "actual": "0.062",
+          "delta_actual_minus_expected": "0.031",
+          "expected": "0.031",
+          "units": 48
+        },
+        {
+          "actual": "0.063",
+          "delta_actual_minus_expected": "0.0315",
+          "expected": "0.0315",
+          "units": 1608
+        },
+        {
+          "actual": "0.064000000000000001",
+          "delta_actual_minus_expected": "0.032000000000000001",
+          "expected": "0.032000000000000001",
+          "units": 24
+        },
+        {
+          "actual": "0.065000000000000002",
+          "delta_actual_minus_expected": "0.032500000000000001",
+          "expected": "0.032500000000000001",
+          "units": 68
+        },
+        {
+          "actual": "0.066000000000000003",
+          "delta_actual_minus_expected": "0.033000000000000002",
+          "expected": "0.033000000000000002",
+          "units": 20
+        },
+        {
+          "actual": "0.067000000000000004",
+          "delta_actual_minus_expected": "0.033500000000000002",
+          "expected": "0.033500000000000002",
+          "units": 236
+        },
+        {
+          "actual": "0.069000000000000006",
+          "delta_actual_minus_expected": "0.034500000000000003",
+          "expected": "0.034500000000000003",
+          "units": 36
+        },
+        {
+          "actual": "0.070000000000000007",
+          "delta_actual_minus_expected": "0.035000000000000003",
+          "expected": "0.035000000000000003",
+          "units": 988
+        },
+        {
+          "actual": "0.071999999999999995",
+          "delta_actual_minus_expected": "0.035999999999999997",
+          "expected": "0.035999999999999997",
+          "units": 80
+        },
+        {
+          "actual": "0.072999999999999995",
+          "delta_actual_minus_expected": "0.036499999999999998",
+          "expected": "0.036499999999999998",
+          "units": 28
+        },
+        {
+          "actual": "0.073999999999999996",
+          "delta_actual_minus_expected": "0.036999999999999998",
+          "expected": "0.036999999999999998",
+          "units": 12
+        },
+        {
+          "actual": "0.074999999999999997",
+          "delta_actual_minus_expected": "0.037499999999999999",
+          "expected": "0.037499999999999999",
+          "units": 228
+        },
+        {
+          "actual": "0.076999999999999999",
+          "delta_actual_minus_expected": "0.0385",
+          "expected": "0.0385",
+          "units": 184
+        },
+        {
+          "actual": "0.079000000000000001",
+          "delta_actual_minus_expected": "0.0395",
+          "expected": "0.0395",
+          "units": 24
+        },
+        {
+          "actual": "0.081000000000000003",
+          "delta_actual_minus_expected": "0.040500000000000001",
+          "expected": "0.040500000000000001",
+          "units": 8
+        },
+        {
+          "actual": "0.082000000000000003",
+          "delta_actual_minus_expected": "0.041000000000000002",
+          "expected": "0.041000000000000002",
+          "units": 24
+        },
+        {
+          "actual": "0.083000000000000004",
+          "delta_actual_minus_expected": "0.041500000000000002",
+          "expected": "0.041500000000000002",
+          "units": 204
+        },
+        {
+          "actual": "0.084000000000000005",
+          "delta_actual_minus_expected": "0.042000000000000003",
+          "expected": "0.042000000000000003",
+          "units": 12
+        },
+        {
+          "actual": "0.085000000000000006",
+          "delta_actual_minus_expected": "0.042500000000000003",
+          "expected": "0.042500000000000003",
+          "units": 176
+        },
+        {
+          "actual": "0.085999999999999993",
+          "delta_actual_minus_expected": "0.042999999999999997",
+          "expected": "0.042999999999999997",
+          "units": 20
+        },
+        {
+          "actual": "0.086999999999999994",
+          "delta_actual_minus_expected": "0.043499999999999997",
+          "expected": "0.043499999999999997",
+          "units": 40
+        },
+        {
+          "actual": "0.087999999999999995",
+          "delta_actual_minus_expected": "0.043999999999999997",
+          "expected": "0.043999999999999997",
+          "units": 1588
+        },
+        {
+          "actual": "0.089999999999999997",
+          "delta_actual_minus_expected": "0.044999999999999998",
+          "expected": "0.044999999999999998",
+          "units": 64
+        },
+        {
+          "actual": "0.090999999999999998",
+          "delta_actual_minus_expected": "0.045499999999999999",
+          "expected": "0.045499999999999999",
+          "units": 8
+        },
+        {
+          "actual": "0.091999999999999998",
+          "delta_actual_minus_expected": "0.045999999999999999",
+          "expected": "0.045999999999999999",
+          "units": 24
+        },
+        {
+          "actual": "0.094",
+          "delta_actual_minus_expected": "0.047",
+          "expected": "0.047",
+          "units": 36
+        },
+        {
+          "actual": "0.095000000000000001",
+          "delta_actual_minus_expected": "0.047500000000000001",
+          "expected": "0.047500000000000001",
+          "units": 20
+        },
+        {
+          "actual": "0.096000000000000002",
+          "delta_actual_minus_expected": "0.048000000000000001",
+          "expected": "0.048000000000000001",
+          "units": 24
+        },
+        {
+          "actual": "0.097000000000000003",
+          "delta_actual_minus_expected": "0.048500000000000001",
+          "expected": "0.048500000000000001",
+          "units": 36
+        },
+        {
+          "actual": "0.10000000000000001",
+          "delta_actual_minus_expected": "0.050000000000000003",
+          "expected": "0.050000000000000003",
+          "units": 24434
+        },
+        {
+          "actual": "0.104",
+          "delta_actual_minus_expected": "0.051999999999999998",
+          "expected": "0.051999999999999998",
+          "units": 12
+        },
+        {
+          "actual": "0.107",
+          "delta_actual_minus_expected": "0.053499999999999999",
+          "expected": "0.053499999999999999",
+          "units": 24
+        },
+        {
+          "actual": "0.108",
+          "delta_actual_minus_expected": "0.053999999999999999",
+          "expected": "0.053999999999999999",
+          "units": 12
+        },
+        {
+          "actual": "0.109",
+          "delta_actual_minus_expected": "0.0545",
+          "expected": "0.0545",
+          "units": 12
+        },
+        {
+          "actual": "0.11",
+          "delta_actual_minus_expected": "0.055",
+          "expected": "0.055",
+          "units": 32
+        },
+        {
+          "actual": "0.111",
+          "delta_actual_minus_expected": "0.055500000000000001",
+          "expected": "0.055500000000000001",
+          "units": 12
+        },
+        {
+          "actual": "0.112",
+          "delta_actual_minus_expected": "0.056000000000000001",
+          "expected": "0.056000000000000001",
+          "units": 12
+        },
+        {
+          "actual": "0.113",
+          "delta_actual_minus_expected": "0.056500000000000002",
+          "expected": "0.056500000000000002",
+          "units": 12
+        },
+        {
+          "actual": "0.115",
+          "delta_actual_minus_expected": "0.057500000000000002",
+          "expected": "0.057500000000000002",
+          "units": 12
+        },
+        {
+          "actual": "0.121",
+          "delta_actual_minus_expected": "0.060499999999999998",
+          "expected": "0.060499999999999998",
+          "units": 24
+        },
+        {
+          "actual": "0.125",
+          "delta_actual_minus_expected": "0.0625",
+          "expected": "0.0625",
+          "units": 30460
+        }
+      ],
+      "by_revision": {
+        "bnd_2026-07-24": 34738,
+        "bnd_2026-07-31": 33680
+      },
+      "case_id_set_sha256": "c598f17626c137dc68b7fb9a5da32513a21f18d74b519166da6356bab6a39a4e",
+      "cause_axis": "conditional-use model/input comparability",
+      "distinct": {
+        "case_ids": 68418,
+        "chapters": 8,
+        "hts10": 856,
+        "hts10_origin_cells": 17369,
+        "hts_lines": 700,
+        "interval_cells": 34209,
+        "origins": 86,
+        "rate_pairs": 60
+      },
+      "expected_actual_relation": "expected = 0.50 * actual (Yale 50% exempt utilization proxy)",
+      "flag_true_counts": {
+        "entry_is_brazil_301_listed": 3340,
+        "entry_is_china_301_list123": 48854,
+        "entry_is_china_301_list4a": 1808,
+        "entry_is_forced_labor_301_listed": 68418,
+        "entry_is_section_122_exempt": 21476
+      },
+      "representatives_by_origin_tier": {
+        "flat-10": {
+          "actual": 0.1,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-1506d6477bba78053e3014ff",
+          "chapter": "28",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.05,
+          "expected": 0.05,
+          "hts10": "2804100000",
+          "hts_line": "2804100000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "BD",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000000000000",
+          "origin_tier": "flat-10",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        },
+        "flat-12.5": {
+          "actual": 0.125,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-b46e4531e2f9895ca124688a",
+          "chapter": "28",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.0625,
+          "expected": 0.0625,
+          "hts10": "2804100000",
+          "hts_line": "2804100000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "BR",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000001000000",
+          "origin_tier": "flat-12.5",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_brazil_301_listed",
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        },
+        "mfn-cap-10": {
+          "actual": 0.063,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-9aa9516719541b9f13366d25",
+          "chapter": "28",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.0315,
+          "expected": 0.0315,
+          "hts10": "2804100000",
+          "hts_line": "2804100000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "ES",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000000010000",
+          "origin_tier": "mfn-cap-10",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        },
+        "mfn-cap-12.5": {
+          "actual": 0.088,
+          "cafta_52i_exact": false,
+          "case_id": "schedule-0fc769558b1d97ef6ddc8f9a",
+          "chapter": "28",
+          "current_class": null,
+          "delta_actual_minus_expected": 0.044,
+          "expected": 0.044,
+          "hts10": "2804100000",
+          "hts_line": "2804100000",
+          "interval": [
+            "2026-07-24",
+            "2026-07-30"
+          ],
+          "iso2": "CH",
+          "new_disagreement": false,
+          "old_target_class": "fed-false-family-forced-labor",
+          "origin_regime": "0000000000000100",
+          "origin_tier": "mfn-cap-12.5",
+          "probe": "2026-07-24",
+          "revision": "bnd_2026-07-24",
+          "slot": "forced_labor_section_301",
+          "true_flags": [
+            "entry_is_china_301_list123",
+            "entry_is_forced_labor_301_listed"
+          ]
+        }
+      },
+      "units": 68418
+    }
+  },
+  "conditional_source_parity": {
+    "brazil_aircraft": {
+      "exact": true,
+      "only_rulespec": [],
+      "only_yale": [],
+      "rulespec_unique_hts8": 546,
+      "yale_unique_hts8": 546
+    },
+    "brazil_pharma": {
+      "exact": true,
+      "only_rulespec": [],
+      "only_yale": [],
+      "rulespec_unique_hts8": 705,
+      "yale_unique_hts8": 705
+    },
+    "forced_aircraft": {
+      "exact": true,
+      "only_rulespec": [],
+      "only_yale": [],
+      "rulespec_unique_hts8": 541,
+      "yale_unique_hts8": 541
+    },
+    "forced_pharma": {
+      "exact": true,
+      "only_rulespec": [],
+      "only_yale": [],
+      "rulespec_unique_hts8": 700,
+      "yale_unique_hts8": 700
+    }
+  },
+  "conditional_wiring_deferred_outputs": [
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note50/page-548#brazil_301_aircraft_conditional_membership_p548",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-548.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    },
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note50/page-549#brazil_301_aircraft_conditional_membership_p549",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-549.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    },
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note50/page-551#brazil_301_pharma_conditional_membership_p551",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-551.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    },
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note50/page-552#brazil_301_pharma_conditional_membership_p552",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-552.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    },
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note50/page-553#brazil_301_pharma_conditional_membership_p553",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note50/page-553.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    },
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note52/page-561#forced_labor_301_aircraft_conditional_membership_p561",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-561.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    },
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note52/page-562#forced_labor_301_aircraft_conditional_membership_p562",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-562.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    },
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note52/page-564#forced_labor_301_pharma_conditional_membership_p564",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-564.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    },
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note52/page-565#forced_labor_301_pharma_conditional_membership_p565",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-565.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    },
+    {
+      "output": "us:policies/usitc/us-tariff-incidence/generated/note52/page-566#forced_labor_301_pharma_conditional_membership_p566",
+      "path": "us/policies/usitc/us-tariff-incidence/generated/note52/page-566.yaml",
+      "reason": "Composition regeneration is blocked by the active hard-cut\nwaiver set; conditional wiring is deferred to .github#106."
+    }
+  ],
+  "conservation": {
+    "by_old_target_class": {
+      "fed-false-family-brazil": 8736,
+      "fed-false-family-forced-labor": 139654
+    },
+    "by_slot": {
+      "brazil_section_301": 8736,
+      "forced_labor_section_301": 139654
+    },
+    "cafta_52i_country_heuristic": {
+      "false": 148390
+    },
+    "cafta_52i_exact": {
+      "false": 148390
+    },
+    "cafta_52i_overlap_units": 0,
+    "cap_formula_issue_units": 0,
+    "category_sum": 148390,
+    "conditional_membership_overlap_units": 0,
+    "conditional_use_model_proxy_units": 148322,
+    "date_issue_units": 0,
+    "listed_flag_issue_units": 0,
+    "mfn_cap_rate_input_parser_units": 68,
+    "new_disagreement": {
+      "false": 148390
+    },
+    "old_non_new_residual_units": 148390,
+    "post_rebind_target_units": {
+      "fed-false-family-brazil": {
+        "baseline": 93198,
+        "closed": 84462,
+        "residual": 8736
+      },
+      "fed-false-family-forced-labor": {
+        "baseline": 1499038,
+        "closed": 1359384,
+        "residual": 139654
+      }
+    }
+  },
+  "definition": {
+    "delta": "actual - expected",
+    "selected_rows": "old_target_class is non-null in target-mismatch-cells.jsonl.gz",
+    "unit": "one compared component at one campaign endpoint case"
+  },
+  "mfn_cap_parser_proof": {
+    "cap_cell_count": 17,
+    "cells": [
+      {
+        "axiom_actual": "0.063",
+        "delta_actual_minus_expected": "-0.037000000000000005",
+        "formula_check": "0.063",
+        "hts10": "8712005000",
+        "iso2": "IE",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-2d04de10e6dafcb21020a4ba",
+        "rulespec_general_rate": "0.036999999999999998",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.087999999999999995",
+        "delta_actual_minus_expected": "-0.037000000000000005",
+        "formula_check": "0.087999999999999995",
+        "hts10": "8712005000",
+        "iso2": "JP",
+        "origin_tier": "mfn-cap-12.5",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-5914354a6627ddb5a377330a",
+        "rulespec_general_rate": "0.036999999999999998",
+        "units": 4,
+        "yale_expected": "0.125",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.087999999999999995",
+        "delta_actual_minus_expected": "-0.037000000000000005",
+        "formula_check": "0.087999999999999995",
+        "hts10": "8712005000",
+        "iso2": "KR",
+        "origin_tier": "mfn-cap-12.5",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-51d7dfbe0914999265765d7b",
+        "rulespec_general_rate": "0.036999999999999998",
+        "units": 4,
+        "yale_expected": "0.125",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.063",
+        "delta_actual_minus_expected": "-0.037000000000000005",
+        "formula_check": "0.063",
+        "hts10": "8712005000",
+        "iso2": "SE",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-96b9ddd236672d4c2cbf53f2",
+        "rulespec_general_rate": "0.036999999999999998",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.063",
+        "delta_actual_minus_expected": "-0.037000000000000005",
+        "formula_check": "0.063",
+        "hts10": "8712005000",
+        "iso2": "TW",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-a6ea71a2fb88f4eef35a091a",
+        "rulespec_general_rate": "0.036999999999999998",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.040000000000000001",
+        "delta_actual_minus_expected": "-0.060000000000000005",
+        "formula_check": "0.040000000000000008",
+        "hts10": "8714915000",
+        "iso2": "HU",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-dcb87591b944310ea02729da",
+        "rulespec_general_rate": "0.059999999999999998",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.065000000000000002",
+        "delta_actual_minus_expected": "-0.059999999999999998",
+        "formula_check": "0.065000000000000002",
+        "hts10": "8714915000",
+        "iso2": "JP",
+        "origin_tier": "mfn-cap-12.5",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-df174aaa7655ea391fc09f9a",
+        "rulespec_general_rate": "0.059999999999999998",
+        "units": 4,
+        "yale_expected": "0.125",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.065000000000000002",
+        "delta_actual_minus_expected": "-0.059999999999999998",
+        "formula_check": "0.065000000000000002",
+        "hts10": "8714915000",
+        "iso2": "KR",
+        "origin_tier": "mfn-cap-12.5",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-79d54547da693a6f97c8ce23",
+        "rulespec_general_rate": "0.059999999999999998",
+        "units": 4,
+        "yale_expected": "0.125",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.040000000000000001",
+        "delta_actual_minus_expected": "-0.060000000000000005",
+        "formula_check": "0.040000000000000008",
+        "hts10": "8714915000",
+        "iso2": "SI",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-292903dabc469d9c4398010a",
+        "rulespec_general_rate": "0.059999999999999998",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.040000000000000001",
+        "delta_actual_minus_expected": "-0.060000000000000005",
+        "formula_check": "0.040000000000000008",
+        "hts10": "8714915000",
+        "iso2": "TW",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-fd31206a630cae86f01e2702",
+        "rulespec_general_rate": "0.059999999999999998",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.050000000000000003",
+        "delta_actual_minus_expected": "-0.050000000000000003",
+        "formula_check": "0.050000000000000003",
+        "hts10": "8714921000",
+        "iso2": "CZ",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-5b32241367c51d73e26992a4",
+        "rulespec_general_rate": "0.050000000000000003",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.050000000000000003",
+        "delta_actual_minus_expected": "-0.050000000000000003",
+        "formula_check": "0.050000000000000003",
+        "hts10": "8714921000",
+        "iso2": "TW",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-b8b3ef8e39f598b838f0df5f",
+        "rulespec_general_rate": "0.050000000000000003",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.025000000000000001",
+        "delta_actual_minus_expected": "-0.10000000000000001",
+        "formula_check": "0.024999999999999994",
+        "hts10": "8714949000",
+        "iso2": "CH",
+        "origin_tier": "mfn-cap-12.5",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-d125355b1f44b291522eed93",
+        "rulespec_general_rate": "0.10000000000000001",
+        "units": 4,
+        "yale_expected": "0.125",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0.025000000000000001",
+        "delta_actual_minus_expected": "-0.10000000000000001",
+        "formula_check": "0.024999999999999994",
+        "hts10": "8714949000",
+        "iso2": "KR",
+        "origin_tier": "mfn-cap-12.5",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-a24448ac7d5b9f24c3496bc9",
+        "rulespec_general_rate": "0.10000000000000001",
+        "units": 4,
+        "yale_expected": "0.125",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0",
+        "delta_actual_minus_expected": "-0.10000000000000001",
+        "formula_check": "0",
+        "hts10": "8714949000",
+        "iso2": "PT",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-c861188d6aab256c26b20fbc",
+        "rulespec_general_rate": "0.10000000000000001",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0",
+        "delta_actual_minus_expected": "-0.10000000000000001",
+        "formula_check": "0",
+        "hts10": "8714949000",
+        "iso2": "SI",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-c2898f28d0406e3d0b8d7b67",
+        "rulespec_general_rate": "0.10000000000000001",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      },
+      {
+        "axiom_actual": "0",
+        "delta_actual_minus_expected": "-0.10000000000000001",
+        "formula_check": "0",
+        "hts10": "8714949000",
+        "iso2": "TW",
+        "origin_tier": "mfn-cap-10",
+        "probes": [
+          "2026-07-24",
+          "2026-07-30",
+          "2026-07-31",
+          "2026-08-01"
+        ],
+        "representative_case_id": "schedule-2af16961cc60f456ed394bb8",
+        "rulespec_general_rate": "0.10000000000000001",
+        "units": 4,
+        "yale_expected": "0.10000000000000001",
+        "yale_selected_statutory_base_rate": {
+          "bnd_2026-07-24": [
+            "0"
+          ],
+          "bnd_2026-07-31": [
+            "0"
+          ]
+        }
+      }
+    ],
+    "raw_hts": {
+      "archives": [
+        {
+          "bytes": 705898,
+          "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/data/hts_archives/hts_2026_rev_10.json.gz",
+          "sha256": "369170d51a419688d5e9e42c3eb91b6fdb861c3729a931b03277baab3e236b80"
+        },
+        {
+          "bytes": 712813,
+          "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/data/hts_archives/hts_2026_rev_11.json.gz",
+          "sha256": "e3dfb6efe3e06332df5580b079242ad2c651be658b204fe4713a70dc863ba811"
+        },
+        {
+          "bytes": 712989,
+          "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/data/hts_archives/hts_2026_rev_12.json.gz",
+          "sha256": "7228358c06973566809e54eb4bb788948c4252e9b07ed486fdbb6a6146fbeb4a"
+        }
+      ],
+      "records": [
+        {
+          "accepted_by_yale_simple_percent_regex": true,
+          "contains_empty_underline_markup": false,
+          "general_raw": "3.7% ",
+          "hts10": "8712005000",
+          "revision": "2026_rev_10"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": true,
+          "contains_empty_underline_markup": false,
+          "general_raw": "6% ",
+          "hts10": "8714915000",
+          "revision": "2026_rev_10"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": true,
+          "contains_empty_underline_markup": false,
+          "general_raw": "5% ",
+          "hts10": "8714921000",
+          "revision": "2026_rev_10"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": true,
+          "contains_empty_underline_markup": false,
+          "general_raw": "10% ",
+          "hts10": "8714949000",
+          "revision": "2026_rev_10"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": false,
+          "contains_empty_underline_markup": true,
+          "general_raw": "3.7% <u></u>",
+          "hts10": "8712005000",
+          "revision": "2026_rev_11"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": false,
+          "contains_empty_underline_markup": true,
+          "general_raw": "6% <u></u>",
+          "hts10": "8714915000",
+          "revision": "2026_rev_11"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": false,
+          "contains_empty_underline_markup": true,
+          "general_raw": "5% <u></u>",
+          "hts10": "8714921000",
+          "revision": "2026_rev_11"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": false,
+          "contains_empty_underline_markup": true,
+          "general_raw": "10% <u></u>",
+          "hts10": "8714949000",
+          "revision": "2026_rev_11"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": false,
+          "contains_empty_underline_markup": true,
+          "general_raw": "3.7% <u></u>",
+          "hts10": "8712005000",
+          "revision": "2026_rev_12"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": false,
+          "contains_empty_underline_markup": true,
+          "general_raw": "6% <u></u>",
+          "hts10": "8714915000",
+          "revision": "2026_rev_12"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": false,
+          "contains_empty_underline_markup": true,
+          "general_raw": "5% <u></u>",
+          "hts10": "8714921000",
+          "revision": "2026_rev_12"
+        },
+        {
+          "accepted_by_yale_simple_percent_regex": false,
+          "contains_empty_underline_markup": true,
+          "general_raw": "10% <u></u>",
+          "hts10": "8714949000",
+          "revision": "2026_rev_12"
+        }
+      ]
+    },
+    "rulespec_general_rates": {
+      "8712005000": "0.036999999999999998",
+      "8714915000": "0.059999999999999998",
+      "8714921000": "0.050000000000000003",
+      "8714949000": "0.10000000000000001"
+    },
+    "summary": "The four Yale target-vintage General strings retain their numeric rates but append <u></u>; Yale parse_rate accepts only an entire bare N% string and produces a zero panel base downstream. RuleSpec retains the numeric General rates, and every Axiom result equals max(cap - General, 0).",
+    "units": 68
+  },
+  "provenance": {
+    "classification_receipt": {
+      "bytes": 33995,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/target-comparison-classification-receipt.json",
+      "sha256": "845c4ad0516c03ef4cfb5224f5c5f67f812d42a084db9de52633ca050205f9c7"
+    },
+    "command_argv": [
+      "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/.venv/bin/python",
+      "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/old_residual_taxonomy.py",
+      "--mismatch-cells",
+      "reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz",
+      "--selected-intervals",
+      "reference/us-tariff-schedule/selected-intervals.csv.gz",
+      "--classification-receipt",
+      "reference/us-tariff-schedule/preview-1311/target-comparison-classification-receipt.json",
+      "--yale-root",
+      "/Users/maxghenis/TheAxiomFoundation/_tariff-yale",
+      "--rulespec-root",
+      "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us",
+      "--output",
+      "reference/us-tariff-schedule/preview-1311/old-residual-taxonomy-receipt.json"
+    ],
+    "mismatch_cells": {
+      "bytes": 10088070,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/target-mismatch-cells.jsonl.gz",
+      "sha256": "d5b53173afe489686aff86a4d1d776bf821cb97945e9ebacd5ba6bc912a8b705"
+    },
+    "rulespec": {
+      "commit": "3357f7dc710d18861b1fefdff115e2434e67b988",
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us",
+      "tree": "c3d530c72344310aa2fdfcebe5aec286b1ad4869"
+    },
+    "rulespec_sources": {
+      "ch87_general_rate": {
+        "bytes": 206567,
+        "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-duty/lines/generated/ch87.yaml",
+        "sha256": "79e408f42f2541d0ac9647b3a3b089f5ba2c7ccc201a0ab541fa0a23814d8146"
+      },
+      "conditional_modules": [
+        {
+          "bytes": 91379,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note50/page-548.yaml",
+          "sha256": "72c42689c3eab3e7001be7817e57d956afc20521120c1efa27a5d099dff6a170"
+        },
+        {
+          "bytes": 60143,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note50/page-549.yaml",
+          "sha256": "ee6f3c86387444d397daf01cf4aecdb93a1ac36b30b1c90a495300fa30d6f122"
+        },
+        {
+          "bytes": 91044,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note50/page-551.yaml",
+          "sha256": "5bca5e53d1aa9d40a53beec09593ad0695f8545df547ff9110a9559825f466eb"
+        },
+        {
+          "bytes": 91044,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note50/page-552.yaml",
+          "sha256": "9a8960e8e2eafda19cda0ca1b278af80fdc51c305532efac1a4d7f61f36e600c"
+        },
+        {
+          "bytes": 13239,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note50/page-553.yaml",
+          "sha256": "e7e6594b35fe0c55a5ed0ca6df555e2d5655c9869b781fc17d7f303279913d60"
+        },
+        {
+          "bytes": 90067,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note52/page-561.yaml",
+          "sha256": "e3aa1593aac25e89cc1fcef2b97cbfbeb7a79c7eb9ff027e4b3c15ea9f584001"
+        },
+        {
+          "bytes": 57937,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note52/page-562.yaml",
+          "sha256": "7cf857b6567e1e4d01f0028d616a6756e82955c46b2e729481ed33953aca2e09"
+        },
+        {
+          "bytes": 90063,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note52/page-564.yaml",
+          "sha256": "ca69256ead4b176447a306a3d3d778f37fabc719f308a1172e68f8665144b9bb"
+        },
+        {
+          "bytes": 90063,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note52/page-565.yaml",
+          "sha256": "0e53eb83c76dc073cc503fb099c9bf7ef013c1022a2c516aa93f29a07b6f7784"
+        },
+        {
+          "bytes": 11763,
+          "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/us/policies/usitc/us-tariff-incidence/generated/note52/page-566.yaml",
+          "sha256": "3fbc96605dd1ad23164d8a95c35ab519bb2fe41edb1fd5c6c8744d02c3effad9"
+        }
+      ],
+      "entry_flag_tool": {
+        "bytes": 8171,
+        "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/tools/b16_entry_flags.py",
+        "sha256": "8032dde5fe4a9bc14448cc84e338181a69b912e37b74331d89e9d5f9ef746c8a"
+      }
+    },
+    "script": {
+      "bytes": 26670,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/old_residual_taxonomy.py",
+      "sha256": "ff5cc00b453547534beaa48f62ef0046c04249a947bff4e92921832465faddf7"
+    },
+    "selected_intervals": {
+      "bytes": 75405367,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/selected-intervals.csv.gz",
+      "sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
+    },
+    "yale": {
+      "commit": "c4307e514196618afcbf88cf7fd33746417eeabf",
+      "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale",
+      "tree": "d3107eae32ae7ac366b319abd4ab7b13c78d5c3c"
+    },
+    "yale_sources": {
+      "brazil_aircraft": {
+        "bytes": 8235,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s301_brazil_aircraft_products.csv",
+        "sha256": "5268dc619bca936b7f87625c96369516d7074066960d38d4319e72a1acca84cd"
+      },
+      "brazil_pharma": {
+        "bytes": 10620,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s301_brazil_pharma_products.csv",
+        "sha256": "322c0f562649cce35674df0d7c34ee7d5d4ada381784ba3873ec564100bcdab7"
+      },
+      "calculator": {
+        "bytes": 179892,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/src/pipeline/06_calculate_rates.R",
+        "sha256": "2620a122159c11cc2b116786925ccbc6d801cb274982034cd8105657ae13a76a"
+      },
+      "forced_common": {
+        "bytes": 33245,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s301fl_final_common_exemptions.csv",
+        "sha256": "15b5e352cd810af33b90699bb595010f5aca43ea10de25ba1b2c6239acc96054"
+      },
+      "forced_country": {
+        "bytes": 140808,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s301fl_final_country_exemptions.csv",
+        "sha256": "a38f8e42e9615b58dc09fd8a661b4a0fdb9d12e2121342a657fae69450215280"
+      },
+      "policy_params": {
+        "bytes": 50577,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/config/policy_params.yaml",
+        "sha256": "5f3d79b192b9fb6079e5ad10a1969e12f397567fc9f89d4e202403116ecb6346"
+      },
+      "rate_parser": {
+        "bytes": 18003,
+        "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/src/core/helpers.R",
+        "sha256": "4d493f990cfa630219e7338ada94af2dceda32240abeb8ff2983d3cbb6692e4d"
+      }
+    }
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.preview_1311_old_residual_taxonomy.v1",
+  "verdict": "PASS"
+}

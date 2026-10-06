@@ -1,0 +1,1744 @@
+{
+  "baseline_by_class_iso": [
+    {
+      "class_id": "fed-false-family-brazil",
+      "iso2": "BR",
+      "units": 93198
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "AE",
+      "units": 3464
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "AO",
+      "units": 9598
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "AR",
+      "units": 25092
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "AT",
+      "units": 2396
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "AU",
+      "units": 3638
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "BD",
+      "units": 43116
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "BE",
+      "units": 2596
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "BG",
+      "units": 2622
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "BH",
+      "units": 3304
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "BR",
+      "units": 54460
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "BS",
+      "units": 3470
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "CA",
+      "units": 54344
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "CH",
+      "units": 19030
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "CL",
+      "units": 3338
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "CN",
+      "units": 54528
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "CO",
+      "units": 2992
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "CR",
+      "units": 5954
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "CY",
+      "units": 2772
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "CZ",
+      "units": 2670
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "DE",
+      "units": 2596
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "DK",
+      "units": 2728
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "DO",
+      "units": 2322
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "DZ",
+      "units": 26386
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "EC",
+      "units": 34348
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "EE",
+      "units": 2696
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "EG",
+      "units": 3526
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "ES",
+      "units": 2504
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "FI",
+      "units": 2726
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "FR",
+      "units": 2672
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "GB",
+      "units": 53764
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "GR",
+      "units": 2674
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "GT",
+      "units": 9402
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "GY",
+      "units": 9870
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "HK",
+      "units": 54240
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "HN",
+      "units": 10146
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "HR",
+      "units": 2868
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "HU",
+      "units": 2538
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "ID",
+      "units": 25666
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "IE",
+      "units": 2604
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "IL",
+      "units": 9700
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "IN",
+      "units": 52440
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "IQ",
+      "units": 52356
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "IT",
+      "units": 2648
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "JO",
+      "units": 18906
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "JP",
+      "units": 19590
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "KH",
+      "units": 25852
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "KR",
+      "units": 47564
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "KW",
+      "units": 3508
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "KZ",
+      "units": 52320
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "LK",
+      "units": 43438
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "LT",
+      "units": 2700
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "LU",
+      "units": 2748
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "LV",
+      "units": 2538
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "LY",
+      "units": 26008
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "MA",
+      "units": 3334
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "MT",
+      "units": 2684
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "MX",
+      "units": 54360
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "MY",
+      "units": 25620
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "NG",
+      "units": 9478
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "NI",
+      "units": 36726
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "NL",
+      "units": 2560
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "NO",
+      "units": 9584
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "NZ",
+      "units": 9558
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "OM",
+      "units": 3362
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "PE",
+      "units": 3338
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "PH",
+      "units": 52358
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "PK",
+      "units": 27154
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "PL",
+      "units": 2654
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "PT",
+      "units": 2486
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "QA",
+      "units": 3512
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "RO",
+      "units": 2640
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "RU",
+      "units": 47734
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "SA",
+      "units": 3414
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "SE",
+      "units": 2630
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "SG",
+      "units": 3480
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "SI",
+      "units": 2602
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "SK",
+      "units": 2342
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "SV",
+      "units": 9274
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "TH",
+      "units": 52342
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "TR",
+      "units": 9876
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "TT",
+      "units": 35070
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "TW",
+      "units": 43464
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "UY",
+      "units": 3328
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "VE",
+      "units": 9334
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "VN",
+      "units": 52410
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "iso2": "ZA",
+      "units": 52354
+    }
+  ],
+  "baseline_by_class_probe": [
+    {
+      "class_id": "fed-false-family-brazil",
+      "probe": "2026-07-22",
+      "units": 15547
+    },
+    {
+      "class_id": "fed-false-family-brazil",
+      "probe": "2026-07-23",
+      "units": 15547
+    },
+    {
+      "class_id": "fed-false-family-brazil",
+      "probe": "2026-07-24",
+      "units": 15547
+    },
+    {
+      "class_id": "fed-false-family-brazil",
+      "probe": "2026-07-30",
+      "units": 15547
+    },
+    {
+      "class_id": "fed-false-family-brazil",
+      "probe": "2026-07-31",
+      "units": 15505
+    },
+    {
+      "class_id": "fed-false-family-brazil",
+      "probe": "2026-08-01",
+      "units": 15505
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "probe": "2026-07-24",
+      "units": 375024
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "probe": "2026-07-30",
+      "units": 375024
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "probe": "2026-07-31",
+      "units": 374495
+    },
+    {
+      "class_id": "fed-false-family-forced-labor",
+      "probe": "2026-08-01",
+      "units": 374495
+    }
+  ],
+  "baseline_chapters": {
+    "fed-false-family-brazil": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "28",
+      "29",
+      "30",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50",
+      "51",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59",
+      "60",
+      "61",
+      "62",
+      "63",
+      "64",
+      "65",
+      "66",
+      "67",
+      "68",
+      "69",
+      "70",
+      "71",
+      "72",
+      "73",
+      "75",
+      "76",
+      "78",
+      "79",
+      "80",
+      "81",
+      "82",
+      "83",
+      "84",
+      "85",
+      "86",
+      "87",
+      "88",
+      "89",
+      "90",
+      "91",
+      "92",
+      "93",
+      "94",
+      "95",
+      "96"
+    ],
+    "fed-false-family-forced-labor": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "28",
+      "29",
+      "30",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50",
+      "51",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59",
+      "60",
+      "61",
+      "62",
+      "63",
+      "64",
+      "65",
+      "66",
+      "67",
+      "68",
+      "69",
+      "70",
+      "71",
+      "72",
+      "73",
+      "75",
+      "76",
+      "78",
+      "79",
+      "80",
+      "81",
+      "82",
+      "83",
+      "84",
+      "85",
+      "86",
+      "87",
+      "88",
+      "89",
+      "90",
+      "91",
+      "92",
+      "93",
+      "94",
+      "95",
+      "96"
+    ]
+  },
+  "baseline_target_units": {
+    "fed-false-family-brazil": 93198,
+    "fed-false-family-forced-labor": 1499038
+  },
+  "elapsed_seconds": 57.84,
+  "entry_flag_calls": 75517,
+  "exact_cafta_52i_panel": {
+    "by_chapter": {
+      "42": 356,
+      "50": 16,
+      "51": 328,
+      "52": 2220,
+      "53": 276,
+      "54": 1136,
+      "55": 1796,
+      "56": 356,
+      "57": 344,
+      "58": 464,
+      "59": 336,
+      "60": 492,
+      "61": 3028,
+      "62": 4756,
+      "63": 1000,
+      "65": 156,
+      "70": 252,
+      "94": 92
+    },
+    "by_probe": {
+      "2026-07-24": 4351,
+      "2026-07-30": 4351,
+      "2026-07-31": 4351,
+      "2026-08-01": 4351
+    },
+    "interval_rows": 8702,
+    "per_origin": {
+      "CR": 1260,
+      "DO": 128,
+      "GT": 108,
+      "HN": 120,
+      "NI": 15636,
+      "SV": 152
+    },
+    "source": {
+      "bytes": 140808,
+      "condition": "fta",
+      "country_code_group": "2050;2110;2150;2190;2230;2470",
+      "iso2_origins": [
+        "CR",
+        "DO",
+        "GT",
+        "HN",
+        "NI",
+        "SV"
+      ],
+      "path": "/Users/maxghenis/TheAxiomFoundation/_tariff-yale/resources/s301fl_final_country_exemptions.csv",
+      "sha256": "a38f8e42e9615b58dc09fd8a661b4a0fdb9d12e2121342a657fae69450215280",
+      "source_rows": 1737,
+      "unique_hts8": 1737,
+      "yale_commit": "c4307e514196618afcbf88cf7fd33746417eeabf"
+    },
+    "units": 17404
+  },
+  "flag_true_yale_zero_ceiling": {
+    "by_slot_chapter": [
+      {
+        "chapter": "04",
+        "slot": "brazil_section_301",
+        "units": 30
+      },
+      {
+        "chapter": "29",
+        "slot": "brazil_section_301",
+        "units": 82
+      },
+      {
+        "chapter": "30",
+        "slot": "brazil_section_301",
+        "units": 2
+      },
+      {
+        "chapter": "37",
+        "slot": "brazil_section_301",
+        "units": 6
+      },
+      {
+        "chapter": "40",
+        "slot": "brazil_section_301",
+        "units": 102
+      },
+      {
+        "chapter": "44",
+        "slot": "brazil_section_301",
+        "units": 654
+      },
+      {
+        "chapter": "70",
+        "slot": "brazil_section_301",
+        "units": 12
+      },
+      {
+        "chapter": "72",
+        "slot": "brazil_section_301",
+        "units": 3030
+      },
+      {
+        "chapter": "73",
+        "slot": "brazil_section_301",
+        "units": 2514
+      },
+      {
+        "chapter": "74",
+        "slot": "brazil_section_301",
+        "units": 672
+      },
+      {
+        "chapter": "76",
+        "slot": "brazil_section_301",
+        "units": 630
+      },
+      {
+        "chapter": "82",
+        "slot": "brazil_section_301",
+        "units": 378
+      },
+      {
+        "chapter": "83",
+        "slot": "brazil_section_301",
+        "units": 180
+      },
+      {
+        "chapter": "84",
+        "slot": "brazil_section_301",
+        "units": 2556
+      },
+      {
+        "chapter": "85",
+        "slot": "brazil_section_301",
+        "units": 960
+      },
+      {
+        "chapter": "86",
+        "slot": "brazil_section_301",
+        "units": 138
+      },
+      {
+        "chapter": "87",
+        "slot": "brazil_section_301",
+        "units": 1974
+      },
+      {
+        "chapter": "90",
+        "slot": "brazil_section_301",
+        "units": 24
+      },
+      {
+        "chapter": "94",
+        "slot": "brazil_section_301",
+        "units": 180
+      },
+      {
+        "chapter": "98",
+        "slot": "brazil_section_301",
+        "units": 6
+      },
+      {
+        "chapter": "02",
+        "slot": "forced_labor_section_301",
+        "units": 8
+      },
+      {
+        "chapter": "03",
+        "slot": "forced_labor_section_301",
+        "units": 24
+      },
+      {
+        "chapter": "04",
+        "slot": "forced_labor_section_301",
+        "units": 992
+      },
+      {
+        "chapter": "07",
+        "slot": "forced_labor_section_301",
+        "units": 612
+      },
+      {
+        "chapter": "08",
+        "slot": "forced_labor_section_301",
+        "units": 244
+      },
+      {
+        "chapter": "10",
+        "slot": "forced_labor_section_301",
+        "units": 16
+      },
+      {
+        "chapter": "11",
+        "slot": "forced_labor_section_301",
+        "units": 12
+      },
+      {
+        "chapter": "12",
+        "slot": "forced_labor_section_301",
+        "units": 68
+      },
+      {
+        "chapter": "15",
+        "slot": "forced_labor_section_301",
+        "units": 80
+      },
+      {
+        "chapter": "16",
+        "slot": "forced_labor_section_301",
+        "units": 184
+      },
+      {
+        "chapter": "17",
+        "slot": "forced_labor_section_301",
+        "units": 40
+      },
+      {
+        "chapter": "18",
+        "slot": "forced_labor_section_301",
+        "units": 112
+      },
+      {
+        "chapter": "19",
+        "slot": "forced_labor_section_301",
+        "units": 376
+      },
+      {
+        "chapter": "20",
+        "slot": "forced_labor_section_301",
+        "units": 604
+      },
+      {
+        "chapter": "21",
+        "slot": "forced_labor_section_301",
+        "units": 220
+      },
+      {
+        "chapter": "22",
+        "slot": "forced_labor_section_301",
+        "units": 36
+      },
+      {
+        "chapter": "24",
+        "slot": "forced_labor_section_301",
+        "units": 428
+      },
+      {
+        "chapter": "29",
+        "slot": "forced_labor_section_301",
+        "units": 1000
+      },
+      {
+        "chapter": "30",
+        "slot": "forced_labor_section_301",
+        "units": 58
+      },
+      {
+        "chapter": "37",
+        "slot": "forced_labor_section_301",
+        "units": 72
+      },
+      {
+        "chapter": "40",
+        "slot": "forced_labor_section_301",
+        "units": 1816
+      },
+      {
+        "chapter": "42",
+        "slot": "forced_labor_section_301",
+        "units": 948
+      },
+      {
+        "chapter": "44",
+        "slot": "forced_labor_section_301",
+        "units": 7944
+      },
+      {
+        "chapter": "45",
+        "slot": "forced_labor_section_301",
+        "units": 8
+      },
+      {
+        "chapter": "46",
+        "slot": "forced_labor_section_301",
+        "units": 28
+      },
+      {
+        "chapter": "50",
+        "slot": "forced_labor_section_301",
+        "units": 16
+      },
+      {
+        "chapter": "51",
+        "slot": "forced_labor_section_301",
+        "units": 688
+      },
+      {
+        "chapter": "52",
+        "slot": "forced_labor_section_301",
+        "units": 3576
+      },
+      {
+        "chapter": "53",
+        "slot": "forced_labor_section_301",
+        "units": 312
+      },
+      {
+        "chapter": "54",
+        "slot": "forced_labor_section_301",
+        "units": 2780
+      },
+      {
+        "chapter": "55",
+        "slot": "forced_labor_section_301",
+        "units": 4620
+      },
+      {
+        "chapter": "56",
+        "slot": "forced_labor_section_301",
+        "units": 416
+      },
+      {
+        "chapter": "57",
+        "slot": "forced_labor_section_301",
+        "units": 344
+      },
+      {
+        "chapter": "58",
+        "slot": "forced_labor_section_301",
+        "units": 724
+      },
+      {
+        "chapter": "59",
+        "slot": "forced_labor_section_301",
+        "units": 348
+      },
+      {
+        "chapter": "60",
+        "slot": "forced_labor_section_301",
+        "units": 1240
+      },
+      {
+        "chapter": "61",
+        "slot": "forced_labor_section_301",
+        "units": 7644
+      },
+      {
+        "chapter": "62",
+        "slot": "forced_labor_section_301",
+        "units": 10260
+      },
+      {
+        "chapter": "63",
+        "slot": "forced_labor_section_301",
+        "units": 1612
+      },
+      {
+        "chapter": "64",
+        "slot": "forced_labor_section_301",
+        "units": 1964
+      },
+      {
+        "chapter": "65",
+        "slot": "forced_labor_section_301",
+        "units": 156
+      },
+      {
+        "chapter": "66",
+        "slot": "forced_labor_section_301",
+        "units": 8
+      },
+      {
+        "chapter": "67",
+        "slot": "forced_labor_section_301",
+        "units": 12
+      },
+      {
+        "chapter": "69",
+        "slot": "forced_labor_section_301",
+        "units": 312
+      },
+      {
+        "chapter": "70",
+        "slot": "forced_labor_section_301",
+        "units": 892
+      },
+      {
+        "chapter": "71",
+        "slot": "forced_labor_section_301",
+        "units": 52
+      },
+      {
+        "chapter": "72",
+        "slot": "forced_labor_section_301",
+        "units": 34496
+      },
+      {
+        "chapter": "73",
+        "slot": "forced_labor_section_301",
+        "units": 39400
+      },
+      {
+        "chapter": "74",
+        "slot": "forced_labor_section_301",
+        "units": 7736
+      },
+      {
+        "chapter": "76",
+        "slot": "forced_labor_section_301",
+        "units": 7844
+      },
+      {
+        "chapter": "82",
+        "slot": "forced_labor_section_301",
+        "units": 3184
+      },
+      {
+        "chapter": "83",
+        "slot": "forced_labor_section_301",
+        "units": 2852
+      },
+      {
+        "chapter": "84",
+        "slot": "forced_labor_section_301",
+        "units": 58280
+      },
+      {
+        "chapter": "85",
+        "slot": "forced_labor_section_301",
+        "units": 19388
+      },
+      {
+        "chapter": "86",
+        "slot": "forced_labor_section_301",
+        "units": 1676
+      },
+      {
+        "chapter": "87",
+        "slot": "forced_labor_section_301",
+        "units": 25620
+      },
+      {
+        "chapter": "90",
+        "slot": "forced_labor_section_301",
+        "units": 760
+      },
+      {
+        "chapter": "91",
+        "slot": "forced_labor_section_301",
+        "units": 24
+      },
+      {
+        "chapter": "94",
+        "slot": "forced_labor_section_301",
+        "units": 2432
+      },
+      {
+        "chapter": "96",
+        "slot": "forced_labor_section_301",
+        "units": 164
+      },
+      {
+        "chapter": "98",
+        "slot": "forced_labor_section_301",
+        "units": 1508
+      }
+    ],
+    "by_slot_iso": [
+      {
+        "iso2": "BR",
+        "slot": "brazil_section_301",
+        "units": 14130
+      },
+      {
+        "iso2": "AE",
+        "slot": "forced_labor_section_301",
+        "units": 384
+      },
+      {
+        "iso2": "AO",
+        "slot": "forced_labor_section_301",
+        "units": 414
+      },
+      {
+        "iso2": "AR",
+        "slot": "forced_labor_section_301",
+        "units": 676
+      },
+      {
+        "iso2": "AT",
+        "slot": "forced_labor_section_301",
+        "units": 980
+      },
+      {
+        "iso2": "AU",
+        "slot": "forced_labor_section_301",
+        "units": 418
+      },
+      {
+        "iso2": "BD",
+        "slot": "forced_labor_section_301",
+        "units": 3400
+      },
+      {
+        "iso2": "BE",
+        "slot": "forced_labor_section_301",
+        "units": 876
+      },
+      {
+        "iso2": "BG",
+        "slot": "forced_labor_section_301",
+        "units": 934
+      },
+      {
+        "iso2": "BH",
+        "slot": "forced_labor_section_301",
+        "units": 376
+      },
+      {
+        "iso2": "BR",
+        "slot": "forced_labor_section_301",
+        "units": 9264
+      },
+      {
+        "iso2": "BS",
+        "slot": "forced_labor_section_301",
+        "units": 418
+      },
+      {
+        "iso2": "CA",
+        "slot": "forced_labor_section_301",
+        "units": 10708
+      },
+      {
+        "iso2": "CH",
+        "slot": "forced_labor_section_301",
+        "units": 2746
+      },
+      {
+        "iso2": "CL",
+        "slot": "forced_labor_section_301",
+        "units": 446
+      },
+      {
+        "iso2": "CN",
+        "slot": "forced_labor_section_301",
+        "units": 10824
+      },
+      {
+        "iso2": "CO",
+        "slot": "forced_labor_section_301",
+        "units": 424
+      },
+      {
+        "iso2": "CR",
+        "slot": "forced_labor_section_301",
+        "units": 1970
+      },
+      {
+        "iso2": "CY",
+        "slot": "forced_labor_section_301",
+        "units": 880
+      },
+      {
+        "iso2": "CZ",
+        "slot": "forced_labor_section_301",
+        "units": 1038
+      },
+      {
+        "iso2": "DE",
+        "slot": "forced_labor_section_301",
+        "units": 956
+      },
+      {
+        "iso2": "DK",
+        "slot": "forced_labor_section_301",
+        "units": 904
+      },
+      {
+        "iso2": "DO",
+        "slot": "forced_labor_section_301",
+        "units": 514
+      },
+      {
+        "iso2": "DZ",
+        "slot": "forced_labor_section_301",
+        "units": 3806
+      },
+      {
+        "iso2": "EC",
+        "slot": "forced_labor_section_301",
+        "units": 680
+      },
+      {
+        "iso2": "EE",
+        "slot": "forced_labor_section_301",
+        "units": 1016
+      },
+      {
+        "iso2": "EG",
+        "slot": "forced_labor_section_301",
+        "units": 402
+      },
+      {
+        "iso2": "ES",
+        "slot": "forced_labor_section_301",
+        "units": 964
+      },
+      {
+        "iso2": "FI",
+        "slot": "forced_labor_section_301",
+        "units": 902
+      },
+      {
+        "iso2": "FR",
+        "slot": "forced_labor_section_301",
+        "units": 892
+      },
+      {
+        "iso2": "GB",
+        "slot": "forced_labor_section_301",
+        "units": 9612
+      },
+      {
+        "iso2": "GR",
+        "slot": "forced_labor_section_301",
+        "units": 902
+      },
+      {
+        "iso2": "GT",
+        "slot": "forced_labor_section_301",
+        "units": 774
+      },
+      {
+        "iso2": "GY",
+        "slot": "forced_labor_section_301",
+        "units": 646
+      },
+      {
+        "iso2": "HK",
+        "slot": "forced_labor_section_301",
+        "units": 10724
+      },
+      {
+        "iso2": "HN",
+        "slot": "forced_labor_section_301",
+        "units": 506
+      },
+      {
+        "iso2": "HR",
+        "slot": "forced_labor_section_301",
+        "units": 1000
+      },
+      {
+        "iso2": "HU",
+        "slot": "forced_labor_section_301",
+        "units": 934
+      },
+      {
+        "iso2": "ID",
+        "slot": "forced_labor_section_301",
+        "units": 3766
+      },
+      {
+        "iso2": "IE",
+        "slot": "forced_labor_section_301",
+        "units": 920
+      },
+      {
+        "iso2": "IL",
+        "slot": "forced_labor_section_301",
+        "units": 672
+      },
+      {
+        "iso2": "IN",
+        "slot": "forced_labor_section_301",
+        "units": 4456
+      },
+      {
+        "iso2": "IQ",
+        "slot": "forced_labor_section_301",
+        "units": 10636
+      },
+      {
+        "iso2": "IT",
+        "slot": "forced_labor_section_301",
+        "units": 940
+      },
+      {
+        "iso2": "JO",
+        "slot": "forced_labor_section_301",
+        "units": 674
+      },
+      {
+        "iso2": "JP",
+        "slot": "forced_labor_section_301",
+        "units": 2442
+      },
+      {
+        "iso2": "KH",
+        "slot": "forced_labor_section_301",
+        "units": 3720
+      },
+      {
+        "iso2": "KR",
+        "slot": "forced_labor_section_301",
+        "units": 18220
+      },
+      {
+        "iso2": "KW",
+        "slot": "forced_labor_section_301",
+        "units": 392
+      },
+      {
+        "iso2": "KZ",
+        "slot": "forced_labor_section_301",
+        "units": 4580
+      },
+      {
+        "iso2": "LK",
+        "slot": "forced_labor_section_301",
+        "units": 3550
+      },
+      {
+        "iso2": "LT",
+        "slot": "forced_labor_section_301",
+        "units": 868
+      },
+      {
+        "iso2": "LU",
+        "slot": "forced_labor_section_301",
+        "units": 900
+      },
+      {
+        "iso2": "LV",
+        "slot": "forced_labor_section_301",
+        "units": 942
+      },
+      {
+        "iso2": "LY",
+        "slot": "forced_labor_section_301",
+        "units": 3732
+      },
+      {
+        "iso2": "MA",
+        "slot": "forced_labor_section_301",
+        "units": 430
+      },
+      {
+        "iso2": "MT",
+        "slot": "forced_labor_section_301",
+        "units": 972
+      },
+      {
+        "iso2": "MX",
+        "slot": "forced_labor_section_301",
+        "units": 10704
+      },
+      {
+        "iso2": "MY",
+        "slot": "forced_labor_section_301",
+        "units": 3928
+      },
+      {
+        "iso2": "NG",
+        "slot": "forced_labor_section_301",
+        "units": 674
+      },
+      {
+        "iso2": "NI",
+        "slot": "forced_labor_section_301",
+        "units": 26278
+      },
+      {
+        "iso2": "NL",
+        "slot": "forced_labor_section_301",
+        "units": 880
+      },
+      {
+        "iso2": "NO",
+        "slot": "forced_labor_section_301",
+        "units": 648
+      },
+      {
+        "iso2": "NZ",
+        "slot": "forced_labor_section_301",
+        "units": 630
+      },
+      {
+        "iso2": "OM",
+        "slot": "forced_labor_section_301",
+        "units": 386
+      },
+      {
+        "iso2": "PE",
+        "slot": "forced_labor_section_301",
+        "units": 390
+      },
+      {
+        "iso2": "PH",
+        "slot": "forced_labor_section_301",
+        "units": 3878
+      },
+      {
+        "iso2": "PK",
+        "slot": "forced_labor_section_301",
+        "units": 3622
+      },
+      {
+        "iso2": "PL",
+        "slot": "forced_labor_section_301",
+        "units": 910
+      },
+      {
+        "iso2": "PT",
+        "slot": "forced_labor_section_301",
+        "units": 926
+      },
+      {
+        "iso2": "QA",
+        "slot": "forced_labor_section_301",
+        "units": 436
+      },
+      {
+        "iso2": "RO",
+        "slot": "forced_labor_section_301",
+        "units": 908
+      },
+      {
+        "iso2": "RU",
+        "slot": "forced_labor_section_301",
+        "units": 10266
+      },
+      {
+        "iso2": "SA",
+        "slot": "forced_labor_section_301",
+        "units": 402
+      },
+      {
+        "iso2": "SE",
+        "slot": "forced_labor_section_301",
+        "units": 938
+      },
+      {
+        "iso2": "SG",
+        "slot": "forced_labor_section_301",
+        "units": 444
+      },
+      {
+        "iso2": "SI",
+        "slot": "forced_labor_section_301",
+        "units": 818
+      },
+      {
+        "iso2": "SK",
+        "slot": "forced_labor_section_301",
+        "units": 906
+      },
+      {
+        "iso2": "SV",
+        "slot": "forced_labor_section_301",
+        "units": 838
+      },
+      {
+        "iso2": "TH",
+        "slot": "forced_labor_section_301",
+        "units": 3726
+      },
+      {
+        "iso2": "TR",
+        "slot": "forced_labor_section_301",
+        "units": 620
+      },
+      {
+        "iso2": "TT",
+        "slot": "forced_labor_section_301",
+        "units": 734
+      },
+      {
+        "iso2": "TW",
+        "slot": "forced_labor_section_301",
+        "units": 18456
+      },
+      {
+        "iso2": "UY",
+        "slot": "forced_labor_section_301",
+        "units": 412
+      },
+      {
+        "iso2": "VE",
+        "slot": "forced_labor_section_301",
+        "units": 398
+      },
+      {
+        "iso2": "VN",
+        "slot": "forced_labor_section_301",
+        "units": 8354
+      },
+      {
+        "iso2": "ZA",
+        "slot": "forced_labor_section_301",
+        "units": 10638
+      }
+    ],
+    "distinct_interval_cells": {
+      "brazil_section_301": 7065,
+      "forced_labor_section_301": 129635
+    },
+    "per_slot": {
+      "brazil_section_301": 14130,
+      "forced_labor_section_301": 259270
+    }
+  },
+  "inputs": {
+    "baseline_classification": {
+      "bytes": 13421,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/classification-receipt.json",
+      "sha256": "8890874d6162ae5acd17c300aa7567101aa77cd151687fa86b67036607748e2f"
+    },
+    "disposition_ledger": {
+      "bytes": 15614,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/campaign-dispositions.yaml",
+      "sha256": "d24e578836db1f5c5e076af600a049140ed499567c8c8d6823074184a706db53"
+    },
+    "driver": {
+      "bytes": 43035,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/preview_driver.py",
+      "sha256": "c8b757d1447ce6abd21edf217490247b69649a861d23bddabde03bc2849e77dd"
+    },
+    "entry_flag_tool": {
+      "bytes": 8171,
+      "path": "/Users/maxghenis/PolicyEngine/_tariff-p5/b1/c6-roots/rulespec-us/tools/b16_entry_flags.py",
+      "sha256": "8032dde5fe4a9bc14448cc84e338181a69b912e37b74331d89e9d5f9ef746c8a"
+    },
+    "routing": {
+      "bytes": 94243,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/disposition-routing.csv.gz",
+      "sha256": "7236c015bee357f33063a3ab7917c1b4ad42390d97ad2ecda26fad9bb21232b3"
+    },
+    "selected_intervals": {
+      "bytes": 75405367,
+      "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/selected-intervals.csv.gz",
+      "sha256": "94af0a2b36c7cde0840220810791672ae494da38f288fd1cb3de1a122eb91826"
+    }
+  },
+  "partition": {
+    "added_for_changed_flag_exposure": [
+      "74",
+      "98"
+    ],
+    "chapter_count": 94,
+    "chapters": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "28",
+      "29",
+      "30",
+      "32",
+      "33",
+      "34",
+      "35",
+      "36",
+      "37",
+      "38",
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50",
+      "51",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59",
+      "60",
+      "61",
+      "62",
+      "63",
+      "64",
+      "65",
+      "66",
+      "67",
+      "68",
+      "69",
+      "70",
+      "71",
+      "72",
+      "73",
+      "74",
+      "75",
+      "76",
+      "78",
+      "79",
+      "80",
+      "81",
+      "82",
+      "83",
+      "84",
+      "85",
+      "86",
+      "87",
+      "88",
+      "89",
+      "90",
+      "91",
+      "92",
+      "93",
+      "94",
+      "95",
+      "96",
+      "98"
+    ],
+    "old_class_chapter_count": 92,
+    "omitted_chapters": [
+      "27",
+      "31",
+      "97",
+      "99a",
+      "99b",
+      "99c"
+    ]
+  },
+  "schema": "axiom_oracles.us_tariff_schedule.preview_1311_static_footprint.v1",
+  "selected_interval_rows_scanned": 9913304,
+  "verdict": "PASS"
+}

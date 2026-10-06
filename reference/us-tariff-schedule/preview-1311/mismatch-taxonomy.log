@@ -1,0 +1,24 @@
+nice: setpriority: Operation not permitted
+{
+  "new_disagreement_rows": 246940,
+  "output": {
+    "bytes": 7491213,
+    "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/new-mismatch-cells.jsonl.gz",
+    "sha256": "7e26a7e746abd4d033b8dcc6b7d95efcece45b1405ac84238011500c84bbe029"
+  },
+  "primary_counts": {
+    "brazil-aircraft": 414,
+    "brazil-pharma": 84,
+    "cafta-52i": 17404,
+    "encoded-full-exemption": 0,
+    "forced-aircraft": 40392,
+    "forced-pharma": 1058,
+    "unmapped": 187588
+  },
+  "receipt": {
+    "bytes": 96104096,
+    "path": "/Users/maxghenis/TheAxiomFoundation/axiom-oracles-cert/reference/us-tariff-schedule/preview-1311/mismatch-taxonomy-receipt.json",
+    "sha256": "3d1a7543d738d6e396e111ff909c245f082146aeeeeef27d57a5da38f30e25de"
+  },
+  "verdict": "PASS"
+}
