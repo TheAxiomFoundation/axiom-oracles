@@ -64,7 +64,7 @@ DEFAULT_PERIOD = "2026-05"
 # (taxsimtest-osx.exe, build 20260521; see adapters/taxsim/taxsim_pins.json)
 # models law year 2026 rate schedules, the OBBBA standard deduction, childless
 # EITC, and FICA/SECA, so TAXSIM comparisons default to the same 2026
-# validation year as every other lane. The Linux binary in the same release
+# validation year as DEFAULT_PERIOD. The Linux binary in the same release
 # (taxsimtest-linux.exe) is an older build that stops at 2024 and fails on
 # 2025 and 2026 rows; on Linux, pass --period 2024. Known 2026 gap in the
 # macOS build, verified empirically: the qualifying-child credit machinery is
