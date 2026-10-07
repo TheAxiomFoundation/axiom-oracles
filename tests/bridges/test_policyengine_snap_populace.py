@@ -1,4 +1,5 @@
 import shutil
+import subprocess
 from datetime import date
 from pathlib import Path
 from types import SimpleNamespace
@@ -450,6 +451,7 @@ def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
     # Run from inside a monorepo jurisdiction directory (e.g. a rulespec-us
     # worktree's us-co/), that directory's program wins.
     worktree_dir = tmp_path / "rulespec-us-worktree" / jurisdiction
+    (worktree_dir.parent / "us").mkdir(parents=True)
     worktree_program = worktree_dir / config.program_relative_path
     worktree_program.parent.mkdir(parents=True)
     worktree_program.write_text("worktree\n")
@@ -461,4 +463,72 @@ def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
     override = tmp_path / "explicit.yaml"
     assert snap_populace.resolve_program_path(config, workspace, override) == (
         override.resolve()
+    )
+
+
+@pytest.mark.parametrize("jurisdiction", sorted(snap_populace.JURISDICTION_CONFIGS))
+@pytest.mark.parametrize("cwd_kind", ["unrelated", "renamed-archived", "other-owner"])
+def test_implicit_program_ignores_a_cwd_without_monorepo_identity(
+    jurisdiction, cwd_kind, monkeypatch, tmp_path
+):
+    """A jurisdiction basename alone cannot establish live monorepo membership."""
+    config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
+    workspace = tmp_path / "workspace"
+    expected = (
+        workspace / "rulespec-us" / jurisdiction / config.program_relative_path
+    )
+    expected.parent.mkdir(parents=True)
+    expected.write_text("live monorepo\n")
+
+    checkout = tmp_path / "elsewhere" / "rulespec-us"
+    cwd = checkout / jurisdiction
+    cwd_program = cwd / config.program_relative_path
+    cwd_program.parent.mkdir(parents=True)
+    cwd_program.write_text("unrelated or frozen rules\n")
+    if cwd_kind != "unrelated":
+        # Even a renamed checkout with a plausible country/state layout must
+        # not override the live monorepo when its origin identifies other rules.
+        (checkout / "us").mkdir()
+        remote = (
+            f"https://github.com/TheAxiomFoundation/rulespec-{jurisdiction}.git"
+            if cwd_kind == "renamed-archived"
+            else "https://github.com/OtherOwner/rulespec-us.git"
+        )
+        subprocess.run(["git", "init", "-q", str(checkout)], check=True)
+        subprocess.run(
+            ["git", "-C", str(checkout), "remote", "add", "origin", remote],
+            check=True,
+        )
+    monkeypatch.chdir(cwd)
+
+    assert snap_populace.resolve_program_path(config, workspace, None) == (
+        expected.resolve()
+    )
+    # Deliberately selecting a program remains an explicit supported exception.
+    assert snap_populace.resolve_program_path(config, workspace, cwd_program) == (
+        cwd_program.resolve()
+    )
+
+
+def test_implicit_program_accepts_a_renamed_live_monorepo_checkout(
+    monkeypatch, tmp_path
+):
+    config = snap_populace.JURISDICTION_CONFIGS["us-co"]
+    checkout = tmp_path / "current-worktree"
+    (checkout / "us").mkdir(parents=True)
+    program = checkout / config.jurisdiction / config.program_relative_path
+    program.parent.mkdir(parents=True)
+    program.write_text("live worktree\n")
+    subprocess.run(["git", "init", "-q", str(checkout)], check=True)
+    subprocess.run(
+        [
+            "git", "-C", str(checkout), "remote", "add", "origin",
+            "https://github.com/theaxiomfoundation/RuleSpec-US.git",
+        ],
+        check=True,
+    )
+    monkeypatch.chdir(checkout / config.jurisdiction)
+
+    assert snap_populace.resolve_program_path(config, tmp_path / "workspace", None) == (
+        program.resolve()
     )

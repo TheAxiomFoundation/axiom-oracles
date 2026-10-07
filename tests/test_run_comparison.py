@@ -1870,6 +1870,80 @@ def test_archived_clone_run_is_never_stamped_fresh(monkeypatch, tmp_path):
     ) == []
 
 
+@pytest.mark.parametrize(
+    "archived_slug",
+    [
+        "TheAxiomFoundation/rulespec-us-co",
+        "theaxiomfoundation/rulespec-us-co",
+        "TheAxiomFoundation/RuleSpec-US-CO",
+        "THEAXIOMFOUNDATION/RULESPEC-US-CO",
+    ],
+)
+@pytest.mark.parametrize("root_order", ["archived-only", "archived-first", "country-first"])
+def test_absorbed_layer_keeps_country_sha_unknown(
+    archived_slug, root_order, monkeypatch, tmp_path
+):
+    """Any absorbed layer prevents country freshness, regardless of casing,
+    root order, an already stamped country SHA, or a runner's cloned SHA.
+    Raw archived provenance must retain the actual origin and HEAD.
+    """
+    from axiom_oracles import provenance
+
+    country_slug = "TheAxiomFoundation/rulespec-us"
+    rc, config = _completion_fixture(monkeypatch, tmp_path, [country_slug])
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: tmp_path))
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+
+    def checkout(path, slug, content):
+        path.mkdir(parents=True)
+        for args in (
+            ["init", "-q"],
+            ["config", "user.name", "test"],
+            ["config", "user.email", "test@invalid"],
+            ["config", "commit.gpgsign", "false"],
+            ["remote", "add", "origin", f"https://github.com/{slug}.git"],
+        ):
+            subprocess.run(["git", "-C", str(path), *args], check=True)
+        (path / "fixture.txt").write_text(content)
+        subprocess.run(["git", "-C", str(path), "add", "fixture.txt"], check=True)
+        subprocess.run(["git", "-C", str(path), "commit", "-qm", "fixture"], check=True)
+        return provenance._git_sha(path)
+
+    archived = tmp_path / "archived"
+    monorepo = tmp_path / "TheAxiomFoundation" / "rulespec-us"
+    archived_sha = checkout(archived, archived_slug, "frozen")
+    country_sha = checkout(monorepo, country_slug, "current")
+    roots = {
+        "archived-only": [archived],
+        "archived-first": [archived, monorepo],
+        "country-first": [monorepo, archived],
+    }[root_order]
+    config["runner"] = {
+        "parameters": {"rulespec_roots": [str(path) for path in roots]},
+        "_cloned_rulespec_us_sha": country_sha,
+    }
+    output = tmp_path / "output.json"
+    output.write_text("{}")
+    block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+    assert {"repo": archived_slug, "sha": archived_sha} in block["rulespecs"]
+    assert {"repo": country_slug, "sha": None} in block["rulespecs"]
+
+    selector = load_script_module("select_affected_suites")
+    affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+    [decision] = selector.select(
+        affected_map, {country_slug: country_sha}, {"demo-suite": {"provenance": block}}
+    )
+    assert "rulespec-us: report ran against unknown SHA" in decision["reason"]
+
+    # A run using only the live country checkout still proves freshness.
+    config["runner"]["parameters"]["rulespec_roots"] = [str(monorepo)]
+    block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+    assert block["rulespecs"] == [{"repo": country_slug, "sha": country_sha}]
+    assert selector.select(
+        affected_map, {country_slug: country_sha}, {"demo-suite": {"provenance": block}}
+    ) == []
+
+
 def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
     """taxcalc==6.7.1 cannot resolve on 3.14 (no numba wheel); the lane pins
     `python: "3.13"` and the runner must pass it through to uv (#296)."""

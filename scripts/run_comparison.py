@@ -745,8 +745,9 @@ def _complete_rulespecs_from_affected_map(
       (:func:`axiom_oracles.provenance.resolve_rulespec_checkout` — the same
       locations the harnesses themselves search).
 
-    Entries that already carry a SHA are untouched, and declared-path entries
-    always win over convention lookups. Unresolvable repos keep or gain a
+    Declared-path entries win over convention lookups. Existing SHAs are
+    retained unless a declared absorbed layer makes country provenance
+    ambiguous. Unresolvable repos keep or gain a
     ``sha: None`` entry so the selector's conservative "cannot prove fresh"
     reading stays intact. So does a mapped repo that a declared checkout of an
     absorbed repo folds into (a clone of an archived ``rulespec-us-<st>``,
@@ -782,18 +783,26 @@ def _complete_rulespecs_from_affected_map(
         }
         completed = list(rulespecs)
         for repo in mapped_repos:
+            # Any absorbed layer makes this country's provenance ambiguous,
+            # even when a separate federal/country root supplied a live SHA.
+            if repo in read_absorbed_instead:
+                for entry in completed:
+                    if (entry.get("repo") or "").casefold() == repo.casefold():
+                        entry["sha"] = None
+                if repo not in by_repo:
+                    entry = {"repo": repo, "sha": None}
+                    by_repo[repo] = entry
+                    completed.append(entry)
+                continue
             if by_repo.get(repo, {}).get("sha"):
                 continue
             sha = None
-            # A declared absorbed-repo checkout means the run read frozen
-            # rules in place of this repo: vouch for no SHA of it.
-            if repo not in read_absorbed_instead:
-                if repo == "TheAxiomFoundation/rulespec-us":
-                    sha = runner.get("_cloned_rulespec_us_sha")
-                if sha is None:
-                    checkout = resolve_rulespec_checkout(repo)
-                    if checkout is not None:
-                        sha = _git_head_sha(checkout)
+            if repo == "TheAxiomFoundation/rulespec-us":
+                sha = runner.get("_cloned_rulespec_us_sha")
+            if sha is None:
+                checkout = resolve_rulespec_checkout(repo)
+                if checkout is not None:
+                    sha = _git_head_sha(checkout)
             if repo in by_repo:
                 if sha:
                     by_repo[repo]["sha"] = sha

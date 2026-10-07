@@ -190,6 +190,17 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
     return entries
 
 
+def checkout_remote_matches_slug(path: Path, slug: str) -> bool:
+    """Reject a checkout whose recognized GitHub origin names another repo.
+
+    GitHub identities are case-insensitive. Compare the raw origin identity:
+    absorption aliases identify dependencies, not the checkout actually read.
+    Without a recognized origin, callers must rely on layout conventions.
+    """
+    remote_slug = repo_slug_from_remote(_remote_url(path))
+    return remote_slug is None or remote_slug.casefold() == slug.casefold()
+
+
 def resolve_rulespec_checkout(slug: str) -> Path | None:
     """Locate a local checkout for a rulespec repo slug via layout conventions.
 
@@ -200,12 +211,13 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
     report's provenance can record the SHA of the checkout the run actually
     resolved. Git-bearing candidates win over bare directories (an rsync'd
     root without `.git` has no SHA to record); returns None when nothing
-    matches. The slug is canonicalized first, and absorbed repo names
-    (:data:`ABSORBED_RULESPEC_REPOS`) are never candidates, so no lookup can
-    land on an archived ``rulespec-us-<st>`` clone left on a supervised
-    machine.
+    matches. Absorbed repo names (:data:`ABSORBED_RULESPEC_REPOS`) resolve
+    through the country name. Candidates with a contradictory GitHub origin
+    are rejected even if renamed to that country name; candidates without a
+    recognized origin still rely on the supervised layout conventions.
     """
-    name = canonical_rulespec_slug(slug).split("/", 1)[-1]
+    slug = canonical_rulespec_slug(slug)
+    name = slug.split("/", 1)[-1]
     candidate_names = [name] + [
         alias for alias, target in _RULESPEC_DIR_ALIASES.items() if target == name
     ]
@@ -217,7 +229,12 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
     # the developer's convention-path checkout happens to be on.
     override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
     if override and name == "rulespec-us":
-        candidates.append(Path(override))
+        pinned = Path(override)
+        # An invalid pin still names the checkout the harness read. Falling
+        # back would attach an unrelated convention checkout's SHA to it.
+        if pinned.exists() and not checkout_remote_matches_slug(pinned, slug):
+            return None
+        candidates.append(pinned)
     for candidate_name in candidate_names:
         candidates.extend(
             [
@@ -226,7 +243,10 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
                 home / ".axiom-oracles" / "roots" / candidate_name,
             ]
         )
-    existing = [path for path in candidates if path.exists()]
+    existing = [
+        path for path in candidates
+        if path.exists() and checkout_remote_matches_slug(path, slug)
+    ]
     for path in existing:
         if _git_sha(path):
             return path
@@ -245,15 +265,17 @@ def canonical_rulespec_slug(name: str) -> str:
     → ``rulespec-uk``), an absorbed repo (``rulespec-us-co`` → ``rulespec-us``,
     see :data:`ABSORBED_RULESPEC_REPOS`), or an ``owner/repo`` slug (passthrough,
     except that an absorbed repo under :data:`RULESPEC_OWNER` folds the same
-    way). Non-rulespec names pass through unchanged (they are never
+    way, matching the GitHub owner and repository case-insensitively).
+    Non-rulespec names pass through unchanged (they are never
     affected-map keys).
 
     A checkout's git remote is stamped as-is (:func:`rulespec_provenance` never
     folds it), so a run that really read an archived clone still says so.
     """
     owner_prefix = f"{RULESPEC_OWNER}/"
-    if name.startswith(owner_prefix):
-        absorbed = ABSORBED_RULESPEC_REPOS.get(name[len(owner_prefix) :])
+    owner, separator, repo = name.partition("/")
+    if separator and owner.casefold() == RULESPEC_OWNER.casefold():
+        absorbed = ABSORBED_RULESPEC_REPOS.get(repo.casefold())
         return f"{owner_prefix}{absorbed}" if absorbed else name
     resolved = _RULESPEC_DIR_ALIASES.get(name, name)
     resolved = ABSORBED_RULESPEC_REPOS.get(resolved, resolved)

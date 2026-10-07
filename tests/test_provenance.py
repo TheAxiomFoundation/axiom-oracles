@@ -150,6 +150,13 @@ def test_rulespec_provenance_stamps_an_archived_clone_under_its_true_name(tmp_pa
         ("rulespec-us-dc", "TheAxiomFoundation/rulespec-us"),
         ("rulespec-us-ak", "TheAxiomFoundation/rulespec-us"),  # never existed
         ("TheAxiomFoundation/rulespec-us-tx", "TheAxiomFoundation/rulespec-us"),
+        ("theaxiomfoundation/rulespec-us-co", "TheAxiomFoundation/rulespec-us"),
+        ("TheAxiomFoundation/RuleSpec-US-CO", "TheAxiomFoundation/rulespec-us"),
+        ("THEAXIOMFOUNDATION/RULESPEC-US-CO", "TheAxiomFoundation/rulespec-us"),
+        (
+            "theaxiomfoundation/RuleSpec-UK-Kingston-Upon-Thames",
+            "TheAxiomFoundation/rulespec-uk",
+        ),
         (
             "rulespec-uk-kingston-upon-thames",
             "TheAxiomFoundation/rulespec-uk",
@@ -509,6 +516,53 @@ def test_resolve_rulespec_checkout_walks_uk_official_alias(monkeypatch, tmp_path
     assert provenance.resolve_rulespec_checkout(
         "TheAxiomFoundation/rulespec-uk"
     ) == official
+
+
+@pytest.mark.parametrize("location", ["override", "convention"])
+@pytest.mark.parametrize(
+    "remote_slug",
+    ["theaxiomfoundation/RuleSpec-US-CO", "someone/rulespec-us"],
+)
+def test_resolve_rulespec_checkout_rejects_a_renamed_wrong_repository(
+    location, remote_slug, monkeypatch, tmp_path
+):
+    """A country-named directory cannot establish country provenance when
+    its GitHub origin identifies an absorbed state or another owner's repo.
+    An invalid pinned root must not substitute a convention checkout's SHA.
+    """
+    from axiom_oracles import provenance
+
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: tmp_path))
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    convention = tmp_path / "TheAxiomFoundation" / "rulespec-us"
+    candidate = tmp_path / "renamed" / "rulespec-us" if location == "override" else convention
+    candidate.mkdir(parents=True)
+    subprocess.run(["git", "init", "-q", str(candidate)], check=True)
+    subprocess.run(
+        ["git", "-C", str(candidate), "remote", "add", "origin",
+         f"https://github.com/{remote_slug}.git"],
+        check=True,
+    )
+    monkeypatch.setattr(provenance, "_git_sha", lambda path: "a" * 40)
+    if location == "override":
+        monkeypatch.setenv("AXIOM_RULESPEC_US_ROOT", str(candidate))
+        convention.mkdir(parents=True)
+
+    country = "TheAxiomFoundation/rulespec-us"
+    assert provenance.resolve_rulespec_checkout(country) is None
+    output = tmp_path / "output.json"
+    output.write_text("{}")
+    rc = _load_run_comparison()
+    comparisons = tmp_path / "comparisons"
+    comparisons.mkdir()
+    (comparisons / "affected_map.json").write_text(json.dumps({
+        "suites": [{"suite": "demo", "name": "demo", "repos": [country]}]
+    }))
+    monkeypatch.setattr(rc, "COMPARISONS_DIR", comparisons)
+    block = rc._build_run_provenance(
+        {"name": "demo", "runner": {}}, "axiom-encode-snap-ecps-compare", output
+    )
+    assert block["rulespecs"] == [{"repo": country, "sha": None}]
 
 
 def test_snap_qc_skip_reemit_never_resolves_recorded_root(tmp_path, monkeypatch):
