@@ -13,7 +13,7 @@ if any invariant regressed:
   harness fed the engines different inputs; not an engine or encoding defect",
   dispositions/README.md) — which is exactly why it needs a ceiling: an
   explanatory bucket that blocks nothing can absorb an unbounded new residual
-  without any gate noticing. Today it absorbs 3,371 mismatches, 3,067 of them
+  without any gate noticing. Today it absorbs 3,340 mismatches, 3,067 of them
   in one ssi-ecps entry whose own evidence cites a v1-slice scope omission
   alongside genuine bridge-input divergence. Growth is legitimate sometimes, so
   this is a ratchet rather than a block: raising it means re-pinning through

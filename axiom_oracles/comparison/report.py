@@ -108,6 +108,7 @@ class ComparisonReportAccumulator:
         self._match_weight = 0.0
         self._mismatch_weight = 0.0
         self._aggregate_buckets: dict[str, dict] = defaultdict(_aggregate_bucket)
+        self._output_counts: Counter[tuple[str, str, str]] = Counter()
         self._mismatch_rows: list[dict] = []
         self._error_rows: list[dict] = []
         self._left_engine: str | None = None
@@ -144,6 +145,12 @@ class ComparisonReportAccumulator:
                     comparison,
                     weight,
                 )
+                for engine, variables in (
+                    (item.left_engine, comparison.left_variables),
+                    (item.right_engine, comparison.right_variables),
+                ):
+                    for variable in variables:
+                        self._output_counts[(comparison.variable, engine, variable)] += 1
 
         self._mismatch_rows.extend(
             _mismatch_rows(comparisons, cases_by_id, self._mappings_by_id)
@@ -217,11 +224,7 @@ class ComparisonReportAccumulator:
             "comparison_count": self._comparison_count,
             "error_count": len(self._error_rows),
             "engines": {"left": self._left_engine, "right": self._right_engine},
-            "outputs": _attested_output_rows(
-                self._aggregate_buckets,
-                self.mappings,
-                (self._left_engine, self._right_engine),
-            ),
+            "outputs": _attested_output_rows(self._output_counts),
         }
 
     def write_json(self, path: Path) -> None:
@@ -545,39 +548,24 @@ def _update_aggregate_bucket(
 
 
 def _attested_output_rows(
-    buckets: dict[str, dict],
-    mappings: list[ProgramMapping],
-    engines: tuple[str | None, str | None],
+    counts: Counter[tuple[str, str, str]],
 ) -> list[dict]:
     """Per-concept, per-engine evidence of which variables the run compared.
 
-    One row per (concept, engine, variable) that carried at least one
-    comparison. A concept whose mapping names no target for an engine is
-    skipped for that engine rather than guessed — the attestation records what
-    the run read, and an absent binding is itself the honest signal.
+    Counts include only targets present in the result used by each comparison.
+    Missing list components retain their comparator default of zero without
+    being recorded as evidence that the engine returned those variables.
     """
-    rows: list[dict] = []
-    for mapping in mappings:
-        bucket = buckets.get(mapping.concept_id)
-        if bucket is None or not bucket["comparison_count"]:
-            continue
-        for engine in engines:
-            if not engine:
-                continue
-            target = mapping.target_for_engine(engine)
-            names = [target] if isinstance(target, str) else list(target or ())
-            for name in names:
-                if not name:
-                    continue
-                rows.append(
-                    {
-                        "concept": mapping.concept_id,
-                        "engine": engine,
-                        "variable": name,
-                        "comparisons": bucket["comparison_count"],
-                    }
-                )
-    return rows
+    return [
+        {
+            "concept": concept,
+            "engine": engine,
+            "variable": variable,
+            "comparisons": count,
+        }
+        for (concept, engine, variable), count in sorted(counts.items())
+        if count > 0
+    ]
 
 
 def _aggregate_rows_from_buckets(

@@ -17,6 +17,9 @@ class VariableComparison:
     tolerance: float = 0
     relative_tolerance: float = 0
     description: str = ""
+    # Observed targets exclude absent list members filled with a default zero.
+    left_variables: tuple[str, ...] = ()
+    right_variables: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -126,7 +129,16 @@ class Comparator:
             tolerance=mapping.tolerance,
             relative_tolerance=mapping.relative_tolerance,
             description=mapping.description,
+            left_variables=self._observed_mapping_variables(mapping, left),
+            right_variables=self._observed_mapping_variables(mapping, right),
         )
+
+    def _observed_mapping_variables(
+        self, mapping: ProgramMapping, result: EngineResult
+    ) -> tuple[str, ...]:
+        key = self._mapping_key(mapping, result.engine)
+        names = [key] if isinstance(key, str) else list(key or ())
+        return tuple(name for name in dict.fromkeys(names) if name in result.values)
 
     def _has_mapping_value(self, mapping: ProgramMapping, result: EngineResult) -> bool:
         key = self._mapping_key(mapping, result.engine)

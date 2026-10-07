@@ -65,22 +65,10 @@ waivers:
   note: The report records policyengine = al_income_tax_before_refundable_credits; the universe row registers
     the final al_income_tax. The liability grid deliberately compares the pre-refundable-credit surface.
 - jurisdiction: us-pe
-  policy_id: us-pe:ctc
-  suite: fiit-ecps
-  reason: compared_surface_differs
-  note: All 13 compared surfaces resolve, and the child-tax-credit one is PolicyEngine's ctc_value, not
-    the ctc variable the universe row registers.
-- jurisdiction: us-pe
   policy_id: us-pe:elderly_disabled_credit
   suite: us-elderly-disabled-grid
   reason: oracle_variable_not_recorded
   note: The grid's single concept has no committed concept→PolicyEngine binding.
-- jurisdiction: us-pe
-  policy_id: us-pe:income_tax_before_refundable_credits
-  suite: fiit-ecps
-  reason: compared_surface_differs
-  note: All 13 compared surfaces resolve; the income-tax ones are income_tax, income_tax_main_rates and
-    income_tax_capped_non_refundable_credits — not income_tax_before_refundable_credits.
 - jurisdiction: us-pe
   policy_id: us-pe:ks_tanf
   suite: ks-tanf-ecps

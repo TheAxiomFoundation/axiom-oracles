@@ -92,6 +92,13 @@ FIIT_SURFACE_CONCEPTS: dict[str, dict] = {
         "category": "tax",
         "tolerance": 5,
     },
+    "income-tax": {
+        "concept": "us:tax/federal-income-tax#income_tax",
+        "description": "Federal income tax and refundable credits",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
     "nonrefundable-credits": {
         "concept": "us:tax/federal-income-tax#nonrefundable_credits",
         "description": "Federal capped nonrefundable credits",
@@ -3444,6 +3451,9 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     """
     from collections import Counter, defaultdict
 
+    from axiom_oracles.conformance.attestation import EXECUTION_ATTESTATION_SCHEMA
+    from axiom_oracles.conformance.fiit import fiit_output_rows
+
     identity = _normalize_dataset_identity(raw)
     dataset_label = _dataset_label_from_identity(identity, fallback="enhanced_cps")
 
@@ -3619,6 +3629,9 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "errors": [],
         "locales": [],
         "mismatches": flat_mismatches,
+        # Preserve the producer's output-level evidence; surface aggregates
+        # cannot distinguish a subset from the full configured output list.
+        "output_summary": raw.get("output_summary", []),
         "population": "enhanced-cps",
         "schema_version": "axiom.comparison_report.v2",
         "scope": {"geoid": "US", "type": "country"},
@@ -3641,6 +3654,17 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "mismatch_weight": parent_mismatches,
             },
         },
+    }
+    output_rows, outputs_complete = fiit_output_rows(report["output_summary"])
+    report["attestation"] = {
+        "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+        "executed": report["case_count"] > 0 and parent_compared > 0,
+        "case_count": report["case_count"],
+        "comparison_count": parent_compared,
+        "error_count": 0,
+        "engines": dict(report["engines"]),
+        "outputs": output_rows,
+        "outputs_complete": outputs_complete,
     }
     # Thread encode's dataset identity onto the report top-level so the
     # checked-in FIIT report records which pinned Populace artifact produced

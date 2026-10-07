@@ -24,7 +24,10 @@ ratchets:
   bridge_artifacts_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
-  covered_min: 34
+  # Correct the bootstrap floor: FIIT's generic mappings falsely covered
+  # capital_gains_tax, eitc and income_tax; the pre-refundable-tax waiver also
+  # lacked its claimed complete recording. All four await bound output evidence.
+  covered_min: 30
   # 2026-07-26: the az/ca SNAP migration off the legacy encoder harness
   # (matched by construction, no comparison information) surfaced
   # California's real residual surface: 684 mismatches over 7,101

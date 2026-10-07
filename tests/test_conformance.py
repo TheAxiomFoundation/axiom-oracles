@@ -631,9 +631,15 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
     assert covered <= live_pe_suites
     by_name = universe.by_name()
-    # Federal income tax + payroll ride the fiit-ecps bridge.
-    for program in ("income_tax", "eitc", "ctc", "employee_social_security_tax"):
+    # The FIIT producer records CTC and payroll output bindings.
+    for program in ("ctc", "employee_social_security_tax"):
         assert by_name[program].suite == "fiit-ecps", program
+    # Its recorded components do not establish these final policy outputs;
+    # suite-name registration must not reinstate their unsupported coverage.
+    for program in ("capital_gains_tax", "eitc", "income_tax", "income_tax_before_refundable_credits"):
+        assert by_name[program].suite is None, program
+        assert by_name[program].in_scope, program
+        assert by_name[program].note, program
     # SNAP is one national row registered to its canonical (largest) suite.
     assert by_name["snap"].suite == "ca-snap-ecps"
     assert by_name["aca_ptc"].suite == "us-aca-ptc-grid"
@@ -1091,6 +1097,11 @@ def _report(
         summary["dispositioned"] = dispositioned
     case_count = comparisons if cases is None else cases
     engines = engines if engines is not None else {"left": "euromod", "right": "axiom"}
+    oracle_engine = next(
+        (engines[role] for role in ("left", "right")
+         if engines.get(role) and engines[role] != "axiom"),
+        "euromod",
+    )
     attestation = {
         "schema_version": EXECUTION_ATTESTATION_SCHEMA,
         "executed": executed,
@@ -1101,7 +1112,7 @@ def _report(
         "outputs": [
             {
                 "concept": f"tx:{name}",
-                "engine": "euromod",
+                "engine": oracle_engine,
                 "variable": name,
                 "comparisons": comparisons,
             }
@@ -1113,6 +1124,10 @@ def _report(
         "engines": engines,
         "case_count": case_count,
         "summary": summary,
+        "aggregates": [
+            {"concept": f"tx:{name}", "comparison_count": comparisons}
+            for name in (outputs or ())
+        ],
         "mismatches": [],
         "errors": list(errors or []),
         "attestation": attestation,
@@ -2092,14 +2107,19 @@ def _waiver(**kw) -> AttestationWaiver:
 
 def test_waiver_restores_coverage_and_is_published_on_the_scoreboard():
     """A waived row stays covered — and the badge says how many it rests on."""
-    report = _report("suite-a", comparisons=5, matches=5, outputs=("y_s",))
+    universe = parse_universe(CONFORMANCE_DIR / "be.yaml")
+    policy = next(p for p in universe.policies if p.id == "be:tintb_be")
+    universe = replace(universe, policies=[policy])
+    report = json.loads(
+        (REPO_ROOT / "dashboard/public/data/axiom-euromod-be-marital-quotient.json").read_text()
+    )
     board, scores = score_jurisdiction(
-        _tx_universe(), [report], waivers=WaiverIndex([_waiver()])
+        universe, [report], waivers=parse_waivers(CONFORMANCE_DIR / "attestation_waivers.yaml")
     )
     assert board.covered == 1
     assert board.conformant is True
     assert board.covered_with_waived_output_attestation == 1
-    assert scores[0].output_attestation == "waived:oracle_variable_not_recorded"
+    assert scores[0].output_attestation == "waived:compared_surface_differs"
 
 
 def test_waiver_is_pinned_to_its_suite():

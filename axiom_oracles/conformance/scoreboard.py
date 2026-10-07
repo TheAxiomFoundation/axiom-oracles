@@ -307,7 +307,8 @@ def score_jurisdiction(
             output_attestation = "attested"
         else:
             waiver = waivers.waiver_for(
-                universe.jurisdiction, policy.id, policy.suite
+                universe.jurisdiction, policy.id, policy.suite,
+                report=report, reason=binding_gap,
             )
             if waiver is None:
                 uncovered_policies.append(policy.oracle_policy_name)

@@ -76,12 +76,19 @@ variable each side was read from), from the grid `engines` shape that records
 the compared variable directly, or from the concept→engine-target bindings the
 comparison machinery itself uses (`config/concept_mappings.yaml` and the
 PolicyEngine oracle registry) applied to the report's positive aggregates.
+FIIT uses its producer's `SURFACE_OUTPUTS` bindings and preserves `output_summary`;
+its targets differ from the generic Comparator mappings. Legacy FIIT surfaces
+bind only when counts show the producer's complete output loop or a mismatch
+explicitly names the output. Its synthetic liability parent adds no output binding.
 
 `attestation_waivers.yaml` names the reports that predate stamping and cannot
 show that binding. It is **hand-authored and shrink-only**: a new unbound row
 fails `scripts/conformance_attestation.py --check` instead of landing there, a
 waiver that is no longer needed is stale and fails too, and each is pinned to
-its suite so re-pointing a policy drops it. Two reasons are distinguished, and
+its suite and the complete approved legacy artifact's SHA-256. The fixed bootstrap
+set in `conformance/waivers.py` rejects additions and suite/reason changes;
+replacement artifacts and runner-stamped reports cannot use migration waivers.
+Two reasons are distinguished, and
 only the first is a statement about what a run did:
 
 | Reason | Meaning |
@@ -103,13 +110,22 @@ universe moved would be the wrong trade. So each covered row carries
 `oracle_release_drift` (the release its report actually recorded) and the
 jurisdiction carries `covered_with_oracle_release_drift`.
 
-Today that is **0 for be, uk and uk-pe** and **25 of us-pe's 34 covered
-policies** — `fiit-ecps` ran policyengine-us 1.729.0, `ca-snap-ecps` 1.705.1 and
+Today that is **0 for be, uk and uk-pe** and **21 of us-pe's 30 covered
+policies** — `fiit-ecps` ran policyengine-us 1.729.0, `ca-snap-ecps` 1.752.2 and
 the TANF/SSI/Medicaid population suites 1.752.2, against a universe pinned at
 1.767.3. The claim a badge makes is "Axiom conforms to *this* oracle at *this*
 release", so closing that gap means rerunning those suites at the pinned release
 (or re-pinning the universe to what the evidence actually covers). Making drift
 blocking is that scope decision, not a code change.
+
+The corrected FIIT bindings leave `capital_gains_tax`, final `eitc`, final
+`income_tax`, and `income_tax_before_refundable_credits` uncovered pending reports
+that record those outputs. CTC binds the producer's actual `ctc` target, so its
+former substantive waiver is removed. The legacy FIIT parent contains comparisons
+absent from its recorded component aggregates; its pre-refundable-tax waiver
+therefore cannot retain a reason that claims complete recording. Waivers fall
+from 20 to 18. The US coverage bootstrap floor is corrected from 34 to 30 to remove
+these unsupported claims; the ratchet's regression checks remain enforced.
 
 ## The pieces
 

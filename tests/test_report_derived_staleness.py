@@ -95,6 +95,7 @@ def _report(suite: str, *, comparisons: int, matches: int) -> dict:
             "error_count": 0,
         },
         "mismatches": [],
+        "aggregates": [{"concept": "tx:a", "comparison_count": comparisons}],
         "errors": [],
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,

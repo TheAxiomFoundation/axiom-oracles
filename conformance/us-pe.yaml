@@ -168,8 +168,9 @@ policies:
     output_vars:
       - capital_gains_tax
     in_scope: true
-    suite: fiit-ecps
-    note: Covered by fiit-ecps (us:tax/federal-income-tax#capital_gain).
+    suite: null
+    note: FIIT compares capital-gain definitions and income_tax_main_rates, not the registered
+      capital_gains_tax output. Coverage requires a report comparing capital_gains_tax.
   - id: us-pe:cdcc
     oracle_policy_name: cdcc
     oracle_policy_type: rules
@@ -330,8 +331,9 @@ policies:
     output_vars:
       - eitc
     in_scope: true
-    suite: fiit-ecps
-    note: Covered by fiit-ecps (us:tax/federal-income-tax#eitc) — the largest federal residual, undispositioned.
+    suite: null
+    note: FIIT's recorded EITC surface compares intermediate and eligibility outputs. Its report
+      does not bind the registered final eitc award; coverage requires that output's evidence.
   - id: us-pe:elderly_disabled_credit
     oracle_policy_name: elderly_disabled_credit
     oracle_policy_type: rules
@@ -556,18 +558,19 @@ policies:
     output_vars:
       - income_tax
     in_scope: true
-    suite: fiit-ecps
-    note: Covered by fiit-ecps — the federal income tax ECPS bridge compares PE-US income_tax (us:tax/federal-income-tax#liability)
-      at population scale vs PE-2026; residuals concentrate in EITC and tax-before-credits and are not
-      yet dispositioned (counted unexplained).
+    suite: null
+    note: FIIT's synthetic liability aggregate sums component counts but does not record the
+      registered final income_tax output. Coverage requires a report with that output's binding.
   - id: us-pe:income_tax_before_refundable_credits
     oracle_policy_name: income_tax_before_refundable_credits
     oracle_policy_type: rules
     output_vars:
       - income_tax_before_refundable_credits
     in_scope: true
-    suite: fiit-ecps
-    note: Covered by fiit-ecps (us:tax/federal-income-tax#tax_before_credits).
+    suite: null
+    note: FIIT's recorded tax-before-credits surface compares income_tax_main_rates. The report
+      does not bind income_tax_before_refundable_credits; its former waiver reason was inferred
+      from another producer's mappings and cannot be retained.
   - id: us-pe:itemized_taxable_income_deductions
     oracle_policy_name: itemized_taxable_income_deductions
     oracle_policy_type: rules

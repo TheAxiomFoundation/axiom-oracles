@@ -17,7 +17,9 @@ The waiver file is hand-authored and **shrink-only**, so ``--check`` fails on:
   policy is no longer covered) — stale entries must be pruned so the debt only
   falls;
 * a waiver whose ``reason`` disagrees with the computed one, or whose ``suite``
-  is not the suite the universe now names.
+  is not the suite the universe now names;
+* an addition or suite/reason change from the approved bootstrap set, or a
+  waiver applied to a different artifact or a runner-stamped report.
 
 Usage::
 
@@ -95,6 +97,7 @@ def survey() -> tuple[list[dict], list[AttestationWaiver]]:
                     "jurisdiction": universe.jurisdiction,
                     "policy_id": policy.id,
                     "suite": policy.suite,
+                    "report": report,
                     "eligible": attestation.eligible,
                     "problems": list(attestation.problems),
                     "binding_gap": gap,
@@ -121,7 +124,10 @@ def survey() -> tuple[list[dict], list[AttestationWaiver]]:
 
 def check(rows: list[dict], needed: list[AttestationWaiver]) -> list[str]:
     """Gate messages (empty ⇒ pass)."""
-    committed = parse_waivers(WAIVERS_PATH)
+    try:
+        committed = parse_waivers(WAIVERS_PATH)
+    except ValueError as error:
+        return [str(error)]
     problems: list[str] = []
 
     for row in rows:
@@ -133,22 +139,20 @@ def check(rows: list[dict], needed: list[AttestationWaiver]) -> list[str]:
             )
 
     needed_by_key = {waiver.key: waiver for waiver in needed}
+    rows_by_key = {(row["jurisdiction"], row["policy_id"]): row for row in rows}
     for key, waiver in sorted(needed_by_key.items()):
-        held = committed.waiver_for(waiver.jurisdiction, waiver.policy_id, waiver.suite)
+        held = committed.waiver_for(
+            waiver.jurisdiction, waiver.policy_id, waiver.suite,
+            report=rows_by_key[key]["report"], reason=waiver.reason,
+        )
         if held is None:
             problems.append(
                 f"[{waiver.jurisdiction}] {waiver.policy_id} is covered by suite "
                 f"{waiver.suite!r} but no registered output of that policy carries "
                 f"comparison evidence in the report ({waiver.reason}). Bind the "
-                "suite to the policy's outputs (regenerate the report so it stamps "
-                "an attestation), or — only for a pre-attestation artifact — add "
-                "the row to conformance/attestation_waivers.yaml with a note."
-            )
-        elif held.reason != waiver.reason:
-            problems.append(
-                f"[{waiver.jurisdiction}] {waiver.policy_id}: waiver reason "
-                f"{held.reason!r} no longer matches the computed reason "
-                f"{waiver.reason!r} — re-state why the binding cannot be shown."
+                "suite to the policy's outputs and regenerate the report. A "
+                "migration waiver can apply only to its approved bootstrap "
+                "suite, reason and unstamped artifact; new waivers are forbidden."
             )
 
     for key in sorted(committed.keys() - set(needed_by_key)):

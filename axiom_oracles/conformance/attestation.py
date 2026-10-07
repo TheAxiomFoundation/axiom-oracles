@@ -36,6 +36,8 @@ comes, in order of authority, from
   variables it queried and how many comparisons each carried;
 * the report's ``engines`` map when it is written in the engine→variable shape
   (``{"axiom": "...", "policyengine": "al_income_tax_before_refundable_credits"}``);
+* FIIT's producer-specific ``SURFACE_OUTPUTS`` bindings when legacy surface
+  counts prove its complete output loop, or a mismatch names the output;
 * the concept→engine-target bindings the comparison machinery itself uses —
   ``axiom_oracles/config/concept_mappings.yaml`` (``ProgramMapping``) and the
   PolicyEngine oracle registry (``bridges/mappings/*.yaml``) — applied to the
@@ -215,7 +217,7 @@ def attest(
 
     executed = True
     if stamped:
-        problems.extend(_stamp_problems(stamp, case_count, comparison_count, error_count))
+        problems.extend(_stamp_problems(stamp, report, case_count, comparison_count, error_count))
         if stamp.get("executed") is False:
             executed = False
             problems.append(
@@ -361,7 +363,7 @@ def _identity_problems(report: dict, oracle, suite: str) -> tuple[list[str], str
 
 
 def _stamp_problems(
-    stamp: dict, case_count: int, comparison_count: int, error_count: int
+    stamp: dict, report: dict, case_count: int, comparison_count: int, error_count: int
 ) -> list[str]:
     """A stamp may not claim more than the report body shows.
 
@@ -389,6 +391,46 @@ def _stamp_problems(
                 f"body ({body_value}) — the stamp must be produced by the run "
                 "that wrote the report"
             )
+    engines = _engine_names(report)
+    if "engines" in stamp and _engine_names(stamp) != engines:
+        problems.append("attestation engines contradict the report body")
+
+    # Each variable may be one component of a summed concept, so its observed
+    # count may be smaller than the aggregate, but cannot exceed that evidence.
+    aggregate_counts = {
+        row.get("concept"): _int(row.get("comparison_count"))
+        for row in report.get("aggregates") or []
+        if isinstance(row, dict) and isinstance(row.get("concept"), str)
+    }
+    outputs = stamp.get("outputs")
+    if outputs is None:
+        return problems
+    if not isinstance(outputs, list):
+        return problems + ["attestation outputs must be a list"]
+    seen: set[tuple[str, str, str]] = set()
+    for entry in outputs:
+        if not isinstance(entry, dict):
+            problems.append("attestation output must name a concept, engine and variable")
+            continue
+        concept = entry.get("concept")
+        engine = entry.get("engine")
+        variable = entry.get("variable")
+        if not all(isinstance(value, str) and value for value in (concept, engine, variable)):
+            problems.append("attestation output must explicitly name its concept, engine and variable")
+            continue
+        if engine not in engines:
+            problems.append(f"attestation output engine {engine!r} is absent from the report body")
+        count = entry.get("comparisons")
+        bound = min(aggregate_counts.get(concept, 0), comparison_count)
+        if not isinstance(count, int) or isinstance(count, bool) or not 0 < count <= bound:
+            problems.append(
+                f"attestation output {concept!r}/{variable!r} comparisons={count!r} "
+                f"contradicts positive report body evidence ({bound})"
+            )
+        key = (concept, engine, variable)
+        if key in seen:
+            problems.append(f"attestation repeats output evidence for {key!r}")
+        seen.add(key)
     return problems
 
 
@@ -404,7 +446,7 @@ def _attested_outputs(
         for entry in stamp.get("outputs") or []:
             if not isinstance(entry, dict):
                 continue
-            if entry.get("engine") not in (None, oracle_engine):
+            if entry.get("engine") != oracle_engine:
                 continue
             if _int(entry.get("comparisons")) <= 0:
                 continue
@@ -413,9 +455,15 @@ def _attested_outputs(
                 names.add(variable)
             elif isinstance(variable, list):
                 names.update(str(item) for item in variable if item)
-        # A stamp enumerates every output the run compared, so the recording is
-        # complete by construction — that is what stamping means.
-        return frozenset(names), True
+        # An adapter can preserve an unresolved producer surface without
+        # inventing its target; it explicitly records incomplete output names.
+        return frozenset(names), stamp.get("outputs_complete", True) is not False
+
+    from .fiit import legacy_fiit_outputs
+
+    fiit_outputs = legacy_fiit_outputs(report, oracle_engine)
+    if fiit_outputs is not None:
+        return fiit_outputs
 
     names = set(_engines_map_variables(report, oracle_engine))
     resolved_every_surface = True
