@@ -476,12 +476,11 @@ def attach_generic_inputs(
     # (axiom_oracles/data/populace_input_mapping.yaml); this just picks the
     # entries that match the program's specific slots.
     if ecps_mapping is None and load_default_mapping:
-        try:
-            from .populace_mapping_loader import load_populace_mapping_for_program
+        # A table that fails to load (a bad entry, an unknown transform or concept) must stop the
+        # run: swallowing it here left every slot at its default, which reads as a data difference.
+        from .populace_mapping_loader import load_populace_mapping_for_program
 
-            ecps_mapping = load_populace_mapping_for_program(program)
-        except Exception:
-            ecps_mapping = None
+        ecps_mapping = load_populace_mapping_for_program(program)
 
     # Derive a stable synthetic target from the compiled-program path so the
     # absolute references the engine sees are deterministic per program.

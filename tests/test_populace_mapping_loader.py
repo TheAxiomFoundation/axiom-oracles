@@ -367,3 +367,25 @@ def test_deprecated_ecps_mapping_loader_alias_resolves_to_populace_loader() -> N
     assert (
         legacy.load_ecps_mapping_for_program is load_populace_mapping_for_program
     )
+
+
+def test_an_unknown_transform_fails_when_the_table_loads():
+    import pytest
+
+    from axiom_oracles.adapters.axiom.populace_mapping_loader import TRANSFORMS, _build_derived_mapper
+
+    assert "monthly" in TRANSFORMS
+    with pytest.raises(ValueError, match="unknown transform 'astrology'"):
+        _build_derived_mapper("household", {"kind": "derived", "transform": "astrology"})
+
+
+def test_every_transform_in_the_table_is_implemented():
+    from pathlib import Path
+
+    import yaml
+
+    from axiom_oracles.adapters.axiom.populace_mapping_loader import TRANSFORMS
+
+    table = Path(__file__).resolve().parent.parent / "axiom_oracles" / "data" / "populace_input_mapping.yaml"
+    used = {r["source"]["transform"] for r in yaml.safe_load(table.read_text())["mappings"] if r["source"]["kind"] == "derived"}
+    assert used <= TRANSFORMS
