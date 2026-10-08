@@ -3,12 +3,12 @@
     {
       "category": "tax",
       "comparison": "amount",
-      "comparison_count": 967396,
+      "comparison_count": 967426,
       "components": [],
       "concept": "ca:policies/cra/t1-2025/federal-tax-on-taxable-income#federal_2025_t1_tax_on_taxable_income_line_76",
       "description": "Federal tax on taxable income (2025 T1 Step 5 Part A) vs SPSM federal tax before credits",
-      "match_count": 958555,
-      "mismatch_count": 8841
+      "match_count": 958724,
+      "mismatch_count": 8702
     }
   ],
   "case_count": 327970,
@@ -27,10 +27,6 @@
   ],
   "mismatches": [
     {
-      "difference": -3445242.15,
-      "kind": "spsm_above_axiom"
-    },
-    {
       "difference": 17878.35,
       "kind": "axiom_above_spsm"
     },
@@ -39,43 +35,7 @@
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": -3714492.67,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -5487949.75,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -4867585.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -324355.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": 52545.63,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": -4157208.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -7513.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -4756.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
       "difference": 20801.37,
-      "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": 33439.48,
       "kind": "axiom_above_spsm"
     },
     {
@@ -87,18 +47,6 @@
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": -4332583.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -4380.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": 15005.25,
-      "kind": "axiom_above_spsm"
-    },
-    {
       "difference": 51722.76,
       "kind": "axiom_above_spsm"
     },
@@ -107,76 +55,12 @@
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": 12290.97,
-      "kind": "axiom_above_spsm"
-    },
-    {
       "difference": 65050.84,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": -3556106.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -19109.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -58856.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -660.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -554.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -3703873.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -27124.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
       "difference": 104481.19,
       "kind": "axiom_above_spsm"
-    },
-    {
-      "difference": -7682970.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -2945.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -644.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -818.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -3426.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -5630479.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -19251.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -8164.0,
-      "kind": "spsm_above_axiom"
     },
     {
       "difference": 37748.23,
@@ -187,51 +71,167 @@
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": -3339751.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -4261.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
-      "difference": -9088.0,
-      "kind": "spsm_above_axiom"
-    },
-    {
       "difference": 436771.33,
       "kind": "axiom_above_spsm"
     },
     {
-      "difference": -6968081.0,
-      "kind": "spsm_above_axiom"
+      "difference": 14860.95,
+      "kind": "axiom_above_spsm"
     },
     {
-      "difference": -3821.0,
-      "kind": "spsm_above_axiom"
+      "difference": 190209.87,
+      "kind": "axiom_above_spsm"
     },
     {
-      "difference": -1334.0,
-      "kind": "spsm_above_axiom"
+      "difference": 11734.06,
+      "kind": "axiom_above_spsm"
     },
     {
-      "difference": -1634.0,
-      "kind": "spsm_above_axiom"
+      "difference": 39584.86,
+      "kind": "axiom_above_spsm"
     },
     {
-      "difference": -3653147.0,
-      "kind": "spsm_above_axiom"
+      "difference": 43618.25,
+      "kind": "axiom_above_spsm"
     },
     {
-      "difference": -6690.0,
-      "kind": "spsm_above_axiom"
+      "difference": 194800.9,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 127047.68,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 122240.78,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 89568.68,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 318446.97,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 75823.16,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 1594411.65,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 37353.86,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 78231.23,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 30584.18,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 65987.06,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 38176.09,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 12931.19,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 44790.89,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 44755.41,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 7786.72,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 27007.09,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 76235.91,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 46196.39,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 27892.93,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 24025.02,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 65422.02,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 397334.16,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 84380.48,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 38866.34,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 47822.32,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 60422.59,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 1120644.34,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 10968.24,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 44761.59,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 26971.77,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 19434.68,
+      "kind": "axiom_above_spsm"
+    },
+    {
+      "difference": 7293.91,
+      "kind": "axiom_above_spsm"
     }
   ],
   "population": "spsd-synthetic-2022",
   "provenance": {
     "attribution": "This analysis is based on Statistics Canada's Social Policy Simulation Database and Model. The assumptions and calculations underlying the simulation results were prepared by the Axiom Foundation and the responsibility for the use and interpretation of these data is entirely that of the author(s).",
-    "generated": "2026-07-26",
-    "generated_at": "2026-07-26T05:50:24Z",
+    "generated": "2026-07-27",
+    "generated_at": "2026-07-27T04:39:49Z",
     "generator": "scripts/generate_ca_federal_tax_spsm.py",
     "licence": "SPSD/M Licence Agreement v34; no Package contents are redistributed with this repository (s.3.1).",
     "oracle": "spsm",
@@ -261,27 +261,28 @@
   },
   "suite": "ca-federal-schedule-tax-spsm",
   "summary": {
-    "amt_overwrite_class_count": 8588,
-    "comparison_count": 967396,
+    "amt_overwrite_class_count": 8589,
+    "comparison_count": 967426,
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
         "bridge_artifact": 0,
         "explained_residual": 0,
         "unexplained": 0,
-        "upstream_engine_gap": 8588
+        "upstream_engine_gap": 8605
       },
       "dispositions_file": null,
       "expired_entries": [],
-      "explained_rate": 99.97,
+      "explained_rate": 99.99,
       "orphaned_entries": [],
-      "raw_match_rate": 99.09,
+      "raw_match_rate": 99.1,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 253
+      "unexplained_count": 97
     },
-    "match_count": 958555,
-    "match_rate": 99.09,
-    "mismatch_count": 8841,
-    "unclassified_count": 253
+    "match_count": 958724,
+    "match_rate": 99.1,
+    "mismatch_count": 8702,
+    "pension_splitting_class_count": 16,
+    "unclassified_count": 97
   }
 }

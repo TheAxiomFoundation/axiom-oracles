@@ -3,12 +3,21 @@
 name: ks-tanf-ecps
 title: Kansas TANF maximum benefit -- Axiom vs PolicyEngine
 description: >-
-  Compares the composed KEESM 7410 maximum-benefit standard (basic
+  Compares the monthly composed KEESM 7410 maximum-benefit standard (basic
   allowance plus energy supplement plus county shelter group, fixed at
-  group V / table-I percentage to match PolicyEngine's single combined
+  group I / table-I percentage to match PolicyEngine's single combined
   table) against PolicyEngine's ks_tanf_maximum_benefit on Enhanced CPS
   households in Kansas. The countable-income path is not yet encoded, so
   this scores the standards composition, not end-to-end eligibility.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
+# staging fails the engine's canonical-path scan (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049) before any comparison runs;
+# rulespec-us#1050 (removed plural corpus_citation_paths) and -- for the
+# composed program lanes -- axiom-compose#29 and axiom-oracles#335 queue
+# behind it. Manual lane only; drop this marker when the upstream chain lands
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
 
 runner:
   type: axiom-oracles-compare
@@ -25,6 +34,10 @@ runner:
     sample_size: 0
     period: 2026-01
     population: enhanced-cps
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
     jurisdiction_fips: "20"
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
     axiom_program: $HOME/axiom-oracles/programs/us-ks/tanf/fy-2026.yaml

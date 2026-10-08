@@ -222,7 +222,11 @@ def taxsim_input_for_case(
             if spouse is not None
             else 0
         ),
-        "dividends": _sum_fact(earners, Concepts.DIVIDEND_INCOME),
+        # TAXSIM's dividends column is qualified-dividend income (taxed at
+        # the preferential rate); only the qualified leaf belongs there. The
+        # non-qualified remainder rides in otherprop with the other ordinary
+        # NIIT-subject property income so AGI stays whole.
+        "dividends": _qualified_dividends(earners),
         "intrec": _sum_fact(earners, Concepts.INTEREST_INCOME),
         "stcg": _sum_fact(earners, Concepts.SHORT_TERM_CAPITAL_GAINS),
         "ltcg": _sum_fact(earners, Concepts.LONG_TERM_CAPITAL_GAINS),
@@ -230,7 +234,8 @@ def taxsim_input_for_case(
         # Rental/royalty income flows through TAXSIM's other-property
         # column; zero-filling it depressed TAXSIM AGI on every
         # rental-income unit relative to the axiom side.
-        "otherprop": _sum_fact(earners, Concepts.RENTAL_INCOME),
+        "otherprop": _sum_fact(earners, Concepts.RENTAL_INCOME)
+        + _nonqualified_dividends(earners),
         "gssi": _sum_fact(earners, Concepts.SOCIAL_SECURITY_BENEFITS),
         "pui": _number(head.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0)),
         "sui": (
@@ -254,6 +259,32 @@ def taxsim_input_for_case(
 
 def _sum_fact(people: list[Entity], concept: str) -> float:
     return sum(_number(person.fact(concept, 0)) for person in people)
+
+
+def _qualified_dividends(people: list[Entity]) -> float:
+    # Qualified dividends are a subset of total dividends; some ECPS rows
+    # carry only the qualified leaf, so cap at the person's larger total.
+    return sum(
+        min(
+            _number(person.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
+            max(
+                _number(person.fact(Concepts.DIVIDEND_INCOME, 0)),
+                _number(person.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
+            ),
+        )
+        for person in people
+    )
+
+
+def _nonqualified_dividends(people: list[Entity]) -> float:
+    return sum(
+        max(
+            0.0,
+            _number(person.fact(Concepts.DIVIDEND_INCOME, 0))
+            - _number(person.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
+        )
+        for person in people
+    )
 
 
 def _people(case: Case) -> list[Entity]:

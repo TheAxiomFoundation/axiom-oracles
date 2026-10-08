@@ -1,108 +1,30 @@
 {
  "suite": "md-income-tax-liability",
- "updated": "2026-07-09",
+ "updated": "2026-07-27",
  "entries": [
   {
-   "id": "md-taxsim-2024-vintage-single-30000",
+   "id": "md-uprating-vintage-flat-deltas",
    "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
    "kind": "amount_difference",
    "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Maryland's section 10-105 state rate schedule is unchanged between 2024 and 2026; the residual is the Maryland standard-deduction vintage. The maximum standard deduction is 700 dollars per filer lower in 2024, so 2024 Maryland taxable income and tax are higher by 700 times the number of filers times the case's marginal rate (700 * 0.0475 = 33.25 for a single filer in the 4.75-per-cent bracket). TAXSIM's siitax adds no Maryland county tax for this unspecified-county grid, matching the state-only target. The pipeline reports 1059.0; TAXSIM 2024 reports 1092.25. State-only 2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine md_income_tax_before_refundable_credits at 2026 to the cent.",
+   "mechanism": "Parameter uprating vintage between the legs: the axiom program carries\nFY2026-uprated MD parameters while the oracle leg's parameter set holds\nthe prior vintage, producing income-invariant flat deltas within each\nfiling band (the fingerprint: identical differences across the grid's\nincome levels \u2014 e.g. Washington's flat \\$163.92 equals the 7 percent\nrate times the \\$2,342 capital-gains standard-deduction vintage gap, PE\n278,000 vs axiom's uprated value). Favors the encoded 2026 truth;\nresolves when the oracle's parameters uprate.",
    "cases": [
-    "md-single-30000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "1059.0 - 1092.25",
-     "equals": -33.25
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "md-taxsim-2024-vintage-single-60000",
-   "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Maryland's section 10-105 state rate schedule is unchanged between 2024 and 2026; the residual is the Maryland standard-deduction vintage. The maximum standard deduction is 700 dollars per filer lower in 2024, so 2024 Maryland taxable income and tax are higher by 700 times the number of filers times the case's marginal rate (700 * 0.0475 = 33.25 for a single filer in the 4.75-per-cent bracket). TAXSIM's siitax adds no Maryland county tax for this unspecified-county grid, matching the state-only target. The pipeline reports 2484.0; TAXSIM 2024 reports 2517.25. State-only 2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine md_income_tax_before_refundable_credits at 2026 to the cent.",
-   "cases": [
+    "md-married-120000",
+    "md-married-60000",
+    "md-single-30000",
     "md-single-60000"
    ],
    "arithmetic": [
     {
-     "expression": "2484.0 - 2517.25",
-     "equals": -33.25
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "md-taxsim-2024-vintage-single-150000",
-   "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Maryland's section 10-105 state rate schedule is unchanged between 2024 and 2026; the residual is the Maryland standard-deduction vintage. The maximum standard deduction is 700 dollars per filer lower in 2024, so 2024 Maryland taxable income and tax are higher by 700 times the number of filers times the case's marginal rate (700 * 0.0475 = 33.25 for a single filer in the 4.75-per-cent bracket). TAXSIM's siitax adds no Maryland county tax for this unspecified-county grid, matching the state-only target. The pipeline reports 7039.5; TAXSIM 2024 reports 7076.25. State-only 2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine md_income_tax_before_refundable_credits at 2026 to the cent.",
-   "cases": [
-    "md-single-150000"
-   ],
-   "arithmetic": [
+     "expression": "8.54",
+     "equals": 8.54
+    },
     {
-     "expression": "7039.5 - 7076.25",
-     "equals": -36.75
+     "expression": "13.12",
+     "equals": 13.12
     }
    ],
-   "linked_issue": null
-  },
-  {
-   "id": "md-taxsim-2024-vintage-married-60000",
-   "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Maryland's section 10-105 state rate schedule is unchanged between 2024 and 2026; the residual is the Maryland standard-deduction vintage. The maximum standard deduction is 700 dollars per filer lower in 2024, so 2024 Maryland taxable income and tax are higher by 700 times the number of filers times the case's marginal rate (700 * 0.0475 = 33.25 for a single filer in the 4.75-per-cent bracket). TAXSIM's siitax adds no Maryland county tax for this unspecified-county grid, matching the state-only target. The pipeline reports 2168.125; TAXSIM 2024 reports 2234.63. State-only 2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine md_income_tax_before_refundable_credits at 2026 to the cent.",
-   "cases": [
-    "md-married-60000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "2168.125 - 2234.63",
-     "equals": -66.505
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "md-taxsim-2024-vintage-married-120000",
-   "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Maryland's section 10-105 state rate schedule is unchanged between 2024 and 2026; the residual is the Maryland standard-deduction vintage. The maximum standard deduction is 700 dollars per filer lower in 2024, so 2024 Maryland taxable income and tax are higher by 700 times the number of filers times the case's marginal rate (700 * 0.0475 = 33.25 for a single filer in the 4.75-per-cent bracket). TAXSIM's siitax adds no Maryland county tax for this unspecified-county grid, matching the state-only target. The pipeline reports 5018.125; TAXSIM 2024 reports 5084.63. State-only 2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine md_income_tax_before_refundable_credits at 2026 to the cent.",
-   "cases": [
-    "md-married-120000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "5018.125 - 5084.63",
-     "equals": -66.505
-    }
-   ],
-   "linked_issue": null
-  },
-  {
-   "id": "md-taxsim-2024-vintage-married-300000",
-   "concept": "us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability",
-   "kind": "amount_difference",
-   "disposition": "explained_residual",
-   "mechanism": "TAXSIM runs at its latest 2024 law year. Maryland's section 10-105 state rate schedule is unchanged between 2024 and 2026; the residual is the Maryland standard-deduction vintage. The maximum standard deduction is 700 dollars per filer lower in 2024, so 2024 Maryland taxable income and tax are higher by 700 times the number of filers times the case's marginal rate (700 * 0.0475 = 33.25 for a single filer in the 4.75-per-cent bracket). TAXSIM's siitax adds no Maryland county tax for this unspecified-county grid, matching the state-only target. The pipeline reports 14695.75; TAXSIM 2024 reports 14772.75. State-only 2024-law-year vintage, not a pipeline defect; the pipeline matches PolicyEngine md_income_tax_before_refundable_credits at 2026 to the cent.",
-   "cases": [
-    "md-married-300000"
-   ],
-   "arithmetic": [
-    {
-     "expression": "14695.75 - 14772.75",
-     "equals": -77.0
-    }
-   ],
-   "linked_issue": null
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/315"
   }
  ]
 }

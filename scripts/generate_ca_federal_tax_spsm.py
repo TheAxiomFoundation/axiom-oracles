@@ -76,11 +76,50 @@ ASCVARS       -
 \timtaxcr
 \timbft
 \timamtdf
+\tidipens
+\timipnst
 \t-
 """
 
 DIALOGUE_CONTROL = "$spsd/ba25"
 DIALOGUE_SAMPLE = None  # None = full database
+
+
+def _dispositioned_block(
+    *,
+    counts: dict[str, int],
+    comparison_count: int,
+    match_count: int,
+    unexplained_count: int,
+) -> dict:
+    """A ``summary.dispositioned`` block under the canonical semantics.
+
+    ``explained_rate`` counts every classified row — the same
+    ``CLASSIFIED_DISPOSITION_KINDS`` formula ``apply_dispositions`` uses —
+    so a future encoding-gap classification here cannot silently diverge
+    from the merge pipeline's definition of "explained".
+    """
+    from axiom_oracles.comparison.dispositions import (
+        CLASSIFIED_DISPOSITION_KINDS,
+        DISPOSITIONS_SCHEMA_VERSION,
+    )
+
+    classified = sum(
+        counts.get(kind, 0) for kind in CLASSIFIED_DISPOSITION_KINDS
+    )
+    n = comparison_count
+    return {
+        "schema_version": DISPOSITIONS_SCHEMA_VERSION,
+        "dispositions_file": None,
+        "counts": counts,
+        "unexplained_count": unexplained_count,
+        "raw_match_rate": round(100.0 * match_count / n, 2) if n else 0,
+        "explained_rate": (
+            round(100.0 * (match_count + classified) / n, 2) if n else 0
+        ),
+        "expired_entries": [],
+        "orphaned_entries": [],
+    }
 
 
 def run_spsm(output_name: str) -> Path:
@@ -101,6 +140,20 @@ def run_spsm(output_name: str) -> Path:
             + (process.stdout or "")[-2000:]
         )
     return prn
+
+
+_TH = [0, 57375, 114750, 177882, 253414]
+_RATE = [0.145, 0.205, 0.26, 0.29, 0.33]
+_BASE = [0, 8319.38, 20081.25, 36495.57, 58399.85]
+
+
+def _inverse_schedule(tax: float) -> float:
+    """Taxable income that produces this 2025 schedule tax."""
+
+    for bracket in range(4, -1, -1):
+        if tax >= _BASE[bracket] - 0.01:
+            return _TH[bracket] + (tax - _BASE[bracket]) / _RATE[bracket]
+    return 0.0
 
 
 def axiom_schedule_tax(
@@ -218,22 +271,26 @@ def main() -> int:
         prn = args.extract.expanduser()
 
     households = parse_case_output(prn)
-    rows: list[tuple[int, int, float, float, float]] = []
+    rows: list[tuple[int, int, float, float, float, float]] = []
     for household in households:
         taxable = household.values.get("imitax", [])
         fedtax = household.values.get("imfedtax", [])
         amtdf = household.values.get("imamtdf", [])
+        pension = household.total("idipens")
         for member in range(len(fedtax)):
             ti = taxable[member] if member < len(taxable) else 0.0
             amt = amtdf[member] if member < len(amtdf) else 0.0
-            rows.append((household.sequence, member, ti, fedtax[member], amt))
+            rows.append(
+                (household.sequence, member, ti, fedtax[member], amt, pension)
+            )
 
     axiom_values = axiom_schedule_tax([row[2] for row in rows])
 
     matches = 0
     amt_class = 0
+    split_class = 0
     other: list[dict] = []
-    for (seq, member, ti, spsm_value, amt_flag), axiom_value in zip(
+    for (seq, member, ti, spsm_value, amt_flag, pension_received), axiom_value in zip(
         rows, axiom_values, strict=True
     ):
         diff = axiom_value - spsm_value
@@ -248,6 +305,22 @@ def main() -> int:
             # either direction. imamtdf ("difference due to minimum
             # tax") > 0 identifies exactly those filers.
             amt_class += 1
+        elif (
+            axiom_value - spsm_value > TOLERANCE
+            and pension_received > 0
+            and 0
+            < (ti - _inverse_schedule(spsm_value))
+            <= min(pension_received, ti * 0.5) + 1
+        ):
+            # SPSM's family block splits eligible pension income between
+            # spouses and recomputes imfedtax on the POST-SPLIT taxable
+            # while imitax prints the pre-split figure (glass-box
+            # Atxcalc.cpp lines 1267-1304) — the same
+            # variable-semantics family as the AMT overwrite. Verified
+            # per-row: the implied income shift is positive, bounded by
+            # both the household's actual eligible pension income and
+            # the 50 percent legal cap.
+            split_class += 1
         else:
             other.append(
                 {
@@ -299,6 +372,7 @@ def main() -> int:
             "match_count": matches,
             "mismatch_count": n - matches,
             "amt_overwrite_class_count": amt_class,
+            "pension_splitting_class_count": split_class,
             "unclassified_count": len(other),
             "match_rate": round(100.0 * matches / n, 2) if n else 0,
             # Standard disposition accounting: the AMT-overwrite class is
@@ -306,26 +380,18 @@ def main() -> int:
             # row 94 replaces imfedtax with netminamt) and attributed to
             # the oracle's variable semantics — an upstream engine
             # behavior, not a rules disagreement.
-            "dispositioned": {
-                "schema_version": "axiom_oracles.dispositions.v1",
-                "dispositions_file": None,
-                "counts": {
+            "dispositioned": _dispositioned_block(
+                counts={
                     "axiom_encoding_gap": 0,
                     "bridge_artifact": 0,
                     "explained_residual": 0,
                     "unexplained": 0,
-                    "upstream_engine_gap": amt_class,
+                    "upstream_engine_gap": amt_class + split_class,
                 },
-                "unexplained_count": len(other),
-                "raw_match_rate": round(100.0 * matches / n, 2) if n else 0,
-                "explained_rate": round(
-                    100.0 * (matches + amt_class) / n, 2
-                )
-                if n
-                else 0,
-                "expired_entries": [],
-                "orphaned_entries": [],
-            },
+                comparison_count=n,
+                match_count=matches,
+                unexplained_count=len(other),
+            ),
         },
         "mismatches": other[:50],
         "provenance": {
@@ -354,7 +420,8 @@ def main() -> int:
     out.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     print(
         f"{n} taxfilers: {matches} match ({report['summary']['match_rate']}%), "
-        f"{amt_class} AMT-class, {len(other)} unclassified"
+        f"{amt_class} AMT-class, {split_class} splitting-class, "
+        f"{len(other)} unclassified"
     )
     print(f"wrote {out}")
     return 0

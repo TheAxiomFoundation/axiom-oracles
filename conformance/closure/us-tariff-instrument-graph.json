@@ -1,0 +1,163 @@
+{
+  "schema": "axiom_oracles.closure.us_tariff_instrument_graph.v1",
+  "program": "us/tariff-duty",
+  "rulespec_ref": "96d5e7c1e6309dc205b7320bbddaae8dd5d410df",
+  "retrieved_at": "2026-09-20",
+  "retrieval_method": "Distinct statute, HTS publication, and Federal Register document roots cited by source_verification in the pinned RuleSpec tariff composition and its reachable support modules.",
+  "evidence_contract": {
+    "mode": "pending-only-v1",
+    "rule": "This seed graph cannot assert completion or disposition. Every channel and instrument remains pending until a successor schema rederives source blobs, query results, candidate union, bearing edges, and encoded-rule reachability."
+  },
+  "channels": [
+    {
+      "id": "rulespec-source-verification-citations",
+      "state": "pending",
+      "reason": "The seed list was enumerated from current source_verification blocks, but no committed, hash-bound scan result yet proves the complete reachable citation union."
+    },
+    {
+      "id": "federal-register-authority-and-subject-search",
+      "state": "pending",
+      "reason": "No complete agency, authority, and subject-matter search has yet bounded uncited tariff-bearing Federal Register instruments."
+    },
+    {
+      "id": "hts-chapter-99-page-census",
+      "state": "pending",
+      "reason": "The complete Chapter 99 page and historical-vintage instrument census remains open."
+    },
+    {
+      "id": "corpus-bidirectional-citation-scan",
+      "state": "pending",
+      "reason": "The corpus text-cites-program versus captured-link-graph cross-check required by oracles#491 has not run to closure."
+    }
+  ],
+  "instruments": [
+    {
+      "id": "us-hts-2026-rev15",
+      "citation": "Harmonized Tariff Schedule of the United States (2026), Revision 15",
+      "relation": "rates_publication",
+      "status": "pending",
+      "reason": "The pinned schedule is captured, but its complete Chapter 99 and historical-vintage disposition is not closed.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "us-code-19-1321-a-2-c",
+      "citation": "19 U.S.C. 1321(a)(2)(C)",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The statutory de minimis threshold is cited, but its complete regulatory and amendment dependency chain is not dispositioned.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2022-02906",
+      "citation": "87 FR 7357, document 2022-02906",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The Section 201 solar safeguard instrument is cited but not yet independently dispositioned in this frontier.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2024-21217",
+      "citation": "Federal Register document 2024-21217",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The 2024 China Section 301 action is cited but its complete dependency and membership disposition remains open.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2025-06063",
+      "citation": "Federal Register document 2025-06063",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2025-23316",
+      "citation": "Federal Register document 2025-23316",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-03824",
+      "citation": "Federal Register document 2026-03824",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The temporary Section 122 import surcharge instrument is cited but its exact-time and dependency disposition remains open.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-03829",
+      "citation": "Federal Register document 2026-03829",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The de minimis suspension instrument is cited but its complete regulatory dependency chain remains open.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-03832",
+      "citation": "Federal Register document 2026-03832",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-06960",
+      "citation": "Federal Register document 2026-06960",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-12669",
+      "citation": "Federal Register document 2026-12669",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-12670",
+      "citation": "Federal Register document 2026-12670",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The nonpostal de minimis rule is cited but its complete authority and successor-notice chain remains open.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-14542",
+      "citation": "Federal Register document 2026-14542",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-14991",
+      "citation": "Federal Register document 2026-14991 and annexes",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The instrument and cited annex pages are captured, but complete annex and dependency disposition remains open.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-15181",
+      "citation": "Federal Register document 2026-15181",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The forced-labor tariff action is cited but its complete incidence and exception dependency chain remains open.",
+      "bears_on_computed_surface": true
+    },
+    {
+      "id": "fr-2026-15274",
+      "citation": "Federal Register document 2026-15274",
+      "relation": "bears_on",
+      "status": "pending",
+      "reason": "The tariff-bearing instrument is cited but not yet independently dispositioned in this frontier.",
+      "bears_on_computed_surface": true
+    }
+  ]
+}

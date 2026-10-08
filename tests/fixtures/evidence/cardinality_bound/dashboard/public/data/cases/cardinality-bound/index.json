@@ -1,0 +1,15 @@
+{
+  "schema_version": "axiom_oracles.chunk_index.v1",
+  "report_path": "tests/fixtures/evidence/cardinality_bound/dashboard/public/data/report.json",
+  "report_sha256": "dfaea8b21aedfb24b6236f312b602dec4cbe1e38401dec887398dc2755c319aa",
+  "suite": "cardinality-bound",
+  "count": 2,
+  "chunk_count": 1,
+  "chunks": [
+    {
+      "name": "chunk-0.json",
+      "sha256": "3d2f54d37f5ff0e743d4e76d36c25aec77e9d7fc988872f41de6e1cd5f248a9c",
+      "cases": 2
+    }
+  ]
+}

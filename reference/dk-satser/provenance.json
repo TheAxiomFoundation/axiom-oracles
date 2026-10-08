@@ -1,0 +1,44 @@
+{
+  "schema_version": "dk_satser.reference_provenance.v1",
+  "reference": "Skatte- og Vaekstministeriet official boerne- og ungeydelse satser",
+  "authority": "Skatte- og Vaekstministeriet (formerly Skatteministeriet; skm.dk 301-redirects to svmn.dk)",
+  "fetched_at": "2026-08-13",
+  "fetched_by": "WebFetch (Claude Code), D3 dk conformance lane",
+  "pages": [
+    {
+      "role": "current satser (2026, 2027 incl. quarterly/monthly)",
+      "url": "https://svmn.dk/tal-og-metode/satser/satser-og-beloebsgraenser-i-lovgivningen/boerne-og-ungeydelsesloven",
+      "redirected_from": "https://skm.dk/tal-og-metode/satser/satser-og-beloebsgraenser-i-lovgivningen/boerne-og-ungeydelsesloven",
+      "page_last_updated": "12-01-2026"
+    },
+    {
+      "role": "historical satser 2022-2026 incl. the 2023 660 kr. engangsforhoejelse footnote and the 2023 aftrapningsgraense",
+      "url": "https://svmn.dk/tal-og-metode/satser/skattehistorik/boerne-og-ungeydelse-en-historisk-oversigt",
+      "page_last_updated": "12-01-2026",
+      "footnote_2023": "I foerste kvartal 2023 er der en engangsforhoejelse paa 660 kr."
+    },
+    {
+      "role": "aftrapningsgraense 2025/2026 (PSL section 20 regulated amounts; grundbeloeb 700.000, 2026 regulation 4,8 pct.)",
+      "url": "https://svmn.dk/tal-og-metode/satser/regulering-af-beloebsgraenser/beloebsgraenser-i-skattelovgivningen-der-reguleres-efter-personskattelovens-20-2025-2026",
+      "page_last_updated": "16-01-2026"
+    },
+    {
+      "role": "ligedeling doctrine (equal sharing + own-income taper from 2022-01-01)",
+      "url": "https://svmn.dk/tal-og-metode/satser/satser-og-beloebsgraenser-i-lovgivningen/ligedeling-af-boerne-og-ungeydelse",
+      "page_last_updated": "16-12-2020",
+      "quotes": [
+        "Fra og med 1. januar 2022 deles boerne- og ungeydelsen som udgangspunkt lige mellem barnets foraeldre.",
+        "Fra og med 1. januar 2022 sker der alene indkomstaftrapning ud fra modtagerens egen indkomst."
+      ]
+    }
+  ],
+  "period_amounts_as_printed": {
+    "2026": {"0-2_quarter": 5370, "3-6_quarter": 4248, "7-14_quarter": 3342, "15-17_month": 1114},
+    "2027": {"0-2_quarter": 5478, "3-6_quarter": 4332, "7-14_quarter": 3408, "15-17_month": 1136}
+  },
+  "notes": [
+    "The reference is reviewer-independent: values come only from the ministry pages, never from artifacts shared with the rulespec-dk implementation.",
+    "Third-party sites circulate round-12 projections for 2026 (17.004 / 13.380); the ministry table is round-24 per LOV nr 1642 af 16/12/2025 and this extract records the ministry values.",
+    "2027 aftrapningsgraense is printed as 'Fastlaegges senere' and is intentionally absent."
+  ]
+}

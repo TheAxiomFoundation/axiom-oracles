@@ -5,7 +5,7 @@ Each invocation selects exactly one policy.  The selected policy's reviewed
 case grid is evaluated independently:
 
 * ``axiom`` reads the expected value from that policy's engine-verified
-  RuleSpec companion fixture; and
+  RuleSpec companion fixture plus any reviewed repo-owned extension; and
 * ``policyengine`` builds a fresh PolicyEngine-US ``Simulation`` at tax year
   2026 from the same case inputs.
 
@@ -22,8 +22,10 @@ from __future__ import annotations
 
 import argparse
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field as dataclass_field
 from decimal import Decimal
+from importlib.metadata import version as distribution_version
+from math import isfinite
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
@@ -34,8 +36,14 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from axiom_oracles.comparison.dispositions import report_json_text  # noqa: E402
+from axiom_oracles.bridges import load_policyengine_registry  # noqa: E402
 
 VALIDATION_YEAR = 2026
+ENGINE_VERSIONS = {
+    "policyengine": "4.18.9",
+    "policyengine_core": "3.30.3",
+    "policyengine_us": "1.767.3",
+}
 
 
 @dataclass(frozen=True)
@@ -45,6 +53,18 @@ class FederalCase:
     case_id: str
     filing_status: str
     inputs: Mapping[str, Any]
+
+
+@dataclass(frozen=True)
+class ComparisonBinding:
+    """One scored Axiom concept and its reviewed PolicyEngine target."""
+
+    concept: str
+    policyengine_target: str
+    comparison: str
+    case_ids: tuple[str, ...] = ()
+    case_id_suffix: str = ""
+    tolerance: float | None = None
 
 
 @dataclass(frozen=True)
@@ -60,10 +80,20 @@ class PolicyConfig:
     pe_output_variables: tuple[str, ...]
     pe_boundary: str
     cases: tuple[FederalCase, ...]
-    pe_situation: Callable[[FederalCase], dict[str, Any]]
+    pe_situation: Callable[
+        [FederalCase, Mapping[str, float]],
+        dict[str, Any],
+    ]
     fixture_input_validator: Callable[[FederalCase, Mapping[str, Any]], None]
     pe_diagnostic_variables: tuple[str, ...] = ()
     pe_parameter_validator: Callable[[Any], None] | None = None
+    supplemental_fixture_paths: tuple[Path, ...] = ()
+    comparison_bindings: tuple[ComparisonBinding, ...] = ()
+    axiom_bridge_outputs: Mapping[str, str] = dataclass_field(default_factory=dict)
+    axiom_diagnostic_outputs: Mapping[str, str] = dataclass_field(default_factory=dict)
+    rulespec_domain_inputs: Mapping[str, Any] = dataclass_field(default_factory=dict)
+    rulespec_only_inputs: tuple[str, ...] = ()
+    pe_input_variables: tuple[str, ...] = ()
     tolerance: float = 0.01
     relative_tolerance: float = 0.0
 
@@ -74,6 +104,308 @@ def _case(
     **inputs: Any,
 ) -> FederalCase:
     return FederalCase(case_id, filing_status, inputs)
+
+
+_SALT_MODULE = "us:policies/income_tax/salt_deduction_pipeline"
+_ITEMIZED_MODULE = "us:policies/income_tax/itemized_taxable_income_deductions_pipeline"
+_SALT_SECTION_911_BRIDGE = f"{_SALT_MODULE}#federal_section_911_exclusion_for_salt_magi"
+_ITEMIZED_BEFORE_SECTION_68 = (
+    f"{_ITEMIZED_MODULE}"
+    "#itemized_deductions_otherwise_allowable_after_other_limitations"
+)
+_ITEMIZED_SECTION_68_REDUCTION = f"{_ITEMIZED_MODULE}#federal_section_68_reduction"
+_PE_STRUCTURAL_INPUTS = (
+    "age",
+    "filing_status",
+    "is_separated",
+    "is_tax_unit_dependent",
+    "state_code",
+)
+
+
+def _salt_case(
+    case_id: str,
+    filing_status: str,
+    *,
+    adjusted_gross_income: float,
+    state_and_local_sales_or_income_tax: float,
+    real_estate_taxes: float = 0,
+    state_and_local_personal_property_tax: float = 0,
+    section_911_exclusions: tuple[float, ...] = (0,),
+) -> FederalCase:
+    return _case(
+        case_id,
+        filing_status,
+        adjusted_gross_income=adjusted_gross_income,
+        state_and_local_sales_or_income_tax=state_and_local_sales_or_income_tax,
+        state_and_local_personal_property_tax=(state_and_local_personal_property_tax),
+        real_estate_taxes=real_estate_taxes,
+        section_911_exclusions=section_911_exclusions,
+    )
+
+
+_SALT_DEDUCTION_CASES = (
+    _salt_case(
+        "salt-single-base",
+        "single",
+        adjusted_gross_income=100_000,
+        state_and_local_sales_or_income_tax=8_000,
+        real_estate_taxes=2_000,
+    ),
+    _salt_case(
+        "salt-single-at-cap",
+        "single",
+        adjusted_gross_income=100_000,
+        state_and_local_sales_or_income_tax=30_400,
+        real_estate_taxes=10_000,
+    ),
+    _salt_case(
+        "salt-single-over-cap",
+        "single",
+        adjusted_gross_income=100_000,
+        state_and_local_sales_or_income_tax=40_000,
+        real_estate_taxes=10_000,
+    ),
+    _salt_case(
+        "salt-joint-cap",
+        "joint",
+        adjusted_gross_income=150_000,
+        state_and_local_sales_or_income_tax=50_000,
+    ),
+    _salt_case(
+        "salt-hoh-cap",
+        "head_of_household",
+        adjusted_gross_income=150_000,
+        state_and_local_sales_or_income_tax=50_000,
+    ),
+    _salt_case(
+        "salt-surviving-cap",
+        "surviving_spouse",
+        adjusted_gross_income=150_000,
+        state_and_local_sales_or_income_tax=50_000,
+    ),
+    _salt_case(
+        "salt-mfs-cap",
+        "separate",
+        adjusted_gross_income=100_000,
+        state_and_local_sales_or_income_tax=25_000,
+    ),
+    _salt_case(
+        "salt-single-phaseout-start",
+        "single",
+        adjusted_gross_income=505_000,
+        state_and_local_sales_or_income_tax=50_000,
+    ),
+    _salt_case(
+        "salt-single-phaseout-plus-one",
+        "single",
+        adjusted_gross_income=505_001,
+        state_and_local_sales_or_income_tax=50_000,
+    ),
+    _salt_case(
+        "salt-single-phaseout-mid",
+        "single",
+        adjusted_gross_income=600_000,
+        state_and_local_sales_or_income_tax=50_000,
+    ),
+    _salt_case(
+        "salt-single-floor",
+        "single",
+        adjusted_gross_income=607_000,
+        state_and_local_sales_or_income_tax=50_000,
+    ),
+    _salt_case(
+        "salt-mfs-phaseout-mid",
+        "separate",
+        adjusted_gross_income=300_000,
+        state_and_local_sales_or_income_tax=30_000,
+    ),
+    _salt_case(
+        "salt-mfs-floor",
+        "separate",
+        adjusted_gross_income=310_000,
+        state_and_local_sales_or_income_tax=30_000,
+    ),
+    _salt_case(
+        "salt-low-agi-engine-cap",
+        "single",
+        adjusted_gross_income=5_000,
+        state_and_local_sales_or_income_tax=10_000,
+    ),
+    _salt_case(
+        "salt-magi-911-addback",
+        "single",
+        adjusted_gross_income=500_000,
+        state_and_local_sales_or_income_tax=50_000,
+        section_911_exclusions=(4_000, 6_000),
+    ),
+    _salt_case(
+        "salt-personal-property-tax-probe",
+        "single",
+        adjusted_gross_income=100_000,
+        state_and_local_sales_or_income_tax=0,
+        state_and_local_personal_property_tax=4_000,
+    ),
+)
+
+
+def _itemized_case(
+    case_id: str,
+    filing_status: str,
+    *,
+    adjusted_gross_income: float,
+    taxable_income_determined_without_section_68: float,
+    charitable_deduction: float = 0,
+    interest_deduction: float = 0,
+    state_and_local_sales_or_income_tax: float = 0,
+    real_estate_taxes: float = 0,
+    medical_expense_deduction: float = 0,
+    casualty_loss_deduction: float = 0,
+) -> FederalCase:
+    return _case(
+        case_id,
+        filing_status,
+        adjusted_gross_income=adjusted_gross_income,
+        state_and_local_sales_or_income_tax=state_and_local_sales_or_income_tax,
+        state_and_local_personal_property_tax=0,
+        real_estate_taxes=real_estate_taxes,
+        charitable_deduction=charitable_deduction,
+        interest_deduction=interest_deduction,
+        medical_expense_deduction=medical_expense_deduction,
+        casualty_loss_deduction=casualty_loss_deduction,
+        misc_deduction=0,
+        taxable_income_determined_without_section_68=(
+            taxable_income_determined_without_section_68
+        ),
+        section_911_exclusions=(),
+    )
+
+
+_ITEMIZED_DEDUCTION_CASES = (
+    _itemized_case(
+        "itemized-zero",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=100_000,
+    ),
+    _itemized_case(
+        "itemized-charity-only",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=90_000,
+        charitable_deduction=10_000,
+    ),
+    _itemized_case(
+        "itemized-interest-only",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=92_000,
+        interest_deduction=8_000,
+    ),
+    _itemized_case(
+        "itemized-salt-only",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=90_000,
+        state_and_local_sales_or_income_tax=8_000,
+        real_estate_taxes=2_000,
+    ),
+    _itemized_case(
+        "itemized-medical-only",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=98_000,
+        medical_expense_deduction=2_000,
+    ),
+    _itemized_case(
+        "itemized-casualty-completed",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=97_000,
+        casualty_loss_deduction=3_000,
+    ),
+    _itemized_case(
+        "itemized-mixed",
+        "single",
+        adjusted_gross_income=100_000,
+        taxable_income_determined_without_section_68=70_000,
+        charitable_deduction=10_000,
+        interest_deduction=8_000,
+        state_and_local_sales_or_income_tax=8_000,
+        real_estate_taxes=2_000,
+        medical_expense_deduction=2_000,
+    ),
+    _itemized_case(
+        "itemized-68-single-at",
+        "single",
+        adjusted_gross_income=640_600,
+        taxable_income_determined_without_section_68=590_600,
+        charitable_deduction=50_000,
+    ),
+    _itemized_case(
+        "itemized-68-single-plus-one",
+        "single",
+        adjusted_gross_income=640_601,
+        taxable_income_determined_without_section_68=590_601,
+        charitable_deduction=50_000,
+    ),
+    _itemized_case(
+        "itemized-68-single-income-lesser",
+        "single",
+        adjusted_gross_income=650_600,
+        taxable_income_determined_without_section_68=600_600,
+        charitable_deduction=50_000,
+    ),
+    _itemized_case(
+        "itemized-68-single-deduction-lesser",
+        "single",
+        adjusted_gross_income=800_000,
+        taxable_income_determined_without_section_68=750_000,
+        charitable_deduction=50_000,
+    ),
+    _itemized_case(
+        "itemized-68-hoh-at",
+        "head_of_household",
+        adjusted_gross_income=640_600,
+        taxable_income_determined_without_section_68=590_600,
+        charitable_deduction=50_000,
+    ),
+    _itemized_case(
+        "itemized-68-joint-at",
+        "joint",
+        adjusted_gross_income=768_700,
+        taxable_income_determined_without_section_68=718_700,
+        charitable_deduction=50_000,
+    ),
+    _itemized_case(
+        "itemized-68-surviving-at",
+        "surviving_spouse",
+        adjusted_gross_income=768_700,
+        taxable_income_determined_without_section_68=718_700,
+        charitable_deduction=50_000,
+    ),
+    _itemized_case(
+        "itemized-68-mfs-at",
+        "separate",
+        adjusted_gross_income=384_350,
+        taxable_income_determined_without_section_68=334_350,
+        charitable_deduction=50_000,
+    ),
+    _itemized_case(
+        "itemized-68-other-deduction-base",
+        "single",
+        adjusted_gross_income=700_000,
+        taxable_income_determined_without_section_68=550_000,
+        charitable_deduction=50_000,
+    ),
+    _itemized_case(
+        "itemized-68-rational-rate",
+        "single",
+        adjusted_gross_income=10_640_600,
+        taxable_income_determined_without_section_68=640_600,
+        charitable_deduction=10_000_000,
+    ),
+)
 
 
 # GRID-CONTRACT P1, restricted to the five wage-only cases. The merged
@@ -416,7 +748,8 @@ _QBID_CASES = (
 )
 
 
-# GRID-CONTRACT P6 plus six eligibility/boundary diagnostics.  The selected PE
+# GRID-CONTRACT P6 plus the merged Notice 2025-67 boundary, filing-status,
+# exclusion, contribution-cap, and eligibility diagnostics. The selected PE
 # potential variable is the companion's pre-section-26 statutory boundary; the
 # separately calculated public variable is retained only as a diagnostic.
 def _savers_case(
@@ -426,6 +759,9 @@ def _savers_case(
     adjusted_gross_income: float,
     primary_contributions: float,
     spouse_contributions: float = 0,
+    section_911_excluded_income: float = 0,
+    section_931_excluded_income: float = 0,
+    section_933_excluded_income: float = 0,
     primary_age: int = 30,
     primary_is_student: bool = False,
     primary_is_dependent: bool = False,
@@ -433,6 +769,9 @@ def _savers_case(
     thresholds = {
         "single": (24_250, 26_250, 40_250),
         "joint": (48_500, 52_500, 80_500),
+        "head_of_household": (36_375, 39_375, 60_375),
+        "separate": (24_250, 26_250, 40_250),
+        "surviving_spouse": (24_250, 26_250, 40_250),
     }[filing_status]
     return _case(
         case_id,
@@ -440,6 +779,9 @@ def _savers_case(
         adjusted_gross_income=adjusted_gross_income,
         primary_contributions=primary_contributions,
         spouse_contributions=spouse_contributions,
+        section_911_excluded_income=section_911_excluded_income,
+        section_931_excluded_income=section_931_excluded_income,
+        section_933_excluded_income=section_933_excluded_income,
         primary_age=primary_age,
         primary_is_student=primary_is_student,
         primary_is_dependent=primary_is_dependent,
@@ -454,76 +796,210 @@ def _savers_case(
 
 _SAVERS_CREDIT_CASES = (
     _savers_case(
-        "savers-50pct",
+        "single-one-below-50-percent-limit",
         "single",
-        adjusted_gross_income=20_000,
+        adjusted_gross_income=24_249,
         primary_contributions=2_000,
     ),
     _savers_case(
-        "savers-20pct",
-        "single",
-        adjusted_gross_income=25_250,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-10pct",
-        "single",
-        adjusted_gross_income=33_250,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-over",
-        "single",
-        adjusted_gross_income=40_251,
-        primary_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-cap",
-        "single",
-        adjusted_gross_income=20_000,
-        primary_contributions=5_000,
-    ),
-    _savers_case(
-        "savers-joint-both",
-        "joint",
-        adjusted_gross_income=38_000,
-        primary_contributions=2_000,
-        spouse_contributions=2_000,
-    ),
-    _savers_case(
-        "savers-zero-contributions",
-        "single",
-        adjusted_gross_income=0,
-        primary_contributions=0,
-    ),
-    _savers_case(
-        "savers-at-first-threshold",
+        "single-at-50-percent-limit-inclusive",
         "single",
         adjusted_gross_income=24_250,
         primary_contributions=2_000,
     ),
     _savers_case(
-        "savers-one-over-first-threshold",
+        "single-one-over-50-percent-limit",
         "single",
         adjusted_gross_income=24_251,
         primary_contributions=2_000,
     ),
     _savers_case(
-        "savers-age-screen",
+        "single-one-below-20-percent-limit",
+        "single",
+        adjusted_gross_income=26_249,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-at-20-percent-limit-inclusive",
+        "single",
+        adjusted_gross_income=26_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-one-over-20-percent-limit",
+        "single",
+        adjusted_gross_income=26_251,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-one-below-10-percent-limit",
+        "single",
+        adjusted_gross_income=40_249,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-at-10-percent-limit-inclusive",
+        "single",
+        adjusted_gross_income=40_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "single-one-over-10-percent-limit",
+        "single",
+        adjusted_gross_income=40_251,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-below-50-percent-limit",
+        "joint",
+        adjusted_gross_income=48_499,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-at-50-percent-limit-inclusive",
+        "joint",
+        adjusted_gross_income=48_500,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-over-50-percent-limit",
+        "joint",
+        adjusted_gross_income=48_501,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-below-20-percent-limit",
+        "joint",
+        adjusted_gross_income=52_499,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-at-20-percent-limit-inclusive",
+        "joint",
+        adjusted_gross_income=52_500,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-over-20-percent-limit",
+        "joint",
+        adjusted_gross_income=52_501,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-below-10-percent-limit",
+        "joint",
+        adjusted_gross_income=80_499,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-at-10-percent-limit-inclusive",
+        "joint",
+        adjusted_gross_income=80_500,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-one-over-10-percent-limit",
+        "joint",
+        adjusted_gross_income=80_501,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-below-50-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=36_374,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-at-50-percent-limit-inclusive",
+        "head_of_household",
+        adjusted_gross_income=36_375,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-over-50-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=36_376,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-below-20-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=39_374,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-at-20-percent-limit-inclusive",
+        "head_of_household",
+        adjusted_gross_income=39_375,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-over-20-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=39_376,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-below-10-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=60_374,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-at-10-percent-limit-inclusive",
+        "head_of_household",
+        adjusted_gross_income=60_375,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "head-of-household-one-over-10-percent-limit",
+        "head_of_household",
+        adjusted_gross_income=60_376,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "married-filing-separately-uses-all-other-limits",
+        "separate",
+        adjusted_gross_income=24_250,
+        primary_contributions=2_000,
+        spouse_contributions=2_000,
+    ),
+    _savers_case(
+        "surviving-spouse-uses-all-other-limits",
+        "surviving_spouse",
+        adjusted_gross_income=24_250,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "section-911-add-back-crosses-inclusive-limit",
+        "single",
+        adjusted_gross_income=24_250,
+        section_911_excluded_income=1,
+        primary_contributions=2_000,
+    ),
+    _savers_case(
+        "joint-separate-cap-for-each-spouse",
+        "joint",
+        adjusted_gross_income=40_000,
+        primary_contributions=5_000,
+        spouse_contributions=5_000,
+    ),
+    _savers_case(
+        "age-screen",
         "single",
         adjusted_gross_income=20_000,
         primary_contributions=2_000,
         primary_age=17,
     ),
     _savers_case(
-        "savers-student-screen",
+        "student-screen",
         "single",
         adjusted_gross_income=20_000,
         primary_contributions=2_000,
         primary_is_student=True,
     ),
     _savers_case(
-        "savers-dependent-screen",
+        "dependent-screen",
         "single",
         adjusted_gross_income=20_000,
         primary_contributions=2_000,
@@ -755,7 +1231,10 @@ def _tax_situation(
     if case.filing_status == "joint":
         people["spouse"] = _person(**dict(spouse_inputs or {}))
         members.append("spouse")
-    return {
+    if case.filing_status in {"head_of_household", "surviving_spouse"}:
+        people["child"] = _person(age=10, is_tax_unit_dependent=True)
+        members.append("child")
+    situation = {
         "people": people,
         "tax_units": {"tax_unit": {"members": members}},
         "families": {"family": {"members": members}},
@@ -767,6 +1246,143 @@ def _tax_situation(
             }
         },
     }
+    explicit_statuses = {
+        "head_of_household": "HEAD_OF_HOUSEHOLD",
+        "surviving_spouse": "SURVIVING_SPOUSE",
+    }
+    if case.filing_status in explicit_statuses:
+        situation["tax_units"]["tax_unit"]["filing_status"] = {
+            VALIDATION_YEAR: explicit_statuses[case.filing_status]
+        }
+    return situation
+
+
+def _require_bridge_output_values(
+    *,
+    suite: str,
+    case_id: str,
+    bridge_outputs: Mapping[str, float],
+    expected_keys: tuple[str, ...],
+) -> dict[str, float]:
+    actual_keys = set(bridge_outputs)
+    expected = set(expected_keys)
+    missing = sorted(expected - actual_keys)
+    unexpected = sorted(actual_keys - expected)
+    if missing or unexpected:
+        raise ValueError(
+            f"{suite}: case {case_id!r} bridge outputs differ; "
+            f"missing={missing}, unexpected={unexpected}"
+        )
+    values: dict[str, float] = {}
+    for key in expected_keys:
+        value = bridge_outputs[key]
+        if isinstance(value, bool) or not isinstance(
+            value,
+            int | float | Decimal,
+        ):
+            raise ValueError(
+                f"{suite}: case {case_id!r} bridge output {key!r} must "
+                f"be numeric; got {value!r}"
+            )
+        values[key] = float(value)
+    return values
+
+
+def _no_bridge_situation(
+    builder: Callable[[FederalCase], dict[str, Any]],
+) -> Callable[[FederalCase, Mapping[str, float]], dict[str, Any]]:
+    def build(
+        case: FederalCase,
+        bridge_outputs: Mapping[str, float],
+    ) -> dict[str, Any]:
+        _require_bridge_output_values(
+            suite="federal-tax-liability-grid",
+            case_id=case.case_id,
+            bridge_outputs=bridge_outputs,
+            expected_keys=(),
+        )
+        return builder(case)
+
+    return build
+
+
+def _salt_situation(
+    case: FederalCase,
+    bridge_outputs: Mapping[str, float],
+) -> dict[str, Any]:
+    values = _require_bridge_output_values(
+        suite="us-salt-deduction-grid",
+        case_id=case.case_id,
+        bridge_outputs=bridge_outputs,
+        expected_keys=(_SALT_SECTION_911_BRIDGE,),
+    )
+    inputs = case.inputs
+    situation = _tax_situation(
+        case,
+        primary_inputs={
+            "real_estate_taxes": inputs["real_estate_taxes"],
+        },
+        spouse_inputs={},
+    )
+    tax_unit = situation["tax_units"]["tax_unit"]
+    tax_unit.update(
+        {
+            "adjusted_gross_income": {VALIDATION_YEAR: inputs["adjusted_gross_income"]},
+            "state_and_local_sales_or_income_tax": {
+                VALIDATION_YEAR: inputs["state_and_local_sales_or_income_tax"]
+            },
+            "foreign_earned_income_exclusion": {
+                VALIDATION_YEAR: values[_SALT_SECTION_911_BRIDGE]
+            },
+        }
+    )
+    return situation
+
+
+def _itemized_situation(
+    case: FederalCase,
+    bridge_outputs: Mapping[str, float],
+) -> dict[str, Any]:
+    _require_bridge_output_values(
+        suite="us-itemized-taxable-income-deductions-grid",
+        case_id=case.case_id,
+        bridge_outputs=bridge_outputs,
+        expected_keys=(),
+    )
+    situation = _tax_situation(
+        case,
+        primary_inputs={},
+        spouse_inputs={},
+    )
+    inputs = case.inputs
+    tax_unit = situation["tax_units"]["tax_unit"]
+    tax_unit.update(
+        {
+            "adjusted_gross_income": {VALIDATION_YEAR: inputs["adjusted_gross_income"]},
+            # Section 151 exemptions are zero in 2026. Binding the completed
+            # zero keeps PE's AGI-minus-exemptions proxy fully observable.
+            "exemptions": {VALIDATION_YEAR: 0},
+            "charitable_deduction": {VALIDATION_YEAR: inputs["charitable_deduction"]},
+            "interest_deduction": {VALIDATION_YEAR: inputs["interest_deduction"]},
+            # These companion cases carry a completed SALT amount below its
+            # own cap. Bind that completed component directly, as the itemized
+            # aggregate contract requires.
+            "salt_deduction": {
+                VALIDATION_YEAR: (
+                    inputs["state_and_local_sales_or_income_tax"]
+                    + inputs["real_estate_taxes"]
+                )
+            },
+            "medical_expense_deduction": {
+                VALIDATION_YEAR: inputs["medical_expense_deduction"]
+            },
+            "casualty_loss_deduction": {
+                VALIDATION_YEAR: inputs["casualty_loss_deduction"]
+            },
+            "misc_deduction": {VALIDATION_YEAR: inputs["misc_deduction"]},
+        }
+    )
+    return situation
 
 
 def _payroll_situation(case: FederalCase) -> dict[str, Any]:
@@ -892,6 +1508,9 @@ def _savers_credit_situation(case: FederalCase) -> dict[str, Any]:
     tax_unit = situation["tax_units"]["tax_unit"]
     tax_unit["adjusted_gross_income"] = {
         VALIDATION_YEAR: inputs["adjusted_gross_income"]
+    }
+    tax_unit["foreign_earned_income_exclusion"] = {
+        VALIDATION_YEAR: inputs["section_911_excluded_income"]
     }
     return situation
 
@@ -1026,6 +1645,251 @@ def _require_fixture_values(
             raise ValueError(
                 f"{suite}: fixture case {case_id!r} input {key!r} is "
                 f"{actual[key]!r}; expected {expected_value!r}"
+            )
+
+
+def _require_exact_fixture_values(
+    *,
+    suite: str,
+    case_id: str,
+    actual: Mapping[str, Any],
+    expected: Mapping[str, Any],
+) -> None:
+    _require_fixture_values(
+        suite=suite,
+        case_id=case_id,
+        actual=actual,
+        expected=expected,
+    )
+    unexpected = sorted(set(actual) - set(expected))
+    if unexpected:
+        raise ValueError(
+            f"{suite}: fixture case {case_id!r} has unexpected inputs {unexpected}"
+        )
+
+
+_SALT_INPUT_PREFIX = f"{_SALT_MODULE}#input."
+_SALT_SECTION_911_RELATION = (
+    f"{_SALT_MODULE}#relation.salt_section_911_individual_of_tax_unit"
+)
+_SALT_DOMAIN_INPUTS = {
+    (
+        f"{_SALT_INPUT_PREFIX}"
+        "completed_personal_tax_amounts_exclude_business_and_section_212_taxes"
+    ): True,
+    (
+        f"{_SALT_INPUT_PREFIX}"
+        "completed_personal_tax_amounts_exclude_acquisition_capitalized_taxes"
+    ): True,
+    (f"{_SALT_INPUT_PREFIX}completed_personal_tax_amounts_are_net_of_refunds"): True,
+    (
+        f"{_SALT_INPUT_PREFIX}"
+        "completed_personal_tax_amounts_exclude_nondeductible_taxes"
+    ): True,
+    (
+        f"{_SALT_INPUT_PREFIX}"
+        "section_911_exclusion_relation_includes_every_tax_unit_individual"
+    ): True,
+}
+_ITEMIZED_INPUT_PREFIX = f"{_ITEMIZED_MODULE}#input."
+_ITEMIZED_DOMAIN_INPUTS = {
+    **_SALT_DOMAIN_INPUTS,
+    f"{_ITEMIZED_INPUT_PREFIX}taxpayer_is_individual": True,
+    (
+        f"{_ITEMIZED_INPUT_PREFIX}no_other_component_in_pe_six_item_itemized_aggregate"
+    ): True,
+}
+_SALT_PERSONAL_PROPERTY_INPUT = (
+    f"{_SALT_INPUT_PREFIX}state_and_local_personal_property_tax"
+)
+_ITEMIZED_SECTION_68_BASE_INPUT = (
+    "us:statutes/26/68#input.taxable_income_determined_without_section_68"
+)
+_NEUTRAL_POSSESSION_INPUTS = {
+    (
+        "us:statutes/26/931#input."
+        "bona_fide_resident_of_specified_possession_during_entire_taxable_year"
+    ): False,
+    (
+        "us:statutes/26/931#input."
+        "income_derived_from_sources_within_specified_possessions"
+    ): 0,
+    (
+        "us:statutes/26/931#input."
+        "income_effectively_connected_with_trade_or_business_within_"
+        "specified_possessions"
+    ): 0,
+    (
+        "us:statutes/26/931#input."
+        "amounts_paid_for_services_as_employee_of_united_states_or_agency"
+    ): 0,
+    (
+        "us:statutes/26/933#input."
+        "individual_is_bona_fide_resident_of_puerto_rico_during_entire_"
+        "taxable_year"
+    ): False,
+    ("us:statutes/26/933#input.income_derived_from_sources_within_puerto_rico"): 0,
+    (
+        "us:statutes/26/933#input."
+        "amounts_received_for_services_performed_as_employee_of_united_"
+        "states_or_agency"
+    ): 0,
+    ("us:statutes/26/933#input.individual_is_citizen_of_united_states"): False,
+    (
+        "us:statutes/26/933#input."
+        "individual_changes_residence_from_puerto_rico_during_taxable_year"
+    ): False,
+    (
+        "us:statutes/26/933#input.bona_fide_resident_of_puerto_rico_years_before_change"
+    ): 0,
+    (
+        "us:statutes/26/933#input."
+        "puerto_rico_source_income_attributable_to_puerto_rican_residence_"
+        "period_before_change"
+    ): 0,
+    (
+        "us:statutes/26/933#input."
+        "amounts_received_for_services_performed_as_employee_of_united_"
+        "states_or_agency_attributable_to_period_before_change"
+    ): 0,
+}
+_FILING_STATUS_CODES = {
+    "single": 0,
+    "joint": 1,
+    "separate": 2,
+    "head_of_household": 3,
+    "surviving_spouse": 4,
+}
+
+
+def _section_911_fixture_people(
+    amounts: tuple[float, ...],
+) -> list[dict[str, Any]]:
+    prefix = "us:statutes/26/911/a#input."
+    return [
+        {
+            f"{prefix}individual_is_qualified_individual": amount > 0,
+            f"{prefix}election_made_for_foreign_earned_income": amount > 0,
+            f"{prefix}foreign_earned_income_of_individual": amount,
+            f"{prefix}election_made_for_housing_cost_amount": False,
+            f"{prefix}housing_cost_amount_of_individual": 0,
+        }
+        for amount in amounts
+    ]
+
+
+def _validate_salt_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    inputs = case.inputs
+    personal_property_tax = inputs["state_and_local_personal_property_tax"]
+    if case.case_id == "salt-personal-property-tax-probe":
+        if not _same_scalar(personal_property_tax, 4_000):
+            raise ValueError(
+                f"{case.case_id}: personal-property probe must bind exactly 4000"
+            )
+    elif not _same_scalar(personal_property_tax, 0):
+        raise ValueError(
+            f"{case.case_id}: personal-property tax is RuleSpec-only and may "
+            "be nonzero only in salt-personal-property-tax-probe"
+        )
+    expected = {
+        **_NEUTRAL_POSSESSION_INPUTS,
+        _SALT_SECTION_911_RELATION: _section_911_fixture_people(
+            tuple(inputs["section_911_exclusions"])
+        ),
+        **_SALT_DOMAIN_INPUTS,
+        f"{_SALT_INPUT_PREFIX}filing_status": _FILING_STATUS_CODES[case.filing_status],
+        f"{_SALT_INPUT_PREFIX}adjusted_gross_income": inputs["adjusted_gross_income"],
+        (f"{_SALT_INPUT_PREFIX}state_and_local_sales_or_income_tax"): inputs[
+            "state_and_local_sales_or_income_tax"
+        ],
+        _SALT_PERSONAL_PROPERTY_INPUT: personal_property_tax,
+        f"{_SALT_INPUT_PREFIX}real_estate_taxes": inputs["real_estate_taxes"],
+    }
+    _require_exact_fixture_values(
+        suite="us-salt-deduction-grid",
+        case_id=case.case_id,
+        actual=actual,
+        expected=expected,
+    )
+
+
+def _validate_itemized_fixture(
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    inputs = case.inputs
+    if inputs["state_and_local_personal_property_tax"] != 0:
+        raise ValueError(
+            f"{case.case_id}: itemized adopted cases require zero "
+            "state_and_local_personal_property_tax"
+        )
+    expected = {
+        **_NEUTRAL_POSSESSION_INPUTS,
+        **_SALT_DOMAIN_INPUTS,
+        _SALT_SECTION_911_RELATION: [],
+        **{
+            key: value
+            for key, value in _ITEMIZED_DOMAIN_INPUTS.items()
+            if key not in _SALT_DOMAIN_INPUTS
+        },
+        f"{_ITEMIZED_INPUT_PREFIX}misc_deduction": inputs["misc_deduction"],
+        f"{_SALT_INPUT_PREFIX}filing_status": _FILING_STATUS_CODES[case.filing_status],
+        f"{_SALT_INPUT_PREFIX}adjusted_gross_income": inputs["adjusted_gross_income"],
+        (f"{_SALT_INPUT_PREFIX}state_and_local_sales_or_income_tax"): inputs[
+            "state_and_local_sales_or_income_tax"
+        ],
+        _SALT_PERSONAL_PROPERTY_INPUT: 0,
+        f"{_SALT_INPUT_PREFIX}real_estate_taxes": inputs["real_estate_taxes"],
+        f"{_ITEMIZED_INPUT_PREFIX}charitable_deduction": inputs["charitable_deduction"],
+        f"{_ITEMIZED_INPUT_PREFIX}interest_deduction": inputs["interest_deduction"],
+        f"{_ITEMIZED_INPUT_PREFIX}medical_expense_deduction": inputs[
+            "medical_expense_deduction"
+        ],
+        f"{_ITEMIZED_INPUT_PREFIX}casualty_loss_deduction": inputs[
+            "casualty_loss_deduction"
+        ],
+        _ITEMIZED_SECTION_68_BASE_INPUT: inputs[
+            "taxable_income_determined_without_section_68"
+        ],
+    }
+    _require_exact_fixture_values(
+        suite="us-itemized-taxable-income-deductions-grid",
+        case_id=case.case_id,
+        actual=actual,
+        expected=expected,
+    )
+
+
+def _validate_rulespec_input_contract(
+    config: PolicyConfig,
+    case: FederalCase,
+    actual: Mapping[str, Any],
+) -> None:
+    overlap = set(config.rulespec_domain_inputs) & set(config.rulespec_only_inputs)
+    if overlap:
+        raise ValueError(
+            f"{config.suite}: domain and RuleSpec-only inputs overlap: "
+            f"{sorted(overlap)}"
+        )
+    _require_fixture_values(
+        suite=config.suite,
+        case_id=case.case_id,
+        actual=actual,
+        expected=config.rulespec_domain_inputs,
+    )
+    for key in config.rulespec_only_inputs:
+        if key not in actual:
+            raise ValueError(
+                f"{config.suite}: fixture case {case.case_id!r} is missing "
+                f"RuleSpec-only input {key!r}"
+            )
+        value = actual[key]
+        if isinstance(value, (dict, list, tuple, set)):
+            raise ValueError(
+                f"{config.suite}: RuleSpec-only input {key!r} must be scalar"
             )
 
 
@@ -1300,20 +2164,29 @@ def _validate_savers_credit_fixture(
 ) -> None:
     inputs = case.inputs
     prefix = "us:policies/income_tax/savers_credit_pipeline#input."
-    status_codes = {"single": 0, "joint": 1, "separate": 2}
+    status_codes = {
+        "single": 0,
+        "joint": 1,
+        "separate": 2,
+        "head_of_household": 3,
+        "surviving_spouse": 4,
+    }
     _require_fixture_values(
-        suite="us-savers-credit-grid",
+        suite="us-savers-grid",
         case_id=case.case_id,
         actual=actual,
         expected={
-            f"{prefix}section_911_excluded_income": 0,
-            f"{prefix}section_931_excluded_income": 0,
-            f"{prefix}section_933_excluded_income": 0,
+            f"{prefix}section_911_excluded_income": inputs[
+                "section_911_excluded_income"
+            ],
+            f"{prefix}section_931_excluded_income": inputs[
+                "section_931_excluded_income"
+            ],
+            f"{prefix}section_933_excluded_income": inputs[
+                "section_933_excluded_income"
+            ],
             f"{prefix}filing_status": status_codes[case.filing_status],
             f"{prefix}adjusted_gross_income": inputs["adjusted_gross_income"],
-            f"{prefix}savers_credit_first_threshold_2026": inputs["first_threshold"],
-            f"{prefix}savers_credit_second_threshold_2026": inputs["second_threshold"],
-            f"{prefix}savers_credit_third_threshold_2026": inputs["third_threshold"],
             f"{prefix}primary_age_at_close_of_taxable_year": inputs["primary_age"],
             f"{prefix}primary_is_student_under_section_152_f_2": inputs[
                 "primary_is_student"
@@ -1525,6 +2398,115 @@ def _verify_parameter_values(
             )
 
 
+def _verify_salt_pe_parameters(tax_benefit_system: Any) -> None:
+    parameters = tax_benefit_system.parameters("2026-01-01")
+    p = parameters.gov.irs.deductions.itemized.salt_and_real_estate
+    simulation = parameters.gov.simulation
+    _verify_parameter_values(
+        "us-salt-deduction-grid",
+        {
+            "sources": list(p.sources),
+            "cap.SINGLE": float(p.cap.SINGLE),
+            "cap.JOINT": float(p.cap.JOINT),
+            "cap.SEPARATE": float(p.cap.SEPARATE),
+            "cap.HEAD_OF_HOUSEHOLD": float(p.cap.HEAD_OF_HOUSEHOLD),
+            "cap.SURVIVING_SPOUSE": float(p.cap.SURVIVING_SPOUSE),
+            "phase_out.threshold.SINGLE": float(p.phase_out.threshold.SINGLE),
+            "phase_out.threshold.JOINT": float(p.phase_out.threshold.JOINT),
+            "phase_out.threshold.SEPARATE": float(p.phase_out.threshold.SEPARATE),
+            "phase_out.threshold.HEAD_OF_HOUSEHOLD": float(
+                p.phase_out.threshold.HEAD_OF_HOUSEHOLD
+            ),
+            "phase_out.threshold.SURVIVING_SPOUSE": float(
+                p.phase_out.threshold.SURVIVING_SPOUSE
+            ),
+            "phase_out.rate": float(p.phase_out.rate),
+            "phase_out.floor.amount.SINGLE": float(p.phase_out.floor.amount.SINGLE),
+            "phase_out.floor.amount.JOINT": float(p.phase_out.floor.amount.JOINT),
+            "phase_out.floor.amount.SEPARATE": float(p.phase_out.floor.amount.SEPARATE),
+            "phase_out.floor.amount.HEAD_OF_HOUSEHOLD": float(
+                p.phase_out.floor.amount.HEAD_OF_HOUSEHOLD
+            ),
+            "phase_out.floor.amount.SURVIVING_SPOUSE": float(
+                p.phase_out.floor.amount.SURVIVING_SPOUSE
+            ),
+            "phase_out.in_effect": bool(p.phase_out.in_effect),
+            "phase_out.floor.applies": bool(p.phase_out.floor.applies),
+            "simulation.limit_itemized_deductions_to_taxable_income": bool(
+                simulation.limit_itemized_deductions_to_taxable_income
+            ),
+            "simulation.branch_to_determine_itemization": bool(
+                simulation.branch_to_determine_itemization
+            ),
+        },
+        {
+            "sources": [
+                "state_and_local_sales_or_income_tax",
+                "real_estate_taxes",
+            ],
+            "cap.SINGLE": 40_400,
+            "cap.JOINT": 40_400,
+            "cap.SEPARATE": 20_200,
+            "cap.HEAD_OF_HOUSEHOLD": 40_400,
+            "cap.SURVIVING_SPOUSE": 40_400,
+            "phase_out.threshold.SINGLE": 505_000,
+            "phase_out.threshold.JOINT": 505_000,
+            "phase_out.threshold.SEPARATE": 252_500,
+            "phase_out.threshold.HEAD_OF_HOUSEHOLD": 505_000,
+            "phase_out.threshold.SURVIVING_SPOUSE": 505_000,
+            "phase_out.rate": 0.3,
+            "phase_out.floor.amount.SINGLE": 10_000,
+            "phase_out.floor.amount.JOINT": 10_000,
+            "phase_out.floor.amount.SEPARATE": 5_000,
+            "phase_out.floor.amount.HEAD_OF_HOUSEHOLD": 10_000,
+            "phase_out.floor.amount.SURVIVING_SPOUSE": 10_000,
+            "phase_out.in_effect": True,
+            "phase_out.floor.applies": True,
+            "simulation.limit_itemized_deductions_to_taxable_income": True,
+            "simulation.branch_to_determine_itemization": True,
+        },
+    )
+
+
+def _verify_itemized_pe_parameters(tax_benefit_system: Any) -> None:
+    parameters = tax_benefit_system.parameters("2026-01-01")
+    deductions = parameters.gov.irs.deductions
+    p = deductions.itemized.limitation
+    top_thresholds = parameters.gov.irs.income.bracket.thresholds["6"]
+    _verify_parameter_values(
+        "us-itemized-taxable-income-deductions-grid",
+        {
+            "itemized_deductions": list(deductions.itemized_deductions),
+            "limitation.applies": bool(p.applies),
+            "limitation.obbb.applies": bool(p.obbb.applies),
+            "top_threshold.SINGLE": float(top_thresholds.SINGLE),
+            "top_threshold.JOINT": float(top_thresholds.JOINT),
+            "top_threshold.SEPARATE": float(top_thresholds.SEPARATE),
+            "top_threshold.HEAD_OF_HOUSEHOLD": float(top_thresholds.HEAD_OF_HOUSEHOLD),
+            "top_threshold.SURVIVING_SPOUSE": float(top_thresholds.SURVIVING_SPOUSE),
+            "limitation.obbb.rate": float(p.obbb.rate),
+        },
+        {
+            "itemized_deductions": [
+                "charitable_deduction",
+                "interest_deduction",
+                "salt_deduction",
+                "medical_expense_deduction",
+                "casualty_loss_deduction",
+                "misc_deduction",
+            ],
+            "limitation.applies": True,
+            "limitation.obbb.applies": True,
+            "top_threshold.SINGLE": 640_600,
+            "top_threshold.JOINT": 768_700,
+            "top_threshold.SEPARATE": 384_350,
+            "top_threshold.HEAD_OF_HOUSEHOLD": 640_600,
+            "top_threshold.SURVIVING_SPOUSE": 768_700,
+            "limitation.obbb.rate": 0.05405405,
+        },
+    )
+
+
 def _verify_qbid_pe_parameters(tax_benefit_system: Any) -> None:
     p = tax_benefit_system.parameters("2026-01-01").gov.irs.deductions.qbi
     _verify_parameter_values(
@@ -1558,7 +2540,7 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
     # and at each published value proves the exact stored breakpoints while
     # leaving the inclusive-maximum truth case to surface as a real mismatch.
     _verify_parameter_values(
-        "us-savers-credit-grid",
+        "us-savers-grid",
         {
             "rate.joint@48499.99": float(p.rate.joint.calc(48_499.99)),
             "rate.joint@48500": float(p.rate.joint.calc(48_500)),
@@ -1566,6 +2548,15 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
             "rate.joint@80500": float(p.rate.joint.calc(80_500)),
             "rate.threshold_adjustment.JOINT": (p.rate.threshold_adjustment.JOINT),
             "rate.threshold_adjustment.SINGLE": (p.rate.threshold_adjustment.SINGLE),
+            "rate.threshold_adjustment.SEPARATE": (
+                p.rate.threshold_adjustment.SEPARATE
+            ),
+            "rate.threshold_adjustment.HEAD_OF_HOUSEHOLD": (
+                p.rate.threshold_adjustment.HEAD_OF_HOUSEHOLD
+            ),
+            "rate.threshold_adjustment.SURVIVING_SPOUSE": (
+                p.rate.threshold_adjustment.SURVIVING_SPOUSE
+            ),
             "contributions_cap": p.contributions_cap,
         },
         {
@@ -1575,6 +2566,9 @@ def _verify_savers_pe_parameters(tax_benefit_system: Any) -> None:
             "rate.joint@80500": 0,
             "rate.threshold_adjustment.JOINT": 1,
             "rate.threshold_adjustment.SINGLE": 0.5,
+            "rate.threshold_adjustment.SEPARATE": 0.5,
+            "rate.threshold_adjustment.HEAD_OF_HOUSEHOLD": 0.75,
+            "rate.threshold_adjustment.SURVIVING_SPOUSE": 0.5,
             "contributions_cap": 2_000,
         },
     )
@@ -1641,6 +2635,95 @@ def _verify_llc_pe_parameters(tax_benefit_system: Any) -> None:
 # read only one fixture; a missing companion cannot prevent another policy from
 # running.
 POLICIES: dict[str, PolicyConfig] = {
+    "salt_deduction": PolicyConfig(
+        key="salt_deduction",
+        suite="us-salt-deduction-grid",
+        title="State and local tax deduction",
+        axiom_module_ref=_SALT_MODULE,
+        fixture_path=Path("us/policies/income_tax/salt_deduction_pipeline.test.yaml"),
+        axiom_output=f"{_SALT_MODULE}#federal_salt_deduction",
+        pe_output_variables=("salt_deduction",),
+        pe_boundary=(
+            "TaxUnit section 164 personal SALT component after the 2026 "
+            "cap, phaseout, and PolicyEngine's simulation-only AGI ceiling"
+        ),
+        cases=_SALT_DEDUCTION_CASES,
+        pe_situation=_salt_situation,
+        fixture_input_validator=_validate_salt_fixture,
+        pe_diagnostic_variables=(
+            "salt",
+            "salt_cap",
+            "adjusted_gross_income",
+            "exemptions",
+            "foreign_earned_income_exclusion",
+            "salt_deduction",
+        ),
+        pe_parameter_validator=_verify_salt_pe_parameters,
+        axiom_bridge_outputs={
+            _SALT_SECTION_911_BRIDGE: "foreign_earned_income_exclusion",
+        },
+        rulespec_domain_inputs=_SALT_DOMAIN_INPUTS,
+        rulespec_only_inputs=(_SALT_PERSONAL_PROPERTY_INPUT,),
+        pe_input_variables=(
+            *_PE_STRUCTURAL_INPUTS,
+            "adjusted_gross_income",
+            "state_and_local_sales_or_income_tax",
+            "real_estate_taxes",
+            "foreign_earned_income_exclusion",
+        ),
+    ),
+    "itemized_taxable_income_deductions": PolicyConfig(
+        key="itemized_taxable_income_deductions",
+        suite="us-itemized-taxable-income-deductions-grid",
+        title="Itemized taxable-income deductions",
+        axiom_module_ref=_ITEMIZED_MODULE,
+        fixture_path=Path(
+            "us/policies/income_tax/"
+            "itemized_taxable_income_deductions_pipeline.test.yaml"
+        ),
+        axiom_output=(f"{_ITEMIZED_MODULE}#federal_itemized_taxable_income_deductions"),
+        pe_output_variables=("itemized_taxable_income_deductions",),
+        pe_boundary=(
+            "TaxUnit six-component completed itemized aggregate after the "
+            "2026 section 68 limitation"
+        ),
+        cases=_ITEMIZED_DEDUCTION_CASES,
+        pe_situation=_itemized_situation,
+        fixture_input_validator=_validate_itemized_fixture,
+        pe_diagnostic_variables=(
+            "total_itemized_taxable_income_deductions",
+            "itemized_taxable_income_deductions_reduction",
+            "itemized_taxable_income_deductions",
+            "adjusted_gross_income",
+            "exemptions",
+            "charitable_deduction",
+            "interest_deduction",
+            "salt_deduction",
+            "medical_expense_deduction",
+            "casualty_loss_deduction",
+            "misc_deduction",
+        ),
+        pe_parameter_validator=_verify_itemized_pe_parameters,
+        axiom_diagnostic_outputs={
+            _ITEMIZED_BEFORE_SECTION_68: ("total_itemized_taxable_income_deductions"),
+            _ITEMIZED_SECTION_68_REDUCTION: (
+                "itemized_taxable_income_deductions_reduction"
+            ),
+        },
+        rulespec_domain_inputs=_ITEMIZED_DOMAIN_INPUTS,
+        rulespec_only_inputs=(_ITEMIZED_SECTION_68_BASE_INPUT,),
+        pe_input_variables=(
+            *_PE_STRUCTURAL_INPUTS,
+            "adjusted_gross_income",
+            "exemptions",
+            "charitable_deduction",
+            "interest_deduction",
+            "salt_deduction",
+            "medical_expense_deduction",
+            "casualty_loss_deduction",
+            "misc_deduction",
+        ),
+    ),
     "qualified_business_income_deduction": PolicyConfig(
         key="qualified_business_income_deduction",
         suite="us-qbid-grid",
@@ -1663,13 +2746,13 @@ POLICIES: dict[str, PolicyConfig] = {
             "UBIA, REIT/PTP income, taxable income, and net capital gain"
         ),
         cases=_QBID_CASES,
-        pe_situation=_qbid_situation,
+        pe_situation=_no_bridge_situation(_qbid_situation),
         fixture_input_validator=_validate_qbid_fixture,
         pe_parameter_validator=_verify_qbid_pe_parameters,
     ),
     "savers_credit": PolicyConfig(
         key="savers_credit",
-        suite="us-savers-credit-grid",
+        suite="us-savers-grid",
         title="Saver's credit before section 26",
         axiom_module_ref=("us:policies/income_tax/savers_credit_pipeline"),
         fixture_path=Path("us/policies/income_tax/savers_credit_pipeline.test.yaml"),
@@ -1677,21 +2760,24 @@ POLICIES: dict[str, PolicyConfig] = {
             "us:policies/income_tax/savers_credit_pipeline#federal_savers_credit"
         ),
         # The public PE variable applies the nonrefundable credit limit.
-        # `savers_credit_potential` is its statutory pre-section-26 input and
-        # therefore matches the Axiom companion boundary.
+        # `savers_credit_potential` is PE's TaxUnit pre-section-26 amount and
+        # the bridge registry's reviewed direct target for this final.
         pe_output_variables=("savers_credit_potential",),
         pe_boundary=(
-            "TaxUnit statutory section 25B amount before section 26, summed "
-            "from separately capped eligible Persons"
+            "TaxUnit section 25B amount before section 26, mapped directly to "
+            "PE's pre-section-26 potential-credit surface"
         ),
         cases=_SAVERS_CREDIT_CASES,
-        pe_situation=_savers_credit_situation,
+        pe_situation=_no_bridge_situation(_savers_credit_situation),
         fixture_input_validator=_validate_savers_credit_fixture,
         pe_diagnostic_variables=(
             "savers_credit",
             "savers_credit_credit_limit",
         ),
         pe_parameter_validator=_verify_savers_pe_parameters,
+        supplemental_fixture_paths=(
+            Path("comparisons/fixtures/us-savers-grid-boundary-probes.yaml"),
+        ),
     ),
     "elderly_disabled_credit": PolicyConfig(
         key="elderly_disabled_credit",
@@ -1712,7 +2798,7 @@ POLICIES: dict[str, PolicyConfig] = {
             "aged and collapsed permanent-total-disability branches"
         ),
         cases=_ELDERLY_DISABLED_CASES,
-        pe_situation=_elderly_disabled_situation,
+        pe_situation=_no_bridge_situation(_elderly_disabled_situation),
         fixture_input_validator=_validate_elderly_disabled_fixture,
         pe_diagnostic_variables=(
             "elderly_disabled_credit",
@@ -1738,7 +2824,7 @@ POLICIES: dict[str, PolicyConfig] = {
             "limit; the diagnostic case binds that limit"
         ),
         cases=_LLC_CASES,
-        pe_situation=_llc_situation,
+        pe_situation=_no_bridge_situation(_llc_situation),
         fixture_input_validator=_validate_llc_fixture,
         pe_diagnostic_variables=(
             "lifetime_learning_credit_potential",
@@ -1765,7 +2851,7 @@ POLICIES: dict[str, PolicyConfig] = {
             "section 3101(b)(2) wage-only amount"
         ),
         cases=_ADDITIONAL_MEDICARE_CASES,
-        pe_situation=_payroll_situation,
+        pe_situation=_no_bridge_situation(_payroll_situation),
         fixture_input_validator=_validate_additional_medicare_fixture,
     ),
     "self_employment_tax": PolicyConfig(
@@ -1786,7 +2872,7 @@ POLICIES: dict[str, PolicyConfig] = {
             "excludes Additional Medicare Tax"
         ),
         cases=_SELF_EMPLOYMENT_CASES,
-        pe_situation=_payroll_situation,
+        pe_situation=_no_bridge_situation(_payroll_situation),
         fixture_input_validator=_validate_self_employment_fixture,
     ),
     "net_investment_income_tax": PolicyConfig(
@@ -1807,7 +2893,7 @@ POLICIES: dict[str, PolicyConfig] = {
             "section 911 exclusions"
         ),
         cases=_NIIT_CASES,
-        pe_situation=_niit_situation,
+        pe_situation=_no_bridge_situation(_niit_situation),
         fixture_input_validator=_validate_niit_fixture,
     ),
     "aca_ptc": PolicyConfig(
@@ -1825,7 +2911,7 @@ POLICIES: dict[str, PolicyConfig] = {
             "premium for twelve months"
         ),
         cases=_ACA_PTC_CASES,
-        pe_situation=_aca_ptc_situation,
+        pe_situation=_no_bridge_situation(_aca_ptc_situation),
         fixture_input_validator=_validate_aca_ptc_fixture,
     ),
 }
@@ -1865,20 +2951,262 @@ def _fixture_records(path: Path) -> list[dict[str, Any]]:
     return records
 
 
+def _scored_bindings(config: PolicyConfig) -> tuple[ComparisonBinding, ...]:
+    if config.comparison_bindings:
+        return config.comparison_bindings
+    if len(config.pe_output_variables) != 1:
+        raise ValueError(
+            f"{config.suite}: a single legacy PE output or explicit comparison "
+            "bindings are required"
+        )
+    return (
+        ComparisonBinding(
+            concept=config.axiom_output,
+            policyengine_target=config.pe_output_variables[0],
+            comparison="amount",
+        ),
+    )
+
+
+def _comparison_rows(
+    config: PolicyConfig,
+) -> list[tuple[str, FederalCase, ComparisonBinding]]:
+    known_cases = {case.case_id: case for case in config.cases}
+    rows: list[tuple[str, FederalCase, ComparisonBinding]] = []
+    for binding in _scored_bindings(config):
+        selected_ids = binding.case_ids or tuple(known_cases)
+        unknown = sorted(set(selected_ids) - set(known_cases))
+        if unknown:
+            raise ValueError(
+                f"{config.suite}: comparison binding {binding.concept!r} "
+                f"selects unknown cases {unknown}"
+            )
+        for case_id in selected_ids:
+            case = known_cases[case_id]
+            rows.append((f"{case_id}{binding.case_id_suffix}", case, binding))
+    row_ids = [row_id for row_id, _, _ in rows]
+    if len(row_ids) != len(set(row_ids)):
+        raise ValueError(f"{config.suite}: comparison row IDs are not unique")
+    return rows
+
+
+def _mapping_for_binding(config: PolicyConfig, binding: ComparisonBinding) -> Any:
+    mapping = load_policyengine_registry().mapping_for_legal_id(
+        binding.concept,
+        country="us",
+    )
+    if mapping is None:
+        raise ValueError(
+            f"{config.suite}: scored concept {binding.concept!r} is unmapped"
+        )
+    if not mapping.comparable:
+        raise ValueError(
+            f"{config.suite}: scored concept {binding.concept!r} is "
+            "registry-not-comparable"
+        )
+    mapped_target = mapping.policyengine_variable or mapping.policyengine_parameter
+    if binding.policyengine_target != mapped_target:
+        raise ValueError(
+            f"{config.suite}: scored concept {binding.concept!r} binds "
+            f"{binding.policyengine_target!r}, but the registry target is "
+            f"{mapped_target!r}"
+        )
+    return mapping
+
+
+def _assert_registry_comparable_bindings(config: PolicyConfig) -> None:
+    """Fail closed for grids whose scored bindings have been registry-audited.
+
+    Other older federal grids still need a separate mapping migration. Keeping
+    the invariant scoped prevents this work from silently blessing their
+    pre-existing unmapped pipeline concepts.
+    """
+
+    audited_suites = {
+        "us-savers-grid",
+        "us-salt-deduction-grid",
+        "us-itemized-taxable-income-deductions-grid",
+    }
+    if config.suite not in audited_suites:
+        return
+    for binding in _scored_bindings(config):
+        _mapping_for_binding(config, binding)
+
+
+def _validate_policy_config(config: PolicyConfig) -> None:
+    scored_outputs = {binding.concept for binding in _scored_bindings(config)}
+    bridge_outputs = set(config.axiom_bridge_outputs)
+    diagnostic_outputs = set(config.axiom_diagnostic_outputs)
+    overlap = scored_outputs & bridge_outputs
+    if overlap:
+        raise ValueError(
+            f"{config.suite}: compared Axiom outputs cannot also be bridge "
+            f"outputs: {sorted(overlap)}"
+        )
+    overlap = (scored_outputs | bridge_outputs) & diagnostic_outputs
+    if overlap:
+        raise ValueError(
+            f"{config.suite}: diagnostic Axiom outputs must be distinct from "
+            f"compared and bridge outputs: {sorted(overlap)}"
+        )
+    for output in bridge_outputs | diagnostic_outputs:
+        if not output.startswith(f"{config.axiom_module_ref}#"):
+            raise ValueError(
+                f"{config.suite}: auxiliary Axiom output {output!r} is not "
+                f"defined by configured module {config.axiom_module_ref!r}"
+            )
+    bridge_targets = tuple(config.axiom_bridge_outputs.values())
+    if len(bridge_targets) != len(set(bridge_targets)):
+        raise ValueError(
+            f"{config.suite}: multiple Axiom bridge outputs target the same "
+            "PolicyEngine input"
+        )
+    if len(config.rulespec_only_inputs) != len(set(config.rulespec_only_inputs)):
+        raise ValueError(f"{config.suite}: RuleSpec-only inputs contain duplicates")
+    if len(config.pe_input_variables) != len(set(config.pe_input_variables)):
+        raise ValueError(
+            f"{config.suite}: declared PolicyEngine inputs contain duplicates"
+        )
+    undeclared_bridge_targets = sorted(
+        set(bridge_targets) - set(config.pe_input_variables)
+    )
+    if undeclared_bridge_targets:
+        raise ValueError(
+            f"{config.suite}: PolicyEngine bridge targets are not declared "
+            f"inputs: {undeclared_bridge_targets}"
+        )
+    undeclared_diagnostic_targets = sorted(
+        set(config.axiom_diagnostic_outputs.values())
+        - set(config.pe_diagnostic_variables)
+    )
+    if undeclared_diagnostic_targets:
+        raise ValueError(
+            f"{config.suite}: Axiom diagnostic targets are not declared "
+            f"PolicyEngine diagnostics: {undeclared_diagnostic_targets}"
+        )
+    overlap = set(config.rulespec_domain_inputs) & set(config.rulespec_only_inputs)
+    if overlap:
+        raise ValueError(
+            f"{config.suite}: domain and RuleSpec-only inputs overlap: "
+            f"{sorted(overlap)}"
+        )
+
+
+def _binding_payload(
+    config: PolicyConfig,
+    binding: ComparisonBinding,
+) -> dict[str, Any]:
+    mapping = _mapping_for_binding(config, binding)
+    payload: dict[str, Any] = {
+        "concept": binding.concept,
+        "mapping_type": mapping.mapping_type,
+        "comparison": binding.comparison,
+    }
+    if mapping.policyengine_variable:
+        payload["variable"] = mapping.policyengine_variable
+    if mapping.policyengine_parameter:
+        payload["parameter"] = mapping.policyengine_parameter
+    if mapping.parameter_key:
+        payload["parameter_key"] = mapping.parameter_key
+    if mapping.parameter_key_input:
+        payload["parameter_key_input"] = mapping.parameter_key_input
+    if mapping.parameter_key_map:
+        payload["parameter_key_map"] = dict(mapping.parameter_key_map)
+    if binding.case_ids:
+        payload["case_ids"] = list(binding.case_ids)
+    return payload
+
+
+def _merge_fixture_record(
+    *,
+    suite: str,
+    base: dict[str, Any],
+    extension: Mapping[str, Any],
+    extension_path: Path,
+) -> dict[str, Any]:
+    merged = dict(base)
+    for field in ("period",):
+        if field in extension and field in merged and extension[field] != merged[field]:
+            raise ValueError(
+                f"{suite}: {extension_path} conflicts on {field!r} for "
+                f"case {base.get('name')!r}"
+            )
+        if field in extension:
+            merged[field] = extension[field]
+    for field in ("input", "output"):
+        existing = merged.get(field) or {}
+        additional = extension.get(field) or {}
+        if not isinstance(existing, dict) or not isinstance(additional, dict):
+            raise ValueError(
+                f"{suite}: fixture case {base.get('name')!r} field {field!r} "
+                "must be a mapping"
+            )
+        combined = dict(existing)
+        for key, value in additional.items():
+            if key in combined and combined[key] != value:
+                raise ValueError(
+                    f"{suite}: {extension_path} conflicts on {field}.{key} "
+                    f"for case {base.get('name')!r}"
+                )
+            combined[key] = value
+        merged[field] = combined
+    return merged
+
+
+def _merged_fixture_records(
+    config: PolicyConfig,
+    fixture: Path,
+) -> dict[str, dict[str, Any]]:
+    by_name = {str(record.get("name")): record for record in _fixture_records(fixture)}
+    configured_ids = {case.case_id for case in config.cases}
+    for relative_path in config.supplemental_fixture_paths:
+        extension_path = REPO_ROOT / relative_path
+        if not extension_path.is_file():
+            raise FileNotFoundError(
+                f"{config.suite}: supplemental fixture not found: {extension_path}"
+            )
+        for extension in _fixture_records(extension_path):
+            name = str(extension.get("name"))
+            if name not in configured_ids:
+                raise ValueError(
+                    f"{config.suite}: {extension_path} contains unconfigured "
+                    f"case {name!r}"
+                )
+            if name in by_name:
+                by_name[name] = _merge_fixture_record(
+                    suite=config.suite,
+                    base=by_name[name],
+                    extension=extension,
+                    extension_path=extension_path,
+                )
+            else:
+                by_name[name] = extension
+    return by_name
+
+
 def _axiom_values(
     config: PolicyConfig,
     roots: list[Path],
-) -> tuple[Path, dict[str, float], dict[str, dict[str, Any]]]:
-    if not config.axiom_output.startswith(f"{config.axiom_module_ref}#"):
-        raise ValueError(
-            f"{config.suite}: Axiom output {config.axiom_output!r} is not "
-            f"defined by configured module {config.axiom_module_ref!r}"
-        )
+) -> tuple[
+    Path,
+    dict[str, float],
+    dict[str, dict[str, Any]],
+    dict[str, dict[str, float]],
+    dict[str, dict[str, float]],
+]:
+    bindings = _scored_bindings(config)
+    for binding in bindings:
+        if not binding.concept.startswith(f"{config.axiom_module_ref}#"):
+            raise ValueError(
+                f"{config.suite}: Axiom output {binding.concept!r} is not "
+                f"defined by configured module {config.axiom_module_ref!r}"
+            )
     fixture = _fixture_file(config, roots)
-    records = _fixture_records(fixture)
-    by_name = {str(record.get("name")): record for record in records}
+    by_name = _merged_fixture_records(config, fixture)
     values: dict[str, float] = {}
     fixture_inputs: dict[str, dict[str, Any]] = {}
+    bridge_values: dict[str, dict[str, float]] = {}
+    diagnostic_values: dict[str, dict[str, float]] = {}
     for case in config.cases:
         if case.case_id not in by_name:
             raise ValueError(f"{fixture}: missing contract case {case.case_id!r}")
@@ -1894,30 +3222,226 @@ def _axiom_values(
                 f"{VALIDATION_YEAR} tax-year period"
             )
         outputs = record.get("output")
-        if not isinstance(outputs, dict) or config.axiom_output not in outputs:
+        if not isinstance(outputs, dict):
             raise ValueError(
-                f"{fixture}: case {case.case_id!r} has no output "
-                f"{config.axiom_output!r}"
+                f"{fixture}: case {case.case_id!r} output is not a mapping"
             )
-        values[case.case_id] = float(str(outputs[config.axiom_output]))
         raw_inputs = record.get("input") or {}
         if not isinstance(raw_inputs, dict):
             raise ValueError(f"{fixture}: case {case.case_id!r} input is not a mapping")
         config.fixture_input_validator(case, raw_inputs)
+        _validate_rulespec_input_contract(config, case, raw_inputs)
         fixture_inputs[case.case_id] = raw_inputs
-    return fixture, values, fixture_inputs
+        bridge_values[case.case_id] = {
+            output: _numeric_fixture_output(
+                fixture=fixture,
+                case_id=case.case_id,
+                output=output,
+                value=outputs.get(output),
+                present=output in outputs,
+            )
+            for output in config.axiom_bridge_outputs
+        }
+        diagnostic_values[case.case_id] = {
+            output: _numeric_fixture_output(
+                fixture=fixture,
+                case_id=case.case_id,
+                output=output,
+                value=outputs.get(output),
+                present=output in outputs,
+            )
+            for output in config.axiom_diagnostic_outputs
+        }
+    for row_id, case, binding in _comparison_rows(config):
+        outputs = by_name[case.case_id].get("output") or {}
+        if binding.concept not in outputs:
+            raise ValueError(
+                f"{fixture}: case {case.case_id!r} has no output {binding.concept!r}"
+            )
+        values[row_id] = _numeric_fixture_output(
+            fixture=fixture,
+            case_id=case.case_id,
+            output=binding.concept,
+            value=outputs[binding.concept],
+            present=True,
+        )
+    return (
+        fixture,
+        values,
+        fixture_inputs,
+        bridge_values,
+        diagnostic_values,
+    )
+
+
+def _numeric_fixture_output(
+    *,
+    fixture: Path,
+    case_id: str,
+    output: str,
+    value: Any,
+    present: bool,
+) -> float:
+    if not present:
+        raise ValueError(f"{fixture}: case {case_id!r} has no output {output!r}")
+    if isinstance(value, bool):
+        raise ValueError(
+            f"{fixture}: case {case_id!r} output {output!r} must be numeric"
+        )
+    try:
+        numeric = float(str(value))
+    except (TypeError, ValueError) as error:
+        raise ValueError(
+            f"{fixture}: case {case_id!r} output {output!r} must be numeric; "
+            f"got {value!r}"
+        ) from error
+    if not isfinite(numeric):
+        raise ValueError(
+            f"{fixture}: case {case_id!r} output {output!r} must be finite; "
+            f"got {value!r}"
+        )
+    return numeric
+
+
+def _situation_input_variables(situation: Mapping[str, Any]) -> set[str]:
+    observed: set[str] = set()
+    for entities in situation.values():
+        if not isinstance(entities, Mapping):
+            continue
+        for entity in entities.values():
+            if not isinstance(entity, Mapping):
+                continue
+            observed.update(variable for variable in entity if variable != "members")
+    return observed
+
+
+def _validate_pe_situation_inputs(
+    config: PolicyConfig,
+    case: FederalCase,
+    situation: Mapping[str, Any],
+) -> None:
+    if not config.pe_input_variables:
+        return
+    observed = _situation_input_variables(situation)
+    unexpected = sorted(observed - set(config.pe_input_variables))
+    if unexpected:
+        raise ValueError(
+            f"{config.suite}: case {case.case_id!r} has undeclared "
+            f"PolicyEngine overrides {unexpected}"
+        )
+    missing_bridges = sorted(set(config.axiom_bridge_outputs.values()) - observed)
+    if missing_bridges:
+        raise ValueError(
+            f"{config.suite}: case {case.case_id!r} omits PolicyEngine "
+            f"bridge inputs {missing_bridges}"
+        )
 
 
 def _policyengine_values(
     config: PolicyConfig,
+    bridge_values: Mapping[str, Mapping[str, float]],
 ) -> tuple[dict[str, float], dict[str, dict[str, float]]]:
+    actual_versions = {
+        "policyengine": distribution_version("policyengine"),
+        "policyengine_core": distribution_version("policyengine-core"),
+        "policyengine_us": distribution_version("policyengine-us"),
+    }
+    if actual_versions != ENGINE_VERSIONS:
+        raise RuntimeError(
+            f"{config.suite}: runtime PolicyEngine stack {actual_versions} "
+            f"does not match reviewed stack {ENGINE_VERSIONS}"
+        )
     from policyengine_us import Simulation
+
+    configured_cases = {case.case_id for case in config.cases}
+    missing_bridge_cases = sorted(configured_cases - set(bridge_values))
+    unexpected_bridge_cases = sorted(set(bridge_values) - configured_cases)
+    if missing_bridge_cases or unexpected_bridge_cases:
+        raise ValueError(
+            f"{config.suite}: bridge-value cases differ; "
+            f"missing={missing_bridge_cases}, "
+            f"unexpected={unexpected_bridge_cases}"
+        )
+
+    if config.comparison_bindings:
+        totals: dict[str, float] = {}
+        components: dict[str, dict[str, float]] = {}
+        rows_by_case: dict[
+            str,
+            list[tuple[str, ComparisonBinding]],
+        ] = {}
+        for row_id, case, binding in _comparison_rows(config):
+            rows_by_case.setdefault(case.case_id, []).append((row_id, binding))
+        parameters_verified = False
+        for case in config.cases:
+            situation = config.pe_situation(
+                case,
+                bridge_values[case.case_id],
+            )
+            _validate_pe_situation_inputs(config, case, situation)
+            simulation = Simulation(situation=situation)
+            if config.pe_parameter_validator is not None and not parameters_verified:
+                config.pe_parameter_validator(simulation.tax_benefit_system)
+                parameters_verified = True
+            for row_id, binding in rows_by_case.get(case.case_id, []):
+                mapping = _mapping_for_binding(config, binding)
+                if mapping.policyengine_variable:
+                    calculated = simulation.calculate(
+                        mapping.policyengine_variable,
+                        VALIDATION_YEAR,
+                    )
+                    value = sum(float(item) for item in calculated)
+                elif mapping.policyengine_parameter:
+                    parameter: Any = simulation.tax_benefit_system.parameters(
+                        f"{VALIDATION_YEAR}-01-01"
+                    )
+                    for part in mapping.policyengine_parameter.split("."):
+                        parameter = getattr(parameter, part)
+                    if mapping.parameter_key:
+                        parameter = getattr(parameter, mapping.parameter_key)
+                    elif mapping.parameter_key_input:
+                        status_codes = {
+                            "single": 0,
+                            "joint": 1,
+                            "separate": 2,
+                            "head_of_household": 3,
+                            "surviving_spouse": 4,
+                        }
+                        raw_key = (
+                            status_codes[case.filing_status]
+                            if mapping.parameter_key_input == "filing_status"
+                            else case.inputs[mapping.parameter_key_input]
+                        )
+                        selected_key = mapping.parameter_key_map.get(
+                            str(raw_key),
+                            mapping.parameter_key_map.get(raw_key),
+                        )
+                        if selected_key is None:
+                            raise ValueError(
+                                f"{config.suite}: no parameter key for "
+                                f"{mapping.parameter_key_input}={raw_key!r}"
+                            )
+                        parameter = getattr(parameter, selected_key)
+                    value = float(parameter)
+                else:
+                    raise ValueError(
+                        f"{config.suite}: unsupported scored registry mapping "
+                        f"for {binding.concept!r}"
+                    )
+                totals[row_id] = value
+                components[row_id] = {binding.policyengine_target: value}
+        return totals, components
 
     totals: dict[str, float] = {}
     components: dict[str, dict[str, float]] = {}
     parameters_verified = False
     for case in config.cases:
-        simulation = Simulation(situation=config.pe_situation(case))
+        situation = config.pe_situation(
+            case,
+            bridge_values[case.case_id],
+        )
+        _validate_pe_situation_inputs(config, case, situation)
+        simulation = Simulation(situation=situation)
         if config.pe_parameter_validator is not None and not parameters_verified:
             config.pe_parameter_validator(simulation.tax_benefit_system)
             parameters_verified = True
@@ -1965,9 +3489,16 @@ def _policyengine_values(
     return totals, components
 
 
-def _matches(config: PolicyConfig, left: float, right: float) -> bool:
+def _matches(
+    config: PolicyConfig,
+    left: float,
+    right: float,
+    *,
+    tolerance: float | None = None,
+) -> bool:
+    absolute_tolerance = config.tolerance if tolerance is None else tolerance
     difference = abs(left - right)
-    if difference <= config.tolerance:
+    if difference <= absolute_tolerance:
         return True
     scale = max(abs(left), abs(right))
     return (
@@ -1982,17 +3513,31 @@ def _assert_non_vacuous(
     axiom: Mapping[str, float],
     policyengine: Mapping[str, float],
 ) -> None:
-    nonzero_matches = [
-        case.case_id
-        for case in config.cases
-        if abs(axiom[case.case_id]) > config.tolerance
-        and abs(policyengine[case.case_id]) > config.tolerance
-        and _matches(
-            config,
-            axiom[case.case_id],
-            policyengine[case.case_id],
+    if set(axiom) != set(policyengine):
+        raise RuntimeError(
+            f"{config.suite}: Axiom and PolicyEngine comparison rows differ"
         )
-    ]
+    tolerances = {
+        row_id: binding.tolerance for row_id, _case, binding in _comparison_rows(config)
+    }
+    nonzero_matches = []
+    for row_id in axiom:
+        tolerance = (
+            config.tolerance
+            if tolerances[row_id] is None
+            else float(tolerances[row_id])
+        )
+        if (
+            abs(axiom[row_id]) > tolerance
+            and abs(policyengine[row_id]) > tolerance
+            and _matches(
+                config,
+                axiom[row_id],
+                policyengine[row_id],
+                tolerance=tolerance,
+            )
+        ):
+            nonzero_matches.append(row_id)
     if not nonzero_matches:
         raise RuntimeError(
             f"{config.suite}: vacuous grid: no nonzero expected case matches "
@@ -2007,39 +3552,71 @@ def _build_report(
     fixture_inputs: Mapping[str, Mapping[str, Any]],
     policyengine: Mapping[str, float],
     policyengine_components: Mapping[str, Mapping[str, float]],
+    axiom_bridge_values: Mapping[str, Mapping[str, float]] | None = None,
+    axiom_diagnostic_values: Mapping[str, Mapping[str, float]] | None = None,
 ) -> dict[str, Any]:
+    bridge_values = axiom_bridge_values or {}
+    diagnostic_values = axiom_diagnostic_values or {}
     cases: list[dict[str, Any]] = []
     mismatches: list[dict[str, Any]] = []
-    match_count = 0
-    left_positive = 0
-    right_positive = 0
-    for case in config.cases:
-        axiom_value = axiom[case.case_id]
-        pe_value = policyengine[case.case_id]
-        matched = _matches(config, axiom_value, pe_value)
-        match_count += int(matched)
-        left_positive += int(abs(axiom_value) > config.tolerance)
-        right_positive += int(abs(pe_value) > config.tolerance)
-        difference = axiom_value - pe_value
-        cases.append(
-            {
-                "case_id": case.case_id,
-                "concept": config.axiom_output,
-                "filing_status": case.filing_status,
-                "inputs": dict(case.inputs),
-                "axiom_fixture_inputs": dict(fixture_inputs[case.case_id]),
-                "axiom": axiom_value,
-                "policyengine": pe_value,
-                "policyengine_components": dict(policyengine_components[case.case_id]),
-                "difference": difference,
-                "match": matched,
-            }
+    aggregate_state: dict[str, dict[str, Any]] = {}
+    for row_id, case, binding in _comparison_rows(config):
+        tolerance = config.tolerance if binding.tolerance is None else binding.tolerance
+        axiom_value = axiom[row_id]
+        pe_value = policyengine[row_id]
+        matched = _matches(
+            config,
+            axiom_value,
+            pe_value,
+            tolerance=tolerance,
         )
+        difference = axiom_value - pe_value
+        case_report = {
+            "case_id": row_id,
+            "scenario_id": case.case_id,
+            "concept": binding.concept,
+            "filing_status": case.filing_status,
+            "inputs": dict(case.inputs),
+            "axiom_fixture_inputs": dict(fixture_inputs[case.case_id]),
+            "axiom": axiom_value,
+            "policyengine": pe_value,
+            "policyengine_components": dict(policyengine_components[row_id]),
+            "difference": difference,
+            "match": matched,
+        }
+        if config.axiom_bridge_outputs:
+            case_report["axiom_bridge_outputs"] = dict(bridge_values[case.case_id])
+        if config.axiom_diagnostic_outputs:
+            case_diagnostics = dict(diagnostic_values[case.case_id])
+            case_report["axiom_diagnostics"] = case_diagnostics
+            case_report["diagnostic_reconciliation"] = [
+                {
+                    "axiom_output": output,
+                    "policyengine_variable": pe_variable,
+                    "axiom": case_diagnostics[output],
+                    "policyengine": policyengine_components[row_id][pe_variable],
+                    "difference": (
+                        case_diagnostics[output]
+                        - policyengine_components[row_id][pe_variable]
+                    ),
+                }
+                for output, pe_variable in (config.axiom_diagnostic_outputs.items())
+            ]
+        if (
+            config.suite == "us-savers-grid"
+            and case.case_id == "section-911-add-back-crosses-inclusive-limit"
+        ):
+            case_report["diagnostic_note"] = (
+                "Observed match is cancellation, not section 911 parity: "
+                "PolicyEngine omits the section 25B(e) add-back while "
+                "PolicyEngine #9151 moves exact $24,250 into the 20-percent tier."
+            )
+        cases.append(case_report)
         if not matched:
             mismatches.append(
                 {
-                    "case_id": case.case_id,
-                    "concept": config.axiom_output,
+                    "case_id": row_id,
+                    "concept": binding.concept,
                     "kind": "amount_difference",
                     "engines": ["axiom", "policyengine"],
                     "left_engine": "axiom",
@@ -2049,39 +3626,104 @@ def _build_report(
                     "difference": difference,
                 }
             )
-    comparison_count = len(config.cases)
+        state = aggregate_state.setdefault(
+            binding.concept,
+            {
+                "comparison": binding.comparison,
+                "tolerance": tolerance,
+                "comparison_count": 0,
+                "match_count": 0,
+                "left_positive": 0,
+                "right_positive": 0,
+            },
+        )
+        state["comparison_count"] += 1
+        state["match_count"] += int(matched)
+        state["left_positive"] += int(abs(axiom_value) > tolerance)
+        state["right_positive"] += int(abs(pe_value) > tolerance)
+
+    aggregates: list[dict[str, Any]] = []
+    concepts: list[dict[str, Any]] = []
+    for concept, state in aggregate_state.items():
+        count = state["comparison_count"]
+        matched = state["match_count"]
+        mismatch = count - matched
+        aggregates.append(
+            {
+                "concept": concept,
+                "comparison": state["comparison"],
+                "comparison_count": count,
+                "match_count": matched,
+                "mismatch_count": mismatch,
+                "compared": count,
+                "matched": matched,
+                "mismatched": mismatch,
+                "match_rate": 100.0 * matched / count,
+                "left_positive_rate": 100.0 * state["left_positive"] / count,
+                "right_positive_rate": 100.0 * state["right_positive"] / count,
+            }
+        )
+        concepts.append(
+            {
+                "id": concept,
+                "description": (
+                    config.title
+                    if len(aggregate_state) == 1
+                    else concept.rsplit("#", 1)[-1].replace("_", " ")
+                ),
+                "category": "tax",
+                "comparison": state["comparison"],
+                "tolerance": state["tolerance"],
+                "relative_tolerance": config.relative_tolerance,
+                "priority": "high",
+                "components": [],
+                "parent": None,
+            }
+        )
+
+    comparison_count = len(cases)
+    match_count = sum(aggregate["match_count"] for aggregate in aggregates)
     mismatch_count = len(mismatches)
     match_rate = 100.0 * match_count / comparison_count
-    aggregate = {
-        "concept": config.axiom_output,
-        "comparison": "amount",
-        "comparison_count": comparison_count,
-        "match_count": match_count,
-        "mismatch_count": mismatch_count,
-        "compared": comparison_count,
-        "matched": match_count,
-        "mismatched": mismatch_count,
-        "match_rate": match_rate,
-        "left_positive_rate": 100.0 * left_positive / comparison_count,
-        "right_positive_rate": 100.0 * right_positive / comparison_count,
+    audited_suite = config.suite in {
+        "us-savers-grid",
+        "us-salt-deduction-grid",
+        "us-itemized-taxable-income-deductions-grid",
     }
+    comparison_bindings = (
+        [_binding_payload(config, binding) for binding in _scored_bindings(config)]
+        if audited_suite
+        else []
+    )
+    scored_concepts = list(aggregate_state)
     return {
         "schema_version": "axiom.comparison_report.v2",
         "suite": config.suite,
         "concept": config.axiom_output,
         "population": "case-grid",
         "validation_year": VALIDATION_YEAR,
-        "engines": {"left": "axiom", "right": "policyengine"},
+        "engines": {
+            "left": "axiom",
+            "right": "policyengine",
+            "versions": dict(ENGINE_VERSIONS),
+        },
         "engine_bindings": {
             "axiom": {
                 "module": config.axiom_module_ref,
                 "output": config.axiom_output,
+                "outputs": scored_concepts,
                 "fixture": str(config.fixture_path),
+                "supplemental_fixtures": [
+                    str(path) for path in config.supplemental_fixture_paths
+                ],
+                "bridge_outputs": dict(config.axiom_bridge_outputs),
+                "diagnostic_outputs": dict(config.axiom_diagnostic_outputs),
             },
             "policyengine": {
                 "outputs": list(config.pe_output_variables),
                 "diagnostic_outputs": list(config.pe_diagnostic_variables),
                 "boundary": config.pe_boundary,
+                "comparison_bindings": comparison_bindings,
             },
         },
         "tolerance": {
@@ -2089,20 +3731,9 @@ def _build_report(
             "relative": config.relative_tolerance,
         },
         "case_count": comparison_count,
-        "concepts": [
-            {
-                "id": config.axiom_output,
-                "description": config.title,
-                "category": "tax",
-                "comparison": "amount",
-                "tolerance": config.tolerance,
-                "relative_tolerance": config.relative_tolerance,
-                "priority": "high",
-                "components": [],
-                "parent": None,
-            }
-        ],
-        "aggregates": [aggregate],
+        "scenario_count": len(config.cases),
+        "concepts": concepts,
+        "aggregates": aggregates,
         "summary": {
             "comparison_count": comparison_count,
             "match_count": match_count,
@@ -2110,9 +3741,14 @@ def _build_report(
             "error_count": 0,
             "errors_by_engine": {},
             "mismatches_by_concept": (
-                [{"value": config.axiom_output, "count": mismatch_count}]
-                if mismatch_count
-                else []
+                [
+                    {
+                        "value": aggregate["concept"],
+                        "count": aggregate["mismatch_count"],
+                    }
+                    for aggregate in aggregates
+                    if aggregate["mismatch_count"]
+                ]
             ),
             "mismatches_by_kind": (
                 [{"value": "amount_difference", "count": mismatch_count}]
@@ -2133,8 +3769,19 @@ def generate(policy: str, roots: list[Path]) -> dict[str, Any]:
     if not roots:
         raise ValueError("at least one --rulespec-root is required")
     config = POLICIES[policy]
-    _fixture, axiom, fixture_inputs = _axiom_values(config, roots)
-    policyengine, components = _policyengine_values(config)
+    _validate_policy_config(config)
+    _assert_registry_comparable_bindings(config)
+    (
+        _fixture,
+        axiom,
+        fixture_inputs,
+        bridge_values,
+        diagnostic_values,
+    ) = _axiom_values(config, roots)
+    policyengine, components = _policyengine_values(
+        config,
+        bridge_values,
+    )
     _assert_non_vacuous(config, axiom, policyengine)
     return _build_report(
         config,
@@ -2142,6 +3789,8 @@ def generate(policy: str, roots: list[Path]) -> dict[str, Any]:
         fixture_inputs=fixture_inputs,
         policyengine=policyengine,
         policyengine_components=components,
+        axiom_bridge_values=bridge_values,
+        axiom_diagnostic_values=diagnostic_values,
     )
 
 

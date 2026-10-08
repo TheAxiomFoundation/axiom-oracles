@@ -1,68 +1,131 @@
 # SNAP QC administrative data oracle playbook
 
-The SNAP QC oracle validates Axiom SNAP encodings against real administrative
-microdata rather than against a second engine. It replays the USDA SNAP Quality
-Control public-use file (PUF) through the Axiom RuleSpec SNAP composition and
-checks the file's own recomputed benefit and stage intermediates against Axiom's.
+The SNAP QC oracle checks the benefit arithmetic of Axiom SNAP encodings and
+leaves eligibility untested (§3). It replays the USDA SNAP Quality Control
+public-use file (PUF) through the Axiom RuleSpec SNAP composition and compares
+Axiom's benefit and
+stage intermediates with the values Mathematica calculated for USDA from each
+edited case record (`FSBEN` and its intermediates, §2).
 This playbook is the standing recipe — the one a future contributor follows to add
-a fiscal year, add a state, or triage a mismatch class. Six jurisdictions run
-for FY2024 — Colorado (the pilot), New York, California, Arizona, Georgia,
-and Maryland:
+a fiscal year, add a state, or triage a mismatch class. Seven FY2024 suites are
+registered. Six of them run against rulespec-us main: Colorado (the pilot), New
+York, California, Arizona, Georgia, and Maryland.
 
 ```bash
-for suite in co ny ca az ga md tx; do
+for suite in co ny ca az ga md; do
   uv run scripts/run_comparison.py "$suite-snap-qc" --summary
 done
 ```
 
+The seventh, `tx-snap-qc`, needs the Texas composition
+(`us-tx/policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.yaml`),
+which exists only on the unmerged rulespec-us#891 branch. Against main the Texas
+replay stops with `FileNotFoundError` on the composition's test template. Its
+committed report is the July 2026 run against that branch.
+
 That runs the real replay where the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, and the downloaded QC file all exist,
 and re-emits the committed dashboard report everywhere else (the same graceful-skip
-contract the EUROMOD runner honors). The pins, sha256s, and archive members live in
+contract the EUROMOD runner honors). A re-emission never replaces a committed
+report from a real run. The seven suites declare `ci: manual`, so the weekly
+matrix and the 6-hourly affected rerun never dispatch them; a supervised
+`run_comparison.py <st>-snap-qc` run is how the committed reports refresh. The pins, sha256s, and archive members live in
 `axiom_oracles/populations/snap_qc.py::SNAP_QC_PINS`; the loader (`load_qc_units`)
 downloads, verifies, caches, and parses them; the replay harness is
 `axiom_oracles/bridges/snap_qc_compare.py`. Everything below cites the FY2024 QC
-technical documentation by its PDF page (the `qcfy2024_csv.zip` companion doc).
+technical documentation by its PDF page in the May 2026 posting
+(`2026-05/FY-2024-Tech-Doc.pdf`; the overlay specs' `page-183` source citations
+use the same numbering). The August 2026 re-posting
+(`2026-08/FY-2024-Tech-Doc.pdf`, 204 pages to the May posting's 200) puts a
+note on the corrected weights on its title page and adds four blank pages to
+the front matter, so from Chapter I on (May p.11, August p.15) every cited page
+is four later there. The one front-matter citation, the disclaimer, is p.2 in
+May and p.3 in August. The August posting also revises the weighting material,
+reads Food and Nutrition Administration (FNA) for the agency, and adds records
+with unknown eligibility status (`STATUS` missing) to the preliminary-processing
+drop list (August p.21); the May posting lists that drop only under editing
+Step 1 (May p.28).
 
 ## 1. What the QC public-use file is
 
-- FNS draws a monthly stratified random sample of active (participating) SNAP cases
-  across the 50 states, DC, Guam, and the Virgin Islands; a QC reviewer re-interviews
-  each household and re-derives every eligibility and benefit input. FY2024 pools the
-  twelve monthly samples into 44,891 unit records for sample months October 2023
-  through September 2024 (`YRMONTH` 202310–202409) (tech doc PDF p.15, p.64).
+- The file is built from the sample of active (participating) SNAP cases drawn
+  each month for the 50 states, DC, Guam, and the Virgin Islands. State QC
+  reviewers gather each sampled unit's financial and demographic information from
+  its case file, reinterview the participants, and determine whether the unit
+  received the correct benefit; FNS regional offices re-review a subsample of each
+  state's sample (tech doc PDF p.15). No state's FY 2024 sample was stratified
+  (chapter III.A, *Developing the SNAP QC file*, Step 7, PDF p.26). FY2024 pools
+  the twelve monthly samples into 44,891
+  unit records for sample months October 2023 through September 2024 (`YRMONTH`
+  202310–202409) (tech doc PDF p.15, p.64).
 - The file is nationally representative when weighted by `HWGT`, the monthly sample
-  weight; the documentation warns against within-state tabulations because the
-  per-state sample is not itself representative (tech doc PDF p.64, p.77). Benefit
-  parity does not tabulate by state, so this caveat does not bite — see §7 on
-  replicate weights.
+  weight (tech doc PDF p.64). The documentation's state-level cautions are
+  variable-specific: it recommends caution or against state-level tabulations of
+  `URBRUR` (sample representativeness within a state, PDF p.77), `FSDEPDED` and
+  `DPCOSTi` (small samples and inconsistencies, PDF p.84, p.90), and `ABWDSTi`
+  (PDF p.89). Benefit parity replays each unit rather than tabulating by state, so
+  these cautions do not bite — see §7 on replicate weights.
 - `qc_pub_fy2024.csv` (44,891 rows, ~1,177 columns) is the redacted release of the
   restricted file. Colorado contributes 856 reviews. Person-level facts (`AGE1`–
   `AGE16`, per-source monthly income, relations) and unit-level facts (`CERTHHSZ`,
   shelter, `SUA1`/`SUA2`, `FSMEDEXP`, dependent-care and child-support expenses,
   `LIQRESOR`, `CAT_ELIG`, `STATE` FIPS, `HWGT`) are all present.
 
-## 2. Ground truth: FSBEN is a constructed benefit
+## 2. The compared benefit: FSBEN is a constructed benefit
 
-- `FSBEN` is not the benefit the household received. It is FNS/Mathematica's QC
-  Minimodel recomputation of the *correct* benefit from the edited, internally
-  consistent inputs and the official FY parameters (tech doc chapter IV, the QC
-  Minimodel, PDF p.47; the QC-specific portion, PDF p.49). `RAWBEN` is the reported
-  issuance; `STATUS` 1/2/3 = correct/over/under-issuance and `AMTERR` is the dollar
-  error the reviewer recorded.
-- Before recomputation the file is edited so that "certain relationships hold for
-  all cases" (tech doc chapter III.B, *Obtaining file consistency*; standard editing
-  procedures begin PDF p.27). Person-level income is reconciled and de-duplicated
-  against unit-level totals, and a cascade of reconciliations runs until the
-  calculated benefit matches the raw benefit. A unit is retained as *matching* when
-  the calculated benefit is within $5 of the raw benefit (adjusted for any recorded
-  payment error), after adjusting, in order, the dependent-care deduction, the
-  excess-shelter deduction, and — for standard-medical-deduction-demonstration
-  participants — the medical deduction (Steps 13a–13d, tech doc PDF p.32–33).
-- That is the editing guarantee the oracle leans on: every retained unit is a
-  complete, eligible, internally consistent benefit computation whose FSBEN is
-  reproducible from its own recorded inputs. Constructed intermediates travel with it
-  for stage-by-stage diagnosis — `FSGRINC` (gross), `FSNETINC` (net),
+- `FSBEN` is not the benefit the household received. The codebook defines it as
+  the "FINAL CALCULATED BENEFIT", a constructed variable computed as `BENMAX`
+  less 30 percent of `FSNETINC` (rounded), floored at the minimum benefit for
+  one- and two-person units and at zero otherwise, with state-specific formulas
+  for MFIP units and standard-benefit SSI-CAP units (PDF p.87).
+  Mathematica computes it for USDA while editing the file ("Step 12. Calculate the
+  benefit", PDF p.32), from the edited case record and the fiscal year's
+  parameters. The tech doc says its findings and conclusions are the authors' and
+  "should not be construed to represent any official USDA or U.S. Government
+  determination or policy" (disclaimer, PDF p.2; p.3 in the August posting). The
+  QC Minimodel (chapter IV, PDF p.47) reads FSBEN as an input and
+  points to the codebook entry for how it is calculated (PDF p.54, p.61); the
+  tech doc notes that the results of the file-editing algorithms match those of
+  the Minimodel's FSTAMP algorithms exactly (PDF p.53). `RAWBEN` is the
+  "REPORTED SNAP BENEFIT RECEIVED" (PDF p.88); `STATUS` 1/2/3 =
+  correct/over/under-issuance and `AMTERR` is the dollar error the reviewer
+  recorded. `BENFIX` is the benefit adjusted for that error (PDF p.72); in every
+  Colorado row it equals `RAWBEN` less an overissuance or plus an underissuance.
+- The editing aims to "ensure that certain relationships hold for all cases"
+  (tech doc chapter II, *Data editing*, PDF p.18–19). Those relationships are
+  identities among the edited variables: net income equals gross income minus
+  the deductions the unit is eligible for; the benefit equals the maximum benefit
+  for the unit size minus 30 percent of net income, or the minimum benefit; gross
+  income equals the sum of countable person-level income; and the earned-income
+  and excess-shelter deductions and total deductions follow their formulas.
+  Units with unresolved inconsistencies are dropped (84 in
+  FY 2024, Table II.1, PDF p.18). The standard editing procedures (chapter III.B,
+  PDF p.27–34) reconcile person-level income against unit-level totals and
+  calculate the benefit (Step 12). When the calculated benefit fails the Step 13a
+  match test (within $5 of the raw benefit or, when the reviewer recorded a
+  payment error, of the error-adjusted raw benefit, under the conditions Step 13a
+  lists), the editors try, in order, the dependent-care deduction (when it is
+  inconsistent with dependent-care costs), the utility amount in the
+  excess-shelter deduction, and, for standard-medical-deduction-demonstration
+  participants, the medical deduction, and keep an adjustment only if it meets
+  that step's conditions (Steps 13b–13d, PDF p.32–33). Each step accepts a
+  benefit match; the utility step (13c) also accepts two cases with no recorded
+  payment error: a calculated shelter deduction within $5 of the raw one, and a
+  New York unit coded as using the HCSUA whose utilities equal it. Step 14
+  drops only units whose calculated benefit is under $1 (PDF p.34), and the
+  file keeps units that still do not match (next bullet).
+- FSBEN therefore need not equal the benefit on the case record. Recomputed
+  from `qc_pub_fy2024.csv` (`FSBEN`, `RAWBEN`, and `BENFIX` are identical in
+  the May and August 2026 postings), FSBEN is within $5 of the issued benefit
+  `RAWBEN` for 556 of 856 Colorado units and 27,868 of 44,891 nationally, and
+  within $5 of `BENFIX`, the issued benefit corrected by the reviewer's error
+  amount, for 797 Colorado units (743 to the dollar) and 41,729 nationally. Of
+  the 59 Colorado units more than $5 from `BENFIX`, 31 have no recorded error
+  (`STATUS` 1). What the editing provides is a benefit computed by formula
+  from each edited record, and the replay reproduces FSBEN for all 856 Colorado
+  units from the file's own amounts under the conventions in §3 and §7 (track
+  record below). Constructed intermediates travel with it
+  (the replay compares four of them; §3) — `FSGRINC` (gross), `FSNETINC` (net),
   `FSERNDED`/`FSSTDDED`/`FSMEDDED`/`FSDEPDED`/`FSCSDED`/`FSSLTDED` (deductions;
   `FSSLTDED` is the final calculated excess-shelter deduction — the reported
   `SHELDED` is pre-edit and the codebook redirects to `FSSLTDED`),
@@ -72,7 +135,7 @@ technical documentation by its PDF page (the `qcfy2024_csv.zip` companion doc).
 
 ## 3. What the oracle validates — and what it does not
 
-- The replay scores the benefit computation, not the eligibility screening. The
+- The replay scores the benefit computation and leaves eligibility untested. The
   public file already dropped every incomplete review and every ineligible unit (§4),
   and the records carry no application dates for initial-month proration, so the
   mapper feeds the composition's passing defaults for the eligibility gates (work
@@ -80,17 +143,45 @@ technical documentation by its PDF page (the `qcfy2024_csv.zip` companion doc).
   member age stays pinned at the template's exempting value while the QC member's
   real age drives `snap_member_is_elderly_or_disabled` — the fact the benefit chain
   actually consumes (shelter cap, medical entitlement, gross-test path) — mirroring
-  the `snap_populace` work-projection convention. The comparison covers only the
-  benefit chain:
-  gross income → each deduction → net income → income screens → maximum allotment →
-  allotment. This mirrors the `snap_populace` convention of comparing
-  `snap_regular_month_allotment` (not the take-up-adjusted `snap`) and is stated
-  explicitly in the bridge module docstring.
+  the `snap_populace` work-projection convention.
+- The comparison covers six values per review, in stage order (`_LABELS` in
+  `bridges/snap_qc_compare.py`): gross income (`FSGRINC`; net of `FSCSDED` in
+  Colorado, a child-support exclusion state), the standard deduction
+  (`FSSTDDED`), the excess-shelter deduction (`FSSLTDED`), net income
+  (`FSNETINC`), the maximum allotment, and the benefit (`FSBEN`). The maximum
+  allotment is checked against the oracle's own FY2024 48-state table by
+  certified size (`FY2024_MAX_ALLOTMENT_48_STATES`), not against the file's
+  `BENMAX`; the two agree for every in-scope FY2024 review in the six states.
+  The earned-income, medical, dependent-care, and child-support deductions and
+  the gross and net income screens are not compared on their own; a divergence
+  there first shows at the standard-deduction, shelter, or net-income stage.
+  This mirrors the `snap_populace` convention of comparing the regular monthly
+  allotment (not the take-up-adjusted `snap`).
+- Several inputs are the file's own amounts rather than values Axiom derives,
+  which bounds what a match proves. The replay feeds the calculated medical
+  deduction `FSMEDDED` as `FSMEDDED + 35` of expenses, so the engine's $35
+  threshold returns exactly `FSMEDDED` (§7). It feeds the dependent-care
+  deduction `FSDEPDED` (a reported field the editors reconciled with the
+  per-person costs, PDF p.84) rather than the costs, and the calculated
+  child-support deduction `FSCSDED` rather than the reported payment `FSCSEXP`.
+  It treats the file's utility amount `UTIL` as authoritative: an amount that
+  matches an encoded standard raises that tier's flags, and any other amount is
+  added to shelter costs (§7). For California,
+  Arizona, Georgia, Maryland, and Texas the homeless shelter deduction is the
+  file's `HOMELESS_DED`, capped by the engine at the indexed maximum. A match
+  therefore shows that Axiom's arithmetic from those amounts onward reproduces
+  FSBEN and the compared stages. It does not show that Axiom would derive those
+  deductions or that utility allowance from raw expenses.
 - An eligibility-side divergence is therefore out of scope *by construction* and is
-  dispositioned as such, not scored as a benefit error. The oracle's claim is narrow
-  and strong: given the QC unit's edited inputs, does Axiom reproduce FNS's own
-  benefit arithmetic? This is the US analogue of the BEAMM full-admin-returns
-  income-tax check — administrative ground truth, not a second model's opinion.
+  dispositioned as such; it does not count as a benefit mismatch. The oracle asks
+  one question: given a QC unit's edited inputs, does Axiom reproduce FSBEN, the
+  benefit Mathematica calculates for USDA from those inputs (§2)? A match shows
+  agreement with that documented calculation over administrative case records.
+  It says nothing about agreement with the benefit on the case record: FSBEN
+  is more than $5 from the issued benefit for 300 of 856 Colorado units and
+  from the reviewer-corrected benefit (`BENFIX`) for 59 (§2), and the
+  tech doc disclaims official status for its findings (PDF p.2; p.3 in the August
+  posting).
 
 ## 4. Exclusions
 
@@ -101,26 +192,44 @@ it documents them. The loader's own exclusions are each counted by reason in
 
 | exclusion | flag / field | removed by | why |
 |---|---|---|---|
-| incomplete reviews | `REVDISP = 3` | FNS upstream (already absent) | not a completed benefit computation (tech doc PDF p.17–18) |
-| not subject to review | `REVDISP = 2` | FNS upstream | outside the active QC universe (PDF p.17) |
-| ineligible / non-compliance findings | `STATUS = 4`; listed-in-error actives | FNS upstream | no positive benefit to reproduce (PDF p.16–17) |
+| listed-in-error actives | — | excluded from the active case universe (already absent) | listed in error as active cases, among them cases that did not participate in SNAP for the sample month (tech doc PDF p.16) |
+| incomplete or deselected reviews | `REVDISP = 3` or `4` | Mathematica, preliminary processing (already absent) | not a completed benefit computation (PDF p.17–18) |
+| not subject to review | `REVDISP = 2` | Mathematica, preliminary processing (already absent) | outside the active QC universe (PDF p.16–17) |
+| ineligible, non-compliance, or unknown-eligibility findings | `STATUS = 4` or `5`; `STATUS = 2` with `RAWBEN <= AMTERR`; `STATUS` missing | Mathematica, preliminary processing and editing Step 1 (already absent) | no positive benefit to reproduce (PDF p.17–18, p.27–28) |
+| empty or inconsistent records | `CERTHHSZ = 0`; unresolved inconsistencies | Mathematica (already absent) | no case members, or inconsistencies the editing could not resolve (the latter 84 FY2024 units; PDF p.18) |
 | MFIP units | `MN_FIP` | loader (counted) | the Minnesota Family Investment Program uses a separate benefit procedure — only a 50% earnings deduction, all other deductions coded missing (Table F.3 note, PDF p.180; MFIP benefits Table F.8, PDF p.186) |
 | SSI-CAP units | SSI-CAP participation flag | loader (counted) | Combined Application Projects use separate procedures; standard-benefit units have deductions coded missing (Table F.3 note, PDF p.180; SSI-CAP shelter Table F.23, PDF p.192) |
 | missing benefit | `FSBEN` missing or 0 | loader (counted) | no constructed benefit to replay (the file's minimum is $1) |
 | missing certified size | `CERTHHSZ` missing or 0 | loader (counted) | no unit size to drive `household_size` |
 
-Of the FY2024 sample, 6,332 reviews were dropped as incomplete and 46,418 were
-completed; a further set of ineligible and listed-in-error actives left 44,891 units
-in the public file (tech doc Table II.1, PDF p.18). Demonstration-state components
+Of the 52,750 FY2024 cases subject to review, 6,332 were incomplete and 46,418
+were completed. Of the completed reviews, 1,037 were not eligible for SNAP, 406
+were not eligible for a positive benefit, and 84 were dropped for unresolved
+inconsistencies, leaving 44,891 units in the public file (tech doc Table II.1,
+PDF p.18). Demonstration-state components
 (§7, §9) are transformed rather than excluded.
 
 ## 5. Getting the data (pins, caching, the 403)
 
 - `SNAP_QC_PINS` pins each fiscal year to its CSV-zip URL, sha256, and archive
-  member. FY2024: `https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip`,
-  sha256 `0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4`, member
-  `qc_pub_fy2024.csv`. The loader refuses unpinned fiscal years outright — the
-  postings are immutable, so there is no allow-unpinned escape hatch.
+  member. FY2024: `https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip`,
+  sha256 `b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5`, member
+  `qc_pub_fy2024.csv`. The loader refuses unpinned fiscal years outright; there
+  is no allow-unpinned escape hatch.
+- Postings are replaced, not edited. USDA re-posted the FY2024 files on
+  2026-08-18 to correct the `FYWGT` and `HWGT` weighting variables, replacing the
+  May 2026 posting (`2026-05/qcfy2024_csv.zip`, sha256
+  `0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4`) that the
+  July 2026 runs used. A cell-by-cell diff of the two CSVs found the same 1,177
+  columns and 44,891 rows in the same order, with changes only in `HWGT` and
+  `FYWGT` (16,948 rows) and `HWGT_OLD` and `FYWGT_OLD` (10,072 rows); `FSBEN` and
+  every input the replay reads are identical, so the re-pin moves only the
+  HWGT-weighted totals. Re-pin the same way when a posting is replaced: download
+  both, diff every column, and re-pin only if no benefit or input column moved.
+- The loader hashes the zip it downloads, not a CSV it finds already on disk.
+  After a re-pin, delete or replace a cached `qc_pub_fy{YYYY}.csv` from the old
+  posting, or point `AXIOM_SNAP_QC_DATA_DIR` at the new one, or reports will carry
+  the new pin over the old file's weights.
 - The host 403s non-browser user agents. The loader's lazily imported `requests`
   call sends a Chrome UA string and `Referer: https://snapqcdata.net/datafiles`; a
   plain `curl`/`urllib` fetch is rejected. Downloads cache under
@@ -128,12 +237,19 @@ in the public file (tech doc Table II.1, PDF p.18). Demonstration-state componen
   that already holds `qc_pub_fy{YYYY}.csv` to skip the download entirely — that is
   also how the engine-gated live test and a local real run pick up the file. The
   sha256 is verified after download with the populace-style remediation message.
-- Until the fy-2024-cola modules merge to rulespec-us main, a local run also needs
-  `AXIOM_SNAP_QC_RULESPEC_ROOT` pointed at a checkout that carries them (and
+- The fy-2024-cola modules are on rulespec-us main (rulespec-us#760, merged
+  2026-07-09), so any current main checkout serves. Point
+  `AXIOM_SNAP_QC_RULESPEC_ROOT` at it when it is not the workspace default, and
   `AXIOM_SNAP_QC_AXIOM_BINARY` at a built engine when the default debug-path
-  resolution does not apply). The `scripts/run_comparison.py co-snap-qc` runner
-  honors both alongside the yaml parameters; absent any of the three
-  prerequisites it degrades to re-emitting the committed dashboard report.
+  resolution does not apply. The `scripts/run_comparison.py <st>-snap-qc` runner
+  honors both alongside the yaml parameters. Absent any of the three
+  prerequisites it re-emits the committed dashboard report, and that report's
+  provenance carries `reemitted_report: true` and no `rulespecs` entry. A real
+  run's provenance lists the rulespec-us SHA it ran against under `rulespecs`.
+  A re-emission is never published over a committed report from a real run.
+  The affected map lists only rulespec-us for these suites, because the overlay
+  copies both `us/` and `us-<st>/` out of that one checkout, so staleness is
+  judged against the one SHA a real run records.
 
 ## 6. The fiscal-year gap and the overlay
 
@@ -173,6 +289,14 @@ period `2026-01`:
   overlay root alone: the engine unions module ids across roots rather than
   shadowing, so a sparse overlay in front of the real monorepo would compile both
   COLA years and abort on duplicate rules.
+- The same failure follows when the base repo gains a module that imports a COLA
+  id directly and the spec does not list it in `rewrite_files`. rulespec-us#1176
+  (2026-07-30) added California's modified-categorical-eligibility module, which
+  imports `fy-2026-cola/income-eligibility-standards`, and the CA replay stopped
+  compiling with a duplicate `snap_net_income_limit_*` rule. After rewriting,
+  `build_overlay` now walks the program's import closure inside the overlay root
+  and raises `OverlayDriftError` naming every module that still imports an id the
+  spec rewrites; the fix is to add those files to `rewrite_files`.
 - Caveat, carried in the report provenance and here: the rule *structure* is the
   current-manual snapshot, not the FY2024 manual. The benefit-calculation chain is
   structurally stable FY2024→FY2026 (only parameters moved), but genuine FY2024
@@ -190,11 +314,14 @@ Colorado parameters exactly.
 
 ## 7. Conventions the comparisons must respect
 
-- **Whole dollars.** SNAP allotments and the QC amounts are whole-dollar, so the
-  benefit is compared exactly after rounding to whole dollars (`--tolerance 0`), with
-  stage intermediates at `--stage-tolerance 1` to absorb the file's per-field
-  rounding. The homeless shelter deduction, statutorily $179.66, is recorded as $180
-  in the QC file (whole-dollar rounding; tech doc Table F.3 note, PDF p.180) — the
+- **Whole dollars, zero tolerance.** SNAP allotments and the QC amounts are
+  whole-dollar. The benefit matches when both sides, rounded to whole dollars,
+  differ by no more than `--tolerance` (default 0). A stage matches when the
+  unrounded values differ by no more than `--stage-tolerance`; every registered
+  suite sets `stage_tolerance: 0`, so each compared stage must match exactly (the
+  bridge CLI and the runner fall back to 1 only when a config omits the key).
+  The homeless shelter deduction, statutorily $179.66, is recorded as $180 in
+  the QC file (whole-dollar rounding; tech doc Table F.3 note, PDF p.180) — the
   encoding applies it at its nearest-dollar value under the 273.10(e)(1)(ii)(A)
   rounding election, reproducing the file exactly.
 - **Utility tiers when standard, `UTIL` when not.** The QC `SUA1` code maps to the
@@ -207,8 +334,9 @@ Colorado parameters exactly.
   prorated allowance), the mapper drops the flags and carries UTIL as an incurred
   shelter cost instead.
 - **Medical expenses: feed the applied deduction, not the reported excess.**
-  `FSMEDEXP` is the allowable medical expense *in excess of $35* and `FSMEDDED`
-  is the deduction FNS applied (codebook PDF p.84). The two are equal in
+  `FSMEDEXP` (reported, codebook PDF p.85) is the allowable medical expense *in
+  excess of $35*, and `FSMEDDED` (constructed, PDF p.84) is the calculated
+  medical deduction in the edited file. The two are equal in
   ordinary states, but in standard-medical-deduction demonstration states
   `FSMEDDED` is a flat standard that can differ from the excess (10 FY2024 rows
   nationally, none in Colorado; Table F.4, PDF p.181). The mapper therefore
@@ -224,11 +352,14 @@ Colorado parameters exactly.
   TheAxiomFoundation/rulespec-us#761, fixed by rulespec-us#765 (the cap now binds
   from the fiscal-year COLA policy module).
 - **Child support: feed the applied deduction, and net gross only for
-  exclusion states.** The engine feed is `FSCSDED` — the deduction FNS
-  applied — not the reported payment `FSCSEXP`: the two match wherever a
-  payment was allowed, but the file carries rows whose reported payment was
-  not allowed as a deduction (two FY2024 New York rows), and the applied
-  amount is what enters `FSTOTDED` (the same applied-amount convention the
+  exclusion states.** The engine feed is `FSCSDED`, the constructed
+  child-support deduction in the edited file (codebook PDF p.84), in place of
+  the reported payment `FSCSEXP`. The two match wherever a payment was allowed,
+  but the file carries a row whose reported payment was not allowed as a
+  deduction (one in-scope FY2024 New York row: `FSCSEXP` 139, `FSCSDED` 0;
+  a second New York row with a reported payment is a standard-benefit SSI-CAP
+  unit, whose `FSCSDED` is coded missing and which the loader excludes), and
+  `FSCSDED` is what enters `FSTOTDED` (the same applied-amount convention the
   medical feed uses). The state's 7 USC 2014(e)(4) election is the
   jurisdiction's `child_support_convention`: Colorado elects the *exclusion*,
   so its composition removes child support paid from countable gross income
@@ -240,26 +371,29 @@ Colorado parameters exactly.
   is not excluded with the other CAP codes: NYSCAP units "went through the
   standard editing process that non-SSI-CAP households undergo" and all SNAP
   deductions apply to them (tech doc, SSI-CAP benefit calculations and the
-  SSI_CAP codebook note), so their FSBEN is an ordinary Minimodel
-  recomputation. The loader keeps `SSI_CAP` 0 and 4 and excludes every other
+  SSI_CAP codebook note), so their FSBEN follows the regular benefit
+  calculation. The loader keeps `SSI_CAP` 0 and 4 and excludes every other
   nonzero code.
 - **Regional SUA schedules are inferred from UTIL.** New York publishes three
   schedules (New York City 992/391/31, Nassau/Suffolk 923/363/31, rest of
   state 819/332/31 in FY 2024) and the public file carries no sub-state
   geography, so the mapper matches the QC-applied `UTIL` amount against the
   encoded schedule to set the region facts. An amount matching no schedule —
-  including New York's handful of off-by-a-dollar auto-generated allowances
-  (footnote 20 of the tech doc's Minimodel chapter) — rides as an incurred
-  shelter cost, which reproduces the file's arithmetic exactly. A tier the
-  jurisdiction does not encode at all (California's limited and telephone
-  allowances; the chain carries only the 596-dollar heating/cooling SUA)
-  falls back the same way.
+  including five in-scope FY2024 New York rows whose `UTIL` is one dollar off a
+  schedule amount — rides as an incurred shelter cost, which reproduces the
+  file's arithmetic exactly. (Tech doc footnote 20, chapter III, PDF p.33, notes
+  that New York's system generates an SUA automatically for certain units, so
+  the editors relax the matching test for New York units coded as using the
+  HCSUA.) A tier the jurisdiction does not encode at all (California's limited
+  and telephone allowances; the chain carries only the 596-dollar
+  heating/cooling SUA) falls back the same way.
 - **New York's headline is the composition's issued benefit.** The New York
-  composition's statutory 2014(e)/2017(a) chain carries cents; FNS's
-  Minimodel — and New York's own system — compute in whole dollars under the
-  273.10(e)(1)(ii)(A) election, which the encoded 273.10 chain implements
-  (rulespec-us#826). First-run finding: 33 of 847 New York reviews diverged
-  by exactly one dollar through the statutory surface (26 low, 7 high —
+  composition's statutory 2014(e)/2017(a) chain carries cents, while the file's
+  constructed values are whole dollars (the QC data record only whole-dollar
+  amounts, Table F.3 note a, PDF p.180). The encoded 273.10 chain computes in
+  whole dollars under the 273.10(e)(1)(ii)(A) election (rulespec-us#826).
+  First-run finding: 33 of 847 New York reviews diverged by exactly one
+  dollar through the statutory surface (26 low, 7 high —
   half-dollar shelter fractions and earned-income-deduction cents), filed as
   rulespec-us#830 and fixed by rulespec-us#836, which exposes the issued
   benefit (`snap_benefit`, initial-month aware) on the 273.10 chain and binds
@@ -293,11 +427,13 @@ Colorado parameters exactly.
   so their flat path rides the flags.
 - **Whole-dollar rounding is encoded.** The encoded chain originally carried
   cents (20 percent earned-income deduction, half-income shelter subtraction)
-  where the FNS Minimodel computes with whole dollars at each step; when the
-  fractional net crossed a dollar boundary the benefit flipped by exactly $1.
+  where the file's constructed values are whole dollars at each step (the
+  editing rules take the earned-income deduction "rounded down", PDF p.19);
+  when the fractional net crossed a dollar boundary the benefit flipped by
+  exactly $1.
   TheAxiomFoundation/rulespec-us#762, fixed by rulespec-us#826: the earned-income
   deduction drops cents and the excess-shelter subtraction rounds to the nearest
-  whole dollar per the 273.10(e)(1)(ii)(A) election, matching the Minimodel's
+  whole dollar per the 273.10(e)(1)(ii)(A) election, matching the file's
   constructed FSERNDED/FSSLTDED/FSNETINC.
 - **Elderly/disabled status is a unit-level fact.** The medical deduction and the
   excess-shelter cap waiver key off `FSNELDER`/`FSNDIS` (the file's constructed
@@ -348,7 +484,7 @@ Colorado parameters exactly.
    `_categorical_inputs`, `_homeless_inputs`, and `_utility_flag_inputs`,
    reusing `snap_populace.project_deduction_inputs`' existing per-state
    deduction dictionaries. Pre-flight the state's QC subset first with the
-   committed reference script — it replicates the Minimodel arithmetic in
+   committed reference script — it replicates the file's benefit arithmetic in
    pandas over the file's own inputs, predicting the replay ceiling and
    profiling `UTIL`/`SUA1`/`HOMEDED`/`CAT_ELIG`/child-support quirks before
    any engine run:
@@ -376,49 +512,166 @@ Colorado parameters exactly.
    standardizes shelter for SSI-CAP (Table F.23, PDF p.192) has those
    deductions coded missing and must not be scored on them.
 
+## 10. The live CI replay
+
+The weekly matrix (`comparisons.yml`) and the 6-hourly affected rerun
+(`affected-rerun.yml`) dispatch the snap-qc suites to bare runners. Those
+runners have no engine binary and no QC public-use file, so every leg
+re-emits the committed dashboard report (`provenance.reemitted_report:
+true`) and passes whether or not the replay still works. That is how California's replay could
+stop compiling after rulespec-us#1176 (2026-07-30) with nothing failing: the
+new modified-categorical-eligibility module imports `fy-2026-cola`, which the
+CA FY2024 overlay did not rewrite, and the engine rejects the duplicate
+derived rule `snap_net_income_limit_100_percent_fpl_48_states_dc`.
+
+`.github/workflows/snap-qc-replay.yml` actually runs the suites. It fires on
+Mondays at 07:17 UTC and on demand (`workflow_dispatch`, with optional
+`suites` and `rulespec_us_ref` inputs). A failing leg is the output. The lane
+never commits; each report and its replay log are uploaded as workflow
+artifacts.
+
+- **Engine.** It builds `axiom-rules-engine` at `axiom_artifact_rules_engine_ref`,
+  the pin in rulespec-us `.axiom/workflow-toolchain.toml` that
+  `program-artifacts.yml` also builds. The build is
+  `cargo build --release --locked --bin axiom-rules-engine`, cached per ref
+  and Ubuntu release (`ImageOS`). Every job selects `ubuntu-24.04` rather
+  than `ubuntu-latest`, so a binary cached on one Ubuntu release is never
+  restored on another.
+  The validation pin (`axiom_rules_engine_ref`) cannot load the chain: it
+  refuses the `fy-2024-cola` modules' plural `corpus_citation_paths`. The
+  artifact pin predates `compile-composed`, so every compile takes the legacy
+  `compile --program` fallback in `axiom_oracles/engine_compat.py`.
+- **rulespec-us.** The `prepare` job resolves one commit (`main` unless
+  dispatched otherwise), and every leg checks it out into a directory named
+  `rulespec-us`. The name matters. The overlay copies the tree under the
+  checkout's basename, and the engine resolves `us:` imports only from a root
+  named `rulespec-us` (or `rulespec-us-<suffix>`). Under another name the
+  staged copy cannot serve its own `us:` imports: the compile fails, as it
+  did locally with a differently named checkout, or it could resolve against
+  some other discoverable rulespec-us tree.
+- **Data.** `scripts/snap_qc_replay.py fetch-puf` calls
+  `populations/snap_qc.fetch_pinned_puf`. It keeps the pinned zip in a cache
+  keyed on the pin and re-verifies it against `SNAP_QC_PINS` before every
+  extraction, so a restored cache is never trusted unverified. A re-pin
+  changes the key.
+- **Run.** Each leg runs
+  `run_comparison.py <suite> --summary --require-live --output-dir <dir>`
+  with `AXIOM_SNAP_QC_RULESPEC_ROOT`, `AXIOM_SNAP_QC_AXIOM_BINARY`, and
+  `AXIOM_SNAP_QC_DATA_DIR` set. With `--require-live`, a runner that would
+  have re-emitted exits nonzero, and `run_comparison.py` publishes no report
+  and no dashboard copy. The skip reason is printed just above the exit.
+- **Gate.** `scripts/snap_qc_replay.py check <suite>` then fails the leg
+  unless:
+  - the report was computed in this run: not re-emitted, and the replay log
+    records writing it and records no failure;
+  - it has at least one case;
+  - benefit mismatches, error cases, and error rows are all zero;
+  - the report lists every stage concept the suite's replay compares, the
+    benefit included, and repeats none, so an empty, partial, or shadowed
+    concept list cannot pass;
+  - every stage concept was compared on every case, with no divergence and no
+    missing side (a stage can diverge while the benefit still matches);
+  - it ran against the resolved rulespec-us SHA and the pinned engine binary.
+
+  A failing leg carries an `::error` annotation that names the suite and
+  every failed check. It then adds either the first benefit-mismatch cases
+  (case id, first divergent stage, QC versus Axiom values) or the exception
+  the replay raised. The report keeps no per-case rows for a stage that
+  diverges while the benefit matches, so that failure shows as counts.
+- **Suites.** `REQUIRED_SUITES` in `scripts/snap_qc_replay.py` lists the six
+  states whose compositions are on rulespec-us main (CO, NY, CA, AZ, GA,
+  MD). They run unless a dispatch restricts the selection, and a selected
+  suite whose composition moved fails its leg instead of leaving the
+  matrix. `PENDING_SUITES` holds TX (rulespec-us#888), which joins
+  automatically, with a warning to promote it, once its composition exists in
+  the checkout. `tests/test_snap_qc_replay.py` fails CI if a registered
+  snap-qc suite appears in neither list.
+- **Live tests.** A parallel job runs the two live pytest cases, which skip
+  unless their inputs are provided. `test_live_fy2024_row_counts` needs the
+  PUF, and `test_live_engine_reproduces_worked_example` needs the engine and
+  a rulespec-us checkout. The job fails if either one skips.
+
+To reproduce a leg locally, point the three variables at your checkouts.
+Start from an empty report directory and pass `check` the replay log.
+`check` then requires the log to record writing the report it checks, so a
+report left in the directory by an earlier run cannot pass. `run_comparison.py` also rewrites
+the working copy of the suite's dashboard report, so restore it afterward.
+
+```bash
+uv run scripts/snap_qc_replay.py fetch-puf \
+  --archive-dir ~/.cache/axiom-oracles/snap-qc/archives --data-dir /tmp/snap-qc-data
+rm -rf /tmp/snap-qc-reports && mkdir -p /tmp/snap-qc-reports
+AXIOM_SNAP_QC_RULESPEC_ROOT=~/TheAxiomFoundation/rulespec-us \
+AXIOM_SNAP_QC_AXIOM_BINARY=<engine at the artifact pin>/target/release/axiom-rules-engine \
+AXIOM_SNAP_QC_DATA_DIR=/tmp/snap-qc-data \
+  uv run scripts/run_comparison.py ca-snap-qc --summary --require-live \
+    --output-dir /tmp/snap-qc-reports 2>&1 | tee /tmp/snap-qc-reports/replay.log
+uv run scripts/snap_qc_replay.py check ca-snap-qc \
+  --report-dir /tmp/snap-qc-reports --log /tmp/snap-qc-reports/replay.log
+git checkout -- dashboard/
+```
+
 ## Track record
 
 Colorado FY2024 is the pilot. The overlay compiles the existing
 `us-co/policies/cdhs/snap/fy-2026-benefit-calculation.yaml` under the FY2024
 parameters and reproduces the worked example above — allotment 291, standard
 deduction 198, excess-shelter deduction 672, HCSUA 560 — to the dollar. Running the
-full 856-review Colorado subset turns the editing guarantee into a benefit-computation
-match rate and a stage-keyed mismatch taxonomy, so a real encoding gap shows up as a
-dispositioned class against administrative ground truth rather than as a green light
-nobody checked. Colorado's first run scored 816/856 and surfaced two federal
-encoding findings (the stale homeless-cap literal, rulespec-us#765, and the
-whole-dollar computation, #826) plus one mapper fix before reaching 856/856
-with every stage comparison exact at zero tolerance.
+full 856-review Colorado subset gives a benefit match rate and a stage-keyed
+mismatch taxonomy, so an encoding gap shows up as a dispositioned class against
+the file's calculated values. Colorado's first run scored 816/856 and surfaced
+two federal encoding findings (the stale homeless-cap literal, rulespec-us#765,
+and the whole-dollar computation, #826) plus one mapper fix before reaching
+856/856; all six compared values have been scored at zero tolerance since 2026-07-12
+(details at the end of this section).
 
 New York, California, Arizona, Georgia, and Maryland joined for FY2024 on
-the same arc. California ran
-883/883 benefit-exact with all 5,298 stage comparisons exact at zero tolerance
-on its first successful run — the federal chain fixes Colorado surfaced carry
-over intact. New York's first run scored 814/847: all 33 divergences were the
-one-dollar whole-dollar class through the composition's statutory-chain
-surface (§7), and scoring the 273.10 regulatory chain took the suite to
-847/847 — including all 107 NYSCAP units — with all 5,082 stage comparisons
-exact at zero tolerance.
+the same arc. California's first committed run (2026-07-12, rulespec-us
+`b53ce208`) matched 883/883 benefits, with the other five compared values
+within the $1 stage tolerance then in force; the federal chain fixes Colorado surfaced carried
+over intact. New York's first run, recorded in the #269 description and not
+committed, scored 814/847: all 33 divergences were the one-dollar
+whole-dollar class through the composition's statutory-chain surface (§7).
+Scoring the 273.10 regulatory chain took the suite to 847/847, including all
+107 NYSCAP units, in its first committed run (2026-07-12, rulespec-us
+`b53ce208`, also at the $1 stage tolerance). Every committed real run of the
+two suites since the 2026-07-12 zero-tolerance run against rulespec-us
+`2e3e0821`, through the 2026-09-22 run against `f43dec52`, matched all 5,298
+California and 5,082 New York comparisons (six concepts per review) at zero
+tolerance.
 
 Arizona, Georgia, and Maryland (rulespec-us#842) each encoded their FY2026
 SUA amounts from primary sources and a composition on the 273.10 chain
-before their suites ran. Georgia (945/945) and Maryland (722/722) were
-first-run clean at zero stage tolerance; Arizona's single first-run
-divergence (921/922) was the bracket-inconsistent UTIL row above,
-dispositioned as a mapper convention, after which 922/922 stage comparisons
-reproduce exactly.
+before their suites ran. Their first committed runs (2026-07-12, rulespec-us
+`2e3e0821`) already used zero stage tolerance, and Georgia matched all 945
+reviews and Maryland all 722 on every compared value. Arizona's one
+divergence on its first run (921/922, described in #273 and not committed)
+was a bracket-inconsistent UTIL row (§7), resolved by a mapper convention.
+Every committed real Arizona run matched all 5,532 comparisons (922 reviews
+× six concepts) at zero tolerance.
 
-That is exactly how the pilot played out. The first run matched 816 of 856
-benefits (95.3%) with every residual classified; the classifications surfaced
-two defects in the federal 273.10 encoding — the stale $143 homeless-deduction
-literal (rulespec-us#761 → #765) and the missing whole-dollar rounding steps
-(rulespec-us#762 → #826) — plus one mapping refinement in this repo
-(unit-level elderly/disabled status, §7). With the two upstream fixes merged
-and the mapper refined, the suite stands at **856/856 (100%) benefit-exact,
-with every stage intermediate exact** — gross income, standard deduction,
-shelter deduction, net income, maximum allotment, and benefit, 5,136/5,136
-comparisons — against rulespec-us `b53ce208`
-(`reports/axiom-snapqc-co-snap-0-2026-07-11.json`). The dispositions ledger
+The Colorado pilot in detail. The first run (2026-07-08, rulespec-us
+`67cd1000`) matched 816 of 856 benefits with every residual
+classified; the classifications surfaced two defects in the federal 273.10
+encoding — the stale $143 homeless-deduction literal (rulespec-us#761 → #765)
+and the missing whole-dollar rounding steps (rulespec-us#762 → #826) — plus
+one mapping refinement in this repo (unit-level elderly/disabled status, §7).
+With the two upstream fixes merged and the mapper refined, the 2026-07-11 run
+against rulespec-us `b53ce208` matched all 856 benefits at zero tolerance and
+all 4,280 stage comparisons (five stages × 856) within the $1 stage tolerance
+that run used (`tolerance: 1.0` on each stage concept). That report survives in
+git history as `git show d34aa6fa0:dashboard/public/data/axiom-snapqc-co-snap.json`;
+the `reports/axiom-snapqc-co-snap-0-2026-07-11.json` copy that #268 committed
+left `main` in the #325 merge on 2026-07-25 (`reports/*.json` is git-ignored).
+#273 set `stage_tolerance: 0` on 2026-07-12. Four committed real runs since
+then each matched all 5,136 comparisons (six concepts × 856 reviews) at zero
+tolerance: 2026-07-12 against rulespec-us `2e3e0821`, 2026-07-13 against
+`04d9d7cc` and `c739eade`, and 2026-09-22 against `f43dec52`, which is the
+committed dashboard report today. The committed versions in between are
+re-emissions of those runs. The report provenance names
+the rulespec-us SHA but records the engine binary and rulespec root only as
+absolute paths on the machine that ran it, with no engine commit
+(TheAxiomFoundation/axiom-oracles#584). The dispositions ledger
 for the suite is empty: every divergence either exposed a real defect (fixed
 upstream, in public pull requests) or a documented mapping subtlety (encoded
-in §7). That is the loop working as designed.
+in §7).

@@ -36,6 +36,7 @@ def test_report_has_stable_schema_and_eligibility_mismatch_kind() -> None:
     assert report["summary"]["mismatches_by_kind"] == [
         {"value": MismatchKind.ELIGIBILITY_LEFT_ONLY, "count": 1}
     ]
+    assert report["summary"]["errors_by_engine"] == {}
     assert report["mismatches"][0]["kind"] == MismatchKind.ELIGIBILITY_LEFT_ONLY
     assert report["cases"][0]["mismatches"][0]["kind"] == (
         MismatchKind.ELIGIBILITY_LEFT_ONLY
@@ -107,9 +108,7 @@ def test_missing_output_mismatch_kind_and_engine_errors_are_reported() -> None:
         {"value": MismatchKind.MISSING_LEFT, "count": 1}
     ]
     assert report["summary"]["error_count"] == 1
-    assert report["summary"]["errors_by_engine"] == [
-        {"value": "policyengine", "count": 1}
-    ]
+    assert report["summary"]["errors_by_engine"] == {"policyengine": 1}
     assert report["mismatches"][0]["difference"] is None
     assert report["errors"] == [
         {

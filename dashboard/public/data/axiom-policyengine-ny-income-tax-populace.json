@@ -6,7 +6,7 @@
    "comparison_count": 3741,
    "components": [],
    "concept": "us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax",
-   "description": "State income tax liability over every routed tax unit in the pinned US Populace",
+   "description": "New York Tax Law section 601 main resident individual-income-tax schedule, computed from caller-supplied completed New York taxable income and strict filing-status schedule classifiers over every routed tax unit in the pinned US Populace; this bounded suite excludes section 601(d-5) supplemental tax, credits, local taxes, payments, and final liability",
    "match_count": 3741,
    "match_rate": 100.0,
    "matched": 3741,
@@ -28,7 +28,16 @@
  "mismatches": [],
  "population": "populace-us",
  "provenance": {
-  "campaign_report": "state-tax-populace-campaign-2026-07-25.json",
+  "branch_diagnostics": {
+   "compared_tax_unit_count": 3741,
+   "head_of_household_count": 217,
+   "joint_or_surviving_count": 1543,
+   "negative_taxable_income_count": 0,
+   "positive_taxable_income_count": 3222,
+   "single_or_separate_count": 1981,
+   "zero_taxable_income_count": 519
+  },
+  "campaign_report": "state-tax-populace-ny-campaign-2026-07-27.json",
   "dataset_identity": {
    "built_with": "1.729.0",
    "country": "us",
@@ -37,12 +46,21 @@
    "sha256": "16be6338f9d0",
    "source": "pinned"
   },
+  "generated_at": "2026-07-27T19:21:32Z",
+  "generated_by": "scripts/emit_populace_campaign_artifacts.py::ny-income-tax-populace",
   "max_absolute_difference": 2.119999997317791,
   "relative_tolerance": 1e-07,
+  "rulespecs": [
+   {
+    "repo": "TheAxiomFoundation/rulespec-us",
+    "sha": "5d8f3469682d8058a1396745812f614ed0f79200"
+   }
+  ],
+  "run_kind": "manual",
   "runtime_provenance": {
    "axiom_engine": {
-    "commit": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
-    "executable_sha256": "a181a6f1aedc16ca27f553ef54006a390919b85d7cb1efc435bc65f41aeaeef0",
+    "commit": "68d65229632e371b96d8eb25c704c1977a2b7ed3",
+    "executable_sha256": "2e881f18dda64ae801d318a16c61525f50d094d83f5de71d330098696da9dd42",
     "repository": "TheAxiomFoundation/axiom-rules-engine",
     "working_tree": "clean"
    },
@@ -51,11 +69,12 @@
     "policyengine-us": "1.752.2"
    },
    "rulespec": {
-    "commit": "ca2d424fcb85ce8c3a8f4706113331710f114460",
+    "commit": "5d8f3469682d8058a1396745812f614ed0f79200",
     "repository": "TheAxiomFoundation/rulespec-us",
     "working_tree": "clean"
    }
   },
+  "schema": "axiom_oracles.provenance.v1",
   "tolerance": 2.25,
   "weighted_compared_tax_units": 10690765.874736872
  },

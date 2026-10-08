@@ -38,12 +38,14 @@ comes, in order of authority, from
   (``{"axiom": "...", "policyengine": "al_income_tax_before_refundable_credits"}``);
 * FIIT's producer-specific ``SURFACE_OUTPUTS`` bindings when legacy surface
   counts prove its complete output loop, or a mismatch names the output;
+* the Yale panel producer's ``AUTHORITY_SLOTS`` bindings when its slot counts
+  reconcile to positive case-family comparison evidence;
 * the concept→engine-target bindings the comparison machinery itself uses —
   ``axiom_oracles/config/concept_mappings.yaml`` (``ProgramMapping``) and the
   PolicyEngine oracle registry (``bridges/mappings/*.yaml``) — applied to the
   report's aggregates that carry a positive ``comparison_count``.
 
-The third source is a deduction, so it is tracked as such:
+Producer and concept bindings are deductions, so they are tracked as such:
 :attr:`ExecutionAttestation.outputs_complete` is true only when EVERY
 positive-comparison aggregate resolved to a named oracle variable. When the
 recording is incomplete, "none of the registered outputs appear" means *the
@@ -55,6 +57,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from functools import lru_cache
+from math import isfinite
 
 #: Schema id stamped into a runner-produced ``report["attestation"]`` block.
 EXECUTION_ATTESTATION_SCHEMA = "axiom_oracles.execution_attestation.v1"
@@ -66,6 +69,7 @@ BACKEND_ENGINE_NAMES: dict[str, str] = {
     "euromod": "euromod",
     "ukmod": "euromod",
     "policyengine": "policyengine",
+    "yale-tariff": "yale_statutory",
 }
 
 #: Axiom must be a party to any comparison that can attest Axiom conformance —
@@ -465,6 +469,11 @@ def _attested_outputs(
     if fiit_outputs is not None:
         return fiit_outputs
 
+    if oracle_engine == "yale_statutory":
+        # This producer's engines value describes the panel, not an output.
+        # Its actual compared columns belong to its authority-slot loop.
+        return _yale_panel_outputs(report)
+
     names = set(_engines_map_variables(report, oracle_engine))
     resolved_every_surface = True
     saw_surface = False
@@ -489,6 +498,86 @@ def _attested_outputs(
     return frozenset(names), outputs_complete
 
 
+def _yale_panel_outputs(report: dict) -> tuple[frozenset[str], bool]:
+    """Resolve only the Yale producer's positively evidenced comparison slots.
+
+    ``generate_us_tariff_panel.build_report`` compares each authority's column
+    sum for every unit and records both slot counts and expected/Axiom vectors
+    in its case-family ledger. A description, column declaration or positive
+    exposure alone cannot substitute for those comparisons.
+    """
+    provenance = report.get("provenance")
+    if (
+        report.get("suite") != "us-tariff-panel"
+        or not isinstance(provenance, dict)
+        or not (
+            provenance.get("generated_by") == "scripts/run_comparison.py::us-tariff-panel"
+            or provenance.get("generator") == "scripts/generate_us_tariff_panel.py"
+        )
+    ):
+        return frozenset(), False
+
+    from axiom_oracles.suites.us_tariff_panel import AUTHORITY_SLOTS
+
+    summary = report.get("summary") or {}
+    scope = report.get("scope") or {}
+    reference = scope.get("reference") or {}
+    slots = summary.get("slots")
+    families = report.get("cases")
+    declared_slots = scope.get("authority_slots")
+    columns = reference.get("columns")
+    unit_counts = (
+        report.get("case_count"), summary.get("comparison_count"), scope.get("comparison_units")
+    )
+    if (
+        not isinstance(slots, dict)
+        or not isinstance(families, list)
+        or not isinstance(declared_slots, list)
+        or not isinstance(columns, list)
+        or not all(isinstance(count, int) and not isinstance(count, bool) and count > 0
+                   for count in unit_counts)
+        or len(set(unit_counts)) != 1
+    ):
+        return frozenset(), False
+
+    names: set[str] = set()
+    complete = set(slots) == set(declared_slots) == set(AUTHORITY_SLOTS) | {"total"}
+    for slot, (_, targets) in AUTHORITY_SLOTS.items():
+        row = slots.get(slot)
+        if slot not in declared_slots or not set(targets) <= set(columns) or not isinstance(row, dict):
+            complete = False
+            continue
+        counts = (row.get("matches"), row.get("mismatches"))
+        if not all(isinstance(count, int) and not isinstance(count, bool) and count >= 0
+                   for count in counts):
+            complete = False
+            continue
+        compared = sum(counts)
+        family_units = sum(
+            family["unit_count"]
+            for family in families
+            if isinstance(family, dict)
+            and isinstance(family.get("unit_count"), int)
+            and not isinstance(family["unit_count"], bool)
+            and family["unit_count"] > 0
+            and isinstance(family.get("expected"), dict)
+            and isinstance(family.get("axiom"), dict)
+            and slot in family["expected"]
+            and slot in family["axiom"]
+            and all(
+                isinstance(value, (int, float))
+                and not isinstance(value, bool)
+                and (not isinstance(value, float) or isfinite(value))
+                for value in (family["expected"][slot], family["axiom"][slot])
+            )
+        )
+        if not 0 < compared == family_units <= unit_counts[0]:
+            complete = False
+            continue
+        names.update(targets)
+    return frozenset(names), complete and bool(names)
+
+
 def _engines_map_variables(report: dict, engine: str) -> frozenset[str]:
     """Oracle variables named by the engine→variable ``engines`` shape.
 
@@ -508,9 +597,12 @@ def _engine_names(report: dict) -> set[str]:
     engines = report.get("engines")
     if not isinstance(engines, dict):
         return set()
-    if set(engines) <= {"left", "right"}:
-        return {str(value) for value in engines.values() if value}
-    return {str(key) for key in engines}
+    # Runner stamping adds versions to both role-pair and engine-key shapes;
+    # it is metadata and can neither supply nor conceal a comparison party.
+    identities = {key: value for key, value in engines.items() if key != "versions"}
+    if set(identities) <= {"left", "right"}:
+        return {value for value in identities.values() if isinstance(value, str) and value}
+    return {str(key) for key in identities}
 
 
 def _error_count(report: dict, summary: dict) -> int:

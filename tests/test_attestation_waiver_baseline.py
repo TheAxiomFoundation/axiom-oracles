@@ -31,7 +31,7 @@ def _approved_waiver() -> AttestationWaiver:
 
 def _approved_report() -> dict:
     return json.loads(
-        (REPO_ROOT / "dashboard/public/data/axiom-euromod-be-marital-quotient.json")
+        (REPO_ROOT / "tests/fixtures/attestations/approved-be-marital-quotient.json")
         .read_text()
     )
 
@@ -88,6 +88,19 @@ def test_unchanged_approved_legacy_report_keeps_waived_coverage():
 def test_legacy_waiver_cannot_cover_a_replacement_report():
     report = _approved_report()
     report["generated_at"] = "2099-01-01T00:00:00Z"
+    board, scores = score_jurisdiction(
+        _approved_universe(), [report], waivers=WaiverIndex([_approved_waiver()])
+    )
+    assert board.covered == 0
+    assert not board.conformant
+    assert scores[0].status == "unbound"
+
+
+def test_current_committed_replacement_cannot_inherit_legacy_waiver():
+    report = json.loads(
+        (REPO_ROOT / "dashboard/public/data/axiom-euromod-be-marital-quotient.json")
+        .read_text()
+    )
     board, scores = score_jurisdiction(
         _approved_universe(), [report], waivers=WaiverIndex([_approved_waiver()])
     )

@@ -1,0 +1,91 @@
+rows:
+  - citation: "us-co/regulation/10-ccr-2506-1/4.000"
+    heading: "SNAP"
+    status: excluded
+    reason: container_heading
+    basis: "The source record is only the heading “SNAP” and has no body of its own; its sole child, 4.000.1, begins “Able-Bodied Adult Without Dependents (ABAWD)” means an individual and carries the content."
+
+  - citation: "us-co/regulation/10-ccr-2506-1/4.207"
+    heading: "AUTHORIZING BENEFITS"
+    status: excluded
+    reason: container_heading
+    basis: "The source record is only the heading “AUTHORIZING BENEFITS” and has no body of its own; children 4.207.1–4.207.3 carry the rules, beginning “All households shall be placed on an issuance schedule” and continuing through proration and benefit allotment."
+
+  - citation: "us-co/regulation/10-ccr-2506-1/4.609"
+    heading: "TRANSITIONAL SNAP (T-SNAP)"
+    status: excluded
+    reason: container_heading
+    basis: "The source record is only the heading “TRANSITIONAL SNAP (T-SNAP)” and has no body of its own; children 4.609.1–4.609.6 carry the content, beginning “Households that receive SNAP and Colorado Works (CW) basic cash assistance.”"
+
+  - citation: "us-co/regulation/10-ccr-2506-1/4.702"
+    heading: "RESTORATION OF LOST BENEFITS"
+    status: excluded
+    reason: container_heading
+    basis: "The source record is only the heading “RESTORATION OF LOST BENEFITS” and has no body of its own; children 4.702.1–4.702.4 carry the rules, beginning “To be eligible for restored benefits.”"
+
+  - citation: "us-co/regulation/10-ccr-2506-1/4.802.6"
+    heading: "STATE-LEVEL FAIR HEARINGS"
+    status: excluded
+    reason: container_heading
+    basis: "The PDF shows only “4.802.6 STATE-LEVEL FAIR HEARINGS,” immediately followed by child “4.802.61 MANAGEMENT OF STATE-LEVEL HEARINGS” and “A. Scheduling”; the heading has no body of its own."
+    note: "The source establishes children 4.802.61–4.802.63; the closure report’s children=0 result is a flattened-hierarchy artifact, and the source contains no reserved or repealed marker."
+
+  - citation: "us-co/regulation/10-ccr-2506-1/4.900"
+    heading: "ADMINISTRATIVE PROCEDURES"
+    status: excluded
+    reason: container_heading
+    basis: "The PDF shows only “4.900 ADMINISTRATIVE PROCEDURES,” immediately followed by child “4.901 ADMINISTRATION OF SNAP” and the substantive rule “SNAP shall be administered in every county of the state”; the heading has no body of its own."
+    note: "The source establishes the 4.901–4.905 hierarchy; the closure report’s children=0 result is a flattened-hierarchy artifact, and the source contains no reserved or repealed marker."
+
+  - citation: "us-co/regulation/10-ccr-2506-1/4.902"
+    heading: "COUNTY ADMINISTRATION REQUIREMENTS"
+    status: excluded
+    reason: container_heading
+    basis: "The source record is only the heading “COUNTY ADMINISTRATION REQUIREMENTS” and has no body of its own; its eight citation-prefixed children carry the content, beginning “Local offices shall ensure that adequate locations and hours of operation exist.”"
+
+  - citation: "us-co/regulation/10-ccr-2506-1/4.903"
+    heading: "STATE ADMINISTRATION RESPONSIBILITIES"
+    status: excluded
+    reason: container_heading
+    basis: "The source record is only the heading “STATE ADMINISTRATION RESPONSIBILITIES” and has no body of its own; its ten citation-prefixed children carry the content, including “The State Department is responsible for supervising the administration of SNAP.”"
+
+findings:
+  - >-
+    Six-container descendant audit: all 32 content-bearing descendants have
+    non-null source text and exact citation-matched module files in the pinned
+    rulespec-us tree. The grouped suffixes are 4.000 → 4.000.1; 4.207 →
+    4.207.1, 4.207.2, 4.207.3; 4.609 → 4.609.1–4.609.6; 4.702 →
+    4.702.1–4.702.4; 4.902 → 4.902.1, 4.902.2, 4.902.3, 4.902.31,
+    4.902.32, 4.902.4, 4.902.5, 4.902.6; and 4.903 → 4.903.1, 4.903.2,
+    4.903.3, 4.903.31, 4.903.32, 4.903.4, 4.903.41–4.903.44. For every
+    suffix S, the confirmed module is
+    us-co/regulations/10-ccr-2506-1/S.yaml.
+  - >-
+    Source correction: axiom-corpus main and origin/main were both
+    bf97b17baebfdf12601f7c23697524bf5adcdaed. The pinned PDF at
+    data/corpus/sources/us-co/regulation/2026-07-16-10-ccr-2506-1/colorado-ccr-pdf/10-ccr-2506-1.pdf
+    shows on PDF pages 197 and 215 that 4.802.6 and 4.900 are container
+    headings followed by substantive child hierarchies, not reserved or
+    repealed provisions. The JSONL assigns every section level 2 and the
+    document root as parent, so the reported zero-child counts are an
+    extraction-hierarchy defect.
+  - >-
+    Content-coverage caveat from the required descendant audit: the exact
+    file join succeeds for all 32 descendants, but at pinned rulespec-us
+    commit 3373e8411 the 4.000.1 module is entity_not_supported with no
+    executable rules, the 4.903.3 and 4.903.4 modules are deferred with no
+    executable rules, and 4.702.4 has one explicitly deferred branch. The
+    parent rows remain valid bodyless-container exclusions, but artifact
+    presence alone does not establish full semantic encoding of those four
+    children.
+  - >-
+    Reproducible spot-check of exactly 5/281 previously encoded sections:
+    an exact-file join produced the known 281 candidates, then the five
+    lowest SHA-256 scores for seed
+    “a3-co-spotcheck-2026-07-27-v1” + NUL + citation_path selected 4.403.1
+    Self-Employment, 4.802.62 Hearing Denials or Dismissals, 4.504.4
+    Systematic Alien Verification Entitlement (SAVE), 4.208.1 Certification
+    Period Guidelines, and 4.307 STRIKER ELIGIBILITY. Actual provision text
+    was read for those five; each exact module exists in the pinned file tree
+    and declares the matching corpus citation path. All five passed, with no
+    citation-scope defect found.

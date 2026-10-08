@@ -54,6 +54,7 @@ jobs:
           import yaml
           only = os.environ.get("ONLY", "").strip()
           names = []
+          manual = []
           for path in sorted(Path("comparisons").glob("*.yaml")):
               if path.name.endswith(".fixtures.yaml"):
                   continue
@@ -63,9 +64,15 @@ jobs:
               if not (config.get("runner") or {}).get("type"):
                   continue
               if config.get("ci") == "manual":
+                  manual.append(path.stem)
                   continue
               names.append(path.stem)
           if only:
+              if only in manual:
+                  raise SystemExit(
+                      f"{only} declares ci: manual (see comparisons/{only}.yaml); "
+                      "run it with a supervised run_comparison.py"
+                  )
               names = [n for n in names if n == only]
               if not names:
                   raise SystemExit(f"unknown comparison: {only}")
@@ -164,6 +171,12 @@ jobs:
         env:
           AXIOM_ENCODE_REPO: ${{ github.workspace }}/axiom-encode
           AXIOM_RULES_REPO: ${{ github.workspace }}/axiom-rules
+          # Pinned Populace artifacts: the UK one lives in a private HF repo
+          # (policyengine/populace-uk-private), and the public US one is
+          # rate-limited unauthenticated. Empty until the org
+          # HUGGING_FACE_TOKEN is restored and shared to this repo
+          # (policyengine-uk#1816) — harmless meanwhile.
+          HF_TOKEN: ${{ secrets.HUGGING_FACE_TOKEN }}
         working-directory: axiom-oracles
         run: |
           # The runner configs reference $HOME/axiom-encode etc.; symlink the

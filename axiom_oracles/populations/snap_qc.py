@@ -1,14 +1,19 @@
 """SNAP Quality Control public-use-file loader for administrative-grade parity.
 
-The USDA SNAP Quality Control (QC) public-use file (PUF) is a stratified
-sample of active SNAP case reviews for a fiscal year. For every retained
-review the file carries a **constructed** benefit computation: FNS's contractor
-(Mathematica) recomputes the allotment from edited, internally consistent
-inputs and the official fiscal-year parameters (the "QC Minimodel"), so
-``FSBEN`` is the benefit the rules *should* produce for those inputs — the US
-analogue of a full-admin-returns oracle. Replaying each unit's inputs through
-an Axiom SNAP composition and comparing allotments (and stage intermediates)
-against the QC-constructed values is therefore ground-truth parity.
+The USDA SNAP Quality Control (QC) public-use file (PUF) holds a fiscal year's
+monthly samples of active SNAP case reviews (no state had a stratified sample
+in FY 2024; tech doc chapter III.A, Step 7, May PDF p.26). For every retained
+review the file
+carries a **constructed** benefit computation: Mathematica, under contract to
+USDA, calculates the allotment ``FSBEN`` from the edited case record and the
+fiscal year's parameters while editing the file (Step 12). The QC Minimodel
+reads ``FSBEN`` as an input. ``FSBEN`` need not equal the benefit on the case
+record: in the FY 2024 file it is within $5 of the issued benefit
+(``RAWBEN``) for 556 of 856 Colorado units and of the reviewer-corrected
+benefit (``BENFIX``) for 797. Replaying each unit's
+inputs through an Axiom SNAP composition and comparing allotments (and stage
+intermediates) against the QC-constructed values therefore tests whether Axiom
+reproduces Mathematica's calculation from the edited inputs.
 
 This module is the loader: it pins each fiscal year's PUF (URL + sha256 +
 archive member), downloads and verifies it on demand, streams the CSV with the
@@ -34,7 +39,8 @@ Codebook citations
 Every mapped variable is cited to a page of the FY 2024 SNAP QC Technical
 Documentation detailed codebook (Chapter V.B). Page numbers below are PDF pages
 of that document (the ``===== PDF PAGE N =====`` markers in the archived
-``tech-doc-full.txt``); they equal the printed page plus ten.
+``tech-doc-full.txt``) in the May 2026 posting, where they equal the printed
+page plus ten; in the August 2026 posting each is four pages later.
 
 Case control and identification
     ``YRMONTH`` sample year+month (p74) -> ``yrmonth``;
@@ -187,10 +193,18 @@ class SnapQcPin:
 #: unpinned fiscal year: the PUFs are immutable postings, so an unpinned or
 #: moved file would silently change the oracle's ground truth.
 SNAP_QC_PINS: dict[int, SnapQcPin] = {
+    # FY2024 re-pinned 2026-09-22 to the August 18, 2026 re-posting, which
+    # "replace[s] earlier versions posted in May 2026" with corrections to the
+    # FYWGT and HWGT weighting variables (snapqcdata.net/datafiles). Diffed
+    # against the May posting (zip sha256 0f3230a4...263f4, recorded
+    # 2026-07-08): identical header (1,177 columns) and 44,891 rows in the same
+    # order (STATE/YRMONTH/HHLDNO/CASE keys match position by position); only
+    # HWGT and FYWGT (16,948 rows each) and HWGT_OLD and FYWGT_OLD (10,072 rows
+    # each) changed. FSBEN and every input column are unchanged.
     2024: SnapQcPin(
         fiscal_year=2024,
-        url="https://snapqcdata.net/sites/default/files/2026-05/qcfy2024_csv.zip",
-        sha256="0f3230a4318307d3088382546095eebfde03e781da6f65c9eac7f077bd4263f4",
+        url="https://snapqcdata.net/sites/default/files/2026-08/qcfy2024_csv.zip",
+        sha256="b8b29b8593f78aa51c48332c47d2d92fa5bbecf5346570acb45e26f2d9ebd2b5",
         archive_member="qc_pub_fy2024.csv",
     ),
     2023: SnapQcPin(
@@ -374,10 +388,12 @@ class QcMember:
 
 @dataclass(frozen=True)
 class QcExpected:
-    """The QC-constructed benefit computation for a unit — the ground truth.
+    """The QC-constructed benefit computation the replay scores a unit against.
 
-    Every field is a QC Minimodel output (or the reported error finding for
-    ``status``/``error_amount``). A value is ``None`` when the source column is
+    Every field is a variable Mathematica constructs while editing the file,
+    except ``dependent_care_deduction`` (``FSDEPDED``, a reported deduction the
+    editing adjusts) and the reviewer's error finding in
+    ``status``/``error_amount``. A value is ``None`` when the source column is
     coded missing for the unit; for the loaded (non-excluded) population these
     are populated.
     """
@@ -403,7 +419,7 @@ class QcExpected:
 
 @dataclass(frozen=True)
 class QcUnit:
-    """A single SNAP QC case review projected into oracle inputs + ground truth."""
+    """A single SNAP QC case review projected into oracle inputs + QC values."""
 
     case_id: str
     fiscal_year: int
@@ -456,9 +472,10 @@ EXCLUSION_MFIP = "mfip"
 #: Unit uses an SSI Combined Application Project benefit procedure. NYSCAP
 #: (``SSI_CAP = 4``) is *not* excluded: unlike the standard-benefit and
 #: standardized-shelter CAPs, NYSCAP units "went through the standard editing
-#: process that non-SSI-CAP households undergo" and "all SNAP deductions apply"
-#: (FY 2024 tech doc, SSI-CAP benefit calculations and the SSI_CAP codebook
-#: note), so their FSBEN is an ordinary Minimodel recomputation.
+#: process that non-SSI-CAP households undergo" (FY 2024 tech doc chapter III,
+#: SSI-CAP benefit calculations, PDF p.42) and "all SNAP deductions apply" to
+#: them (chapter IV footnote 36, PDF p.50), so their FSBEN comes from the same
+#: file-editing benefit calculation as non-CAP units.
 EXCLUSION_SSI_CAP = "ssi_cap"
 #: Data-quality guard: no constructed benefit to replay (FSBEN missing or 0).
 EXCLUSION_MISSING_BENEFIT = "missing_benefit"
@@ -571,8 +588,8 @@ def _verify_sha256(data: bytes, *, expected: str, source: str) -> None:
         )
 
 
-def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
-    """Download, verify, and extract a pinned PUF; return the local CSV path.
+def _fetch_verified_archive(pin: SnapQcPin) -> bytes:
+    """Download a pinned PUF zip and return its bytes once they pass the pin.
 
     ``requests`` is imported lazily inside this function so the rest of the
     loader (and its tests) never require the dependency at import time and can
@@ -592,9 +609,13 @@ def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
     response.raise_for_status()
     payload = response.content
     _verify_sha256(payload, expected=pin.sha256, source=pin.url)
+    return payload
 
-    cache_dir.mkdir(parents=True, exist_ok=True)
-    destination = cache_dir / _csv_name(pin.fiscal_year)
+
+def _extract_qc_csv(pin: SnapQcPin, payload: bytes, directory: Path) -> Path:
+    """Write the pinned member of a verified zip to ``directory``; return it."""
+    directory.mkdir(parents=True, exist_ok=True)
+    destination = directory / _csv_name(pin.fiscal_year)
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
         with archive.open(pin.archive_member) as member, open(
             destination, "wb"
@@ -605,13 +626,13 @@ def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
     return destination
 
 
-def _resolve_csv_path(fiscal_year: int, data_dir: str | Path | None) -> Path:
-    """Locate the PUF CSV, downloading into the cache only as a last resort.
+def _download_qc_csv(pin: SnapQcPin, cache_dir: Path) -> Path:
+    """Download, verify, and extract a pinned PUF; return the local CSV path."""
+    return _extract_qc_csv(pin, _fetch_verified_archive(pin), cache_dir)
 
-    Resolution order: an explicit ``data_dir`` that contains the file, then the
-    :data:`DATA_DIR_ENV_VAR` directory that contains it (either short-circuits
-    the download), then the on-disk cache, then a verified download.
-    """
+
+def _pin_for(fiscal_year: int) -> SnapQcPin:
+    """Return the fiscal year's pin, refusing unpinned years outright."""
     pin = SNAP_QC_PINS.get(fiscal_year)
     if pin is None:
         raise ValueError(
@@ -621,6 +642,57 @@ def _resolve_csv_path(fiscal_year: int, data_dir: str | Path | None) -> Path:
             "year — there is no unpinned-load escape hatch, because the PUFs "
             "are immutable postings."
         )
+    return pin
+
+
+def fetch_pinned_puf(
+    fiscal_year: int,
+    data_dir: str | Path,
+    *,
+    archive_dir: str | Path | None = None,
+) -> Path:
+    """Materialize a pinned fiscal year's PUF CSV into ``data_dir``.
+
+    Unlike the loader's lazy cache — which trusts any CSV already on disk —
+    this checks the zip against its pin on every call, so a persisted download
+    (a CI cache restore, a shared directory) can never stand in for an
+    unverified ground truth. With ``archive_dir`` the verified zip is kept
+    there, named by its pinned sha256, and reused by later calls; a kept zip
+    that no longer verifies (a truncated restore, bit rot) is discarded and
+    downloaded afresh, and a fresh download that fails its pin still raises.
+    The CSV is always re-extracted, replacing whatever ``data_dir`` held, so
+    ``data_dir`` then satisfies :data:`DATA_DIR_ENV_VAR` for
+    :func:`load_qc_units` and the comparison runner.
+    """
+    pin = _pin_for(fiscal_year)
+    payload: bytes | None = None
+    archive: Path | None = None
+    if archive_dir is not None:
+        archive = Path(archive_dir) / f"{pin.sha256}.zip"
+        if archive.exists():
+            kept = archive.read_bytes()
+            if hashlib.sha256(kept).hexdigest() == pin.sha256:
+                payload = kept
+            else:
+                archive.unlink()
+    if payload is None:
+        payload = _fetch_verified_archive(pin)
+        if archive is not None:
+            archive.parent.mkdir(parents=True, exist_ok=True)
+            partial = archive.with_name(f".{archive.name}.partial")
+            partial.write_bytes(payload)
+            partial.replace(archive)
+    return _extract_qc_csv(pin, payload, Path(data_dir))
+
+
+def _resolve_csv_path(fiscal_year: int, data_dir: str | Path | None) -> Path:
+    """Locate the PUF CSV, downloading into the cache only as a last resort.
+
+    Resolution order: an explicit ``data_dir`` that contains the file, then the
+    :data:`DATA_DIR_ENV_VAR` directory that contains it (either short-circuits
+    the download), then the on-disk cache, then a verified download.
+    """
+    pin = _pin_for(fiscal_year)
 
     csv_name = _csv_name(fiscal_year)
     for candidate_dir in (data_dir, os.environ.get(DATA_DIR_ENV_VAR)):
@@ -881,5 +953,6 @@ __all__ = [
     "SnapQcPin",
     "UNEARNED_INCOME_SOURCES",
     "UtilityTier",
+    "fetch_pinned_puf",
     "load_qc_units",
 ]

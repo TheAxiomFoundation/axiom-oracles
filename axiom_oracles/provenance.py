@@ -180,6 +180,13 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
     ]
     home = Path.home()
     candidates = []
+    # AXIOM_RULESPEC_US_ROOT pins the rulespec-us checkout a comparison runs
+    # against (see scripts/run_comparison.py); the recorded SHA must come
+    # from the same checkout the run actually resolved, not whatever branch
+    # the developer's convention-path checkout happens to be on.
+    override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
+    if override and name == "rulespec-us":
+        candidates.append(Path(override))
     for candidate_name in candidate_names:
         candidates.extend(
             [
@@ -211,6 +218,24 @@ def canonical_rulespec_slug(name: str) -> str:
     if "/" in resolved or not resolved.startswith("rulespec-"):
         return resolved
     return f"{RULESPEC_OWNER}/{resolved}"
+
+
+def is_real_run_report(report: Any) -> bool:
+    """Whether a parsed report came from a real run rather than a re-emission.
+
+    A skip-capable runner that cannot execute re-emits the committed report and
+    marks it ``provenance.reemitted_report``. Its numbers are the committed
+    ones, so it must never replace a real run's report, whose provenance
+    records what the numbers ran against. Unstamped legacy reports count as
+    real: nothing marks them re-emitted. Anything that is not a JSON object is
+    not a report.
+    """
+    if not isinstance(report, dict):
+        return False
+    provenance = report.get("provenance")
+    if not isinstance(provenance, dict):
+        return True
+    return not provenance.get("reemitted_report")
 
 
 def build_provenance(

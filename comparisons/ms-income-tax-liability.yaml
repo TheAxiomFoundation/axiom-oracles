@@ -1,12 +1,28 @@
+# PolicyEngine and pinned policyengine-taxsim 2.30.0 are both requested at the
+# 2026 validation year. TAXSIM's Mississippi results do not reproduce the
+# enacted 2026 schedule and remain supplemental triangulation only.
+
 name: ms-income-tax-liability
-title: Mississippi income tax liability — Axiom vs PolicyEngine and TAXSIM
+title: Mississippi section 27-7-5 Person schedule tax — Axiom vs PolicyEngine and TAXSIM
 description: >-
-  Compares Mississippi's section 27-7-5 schedule-before-credits pipeline in
-  Axiom RuleSpec against PolicyEngine (ms_income_tax_before_credits_unit) at
-  2026 and TAXSIM (siitax) at 2026 on the
-  standard six-case grid. The RuleSpec computes both Person-grain completed-
-  taxable-income candidates and performs the strict lower-tax comparison
-  without consuming PolicyEngine's filing selector or candidate tax outputs.
+  Compares the canonical Mississippi 2026 section 27-7-5 Person-grain schedule
+  tax, using caller-supplied completed Mississippi taxable income, against
+  PolicyEngine's joint/default Person-grain schedule
+  (ms_income_tax_before_credits_joint) at 2026 and TAXSIM (siitax) at 2026 on
+  the historical modest grid. The RuleSpec does not construct taxable income,
+  choose a filing method, apply credits, or claim final-return liability.
+  TAXSIM independently constructs a broader filing-unit boundary and this grid
+  is retained only as supplemental triangulation; the canonical Populace
+  campaign carries the protected engine executable provenance.
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: the engine's
+# canonical-path root scan rejects the whole tree (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049), and the state pipelines carry the
+# removed plural `corpus_citation_paths` schema (rulespec-us#1050; 176 files
+# across every jurisdiction as of 2026-08-05). Every dispatched leg fails
+# before producing a report. Manual lane only; drop this marker when both land
+# upstream (axiom-oracles#455 tracks the flip-back).
+ci: manual
 
 runner:
   type: state-income-tax-liability-grid
@@ -14,6 +30,8 @@ runner:
     state: MS
     period: "2026"
     taxsim_law_year: 2026
+    # Links this suite to the rulespec-us monorepo in the affected map
+    # so a change to the canonical schedule triggers a re-run.
     rulespec_roots:
       - $HOME/TheAxiomFoundation/rulespec-us
 

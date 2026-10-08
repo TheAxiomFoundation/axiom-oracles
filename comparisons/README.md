@@ -4,7 +4,8 @@ Each `*.yaml` in this directory declares one oracle comparison — a head-to-hea
 between two engines over a validation population. `scripts/run_comparison.py`
 reads a config, dispatches to the right runner type, writes a JSON report, and
 prints a headline summary. `.github/workflows/comparisons.yml` matrix-runs
-every config in the registry on a weekly schedule.
+every config in the registry that does not declare `ci: manual` on a weekly
+schedule.
 
 ## How to run one locally
 
@@ -39,14 +40,68 @@ YAML (with a comment saying why and what unblocks it). The affected-map
 generator then emits `name: null`, the 6-hourly selector routes it to the
 manual lane instead of dispatching a doomed leg, and the weekly matrix skips
 it. Its committed report refreshes only via a supervised
-`run_comparison.py` run.
+`run_comparison.py` run. The seven SNAP QC suites (`*-snap-qc`) declare
+`ci: manual` for that reason: both workflows clone rulespec-us main but never
+build the engine binary or download the QC public-use file, so their legs
+could only re-emit the committed report, and on 2026-09-23 the affected rerun
+committed such re-emissions over the five real reports #548 had landed. The
+same holds, and the same marker applies, for:
+
+- the 40 EUROMOD-platform suites (`euromod-synthetic-compare`: the BE and DK
+  EUROMOD suites and the `*-ukmod` UKMOD suites). Neither workflow provides the
+  x64 engine, the `euromod` connector under `EUROMOD_PYTHON`, a .NET runtime,
+  or the model checkout. They refresh through `scripts/regenerate_euromod_uk.sh`,
+  `scripts/regenerate_euromod_dk.sh`, or a supervised run.
+- the ten UK PolicyEngine case grids and the `us-tariff` grid. Their generators
+  evaluate the rules through an engine binary (`AXIOM_RULES_ENGINE_BINARY`, an
+  `axiom-rules-engine` build, or `axiom-rules` on `PATH`) that neither workflow
+  exports or builds, so their legs fail with "No such file or directory:
+  'axiom-rules'" and fall back to the committed report.
+- the SPSD/M suite (`ca-federal-schedule-tax-spsm`, `spsm-ca-compare`).
+  SPSD/M is licensed and never vendored (`docs/spsdm-oracle-design.md`), so no
+  runner can hold an install. Its generator hard-fails rather than re-emitting
+  ("No SPSD/M installation found"), and it was the weekly matrix's only red leg
+  (run 36426573617). It maps to no rulespec repo, so the affected rerun never
+  selected it; the marker takes it out of the weekly matrix.
+
+Before these suites were marked, the affected rerun committed their legs' output
+over 45 of their reports (34 EUROMOD/UKMOD suites, `us-tariff`, and the ten UK
+grids): first over the real runs, then over each other on every sweep, often
+changing nothing but `generated_at`. The UK grid fallback is not even marked as
+a re-emission, so those commits stamped the July numbers with each later
+rulespec-uk SHA as if they had run. `tests/test_affected_map.py` fails if a
+suite of any of these runner types lacks `ci: manual`. (The two DE GETTSIM
+suites also only re-emit here, but they map to no rulespec repo, so the affected
+rerun never selects them, and the DE lane is left as it is.)
 
 Reports must carry real rulespec SHAs: `provenance.rulespecs[].sha` is what
 `select_affected_suites.py` diffs against repo HEADs, and a `null` SHA means
 "cannot prove fresh" — re-selected every sweep. The always-real runner lanes
 complete missing SHAs from the affected map plus the checkout the run actually
-resolved; skip-capable lanes (euromod/gettsim/snap-qc) are deliberately
-excluded so a re-emitted report is never stamped fresh.
+resolved; skip-capable lanes (euromod/gettsim/snap-qc) are deliberately excluded
+so a re-emitted report is never stamped fresh. A re-emission never replaces a
+committed report, whether that report came from a real run or was itself a
+re-emission: it copies the committed numbers, so publishing it could only change
+labels. `run_comparison.py` leaves any existing dashboard copy byte-for-byte
+unchanged, and `scripts/commit_refreshed_report.sh` puts back the tip's copy
+(`scripts/guard_reemitted_reports.py`) before it commits. Only a suite's first
+report may be a re-emission. A re-emission also records no engine in its
+provenance, because none ran, and it leaves the copied report's
+`engines.versions` alone. Both guards rely on the runner marking its re-emission
+(`provenance.reemitted_report`). The UK PolicyEngine case-grid runners'
+fallbacks do not mark theirs yet (#549 adds the marker): `ci: manual` keeps
+those suites off the bot, but until #549 lands a manual run of one of them on a
+machine without the engine still copies the committed report under fresh
+provenance and replaces it.
+
+A suite that pins one reviewed rulespec snapshot
+(`rulespec_upstream_sha`/`rulespec_upstream_tree` in its parameters — the
+federal tax grids) is judged against the PIN instead of the repo's moving
+HEAD: the map generator copies the pin into the entry (`pinned: {repo:
+sha}`), the selector treats `recorded == pin` as fresh, and the suite goes
+stale exactly when a deliberate re-pin PR changes the pin. Judging a pinned
+suite against HEAD would re-select it every sweep forever, since its report
+can only ever stamp the pinned SHA.
 
 ## How to add a new comparison
 
@@ -119,8 +174,17 @@ Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 
 ### `axiom-encode-uk-efrs-compare`
 
-Invokes `axiom-encode uk-efrs-compare` via `uv run` with the pinned
-PolicyEngine UK stack. Supports either one `surface` or a `surfaces` list; the
+Invokes `axiom-encode uk-populace-compare` (renamed from `uk-efrs-compare` in
+the encoder's ECPS→Populace hard cut, axiom-encode #1108; no alias survives
+on axiom-encode main — the runner type keeps the old name so existing suite
+YAMLs stay valid) via `uv run` with the pinned PolicyEngine UK stack. The
+subcommand's implementation is this repo's own
+`axiom_oracles.bridges.efrs_uk` module, re-exported by axiom-encode; the
+runner overlays this checkout's bridge over the encoder's pinned
+axiom-oracles dependency via `PYTHONPATH` (uv rejects a second URL for a
+pinned package), so suite runs validate the current oracle code — this was
+the "pointing it at the in-repo package" follow-up. Supports either
+one `surface` or a `surfaces` list; the
 runner merges multi-surface JSON output before adapting it to the dashboard.
 When `parameters.axiom_program` is declared, the runner first composes that
 `axiom-programs` spec and passes the composed RuleSpec file as the Universal
@@ -161,11 +225,51 @@ the canonical `rulespec_remote` so the affected-rerun map retains the
 `rulespec-us` dependency and CI can clone it when the development root is
 absent.
 
+When `rulespec_upstream_sha`/`rulespec_upstream_tree` pin the reviewed
+snapshot, a configured root is used only if it IS that snapshot (clean, tree
+equal to the pin); otherwise the runner materializes the pinned revision in a
+scratch clone (`git fetch` of the pinned SHA — reachable from main — then a
+detached checkout) and verifies it before running. Previously the runner
+cloned main HEAD and died on "pinned federal rulespec snapshot tree mismatch"
+on every sweep after upstream moved. The affected-rerun selector judges these
+suites against the pin, not HEAD (see above), so a green refresh settles them
+until the next deliberate re-pin.
+
+### `snap-abawd-boundary-grid`
+
+Runs the SNAP ABAWD post-P.L. 119-21 statute-boundary grid
+(`scripts/generate_snap_abawd_boundary.py`) — the behavioral companion to the
+PR #400 structural closure warning on the 2015(o)(3) / 273.24 divergence. The
+Axiom leg replays the nine July 2026 boundary cases from the rulespec-us
+`us/regulations/7-cfr/273/24.test.yaml` companion fixture (engine-verified in
+rulespec-us CI) and fails closed unless each replayed verdict equals the
+pinned legal expectation and each case still zeroes every unrelated
+exception; the PolicyEngine leg builds fresh person-level monthly simulations
+under the reviewed 2026 oracle stack and verifies the oracle's own
+exempted-age brackets flip at the 2025-07-04 effective date before trusting
+its verdicts.
+
+Unlike the federal tax grids the rulespec snapshot is deliberately unpinned:
+each run clones rulespec-us main (or reads the materialized CI checkout) and
+stamps its real HEAD into provenance, so the affected-rerun sweep re-runs the
+matrix whenever rulespec-us moves — encoding drift at the boundaries fails
+the generator loudly, and oracle drift surfaces as report mismatches gated by
+the unexplained ratchet.
+
+Required `parameters`: `rulespec_roots` (with a `rulespec_remote` fallback for
+runners where no checkout is materialized), `policyengine_version: 4.18.9`,
+`policyengine_us_version: 1.767.3`, and `policyengine_core_version: 3.30.3`.
+The runner rejects missing or different pins. Optional `parameters`: `python`
+(defaults to `3.13`).
+
 ### `snap-qc-compare`
 
 Replays USDA SNAP Quality Control public-use reviews through the Axiom RuleSpec
-SNAP composition and compares the constructed benefit (FSBEN) plus its stage
-intermediates against the QC file's own recomputed values. Unlike the
+SNAP composition and compares the composition's benefit and stage
+intermediates with the file's constructed values (`FSBEN`, `FSGRINC`,
+`FSSTDDED`, `FSSLTDED`, `FSNETINC`), which Mathematica calculates for USDA from
+each edited case record; the maximum allotment is checked against the
+oracle's FY2024 table. Unlike the
 `axiom-encode-*` runners this calls the in-repo bridge
 (`axiom_oracles.bridges.snap_qc_compare.run_snap_qc_comparison`) **in process** —
 the oracle lives in this repo, so there is no encoder CLI to shell out to.
@@ -177,13 +281,21 @@ seven New York regional amounts, one California amount) at the nominal period
 `2026-01`, because the federal-regulation and state-manual chain is snapshot-
 dated `2025-10-01` and true-period FY2024 evaluation is impossible today (see the
 playbook and TheAxiomFoundation/rulespec-us#759). Suites: `co-snap-qc`,
-`ny-snap-qc` (847 reviews including the 107 NYSCAP units), and `ca-snap-qc`
-(883 reviews). The runner **skips gracefully**
+`ny-snap-qc` (847 reviews including the 107 NYSCAP units), `ca-snap-qc`
+(883 reviews), `az-snap-qc`, `ga-snap-qc`, `md-snap-qc`, and `tx-snap-qc`
+(its composition is not on rulespec-us main yet); all seven declare
+`ci: manual` (see above). The runner **skips gracefully**
 — re-emitting the committed dashboard report, exactly like
 `euromod-synthetic-compare` — when the `axiom-rules-engine` binary, a rulespec-us
 checkout carrying the `fy-2024-cola` modules, or the downloaded QC public-use file
 is absent, or while the bridge is still mid-build. Where all three exist it runs
-for real; the checked-in numbers are regenerated there.
+for real; the checked-in numbers are regenerated there. Because the weekly
+matrix and the affected rerun never have all three, those legs always
+re-emit. The **SNAP QC live replay** workflow
+(`.github/workflows/snap-qc-replay.yml`, weekly and on demand) provisions the
+pinned engine, a rulespec-us checkout, and the pinned PUF. It runs every
+selected suite with `run_comparison.py --require-live` and fails on any re-emission,
+mismatch, or error (`scripts/snap_qc_replay.py check`). See the playbook's §10.
 
 Required `parameters`: `jurisdiction`, `fiscal_year`, `sample_size` (`0` runs the
 whole jurisdiction-fiscal-year subset). Optional `parameters`: `months`,
@@ -231,32 +343,53 @@ date with `scripts/backfill_report_provenance.py`.
 
 `comparisons/affected_map.json` (generated by `scripts/generate_affected_map.py`,
 CI-checked with `--check`) maps each suite to the rulespec repos its concepts
-exercise. The **affected-rerun** workflow
+exercise. A SNAP QC suite maps to the one rulespec root its overlay is built
+from (rulespec-us), since both the federal `us/` chain and the state's
+`us-<st>/` layer are copied out of it; the archived `rulespec-us-<st>` repos
+are never read. The **affected-rerun** workflow
 (`.github/workflows/affected-rerun.yml`, every 6h + `repository_dispatch`)
 resolves each mapped repo's `main` HEAD, and `scripts/select_affected_suites.py`
-selects only the suites whose report ran against an older SHA — those get rerun
-and their refreshed reports committed via `scripts/commit_refreshed_report.sh`,
-which regenerates every derived, CI-validated artifact in the same commit
-(the dispositions merge + EUROMOD-BE coverage rollup, freshness, conformance
-scoreboard + detail, the daily history snapshot, and
-the burn-down), self-checks the tree against ci.yml's staleness gates before
-pushing, and rebuilds the commit from scratch on the current tip on every push
-attempt so concurrent matrix siblings can't strand main stale or conflicted.
-The conformance ratchet is never re-pinned from that bot path. The weekly full
-matrix (`comparisons.yml`) stays the backstop. Regenerate the map after adding
-a comparison: `uv run scripts/generate_affected_map.py`.
+selects only the suites whose report ran against an older SHA — those get
+rerun. Each matrix leg then packs its refresh
+(`scripts/commit_refreshed_report.sh --pack`): it collects the run's private
+outputs, vets them once on its own checkout (the re-emission guard,
+regenerating and verifying every derived artifact, the unexplained ratchet)
+and uploads the bundle as the `refreshed-<suite>` artifact. Legs only read the
+repository. One `publish` job then runs `--publish` over every bundle: it
+regenerates every derived, CI-validated artifact once, in the same commit as
+the reports (the dispositions merge + EUROMOD-BE coverage rollup, freshness,
+conformance scoreboard + detail, the daily history snapshot, the burn-down,
+census and certificates), self-checks the tree against ci.yml's staleness
+gates and the unexplained ratchet before pushing, and rebuilds the commit from
+scratch on the current tip whenever a push is rejected, so a concurrent push
+can't strand main stale or conflicted. Run by hand,
+`scripts/commit_refreshed_report.sh <suite> <branch>` still commits one suite
+(pack, then publish that one bundle).
+The conformance ratchet is never re-pinned from that bot path. Stale suites
+with `name: null` (parameter suites and `ci: manual` suites) are listed as
+awaiting the manual lane, not rerun. The weekly full matrix (`comparisons.yml`)
+runs every suite that does not declare `ci: manual` as a CI signal; it uploads
+reports as artifacts and never commits them.
+Regenerate the map after adding a comparison:
+`uv run scripts/generate_affected_map.py`.
 
 Regenerating these aggregates with the report is not optional bookkeeping —
 they are *derived* from the committed reports, so a report refresh that skips
 them leaves `conformance/scoreboard.json` + `conformance/detail/<jur>.json`
 stale and reds `conformance_scoreboard.py --check` on **every open PR** until
 someone regenerates by hand (the 2026-07-14 il/ky/oh/va income-tax incident,
-fixed reactively in #282). Regeneration happens per matrix leg, inside the
+fixed reactively in #282). Regeneration happens inside the publish job's
 push-retry loop, because each attempt rebuilds on the current tip: an
 aggregate recomputed there is consistent with every report committed so far,
-so every intermediate push is gate-green — there is no post-matrix red window
-and nothing for a separate reconcile pass to repair (#283's post-matrix job,
-briefly on main, is superseded by this; see `tests/test_commit_refreshed_report.py`).
+so every push is gate-green — there is no red window and nothing for a
+separate reconcile pass to repair (#283's post-matrix job, briefly on main, is
+superseded by this; see `tests/test_commit_refreshed_report.py`). It used to
+happen in every matrix leg, each racing its siblings to push: with ~47 legs,
+each successful push invalidated every other leg's ~4-minute attempt, and runs
+36239293795 and 35958364304 lost 7 and 11 legs to the 90-minute timeout inside
+that loop. Publishing once removes the race; the legs still vet their own
+refresh so that a refused one fails its own leg (`tests/test_affected_rerun_publisher.py`
+pins the wiring).
 
 ## Vacuous-verification gate (O3)
 

@@ -36,21 +36,29 @@
    "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/22"
   },
   {
-   "id": "gettsim-midijob-childless-care-surcharge-base",
+   "id": "euromod-midijob-childless-care-surcharge-base",
    "concept": "de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "GETTSIM applies the childless Pflegeversicherung surcharge to the total reduced Midijob contribution base instead of the SGB IV \u00a720(2a) sentence 6 employee base. EUROMOD follows the statutory employee-base rule, yielding EUROMOD minus GETTSIM = -1.06973 EUR/month.",
+   "mechanism": "EUROMOD DE_2025 applies the employee-only 0.6 percentage-point childless Pflegeversicherung surcharge to the SGB IV \u00a720(2a) sentence 6 employee-share assessment base. BVV \u00a72(2) sentence 3 uses that base for the employee half of the shared contribution, but sentence 6 expressly requires an employee-only Beitragszuschlag to be calculated on the \u00a720(2a) sentence 1 total assessment base. Because SGB XI \u00a758(1) sentence 3 makes the childless surcharge employee-only, GETTSIM follows the controlling base rule and EUROMOD is low by 1.06973 EUR/month in the committed parity row.",
    "cases": [
     "single-w-1200"
    ],
    "arithmetic": [
     {
+     "expression": "1040.3640680648991 * 0.018 + 1218.6523328056985 * 0.006",
+     "equals": 26.038467222002375
+    },
+    {
+     "expression": "1040.3640680648991 * 0.024",
+     "equals": 24.968737633557577
+    },
+    {
      "expression": "24.968737633557577 - 26.038467222002375",
      "equals": -1.069729588444798
     }
    ],
-   "linked_issue": "https://github.com/ttsim-dev/gettsim/issues/1215"
+   "linked_issue": "https://github.com/ec-jrc/JRC-EUROMOD-software-source-code/issues/23"
   }
  ]
 }

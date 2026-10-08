@@ -1,0 +1,81 @@
+{
+ "aggregates": [
+  {
+   "compared": 1117,
+   "comparison": "amount",
+   "comparison_count": 1117,
+   "components": [],
+   "concept": "us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_schedule_tax",
+   "description": "Minnesota tax-year-2026 continuous graduated schedule under section 290.06, computed from caller-supplied completed Minnesota taxable net income and reviewed filing-status classifiers over every routed tax unit in the pinned US Populace; this schedule suite does not claim tax-table rounding, alternative minimum tax, net investment income tax, credits, payments, or final Minnesota liability",
+   "match_count": 1117,
+   "match_rate": 100.0,
+   "matched": 1117,
+   "mismatch_count": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "weighted_match_rate": 100.0
+  }
+ ],
+ "case_count": 1117,
+ "cases": [],
+ "engines": {
+  "axiom": "us-mn:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "mn_basic_tax_precision_stable"
+ },
+ "errors": [],
+ "mismatches": [],
+ "population": "populace-us",
+ "provenance": {
+  "branch_diagnostics": null,
+  "campaign_report": "state-tax-populace-mn-campaign-2026-07-27.json",
+  "dataset_identity": {
+   "built_with": "1.729.0",
+   "country": "us",
+   "path": "/Users/pavelmakarchuk/.cache/huggingface/hub/datasets--policyengine--populace-us/snapshots/d8f5cff65f36205a613cb144fd97db3087bbd82a/populace_us_2024.h5",
+   "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+   "sha256": "16be6338f9d0",
+   "source": "pinned"
+  },
+  "generated_at": "2026-07-27T19:54:57Z",
+  "generated_by": "scripts/emit_populace_campaign_artifacts.py::mn-income-tax-populace",
+  "max_absolute_difference": 0.8099999999976717,
+  "relative_tolerance": 0.0,
+  "rulespecs": [
+   {
+    "repo": "TheAxiomFoundation/rulespec-us",
+    "sha": "453f8fab7c6bd83f0e0efe604377d4ef85b7db72"
+   }
+  ],
+  "run_kind": "manual",
+  "runtime_provenance": {
+   "axiom_engine": {
+    "commit": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+    "executable_sha256": "c7eef635dadca73b51d4012fcc2f12c2f08dd82f9d505ba5228f127779a3a4e2",
+    "repository": "TheAxiomFoundation/axiom-rules-engine",
+    "working_tree": "clean"
+   },
+   "packages": {
+    "policyengine": "4.18.9",
+    "policyengine-us": "1.752.2"
+   },
+   "rulespec": {
+    "commit": "453f8fab7c6bd83f0e0efe604377d4ef85b7db72",
+    "repository": "TheAxiomFoundation/rulespec-us",
+    "working_tree": "clean"
+   }
+  },
+  "schema": "axiom_oracles.provenance.v1",
+  "tolerance": 1.0,
+  "weighted_compared_tax_units": 3008704.4160428913
+ },
+ "schema_version": "axiom.comparison_report.v2",
+ "suite": "mn-income-tax-populace",
+ "summary": {
+  "comparison_count": 1117,
+  "match_count": 1117,
+  "match_rate": 100.0,
+  "mismatch_count": 0
+ }
+}

@@ -73,6 +73,40 @@ def test_helpers_expose_pinned_version_and_binaries() -> None:
     assert pins.bundled_binaries() == pins.load_pins()["bundled_binaries"]
 
 
+_VERSION_LITERAL_RE = re.compile(r"policyengine-taxsim==(\d+\.\d+\.\d+)")
+
+# Files allowed to carry a versioned policyengine-taxsim literal, checked for
+# agreement with the pin. pyproject.toml must declare the dependency; nothing
+# else may hardcode a version (#266: a stale 2.21.2 literal in
+# run_comparison.py silently regenerated four suites at 2024 law while the
+# repo pin said 2.30.0). Runtime code sources the version via
+# ``pins.pinned_version()``, which this guard cannot be fooled by.
+_ALLOWED_LITERAL_FILES = {"pyproject.toml"}
+
+
+def test_no_divergent_version_literals() -> None:
+    """Every policyengine-taxsim== version literal must match the pin."""
+    repo_root = Path(__file__).resolve().parent.parent
+    pinned = pins.pinned_version()
+    offenders: list[str] = []
+    for pattern in ("scripts/*.py", "axiom_oracles/**/*.py", "pyproject.toml"):
+        for path in repo_root.glob(pattern):
+            rel = path.relative_to(repo_root).as_posix()
+            for match in _VERSION_LITERAL_RE.finditer(path.read_text()):
+                if rel not in _ALLOWED_LITERAL_FILES:
+                    offenders.append(f"{rel}: hardcoded {match.group(0)}")
+                elif match.group(1) != pinned:
+                    offenders.append(
+                        f"{rel}: {match.group(0)} != pinned {pinned}"
+                    )
+    assert not offenders, (
+        "versioned policyengine-taxsim literals must live in pyproject.toml "
+        "only and agree with taxsim_pins.json; use "
+        "axiom_oracles.adapters.taxsim.pins.pinned_version() elsewhere:\n"
+        + "\n".join(offenders)
+    )
+
+
 def _recompute_from_wheel(wheel_path: Path) -> dict[str, dict[str, object]]:
     """Return {pinned-key: {sha256, bytes}} for bundled binaries in a wheel."""
     version = pins.pinned_version()

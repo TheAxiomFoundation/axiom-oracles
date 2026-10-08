@@ -1,0 +1,120 @@
+{
+  "schema": "axiom_oracles.us_tariff_schedule.ieepa_date_receipt.v1",
+  "order_interval": {
+    "from": "2026-02-15",
+    "through": "2026-02-19",
+    "revision": "2026_rev_3",
+    "basis": "reciprocal and fentanyl orders effective before the 2026-02-20 legal endpoint"
+  },
+  "exact_rate_census": [
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.5,
+      "units": 2
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.41,
+      "units": 2
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.4,
+      "units": 198
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.35,
+      "units": 4
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.3,
+      "units": 4
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.25,
+      "units": 4
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.2,
+      "units": 4
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.19,
+      "units": 4
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.18,
+      "units": 2
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.15,
+      "units": 4
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.124,
+      "units": 4
+    },
+    {
+      "revision": "2026_rev_3",
+      "interval": [
+        "2026-02-15",
+        "2026-02-19"
+      ],
+      "delta": -0.1,
+      "units": 12
+    }
+  ],
+  "units": 244
+}

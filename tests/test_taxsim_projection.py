@@ -158,3 +158,55 @@ def test_taxsim_projection_rejects_years_after_bundled_taxsim_support() -> None:
 
     with pytest.raises(RuntimeError, match="through 2026"):
         taxsim_input_for_case(case)
+
+
+def test_taxsim_projection_splits_dividends_by_qualification() -> None:
+    case = Case(
+        case_id="dividend-split",
+        period="2026",
+        facts={Concepts.STATE_CODE: "CO"},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.DIVIDEND_INCOME: 5_000,
+                    Concepts.QUALIFIED_DIVIDEND_INCOME: 3_000,
+                    Concepts.RENTAL_INCOME: 1_000,
+                },
+            ),
+        ),
+    )
+
+    row = taxsim_input_for_case(case)
+
+    # TAXSIM's dividends column is qualified-only; the non-qualified
+    # remainder rides in otherprop so AGI stays whole.
+    assert row["dividends"] == 3_000
+    assert row["otherprop"] == 3_000  # 1,000 rental + 2,000 non-qualified
+
+
+def test_taxsim_projection_keeps_qualified_only_dividend_rows_whole() -> None:
+    case = Case(
+        case_id="dividend-qualified-only",
+        period="2026",
+        facts={Concepts.STATE_CODE: "CO"},
+        entities=(
+            Entity(
+                "person-1",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 40,
+                    Concepts.QUALIFIED_DIVIDEND_INCOME: 4_000,
+                },
+            ),
+        ),
+    )
+
+    row = taxsim_input_for_case(case)
+
+    assert row["dividends"] == 4_000
+    assert row["otherprop"] == 0

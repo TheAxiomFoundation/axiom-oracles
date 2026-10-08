@@ -3,22 +3,22 @@ prefixes:
     country: dk
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: No Denmark comparison target is wired yet. The EUROMOD
-      platform side is already in place - the probed public JRC release
-      (EUROMOD_RELEASES_J2.0+, euromod_country_readiness.json, probed
-      2026-07-02) runs Denmark systems DK_2007..DK_2025 on the generic
-      platform runner using the shipped DK_training_data (2,397 synthetic,
-      non-representative rows; fine for per-case probes, not for
-      distributional work). What remains is the Denmark-specific oracle
-      surface, dk legal-ID to EUROMOD output bridge mappings, per-case
-      comparison suites against the appropriate DK system, and a pinned
-      release configuration - plus a system for the 2026 policy year once
-      the release carries one (DK_2025 is the latest probed). External
-      context, verified outside this repository - PolicyEngine has no
-      Denmark model and Statistics Denmark's Lovmodellen is
-      government-internal. The rulespec-dk pilot outputs (borne- og
-      ungeydelsesloven, section 1 base amounts and section 1 a income
-      taper; TheAxiomFoundation/rulespec-dk#1) assert statutory bases from
-      captured retsinformation.dk provisions in companion tests until the
-      oracle surface lands. Exact mappings should replace this prefix only
-      after a verified per-case EUROMOD-DK target exists.
+    rationale: >-
+      PolicyEngine provides no Denmark runtime surface, so no dk legal ID
+      has a PolicyEngine target (the Belgium precedent). Denmark IS
+      oracle-validated, just not against PolicyEngine - the EUROMOD leg is
+      live in this repository. The dk-child-youth-benefit suites compare
+      the composed rulespec-dk pipelines against the public JRC release
+      (EUROMOD_RELEASES_J2.0+, systems DK_2025 and DK_2023, shipped
+      DK_training_data synthetic rows) with a pinned engine and full
+      provenance (comparisons/dk-child-youth-benefit-euromod.yaml and its
+      2023/couple siblings); three witness cases activate and disposition
+      the known EUROMOD gaps (ec-jrc 18 pre-2022 spousal taper, 19
+      600-vs-660 supplement, 20 missing pension gross-up) as
+      upstream_engine_gap; the ministry satser tables are a second,
+      EUROMOD-independent reference (reference/dk-satser/); and
+      conformance/dk.yaml carries the DK_2025-spine universe with the
+      honest coverage burndown. Exact PolicyEngine mappings should replace
+      this prefix only if a real Denmark PolicyEngine surface is ever
+      implemented. External context, verified outside this repository -
+      Statistics Denmark's Lovmodellen is government-internal.

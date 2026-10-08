@@ -234,6 +234,7 @@ class PopulaceUsCaseLoader:
                         facts={
                             Concepts.CASH_ON_HAND: 0,
                             Concepts.RENT_PAID: household.housing_cost,
+                            Concepts.CHILDCARE_EXPENSES: household.childcare_expenses,
                         },
                         entities=tuple(entities),
                         metadata=metadata,
@@ -309,6 +310,18 @@ class PopulaceUsCaseLoader:
             default=0,
             size=size,
         )
+        # childcare_expenses is an SPMUnit variable (annual USD); same
+        # household roll-up as housing_cost. Feeds programs whose earned-income
+        # computation deducts observed child care (e.g. AL TANF Appendix N §2
+        # step 2), matching the value PolicyEngine's own formulas read.
+        childcare_expenses = _calculate_values(
+            sim,
+            "childcare_expenses",
+            period,
+            map_to="household",
+            default=0,
+            size=size,
+        )
 
         return [
             _HouseholdRow(
@@ -316,14 +329,16 @@ class PopulaceUsCaseLoader:
                 weight=float(_clean_number(weight)),
                 scope=_scope_from_geography(state, county, place),
                 housing_cost=float(_clean_number(housing_cost)),
+                childcare_expenses=float(_clean_number(childcare)),
             )
-            for household_id, weight, state, county, place, housing_cost in zip(
+            for household_id, weight, state, county, place, housing_cost, childcare in zip(
                 household_ids,
                 weights,
                 state_fips,
                 county_fips,
                 place_fips,
                 housing_costs,
+                childcare_expenses,
                 strict=True,
             )
         ]
@@ -480,6 +495,7 @@ class _HouseholdRow:
     weight: float
     scope: GeographyScope | None
     housing_cost: float = 0.0
+    childcare_expenses: float = 0.0
 
 
 _PERSON_NON_WAGE_VARIABLES = {

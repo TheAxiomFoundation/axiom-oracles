@@ -1,0 +1,90 @@
+# SNAP ABAWD time-limit exceptions after P.L. 119-21 — Axiom vs
+# PolicyEngine-US, July 2026.
+#
+# Behavioral companion to the structural closure warning recorded in PR #400
+# (closure/classifications/a2-usc-1.yaml): 7 U.S.C. 2015(o)(3), as struck and
+# replaced by P.L. 119-21 section 10102(a) effective 2025-07-04, materially
+# differs from the pre-amendment 7 CFR 273.24(c) exception list the eCFR still
+# carries.  Closure detection alone does not verify executable outcomes, so
+# this grid runs the replacement paragraph's statute boundaries through both
+# engines: ages 55/64/65/66, the ended former-foster-youth branch, the
+# Indian / Urban Indian and California Indian exceptions, and the
+# dependent-child 13-vs-14 boundary.
+#
+# Axiom boundary: snap_member_abawd_exception_applies from
+# us/regulations/7-cfr/273/24.yaml, replayed from the module's own
+# engine-verified companion fixture (the nine July 2026 boundary cases landed
+# with the rulespec-us #1212 encoding fix).  The generator fails closed unless
+# each replayed verdict equals the pinned legal expectation and each case
+# still zeroes every unrelated exception (negatives additionally pin zero
+# qualifying work, four countable months, no waiver, and no
+# regained/additional eligibility), so a rulespec-side regression at the
+# boundaries fails the run loudly instead of silently shifting the matrix.
+#
+# PolicyEngine binding decision: compare meets_snap_abawd_work_requirements,
+# the person-level ABAWD composite.  Under this grid's construction it
+# reduces exactly to PolicyEngine's 2015(o)(3) exception set — the
+# work-activity arm reads zero hours and no workfare, the area-waiver arm
+# reads the empty default county geography, the discretionary-exemption input
+# defaults false, and PolicyEngine documents its no-month-history
+# simplification as exact for members who have exhausted their countable
+# months, which the fixture pins at four.  The one architectural difference
+# is the dependent-child exception: PolicyEngine implements 2015(o)(3)(C)
+# upstream in meets_snap_work_requirements_person (any SPM-unit member under
+# 14 routes the person around the ABAWD test entirely), so the ABAWD
+# composite stays false on the child-13 case while Axiom's direct exception
+# holds.  That single residual is classified in
+# dispositions/us-snap-abawd-grid.yaml and proven causally on every run by
+# the generator's age-64 child-routing probe (person-level composite flips
+# with the child-13/14 boundary while the ABAWD composite stays false;
+# recorded under engine_bindings.policyengine.child_routing_probe), and
+# meets_snap_work_requirements_person is carried per case as a diagnostic so
+# the routing stays visible.
+#
+# The former-foster case sets PolicyEngine's retired was_in_foster_care input
+# TRUE to prove it no longer flips the post-P.L. 119-21 verdict; the Axiom
+# module encodes the repeal by carrying no former-foster fact at all.  Both
+# Indian-status cases set PolicyEngine's single is_snap_abawd_indian_exempt
+# input, which folds subparagraphs (F) and (G) together.  Cases run in Texas:
+# California, Hawaii, and Alaska carry delayed state hr1_in_effect parameters
+# (California adopts 2026-06-01), and the matrix pins the federal criteria.
+#
+# The rulespec snapshot is deliberately unpinned, unlike the federal
+# tax-liability grids: each run clones rulespec-us main (or reads the
+# materialized CI checkout) and stamps its real HEAD into provenance, so the
+# affected-rerun sweep re-runs the boundary matrix whenever rulespec-us moves.
+# The oracle stack stays pinned to the reviewed 2026 trio.
+#
+# Run locally:
+#   uv run python scripts/run_comparison.py us-snap-abawd-grid --summary
+
+name: us-snap-abawd-grid
+title: SNAP ABAWD post-P.L. 119-21 boundaries — Axiom vs PolicyEngine
+description: >-
+  Compares the 7 U.S.C. 2015(o)(3) ABAWD exception verdict as replaced by
+  P.L. 119-21 across nine deterministic July 2026 statute-boundary cases:
+  ages 55/64/65/66, the ended former-foster-youth branch, the Indian and
+  California Indian exceptions, and the dependent-child 13-vs-14 boundary.
+  Behavioral companion to the PR #400 structural closure warning on the
+  2015(o)(3) / 273.24 divergence.
+
+runner:
+  type: snap-abawd-boundary-grid
+  parameters:
+    period: "2026-07"
+    concept: >-
+      us:regulations/7-cfr/273/24#snap_member_abawd_exception_applies
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+    rulespec_roots:
+      - $HOME/TheAxiomFoundation/rulespec-us
+
+artifacts:
+  report_basename: axiom-policyengine-us-snap-abawd-grid
+
+dashboard:
+  filename: axiom-policyengine-us-snap-abawd-grid.json
+  suite: us-snap-abawd-grid

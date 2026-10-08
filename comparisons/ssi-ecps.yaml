@@ -3,7 +3,7 @@
 name: ssi-ecps
 title: SSI -- Axiom vs PolicyEngine
 description: >-
-  Compares the SSI annual benefit from the composed us/ssi program (42 USC
+  Compares the SSI monthly benefit from the composed us/ssi program (42 USC
   1382 eligibility and benefit computation, 1382a income exclusions, 1382f
   cost-of-living amounts) against PolicyEngine's person-level ssi on the
   Enhanced CPS. v1 compares every person at the individual rate: eligible
@@ -13,6 +13,15 @@ description: >-
   main (refresh with:
   rsync -a --delete --exclude .axiom ~/rulespec-us/us/ ~/.axiom-oracles/roots/rulespec-us/
   after pulling ~/rulespec-us).
+
+# Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
+# staging fails the engine's canonical-path scan (non-canonical filenames in
+# us-la/us-nh/us-nj/us -- rulespec-us#1049) before any comparison runs;
+# rulespec-us#1050 (removed plural corpus_citation_paths) and -- for the
+# composed program lanes -- axiom-compose#29 and axiom-oracles#335 queue
+# behind it. Manual lane only; drop this marker when the upstream chain lands
+# (axiom-oracles#455 tracks the flip-back).
+ci: manual
 
 runner:
   type: axiom-oracles-compare
@@ -26,6 +35,10 @@ runner:
     sample_size: 0
     period: 2026-01
     population: enhanced-cps
+    python: "3.13"
+    policyengine_version: "4.18.9"
+    policyengine_us_version: "1.767.3"
+    policyengine_core_version: "3.30.3"
     axiom_compose_binary: $HOME/axiom-compose/.venv/bin/axiom-compose
     axiom_program: programs/us/ssi/fy-2026.yaml
     axiom_composed_program: /tmp/ssi-composed.yaml

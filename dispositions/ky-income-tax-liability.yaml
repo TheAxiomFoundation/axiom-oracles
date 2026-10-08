@@ -1,0 +1,124 @@
+schema: axiom_oracles.dispositions.v1
+suite: ky-income-tax-liability
+updated: "2026-07-26"
+# The canonical Kentucky surface is the KRS 141.020 schedule before allowable
+# credits. It matches PolicyEngine's corresponding 2026 pre-credit target on
+# every grid case. TAXSIM's 2026 `siitax` results retain a 4 percent marginal
+# slope across this grid, while KRS 141.020's 2026 rate is 3.5 percent, and
+# `siitax` is an annual-tax surface rather than this narrow pre-credit schedule.
+entries:
+  - id: ky-taxsim-rate-surface-single-30000
+    concept: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits
+    case_id: ky-single-30000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The canonical 2026 KRS 141.020 schedule uses 3.5 percent and reports
+        932.956240234375 before credits. TAXSIM `siitax` reports 1065.28 on its
+        broader annual-tax surface. Across the grid its result rises by 4 cents
+        per additional wage dollar, retaining a 4 percent Kentucky rate vintage;
+        this is a TAXSIM rate-and-surface residual, not an Axiom encoding gap.
+      arithmetic:
+        - expression: "932.956240234375 - 1065.28"
+          equals: -132.32375976562503
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 932.956240234375
+      right: 1065.28
+  - id: ky-taxsim-rate-surface-single-60000
+    concept: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits
+    case_id: ky-single-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The canonical 2026 pre-credit schedule reports 1982.956171875 and
+        TAXSIM's broader `siitax` surface reports 2265.28. The TAXSIM grid slope
+        is 4 percent rather than the statutory 2026 3.5 percent; the canonical
+        Axiom result independently matches PolicyEngine's pre-credit target.
+      arithmetic:
+        - expression: "1982.956171875 - 2265.28"
+          equals: -282.3238281250001
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 1982.956171875
+      right: 2265.28
+  - id: ky-taxsim-rate-surface-single-150000
+    concept: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits
+    case_id: ky-single-150000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The canonical 2026 pre-credit schedule reports 5132.956171875 and
+        TAXSIM's broader `siitax` surface reports 5865.28. The TAXSIM grid slope
+        is 4 percent rather than the statutory 2026 3.5 percent; the canonical
+        Axiom result independently matches PolicyEngine's pre-credit target.
+      arithmetic:
+        - expression: "5132.956171875 - 5865.28"
+          equals: -732.3238281249996
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 5132.956171875
+      right: 5865.28
+  - id: ky-taxsim-rate-surface-married-60000
+    concept: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits
+    case_id: ky-married-60000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The canonical 2026 pre-credit schedule reports 1982.956171875 and
+        TAXSIM's broader `siitax` surface reports 2265.28. The TAXSIM grid slope
+        is 4 percent rather than the statutory 2026 3.5 percent; the canonical
+        Axiom result independently matches PolicyEngine's pre-credit target.
+      arithmetic:
+        - expression: "1982.956171875 - 2265.28"
+          equals: -282.3238281250001
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 1982.956171875
+      right: 2265.28
+  - id: ky-taxsim-rate-surface-married-120000
+    concept: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits
+    case_id: ky-married-120000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The canonical 2026 pre-credit schedule reports 4082.956171875 and
+        TAXSIM's broader `siitax` surface reports 4665.28. The TAXSIM grid slope
+        is 4 percent rather than the statutory 2026 3.5 percent; the canonical
+        Axiom result independently matches PolicyEngine's pre-credit target.
+      arithmetic:
+        - expression: "4082.956171875 - 4665.28"
+          equals: -582.3238281249996
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 4082.956171875
+      right: 4665.28
+  - id: ky-taxsim-rate-surface-married-300000
+    concept: us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits
+    case_id: ky-married-300000
+    kind: amount_difference
+    disposition: explained_residual
+    evidence:
+      mechanism: >-
+        The canonical 2026 pre-credit schedule reports 10382.95671875 and
+        TAXSIM's broader `siitax` surface reports 11865.28. The TAXSIM grid slope
+        is 4 percent rather than the statutory 2026 3.5 percent; the canonical
+        Axiom result independently matches PolicyEngine's pre-credit target.
+      arithmetic:
+        - expression: "10382.95671875 - 11865.28"
+          equals: -1482.323281250001
+          tolerance: 0.01
+    expires_on_source_change: true
+    pinned:
+      left: 10382.95671875
+      right: 11865.28

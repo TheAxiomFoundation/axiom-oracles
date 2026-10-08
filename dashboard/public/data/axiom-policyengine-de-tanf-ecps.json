@@ -7,8 +7,8 @@
       "comparison_weight": 485343.398549,
       "components": [],
       "concept": "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit",
-      "description": "DE TANF benefit (annualized)",
-      "left_weighted_sum": 2314128.800637,
+      "description": "DE TANF monthly benefit",
+      "left_weighted_sum": 192844.06672,
       "match_rate": 100,
       "match_weight": 485343.398549,
       "mismatch_count": 0,
@@ -17,7 +17,7 @@
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 2314128.800637,
+      "right_weighted_sum": 192844.06672,
       "weighted_difference": 0,
       "weighted_match_rate": 100
     }
@@ -37,7 +37,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -77,7 +76,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -117,7 +115,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -157,7 +154,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -197,7 +193,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -239,7 +234,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -279,7 +273,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -321,7 +314,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -361,7 +353,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -405,7 +396,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -455,7 +445,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -497,7 +486,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -541,7 +529,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -581,7 +568,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -621,7 +607,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -663,7 +648,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -705,7 +689,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -745,7 +728,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -789,7 +771,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -829,7 +810,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -869,7 +849,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -911,7 +890,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -953,7 +931,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -995,7 +972,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1039,7 +1015,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1081,7 +1056,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1127,7 +1101,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1171,7 +1144,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1211,7 +1183,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1253,7 +1224,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1297,7 +1267,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1339,7 +1308,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1379,7 +1347,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1421,7 +1388,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1460,12 +1426,11 @@
       "matches": [
         {
           "concept": "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit",
-          "left": 4884.0,
-          "right": 4884.0
+          "left": 407.0,
+          "right": 407.0
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1511,7 +1476,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1555,7 +1519,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1595,7 +1558,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1643,7 +1605,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1683,7 +1644,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1725,7 +1685,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1767,7 +1726,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1813,7 +1771,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1853,7 +1810,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1893,7 +1849,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1935,7 +1890,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -1983,7 +1937,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2031,7 +1984,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2073,7 +2025,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2115,7 +2066,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2159,7 +2109,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2207,7 +2156,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2255,7 +2203,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2297,7 +2244,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2337,7 +2283,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2379,7 +2324,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2427,7 +2371,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2467,7 +2410,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2511,7 +2453,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2557,7 +2498,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2599,7 +2539,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2647,7 +2586,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2689,7 +2627,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2729,7 +2666,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2779,7 +2715,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2821,7 +2756,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2861,7 +2795,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2901,7 +2834,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2943,7 +2875,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -2985,7 +2916,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3025,7 +2955,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3069,7 +2998,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3115,7 +3043,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3155,7 +3082,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3199,7 +3125,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3239,7 +3164,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3281,7 +3205,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3325,7 +3248,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3369,7 +3291,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3413,7 +3334,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3461,7 +3381,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3503,7 +3422,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3543,7 +3461,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3583,7 +3500,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3631,7 +3547,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3673,7 +3588,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3713,7 +3627,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3750,12 +3663,11 @@
       "matches": [
         {
           "concept": "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit",
-          "left": 2412.0,
-          "right": 2412.0
+          "left": 201.0,
+          "right": 201.0
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3795,7 +3707,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3835,7 +3746,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3875,7 +3785,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3917,7 +3826,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3957,7 +3865,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -3999,7 +3906,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4039,7 +3945,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4081,7 +3986,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4121,7 +4025,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4161,7 +4064,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4201,7 +4103,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4249,7 +4150,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4289,7 +4189,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4329,7 +4228,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4369,7 +4267,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4409,7 +4306,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4451,7 +4347,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4493,7 +4388,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4535,7 +4429,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4575,7 +4468,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4617,7 +4509,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4657,7 +4548,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4697,7 +4587,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4739,7 +4628,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4781,7 +4669,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4823,7 +4710,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4873,7 +4759,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4921,7 +4806,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -4963,7 +4847,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5003,7 +4886,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5043,7 +4925,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5085,7 +4966,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5127,7 +5007,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5169,7 +5048,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5215,7 +5093,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5255,7 +5132,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5297,7 +5173,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5339,7 +5214,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5383,7 +5257,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5431,7 +5304,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5475,7 +5347,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5517,7 +5388,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5561,7 +5431,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5601,7 +5470,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5647,7 +5515,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5691,7 +5558,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5735,7 +5601,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5777,7 +5642,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5819,7 +5683,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5863,7 +5726,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5903,7 +5765,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5943,7 +5804,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -5983,7 +5843,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6023,7 +5882,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6063,7 +5921,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6103,7 +5960,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6143,7 +5999,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6185,7 +6040,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6229,7 +6083,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6269,7 +6122,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6309,7 +6161,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6349,7 +6200,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6395,7 +6245,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6437,7 +6286,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6483,7 +6331,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6523,7 +6370,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6563,7 +6409,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6605,7 +6450,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6650,7 +6494,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6694,7 +6537,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6740,7 +6582,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6782,7 +6623,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6825,7 +6665,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6865,7 +6704,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6907,7 +6745,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6947,7 +6784,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -6989,7 +6825,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7031,7 +6866,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7071,7 +6905,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7111,7 +6944,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7159,7 +6991,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7201,7 +7032,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7241,7 +7071,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7283,7 +7112,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7325,7 +7153,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7367,7 +7194,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7409,7 +7235,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7451,7 +7276,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7495,7 +7319,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7541,7 +7364,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7589,7 +7411,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7629,7 +7450,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7669,7 +7489,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7709,7 +7528,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7749,7 +7567,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7791,7 +7608,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7831,7 +7647,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7871,7 +7686,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7911,7 +7725,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7951,7 +7764,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -7991,7 +7803,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8033,7 +7844,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8075,7 +7885,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8115,7 +7924,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8155,7 +7963,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8199,7 +8006,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8239,7 +8045,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8287,7 +8092,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8329,7 +8133,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8369,7 +8172,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8409,7 +8211,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8449,7 +8250,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8489,7 +8289,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8533,7 +8332,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8573,7 +8371,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8615,7 +8412,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8657,7 +8453,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8697,7 +8492,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8739,7 +8533,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8779,7 +8572,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8819,7 +8611,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8859,7 +8650,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8903,7 +8693,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8945,7 +8734,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -8980,12 +8768,11 @@
       "matches": [
         {
           "concept": "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit",
-          "left": 4056.0,
-          "right": 4056.0
+          "left": 338.0,
+          "right": 338.0
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9029,7 +8816,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9073,7 +8859,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9119,7 +8904,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9161,7 +8945,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9201,7 +8984,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9245,7 +9027,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9287,7 +9068,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9329,7 +9109,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9371,7 +9150,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9417,7 +9195,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9457,7 +9234,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9499,7 +9275,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9539,7 +9314,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9579,7 +9353,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9619,7 +9392,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9659,7 +9431,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9699,7 +9470,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9747,7 +9517,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9793,7 +9562,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9839,7 +9607,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9879,7 +9646,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9919,7 +9685,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9959,7 +9724,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -9999,7 +9763,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10039,7 +9802,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10079,7 +9841,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10119,7 +9880,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10163,7 +9923,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10207,7 +9966,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10247,7 +10005,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10287,7 +10044,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10333,7 +10089,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10373,7 +10128,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10413,7 +10167,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10455,7 +10208,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10495,7 +10247,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10543,7 +10294,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10585,7 +10335,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10625,7 +10374,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10665,7 +10413,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10705,7 +10452,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10747,7 +10493,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10789,7 +10534,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10829,7 +10573,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10869,7 +10612,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10911,7 +10653,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10951,7 +10692,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -10991,7 +10731,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11031,7 +10770,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11071,7 +10809,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11111,7 +10848,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11155,7 +10891,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11199,7 +10934,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11243,7 +10977,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11291,7 +11024,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11331,7 +11063,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11373,7 +11104,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11415,7 +11145,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11459,7 +11188,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11503,7 +11231,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11543,7 +11270,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11585,7 +11311,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11633,7 +11358,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11673,7 +11397,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11713,7 +11436,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11760,7 +11482,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11800,7 +11521,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11846,7 +11566,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11886,7 +11605,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11928,7 +11646,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -11972,7 +11689,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12012,7 +11728,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12056,7 +11771,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12098,7 +11812,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12140,7 +11853,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12182,7 +11894,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12224,7 +11935,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12264,7 +11974,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12304,7 +12013,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12344,7 +12052,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12388,7 +12095,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12430,7 +12136,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12472,7 +12177,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12518,7 +12222,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12564,7 +12267,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12604,7 +12306,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12648,7 +12349,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12688,7 +12388,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12732,7 +12431,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12774,7 +12472,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12814,7 +12511,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12856,7 +12552,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12896,7 +12591,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12941,7 +12635,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -12981,7 +12674,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13023,7 +12715,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13069,7 +12760,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13104,12 +12794,11 @@
       "matches": [
         {
           "concept": "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit",
-          "left": 3240.0,
-          "right": 3240.0
+          "left": 270.0,
+          "right": 270.0
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13151,7 +12840,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13186,12 +12874,11 @@
       "matches": [
         {
           "concept": "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit",
-          "left": 2412.0,
-          "right": 2412.0
+          "left": 201.0,
+          "right": 201.0
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13231,7 +12918,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13271,7 +12957,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13313,7 +12998,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13353,7 +13037,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13395,7 +13078,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13435,7 +13117,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13477,7 +13158,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13523,7 +13203,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13567,7 +13246,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13607,7 +13285,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13647,7 +13324,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13689,7 +13365,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13733,7 +13408,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13775,7 +13449,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13823,7 +13496,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13863,7 +13535,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13903,7 +13574,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13945,7 +13615,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -13985,7 +13654,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14027,7 +13695,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14067,7 +13734,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14115,7 +13781,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14155,7 +13820,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14201,7 +13865,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14249,7 +13912,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14291,7 +13953,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14333,7 +13994,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14375,7 +14035,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14415,7 +14074,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14467,7 +14125,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14511,7 +14168,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14557,7 +14213,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14599,7 +14254,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14639,7 +14293,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14679,7 +14332,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14723,7 +14375,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14763,7 +14414,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14803,7 +14453,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14845,7 +14494,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14885,7 +14533,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14925,7 +14572,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -14968,7 +14614,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15008,7 +14653,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15050,7 +14694,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15094,7 +14737,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15134,7 +14776,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15176,7 +14817,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15218,7 +14858,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15258,7 +14897,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15302,7 +14940,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15344,7 +14981,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15384,7 +15020,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15424,7 +15059,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15464,7 +15098,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15506,7 +15139,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15550,7 +15182,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15594,7 +15225,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15638,7 +15268,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15680,7 +15309,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15726,7 +15354,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15770,7 +15397,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15812,7 +15438,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15856,7 +15481,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15902,7 +15526,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15948,7 +15571,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -15994,7 +15616,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16036,7 +15657,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16076,7 +15696,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16118,7 +15737,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16158,7 +15776,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16204,7 +15821,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16246,7 +15862,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16288,7 +15903,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16330,7 +15944,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16370,7 +15983,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16414,7 +16026,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16454,7 +16065,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16502,7 +16112,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16542,7 +16151,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16582,7 +16190,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16628,7 +16235,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16668,7 +16274,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16714,7 +16319,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16756,7 +16360,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16796,7 +16399,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16842,7 +16444,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16888,7 +16489,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16932,7 +16532,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -16972,7 +16571,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17014,7 +16612,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17056,7 +16653,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17098,7 +16694,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17142,7 +16737,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17188,7 +16782,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17230,7 +16823,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17272,7 +16864,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17312,7 +16903,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17356,7 +16946,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17400,7 +16989,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17440,7 +17028,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17480,7 +17067,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17530,7 +17116,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17572,7 +17157,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17612,7 +17196,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17656,7 +17239,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17702,7 +17284,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17744,7 +17325,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17784,7 +17364,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17830,7 +17409,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17870,7 +17448,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17912,7 +17489,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17952,7 +17528,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -17996,7 +17571,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18038,7 +17612,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18078,7 +17651,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18118,7 +17690,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18158,7 +17729,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18204,7 +17774,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18250,7 +17819,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18290,7 +17858,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18332,7 +17899,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18376,7 +17942,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18426,7 +17991,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18468,7 +18032,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18516,7 +18079,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18559,7 +18121,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18599,7 +18160,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18647,7 +18207,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18689,7 +18248,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18731,7 +18289,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18773,7 +18330,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18819,7 +18375,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18863,7 +18418,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18903,7 +18457,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18947,7 +18500,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -18987,7 +18539,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19027,7 +18578,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19067,7 +18617,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19111,7 +18660,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19151,7 +18699,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19193,7 +18740,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19233,7 +18779,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19279,7 +18824,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19319,7 +18863,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19363,7 +18906,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19405,7 +18947,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19447,7 +18988,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19491,7 +19031,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19531,7 +19070,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19573,7 +19111,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19619,7 +19156,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19663,7 +19199,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19713,7 +19248,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19750,12 +19284,11 @@
       "matches": [
         {
           "concept": "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit",
-          "left": 4056.0,
-          "right": 4056.0
+          "left": 338.0,
+          "right": 338.0
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19799,7 +19332,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19841,7 +19373,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19887,7 +19418,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19931,7 +19461,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -19971,7 +19500,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20019,7 +19547,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20059,7 +19586,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20101,7 +19627,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20143,7 +19668,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20187,7 +19711,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20227,7 +19750,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20267,7 +19789,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20309,7 +19830,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20355,7 +19875,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20397,7 +19916,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20437,7 +19955,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20481,7 +19998,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20521,7 +20037,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20561,7 +20076,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20605,7 +20119,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20645,7 +20158,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20685,7 +20197,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20727,7 +20238,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20769,7 +20279,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20815,7 +20324,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20863,7 +20371,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20911,7 +20418,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20955,7 +20461,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -20999,7 +20504,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21041,7 +20545,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21081,7 +20584,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21125,7 +20627,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21167,7 +20668,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21209,7 +20709,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21249,7 +20748,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21291,7 +20789,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21335,7 +20832,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21377,7 +20873,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21417,7 +20912,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21457,7 +20951,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21505,7 +20998,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21545,7 +21037,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21587,7 +21078,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21629,7 +21119,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21669,7 +21158,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21711,7 +21199,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21755,7 +21242,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21801,7 +21287,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21841,7 +21326,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21887,7 +21371,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21929,7 +21412,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -21971,7 +21453,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22013,7 +21494,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22057,7 +21537,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22097,7 +21576,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22145,7 +21623,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22185,7 +21662,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22229,7 +21705,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22273,7 +21748,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22313,7 +21787,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22353,7 +21826,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22395,7 +21867,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22435,7 +21906,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22475,7 +21945,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22515,7 +21984,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22555,7 +22023,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22595,7 +22062,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22637,7 +22103,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22677,7 +22142,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22719,7 +22183,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22761,7 +22224,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22801,7 +22263,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22843,7 +22304,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22883,7 +22343,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22927,7 +22386,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -22969,7 +22427,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23009,7 +22466,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23053,7 +22509,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23097,7 +22552,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23141,7 +22595,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23181,7 +22634,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23223,7 +22675,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23265,7 +22716,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23305,7 +22755,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23351,7 +22800,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23393,7 +22841,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23435,7 +22882,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23475,7 +22921,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23523,7 +22968,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23571,7 +23015,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23615,7 +23058,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23655,7 +23097,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23695,7 +23136,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23737,7 +23177,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23779,7 +23218,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23821,7 +23259,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23861,7 +23298,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23907,7 +23343,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23947,7 +23382,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -23987,7 +23421,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24029,7 +23462,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24073,7 +23505,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24115,7 +23546,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24161,7 +23591,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24205,7 +23634,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24247,7 +23675,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24289,7 +23716,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24331,7 +23757,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24385,7 +23810,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24429,7 +23853,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24473,7 +23896,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24513,7 +23935,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24563,7 +23984,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24603,7 +24023,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24643,7 +24062,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24683,7 +24101,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24725,7 +24142,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24765,7 +24181,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24805,7 +24220,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24845,7 +24259,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24885,7 +24298,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24927,7 +24339,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -24974,7 +24385,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25016,7 +24426,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25058,7 +24467,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25098,7 +24506,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25138,7 +24545,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25178,7 +24584,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25220,7 +24625,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25264,7 +24668,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25306,7 +24709,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25348,7 +24750,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25390,7 +24791,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25430,7 +24830,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25470,7 +24869,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25512,7 +24910,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25552,7 +24949,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25592,7 +24988,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25634,7 +25029,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25676,7 +25070,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25718,7 +25111,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25760,7 +25152,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25802,7 +25193,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25842,7 +25232,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25882,7 +25271,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25924,7 +25312,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -25964,7 +25351,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26006,7 +25392,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26048,7 +25433,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26090,7 +25474,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26132,7 +25515,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26174,7 +25556,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26214,7 +25595,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26256,7 +25636,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26298,7 +25677,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26340,7 +25718,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26382,7 +25759,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26422,7 +25798,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26462,7 +25837,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26504,7 +25878,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26546,7 +25919,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26586,7 +25958,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26626,7 +25997,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26668,7 +26038,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26710,7 +26079,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26752,7 +26120,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26796,7 +26163,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26836,7 +26202,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26878,7 +26243,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26918,7 +26282,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -26960,7 +26323,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27002,7 +26364,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27048,7 +26409,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27088,7 +26448,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27130,7 +26489,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27170,7 +26528,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27212,7 +26569,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27252,7 +26608,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27294,7 +26649,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27338,7 +26692,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27378,7 +26731,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27418,7 +26770,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27464,7 +26815,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27506,7 +26856,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27546,7 +26895,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27586,7 +26934,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27626,7 +26973,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27668,7 +27014,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27708,7 +27053,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27750,7 +27094,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27792,7 +27135,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27834,7 +27176,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27877,7 +27218,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27919,7 +27259,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -27959,7 +27298,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28001,7 +27339,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28049,7 +27386,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28093,7 +27429,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28133,7 +27468,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28175,7 +27509,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28217,7 +27550,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28257,7 +27589,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28304,7 +27635,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28346,7 +27676,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28388,7 +27717,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28430,7 +27758,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28472,7 +27799,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28514,7 +27840,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28556,7 +27881,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28596,7 +27920,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28642,7 +27965,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28684,7 +28006,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28730,7 +28051,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28774,7 +28094,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28814,7 +28133,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28856,7 +28174,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28898,7 +28215,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28942,7 +28258,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -28984,7 +28299,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29026,7 +28340,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29076,7 +28389,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29124,7 +28436,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29166,7 +28477,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29208,7 +28518,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29250,7 +28559,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29294,7 +28602,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29336,7 +28643,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29376,7 +28682,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29418,7 +28723,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29458,7 +28762,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29500,7 +28803,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29540,7 +28842,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29582,7 +28883,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29624,7 +28924,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29664,7 +28963,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29704,7 +29002,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29748,7 +29045,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29788,7 +29084,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29828,7 +29123,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29870,7 +29164,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29914,7 +29207,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -29960,7 +29252,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30002,7 +29293,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30048,7 +29338,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30090,7 +29379,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30132,7 +29420,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30172,7 +29459,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30212,7 +29498,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30258,7 +29543,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30302,7 +29586,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30344,7 +29627,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30391,7 +29673,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30443,7 +29724,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30485,7 +29765,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30533,7 +29812,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30575,7 +29853,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30617,7 +29894,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30663,7 +29939,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30703,7 +29978,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30748,7 +30022,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30788,7 +30061,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30828,7 +30100,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30868,7 +30139,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30908,7 +30178,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30948,7 +30217,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -30994,7 +30262,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31036,7 +30303,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31080,7 +30346,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31122,7 +30387,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31166,7 +30430,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31212,7 +30475,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31260,7 +30522,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31304,7 +30565,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31350,7 +30610,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31396,7 +30655,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31436,7 +30694,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31482,7 +30739,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31528,7 +30784,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31568,7 +30823,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31616,7 +30870,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31658,7 +30911,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31702,7 +30954,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31748,7 +30999,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31790,7 +31040,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31832,7 +31081,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31874,7 +31122,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31916,7 +31163,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31956,7 +31202,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -31996,7 +31241,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32038,7 +31282,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32078,7 +31321,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32120,7 +31362,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32162,7 +31403,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32204,7 +31444,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32246,7 +31485,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32288,7 +31526,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32330,7 +31567,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32372,7 +31608,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32414,7 +31649,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32456,7 +31690,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32496,7 +31729,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32538,7 +31770,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32580,7 +31811,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32620,7 +31850,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32662,7 +31891,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32704,7 +31932,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32746,7 +31973,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32788,7 +32014,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32830,7 +32055,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32872,7 +32096,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32914,7 +32137,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32954,7 +32176,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -32996,7 +32217,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -33038,7 +32258,6 @@
         }
       ],
       "metadata": {
-        "axiom_all_outputs_count": 1,
         "axiom_entity": "Household",
         "axiom_entity_id": "household",
         "axiom_input_records_count": 9,
@@ -33071,7 +32290,7 @@
       "category": "cash",
       "comparison": "amount",
       "components": [],
-      "description": "DE TANF benefit (annualized)",
+      "description": "DE TANF monthly benefit",
       "id": "us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit",
       "parent": null,
       "priority": "high",
@@ -33081,7 +32300,13 @@
   ],
   "engines": {
     "left": "axiom",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "axiom_rules_engine": "0.1.0",
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
   },
   "errors": [],
   "locales": [],
@@ -33093,20 +32318,21 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
+      "axiom_rules_engine_sha": "c4b62bdb740d4149f0872783964f917e74cffe42",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-25T05:24:38Z",
+    "generated_at": "2026-07-28T20:50:53Z",
     "generated_by": "scripts/run_comparison.py::de-tanf-ecps",
     "oracle": {
       "name": "policyengine",
+      "policyengine_core": "3.30.3",
       "policyengine_package": "policyengine==4.18.9",
-      "policyengine_us": "1.752.2"
+      "policyengine_us": "1.767.3"
     },
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-us-de",
-        "sha": "d827b1fdc2f0323bc976b10157081895f60452c5"
+        "sha": null
       }
     ],
     "run_kind": "manual",

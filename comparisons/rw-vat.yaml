@@ -1,0 +1,61 @@
+name: rw-vat
+title: Rwanda rw-vat — Axiom vs RWAMOD
+description: >-
+  Compares the rulespec-rw Law 049/2023 Article 4 standard VAT rate (18%)
+  against RWAMOD tva_s on a single food-detail expenditure item (x0111211).
+  The Axiom taxable value is bridged from il_exp_vat01, the engine's
+  post-uprating VAT base, which the output frame echoes (probed: 11,382.06 on
+  10,000 FRW per month raw, tva_s 2,048.77 = 18% of it). The base does not
+  come from tva_s, so the 18% rate is under test; the July bridge (tva_s /
+  0.18) could not fail and was replaced. Not compared: VAT on excisable
+  purchases, which RWAMOD computes on the value plus the excise it charged,
+  and the bottled-water item, on which it charges VAT twice
+  (rwamod_issues.json). Convention adopted for parity: the post-uprating spend
+  is fed as the VAT-exclusive taxable value, as RWAMOD's VAT reads it; its
+  excise reads spend as a tax-inclusive price (rwamod_issues.json,
+  rwamod-expenditure-read-tax-inclusive-for-excise-pre-tax-for-vat), so the
+  suite tests the rate, not the base definition. The Axiom side evaluates
+  period 2026; RWAMOD runs RW_2025 (CY2025), and every schedule this suite
+  compares is value-identical across 2025 and 2026. Results are based on the
+  tax-benefit microsimulation model for Rwanda (RWAMOD) in SOUTHMOD_A4.0,
+  developed, maintained and managed by UNU-WIDER with SASPRI, the LSE
+  International Inequalities Institute and local partners, run on the EUROMOD
+  software (EM_Executable 1.0.0 via the euromod connector 0.2.18) under the
+  registered rw_2024_a1 dataset name; the bundle ships no Rwandan microdata,
+  so a header-only input file is built locally from the model's own variable
+  list and every household is synthetic. The results and their interpretation
+  are Axiom's responsibility. The SOUTHMOD bundle is licensed and
+  non-redistributable: it is referenced only by path (euromod_model_root), and
+  no model XML, dataset row, or DRD text is committed.
+
+# Not runnable on the CI matrix runners. The SOUTHMOD bundle is licensed to
+# Axiom by UNU-WIDER under the SOUTHMOD_A4.0 Adhesion Agreement, which bars
+# providing the model or its input datasets to any third party (clause 4), so
+# no shared runner can hold it; the runner also needs the x64 EUROMOD engine
+# (EM_Executable.dll) under EUROMOD_PYTHON and a .NET runtime. Manual lane
+# only: scripts/regenerate_euromod_rw.sh, where the licensed bundle and
+# runtime exist, refreshes the committed report. This marker stays unless
+# UNU-WIDER licenses a runner-held copy.
+ci: manual
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-vat
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-vat.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-vat
+
+dashboard:
+  filename: axiom-euromod-rw-vat.json
+  suite: rw-vat

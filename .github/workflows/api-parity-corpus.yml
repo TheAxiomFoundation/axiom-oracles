@@ -1,0 +1,43 @@
+name: API parity corpus release
+
+# Publishes corpora/api-parity/ as a versioned release axiom-api pins
+# (axiom-oracles#459 / axiom-api#139). One release per corpus change.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "corpora/api-parity/**"
+      - "scripts/build_api_parity_corpus.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - name: Build and validate corpus
+        run: python scripts/build_api_parity_corpus.py --out dist/api-parity-corpus.json | tee build.log
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          n=$(( $(git tag -l 'api-parity-corpus-v*' | wc -l) + 1 ))
+          tag="api-parity-corpus-v${n}"
+          sha=$(grep '^sha256 ' build.log | awk '{print $2}')
+          gh release create "$tag" dist/api-parity-corpus.json \
+            --title "API parity corpus v${n}" \
+            --notes "sha256: ${sha}
+
+          Pinned by axiom-api via data/parity-corpus.lock.json (axiom-api#139)."

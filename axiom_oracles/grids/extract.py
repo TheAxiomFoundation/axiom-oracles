@@ -19,8 +19,9 @@ engine-specific projection adds. Concretely, from a
   engine-projection payloads and not the redundant, already-captured entity
   or scope bookkeeping.
 
-It drops ``axiom_inputs``, ``euromod_inputs``, ``gettsim_case``,
-``euromod_to_axiom_input_bridge`` and the ``*_applied`` bridge echo — all
+It drops ``axiom_inputs`` / explicit input records / relation records, ``euromod_inputs``,
+``gettsim_case``, engine-result aggregation wiring,
+``euromod_to_axiom_input_bridge`` and the ``*_applied`` evidence echoes — all
 re-derivable from the skeleton by the suite factory.
 """
 
@@ -36,12 +37,16 @@ from ..core.case import Case, Concepts, Entity
 _PROJECTION_METADATA_KEYS = frozenset(
     {
         "axiom_inputs",
+        "axiom_input_records",
+        "axiom_relations",
         "euromod_inputs",
         "gettsim_case",
         "euromod_to_axiom_input_bridge",
         "euromod_to_axiom_input_bridge_applied",
         "axiom_alias_qualified_inputs",
         "axiom_result_selection",
+        "axiom_result_aggregation",
+        "axiom_result_aggregation_applied",
     }
 )
 

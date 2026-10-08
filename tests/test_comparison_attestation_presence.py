@@ -40,15 +40,24 @@ def test_partial_list_target_does_not_cover_absent_output(oracle_on_left):
         if mapping.target_for_engine("policyengine")
         == ["income_tax_main_rates", "capital_gains_tax"]
     )
-    axiom = EngineResult("axiom", "c1", {mapping.target_for_engine("axiom"): 100})
+    axiom_target = mapping.target_for_engine("axiom")
+    axiom_values = (
+        {target: 100 if index == 0 else 0 for index, target in enumerate(axiom_target)}
+        if isinstance(axiom_target, list)
+        else {axiom_target: 100}
+    )
+    axiom = EngineResult("axiom", "c1", axiom_values)
     oracle = EngineResult("policyengine", "c1", {"income_tax_main_rates": 100})
     left, right = (oracle, axiom) if oracle_on_left else (axiom, oracle)
     report, _, comparisons = _report(mapping, [left], [right])
 
-    # The parent comparator behavior intentionally sums absent list targets as
-    # zero. A matching sum is still not evidence that every component ran.
-    assert comparisons[0].comparisons[0].matches
-    assert report["summary"]["match_count"] == 1
+    # Main requires every sum component. Output evidence still records only
+    # the targets that actually ran, including for an incomplete comparison.
+    comparison = comparisons[0].comparisons[0]
+    assert not comparison.matches
+    assert (comparison.left_value if oracle_on_left else comparison.right_value) is None
+    assert report["summary"]["match_count"] == 0
+    assert report["summary"]["mismatch_count"] == 1
     oracle_outputs = {
         row["variable"]
         for row in report["attestation"]["outputs"]
@@ -103,7 +112,8 @@ def test_output_counts_track_presence_across_streaming_batches():
     accumulator.add_batch(cases[:1], comparisons[:1])
     accumulator.add_batch(cases[1:], comparisons[1:])
     assert accumulator.to_dict() == report
-    assert report["summary"]["match_count"] == 3
+    assert report["summary"]["match_count"] == 1
+    assert report["summary"]["mismatch_count"] == 2
     counts = {
         (row["engine"], row["variable"]): row["comparisons"]
         for row in report["attestation"]["outputs"]
@@ -143,7 +153,7 @@ def test_absent_scalar_target_has_no_output_stamp(missing_engine):
 
 @pytest.mark.parametrize("presence_mask", range(8))
 def test_stamp_targets_equal_observed_subset_of_list(presence_mask):
-    # Exhaust all presence subsets; this repo has no property-test dependency.
+    # Exhaust all presence subsets as a compact deterministic check.
     targets = ["ordinary_tax", "gains_tax", "surtax"]
     observed = {
         target: 0 for index, target in enumerate(targets) if presence_mask & (1 << index)
@@ -160,7 +170,10 @@ def test_stamp_targets_equal_observed_subset_of_list(presence_mask):
         [EngineResult("axiom", "c1", {"tax": 0})],
         [EngineResult("policyengine", "c1", observed)],
     )
-    assert comparisons[0].comparisons[0].matches == bool(observed)
+    comparison = comparisons[0].comparisons[0]
+    complete = len(observed) == len(targets)
+    assert comparison.matches == complete
+    assert comparison.right_value == (0 if complete else None)
     assert {
         row["variable"]
         for row in report["attestation"]["outputs"]

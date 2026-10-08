@@ -3,7 +3,7 @@
 # Mirrors the upstream compose spec (rulespec-us programs/us-az/tanf) — the
 # DES FAA5 payment-standard, needy-family, and eligible-no-pay financial
 # path — and adds the oracle-suite plumbing: the household-membership data
-# relation and an annualized output gated on the demographic fact the
+# relation and a monthly output gated on the demographic fact the
 # encoded surface acknowledges as incomplete (a minor or pregnant member),
 # so the comparison never pays childless units PolicyEngine's az_tanf
 # would not.
@@ -12,10 +12,10 @@ program: us-az/tanf
 period: 2026-01
 
 outputs:
-  - az_tanf_annual_cash_benefit
+  - az_tanf_monthly_cash_benefit
 
 acknowledged_incomplete:
-  - az_tanf_annual_cash_benefit
+  - az_tanf_monthly_cash_benefit
 
 scope:
   state:

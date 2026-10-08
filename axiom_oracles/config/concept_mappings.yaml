@@ -133,6 +133,23 @@ concepts:
         name: kindergeld.betrag_m
         scope: *de_country_scope
 
+  de:policies/kindergeld_eligibility_baseline#kindergeld_qualifying_child_count:
+    description: >-
+      Germany: number of children in the household for whom Kindergeld is due
+      (§ 63 Abs. 1 with § 32 Abs. 3–5 EStG). GETTSIM exposes it as the recipient's
+      claim count; EUROMOD has no per-child eligibility output, so its leg is the
+      household amount under kindergeld_monthly.
+    category: benefits
+    comparison: amount
+    tolerance: 0
+    priority: high
+    locales: [DE]
+    scope: *de_country_scope
+    targets:
+      gettsim:
+        name: kindergeld.anzahl_ansprüche
+        scope: *de_country_scope
+
   be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding:
     description: Belgium worker PIT before withholding
     category: tax
@@ -173,6 +190,160 @@ concepts:
           geoid: BE
       euromod:
         name: tin_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_federal_and_local_tax_before_withholding:
+    description: Belgium pension and replacement-income PIT before withholding
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_pensioner_federal_and_local_tax_before_withholding
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_annual_social_withholding:
+    description: Belgium pensioner annual health and solidarity withholding
+    category: social_contributions
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_pensioner_annual_social_withholding
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tscpe_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_pensioner_replacement_reduction_after_limits:
+    description: Belgium Articles 147--153 pension-income tax reduction
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_pensioner_replacement_reduction_after_limits
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tintcri_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_unemployment_reduction_after_limits:
+    description: Belgium Articles 147--153 unemployment-income tax reduction
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_replacement_unemployment_reduction_after_limits
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tintcri_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/pensioner_pit_oracle_pipeline#belgium_pit_replacement_sickness_invalidity_reduction_after_limits:
+    description: Belgium Articles 147--153 sickness/invalidity tax reduction
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_replacement_sickness_invalidity_reduction_after_limits
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tintcri_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding:
+    description: Belgium self-employment PIT before withholding
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_self_employment_federal_regional_and_local_tax_before_withholding
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: BE
+
+  be:statutes/income_tax/individual/self_employed_oracle_pipeline#belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income:
+    description: Belgium combined worker and self-employment taxable income
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    priority: high
+    locales: [BE]
+    scope:
+      type: country
+      geoid: BE
+    targets:
+      axiom:
+        name: belgium_pit_self_employment_combined_worker_and_self_employment_taxable_income
+        scope:
+          type: country
+          geoid: BE
+      euromod:
+        name: il_taxabley
         scope:
           type: country
           geoid: BE
@@ -398,6 +569,29 @@ concepts:
     targets:
       axiom:
         name: single_recipient_annual_child_youth_benefit
+        scope:
+          type: country
+          geoid: DK
+      euromod:
+        name: bfachnm_s
+        scope:
+          type: country
+          geoid: DK
+
+  dk:statutes/composed/boerne-og-ungeydelse-couple-pipeline#couple_recipient_annual_child_youth_benefit:
+    description: Denmark child and youth benefit (couple recipients, household sum)
+    category: benefits
+    comparison: amount
+    tolerance: 1
+    relative_tolerance: 0.001
+    priority: high
+    locales: [DK]
+    scope:
+      type: country
+      geoid: DK
+    targets:
+      axiom:
+        name: couple_recipient_annual_child_youth_benefit
         scope:
           type: country
           geoid: DK
@@ -1740,7 +1934,20 @@ concepts:
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
     targets:
-      axiom: us:statutes/26/1/j#income_tax_main_rates
+      # Same two-component composition the PolicyEngine target below needs, for
+      # the same reason: 1(j) main rates are the ORDINARY-bracket tax only, so
+      # on any unit with net capital gain they cannot reach `taxbc` scope. The
+      # 1(h) worksheet total (main + unrecaptured 1250 + 28%-rate gain) is the
+      # missing half. Mapping main rates alone made every capital-gains unit
+      # read axiom-low against TAXSIM's `v28` by the full preferential-rate
+      # spread — the "tax-before-credits continuum" class in axiom-oracles#304
+      # (e.g. ecps-tax-unit-154437: axiom 431,687 vs v28 49,930,649 on
+      # $249,062,816 of LTCG, while axiom's own `liability`, which does carry
+      # the 1(h) tax, lands within 0.1% of `v28`). The comparator sums a list
+      # target, as it already does for us:tax/payroll#employee_fica.
+      axiom:
+        - us:statutes/26/1/j#income_tax_main_rates
+        - us:statutes/26/1/h#capital_gains_tax
       # Tax-Calculator's `taxbc` is regular tax before credits including the
       # Schedule D preferential-rate worksheet, so it must be compared against
       # PolicyEngine's ordinary-bracket tax PLUS its separate capital-gains tax.
@@ -1975,7 +2182,7 @@ concepts:
       policyengine: is_ssi_recipient_for_medicaid
 
   us-wa:regulations/388#wa_tanf_benefit:
-    description: WA TANF benefit (annualized)
+    description: WA TANF monthly benefit
     category: cash
     comparison: amount
     # Both sides: max(0, payment standard - countable income) with the
@@ -1985,67 +2192,67 @@ concepts:
     tolerance: 25
     priority: high
     targets:
-      axiom: wa_tanf_annual_benefit
+      axiom: wa_tanf_monthly_benefit
       policyengine: wa_tanf
 
   us-al:policies/dhr/tanf#al_tanf_benefit:
-    description: AL TANF (Family Assistance) benefit (annualized)
+    description: AL TANF (Family Assistance) monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: al_tanf_annual_benefit
+      axiom: al_tanf_monthly_benefit
       policyengine: al_tanf
 
   us-ga:policies/dfcs/tanf#ga_tanf_benefit:
-    description: GA TANF benefit (annualized)
+    description: GA TANF monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: ga_tanf_annual_benefit
+      axiom: ga_tanf_monthly_benefit
       policyengine: ga_tanf
 
   us-de:regulations/title-16/4000-financial-responsibility#de_tanf_benefit:
-    description: DE TANF benefit (annualized)
+    description: DE TANF monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: de_tanf_annual_benefit
+      axiom: de_tanf_monthly_benefit
       policyengine: de_tanf
 
   us-ks:policies/dcf/keesm#ks_tanf_maximum_benefit:
-    description: KS TANF maximum benefit standard (annualized)
+    description: KS TANF monthly maximum benefit standard
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: ks_tanf_annual_maximum_benefit
+      axiom: ks_tanf_monthly_maximum_benefit
       policyengine: ks_tanf_maximum_benefit
 
   us-az:policies/des/faa5#az_tanf_benefit:
-    description: AZ Cash Assistance benefit (annualized)
+    description: AZ Cash Assistance monthly benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: az_tanf_annual_cash_benefit
+      axiom: az_tanf_monthly_cash_benefit
       policyengine: az_tanf
 
   us-mn:policies/dhs/combined-manual#mn_mfip_benefit:
-    description: MN MFIP cash benefit (annualized)
+    description: MN MFIP monthly cash benefit
     category: cash
     comparison: amount
     tolerance: 25
     priority: high
     targets:
-      axiom: mn_mfip_annual_cash_benefit
+      axiom: mn_mfip_monthly_cash_benefit
       policyengine: mn_mfip
 
   us-ca:policies/cdss/calworks#ca_tanf_benefit:
@@ -2069,7 +2276,7 @@ concepts:
       policyengine: co_tanf
 
   us-ny:policies/otda/tanf-state-plan-2024-2026#ny_tanf_benefit:
-    description: NY TANF benefit (annualized)
+    description: NY TANF monthly benefit
     category: cash
     comparison: amount
     # Both sides compute max(0, need standard - countable income) monthly.
@@ -2079,20 +2286,21 @@ concepts:
     tolerance: 25
     priority: high
     targets:
-      axiom: ny_tanf_annual_benefit
+      axiom: ny_tanf_benefit
       policyengine: ny_tanf
 
   us:statutes/42/1382#ssi_benefit:
-    description: SSI annual benefit amount
+    description: SSI monthly benefit amount
     category: cash
     comparison: amount
-    # PolicyEngine's `ssi` is person-level annual dollars; the composed
-    # us/ssi program emits ssi_annual_benefit on the same shape. Keep a
-    # $25/year tolerance to absorb monthly-vs-annual rounding.
+    # PolicyEngine's `ssi` is person-level monthly dollars; the composed
+    # us/ssi program emits ssi_monthly_benefit on the same household-aggregate
+    # shape. Keep the suite's existing literal tolerance during the period
+    # reconciliation so the runner correction is not masked by a threshold edit.
     tolerance: 25
     priority: high
     targets:
-      axiom: ssi_annual_benefit
+      axiom: ssi_monthly_benefit
       policyengine: ssi
 
   us:statutes/7/2014/o#snap_eligible:
@@ -2307,18 +2515,22 @@ concepts:
       policyengine: va_income_tax_before_non_refundable_credits
       taxsim: siitax
 
-  us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability:
-    description: Utah individual income tax liability (resident wage earner; Utah Code 59-10-104 flat 4.45 per cent on Utah taxable income, before the 59-10-1018 taxpayer credit)
+  us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits:
+    description: Utah full-year-resident income tax before credits, including the section 59-10-104.1 exemption gate
     category: tax
     comparison: amount
-    # Compared against PolicyEngine ut_income_tax_before_credits, the pure
-    # 59-10-104 flat tax; the pipeline reproduces it exactly. The before-
-    # non-refundable variable nets the phased-out 59-10-1018 taxpayer credit that
-    # this flat core excludes. Against TAXSIM 2024 every case diverges by the
-    # 4.55-vs-4.45 rate vintage plus TAXSIM's inclusion of the taxpayer credit,
-    # dispositioned in dispositions/ut-income-tax-liability.yaml. The tight
-    # absolute tolerance catches structural rate errors.
-    tolerance: 1
+    # PolicyEngine publishes the section 59-10-104 pre-credit amount and the
+    # section 59-10-104.1 exemption separately. The reviewed derived target
+    # combines them; direct comparison to ut_income_tax_before_credits would
+    # silently omit the statutory exemption. TAXSIM staxbc is the exact
+    # pre-credit peer (verified against the pinned 2.30.0 binary: staxbc -
+    # v40 total credits = siitax, with the section 59-10-1018 taxpayer
+    # credit booked in v40) — the earlier siitax target was supplemental
+    # precisely because it netted that credit. Residual caveat: TAXSIM's
+    # 2026 Utah module extrapolates the rate (4.5 vs enacted 4.45 percent);
+    # rate-vintage rows stay dispositionable as before.
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-UT]
     scope:
@@ -2326,23 +2538,19 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ut_pit_pilot_income_tax_liability
+        name: ut_pit_2026_resident_income_tax_before_credits
         scope:
           type: country
           geoid: US
-      policyengine: ut_income_tax_before_credits
-      taxsim: siitax
+      policyengine: ut_resident_income_tax_before_credits_derived
+      taxsim: staxbc
 
-  us-al:policies/income_tax/pilot_liability_pipeline#al_pit_pilot_income_tax_liability:
-    description: Alabama income tax liability (resident wage earner; the section 40-18-5 graduated tax (2/4/5 per cent) on Alabama taxable income (Alabama AGI less the section 40-18-15 deductions and the section 40-18-19 exemptions))
+  us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits:
+    description: Alabama Code section 40-18-5 graduated schedule tax on completed Alabama taxable income, before nonrefundable credits
     category: tax
     comparison: amount
-    # Compared against PolicyEngine al_income_tax_before_non_refundable_credits,
-    # the exact section 40-18-5 schedule-tax analog before credits.
-    # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
-    # dispositioned in dispositions/al-income-tax-liability.yaml. The tight
-    # absolute tolerance catches structural bracket errors.
-    tolerance: 1
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-AL]
     scope:
@@ -2350,12 +2558,16 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: al_pit_pilot_income_tax_liability
+        name: al_pit_2026_section_40_18_5_schedule_before_credits
         scope:
           type: country
           geoid: US
       policyengine: al_income_tax_before_non_refundable_credits
-      taxsim: siitax
+      # TAXSIM state tax before credits (pinned 2.30.0: staxbc - v40 total
+      # credits = siitax). Deduction/exemption-model differences between
+      # TAXSIM's Alabama module and the completed-taxable-income boundary
+      # stay dispositionable, as on every TAXSIM state comparison.
+      taxsim: staxbc
   us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability:
     description: Idaho income tax liability (resident wage earner; the section 63-3024 tax (5.3 per cent) on Idaho taxable income above the indexed filing-status no-tax threshold)
     category: tax
@@ -2380,17 +2592,18 @@ concepts:
           geoid: US
       policyengine: id_income_tax_before_refundable_credits
       taxsim: siitax
-  us-ky:policies/income_tax/pilot_liability_pipeline#ky_pit_pilot_income_tax_liability:
-    description: Kentucky income tax liability (resident wage earner; the section 141.020 flat tax (3.5 per cent) on Kentucky taxable income (Kentucky AGI less the section 141.081 standard deduction))
+  us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits:
+    description: Kentucky KRS 141.020 tax-year-2026 schedule tax before credits (3.5 percent of completed nonnegative Kentucky net income)
     category: tax
     comparison: amount
-    # Compared against PolicyEngine ky_income_tax_before_refundable_credits, the exact statutory analog of
-    # this core; the pipeline reproduces it to a hundredth of a cent across the
-    # grid (the residual is PolicyEngine's float32 rounding). ky_income_tax nets the refundable/family-size credits, which the 141.020 flat core excludes.
-    # Against TAXSIM 2024 every case diverges by the 2024-to-2026 vintage,
-    # dispositioned in dispositions/ky-income-tax-liability.yaml. The tight
-    # absolute tolerance catches structural bracket errors.
-    tolerance: 1
+    # PolicyEngine's unit-level before-nonrefundable-credit variable is the
+    # direct pre-credit analog. The Axiom grid projects only its completed net
+    # income from PolicyEngine's upstream joint/separate taxable-income
+    # variables and executes the canonical RuleSpec live. TAXSIM staxbc is
+    # the pre-credit peer (staxbc - v40 = siitax on the pinned binary);
+    # its 2026 Kentucky module retains the un-enacted 4.0 percent rate
+    # (enacted 3.5) — rate-vintage rows stay dispositionable as before.
+    tolerance: 0.01
     priority: high
     locales: [US-KY]
     scope:
@@ -2398,12 +2611,12 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ky_pit_pilot_income_tax_liability
+        name: ky_pit_2026_krs_141_020_schedule_before_credits
         scope:
           type: country
           geoid: US
-      policyengine: ky_income_tax_before_refundable_credits
-      taxsim: siitax
+      policyengine: ky_income_tax_before_non_refundable_credits_unit
+      taxsim: staxbc
 
 
   us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability:
@@ -2433,14 +2646,14 @@ concepts:
           geoid: US
       policyengine: ne_income_tax_before_credits
       taxsim: siitax
-  us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_income_tax_liability:
-    description: Delaware section 1102(a)(14) schedule tax before nonrefundable credits, selecting between aggregate separate-return and combined-return taxable-income candidates
+  us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_separate_schedule_tax:
+    description: Delaware section 1102(a)(14) individual schedule component before nonrefundable credits, summed from Person to TaxUnit only for Populace comparison accounting
     category: tax
     comparison: amount
-    # Compared against PolicyEngine's unit-level tax before nonrefundable credits,
-    # the exact analog of the encoded schedule and strict lower-pre-credit-tax
-    # branch selector. Later Delaware targets subtract credits outside this core.
-    tolerance: 1
+    # Compared against PolicyEngine's Person-grain individual schedule before
+    # nonrefundable credits. Filing-method selection, combined-return
+    # computation, credits, payments, and final liability are outside this core.
+    tolerance: 0.01
     priority: high
     locales: [US-DE]
     scope:
@@ -2448,12 +2661,17 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: de_pit_pilot_income_tax_liability
+        name: de_pit_pilot_separate_schedule_tax
         scope:
           type: country
           geoid: US
-      policyengine: de_income_tax_before_non_refundable_credits_unit
-      taxsim: siitax
+      policyengine: de_income_tax_before_non_refundable_credits_indv
+      # TAXSIM state tax before credits, unit-grain (staxbc - v40 = siitax
+      # on the pinned binary; the 113-dollar spread at the probe case is
+      # Delaware's personal credit, correctly outside this pre-credit
+      # surface). Joint returns: TAXSIM optimizes Delaware's separate
+      # filing internally; structural rows stay dispositionable.
+      taxsim: staxbc
   us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability:
     description: Maryland STATE income tax liability (resident wage earner; the section 10-105 graduated state tax on Maryland taxable income; the county income tax is a separate PolicyEngine variable, excluded)
     category: tax
@@ -2526,29 +2744,6 @@ concepts:
           geoid: US
       policyengine: mn_income_tax_before_refundable_credits
       taxsim: siitax
-  us-ct:policies/income_tax/pilot_liability_pipeline#ct_pit_pilot_income_tax_liability:
-    description: Connecticut income tax liability before refundable credits (complete section 12-700 schedules, phaseout and recapture, personal credit, AMT, and ordered property-tax/stillborn nonrefundable credits)
-    category: tax
-    comparison: amount
-    # Compared against PolicyEngine ct_income_tax_before_refundable_credits, the
-    # exact analog of the complete encoded schedule, phaseout/recapture, personal
-    # credit, AMT, and ordered nonrefundable-credit pipeline. Against TAXSIM 2024,
-    # differences from the 2024-to-2026 indexation and credit scope are
-    # dispositioned rather than absorbed into the national contract tolerance.
-    tolerance: 1
-    priority: high
-    locales: [US-CT]
-    scope:
-      type: country
-      geoid: US
-    targets:
-      axiom:
-        name: ct_pit_pilot_income_tax_liability
-        scope:
-          type: country
-          geoid: US
-      policyengine: ct_income_tax_before_refundable_credits
-      taxsim: siitax
   us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability:
     description: Colorado C.R.S. section 39-22-104(1.7)(c) individual-income base tax before section 39-22-627 temporary rate adjustments and all credits
     category: tax
@@ -2599,17 +2794,14 @@ concepts:
           geoid: US
       policyengine: az_income_tax
       taxsim: siitax
-  us-ga:policies/income_tax/pilot_liability_pipeline#ga_pit_pilot_income_tax_liability:
-    description: Georgia individual income tax liability (resident wage earner; the O.C.G.A. 48-7-20 flat 4.99 per cent tax on Georgia taxable net income = AGI less the section 48-7-27 standard deduction)
+  us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits:
+    description: Georgia tax-year-2026 annual O.C.G.A. 48-7-20 tax before nonrefundable credits (the flat 4.99 per cent rate on caller-completed Georgia taxable net income)
     category: tax
     comparison: amount
     # Compared against PolicyEngine ga_income_tax_before_non_refundable_credits,
-    # the exact 48-7-20 flat-tax analog (equals the final ga_income_tax on this
-    # childless grid — no 48-7-29 / low-income / CDCC credits active); the
-    # pipeline reproduces it to the cent across the grid. Against TAXSIM 2024
-    # every case diverges by the 5.39-to-4.99 rate step-down plus the HB463
-    # standard-deduction vintage, dispositioned in
-    # dispositions/ga-income-tax-liability.yaml.
+    # with PolicyEngine ga_taxable_income projected only as the distinct direct
+    # upstream completed-taxable-net-income boundary. RuleSpec applies no
+    # filing-status, deduction, exemption, exclusion, or credit construction.
     tolerance: 1
     priority: high
     locales: [US-GA]
@@ -2618,12 +2810,15 @@ concepts:
       geoid: US
     targets:
       axiom:
-        name: ga_pit_pilot_income_tax_liability
+        name: ga_pit_2026_annual_tax_before_nonrefundable_credits
         scope:
           type: country
           geoid: US
       policyengine: ga_income_tax_before_non_refundable_credits
-      taxsim: siitax
+      # TAXSIM state tax before credits. Known vintage gap: TAXSIM's 2026
+      # Georgia module retains the un-enacted 5.19 percent rate (enacted
+      # 4.99) — rate-vintage rows stay dispositionable.
+      taxsim: staxbc
   us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability:
     description: Michigan individual income tax liability (resident wage earner; the MCL 206.51(1) flat 4.25 per cent tax on Michigan taxable income = AGI less the section 206.30 personal exemptions)
     category: tax
@@ -2768,7 +2963,8 @@ concepts:
     description: Montana individual income tax liability (complete 2026 ordinary and net-long-term-capital-gain schedules)
     category: tax
     comparison: amount
-    tolerance: 1
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-MT]
     scope:
@@ -2997,6 +3193,7 @@ concepts:
     category: tax
     comparison: amount
     tolerance: 0.01
+    relative_tolerance: 0.0000001
     priority: high
     locales: [US-AR]
     scope: {type: country, geoid: US}
@@ -3005,20 +3202,28 @@ concepts:
         name: ar_pit_pilot_income_tax_before_non_refundable_credits_indiv
         scope: {type: country, geoid: US}
       policyengine: ar_income_tax_before_non_refundable_credits_indiv
-  us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability:
-    description: Mississippi section 27-7-5 schedule tax before credits, after the lower separate-or-joint candidate comparison
+      # TAXSIM state tax before credits, unit-grain. The Axiom side sums
+      # Person-grain individual schedules to TaxUnit for accounting; on
+      # joint returns TAXSIM's own separate-filing computation can differ
+      # structurally — such rows stay dispositionable.
+      taxsim: staxbc
+  us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax:
+    description: Mississippi tax-year-2026 section 27-7-5 Person-grain schedule tax on caller-completed taxable income
     category: tax
     comparison: amount
-    tolerance: 1
+    tolerance: 0.01
     priority: high
     locales: [US-MS]
     scope: {type: country, geoid: US}
     targets:
       axiom:
-        name: ms_pit_pilot_income_tax_liability
+        name: ms_pit_2026_section_27_7_5_schedule_tax
         scope: {type: country, geoid: US}
-      policyengine: ms_income_tax_before_credits_unit
-      taxsim: siitax
+      policyengine: ms_income_tax_before_credits_joint
+      # TAXSIM state tax before credits, unit-grain (the concept already
+      # bridges Person-grain to a joint PE target, so the same accounting
+      # caveat applies to the TAXSIM leg).
+      taxsim: staxbc
   us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability:
     description: West Virginia individual income tax liability (2026 section 11-21-4J ordinary resident wage-earner core)
     category: tax
@@ -3047,3 +3252,1642 @@ concepts:
         scope: {type: country, geoid: US}
       policyengine: vt_income_tax_before_non_refundable_credits
       taxsim: siitax
+
+  # --- Populace-campaign pre-credit schedule concepts with a TAXSIM staxbc
+  # leg. Each staxbc peer was probe-verified against the pinned 2.30.0
+  # binary on 2026-08-23 (single filer, 60k wages): DC/KS/MN/OH satisfy
+  # staxbc - v40 = siitax with v40 = 0 at the probe; CT's staxbc sits
+  # exactly one personal-tax-credit (10 percent at the probe AGI) above
+  # siitax, which is precisely the before-personal-credit boundary the CT
+  # concept declares. Deduction/exemption-model and vintage residuals stay
+  # dispositionable, as on every TAXSIM state comparison.
+  us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_resident_ordinary_tax_before_personal_credit:
+    description: Connecticut full-year-resident section 12-700 ordinary tax before the personal tax credit
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    priority: high
+    locales: [US-CT]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ct_pit_2026_resident_ordinary_tax_before_personal_credit
+        scope: {type: country, geoid: US}
+      policyengine: ct_resident_ordinary_tax_before_personal_credit_derived
+      taxsim: staxbc
+  us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_schedule_before_credits:
+    description: District of Columbia section 47-1806.03 schedule tax on completed DC taxable income, before credits
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    priority: high
+    locales: [US-DC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: dc_pit_2026_section_47_1806_03_schedule_before_credits
+        scope: {type: country, geoid: US}
+      policyengine: dc_income_tax_before_credits_joint
+      taxsim: staxbc
+  us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_schedule_before_credits:
+    description: Kansas K-40ES schedule tax on completed Kansas taxable income, before credits
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    priority: high
+    locales: [US-KS]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: ks_pit_2026_k40es_schedule_before_credits
+        scope: {type: country, geoid: US}
+      policyengine: ks_k40es_schedule_before_credits_reviewed
+      taxsim: staxbc
+  us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_schedule_tax:
+    description: Minnesota section 290.06 basic schedule tax on completed Minnesota taxable income, before credits
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [US-MN]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: mn_pit_pilot_schedule_tax
+        scope: {type: country, geoid: US}
+      policyengine: mn_basic_tax_precision_stable
+      taxsim: staxbc
+  us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_schedule_tax:
+    description: Ohio section 5747.02 nonbusiness schedule tax on completed Ohio taxable nonbusiness income, before nonrefundable credits
+    category: tax
+    comparison: amount
+    tolerance: 0.01
+    relative_tolerance: 0.0000001
+    priority: high
+    locales: [US-OH]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: oh_pit_pilot_schedule_tax
+        scope: {type: country, geoid: US}
+      policyengine: oh_nonbusiness_income_tax_before_non_refundable_credits_derived
+      taxsim: staxbc
+
+  # GHAMOD (SOUTHMOD Ghana, EUROMOD engine) oracle concepts. Compared on the
+  # GH_2025 system; the Act 1111 rate bands (in force from 29 December 2023)
+  # and Act 1007 relief amounts (from 30 December 2019) are unchanged through
+  # 2026, so GH_2025 applies the schedule and reliefs the Axiom modules
+  # validate for 2026.
+  gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax:
+    description: Ghana resident individual income tax over chargeable income (Act 1111 First Schedule bands)
+    category: tax
+    comparison: amount
+    # Exact-to-the-cedi schedule parity for chargeable income <= 605,000; above
+    # it GHAMOD taxes at 30% where Act 1111 charges 35% (live: 193,244 vs
+    # 197,994 at 700,000), dispositioned in
+    # dispositions/gh-income-tax-rate-schedule.yaml.
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: resident_individual_income_tax
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: GH
+
+  # National Pensions Act, 2008 (Act 766) s.3 SSNIT contributions. Flat
+  # statutory rates (worker 5.5%, employer 13%) frozen since commencement
+  # (Act 883 (2014) left s.3 untouched), so GH_2025 and the 2026 validation
+  # year apply identical rates. GHAMOD restricts contributors to ages 15-45
+  # (no basis in Act 766 s.3; ghamod_issues.json
+  # ghamod-tscee-tscer-age-15-45-contributor-cap); suite cases stay inside
+  # the shared window.
+  gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution:
+    description: Ghana SSNIT worker contribution (Act 766 s.3(1), 5.5% of qualifying employment income)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: employee_social_security_contribution
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution:
+    description: Ghana SSNIT employer contribution (Act 766 s.3(2), 13% of qualifying employment income)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: employer_social_security_contribution
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tscer_s
+        scope:
+          type: country
+          geoid: GH
+
+  # Act 896 First Schedule paragraph 8(1)(b)(iv) residential rent withholding
+  # (final for rent paid to a resident individual, s.119(1)(b)); one encoded
+  # version from 2016-01-01. GHAMOD's tinrt_s applies the same 8% on ypr.
+  # GHAMOD's tiniy_s (flat 15% on yiy) has no supported statutory rate and is
+  # recorded in ghamod_issues.json, not compared.
+  gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding:
+    description: Ghana residential rent final withholding (Act 896 First Schedule para 8(1)(b)(iv), 8% of rent to a resident individual)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: individual_residential_rent_final_withholding
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinrt_s
+        scope:
+          type: country
+          geoid: GH
+
+  # Second Schedule paragraph 5 presumptive turnover tax as substituted by
+  # Act 1071 (3%, band (20,000, 500,000]) and the Act 1068 CHRL (1%).
+  # GHAMOD's ttn eligibility band 10,000-120,000 matches no in-force text
+  # (ghamod_issues.json ghamod-ttn-eligibility-band-10k-120k-superseded);
+  # suite cases stay inside the band both engines tax (top case 119,999,
+  # clear of GHAMOD's all-or-nothing 120,000 ceiling).
+  gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable:
+    description: Ghana presumptive turnover tax (Act 896 Second Schedule para 5 as substituted by Act 1071, 3% of turnover in (20,000, 500,000])
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: paragraph_5_turnover_tax_payable
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: ttn01_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount:
+    description: Ghana COVID-19 Health Recovery Levy (Act 1068 s.1(4), 1% of the taxable supply value)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: covid_health_recovery_levy_amount
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: ttn02_s
+        scope:
+          type: country
+          geoid: GH
+
+  # December 2025 reform consumption levies (2.5% each in the substituted
+  # texts and in GH_2025; compared on GHAMOD's household expenditure base,
+  # ghamod_issues.json ghamod-nhil-getfund-charged-on-household-expenditure).
+  # VAT itself is recorded there too
+  # (ghamod-tva-wedge-double-and-triple-counts-levies).
+  gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount:
+    description: Ghana National Health Insurance Levy (Act 1156 s.47, 2.5% of the chargeable supply value)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: national_health_insurance_levy_amount
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tva01_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount:
+    description: Ghana Education Trust Fund Levy (Act 1152 s.3A, 2.5% of the taxable supply value)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: getfund_levy_amount
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tva02_s
+        scope:
+          type: country
+          geoid: GH
+
+  # Act 1108 First Schedule beer excise (under-50%-local band, the one GHAMOD
+  # ad-valorem excise output whose rate matches the statutory table; compared
+  # on GHAMOD's household-expenditure base) and the GSFP feeding grant
+  # (GH¢2.00/day, compared at GHAMOD's every-weekday day count). Both base
+  # conventions, the other excise outputs, the fuel rows, LEAP and Free SHS
+  # are recorded in ghamod_issues.json (findings #9-#12 and the convention
+  # entries).
+  gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount:
+    description: Ghana beer excise (Act 1108 First Schedule, 47.5% band under 50% local raw material)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: beer_excise_amount
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tvl04_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:policies/gsfp/feeding-grant#school_feeding_value_per_year:
+    description: Ghana School Feeding Programme grant (GH¢2.00 per child per day, 2025 Budget paragraph 381)
+    category: benefit
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: school_feeding_value_per_year
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: bed_s
+        scope:
+          type: country
+          geoid: GH
+
+  # Composed single-employee disposable income (rulespec-gh pipeline:
+  # Act 766 s.3(1) contribution, s.112(2) deduction, Act 1111 bands),
+  # compared to GHAMOD ils_dispy in the shared-nil zone. In the taxed
+  # zone GHAMOD taxes gross employment income (il_tintb3 = yem), omitting
+  # the s.112(2) deduction, recorded in ghamod_issues.json (finding #13).
+  gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Ghana composed single-employee disposable income (gross + benefits - income tax - employee SSNIT contribution)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: GH
+
+  # Uganda Third Schedule Part I resident schedule (Act 4 of 2012
+  # substitution; rulespec-ug), compared to UGAMOD tin_s on a
+  # band-boundary/interior sweep including the additional 10% above
+  # 120,000,000/yr, which UGAMOD implements.
+  ug:statutes/act-2012-4/income-tax-amendment-2012/third-schedule-rates-of-tax-substituted#resident_individual_income_tax:
+    description: Uganda resident individual income tax (Cap. 340 Third Schedule Part I as substituted by Act 4 of 2012)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: resident_individual_income_tax
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: UG
+
+  # Uganda individual rental tax (2022 amendment Part VI; 12% of gross
+  # rental above 2,820,000/yr) vs UGAMOD tpr_s — run live exact.
+  ug:statutes/act-2022-11/income-tax-amendment-2022/third-schedule-rental-rate-part-substituted#individual_rental_income_tax:
+    description: Uganda individual rental income tax (Third Schedule Part VI as substituted by the Income Tax (Amendment) Act, 2022)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: individual_rental_income_tax
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tpr_s
+        scope:
+          type: country
+          geoid: UG
+
+  # Uganda small-business presumptive tax (Act 20 of 2020 Second
+  # Schedule; both regimes) vs UGAMOD ttn_s — run live exact at every band.
+  ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits:
+    description: Uganda presumptive small-business income tax (Second Schedule as substituted by Act 20 of 2020)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: presumptive_small_business_income_tax_before_credits
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: ttn_s
+        scope:
+          type: country
+          geoid: UG
+
+  # Uganda NSSF employee share and employer-net share (Cap. 230
+  # ss.10-11) vs UGAMOD tscee_s/tscer_s — run live exact.
+  ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employee_share:
+    description: Uganda NSSF employee share (5% of total wages, Cap. 230 s.11)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: nssf_employee_share
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: UG
+
+  ug:statutes/cap-230/national-social-security-fund-act/section-10-payment-of-standard-contribution-by-employers#nssf_employer_net_share:
+    description: Uganda NSSF employer-net share (derived 10% of total wages, Cap. 230 ss.10-11)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: nssf_employer_net_share
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tscer_s
+        scope:
+          type: country
+          geoid: UG
+
+  ug:statutes/act-2008-8/local-governments-amendment-no2-2008#local_service_tax:
+    description: Uganda salaried-employee Local Service Tax (Act 8 of 2008, regulation 3 graduated table)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: local_service_tax
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tgv_s
+        scope:
+          type: country
+          geoid: UG
+
+  ug:policies/mglsd-scg/sage-handbook#senior_citizens_grant_per_year:
+    description: Uganda Senior Citizens Grant national rule (Shs 25,000/month at 80+, SAGE Handbook)
+    category: benefit
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: senior_citizens_grant_per_year
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: boa_s
+        scope:
+          type: country
+          geoid: UG
+
+  ug:regulations/vat-rate-of-tax-order-2006/rate-of-tax-order-2006#vat_amount:
+    description: Uganda 18% standard VAT (Rate of Tax Order 2006)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: vat_amount
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: UG
+
+  ug:statutes/act-2024-excise/excise-duty-amendment-2024#fuel_excise_duty:
+    description: "Uganda fuel excise (2024 amendment Schedule 2 items 8(a)-(b): petrol 1550/l, diesel 1230/l)"
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: fuel_excise_duty
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: tex10_s
+        scope:
+          type: country
+          geoid: UG
+
+  # Uganda composed single-employee disposable income (rulespec-ug
+  # pipeline: Act 4 of 2012 Third Schedule tax on chargeable income,
+  # Cap. 230 s.11 employee 5% share), compared to UGAMOD ils_dispy on
+  # the full PAYE grid — no shared-nil restriction: the Ugandan ITA has
+  # no employee NSSF deduction and UGAMOD agrees (ttb_s = yem), so the
+  # engines share the tax base at every income (contrast Ghana
+  # finding #13).
+  ug:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Uganda composed single-employee disposable income (gross + benefits - income tax - employee NSSF share)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [UG]
+    scope:
+      type: country
+      geoid: UG
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: UG
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: UG
+
+  # Zambia individual income tax (Act 22 of 2023 Charging Schedule
+  # para 2(1)) vs MicroZAMOD tin_s on the bridged ttb_s base — the
+  # net-of-contributions base is rulespec-zm#1 candidate finding 1.
+  zm:statutes/act-2023-22/income-tax-amendment-2023#individual_income_tax:
+    description: Zambia individual income tax (Charging Schedule paragraph 2(1) as substituted by Act No. 22 of 2023)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: individual_income_tax
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia turnover tax (Act 22 of 2024 Ninth Schedule Part II; slab
+  # 5% above K12,000 up to K5,000,000) vs MicroZAMOD ttn_s in the
+  # agreement zone (the 0% band and ceiling-bound divergences are
+  # rulespec-zm#1 candidate findings 2a/2b).
+  zm:statutes/act-2024-22/income-tax-amendment-2024#turnover_tax:
+    description: Zambia turnover tax (Ninth Schedule Part II as substituted by Act No. 22 of 2024; s.64A ceiling)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: turnover_tax
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: ttn_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia NAPSA employee share (S.I. 9 of 2024: 5% of pensionable
+  # earnings, monthly ceiling K29,816) vs MicroZAMOD tsceepi_s on the
+  # ZM_2024 system (the SI's statutory year).
+  zm:regulations/si-2024-9/pensionable-earnings-amendment-2024#napsa_employee_contribution:
+    description: Zambia NAPSA employee contribution (National Pension Scheme (Pensionable Earnings) (Amendment) Regulations, 2024)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: napsa_employee_contribution
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tsceepi_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia NAPSA employer share (same SI and system).
+  zm:regulations/si-2024-9/pensionable-earnings-amendment-2024#napsa_employer_contribution:
+    description: Zambia NAPSA employer contribution (National Pension Scheme (Pensionable Earnings) (Amendment) Regulations, 2024)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: napsa_employer_contribution
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tscerpi_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia NHIMA employee contribution (S.I. 63 of 2019 Third
+  # Schedule: 1% of basic salary, uncapped) vs MicroZAMOD tsceehl_s.
+  zm:regulations/si-2019-63/national-health-insurance-general-regulations-2019#employee_monthly_contribution_amount:
+    description: Zambia NHIMA employee contribution (National Health Insurance (General) Regulations, 2019, Third Schedule)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: employee_monthly_contribution_amount
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tsceehl_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia NHIMA employer contribution (same instrument).
+  zm:regulations/si-2019-63/national-health-insurance-general-regulations-2019#employer_monthly_contribution_amount:
+    description: Zambia NHIMA employer contribution (National Health Insurance (General) Regulations, 2019, Third Schedule)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: employer_monthly_contribution_amount
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tscerhl_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia VAT standard rate (S.I. 14 of 2008 under Cap. 331 s.9(3))
+  # vs MicroZAMOD tva_s, with the engine's il_vat01 income list (the
+  # item's post-uprating value) bridged onto taxable_value.
+  zm:statutes/cap-331/value-added-tax-act#vat_amount:
+    description: Zambia VAT at the standard rate (16% per the Value Added Tax (Rate of Tax) Order, 2008)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: vat_amount
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia wine ad-valorem excise (60%, Act 19 of 2018) vs MicroZAMOD
+  # tex02_s on a wine-only expenditure case.
+  zm:statutes/act-2024-24/customs-and-excise-amendment-2024#wine_duty:
+    description: Zambia wine excise duty (Second Schedule heading 5, 60 percent)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: wine_duty
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tex02_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia spirits ad-valorem excise (60%, Acts 45/2021-25/2023) vs
+  # MicroZAMOD tex02_s on a spirits-only expenditure case.
+  zm:statutes/act-2024-24/customs-and-excise-amendment-2024#spirits_duty:
+    description: Zambia spirits excise duty (Second Schedule heading 6, 60 percent)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: spirits_duty
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: tex02_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia Social Cash Transfer standing values (MCDSS Ministerial
+  # Statement) vs MicroZAMOD bsa_s on ZM_2024 (the standing scheme);
+  # ZM_2025's 400/600 amounts are rulespec-zm#1 finding 6.
+  zm:policies/mcdss-sct/ministerial-statement-transfer-values#sct_monthly_transfer:
+    description: Zambia Social Cash Transfer monthly value (K200 standing; K400 severe-disability double)
+    category: benefit
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: sct_monthly_transfer
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: bsa_s
+        scope:
+          type: country
+          geoid: ZM
+
+  # Zambia composed single-employee disposable income (rulespec-zm
+  # pipeline: Act 22 of 2023 tax on gross less employee NAPSA/NHIMA
+  # contributions) vs MicroZAMOD ils_dispy in the shared-nil zone; the
+  # taxed-zone net-base divergence is rulespec-zm#1 candidate finding 1.
+  zm:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Zambia composed single-employee disposable income (gross + benefits - income tax - employee NAPSA - employee NHIMA)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ZM]
+    scope:
+      type: country
+      geoid: ZM
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: ZM
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: ZM
+
+  # Ethiopia employment income tax (Proclamation 1395/2025 Article 11
+  # monthly schedule) vs ETMOD tin01_s - gross base verified correct.
+  et:statutes/proc-1395-2025/income-tax-amendment-2025#employment_income_tax:
+    description: Ethiopia employment income tax (Income Tax (Amendment) Proclamation No. 1395/2025, monthly schedule)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: employment_income_tax
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tin01_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia business income tax payable incl. the Article 23 minimum
+  # tax floor vs ETMOD tin02_s (agreement zone; MAT findings 1-2
+  # dispositioned).
+  et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable:
+    description: Ethiopia business income tax payable (annual schedule with the Article 23 minimum-tax floor)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: business_income_tax_payable
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tin02_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia presumptive gross-receipts tax (Article 50 schedule under
+  # the Article 49 regime) vs ETMOD ttn_s - run live exact.
+  et:statutes/proc-1395-2025/income-tax-amendment-2025#presumptive_gross_receipts_tax:
+    description: Ethiopia presumptive gross-receipts tax (Article 50 schedule, Category B)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: presumptive_gross_receipts_tax
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: ttn_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia private-organization employee pension share (7%,
+  # Proclamation 715/2011 Article 10) vs ETMOD tscee_s.
+  et:statutes/proc-715-2011/private-organization-employees-pension#private_employee_pension_contribution:
+    description: Ethiopia private-organization employee pension contribution (7% of salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: private_employee_pension_contribution
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tscee_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia private-organization employer pension share (11%).
+  et:statutes/proc-715-2011/private-organization-employees-pension#private_employer_pension_contribution:
+    description: Ethiopia private-organization employer pension contribution (11% of salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: private_employer_pension_contribution
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tscer_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia military/police office pension rate (25%, Proclamation
+  # 714/2011 Article 11) vs ETMOD tscer_s at loc=0.
+  et:statutes/proc-714-2011/public-servants-pension#military_police_office_pension_contribution:
+    description: Ethiopia military and police office pension contribution (25% of salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: military_police_office_pension_contribution
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tscer_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia VAT on domestic electricity above the Directive
+  # 1021/2024 200 kWh monthly threshold vs ETMOD tva_s.
+  et:statutes/proc-1341-2024/value-added-tax-proclamation#electricity_vat:
+    description: Ethiopia VAT on domestic electricity above 200 kWh per month (15%)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: electricity_vat
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia VAT on domestic water above the 15 cubic-meter monthly
+  # threshold vs ETMOD tva_s.
+  et:statutes/proc-1341-2024/value-added-tax-proclamation#water_vat:
+    description: Ethiopia VAT on domestic water above 15 cubic meters per month (15%)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: water_vat
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: ET
+
+  # Ethiopia composed monthly disposable income vs ETMOD ils_dispy on
+  # the FULL grid (gross base verified in both engines - no shared-nil
+  # restriction).
+  et:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Ethiopia composed single-employee monthly disposable income (gross + benefits - income tax - employee pension)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [ET]
+    scope:
+      type: country
+      geoid: ET
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: ET
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: ET
+
+
+  # Rwanda Law 027/2022 schedules, Law 048/2023 rental, Law 049/2023
+  # VAT, Law 011/2025 excise rows and the RSSB contribution stack vs
+  # RWAMOD (rulespec-rw#1). The CBHI member premium mapping carries the
+  # 2026 gazetting timing finding in its suite description.
+  rw:statutes/law-2022-027/employment-income-tax#employment_income_tax:
+    description: Rwanda employment income tax (Law 027/2022 Article 56 Table 2 monthly schedule)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employment_income_tax
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tin_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2022-027/lump-sum-regime#lump_sum_tax:
+    description: Rwanda micro/small-enterprise lump-sum tax (Law 027/2022 flat table + 3% arm)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: lump_sum_tax
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: ttn_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2023-048/rental-income-tax#rental_income_tax:
+    description: Rwanda rental income tax (Law 048/2023 Articles 42-43)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: rental_income_tax
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tpr_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2023-049/value-added-tax#vat_amount:
+    description: Rwanda VAT standard rate (Law 049/2023 Article 4, 18%)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: vat_amount
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tva_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2025-011/excise-duty#premium_fuel_excise_duty:
+    description: Rwanda premium fuel excise (Law 011/2025 Annex item 17, FRW 183/litre)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: premium_fuel_excise_duty
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tex12_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2025-011/excise-duty#gas_oil_excise_duty:
+    description: Rwanda gas oil excise (Law 011/2025 Annex item 18, FRW 150/litre)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: gas_oil_excise_duty
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tex13_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2025-011/excise-duty#cigarette_excise_duty:
+    description: Rwanda cigarette compound excise (Law 011/2025 Annex item 13, 36% + FRW 230/pack)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: cigarette_excise_duty
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tex01_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:regulations/po-2024-086-01/pension-contribution-rate#employee_pension_contribution:
+    description: Rwanda employee pension contribution (PO 086/01 12% from 2025, halved per Law 05/2015 Article 8)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employee_pension_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceepi_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:regulations/po-2024-086-01/pension-contribution-rate#employer_pension_contribution:
+    description: Rwanda employer pension contribution (PO 086/01 12% from 2025, halved per Law 05/2015 Article 8)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employer_pension_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tscerpi_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2016-003/maternity-leave-contributions#employee_maternity_contribution:
+    description: Rwanda employee maternity contribution (Law 003/2016 Article 7, 0.3%)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employee_maternity_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceeml_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2016-003/maternity-leave-contributions#employer_maternity_contribution:
+    description: Rwanda employer maternity contribution (Law 003/2016 Article 7, 0.3%)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employer_maternity_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tscerml_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2001-24/rama-contributions#employee_rama_contribution:
+    description: Rwanda employee RAMA contribution (Law 24/2001 Article 44, 7.5% of basic salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employee_rama_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceehl_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2001-24/rama-contributions#employer_rama_contribution:
+    description: Rwanda employer RAMA contribution (Law 24/2001 Article 44, 7.5% of basic salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: employer_rama_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tscerhl_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2005-23/mmi-contributions#insured_mmi_contribution:
+    description: Rwanda insured MMI contribution (Law 23/2005 Article 30, 5% of basic salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: insured_mmi_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceehl01_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/law-2005-23/mmi-contributions#government_mmi_contribution:
+    description: Rwanda government MMI contribution (Law 23/2005 Article 30, 17.5% of basic salary)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: government_mmi_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tscerhl01_s
+        scope:
+          type: country
+          geoid: RW
+
+  rw:regulations/mo-2026-002-26-10-tc/cbhi-member-premiums#cbhi_member_paid_annual_contribution:
+    description: Rwanda CBHI member premium by IMIBEREHO level (MO 002/26/10/TC of 16/02/2026); period-shifted schedule check, Axiom at 2027 vs RWAMOD RW_2025 (timing finding)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: cbhi_member_paid_annual_contribution
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceehl02_s
+        scope:
+          type: country
+          geoid: RW
+
+
+  # Rwanda composed disposable income vs RWAMOD ils_dispy (full grid,
+  # no base divergence; formal private-sector worker).
+  rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income:
+    description: Rwanda composed worker disposable income (Table 2 tax + employee pension/maternity/CBHI-levy stack)
+    category: income
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: pilot_worker_disposable_income
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: ils_dispy
+        scope:
+          type: country
+          geoid: RW
+
+  rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy:
+    description: Rwanda CBHI employee levy (PM Order 105/03 Article 5, 0.5%) on the composed pipeline's net salary (formal private-sector worker)
+    category: contribution
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [RW]
+    scope:
+      type: country
+      geoid: RW
+    targets:
+      axiom:
+        name: pilot_worker_cbhi_levy
+        scope:
+          type: country
+          geoid: RW
+      euromod:
+        name: tsceehl03_s
+        scope:
+          type: country
+          geoid: RW
+
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief:
+    description: Ghana Fifth Schedule old-age personal relief (Act 896 para 1(c), Act 1007 amount)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: old_age_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta03_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#disability_personal_relief:
+    description: Ghana Fifth Schedule disability personal relief (Act 896 para 1(b), 25% of assessable income)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: disability_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta07_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief:
+    description: Ghana Fifth Schedule child-education personal relief (Act 896 para 1(d), 600 per child, max 3)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: child_education_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta05_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief:
+    description: Ghana Fifth Schedule aged-dependant-relative relief (Act 896 para 1(e), 1000 per relative, max 2)
+    category: tax
+    comparison: amount
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: aged_dependant_relative_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta06_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief:
+    description: Ghana Fifth Schedule dependent-spouse-or-children (marriage) relief (Act 896 para 1(a))
+    category: tax
+    comparison: amount
+    # Compared against GHAMOD tinta01_s (dependent-spouse limb). GHAMOD reports
+    # para 1(a) as tinta01_s (spouse) and tinta02_s (lone parent); tinta02_s
+    # returns 0 for every synthetic lone-parent household tried
+    # (ghamod_issues.json), so the spouse limb is the parity target.
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: dependant_spouse_or_children_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta01_s
+        scope:
+          type: country
+          geoid: GH
+
+  gh:statutes/act-896/income-tax-2015/fifth-schedule#training_personal_relief:
+    description: Ghana Fifth Schedule professional/vocational training relief (Act 896 para 1(f), capped at 2000)
+    category: tax
+    comparison: amount
+    # Mapped but not live-compared: GH_2025 does not model the training relief
+    # and emits no tinta04_s output column at all, so there is nothing to
+    # compare against (a missing column, not a zero). The gap is
+    # recorded in axiom_oracles/data/ghamod_issues.json; the encoded relief pays
+    # min(cost, 2000) and is exercised by the rulespec-gh companion tests.
+    tolerance: 1
+    priority: high
+    locales: [GH]
+    scope:
+      type: country
+      geoid: GH
+    targets:
+      axiom:
+        name: training_personal_relief
+        scope:
+          type: country
+          geoid: GH
+      euromod:
+        name: tinta04_s
+        scope:
+          type: country
+          geoid: GH

@@ -1,22 +1,39 @@
 """Validate state SNAP RuleSpec output against the SNAP QC administrative file.
 
-The USDA SNAP Quality Control (QC) public-use file is a monthly sample of
-active-case reviews. Each record carries the case's reported benefit
-(``RAWBEN``) and, more usefully as ground truth, ``FSBEN`` — the benefit that
-FNS/Mathematica *reconstruct* from the edited case inputs and the official
-fiscal-year parameters via the QC Minimodel. Because that reconstruction is a
-faithful re-run of the statutory benefit computation over clean inputs, it is a
-per-case oracle for a benefit engine: project the QC unit's income, size,
-shelter, utilities, deductions, and resources onto the RuleSpec composition's
-input surface, run the engine, and compare the regular monthly allotment and
-its intermediate stages against the QC constructed values.
+The USDA SNAP Quality Control (QC) public-use file is built from monthly samples
+of active-case reviews. Each record carries the benefit the review recorded as
+received (``RAWBEN``) and ``FSBEN``, the file's "final calculated benefit",
+which Mathematica computes for USDA from the edited case record and the fiscal
+year's parameters while building the file (FY 2024 tech doc editing Step 12 and
+the codebook; PDF p.32 and p.87 in the May 2026 posting, p.36 and p.91 in the
+August 2026 posting). The editing aims to make the constructed variables
+satisfy the benefit identities (net income is gross income less deductions; the
+benefit is the maximum allotment less 30 percent of net income, or the minimum
+benefit) and drops units with unresolved inconsistencies (May PDF p.18-19), so
+FSBEN is a per-case target for a benefit engine: project the QC unit's income, size, shelter,
+utilities, deductions, and resources onto the RuleSpec composition's input
+surface, run the engine, and compare the regular monthly allotment and its
+intermediate stages against the QC constructed values.
 
-This oracle validates the *benefit computation*, not eligibility screening. The
-public file already contains only complete, eligible, internally consistent
-reviews, so work-registration, student, SSN, and citizenship member facts stay
-at the composition test template's passing defaults; the replay exercises the
-income -> deduction -> net-income -> allotment arithmetic, which is what the QC
-constructed intermediates let us check stage by stage.
+FSBEN need not equal the benefit on the case record. Editing Step 13 keeps a
+deduction adjustment only when it meets that step's conditions: a calculated
+benefit within $5 of the raw benefit (error-adjusted when the reviewer recorded
+an error), or, in the utility step (13c) for a unit with no recorded payment
+error, a calculated shelter deduction within $5 of the raw one, or a New York
+unit coded as using the HCSUA whose utilities equal it (May PDF p.32-33).
+Step 14 drops only calculated benefits under $1. In the FY 2024 file, FSBEN is
+within $5 of the issued benefit (``RAWBEN``) for 556 of 856 Colorado units and
+of the reviewer-corrected benefit (``BENFIX``) for 797. A match here means
+Axiom reproduces Mathematica's calculation from the edited inputs
+(docs/snap-qc-oracle-playbook.md, sections 2 and 3).
+
+This oracle validates the *benefit computation*; eligibility screening is out
+of scope. The public file keeps only completed reviews of eligible units that
+passed the editing consistency checks, so work-registration, student, SSN, and
+citizenship member facts stay at the composition test template's passing
+defaults; the replay exercises the income -> deduction -> net-income ->
+allotment arithmetic, which is what the QC constructed intermediates let us
+check stage by stage.
 
 The FY 2024 evaluation runs through a compile-time overlay
 (:mod:`axiom_oracles.bridges.rulespec_overlay`) because the rulespec-us monorepo
@@ -220,9 +237,9 @@ class QcJurisdiction:
     child_support_convention: str = "deduction"
     #: Compared-label output ids that replace the ``base`` config's for the QC
     #: replay only (applied before the overlay rewrite). New York uses this to
-    #: score the 273.10 regulatory chain — the whole-dollar computation FNS
-    #: applies — instead of the composition's statutory-chain surface; see the
-    #: us-ny entry.
+    #: score the 273.10 regulatory chain, which computes in whole dollars as the
+    #: QC file's constructed values do, instead of the composition's
+    #: statutory-chain surface; see the us-ny entry.
     output_id_overrides: Mapping[str, str] = field(default_factory=dict)
 
 
@@ -281,10 +298,11 @@ QC_JURISDICTIONS = {
             "telephone_standard_allowance_amount": ("telephone", "rest_of_state"),
         },
         child_support_convention="deduction",
-        # The composition's statutory 2014(e)/2017(a) chain carries cents;
-        # FNS's Minimodel — and New York's own system (QC tech doc footnote
-        # 20) — compute in whole dollars under the 273.10(e)(1)(ii)(A)
-        # election. Since TheAxiomFoundation/rulespec-us#836 the composition
+        # The composition's statutory 2014(e)/2017(a) chain carries cents,
+        # while the QC file records only whole-dollar amounts (FY 2024 tech doc
+        # Table F.3 note a, PDF p.180) and the encoded 273.10 chain computes in
+        # whole dollars under the 273.10(e)(1)(ii)(A) election. Since
+        # TheAxiomFoundation/rulespec-us#836 the composition
         # exposes the issued benefit on the encoded 273.10 chain as
         # snap_benefit (binding the chain's shelter input to New York's
         # 387.12(f)(3)(vi) allowable shelter costs), so the headline compares
@@ -425,7 +443,9 @@ class _Label:
 #: Compared labels in the contract's stage order: the first stage whose axiom
 #: value diverges from the QC value localizes a mismatch. ``expected_attr`` is a
 #: ``QcExpected`` attribute, or ``None`` for the maximum allotment (checked
-#: against the FY 2024 table by size, which the QC file does not store directly).
+#: against the FY 2024 table by certified size; the file's ``BENMAX`` is not
+#: read, and it equals this table for every in-scope FY 2024 unit in the six
+#: replayed states).
 #: The earned-income, medical, dependent-care, and child-support deductions are
 #: not separately bound axiom outputs, so a divergence there first surfaces at
 #: the standard-deduction, shelter-deduction, or net-income stage.
@@ -568,8 +588,8 @@ def map_qc_unit(
 
     dependent_care = _money(getattr(unit, "dependent_care_expense", 0) or 0)
 
-    # Child support: feed the deduction FNS actually applied (FSCSDED), not
-    # the reported payment (FSCSEXP). The two match wherever a payment was
+    # Child support: feed the file's constructed deduction (FSCSDED) in place
+    # of the reported payment (FSCSEXP). The two match wherever a payment was
     # allowed, but the file carries rows whose reported payment was not
     # allowed as a deduction (FSCSDED = 0), and the applied amount is what
     # enters FSTOTDED — the same applied-amount convention the medical feed
@@ -579,7 +599,7 @@ def map_qc_unit(
         or 0
     )
 
-    # Reconstruct the medical deduction FNS actually applied. FSMEDDED equals
+    # Reconstruct the file's calculated medical deduction. FSMEDDED equals
     # the excess FSMEDEXP in ordinary states, but in standard-medical-deduction
     # demonstration states it is a flat standard that differs from the excess
     # (10 FY2024 rows nationally), so the applied deduction — not the
@@ -609,9 +629,9 @@ def map_qc_unit(
     # non-participants whose income counts but whose age or disability does
     # not confer unit status, so a member-derived OR can overstate it (one
     # real Colorado row: a disabled non-participant made the unit look
-    # uncapped for shelter while FNS applied the cap). The engine only
-    # consumes any-member-is-elderly-or-disabled, so the unit flag rides on
-    # the first member.
+    # uncapped for shelter while the file's FSSLTDED applied the cap). The
+    # engine only consumes any-member-is-elderly-or-disabled, so the unit
+    # flag rides on the first member.
     unit_ed = getattr(unit, "unit_has_elderly_or_disabled", None)
 
     member_inputs: list[dict[str, Any]] = []
@@ -1185,6 +1205,22 @@ def _output_id_by_label(
     base_ids.update(config.output_id_overrides)
     pre_rewrite = {label.label: base_ids[label.label] for label in _LABELS}
     return rewrite_output_ids(pre_rewrite, module_id_rewrites)
+
+
+def stage_concepts(jurisdiction: str) -> dict[str, str]:
+    """Stage -> the concept id a ``jurisdiction`` replay compares it under.
+
+    In stage order, overlay-rewritten exactly as ``run_snap_qc_comparison``
+    rewrites them: the ids its report lists under ``concepts`` (and under
+    ``aggregates`` for each stage compared at least once). Needs no engine,
+    rulespec-us checkout, or QC file, so a gate can require every stage
+    without running the replay.
+    """
+    config = QC_JURISDICTIONS[jurisdiction]
+    by_label = _output_id_by_label(
+        config, load_overlay_spec(config.overlay).module_id_rewrites
+    )
+    return {label.stage: by_label[label.label] for label in _LABELS}
 
 
 # --------------------------------------------------------------------------- #

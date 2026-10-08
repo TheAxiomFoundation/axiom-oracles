@@ -1,0 +1,1398 @@
+"""Contract and mutant tests for the all-pending DE closure ledgers.
+
+The DE discovery producer deliberately does not disposition law.  Facts come
+from pinned corpus, RuleSpec, certificate, and discovery-snapshot bytes;
+absence of a committed decision derives a pending row.  These tests keep the
+two axes separate: a leaf may already be known to be ``law_derived`` while its
+workflow status remains ``pending``.
+"""
+
+from __future__ import annotations
+
+import copy
+import importlib.util
+import json
+import socket
+import sys
+import urllib.request
+from pathlib import Path
+
+import pytest
+import yaml
+
+
+REPO_ROOT = Path(__file__).parents[1]
+SCRIPT = REPO_ROOT / "scripts" / "de_closure_ledger.py"
+REFRESH_SCRIPT = REPO_ROOT / "scripts" / "refresh_de_instrument_graph.py"
+SNAPSHOT = REPO_ROOT / "conformance" / "closure" / "de-instrument-graph.json"
+PROGRAMS = (
+    "de/kindergeld",
+    "de/unterhaltsvorschuss",
+    "de/rv-employee-contribution",
+)
+KINDERGELD_LAW_DERIVED = {
+    "claimant_entitlement",
+    "qualifying_child_count",
+    "recipient_priority",
+    "substitute_child_benefit_exclusion",
+}
+EXPECTED_SPINE_COUNTS = {
+    "de/kindergeld": 18,
+    "de/unterhaltsvorschuss": 12,
+    "de/rv-employee-contribution": 3,
+}
+EXPECTED_LEAVES = {
+    "de/kindergeld": {
+        "child_allowances_under_sections_31_and_32_6_1_are_increased",
+        "claimant_entitlement",
+        "correspondingly_increased_kindergeld_amount",
+        "month_is_on_or_after_first_qualifying_month",
+        "month_is_on_or_before_last_qualifying_month",
+        "qualifying_child_count",
+        "recipient_priority",
+        "substitute_child_benefit_exclusion",
+    },
+    "de/unterhaltsvorschuss": {
+        "child_allowances_under_sections_31_and_32_6_1_are_increased",
+        "child_is_in_first_age_stage_under_section_1612a",
+        "child_is_in_second_age_stage_under_section_1612a",
+        "child_is_in_third_age_stage_under_section_1612a",
+        "correspondingly_increased_kindergeld_amount",
+        "first_child_kindergeld",
+        "minimum_maintenance_for_age_stage",
+        "month_is_on_or_after_first_qualifying_month",
+        "month_is_on_or_before_last_qualifying_month",
+    },
+    "de/rv-employee-contribution": {"total_pension_insurance_contribution"},
+}
+EXPECTED_MEASURED = {
+    "de/kindergeld": (18, 492, 8, 1, 0, 0),
+    "de/unterhaltsvorschuss": (12, 23, 0, 2, 2, 1),
+    "de/rv-employee-contribution": (3, 11, 0, 1, 2, 1),
+}
+
+
+def _load_script():
+    spec = importlib.util.spec_from_file_location("de_closure_ledger_test", SCRIPT)
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _load_refresh_script():
+    spec = importlib.util.spec_from_file_location(
+        "refresh_de_instrument_graph_test", REFRESH_SCRIPT
+    )
+    assert spec is not None and spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def _artifact_items(module) -> list[tuple[str, Path]]:
+    paths = module.ARTIFACT_PATHS
+    assert isinstance(paths, dict)
+    assert set(paths) == set(PROGRAMS)
+    return [(program, Path(paths[program])) for program in PROGRAMS]
+
+
+def _document(module, path: Path) -> dict:
+    document = module.load_document(path)
+    assert isinstance(document, dict)
+    return document
+
+
+def _write_document(path: Path, document: dict) -> None:
+    path.write_text(yaml.safe_dump(document, sort_keys=False, allow_unicode=True))
+
+
+def _assert_strict_count(value: object) -> None:
+    assert isinstance(value, int)
+    assert not isinstance(value, bool)
+    assert value >= 0
+
+
+def _committed_ledger_git_only(module):
+    original_run = module.subprocess.run
+    allowed_specs = {
+        f"HEAD:conformance/closure/de-{program.removeprefix('de/').replace('/', '-')}.yaml"
+        for program in PROGRAMS
+    }
+
+    def run(argv, *args, **kwargs):
+        assert argv[:4] == ["git", "-C", str(REPO_ROOT), "show"]
+        assert len(argv) == 5 and argv[4] in allowed_specs
+        assert kwargs["env"]["GIT_NO_LAZY_FETCH"] == "1"
+        assert kwargs["env"]["GIT_TERMINAL_PROMPT"] == "0"
+        assert not any(
+            str(value).startswith(("http://", "https://")) for value in argv
+        )
+        return original_run(argv, *args, **kwargs)
+
+    return run
+
+
+@pytest.fixture(scope="module")
+def refresh_corpus():
+    refresh = _load_refresh_script()
+    root = refresh._configured_corpus_root()
+    if not root.is_dir():
+        pytest.skip(
+            f"DE corpus re-verification skipped: missing corpus root {root}; "
+            f"set {refresh.CORPUS_ROOT_ENV} or use --corpus-root"
+        )
+    source, _source_raw = refresh._read_json(
+        refresh.DEFAULT_SOURCE, refresh.SOURCE_SCHEMA
+    )
+    resolved = refresh._resolve_corpus_root(root)
+    return refresh, refresh._load_corpus(resolved, source), resolved
+
+
+def test_public_api_and_three_artifact_paths() -> None:
+    module = _load_script()
+    assert callable(module.load_document)
+    assert callable(module.validate_artifact)
+    assert callable(module.verify_artifact)
+    assert callable(module.main)
+    for _, path in _artifact_items(module):
+        assert path.is_file(), path
+
+
+def test_committed_snapshot_receipts_and_pending_frontiers_are_valid() -> None:
+    refresh = _load_refresh_script()
+    snapshot = json.loads(SNAPSHOT.read_bytes())
+    refresh.validate_snapshot(snapshot)
+    assert snapshot["channels"]["corpus_release"]["scanned_row_count"] == 7637
+    subject = snapshot["channels"]["subject_matter_search"]
+    row_states = {row["state"] for row in subject["attempts"]}
+    # The channel aggregate must be derived from its rows, never pinned:
+    # retrieved rows carry a sha256 receipt, unretrieved rows carry the
+    # actual error, and nothing else is a legal row state.
+    assert row_states <= {"retrieved", "unretrieved"}
+    expected_state = (
+        "retrieved"
+        if row_states == {"retrieved"}
+        else "unretrieved"
+        if row_states == {"unretrieved"}
+        else "partial"
+    )
+    assert subject["state"] == expected_state
+    for row in subject["attempts"]:
+        if row["state"] == "retrieved":
+            assert (
+                isinstance(row.get("content_sha256"), str)
+                and len(row["content_sha256"]) == 64
+            )
+            assert isinstance(row.get("byte_count"), int) and row["byte_count"] > 0
+        else:
+            assert row.get("reason")
+    assert snapshot["channels"]["citation_scan"]["state"] == "not_yet_available"
+    assert snapshot["channels"]["citation_scan"]["issue"] == "axiom-corpus#611"
+    assert all(
+        instrument["status"] == "pending"
+        for program in snapshot["programs"]
+        for instrument in program["instruments"]
+    )
+    kindergeld = next(
+        row for row in snapshot["programs"] if row["id"] == "de/kindergeld"
+    )
+    assert [row["id"] for row in kindergeld["seed_bindings"]] == [
+        f"de-kg-instr-{number:03d}" for number in range(1, 6)
+    ]
+    assert all(row["status"] == "pending" for row in kindergeld["seed_bindings"])
+
+
+def test_global_corpus_extraction_index_measures_every_pinned_row() -> None:
+    refresh = _load_refresh_script()
+    snapshot = json.loads(SNAPSHOT.read_bytes())
+    index = snapshot["channels"]["corpus_release"]["global_extraction_index"]
+
+    refresh._validate_global_extraction_index(index, scanned_row_count=7637)
+    assert index["row_count"] == index["mapped_row_count"] == 7637
+    assert index["body_row_count"] == 7588
+    assert index["unmapped_row_count"] == 0
+    assert index["act_count"] == len(index["acts"]) == 76
+    assert index["mechanism_counts"] == {
+        "amendment_targets": 38,
+        "explicit_cross_reference_body": 4766,
+        "law_metadata_changed_by": 23,
+        "law_metadata_fundstelle": 29,
+    }
+    assert all(
+        fact.get("target_citation_path") != act["document_citation_path"]
+        for act in index["acts"]
+        for fact in act["findings"]
+    )
+    estg = next(
+        row
+        for row in index["acts"]
+        if row["document_citation_path"] == "de/statute/estg"
+    )
+    assert not any(
+        fact.get("source_citation_path") == "de/statute/estg"
+        and fact.get("matched_text") == "Einkommensteuergesetz"
+        for fact in estg["findings"]
+    )
+    self_name_pairs = {
+        (
+            "de/regulation/bgbl-2024-i-312/rbsfv-2025/document-1",
+            "Regelbedarfsstufen-Fortschreibungsverordnung",
+        ),
+        (
+            "de/statute/bgbl-2024-i-449/steuerfortentwicklungsgesetz/document-1",
+            "Steuerfortentwicklungsgesetz",
+        ),
+    }
+    assert not any(
+        (fact.get("source_citation_path"), fact.get("matched_text"))
+        in self_name_pairs
+        for act in index["acts"]
+        for fact in act["findings"]
+    )
+    alg_ii = next(
+        row
+        for row in index["acts"]
+        if row["document_citation_path"] == "de/regulation/algiiv-2008"
+    )
+    infection_protection = next(
+        fact
+        for fact in alg_ii["findings"]
+        if fact.get("matched_text") == "Infektionsschutzgesetzes"
+    )
+    assert infection_protection["source_citation_path"] == (
+        "de/regulation/algiiv-2008/1"
+    )
+    assert infection_protection["unresolved_identity"] == (
+        "named-instrument:infektionsschutzgesetzes"
+    )
+
+
+def test_global_corpus_index_drift_is_rejected_after_receipts_are_reforged(
+    refresh_corpus,
+) -> None:
+    refresh, corpus, _root = refresh_corpus
+    snapshot = json.loads(SNAPSHOT.read_bytes())
+    channel = snapshot["channels"]["corpus_release"]
+    index = channel["global_extraction_index"]
+    act = next(row for row in index["acts"] if row["findings"])
+    removed = act["findings"].pop()
+    mechanism = removed["mechanism"]
+    act["mechanism_counts"][mechanism] -= 1
+    act["findings_sha256"] = refresh._sha(
+        refresh._canonical_bytes({"findings": act["findings"]})
+    )
+    index["mechanism_counts"][mechanism] -= 1
+    stored_findings = sorted(
+        [fact for row in index["acts"] for fact in row["findings"]],
+        key=lambda fact: refresh._canonical_bytes(fact),
+    )
+    index["canonical_index_sha256"] = refresh._sha(
+        refresh._canonical_bytes({"findings": stored_findings})
+    )
+    index["per_act_sha256"] = refresh._sha(
+        refresh._canonical_bytes({"acts": index["acts"]})
+    )
+    channel["global_extraction_index"] = refresh._add_receipt(index)
+    snapshot["channels"]["corpus_release"] = refresh._add_receipt(channel)
+    kindergeld = next(
+        row for row in snapshot["programs"] if row["id"] == "de/kindergeld"
+    )
+    seed = next(row for row in kindergeld["seed_bindings"] if row["id"] == "de-kg-instr-005")
+    seed["receipts"]["corpus_release"] = snapshot["channels"]["corpus_release"][
+        "receipt_sha256"
+    ]
+    snapshot = refresh._add_receipt(snapshot)
+
+    refresh.validate_snapshot(snapshot)
+    with pytest.raises(
+        refresh.CaptureError, match="global corpus extraction index does not rederive"
+    ):
+        refresh.validate_snapshot(snapshot, corpus=corpus)
+
+
+def test_snapshot_check_is_committed_byte_only(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    refresh = _load_refresh_script()
+
+    def no_network(*_args, **_kwargs):
+        raise AssertionError("DE snapshot --check-snapshot attempted network access")
+
+    monkeypatch.setattr(refresh.urllib.request, "urlopen", no_network)
+    monkeypatch.setattr(socket, "socket", no_network)
+    monkeypatch.setattr(socket, "create_connection", no_network)
+    monkeypatch.setattr(refresh.subprocess, "run", no_network)
+    monkeypatch.setattr(refresh, "_load_corpus", no_network)
+    missing = tmp_path / "no-corpus-here"
+    monkeypatch.setenv(refresh.CORPUS_ROOT_ENV, str(missing))
+    assert refresh.main(
+        ["--check-snapshot", "--corpus-root", str(missing)]
+    ) == 0
+
+
+def test_corpus_root_resolution_precedence_and_missing_error(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    refresh = _load_refresh_script()
+    from_flag = tmp_path / "from-flag"
+    from_env = tmp_path / "from-env"
+    monkeypatch.setenv(refresh.CORPUS_ROOT_ENV, str(from_env))
+
+    assert refresh._configured_corpus_root(from_flag) == from_flag.resolve()
+    assert refresh._configured_corpus_root() == from_env.resolve()
+    with pytest.raises(refresh.CaptureError) as excinfo:
+        refresh._resolve_corpus_root(from_flag)
+    message = str(excinfo.value)
+    assert "--corpus-root" in message
+    assert refresh.CORPUS_ROOT_ENV in message
+
+
+def test_refresh_script_never_invokes_axiom_locate() -> None:
+    assert "axiom-locate" not in REFRESH_SCRIPT.read_text()
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    (
+        "channel_receipt",
+        "unknown_discovery_ref",
+        "duplicate_id",
+        "nonpending",
+        "source_binding",
+        "duplicate_evidence",
+        "subject_state",
+    ),
+)
+def test_snapshot_mutants_are_rejected(mutation: str) -> None:
+    refresh = _load_refresh_script()
+    snapshot = json.loads(SNAPSHOT.read_bytes())
+    if mutation == "channel_receipt":
+        snapshot["channels"]["citation_scan"]["reason"] += " forged"
+    elif mutation == "unknown_discovery_ref":
+        snapshot["programs"][0]["instruments"][0]["discovery_refs"] = [
+            "not-a-captured-row"
+        ]
+        snapshot = refresh._add_receipt(snapshot)
+    elif mutation == "duplicate_id":
+        instruments = snapshot["programs"][0]["instruments"]
+        instruments[1]["id"] = instruments[0]["id"]
+        instruments.sort(key=lambda row: row["id"])
+        snapshot = refresh._add_receipt(snapshot)
+    elif mutation == "nonpending":
+        snapshot["programs"][0]["instruments"][0]["status"] = "encoded"
+        snapshot = refresh._add_receipt(snapshot)
+    elif mutation == "source_binding":
+        snapshot["source"]["sha256"] = "0" * 64
+        snapshot = refresh._add_receipt(snapshot)
+    elif mutation == "duplicate_evidence":
+        channel = snapshot["channels"]["corpus_release"]
+        channel["evidence"].append(copy.deepcopy(channel["evidence"][0]))
+        snapshot["channels"]["corpus_release"] = refresh._add_receipt(channel)
+        snapshot = refresh._add_receipt(snapshot)
+    else:
+        channel = snapshot["channels"]["subject_matter_search"]
+        channel["state"] = "retrieved"
+        snapshot["channels"]["subject_matter_search"] = refresh._add_receipt(channel)
+        snapshot = refresh._add_receipt(snapshot)
+
+    with pytest.raises(refresh.CaptureError):
+        refresh.validate_snapshot(snapshot)
+
+
+@pytest.mark.parametrize("program", PROGRAMS)
+def test_committed_ledgers_are_valid_and_open(program: str) -> None:
+    module = _load_script()
+    path = Path(module.ARTIFACT_PATHS[program])
+    document = _document(module, path)
+    summary = module.validate_artifact(document)
+
+    assert document["schema"] == "axiom_oracles.closure.ledger.v3"
+    assert document["program"]["id"] == program
+    assert isinstance(document["computed"]["closed"], bool)
+    assert document["computed"]["closed"] is False
+    assert summary.closed is False
+
+
+@pytest.mark.parametrize("program", PROGRAMS)
+def test_counts_lists_and_decisions_agree(program: str) -> None:
+    """Counts are strict integers that agree with the row statuses; every
+    non-pending row is backed by a committed decision that binds it."""
+
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS[program]))
+    computed = document["computed"]
+    decisions = document["committed_decisions"]
+
+    ledger = computed["ledger"]
+    provision_counts = computed["provision_counts"]
+    for value in provision_counts.values():
+        _assert_strict_count(value)
+    assert provision_counts["total"] == len(ledger) == EXPECTED_SPINE_COUNTS[program]
+    for status in ("encoded", "partially-encoded", "classified-with-reason", "excluded-with-reason", "pending"):
+        assert provision_counts[status] == sum(1 for row in ledger if row["status"] == status)
+    assert computed["pending"] == [row["citation_path"] for row in ledger if row["status"] == "pending"]
+    assert {row["citation_path"] for row in ledger if row["status"] != "pending"} == {
+        row["citation_path"] for row in decisions["provisions"]
+    }
+
+    frontier = computed["instrument_frontier"]
+    instrument_ledger = frontier["ledger"]
+    instrument_counts = frontier["counts"]
+    for value in instrument_counts.values():
+        _assert_strict_count(value)
+    assert instrument_counts["total"] == len(instrument_ledger)
+    for status in ("encoded", "classified-with-reason", "excluded-with-reason", "pending"):
+        assert instrument_counts[status] == sum(1 for row in instrument_ledger if row["status"] == status)
+    assert frontier["pending"] == [row["id"] for row in instrument_ledger if row["status"] == "pending"]
+    decided = {row["id"]: row for row in decisions["instrument_dispositions"]}
+    # Decided supplemental rows live in their own section and join the
+    # frontier ledger with the same status/reason/text binding.
+    decided.update(
+        {row["id"]: row for row in decisions["supplemental_instruments"] if row["status"] != "pending"}
+    )
+    assert {row["id"] for row in instrument_ledger if row["status"] != "pending"} == set(decided)
+    for row in instrument_ledger:
+        if row["status"] != "pending":
+            assert row["reason"] == decided[row["id"]]["reason"]
+            # Unresolved references and act-level rows without a captured body
+            # carry no body_sha256 on either side.
+            assert row.get("body_sha256") == decided[row["id"]].get("body_sha256")
+    assert frontier["complete"] is (bool(instrument_ledger) and not frontier["pending"])
+    assert computed["closed"] is False
+
+
+@pytest.mark.parametrize("program", PROGRAMS)
+def test_leaf_frontier_is_explicit_typed_and_pending(program: str) -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS[program]))
+    leaves = document["generated_facts"]["leaf_frontier"]
+    assert leaves
+    assert all(row["status"] == "pending" for row in leaves)
+    assert {row["leaf_kind"] for row in leaves} <= {
+        "law_derived",
+        "unclassified",
+    }
+    assert {row["input"] for row in leaves} == EXPECTED_LEAVES[program]
+
+    law_derived = {
+        row["input"] for row in leaves if row["leaf_kind"] == "law_derived"
+    }
+    if program == "de/kindergeld":
+        assert law_derived == KINDERGELD_LAW_DERIVED
+    else:
+        assert law_derived == set()
+    assert all(
+        row["leaf_kind"] == "unclassified"
+        for row in leaves
+        if row["input"] not in law_derived
+    )
+
+    boundary = document["computed"]["boundary_frontier"]
+    assert boundary["input_count"] == len(leaves)
+    assert boundary["pending_count"] == len(boundary["pending"])
+    if program == "de/kindergeld":
+        # The four source-typed law-derived leaves cannot be classified in the
+        # ledger and stay pending; the four module inputs carry committed
+        # law_derived classifications and remain open dependencies below.
+        assert set(boundary["pending"]) == KINDERGELD_LAW_DERIVED
+        assert set(dependency_inputs := document["computed"]["dependency_closure"]["law_derived_inputs"]) == EXPECTED_LEAVES[program]
+        assert len(dependency_inputs) == len(leaves)
+        # Every leaf is typed, so the boundary is complete; the eight
+        # law-derived leaves keep dependency closure (below) open.
+        assert boundary["complete"] is True
+    else:
+        assert boundary["pending_count"] == len(leaves)
+        assert boundary["complete"] is False
+
+    dependency = document["computed"]["dependency_closure"]
+    for key in (
+        "open_dependency_count",
+        "law_derived_input_count",
+        "unclassified_input_count",
+        "instruments_bearing_on_computed_count",
+    ):
+        _assert_strict_count(dependency[key])
+    assert dependency["law_derived_input_count"] == len(
+        dependency["law_derived_inputs"]
+    )
+    assert dependency["unclassified_input_count"] == len(
+        dependency["unclassified_inputs"]
+    )
+    assert dependency["instruments_bearing_on_computed_count"] == len(
+        dependency["instruments_bearing_on_computed"]
+    )
+    assert dependency["open_dependency_count"] == (
+        len(dependency["law_derived_inputs"])
+        + len(dependency["unclassified_inputs"])
+        + len(dependency["instruments_bearing_on_computed"])
+    )
+    assert dependency["closed"] is False
+
+
+@pytest.mark.parametrize("program", PROGRAMS)
+def test_measured_denominators_are_scalar_and_rederived(program: str) -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS[program]))
+    measured = document["computed"]["measured_denominators"]
+    assert set(measured) == {
+        "spine_rows",
+        "bearing_candidate_instruments",
+        "law_derived_leaf_nodes",
+        "max_depth_estimate",
+        "remaining_oracle_work",
+        "remaining_executable_work",
+    }
+    for value in measured.values():
+        _assert_strict_count(value)
+    assert measured["spine_rows"] == len(document["computed"]["ledger"])
+    assert measured["bearing_candidate_instruments"] == len(
+        document["computed"]["instrument_frontier"]["ledger"]
+    )
+    assert measured["law_derived_leaf_nodes"] == len(
+        document["computed"]["dependency_closure"]["law_derived_inputs"]
+    )
+    assert tuple(measured[key] for key in (
+        "spine_rows",
+        "bearing_candidate_instruments",
+        "law_derived_leaf_nodes",
+        "max_depth_estimate",
+        "remaining_oracle_work",
+        "remaining_executable_work",
+    )) == EXPECTED_MEASURED[program]
+
+
+@pytest.mark.parametrize("mutation", ("candidate_count", "duplicate_leaf_id"))
+def test_generated_fact_shape_mutants_are_rejected(mutation: str) -> None:
+    module = _load_script()
+    document = copy.deepcopy(
+        _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    )
+    generated = document["generated_facts"]
+    if mutation == "candidate_count":
+        generated["instrument_graph"]["candidate_count"] = 0
+    else:
+        generated["leaf_frontier"][1]["id"] = generated["leaf_frontier"][0]["id"]
+        document["computed"] = module._computed(
+            generated["provision_spine"],
+            generated["leaf_frontier"],
+            generated["instrument_graph"],
+            generated["measurement_basis"],
+        )
+
+    with pytest.raises(ValueError):
+        module.validate_artifact(document)
+
+
+@pytest.mark.parametrize("program", PROGRAMS)
+def test_forged_complete_instrument_frontier_is_rejected(program: str) -> None:
+    module = _load_script()
+    document = copy.deepcopy(
+        _document(module, Path(module.ARTIFACT_PATHS[program]))
+    )
+    frontier = document["computed"]["instrument_frontier"]
+    frontier["pending"] = []
+    frontier["counts"]["pending"] = 0
+    frontier["complete"] = True
+    document["computed"]["closed"] = True
+
+    with pytest.raises(ValueError):
+        module.validate_artifact(document)
+
+
+@pytest.mark.parametrize(
+    "count_path",
+    (
+        ("provision_counts", "pending"),
+        ("instrument_frontier", "counts", "pending"),
+        ("dependency_closure", "open_dependency_count"),
+        ("measured_denominators", "spine_rows"),
+        ("measured_denominators", "law_derived_leaf_nodes"),
+        ("measured_denominators", "remaining_oracle_work"),
+        ("measured_denominators", "remaining_executable_work"),
+    ),
+)
+def test_boolean_is_never_accepted_as_an_integer_count(
+    count_path: tuple[str, ...],
+) -> None:
+    module = _load_script()
+    document = copy.deepcopy(
+        _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    )
+    target = document["computed"]
+    for key in count_path[:-1]:
+        target = target[key]
+    target[count_path[-1]] = False
+
+    with pytest.raises(ValueError):
+        module.validate_artifact(document)
+
+
+def test_bare_closed_true_dependency_block_is_rejected() -> None:
+    module = _load_script()
+    document = copy.deepcopy(
+        _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    )
+    document["computed"]["dependency_closure"] = {"closed": True}
+    document["computed"]["closed"] = True
+
+    with pytest.raises(ValueError):
+        module.validate_artifact(document)
+
+
+def test_hand_flipped_top_level_closed_true_is_rejected() -> None:
+    module = _load_script()
+    document = copy.deepcopy(
+        _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    )
+    document["computed"]["closed"] = True
+
+    with pytest.raises(ValueError):
+        module.validate_artifact(document)
+
+
+@pytest.mark.parametrize(
+    "generated_mutation",
+    ("corpus_spine", "snapshot_receipt"),
+)
+def test_full_verifier_rejects_coordinated_generated_fact_mutation(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    generated_mutation: str,
+) -> None:
+    """Purely well-shaped generated facts still have to reproduce from sources."""
+
+    module = _load_script()
+    original_path = Path(module.ARTIFACT_PATHS["de/kindergeld"])
+    document = copy.deepcopy(_document(module, original_path))
+    if generated_mutation == "corpus_spine":
+        document["generated_facts"]["provision_spine"][0]["body_sha256"] = (
+            "0" * 64
+        )
+    else:
+        document["generated_facts"]["instrument_graph"]["snapshot_sha256"] = (
+            "0" * 64
+        )
+    generated = document["generated_facts"]
+    document["computed"] = module._computed(
+        generated["provision_spine"],
+        generated["leaf_frontier"],
+        generated["instrument_graph"],
+        generated["measurement_basis"],
+        document["committed_decisions"],
+    )
+    mutant = tmp_path / f"{generated_mutation}.yaml"
+    _write_document(mutant, document)
+    module.ARTIFACT_PATHS["de/kindergeld"] = mutant
+
+    monkeypatch.setattr(
+        module.subprocess, "run", _committed_ledger_git_only(module)
+    )
+
+    result = module.verify_artifact(artifact_path=mutant)
+    assert result.valid is False
+    assert result.errors == ("committed artifact differs from hermetic rederivation",)
+
+
+@pytest.mark.parametrize("program", PROGRAMS)
+def test_full_verifier_accepts_each_committed_artifact(
+    program: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    module = _load_script()
+
+    monkeypatch.setattr(
+        module.subprocess, "run", _committed_ledger_git_only(module)
+    )
+    result = module.verify_artifact(
+        artifact_path=Path(module.ARTIFACT_PATHS[program])
+    )
+    assert result.valid is True, result.errors
+
+
+def test_live_corpus_reverification_rejects_a_forged_spine_receipt(
+    tmp_path: Path,
+    refresh_corpus,
+) -> None:
+    _refresh, _corpus, corpus_root = refresh_corpus
+    module = _load_script()
+    original_path = Path(module.ARTIFACT_PATHS["de/kindergeld"])
+    document = copy.deepcopy(_document(module, original_path))
+    document["generated_facts"]["provision_spine"][-1]["body_sha256"] = "0" * 64
+    generated = document["generated_facts"]
+    # Join with the committed (canonical) decisions so the only defect the
+    # verifier can find is the forged spine receipt against the corpus.
+    document["computed"] = module._computed(
+        generated["provision_spine"],
+        generated["leaf_frontier"],
+        generated["instrument_graph"],
+        generated["measurement_basis"],
+        document["committed_decisions"],
+    )
+    mutant = tmp_path / "live-corpus-spine.yaml"
+    _write_document(mutant, document)
+    module.ARTIFACT_PATHS["de/kindergeld"] = mutant
+
+    result = module.verify_artifact(
+        artifact_path=mutant,
+        corpus_root=corpus_root,
+        verify_corpus=True,
+    )
+    assert result.valid is False
+    assert any(
+        "corpus blob re-verification differs" in error for error in result.errors
+    )
+
+
+def test_verify_corpus_flag_requires_a_present_checkout(
+    tmp_path: Path,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    module = _load_script()
+    missing_root = tmp_path / "missing-required-corpus"
+
+    assert module.main(
+        [
+            "--check",
+            "--artifact",
+            "de/kindergeld",
+            "--verify-corpus",
+            "--corpus-root",
+            str(missing_root),
+        ]
+    ) == 1
+    error = capsys.readouterr().err
+    assert "--verify-corpus requires" in error
+    assert "--corpus-root" in error
+    assert module.CORPUS_ROOT_ENV in error
+
+
+def test_check_is_hermetic_for_all_and_each_artifact(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+) -> None:
+    module = _load_script()
+
+    def no_network(*_args, **_kwargs):
+        raise AssertionError("DE ledger --check attempted network access")
+
+    monkeypatch.setattr(urllib.request, "urlopen", no_network)
+    monkeypatch.setattr(socket, "create_connection", no_network)
+    monkeypatch.setattr(socket, "socket", no_network)
+
+    monkeypatch.setattr(
+        module.subprocess, "run", _committed_ledger_git_only(module)
+    )
+    missing_root = tmp_path / "missing-de-corpus"
+    monkeypatch.setenv(module.CORPUS_ROOT_ENV, str(missing_root))
+
+    assert module.main(["--check", "--artifact", "all"]) == 0
+    for _, path in _artifact_items(module):
+        assert module.main(["--check", "--artifact", str(path)]) == 0
+    note = capsys.readouterr().err
+    assert "DE closure NOTE:" in note
+    assert str(missing_root) in note
+    assert "committed bytes remain binding" in note
+    assert "no-op clean" in note
+
+
+def test_work_inventory_binds_certificate_premises_not_the_ledger_derived_verdict(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """The certificate embeds this ledger's SHA-256 as closure evidence once
+    certify consumes it through the central producer gate, so the ledger may
+    bind only the premises it reads (conformant, executable). MUTANTS: a
+    changed closed verdict or evidence list leaves the binding untouched; a
+    changed conformant premise moves it."""
+
+    module = _load_script()
+    program = "de/kindergeld"
+    committed_path = Path(module.CERTIFICATE_PATHS[program])
+    committed = json.loads(committed_path.read_text())
+    document = module.load_document(Path(module.ARTIFACT_PATHS[program]))
+    facts = document["generated_facts"]
+    inventory = facts["measurement_basis"]["work_inventory"]
+    assert inventory["certificate_premises"] == ["conformant", "executable"]
+    assert "certificate_sha256" not in inventory
+
+    def basis_for(certificate: dict) -> dict:
+        path = tmp_path / "certificate.json"
+        path.write_text(json.dumps(certificate))
+        monkeypatch.setitem(module.CERTIFICATE_PATHS, program, path)
+        monkeypatch.setattr(module, "REPO_ROOT", tmp_path)
+        return module._measurement_basis(
+            program,
+            document["program"],
+            facts["rulespec_modules"],
+            facts["leaf_frontier"],
+        )["work_inventory"]
+
+    baseline = basis_for(committed)["certificate_premises_sha256"]
+    assert baseline == inventory["certificate_premises_sha256"]
+
+    mutated_closed = copy.deepcopy(committed)
+    mutated_closed["verdicts"]["closed"] = {"value": True, "forged": True}
+    mutated_closed["evidence"] = []
+    mutated_closed["blockers"] = []
+    assert basis_for(mutated_closed)["certificate_premises_sha256"] == baseline
+
+    mutated_premise = copy.deepcopy(committed)
+    mutated_premise["verdicts"]["conformant"]["value"] = not committed["verdicts"][
+        "conformant"
+    ]["value"]
+    assert basis_for(mutated_premise)["certificate_premises_sha256"] != baseline
+
+
+# ---------------------------------------------------------------------------
+# committed_decisions: text-bound dispositions overlay the generated facts.
+# ---------------------------------------------------------------------------
+
+
+def _full_dispositions(module, document: dict) -> dict:
+    """Every spine row excluded, every candidate excluded as non-bearing, every
+    unclassified leaf typed world_fact — the cheapest complete overlay."""
+
+    facts = document["generated_facts"]
+    provisions = [
+        {
+            "citation_path": row["citation_path"],
+            "body_sha256": row["body_sha256"],
+            "status": "excluded-with-reason",
+            "classification": "test_only_exclusion",
+            "reason": f"synthetic exclusion of {row['citation_path']} for the contract test",
+        }
+        for row in facts["provision_spine"]
+    ]
+    dispositions = []
+    for row in facts["instrument_graph"]["candidates"]:
+        entry = {
+            "id": row["id"],
+            "status": "excluded-with-reason",
+            "classification": "test_only_exclusion",
+            "reason": f"synthetic exclusion of {row['id']}",
+            "bears_on_computed_surface": False,
+        }
+        if isinstance(row.get("body_sha256"), str):
+            entry["body_sha256"] = row["body_sha256"]
+        dispositions.append(entry)
+    leaves = [
+        {
+            "input": row["input"],
+            "leaf_kind": "world_fact",
+            "reason": f"synthetic world-fact typing of {row['input']}",
+        }
+        for row in facts["leaf_frontier"]
+        if row["leaf_kind"] == "unclassified"
+    ]
+    return {
+        "provisions": provisions,
+        "instrument_dispositions": dispositions,
+        "leaf_classifications": leaves,
+    }
+
+
+def _with_decisions(module, program: str, decisions: dict) -> dict:
+    document = copy.deepcopy(_document(module, Path(module.ARTIFACT_PATHS[program])))
+    facts = document["generated_facts"]
+    errors: list[str] = []
+    canonical = module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    assert errors == [], errors
+    document["committed_decisions"] = canonical
+    document["computed"] = module._computed(
+        facts["provision_spine"],
+        facts["leaf_frontier"],
+        facts["instrument_graph"],
+        facts["measurement_basis"],
+        canonical,
+    )
+    return document
+
+
+def test_committed_decisions_reproduce_the_committed_join() -> None:
+    """The committed computed block is exactly the join of the committed
+    facts and decisions; with the decisions removed every row is pending."""
+
+    module = _load_script()
+    for program in PROGRAMS:
+        document = _document(module, Path(module.ARTIFACT_PATHS[program]))
+        facts = document["generated_facts"]
+        joined = module._computed(
+            facts["provision_spine"],
+            facts["leaf_frontier"],
+            facts["instrument_graph"],
+            facts["measurement_basis"],
+            document["committed_decisions"],
+        )
+        assert joined == document["computed"]
+        bare = module._computed(
+            facts["provision_spine"],
+            facts["leaf_frontier"],
+            facts["instrument_graph"],
+            facts["measurement_basis"],
+        )
+        assert bare["pending"] == [row["citation_path"] for row in bare["ledger"]]
+        assert bare["instrument_frontier"]["pending"] == [row["id"] for row in bare["instrument_frontier"]["ledger"]]
+        if document["committed_decisions"] == module._empty_decisions():
+            assert bare == document["computed"]
+
+
+def test_full_dispositions_close_a_ledger_with_no_law_derived_leaves() -> None:
+    """rv-employee-contribution has no source-typed law-derived leaves, so a
+    complete, non-bearing overlay closes it; kindergeld keeps its four
+    law-derived leaves open with the same overlay."""
+
+    module = _load_script()
+    rv = _with_decisions(
+        module,
+        "de/rv-employee-contribution",
+        _full_dispositions(
+            module, _document(module, Path(module.ARTIFACT_PATHS["de/rv-employee-contribution"]))
+        ),
+    )
+    summary = module.validate_artifact(rv)
+    computed = rv["computed"]
+    assert computed["pending"] == []
+    assert computed["provision_counts"]["excluded-with-reason"] == computed["provision_counts"]["total"]
+    assert computed["instrument_frontier"]["complete"] is True
+    assert computed["instrument_frontier"]["pending"] == []
+    assert computed["boundary_frontier"]["complete"] is True
+    assert computed["dependency_closure"] == {
+        "law_derived_inputs": [],
+        "law_derived_input_count": 0,
+        "unclassified_inputs": [],
+        "unclassified_input_count": 0,
+        "instruments_bearing_on_computed": [],
+        "instruments_bearing_on_computed_count": 0,
+        "open_dependency_count": 0,
+        "closed": True,
+    }
+    assert computed["closed"] is True
+    assert summary.closed is True and summary.open_dependencies == 0
+
+    kg = _with_decisions(
+        module,
+        "de/kindergeld",
+        _full_dispositions(module, _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))),
+    )
+    summary = module.validate_artifact(kg)
+    assert kg["computed"]["instrument_frontier"]["complete"] is True
+    assert kg["computed"]["boundary_frontier"]["complete"] is True
+    assert kg["computed"]["dependency_closure"]["open_dependency_count"] == 4
+    assert kg["computed"]["dependency_closure"]["law_derived_inputs"] == [
+        "claimant_entitlement",
+        "qualifying_child_count",
+        "recipient_priority",
+        "substitute_child_benefit_exclusion",
+    ]
+    assert kg["computed"]["closed"] is False
+    assert summary.closed is False and summary.open_dependencies == 4
+
+
+def test_closed_ledger_passes_the_central_gate_through_certify(tmp_path, monkeypatch) -> None:
+    module = _load_script()
+    rv = _with_decisions(
+        module,
+        "de/rv-employee-contribution",
+        _full_dispositions(
+            module, _document(module, Path(module.ARTIFACT_PATHS["de/rv-employee-contribution"]))
+        ),
+    )
+    artifact = tmp_path / "de-rv-employee-contribution.yaml"
+    artifact.write_text(module.serialize(rv))
+    certify_spec = importlib.util.spec_from_file_location(
+        "certify_for_ledger_test", REPO_ROOT / "scripts" / "certify.py"
+    )
+    certify = importlib.util.module_from_spec(certify_spec)
+    sys.modules[certify_spec.name] = certify
+    certify_spec.loader.exec_module(certify)
+    real_path = certify._repo_artifact_path
+    monkeypatch.setattr(
+        certify,
+        "_repo_artifact_path",
+        lambda relative, label: (
+            artifact if str(relative).endswith("de-rv-employee-contribution.yaml") else real_path(relative, label=label)
+        ),
+    )
+    verdict = certify._producer_closed_verdict(
+        "de/rv-employee-contribution",
+        certify.PROGRAMS["de/rv-employee-contribution"],
+        [],
+    )
+    assert verdict["value"] is True
+    assert verdict["status"] == "computed_closed"
+    assert verdict["blockers"] == []
+    assert verdict["instrument_frontier"]["complete"] is True
+    assert verdict["dependency_closure"]["closed"] is True
+
+
+def test_bearing_instrument_classified_around_stays_an_open_dependency() -> None:
+    module = _load_script()
+    base = _document(module, Path(module.ARTIFACT_PATHS["de/rv-employee-contribution"]))
+    decisions = _full_dispositions(module, base)
+    decisions["instrument_dispositions"][0]["bears_on_computed_surface"] = True
+    decisions["instrument_dispositions"][0]["status"] = "classified-with-reason"
+    document = _with_decisions(module, "de/rv-employee-contribution", decisions)
+    computed = document["computed"]
+    assert computed["instrument_frontier"]["complete"] is True
+    assert computed["dependency_closure"]["instruments_bearing_on_computed"] == [
+        decisions["instrument_dispositions"][0]["id"]
+    ]
+    assert computed["dependency_closure"]["open_dependency_count"] == 1
+    assert computed["closed"] is False
+    assert module.validate_artifact(document).closed is False
+
+
+def test_law_derived_leaf_classification_stays_open_until_encoded() -> None:
+    module = _load_script()
+    base = _document(module, Path(module.ARTIFACT_PATHS["de/rv-employee-contribution"]))
+    decisions = _full_dispositions(module, base)
+    decisions["leaf_classifications"][0].update(
+        {"leaf_kind": "law_derived", "defining_citation_path": "de/statute/sgb-6/168"}
+    )
+    document = _with_decisions(module, "de/rv-employee-contribution", decisions)
+    dependency = document["computed"]["dependency_closure"]
+    assert dependency["law_derived_inputs"] == [decisions["leaf_classifications"][0]["input"]]
+    assert dependency["unclassified_inputs"] == []
+    assert document["computed"]["boundary_frontier"]["complete"] is True
+    assert document["computed"]["closed"] is False
+
+
+@pytest.mark.parametrize(
+    ("mutation", "message"),
+    [
+        (
+            lambda d: d["provisions"][0].__setitem__("citation_path", "de/statute/estg/999"),
+            "not in the generated spine",
+        ),
+        (
+            lambda d: d["provisions"][0].__setitem__("body_sha256", "0" * 64),
+            "does not bind the spine row's provision text",
+        ),
+        (
+            lambda d: d["provisions"].append(copy.deepcopy(d["provisions"][0])),
+            "duplicate provision decision",
+        ),
+        (
+            lambda d: d["provisions"][0].update({"status": "encoded", "encoded_by": "de:statutes/nothing"}),
+            "encoded_by must name a captured RuleSpec module",
+        ),
+        (
+            lambda d: d["provisions"][0].__setitem__("reason", "  "),
+            "reason must be non-empty",
+        ),
+        (
+            lambda d: d["instrument_dispositions"][0].__setitem__("id", "de-kg-instr-999"),
+            "not a generated instrument candidate",
+        ),
+        (
+            lambda d: d["instrument_dispositions"][0].pop("bears_on_computed_surface"),
+            "bears_on_computed_surface must be true or false",
+        ),
+        (
+            lambda d: d["instrument_dispositions"][0].__setitem__("status", "pending"),
+            "status must be one of",
+        ),
+        (
+            lambda d: d["leaf_classifications"][0].__setitem__("input", "not_a_leaf"),
+            "not a generated frontier leaf",
+        ),
+        (
+            lambda d: d["leaf_classifications"][0].__setitem__("leaf_kind", "encoded"),
+            "leaf_kind must be one of",
+        ),
+        (
+            lambda d: d["leaf_classifications"][0].__setitem__("leaf_kind", "law_derived"),
+            "defining_citation_path must name the DE provision",
+        ),
+        (
+            lambda d: d.__setitem__("extra", []),
+            "unknown sections",
+        ),
+    ],
+)
+def test_decision_binding_mutants_are_rejected(mutation, message: str) -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    facts = document["generated_facts"]
+    decisions = _full_dispositions(module, document)
+    mutation(decisions)
+    errors: list[str] = []
+    module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    assert any(message in error for error in errors), errors
+
+
+def test_corpus_bound_instrument_requires_its_body_hash() -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    facts = document["generated_facts"]
+    decisions = _full_dispositions(module, document)
+    corpus_row = next(
+        row for row in decisions["instrument_dispositions"] if "body_sha256" in row
+    )
+    corpus_row["body_sha256"] = "1" * 64
+    errors: list[str] = []
+    module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    assert any("does not bind the captured instrument text" in e for e in errors), errors
+
+
+def test_source_typed_law_derived_leaf_cannot_be_reclassified() -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    facts = document["generated_facts"]
+    decisions = _full_dispositions(module, document)
+    decisions["leaf_classifications"].append(
+        {"input": "claimant_entitlement", "leaf_kind": "world_fact", "reason": "forged demotion"}
+    )
+    errors: list[str] = []
+    module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    assert any("cannot be reclassified in the ledger" in e for e in errors), errors
+
+
+def test_non_canonical_or_forged_computed_with_decisions_is_rejected() -> None:
+    module = _load_script()
+    program = "de/rv-employee-contribution"
+    base = _document(module, Path(module.ARTIFACT_PATHS[program]))
+    document = _with_decisions(module, program, _full_dispositions(module, base))
+    assert module.validate_artifact(document).closed is True
+
+    reordered = copy.deepcopy(document)
+    reordered["committed_decisions"]["provisions"].reverse()
+    with pytest.raises(module.ClosureLedgerError, match="not canonical"):
+        module.validate_artifact(reordered)
+
+    stale = copy.deepcopy(document)
+    stale["computed"] = copy.deepcopy(base["computed"])
+    with pytest.raises(module.ClosureLedgerError, match="does not equal the pure derivation"):
+        module.validate_artifact(stale)
+
+    # A committed decision that binds nothing cannot survive regeneration.
+    broken = copy.deepcopy(document)
+    broken["committed_decisions"]["provisions"][0]["body_sha256"] = "2" * 64
+    with pytest.raises(module.ClosureLedgerError, match="does not bind"):
+        module.validate_artifact(broken)
+
+
+def test_working_tree_decisions_are_checked_without_a_git_commit(tmp_path, monkeypatch) -> None:
+    """The hermetic rederivation must take committed_decisions from the
+    document under check, not from HEAD: a new disposition is validated and
+    joined before it is committed, and a stale computed block is refused."""
+
+    module = _load_script()
+    program = "de/rv-employee-contribution"
+    document = _document(module, Path(module.ARTIFACT_PATHS[program]))
+    facts = document["generated_facts"]
+    candidate = facts["instrument_graph"]["candidates"][0]
+    decision = {
+        "id": candidate["id"],
+        "status": "excluded-with-reason",
+        "classification": "test_only",
+        "reason": "synthetic working-tree decision",
+        "bears_on_computed_surface": False,
+    }
+    if isinstance(candidate.get("body_sha256"), str):
+        decision["body_sha256"] = candidate["body_sha256"]
+    edited = copy.deepcopy(document)
+    edited["committed_decisions"]["instrument_dispositions"] = [decision]
+
+    monkeypatch.setattr(module, "_load_committed_document", lambda _program: copy.deepcopy(document))
+    expected = module._hermetic_rederivation(edited, source_path=module.SOURCE_PATH, snapshot_path=module.SNAPSHOT_PATH)
+    assert expected["committed_decisions"]["instrument_dispositions"] == [decision]
+    assert expected["computed"]["instrument_frontier"]["counts"]["excluded-with-reason"] == 1
+    assert candidate["id"] not in expected["computed"]["instrument_frontier"]["pending"]
+    # The edited file with its old computed block does not equal the
+    # rederivation, so --check would refuse it until computed is rewritten.
+    assert edited != expected
+    edited["computed"] = expected["computed"]
+    assert edited == expected
+
+
+# ---------------------------------------------------------------------------
+# supplemental_instruments: instruments found by reading enter the frontier
+# as pending rows, bound to the read that named them.
+# ---------------------------------------------------------------------------
+
+
+def _supplemental_fixture(module):
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    facts = document["generated_facts"]
+    discovering = next(
+        row for row in facts["instrument_graph"]["candidates"] if isinstance(row.get("body_sha256"), str)
+    )
+    disposition = {
+        "id": discovering["id"],
+        "status": "excluded-with-reason",
+        "classification": "test_only",
+        "reason": "synthetic read that names another instrument",
+        "bears_on_computed_surface": False,
+        "body_sha256": discovering["body_sha256"],
+    }
+    supplemental = {
+        "id": "de-kg-suppl-901",
+        "identity": "Verordnung (EG) Nr. 883/2004",
+        "title_short": "VO 883/2004",
+        "relation": "coordination",
+        "discovered_by": discovering["id"],
+        "discovered_in_body_sha256": discovering["body_sha256"],
+        "provenance": "synthetic read, Abs. 2",
+        "status": "pending",
+    }
+    return document, facts, disposition, supplemental
+
+
+def _canon(module, facts, decisions):
+    errors: list[str] = []
+    canonical = module._canonical_decisions(
+        decisions,
+        spine=facts["provision_spine"],
+        leaves=facts["leaf_frontier"],
+        candidates=facts["instrument_graph"]["candidates"],
+        modules=facts["rulespec_modules"],
+        errors=errors,
+    )
+    return canonical, errors
+
+
+def test_supplemental_instrument_enters_the_frontier_as_pending_and_counts_toward_it() -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    canonical, errors = _canon(
+        module, facts, {"instrument_dispositions": [disposition], "supplemental_instruments": [supplemental]}
+    )
+    assert errors == []
+    computed = module._computed(
+        facts["provision_spine"], facts["leaf_frontier"], facts["instrument_graph"], facts["measurement_basis"], canonical
+    )
+    frontier = computed["instrument_frontier"]
+    assert frontier["instrument_count"] == len(facts["instrument_graph"]["candidates"]) + 1
+    row = next(r for r in frontier["ledger"] if r["id"] == "de-kg-suppl-901")
+    assert row["identity_kind"] == "supplemental" and row["status"] == "pending"
+    assert row["discovery_refs"] == [disposition["id"]]
+    assert "de-kg-suppl-901" in frontier["pending"]
+    assert computed["measured_denominators"]["bearing_candidate_instruments"] == frontier["instrument_count"]
+    assert frontier["complete"] is False
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (lambda d, s: s.__setitem__("id", "suppl-1"), "must match de-<program>-suppl-NNN"),
+        (lambda d, s: s.__setitem__("discovered_by", "de-kg-instr-999"), "must name a generated instrument candidate"),
+        (lambda d, s: s.__setitem__("discovered_in_body_sha256", "0" * 64), "does not bind the discovering candidate's section text"),
+        (lambda d, s: s.__setitem__("relation", "mentioned"), "relation must be one of"),
+        (lambda d, s: s.__setitem__("provenance", " "), "provenance must record"),
+        (lambda d, s: s.update({"status": "excluded-with-reason", "classification": "x", "reason": "y", "bears_on_computed_surface": False}), "must bind the captured text it was read from"),
+        (lambda d, s: s.__setitem__("reason", "pending rows cannot carry this"), "pending rows carry no reason"),
+    ],
+)
+def test_supplemental_binding_mutants_are_rejected(mutate, message) -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    mutate(disposition, supplemental)
+    _canonical, errors = _canon(
+        module, facts, {"instrument_dispositions": [disposition], "supplemental_instruments": [supplemental]}
+    )
+    assert any(message in error for error in errors), errors
+
+
+def test_supplemental_requires_the_discovering_read_to_be_recorded() -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    _canonical, errors = _canon(module, facts, {"supplemental_instruments": [supplemental]})
+    assert any("has no committed disposition" in error for error in errors), errors
+
+
+def test_decided_supplemental_instrument_binds_captured_text_and_bearing_stays_open() -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    supplemental.update(
+        {
+            "status": "classified-with-reason",
+            "classification": "coordination_instrument",
+            "reason": "synthetic",
+            "bears_on_computed_surface": True,
+            "text_source": "https://example.invalid/883-2004",
+            "text_sha256": "a" * 64,
+        }
+    )
+    canonical, errors = _canon(
+        module, facts, {"instrument_dispositions": [disposition], "supplemental_instruments": [supplemental]}
+    )
+    assert errors == []
+    computed = module._computed(
+        facts["provision_spine"], facts["leaf_frontier"], facts["instrument_graph"], facts["measurement_basis"], canonical
+    )
+    assert "de-kg-suppl-901" in computed["dependency_closure"]["instruments_bearing_on_computed"]
+    assert "de-kg-suppl-901" not in computed["instrument_frontier"]["pending"]
+
+
+def test_committed_kindergeld_ledger_enrols_the_o_2_4_instruments() -> None:
+    module = _load_script()
+    document = _document(module, Path(module.ARTIFACT_PATHS["de/kindergeld"]))
+    supplemental = document["committed_decisions"]["supplemental_instruments"]
+    assert len(supplemental) == 40
+    # Only the four classes (members still to be enumerated by a discovery
+    # channel) remain pending; the 13 named documents are decided on
+    # captured text.
+    pending_classes = {"de-kg-suppl-007", "de-kg-suppl-008", "de-kg-suppl-009", "de-kg-suppl-010"}
+    # The 23 social-security-agreement and ARB 3/80 members enrolled from the
+    # corpus scopes (de-kg-suppl-018..040) are decided; only the classes wait
+    # for a discovery channel.
+    assert {row["id"] for row in supplemental if row["status"] == "pending"} == pending_classes
+    assert all(row["text_sha256"] and row["text_source"] for row in supplemental if row["status"] != "pending")
+    from_o24 = [row for row in supplemental if row["discovered_by"] == "de-kg-dakg-O2.4"]
+    assert len(from_o24) == 15
+    dispositions = {r["id"]: r for r in document["committed_decisions"]["instrument_dispositions"]}
+    for row in supplemental:
+        # every enrolment binds the discovering read's section text
+        assert row["discovered_in_body_sha256"] == dispositions[row["discovered_by"]]["body_sha256"]
+    assert {row["discovered_by"] for row in supplemental} == {"de-kg-dakg-O2.4", "de-kg-dakg-O4.5", "de-kg-dakg-S1.2", "de-kg-dakg-A4.5"}
+    frontier = document["computed"]["instrument_frontier"]
+    assert frontier["instrument_count"] == 452 + 40
+    assert all(sid in frontier["pending"] for sid in pending_classes)
+
+
+def test_duplicate_supplemental_ids_are_rejected() -> None:
+    module = _load_script()
+    document, facts, disposition, supplemental = _supplemental_fixture(module)
+    _canonical, errors = _canon(
+        module,
+        facts,
+        {
+            "instrument_dispositions": [disposition],
+            "supplemental_instruments": [supplemental, copy.deepcopy(supplemental)],
+        },
+    )
+    assert any("duplicate or colliding supplemental instrument id" in error for error in errors), errors

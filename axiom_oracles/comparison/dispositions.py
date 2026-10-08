@@ -53,6 +53,12 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
 * ``evidence.sources`` entries that are not URLs must be repo-relative paths
   (an optional ``#fragment`` may name an entry inside the file) and the file
   must exist, so citations cannot dangle.
+* ``axiom_companion`` / ``axiom_encoding_debt`` (at most one, only on
+  ``upstream_engine_gap`` entries) must be well formed: companion legal ids
+  are ``<jurisdiction>:<path>#<output>`` and companion tests are
+  ``rulespec-<jur>@<40-hex sha>:<path>.test.yaml#<case>``; debt is a
+  TheAxiomFoundation ``rulespec-*`` issue URL. Which entries MUST carry one is
+  decided by attribution in ``scripts/pe_axiom_standard.py --check``.
 * ``expires_on_source_change`` is required. When true and the entry carries
   ``pinned`` engine values, the disposition only applies while the live
   mismatch row still shows those values; when the source engines change, the
@@ -65,12 +71,16 @@ Merge semantics
 disposition and adds ``summary.dispositioned``::
 
     raw_match_rate    match_count / comparison_count
-    explained_rate    (match_count + explained rows) / comparison_count,
-                      where explained = explained_residual,
-                      upstream_engine_gap, bridge_artifact
+    explained_rate    (match_count + classified rows) / comparison_count,
+                      where classified = explained_residual,
+                      upstream_engine_gap, bridge_artifact, and
+                      axiom_encoding_gap — a bug we can name, reproduce,
+                      and have filed upstream IS explained (owner
+                      decision, 2026-08-24); the encoding-gap count stays
+                      broken out in ``counts`` so our own open bugs
+                      remain visible until fixed
     unexplained_count mismatch_count minus rows classified as any of the
-                      four explanatory kinds (axiom_encoding_gap counts as
-                      classified but never as explained)
+                      four explanatory kinds
 
 The result is additive over ``axiom.comparison_report.v2``; merged reports
 are stamped ``axiom.comparison_report.v2.1``. Reports that slim their
@@ -81,10 +91,13 @@ counts cover the full row set.
 from __future__ import annotations
 
 import ast
+import hashlib
 import json
 from pathlib import Path
 
 import yaml
+
+from .pe_axiom_standard import validate_axiom_side_fields
 
 DISPOSITIONS_SCHEMA_VERSION = "axiom_oracles.dispositions.v1"
 DISPOSITIONED_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2.1"
@@ -107,15 +120,28 @@ _ENTRY_KEYS = {
     "concept",
     "case_id",
     "case_selector",
+    "signatures",
     "kind",
     "disposition",
     "evidence",
     "linked_issue",
     "expires_on_source_change",
     "pinned",
+    "selector_binding",
     "notes",
+    "attribution",
+    "receipt",
+    "reason",
+    "comment",
+    # The Axiom side of a PolicyEngine-attributed upstream_engine_gap (see
+    # axiom_oracles/comparison/pe_axiom_standard.py): exactly one of these.
+    "axiom_companion",
+    "axiom_encoding_debt",
 }
-_EVIDENCE_KEYS = {"mechanism", "arithmetic", "upstream_url", "sources"}
+_EVIDENCE_KEYS = {
+    "mechanism", "arithmetic", "upstream_url", "sources",
+    "receipt_type", "instrument_receipt",
+}
 _SELECTOR_KEYS = {"case_ids", "case_id_prefix"}
 _PINNED_KEYS = {"left", "right", "difference"}
 
@@ -291,10 +317,16 @@ def _validate_entry(
 
     case_id = entry.get("case_id")
     case_selector = entry.get("case_selector")
-    if (case_id is None) == (case_selector is None):
+    signatures = entry.get("signatures")
+    if sum(value is not None for value in (case_id, case_selector, signatures)) != 1:
         errors.append(
-            f"{label} needs exactly one of `case_id` or `case_selector`"
+            f"{label} needs exactly one of `case_id`, `case_selector`, or `signatures`"
         )
+    if signatures is not None and (
+        not isinstance(signatures, list)
+        or any(not isinstance(value, str) or not value for value in signatures)
+    ):
+        errors.append(f"{label} `signatures` must be a list of non-empty strings")
     if case_id is not None and (
         not isinstance(case_id, str | int) or str(case_id).strip() == ""
     ):
@@ -348,6 +380,35 @@ def _validate_entry(
             f"{label} needs `expires_on_source_change` as a boolean"
         )
 
+    selector_binding = entry.get("selector_binding")
+    if selector_binding is not None:
+        if case_selector is None:
+            errors.append(
+                f"{label} `selector_binding` requires a `case_selector`"
+            )
+        if not isinstance(selector_binding, dict) or set(
+            selector_binding
+        ) != {"units", "rows_sha256"}:
+            errors.append(
+                f"{label} `selector_binding` must be a mapping with exactly "
+                "the keys `units` and `rows_sha256`"
+            )
+        else:
+            if not isinstance(selector_binding["units"], int):
+                errors.append(
+                    f"{label} selector_binding.units must be an integer"
+                )
+            rows_sha = selector_binding["rows_sha256"]
+            if not (
+                isinstance(rows_sha, str)
+                and len(rows_sha) == 64
+                and all(c in "0123456789abcdef" for c in rows_sha)
+            ):
+                errors.append(
+                    f"{label} selector_binding.rows_sha256 must be a "
+                    "64-char lowercase hex sha256"
+                )
+
     pinned = entry.get("pinned")
     if pinned is not None:
         if case_id is None:
@@ -373,6 +434,16 @@ def _validate_entry(
     linked_issue = entry.get("linked_issue")
     if linked_issue is not None and not _is_url(linked_issue):
         errors.append(f"{label} linked_issue must be an http(s) URL")
+
+    errors.extend(
+        validate_axiom_side_fields(
+            entry,
+            label,
+            disposition_kind=disposition
+            if disposition in DISPOSITION_KINDS
+            else None,
+        )
+    )
 
     evidence = entry.get("evidence")
     if not isinstance(evidence, dict) or not evidence:
@@ -480,6 +551,29 @@ def dispositions_path_for_suite(
     return candidate if candidate.exists() else None
 
 
+def selected_rows_sha256(rows: list[dict]) -> str:
+    """Canonical digest of a selected mismatch population.
+
+    Sorted by case id; each row contributes its identity plus the exact
+    ``left``/``right``/signed ``difference`` values, so any value movement —
+    sign flips, balanced multi-row swaps, anything that preserves aggregates —
+    changes the digest (sol closing review r2 finding 2).
+    """
+    canonical = sorted(
+        [
+            str(row.get("case_id")),
+            str(row.get("concept")),
+            json.dumps(row.get("left"), sort_keys=True),
+            json.dumps(row.get("right"), sort_keys=True),
+            json.dumps(row.get("difference"), sort_keys=True),
+        ]
+        for row in rows
+    )
+    return hashlib.sha256(
+        json.dumps(canonical, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
 def _pin_matches(pinned: dict | None, row: dict) -> bool:
     if not pinned:
         return True
@@ -508,6 +602,9 @@ def _entry_selects_row(entry: dict, row: dict) -> bool:
     case_id = entry.get("case_id")
     if case_id is not None:
         return row_case == str(case_id)
+    signatures = entry.get("signatures")
+    if signatures is not None:
+        return row.get("signature") in signatures
     selector = entry.get("case_selector") or {}
     case_ids = selector.get("case_ids")
     if case_ids is not None and row_case not in {
@@ -554,20 +651,62 @@ def apply_dispositions(
     applied_rows = 0
     entry_applied = {str(entry.get("id")): 0 for entry in entries}
     entry_pin_failed = {str(entry.get("id")): 0 for entry in entries}
+    entry_selected_rows: dict[str, list[dict]] = {
+        str(entry.get("id")): [] for entry in entries
+    }
+    entry_by_id = {str(entry.get("id")): entry for entry in entries}
 
-    annotated_mismatches = []
-    for row in report.get("mismatches") or []:
-        annotated = dict(row)
+    # Pass 1 — tentative assignment. Rows are matched to their winning entry
+    # but not yet annotated, so selector-level value bindings can be checked
+    # against the FULL selected population before any annotation lands.
+    row_winner: list[str | None] = []
+    source_rows = list(report.get("mismatches") or [])
+    for row in source_rows:
+        winner = None
         for entry in entries:
-            if not _entry_selects_row(entry, annotated):
+            if not _entry_selects_row(entry, row):
                 continue
             entry_id = str(entry.get("id"))
-            if not _pin_matches(entry.get("pinned"), annotated):
+            if not _pin_matches(entry.get("pinned"), row):
                 entry_pin_failed[entry_id] += 1
                 continue
+            winner = entry_id
+            entry_applied[entry_id] += 1
+            entry_selected_rows[entry_id].append(row)
+            break
+        row_winner.append(winner)
+
+    # Selector-binding validation (sol closing review F4, hardened in r2):
+    # the binding pins a canonical per-row digest of the selected population
+    # — identity plus left/right/signed difference — so ANY value movement,
+    # including sign flips and balanced multi-row changes that preserve
+    # aggregates, violates it. Per ``expires_on_source_change`` semantics a
+    # violated entry EXPIRES and its rows return to unexplained; drift can
+    # never ride an old classification.
+    binding_violated: set[str] = set()
+    for entry in entries:
+        entry_id = str(entry.get("id"))
+        binding = entry.get("selector_binding")
+        if not binding or entry_applied[entry_id] == 0:
+            continue
+        units_match = entry_applied[entry_id] == binding["units"]
+        digest_match = (
+            selected_rows_sha256(entry_selected_rows[entry_id])
+            == binding["rows_sha256"]
+        )
+        if not (units_match and digest_match):
+            binding_violated.add(entry_id)
+
+    # Pass 2 — annotate, skipping entries whose binding was violated.
+    annotated_mismatches = []
+    for row, winner in zip(source_rows, row_winner):
+        annotated = dict(row)
+        annotated.pop("disposition", None)
+        if winner is not None and winner not in binding_violated:
+            entry = entry_by_id[winner]
             disposition_kind = entry["disposition"]
             annotation = {
-                "id": entry_id,
+                "id": winner,
                 "disposition": disposition_kind,
             }
             if entry.get("linked_issue"):
@@ -575,14 +714,15 @@ def apply_dispositions(
             annotated["disposition"] = annotation
             counts[disposition_kind] += 1
             applied_rows += 1
-            entry_applied[entry_id] += 1
-            break
         annotated_mismatches.append(annotated)
 
     expired = []
     orphaned = []
     for entry in entries:
         entry_id = str(entry.get("id"))
+        if entry_id in binding_violated:
+            expired.append(entry_id)
+            continue
         if entry_applied[entry_id] > 0:
             continue
         if entry.get("expires_on_source_change"):
@@ -590,9 +730,6 @@ def apply_dispositions(
         else:
             orphaned.append(entry_id)
 
-    explained_rows = sum(
-        counts[kind] for kind in EXPLAINED_DISPOSITION_KINDS
-    )
     classified_rows = sum(
         counts[kind] for kind in CLASSIFIED_DISPOSITION_KINDS
     )
@@ -600,19 +737,66 @@ def apply_dispositions(
         "schema_version": DISPOSITIONS_SCHEMA_VERSION,
         "dispositions_file": dispositions_file,
         "raw_match_rate": _percentage(match_count, comparison_count),
+        # Explained = every row whose cause is verified — including rows
+        # classified axiom_encoding_gap: a bug we can name, reproduce to
+        # the cent, and have filed upstream IS explained (owner decision,
+        # 2026-08-24). The encoding-gap count stays broken out separately
+        # in `counts` and on the dashboard so our own bugs remain visible
+        # until fixed and regenerated away.
         "explained_rate": _percentage(
-            match_count + explained_rows, comparison_count
+            match_count + classified_rows, comparison_count
         ),
         "unexplained_count": max(mismatch_count - classified_rows, 0),
         "counts": counts,
         "expired_entries": expired,
         "orphaned_entries": orphaned,
     }
+    if binding_violated:
+        summary["dispositioned"]["binding_violated_entries"] = sorted(
+            binding_violated
+        )
     merged["summary"] = summary
     merged["mismatches"] = annotated_mismatches
     if report.get("schema_version") == "axiom.comparison_report.v2":
         merged["schema_version"] = DISPOSITIONED_REPORT_SCHEMA_VERSION
     return merged
+
+
+def assignment_digest(report: dict) -> str:
+    """SHA-256 over the complete per-row disposition assignment.
+
+    Serializes ``[case_id, concept, entry_id | None, disposition | None]``
+    for EVERY mismatch row of a merged report as a canonically sorted JSON
+    list and hashes it. Aggregate counts cannot distinguish two entries of
+    equal cardinality swapping disposition classes; this digest can, so a
+    premerged-slim dashboard block that embeds it is bound to the exact
+    row-level assignment a fresh merge over the full report produces (sol
+    stack review r2, F2 residual). A sorted LIST — never a mapping keyed
+    by case_id — because a case validly carries one mismatch row per
+    concept, and a map would let same-case rows overwrite each other,
+    hiding count-preserving reclassifications among them (sol stack
+    review r3).
+    """
+
+    assignment: list[list[str | None]] = []
+    for row in report.get("mismatches") or []:
+        annotation = row.get("disposition")
+        entry_id, disposition = (
+            (str(annotation.get("id")), str(annotation.get("disposition")))
+            if isinstance(annotation, dict)
+            else (None, None)
+        )
+        assignment.append(
+            [
+                str(row.get("case_id")),
+                str(row.get("concept")),
+                entry_id,
+                disposition,
+            ]
+        )
+    assignment.sort(key=lambda item: [part or "" for part in item])
+    payload = json.dumps(assignment, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
 def apply_dispositions_from_dir(
@@ -665,7 +849,7 @@ def dispositioned_rollup(reports: list[dict]) -> dict:
         comparison_count += comparisons
         match_count += matches
         explained_mismatches += sum(
-            counts.get(kind, 0) for kind in EXPLAINED_DISPOSITION_KINDS
+            counts.get(kind, 0) for kind in CLASSIFIED_DISPOSITION_KINDS
         )
         if "unexplained_count" in block:
             unexplained_count += block["unexplained_count"]

@@ -53,18 +53,6 @@ waivers:
   note: The grid's single concept (us:policies/aca/ptc_pipeline#aca_ptc_annual_premium_tax_credit) has
     no committed concept→PolicyEngine binding, so the artifact cannot name aca_ptc as the compared variable.
 - jurisdiction: us-pe
-  policy_id: us-pe:additional_medicare_tax
-  suite: us-additional-medicare-grid
-  reason: oracle_variable_not_recorded
-  note: The grid's single concept has no committed concept→PolicyEngine binding, so additional_medicare_tax
-    cannot be shown as the compared variable.
-- jurisdiction: us-pe
-  policy_id: us-pe:al_income_tax
-  suite: al-income-tax-liability
-  reason: compared_surface_differs
-  note: The report records policyengine = al_income_tax_before_refundable_credits; the universe row registers
-    the final al_income_tax. The liability grid deliberately compares the pre-refundable-credit surface.
-- jurisdiction: us-pe
   policy_id: us-pe:elderly_disabled_credit
   suite: us-elderly-disabled-grid
   reason: oracle_variable_not_recorded

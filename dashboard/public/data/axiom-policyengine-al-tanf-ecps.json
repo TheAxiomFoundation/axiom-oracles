@@ -7,29 +7,194 @@
       "comparison_weight": 2466056.199342,
       "components": [],
       "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
-      "description": "AL TANF (Family Assistance) benefit (annualized)",
-      "left_weighted_sum": 131788551.550018,
-      "match_rate": 100,
-      "match_weight": 2466056.199342,
-      "mismatch_count": 0,
-      "mismatch_weight": 0,
+      "description": "AL TANF (Family Assistance) monthly benefit",
+      "left_weighted_sum": 10982379.295835,
+      "match_rate": 99.792244,
+      "match_weight": 2466040.262759,
+      "mismatch_count": 3,
+      "mismatch_weight": 15.936583,
       "missing_both_count": 0,
       "missing_left_count": 0,
       "missing_right_count": 0,
       "parent": null,
-      "right_weighted_sum": 131836109.236438,
-      "weighted_difference": -47557.686421,
-      "weighted_match_rate": 100
+      "right_weighted_sum": 11050566.382537,
+      "weighted_difference": -68187.086702,
+      "weighted_match_rate": 99.999354
     }
   ],
   "case_count": 1444,
-  "cases": [],
+  "cases": [
+    {
+      "case_id": "ecps-37103",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "matches": [],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 18,
+        "axiom_relations_count": 4,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            23,
+            0
+          ],
+          "household_size": 2,
+          "yearly_earned_income_per_person": [
+            4296.16,
+            0.0
+          ],
+          "yearly_earned_income_total": 4296.16
+        },
+        "household_weight": 0.8464139699935913,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "01117",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
+          "description": "AL TANF (Family Assistance) monthly benefit",
+          "difference": -35.390533447265625,
+          "kind": "amount_difference",
+          "left": 18.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 53.390533447265625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-37187",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "matches": [],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 18,
+        "axiom_relations_count": 12,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            36,
+            37,
+            18,
+            16,
+            11,
+            7
+          ],
+          "household_size": 6,
+          "yearly_earned_income_per_person": [
+            3566.92,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 3566.92
+        },
+        "household_weight": 14.50944709777832,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "01077",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
+          "description": "AL TANF (Family Assistance) monthly benefit",
+          "difference": -29.929443359375,
+          "kind": "amount_difference",
+          "left": 250.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 279.929443359375,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    },
+    {
+      "case_id": "ecps-37415",
+      "left_engine": "axiom",
+      "left_errors": [],
+      "match_rate": 0.0,
+      "matches": [],
+      "metadata": {
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Household",
+        "axiom_entity_id": "household",
+        "axiom_input_records_count": 18,
+        "axiom_relations_count": 16,
+        "dataset": "populace://policyengine/populace-us/populace_us_2024.h5",
+        "household_summary": {
+          "ages": [
+            36,
+            38,
+            9,
+            8,
+            7,
+            6,
+            5,
+            4
+          ],
+          "household_size": 8,
+          "yearly_earned_income_per_person": [
+            3566.92,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "yearly_earned_income_total": 3566.92
+        },
+        "household_weight": 0.5807216763496399,
+        "population": "enhanced-cps",
+        "scope": {
+          "geoid": "01003",
+          "type": "census_county"
+        }
+      },
+      "mismatches": [
+        {
+          "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
+          "description": "AL TANF (Family Assistance) monthly benefit",
+          "difference": -29.26275634765625,
+          "kind": "amount_difference",
+          "left": 305.0,
+          "parent": null,
+          "relative_tolerance": 0,
+          "right": 334.26275634765625,
+          "tolerance": 25
+        }
+      ],
+      "right_engine": "policyengine",
+      "right_errors": []
+    }
+  ],
   "concepts": [
     {
       "category": "cash",
       "comparison": "amount",
       "components": [],
-      "description": "AL TANF (Family Assistance) benefit (annualized)",
+      "description": "AL TANF (Family Assistance) monthly benefit",
       "id": "us-al:policies/dhr/tanf#al_tanf_benefit",
       "parent": null,
       "priority": "high",
@@ -38,18 +203,85 @@
     }
   ],
   "dashboard_truncation": {
-    "shown_case_rows": 0,
-    "shown_mismatches": 0,
+    "shown_case_rows": 3,
+    "shown_mismatches": 3,
     "total_case_rows": 1444,
-    "total_mismatches": 0
+    "total_mismatches": 3
   },
   "engines": {
     "left": "axiom",
-    "right": "policyengine"
+    "right": "policyengine",
+    "versions": {
+      "axiom_rules_engine": "0.1.0",
+      "policyengine": "4.18.9",
+      "policyengine_core": "3.30.3",
+      "policyengine_us": "1.767.3"
+    }
   },
   "errors": [],
   "locales": [],
-  "mismatches": [],
+  "mismatches": [
+    {
+      "ages": null,
+      "case_id": "ecps-37103",
+      "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
+      "description": "AL TANF (Family Assistance) monthly benefit",
+      "difference": -35.390533447265625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "al-childcare-deduction-missing-37103"
+      },
+      "kind": "amount_difference",
+      "left": 18.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 53.390533447265625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-37187",
+      "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
+      "description": "AL TANF (Family Assistance) monthly benefit",
+      "difference": -29.929443359375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "al-childcare-deduction-missing-37187"
+      },
+      "kind": "amount_difference",
+      "left": 250.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 279.929443359375,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    },
+    {
+      "ages": null,
+      "case_id": "ecps-37415",
+      "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
+      "description": "AL TANF (Family Assistance) monthly benefit",
+      "difference": -29.26275634765625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "al-childcare-deduction-missing-37415"
+      },
+      "kind": "amount_difference",
+      "left": 305.0,
+      "parent": null,
+      "pregnant_head": null,
+      "relative_tolerance": 0,
+      "right": 334.26275634765625,
+      "scenario": null,
+      "tolerance": 25,
+      "yearly_earned_income": null
+    }
+  ],
   "population": "enhanced-cps",
   "provenance": {
     "dataset": {
@@ -57,15 +289,16 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "48797e101c093bb388be718c6f5d8fc9d9f94a7d",
+      "axiom_rules_engine_sha": "c4b62bdb740d4149f0872783964f917e74cffe42",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-25T05:27:20Z",
+    "generated_at": "2026-07-28T20:51:00Z",
     "generated_by": "scripts/run_comparison.py::al-tanf-ecps",
     "oracle": {
       "name": "policyengine",
+      "policyengine_core": "3.30.3",
       "policyengine_package": "policyengine==4.18.9",
-      "policyengine_us": "1.752.2"
+      "policyengine_us": "1.767.3"
     },
     "rulespecs": [
       {
@@ -87,32 +320,47 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 3,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/al-tanf-ecps.yaml",
       "expired_entries": [],
       "explained_rate": 100,
       "orphaned_entries": [],
-      "raw_match_rate": 100,
+      "raw_match_rate": 99.792244,
       "schema_version": "axiom_oracles.dispositions.v1",
       "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],
-    "match_count": 1444,
-    "mismatch_count": 0,
-    "mismatches_by_concept": [],
-    "mismatches_by_kind": [],
-    "mismatches_by_scenario": [],
-    "stored_mismatch_example_count": 0,
+    "match_count": 1441,
+    "mismatch_count": 3,
+    "mismatches_by_concept": [
+      {
+        "count": 3,
+        "value": "us-al:policies/dhr/tanf#al_tanf_benefit"
+      }
+    ],
+    "mismatches_by_kind": [
+      {
+        "count": 3,
+        "value": "amount_difference"
+      }
+    ],
+    "mismatches_by_scenario": [
+      {
+        "count": 3,
+        "value": null
+      }
+    ],
+    "stored_mismatch_example_count": 3,
     "weighted": {
       "comparison_weight": 2466056.199342,
-      "match_rate": 100,
-      "match_weight": 2466056.199342,
-      "mismatch_weight": 0
+      "match_rate": 99.999354,
+      "match_weight": 2466040.262759,
+      "mismatch_weight": 15.936583
     }
   }
 }

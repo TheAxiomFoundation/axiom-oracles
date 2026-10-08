@@ -5,6 +5,8 @@ This is a work queue, not an attempt to force Axiom to match PolicyEngine.
 TANF, TAFDC, and Families First residuals stay visible until those cash
 assistance programs or source-backed case inputs are available.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
+
 ## Summary
 
 | State | Current result | Fixability | Next action |

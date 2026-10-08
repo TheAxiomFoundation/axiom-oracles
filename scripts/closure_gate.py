@@ -1,0 +1,307 @@
+#!/usr/bin/env python3
+"""Central CERTIFIED.md v3 closure gate, shared by certify and the DE census.
+
+Every closure artifact — DK, NZ, US tariff, DE — is judged here from its
+``computed`` block alone, with no program-name conditionals: the instrument
+frontier must be complete (oracles#491) and the dependency closure must be
+well-formed and closed (v3 leaf discipline). Any artifact that declares
+neither, or declares them inconsistently, fails closed. The blocker strings
+these summaries produce are the ones certificates and the DE census carry,
+so the two can never disagree about why a program is not closed.
+"""
+
+from __future__ import annotations
+
+from typing import Any
+
+FRONTIER_MISSING_REQUIREMENT = (
+    "closure must disposition the act's subordinate instruments "
+    "(oracles#491); this artifact declares none"
+)
+DEPENDENCY_MISSING_REQUIREMENT = (
+    "closure must type every leaf and encode every law-derived "
+    "dependency (CERTIFIED.md v3); this artifact declares no "
+    "dependency-closure block"
+)
+DEPENDENCY_MALFORMED_REQUIREMENT = (
+    "the dependency-closure block must carry a well-typed "
+    "open_dependency_count, law_derived_inputs, and "
+    "instruments_bearing_on_computed that agree with its closed "
+    "flag (CERTIFIED.md v3); this artifact's block is incomplete "
+    "or inconsistent"
+)
+
+
+def _is_int(value: Any) -> bool:
+    # bool is an int subclass: open_dependency_count=false must read
+    # malformed, not as a zero count (launch-audit delta r2 finding).
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
+def _is_seed_only(frontier: dict[str, Any]) -> bool:
+    return "enumerated_seed_candidate_count" in frontier
+
+
+def _seed_only_disclosures_resolved(frontier: dict[str, Any]) -> bool:
+    """Whether a seed-only frontier's own disclosures permit complete=true.
+
+    A seed-only enumeration cannot be complete while it says its denominator
+    is unknown, while any known family, enumerated seed candidate or discovery
+    channel is still open, or while its executable surface is missing or not
+    closure-eligible. Each field must be present and well-typed; an absent one
+    fails closed.
+    """
+
+    denominator = frontier.get("denominator_status")
+    surface = frontier.get("executable_surface")
+    return (
+        isinstance(denominator, str)
+        and bool(denominator)
+        and denominator != "unknown"
+        and frontier.get("additional_known_families_open") is False
+        and frontier.get("pending_enumerated_seed_candidates") == []
+        and frontier.get("pending_discovery_channels") == []
+        and isinstance(surface, dict)
+        and surface.get("closure_eligible") is True
+    )
+
+
+def instrument_frontier_summary(computed: Any) -> dict[str, Any]:
+    """The central view of an artifact's instrument frontier (oracles#491)."""
+
+    frontier = (
+        computed.get("instrument_frontier") if isinstance(computed, dict) else None
+    )
+    if not isinstance(frontier, dict):
+        return {
+            "complete": False,
+            "missing": True,
+            "requirement": FRONTIER_MISSING_REQUIREMENT,
+        }
+    if _is_seed_only(frontier):
+        summary = {
+            key: frontier.get(key)
+            for key in (
+                "enumeration_scope",
+                "enumerated_seed_candidate_count",
+                "enumerated_seed_counts_by_status",
+                "pending_enumerated_seed_candidates",
+                "discovery_channel_count",
+                "pending_discovery_channels",
+                "additional_known_families_open",
+                "denominator_status",
+                "executable_surface",
+                "complete",
+            )
+        }
+        # A producer's complete=true cannot outvote its own open disclosures.
+        if summary["complete"] is True and not _seed_only_disclosures_resolved(summary):
+            summary["complete"] = False
+        return summary
+    summary = {
+        key: frontier.get(key)
+        for key in (
+            "instrument_count",
+            "supplemental_count",
+            "counts",
+            "pending",
+            "complete",
+        )
+    }
+    if "executable_surface" in frontier:
+        summary["executable_surface"] = frontier.get("executable_surface")
+    return summary
+
+
+def dependency_closure_summary(computed: Any) -> tuple[dict[str, Any], bool]:
+    """The central view of an artifact's dependency closure, and whether the
+    block is well-formed.
+
+    A block only satisfies the gate when it is COMPLETE and internally
+    consistent: the three enumerations present and list-typed, an integer
+    (never bool) ``open_dependency_count`` equal to their combined length,
+    and ``closed`` exactly ``open_dependency_count == 0``. ``unclassified_inputs``
+    is optional — a discovery ledger that has not yet typed every leaf must
+    count those leaves as open, never hide them — but when present it is part
+    of the count identity. A bare ``{"closed": true}`` or any block whose
+    count and lists disagree is malformed and fails closed.
+    """
+
+    block = computed.get("dependency_closure") if isinstance(computed, dict) else None
+    if not isinstance(block, dict):
+        return (
+            {
+                "closed": False,
+                "missing": True,
+                "requirement": DEPENDENCY_MISSING_REQUIREMENT,
+            },
+            False,
+        )
+    has_unclassified = "unclassified_inputs" in block
+    unclassified = block.get("unclassified_inputs") if has_unclassified else []
+    well_formed = (
+        _is_int(block.get("open_dependency_count"))
+        and isinstance(block.get("law_derived_inputs"), list)
+        and isinstance(block.get("instruments_bearing_on_computed"), list)
+        and isinstance(unclassified, list)
+        and isinstance(block.get("closed"), bool)
+        and block["open_dependency_count"]
+        == len(block["law_derived_inputs"])
+        + len(block["instruments_bearing_on_computed"])
+        + len(unclassified)
+        and block["closed"] == (block["open_dependency_count"] == 0)
+    )
+    if not well_formed:
+        return (
+            {
+                "closed": False,
+                "malformed": True,
+                "requirement": DEPENDENCY_MALFORMED_REQUIREMENT,
+            },
+            False,
+        )
+    summary = {
+        key: block[key]
+        for key in (
+            "open_dependency_count",
+            "law_derived_inputs",
+            "instruments_bearing_on_computed",
+            "closed",
+        )
+    }
+    if has_unclassified:
+        summary["unclassified_inputs"] = list(unclassified)
+    return summary, True
+
+
+def _seed_only_frontier_blocker(frontier: dict[str, Any]) -> str:
+    """Why a seed-only frontier with a declared denominator is not complete."""
+
+    reasons = []
+    for key, noun in (
+        ("pending_enumerated_seed_candidates", "enumerated seed candidates pending"),
+        ("pending_discovery_channels", "discovery channels open"),
+    ):
+        value = frontier.get(key)
+        if not isinstance(value, list):
+            reasons.append(f"{key} undeclared")
+        elif value:
+            reasons.append(f"{len(value)} {noun}")
+    if frontier.get("additional_known_families_open") is not False:
+        reasons.append("additional known families open")
+    denominator = frontier.get("denominator_status")
+    if not isinstance(denominator, str) or not denominator:
+        reasons.append("denominator status undeclared")
+    surface = frontier.get("executable_surface")
+    if not isinstance(surface, dict) or surface.get("closure_eligible") is not True:
+        reasons.append("executable surface not closure-eligible")
+    if not reasons:
+        reasons.append("frontier not declared complete")
+    return (
+        "closed: instrument frontier incomplete — "
+        + "; ".join(reasons)
+        + " (oracles#491)"
+    )
+
+
+def closure_blockers(frontier: dict[str, Any], dependency: dict[str, Any]) -> list[str]:
+    """Blocker lines for a closure that does not compute closed=true.
+
+    Empty exactly when both gates pass. Missing and malformed blocks keep
+    their requirement sentence; declared-but-open blocks state the measured
+    denominators so a reader can see what closing them costs.
+    """
+
+    blockers: list[str] = []
+    if frontier.get("complete") is not True:
+        if frontier.get("requirement"):
+            blockers.append("closed: " + str(frontier["requirement"]))
+        elif frontier.get("denominator_status") == "unknown":
+            pending = frontier.get("pending_enumerated_seed_candidates")
+            pending_count = len(pending) if isinstance(pending, list) else pending
+            channels = frontier.get("pending_discovery_channels")
+            channel_count = len(channels) if isinstance(channels, list) else channels
+            blockers.append(
+                "closed: instrument frontier incomplete — "
+                f"{pending_count} enumerated seed candidates pending; "
+                f"additional known families and {channel_count} discovery channels "
+                "open; denominator unknown (oracles#491)"
+            )
+        elif _is_seed_only(frontier):
+            blockers.append(_seed_only_frontier_blocker(frontier))
+        else:
+            pending = frontier.get("pending")
+            pending_count = len(pending) if isinstance(pending, list) else pending
+            blockers.append(
+                "closed: instrument frontier incomplete — "
+                f"{pending_count} of {frontier.get('instrument_count')} "
+                "subordinate/bearing instruments pending disposition (oracles#491)"
+            )
+    executable_surface = frontier.get("executable_surface")
+    if (
+        isinstance(executable_surface, dict)
+        and executable_surface.get("closure_eligible") is not True
+    ):
+        blockers.append(
+            "closed: executable surface is not a singular composed program — "
+            f"{executable_surface.get('program_count')} separately compiled "
+            "program/output rows are bound, but composition identity remains open"
+        )
+    elif executable_surface is not None and not isinstance(executable_surface, dict):
+        blockers.append(
+            "closed: executable surface block is malformed and cannot satisfy "
+            "composition identity"
+        )
+    elif executable_surface is None and _is_seed_only(frontier):
+        blockers.append(
+            "closed: executable surface block is missing and cannot satisfy "
+            "composition identity"
+        )
+    if dependency.get("closed") is not True:
+        if dependency.get("requirement"):
+            blockers.append("closed: " + str(dependency["requirement"]))
+        else:
+            parts = [
+                f"{len(dependency.get('law_derived_inputs') or [])} law-derived inputs",
+            ]
+            if "unclassified_inputs" in dependency:
+                parts.append(
+                    f"{len(dependency['unclassified_inputs'])} unclassified inputs"
+                )
+            parts.append(
+                f"{len(dependency.get('instruments_bearing_on_computed') or [])} "
+                "bearing instruments"
+            )
+            seed_only = frontier.get("denominator_status") == "unknown"
+            blockers.append(
+                "closed: dependency closure open — "
+                + ("at least " if seed_only else "")
+                + f"{dependency.get('open_dependency_count')} open dependencies "
+                + ("under seed-only enumeration " if seed_only else "")
+                + f"({', '.join(parts)}) (CERTIFIED.md v3)"
+            )
+    return blockers
+
+
+def gate(computed: Any) -> tuple[dict[str, Any], dict[str, Any], bool, list[str]]:
+    """(frontier summary, dependency summary, passes, blockers) for one block."""
+
+    frontier = instrument_frontier_summary(computed)
+    dependency, well_formed = dependency_closure_summary(computed)
+    executable_surface = frontier.get("executable_surface")
+    surface_eligible = (
+        isinstance(executable_surface, dict)
+        and executable_surface.get("closure_eligible") is True
+    )
+    # A seed-only frontier must declare a closure-eligible surface; only an
+    # instrument-count frontier may omit the surface block.
+    surface_passes = surface_eligible or (
+        executable_surface is None and not _is_seed_only(frontier)
+    )
+    passes = (
+        frontier.get("complete") is True
+        and well_formed
+        and dependency.get("closed") is True
+        and surface_passes
+    )
+    return frontier, dependency, passes, closure_blockers(frontier, dependency)

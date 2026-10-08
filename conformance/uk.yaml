@@ -18,6 +18,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: switch
     internal_only_vars:
       - i_rand_tu
     exclusion_reason: takeup_adjustment
@@ -26,6 +27,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
     exclusion_reason: technical
@@ -34,6 +36,7 @@ policies:
     oracle_policy_type: inc
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - glfya1
       - n/a
@@ -43,6 +46,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - glfya1
       - n/a
@@ -52,18 +56,21 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:ILSDef_uk
     oracle_policy_name: ILSDef_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:ILSUDBDef_uk
     oracle_policy_name: ILSUDBDef_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:InitVars_uk
     oracle_policy_name: InitVars_uk
@@ -81,6 +88,7 @@ policies:
       - tpcee_s
       - sin05_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - yot01
       - ydgchmp_s
@@ -101,6 +109,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - ntax
       - mntr_earns
@@ -114,12 +123,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     exclusion_reason: technical
   - id: uk:Output_std_uk
     oracle_policy_name: Output_std_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:PAA_uk
     oracle_policy_name: PAA_uk
@@ -127,6 +138,7 @@ policies:
     output_vars:
       - boact_s
     in_scope: false
+    oracle_switch: switch
     internal_only_vars:
       - boactcm
       - yem
@@ -152,6 +164,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - dhr
     exclusion_reason: technical
@@ -160,18 +173,21 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:Uprate_uk
     oracle_policy_name: Uprate_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:UseHBAI_uk
     oracle_policy_name: UseHBAI_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - yem
       - yse
@@ -199,6 +215,7 @@ policies:
       - brd_s
       - brduc_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bcap_finalAmt
       - i_bcap_NoExempt
@@ -232,6 +249,7 @@ policies:
     output_vars:
       - bch_s
     in_scope: true
+    oracle_switch: 'on'
     suite: uk-child-benefit
     note: 'BEN: Child Benefit. The uk-child-benefit suite live-compares the composed UK Child Benefit
       pipeline (SSCBA 1992 s.141 with the SI 2006/965 reg.2 enhanced GBP 27.05 / other GBP 17.90 weekly
@@ -251,6 +269,7 @@ policies:
     output_vars:
       - bched01_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bched01a
       - i_bched01b
@@ -286,6 +305,7 @@ policies:
     output_vars:
       - bched02_s
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: oracle_models_nonstatutory_amount
     note: 'BEN: School Clothing Grant (Scotland). EXCLUDED oracle_models_nonstatutory_amount. Not a Child
       Benefit education-age extension despite the bch* prefix. bched02_s passports off the same means-tested
@@ -305,6 +325,7 @@ policies:
     output_vars:
       - bchht_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bdisc00
       - i_bdisc01
@@ -329,6 +350,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -340,6 +362,7 @@ policies:
     output_vars:
       - bchmt_s
     in_scope: true
+    oracle_switch: 'on'
     suite: uk-scottish-child-payment
     note: 'BEN: Scottish Child Payment (UKMOD comment "BEN: Child Payment (Scotland)"), not a Child Benefit
       means-test variant despite the bch* prefix (distinct from the excluded bchmt01_uk SCP bridging scheme).
@@ -365,6 +388,7 @@ policies:
       - bch_s
       - bchrd_s
     in_scope: true
+    oracle_switch: 'on'
     suite: uk-child-benefit
     note: 'BEN: Reduce child benefit (from 2013) — the High Income Child Benefit Charge clawback (ITEPA
       2003 ss.681B-681H). bchrd_uk computes bchrd_s = ((adjusted_net_income - $ITCBthresh)/200)*1% * bch_s,
@@ -383,6 +407,7 @@ policies:
     output_vars:
       - bcrdicm_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bcrdi
     suite: uk-scottish-carer-supplement
@@ -407,6 +432,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - ddipd
       - bdimbwa
@@ -425,6 +451,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - bdisc
     exclusion_reason: not_a_policy
@@ -440,6 +467,7 @@ policies:
       - ymn01_s
       - bho_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bho_FamPremium
       - i_bho_FamDisChildPremium
@@ -499,6 +527,7 @@ policies:
     output_vars:
       - bhosc01_s
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: oracle_models_nonstatutory_amount
     note: 'BEN: Discretionary Housing Payments (Scotland) — bedroom-tax mitigation. EXCLUDED oracle_models_nonstatutory_amount.
       Verdict: scoped out (not encoded), a modelled policy assumption rather than a statutory formula.
@@ -527,6 +556,7 @@ policies:
     output_vars:
       - bmact_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_elparent_bmact
       - i_elchild_bmact
@@ -554,6 +584,7 @@ policies:
     output_vars:
       - bmamt01_s
     in_scope: true
+    oracle_switch: 'on'
     suite: uk-healthy-start
     note: 'BEN: Healthy Start food voucher (rest of UK). Unlike the statutory-pay policies this is a passported
       means-tested payment: the Elig_Cond requires a qualifying means-tested benefit in payment (bsa_s>0
@@ -571,6 +602,7 @@ policies:
     output_vars:
       - bmamt_s
     in_scope: true
+    oracle_switch: 'on'
     suite: uk-sure-start-maternity-grant
     note: 'BEN: Sure Start Maternity Grant (rest of UK). Passported means-tested lump sum: the Elig_Cond
       requires a qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0
@@ -587,6 +619,7 @@ policies:
     output_vars:
       - bmanc_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_elparent_bmanc
       - i_elchild_bmanc
@@ -611,6 +644,7 @@ policies:
     output_vars:
       - bmascmt01_s
     in_scope: true
+    oracle_switch: 'on'
     suite: uk-best-start-foods
     note: 'BEN: Best Start Foods (Scotland). Passported means-tested payment: the Elig_Cond requires a
       qualifying means-tested benefit in payment (bsa_s>0 | bunmt_s>0 | boamt_s>0 | bsauc_s>0 ...) AND
@@ -629,6 +663,7 @@ policies:
     output_vars:
       - bmascmt_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bmascmt01_s
       - i_bmascmt04_s
@@ -656,6 +691,7 @@ policies:
       - ymn01_s
       - bmu_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bmu_nBabies
       - i_bmu_FamPremium
@@ -699,6 +735,7 @@ policies:
     output_vars:
       - boact_s
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: input_carrying
     note: 'State Pension (contributory). UKMOD does not compute the state pension from contribution records
       — its whole UK_2026 body is boact_s = boact00 * (SPSingle/SPSingle0): it takes the reported state-
@@ -714,6 +751,7 @@ policies:
     output_vars:
       - boaht_s
     in_scope: true
+    oracle_switch: 'on'
     suite: uk-winter-fuel
     note: 'BEN: Pensioner''s annual heating allowance (Winter Fuel Payment). The UK_2026 policy is switch=on
       and computes a distinct payable boaht_s at benefit-unit level: a base amount if anyone in the unit
@@ -738,6 +776,7 @@ policies:
     output_vars:
       - bpact_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_elparent_bpact
       - i_yempv_bpact
@@ -764,6 +803,7 @@ policies:
       - bfamt_s
       - boamt_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bsa_EligDisPremium
       - i_bsa_SevDisPremium
@@ -834,6 +874,7 @@ policies:
       - bsadi_s
       - bsa_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bsadi_EligSevDisPremium
       - i_bsadi_EligCarerPremium
@@ -877,6 +918,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -889,6 +931,7 @@ policies:
       - yiviy02_s
       - bsauc_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bsauc_AmtFam
       - i_bsauc_AmtChild
@@ -933,6 +976,7 @@ policies:
       - liwmy_s
       - yempv_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bunct_IncDisregard
     suite: uk-contribution-based-jsa
@@ -966,6 +1010,7 @@ policies:
       - bwkmt_s
       - bfamttm_s
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_bwkmt_bfamt_Disab
       - i_bwkmt_ChildCare
@@ -1016,6 +1061,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -1026,12 +1072,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:covshocks_benreceipt_uk
     oracle_policy_name: covshocks_benreceipt_uk
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -1041,6 +1089,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_lha30
     exclusion_reason: technical
@@ -1049,6 +1098,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_mif_exempt
       - i_mif_h
@@ -1059,6 +1109,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - yse
       - i_yse0
@@ -1068,6 +1119,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - i_rand_dla
       - i_rand_uc
@@ -1081,6 +1133,7 @@ policies:
     oracle_policy_type: inc
     output_vars: []
     in_scope: false
+    oracle_switch: n/a
     internal_only_vars:
       - n/a
     exclusion_reason: not_a_policy
@@ -1091,6 +1144,7 @@ policies:
     oracle_policy_type: ben
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - tco_adj_ta_02131
       - tco_adj_ta_02111
@@ -1111,6 +1165,7 @@ policies:
     oracle_policy_type: tax
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - tco_ta_07221
     exclusion_reason: unobservable_boundary
@@ -1122,12 +1177,14 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:tco_ce_uk
     oracle_policy_name: tco_ce_uk
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - adjfact_x1
       - bsav
@@ -1138,6 +1195,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - adjfact_x
     exclusion_reason: technical
@@ -1146,6 +1204,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     internal_only_vars:
       - adjfact_x
     exclusion_reason: technical
@@ -1154,6 +1213,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: technical
   - id: uk:tin_uk
     oracle_policy_name: tin_uk
@@ -1166,6 +1226,7 @@ policies:
       - tin00_s
       - tinsa_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tin_prelim_rUK
       - i_tin_prelimMCA
@@ -1212,6 +1273,7 @@ policies:
     output_vars:
       - tinta_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_tinta_IncExcess2
       - i_tinta_PersAllow
@@ -1237,6 +1299,7 @@ policies:
     output_vars:
       - tpcee_s
     in_scope: false
+    oracle_switch: 'on'
     exclusion_reason: input_carrying
   - id: uk:tscee_tscse_uk
     oracle_policy_name: tscee_tscse_uk
@@ -1245,6 +1308,7 @@ policies:
       - tscee_s
       - tscse_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - i_NIcl1_empl_bwPTandUEL
       - i_NIcl1_empl_aboveUEL
@@ -1268,6 +1332,7 @@ policies:
     output_vars:
       - tscer_s
     in_scope: true
+    oracle_switch: 'on'
     internal_only_vars:
       - n/a
     suite: uk-employer-nic
@@ -1276,6 +1341,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - eqScaleBHC
       - eqDispyBHC
@@ -1289,6 +1355,7 @@ policies:
     oracle_policy_type: def
     output_vars: []
     in_scope: false
+    oracle_switch: 'off'
     internal_only_vars:
       - i_hourlywage
       - yem

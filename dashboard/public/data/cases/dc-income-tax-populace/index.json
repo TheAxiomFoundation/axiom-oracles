@@ -1,0 +1,15 @@
+{
+ "suite": "dc-income-tax-populace",
+ "count": 1362,
+ "total_cases": 1362,
+ "chunks": 3,
+ "chunk_size": 500,
+ "engines": {
+  "left": "axiom",
+  "right": "policyengine"
+ },
+ "mismatch_concepts": [
+  "us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_schedule_before_credits"
+ ],
+ "source": "state-tax-populace-campaign"
+}

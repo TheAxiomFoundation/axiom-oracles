@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -43,9 +44,12 @@ except ImportError:  # pragma: no cover
     sys.stderr.write("PyYAML is required (uv pip install pyyaml).\n")
     sys.exit(2)
 
+from axiom_oracles.provenance import PROVENANCE_SCHEMA_VERSION, RUN_KINDS
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
 COMPARISONS_DIR = REPO_ROOT / "comparisons"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
+REPORTS_DIR = REPO_ROOT / "reports"
 COVERAGE_OVERVIEW = DASHBOARD_DATA_DIR / "coverage_overview.json"
 AFFECTED_MAP = COMPARISONS_DIR / "affected_map.json"
 FRESHNESS_OUTPUT = DASHBOARD_DATA_DIR / "freshness.json"
@@ -55,6 +59,24 @@ FRESHNESS_OUTPUT = DASHBOARD_DATA_DIR / "freshness.json"
 FRESH_MAX_AGE_DAYS = 14
 
 _RUN_COMPARISON = REPO_ROOT / "scripts" / "run_comparison.py"
+
+_REQUIRED_CAMPAIGN_RUNTIME_FIELDS = {
+    "rulespec": ("repository", "commit", "working_tree"),
+    "axiom_engine": (
+        "repository",
+        "commit",
+        "executable_sha256",
+        "working_tree",
+    ),
+    "packages": ("policyengine", "policyengine-us"),
+}
+_REQUIRED_CAMPAIGN_DATASET_FIELDS = (
+    "source",
+    "revision",
+    "sha256",
+    "built_with",
+    "country",
+)
 
 
 def _registered_runner_types() -> set[str]:
@@ -154,8 +176,7 @@ def _fixture_oracle_problems(path: Path, doc: dict) -> list[str]:
         if "oracle" in fixture and str(fixture.get("oracle")).strip().lower() == "none":
             if not str(fixture.get("reason") or "").strip():
                 problems.append(
-                    f"{rel}: fixture {fid!r} has `oracle: none` without a "
-                    "`reason:`"
+                    f"{rel}: fixture {fid!r} has `oracle: none` without a `reason:`"
                 )
             continue
         expected = fixture.get("expected")
@@ -166,6 +187,427 @@ def _fixture_oracle_problems(path: Path, doc: dict) -> list[str]:
                 f"{rel}: fixture {fid!r} declares no `expected:` engine outcome "
                 "(and no `oracle: none` + `reason:`) — it verifies nothing"
             )
+    return problems
+
+
+def _declared_file(
+    root: Path,
+    raw: object,
+    *,
+    label: str,
+    problems: list[str],
+) -> Path | None:
+    """Resolve a declared relative file without allowing path escape."""
+
+    if not isinstance(raw, str) or not raw.strip():
+        problems.append(f"{label} path is missing")
+        return None
+    relative = Path(raw)
+    if relative.is_absolute():
+        problems.append(f"{label} path must be repo-relative: {raw!r}")
+        return None
+    candidate = (root / relative).resolve()
+    try:
+        candidate.relative_to(root.resolve())
+    except ValueError:
+        problems.append(f"{label} path escapes its declared root: {raw!r}")
+        return None
+    if not candidate.is_file():
+        problems.append(f"{label} path does not exist: {raw!r}")
+        return None
+    return candidate
+
+
+def _read_json_object(path: Path, *, label: str, problems: list[str]) -> dict | None:
+    try:
+        doc = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        problems.append(f"{label} is not valid JSON: {exc}")
+        return None
+    if not isinstance(doc, dict):
+        problems.append(f"{label} must contain a JSON object")
+        return None
+    return doc
+
+
+def _json_values_exactly_equal(left: object, right: object) -> bool:
+    """Compare parsed JSON without Python's bool/int equality coercion."""
+
+    if isinstance(left, bool) or isinstance(right, bool):
+        return type(left) is type(right) and left == right
+    if isinstance(left, int | float) and isinstance(right, int | float):
+        return left == right
+    if type(left) is not type(right):
+        return False
+    if isinstance(left, dict):
+        return left.keys() == right.keys() and all(
+            _json_values_exactly_equal(value, right[key])
+            for key, value in left.items()
+        )
+    if isinstance(left, list):
+        return len(left) == len(right) and all(
+            _json_values_exactly_equal(lvalue, rvalue)
+            for lvalue, rvalue in zip(left, right, strict=True)
+        )
+    return left == right
+
+
+def _require_campaign_fields(
+    value: object,
+    fields: tuple[str, ...],
+    *,
+    label: str,
+    problems: list[str],
+) -> None:
+    """Require a complete, nonempty identity object.
+
+    Exact report/campaign equality alone is insufficient: both artifacts could
+    omit the same identity fields and still appear aligned.
+    """
+
+    if not isinstance(value, dict):
+        problems.append(f"{label} must be an object")
+        return
+    missing = [
+        field
+        for field in fields
+        if not isinstance(value.get(field), str) or not value[field].strip()
+    ]
+    if missing:
+        problems.append(
+            f"{label} is missing {', '.join(missing)} or they are not "
+            "nonempty strings"
+        )
+
+
+def _campaign_identity_problems(label: str, campaign: dict) -> list[str]:
+    """Validate the complete runtime and dataset identity of one campaign."""
+
+    problems: list[str] = []
+    runtime = campaign.get("runtime_provenance")
+    if not isinstance(runtime, dict):
+        problems.append(f"{label} runtime_provenance must be an object")
+    else:
+        for section, fields in _REQUIRED_CAMPAIGN_RUNTIME_FIELDS.items():
+            _require_campaign_fields(
+                runtime.get(section),
+                fields,
+                label=f"{label} runtime_provenance.{section}",
+                problems=problems,
+            )
+    _require_campaign_fields(
+        campaign.get("dataset_identity"),
+        _REQUIRED_CAMPAIGN_DATASET_FIELDS,
+        label=f"{label} dataset_identity",
+        problems=problems,
+    )
+    return problems
+
+
+def _campaign_projection_problems(name: str, config: dict) -> list[str]:
+    """Validate declaration, projected report, and source campaign as one chain."""
+
+    problems: list[str] = []
+    repos = config.get("rulespec_repos") or []
+    suites = config.get("suites") or []
+    if not suites:
+        return [f"{name}: campaign projection declares no suites"]
+    for suite in suites:
+        suite_name = suite.get("suite", "<unnamed>")
+        label = f"{name} suite {suite_name!r}"
+        declared_repos = suite.get("rulespec_repos") or repos
+        if not declared_repos:
+            problems.append(f"{name} suite {suite_name!r} has no rulespec repos")
+        oracle = str(suite.get("oracle") or "").strip().lower()
+        if not oracle or oracle == "none":
+            problems.append(f"{name} suite {suite_name!r} has no oracle")
+        _declared_file(
+            REPO_ROOT,
+            suite.get("campaign_runner"),
+            label=f"{label} campaign runner",
+            problems=problems,
+        )
+        _declared_file(
+            REPO_ROOT,
+            suite.get("projector"),
+            label=f"{label} projector",
+            problems=problems,
+        )
+        report_path = _declared_file(
+            DASHBOARD_DATA_DIR,
+            suite.get("report"),
+            label=f"{label} report",
+            problems=problems,
+        )
+        if report_path is None:
+            continue
+        report = _read_json_object(
+            report_path, label=f"{label} report", problems=problems
+        )
+        if report is None:
+            continue
+        if report.get("schema_version") != "axiom.comparison_report.v2":
+            problems.append(f"{label} report schema is not axiom.comparison_report.v2")
+        if report.get("suite") != suite_name:
+            problems.append(
+                f"{label} report suite is {report.get('suite')!r}, "
+                f"expected {suite_name!r}"
+            )
+        engines = report.get("engines") or {}
+        if not oracle or not engines.get(oracle):
+            problems.append(f"{label} report does not carry declared oracle {oracle!r}")
+
+        provenance = report.get("provenance") or {}
+        if provenance.get("schema") != PROVENANCE_SCHEMA_VERSION:
+            problems.append(f"{label} report has invalid provenance schema")
+        expected_generated_by = f"{suite.get('projector')}::{suite_name}"
+        if provenance.get("generated_by") != expected_generated_by:
+            problems.append(
+                f"{label} report generated_by does not align with projector"
+            )
+        generated_at = provenance.get("generated_at")
+        try:
+            datetime.strptime(str(generated_at), "%Y-%m-%dT%H:%M:%SZ")
+        except ValueError:
+            problems.append(f"{label} report has invalid provenance generated_at")
+        if provenance.get("run_kind") not in RUN_KINDS:
+            problems.append(f"{label} report has invalid provenance run_kind")
+
+        report_rulespecs = provenance.get("rulespecs") or []
+        report_repos = {
+            item.get("repo")
+            for item in report_rulespecs
+            if isinstance(item, dict) and item.get("repo")
+        }
+        if report_repos != set(declared_repos):
+            problems.append(
+                f"{label} report RuleSpec repos {sorted(report_repos)!r} "
+                f"do not align with declaration {sorted(declared_repos)!r}"
+            )
+        if not report_rulespecs or any(
+            not isinstance(item, dict) or not item.get("sha")
+            for item in report_rulespecs
+        ):
+            problems.append(f"{label} report RuleSpec provenance lacks a SHA")
+
+        campaign_path = _declared_file(
+            REPORTS_DIR,
+            provenance.get("campaign_report"),
+            label=f"{label} source campaign",
+            problems=problems,
+        )
+        if campaign_path is None:
+            continue
+        campaign = _read_json_object(
+            campaign_path, label=f"{label} source campaign", problems=problems
+        )
+        if campaign is None:
+            continue
+        if campaign.get("schema_version") != (
+            "axiom.state_tax_populace_campaign_report.v1"
+        ):
+            problems.append(f"{label} source campaign schema is invalid")
+        if campaign.get("generated_at") != generated_at:
+            problems.append(
+                f"{label} report generated_at does not align with source campaign"
+            )
+        if campaign.get("run_kind") != provenance.get("run_kind"):
+            problems.append(
+                f"{label} report run_kind does not align with source campaign"
+            )
+        if campaign.get("generated_by") != suite.get("campaign_runner"):
+            problems.append(
+                f"{label} source campaign generated_by does not align with runner"
+            )
+        problems.extend(_campaign_identity_problems(f"{label} source campaign", campaign))
+
+        campaign_runtime = campaign.get("runtime_provenance")
+        projected_runtime = provenance.get("runtime_provenance")
+        campaign_rulespec = (campaign_runtime or {}).get("rulespec") or {}
+        expected_rulespec = {
+            "repo": campaign_rulespec.get("repository"),
+            "sha": campaign_rulespec.get("commit"),
+        }
+        if expected_rulespec not in report_rulespecs:
+            problems.append(
+                f"{label} report RuleSpec provenance does not align with "
+                "source campaign runtime"
+            )
+        if (
+            not isinstance(campaign_runtime, dict)
+            or not campaign_runtime
+            or not _json_values_exactly_equal(projected_runtime, campaign_runtime)
+        ):
+            problems.append(
+                f"{label} projected runtime_provenance does not exactly align "
+                "with source campaign"
+            )
+
+        campaign_dataset = campaign.get("dataset_identity")
+        projected_dataset = provenance.get("dataset_identity")
+        if (
+            not isinstance(campaign_dataset, dict)
+            or not campaign_dataset
+            or not _json_values_exactly_equal(projected_dataset, campaign_dataset)
+        ):
+            problems.append(
+                f"{label} projected dataset_identity does not exactly align "
+                "with source campaign"
+            )
+
+        jurisdiction = str(suite.get("jurisdiction") or "").strip().upper()
+        if not jurisdiction:
+            problems.append(f"{label} declaration has no jurisdiction")
+            continue
+        requested_states = campaign.get("requested_states")
+        if not isinstance(requested_states, list) or jurisdiction not in {
+            str(state).upper() for state in requested_states
+        }:
+            problems.append(
+                f"{label} jurisdiction is not present in source campaign "
+                "requested_states"
+            )
+        campaign_comparison = campaign.get("comparison")
+        campaign_states = {}
+        if isinstance(campaign_comparison, dict):
+            campaign_states = campaign_comparison.get("states") or {}
+        state_entry = (
+            campaign_states.get(jurisdiction)
+            if isinstance(campaign_states, dict)
+            else None
+        )
+        if not isinstance(state_entry, dict):
+            problems.append(
+                f"{label} source campaign has no comparison state for {jurisdiction}"
+            )
+            continue
+        for field in ("output", "program", "policyengine_target"):
+            value = state_entry.get(field)
+            if not isinstance(value, str) or not value.strip():
+                problems.append(
+                    f"{label} source campaign comparison state is missing {field} "
+                    "or it is not a nonempty string"
+                )
+        campaign_mismatches = state_entry.get("mismatches")
+        if not isinstance(campaign_mismatches, list):
+            problems.append(
+                f"{label} source campaign comparison state mismatches must be a list"
+            )
+            campaign_mismatches = []
+
+        compared = state_entry.get("compared_count")
+        mismatch_count = state_entry.get("mismatch_count")
+        if (
+            not isinstance(compared, int)
+            or isinstance(compared, bool)
+            or compared <= 0
+        ):
+            problems.append(
+                f"{label} source campaign compared_count must be a positive integer"
+            )
+            continue
+        if (
+            not isinstance(mismatch_count, int)
+            or isinstance(mismatch_count, bool)
+            or not 0 <= mismatch_count <= compared
+        ):
+            problems.append(
+                f"{label} source campaign mismatch_count must be an integer "
+                "between zero and compared_count"
+            )
+            continue
+        if len(campaign_mismatches) != mismatch_count:
+            problems.append(
+                f"{label} source campaign mismatch list length does not align "
+                "with mismatch_count"
+            )
+
+        matched = compared - mismatch_count
+        match_rate = matched / compared * 100
+        if report.get("population") != "populace-us":
+            problems.append(f"{label} report population is not 'populace-us'")
+        if not _json_values_exactly_equal(report.get("case_count"), compared):
+            problems.append(
+                f"{label} report case_count does not align with source campaign"
+            )
+        if not _json_values_exactly_equal(
+            engines.get("axiom"), state_entry.get("program")
+        ):
+            problems.append(
+                f"{label} report Axiom program does not align with source campaign"
+            )
+        if not _json_values_exactly_equal(
+            engines.get(oracle), state_entry.get("policyengine_target")
+        ):
+            problems.append(
+                f"{label} report oracle target does not align with source campaign"
+            )
+        if not _json_values_exactly_equal(
+            report.get("mismatches"), campaign_mismatches
+        ):
+            problems.append(
+                f"{label} report mismatches do not align with source campaign"
+            )
+
+        expected_summary = {
+            "comparison_count": compared,
+            "match_count": matched,
+            "match_rate": match_rate,
+            "mismatch_count": mismatch_count,
+        }
+        if not _json_values_exactly_equal(report.get("summary"), expected_summary):
+            problems.append(
+                f"{label} report summary does not align with source campaign"
+            )
+
+        aggregates = report.get("aggregates")
+        if not isinstance(aggregates, list) or len(aggregates) != 1:
+            problems.append(f"{label} report must carry exactly one aggregate")
+        else:
+            aggregate = aggregates[0]
+            expected_aggregate_fields = {
+                "concept": state_entry.get("output"),
+                "comparison_count": compared,
+                "compared": compared,
+                "match_count": matched,
+                "matched": matched,
+                "mismatch_count": mismatch_count,
+                "match_rate": match_rate,
+                "weighted_match_rate": match_rate,
+            }
+            if not isinstance(aggregate, dict) or any(
+                not _json_values_exactly_equal(aggregate.get(field), value)
+                for field, value in expected_aggregate_fields.items()
+            ):
+                problems.append(
+                    f"{label} report aggregate does not align with source campaign"
+                )
+
+        evidence_constraints = {
+            "tolerance": False,
+            "relative_tolerance": False,
+            "max_absolute_difference": False,
+            "weighted_compared_tax_units": True,
+        }
+        for field, must_be_positive in evidence_constraints.items():
+            value = state_entry.get(field)
+            valid_number = (
+                isinstance(value, int | float)
+                and not isinstance(value, bool)
+                and math.isfinite(value)
+                and (value > 0 if must_be_positive else value >= 0)
+            )
+            if not valid_number:
+                qualifier = "positive" if must_be_positive else "nonnegative"
+                problems.append(
+                    f"{label} source campaign {field} must be a finite "
+                    f"{qualifier} number"
+                )
+            if not _json_values_exactly_equal(provenance.get(field), value):
+                problems.append(
+                    f"{label} report provenance {field} does not align with "
+                    "source campaign"
+                )
     return problems
 
 
@@ -189,6 +631,9 @@ def check_oracle_backed() -> list[str]:
                         f"parameter-oracles.yaml suite {suite.get('suite')!r} "
                         "declares no comparisons — nothing is verified"
                     )
+            continue
+        if config.get("kind") == "campaign-projection-suite-list":
+            problems.extend(_campaign_projection_problems(path.name, config))
             continue
         if "name" not in config:
             continue
@@ -275,6 +720,15 @@ def build_freshness() -> dict:
                 "affected_repos": entry.get("repos", []),
                 "ran_against": ran_against,
                 "unstamped": provenance.get("generated_at") is None,
+                # Re-emission honesty (sol stack review F6): for a
+                # skip-capable lane that reused the committed report,
+                # generated_at dates the RE-EMISSION, not the numbers.
+                # Without this flag (plus the source stamp dating the
+                # actual numbers, when the lane recorded one), a
+                # permanently re-emitting lane presents as freshly run on
+                # every freshness surface.
+                "reemitted": bool(provenance.get("reemitted_report")),
+                "reemitted_from": provenance.get("reemitted_from"),
             }
         )
 
@@ -320,12 +774,14 @@ _PROGRAM_SUITE_TOKENS = {
     "federal_income_tax": "fiit",
     "medicaid_eligibility_groups": "medicaid",
     "medicaid_chip_bhp_thresholds": "health",
-    "state_income_tax": "state-income-tax",
+    "state_income_tax": "income-tax",
     "nyc_income_tax": "nyc-income-tax",
 }
 
 
-def _suite_matches_program(suite: str, program: str | None, jurisdiction: str | None) -> bool:
+def _suite_matches_program(
+    suite: str, program: str | None, jurisdiction: str | None
+) -> bool:
     """Link a coverage (program, jurisdiction) row to a report suite.
 
     Suites are slugged like ``co-snap-ecps`` / ``ny-tanf-ecps`` / ``fiit-ecps``;
@@ -343,7 +799,10 @@ def _suite_matches_program(suite: str, program: str | None, jurisdiction: str | 
         return False
     # `us` is the national marker, not a slug substring; only a real state
     # jurisdiction must appear in the slug.
-    if juris and juris != "us" and juris not in slug:
+    # State suites use the jurisdiction as their first slug token. Do not use a
+    # raw substring test: ``co`` occurs inside ``income`` and would otherwise
+    # make every income-tax suite look like a Colorado suite.
+    if juris and juris != "us" and slug.split("-", 1)[0] != juris:
         return False
     return bool(token or juris)
 

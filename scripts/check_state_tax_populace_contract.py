@@ -82,7 +82,9 @@ def _validate_generator_registry(contract) -> None:
         state = item.state
         generated = (
             generator._TAXSIM_STATE.get(state),
-            generator._MODULE.get(state),
+            getattr(generator, "_POPULACE_MODULE", {}).get(
+                state, generator._MODULE.get(state)
+            ),
             getattr(generator, "_POPULACE_OUTPUT", {}).get(
                 state, generator._LIABILITY_OUTPUT.get(state)
             ),

@@ -1,0 +1,85 @@
+{
+ "aggregates": [
+  {
+   "compared": 8883,
+   "comparison": "amount",
+   "comparison_count": 8883,
+   "components": [],
+   "concept": "us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_behavioral_health_services_tax",
+   "description": "California Behavioral Health Services Tax, computed as 1 percent of caller-supplied completed California taxable income above $1 million, over every routed tax unit in the pinned US Populace; this component suite does not claim broad California income-tax liability",
+   "match_count": 8883,
+   "match_rate": 100.0,
+   "matched": 8883,
+   "mismatch_count": 0,
+   "missing_both_count": 0,
+   "missing_left_count": 0,
+   "missing_right_count": 0,
+   "parent": null,
+   "weighted_match_rate": 100.0
+  }
+ ],
+ "case_count": 8883,
+ "cases": [],
+ "engines": {
+  "axiom": "us-ca:policies/income_tax/pilot_liability_pipeline",
+  "policyengine": "ca_mental_health_services_tax"
+ },
+ "errors": [],
+ "mismatches": [],
+ "population": "populace-us",
+ "provenance": {
+  "branch_diagnostics": {
+   "compared_tax_unit_count": 8883,
+   "positive_behavioral_health_services_tax_count": 1206,
+   "zero_behavioral_health_services_tax_count": 7677
+  },
+  "campaign_report": "state-tax-populace-ca-campaign-2026-07-27.json",
+  "dataset_identity": {
+   "built_with": "1.729.0",
+   "country": "us",
+   "path": "/Users/pavelmakarchuk/.cache/huggingface/hub/datasets--policyengine--populace-us/snapshots/d8f5cff65f36205a613cb144fd97db3087bbd82a/populace_us_2024.h5",
+   "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+   "sha256": "16be6338f9d0",
+   "source": "pinned"
+  },
+  "generated_at": "2026-07-27T17:55:17Z",
+  "generated_by": "scripts/emit_populace_campaign_artifacts.py::ca-income-tax-populace",
+  "max_absolute_difference": 0.21999999973922968,
+  "relative_tolerance": 1e-07,
+  "rulespecs": [
+   {
+    "repo": "TheAxiomFoundation/rulespec-us",
+    "sha": "6b0773d3f7fa6719f208154f3e609e292ab7abe7"
+   }
+  ],
+  "run_kind": "manual",
+  "runtime_provenance": {
+   "axiom_engine": {
+    "commit": "ffd8213271947b0189a9dd61a055c1e0e78908a0",
+    "executable_sha256": "c7eef635dadca73b51d4012fcc2f12c2f08dd82f9d505ba5228f127779a3a4e2",
+    "repository": "TheAxiomFoundation/axiom-rules-engine",
+    "working_tree": "clean"
+   },
+   "packages": {
+    "policyengine": "4.18.9",
+    "policyengine-us": "1.752.2"
+   },
+   "rulespec": {
+    "commit": "6b0773d3f7fa6719f208154f3e609e292ab7abe7",
+    "repository": "TheAxiomFoundation/rulespec-us",
+    "working_tree": "clean"
+   }
+  },
+  "schema": "axiom_oracles.provenance.v1",
+  "tolerance": 0.01,
+  "weighted_compared_tax_units": 20283184.623890057
+ },
+ "schema_version": "axiom.comparison_report.v2",
+ "suite": "ca-income-tax-populace",
+ "summary": {
+  "comparison_count": 8883,
+  "match_count": 8883,
+  "match_rate": 100.0,
+  "mismatch_count": 0
+ }
+}

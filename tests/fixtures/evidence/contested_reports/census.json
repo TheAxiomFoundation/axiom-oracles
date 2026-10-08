@@ -1,0 +1,26 @@
+{
+  "schema": "axiom_oracles.exercise_census.v1",
+  "suites": {
+    "synthetic-contested": {
+      "cases_scanned": 2,
+      "report": "tests/fixtures/evidence/contested_reports/report-b.json",
+      "report_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "contested_reports": [
+        "tests/fixtures/evidence/contested_reports/report-a.json",
+        "tests/fixtures/evidence/contested_reports/report-b.json"
+      ],
+      "evidence_fields": {
+        "income": {
+          "distinct": 2,
+          "state": "varied"
+        }
+      },
+      "varied_fields": 1,
+      "constant_fields": 0,
+      "bridged_through": {},
+      "bridge_audited": true,
+      "binding": "unbound",
+      "reconciliation": "cardinality"
+    }
+  }
+}

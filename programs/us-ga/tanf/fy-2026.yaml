@@ -18,17 +18,17 @@
 #
 # Target oracle surface: PolicyEngine ga_tanf (SPMUnit, MONTH):
 #   min(max(standard_of_need - countable_income, 0), family_maximum),
-#   defined_for ga_tanf_eligible. The annualized output mirrors the covered
-#   al/co/az convention; the compare framework annualizes PE's monthly ga_tanf.
+#   defined_for ga_tanf_eligible. The comparison requests January 2026 and
+#   therefore exposes the composed monthly benefit.
 
 program: us-ga/tanf
 period: 2026-01
 
 outputs:
-  - ga_tanf_annual_benefit
+  - ga_tanf_monthly_benefit
 
 acknowledged_incomplete:
-  - ga_tanf_annual_benefit
+  - ga_tanf_monthly_benefit
 
 scope:
   state:

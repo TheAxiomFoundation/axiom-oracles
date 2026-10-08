@@ -1,133 +1,101 @@
 schema: axiom_oracles.dispositions.v1
 suite: ut-income-tax-liability
-updated: "2026-07-08"
-# Utah composed flat-liability pipeline vs PolicyEngine (2026) and TAXSIM (2024)
-# on the six-case grid. The pipeline matches PolicyEngine ut_income_tax_before_credits
-# exactly on all six cases (a single flat rate on the taxable base), so the
-# PolicyEngine leg needs no disposition.
-#
-# Against TAXSIM's 2024 law year every case diverges for two combined reasons:
-# (1) the rate vintage — Utah's flat rate was 4.55 per cent in 2024 and 4.45 per
-# cent in 2026 (H.B. 106 of 2025), so TAXSIM's 2024 tax is 0.10 point of taxable
-# income higher; and (2) TAXSIM's siitax nets the section 59-10-1018 taxpayer tax
-# credit, which this before-credits core excludes and which phases out with
-# income (large at low income, zero by ~$150,000). At the high-income cases the
-# credit is fully phased out and only the rate vintage remains (a clean
-# -0.001 x taxable income). All six residuals are dispositioned below.
+updated: "2026-07-27"
+# Canonical exemption-aware Utah section 59-10-104 tax before credits versus
+# PolicyEngine's exact derived target and TAXSIM 2.30.0 at law year 2026.
+# PolicyEngine matches all six cases. TAXSIM siitax is a downstream final-tax
+# surface: it nets the section 59-10-1018 taxpayer credit and currently applies
+# a 4.50 percent Utah rate, while the official 2026 statute and canonical
+# RuleSpec apply 4.45 percent. These scope/model residuals are dispositioned
+# exactly; none is absorbed by tolerance.
 entries:
-  - id: ut-taxsim-2024-rate-and-credit-single-30000
-    concept: us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability
+  - id: ut-taxsim-2026-rate-and-credit-single-30000
+    concept: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits
     case_id: ut-single-30000
     kind: amount_difference
     disposition: explained_residual
     evidence:
-      mechanism: >-
-        The 2026 pipeline reports 1335.00 (before credits) and TAXSIM 2024 reports
-        649.52, a positive 685.48-dollar gap (the pipeline is higher). TAXSIM 2024
-        applies the 4.55 per cent rate (raising its tax by 30 dollars on 30,000)
-        but then nets the section 59-10-1018 taxpayer tax credit (about 715
-        dollars at this income) that this before-credits core excludes; the credit
-        dominates. The residual is the rate vintage plus the taxpayer-credit scope,
-        both documented boundaries of this before-credits core.
+      mechanism: TAXSIM siitax nets the downstream taxpayer credit and uses a 4.50 percent rate; the canonical output is before credits at the official 4.45 percent rate.
       arithmetic:
-        - expression: "1335.0 - 649.52"
-          equals: 685.48
+        - expression: "1335.0 - 530.13"
+          equals: 804.87
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
       left: 1335.0
-      right: 649.52
-  - id: ut-taxsim-2024-rate-and-credit-single-60000
-    concept: us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability
+      right: 530.13
+  - id: ut-taxsim-2026-rate-and-credit-single-60000
+    concept: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits
     case_id: ut-single-60000
     kind: amount_difference
     disposition: explained_residual
     evidence:
-      mechanism: >-
-        The 2026 pipeline reports 2670.00 and TAXSIM 2024 reports 2404.52, a
-        265.48-dollar gap: the 4.55-vs-4.45 rate vintage (+60 dollars in TAXSIM on
-        60,000) net of the partially-phased-out 59-10-1018 taxpayer credit (about
-        325 dollars) that this before-credits core excludes.
+      mechanism: TAXSIM siitax nets the downstream taxpayer credit and uses a 4.50 percent rate; the canonical output is before credits at the official 4.45 percent rate.
       arithmetic:
-        - expression: "2670.0 - 2404.52"
-          equals: 265.48
+        - expression: "2670.0 - 2270.13"
+          equals: 399.87
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
       left: 2670.0
-      right: 2404.52
-  - id: ut-taxsim-2024-rate-vintage-single-150000
-    concept: us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability
+      right: 2270.13
+  - id: ut-taxsim-2026-rate-vintage-single-150000
+    concept: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits
     case_id: ut-single-150000
     kind: amount_difference
     disposition: explained_residual
     evidence:
-      mechanism: >-
-        The 2026 pipeline reports 6675.00 and TAXSIM 2024 reports 6825.00, a
-        clean -150.00-dollar gap: at this income the section 59-10-1018 taxpayer
-        credit is fully phased out, leaving only the 4.55-vs-4.45 rate vintage
-        (150,000 x -0.001 = -150). The residual is exactly the rate vintage.
+      mechanism: The taxpayer credit is fully phased out; the residual is TAXSIM's 4.50 percent rate versus the official 4.45 percent rate.
       arithmetic:
-        - expression: "6675.0 - 6825.0"
-          equals: -150.0
+        - expression: "6675.0 - 6750.0"
+          equals: -75.0
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
       left: 6675.0
-      right: 6825.0
-  - id: ut-taxsim-2024-rate-and-credit-married-60000
-    concept: us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability
+      right: 6750.0
+  - id: ut-taxsim-2026-rate-and-credit-married-60000
+    concept: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits
     case_id: ut-married-60000
     kind: amount_difference
     disposition: explained_residual
     evidence:
-      mechanism: >-
-        The 2026 pipeline reports 2670.00 and TAXSIM 2024 reports 1299.05, a
-        1370.95-dollar gap: the rate vintage (+60 dollars in TAXSIM on 60,000) net
-        of the larger married section 59-10-1018 taxpayer credit (about 1,431
-        dollars) that this before-credits core excludes.
+      mechanism: TAXSIM siitax nets the downstream married taxpayer credit and uses a 4.50 percent rate; the canonical output is before credits at the official 4.45 percent rate.
       arithmetic:
-        - expression: "2670.0 - 1299.05"
-          equals: 1370.95
+        - expression: "2670.0 - 1060.27"
+          equals: 1609.73
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
       left: 2670.0
-      right: 1299.05
-  - id: ut-taxsim-2024-rate-and-credit-married-120000
-    concept: us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability
+      right: 1060.27
+  - id: ut-taxsim-2026-rate-and-credit-married-120000
+    concept: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits
     case_id: ut-married-120000
     kind: amount_difference
     disposition: explained_residual
     evidence:
-      mechanism: >-
-        The 2026 pipeline reports 5340.00 and TAXSIM 2024 reports 4809.05, a
-        530.95-dollar gap: the rate vintage (+120 dollars in TAXSIM on 120,000)
-        net of the partially-phased-out married taxpayer credit (about 651 dollars)
-        that this before-credits core excludes.
+      mechanism: TAXSIM siitax nets the downstream married taxpayer credit and uses a 4.50 percent rate; the canonical output is before credits at the official 4.45 percent rate.
       arithmetic:
-        - expression: "5340.0 - 4809.05"
-          equals: 530.95
+        - expression: "5340.0 - 4540.27"
+          equals: 799.73
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
       left: 5340.0
-      right: 4809.05
-  - id: ut-taxsim-2024-rate-vintage-married-300000
-    concept: us-ut:policies/income_tax/pilot_liability_pipeline#ut_pit_pilot_income_tax_liability
+      right: 4540.27
+  - id: ut-taxsim-2026-rate-vintage-married-300000
+    concept: us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits
     case_id: ut-married-300000
     kind: amount_difference
     disposition: explained_residual
     evidence:
-      mechanism: >-
-        The 2026 pipeline reports 13350.00 and TAXSIM 2024 reports 13650.00, a
-        clean -300.00-dollar gap: the taxpayer credit is fully phased out, leaving
-        only the 4.55-vs-4.45 rate vintage (300,000 x -0.001 = -300).
+      mechanism: The taxpayer credit is fully phased out; the residual is TAXSIM's 4.50 percent rate versus the official 4.45 percent rate.
       arithmetic:
-        - expression: "13350.0 - 13650.0"
-          equals: -300.0
+        - expression: "13350.0 - 13500.0"
+          equals: -150.0
           tolerance: 0.02
     expires_on_source_change: true
     pinned:
       left: 13350.0
-      right: 13650.0
+      right: 13500.0
