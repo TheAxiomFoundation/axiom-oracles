@@ -730,7 +730,8 @@ def _euromod_release_from_model_root(model_root: str | None) -> str | None:
 
 
 def _complete_rulespecs_from_affected_map(
-    config: dict, runner: dict, rulespecs: list[dict]
+    config: dict, runner: dict, rulespecs: list[dict],
+    *, declared_paths: list[str] | None = None,
 ) -> list[dict]:
     """Fill missing or SHA-less rulespec entries for the suite's mapped repos.
 
@@ -745,9 +746,11 @@ def _complete_rulespecs_from_affected_map(
       (:func:`axiom_oracles.provenance.resolve_rulespec_checkout` — the same
       locations the harnesses themselves search).
 
-    Declared-path entries win over convention lookups. Existing SHAs are
-    retained unless a declared absorbed layer makes country provenance
-    ambiguous. Unresolvable repos keep or gain a
+    Declared paths never borrow clone or convention SHAs. GitHub identities
+    match case-insensitively, while raw remote spelling is retained. A mapped
+    SHA comes only from agreeing declared entries; missing or conflicting
+    SHAs, or a declared absorbed layer, leave country provenance ambiguous.
+    Unresolvable repos keep or gain a
     ``sha: None`` entry so the selector's conservative "cannot prove fresh"
     reading stays intact. So does a mapped repo that a declared checkout of an
     absorbed repo folds into (a clone of an archived ``rulespec-us-<st>``,
@@ -777,15 +780,16 @@ def _complete_rulespecs_from_affected_map(
             return rulespecs
         by_repo = {e.get("repo"): e for e in rulespecs}
         read_absorbed_instead = {
-            canonical_rulespec_slug(e["repo"])
+            canonical_rulespec_slug(e["repo"]).casefold()
             for e in rulespecs
-            if e.get("repo") and canonical_rulespec_slug(e["repo"]) != e["repo"]
+            if e.get("repo")
+            and canonical_rulespec_slug(e["repo"]).casefold() != e["repo"].casefold()
         }
         completed = list(rulespecs)
         for repo in mapped_repos:
             # Any absorbed layer makes this country's provenance ambiguous,
             # even when a separate federal/country root supplied a live SHA.
-            if repo in read_absorbed_instead:
+            if repo.casefold() in read_absorbed_instead:
                 for entry in completed:
                     if (entry.get("repo") or "").casefold() == repo.casefold():
                         entry["sha"] = None
@@ -794,7 +798,25 @@ def _complete_rulespecs_from_affected_map(
                     by_repo[repo] = entry
                     completed.append(entry)
                 continue
-            if by_repo.get(repo, {}).get("sha"):
+            matching = [
+                entry for entry in rulespecs
+                if (entry.get("repo") or "").casefold() == repo.casefold()
+            ]
+            if declared_paths or any(entry.get("sha") for entry in matching):
+                # The canonical selector key must describe these checkouts,
+                # even if a different convention checkout is newer. Unknown
+                # or contradictory declared origins cannot establish its SHA.
+                shas = {entry.get("sha") for entry in matching}
+                sha = next(iter(shas)) if len(shas) == 1 else None
+                if sha is None:
+                    for entry in matching:
+                        entry["sha"] = None
+                if repo in by_repo:
+                    by_repo[repo]["sha"] = sha
+                else:
+                    entry = {"repo": repo, "sha": sha}
+                    by_repo[repo] = entry
+                    completed.append(entry)
                 continue
             sha = None
             if repo == "TheAxiomFoundation/rulespec-us":
@@ -912,7 +934,9 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         "axiom-oracles-compare",
         "de-axiom-oracle-compare",
     ):
-        rulespecs = _complete_rulespecs_from_affected_map(config, runner, rulespecs)
+        rulespecs = _complete_rulespecs_from_affected_map(
+            config, runner, rulespecs, declared_paths=rulespec_paths
+        )
     # A skip-capable runner that re-emitted the committed report never
     # executed any rules this run — no matter which path produced a rulespec
     # entry (configured roots included), its SHA must not be recorded, or the

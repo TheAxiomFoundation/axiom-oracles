@@ -2,6 +2,7 @@ import importlib.util
 import json
 import os
 import subprocess
+from itertools import permutations
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -1942,6 +1943,131 @@ def test_absorbed_layer_keeps_country_sha_unknown(
     assert selector.select(
         affected_map, {country_slug: country_sha}, {"demo-suite": {"provenance": block}}
     ) == []
+
+
+def _provenance_checkout(path, slug, content):
+    """Create distinct real checkout SHAs for completion/selector regressions."""
+    from axiom_oracles import provenance
+
+    path.mkdir(parents=True)
+    for args in (
+        ["init", "-q"],
+        ["config", "user.name", "test"],
+        ["config", "user.email", "test@invalid"],
+        ["config", "commit.gpgsign", "false"],
+        ["remote", "add", "origin", f"https://github.com/{slug}.git"],
+    ):
+        subprocess.run(["git", "-C", str(path), *args], check=True)
+    (path / "fixture.txt").write_text(content)
+    subprocess.run(["git", "-C", str(path), "add", "fixture.txt"], check=True)
+    subprocess.run(["git", "-C", str(path), "commit", "-qm", "fixture"], check=True)
+    return provenance._git_sha(path)
+
+
+@pytest.mark.parametrize(
+    "origin",
+    [
+        "theaxiomfoundation/RuleSpec-US",
+        "someone/rulespec-us",
+        "TheAxiomFoundation/rulespec-us",
+    ],
+)
+def test_declared_country_checkout_never_borrows_convention_sha(
+    origin, monkeypatch, tmp_path
+):
+    """The TANF symlink's own SHA wins; a contradictory origin stays unknown."""
+    country = "TheAxiomFoundation/rulespec-us"
+    rc, config = _completion_fixture(monkeypatch, tmp_path, [country])
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: tmp_path))
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    declared = tmp_path / "declared" / "rulespec-us"
+    convention = tmp_path / "TheAxiomFoundation" / "rulespec-us"
+    actual_sha = _provenance_checkout(declared, origin, "rules actually read")
+    convention_sha = _provenance_checkout(convention, country, "new upstream rules")
+    assert actual_sha != convention_sha
+    link = tmp_path / "rulespec-us"
+    link.symlink_to(declared, target_is_directory=True)
+    config["runner"] = {"parameters": {"rulespec_roots": [str(link)]}}
+    assert rc._resolve_path(str(link), "rulespec_roots") == declared.resolve()
+    output = tmp_path / "output.json"
+    output.write_text("{}")
+
+    block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+
+    assert {"repo": origin, "sha": actual_sha} in block["rulespecs"]
+    expected = actual_sha if origin.casefold() == country.casefold() else None
+    assert {"repo": country, "sha": expected} in block["rulespecs"]
+    assert all(entry["sha"] != convention_sha for entry in block["rulespecs"])
+    selector = load_script_module("select_affected_suites")
+    affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+    reports = {"demo-suite": {"provenance": block}}
+    assert len(selector.select(affected_map, {country: convention_sha}, reports)) == 1
+    assert bool(selector.select(affected_map, {country: actual_sha}, reports)) == (
+        expected is None
+    )
+
+
+def test_completion_property_over_mixed_declared_roots(monkeypatch, tmp_path):
+    """Exhaust all root orders up to three layers, plus duplicate roots.
+
+    Without Hypothesis tooling, the finite domain covers archived checkouts,
+    country checkouts, jurisdiction directories within monorepos, and roots
+    without a SHA. Freshness requires one agreed SHA from the declared roots;
+    unrelated convention/clone SHAs can never fill missing evidence.
+    """
+    from axiom_oracles import provenance
+
+    country = "TheAxiomFoundation/rulespec-us"
+    rc, config = _completion_fixture(monkeypatch, tmp_path, [country])
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: tmp_path))
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    convention = tmp_path / "TheAxiomFoundation" / "rulespec-us"
+    borrowed_sha = _provenance_checkout(convention, country, "unread checkout")
+    checkout = tmp_path / "country" / "rulespec-us"
+    country_sha = _provenance_checkout(
+        checkout, "theaxiomfoundation/RuleSpec-US", "declared country"
+    )
+    monorepo = tmp_path / "monorepo"
+    monorepo_sha = _provenance_checkout(monorepo, country, "declared monorepo")
+    jurisdiction = monorepo / "us-co"
+    jurisdiction.mkdir()
+    archived = tmp_path / "archived"
+    archived_slug = "THEAXIOMFOUNDATION/RuleSpec-US-CO"
+    archived_sha = _provenance_checkout(archived, archived_slug, "archived rules")
+    bare = tmp_path / "bare" / "rulespec-us"
+    bare.mkdir(parents=True)
+    missing = tmp_path / "missing" / "rulespec-us"
+    roots = [checkout, jurisdiction, archived, bare, missing]
+    own_shas = {checkout: country_sha, jurisdiction: monorepo_sha}
+    assert len({borrowed_sha, country_sha, monorepo_sha, archived_sha}) == 4
+    orders = [order for size in range(1, 4) for order in permutations(roots, size)]
+    orders.extend([(checkout, checkout), (jurisdiction, jurisdiction)])
+    output = tmp_path / "output.json"
+    output.write_text("{}")
+    selector = load_script_module("select_affected_suites")
+    affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+
+    for order in orders:
+        config["runner"] = {
+            "parameters": {"rulespec_roots": [str(root) for root in order]},
+            "_cloned_rulespec_us_sha": borrowed_sha,
+        }
+        block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+        shas = {own_shas.get(root) for root in order}
+        expected = next(iter(shas)) if len(shas) == 1 else None
+        canonical = [entry for entry in block["rulespecs"] if entry["repo"] == country]
+        assert canonical and {entry["sha"] for entry in canonical} == {expected}, order
+        assert all(entry["sha"] != borrowed_sha for entry in block["rulespecs"]), order
+        if archived in order:
+            assert {"repo": archived_slug, "sha": archived_sha} in block["rulespecs"]
+        reports = {"demo-suite": {"provenance": block}}
+        for head in (borrowed_sha, country_sha, monorepo_sha):
+            assert bool(selector.select(affected_map, {country: head}, reports)) == (
+                expected != head
+            ), (order, head)
+        # Bare and absent roots have no enclosing Git repository or known SHA.
+        if bare in order or missing in order:
+            assert provenance._git_sha(bare if bare in order else missing) is None
 
 
 def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
