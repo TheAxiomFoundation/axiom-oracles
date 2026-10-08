@@ -742,8 +742,12 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         assert by_name[program].suite is None, program
         assert by_name[program].in_scope, program
         assert by_name[program].note, program
-    # SNAP is one national row registered to its canonical (largest) suite.
-    assert by_name["snap"].suite == "ca-snap-ecps"
+    # The canonical SNAP suite compares intermediates, so final SNAP remains
+    # in scope without a covering registration until an output comparison.
+    assert by_name["snap"].suite is None
+    assert by_name["snap"].in_scope
+    assert "snap_normal_allotment" in by_name["snap"].note
+    assert "is_snap_eligible" in by_name["snap"].note
     assert by_name["aca_ptc"].suite == "us-aca-ptc-grid"
     assert (
         by_name["additional_medicare_tax"].suite
@@ -795,11 +799,22 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "foreign_tax_credit": None,
         "taxable_income": None,
     }
-    assert by_name["savers_credit"].suite == "us-savers-grid"
-    assert "34 fixture-bound" in by_name["savers_credit"].note
-    assert "reviewed direct PE-US target" in by_name["savers_credit"].note
-    assert "23/34" in by_name["savers_credit"].note
-    assert "policyengine-us/issues/9151" in by_name["savers_credit"].note
+    assert by_name["savers_credit"].suite is None
+    assert by_name["savers_credit"].in_scope
+    assert "savers_credit_potential" in by_name["savers_credit"].note
+    assert "diagnostic" in by_name["savers_credit"].note
+    # The useful narrower evidence stays published even while the final
+    # policy's coverage is retracted; check its facts in the report itself.
+    savers_report = json.loads(
+        (REPO_ROOT / "dashboard/public/data/axiom-policyengine-us-savers-grid.json").read_text()
+    )
+    assert savers_report["case_count"] == 34
+    assert savers_report["summary"]["match_count"] == 23
+    assert savers_report["summary"]["comparison_count"] == 34
+    savers_dispositions = (
+        REPO_ROOT / "dashboard/public/data/dispositions/us-savers-grid.json"
+    ).read_text()
+    assert "policyengine-us/issues/9151" in savers_dispositions
     assert by_name["self_employment_tax"].suite == "us-seca-grid"
     # State income-tax coverage counts only a comparison that proves the final
     # public variable. These blocked grids exercise useful narrower components,
@@ -834,6 +849,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "mn_income_tax": "mn_income_tax_before_refundable_credits",
         "mo_income_tax": "mo_income_tax_before_credits",
         "mt_income_tax": "mt_income_tax_before_non_refundable_credits_joint",
+        "nc_income_tax": "nc_income_tax_before_credits",
         "nd_income_tax": "nd_income_tax_before_credits",
         "ne_income_tax": "ne_income_tax_before_credits",
         "nj_income_tax": "nj_main_income_tax",
@@ -863,27 +879,18 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         ct_income_tax.note
     )
     assert "final ct_income_tax" in ct_income_tax.note
-    # North Carolina is the reviewed 2026 exception whose narrower target
-    # is provably identical to the generated final variable over every
-    # positive-weight routed Populace tax unit. Alabama and Connecticut
-    # deliberately are not promoted from their narrower component comparisons
-    # to final liability.
-    final_equivalent_state_targets = {
-        "nc_income_tax": ("nc_income_tax_before_credits", "2,169"),
-    }
-    for final_variable, (compared_surface, population_count) in (
-        final_equivalent_state_targets.items()
-    ):
-        row = by_name[final_variable]
-        assert row.suite == f"{final_variable[:2]}-income-tax-liability"
-        assert compared_surface in row.note
-        assert population_count in row.note
+    # Equality with a narrower target does not attest a comparison of the
+    # registered final output (Max's d1081 ruling applies to NC too).
+    assert "even if the two values coincide" in by_name["nc_income_tax"].note
     covered_state_income_taxes = {
         variable
         for variable, row in by_name.items()
         if re.fullmatch(r"[a-z]{2}_income_tax", variable) and row.suite is not None
     }
-    assert covered_state_income_taxes == set(final_equivalent_state_targets)
+    assert covered_state_income_taxes == set()
+    assert by_name["ks_tanf"].suite is None
+    assert by_name["ks_tanf"].in_scope
+    assert "ks_tanf_maximum_benefit" in by_name["ks_tanf"].note
     # Per-state TANF suites bind their state's variable (incl. renamed ones).
     assert by_name["mn_mfip"].suite == "mn-tanf-ecps"
 
@@ -2103,8 +2110,10 @@ def test_marital_quotient_records_the_related_person_worker_pipeline():
     worker records, so the composition must preserve those record identities,
     their relation tuples, and both record-targeted bridges.
     """
-    composition = load_composition("be-marital-quotient")
-    assert composition is not None
+    # Retraction removes the covering record, while the live suite still
+    # derives the same repaired worker pipeline for a future rerun.
+    assert load_composition("be-marital-quotient") is None
+    composition = composition_for_suite("be-marital-quotient")
     assert composition.entity == "TaxUnit"
     assert composition.imports == (
         "be:statutes/income_tax/individual/couple_pit_oracle_pipeline",
@@ -2258,7 +2267,7 @@ def test_resolve_suite_program_normalizes_a_rulespec_checkout_root(tmp_path):
     target.parent.mkdir(parents=True)
     target.write_text("format: rulespec/v1\n")
 
-    composition = load_composition("be-marital-quotient")
+    composition = composition_for_suite("be-marital-quotient")
     # Pointing straight at the checkout resolves to its parent workspace.
     resolved = composition.resolve(checkout)
     assert resolved.root == workspace
@@ -2310,7 +2319,7 @@ def test_compositions_check_fails_on_mutated_commit():
     path = compositions_path("be")
     original = path.read_text()
     # Flip a query entity — a lie about what the harness runs.
-    tampered = original.replace("entity: TaxUnit", "entity: Household", 1)
+    tampered = original.replace("entity: Person", "entity: Household", 1)
     assert tampered != original
     path.write_text(tampered)
     try:
@@ -2709,12 +2718,17 @@ def test_waiver_restores_coverage_and_is_published_on_the_scoreboard():
     """A waived row stays covered — and the badge says how many it rests on."""
     universe = parse_universe(CONFORMANCE_DIR / "be.yaml")
     policy = next(p for p in universe.policies if p.id == "be:tintb_be")
-    universe = replace(universe, policies=[policy])
+    # This isolates the approved historical waiver mechanism; the current
+    # public policy has deliberately retracted this covering registration.
+    universe = replace(universe, policies=[replace(policy, suite="be-marital-quotient")])
     report = json.loads(
         (REPO_ROOT / "tests/fixtures/attestations/approved-be-marital-quotient.json").read_text()
     )
     board, scores = score_jurisdiction(
-        universe, [report], waivers=parse_waivers(CONFORMANCE_DIR / "attestation_waivers.yaml")
+        universe, [report], waivers=WaiverIndex([_waiver(
+            jurisdiction="be", policy_id="be:tintb_be", suite="be-marital-quotient",
+            reason="compared_surface_differs",
+        )])
     )
     assert board.covered == 1
     assert board.conformant is True
@@ -2807,7 +2821,8 @@ def test_attestation_gate_fails_when_a_waiver_is_removed_while_still_needed():
     gate = _load_script("conformance_attestation.py")
     path = CONFORMANCE_DIR / "attestation_waivers.yaml"
     original = path.read_text()
-    kept = [w for w in parse_waivers(path) if w.policy_id != "be:tintb_be"]
+    kept = [w for w in parse_waivers(path) if w.policy_id != "uk-pe:dla"]
+    assert len(kept) == len(parse_waivers(path)) - 1
     path.write_text(serialize_waivers(kept))
     try:
         rc = _run_attestation_check(gate)

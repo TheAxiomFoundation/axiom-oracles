@@ -1,4 +1,10 @@
 # axiom_oracles.conformance_ratchet.v1 — GENERATED; advance only via the ratchet script.
+# Max ruling d1081 (2026-10-08): publish attested-only coverage; keep unproved outputs in scope.
+# BE 23 -> 22: be:tintb_be (marital quotient). US-PE 32 -> 28: us-pe:ks_tanf,
+# us-pe:nc_income_tax, us-pe:savers_credit, us-pe:snap. Restore with stamped actual output comparisons.
+# Retains prior FIIT drops: us-pe:capital_gains_tax, us-pe:eitc, us-pe:income_tax,
+# us-pe:income_tax_before_refundable_credits (public main US-PE 36 -> 28 including FIIT).
+# All other floors, ceilings and policy denominators remain pinned.
 schema: axiom_oracles.conformance_ratchet.v1
 _comment: Conformance ratchets — monotonic floors/ceilings enforced by scripts/conformance_ratchet.py
   --check. covered_min may only rise; unexplained_max, axiom_attributed_open_max and bridge_artifacts_max
@@ -6,7 +12,7 @@ _comment: Conformance ratchets — monotonic floors/ceilings enforced by scripts
   gate refuses regressions.
 ratchets:
 - jurisdiction: be
-  covered_min: 23
+  covered_min: 22
   unexplained_max: 0
   axiom_attributed_open_max: 0
   bridge_artifacts_max: 0
@@ -30,7 +36,7 @@ ratchets:
   bridge_artifacts_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
-  covered_min: 32
+  covered_min: 28
   unexplained_max: 0
   axiom_attributed_open_max: 0
   bridge_artifacts_max: 3938

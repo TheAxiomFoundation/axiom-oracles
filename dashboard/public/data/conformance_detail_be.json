@@ -744,7 +744,7 @@
       "oracle_policy_name": "tintb_be",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "be-marital-quotient",
+      "suite": null,
       "covered": false,
       "comparisons": null,
       "matches": null,
@@ -754,13 +754,11 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "TAX: PIT deductions & marital quotient \u2014 a distinct policy from the covered tinna worker PIT. The be-marital-quotient suite live-compares the CIR 1992 Article 87 marital quotient (quotient conjugal \u2014 30% of the single earner's professional income, capped at the indexed 13,460 EUR, imputed to the zero-income spouse and taxed separately through the Article 130 scale) against EUROMOD tin_s on a single-earner married-couple grid at 30k/45k/60k. The three cases are dispositioned as explained residuals (upstream_engine_gap) with the 13.07% SSC + Article 51 forfait decomposition, exact at 60k; zero unexplained and zero Axiom-attributed, so the surface is covered and conformant for this policy.",
-      "status": "unbound",
+      "note": "be-marital-quotient compares tin_s, not the registered tintb_be outputs such as tintasp_s; coverage requires a stamped report recording an actual comparison of a registered tintb_be output.",
+      "status": "uncovered",
       "output_attestation": null,
       "attested_outputs": [],
-      "attestation_problems": [
-        "be-marital-quotient: no registered output of be:tintb_be (tintasp_s, tintals_s, tintami_s, tintcmg_s, sin03_s, sin04_s, sin01_s, sin02_s, sin05_s, sin06_s, tintadt_s, sin30_s, sin31_s, sin32_s, sin33_s, xccfd_s) carries comparison evidence in the covering report [compared_surface_differs]"
-      ],
+      "attestation_problems": [],
       "oracle_release_drift": null
     },
     {

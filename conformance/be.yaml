@@ -565,15 +565,9 @@ policies:
     internal_only_vars:
       - n/a
       - kivho
-    suite: be-marital-quotient
-    note: 'TAX: PIT deductions & marital quotient — a distinct policy from the covered tinna worker PIT.
-      The be-marital-quotient suite live-compares the CIR 1992 Article 87 marital quotient (quotient conjugal
-      — 30% of the single earner''s professional income, capped at the indexed 13,460 EUR, imputed to
-      the zero-income spouse and taxed separately through the Article 130 scale) against EUROMOD tin_s
-      on a single-earner married-couple grid at 30k/45k/60k. The three cases are dispositioned as explained
-      residuals (upstream_engine_gap) with the 13.07% SSC + Article 51 forfait decomposition, exact at
-      60k; zero unexplained and zero Axiom-attributed, so the surface is covered and conformant for this
-      policy.'
+    suite: null
+    note: be-marital-quotient compares tin_s, not the registered tintb_be outputs such as tintasp_s; coverage
+      requires a stamped report recording an actual comparison of a registered tintb_be output.
   - id: be:tprhm_be
     oracle_policy_name: tprhm_be
     oracle_policy_type: tax

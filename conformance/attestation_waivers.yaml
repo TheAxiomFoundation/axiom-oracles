@@ -5,14 +5,6 @@ _comment: 'Output-attestation waivers — covered policies whose committed repor
   (scripts/conformance_attestation.py --check) instead of landing here, and a waiver that is no longer
   needed must be pruned. Execution attestation itself is never waivable.'
 waivers:
-- jurisdiction: be
-  policy_id: be:tintb_be
-  suite: be-marital-quotient
-  reason: compared_surface_differs
-  note: The suite compares one concept — belgium_pit_couple_federal_and_local_tax_before_withholding,
-    bound to EUROMOD tin_s (total PIT) — while tintb_be writes tintasp_s / tintals_s / tintami_s / tintcmg_s
-    / tintadt_s and the sin* income-list intermediates. The marital quotient reaches tin_s only through
-    the PIT it feeds, so the committed evidence tests the policy end-to-end rather than at its own outputs.
 - jurisdiction: uk-pe
   policy_id: uk-pe:dla
   suite: uk-tax-benefits-efrs
@@ -58,12 +50,6 @@ waivers:
   reason: oracle_variable_not_recorded
   note: The grid's single concept has no committed concept→PolicyEngine binding.
 - jurisdiction: us-pe
-  policy_id: us-pe:ks_tanf
-  suite: ks-tanf-ecps
-  reason: compared_surface_differs
-  note: The suite's one compared surface resolves to ks_tanf_maximum_benefit; the universe row registers
-    the final ks_tanf award.
-- jurisdiction: us-pe
   policy_id: us-pe:lifetime_learning_credit
   suite: us-llc-grid
   reason: oracle_variable_not_recorded
@@ -75,12 +61,6 @@ waivers:
   note: All 6 compared surfaces resolve, and every one is a category flag (is_adult_for_medicaid, is_infant_for_medicaid,
     is_older_child_for_medicaid, is_pregnant_for_medicaid, is_ssi_recipient_for_medicaid, is_young_child_for_medicaid)
     rather than the medicaid variable the universe row registers.
-- jurisdiction: us-pe
-  policy_id: us-pe:nc_income_tax
-  suite: nc-income-tax-liability
-  reason: compared_surface_differs
-  note: The report records policyengine = nc_income_tax_before_credits; the universe row registers the
-    final nc_income_tax.
 - jurisdiction: us-pe
   policy_id: us-pe:net_investment_income_tax
   suite: us-niit-grid
@@ -96,9 +76,3 @@ waivers:
   suite: us-seca-grid
   reason: oracle_variable_not_recorded
   note: The grid's single concept has no committed concept→PolicyEngine binding.
-- jurisdiction: us-pe
-  policy_id: us-pe:snap
-  suite: ca-snap-ecps
-  reason: compared_surface_differs
-  note: Both compared surfaces resolve — is_snap_eligible and snap_normal_allotment — neither of which
-    is the snap variable the universe row registers.

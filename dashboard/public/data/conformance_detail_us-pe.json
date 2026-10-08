@@ -1380,7 +1380,7 @@
       "oracle_policy_name": "ks_tanf",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "ks-tanf-ecps",
+      "suite": null,
       "covered": false,
       "comparisons": null,
       "matches": null,
@@ -1390,13 +1390,11 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "Covered by ks-tanf-ecps \u2014 Kansas TANF (ks_tanf) vs PE-2026 at population scale.",
-      "status": "unbound",
+      "note": "ks-tanf-ecps compares ks_tanf_maximum_benefit, not final ks_tanf; coverage requires a stamped report recording an actual comparison of ks_tanf.",
+      "status": "uncovered",
       "output_attestation": null,
       "attested_outputs": [],
-      "attestation_problems": [
-        "ks-tanf-ecps: no registered output of us-pe:ks_tanf (ks_tanf) carries comparison evidence in the covering report [compared_surface_differs]"
-      ],
+      "attestation_problems": [],
       "oracle_release_drift": null
     },
     {
@@ -1890,7 +1888,7 @@
       "oracle_policy_name": "nc_income_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "nc-income-tax-liability",
+      "suite": null,
       "covered": false,
       "comparisons": null,
       "matches": null,
@@ -1900,13 +1898,11 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "Covered by nc-income-tax-liability. The grid and certified full-Populace campaign compare nc_income_tax_before_credits; all 2,169 positive-weight routed North Carolina tax units also have exact equality with final nc_income_tax in PolicyEngine-US 1.752.2. The only listed downstream credit is the repealed nc_ctc, whose schedule amounts have been zero since 2018; PolicyEngine models no refundable North Carolina income-tax credit in 2026.",
-      "status": "unbound",
+      "note": "nc-income-tax-liability compares nc_income_tax_before_credits, not final nc_income_tax; coverage requires a stamped report recording an actual comparison of nc_income_tax, even if the two values coincide.",
+      "status": "uncovered",
       "output_attestation": null,
       "attested_outputs": [],
-      "attestation_problems": [
-        "nc-income-tax-liability: no registered output of us-pe:nc_income_tax (nc_income_tax) carries comparison evidence in the covering report [compared_surface_differs]"
-      ],
+      "attestation_problems": [],
       "oracle_release_drift": null
     },
     {
@@ -2622,7 +2618,7 @@
       "oracle_policy_name": "savers_credit",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "us-savers-grid",
+      "suite": null,
       "covered": false,
       "comparisons": null,
       "matches": null,
@@ -2632,13 +2628,11 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "The us-savers-grid suite compares Axiom's pre-section-26 section 25B amount with its reviewed direct PE-US target, savers_credit_potential, on 34 fixture-bound tax-year-2026 cases. It does not compare PE's liability-limited public credit. The grid covers all five filing statuses, every exact Notice 2025-67 tier ceiling plus B-1 and B+1, per-person contribution caps, the section 25B(e) section 911 add-back, and the age/student/dependent screens. The raw report is 23/34. All 11 differences remain the exact-ceiling cases explained by https://github.com/PolicyEngine/policyengine-us/issues/9151: PE-US 1.767.3 carries the correct values, but Core 3.30.3 digitizes equality into the next tier despite section 25B(b)'s inclusive ceilings. The dispositioned report is 100% explained. The section 911 case's observed match is cancellation between PE's omitted add-back and #9151, not evidence of add-back parity.",
-      "status": "unbound",
+      "note": "us-savers-grid compares savers_credit_potential and records final savers_credit only as a diagnostic; coverage requires a stamped report recording an actual comparison of liability-limited savers_credit.",
+      "status": "uncovered",
       "output_attestation": null,
       "attested_outputs": [],
-      "attestation_problems": [
-        "us-savers-grid: no registered output of us-pe:savers_credit (savers_credit) carries comparison evidence in the covering report [compared_surface_differs]"
-      ],
+      "attestation_problems": [],
       "oracle_release_drift": null
     },
     {
@@ -2734,7 +2728,7 @@
       "oracle_policy_name": "snap",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "ca-snap-ecps",
+      "suite": null,
       "covered": false,
       "comparisons": null,
       "matches": null,
@@ -2744,13 +2738,11 @@
       "axiom_attributed_open": null,
       "oracle_attributed": null,
       "bridge_artifacts": null,
-      "note": "SNAP is one national PE-US variable (snap). Covered by ca-snap-ecps, the largest of 11 state-scoped SNAP suites validating the same snap surface vs PE-2026. The ten month-scoped suites regenerated on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3 retain AL/AZ/CA/FL/GA/MA/NC/NY/SC/TN unexplained counts of 40/0/241/774/75/92/49/240/110/43 after evidence-backed dispositions. For CA, PUB 275 issuance or online access is a household administrative fact absent from Enhanced CPS; both facts remain unmapped, and neither the population encode nor the oracle assumes them, leaving 157 bridge-attributed residual rows. Resolving them requires a population source carrying household PUB 275 issuance/access or PolicyEngine modeling the same household gate. PolicyEngine-US issues https://github.com/PolicyEngine/policyengine-us/issues/9175 and https://github.com/PolicyEngine/policyengine-us/issues/9176 remain independently verified divergences on the pinned stack, but the corrected bridge cannot currently expose them because the household MCE gate is unobserved. The row registers the canonical largest-population suite; the other ten corroborate and their residuals remain tracked \u2014 the scoreboard scores one suite per row, not silently dropped.",
-      "status": "unbound",
+      "note": "ca-snap-ecps compares snap_normal_allotment and is_snap_eligible, not final snap; coverage requires a stamped report recording an actual comparison of snap.",
+      "status": "uncovered",
       "output_attestation": null,
       "attested_outputs": [],
-      "attestation_problems": [
-        "ca-snap-ecps: no registered output of us-pe:snap (snap) carries comparison evidence in the covering report [compared_surface_differs]"
-      ],
+      "attestation_problems": [],
       "oracle_release_drift": null
     },
     {

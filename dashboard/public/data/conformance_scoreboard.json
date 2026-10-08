@@ -28,8 +28,7 @@
       "unwitnessed_policies": [],
       "temporal_debt": null,
       "blocking_reasons": [
-        "1 of 23 in-scope policies are not covered by a live suite: tintb_be",
-        "execution attestation failed \u2014 be-marital-quotient: no registered output of be:tintb_be (tintasp_s, tintals_s, tintami_s, tintcmg_s, sin03_s, sin04_s, sin01_s, sin02_s, sin05_s, sin06_s, tintadt_s, sin30_s, sin31_s, sin32_s, sin33_s, xccfd_s) carries comparison evidence in the covering report [compared_surface_differs]"
+        "1 of 23 in-scope policies are not covered by a live suite: tintb_be"
       ],
       "invalid_exclusions": []
     },
@@ -263,11 +262,7 @@
       "unwitnessed_policies": [],
       "temporal_debt": null,
       "blocking_reasons": [
-        "99 of 127 in-scope policies are not covered by a live suite: ak_atap, al_income_tax, alternative_minimum_tax, ar_income_tax, ar_tea, az_income_tax, ca_income_tax, capital_gains_tax, co_income_tax, ct_income_tax, ct_tfa, dc_income_tax, dc_tanf, de_income_tax, eitc, fl_tca, foreign_tax_credit, ga_income_tax, hi_income_tax, hi_tanf, high_efficiency_electric_home_rebate, ia_fip, ia_income_tax, id_income_tax, id_tafi, il_income_tax, il_tanf, in_income_tax, in_tanf, income_tax, income_tax_before_refundable_credits, ks_income_tax, ks_tanf, ky_income_tax, ky_ktap, la_fitap, la_income_tax, ma_income_tax, ma_tafdc, md_income_tax, md_tca, me_income_tax, me_tanf, mi_fip, mi_income_tax, mn_income_tax, mo_income_tax, mo_tanf, ms_income_tax, ms_tanf, mt_income_tax, mt_tanf, nc_income_tax, nc_tanf, nd_income_tax, nd_tanf, ne_adc, ne_income_tax, new_clean_vehicle_credit, nh_fanf, nj_income_tax, nj_wfnj, nm_income_tax, nm_works, nv_tanf, ny_income_tax, oh_income_tax, oh_owf, ok_income_tax, ok_tanf, or_income_tax, or_tanf, pa_income_tax, pa_tanf, residential_clean_energy_credit, residential_efficiency_electrification_rebate, ri_income_tax, ri_works, savers_credit, sc_income_tax, sc_tanf, sd_tanf, snap, taxable_income, tn_ff, tx_tanf, used_clean_vehicle_credit, ut_fep, ut_income_tax, va_income_tax, va_tanf, vt_income_tax, vt_reach_up, wa_income_tax, wi_income_tax, wi_works, wv_income_tax, wv_works, wy_power",
-        "execution attestation failed \u2014 ks-tanf-ecps: no registered output of us-pe:ks_tanf (ks_tanf) carries comparison evidence in the covering report [compared_surface_differs]",
-        "execution attestation failed \u2014 nc-income-tax-liability: no registered output of us-pe:nc_income_tax (nc_income_tax) carries comparison evidence in the covering report [compared_surface_differs]",
-        "execution attestation failed \u2014 us-savers-grid: no registered output of us-pe:savers_credit (savers_credit) carries comparison evidence in the covering report [compared_surface_differs]",
-        "execution attestation failed \u2014 ca-snap-ecps: no registered output of us-pe:snap (snap) carries comparison evidence in the covering report [compared_surface_differs]"
+        "99 of 127 in-scope policies are not covered by a live suite: ak_atap, al_income_tax, alternative_minimum_tax, ar_income_tax, ar_tea, az_income_tax, ca_income_tax, capital_gains_tax, co_income_tax, ct_income_tax, ct_tfa, dc_income_tax, dc_tanf, de_income_tax, eitc, fl_tca, foreign_tax_credit, ga_income_tax, hi_income_tax, hi_tanf, high_efficiency_electric_home_rebate, ia_fip, ia_income_tax, id_income_tax, id_tafi, il_income_tax, il_tanf, in_income_tax, in_tanf, income_tax, income_tax_before_refundable_credits, ks_income_tax, ks_tanf, ky_income_tax, ky_ktap, la_fitap, la_income_tax, ma_income_tax, ma_tafdc, md_income_tax, md_tca, me_income_tax, me_tanf, mi_fip, mi_income_tax, mn_income_tax, mo_income_tax, mo_tanf, ms_income_tax, ms_tanf, mt_income_tax, mt_tanf, nc_income_tax, nc_tanf, nd_income_tax, nd_tanf, ne_adc, ne_income_tax, new_clean_vehicle_credit, nh_fanf, nj_income_tax, nj_wfnj, nm_income_tax, nm_works, nv_tanf, ny_income_tax, oh_income_tax, oh_owf, ok_income_tax, ok_tanf, or_income_tax, or_tanf, pa_income_tax, pa_tanf, residential_clean_energy_credit, residential_efficiency_electrification_rebate, ri_income_tax, ri_works, savers_credit, sc_income_tax, sc_tanf, sd_tanf, snap, taxable_income, tn_ff, tx_tanf, used_clean_vehicle_credit, ut_fep, ut_income_tax, va_income_tax, va_tanf, vt_income_tax, vt_reach_up, wa_income_tax, wi_income_tax, wi_works, wv_income_tax, wv_works, wy_power"
       ],
       "invalid_exclusions": []
     },
