@@ -131,36 +131,15 @@ def _git_sha(repo: Path) -> str | None:
     return sha or None
 
 
-#: ``git status`` arguments that decide ``dirty``: staged or unstaged changes
-#: to tracked files only (``--untracked-files=no``); a submodule counts for a
-#: moved HEAD or modified content, not for untracked content. The ``-c``
-#: options stop a checkout's own config from skipping content checks (a
-#: filesystem monitor that missed an event, coarse stat comparison, stat
-#: ignored outright).
-_STATUS_ARGS = (
-    "-c",
-    "core.fsmonitor=false",
-    "-c",
-    "core.checkStat=default",
-    "-c",
-    "core.trustctime=true",
-    "-c",
-    "core.ignoreStat=false",
-    "--no-optional-locks",
-    "status",
-    "--porcelain=v1",
-    "-z",
-    "--no-renames",
-    "--untracked-files=no",
-    "--ignore-submodules=untracked",
-)
-
 #: First line of the manifest ``diff_sha256`` hashes (:func:`_change_manifest`).
 _MANIFEST_HEADER = b"axiom_oracles.worktree_manifest.v1\n"
 
 
 def _git_output(
-    repo: Path, *args: str, env: dict[str, str] | None = None, stdin: bytes | None = None
+    repo: Path,
+    *args: str,
+    env: dict[str, str] | None = None,
+    stdin: bytes | None = None,
 ) -> bytes:
     return subprocess.run(
         ["git", "-C", str(repo), *args],
@@ -172,158 +151,217 @@ def _git_output(
 
 
 def _private_index(toplevel: Path, workdir: Path) -> dict[str, str]:
-    """Environment pointing git at a private copy of the checkout's index.
+    """Read indexes in a private git directory, including split-index files.
 
-    ``git status`` and ``git diff`` refresh the index they read, and a
-    refresh can rewrite it under ``index.lock`` even with
-    ``--no-optional-locks``, so this never runs against the checkout's own
-    index: another session committing in a shared checkout would hit the
-    lock. The copy also lets index flags be cleared without touching the
-    checkout. ``copy2`` keeps the index's mtime: git rereads a file that is no
-    newer than the index ("racily clean"), and a fresh mtime on the copy would
-    make a same-size edit made in the same second look unchanged.
-
-    ``git status`` trusts a ``skip-worktree`` or ``assume-unchanged`` entry
-    without reading its file, so an edit behind either flag runs while the
-    tree looks clean. Each such entry is re-added to the copy from its own
-    ``ls-files -s`` record (``update-index --index-info``), which clears both
-    flags and zeroes the cached stat, so git compares that file's content
-    whatever the timestamps say. One kind of entry keeps its flag: a
-    skip-worktree file that is absent while ``core.sparseCheckout`` is on,
-    which is a sparse checkout leaving it out, not a deletion. An absent
-    assume-unchanged file, or an absent skip-worktree file outside a sparse
-    checkout, is a deletion and shows as one.
+    Git can update a shared index's mtime even when merely listing its
+    entries. ``GIT_INDEX_FILE`` alone leaves that file in the original git
+    directory, so copy the per-worktree metadata too. Objects, refs and
+    common config are still read from the original common directory.
+    Index flags stay intact: raw content comparison ignores hidden flags
+    and exempts only absent skip-worktree entries in a sparse checkout.
     """
-    index = Path(
-        os.fsdecode(_git_output(toplevel, "rev-parse", "--git-path", "index").strip())
+    gitdir = Path(
+        os.fsdecode(_git_output(toplevel, "rev-parse", "--absolute-git-dir").strip())
     )
-    if not index.is_absolute():
-        index = toplevel / index
-    copy = workdir / "index"
-    shutil.copy2(index, copy)
-    env = _git_env(GIT_INDEX_FILE=str(copy))
-    try:
-        sparse = (
-            _git_output(toplevel, "config", "--bool", "core.sparseCheckout").strip()
-            == b"true"
-        )
-    except subprocess.CalledProcessError:  # unset
-        sparse = False
-    revealed = []
-    for record in _git_output(toplevel, "ls-files", "-s", "-v", "-z", env=env).split(b"\0"):
-        tag, entry = record[:1], record[2:]
-        if not entry or tag == b"H" or not (tag in (b"S", b"s") or tag.islower()):
-            continue
-        path = entry.split(b"\t", 1)[1]
-        absent = not os.path.lexists(toplevel / os.fsdecode(path))
-        if absent and sparse and tag in (b"S", b"s"):
-            continue
-        revealed.append(entry)
-    if revealed:
+    common = os.fsdecode(
         _git_output(
-            toplevel,
-            # core.ignoreStat would flag each re-added entry assume-unchanged
-            # all over again.
-            "-c",
-            "core.ignoreStat=false",
-            "update-index",
-            "--no-split-index",
-            "-z",
-            "--index-info",
-            env=env,
-            stdin=b"\0".join(revealed) + b"\0",
-        )
-    return env
+            toplevel, "rev-parse", "--path-format=absolute", "--git-common-dir"
+        ).strip()
+    )
+    # Pin HEAD in the private directory rather than depending on its copied
+    # symbolic reference resolving through the original checkout's refs.
+    (workdir / "HEAD").write_bytes(_git_output(toplevel, "rev-parse", "HEAD"))
+    for relative in ("index", "config.worktree", "info/sparse-checkout"):
+        source = gitdir / relative
+        if source.exists():
+            destination = workdir / relative
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, destination)
+    for source in gitdir.glob("sharedindex.*"):
+        shutil.copy2(source, workdir / source.name)
+    if not (workdir / "index").exists():
+        raise OSError("checkout index unavailable")
+    return _git_env(
+        GIT_DIR=str(workdir),
+        GIT_COMMON_DIR=common,
+        GIT_WORK_TREE=str(toplevel),
+        GIT_INDEX_FILE=str(workdir / "index"),
+    )
 
 
-def _worktree_entry(toplevel: Path, path: bytes) -> bytes:
-    """``<mode> sha256:<hex>`` of the bytes on disk at ``path``, or ``-``."""
+def _worktree_entry(
+    toplevel: Path, path: bytes, object_format: str
+) -> tuple[bytes, bytes]:
+    """Git blob identity and raw SHA-256 manifest entry for a tracked path."""
     target = toplevel / os.fsdecode(path)
     try:
         info = os.lstat(target)
     except FileNotFoundError:
-        return b"-"
+        return b"-", b"-"
     if stat.S_ISLNK(info.st_mode):
         content = os.fsencode(os.readlink(target))
         mode = b"120000"
     elif stat.S_ISDIR(info.st_mode):
-        if not os.path.lexists(target / ".git"):  # not a submodule checkout
-            return b"040000 -"
-        try:  # a submodule: name its checked-out commit
-            head = _git_output(target, "rev-parse", "HEAD").strip()
-        except subprocess.CalledProcessError:
-            head = b"-"
-        return b"160000 " + head
-    else:
+        return b"040000 -", b"040000 -"
+    elif stat.S_ISREG(info.st_mode):
         content = target.read_bytes()
         mode = b"100755" if info.st_mode & 0o111 else b"100644"
-    return mode + b" sha256:" + hashlib.sha256(content).hexdigest().encode()
+    else:
+        raise OSError("tracked path is not a regular file, symlink or directory")
+    blob = b"blob " + str(len(content)).encode() + b"\0" + content
+    oid = hashlib.new(object_format, blob).hexdigest().encode()
+    return (
+        mode + b" " + oid,
+        mode + b" sha256:" + hashlib.sha256(content).hexdigest().encode(),
+    )
 
 
-def _change_manifest(toplevel: Path, env: dict[str, str], status: bytes) -> bytes:
-    """Canonical description of how the tracked files differ from ``HEAD``.
+def _change_manifest(
+    paths: set[bytes],
+    head: dict[bytes, bytes],
+    index: dict[bytes, list[bytes]],
+    worktree: dict[bytes, bytes],
+) -> bytes:
+    """Canonical tracked changes: path, HEAD, index and raw working content.
 
-    One line per path ``git status`` reports, sorted by path:
-    ``<path> NUL <HEAD entry> NUL <index entries> NUL <working-tree entry>``,
-    where the HEAD entry is ``<mode> <object id>`` from ``ls-tree``, the index
-    entries are ``<mode> <object id> <stage>`` from ``ls-files -s`` (joined
-    by ``;`` during a conflict), the working-tree entry is ``<mode>
-    sha256:<hex of the raw bytes>``, and ``-`` marks an absent side. It is
-    built from object ids and raw bytes, never from ``git diff`` text, so
-    git config (diff drivers, attributes, line-ending conversion, context
-    size, compression) cannot change it, and it pins exactly the bytes that
-    ran.
+    Each sorted path contributes a NUL-separated line. HEAD entries contain
+    mode/object id; index entries add stage and are joined by semicolons;
+    working entries contain mode/raw SHA-256. An initialized submodule's
+    working entry contains its HEAD and, when dirty, recursive manifest
+    digest. ``-`` marks an absent side. No filters or diff drivers run.
     """
-    paths = sorted({record[3:] for record in status.split(b"\0") if len(record) > 3})
-    wanted = set(paths)
-    head: dict[bytes, bytes] = {}
-    for record in _git_output(toplevel, "ls-tree", "-r", "-z", "--full-tree", "HEAD").split(b"\0"):
-        meta, _, path = record.partition(b"\t")
-        if path in wanted:
-            mode, _type, oid = meta.split(b" ")
-            head[path] = mode + b" " + oid
-    index: dict[bytes, list[bytes]] = {}
-    for record in _git_output(toplevel, "ls-files", "-s", "-z", env=env).split(b"\0"):
-        meta, _, path = record.partition(b"\t")
-        if path in wanted:
-            index.setdefault(path, []).append(meta)
     lines = [
         b"\0".join(
             (
                 path,
                 head.get(path, b"-"),
                 b";".join(sorted(index.get(path, []))) or b"-",
-                _worktree_entry(toplevel, path),
+                worktree[path],
             )
         )
-        for path in paths
+        for path in sorted(paths)
     ]
     return _MANIFEST_HEADER + b"".join(line + b"\n" for line in lines)
 
 
+def _measure_worktree(toplevel: Path, ancestors: frozenset[Path]) -> dict[str, Any]:
+    """Measure one initialized checkout; child failures propagate to the caller."""
+    resolved = toplevel.resolve()
+    if resolved in ancestors:
+        raise OSError("recursive submodule checkout")
+    ancestors = ancestors | {resolved}
+    _git_output(toplevel, "rev-parse", "--verify", "--quiet", "HEAD^{commit}")
+    object_format = (
+        _git_output(toplevel, "rev-parse", "--show-object-format").strip().decode()
+    )
+    with tempfile.TemporaryDirectory(prefix="axiom-provenance-") as directory:
+        env = _private_index(toplevel, Path(directory))
+        head: dict[bytes, bytes] = {}
+        for record in _git_output(
+            toplevel, "ls-tree", "-r", "-z", "--full-tree", "HEAD", env=env
+        ).split(b"\0"):
+            meta, _, path = record.partition(b"\t")
+            if path:
+                mode, _type, oid = meta.split(b" ")
+                head[path] = mode + b" " + oid
+        index: dict[bytes, list[bytes]] = {}
+        omitted: set[bytes] = set()
+        try:
+            sparse = (
+                _git_output(
+                    toplevel, "config", "--bool", "core.sparseCheckout", env=env
+                ).strip()
+                == b"true"
+            )
+        except subprocess.CalledProcessError:  # unset
+            sparse = False
+        for record in _git_output(
+            toplevel, "ls-files", "-s", "-v", "-z", env=env
+        ).split(b"\0"):
+            tag, entry = record[:1], record[2:]
+            meta, _, path = entry.partition(b"\t")
+            if path:
+                index.setdefault(path, []).append(meta)
+                if (
+                    sparse
+                    and tag in (b"S", b"s")
+                    and not os.path.lexists(toplevel / os.fsdecode(path))
+                ):
+                    omitted.add(path)
+        changed: set[bytes] = set()
+        worktree: dict[bytes, bytes] = {}
+        for path in head.keys() | index.keys():
+            expected = head.get(path, b"-")
+            entries = index.get(path, [])
+            if entries != ([expected + b" 0"] if path in head else []):
+                changed.add(path)
+            if path in omitted:
+                worktree[path] = b"-"
+                continue
+            target = toplevel / os.fsdecode(path)
+            gitlink = expected.startswith(b"160000 ") or any(
+                e.startswith(b"160000 ") for e in entries
+            )
+            if gitlink and (
+                not os.path.lexists(target)
+                or target.is_dir()
+                and not target.is_symlink()
+            ):
+                if not os.path.lexists(target / ".git"):
+                    # An empty deinitialized submodule retains its index pin.
+                    # An absent non-sparse directory is a tracked deletion.
+                    if target.exists() and any(target.iterdir()):
+                        raise OSError("populated submodule has no git metadata")
+                    worktree[path] = b"040000 -" if target.exists() else b"-"
+                    if not target.exists():
+                        changed.add(path)
+                    continue
+                child_root = Path(
+                    os.fsdecode(
+                        _git_output(target, "rev-parse", "--show-toplevel").strip()
+                    )
+                )
+                if child_root.resolve() != target.resolve():
+                    raise OSError("submodule resolves to another checkout")
+                child = _measure_worktree(target, ancestors)
+                entry = b"160000 " + _git_output(target, "rev-parse", "HEAD").strip()
+                if child["dirty"]:
+                    entry += b" sha256:" + child["diff_sha256"].encode()
+                worktree[path] = entry
+                if entry != expected:
+                    changed.add(path)
+            else:
+                actual, worktree[path] = _worktree_entry(toplevel, path, object_format)
+                if actual != expected:
+                    changed.add(path)
+        if not changed:
+            return {"dirty": False}
+        manifest = _change_manifest(changed, head, index, worktree)
+    return {"dirty": True, "diff_sha256": hashlib.sha256(manifest).hexdigest()}
+
+
 def worktree_state(repo: Path | str | None) -> dict[str, Any]:
-    """Whether a checkout's tracked files match its ``HEAD`` commit.
+    """Whether a checkout's tracked index and raw files match its HEAD commit.
 
     Returns ``{"dirty": False}`` when they match, ``{"dirty": True,
     "diff_sha256": <64-hex>}`` when they do not, and ``{"dirty": None}`` when
-    git cannot tell (not a checkout, no commit, git missing). The whole
-    enclosing repository counts, wherever in it ``repo`` points, because the
-    recorded ``sha`` names the whole commit.
+    inspection fails. The whole enclosing repository counts, wherever in
+    it ``repo`` points, because the recorded SHA names the whole commit.
 
-    Dirty means ``git status`` reports a staged or unstaged change to a
-    tracked file: an edit, a deletion, a mode change, a newly staged file, a
-    conflict, a submodule moved off its recorded commit. Edits hidden behind
-    ``skip-worktree`` or ``assume-unchanged`` count too
-    (:func:`_private_index`). Untracked files do not count, so build output
-    never marks a tree dirty; the cost is that a run compiling an untracked
-    module that no tracked file imports goes unseen.
+    Compare raw Git blob identities directly, without clean filters,
+    line-ending normalization, stat caches or hidden index flags. Thus even
+    normalized/smudged checkout bytes that differ from the commit count as
+    dirty. Only absent skip-worktree files in sparse checkouts are exempt.
+    Initialized submodules are measured recursively, including their index
+    and tracked bytes; an unverifiable child makes its parent unverifiable.
+    Untracked files do not count, so build output never marks a tree dirty;
+    an untracked module a run compiles goes unseen.
 
-    ``diff_sha256`` is the SHA-256 of :func:`_change_manifest`, which lists
-    each changed path's HEAD, index and working-tree content ids. The same
-    change on the same commit hashes the same whatever the local git config,
-    and any difference in the bytes that ran changes the hash. The checkout's
-    own index and files are never written. Never raises: provenance must
-    annotate a run, never fail one.
+    ``diff_sha256`` hashes :func:`_change_manifest`, including each dirty
+    child's recursive digest. The same tracked change on the same commit
+    hashes the same whatever the checkout path or local Git config. Reads
+    use private index/shared-index copies and never write the checkout.
+    Never raises: provenance must annotate a run, never fail one.
     """
     if repo is None:
         return {"dirty": None}
@@ -337,16 +375,9 @@ def worktree_state(repo: Path | str | None) -> dict[str, Any]:
                 ).strip()
             )
         )
-        _git_output(toplevel, "rev-parse", "--verify", "--quiet", "HEAD^{commit}")
-        with tempfile.TemporaryDirectory(prefix="axiom-provenance-") as workdir:
-            env = _private_index(toplevel, Path(workdir))
-            status = _git_output(toplevel, *_STATUS_ARGS, env=env)
-            if not status.strip(b"\0"):
-                return {"dirty": False}
-            manifest = _change_manifest(toplevel, env, status)
+        return _measure_worktree(toplevel, frozenset())
     except Exception:  # provenance must annotate, never fail a run
         return {"dirty": None}
-    return {"dirty": True, "diff_sha256": hashlib.sha256(manifest).hexdigest()}
 
 
 def unclean_rulespecs(

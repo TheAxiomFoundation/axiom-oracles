@@ -338,17 +338,23 @@ date with `scripts/backfill_report_provenance.py`.
 
 A SHA names a commit, but a run reads the working tree. So every
 `provenance.rulespecs[]` entry with a SHA also records `dirty`: `false` when
-the checkout's tracked files match that commit, `true` plus `diff_sha256` when
-they do not, and `null` when git could not tell. `diff_sha256` hashes a
-canonical manifest of the change (each changed path's HEAD, index and
-working-tree content ids; see `worktree_state`), so it identifies the bytes
-that ran whatever the local git config. Edits and deletions hidden behind
-`skip-worktree` or `assume-unchanged` count, except files a sparse checkout
-leaves out; untracked files do not count, so build output never marks a tree
-dirty. The check runs on a private copy of the index and never writes the
-checkout. A DE pair run reads its pinned commit from git objects, so its entry
-records the pin as clean whatever the checkout holds. (A mutated scratch copy
-of rulespec-rw once reported `001fa4b` while running a 17% VAT rate.) `run_comparison.py` refuses
+the checkout's tracked index and raw files match that commit, `true` plus
+`diff_sha256` when they do not, and `null` when inspection fails. The check
+compares raw Git blob identities without clean filters or line-ending
+normalization, so converted or smudged checkout bytes that differ from the
+commit count as dirty. `diff_sha256` hashes a canonical manifest of each
+changed path's HEAD, index and raw working-tree content ids. Initialized
+submodules are inspected recursively; their HEAD and recursive dirty digest
+enter the parent manifest, and an unverifiable child makes the parent
+unverifiable (see `worktree_state`). Edits and deletions hidden behind
+`skip-worktree` or `assume-unchanged` count, except absent skip-worktree files
+that a sparse checkout leaves out; untracked files do not count, so build
+output never marks a tree dirty. Reads use a private Git directory with
+copies of the index and shared split-index files, preserving the checkout's
+index metadata. A DE pair run reads its pinned commit from git objects, so its
+entry records the pin as clean whatever the checkout holds. (A mutated scratch
+copy of rulespec-rw once reported `001fa4b` while running a 17% VAT rate.)
+`run_comparison.py` refuses
 to publish a `weekly`, `pr-triggered` or `affected-rerun` report unless every
 rulespec tree it ran is recorded clean. A `manual` run on a dirty tree
 publishes with the flag and a stderr warning. `select_affected_suites.py`
