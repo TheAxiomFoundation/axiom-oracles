@@ -1,0 +1,73 @@
+schema: axiom_oracles.dispositions.v1
+suite: et-business-mat
+updated: "2026-10-04"
+entries:
+  - id: etmod-mat-added-not-floored-3000000-60000
+    concept: et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable
+    case_id: et-business-mat-active-3000000-60000-finding1
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Proclamation 1395/2025 Article 23(3) provides that the minimum
+        alternative tax (2.5% of turnover) "shall be reduced by business
+        income tax under Article 18 paid in the tax year", so the tax
+        payable is a floor: the larger of the scheduled tax and 2.5% of
+        turnover. At 3,000,000 birr receipts and 60,000 taxable business
+        income the Article 19(2) schedule gives 6,000 and the floor is
+        75,000, so the statutory payable, and the encoded
+        business_income_tax_payable, is 75,000. ETMOD returns tin02_s
+        81,000: it adds the full 2.5% of turnover to the scheduled tax
+        instead of topping the scheduled tax up to the floor (probed
+        live). The 6,000 difference is exactly the scheduled tax that
+        sub-article 3 credits. The encoded module follows the statute;
+        ETMOD is the simplified oracle.
+      arithmetic:
+        - expression: "0.15 * (48000 - 24000) + 0.20 * (60000 - 48000)"
+          equals: 6000
+        - expression: "0.025 * 3000000"
+          equals: 75000
+        - expression: "6000 + 75000"
+          equals: 81000
+        - expression: "81000 - 75000"
+          equals: 6000
+      sources:
+        - axiom_oracles/data/etmod_issues.json#etmod-mat-added-instead-of-reduced-floor
+    expires_on_source_change: true
+    pinned:
+      left: 81000.0
+      right: 75000.0
+  - id: etmod-mat-on-article-49-regime-50000-20000
+    concept: et:statutes/proc-1395-2025/income-tax-amendment-2025#business_income_tax_payable
+    case_id: et-business-article-49-regime-50000-20000-finding2
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      mechanism: >-
+        Proclamation 1395/2025 Article 23(4) provides that the minimum
+        alternative tax "shall not apply to a taxpayer under the total
+        gross revenue tax regime set out in Article 49". An individual
+        (not a body) with annual turnover below 2,000,000 birr is a
+        Category B taxpayer (Article 3), Article 50(1) puts Category B
+        taxpayers on the gross-sales tax, and Article 19(2) excepts them
+        from the business income schedule. At 50,000 birr receipts the
+        statutory business income tax is therefore 0. ETMOD returns tin02_s 1,250,
+        exactly 2.5% of receipts, alongside its presumptive ttn_s (probed
+        live). The encoded module returns 0 here because its minimum-tax
+        top-up applies only above the 2,000,000 Category A bound and the
+        20,000 income sits in the Article 19(2) 0-24,000 nil band. The
+        module has no Category B gate on the schedule itself, a separate
+        Axiom encoding gap that this case keeps out of range on purpose.
+        On this case the encoded value equals the statute and ETMOD
+        diverges.
+      arithmetic:
+        - expression: "0.025 * 50000"
+          equals: 1250
+        - expression: "1250 - 0"
+          equals: 1250
+      sources:
+        - axiom_oracles/data/etmod_issues.json#etmod-mat-applied-to-article-49-regime-taxpayers
+    expires_on_source_change: true
+    pinned:
+      left: 1250.0
+      right: 0.0

@@ -32,6 +32,12 @@ Derivation, per suite, unions three signals (all deterministic):
    ``parameter-oracles.yaml`` names files like ``us-ga/policies/…`` whose top
    path segment maps to a rulespec repo the same way.
 
+A few runner types add their own rules (the encoder SNAP lane's jurisdiction,
+the EUROMOD country). A SNAP QC replay (``snap-qc-compare``) uses only a
+configured ``rulespec_root`` (signal 1), defaulting to rulespec-us, and ignores
+concept prefixes and the jurisdiction: it maps to exactly the one rulespec root
+its overlay is built from (see ``snap_qc_repos``).
+
 The output is sorted and stable; ``--check`` fails if the committed file drifts
 from a fresh regeneration, so CI keeps it honest.
 
@@ -44,6 +50,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import os
 import sys
 from pathlib import Path
@@ -140,7 +147,34 @@ def pinned_repos_for_registry_config(config: dict) -> dict[str, str]:
     params = runner.get("parameters") or {}
     sha = str(params.get("rulespec_upstream_sha") or "").strip()
     if not sha:
-        return {}
+        # An axiom-oracles-compare suite pins its snapshot through the roots
+        # its engine compiles against: run_comparison's _verify_declared_pins
+        # refuses to run unless every rulespec checkout under
+        # axiom_rulespec_repo_roots holds this revision. One revision can pin
+        # only one repo (two repos never share a commit), so the suite must
+        # exercise exactly one. The declared value may be a SHA prefix; the
+        # selector matches recorded SHAs by prefix, so require a real one.
+        revision = str(
+            params.get("axiom_rulespec_repo_roots_revision")
+            or runner.get("axiom_rulespec_repo_roots_revision")
+            or ""
+        ).strip()
+        if not revision:
+            return {}
+        if not re.fullmatch(r"[0-9a-f]{7,40}", revision):
+            raise SystemExit(
+                f"suite {config.get('name')!r} declares "
+                f"axiom_rulespec_repo_roots_revision {revision!r}; a pin must be "
+                "7-40 lowercase hex characters"
+            )
+        exercised = sorted(repos_for_registry_config(config))
+        if len(exercised) != 1:
+            raise SystemExit(
+                f"suite {config.get('name')!r} declares "
+                "axiom_rulespec_repo_roots_revision but exercises "
+                f"{exercised or 'no'} rulespec repos; a pin needs exactly one"
+            )
+        return {exercised[0]: revision}
     repos: set[str] = set()
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote:
@@ -165,10 +199,40 @@ def pinned_repos_for_registry_config(config: dict) -> dict[str, str]:
     return {repos.pop(): sha}
 
 
+def snap_qc_repos(config: dict) -> set[str]:
+    """The one rulespec repo a ``snap-qc-compare`` replay reads.
+
+    The bridge builds its fiscal-year overlay from a single rulespec root:
+    ``build_overlay`` copies both the federal ``us/`` chain and the state's
+    ``us-<st>/`` layer out of that root, and the engine is pointed at the
+    overlay alone (``bridges/snap_qc_compare.run_snap_qc_comparison``). That
+    root's repo is therefore the suite's whole rules dependency, and the only
+    repo whose SHA its report can record (``provenance.rulespecs``). The root is
+    the rulespec-us monorepo unless the config names another one.
+
+    The per-state ``rulespec-us-<st>`` repos are never read: they were archived
+    into ``rulespec-us/us-<st>`` on 2026-06-27. Mapping them anyway meant no
+    report could ever prove it was fresh, so the affected-rerun selector picked
+    every snap-qc suite on every sweep ("rulespec-us-<st>: report ran against
+    unknown SHA").
+    """
+    runner = config.get("runner") or {}
+    params = runner.get("parameters") or {}
+    root = runner.get("rulespec_root") or params.get("rulespec_root")
+    slug = _repo_from_path(str(root)) if root else None
+    return {slug or _slug("rulespec-us")}
+
+
 def repos_for_registry_config(config: dict) -> set[str]:
     repos: set[str] = set()
     runner = config.get("runner") or {}
     params = runner.get("parameters") or {}
+
+    # The SNAP QC administrative-data lane depends on exactly the root its
+    # overlay is built from; no other signal (concept prefixes, the
+    # jurisdiction) names a repo it reads. See snap_qc_repos.
+    if runner.get("type") == "snap-qc-compare":
+        return snap_qc_repos(config)
 
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote:
@@ -222,16 +286,6 @@ def repos_for_registry_config(config: dict) -> set[str]:
     # inherits the 7 USC/7 CFR federal chain, so both signals name rulespec-us.
     jurisdiction = params.get("jurisdiction")
     if runner.get("type") == "axiom-encode-snap-ecps-compare" and jurisdiction:
-        state_slug = _repo_from_prefix(str(jurisdiction))
-        if state_slug:
-            repos.add(state_slug)
-        repos.add(_slug("rulespec-us"))
-
-    # The SNAP QC administrative-data lane (snap-qc-compare) replays USDA QC
-    # public-use cases through the state's composed SNAP program under the
-    # fy-cola overlay; rule changes in the state shard or the federal SNAP
-    # chain both move its results.
-    if runner.get("type") == "snap-qc-compare" and jurisdiction:
         state_slug = _repo_from_prefix(str(jurisdiction))
         if state_slug:
             repos.add(state_slug)
@@ -344,10 +398,12 @@ def build_map() -> dict:
             # (e.g. dashboard suite `uk-benefit-cap` runs under registry
             # name `uk-benefit-cap-ukmod`); dispatching the dashboard
             # suite key crashes the leg with "unknown comparison".
-            # A suite declaring `ci: manual` cannot run in CI at all
-            # (e.g. or/ut SNAP: the encoder's snap-populace-compare has no
-            # jurisdiction config for them yet) — emit null so the
-            # selector and the weekly matrix leave it to the manual lane.
+            # A suite declaring `ci: manual` cannot produce a real report
+            # in CI (e.g. or/ut SNAP: the encoder's snap-populace-compare
+            # has no jurisdiction config for them yet; the SNAP QC replays:
+            # no CI matrix provisions the engine or the QC file, so a leg
+            # could only re-emit) — emit null so the selector and the
+            # weekly matrix leave it to the manual lane.
             "name": None if config.get("ci") == "manual" else config["name"],
             "report": report,
             "repos": sorted(repos_for_registry_config(config)),

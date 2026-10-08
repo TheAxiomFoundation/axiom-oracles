@@ -461,6 +461,46 @@ def test_policyengine_taxsim_pairs_carry_aggregates_for_list_targets() -> None:
     assert pairs["v28"] == "income_tax_main_rates"
 
 
+def test_policyengine_taxsim_runner_never_takes_the_binary_path(monkeypatch) -> None:
+    """The CLI builds ``PolicyEngineTaxsimRunner()`` with no factory. It must
+    run policyengine-taxsim's in-process PolicyEngineRunner and read its
+    records, never the TAXSIM-binary executor the base adapter defaults to."""
+
+    class FakePolicyEngineRunner:
+        def __init__(self, input_frame):
+            del input_frame
+
+        def run(self, show_progress=False):
+            del show_progress
+            return [{"taxsimid": 1, "fiitax": 100, "siitax": 25}]
+
+    def refuse_binary(self, input_frame):
+        raise AssertionError("PolicyEngineTaxsimRunner ran the TAXSIM binary")
+
+    monkeypatch.setattr(TaxsimPackageRunner, "_execute_binary", refuse_binary)
+    runner = PolicyEngineTaxsimRunner()
+    monkeypatch.setattr(runner, "_runner_factory", lambda: FakePolicyEngineRunner)
+    case = Case(
+        case_id="case-1",
+        period="2024",
+        metadata={
+            "taxsim_input": {
+                "taxsimid": 1,
+                "year": 2024,
+                "state": 33,
+                "mstat": 1,
+                "page": 40,
+            }
+        },
+    )
+
+    results = runner.run_cases([case], variables=[Concepts.FEDERAL_INCOME_TAX])
+
+    assert results[0].engine == "policyengine"
+    assert results[0].household_id == "case-1"
+    assert results[0].values == {"income_tax": 100}
+
+
 def test_prd_package_runner_wraps_external_prd_households() -> None:
     passed_households = []
     passed_programs = []

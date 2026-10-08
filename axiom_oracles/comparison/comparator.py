@@ -63,6 +63,8 @@ class Comparator:
         """Compare selected mappings, optionally scoped to each case's outputs."""
         left_ids = [result.household_id for result in left_results]
         right_ids = [result.household_id for result in right_results]
+        require_usable_ids(left_results, "left result household IDs")
+        require_usable_ids(right_results, "right result household IDs")
         require_unique_ids(left_ids, "left result household IDs")
         require_unique_ids(right_ids, "right result household IDs")
         require_same_ids(left_ids, right_ids, "right result household IDs")
@@ -212,6 +214,26 @@ class Comparator:
         if isinstance(value, bool):
             return float(value)
         return float(value)
+
+
+def require_usable_ids(results: Sequence[EngineResult], label: str) -> None:
+    """Reject ids that cannot key a case: ``None`` and non-finite floats.
+
+    A float NaN compares unequal to itself, so it slips past the duplicate
+    check and reads as one "unexpected" id per row in the set difference
+    (``unexpected [nan, nan, ...]``) without naming the engine that produced
+    it. Fail on it directly, with the engine's name.
+    """
+    for result in results:
+        household_id = result.household_id
+        unusable = household_id is None or (
+            isinstance(household_id, float) and not isfinite(household_id)
+        )
+        if unusable:
+            raise ValueError(
+                f"Invalid {label}: engine {result.engine!r} returned a result "
+                f"with household id {household_id!r}"
+            )
 
 
 def require_unique_ids(ids: Sequence[int | str], label: str) -> None:

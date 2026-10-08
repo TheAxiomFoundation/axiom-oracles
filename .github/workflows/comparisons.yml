@@ -54,6 +54,7 @@ jobs:
           import yaml
           only = os.environ.get("ONLY", "").strip()
           names = []
+          manual = []
           for path in sorted(Path("comparisons").glob("*.yaml")):
               if path.name.endswith(".fixtures.yaml"):
                   continue
@@ -63,9 +64,15 @@ jobs:
               if not (config.get("runner") or {}).get("type"):
                   continue
               if config.get("ci") == "manual":
+                  manual.append(path.stem)
                   continue
               names.append(path.stem)
           if only:
+              if only in manual:
+                  raise SystemExit(
+                      f"{only} declares ci: manual (see comparisons/{only}.yaml); "
+                      "run it with a supervised run_comparison.py"
+                  )
               names = [n for n in names if n == only]
               if not names:
                   raise SystemExit(f"unknown comparison: {only}")

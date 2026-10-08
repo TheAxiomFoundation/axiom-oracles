@@ -53,6 +53,8 @@ entries:
           tolerance: 0.5
       sources:
         - PROGRESS.md
+      # The issue PR #8614 closes ("Fixes #8613").
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/8613
     linked_issue: https://github.com/PolicyEngine/policyengine-us/pull/8614
     expires_on_source_change: true
 

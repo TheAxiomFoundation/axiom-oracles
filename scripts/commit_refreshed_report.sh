@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Commit a refreshed comparison report atomically with every artifact derived
-# from it, retrying against concurrent sibling pushes.
+# Commit refreshed comparison reports atomically with every artifact derived
+# from them: vet each suite's refresh where it ran (pack), then commit every
+# vetted refresh from one job (publish), retrying only a rejected push.
 #
 # Refreshing a dashboard/public/data/*.json report changes the inputs of
 # derived, CI-validated artifacts:
@@ -32,22 +33,52 @@
 # il/ky/oh/va refreshes changed dispositioned rates and redded main until #282
 # regenerated conformance/detail/us-pe.json by hand). This script makes that
 # state unpushable: every push attempt rebuilds the commit FROM SCRATCH on the
-# current remote tip — restore this run's PRIVATE comparison outputs (the
-# refreshed report files), replay this run's manifest.json additions, then
-# regenerate every derived artifact and verify the tree passes the same
-# staleness gates ci.yml runs before pushing. Sibling matrix jobs pushing
-# between attempts can therefore never cause a conflict (nothing is ever
-# rebased) nor an inconsistent tree (derivations are recomputed on whatever
-# tip won the race).
+# current remote tip — restore each refresh's PRIVATE comparison outputs (the
+# refreshed report files), replay its manifest.json additions, then regenerate
+# every derived artifact and verify the tree passes the same staleness gates
+# ci.yml runs before pushing. A push that loses a race can therefore never
+# cause a conflict (nothing is ever rebased) nor an inconsistent tree
+# (derivations are recomputed on whatever tip won the race).
+#
+# PACK, THEN PUBLISH ONCE. Until 2026-09-26 every affected-rerun matrix leg ran
+# that push loop itself. Each attempt re-ran the whole derived regeneration
+# (about 4 minutes) and then pushed, so with ~47 legs racing for main every
+# successful push invalidated every other leg's attempt. Run 36239293795 lost
+# 7 legs to the 90-minute job timeout inside the loop (az-snap-qc was on
+# attempt 22/60), and run 35958364304 lost 11. The work is now split:
+#
+#   --pack <bundles-dir> <suite>
+#       Runs in each leg, after its comparison. Collects the run's private
+#       outputs, vets them ONCE on the leg's checkout (the re-emission guard,
+#       regenerate + verify every derived artifact, the unexplained ratchet)
+#       and writes a self-contained bundle to <bundles-dir>/<suite>/. Never
+#       fetches, resets, commits or pushes. A refresh that fails the vet fails
+#       its own leg loudly and packs nothing; nothing changed packs nothing.
+#   --publish <bundles-dir> <branch>
+#       Runs once, in one job. Every attempt rebuilds on the current remote
+#       tip, applies EVERY bundle under <bundles-dir>, regenerates the derived
+#       artifacts once for all of them, verifies, gates on the ratchet, and
+#       makes ONE commit. Only a rejected push is retried, and contention now
+#       comes only from other workflows or humans. Zero bundles is a no-op.
+#   <suite> <branch>
+#       Single suite (the original interface): pack into a temporary
+#       directory, then publish that one bundle. Same two steps, one code
+#       path; pack skips only its vet, which publish repeats at once.
+#
+# A bundle is a directory holding bundle.json (schema
+# axiom_oracles.refreshed_report_bundle.v1: the suite, its private paths, its
+# deletions, and its manifest additions) plus files/<path> for every private
+# path. Publish reads the suite from bundle.json, never from the directory
+# name, so a bundle survives any artifact rename.
 #
 # Only leg-PRIVATE outputs are ever restored across attempts. Shared or
 # derived files are not: restoring a stale copy of the shared, append-only
-# dashboard/public/data/manifest.json would drop a sibling's entry (so the
-# leg's manifest ADDITIONS are re-applied per attempt instead), and restoring
-# stale derived artifacts (freshness, scoreboard/detail, history snapshots,
-# burn-down, the BE rollup) could resurrect a prior day's snapshot across a
-# UTC rollover or clobber a sibling's regeneration — they are recomputed from
-# the fresh tip on every attempt, never copied.
+# dashboard/public/data/manifest.json would drop another refresh's entry (so
+# each bundle's manifest ADDITIONS are re-applied per attempt instead), and
+# restoring stale derived artifacts (freshness, scoreboard/detail, history
+# snapshots, burn-down, the BE rollup) could resurrect a prior day's snapshot
+# across a UTC rollover or clobber a concurrent regeneration — they are
+# recomputed from the fresh tip on every attempt, never copied.
 #
 # The conformance RATCHET (conformance/ratchet.yaml) is deliberately NOT
 # re-pinned here: floors tighten only via a deliberate human run of
@@ -58,21 +89,69 @@
 # keeps mechanical staleness out of CI; it must not muffle real regressions.
 #
 # Usage: scripts/commit_refreshed_report.sh <suite-name> <branch>
+#        scripts/commit_refreshed_report.sh --pack <bundles-dir> <suite-name>
+#        scripts/commit_refreshed_report.sh --publish <bundles-dir> <branch>
 # Env:   PYTHON            interpreter for the regeneration scripts (python3)
-#        MAX_ATTEMPTS      push attempts before failing loudly     (60)
+#        MAX_ATTEMPTS      push attempts before failing loudly     (10)
 #        PUSH_RETRY_DELAY  seconds between attempts (default: growing + jitter)
 
 set -euo pipefail
 
-suite="${1:?usage: commit_refreshed_report.sh <suite-name> <branch>}"
-branch="${2:?usage: commit_refreshed_report.sh <suite-name> <branch>}"
+usage() {
+  {
+    echo "usage: commit_refreshed_report.sh <suite-name> <branch>"
+    echo "       commit_refreshed_report.sh --pack <bundles-dir> <suite-name>"
+    echo "       commit_refreshed_report.sh --publish <bundles-dir> <branch>"
+  } >&2
+  exit 2
+}
+
+# A bundles directory is given relative to the caller, before the cd below.
+abspath() {
+  case "$1" in
+    /*) printf '%s\n' "$1" ;;
+    *) printf '%s\n' "$PWD/$1" ;;
+  esac
+}
+
+mode=single
+suite=""
+branch=""
+bundles_dir=""
+case "${1:-}" in
+  --pack)
+    [ "$#" -eq 3 ] || usage
+    mode=pack
+    bundles_dir="$(abspath "$2")"
+    suite="$3"
+    ;;
+  --publish)
+    [ "$#" -eq 3 ] || usage
+    mode=publish
+    bundles_dir="$(abspath "$2")"
+    branch="$3"
+    ;;
+  "" | -*) usage ;;
+  *)
+    [ "$#" -eq 2 ] || usage
+    suite="$1"
+    branch="$2"
+    ;;
+esac
+# The suite names a bundle directory.
+case "$suite" in
+  */* | . | ..) usage ;;
+esac
+[ "$mode" = publish ] || [ -n "$suite" ] || usage
+[ "$mode" = pack ] || [ -n "$branch" ] || usage
+
 PYTHON="${PYTHON:-python3}"
-# 60 attempts, not 20: with 40+ sibling legs each pushing within the same
-# sweep, a leg's vulnerable window (fetch → regenerate → push) is comparable
-# to the herd's inter-push gap, and legs that had completed their comparison
-# were observed losing 20 straight races (#337). The affected-rerun job
-# timeout still bounds the loop.
-MAX_ATTEMPTS="${MAX_ATTEMPTS:-60}"
+# 10, not the old per-leg 60: one publisher no longer races 40+ siblings, so
+# the only contention left is another workflow or a human pushing to the
+# branch, and one or two attempts is the normal case. Every attempt still
+# rebuilds from scratch, so a lost race costs one regeneration, not a
+# conflict.
+MAX_ATTEMPTS="${MAX_ATTEMPTS:-10}"
 
 cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # Direct ``python scripts/foo.py`` execution puts ``scripts/`` rather than the
@@ -80,6 +159,17 @@ cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 # installed in the uv environment, but the bot's hermetic clone test (and any
 # minimally provisioned runner) must still execute the same refresh chain.
 export PYTHONPATH="$PWD${PYTHONPATH:+:$PYTHONPATH}"
+
+# Bundles never live inside the checkout: publish's `git clean` would delete
+# them, and pack would collect a bundle under a derived path as a private
+# output of the next run.
+case "$bundles_dir/" in
+  "$PWD"/*)
+    echo "bundles directory $bundles_dir is inside the checkout; use a" \
+      "directory outside it (e.g. \$RUNNER_TEMP/refreshed)" >&2
+    exit 2
+    ;;
+esac
 
 # Every tree holding a report or report-derived artifact this script may
 # refresh, regenerate, and commit. The EUROMOD-BE coverage rollup lives
@@ -103,12 +193,6 @@ derived_paths=(
   axiom_oracles/data/euromod_be_coverage.json
 )
 manifest="dashboard/public/data/manifest.json"
-
-# Bot identity, only where none is configured (CI runners have none).
-git config user.name >/dev/null 2>&1 ||
-  git config user.name "github-actions[bot]"
-git config user.email >/dev/null 2>&1 ||
-  git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
 regenerate_derived() {
   # Registry-derived affected-run metadata is cheap and hermetic. Keep it in
@@ -282,41 +366,69 @@ if [ "${SIMULATE_DERIVED_REFRESH:-0}" = "1" ]; then
   regenerate_derived
   verify_derived
   "$PYTHON" scripts/unexplained_ratchet.py --check
-  echo "simulated derived refresh passed for $suite"
+  echo "simulated derived refresh passed${suite:+ for $suite}"
   exit 0
 fi
 
-# Collect this run's PRIVATE outputs — what run_comparison.py itself wrote
-# (the refreshed report + any fixture reports), BEFORE any regeneration, so
-# nothing derived or shared ever enters the restore set. NUL-safe, and it
-# catches brand-new untracked files too: the first report of a new suite is
-# untracked, and `git diff` alone would silently drop it.
-private=()   # changed paths that exist in the worktree
-deletions=() # paths the refresh deleted (rare; handled for completeness)
-while IFS= read -r -d '' path; do
-  [ "$path" = "$manifest" ] && continue # shared; additions replayed instead
-  if [ -e "$path" ]; then private+=("$path"); else deletions+=("$path"); fi
-done < <(git diff HEAD --name-only -z -- "${derived_paths[@]}")
-while IFS= read -r -d '' path; do
-  # The manifest is shared even when brand-new (HEAD without one): restoring
-  # it verbatim would drop a racing sibling's entry, so it is excluded here
-  # too and its additions replayed instead.
-  [ "$path" = "$manifest" ] && continue
-  private+=("$path")
-done < <(git ls-files --others --exclude-standard -z -- "${derived_paths[@]}")
+cleanup_dirs=()
+cleanup() {
+  if [ "${#cleanup_dirs[@]}" -gt 0 ]; then
+    rm -rf "${cleanup_dirs[@]}"
+  fi
+}
+trap cleanup EXIT
 
-# Record the manifest entries this run ADDED (run_comparison.py appends its
-# report filename). They are re-applied onto whatever tip wins each attempt —
-# the shared file itself is never restored, so a stale copy can't drop a
-# sibling's concurrently-added entry.
-stash="$(mktemp -d)"
-trap 'rm -rf "$stash"' EXIT
-manifest_added="$stash/manifest-added.json"
-"$PYTHON" - "$manifest" "$manifest_added" <<'PY'
+BUNDLE_SCHEMA="axiom_oracles.refreshed_report_bundle.v1"
+
+# pack <bundles-dir> <suite> [vet]: collect, vet, and bundle this checkout's
+# refresh. vet=0 skips only the vet, for the single-suite mode below.
+pack() {
+  local out="$1" name="$2" vet="${3:-1}" path staging
+
+  # Collect this run's PRIVATE outputs — what run_comparison.py itself wrote
+  # (the refreshed report + any fixture reports), BEFORE any regeneration, so
+  # nothing derived or shared ever enters the bundle. NUL-safe, and it
+  # catches brand-new untracked files too: the first report of a new suite is
+  # untracked, and `git diff` alone would silently drop it.
+  private=()   # changed paths that exist in the worktree
+  deletions=() # paths the refresh deleted (rare; handled for completeness)
+  while IFS= read -r -d '' path; do
+    [ "$path" = "$manifest" ] && continue # shared; additions replayed instead
+    if [ -e "$path" ]; then private+=("$path"); else deletions+=("$path"); fi
+  done < <(git diff HEAD --name-only -z -- "${derived_paths[@]}")
+  while IFS= read -r -d '' path; do
+    # The manifest is shared even when brand-new (HEAD without one): restoring
+    # it verbatim would drop another refresh's entry, so it is excluded here
+    # too and its additions replayed instead.
+    [ "$path" = "$manifest" ] && continue
+    private+=("$path")
+  done < <(git ls-files --others --exclude-standard -z -- "${derived_paths[@]}")
+
+  mkdir -p "$out"
+  # Staged next to its final name so the bundle appears atomically (rename),
+  # and dot-named so publish never mistakes a half-written one for a bundle.
+  staging="$(mktemp -d "$out/.pack.XXXXXX")"
+  cleanup_dirs+=("$staging")
+
+  # The bundle's copies of the private outputs, taken before anything below
+  # can rewrite them.
+  for path in ${private[@]+"${private[@]}"}; do
+    mkdir -p "$staging/files/$(dirname "$path")"
+    cp -p "$path" "$staging/files/$path"
+  done
+
+  # Record the manifest entries this run ADDED (run_comparison.py appends its
+  # report filename) and the bundle's index. Publish re-applies the additions
+  # onto whatever tip wins each attempt — the shared file itself is never
+  # restored, so a stale copy can't drop a concurrently-added entry.
+  "$PYTHON" - "$manifest" "$staging/bundle.json" "$BUNDLE_SCHEMA" "$name" \
+    ${private[@]+"${private[@]}"} -- ${deletions[@]+"${deletions[@]}"} <<'PY'
 import json, subprocess, sys
 from pathlib import Path
 
-manifest, out = sys.argv[1], sys.argv[2]
+manifest, out, schema, suite, *rest = sys.argv[1:]
+split = rest.index("--")
+private, deletions = rest[:split], rest[split + 1 :]
 try:
     now = json.loads(Path(manifest).read_text()).get("reports", [])
 except FileNotFoundError:
@@ -327,41 +439,199 @@ show = subprocess.run(
 committed = (
     json.loads(show.stdout).get("reports", []) if show.returncode == 0 else []
 )
-Path(out).write_text(json.dumps([r for r in now if r not in committed]))
+Path(out).write_text(
+    json.dumps(
+        {
+            "schema": schema,
+            "suite": suite,
+            "private": private,
+            "deletions": deletions,
+            "manifest_added": [r for r in now if r not in committed],
+        },
+        indent=2,
+    )
+    + "\n"
+)
 PY
 
-for path in ${private[@]+"${private[@]}"}; do
-  mkdir -p "$stash/$(dirname "$path")"
-  cp -p "$path" "$stash/$path"
-done
+  # Fast no-op path: nothing private changed and the checked-out tree already
+  # passes every gate — nothing to heal, nothing to publish, no bundle.
+  if [ "${#private[@]}" -eq 0 ] && [ "${#deletions[@]}" -eq 0 ] &&
+    "$PYTHON" -c 'import json, sys; sys.exit(bool(json.load(open(sys.argv[1]))["manifest_added"]))' \
+      "$staging/bundle.json" &&
+    verify_derived >/dev/null 2>&1; then
+    echo "no report or derived-artifact changes for $name"
+    return 0
+  fi
 
-# Fast no-op path: nothing private changed and the checked-out tree already
-# passes every gate — nothing to heal, nothing to push.
-if [ "${#private[@]}" -eq 0 ] && [ "${#deletions[@]}" -eq 0 ] &&
-  [ "$(cat "$manifest_added")" = "[]" ] && verify_derived >/dev/null 2>&1; then
-  echo "no report or derived-artifact changes for $suite"
-  exit 0
-fi
+  # Vet ONCE, here, on the checkout the comparison ran against, with the same
+  # steps publish runs on every attempt: a refresh that could never publish
+  # fails its own leg instead of the shared publish job. The re-emission
+  # guard runs first, so the gates judge what publish would commit.
+  if [ "$vet" = 1 ]; then
+    "$PYTHON" scripts/guard_reemitted_reports.py
+    regenerate_derived
+    verify_derived
+    # Publication gate — unlike the conformance ratchet (an alarm that fires
+    # on main AFTER an honest regression lands), the per-suite unexplained
+    # ratchet stops the regression from publishing at all: a rerun that
+    # surfaces NEW unexplained disagreements leaves the previous,
+    # fully-accounted-for report live until someone triages
+    # (dispositions/<suite>.yaml or the known-causes registry). Fail the leg
+    # loudly, and pack nothing.
+    if ! "$PYTHON" scripts/unexplained_ratchet.py --check; then
+      echo "REFUSED: the $name refresh raises an unexplained-mismatch" \
+        "ceiling (conformance/unexplained-ratchet.yaml), so nothing was" \
+        "packed. Triage the new disagreements, then rerun; the previous" \
+        "report stays published." >&2
+      exit 1
+    fi
+  fi
 
-push_landed=""
-for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
-  # Rebuild from scratch on the current remote tip (fetch + hard reset; never
-  # rebase). git clean keeps the generated trees hermetic across attempts.
-  git fetch origin "$branch"
-  git reset --hard FETCH_HEAD --quiet
-  git clean -fdq -- "${derived_paths[@]}"
+  rm -rf "${out:?}/$name"
+  mv "$staging" "$out/$name"
+  echo "packed the $name refresh into $out/$name: ${#private[@]} private" \
+    "file(s), ${#deletions[@]} deletion(s)"
+}
 
-  for path in ${private[@]+"${private[@]}"}; do
-    mkdir -p "$(dirname "$path")"
-    cp -p "$stash/$path" "$path"
-  done
-  for path in ${deletions[@]+"${deletions[@]}"}; do
-    rm -f "$path"
-  done
+# publish <bundles-dir> <branch>: apply every bundle on the tip, commit once.
+publish() {
+  local src="$1" target="$2" bundle work label subject attempt i path
 
-  # Replay this run's manifest additions onto the tip's manifest (append-only
-  # union, same serialization run_comparison.py writes).
-  "$PYTHON" - "$manifest" "$manifest_added" <<'PY'
+  bundles=()
+  if [ -d "$src" ]; then
+    while IFS= read -r -d '' bundle; do
+      bundles+=("$bundle")
+    done < <(find "$src" -mindepth 1 -maxdepth 1 -type d ! -name '.*' -print0 |
+      LC_ALL=C sort -z)
+  fi
+  if [ "${#bundles[@]}" -eq 0 ]; then
+    echo "no refreshed-report bundles under $src; nothing to publish"
+    return 0
+  fi
+
+  # Validate every bundle once, before touching the checkout, and flatten
+  # each one's paths into NUL lists the attempt loop replays. Paths must stay
+  # inside derived_paths (what pack collects from) and never name the shared
+  # manifest; two bundles writing the same path apply in sorted order, last
+  # one wins, with a warning.
+  work="$(mktemp -d)"
+  cleanup_dirs+=("$work")
+  "$PYTHON" - "$work" "$manifest" "$BUNDLE_SCHEMA" "${derived_paths[@]}" \
+    -- "${bundles[@]}" <<'PY'
+import json, os, sys
+from pathlib import Path, PurePosixPath
+
+work, manifest, schema, *rest = sys.argv[1:]
+split = rest.index("--")
+derived, bundles = rest[:split], rest[split + 1 :]
+work = Path(work)
+
+
+def fail(message):
+    sys.exit(f"FAILED: {message}; nothing was published")
+
+
+def in_derived(path):
+    return any(
+        path.startswith(d) if d.endswith("/") else path == d for d in derived
+    )
+
+
+suites, added, owners = [], [], {}
+for index, bundle in enumerate(bundles):
+    root = Path(bundle)
+    try:
+        doc = json.loads((root / "bundle.json").read_text())
+    except (OSError, ValueError) as exc:
+        fail(f"{bundle} is not a refreshed-report bundle ({exc})")
+    if not isinstance(doc, dict) or doc.get("schema") != schema:
+        fail(f"{bundle}/bundle.json is not a {schema} bundle")
+    suite = doc.get("suite")
+    if not isinstance(suite, str) or not suite or suite in suites:
+        fail(f"{bundle}/bundle.json has a missing or duplicate suite {suite!r}")
+    suites.append(suite)
+    lists = {}
+    for key in ("private", "deletions", "manifest_added"):
+        value = doc.get(key)
+        if not isinstance(value, list) or not all(
+            isinstance(v, str) and v and "\0" not in v for v in value
+        ):
+            fail(f"{suite}: bundle.json {key} must be a list of strings")
+        lists[key] = value
+    for key in ("private", "deletions"):
+        for path in lists[key]:
+            pure = PurePosixPath(path)
+            if (
+                pure.is_absolute()
+                or ".." in pure.parts
+                or path == manifest
+                or not in_derived(path)
+            ):
+                fail(f"{suite}: {key} path {path!r} is outside the derived paths")
+            if key == "private" and not (root / "files" / path).is_file():
+                fail(f"{suite}: bundle lacks files/{path}")
+            if path in owners and owners[path] != suite:
+                message = (
+                    f"{path} is in both the {owners[path]} and {suite} "
+                    f"bundles; applying {suite}'s (last in sorted order)"
+                )
+                if os.environ.get("GITHUB_ACTIONS") == "true":
+                    print(f"::warning title=Overlapping refreshes::{message}")
+                else:
+                    print(f"warning: {message}", file=sys.stderr)
+            owners[path] = suite
+        (work / f"{index}.{key}").write_bytes(
+            b"".join(p.encode() + b"\0" for p in lists[key])
+        )
+    added.extend(e for e in lists["manifest_added"] if e not in added)
+
+(work / "suites").write_bytes(b"".join(s.encode() + b"\0" for s in suites))
+(work / "manifest-added.json").write_text(json.dumps(added))
+PY
+
+  suites=()
+  while IFS= read -r -d '' path; do
+    suites+=("$path")
+  done <"$work/suites"
+  if [ "${#suites[@]}" -eq 1 ]; then
+    label="${suites[0]}"
+  else
+    label="${#suites[@]} suites"
+  fi
+  echo "publishing $label: ${suites[*]}"
+
+  # Bot identity, only where none is configured (CI runners have none).
+  git config user.name >/dev/null 2>&1 ||
+    git config user.name "github-actions[bot]"
+  git config user.email >/dev/null 2>&1 ||
+    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+  push_landed=""
+  for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
+    # Rebuild from scratch on the current remote tip (fetch + hard reset; never
+    # rebase). git clean keeps the generated trees hermetic across attempts.
+    git fetch origin "$target"
+    git reset --hard FETCH_HEAD --quiet
+    git clean -fdq -- "${derived_paths[@]}"
+
+    # Apply every bundle's private outputs and deletions, in sorted order.
+    i=0
+    for bundle in "${bundles[@]}"; do
+      stash="$bundle/files"
+      while IFS= read -r -d '' path; do
+        mkdir -p "$(dirname "$path")"
+        cp -p "$stash/$path" "$path"
+      done <"$work/$i.private"
+      while IFS= read -r -d '' path; do
+        rm -f "$path"
+      done <"$work/$i.deletions"
+      i=$((i + 1))
+    done
+
+    # Replay every bundle's manifest additions onto the tip's manifest
+    # (append-only union, same serialization run_comparison.py writes).
+    "$PYTHON" - "$manifest" "$work/manifest-added.json" <<'PY'
 import json, sys
 from pathlib import Path
 
@@ -383,53 +653,83 @@ if added:
         manifest.write_text(json.dumps(doc, indent=2) + "\n")
 PY
 
-  # Recompute every derived artifact against THIS tip, then refuse to push
-  # anything ci.yml would call stale.
-  regenerate_derived
-  verify_derived
+    # A re-emission never replaces a committed report on THIS tip: for any
+    # restored dashboard report that is a re-emission, put back the tip's bytes
+    # whenever the tip has a copy (real or itself re-emitted).
+    # run_comparison.py already declines to publish one; this is the check at
+    # the push, which no CI workflow sees (bot pushes don't trigger ci.yml).
+    "$PYTHON" scripts/guard_reemitted_reports.py
 
-  # Publication gate — unlike the conformance ratchet (an alarm that fires on
-  # main AFTER an honest regression lands), the per-suite unexplained ratchet
-  # stops the regression from publishing at all: a rerun that surfaces NEW
-  # unexplained disagreements leaves the previous, fully-accounted-for report
-  # live until someone triages (dispositions/<suite>.yaml or the known-causes
-  # registry). Retrying cannot help — a regression is not contention — so
-  # fail the leg loudly instead of looping.
-  if ! "$PYTHON" scripts/unexplained_ratchet.py --check; then
-    echo "REFUSED: this refresh raises an unexplained-mismatch ceiling" \
-      "(conformance/unexplained-ratchet.yaml). Triage the new" \
-      "disagreements, then rerun; the previous report stays published." >&2
-    exit 1
-  fi
+    # Recompute every derived artifact against THIS tip, once for every
+    # bundle, then refuse to push anything ci.yml would call stale.
+    regenerate_derived
+    verify_derived
 
-  git add -A -- "${derived_paths[@]}"
-  if git diff --cached --quiet; then
-    echo "nothing to commit for $suite after regeneration (attempt $attempt)"
-    exit 0
-  fi
-  git commit --quiet \
-    -m "data: refresh $suite (affected rerun $(date -u +%Y-%m-%d))" \
-    -m "Includes the regenerated derived conformance artifacts (dispositioned
+    # The publication gate again, now over the combined tree on THIS tip: each
+    # bundle passed it alone where it ran, but the tip may have moved since.
+    # Retrying cannot help — a regression is not contention — and publishing
+    # the passing bundles alone would drop the rest silently, so refuse the
+    # whole publish loudly and name every suite in it.
+    if ! "$PYTHON" scripts/unexplained_ratchet.py --check; then
+      echo "REFUSED: publishing $label raises an unexplained-mismatch" \
+        "ceiling (conformance/unexplained-ratchet.yaml), so nothing was" \
+        "pushed. Suites in this publish: ${suites[*]}. The lines above name" \
+        "the suites over their ceilings; triage those disagreements, then" \
+        "rerun. The previous reports stay published." >&2
+      exit 1
+    fi
+
+    git add -A -- "${derived_paths[@]}"
+    if git diff --cached --quiet; then
+      echo "nothing to commit for $label after regeneration (attempt $attempt)"
+      return 0
+    fi
+    if [ "${#suites[@]}" -eq 1 ]; then
+      subject="data: refresh ${suites[0]}"
+    else
+      subject="data: refresh ${#suites[@]} suites"
+    fi
+    git commit --quiet \
+      -m "$subject (affected rerun $(date -u +%Y-%m-%d))" \
+      -m "Suites: ${suites[*]}" \
+      -m "Includes the regenerated derived conformance artifacts (dispositioned
 reports + EUROMOD-BE coverage rollup, DE unified/closure/census/executable
 status, scoreboard, detail, daily history snapshot, burn-down, freshness) so
 main CI's staleness gates stay green.
 Committed by scripts/commit_refreshed_report.sh; the ratchet is never
 re-pinned here."
 
-  if git push origin "HEAD:$branch"; then
-    push_landed=1
-    break
-  fi
-  echo "push rejected (attempt $attempt/$MAX_ATTEMPTS): a sibling job" \
-    "advanced $branch; rebuilding on the new tip" >&2
-  # Growing delay with wide jitter to decorrelate the herd — synchronized
-  # retries were losing to each other far more than a Poisson model predicts.
-  sleep "${PUSH_RETRY_DELAY:-$((attempt * 4 + RANDOM % 25))}"
-done
+    if git push origin "HEAD:$target"; then
+      push_landed=1
+      break
+    fi
+    echo "push rejected (attempt $attempt/$MAX_ATTEMPTS): $target advanced" \
+      "under this publish; rebuilding on the new tip" >&2
+    # Growing delay with wide jitter, so a retry does not collide again with
+    # whatever else is pushing to the branch.
+    sleep "${PUSH_RETRY_DELAY:-$((attempt * 4 + RANDOM % 25))}"
+  done
 
-if [ -z "$push_landed" ]; then
-  echo "FAILED: could not push the $suite refresh after $MAX_ATTEMPTS" \
-    "attempts; the refresh was NOT committed" >&2
-  exit 1
-fi
-echo "pushed $suite refresh + derived conformance artifacts to $branch"
+  if [ -z "$push_landed" ]; then
+    echo "FAILED: could not push the $label refresh after $MAX_ATTEMPTS" \
+      "attempts; the refresh was NOT committed" >&2
+    exit 1
+  fi
+  echo "pushed $label refresh + derived conformance artifacts to $target"
+}
+
+case "$mode" in
+  pack) pack "$bundles_dir" "$suite" ;;
+  publish) publish "$bundles_dir" "$branch" ;;
+  single)
+    # The original single-suite interface: the same pack, then a publish of
+    # that one bundle. Pack skips its vet here and only here: publish runs the
+    # identical gates on a tip at least as new straight afterwards, so a
+    # second regeneration would add minutes and catch nothing. Behaviour and
+    # cost stay what this mode always had.
+    single_dir="$(mktemp -d)"
+    cleanup_dirs+=("$single_dir")
+    pack "$single_dir" "$suite" 0
+    publish "$single_dir" "$branch"
+    ;;
+esac

@@ -60,15 +60,19 @@ NYC_BENEFITS_DATASET_URL = (
     "$select=program_code&$limit=5000"
 )
 DEFAULT_PERIOD = "2026-05"
-# The pinned policyengine-taxsim 2.30.0 binary (see adapters/taxsim/
-# taxsim_pins.json) models law year 2026 rate schedules, the OBBBA standard
-# deduction, childless EITC, and FICA/SECA, so TAXSIM comparisons default to
-# the same 2026 validation year as every other lane. Known 2026 gap, verified
-# empirically against the pinned binary: the qualifying-child credit machinery
-# is absent at 2026 — CTC collapses to the $500 ODC path, and ACTC, CDCC, and
-# EITC-with-children return zero (2025 models all of them, including the OBBBA
-# $2,200 CTC). Comparisons of child-credit concepts at 2026 must treat TAXSIM
-# zeros as an NBER gap, not evidence.
+# The macOS binary in the pinned policyengine-taxsim 2.30.0 release
+# (taxsimtest-osx.exe, build 20260521; see adapters/taxsim/taxsim_pins.json)
+# models law year 2026 rate schedules, the OBBBA standard deduction, childless
+# EITC, and FICA/SECA, so TAXSIM comparisons default to the same 2026
+# validation year as DEFAULT_PERIOD. The Linux binary in the same release
+# (taxsimtest-linux.exe) is an older build that stops at 2024 and fails on
+# 2025 and 2026 rows; on Linux, pass --period 2024. Known 2026 gap in the
+# macOS build, verified empirically: the qualifying-child credit machinery is
+# absent at 2026 — CTC collapses to the $500 ODC path, ACTC and CDCC return
+# zero, and the EITC ignores qualifying children, so a family with children
+# gets the childless EITC (2025 models all of them, including the OBBBA $2,200
+# CTC). Comparisons of child-credit concepts at 2026 must treat these TAXSIM
+# values as an NBER gap, not evidence.
 TAXSIM_DEFAULT_PERIOD = "2026"
 MAX_CONSOLE_MISMATCHES = 50
 EUROMOD_TO_AXIOM_INPUT_BRIDGE_METADATA_KEY = "euromod_to_axiom_input_bridge"
@@ -1453,6 +1457,14 @@ def _build_runner(
             constant_overrides=_parse_euromod_constant_overrides(
                 os.environ.get("EUROMOD_CONSTANT_OVERRIDES"),
             ),
+            # Month-period Axiom modules compare monthly-to-monthly (the
+            # engine returns one month at the queried period), so suites
+            # whose Axiom outputs are monthly disable the x12
+            # annualization via EUROMOD_ANNUALIZE_OUTPUTS=false.
+            annualize_outputs=os.environ.get(
+                "EUROMOD_ANNUALIZE_OUTPUTS", "true"
+            ).strip().lower()
+            not in {"false", "0", "no"},
             extra_columns=_parse_euromod_extra_columns(
                 os.environ.get("EUROMOD_EXTRA_COLUMNS"),
             ),

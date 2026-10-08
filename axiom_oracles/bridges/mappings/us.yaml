@@ -7464,6 +7464,38 @@ mappings:
     comparison: boolean
     rationale: Same federal SNAP net-income eligibility test.
 
+  - legal_id: us:regulations/7-cfr/273/9/c/17#snap_child_support_income_exclusion
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_child_support_gross_income_deduction
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same 7 CFR 273.9(c)(17) child support exclusion from gross income. PolicyEngine-US calls the excluded amount a gross income deduction (its state exclusion parameter times countable child support). The adapter replays the test's State election in a state with that election (TX deducts, CA excludes from policyengine-us 2.11.4) and reports the case unsupported when that state's parameter disagrees.
+
+  - legal_id: us:regulations/7-cfr/273/9/d/5#snap_child_support_deduction_for_net_income
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_child_support_deduction
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same optional 7 CFR 273.9(d)(5) child support deduction taken in net income. PolicyEngine-US deducts countable child support that its state parameter does not exclude. The adapter replays the test's State election as for the (c)(17) exclusion.
+
+  - legal_id: us:regulations/7-cfr/273/9/d/5#snap_state_agency_provides_child_support_deduction
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_state_agency_provides_child_support_deduction
+    entity: household
+    period: month
+    comparison: boolean
+    rationale: Same 7 CFR 273.9(d)(5) State election to provide the child support deduction instead of the (c)(17) exclusion. PolicyEngine-US has no variable for it; the adapter reads the negation of gov.usda.snap.income.deductions.child_support, which is true when the state excludes.
+
   - legal_id: us:regulations/7-cfr/273/10#snap_gross_monthly_income
     country: us
     program: snap

@@ -1,3 +1,5 @@
+import pytest
+
 from axiom_oracles.comparison.comparator import Comparator
 from axiom_oracles.comparison.mappings import ProgramMapping
 from axiom_oracles.core.results import EngineResult
@@ -86,6 +88,34 @@ def test_amount_comparison_can_use_relative_tolerance_for_large_outputs() -> Non
     assert comparison.match_rate == 100
     assert variable.matches
     assert variable.relative_tolerance == 0.0000002
+
+
+def test_comparison_names_the_engine_behind_a_nan_household_id() -> None:
+    mappings = [
+        ProgramMapping(
+            standard="us:test#income_tax",
+            description="Federal income tax",
+            category="tax",
+            comparison="amount",
+            targets={"axiom": "income_tax", "taxsim": "fiitax"},
+        )
+    ]
+
+    # pandas coerces an unparseable TAXSIM stdout line to a NaN id; NaN is
+    # unequal to itself, so it passes the duplicate check and shows up as
+    # "unexpected [nan, nan, ...]" — fail on it by name instead.
+    with pytest.raises(
+        ValueError,
+        match=r"Invalid right result household IDs: engine 'taxsim' returned a "
+        r"result with household id nan",
+    ):
+        Comparator(mappings).compare(
+            [EngineResult("axiom", "case-1", {"income_tax": 0})],
+            [
+                EngineResult("taxsim", "case-1", {"fiitax": 0}),
+                EngineResult("taxsim", float("nan"), {}),
+            ],
+        )
 
 
 def test_comparison_carries_engine_errors() -> None:

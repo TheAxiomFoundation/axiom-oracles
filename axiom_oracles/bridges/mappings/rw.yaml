@@ -1,0 +1,23 @@
+prefixes:
+  - legal_id_prefix: "rw:"
+    country: rw
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: >-
+      PolicyEngine has no Rwanda model and cannot serve as a Rwanda
+      tax-benefit oracle. Axiom Rwanda outputs are encoded from Rwandan law
+      (Law No 027/2022 on income taxes, Law No 048/2023 on rental income tax,
+      Law No 049/2023 on VAT, Law No 011/2025 on excise duty, and the pension,
+      maternity, medical-scheme and CBHI contribution instruments); the
+      household oracle is RWAMOD (UNU-WIDER SOUTHMOD, run on the EUROMOD
+      engine; licensed SOUTHMOD A4.0 bundle, system RW_2025; the bundle ships
+      no Rwandan microdata, so runs use a header-only input file built locally
+      by scripts/southmod_rw_header.py), wired by the rw-* comparison suites.
+      Their reports are run by hand where the licensed bundle is installed and
+      committed with a dated provenance stamp (comparisons/rw-*.yaml declare
+      ci: manual, because the licence bars giving the bundle to a shared CI
+      runner); see concept_mappings.yaml and
+      axiom_oracles/data/rwamod_issues.json. This prefix classifies any
+      remaining Rwanda output with no explicit entry as not comparable to
+      PolicyEngine; add exact PolicyEngine mappings only if a real one-to-one
+      Rwanda PolicyEngine oracle target is ever implemented.

@@ -1,6 +1,257 @@
+mappings:
+  # Ghana outputs are validated against GHAMOD (SOUTHMOD Ghana, run on the
+  # EUROMOD engine), not PolicyEngine, which has no Ghana model. These explicit
+  # entries record the GHAMOD household-oracle wiring for each output a gh-*
+  # suite compares; they stay not_comparable to PolicyEngine because there is
+  # no Ghana PolicyEngine target, mirroring the UKMOD-compared UK pipeline
+  # entries. The comparisons live in comparisons/gh-*.yaml and their committed
+  # reports in dashboard/public/data/.
+  - legal_id: gh:statutes/act-1111/income-tax-amendment-no2-2023/first-schedule-rates-of-income-tax-for-individuals#resident_individual_income_tax
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Resident individual income tax over chargeable income (Income Tax
+      (Amendment) (No. 2) Act 2023, Act 1111, First Schedule bands). Validated
+      against GHAMOD tin_s by the gh-income-tax-rate-schedule suite (SOUTHMOD
+      A4.0, GH_2025): exact to the cedi for chargeable income at or below
+      605,000; the 700,000 case is dispositioned as an oracle gap because
+      GHAMOD's schedule omits the Act 1111 35% top band. PolicyEngine has no
+      Ghana model, so there is no PolicyEngine oracle target; the household
+      oracle is GHAMOD.
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#resident_individual_personal_reliefs
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Total Fifth Schedule personal reliefs (Income Tax Act 2015, Act 896,
+      section 51 and Fifth Schedule as amended by Act 1007). Its component
+      reliefs are each validated to the cedi against GHAMOD's per-relief
+      tinta0X_s outputs by the gh-personal-reliefs suite; the total is their
+      deterministic sum. No single GHAMOD variable reports the total, and
+      PolicyEngine has no Ghana model, so there is no one-to-one oracle target
+      for the aggregate.
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#dependant_spouse_or_children_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Marriage relief for a dependent spouse or at least two dependant children
+      (Act 896 Fifth Schedule paragraph 1(a)). Validated against GHAMOD tinta01_s
+      (dependent-spouse limb) by the gh-personal-reliefs suite: 1,200 GHS, exact.
+      The two-child limb has no live comparison: GHAMOD's lone-parent output
+      tinta02_s returns 0 for every synthetic lone-parent household tried
+      (axiom_oracles/data/ghamod_issues.json). Not comparable to PolicyEngine
+      (no Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#disability_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Disability relief of 25% of assessable business/employment income (Act 896
+      Fifth Schedule paragraph 1(b)). Validated against GHAMOD tinta07_s by the
+      gh-personal-reliefs suite, bridged on the engine's own tax base so both
+      take 25% of the identical amount; exact. Not comparable to PolicyEngine
+      (no Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#old_age_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Old-age relief for an individual aged 60 or above (Act 896 Fifth Schedule
+      paragraph 1(c), amount as amended by Act 1007). Validated against GHAMOD
+      tinta03_s by the gh-personal-reliefs suite: 1,500 GHS, exact. Not
+      comparable to PolicyEngine (no Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#child_education_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Child-education relief of 600 GHS per child in education, capped at three
+      (Act 896 Fifth Schedule paragraph 1(d), amount as amended by Act 1007).
+      Validated against GHAMOD tinta05_s by the gh-personal-reliefs suite,
+      including the three-child cap; exact. Not comparable to PolicyEngine (no
+      Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#aged_dependant_relative_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Relief of 1,000 GHS per aged dependant relative, capped at two (Act 896
+      Fifth Schedule paragraph 1(e), amount as amended by Act 1007). Validated
+      against GHAMOD tinta06_s by the gh-personal-reliefs suite, including the
+      two-relative cap; exact. Not comparable to PolicyEngine (no Ghana model).
+  - legal_id: gh:statutes/act-896/income-tax-2015/fifth-schedule#training_personal_relief
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Professional/technical/vocational training relief, cost capped at 2,000 GHS
+      (Act 896 Fifth Schedule paragraph 1(f), amount as amended by Act 1007). No
+      live GHAMOD comparison: GH_2025 emits no tinta04_s output column at all
+      (documented oracle gap in
+      axiom_oracles/data/ghamod_issues.json); the encoded relief is exercised by
+      the rulespec-gh companion tests. Not comparable to PolicyEngine (no Ghana
+      model).
+  - legal_id: gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution
+    country: gh
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      SSNIT worker contribution of 5.5% of qualifying employment income
+      (National Pensions Act 2008, Act 766, s.3(1)). Validated against GHAMOD
+      tscee_s by the gh-ssnit-contributions suite (SOUTHMOD A4.0, GH_2025):
+      exactly 5.5% of the engine's post-uprating yem at every probed income
+      for contributors inside GHAMOD's age window; GHAMOD's age-15-45
+      contributor cap has no basis in Act 766 s.3 and is recorded in
+      ghamod_issues.json. PolicyEngine has no Ghana model, so there is no
+      PolicyEngine oracle target; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution
+    country: gh
+    program: contributions
+    mapping_type: not_comparable
+    rationale: >-
+      SSNIT employer contribution of 13% of qualifying employment income
+      (National Pensions Act 2008, Act 766, s.3(2)). Validated against GHAMOD
+      tscer_s by the gh-ssnit-contributions suite (SOUTHMOD A4.0, GH_2025):
+      exactly 13% of the engine's post-uprating yem at every probed income
+      for contributors inside GHAMOD's age window; the age-cap divergence is
+      recorded in ghamod_issues.json. PolicyEngine has no Ghana model, so
+      there is no PolicyEngine oracle target; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-896/income-tax-2015/first-schedule-8-rates-of-withholding-tax#individual_residential_rent_final_withholding
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Residential rent final withholding (Act 896 First Schedule paragraph
+      8(1)(b)(iv): 8% of rent paid to a resident individual; final under
+      s.119(1)(b); one encoded version from 2016-01-01). Validated against GHAMOD
+      tinrt_s by the gh-capital-income suite (SOUTHMOD A4.0, GH_2025):
+      exactly 8% of the engine's post-uprating ypr at every probed rent.
+      GHAMOD's companion tiniy_s (flat 15% on investment income) matches no
+      paragraph 8(1)(b) row rulespec-gh encodes and is recorded in ghamod_issues.json
+      rather than compared. PolicyEngine has no Ghana model, so there is no
+      PolicyEngine oracle target; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1071/income-tax-amendment-no2-2021/second-schedule-substitutions#paragraph_5_turnover_tax_payable
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Presumptive turnover tax (Act 896 Second Schedule paragraph 5 as
+      substituted by Act 1071: three per cent of turnover in the
+      (20,000, 500,000] band). Validated against GHAMOD ttn01_s by the
+      gh-presumptive-turnover suite at 30,000, 60,000 and 119,999 a year,
+      inside the band both engines tax, exact to the cedi; GHAMOD's
+      10,000-120,000 eligibility band matches no in-force text and is
+      recorded in ghamod_issues.json.
+      PolicyEngine has no Ghana model; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1068/covid-19-health-recovery-levy-2021/section-1-imposition-of-levy#covid_health_recovery_levy_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      COVID-19 Health Recovery Levy (Act 1068 s.1(4): one per cent of the
+      value of the taxable supply). Validated against GHAMOD ttn02_s (which
+      applies the levy on presumptive payers' turnover) by the
+      gh-presumptive-turnover suite, exact to the cedi on the shared
+      turnover base. PolicyEngine has no Ghana model; the household oracle
+      is GHAMOD.
+  - legal_id: gh:statutes/act-1156/national-health-insurance-amendment-2025/section-47-nhil-substituted#national_health_insurance_levy_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      National Health Insurance Levy (Act 852 s.47 as substituted by Act
+      1156: 2.5% of the chargeable supply value, the rate GHAMOD's GH_2025
+      also applies). Validated against GHAMOD tva01_s by the
+      gh-vat-levies suite, exact to the cedi on the shared standard-rated
+      base (GHAMOD's household expenditure base, given to both engines; the
+      base-definition divergence is recorded in ghamod_issues.json).
+      PolicyEngine has no Ghana model; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1152/ghana-education-trust-fund-amendment-2025/section-3a-getfund-levy-substituted#getfund_levy_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Ghana Education Trust Fund Levy (Act 581 s.3A as substituted by Act
+      1152: 2.5% of the taxable supply value, the rate GHAMOD's GH_2025
+      also applies). Validated against GHAMOD tva02_s by the gh-vat-levies suite,
+      exact to the cedi on the shared base (the base-definition divergence is
+      recorded in ghamod_issues.json). PolicyEngine has no Ghana model; the
+      household oracle is GHAMOD.
+  - legal_id: gh:statutes/act-1151/value-added-tax-2025/section-3-rate-of-the-tax#value_added_tax_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Value Added Tax (Act 1151 s.3: fifteen per cent of the taxable supply
+      or import value, commencing 1 January 2026). No live GHAMOD case:
+      GHAMOD emits no pure-VAT output. On a standard-rated base its tva_s is
+      27% and its consumption-tax total 33% (probed), against a statutory 2025 cascade
+      of 21.9%; recorded in ghamod_issues.json
+      (ghamod-tva-wedge-double-and-triple-counts-levies). The Axiom branch
+      is exercised by the rulespec-gh companion tests. PolicyEngine has no
+      Ghana model.
+  - legal_id: gh:statutes/act-1108/excise-duty-amendment-no2-2023/first-schedule-goods-liable-to-excise-duty#beer_excise_amount
+    country: gh
+    program: tax
+    mapping_type: not_comparable
+    rationale: >-
+      Beer excise (Act 1108 First Schedule: 47.5/32.5/10 per centum of the
+      ex-factory price by local raw material). Validated against GHAMOD
+      tvl04_s by the gh-excise suite on the under-50-per-cent band, exact to
+      the cedi on an identical base: the one GHAMOD ad-valorem excise output
+      whose rate matches the statutory table. GHAMOD charges it on household
+      beer expenditure rather than the ex-factory price, and its other
+      excise outputs match no Act 1108 rate; both are recorded in
+      ghamod_issues.json. PolicyEngine has no Ghana model; the household
+      oracle is GHAMOD.
+  - legal_id: gh:policies/gsfp/feeding-grant#school_feeding_value_per_year
+    country: gh
+    program: benefits
+    mapping_type: not_comparable
+    rationale: >-
+      Ghana School Feeding Programme grant (GH¢2.00 per meal per child per
+      day, 2025 Budget Statement paragraph 381). The gh-transfers suite
+      checks that GHAMOD bed_s equals GH¢2.00 over every weekday of the year
+      (365 x 5/7 days, a calendar inferred from GHAMOD's own output), so it is
+      a regression check of GHAMOD's annual value and cannot separate a rate
+      error from an offsetting calendar error; the calendar is recorded as a
+      divergence from the school year in ghamod_issues.json. LEAP
+      and Free SHS are recorded there too (findings #10/#11). PolicyEngine
+      has no Ghana model; the household oracle is GHAMOD.
+  - legal_id: gh:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income
+    country: gh
+    program: income
+    mapping_type: not_comparable
+    rationale: >-
+      Composed single-employee disposable income (Act 766 s.3(1) employee
+      SSNIT contribution, s.112(2) deduction from the tax base, Act 1111
+      First Schedule bands; gross + benefits - tax - contribution).
+      Validated against GHAMOD ils_dispy by the gh-dispy suite in the
+      shared-nil zone (dispy = 94.5% of gross, exact); in the taxed zone
+      GHAMOD taxes gross employment income without the s.112(2) deduction,
+      recorded in ghamod_issues.json (finding #13, probed 46,518 vs
+      statutory 47,343 at 60,000 gross). PolicyEngine has no Ghana model;
+      the household oracle is GHAMOD.
 prefixes:
   - legal_id_prefix: "gh:"
     country: gh
     mapping_type: not_comparable
     candidate_priority: P4
-    rationale: PolicyEngine has no Ghana model and cannot serve as a Ghana tax-benefit oracle. Axiom Ghana outputs are built from official Ghana legislation (Income Tax Act 2015, Act 896, as amended) and GRA/LEAP sources; the intended household oracle is GHAMOD (UNU-WIDER SOUTHMOD), which attaches once the model-and-data bundle clears licensing. Exact PolicyEngine mappings should be added only after a real one-to-one Ghana oracle target is implemented and verified.
+    rationale: >-
+      PolicyEngine has no Ghana model and cannot serve as a Ghana tax-benefit
+      oracle. Axiom Ghana outputs are built from official Ghana legislation
+      (Income Tax Act 2015, Act 896, as amended; the National Pensions Act
+      2008, Act 766; the levy, excise and VAT Acts) and GRA, MoGCSP and GSFP
+      sources; the household oracle is GHAMOD (UNU-WIDER SOUTHMOD, run on the
+      EUROMOD engine; licensed SOUTHMOD A4.0 bundle, system GH_2025), wired by
+      the gh-* comparison suites. Their reports are run by hand where the
+      licensed bundle is installed and committed with a dated provenance stamp
+      (comparisons/gh-*.yaml declare ci: manual, because the licence bars
+      giving the bundle to a shared CI runner); see the explicit mappings
+      above, concept_mappings.yaml and axiom_oracles/data/ghamod_issues.json.
+      This prefix classifies any remaining Ghana output with no explicit entry
+      as not comparable to PolicyEngine; add exact PolicyEngine mappings only
+      if a real one-to-one Ghana PolicyEngine oracle target is ever
+      implemented.
