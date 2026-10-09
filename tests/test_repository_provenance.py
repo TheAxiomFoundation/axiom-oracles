@@ -489,3 +489,184 @@ def test_de_producer_records_the_repository_where_it_verified_the_pin(
     assert runner["parameters"]["_verified_rulespec_upstream_sha"] == commit
     assert runner["parameters"]["_verified_rulespec_upstream_tree"] == tree
     assert runner["parameters"].get("_verified_rulespec_upstream_toplevel") == str(source)
+
+
+@pytest.mark.parametrize("lane", ["tax", "federal"])
+@pytest.mark.parametrize("change", ["commit", "checkout"])
+def test_runner_binds_clean_state_to_pre_run_content(
+    run_comparison, tmp_path, monkeypatch, lane, change
+):
+    """A clean changed HEAD cannot certify the original 18% commit."""
+    root = _repo(tmp_path / "workspace" / "rulespec-us")
+    initial = _head(root)
+    tree = _git(root, "rev-parse", "HEAD^{tree}").strip()
+    if change == "checkout":
+        (root / "rule.yaml").write_text("rate: 0.17\n")
+        _git(root, "commit", "-qam", "alternate checkout")
+        alternate = _head(root)
+        _git(root, "checkout", "-q", "--detach", initial)
+    _registry(tmp_path / "comparisons", run_comparison, monkeypatch, "binding-probe")
+    output = tmp_path / "report.json"
+    if lane == "tax":
+        for name in ("encode", "engine"):
+            (tmp_path / name).mkdir()
+        runner = {
+            "type": "axiom-encode-tax-ecps-compare",
+            "axiom_encode_repo": str(tmp_path / "encode"),
+            "axiom_rules_repo": str(tmp_path / "engine"),
+            "rulespec_remote": "unused", "parameters": {},
+        }
+        monkeypatch.setattr(run_comparison, "_ensure_engine_binary", lambda *_a, **_k: None)
+        monkeypatch.setattr(run_comparison, "_ensure_rulespec_us_checkout", lambda _r: root)
+        execute = run_comparison._run_axiom_encode_tax_ecps_compare
+    else:
+        runner = {
+            "type": "federal-tax-liability-grid",
+            "parameters": {
+                "policy": "aca_ptc", "rulespec_roots": [str(root)],
+                "rulespec_upstream_sha": initial, "rulespec_upstream_tree": tree,
+                "policyengine_version": "4.18.9",
+                "policyengine_us_version": "1.767.3",
+                "policyengine_core_version": "3.30.3",
+            },
+        }
+        execute = run_comparison._run_federal_tax_liability_grid
+    real_run = subprocess.run
+
+    def harness(cmd, *args, **kwargs):
+        if cmd[0] != "uv":
+            return real_run(cmd, *args, **kwargs)
+        if change == "commit":
+            (root / "rule.yaml").write_text("rate: 0.17\n")
+            _git(root, "commit", "-qam", "committed harness change")
+        else:
+            # Another process changes the checkout after pre-run verification.
+            _git(root, "checkout", "-q", "--detach", alternate)
+        assert _git(root, "status", "--porcelain") == ""
+        assert _head(root) != initial
+        assert _git(root, "show", f"{initial}:rule.yaml") == "rate: 0.18\n"
+        report = json.dumps({"executed_rate": float((root / "rule.yaml").read_text().split(":")[1])})
+        if "stdout" in kwargs:
+            kwargs["stdout"].write(report)
+        else:
+            output.write_text(report)
+        return subprocess.CompletedProcess(cmd, 0)
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", harness)
+    execute(runner, output)
+    block = run_comparison._build_run_provenance(
+        {"name": "binding-probe", "runner": runner}, runner["type"], output
+    )
+    [entry] = block["rulespecs"]
+    assert json.loads(output.read_text())["executed_rate"] == 0.17
+    assert entry["sha"] == initial
+    assert entry["dirty"] is True
+    assert len(entry["diff_sha256"]) == 64
+    with pytest.raises(SystemExit, match="refused before publication"):
+        run_comparison._guard_unclean_rulespec_trees(
+            "binding-probe", {**block, "run_kind": "weekly"}
+        )
+
+
+@settings(max_examples=10, database=None, deadline=None,
+          suppress_health_check=[HealthCheck.function_scoped_fixture])
+@example(body=b"rate: 0.17\n")
+@example(body=b"rate: 0.18\n")
+@given(body=st.binary(max_size=64))
+@pytest.mark.parametrize("source", ["declared", "convention"])
+def test_sha_lookup_checkout_race_binds_raw_content(
+    run_comparison, tmp_path, monkeypatch, body, source
+):
+    """Expected classification comes from bytes, independent of Git status."""
+    with tempfile.TemporaryDirectory(dir=tmp_path) as temporary:
+        root = _repo(Path(temporary) / "rulespec-us")
+        initial = _head(root)
+        (root / "rule.yaml").write_bytes(body)
+        _git(root, "add", "rule.yaml")
+        _git(root, "commit", "-q", "--allow-empty", "-m", "new checkout")
+        alternate = _head(root)
+        _git(root, "checkout", "-q", "--detach", initial)
+        real_sha = provenance._git_sha
+
+        def capture_then_checkout(path):
+            sha = real_sha(path)
+            _git(root, "checkout", "-q", "--detach", alternate)
+            return sha
+
+        with monkeypatch.context() as patch:
+            if source == "declared":
+                patch.setattr(provenance, "_git_sha", capture_then_checkout)
+                [entry] = provenance.rulespec_provenance([root])
+            else:
+                _registry(Path(temporary) / "comparisons", run_comparison, patch)
+                patch.setenv("AXIOM_RULESPEC_US_ROOT", str(root))
+                patch.setattr(run_comparison, "_git_head_sha", capture_then_checkout)
+                [entry] = run_comparison._complete_rulespecs_from_affected_map(
+                    {"name": "co-snap-ecps"}, {}, []
+                )
+        assert _git(root, "status", "--porcelain") == ""
+        assert entry["sha"] == initial
+        assert entry["dirty"] is (body != b"rate: 0.18\n")
+
+
+@pytest.mark.parametrize("change", ["empty-commit", "reverted-index"])
+def test_federal_post_run_equivalent_commit_preserves_clean_pin(
+    run_comparison, tmp_path, change
+):
+    """Different commit IDs with the verified tree still represent the pin."""
+    root = _repo(tmp_path / "rulespec-us")
+    upstream = _head(root)
+    tree = _git(root, "rev-parse", "HEAD^{tree}").strip()
+    params = {"rulespec_roots": [str(root)], "rulespec_upstream_sha": upstream,
+              "rulespec_upstream_tree": tree}
+    run_comparison._verify_federal_rulespec_snapshot(params, [root])
+    if change == "empty-commit":
+        _git(root, "commit", "-q", "--allow-empty", "-m", "materialization")
+    else:
+        (root / "rule.yaml").write_text("rate: 0.17\n")
+        _git(root, "commit", "-qam", "other HEAD content")
+        (root / "rule.yaml").write_text("rate: 0.18\n")
+        _git(root, "add", "rule.yaml")
+    assert _head(root) != upstream
+    assert _git(root, "write-tree").strip() == tree
+    # The public commit can be absent from a materialized object database.
+    params["_verified_rulespec_upstream_sha"] = "a" * 40
+    output = tmp_path / "report.json"
+    output.write_text("{}")
+    block = run_comparison._build_run_provenance(
+        {"name": "equivalent-probe", "runner": {"parameters": params}},
+        "federal-tax-liability-grid", output,
+    )
+    [entry] = block["rulespecs"]
+    assert entry["sha"] == "a" * 40
+    assert entry["dirty"] is False
+    assert "diff_sha256" not in entry
+    run_comparison._guard_unclean_rulespec_trees(
+        "equivalent-probe", {**block, "run_kind": "weekly"}
+    )
+
+
+@pytest.mark.parametrize("replacement", ["commit", "tree"])
+def test_rulespec_attestation_ignores_replacement_objects(tmp_path, monkeypatch, replacement):
+    monkeypatch.delenv("GIT_NO_REPLACE_OBJECTS", raising=False)
+    root = _repo(tmp_path / "rulespec-us")
+    original = _head(root)
+    original_tree = _git(root, "rev-parse", "HEAD^{tree}").strip()
+    (root / "rule.yaml").write_text("rate: 0.17\n")
+    _git(root, "commit", "-qam", "replacement content")
+    alternate = _head(root)
+    alternate_tree = _git(root, "rev-parse", "HEAD^{tree}").strip()
+    old, new = ((original, alternate) if replacement == "commit"
+                else (original_tree, alternate_tree))
+    _git(root, "replace", old, new)
+    _git(root, "checkout", "-q", "--detach", original)
+    assert _head(root) == original
+    assert (root / "rule.yaml").read_text() == "rate: 0.17\n"
+    assert _git(root, "status", "--porcelain") == ""
+    assert _git(root, "--no-replace-objects", "show", f"{original}:rule.yaml") == "rate: 0.18\n"
+
+    [entry] = provenance.rulespec_provenance([root])
+
+    assert entry["sha"] == original
+    assert entry["dirty"] is True
+    assert len(entry["diff_sha256"]) == 64

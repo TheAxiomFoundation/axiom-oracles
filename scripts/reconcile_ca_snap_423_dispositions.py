@@ -590,6 +590,7 @@ def _resolve_base_ref(base_ref: str) -> str:
         resolved = subprocess.run(
             [
                 "git",
+                "--no-replace-objects",
                 "-C",
                 str(ROOT),
                 "rev-parse",
@@ -618,6 +619,7 @@ def _git_show(commit: str, relative_path: str) -> bytes:
         return subprocess.run(
             [
                 "git",
+                "--no-replace-objects",
                 "-C",
                 str(ROOT),
                 "show",

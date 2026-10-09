@@ -736,7 +736,7 @@ def _history_note(message: str) -> None:
 
 def _git_history(*args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        ["git", "-C", str(REPO_ROOT), *args],
+        ["git", "--no-replace-objects", "-C", str(REPO_ROOT), *args],
         capture_output=True,
         text=True,
         check=False,

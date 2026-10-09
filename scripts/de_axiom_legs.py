@@ -254,13 +254,14 @@ def _available_rulespec_root(
 
 
 def _git(root: Path, *args: str, binary: bool = False) -> str | bytes:
+    # Exact-pin evidence must use original objects, never local replace refs.
     try:
         result = subprocess.run(
             ["git", "-C", str(root), *args],
             check=True,
             capture_output=True,
             text=not binary,
-            env=_git_env(),
+            env=_git_env(GIT_NO_REPLACE_OBJECTS="1"),
         )
     except (FileNotFoundError, OSError, subprocess.CalledProcessError) as exc:
         stderr = getattr(exc, "stderr", b"" if binary else "")

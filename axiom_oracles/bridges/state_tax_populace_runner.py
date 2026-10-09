@@ -4168,7 +4168,7 @@ def _is_official_github_remote(remote: str, expected_repository: str) -> bool:
 def _git_output(path: Path, *args: str) -> str:
     try:
         result = subprocess.run(
-            ["git", *args],
+            ["git", "--no-replace-objects", *args],
             cwd=Path(path),
             check=True,
             capture_output=True,

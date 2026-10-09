@@ -772,20 +772,46 @@ _ENTRY = st.fixed_dictionaries(
     optional={
         "dirty": st.sampled_from([True, False, None]),
         "diff_sha256": st.just("e" * 64),
+        "sha_toplevel": st.sampled_from([None, "", "relative", "/repo/a", "/repo/b", 1]),
+        "worktree_toplevel": st.sampled_from([None, "", "relative", "/repo/a", "/repo/b", 1]),
     },
 )
 
 
+def _expected_unclean_rulespecs(entries, *, require_recorded=False):
+    """Independent model: a SHA needs valid matching roots and a clean state."""
+    expected = []
+    for entry in entries:
+        if not isinstance(entry, dict) or not entry.get("sha"):
+            continue
+        roots = [entry.get("sha_toplevel"), entry.get("worktree_toplevel")]
+        identity_recorded = any(key in entry for key in ("sha_toplevel", "worktree_toplevel"))
+        identity_valid = not identity_recorded or (
+            all(isinstance(root, str) and root.startswith("/") for root in roots)
+            and roots[0] == roots[1]
+        )
+        state_valid = (
+            entry["dirty"] is False if "dirty" in entry else not require_recorded
+        )
+        if not (identity_valid and state_valid):
+            expected.append(entry)
+    return expected
+
+
+@settings(deadline=None)
 @given(st.lists(_ENTRY, max_size=6))
+@example(entries=[{"repo": "a/r1", "sha": _SHA, "dirty": True}, {"repo": "a/r2", "sha": _SHA, "dirty": None}])
+@example(entries=[{"repo": "a/r1", "sha": _SHA, "dirty": False, "sha_toplevel": "/repo/a", "worktree_toplevel": "/repo/b"}])
 def test_unclean_rulespecs_properties(entries):
     lenient = unclean_rulespecs(entries)
     strict = unclean_rulespecs(entries, require_recorded=True)
-    # Strict only ever adds; nothing returned lacks a SHA or is recorded clean;
-    # the input order is kept (each result is a subsequence of the input).
-    assert all(any(e is s for s in strict) for e in lenient)
-    for result in (lenient, strict):
-        assert all(e.get("sha") and e.get("dirty") is not False for e in result)
-        positions = [next(i for i, x in enumerate(entries) if x is e) for e in result]
+    assert all(any(entry is candidate for candidate in strict) for entry in lenient)
+    for require_recorded, result in ((False, lenient), (True, strict)):
+        assert result == (
+            _expected_unclean_rulespecs(entries, require_recorded=require_recorded)
+        )
+        assert all(entry.get("sha") for entry in result)
+        positions = [next(i for i, entry in enumerate(entries) if entry is found) for found in result]
         assert positions == sorted(positions)
 
 
@@ -852,12 +878,14 @@ def test_gate_is_silent_for_clean_or_sha_less_entries(run_comparison, run_kind, 
     assert capsys.readouterr().err == ""
 
 
-@settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+@settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(run_kind=st.sampled_from(RUN_KINDS), entries=st.lists(_ENTRY, max_size=5))
+@example(run_kind="weekly", entries=[{"repo": "a/r1", "sha": _SHA, "dirty": True}, {"repo": "a/r2", "sha": _SHA, "dirty": None}])
+@example(run_kind="weekly", entries=[{"repo": "a/r1", "sha": _SHA, "dirty": False, "sha_toplevel": "/repo/a", "worktree_toplevel": "/repo/b"}])
 def test_gate_refuses_exactly_non_manual_unclean_runs(run_comparison, run_kind, entries):
-    expect_refusal = run_kind != "manual" and bool(
-        unclean_rulespecs(entries, require_recorded=True)
-    )
+    expected_unclean = _expected_unclean_rulespecs(entries, require_recorded=True)
+    assert unclean_rulespecs(entries, require_recorded=True) == expected_unclean
+    expect_refusal = run_kind != "manual" and bool(expected_unclean)
     try:
         run_comparison._guard_unclean_rulespec_trees("s", _provenance(run_kind, *entries))
     except SystemExit:
@@ -1170,6 +1198,44 @@ def test_selector_ignores_a_dirty_repo_outside_the_suites_map_entry(selector):
     assert not any(d["suite"] == "s1" for d in decisions)
 
 
+_ROOT_IDENTITY = st.fixed_dictionaries(
+    {},
+    optional={
+        "sha_toplevel": st.sampled_from([None, "", "relative", "/repo/a", "/repo/b", 1]),
+        "worktree_toplevel": st.sampled_from([None, "", "relative", "/repo/a", "/repo/b", 1]),
+    },
+)
+
+
+@settings(suppress_health_check=[HealthCheck.function_scoped_fixture])
+@given(identity=_ROOT_IDENTITY)
+@example(identity={"sha_toplevel": "/repo/a", "worktree_toplevel": "/repo/b"})
+@example(identity={"sha_toplevel": "/repo/a"})
+@example(identity={"sha_toplevel": "relative", "worktree_toplevel": "relative"})
+@example(identity={"sha_toplevel": None, "worktree_toplevel": None})
+def test_selector_freshness_requires_matching_repository_identity(selector, identity):
+    """Recorded clean roots must be valid and equal before a SHA proves fresh."""
+    entry = {"repo": "o/rulespec-rw", "sha": _SHA, "dirty": False, **identity}
+    valid_identity = not identity or (
+        isinstance(identity.get("sha_toplevel"), str)
+        and isinstance(identity.get("worktree_toplevel"), str)
+        and identity["sha_toplevel"].startswith("/")
+        and identity["worktree_toplevel"].startswith("/")
+        and identity["sha_toplevel"] == identity["worktree_toplevel"]
+    )
+    affected_map = {"suites": [{"suite": "s1", "name": "s1", "repos": [entry["repo"]]}]}
+    expected = [] if valid_identity else ["s1"]
+    for heads, pin in (({entry["repo"]: _SHA}, None), ({}, _SHA), ({}, None)):
+        if pin is None:
+            affected_map["suites"][0].pop("pinned", None)
+        else:
+            affected_map["suites"][0]["pinned"] = {entry["repo"]: pin}
+        decisions = selector.select(affected_map, heads, {"s1": _report("s1", entry)})
+        assert [decision["suite"] for decision in decisions] == expected
+        if decisions:
+            assert "repository identity mismatch" in decisions[0]["reason"]
+
+
 # --- check_vacuous_gate: freshness surfaces dirty reports -------------------
 
 
@@ -1329,6 +1395,7 @@ def test_a_snapshot_pin_keeps_the_snapshots_measured_state(run_comparison, tmp_p
     state measured on that checkout describes the pin; an edit made after
     verification shows as dirty and is refused for non-manual runs."""
     root = _repo(tmp_path / "rulespec-us")
+    verified_tree = _git(root, "rev-parse", "HEAD^{tree}").strip()
     (root / "rw/vat.yaml").write_text("rate: 0.17\n")
     pin = "3" * 40
     output = tmp_path / "r.json"
@@ -1336,7 +1403,10 @@ def test_a_snapshot_pin_keeps_the_snapshots_measured_state(run_comparison, tmp_p
     config = _pinned_config(
         "federal-tax-liability-grid",
         root,
-        {run_comparison._VERIFIED_RULESPEC_UPSTREAM_SHA: pin},
+        {
+            run_comparison._VERIFIED_RULESPEC_UPSTREAM_SHA: pin,
+            run_comparison._VERIFIED_RULESPEC_WORKTREE_TREE: verified_tree,
+        },
     )
 
     block = run_comparison._build_run_provenance(config, "federal-tax-liability-grid", output)

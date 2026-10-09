@@ -905,7 +905,7 @@ def _complete_rulespecs_from_affected_map(
                     sha = _git_head_sha(checkout)
                     state = {
                         "sha_toplevel": _git_toplevel(checkout),
-                        **worktree_attestation(checkout),
+                        **worktree_attestation(checkout, reference=sha),
                     } if sha else {}
             if _repository_mismatch(state):
                 state = {**state, "dirty": None}
@@ -935,6 +935,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         dataset_provenance_from_identity,
         engine_provenance,
         rulespec_provenance,
+        worktree_attestation,
     )
 
     runner = config.get("runner") or {}
@@ -1001,11 +1002,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             }
             for entry in rulespecs
         ]
-        # The federal runner set this private marker only after checking that
-        # the clean local snapshot's tree equals the public upstream tree pin.
-        # Record the merged-main commit whose content ran, not a local
-        # content-equivalent materialization commit. Its tree is the pin's, so
-        # the worktree state measured against it still describes the pin.
+        # Object-reading producers and working-tree runners need different
+        # attestations: the latter must remeasure against the pre-run tree.
         if params.get(_VERIFIED_RULESPEC_UPSTREAM_TREE):
             # The DE producer read the pinned commit straight from git objects
             # (de_axiom_legs.inspect_pinned_ref: rev-parse, ls-tree and
@@ -1023,10 +1021,17 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 for entry in rulespecs
             ]
         else:
-            rulespecs = [
-                {**entry, "sha": str(verified_upstream_sha)}
-                for entry in rulespecs
-            ]
+            verified_tree = params.get(_VERIFIED_RULESPEC_WORKTREE_TREE)
+            for entry in rulespecs:
+                # Replace the local-HEAD measurement, including its digest.
+                entry.pop("diff_sha256", None)
+                entry.update(
+                    sha=str(verified_upstream_sha),
+                    **worktree_attestation(
+                        entry.get("worktree_toplevel"),
+                        reference=str(verified_tree or verified_upstream_sha),
+                    ),
+                )
         for entry in rulespecs:
             if _repository_mismatch(entry):
                 # A manual run may publish this entry, so record unknown
@@ -1523,11 +1528,13 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         with output.open("w") as f:
             subprocess.run(cmd, check=True, stdout=f)
     finally:
-        # Measured after the run, so a harness that wrote into the clone is
-        # recorded as dirty rather than assumed clean.
+        # Measure after execution against the captured commit, even if the
+        # harness or a concurrent checkout moved HEAD to a new clean commit.
         from axiom_oracles.provenance import worktree_attestation
 
-        runner["_cloned_rulespec_us_worktree"] = worktree_attestation(rulespec_root)
+        runner["_cloned_rulespec_us_worktree"] = worktree_attestation(
+            rulespec_root, reference=runner["_cloned_rulespec_us_sha"] or "HEAD"
+        )
         shutil.rmtree(rulespec_root.parent, ignore_errors=True)
 
 
@@ -2717,6 +2724,9 @@ _VERIFIED_RULESPEC_UPSTREAM_SHA = "_verified_rulespec_upstream_sha"
 #: the pinned commit and tree in the object database it reads them from.
 _VERIFIED_RULESPEC_UPSTREAM_TREE = "_verified_rulespec_upstream_tree"
 _VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL = "_verified_rulespec_upstream_toplevel"
+#: Federal execution reads checkout files; retain its verified tree separately
+#: from the marker for producers that read pinned objects directly (DE).
+_VERIFIED_RULESPEC_WORKTREE_TREE = "_verified_rulespec_worktree_tree"
 
 
 def _pinned_snapshot_unusable_reason(root: Path, upstream_tree: str) -> str | None:
@@ -2840,6 +2850,7 @@ def _verify_federal_rulespec_snapshot(
         )
 
     params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = upstream_sha
+    params[_VERIFIED_RULESPEC_WORKTREE_TREE] = upstream_tree
     params[_VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL] = _git_toplevel(root)
     print(
         "Verified rulespec-us snapshot "

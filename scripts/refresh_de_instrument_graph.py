@@ -157,7 +157,7 @@ def _git_blob(root: Path, commit: str, path: str) -> bytes:
         part in {"", ".", ".."} for part in path.split("/")
     ):
         raise CaptureError(f"unsafe corpus path: {path!r}")
-    return _run(["git", "-C", str(root), "show", f"{commit}:{path}"])
+    return _run(["git", "--no-replace-objects", "-C", str(root), "show", f"{commit}:{path}"])
 
 
 @dataclass(frozen=True)
@@ -218,7 +218,7 @@ def _load_corpus(root: Path, source: Mapping[str, Any]) -> Corpus:
     commit = str(corpus.get("commit", ""))
     if not re.fullmatch(r"[0-9a-f]{40}", commit):
         raise CaptureError("source.json corpus commit is malformed")
-    _run(["git", "-C", str(root), "cat-file", "-e", f"{commit}^{{commit}}"])
+    _run(["git", "--no-replace-objects", "-C", str(root), "cat-file", "-e", f"{commit}^{{commit}}"])
     release = _release_object(root, corpus)
     release_artifacts = {
         row.get("path"): row for row in release.pop("artifacts") if isinstance(row, dict)

@@ -113,6 +113,8 @@ _REPO_LOCATING_ENV = (
 def _git_env(**overrides: str) -> dict[str, str]:
     env = {k: v for k, v in os.environ.items() if k not in _REPO_LOCATING_ENV}
     env.update(overrides)
+    # Exact commit/tree/blob identities must always describe original objects.
+    env["GIT_NO_REPLACE_OBJECTS"] = "1"
     return env
 
 
@@ -256,13 +258,19 @@ def _change_manifest(
     return _MANIFEST_HEADER + b"".join(line + b"\n" for line in lines)
 
 
-def _measure_worktree(toplevel: Path, ancestors: frozenset[Path]) -> dict[str, Any]:
+def _measure_worktree(
+    toplevel: Path, ancestors: frozenset[Path], reference: str = "HEAD"
+) -> dict[str, Any]:
     """Measure one initialized checkout; child failures propagate to the caller."""
     resolved = toplevel.resolve()
     if resolved in ancestors:
         raise OSError("recursive submodule checkout")
     ancestors = ancestors | {resolved}
-    _git_output(toplevel, "rev-parse", "--verify", "--quiet", "HEAD^{commit}")
+    # Resolve once, before reading the index. A later checkout or commit cannot
+    # silently change the content against which this attestation is measured.
+    tree = os.fsdecode(
+        _git_output(toplevel, "rev-parse", "--verify", f"{reference}^{{tree}}").strip()
+    )
     object_format = (
         _git_output(toplevel, "rev-parse", "--show-object-format").strip().decode()
     )
@@ -270,7 +278,7 @@ def _measure_worktree(toplevel: Path, ancestors: frozenset[Path]) -> dict[str, A
         env = _private_index(toplevel, Path(directory))
         head: dict[bytes, bytes] = {}
         for record in _git_output(
-            toplevel, "ls-tree", "-r", "-z", "--full-tree", "HEAD", env=env
+            toplevel, "ls-tree", "-r", "-z", "--full-tree", tree, env=env
         ).split(b"\0"):
             meta, _, path = record.partition(b"\t")
             if path:
@@ -348,8 +356,9 @@ def _measure_worktree(toplevel: Path, ancestors: frozenset[Path]) -> dict[str, A
                 )
                 if child_root.resolve() != target.resolve():
                     raise OSError("submodule resolves to another checkout")
-                child = _measure_worktree(target, ancestors)
-                entry = b"160000 " + _git_output(target, "rev-parse", "HEAD").strip()
+                child_sha = _git_output(target, "rev-parse", "HEAD").strip()
+                child = _measure_worktree(target, ancestors, os.fsdecode(child_sha))
+                entry = b"160000 " + child_sha
                 if child["dirty"]:
                     entry += b" sha256:" + child["diff_sha256"].encode()
                 worktree[path] = entry
@@ -365,8 +374,10 @@ def _measure_worktree(toplevel: Path, ancestors: frozenset[Path]) -> dict[str, A
     return {"dirty": True, "diff_sha256": hashlib.sha256(manifest).hexdigest()}
 
 
-def worktree_state(repo: Path | str | None) -> dict[str, Any]:
-    """Whether a checkout's tracked index and raw files match its HEAD commit.
+def worktree_state(
+    repo: Path | str | None, *, reference: str = "HEAD"
+) -> dict[str, Any]:
+    """Whether tracked index and raw files match the given commit or tree.
 
     Returns ``{"dirty": False}`` when they match, ``{"dirty": True,
     "diff_sha256": <64-hex>}`` when they do not, and ``{"dirty": None}`` when
@@ -401,7 +412,7 @@ def worktree_state(repo: Path | str | None) -> dict[str, Any]:
                 ).strip()
             )
         )
-        return _measure_worktree(toplevel, frozenset())
+        return _measure_worktree(toplevel, frozenset(), reference)
     except Exception:  # provenance must annotate, never fail a run
         return {"dirty": None}
 
@@ -451,7 +462,9 @@ def _repository_mismatch(entry: dict[str, Any]) -> bool:
     )
 
 
-def worktree_attestation(repo: Path | str) -> dict[str, Any]:
+def worktree_attestation(
+    repo: Path | str, *, reference: str = "HEAD"
+) -> dict[str, Any]:
     """Record the measured root; refuse a root borrowing its parent's identity.
 
     Unlike the general-purpose ``worktree_state`` subdirectory API, a rulespec
@@ -464,7 +477,7 @@ def worktree_attestation(repo: Path | str) -> dict[str, Any]:
         toplevel = _git_toplevel(root)
         state["worktree_toplevel"] = toplevel
         if toplevel == str(root):
-            state.update(_measure_worktree(Path(toplevel), frozenset()))
+            state.update(_measure_worktree(Path(toplevel), frozenset(), reference))
     except Exception:  # same best-effort contract as worktree_state
         pass
     return state
@@ -550,7 +563,10 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
             sha = _git_sha(path)
         entry: dict[str, Any] = {"repo": repo, "sha": sha}
         if sha:
-            entry.update(sha_toplevel=_git_toplevel(path), **worktree_attestation(path))
+            entry.update(
+                sha_toplevel=_git_toplevel(path),
+                **worktree_attestation(path, reference=sha),
+            )
             if _repository_mismatch(entry):
                 entry["dirty"] = None
                 entry.pop("diff_sha256", None)

@@ -117,6 +117,21 @@ def _report_ran_against(report: dict) -> dict[str, str | None]:
     return {r["repo"]: r.get("sha") for r in rulespecs if r.get("repo")}
 
 
+def _repository_mismatch(entry: dict) -> bool:
+    """Mirror provenance's root-identity predicate without package imports."""
+    if "sha_toplevel" not in entry and "worktree_toplevel" not in entry:
+        return False  # legacy reports did not record repository identities
+    sha_root = entry.get("sha_toplevel")
+    tree_root = entry.get("worktree_toplevel")
+    return not (
+        isinstance(sha_root, str)
+        and isinstance(tree_root, str)
+        and Path(sha_root).is_absolute()
+        and Path(tree_root).is_absolute()
+        and sha_root == tree_root
+    )
+
+
 def _report_unclean_trees(report: dict) -> dict[str, str]:
     """{repo: reason} for entries whose SHA the report's numbers did not run.
 
@@ -124,15 +139,24 @@ def _report_unclean_trees(report: dict) -> dict[str, str]:
     with only PyYAML installed, so it cannot import the package): an entry
     with a ``sha`` and ``dirty: true`` ran uncommitted rules, and one with
     ``dirty: null`` could not show it did not. Either way its SHA cannot prove
-    the report fresh, even when it equals HEAD or the pin. An entry with no
-    ``dirty`` key predates the field and is judged on its SHA alone.
+    the report fresh, even when it equals HEAD or the pin. Repository roots
+    must also identify the same absolute checkout. An entry with neither
+    roots nor a ``dirty`` key predates those fields and is judged on its SHA.
     """
     unclean: dict[str, str] = {}
     for entry in (report.get("provenance") or {}).get("rulespecs") or []:
         if not isinstance(entry, dict) or not entry.get("repo"):
             continue
         sha = entry.get("sha")
-        if not sha or "dirty" not in entry or entry["dirty"] is False:
+        if not sha:
+            continue
+        if _repository_mismatch(entry):
+            unclean[entry["repo"]] = (
+                f"{entry['repo']}: report has a repository identity mismatch "
+                f"at {str(sha)[:12]}"
+            )
+            continue
+        if "dirty" not in entry or entry["dirty"] is False:
             continue
         state = "a dirty" if entry["dirty"] is True else "an unverifiable"
         unclean[entry["repo"]] = (
