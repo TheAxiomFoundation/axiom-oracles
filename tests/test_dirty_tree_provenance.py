@@ -235,6 +235,142 @@ def test_a_file_a_sparse_checkout_leaves_out_is_not_dirty(tmp_path):
     assert worktree_state(repo)["dirty"] is True
 
 
+def _sparse_repo(path: Path, cone: bool, filename: str = "rule.yaml") -> Path:
+    repo = _repo(
+        path,
+        {f"{directory}/{filename}": "rate: 0.18\n" for directory in ("included", "excluded")},
+    )
+    if cone:
+        _git(repo, "sparse-checkout", "set", "--cone", "included")
+    else:
+        _git(repo, "sparse-checkout", "set", "--no-cone", "/included/")
+    assert not (repo / "excluded" / filename).exists()
+    assert (repo / "included" / filename).exists()
+    return repo
+
+
+def _hide_sparse_included_deletion(repo: Path, filename: str = "rule.yaml") -> None:
+    path = f"included/{filename}"
+    _git(repo, "update-index", "--skip-worktree", path)
+    (repo / path).unlink()
+    assert _git(repo, "status", "--porcelain", "--untracked-files=no") == ""
+    assert _git(repo, "show", f"HEAD:{path}") == "rate: 0.18\n"
+
+
+@pytest.mark.parametrize("cone", [True, False], ids=["cone", "non-cone"])
+@pytest.mark.parametrize(
+    "filename",
+    [
+        pytest.param("rule.yaml", id="plain-path"),
+        pytest.param('rule\n\t"\\name.yaml', id="delimiters-and-quotes"),
+        pytest.param("règle-税.yaml", id="multibyte-path"),
+    ],
+)
+def test_sparse_included_hidden_deletion_is_dirty(tmp_path, cone, filename):
+    """Only paths excluded by effective patterns may be absent and clean.
+
+    A skip-worktree flag on an included file cannot excuse its deletion,
+    even with filenames that cannot be passed through line-based Git output.
+    """
+    repo = _sparse_repo(tmp_path / "rulespec-rw", cone, filename)
+    assert worktree_state(repo) == {"dirty": False}
+    _hide_sparse_included_deletion(repo, filename)
+    index = repo / ".git" / "index"
+    before = (index.read_bytes(), index.stat().st_mtime_ns)
+
+    state = worktree_state(repo)
+
+    assert state["dirty"] is True
+    assert _is_hex64(state["diff_sha256"])
+    assert (index.read_bytes(), index.stat().st_mtime_ns) == before
+    assert _git(repo, "ls-files", "-v", f"included/{filename}").startswith("S ")
+
+
+@pytest.mark.parametrize("cone", [True, False], ids=["cone", "non-cone"])
+def test_weekly_gate_refuses_sparse_included_hidden_deletion(
+    tmp_path, run_comparison, cone
+):
+    repo = _sparse_repo(tmp_path / "rulespec-rw", cone)
+    _hide_sparse_included_deletion(repo)
+
+    with pytest.raises(SystemExit, match="weekly run refused before publication"):
+        run_comparison._guard_unclean_rulespec_trees(
+            "sparse-probe", _provenance("weekly", *rulespec_provenance([repo]))
+        )
+
+
+@pytest.mark.parametrize("failure", ["command-failed", "os-error"])
+def test_unverifiable_sparse_rules_refuse_weekly_publication(
+    tmp_path, monkeypatch, run_comparison, failure
+):
+    """A failed sparse-pattern check cannot prove an absent path is exempt."""
+    repo = _sparse_repo(tmp_path / "rulespec-rw", cone=True)
+    real_output = provenance._git_output
+
+    def fail_rule_check(path, *args, **kwargs):
+        if "check-rules" in args:
+            if failure == "command-failed":
+                raise subprocess.CalledProcessError(1, ["git", *args])
+            raise OSError("sparse rules could not be inspected")
+        return real_output(path, *args, **kwargs)
+
+    monkeypatch.setattr(provenance, "_git_output", fail_rule_check)
+
+    assert worktree_state(repo) == {"dirty": None}
+    with pytest.raises(SystemExit, match="working tree unverifiable"):
+        run_comparison._guard_unclean_rulespec_trees(
+            "sparse-probe", _provenance("weekly", *rulespec_provenance([repo]))
+        )
+
+
+@settings(
+    max_examples=20,
+    deadline=None,
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
+@given(
+    included=st.sets(st.integers(min_value=0, max_value=3), min_size=1, max_size=3),
+    cone=st.booleans(),
+    rate=st.integers(min_value=0, max_value=100),
+)
+@example(included={0}, cone=True, rate=18)
+@example(included={1, 2}, cone=False, rate=17)
+def test_sparse_patterns_alone_determine_missing_flagged_path_dirtiness(
+    tmp_path, included, cone, rate
+):
+    """Different selections and rule contents obey the same sparse model:
+    genuine omissions are clean; one included hidden deletion is dirty;
+    restoring its bytes is clean without changing the original index flag.
+    """
+    with tempfile.TemporaryDirectory(dir=tmp_path, prefix="sparse-") as directory:
+        content = f"rate: {rate}\n"
+        repo = _repo(
+            Path(directory) / "rulespec-rw",
+            {f"case-{number}/rule.yaml": content for number in range(4)},
+        )
+        selections = [f"case-{number}" for number in sorted(included)]
+        if cone:
+            _git(repo, "sparse-checkout", "set", "--cone", *selections)
+        else:
+            patterns = [f"/{selection}/" for selection in selections]
+            _git(repo, "sparse-checkout", "set", "--no-cone", *patterns)
+        for number in range(4):
+            assert (repo / f"case-{number}/rule.yaml").exists() is (number in included)
+        assert worktree_state(repo) == {"dirty": False}
+
+        deleted = f"case-{min(included)}/rule.yaml"
+        _git(repo, "update-index", "--skip-worktree", deleted)
+        (repo / deleted).unlink()
+        assert _git(repo, "status", "--porcelain", "--untracked-files=no") == ""
+
+        state = worktree_state(repo)
+
+        assert state["dirty"] is True, (included, cone, rate, state)
+        assert _is_hex64(state["diff_sha256"])
+        (repo / deleted).write_text(content)
+        assert worktree_state(repo) == {"dirty": False}
+
+
 @pytest.mark.parametrize(
     "hide",
     [

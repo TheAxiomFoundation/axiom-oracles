@@ -348,15 +348,15 @@ submodules are inspected recursively; their HEAD and recursive dirty digest
 enter the parent manifest, and an unverifiable child makes the parent
 unverifiable (see `worktree_state`). Edits and deletions hidden behind
 `skip-worktree` or `assume-unchanged` count, except absent skip-worktree files
-that a sparse checkout leaves out; untracked files do not count, so build
-output never marks a tree dirty. Reads use a private Git directory with
+that effective sparse-checkout patterns exclude; untracked files do not count,
+so build output never marks a tree dirty. Reads use a private Git directory with
 copies of the index and shared split-index files, preserving the checkout's
 index metadata. A DE pair run reads its pinned commit from git objects, so its
 entry records the pin as clean whatever the checkout holds. (A mutated scratch
 copy of rulespec-rw once reported `001fa4b` while running a 17% VAT rate.)
 `run_comparison.py` refuses
 to publish a `weekly`, `pr-triggered` or `affected-rerun` report unless every
-rulespec tree it ran is recorded clean. A `manual` run on a dirty tree
+SHA-bearing rulespec entry is recorded clean. A `manual` run on a dirty tree
 publishes with the flag and a stderr warning. `select_affected_suites.py`
 treats a dirty or unverifiable entry as stale whatever its SHA, and
 `check_vacuous_gate.py` lists the repos as `dirty_rulespecs` on the suite's

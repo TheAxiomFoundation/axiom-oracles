@@ -158,7 +158,7 @@ def _private_index(toplevel: Path, workdir: Path) -> dict[str, str]:
     directory, so copy the per-worktree metadata too. Objects, refs and
     common config are still read from the original common directory.
     Index flags stay intact: raw content comparison ignores hidden flags
-    and exempts only absent skip-worktree entries in a sparse checkout.
+    and exempts only absent skip-worktree entries excluded by sparse rules.
     """
     gitdir = Path(
         os.fsdecode(_git_output(toplevel, "rev-parse", "--absolute-git-dir").strip())
@@ -288,6 +288,19 @@ def _measure_worktree(toplevel: Path, ancestors: frozenset[Path]) -> dict[str, A
                     and not os.path.lexists(toplevel / os.fsdecode(path))
                 ):
                     omitted.add(path)
+        if omitted:
+            # A manually set skip-worktree bit can hide an included deletion.
+            # Let Git evaluate the effective rules; failure makes the tree
+            # unverifiable rather than granting an unproven exemption.
+            included = _git_output(
+                toplevel,
+                "sparse-checkout",
+                "check-rules",
+                "-z",
+                env=env,
+                stdin=b"\0".join(sorted(omitted)) + b"\0",
+            )
+            omitted.difference_update(included.split(b"\0"))
         changed: set[bytes] = set()
         worktree: dict[bytes, bytes] = {}
         for path in head.keys() | index.keys():
@@ -351,7 +364,8 @@ def worktree_state(repo: Path | str | None) -> dict[str, Any]:
     Compare raw Git blob identities directly, without clean filters,
     line-ending normalization, stat caches or hidden index flags. Thus even
     normalized/smudged checkout bytes that differ from the commit count as
-    dirty. Only absent skip-worktree files in sparse checkouts are exempt.
+    dirty. Only absent skip-worktree files excluded by the effective sparse
+    patterns are exempt; failed pattern inspection makes the tree unverifiable.
     Initialized submodules are measured recursively, including their index
     and tracked bytes; an unverifiable child makes its parent unverifiable.
     Untracked files do not count, so build output never marks a tree dirty;
