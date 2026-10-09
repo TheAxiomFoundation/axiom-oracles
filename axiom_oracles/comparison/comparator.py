@@ -186,7 +186,7 @@ class Comparator:
     ) -> tuple[str, ...]:
         key = self._mapping_key(mapping, result.engine)
         names = [key] if isinstance(key, str) else list(key or ())
-        return tuple(name for name in dict.fromkeys(names) if name in result.values)
+        return tuple(name for name in dict.fromkeys(names) if result.get(name) is not None)
 
     def _mapped_value(self, mapping: ProgramMapping, result: EngineResult) -> Value:
         key = self._mapping_key(mapping, result.engine)

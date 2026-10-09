@@ -609,9 +609,9 @@ def _attested_output_rows(
 ) -> list[dict]:
     """Per-concept, per-engine evidence of which variables the run compared.
 
-    Counts include only targets present in the result used by each comparison.
-    Missing list components retain their comparator default of zero without
-    being recorded as evidence that the engine returned those variables.
+    Counts include only targets with a nonmissing value in each engine result.
+    A missing list component makes its mapped value ``None``; other nonmissing
+    components remain evidence of the variables the engine returned.
     """
     return [
         {

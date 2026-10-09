@@ -86,6 +86,32 @@ def test_duplicate_output_claims_cannot_multiply_evidence():
     _assert_uncovered(report)
 
 
+@pytest.mark.parametrize("execution_claim", [
+    {},
+    {"executed": None},
+    {"executed": 0},
+    {"executed": "false"},
+    {"executed": False},
+    {"executed": 1},
+], ids=["absent", "null", "zero", "string-false", "false", "one"])
+def test_stamp_requires_literal_true_execution_claim(execution_claim):
+    report = _report()
+    report["attestation"].pop("executed")
+    report["attestation"].update(execution_claim)
+    evidence = attest(report, oracle="policyengine", resolver=OracleTargetResolver())
+    assert not evidence.executed
+    _assert_uncovered(report)
+
+
+def test_unstamped_report_retains_execution_evidence_from_body():
+    report = _report()
+    report.pop("attestation")
+    evidence = attest(report, oracle="policyengine", resolver=OracleTargetResolver())
+    assert not evidence.stamped
+    assert evidence.executed
+    assert evidence.eligible
+
+
 @pytest.mark.parametrize("count", [1, 2])
 def test_observed_output_count_may_be_less_than_the_concept_total(count):
     report = _report()

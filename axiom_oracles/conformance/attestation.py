@@ -12,7 +12,8 @@ comparisons for the outputs the universe registers (axiom-oracles#355).
 An **execution attestation** is that missing evidence, in two layers:
 
 1. **Execution** (blocking, no exceptions). The report must show a real run:
-   ``executed`` not explicitly false, strictly positive cases AND comparisons,
+   when stamped, literal ``executed: true``; strictly positive cases AND
+   comparisons,
    zero errors at every level the schema records them, an engine pair that
    contains Axiom *and* the oracle the universe declares, and — when the
    artifact records one — an oracle identity that does not contradict the
@@ -43,7 +44,8 @@ comes, in order of authority, from
 * the concept→engine-target bindings the comparison machinery itself uses —
   ``axiom_oracles/config/concept_mappings.yaml`` (``ProgramMapping``) and the
   PolicyEngine oracle registry (``bridges/mappings/*.yaml``) — applied to the
-  report's aggregates that carry a positive ``comparison_count``.
+  report's aggregates with positive evidence of nonmissing oracle values. A
+  positive ``comparison_count`` alone does not show that an output was returned.
 
 Producer and concept bindings are deductions, so they are tracked as such:
 :attr:`ExecutionAttestation.outputs_complete` is true only when EVERY
@@ -222,12 +224,13 @@ def attest(
     executed = True
     if stamped:
         problems.extend(_stamp_problems(stamp, report, case_count, comparison_count, error_count))
-        if stamp.get("executed") is False:
+        if stamp.get("executed") is not True:
             executed = False
+            claim = "false" if stamp.get("executed") is False else repr(stamp.get("executed"))
             problems.append(
-                f"{suite}: the run stamped `executed: false`"
+                f"{suite}: the run stamped `executed: {claim}` rather than `executed: true`"
                 + (f" ({stamp.get('skip_reason')})" if stamp.get("skip_reason") else "")
-                + " — a skipped run cannot cover an in-scope policy"
+                + " — a skipped or unconfirmed run cannot cover an in-scope policy"
             )
 
     if case_count <= 0:
@@ -488,7 +491,10 @@ def _attested_outputs(
             continue
         saw_surface = True
         resolved = resolver.resolve(concept_id, oracle_engine)
-        if resolved:
+        # A grid's explicit engine-to-variable map already records its binding.
+        if resolved and (
+            resolved <= names or _aggregate_has_oracle_value(report, aggregate, oracle_engine)
+        ):
             names.update(resolved)
         else:
             resolved_every_surface = False
@@ -496,6 +502,60 @@ def _attested_outputs(
     if not saw_surface and not names:
         outputs_complete = False
     return frozenset(names), outputs_complete
+
+
+def _aggregate_has_oracle_value(report: dict, aggregate: dict, engine: str) -> bool:
+    """A compared concept binds its targets only if the oracle returned a value.
+
+    Comparator returns None for a sum with any missing component. A nonmissing
+    sum therefore proves all its targets; a partial sum cannot name which
+    components were present without a stamp. Legacy reports can prove a value
+    through missing-value counters, successful matches, or recorded case values.
+    """
+    engines = report.get("engines")
+    if not isinstance(engines, dict):
+        return False
+    side = next((role for role in ("left", "right") if engines.get(role) == engine), None)
+    if side is None:
+        return False
+    compared = _int(aggregate.get("comparison_count"))
+    missing_key = f"missing_{side}_count"
+    if missing_key in aggregate:
+        missing = aggregate[missing_key]
+        return (
+            isinstance(missing, int) and not isinstance(missing, bool)
+            and 0 <= missing < compared
+        )
+
+    # A match requires nonmissing values on BOTH sides. Do not treat an omitted
+    # mismatch counter as zero, or a bare comparison count would bind again.
+    mismatches = aggregate.get("mismatch_count")
+    if (
+        isinstance(mismatches, int) and not isinstance(mismatches, bool)
+        and 0 <= mismatches < compared
+    ):
+        return True
+    summary = report.get("summary") or {}
+    total = _int(summary.get("comparison_count"))
+    if (
+        0 < compared <= total
+        and "mismatch_count" not in aggregate
+        and summary.get("match_count") == total
+        and summary.get("mismatch_count", 0) == 0
+    ):
+        return True
+
+    concept = aggregate.get("concept")
+    for row in report.get("mismatches") or []:
+        if isinstance(row, dict) and row.get("concept") == concept and row.get(side) is not None:
+            return True
+    for case in report.get("cases") or []:
+        if not isinstance(case, dict):
+            continue
+        for row in (case.get("matches") or []) + (case.get("mismatches") or []):
+            if isinstance(row, dict) and row.get("concept") == concept and row.get(side) is not None:
+                return True
+    return False
 
 
 def _yale_panel_outputs(report: dict) -> tuple[frozenset[str], bool]:
