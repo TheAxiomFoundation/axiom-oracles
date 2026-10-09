@@ -1583,6 +1583,8 @@ def test_registry_verifies_snapshot_tree_and_stamps_upstream_sha(tmp_path):
             "repo": "TheAxiomFoundation/rulespec-us",
             "sha": upstream_sha,
             "dirty": False,
+            "sha_toplevel": str(rulespec.resolve()),
+            "worktree_toplevel": str(rulespec.resolve()),
         }
     ]
 

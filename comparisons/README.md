@@ -339,8 +339,11 @@ date with `scripts/backfill_report_provenance.py`.
 A SHA names a commit, but a run reads the working tree. So every
 `provenance.rulespecs[]` entry with a SHA also records `dirty`: `false` when
 the checkout's tracked index and raw files match that commit, `true` plus
-`diff_sha256` when they do not, and `null` when inspection fails. The check
-compares raw Git blob identities without clean filters or line-ending
+`diff_sha256` when they do not, and `null` when inspection fails. Each entry
+records the resolved checkout roots in `sha_toplevel` and
+`worktree_toplevel`; the non-manual publication gate refuses mismatched or unverifiable
+roots, and an enclosing repository cannot attest a requested subdirectory.
+The check compares raw Git blob identities without clean filters or line-ending
 normalization, so converted or smudged checkout bytes that differ from the
 commit count as dirty. `diff_sha256` hashes a canonical manifest of each
 changed path's HEAD, index and raw working-tree content ids. Initialized
@@ -352,8 +355,10 @@ that effective sparse-checkout patterns exclude; untracked files do not count,
 so build output never marks a tree dirty. Reads use a private Git directory with
 copies of the index and shared split-index files, preserving the checkout's
 index metadata. A DE pair run reads its pinned commit from git objects, so its
-entry records the pin as clean whatever the checkout holds. (A mutated scratch
-copy of rulespec-rw once reported `001fa4b` while running a 17% VAT rate.)
+entry records the pin as clean whatever the checkout holds. (As of 2026-10-09,
+Max Ghenis reports that a mutated scratch copy of rulespec-rw once reported
+`001fa4b` while running a 17% VAT rate; its execution evidence is not included
+here.)
 `run_comparison.py` refuses
 to publish a `weekly`, `pr-triggered` or `affected-rerun` report unless every
 SHA-bearing rulespec entry is recorded clean. A `manual` run on a dirty tree

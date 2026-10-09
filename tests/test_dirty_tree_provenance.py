@@ -716,6 +716,8 @@ def test_rulespec_provenance_records_clean_and_dirty_checkouts(tmp_path):
     assert entries[0] == {
         "repo": "TheAxiomFoundation/rulespec-us",
         "sha": _head(clean),
+        "sha_toplevel": str(clean.resolve()),
+        "worktree_toplevel": str(clean.resolve()),
         "dirty": False,
     }
     assert entries[1]["repo"] == "TheAxiomFoundation/rulespec-rw"
@@ -937,7 +939,11 @@ def test_main_publishes_a_manual_dirty_run_marked_dirty(
     for path in (report_path, dashboard / "rw-vat.json"):
         rulespecs = json.loads(path.read_text())["provenance"]["rulespecs"]
         assert rulespecs == [
-            {"repo": "TheAxiomFoundation/rulespec-rw", "sha": _head(root), **expected}
+            {
+                "repo": "TheAxiomFoundation/rulespec-rw", "sha": _head(root),
+                "sha_toplevel": str(root.resolve()),
+                "worktree_toplevel": str(root.resolve()), **expected,
+            }
         ]
     assert expected["dirty"] is True
     assert "WARNING: rw-vat:" in capsys.readouterr().err
@@ -958,7 +964,10 @@ def test_main_publishes_a_non_manual_run_on_a_clean_tree(
     [report_path] = _published(output_dir)
     rulespecs = json.loads(report_path.read_text())["provenance"]["rulespecs"]
     assert rulespecs == [
-        {"repo": "TheAxiomFoundation/rulespec-rw", "sha": _head(root), "dirty": False}
+        {
+            "repo": "TheAxiomFoundation/rulespec-rw", "sha": _head(root), "dirty": False,
+            "sha_toplevel": str(root.resolve()), "worktree_toplevel": str(root.resolve()),
+        }
     ]
     assert "WARNING" not in capsys.readouterr().err
 
@@ -1003,6 +1012,8 @@ def test_completion_records_the_convention_checkouts_state(
     assert entry == {
         "repo": "TheAxiomFoundation/rulespec-rw",
         "sha": _head(checkout),
+        "sha_toplevel": str(checkout.resolve()),
+        "worktree_toplevel": str(checkout.resolve()),
         **worktree_state(checkout),
     }
     assert entry["dirty"] is True
@@ -1306,7 +1317,10 @@ def test_a_pin_read_from_git_objects_records_the_pin_as_clean(run_comparison, tm
     block = run_comparison._build_run_provenance(config, "de-axiom-oracle-compare", output)
 
     assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-de", "sha": pin, "dirty": False}
+        {
+            "repo": "TheAxiomFoundation/rulespec-de", "sha": pin, "dirty": False,
+            "sha_toplevel": str(root.resolve()), "worktree_toplevel": str(root.resolve()),
+        }
     ]
 
 
@@ -1371,7 +1385,10 @@ def test_a_pinned_federal_run_records_only_the_snapshot_that_ran(
 
     assert params["rulespec_roots"] == [str(snapshot.resolve())]
     assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pin, "dirty": False}
+        {
+            "repo": "TheAxiomFoundation/rulespec-us", "sha": pin, "dirty": False,
+            "sha_toplevel": str(snapshot.resolve()), "worktree_toplevel": str(snapshot.resolve()),
+        }
     ]
     run_comparison._guard_unclean_rulespec_trees(
         "fed-pinned", {**block, "run_kind": "affected-rerun"}

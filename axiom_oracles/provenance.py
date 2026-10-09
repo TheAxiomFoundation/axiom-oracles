@@ -18,6 +18,8 @@ The block shape (``axiom_oracles.provenance.v1``)::
         - repo: TheAxiomFoundation/rulespec-us
           sha: 9c1f2ab…                 # 40-hex, or None when unresolved
           dirty: false                  # tracked files differ from `sha`?
+          sha_toplevel: /path/to/repo    # checkout used to resolve the SHA
+          worktree_toplevel: /path/to/repo # checkout used to attest its state
           diff_sha256: 3f0a…            # only when dirty: identifies the change
       engine:                          # the Axiom side under test
         axiom_rules_engine_sha: …      # git SHA of the axiom-rules checkout
@@ -102,6 +104,7 @@ _REPO_LOCATING_ENV = (
     "GIT_COMMON_DIR",
     "GIT_OBJECT_DIRECTORY",
     "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+    "GIT_CEILING_DIRECTORIES",
     "GIT_NAMESPACE",
     "GIT_PREFIX",
 )
@@ -129,6 +132,15 @@ def _git_sha(repo: Path) -> str | None:
         return None
     sha = result.stdout.strip()
     return sha or None
+
+
+def _git_toplevel(repo: Path) -> str | None:
+    """Resolved checkout root selected by Git, without inherited selectors."""
+    try:
+        result = _git_output(repo, "rev-parse", "--show-toplevel")
+        return str(Path(os.fsdecode(result.strip())).resolve()) if result.strip() else None
+    except Exception:  # path resolution and Git lookup are best-effort
+        return None
 
 
 #: First line of the manifest ``diff_sha256`` hashes (:func:`_change_manifest`).
@@ -400,7 +412,8 @@ def unclean_rulespecs(
     """Rulespec entries whose ``sha`` is not shown to be what ran.
 
     An entry with a ``sha`` is unclean when it records ``dirty: true``, or
-    ``dirty: null`` (git could not tell). With ``require_recorded`` an entry
+    ``dirty: null`` (git could not tell), or its recorded SHA and attestation
+    roots disagree or are incomplete. With ``require_recorded`` an entry
     that has a ``sha`` but no ``dirty`` key at all is unclean as well: use it
     for a block this code just built, where every resolved ``sha`` comes with
     a ``dirty`` value, so a missing one means a path skipped the check. Leave
@@ -413,7 +426,9 @@ def unclean_rulespecs(
     for entry in rulespecs or []:
         if not isinstance(entry, dict) or not entry.get("sha"):
             continue
-        if "dirty" in entry:
+        if _repository_mismatch(entry):
+            unclean.append(entry)
+        elif "dirty" in entry:
             if entry["dirty"] is not False:
                 unclean.append(entry)
         elif require_recorded:
@@ -421,10 +436,46 @@ def unclean_rulespecs(
     return unclean
 
 
+def _repository_mismatch(entry: dict[str, Any]) -> bool:
+    """New repository attestations must name the same absolute checkout root."""
+    if "sha_toplevel" not in entry and "worktree_toplevel" not in entry:
+        return False  # reports written before repository identities were recorded
+    sha_root = entry.get("sha_toplevel")
+    tree_root = entry.get("worktree_toplevel")
+    return not (
+        isinstance(sha_root, str)
+        and isinstance(tree_root, str)
+        and Path(sha_root).is_absolute()
+        and Path(tree_root).is_absolute()
+        and sha_root == tree_root
+    )
+
+
+def worktree_attestation(repo: Path | str) -> dict[str, Any]:
+    """Record the measured root; refuse a root borrowing its parent's identity.
+
+    Unlike the general-purpose ``worktree_state`` subdirectory API, a rulespec
+    checkout must be rooted exactly at the requested path. All measurements
+    use Git's resolved root and the same sanitized environment as SHA lookup.
+    """
+    state: dict[str, Any] = {"worktree_toplevel": None, "dirty": None}
+    try:
+        root = Path(os.path.expandvars(os.path.expanduser(str(repo)))).resolve()
+        toplevel = _git_toplevel(root)
+        state["worktree_toplevel"] = toplevel
+        if toplevel == str(root):
+            state.update(_measure_worktree(Path(toplevel), frozenset()))
+    except Exception:  # same best-effort contract as worktree_state
+        pass
+    return state
+
+
 def describe_rulespec_tree(entry: dict[str, Any]) -> str:
     """``owner/repo@sha12 (state)`` for messages about unclean entries."""
     sha = str(entry.get("sha") or "")[:12] or "unknown"
-    if entry.get("dirty") is True:
+    if _repository_mismatch(entry):
+        state = "SHA and working tree repository mismatch"
+    elif entry.get("dirty") is True:
         digest = str(entry.get("diff_sha256") or "")[:12] or "unknown"
         state = f"dirty, diff sha256 {digest}"
     elif "dirty" in entry:
@@ -476,15 +527,16 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
     """Resolve ``{repo, sha, dirty}`` provenance for each rulespec checkout path.
 
     ``paths`` are local checkout directories (as the runner resolves them from
-    ``rulespec_root`` / ``rulespec_roots``). Each is walked up to its enclosing
-    git repo; the ``repo`` slug comes from the origin remote when available,
-    otherwise from the directory basename so a report is never left with an
+    ``rulespec_root`` / ``rulespec_roots``). The ``repo`` slug comes from the
+    origin remote when available, otherwise from the directory basename so a report is never left with an
     anonymous rulespec entry. An entry whose ``sha`` resolved also carries the
-    checkout's :func:`worktree_state`. Deduplicated on the whole entry,
-    order-stable, so two checkouts of one commit in different states both stay.
+    checkout's :func:`worktree_attestation` and both resolved repository roots.
+    A path resolving to an enclosing checkout is unverifiable. Deduplicated
+    on the whole entry, order-stable, so two checkouts of one commit in
+    different states both stay.
     """
     entries: list[dict[str, Any]] = []
-    seen: set[tuple[str | None, str | None]] = set()
+    seen: set[tuple[Any, ...]] = set()
     for raw in paths or []:
         path = Path(os.path.expandvars(os.path.expanduser(str(raw))))
         if not path.exists():
@@ -498,8 +550,13 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
             sha = _git_sha(path)
         entry: dict[str, Any] = {"repo": repo, "sha": sha}
         if sha:
-            entry.update(worktree_state(path))
-        key = (repo, sha, entry.get("dirty"), entry.get("diff_sha256"))
+            entry.update(sha_toplevel=_git_toplevel(path), **worktree_attestation(path))
+            if _repository_mismatch(entry):
+                entry["dirty"] = None
+                entry.pop("diff_sha256", None)
+        key = tuple(entry.get(k) for k in (
+            "repo", "sha", "dirty", "diff_sha256", "sha_toplevel", "worktree_toplevel"
+        ))
         if key in seen:
             continue
         seen.add(key)

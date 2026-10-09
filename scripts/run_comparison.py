@@ -49,6 +49,13 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.provenance import (  # noqa: E402
+    _git_env,
+    _git_sha,
+    _git_toplevel,
+    _repository_mismatch,
+)
+
 # ---------------------------------------------------------------------------
 # tax-ecps-compare → v2 dashboard schema adapter
 # ---------------------------------------------------------------------------
@@ -874,7 +881,7 @@ def _complete_rulespecs_from_affected_map(
     try:
         from axiom_oracles.provenance import (
             resolve_rulespec_checkout,
-            worktree_state,
+            worktree_attestation,
         )
 
         mapped_repos = _affected_map_repos(config)
@@ -890,11 +897,19 @@ def _complete_rulespecs_from_affected_map(
             if repo == "TheAxiomFoundation/rulespec-us":
                 sha = runner.get("_cloned_rulespec_us_sha")
                 state = runner.get("_cloned_rulespec_us_worktree") or {}
+                if "_cloned_rulespec_us_sha_toplevel" in runner:
+                    state = {**state, "sha_toplevel": runner["_cloned_rulespec_us_sha_toplevel"]}
             if sha is None:
                 checkout = resolve_rulespec_checkout(repo)
                 if checkout is not None:
                     sha = _git_head_sha(checkout)
-                    state = worktree_state(checkout) if sha else {}
+                    state = {
+                        "sha_toplevel": _git_toplevel(checkout),
+                        **worktree_attestation(checkout),
+                    } if sha else {}
+            if _repository_mismatch(state):
+                state = {**state, "dirty": None}
+                state.pop("diff_sha256", None)
             if repo in by_repo:
                 if sha:
                     by_repo[repo].update({"sha": sha, **state})
@@ -974,6 +989,18 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     rulespecs = rulespec_provenance(rulespec_paths)
     verified_upstream_sha = params.get(_VERIFIED_RULESPEC_UPSTREAM_SHA)
     if verified_upstream_sha and rulespecs:
+        # The pin was verified in this object database, which may differ from
+        # a configured root. Preserve that source so the publication gate can
+        # reject an attestation collected from another checkout.
+        rulespecs = [
+            {
+                **entry,
+                "sha_toplevel": params.get(
+                    _VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL, entry.get("sha_toplevel")
+                ),
+            }
+            for entry in rulespecs
+        ]
         # The federal runner set this private marker only after checking that
         # the clean local snapshot's tree equals the public upstream tree pin.
         # Record the merged-main commit whose content ran, not a local
@@ -985,9 +1012,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             # `git show <commit>:<path>`), so no working-tree file fed the run
             # and the checkout's state, measured against its own HEAD, says
             # nothing about the pin. What ran is the pin's committed content.
-            tree_state = {"dirty": False}
             rulespecs = [
-                {"repo": entry.get("repo"), "sha": str(verified_upstream_sha), **tree_state}
+                {
+                    "repo": entry.get("repo"),
+                    "sha": str(verified_upstream_sha),
+                    "sha_toplevel": entry.get("sha_toplevel"),
+                    "worktree_toplevel": entry.get("worktree_toplevel"),
+                    "dirty": False,
+                }
                 for entry in rulespecs
             ]
         else:
@@ -995,6 +1027,12 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 {**entry, "sha": str(verified_upstream_sha)}
                 for entry in rulespecs
             ]
+        for entry in rulespecs:
+            if _repository_mismatch(entry):
+                # A manual run may publish this entry, so record unknown
+                # rather than a clean flag the stale selector could trust.
+                entry["dirty"] = None
+                entry.pop("diff_sha256", None)
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote and not rulespecs:
         from axiom_oracles.provenance import repo_slug_from_remote
@@ -1410,6 +1448,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # against (a `sha: null` entry reads as "cannot prove fresh" to
     # select_affected_suites.py and re-selects the suite every run).
     runner["_cloned_rulespec_us_sha"] = _git_head_sha(rulespec_root)
+    runner["_cloned_rulespec_us_sha_toplevel"] = _git_toplevel(rulespec_root)
     params = runner["parameters"]
     pinned = params.get("pinned", True)
     # PolicyEngine-US 1.729.0 is the model version the certified pinned Populace
@@ -1486,9 +1525,9 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     finally:
         # Measured after the run, so a harness that wrote into the clone is
         # recorded as dirty rather than assumed clean.
-        from axiom_oracles.provenance import worktree_state
+        from axiom_oracles.provenance import worktree_attestation
 
-        runner["_cloned_rulespec_us_worktree"] = worktree_state(rulespec_root)
+        runner["_cloned_rulespec_us_worktree"] = worktree_attestation(rulespec_root)
         shutil.rmtree(rulespec_root.parent, ignore_errors=True)
 
 
@@ -2603,6 +2642,7 @@ def _resolve_state_income_tax_grid_repos(
                 check=True,
                 capture_output=True,
                 text=True,
+                env=_git_env(),
             ).stdout
         except (OSError, subprocess.CalledProcessError) as exc:
             raise SystemExit(
@@ -2676,6 +2716,7 @@ _VERIFIED_RULESPEC_UPSTREAM_SHA = "_verified_rulespec_upstream_sha"
 #: Set beside the SHA marker by scripts/de_axiom_legs.py once it has verified
 #: the pinned commit and tree in the object database it reads them from.
 _VERIFIED_RULESPEC_UPSTREAM_TREE = "_verified_rulespec_upstream_tree"
+_VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL = "_verified_rulespec_upstream_toplevel"
 
 
 def _pinned_snapshot_unusable_reason(root: Path, upstream_tree: str) -> str | None:
@@ -2687,18 +2728,22 @@ def _pinned_snapshot_unusable_reason(root: Path, upstream_tree: str) -> str | No
     non-fatally so a non-matching checkout falls through to pinned-revision
     materialization instead of failing the leg.
     """
+    if _git_toplevel(root) != str(root.resolve()):
+        return "not a git checkout rooted at the requested path"
     try:
         status = subprocess.run(
             ["git", "-C", str(root), "status", "--porcelain"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         local_tree = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.strip()
     except (OSError, subprocess.CalledProcessError):
         return "not a verifiable git work tree"
@@ -2751,6 +2796,8 @@ def _verify_federal_rulespec_snapshot(
         )
 
     root = roots[0].resolve()
+    if _git_toplevel(root) != str(root):
+        raise SystemExit(f"cannot verify pinned federal rulespec snapshot {root}: repository root mismatch")
     if root.name != "rulespec-us":
         raise SystemExit(
             "the pinned federal rulespec snapshot must use the canonical "
@@ -2762,18 +2809,21 @@ def _verify_federal_rulespec_snapshot(
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         local_head = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.strip()
         local_tree = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.strip()
     except (OSError, subprocess.CalledProcessError) as exc:
         raise SystemExit(
@@ -2790,6 +2840,7 @@ def _verify_federal_rulespec_snapshot(
         )
 
     params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = upstream_sha
+    params[_VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL] = _git_toplevel(root)
     print(
         "Verified rulespec-us snapshot "
         f"tree {local_tree[:12]} for upstream main {upstream_sha[:12]} "
@@ -2934,6 +2985,7 @@ def _rulespec_checkout_unclean_reason(
             ["git", "-C", str(root), "rev-parse", "--is-inside-work-tree"],
             capture_output=True,
             text=True,
+            env=_git_env(),
         )
     except OSError:
         return "git is unavailable to verify it"
@@ -2943,6 +2995,7 @@ def _rulespec_checkout_unclean_reason(
         ["git", "-C", str(root), "status", "--porcelain"],
         capture_output=True,
         text=True,
+        env=_git_env(),
     )
     if status.returncode != 0:
         return "git status failed"
@@ -2952,6 +3005,7 @@ def _rulespec_checkout_unclean_reason(
         committed = subprocess.run(
             ["git", "-C", str(root), "show", f"HEAD:{relpath}"],
             capture_output=True,
+            env=_git_env(),
         )
         if committed.returncode != 0:
             return f"HEAD does not carry {relpath}"
@@ -3794,6 +3848,7 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.split()
         candidates = [
             path
@@ -3814,6 +3869,7 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         head_payload = json.loads(text)
         _validate_us_tariff_panel_payload(head_payload, f"HEAD:{committed}")
@@ -4332,21 +4388,10 @@ def _git_toplevel_head(path: Path) -> str | None:
     ``--show-toplevel`` keeps a non-checkout from borrowing an identity.
     """
     try:
-        toplevel = subprocess.run(
-            ["git", "-C", str(path), "rev-parse", "--show-toplevel"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-        if Path(toplevel).resolve() != path.resolve():
+        if _git_toplevel(path) != str(path.resolve()):
             return None
-        return subprocess.run(
-            ["git", "-C", str(path), "rev-parse", "HEAD"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-    except (subprocess.CalledProcessError, OSError):
+        return _git_sha(path)
+    except OSError:
         return None
 
 
@@ -4480,8 +4525,9 @@ def _ensure_rulespec_us_checkout(remote: str, revision: str | None = None) -> Pa
     target = workspace / "rulespec-us"
     print(f"Cloning rulespec-us into {target}...")
     subprocess.run(
-        ["git", "clone", "--depth", "1", "--quiet", remote, str(target)],
+        ["git", "-C", str(workspace), "clone", "--depth", "1", "--quiet", remote, str(target)],
         check=True,
+        env=_git_env(),
     )
     if revision:
         print(f"Materializing pinned rulespec-us revision {revision[:12]}...")
@@ -4489,27 +4535,20 @@ def _ensure_rulespec_us_checkout(remote: str, revision: str | None = None) -> Pa
             ["git", "-C", str(target), "fetch", "--depth", "1", "--quiet",
              "origin", revision],
             check=True,
+            env=_git_env(),
         )
         subprocess.run(
             ["git", "-C", str(target), "checkout", "--detach", "--quiet",
              revision],
             check=True,
+            env=_git_env(),
         )
     return target
 
 
 def _git_head_sha(repo: Path) -> str | None:
     """Best-effort HEAD SHA of a checkout; None when unresolvable."""
-    try:
-        result = subprocess.run(
-            ["git", "-C", str(repo), "rev-parse", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
-        return None
-    return result.stdout.strip() or None
+    return _git_sha(repo)
 
 
 def _print_summary(output: Path) -> None:

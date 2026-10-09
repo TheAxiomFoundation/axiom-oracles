@@ -65,8 +65,20 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
         run_comparison, "_ensure_rulespec_us_checkout", lambda _remote: rulespec
     )
 
-    def fake_run(cmd, *, check, stdout=None, cwd=None, capture_output=False, text=False):
+    def fake_run(
+        cmd, *, check, stdout=None, cwd=None, capture_output=False, text=False,
+        env=None, input=None,
+    ):
         del check, cwd, capture_output, text
+        assert input is None
+        if cmd[0] == "git":
+            assert cmd[:3] == ["git", "-C", str(rulespec)]
+            assert env is not None
+            assert not any(key in env for key in (
+                "GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR",
+                "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+                "GIT_CEILING_DIRECTORIES",
+            ))
         calls.append(cmd)
         if stdout is not None:
             stdout.write("{}")
@@ -91,7 +103,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     }
     run_comparison._run_axiom_encode_tax_ecps_compare(runner_config, output)
 
-    cmd = calls[-1]
+    cmd = next(command for command in calls if command[0] == "uv")
     # The encoder renamed the subcommand in its ECPS→Populace rename; no
     # `tax-ecps-compare` alias survives on axiom-encode main (#296).
     assert "tax-populace-compare" in cmd
@@ -2131,7 +2143,13 @@ def test_completion_fills_missing_repo_from_convention_checkout(
     # The faked SHA sits on a directory git cannot inspect, so the worktree
     # state is recorded as unverifiable rather than assumed clean.
     assert completed == [
-        {"repo": "TheAxiomFoundation/rulespec-us-az", "sha": "a" * 40, "dirty": None}
+        {
+            "repo": "TheAxiomFoundation/rulespec-us-az",
+            "sha": "a" * 40,
+            "dirty": None,
+            "sha_toplevel": None,
+            "worktree_toplevel": None,
+        }
     ]
 
 
