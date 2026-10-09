@@ -220,15 +220,12 @@ def test_parameter_suite_entries_use_file_prefix():
 
 # --- absorbed state repos: nothing mapped may be archived --------------------
 #
-# Every TheAxiomFoundation/rulespec-us-<st> repo was archived in June 2026
-# (de/id/ma/nh/ok on 2026-06-13, the other 13 on 2026-06-27) as "ARCHIVED:
-# absorbed into rulespec-us/us-<st>", and ten more state names the map once
-# emitted never existed. An archived repo's HEAD never moves and a
-# missing one is never queried, so a suite mapped to either could never go
-# stale, and no report could prove it fresh against the rules the harness
-# reads. These are the rulespec repos GitHub reported archived on 2026-09-24
-# (`gh repo list TheAxiomFoundation --json name,isArchived`), and the state
-# names that returned 404 then.
+# Regression fixtures from the author's reported 2026-09-24 GitHub query
+# (`gh repo list TheAxiomFoundation --json name,isArchived`) and 404 responses.
+# The source captures are not retained here, so these tests do not establish
+# current API status or archive dates. A 404 does not prove a repository never
+# existed. Frozen standalone SHAs and unreadable dependencies cannot establish
+# freshness against the country rules the harness reads.
 ARCHIVED_RULESPEC_REPOS = frozenset(
     {f"rulespec-us-{st}" for st in (
         "al ar az ca co de fl ga id ma md nc nh ny ok sc tn tx".split()
@@ -241,7 +238,7 @@ ARCHIVED_RULESPEC_REPOS = frozenset(
         "rulespec-validators",
     }
 )
-NEVER_EXISTED_RULESPEC_REPOS = frozenset(
+UNREADABLE_STATE_RULESPEC_REPOS = frozenset(
     f"rulespec-us-{st}" for st in "ak hi ia ks me mi mn or ut wa".split()
 )
 COUNTRY_MONOREPO = r"TheAxiomFoundation/rulespec-[a-z]{2}"
@@ -271,7 +268,7 @@ def _all_mapped_repos() -> dict[str, set[str]]:
 
 
 def test_no_mapped_repo_is_archived_or_missing():
-    """NEGATIVE: no suite may depend on an archived or nonexistent repo."""
+    """NEGATIVE: reject the archived/unreadable regression names."""
     import re
 
     for source, repos in _all_mapped_repos().items():
@@ -281,21 +278,20 @@ def test_no_mapped_repo_is_archived_or_missing():
             f"{source} maps suites to archived repos "
             f"{sorted(names & ARCHIVED_RULESPEC_REPOS)}"
         )
-        assert not names & NEVER_EXISTED_RULESPEC_REPOS, (
-            f"{source} maps suites to repos that do not exist "
-            f"{sorted(names & NEVER_EXISTED_RULESPEC_REPOS)}"
+        assert not names & UNREADABLE_STATE_RULESPEC_REPOS, (
+            f"{source} maps suites to unreadable repository names "
+            f"{sorted(names & UNREADABLE_STATE_RULESPEC_REPOS)}"
         )
         # Positive form: every mapped repo is a country monorepo, so a new
         # sub-jurisdiction name (the shape absorption retired) fails here
-        # before anyone lists it. A country repo archived after 2026-09-24 is
+        # before anyone lists it. A country repo archived later is
         # flagged live by the affected-rerun workflow's GitHub API check.
         offenders = sorted(r for r in repos if not re.fullmatch(COUNTRY_MONOREPO, r))
         assert not offenders, f"{source}: {offenders} are not country monorepos"
 
 
 def test_every_archived_state_repo_folds_into_the_monorepo():
-    """The alias covers every archived absorbed repo and every never-existing
-    state name; the other archived repos (not absorbed anywhere) are left
+    """Cover the absorbed/unreadable fixtures; leave other archived fixtures
     alone, so a suite naming one still trips the guard above."""
     gam = _load("generate_affected_map.py")
     from axiom_oracles.provenance import ABSORBED_RULESPEC_REPOS, US_STATE_CODES
@@ -303,7 +299,7 @@ def test_every_archived_state_repo_folds_into_the_monorepo():
     absorbed = {
         name for name in ARCHIVED_RULESPEC_REPOS if name.startswith("rulespec-us-")
     } | {"rulespec-uk-kingston-upon-thames"}
-    for name in absorbed | NEVER_EXISTED_RULESPEC_REPOS:
+    for name in absorbed | UNREADABLE_STATE_RULESPEC_REPOS:
         assert name in ABSORBED_RULESPEC_REPOS, name
     for name in ARCHIVED_RULESPEC_REPOS - absorbed:
         assert name not in ABSORBED_RULESPEC_REPOS, name
@@ -331,7 +327,7 @@ def test_every_archived_state_repo_folds_into_the_monorepo():
     [
         # parameter suites: `git show origin/main:us-<st>/...` from ~/rulespec-us
         "ga-health-thresholds",
-        "hi-income-tax-parameters",  # a state that never had a standalone repo
+        "hi-income-tax-parameters",  # an unreadable standalone-name fixture
         # composed TANF programs over $HOME/rulespec-us
         "al-tanf-ecps",
         "ca-tanf-ecps",

@@ -18,16 +18,15 @@ Derivation, per suite, unions three signals (all deterministic):
    is encoded in ``rulespec-us`` (its ``us-co/`` directory), as is
    ``us:statutes/…``; ``uk:…`` in the UK rulespec; ``be:…`` in ``rulespec-be``.
    This backstops suites whose rulespec paths are indirected (e.g. rsync'd
-   roots). A state prefix names a directory of the rulespec-us monorepo, not a
-   repo: every standalone ``rulespec-us-<st>`` repo was archived after the
-   monorepo absorbed it, and every harness this map covers reads the state
-   layer from ``rulespec-us/us-<st>``.
+   roots). US state prefixes map to the country dependency ``rulespec-us``;
+   this routing does not depend on a standalone repository's existence or
+   archive history.
    ``axiom_oracles.provenance.canonical_rulespec_slug`` folds absorbed names
    (``ABSORBED_RULESPEC_REPOS``) in the path and prefix signals. A declared
    ``rulespec_remote`` stays as-is, as the report stamper keeps a git remote:
    a harness that clones an archived remote really reads it, and
-   ``tests/test_affected_map.py`` fails on any archived or missing repo in
-   the map.
+   ``tests/test_affected_map.py`` rejects the archived and unreadable names
+   in its regression fixtures and requires country-shaped dependency names.
 3. **parameter-suite ``file:`` prefixes** — the non-registry
    ``parameter-oracles.yaml`` names files like ``us-ga/policies/…`` whose top
    path segment maps to a rulespec repo the same way.

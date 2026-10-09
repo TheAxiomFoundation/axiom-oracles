@@ -172,7 +172,7 @@ def test_rulespec_provenance_stamps_an_archived_clone_under_its_true_name(tmp_pa
     [
         ("rulespec-us-co", "TheAxiomFoundation/rulespec-us"),
         ("rulespec-us-dc", "TheAxiomFoundation/rulespec-us"),
-        ("rulespec-us-ak", "TheAxiomFoundation/rulespec-us"),  # never existed
+        ("rulespec-us-ak", "TheAxiomFoundation/rulespec-us"),  # unreadable-name fixture
         ("TheAxiomFoundation/rulespec-us-tx", "TheAxiomFoundation/rulespec-us"),
         ("theaxiomfoundation/rulespec-us-co", "TheAxiomFoundation/rulespec-us"),
         ("TheAxiomFoundation/RuleSpec-US-CO", "TheAxiomFoundation/rulespec-us"),
@@ -461,18 +461,26 @@ def test_pinned_repo_roots_win_over_the_convention_checkout(tmp_path, monkeypatc
     ]
 
 
-def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch):
+@pytest.mark.parametrize("agreeing", [False, True])
+def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch, agreeing):
     """AXIOM_RULESPEC_US_ROOT's parent is prepended to the exported roots, so
-    the run resolves rulespec-us there; provenance must follow it."""
+    every discovered country checkout must agree before freshness is proven."""
     run_comparison = _load_run_comparison()
     import axiom_oracles.provenance as provenance
 
-    _git_checkout(tmp_path / "oracle-pins" / "rulespec-us", "pin")
+    pinned = tmp_path / "oracle-pins" / "rulespec-us"
+    pinned_sha = _git_checkout(pinned, "pin")
     # The engine reaches the override only as <parent>/rulespec-us (the
     # override's parent is prepended to the exported roots), so an override
     # directory with another name is NOT what compiles.
-    _git_checkout(tmp_path / "snapshot" / "rulespec-us-worktree", "override dir")
-    override_sha = _git_checkout(tmp_path / "snapshot" / "rulespec-us", "sibling")
+    unused_sha = _git_checkout(tmp_path / "snapshot" / "rulespec-us-worktree", "override dir")
+    sibling = tmp_path / "snapshot" / "rulespec-us"
+    if agreeing:
+        subprocess.run(["git", "clone", "-q", "--no-hardlinks", str(pinned), str(sibling)], check=True)
+        override_sha = pinned_sha
+    else:
+        override_sha = _git_checkout(sibling, "sibling")
+        assert override_sha != pinned_sha
     monkeypatch.setattr(provenance, "resolve_rulespec_checkout", lambda slug: None)
     monkeypatch.setenv(
         "AXIOM_RULESPEC_US_ROOT", str(tmp_path / "snapshot" / "rulespec-us-worktree")
@@ -484,9 +492,15 @@ def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch)
         _pinned_roots_config(tmp_path / "oracle-pins"), "axiom-oracles-compare", output
     )
 
-    assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": override_sha}
-    ]
+    country = "TheAxiomFoundation/rulespec-us"
+    assert block["rulespecs"]
+    assert {entry["repo"] for entry in block["rulespecs"]} == {country}
+    assert {entry["sha"] for entry in block["rulespecs"]} == {
+        override_sha if agreeing else None
+    }
+    if agreeing:
+        assert block["rulespecs"] == [{"repo": country, "sha": override_sha}]
+    assert all(entry["sha"] != unused_sha for entry in block["rulespecs"])
 
 
 def test_a_root_naming_a_rulespec_checkout_is_lifted_to_its_parent(

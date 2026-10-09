@@ -61,24 +61,20 @@ RULESPEC_OWNER = "TheAxiomFoundation"
 #: Local checkout directory basenames that differ from the upstream repo name.
 _RULESPEC_DIR_ALIASES = {"rulespec-uk-official": "rulespec-uk"}
 
-#: The 50 US states and DC. The rulespec-us monorepo holds each one's rules as
-#: a top-level ``us-<code>/`` directory beside the federal ``us/``.
+#: The 50 US states and DC, used to canonicalize US jurisdiction names.
 US_STATE_CODES = frozenset(
     "ak al ar az ca co ct dc de fl ga hi ia id il in ks ky la ma md me mi mn mo "
     "ms mt nc nd ne nh nj nm nv ny oh ok or pa ri sc sd tn tx ut va vt wa wi wv "
     "wy".split()
 )
 
-#: Rulespec repo names whose rules now live in a country monorepo, mapped to
-#: that monorepo. Every standalone ``rulespec-us-<st>`` repo was archived in
-#: June 2026 (de/id/ma/nh/ok on 2026-06-13, the other 13 on 2026-06-27) as
-#: "ARCHIVED: absorbed into rulespec-us/us-<st> (full history preserved)", and
-#: rulespec-uk-kingston-upon-thames the same way (2026-06-13) into
-#: ``rulespec-uk/uk-kingston-upon-thames``. States that never had a standalone
-#: repo map the same way: ``us-<st>`` names a directory of rulespec-us, not a
-#: repo. An archived repo never moves, so a suite mapped to one could never
-#: go stale, and a report could never prove it fresh against the rules the
-#: harness actually reads.
+#: Dependency aliases for jurisdiction rules read from country monorepos.
+#: US state names map to ``rulespec-us`` regardless of whether a standalone
+#: repository exists or existed; Kingston maps to ``rulespec-uk``. A frozen
+#: standalone checkout's SHA cannot prove freshness against the country
+#: repository the harness reads. These aliases describe dependency routing,
+#: not archive dates or upstream inventory; actual checkout origins remain
+#: unchanged in :func:`rulespec_provenance`.
 ABSORBED_RULESPEC_REPOS: dict[str, str] = {
     **{f"rulespec-us-{code}": "rulespec-us" for code in sorted(US_STATE_CODES)},
     "rulespec-uk-kingston-upon-thames": "rulespec-uk",
