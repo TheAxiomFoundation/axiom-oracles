@@ -5,7 +5,7 @@ an observation; counts, declarations, metadata and stamp claims cannot.
 """
 
 from collections import defaultdict
-from math import isfinite
+from math import isclose, isfinite
 from numbers import Number
 
 
@@ -94,6 +94,7 @@ class OutputEvidence:
         self.top_mismatches_by_engine_concept = defaultdict(list)
         self.mismatches_by_case_concept = defaultdict(list)
         self.explicit_comparisons_by_case_output = defaultdict(list)
+        self.scored_members = defaultdict(list)
         self.aggregates_by_concept = defaultdict(list)
         self.grid_cases_by_engine_concept = defaultdict(list)
         self.sides_by_engine = defaultdict(set)
@@ -196,12 +197,17 @@ class OutputEvidence:
                 engine = case.get(f"{side}_engine", self.engines.get(side))
                 if isinstance(engine, str):
                     self.sides_by_engine[engine].add(side)
-            for row in (case.get("matches") or []) + (case.get("mismatches") or []):
+            for matched, row in (
+                [(True, row) for row in case.get("matches") or []]
+                + [(False, row) for row in case.get("mismatches") or []]
+            ):
                 if not isinstance(row, dict):
                     continue
                 concept = row.get("concept")
                 if isinstance(concept, str):
                     self.comparisons_by_case_concept[(case_id, concept)].append((case, row))
+                    if isinstance(row.get("variable"), str):
+                        self.scored_members[(concept, row["variable"], case_id)].append((row, matched))
                 for side in ("left", "right"):
                     engine = case.get(f"{side}_engine", self.engines.get(side))
                     if isinstance(engine, str) and isinstance(row.get("variable"), str):
@@ -220,11 +226,33 @@ class OutputEvidence:
                 if not self.sides_by_engine.get(engine):
                     self.sides_by_engine[engine].add("left" if engine == "axiom" else "right")
 
+        # Engine-key grids also retain named left/right member comparisons.
+        # Index their sides after resolving the grid convention, so a scored
+        # member cannot disagree with its own returned ledger values.
+        for case_id, cases in self.cases_by_id.items():
+            for case in cases:
+                for row in (case.get("matches") or []) + (case.get("mismatches") or []):
+                    if not isinstance(row, dict) or not isinstance(row.get("variable"), str):
+                        continue
+                    for engine in grid_engines:
+                        side = self.side_for_engine(engine)
+                        if side is None or case.get(f"{side}_engine", self.engines.get(side)) is not None:
+                            continue
+                        self.explicit_comparisons_by_case_output[(
+                            engine, row["variable"], case_id,
+                        )].append((row, side))
+                        if isinstance(row.get("concept"), str) and side in row:
+                            self.comparisons_by_engine_concept[(engine, row["concept"])].append(
+                                (case_id, row, side)
+                            )
+
         for row in report.get("mismatches") or []:
             if isinstance(row, dict) and valid_case_id(row.get("case_id")):
                 concept = row.get("concept")
                 if isinstance(concept, str):
                     self.mismatches_by_case_concept[(row["case_id"], concept)].append(row)
+                    if isinstance(row.get("variable"), str):
+                        self.scored_members[(concept, row["variable"], row["case_id"])].append((row, False))
                 for engine in grid_engines:
                     side = self.side_for_engine(engine)
                     value_key = engine if engine in row else side
@@ -328,6 +356,43 @@ class OutputEvidence:
         self.rows(engine=engine, concept=concept, output=output, targets=targets)
         return self._returned_by_case[(engine, concept, output, frozenset(targets))].get(case_id, ())
 
+    def scored_member_cases(self, concept, output):
+        """Member comparison identities whose verdict and residual are retained."""
+        mismatches = sum(
+            any(not matched for _, matched in rows)
+            for rows in self.scored_members.values()
+        )
+        retained = (self.report.get("summary") or {}).get("mismatch_count", 0)
+        if not isinstance(retained, int) or isinstance(retained, bool) or retained < mismatches:
+            return set()
+        return {
+            case_id for (row_concept, variable, case_id), rows in self.scored_members.items()
+            if row_concept == concept and variable == output
+            and all(_scored_member_valid(row, matched) for row, matched in rows)
+        }
+
+
+def _scored_member_valid(row, matched):
+    """A member's retained numeric residual and verdict describe the same score."""
+    tolerance = row.get("tolerance", 0)
+    relative_tolerance = row.get("relative_tolerance", 0)
+    if (_contradiction(row)
+            or ("matches" in row and row["matches"] is not matched)
+            or not _valid_value(row.get("difference"), None, allow_bool=False)
+            or not _valid_value(row.get("left"), None)
+            or not _valid_value(row.get("right"), None)
+            or not _valid_value(tolerance, None, allow_bool=False) or tolerance < 0
+            or not _valid_value(relative_tolerance, None, allow_bool=False) or relative_tolerance < 0):
+        return False
+    try:
+        return (
+            row["difference"] == row["left"] - row["right"]
+            and isclose(row["left"], row["right"], abs_tol=tolerance,
+                        rel_tol=relative_tolerance) == matched
+        )
+    except (TypeError, ValueError, OverflowError):
+        return False
+
 
 def returned_output_rows(report, *, engine, concept, output, targets=(), evidence=None):
     """Read returned values without expanding scalar sums into components."""
@@ -380,6 +445,8 @@ def observed_output_value(
         return False
 
     for case in evidence.cases_by_id.get(case_id, ()):
+        if side is not None and case.get(f"{side}_engine", engine) != engine:
+            return False
         if _contradiction(case) or case.get("left_errors") or case.get("right_errors"):
             return False
         missing = case.get("missing_outputs") or {}
@@ -404,10 +471,12 @@ def observed_output_value(
 
     scalar = set(targets) == {output}
     for case, row in evidence.comparisons_by_case_concept.get((case_id, concept), ()):
-        if row.get("variable") is not None and row.get("variable") != output:
-            continue
         if _comparison_stopped(row):
             return False
+        if row.get("variable") is not None and row.get("variable") != output:
+            if scalar and engine != "axiom":
+                return False
+            continue
         if row.get("variable") == output and _contradiction(row):
             return False
         # A missing sum cannot identify the absent member. Individual ledger
@@ -426,10 +495,12 @@ def observed_output_value(
 
     side = evidence.side_for_engine(engine)
     for row in evidence.mismatches_by_case_concept.get((case_id, concept), ()):
-        if row.get("variable") is not None and row.get("variable") != output:
-            continue
         if _comparison_stopped(row):
             return False
+        if row.get("variable") is not None and row.get("variable") != output:
+            if scalar and engine != "axiom":
+                return False
+            continue
         if row.get("variable") == output and _contradiction(row):
             return False
         if scalar and _missing_side(row, side):

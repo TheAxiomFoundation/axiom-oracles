@@ -32,8 +32,9 @@ producer configuration and concept mappings supply candidate output names;
 none is returned-value evidence. Coverage requires finite, non-null returned
 comparison values from both engines in one real case, identified by output,
 with no contradictory missing/error/skipped evidence. Stamps are optional and
-must agree with recorded data when present. Individual sum members
-are recorded separately by producers; a summed scalar never proves its members.
+must agree with recorded data when present. Returned sum members require their
+own scored comparison identity and retained verdict and residual; a summed
+scalar never proves its members.
 
 Producer and concept bindings are deductions, so they are tracked as such:
 :attr:`ExecutionAttestation.outputs_complete` is true only when EVERY
@@ -491,27 +492,30 @@ def _targets(report, engine, concept, resolver):
                 names |= frozenset(slot[1])
             targets &= names
         return targets
+    declarations = []
     bindings = (report.get("output_bindings") or {}).get(concept, {})
     if isinstance(bindings, dict) and engine in bindings:
-        names = _as_names(bindings[engine])
-        recorded = (report.get("engine_bindings") or {}).get(engine)
-        if isinstance(recorded, dict) and ("outputs" in recorded or "output" in recorded):
-            native_names = _as_names(recorded.get("outputs", recorded.get("output")))
-            if not names <= native_names:
-                return frozenset()
-        return names
+        declarations.append(_as_names(bindings[engine]))
     native_targets = _efrs_targets(report, engine, concept)
     if native_targets is not None:
-        return native_targets
+        declarations.append(native_targets)
     bindings = (report.get("engine_bindings") or {}).get(engine)
     global_binding = report.get("concept") in {None, concept}
     if global_binding and isinstance(bindings, dict) and ("outputs" in bindings or "output" in bindings):
         # These are the custom producer's recorded comparison targets;
         # diagnostic_outputs and current generic mappings cannot replace them.
-        return _as_names(bindings.get("outputs", bindings.get("output")))
+        declarations.append(_as_names(bindings.get("outputs", bindings.get("output"))))
     declared = _engines_map_variables(report, engine) if global_binding else frozenset()
-    if declared:
-        return declared
+    engines = report.get("engines") or {}
+    if global_binding and isinstance(engines, dict) and engine in engines:
+        declarations.append(declared)
+    if declarations:
+        # Per-concept bindings cannot hide a contradictory native declaration
+        # or engine heading. Broad headings may contain several scalar targets.
+        # Keep the comparison's full identity: narrowing a sum to one returned
+        # member must not turn it into an independently compared scalar.
+        targets = declarations[0]
+        return targets if all(targets <= names for names in declarations[1:]) else frozenset()
     resolved = resolver.resolve(concept, engine)
     if resolved:
         return resolved
@@ -591,10 +595,15 @@ def _paired_cases(report, oracle_engine, concept, output, resolver, value_eviden
     # Conflicting engine roles cannot pair values from one actual comparison.
     if value_evidence.side_for_engine(AXIOM_ENGINE) is None or value_evidence.side_for_engine(oracle_engine) is None:
         return set()
-    return (
+    paired = (
         _observed_cases(report, oracle_engine, concept, output, resolver, value_evidence)
         & _observed_cases(report, AXIOM_ENGINE, concept, axiom, resolver, value_evidence)
     )
+    if not value_evidence.native_fiit and (len(oracle_targets) > 1 or len(axiom_targets) > 1):
+        # Returned components do not inherit the total's verdict. A member
+        # must retain its own scored comparison and counted residual instead.
+        paired &= value_evidence.scored_member_cases(concept, output)
+    return paired
 
 
 def _attested_outputs(

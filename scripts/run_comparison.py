@@ -1655,6 +1655,7 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
             "compared_values": 0,
             "mismatch_count": 0,
             "mismatches": [],
+            "errors": [],
             "oracle_divergence_count": 0,
             "oracle_divergences": [],
             "output_summary": [],
@@ -1668,6 +1669,7 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
         "compared_benunits": max(r.get("compared_benunits", 0) for r in reports),
         "compared_values": sum(r.get("compared_values", 0) for r in reports),
         "mismatches": [],
+        "errors": [],
         "oracle_divergences": [],
         "output_summary": [],
         "skipped_surfaces": [],
@@ -1676,6 +1678,7 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
     seen_notes: set[str] = set()
     seen_skipped: set[str] = set()
     for report in reports:
+        merged["errors"].extend(report.get("errors") or [])
         merged["mismatches"].extend(report.get("mismatches", []))
         merged["oracle_divergences"].extend(report.get("oracle_divergences", []))
         merged["output_summary"].extend(report.get("output_summary", []))
@@ -4858,8 +4861,11 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "summary": {
             "alarms": alarms,
             "comparison_count": parent_compared,
-            "error_count": 0,
-            "errors_by_engine": {},
+            "error_count": len(raw.get("errors") or []),
+            "errors_by_engine": dict(Counter(
+                row.get("engine", "axiom") for row in raw.get("errors") or []
+                if isinstance(row, dict)
+            )),
             "known_policyengine_divergence_count": parent_known_divergences,
             "match_count": parent_matched,
             "mismatch_count": parent_mismatches,

@@ -14,7 +14,7 @@ import json
 import math
 import sys
 from collections import Counter, defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, Callable
@@ -1902,6 +1902,7 @@ class UKEFRSComparisonReport:
     skipped_surfaces: list[dict[str, str]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
+    errors: list[dict[str, Any]] = field(default_factory=list)
 
     def to_json(self) -> dict[str, Any]:
         return {
@@ -1916,6 +1917,7 @@ class UKEFRSComparisonReport:
             "skipped_surfaces": self.skipped_surfaces,
             "projection_notes": self.projection_notes,
             "dataset_identity": self.dataset_identity,
+            "errors": self.errors,
         }
 
 
@@ -6526,6 +6528,7 @@ def compare_outputs(
 ) -> UKEFRSComparisonReport:
     mismatches: list[UKEFRSComparisonRow] = []
     oracle_divergences: list[UKEFRSOracleDivergence] = []
+    errors: list[dict[str, Any]] = []
     summary: dict[str, dict[str, Any]] = {
         f"{surface}:{name}": {
             "surface": surface,
@@ -6552,6 +6555,23 @@ def compare_outputs(
         for index, result in enumerate(axiom_outputs):
             pe_row = persons[index]
             entity_id = entity_id_for_surface(surface, pe_row)
+            if (
+                any(result.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
+                or ("executed" in result and result["executed"] is not True)
+            ):
+                # Keep stop evidence independently of displayed mismatches,
+                # including results whose returned values would have matched.
+                errors.append({
+                    "engine": "axiom",
+                    "case_id": entity_id,
+                    "surface": surface,
+                    **{
+                        key: result[key]
+                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
+                        if key in result
+                    },
+                })
+                continue
             outputs = result.get("outputs") or {}
             for name, spec in output_specs.items():
                 if not output_applies(spec, pe_row):
@@ -6608,6 +6628,7 @@ def compare_outputs(
         oracle_divergences=oracle_divergences,
         output_summary=list(summary.values()),
         dataset_identity=pe_data.get("dataset_identity") or None,
+        errors=errors,
         skipped_surfaces=SKIPPED_SURFACES,
         projection_notes=[
             "Personal allowance projection supplies validation-population adjusted net income "

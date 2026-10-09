@@ -48,7 +48,7 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
         concept = "mfn" if singleton else "ieepa"
         output = "statutory_base_rate" if singleton else "statutory_rate_ieepa_recip"
         targets = (output,) if singleton else (output, "statutory_rate_ieepa_fent")
-        engines = {"axiom": "tariff_total", engine: "Yale statutory panel"}
+        engines = {"axiom": ",".join(targets), engine: ",".join(targets)}
         # Yale's authority-slot comparison has an existing numeric-rate gate.
         # Preserve that precondition while testing the four observation gates;
         # the other dialects continue to exercise raw False as an output value.
@@ -57,7 +57,7 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
     elif shape.startswith("grid-"):
         if shape == "grid-components":
             targets = ("other_sum_component", output)
-        engines = {"axiom": "axiom_tax", engine: ",".join(targets)}
+        engines = {"axiom": ",".join(targets) if shape == "grid-components" else "axiom_tax", engine: ",".join(targets)}
 
     report = {
         "suite": suite,
@@ -133,7 +133,7 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
             "reference": {"columns": list(targets)},
         }
         # Multiple-column expected sums do not identify either returned member.
-        # Positive evidence for a member comes from its own value ledger.
+        # A member needs its returned values and an independent scored row.
         report["cases"] = [{
             "case_id": "c1", "unit_count": 1,
             "expected": {concept: value if returned and len(targets) == 1 else 0},
@@ -146,6 +146,18 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
             }]
         elif not returned and len(targets) == 1:
             report["cases"][0]["expected"].pop(concept)
+
+    if returned and shape in {"grid-components", "yale-multiple-columns"}:
+        matched = value == 0
+        difference = -value if isinstance(value, (int, float)) else None
+        report["cases"][0]["matches" if matched else "mismatches"] = [{
+            "concept": concept, "variable": output, "left": 0,
+            "right": value, "difference": difference,
+        }]
+        report["summary"]["match_count"] = int(matched)
+        report["summary"]["mismatch_count"] = int(not matched)
+        if shape == "yale-multiple-columns":
+            report["summary"]["slots"][concept] = {"matches": int(matched), "mismatches": int(not matched)}
 
     if not returned:
         # Deliberately offer the exact candidate value in non-output locations.

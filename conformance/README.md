@@ -70,7 +70,9 @@ Every candidate report is now attested against the universe's declared oracle
 2. **Output binding.** At least one of the universe row's registered
    `output_vars` must have a returned value from **both Axiom and the declared
    oracle in the same real case and actual comparison**. Each engine's binding
-   to that registered output must be unambiguous. The shared
+   to that registered output must be unambiguous: every applicable recorded
+   output declaration must agree, and a retained ledger must identify the
+   output of its actual comparison. The shared
    `observed_output_value` predicate requires a finite, non-null numeric value
    or an authoritative declared type, with no missing, error or skipped
    evidence contradicting that case and output. The valid case identities are
@@ -87,7 +89,9 @@ reports can cover when their recorded values satisfy that predicate; never add
 stamps to historical artifacts to restore coverage. Native Comparator and FIIT reports retain
 per-case, per-output returned values in `observed_outputs`; scalar case values
 can supply evidence when their binding is unambiguous. Summed concept or Yale
-slot values do not prove individual component outputs. FIIT retains its raw
+slot values do not prove individual component outputs, even when both engines
+retain each member's returned value. A component requires its own scored
+comparison identity and retained verdict and residual. FIIT retains its raw
 returned oracle values and their Axiom counterpart separately from arithmetic
 projections, so converting a missing value to zero cannot create coverage.
 Native FIIT diagnostic outputs bind only to their explicitly recorded native
@@ -135,9 +139,11 @@ policies. The round-11 reviewed head `4f51296fb` then reported zero covered
 policies in every jurisdiction because it required literal execution stamps.
 Those are historical implementation baselines; `origin/main` is the primary
 publication baseline (114/226 covered at the start of this review). The current
-round-11 fix retains 53/226 covered under the same-case rule:
+round-12 fixes retain the round-11 total of 53/226 covered under the same-case
+rule. The new guards reject synthetic attack reports that are not inputs to
+these public coverage counts:
 
-| Jurisdiction | Covered on `origin/main` | Covered after round-11 fixes |
+| Jurisdiction | Covered on `origin/main` | Covered after round-12 fixes |
 | --- | --- | --- |
 | BE | 23/23 | 10/23 |
 | DK | 1/22 | 1/22 |
@@ -160,11 +166,11 @@ The following producer paths differ in the returned evidence they retain:
 
 | Producer | Recorded evidence and required recovery |
 | --- | --- |
-| UK EFRS (`_adapt_uk_efrs_to_v2`, `bridges/efrs_uk.py`) | The adapter records native Axiom/PolicyEngine output bindings and per-engine values for retained mismatch and divergence cases, preserving missing values and stop flags. Direct PolicyEngine outputs retain missing/nonfinite values rather than converting them to zero. The native report still drops matched case values; recovering a policy with only matching cases requires a per-output ledger written during `compare_outputs`, with stable entity IDs, both returned values and their direct native targets. `pe_expression` values such as the pre-takeup UC award have no final-output binding; run and retain the actual registered final output instead. |
+| UK EFRS (`_adapt_uk_efrs_to_v2`, `bridges/efrs_uk.py`) | The adapter records native Axiom/PolicyEngine output bindings and per-engine values for retained mismatch and divergence cases, preserving missing values and stop flags. The native producer excludes stopped or errored results from comparisons and retains their markers in an aggregate error ledger before display filtering, including cases omitted from displayed mismatches; the adapter preserves that ledger. Direct PolicyEngine outputs retain missing/nonfinite values rather than converting them to zero. The native report still drops matched case values; recovering a policy with only matching cases requires a per-output ledger written during `compare_outputs`, with stable entity IDs, both returned values and their direct native targets. `pe_expression` values such as the pre-takeup UC award have no final-output binding; run and retain the actual registered final output instead. |
 | UK VAT (`generate_uk_vat.py`) | No stamp migration is needed: `build_report` already records each real `case_id`, returned `axiom`/`policyengine` values, and the explicit `VAT_OUTPUT`/`vat` engine bindings. A clean rerun can restore the registered `vat` output using those pairs. |
-| Federal grids (`generate_federal_tax_liability.py`) | No stamp migration is needed for an unambiguous scored binding: `_build_report` already retains same-case returned scalars, named PolicyEngine components and the Axiom/PolicyEngine engine bindings. A comparison that sums oracle variables needs separate real Axiom counterparts for any registered component being claimed; `axiom_diagnostics` and bridge outputs are not final-output evidence. |
+| Federal grids (`generate_federal_tax_liability.py`) | No stamp migration is needed for an unambiguous scored binding: `_build_report` already retains same-case returned scalars, named PolicyEngine components and the Axiom/PolicyEngine engine bindings. A comparison that sums oracle variables needs separately scored per-output comparisons, with their real Axiom counterparts and retained verdicts and residuals, for any registered component being claimed; `axiom_diagnostics` and bridge outputs are not final-output evidence. |
 | State grids (`generate_state_income_tax_liability.py`) | The report retains same-case Axiom, PolicyEngine and TAXSIM scalar comparisons with named oracle targets. Many grids compare `*_before_refundable_credits` while the universe registers final `*_income_tax`; restoring those policies requires executing the final boundary and retaining its Axiom and PolicyEngine pair. Record the exact Axiom output URI instead of only `_MODULE[state]`, identify the Axiom/PolicyEngine pair roles explicitly in case rows or write a separate report for that pair, and retain per-engine output bindings and missing/error evidence for each pair. |
-| Yale panel (`generate_us_tariff_panel.py`) | Single-column authority slots can use their recorded `expected`/`axiom` pairs with unambiguous slot bindings. Multi-column sums cannot cover constituent columns. Restoring their registered outputs requires retaining each real panel unit's source-column value and a separately executed Axiom counterpart, together with the exact column/output binding. Keep the family aggregation for presentation, but retain the unit identity and comparison ledger; never split or copy a summed slot value into its component columns. |
+| Yale panel (`generate_us_tariff_panel.py`) | Single-column authority slots can use their recorded `expected`/`axiom` pairs with unambiguous slot bindings. Multi-column sums cannot cover constituent columns. Restoring their registered outputs requires retaining each real panel unit's source-column value and a separately executed Axiom counterpart, together with the exact column/output binding and independently scored verdict and residual. Keep the family aggregation for presentation, but retain the unit identity and comparison ledger; never split or copy a summed slot value into its component columns. |
 
 The broader matched-case EFRS, final-boundary state and per-column Yale
 migrations are documented here rather than inferred from counts or added to

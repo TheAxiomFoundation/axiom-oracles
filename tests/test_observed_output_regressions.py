@@ -31,22 +31,28 @@ def _sum_mapping():
 
 def _report(mapping, values, *, oracle_on_left=False, paired_components=False):
     if paired_components:
-        mapping = replace(mapping, targets={
-            **mapping.targets,
-            "axiom": mapping.target_for_engine("policyengine"),
-        })
-    targets = mapping.target_for_engine("axiom")
-    axiom_values = (
-        {target: 0 for target in targets}
-        if isinstance(targets, list) else {targets: 0}
-    )
+        # Positive component controls compare every member separately; merely
+        # returning both sides of a summed mapping cannot certify a member.
+        mappings = [replace(
+            mapping, standard=f"{mapping.concept_id}:component:{target}",
+            targets={"axiom": target, "policyengine": target},
+        ) for target in mapping.target_for_engine("policyengine")]
+    else:
+        mappings = [mapping]
+    axiom_values = {}
+    for compared_mapping in mappings:
+        targets = compared_mapping.target_for_engine("axiom")
+        axiom_values.update(
+            {target: 0 for target in targets}
+            if isinstance(targets, list) else {targets: 0}
+        )
     axiom = EngineResult("axiom", "c1", axiom_values)
     oracle = EngineResult("policyengine", "c1", values)
     left, right = (oracle, axiom) if oracle_on_left else (axiom, oracle)
     report = build_comparison_report(
         suite_name="probe", population="synthetic", locales=set(), scope=None,
         cases=[Case(case_id="c1", period="2026")],
-        mappings=[mapping], comparisons=Comparator([mapping]).compare([left], [right]),
+        mappings=mappings, comparisons=Comparator(mappings).compare([left], [right]),
     )
     if report["summary"]["mismatch_count"]:
         report = apply_dispositions(report, {
@@ -230,6 +236,7 @@ def test_explicit_missing_sum_member_overrides_its_positive_stamp(location, orac
     report = _report(mapping, {
         "income_tax_main_rates": 0, "capital_gains_tax": 0,
     }, oracle_on_left=oracle_on_left, paired_components=True)
+    assert _score(report)[0].covered == 1
     side = "left" if oracle_on_left else "right"
     report["aggregates"][0][f"missing_{side}_count"] = 1
     missing = {
@@ -259,6 +266,7 @@ def test_case_output_contradiction_does_not_require_a_concept_label(
     report = _report(mapping, {
         "income_tax_main_rates": 0, "capital_gains_tax": 0,
     }, oracle_on_left=oracle_on_left, paired_components=True)
+    assert _score(report)[0].covered == 1
     value = None if contradiction == "missing" else 0
     conflict = {"case_id": "c1", "variable": "capital_gains_tax"}
     if concept_label == "null":

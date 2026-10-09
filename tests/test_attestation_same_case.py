@@ -40,7 +40,7 @@ def _report(dialect, pairs, *, stamped=True):
     if dialect == "reverse-role":
         engines = {"left": engine, "right": "axiom"}
     elif dialect in {"grid", "components", "yale", "yale-members"}:
-        engines = {"axiom": axiom_target, engine: ",".join(targets)}
+        engines = {"axiom": ",".join(axiom_targets), engine: ",".join(targets)}
     report = {
         "suite": suite, "engines": engines, "case_count": len(pairs),
         "summary": {"comparison_count": len(pairs), "error_count": 0},
@@ -80,13 +80,32 @@ def _report(dialect, pairs, *, stamped=True):
                 {"case_id": case_id, "engine": "axiom", "concept": concept, "variable": axiom_target, "value": axiom},
                 {"case_id": case_id, "engine": engine, "concept": concept, "variable": output, "value": oracle},
             ])
+        if dialect in {"components", "yale-members"}:
+            # Returned members do not inherit the summed comparison's verdict.
+            # This fixture independently scores the registered member too.
+            matched = axiom is not None and oracle is not None and axiom == oracle
+            difference = axiom - oracle if isinstance(axiom, (int, float)) and isinstance(oracle, (int, float)) else None
+            case.setdefault("matches" if matched else "mismatches", []).append({
+                "concept": concept, "variable": output, "left": axiom,
+                "right": oracle, "difference": difference,
+            })
         report["cases"].append(case)
+    if dialect in {"components", "yale-members"}:
+        report["summary"]["mismatch_count"] = sum(
+            len(case.get("mismatches", [])) for case in report["cases"]
+        )
+        report["summary"]["match_count"] = sum(
+            len(case.get("matches", [])) for case in report["cases"]
+        )
     if dialect == "fiit":
         report["provenance"] = {"generated_by": "scripts/run_comparison.py::fiit-ecps"}
         report["output_summary"] = [{"surface": "employee-medicare", "output": output, "compared": len(pairs), "mismatches": 0}]
     if dialect.startswith("yale"):
         report["provenance"] = {"generator": "scripts/generate_us_tariff_panel.py"}
-        report["summary"]["slots"] = {concept: {"matches": len(pairs), "mismatches": 0}}
+        report["summary"]["slots"] = {concept: {
+            "matches": report["summary"].get("match_count", len(pairs)),
+            "mismatches": report["summary"].get("mismatch_count", 0),
+        }}
         report["scope"] = {"comparison_units": len(pairs), "authority_slots": [concept], "reference": {"columns": list(targets)}}
     if stamped:
         # The claims truthfully count each side's returns, even for disjoint cases.
@@ -164,6 +183,26 @@ def test_same_case_zero_pair_survives_in_each_dialect_with_or_without_stamp(dial
     evidence = attest(report, oracle=universe.oracle, resolver=resolver)
     assert evidence.binds(universe.policies[0].output_vars)
     assert score_jurisdiction(universe, [report], resolver=resolver)[0].covered == 1
+
+
+@pytest.mark.parametrize("dialect", ["components", "yale-members"])
+@pytest.mark.parametrize("omission", ["returned-only", "missing-residual", "uncounted-mismatch"])
+def test_sum_member_requires_its_independent_comparison_and_retained_residual(dialect, omission):
+    report, resolver, universe = _report(dialect, [(100, 0)], stamped=False)
+    board, rows = score_jurisdiction(universe, [report], resolver=resolver)
+    assert board.covered == 1
+    assert rows[0].covered
+    assert board.unexplained_total == 1
+    assert not board.conformant
+    comparison = report["cases"][0]["mismatches"][0]
+    if omission == "returned-only":
+        report["cases"][0]["mismatches"] = []
+    elif omission == "missing-residual":
+        comparison.pop("difference")
+    else:
+        report["summary"]["mismatch_count"] = 0
+    assert not attest(report, oracle=universe.oracle, resolver=resolver).binds(universe.policies[0].output_vars)
+    assert score_jurisdiction(universe, [report], resolver=resolver)[0].covered == 0
 
 
 @settings(max_examples=35, deadline=None, database=None, derandomize=True)
