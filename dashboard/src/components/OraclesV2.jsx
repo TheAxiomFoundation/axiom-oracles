@@ -13,6 +13,7 @@ import {
 import ProgramPage from "./ProgramPage";
 import DispositionNote from "./DispositionNote";
 import HouseholdsView from "./Households";
+import SouthmodFindings from "./SouthmodFindings";
 import {
   suiteMeta,
   suiteLabel,
@@ -38,7 +39,8 @@ import {
  *
  * The oracle is the first-class object: trust comes from WHO checked the
  * work. The page is one argument, top to bottom:
- *   1. Thesis — every encoding is checked against independent engines.
+ *   1. Thesis — encodings are checked against other engines and datasets
+ *      where a comparison exists.
  *   2. The roster — one card per oracle: identity, scope, verdict, and
  *      validation state. A card opens into the oracle's full record, where
  *      every discrepancy class ends in an action — a filed issue, a
@@ -314,7 +316,7 @@ function OracleCard({ oracle, selected, onSelect }) {
       aria-expanded={selected}
     >
       <div className="mono v2-card-eyebrow">
-        {id.org || "Independent engine"}
+        {id.org || "Oracle"}
         <span className="v2-card-regions">
           {[...oracle.regions].map((r) => (
             <span key={r} className="mono v2-region">
@@ -327,9 +329,9 @@ function OracleCard({ oracle, selected, onSelect }) {
       <p className="v2-card-what">{id.what}</p>
       <div
         className="v2-card-stats"
-        title={`${oracle.checks.toLocaleString()} individual checks across these households`}
+        title={`${oracle.checks.toLocaleString()} individual checks across these comparison cases`}
       >
-        <Stat value={oracle.households.toLocaleString()} label="households" />
+        <Stat value={oracle.households.toLocaleString()} label="comparison cases" />
         <Stat value={oracle.programs.size} label="programs" />
       </div>
       <div className="mono v2-card-foot">
@@ -341,7 +343,17 @@ function OracleCard({ oracle, selected, onSelect }) {
   );
 }
 
-const REGION_ORDER = ["us", "ca", "uk", "be", "de", "dk"];
+// SOUTHMOD countries follow their registry order, so the SOUTHMOD record
+// and the overview census both get a chip per country model.
+const REGION_ORDER = [
+  "us",
+  "ca",
+  "uk",
+  "be",
+  "de",
+  "dk",
+  ...Object.keys(SOUTHMOD_MODELS),
+];
 
 function ProgRow({ p, onOpenProgram }) {
   return (
@@ -364,10 +376,10 @@ function ProgRow({ p, onOpenProgram }) {
       </span>
       <span
         className="mono v2-prog-checks"
-        title={`${p.households.toLocaleString()} households · ${p.total.toLocaleString()} checks`}
+        title={`${p.households.toLocaleString()} comparison cases · ${p.total.toLocaleString()} checks`}
       >
         {p.households.toLocaleString()}
-        <span className="v2-prog-unit"> households</span>
+        <span className="v2-prog-unit"> comparison cases</span>
       </span>
       <span className="mono v2-prog-rate">
         <span className="v2-prog-rate-part">
@@ -470,18 +482,23 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
     );
   }, [programRows, activeProgram, q]);
 
-  const scoped = useMemo(() => {
-    if (!activeProgram && !matchedKeys) return regionScoped;
-    const keep = (suite) => {
+  // null when no program filter is active.
+  const keepSuite = useMemo(() => {
+    if (!activeProgram && !matchedKeys) return null;
+    return (suite) => {
       const key = programKeyOf(suite);
       return activeProgram ? key === activeProgram : matchedKeys.has(key);
     };
+  }, [activeProgram, matchedKeys]);
+
+  const scoped = useMemo(() => {
+    if (!keepSuite) return regionScoped;
     return {
       ...regionScoped,
-      reports: regionScoped.reports.filter((r) => keep(r.suite)),
-      classes: regionScoped.classes.filter((c) => keep(c.suite)),
+      reports: regionScoped.reports.filter((r) => keepSuite(r.suite)),
+      classes: regionScoped.classes.filter((c) => keepSuite(c.suite)),
     };
-  }, [regionScoped, activeProgram, matchedKeys]);
+  }, [regionScoped, keepSuite]);
 
   const visibleRows = activeProgram
     ? programRows.filter((p) => p.key === activeProgram)
@@ -575,6 +592,16 @@ function OracleRecord({ oracle, knownCauses, onOpenProgram, onBrowseHouseholds }
             <ClassLedger classes={scoped.classes} />
           )}
         </div>
+
+        {oracle.id === "southmod" && (
+          <div className="v2-dossier-col">
+            <SouthmodFindings
+              region={region}
+              keepSuite={keepSuite}
+              onOpenSuite={(suite) => onOpenProgram(programKeyOf(suite))}
+            />
+          </div>
+        )}
       </div>
       {onBrowseHouseholds && (
         <div className="v2-record-foot">
@@ -618,6 +645,10 @@ export default function OraclesV2() {
     setRoute(next);
     const url = new URL(window.location.href);
     for (const k of ["oracle", "program", "view"]) url.searchParams.delete(k);
+    // A #finding-<id> fragment belongs to the page it was opened on; carried
+    // along, it would re-pin that finding whenever the SOUTHMOD record
+    // remounts and ride into unrelated shareable URLs.
+    url.hash = "";
     if (next.oracle) url.searchParams.set("oracle", next.oracle);
     if (next.program) url.searchParams.set("program", next.program);
     if (next.view) url.searchParams.set("view", next.view);
@@ -855,7 +886,7 @@ export default function OraclesV2() {
                 <span className="mono pp-where">
                   {" "}
                   · {(ORACLE_IDENTITY[routeOracle.id] || {}).org ||
-                    "independent engine"}
+                    "oracle"}
                 </span>
               </h1>
               <p className="v2-oracle-what">
@@ -915,10 +946,9 @@ export default function OraclesV2() {
                 className="v2-thesis"
                 title={`${compactCount(totals.checks)} concept-level checks behind these figures${crossChecks > 0 ? ` · ${crossChecks} oracle-vs-oracle arbitration runs` : ""}`}
               >
-                Axiom never grades its own work —{" "}
-                <em>{compactCount(totals.households)}</em> households checked
-                against <em>{oracles.length}</em> independent engines, every
-                disagreement tracked in the open.
+                <em>{compactCount(totals.households)}</em> comparison cases checked
+                against <em>{oracles.length}</em> other engines and datasets,
+                with disagreements tracked in the open.
               </h1>
             </section>
 

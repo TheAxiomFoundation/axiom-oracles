@@ -1,5 +1,5 @@
 /**
- * Who each oracle IS — the identity that makes the check independent.
+ * Who each oracle IS, and any tie it has to Axiom.
  * Keyed by the dashboard's oracle id (otherOracle in utils/suites.js), not
  * the raw engine id: EUROMOD-platform reports split into euromod, ukmod and
  * southmod. An oracle with an acknowledgement or licence its terms require
@@ -15,12 +15,12 @@ import {
 export const ORACLE_IDENTITY = {
   policyengine: {
     org: "PolicyEngine",
-    what: "Open-source tax–benefit microsimulation of US and UK law, maintained independently of Axiom.",
+    what: "Open-source tax–benefit microsimulation of US and UK law. Max Ghenis is CEO of both Axiom and PolicyEngine, which he co-founded, and PSL Foundation fiscally sponsors both organizations.",
     url: "https://policyengine.org",
   },
   taxsim: {
     org: "NBER",
-    what: "TAXSIM-35 — the National Bureau of Economic Research's federal and state income-tax calculator, the reference model of empirical tax research.",
+    what: "TAXSIM-35 — the National Bureau of Economic Research's federal and state income-tax calculator, the reference model of empirical tax research. PolicyEngine is building TAXSIM's successor with its author's cooperation, and Axiom's runs use the TAXSIM executable that PolicyEngine packages (policyengine-taxsim).",
     url: "https://taxsim.nber.org/",
   },
   taxcalc: {
@@ -61,7 +61,7 @@ export const ORACLE_IDENTITY = {
   },
   "snap-qc": {
     org: "USDA Food and Nutrition Service",
-    what: "SNAP Quality Control public-use file — the USDA's national sample of active SNAP cases, each reviewed by state QC reviewers who reinterview the household. Axiom is compared with FSBEN, the file's final calculated benefit, which Mathematica computes for USDA from each edited case record; the benefit received is a separate field (RAWBEN).",
+    what: "SNAP Quality Control public-use file — the USDA's national sample of active SNAP cases, each reviewed by state QC reviewers who reinterview the household. Axiom is compared with FSBEN, the file's final calculated benefit, which Mathematica computes for USDA from each edited case record; the benefit received is a separate field (RAWBEN). The file keeps only eligible households and the replay takes income and several deductions as given, so it checks benefit arithmetic and leaves eligibility untested.",
     url: "https://snapqcdata.net/datafiles",
   },
   spsm: {

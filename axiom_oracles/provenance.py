@@ -77,6 +77,25 @@ RULESPEC_OWNER = "TheAxiomFoundation"
 #: Local checkout directory basenames that differ from the upstream repo name.
 _RULESPEC_DIR_ALIASES = {"rulespec-uk-official": "rulespec-uk"}
 
+#: The 50 US states and DC, used to canonicalize US jurisdiction names.
+US_STATE_CODES = frozenset(
+    "ak al ar az ca co ct dc de fl ga hi ia id il in ks ky la ma md me mi mn mo "
+    "ms mt nc nd ne nh nj nm nv ny oh ok or pa ri sc sd tn tx ut va vt wa wi wv "
+    "wy".split()
+)
+
+#: Dependency aliases for jurisdiction rules read from country monorepos.
+#: US state names map to ``rulespec-us`` regardless of whether a standalone
+#: repository exists or existed; Kingston maps to ``rulespec-uk``. A frozen
+#: standalone checkout's SHA cannot prove freshness against the country
+#: repository the harness reads. These aliases describe dependency routing,
+#: not archive dates or upstream inventory; actual checkout origins remain
+#: unchanged in :func:`rulespec_provenance`.
+ABSORBED_RULESPEC_REPOS: dict[str, str] = {
+    **{f"rulespec-us-{code}": "rulespec-us" for code in sorted(US_STATE_CODES)},
+    "rulespec-uk-kingston-upon-thames": "rulespec-uk",
+}
+
 #: Valid ``run_kind`` values. ``weekly`` = the full backstop matrix,
 #: ``pr-triggered`` = a PR CI run, ``affected-rerun`` = the 6-hourly
 #: stale-suite sweep, ``manual`` = a local/ad-hoc run (the default).
@@ -541,8 +560,11 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
 
     ``paths`` are local checkout directories (as the runner resolves them from
     ``rulespec_root`` / ``rulespec_roots``). The ``repo`` slug comes from the
-    origin remote when available, otherwise from the directory basename so a report is never left with an
-    anonymous rulespec entry. An entry whose ``sha`` resolved also carries the
+    origin remote when available, otherwise from the canonicalized directory
+    basename so a report is never left with an anonymous rulespec entry.
+    Remote slugs are recorded as-is: an archived ``rulespec-us-<st>`` checkout
+    retains its own name, so provenance completion cannot use it to prove
+    freshness against ``rulespec-us``. An entry whose ``sha`` resolved carries the
     checkout's :func:`worktree_attestation` and both resolved repository roots.
     A path resolving to an enclosing checkout is unverifiable. Deduplicated
     on the whole entry, order-stable, so two checkouts of one commit in
@@ -580,6 +602,17 @@ def rulespec_provenance(paths: list[Path | str] | None) -> list[dict[str, Any]]:
     return entries
 
 
+def checkout_remote_matches_slug(path: Path, slug: str) -> bool:
+    """Reject a checkout whose recognized GitHub origin names another repo.
+
+    GitHub identities are case-insensitive. Compare the raw origin identity:
+    absorption aliases identify dependencies, not the checkout actually read.
+    Without a recognized origin, callers must rely on layout conventions.
+    """
+    remote_slug = repo_slug_from_remote(_remote_url(path))
+    return remote_slug is None or remote_slug.casefold() == slug.casefold()
+
+
 def resolve_rulespec_checkout(slug: str) -> Path | None:
     """Locate a local checkout for a rulespec repo slug via layout conventions.
 
@@ -590,8 +623,12 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
     report's provenance can record the SHA of the checkout the run actually
     resolved. Git-bearing candidates win over bare directories (an rsync'd
     root without `.git` has no SHA to record); returns None when nothing
-    matches.
+    matches. Absorbed repo names (:data:`ABSORBED_RULESPEC_REPOS`) resolve
+    through the country name. Candidates with a contradictory GitHub origin
+    are rejected even if renamed to that country name; candidates without a
+    recognized origin still rely on the supervised layout conventions.
     """
+    slug = canonical_rulespec_slug(slug)
     name = slug.split("/", 1)[-1]
     candidate_names = [name] + [
         alias for alias, target in _RULESPEC_DIR_ALIASES.items() if target == name
@@ -604,7 +641,12 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
     # the developer's convention-path checkout happens to be on.
     override = os.environ.get("AXIOM_RULESPEC_US_ROOT")
     if override and name == "rulespec-us":
-        candidates.append(Path(override))
+        pinned = Path(override)
+        # An invalid pin still names the checkout the harness read. Falling
+        # back would attach an unrelated convention checkout's SHA to it.
+        if pinned.exists() and not checkout_remote_matches_slug(pinned, slug):
+            return None
+        candidates.append(pinned)
     for candidate_name in candidate_names:
         candidates.extend(
             [
@@ -613,8 +655,13 @@ def resolve_rulespec_checkout(slug: str) -> Path | None:
                 home / ".axiom-oracles" / "roots" / candidate_name,
             ]
         )
-    existing = [path for path in candidates if path.exists()]
-    for path in existing:
+    existing = []
+    for path in candidates:
+        if not path.exists() or not checkout_remote_matches_slug(path, slug):
+            continue
+        existing.append(path)
+        # Once a Git checkout wins, unused convention roots must not affect
+        # the pin or trigger reads from another repository.
         if _git_sha(path):
             return path
     return existing[0] if existing else None
@@ -629,10 +676,23 @@ def canonical_rulespec_slug(name: str) -> str:
     and the affected-map's keys are always the *same string* — otherwise the
     rerun selector would silently fail to match a suite to its repo. Accepts a
     bare dir basename (``rulespec-us``), an rsync alias (``rulespec-uk-official``
-    → ``rulespec-uk``), or an already-canonical ``owner/repo`` slug (passthrough).
-    Non-rulespec names pass through unchanged (they are never affected-map keys).
+    → ``rulespec-uk``), an absorbed repo (``rulespec-us-co`` → ``rulespec-us``,
+    see :data:`ABSORBED_RULESPEC_REPOS`), or an ``owner/repo`` slug (passthrough,
+    except that an absorbed repo under :data:`RULESPEC_OWNER` folds the same
+    way, matching the GitHub owner and repository case-insensitively).
+    Non-rulespec names pass through unchanged (they are never
+    affected-map keys).
+
+    A checkout's git remote is stamped as-is (:func:`rulespec_provenance` never
+    folds it), so a run that really read an archived clone still says so.
     """
+    owner_prefix = f"{RULESPEC_OWNER}/"
+    owner, separator, repo = name.partition("/")
+    if separator and owner.casefold() == RULESPEC_OWNER.casefold():
+        absorbed = ABSORBED_RULESPEC_REPOS.get(repo.casefold())
+        return f"{owner_prefix}{absorbed}" if absorbed else name
     resolved = _RULESPEC_DIR_ALIASES.get(name, name)
+    resolved = ABSORBED_RULESPEC_REPOS.get(resolved, resolved)
     if "/" in resolved or not resolved.startswith("rulespec-"):
         return resolved
     return f"{RULESPEC_OWNER}/{resolved}"

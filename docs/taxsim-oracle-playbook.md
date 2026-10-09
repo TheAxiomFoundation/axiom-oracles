@@ -1,12 +1,17 @@
 # TAXSIM Oracle Playbook
 
 How the NBER TAXSIM-35 oracle is wired into axiom-oracles as a first-class
-oracle, where it is authoritative, and how to extend its coverage. The
+oracle, which side a disagreement is presumed to be on, and how to extend its
+coverage. The
 mechanics of the comparison path (shared input row, state-code conversion,
 law-year support) live in [policyengine-taxsim.md](policyengine-taxsim.md);
 this page is the standing recipe and the standing *judgment*.
 
-Every TAXSIM lane grades **Axiom** against TAXSIM. Oracle-vs-oracle
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
+Every TAXSIM lane compares **Axiom** with TAXSIM. Oracle-vs-oracle
 comparisons (PolicyEngine vs TAXSIM) are diagnostic tooling for triage
 sessions, not published lanes — an agreement rate that does not bear on
 Axiom's correctness does not go on the dashboard.
@@ -59,18 +64,17 @@ every child row a known NBER artifact).
   mapped to `staxbc` the same day; the probe notes live on their mapping
   entries.
 
-## Standing: where TAXSIM is authoritative vs advisory
+## Standing: which side a TAXSIM disagreement is presumed to be on
 
-**Authoritative** (a disagreement is presumptively an Axiom-side or
-PolicyEngine-side issue):
+**Disagreement presumed Axiom- or PolicyEngine-side:**
 
 - Federal core at 2026: OBBBA rate schedule, standard deduction, AGI
   (`v10`), taxable income, tax before credits, childless EITC, FICA/SECA
   (`tfica`).
 - State flat-rate cores (e.g. CO's taxable × 4.40%).
 
-**Advisory** (a disagreement is presumptively a TAXSIM-side vintage or model
-gap; disposition it, do not chase the Axiom encoding):
+**Disagreement presumed TAXSIM-side** (a vintage or model gap; disposition it,
+do not chase the Axiom encoding):
 
 - Any child-credit machinery at law year 2026: the pinned binary's CTC
   collapses to the $500 ODC path; ACTC, CDCC, and EITC-with-children return

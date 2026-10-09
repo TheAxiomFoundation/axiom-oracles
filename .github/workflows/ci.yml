@@ -143,6 +143,13 @@ jobs:
       - name: Dashboard overview bundle is current
         run: uv run scripts/generate_dashboard_overview.py --check
 
+      - name: Published findings ledgers are current (SOUTHMOD licence lint)
+        # The dashboard's euromod-issues.json and southmod-issues.json must equal,
+        # byte for byte, the canonical serialization the script builds from the
+        # packaged axiom_oracles/data/*_issues.json, and every SOUTHMOD ledger
+        # must pass the closed-schema licence lint.
+        run: uv run scripts/publish_issue_ledgers.py --check
+
       - name: Validate conformance universes (drift vs oracle model spine)
         # No-op-clean when the model checkouts are absent (the committed
         # universes stand alone); enforces determinism when they are present.
@@ -165,6 +172,25 @@ jobs:
 
       - name: Unexplained publication gate (per-suite ceilings only fall)
         run: uv run scripts/unexplained_ratchet.py --check
+
+      - name: PolicyEngine attributions carry their Axiom side (grandfathered list only shrinks; open debt only falls)
+        # A mismatch blamed on PolicyEngine must cite the PolicyEngine issue
+        # and declare axiom_companion or axiom_encoding_debt. Monotonicity is
+        # derived from every committed version of the ratchet file (needs
+        # fetch-depth: 0, set above), so it holds on pushes as well as PRs.
+        run: uv run scripts/pe_axiom_standard.py --check
+
+      - name: PolicyEngine-attribution companions and debt resolve in RuleSpec
+        # Every axiom_companion test pointer: the file exists at the pinned
+        # commit, the commit is on the RuleSpec repo's main, the case asserts
+        # each declared legal id (the disputed concept included when it is a
+        # RuleSpec output) and the disputed Axiom value when it is the
+        # disputed case, and it still does on main. Every axiom_encoding_debt
+        # is an open rulespec-* issue. Public repos: raw fetch + REST API,
+        # with retries; a transient failure says "re-run".
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uv run scripts/pe_axiom_standard.py --resolve
 
       - name: Validate conformance burn-down series is up to date
         run: uv run scripts/conformance_burndown.py --check
@@ -244,7 +270,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The attribution test parses configs with Bun.YAML; pin the Bun it was
+      # verified on.
       - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: "1.3.12"
 
       - name: Install dashboard dependencies
         run: bun install --frozen-lockfile
@@ -253,6 +283,7 @@ jobs:
         run: |
           bun scripts/test-case-agreement.mjs
           bun scripts/test-oracle-attribution.mjs
+          bun test ./scripts/test-comparison-counts.mjs ./scripts/test-disclosures.mjs
 
       - name: Build dashboard
         run: bun run build

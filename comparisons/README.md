@@ -265,8 +265,11 @@ The runner rejects missing or different pins. Optional `parameters`: `python`
 ### `snap-qc-compare`
 
 Replays USDA SNAP Quality Control public-use reviews through the Axiom RuleSpec
-SNAP composition and compares the constructed benefit (FSBEN) plus its stage
-intermediates against the QC file's own recomputed values. Unlike the
+SNAP composition and compares the composition's benefit and stage
+intermediates with the file's constructed values (`FSBEN`, `FSGRINC`,
+`FSSTDDED`, `FSSLTDED`, `FSNETINC`), which Mathematica calculates for USDA from
+each edited case record; the maximum allotment is checked against the
+oracle's FY2024 table. Unlike the
 `axiom-encode-*` runners this calls the in-repo bridge
 (`axiom_oracles.bridges.snap_qc_compare.run_snap_qc_comparison`) **in process** —
 the oracle lives in this repo, so there is no encoder CLI to shell out to.
