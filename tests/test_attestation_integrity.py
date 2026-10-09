@@ -21,6 +21,10 @@ def _report():
         "case_count": 2,
         "summary": {"comparison_count": 2, "match_count": 2, "mismatch_count": 0},
         "aggregates": [{"concept": "actual_tax", "comparison_count": 2}],
+        "observed_outputs": [{
+            "case_id": index, "concept": "actual_tax", "engine": "policyengine",
+            "variable": "snap", "value": 0,
+        } for index in range(2)],
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,
             "executed": True,
@@ -103,13 +107,15 @@ def test_stamp_requires_literal_true_execution_claim(execution_claim):
     _assert_uncovered(report)
 
 
-def test_unstamped_report_retains_execution_evidence_from_body():
+def test_unstamped_report_cannot_infer_execution_from_positive_body_counts():
     report = _report()
     report.pop("attestation")
     evidence = attest(report, oracle="policyengine", resolver=OracleTargetResolver())
     assert not evidence.stamped
-    assert evidence.executed
-    assert evidence.eligible
+    assert not evidence.executed
+    assert not evidence.eligible
+    assert not evidence.attested_outputs
+    _assert_uncovered(report)
 
 
 @pytest.mark.parametrize("count", [1, 2])

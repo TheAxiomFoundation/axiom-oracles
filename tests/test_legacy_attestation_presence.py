@@ -38,7 +38,18 @@ def _legacy_report(values_by_case, oracle_on_left=False, *, compact=False, axiom
         cases=[Case(case_id=index, period="2026") for index in range(len(values_by_case))],
         mappings=[mapping], comparisons=Comparator([mapping]).compare(left, right),
     )
-    report.pop("attestation")
+    # Exercise legacy binding deduction with explicit execution evidence. The
+    # declaration and aggregate counts are not returned per-output values.
+    report["attestation"].pop("outputs")
+    report["observed_outputs"] = [
+        {
+            "case_id": index, "engine": "policyengine", "concept": mapping.concept_id,
+            "variable": variable, "value": value,
+        }
+        for index, values in enumerate(values_by_case)
+        for variable, value in values.items()
+        if variable in mapping.target_for_engine("policyengine")
+    ]
     if compact:
         report["cases"] = []
     return report, mapping
@@ -56,7 +67,7 @@ def _score(report, output="capital_gains_tax"):
 @pytest.mark.parametrize("oracle_on_left", [False, True])
 @pytest.mark.parametrize("compact", [False, True])
 @pytest.mark.parametrize("explained", [False, True])
-def test_unstamped_partial_sum_cannot_cover_absent_output(oracle_on_left, compact, explained):
+def test_legacy_partial_sum_cannot_cover_absent_output(oracle_on_left, compact, explained):
     report, mapping = _legacy_report([{"income_tax_main_rates": 0}], oracle_on_left, compact=compact)
     assert report["summary"]["mismatch_count"] == 1
     if explained:
@@ -79,7 +90,7 @@ def test_unstamped_partial_sum_cannot_cover_absent_output(oracle_on_left, compac
     assert board.covered == 0
     assert not board.conformant
     assert rows[0].status == "unbound"
-    assert not evidence.attested_outputs
+    assert evidence.attested_outputs == {"income_tax_main_rates"}
     assert not evidence.outputs_complete
 
 
@@ -91,13 +102,14 @@ def test_legacy_positive_comparison_count_alone_is_not_output_evidence(oracle_on
         for key in ("missing_left_count", "missing_right_count", "missing_both_count"):
             aggregate.pop(key)
     report["mismatches"] = []
+    report["observed_outputs"] = []
     assert not attest(report, oracle=ORACLE).attested_outputs
     assert _score(report)[0].covered == 0
 
 
 @pytest.mark.parametrize("oracle_on_left", [False, True])
 @pytest.mark.parametrize("value", [0, False])
-def test_unstamped_complete_sum_retains_zero_and_false_evidence(oracle_on_left, value):
+def test_legacy_complete_sum_retains_zero_and_false_evidence(oracle_on_left, value):
     report, _ = _legacy_report(
         [{"income_tax_main_rates": 0, "capital_gains_tax": value}], oracle_on_left,
     )
@@ -107,7 +119,7 @@ def test_unstamped_complete_sum_retains_zero_and_false_evidence(oracle_on_left, 
 
 
 @pytest.mark.parametrize("oracle_on_left", [False, True])
-def test_compact_legacy_all_match_summary_proves_complete_sum(oracle_on_left):
+def test_compact_legacy_returned_output_rows_prove_complete_sum(oracle_on_left):
     report, _ = _legacy_report(
         [{"income_tax_main_rates": 0, "capital_gains_tax": 0}],
         oracle_on_left, compact=True,

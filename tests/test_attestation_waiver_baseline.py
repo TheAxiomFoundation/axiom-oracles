@@ -9,7 +9,7 @@ from pathlib import Path
 
 import pytest
 
-from axiom_oracles.conformance.attestation import EXECUTION_ATTESTATION_SCHEMA
+from axiom_oracles.conformance.attestation import EXECUTION_ATTESTATION_SCHEMA, attest
 from axiom_oracles.conformance.loader import OracleIdentity, Universe
 from axiom_oracles.conformance.schema import UniversePolicy
 from axiom_oracles.conformance.scoreboard import score_jurisdiction
@@ -75,25 +75,40 @@ def test_bootstrap_waiver_rows_cannot_be_duplicated(tmp_path):
         parse(path)
 
 
-def test_unchanged_approved_legacy_report_keeps_waived_coverage():
+def _held_waiver(report, waiver=None):
+    waiver = _approved_waiver() if waiver is None else waiver
+    return WaiverIndex([waiver]).waiver_for(
+        waiver.jurisdiction, waiver.policy_id, waiver.suite,
+        report=report, reason=waiver.reason,
+    )
+
+
+def test_unchanged_approved_legacy_waiver_cannot_replace_an_execution_stamp():
+    report = _approved_report()
+    # The artifact pin still accepts this exact approved report; execution
+    # requires a literal stamp independently of the historical output waiver.
+    assert _held_waiver(report) == _approved_waiver()
     board, scores = score_jurisdiction(
-        _approved_universe(), [_approved_report()],
+        _approved_universe(), [report],
         waivers=WaiverIndex([_approved_waiver()]),
     )
-    assert board.covered == 1
-    assert board.conformant
-    assert scores[0].output_attestation == "waived:compared_surface_differs"
+    assert board.covered == 0
+    assert not board.conformant
+    assert scores[0].status == "unattested"
+    assert board.covered_with_waived_output_attestation == 0
 
 
 def test_legacy_waiver_cannot_cover_a_replacement_report():
     report = _approved_report()
+    assert _held_waiver(report) == _approved_waiver()
     report["generated_at"] = "2099-01-01T00:00:00Z"
+    assert _held_waiver(report) is None
     board, scores = score_jurisdiction(
         _approved_universe(), [report], waivers=WaiverIndex([_approved_waiver()])
     )
     assert board.covered == 0
     assert not board.conformant
-    assert scores[0].status == "unbound"
+    assert scores[0].status == "unattested"
 
 
 def test_current_committed_replacement_cannot_inherit_legacy_waiver():
@@ -101,17 +116,25 @@ def test_current_committed_replacement_cannot_inherit_legacy_waiver():
         (REPO_ROOT / "dashboard/public/data/axiom-euromod-be-marital-quotient.json")
         .read_text()
     )
+    assert _held_waiver(report) is None
     board, scores = score_jurisdiction(
         _approved_universe(), [report], waivers=WaiverIndex([_approved_waiver()])
     )
     assert board.covered == 0
     assert not board.conformant
-    assert scores[0].status == "unbound"
+    assert scores[0].status == "unattested"
 
 
 def test_newly_stamped_report_cannot_use_legacy_waiver():
     report = _approved_report()
+    assert _held_waiver(report) == _approved_waiver()
     summary = report["summary"]
+    concept = report["aggregates"][0]["concept"]
+    report["observed_outputs"] = [
+        {"case_id": case["case_id"], "concept": concept, "engine": "euromod",
+         "variable": "tin_s", "value": case["mismatches"][0]["left"]}
+        for case in report["cases"]
+    ]
     report["attestation"] = {
         "schema_version": EXECUTION_ATTESTATION_SCHEMA,
         "executed": True,
@@ -121,13 +144,17 @@ def test_newly_stamped_report_cannot_use_legacy_waiver():
         "engines": report["engines"],
         "outputs": [
             {
-                "concept": report["aggregates"][0]["concept"],
+                "concept": concept,
                 "engine": "euromod",
                 "variable": "tin_s",
                 "comparisons": report["aggregates"][0]["comparison_count"],
             }
         ],
     }
+    assert _held_waiver(report) is None
+    evidence = attest(report, oracle=_approved_universe().oracle)
+    assert evidence.eligible, evidence.problems
+    assert evidence.binds(("tin_s",))
     board, scores = score_jurisdiction(
         _approved_universe(), [report], waivers=WaiverIndex([_approved_waiver()])
     )
@@ -177,6 +204,10 @@ def test_adding_needed_waiver_with_new_stamped_unbound_report_fails_gate(
         },
         "errors": [],
         "aggregates": [{"concept": "other-output", "comparison_count": 1}],
+        "observed_outputs": [{
+            "case_id": "case-1", "concept": "other-output", "engine": "euromod",
+            "variable": "y_s", "value": 0,
+        }],
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,
             "executed": True,
@@ -190,6 +221,7 @@ def test_adding_needed_waiver_with_new_stamped_unbound_report_fails_gate(
             }],
         },
     }
+    assert attest(report, oracle="euromod").eligible
     (data / "report.json").write_text(json.dumps(report))
     path = conf / "attestation_waivers.yaml"
     monkeypatch.setattr(gate, "CONFORMANCE_DIR", conf)
@@ -212,6 +244,7 @@ def test_direct_waiver_index_cannot_approve_new_debt():
     )
     universe = replace(_approved_universe(), policies=[policy])
     waiver = replace(_approved_waiver(), policy_id="be:new", suite="new-suite")
+    assert _held_waiver(report, waiver) is None
     board, _ = score_jurisdiction(universe, [report], waivers=WaiverIndex([waiver]))
     assert board.covered == 0
     assert not board.conformant

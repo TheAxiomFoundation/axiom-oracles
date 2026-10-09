@@ -7,8 +7,11 @@ import pytest
 from hypothesis import example, given, settings
 from hypothesis import strategies as st
 
-from axiom_oracles.conformance.attestation import OracleTargetResolver, attest
+from axiom_oracles.conformance.attestation import (
+    EXECUTION_ATTESTATION_SCHEMA, OracleTargetResolver, attest,
+)
 from axiom_oracles.conformance.loader import parse as parse_universe
+from axiom_oracles.conformance.scoreboard import score_jurisdiction
 
 
 ROOT = Path(__file__).parents[1]
@@ -57,30 +60,43 @@ def _panel_report(units=2):
             "axiom": {"mfn": 0.1},
         }],
         "provenance": {"generated_by": "scripts/run_comparison.py::us-tariff-panel"},
+        "attestation": {
+            "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+            "executed": True,
+            "case_count": units,
+            "comparison_count": units,
+            "error_count": 0,
+        },
     }
 
 
-def test_committed_dk_role_pair_ignores_engine_version_metadata():
+def test_committed_dk_role_pair_keeps_engine_identity_but_requires_execution_stamp():
     report = _committed_report("axiom-euromod-dk-child-youth-benefit.json")
     universe = parse_universe(ROOT / "conformance/dk.yaml")
     evidence = attest(report, oracle=universe.oracle)
 
-    assert evidence.eligible, evidence.problems
+    assert "attestation" not in report
+    assert not evidence.eligible
+    assert not evidence.executed
     assert evidence.engines == ("axiom", "euromod")
-    assert evidence.attested_outputs == frozenset({"bfachnm_s"})
-    assert evidence.outputs_complete
+    assert not evidence.attested_outputs
+    assert not evidence.outputs_complete
+    assert score_jurisdiction(universe, [report])[0].covered == 0
 
 
-def test_committed_yale_panel_attests_actual_statutory_columns():
+def test_committed_yale_panel_requires_execution_stamp_before_attesting_columns():
     report = _committed_report("axiom-yale-us-tariff-panel.json")
     universe = parse_universe(ROOT / "conformance/us-tariff-yale.yaml")
     evidence = attest(report, oracle=universe.oracle, resolver=OracleTargetResolver())
 
-    assert evidence.eligible, evidence.problems
+    assert "attestation" not in report
+    assert not evidence.eligible
+    assert not evidence.executed
     assert evidence.engines == ("axiom", "yale_statutory")
-    assert evidence.attested_outputs == YALE_COLUMNS
-    assert evidence.outputs_complete
-    assert all(evidence.binds(policy.output_vars) for policy in universe.policies if policy.in_scope)
+    assert not evidence.attested_outputs
+    assert not evidence.outputs_complete
+    assert all(not evidence.binds(policy.output_vars) for policy in universe.policies if policy.in_scope)
+    assert score_jurisdiction(universe, [report])[0].covered == 0
 
 
 def test_yale_direct_generator_provenance_uses_the_same_slot_bindings():
@@ -90,6 +106,22 @@ def test_yale_direct_generator_provenance_uses_the_same_slot_bindings():
 
     assert evidence.eligible
     assert evidence.attested_outputs == frozenset({"statutory_base_rate"})
+    assert not evidence.outputs_complete
+
+
+def test_yale_summed_slot_does_not_invent_its_individual_returned_columns():
+    report = _panel_report()
+    report["summary"]["slots"] = {"ieepa": {"matches": 2, "mismatches": 0}}
+    report["scope"]["authority_slots"] = ["ieepa"]
+    report["scope"]["reference"]["columns"] = [
+        "statutory_rate_ieepa_recip", "statutory_rate_ieepa_fent",
+    ]
+    report["cases"][0]["expected"] = {"ieepa": 0.1}
+    report["cases"][0]["axiom"] = {"ieepa": 0.1}
+    evidence = attest(report, oracle="yale-tariff", resolver=OracleTargetResolver())
+
+    assert evidence.eligible
+    assert not evidence.attested_outputs
     assert not evidence.outputs_complete
 
 
@@ -158,6 +190,7 @@ def test_engine_versions_neither_remove_nor_supply_a_comparison_party(
             "right": "euromod" if oracle_present else "taxsim",
             "versions": versions,
         },
+        "attestation": {"schema_version": EXECUTION_ATTESTATION_SCHEMA, "executed": True},
     }
     evidence = attest(report, oracle="euromod", resolver=OracleTargetResolver())
 

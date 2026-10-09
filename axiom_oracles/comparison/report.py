@@ -13,6 +13,7 @@ from .comparator import (
 )
 from .mappings import ProgramMapping
 from ..conformance.attestation import EXECUTION_ATTESTATION_SCHEMA
+from ..conformance.observations import observed_output_value
 from ..core.case import Case, Concepts
 from ..core.geography import GeographyScope
 from ..core.results import Value
@@ -117,6 +118,7 @@ class ComparisonReportAccumulator:
         self._mismatch_weight = 0.0
         self._aggregate_buckets: dict[str, dict] = defaultdict(_aggregate_bucket)
         self._output_counts: Counter[tuple[str, str, str]] = Counter()
+        self._output_rows: list[dict] = []
         self._mismatch_rows: list[dict] = []
         self._error_rows: list[dict] = []
         self._left_engine: str | None = None
@@ -202,12 +204,22 @@ class ComparisonReportAccumulator:
                     comparison,
                     weight,
                 )
-                for engine, variables in (
-                    (item.left_engine, comparison.left_variables),
-                    (item.right_engine, comparison.right_variables),
+                for engine, values in (
+                    (item.left_engine, comparison.left_output_values),
+                    (item.right_engine, comparison.right_output_values),
                 ):
-                    for variable in variables:
-                        self._output_counts[(comparison.variable, engine, variable)] += 1
+                    rows = [dict(case_id=item.household_id, engine=engine,
+                                 concept=comparison.variable, variable=variable, value=value)
+                            for variable, value in values]
+                    self._output_rows.extend(rows)
+                    evidence = {"attestation": {"executed": True}, "observed_outputs": rows,
+                                "errors": list(item.left_errors) + list(item.right_errors)}
+                    for row in rows:
+                        if observed_output_value(
+                            evidence, case_id=item.household_id, engine=engine,
+                            concept=comparison.variable, output=row["variable"], value=row["value"],
+                        ):
+                            self._output_counts[(comparison.variable, engine, row["variable"])] += 1
 
         self._mismatch_rows.extend(
             _mismatch_rows(comparisons, cases_by_id, self._mappings_by_id)
@@ -257,6 +269,14 @@ class ComparisonReportAccumulator:
                 self._aggregate_buckets,
                 self.mappings,
             ),
+            "output_bindings": {
+                mapping.concept_id: {
+                    engine: mapping.target_for_engine(engine)
+                    for engine in (self._left_engine, self._right_engine) if engine
+                }
+                for mapping in self.mappings
+            },
+            "observed_outputs": list(self._output_rows),
             "attestation": self._attestation(),
             "mismatches": list(self._mismatch_rows),
             "errors": list(self._error_rows),

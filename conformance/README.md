@@ -60,26 +60,29 @@ Every candidate report is now attested against the universe's declared oracle
    oracle identity (`provenance.oracle`) that does not contradict the universe's
    *model* identity — a `UK_2026` run cannot attest a `BE_2025` universe, and
    policyengine-uk evidence cannot attest a policyengine-us claim, though both
-   write the same engine name; and, when the runner stamped an attestation,
-   `executed: true` with counts that agree with the report body — a stamp cannot
+   write the same engine name; and a runner execution stamp with literal
+   `executed: true` and counts that agree with the report body — a stamp cannot
    claim more than the artifact shows. A report failing any of these covers
    nothing: the policy scores **uncovered**, with the reason on the drill-down
    row, rather than covered-with-zero-unexplained.
 2. **Output binding.** At least one of the universe row's registered
-   `output_vars` must carry positive comparison evidence in the covering report.
+   `output_vars` must carry a returned comparison value in the covering report.
+   The shared `observed_output_value` predicate requires a finite, non-null
+   numeric value or the output's registered declared type, with no missing,
+   error or skipped evidence contradicting that case and output. Zero and
+   `False` remain observations.
    A suite that ran cleanly against some other surface does not attest the
    policy it is registered under.
 
-Evidence for layer 2 comes from a runner-stamped
-`report["attestation"].outputs` (which names, per compared concept, the engine
-variable each side was read from), from the grid `engines` shape that records
-the compared variable directly, or from the concept→engine-target bindings the
-comparison machinery itself uses (`config/concept_mappings.yaml` and the
-PolicyEngine oracle registry) applied to the report's positive aggregates.
-FIIT uses its producer's `SURFACE_OUTPUTS` bindings and preserves `output_summary`;
-its targets differ from the generic Comparator mappings. Legacy FIIT surfaces
-bind only when counts show the producer's complete output loop or a mismatch
-explicitly names the output. Its synthetic liability parent adds no output binding.
+Runner stamps, grid engine-to-variable declarations, concept mappings and FIIT's
+`SURFACE_OUTPUTS` identify candidate output names. Every candidate must pass the
+same value predicate. Counts, declarations, variable lists, metadata and schema
+fields cannot prove observation. Native Comparator and FIIT reports retain
+per-case, per-output returned values in `observed_outputs`; scalar case values
+can supply evidence when their binding is unambiguous. Summed concept or Yale
+slot values do not prove individual component outputs. FIIT retains its raw
+returned oracle values separately from arithmetic projections, so converting a
+missing value to zero cannot create coverage.
 
 `attestation_waivers.yaml` names the reports that predate stamping and cannot
 show that binding. It is **hand-authored and shrink-only**: a new unbound row
@@ -96,9 +99,9 @@ only the first is a statement about what a run did:
 | `compared_surface_differs` | The report records every surface it compared and none is a registered output — the suite ran against a different surface (e.g. a state grid comparing PolicyEngine's `*_before_refundable_credits` where the row registers the final `*_income_tax`). |
 | `oracle_variable_not_recorded` | The artifact does not record which oracle variable each compared concept was bound to, so the binding cannot be verified either way. Regenerating the report with a stamped attestation resolves it. |
 
-Waived rows stay covered but are **published**: the scoreboard carries
-`covered_with_waived_output_attestation` per jurisdiction, so a conformant badge
-says how many of its bindings rest on a waiver rather than on evidence.
+Migration waivers cannot supply the required literal execution stamp or a
+returned value. The published `covered_with_waived_output_attestation` field
+remains visible; the current waiver file has no entries.
 
 ### Oracle release drift — measured, not blocking
 
@@ -116,14 +119,14 @@ report's release. The claim a badge makes is "Axiom conforms to *this* oracle at
 release (or re-pinning the universe to what the evidence actually covers).
 Making drift blocking is that scope decision, not a code change.
 
-The corrected FIIT bindings leave `capital_gains_tax`, final `eitc`, final
-`income_tax`, and `income_tax_before_refundable_credits` uncovered pending reports
-that record those outputs. CTC binds the producer's actual `ctc` target, so its
-former substantive waiver is removed. The legacy FIIT parent contains comparisons
-absent from its recorded component aggregates; its pre-refundable-tax waiver
-therefore cannot retain a reason that claims complete recording. Unsupported
-FIIT waivers are removed, and the coverage floor counts only supported claims;
-the ratchet's regression checks remain enforced.
+All six published jurisdictions currently have zero covered policies: their
+committed legacy reports lack literal execution stamps. BE falls from 22 to 0
+and US-PE from 28 to 0 under the stricter observation rule. The policies remain
+in scope. Coverage can return when executed comparisons produce stamps and
+valid returned values for the registered outputs; neither summary counts nor
+migration waivers restore it. Coverage floors are reset to zero while all
+residual ceilings and scope denominators remain pinned. Max's d1097
+confirmation of the larger public coverage drop remains pending.
 
 ## The pieces
 

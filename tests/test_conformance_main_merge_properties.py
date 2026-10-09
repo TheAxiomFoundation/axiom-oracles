@@ -53,6 +53,10 @@ def _report(*, executed: bool = True, bound: bool = True, count: int = 1) -> dic
             "error_count": 0,
         },
         "aggregates": [{"concept": "tx:output", "comparison_count": count}],
+        "observed_outputs": [{
+            "case_id": index, "concept": "tx:output", "engine": "euromod",
+            "variable": variable, "value": 0,
+        } for index in range(count)],
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,
             "executed": executed,

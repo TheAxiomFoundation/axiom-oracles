@@ -4903,7 +4903,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     from collections import Counter, defaultdict
 
     from axiom_oracles.conformance.attestation import EXECUTION_ATTESTATION_SCHEMA
-    from axiom_oracles.conformance.fiit import fiit_output_rows
+    from axiom_oracles.conformance.fiit import FIIT_SURFACE_CONCEPT_IDS, fiit_output_rows
+    from axiom_oracles.conformance.observations import valid_case_id
 
     identity = _normalize_dataset_identity(raw)
     dataset_label = _dataset_label_from_identity(identity, fallback="enhanced_cps")
@@ -5077,19 +5078,34 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "cases": cases,
         "concepts": concepts,
         "engines": {"left": "axiom", "right": "policyengine"},
-        "errors": [],
+        "errors": raw.get("errors") or [],
         "locales": [],
         "mismatches": flat_mismatches,
         # Preserve the producer's output-level evidence; surface aggregates
         # cannot distinguish a subset from the full configured output list.
         "output_summary": raw.get("output_summary", []),
+        # Values are retained separately from numerical projection: native
+        # FIIT's money(None/NaN) == 0 must never become observation evidence.
+        "observed_outputs": [
+            {
+                **row,
+                "case_id": (
+                    f"ecps-{row['case_id']}"
+                    if valid_case_id(row.get("case_id"))
+                    else row.get("case_id")
+                ),
+                "concept": FIIT_SURFACE_CONCEPT_IDS.get(row.get("surface")),
+            }
+            for row in raw.get("observed_outputs") or []
+            if isinstance(row, dict)
+        ],
         "population": "enhanced-cps",
         "schema_version": "axiom.comparison_report.v2",
         "scope": {"geoid": "US", "type": "country"},
         "suite": suite,
         "summary": {
             "comparison_count": parent_compared,
-            "error_count": 0,
+            "error_count": len(raw.get("errors") or []),
             "errors_by_engine": {},
             "match_count": parent_matched,
             "mismatch_count": parent_mismatches,
@@ -5106,17 +5122,29 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             },
         },
     }
-    output_rows, outputs_complete = fiit_output_rows(report["output_summary"])
+    for key in ("error", "skipped", "skip_reason", "executed"):
+        if key in raw:
+            report[key] = raw[key]
     report["attestation"] = {
         "schema_version": EXECUTION_ATTESTATION_SCHEMA,
-        "executed": report["case_count"] > 0 and parent_compared > 0,
+        "executed": (
+            report["case_count"] > 0 and parent_compared > 0
+            and raw.get("executed", True) is True
+            and not any(raw.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
+        ),
         "case_count": report["case_count"],
         "comparison_count": parent_compared,
-        "error_count": 0,
+        "error_count": report["summary"]["error_count"],
         "engines": dict(report["engines"]),
-        "outputs": output_rows,
-        "outputs_complete": outputs_complete,
+        **{key: raw[key] for key in ("error", "skipped", "skip_reason") if key in raw},
     }
+    output_rows, outputs_complete = fiit_output_rows(
+        report["output_summary"], report=report,
+    )
+    report["attestation"].update(
+        outputs=output_rows,
+        outputs_complete=outputs_complete,
+    )
     # Thread encode's dataset identity onto the report top-level so the
     # checked-in FIIT report records which pinned Populace artifact produced
     # it — and so it survives even when `cases` is slimmed to empty on a run

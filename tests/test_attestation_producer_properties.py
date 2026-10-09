@@ -72,6 +72,12 @@ def test_fiit_stamp_targets_equal_its_positive_producer_output_subset(counts):
             "mismatch_count": 0,
             "mismatches": [],
             "output_summary": output_summary,
+            "observed_outputs": [
+                {"case_id": index, "surface": surface, "output": output,
+                 "engine": "policyengine", "variable": variable, "value": 0}
+                for (surface, output, variable, _), count in zip(FIIT_OUTPUTS, counts)
+                for index in range(count)
+            ],
         },
         {},
         suite="fiit-ecps",

@@ -17,7 +17,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
@@ -565,9 +565,13 @@ class TaxComparisonReport:
     output_summary: list[dict[str, Any]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
+    observed_outputs: list[dict[str, Any]] = field(default_factory=list)
+    errors: list[dict[str, Any]] = field(default_factory=list)
 
     def to_json(self) -> dict[str, Any]:
-        return {
+        from axiom_oracles.conformance.observations import json_output_values
+
+        return json_output_values({
             "compared_tax_units": self.compared_tax_units,
             "compared_persons": self.compared_persons,
             "compared_values": self.compared_values,
@@ -576,7 +580,9 @@ class TaxComparisonReport:
             "output_summary": self.output_summary,
             "projection_notes": self.projection_notes,
             "dataset_identity": self.dataset_identity,
-        }
+            "observed_outputs": self.observed_outputs,
+            "errors": self.errors,
+        })
 
 
 @dataclass(frozen=True)
@@ -2905,6 +2911,8 @@ def compare_outputs(
     relative_tolerance: float,
 ) -> TaxComparisonReport:
     mismatches: list[TaxComparisonRow] = []
+    observed_outputs: list[dict[str, Any]] = []
+    errors: list[dict[str, Any]] = []
     summary: dict[str, dict[str, Any]] = {
         f"{surface}:{name}": {
             "surface": surface,
@@ -2939,10 +2947,36 @@ def compare_outputs(
                 else tax_entity_id(int(source_ids[index]))
             )
             outputs = result.get("outputs") or {}
+            result_errors = result.get("errors") or result.get("error")
+            if result_errors:
+                errors.append({
+                    "engine": "axiom", "case_id": entity_id,
+                    "errors": result_errors,
+                })
             pe_row = source_rows.iloc[index]
             for name, spec in output_specs.items():
                 axiom_value = output_number(outputs.get(spec["axiom"]))
-                pe_value = money(pe_row[spec["pe"]])
+                returned_pe_value = pe_row[spec["pe"]]
+                pe_value = money(returned_pe_value)
+                # The money projection is used for comparison arithmetic, but
+                # it may turn a missing oracle result into zero. Keep the
+                # returned value itself as the output-attestation evidence.
+                if np is not None and isinstance(returned_pe_value, np.generic):
+                    returned_pe_value = returned_pe_value.item()
+                observed_outputs.append({
+                    "case_id": entity_id,
+                    "surface": surface,
+                    "output": name,
+                    "engine": "policyengine",
+                    "variable": spec["pe"],
+                    "value": returned_pe_value,
+                    "counterpart_value": axiom_value,
+                    **{
+                        key: result[key]
+                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
+                        if key in result
+                    },
+                })
                 diff = axiom_value - pe_value
                 abs_diff = abs(diff)
                 compared_values += 1
@@ -2994,6 +3028,8 @@ def compare_outputs(
         compared_values=compared_values,
         mismatches=mismatches,
         output_summary=list(summary.values()),
+        observed_outputs=observed_outputs,
+        errors=errors,
         dataset_identity=pe_data.get("dataset_identity") or None,
         projection_notes=[
             "Current CTC projection uses Populace raw tax-unit membership, age, "

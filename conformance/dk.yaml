@@ -94,10 +94,13 @@ policies:
     internal_only_vars:
       - i_thld_base
       - i_thld_start
-    suite: dk-child-youth-benefit
-    note: The suite covers the single-recipient/single-parent domain. Couple/spousal taper cases stay
+    suite: null
+    note: 'The suite covers the single-recipient/single-parent domain. Couple/spousal taper cases stay
       outside its graded surface because DK_2025 retains the pre-2022 spousal income test; see euromod-dk-2025-bfachnm-pre2022-spousal-taper.
-      The schema cannot represent a partial-domain exclusion, so this note records that carve-out.
+      The schema cannot represent a partial-domain exclusion, so this note records that carve-out. Coverage
+      retracted under d1081: dk-child-youth-benefit has no literal execution attestation with executed:
+      true. Restore its registration after a stamped comparison records finite, non-null returned values
+      for a registered output (bfachnm_s), without contradictory missing/error/skipped evidence.'
   - id: dk:bfachxp_dk
     oracle_policy_name: bfachxp_dk
     oracle_policy_type: ben

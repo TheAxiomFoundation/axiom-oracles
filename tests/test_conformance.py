@@ -349,6 +349,7 @@ def test_committed_universe_parses_and_validates(jurisdiction):
 
 
 _DK_UNCOVERED = {
+    "bfachnm_dk",
     "txc_dk",
     "tscpi_dk",
     "tyrui_dk",
@@ -435,7 +436,7 @@ def test_dk_scope_decisions_preserve_the_honest_uncovered_set():
 def test_dk_bfachnm_spousal_carveout_stays_documented():
     bfachnm = parse_universe(CONFORMANCE_DIR / "dk.yaml").by_name()["bfachnm_dk"]
     assert bfachnm.in_scope is True
-    assert bfachnm.suite == "dk-child-youth-benefit"
+    assert bfachnm.suite is None
     assert bfachnm.note is not None
     assert "couple/spousal" in bfachnm.note.lower()
     assert "euromod-dk-2025-bfachnm-pre2022-spousal-taper" in bfachnm.note
@@ -593,7 +594,9 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
         p.suite for p in universe.in_scope() if p.suite is not None
     }
     assert covered_suites <= live_pe_suites
-    # The task's named covered additions are all present and suite-bound.
+    assert covered_suites == set()
+    # The registered final outputs stay in scope while their unstamped
+    # artifacts await an executed comparison with returned values.
     by_name = universe.by_name()
     for program in (
         "income_tax",
@@ -606,24 +609,15 @@ def test_uk_pe_covered_programs_name_a_live_pe_suite():
         "carers_allowance",
         "carer_support_payment",
     ):
-        assert by_name[program].suite in {
-            "uk-tax-benefits-efrs",
-            "uk-universal-credit-efrs",
-        }, program
-    # Council Tax Reduction is covered by its case-grid suite.
-    assert by_name["council_tax_reduction"].suite == "uk-council-tax-reduction"
-    # Winter Fuel Payment is covered by its case-grid suite.
-    assert (
-        by_name["winter_fuel_allowance"].suite == "uk-winter-fuel-payment-pe"
-    )
-    # Attendance Allowance is covered by its rate-only case-grid suite.
-    assert (
-        by_name["attendance_allowance"].suite == "uk-attendance-allowance-pe"
-    )
-    # Tax-Free Childcare is covered by its below-cap top-up case-grid suite.
-    assert (
-        by_name["tax_free_childcare"].suite == "uk-tax-free-childcare-pe"
-    )
+        assert by_name[program].suite is None, program
+        assert by_name[program].in_scope, program
+        assert "attest" in by_name[program].note.lower(), program
+    for program in (
+        "council_tax_reduction", "winter_fuel_allowance", "attendance_allowance",
+        "tax_free_childcare",
+    ):
+        assert by_name[program].suite is None, program
+        assert by_name[program].in_scope, program
 
 
 # ---------------------------------------------------------------------------
@@ -732,10 +726,14 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     }
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
     assert covered <= live_pe_suites
+    assert covered == set()
     by_name = universe.by_name()
-    # The FIIT producer records CTC and payroll output bindings.
+    # The committed FIIT artifact has output names and counts but no execution
+    # stamp or returned values, so CTC and payroll remain in scope uncovered.
     for program in ("ctc", "employee_social_security_tax"):
-        assert by_name[program].suite == "fiit-ecps", program
+        assert by_name[program].suite is None, program
+        assert by_name[program].in_scope, program
+        assert "attest" in by_name[program].note.lower(), program
     # Its recorded components do not establish these final policy outputs;
     # suite-name registration must not reinstate their unsupported coverage.
     for program in ("capital_gains_tax", "eitc", "income_tax", "income_tax_before_refundable_credits"):
@@ -748,30 +746,19 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     assert by_name["snap"].in_scope
     assert "snap_normal_allotment" in by_name["snap"].note
     assert "is_snap_eligible" in by_name["snap"].note
-    assert by_name["aca_ptc"].suite == "us-aca-ptc-grid"
-    assert (
-        by_name["additional_medicare_tax"].suite
-        == "us-additional-medicare-grid"
-    )
-    assert (
-        by_name["elderly_disabled_credit"].suite
-        == "us-elderly-disabled-grid"
-    )
-    assert by_name["lifetime_learning_credit"].suite == "us-llc-grid"
-    assert by_name["net_investment_income_tax"].suite == "us-niit-grid"
-    assert (
-        by_name["qualified_business_income_deduction"].suite
-        == "us-qbid-grid"
-    )
-    assert (
-        by_name["itemized_taxable_income_deductions"].suite
-        == "us-itemized-taxable-income-deductions-grid"
-    )
+    for program in (
+        "aca_ptc", "additional_medicare_tax", "elderly_disabled_credit",
+        "lifetime_learning_credit", "net_investment_income_tax",
+        "qualified_business_income_deduction", "itemized_taxable_income_deductions",
+    ):
+        assert by_name[program].suite is None, program
+        assert by_name[program].in_scope, program
+        assert "attest" in by_name[program].note.lower(), program
     assert (
         "all five filing statuses"
         in by_name["itemized_taxable_income_deductions"].note
     )
-    assert by_name["salt_deduction"].suite == "us-salt-deduction-grid"
+    assert by_name["salt_deduction"].suite is None
     assert "all five filing statuses" in by_name["salt_deduction"].note
     chunk_one_suites = {
         "us-salt-deduction-grid",
@@ -781,12 +768,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         row.oracle_policy_name: row.suite
         for row in universe.in_scope()
         if row.suite in chunk_one_suites
-    } == {
-        "salt_deduction": "us-salt-deduction-grid",
-        "itemized_taxable_income_deductions": (
-            "us-itemized-taxable-income-deductions-grid"
-        ),
-    }
+    } == {}
     assert {
         name: by_name[name].suite
         for name in (
@@ -815,7 +797,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         REPO_ROOT / "dashboard/public/data/dispositions/us-savers-grid.json"
     ).read_text()
     assert "policyengine-us/issues/9151" in savers_dispositions
-    assert by_name["self_employment_tax"].suite == "us-seca-grid"
+    assert by_name["self_employment_tax"].suite is None
     # State income-tax coverage counts only a comparison that proves the final
     # public variable. These blocked grids exercise useful narrower components,
     # but none proves the corresponding final liability.
@@ -891,8 +873,8 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     assert by_name["ks_tanf"].suite is None
     assert by_name["ks_tanf"].in_scope
     assert "ks_tanf_maximum_benefit" in by_name["ks_tanf"].note
-    # Per-state TANF suites bind their state's variable (incl. renamed ones).
-    assert by_name["mn_mfip"].suite == "mn-tanf-ecps"
+    assert by_name["mn_mfip"].suite is None
+    assert by_name["mn_mfip"].in_scope
 
 
 def test_us_pe_tier3_scope_decisions_are_evidence_backed():
@@ -1090,7 +1072,7 @@ def test_us_tariff_yale_scope_decisions():
     excluded = universe.excluded()
     assert len(in_scope) == 10
     for row in in_scope:
-        assert row.suite == "us-tariff-panel", row.oracle_policy_name
+        assert row.suite is None, row.oracle_policy_name
         assert row.note, row.oracle_policy_name
         # Every in-scope surface is a statutory_* column (pre-exemption,
         # pre-stacking) — the comparison boundary the suite binds.
@@ -1389,6 +1371,12 @@ def _report(
         ],
         "mismatches": [],
         "errors": list(errors or []),
+        "observed_outputs": [
+            {"case_id": f"case-{index}", "concept": f"tx:{name}",
+             "engine": oracle_engine, "variable": name, "value": 0}
+            for name in (outputs or ())
+            for index in range(max(comparisons, 0))
+        ],
         "attestation": attestation,
     }
 
@@ -1416,7 +1404,7 @@ def test_scoreboard_not_conformant_when_a_policy_is_uncovered():
     assert any("not covered" in r for r in board.blocking_reasons)
 
 
-def test_committed_dk_scoreboard_exposes_all_21_uncovered_policies():
+def test_committed_dk_scoreboard_exposes_all_22_uncovered_policies():
     scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
     dk = next(
         row
@@ -1424,8 +1412,8 @@ def test_committed_dk_scoreboard_exposes_all_21_uncovered_policies():
         if row["jurisdiction"] == "dk"
     )
     assert dk["policies_in_scope"] == 22
-    assert dk["covered"] == 1
-    assert dk["covered_pct"] == 4.5455
+    assert dk["covered"] == 0
+    assert dk["covered_pct"] == 0
     assert dk["excluded"] == 22
     assert set(dk["uncovered_policies"]) == _DK_UNCOVERED
     assert dk["invalid_exclusions"] == []
@@ -1433,7 +1421,7 @@ def test_committed_dk_scoreboard_exposes_all_21_uncovered_policies():
 
     detail = json.loads((CONFORMANCE_DIR / "detail" / "dk.json").read_text())
     by_name = {row["oracle_policy_name"]: row for row in detail["policies"]}
-    assert by_name["bfachnm_dk"]["status"] == "conformant"
+    assert by_name["bfachnm_dk"]["status"] == "uncovered"
     assert {
         name for name, row in by_name.items() if row["status"] == "uncovered"
     } == _DK_UNCOVERED
@@ -1730,32 +1718,39 @@ def test_scoreboard_surfaces_temporal_debt_from_covered_reports():
     assert board.conformant is True
 
 
-def test_committed_us_tariff_yale_scoreboard_pins_witnessed_coverage():
-    """The live us-tariff-yale verdict: CONFORMANT — 10 of 10 in-scope
-    policies witnessed-covered, unexplained 0, axiom-attributed 0. The two
-    authorities the reference never exercises with a positive rate (301_cs,
-    other) are excluded-with-reason under the technical class with explicit
-    re-inclusion tripwires (universe test above), and the temporal-debt
-    account rides the summary (sol stack review F3/F4)."""
+def test_committed_us_tariff_yale_scoreboard_keeps_unstamped_outputs_uncovered():
+    """All ten final outputs need an execution stamp; diagnostic evidence stays.
+
+    The reference's four technical exclusions and its existing temporal-debt
+    and disposition records remain available independently of coverage.
+    """
     scoreboard = json.loads((CONFORMANCE_DIR / "scoreboard.json").read_text())
     entry = {j["jurisdiction"]: j for j in scoreboard["jurisdictions"]}[
         "us-tariff-yale"
     ]
     assert entry["policies_in_scope"] == 10
-    assert entry["covered"] == 10
-    assert entry["covered_pct"] == 100.0
+    assert entry["covered"] == 0
+    assert entry["covered_pct"] == 0
     assert entry["excluded"] == 4
     assert entry["excluded_by_reason"] == {"technical": 4}
-    assert entry["conformant"] is True
-    assert entry["uncovered_policies"] == []
-    assert entry["unwitnessed_policies"] == []
-    assert entry["temporal_debt"] == {
-        "pre_domain_intervals": 48000,
-        "straddle_clipped_intervals": 1200,
-        "addressable_records": 205,
+    assert entry["conformant"] is False
+    universe = parse_universe(CONFORMANCE_DIR / "us-tariff-yale.yaml")
+    assert set(entry["uncovered_policies"]) == {
+        policy.oracle_policy_name for policy in universe.in_scope()
     }
-    assert entry["oracle_attributed"] == 8283
+    assert entry["unwitnessed_policies"] == []
+    assert entry["temporal_debt"] is None
+    assert entry["oracle_attributed"] == 0
     assert entry["axiom_attributed_open"] == 0
+    report = json.loads(
+        (REPO_ROOT / "dashboard/public/data/axiom-yale-us-tariff-panel.json").read_text()
+    )
+    debt = report["scope"]["temporal_debt"]
+    assert debt["pre_domain_intervals"] == 48000
+    assert debt["straddle_clipped_intervals"] == 1200
+    assert len(debt["records"]) == 205
+    assert report["summary"]["dispositioned"]["counts"]["upstream_engine_gap"] == 8283
+    assert report["summary"]["dispositioned"]["counts"]["axiom_encoding_gap"] == 0
 
 
 def test_committed_be_scoreboard_counts_dataset_lacks_input_exclusion():
@@ -2039,7 +2034,6 @@ from axiom_oracles.conformance.compositions import (  # noqa: E402
     SuiteComposition,
     build_compositions_document,
     composition_for_suite,
-    compositions_path,
     load_composition,
     parse as parse_compositions,
     repo_relative_program_path,
@@ -2246,8 +2240,8 @@ def test_composition_row_round_trip_preserves_structural_targets():
 def test_worker_ssc_composition_spans_two_modules():
     """be-worker-ssc is the one multi-module composition: its three outputs span
     employee_contributions and work_bonus."""
-    composition = load_composition("be-worker-ssc")
-    assert composition is not None
+    assert load_composition("be-worker-ssc") is None
+    composition = composition_for_suite("be-worker-ssc")
     assert composition.imports == (
         "be:regulations/social_security/workers/employee_contributions",
         "be:regulations/social_security/workers/work_bonus",
@@ -2290,7 +2284,7 @@ def test_multi_module_composition_has_no_single_program_path(tmp_path):
     """A 2-module composition offers no single --axiom-program file; callers use
     the import-set the harness composes."""
     workspace = tmp_path
-    composition = load_composition("be-worker-ssc")
+    composition = composition_for_suite("be-worker-ssc")
     resolved = composition.resolve(workspace)
     assert resolved.single_program_path is None
     assert len(resolved.program_paths) == 2
@@ -2313,11 +2307,19 @@ def test_compositions_check_passes_on_committed():
     assert _run_compositions_check(gen) == 0
 
 
-def test_compositions_check_fails_on_mutated_commit():
+def test_compositions_check_fails_on_mutated_commit(tmp_path, monkeypatch):
     """NEGATIVE: mutating the committed record must fail --check (the gate bites)."""
     gen = _load_script("generate_conformance_compositions.py")
-    path = compositions_path("be")
-    original = path.read_text()
+    path = tmp_path / "be.yaml"
+    document = replace(
+        build_compositions_document("be"),
+        compositions=[composition_for_suite("be-worker-ssc")],
+    )
+    original = serialize_compositions(document)
+    path.write_text(original)
+    monkeypatch.setattr(gen, "compositions_path", lambda _jurisdiction: path)
+    monkeypatch.setattr(gen, "build_compositions_document", lambda _jurisdiction: document)
+    assert _run_compositions_check(gen) == 0
     # Flip a query entity — a lie about what the harness runs.
     tampered = original.replace("entity: Person", "entity: Household", 1)
     assert tampered != original
@@ -2534,20 +2536,20 @@ def _unstamped(report: dict) -> dict:
     return report
 
 
-def test_unstamped_report_binds_through_the_committed_concept_targets():
-    """An old report's aggregates bind via the mapping the RUN itself used."""
+def test_unstamped_report_cannot_bind_through_the_committed_concept_targets():
+    """Mappings cannot replace the execution stamp even with returned values."""
     resolver = OracleTargetResolver({"tx:concept": {"euromod": frozenset({"x_s"})}})
     report = _unstamped(_report("suite-a", comparisons=5, matches=5))
     report["aggregates"] = [{"concept": "tx:concept", "comparison_count": 5}]
     board, scores = score_jurisdiction(
         _tx_universe(), [report], resolver=resolver
     )
-    assert board.covered == 1
-    assert scores[0].output_attestation == "attested"
+    assert board.covered == 0
+    assert scores[0].status == "unattested"
 
 
-def test_unstamped_report_binds_through_the_engine_variable_map():
-    """The grid ``engines`` shape names the compared variable directly."""
+def test_unstamped_report_cannot_bind_through_the_engine_variable_map():
+    """Naming the grid's compared variable does not stamp executed comparison."""
     report = _unstamped(
         _report(
             "suite-a",
@@ -2559,8 +2561,9 @@ def test_unstamped_report_binds_through_the_engine_variable_map():
     board, scores = score_jurisdiction(
         _tx_universe(), [report], resolver=OracleTargetResolver()
     )
-    assert board.covered == 1
-    assert scores[0].attested_outputs == ["x_s"]
+    assert board.covered == 0
+    assert scores[0].status == "unattested"
+    assert scores[0].attested_outputs == []
 
 
 def test_unresolved_concepts_report_a_recording_gap_not_a_wrong_surface():
@@ -2569,8 +2572,13 @@ def test_unresolved_concepts_report_a_recording_gap_not_a_wrong_surface():
     ``oracle_variable_not_recorded`` and ``compared_surface_differs`` are kept
     apart on purpose: only the second is a statement about what the run did.
     """
-    report = _unstamped(_report("suite-a", comparisons=5, matches=5))
+    report = _report("suite-a", comparisons=5, matches=5, outputs=())
+    report["attestation"].pop("outputs")
     report["aggregates"] = [{"concept": "tx:unmapped", "comparison_count": 5}]
+    report["observed_outputs"] = [
+        {"case_id": "case-1", "engine": "euromod", "concept": "tx:unmapped",
+         "variable": "y_s", "value": 0},
+    ]
     attestation = attest(
         report, oracle="euromod", resolver=OracleTargetResolver()
     )
@@ -2714,8 +2722,8 @@ def _waiver(**kw) -> AttestationWaiver:
     return AttestationWaiver(**base)
 
 
-def test_waiver_restores_coverage_and_is_published_on_the_scoreboard():
-    """A waived row stays covered — and the badge says how many it rests on."""
+def test_waiver_cannot_restore_coverage_without_an_execution_stamp():
+    """Even an approved historical waiver cannot replace executed: true."""
     universe = parse_universe(CONFORMANCE_DIR / "be.yaml")
     policy = next(p for p in universe.policies if p.id == "be:tintb_be")
     # This isolates the approved historical waiver mechanism; the current
@@ -2730,10 +2738,10 @@ def test_waiver_restores_coverage_and_is_published_on_the_scoreboard():
             reason="compared_surface_differs",
         )])
     )
-    assert board.covered == 1
-    assert board.conformant is True
-    assert board.covered_with_waived_output_attestation == 1
-    assert scores[0].output_attestation == "waived:compared_surface_differs"
+    assert board.covered == 0
+    assert board.conformant is False
+    assert board.covered_with_waived_output_attestation == 0
+    assert scores[0].status == "unattested"
 
 
 def test_waiver_is_pinned_to_its_suite():
@@ -2769,7 +2777,7 @@ def test_committed_waiver_file_round_trips():
     """The committed file parses, and re-serializing it is byte-identical."""
     path = CONFORMANCE_DIR / "attestation_waivers.yaml"
     index = parse_waivers(path)
-    assert len(index) > 0
+    assert len(index) == 0
     assert serialize_waivers(list(index)) == path.read_text()
 
 
@@ -2816,16 +2824,29 @@ def test_attestation_gate_fails_on_a_stale_waiver():
     assert rc == 1
 
 
-def test_attestation_gate_fails_when_a_waiver_is_removed_while_still_needed():
+def test_attestation_gate_fails_when_a_waiver_is_removed_while_still_needed(
+    tmp_path, monkeypatch,
+):
     """NEGATIVE: dropping a needed waiver must fail rather than silently uncover."""
     gate = _load_script("conformance_attestation.py")
-    path = CONFORMANCE_DIR / "attestation_waivers.yaml"
-    original = path.read_text()
-    kept = [w for w in parse_waivers(path) if w.policy_id != "uk-pe:dla"]
-    assert len(kept) == len(parse_waivers(path)) - 1
-    path.write_text(serialize_waivers(kept))
-    try:
-        rc = _run_attestation_check(gate)
-    finally:
-        path.write_text(original)
-    assert rc == 1
+    path = tmp_path / "attestation_waivers.yaml"
+    waiver = _waiver(
+        jurisdiction="be", policy_id="be:tintb_be", suite="be-marital-quotient",
+        reason="compared_surface_differs",
+    )
+    report = json.loads(
+        (REPO_ROOT / "tests/fixtures/attestations/approved-be-marital-quotient.json").read_text()
+    )
+    rows = [{
+        "jurisdiction": waiver.jurisdiction, "policy_id": waiver.policy_id,
+        "suite": waiver.suite, "report": report, "eligible": True, "problems": [],
+        "binding_gap": waiver.reason, "cases": report["case_count"],
+        "comparisons": report["summary"]["comparison_count"], "stamped": False,
+        "release_drift": None, "attested_outputs": [],
+    }]
+    monkeypatch.setattr(gate, "WAIVERS_PATH", path)
+    monkeypatch.setattr(gate, "survey", lambda: (rows, [waiver]))
+    path.write_text(serialize_waivers([waiver]))
+    assert _run_attestation_check(gate) == 0
+    path.write_text(serialize_waivers([]))
+    assert _run_attestation_check(gate) == 1

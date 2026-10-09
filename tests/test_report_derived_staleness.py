@@ -96,6 +96,10 @@ def _report(suite: str, *, comparisons: int, matches: int) -> dict:
         },
         "mismatches": [],
         "aggregates": [{"concept": "tx:a", "comparison_count": comparisons}],
+        "observed_outputs": [{
+            "case_id": index, "concept": "tx:a", "engine": "euromod",
+            "variable": "a_s", "value": 0,
+        } for index in range(comparisons)],
         "errors": [],
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,

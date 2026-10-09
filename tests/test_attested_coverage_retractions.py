@@ -102,6 +102,13 @@ def test_coverage_restores_only_with_a_registered_stamped_output_comparison(
             "error_count": 0,
         },
         "aggregates": [{"concept": "restoring-comparison", "comparison_count": comparisons}],
+        "observed_outputs": [
+            {"case_id": f"case-{index}", "concept": "restoring-comparison",
+             "engine": universe.oracle.backend,
+             "variable": missing_output if registered_comparison else "diagnostic_only",
+             "value": 0}
+            for index in range(comparisons)
+        ],
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,
             "executed": stamped_execution,
