@@ -826,7 +826,7 @@ def _complete_rulespecs_from_affected_map(
     Declared paths never borrow clone or convention SHAs. GitHub identities
     match case-insensitively, while raw remote spelling is retained. A mapped
     SHA comes only from agreeing declared entries; missing or conflicting
-    SHAs, or a declared absorbed layer, leave country provenance ambiguous.
+    SHAs, or a declared absorbed or foreign layer, leave country provenance ambiguous.
     Unresolvable repos keep or gain a
     ``sha: None`` entry so the selector's conservative "cannot prove fresh"
     reading stays intact. So does a mapped repo that a declared checkout of an
@@ -836,8 +836,10 @@ def _complete_rulespecs_from_affected_map(
     suite. Never raises — provenance must annotate a run, never fail one.
     """
     try:
+        from axiom_oracles.engine_compat import explicit_engine_roots
         from axiom_oracles.provenance import (
             canonical_rulespec_slug,
+            checkout_remote_matches_slug,
             resolve_rulespec_checkout,
         )
 
@@ -845,17 +847,41 @@ def _complete_rulespecs_from_affected_map(
         if not mapped_repos:
             return rulespecs
         by_repo = {e.get("repo"): e for e in rulespecs}
-        read_absorbed_instead = {
-            canonical_rulespec_slug(e["repo"]).casefold()
+        read_other_instead = {
+            canonical_rulespec_slug(e["repo"].rsplit("/", 1)[-1].casefold()).casefold()
             for e in rulespecs
             if e.get("repo")
-            and canonical_rulespec_slug(e["repo"]).casefold() != e["repo"].casefold()
+            and canonical_rulespec_slug(
+                e["repo"].rsplit("/", 1)[-1].casefold()
+            ).casefold() != e["repo"].casefold()
         }
+        declared_roots = [Path(path) for path in declared_paths or []]
+        declared_roots.extend(
+            path for path in explicit_engine_roots(declared_roots) if path not in declared_roots
+        )
         completed = list(rulespecs)
         for repo in mapped_repos:
-            # Any absorbed layer makes this country's provenance ambiguous,
-            # even when a separate federal/country root supplied a live SHA.
-            if repo.casefold() in read_absorbed_instead:
+            country = repo.rsplit("/", 1)[-1].removeprefix("rulespec-").casefold()
+            # A foreign checkout can supply this country's rules even when its
+            # origin has another name. Inspect the layouts the composer and
+            # engine read, without invalidating separate-country checkouts.
+            contradictory_root = repo.casefold() in read_other_instead or any(
+                (
+                    canonical_rulespec_slug(path.name.casefold()).casefold() == repo.casefold()
+                    or path.name == country
+                    or path.name.startswith(f"{country}-")
+                    or any(
+                        child.is_dir()
+                        for pattern in (country, f"{country}-*")
+                        for child in path.glob(pattern)
+                    )
+                )
+                and not checkout_remote_matches_slug(path, repo)
+                for path in declared_roots
+            )
+            # Any absorbed or contradictory layer makes country freshness
+            # unknown, even when a separate country root supplied a live SHA.
+            if contradictory_root:
                 for entry in completed:
                     if (entry.get("repo") or "").casefold() == repo.casefold():
                         entry["sha"] = None

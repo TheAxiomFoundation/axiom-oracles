@@ -7,6 +7,9 @@ import json
 from pathlib import Path
 
 import pytest
+from hypothesis import given, settings, strategies as st
+
+from axiom_oracles.provenance import US_STATE_CODES
 
 SCRIPTS = Path(__file__).parents[1] / "scripts"
 
@@ -796,10 +799,46 @@ def test_roots_revision_pins_every_exercised_repo():
             gen.pinned_repos_for_registry_config(config)
     config["runner"]["parameters"]["axiom_rulespec_repo_roots_revision"] = "ca2d424f"
     config["runner"]["parameters"]["concepts"].append("us-co:tax/income#liability")
+    assert gen.pinned_repos_for_registry_config(config) == {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+    }
+    config["runner"]["parameters"]["concepts"].append("uk:tax/income#liability")
     with pytest.raises(SystemExit, match="a pin needs exactly one"):
         gen.pinned_repos_for_registry_config(config)
     config["runner"]["parameters"].pop("axiom_rulespec_repo_roots_revision")
     assert gen.pinned_repos_for_registry_config(config) == {}
+
+
+@settings(max_examples=50, database=None, deadline=None)
+@given(
+    prefixes=st.lists(
+        st.sampled_from(["us", *(f"us-{code}" for code in sorted(US_STATE_CODES))]),
+        min_size=1,
+        max_size=6,
+    ),
+    revision=st.text(alphabet="0123456789abcdef", min_size=7, max_size=40),
+    other_country=st.sampled_from(["uk", "be"]),
+)
+def test_roots_revision_pin_depends_on_canonical_repo_set(
+    prefixes, revision, other_country
+):
+    """US jurisdictions share a pin; a second country requires its own pin."""
+    gen = _load("generate_affected_map.py")
+    parameters = {
+        "concepts": [f"{prefix}:tax/income#liability" for prefix in prefixes],
+        "axiom_rulespec_repo_roots": "$HOME/oracle-pins",
+        "axiom_rulespec_repo_roots_revision": revision,
+    }
+    config = {
+        "name": "roots-pin-property",
+        "runner": {"type": "axiom-oracles-compare", "parameters": parameters},
+    }
+    assert gen.pinned_repos_for_registry_config(config) == {
+        "TheAxiomFoundation/rulespec-us": revision
+    }
+    parameters["concepts"].append(f"{other_country}:tax/income#liability")
+    with pytest.raises(SystemExit, match="a pin needs exactly one"):
+        gen.pinned_repos_for_registry_config(config)
 
 
 def test_committed_roots_pinned_suites_carry_their_pin():

@@ -7,6 +7,7 @@ from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
+from hypothesis import given, settings, strategies as st
 
 
 def assert_pe_companion_pinned(cmd):
@@ -2334,7 +2335,7 @@ def test_absorbed_layer_keeps_country_sha_unknown(
     ) == []
 
 
-def _provenance_checkout(path, slug, content):
+def _provenance_checkout(path, slug, content, filename="fixture.txt"):
     """Create distinct real checkout SHAs for completion/selector regressions."""
     from axiom_oracles import provenance
 
@@ -2347,8 +2348,10 @@ def _provenance_checkout(path, slug, content):
         ["remote", "add", "origin", f"https://github.com/{slug}.git"],
     ):
         subprocess.run(["git", "-C", str(path), *args], check=True)
-    (path / "fixture.txt").write_text(content)
-    subprocess.run(["git", "-C", str(path), "add", "fixture.txt"], check=True)
+    fixture = path / filename
+    fixture.parent.mkdir(parents=True, exist_ok=True)
+    fixture.write_text(content)
+    subprocess.run(["git", "-C", str(path), "add", filename], check=True)
     subprocess.run(["git", "-C", str(path), "commit", "-qm", "fixture"], check=True)
     return provenance._git_sha(path)
 
@@ -2396,10 +2399,70 @@ def test_declared_country_checkout_never_borrows_convention_sha(
     )
 
 
-def test_completion_property_over_mixed_declared_roots(monkeypatch, tmp_path):
-    """Exhaust all root orders up to three layers, plus duplicate roots.
+@pytest.mark.parametrize("country_path_kind", ["checkout", "jurisdiction"])
+@pytest.mark.parametrize("foreign_first", [True, False])
+@pytest.mark.parametrize(
+    "foreign_slug", ["someone/rulespec-us", "someone/custom-repo", "TheAxiomFoundation/rulespec-uk"]
+)
+def test_mixed_foreign_roots_never_prove_country_freshness(
+    foreign_slug, country_path_kind, foreign_first, monkeypatch, tmp_path
+):
+    """Real staging and selection reproduce the review's mixed-origin probe."""
+    from axiom_oracles.engine_compat import explicit_engine_roots, stage_pure_root
 
-    Without Hypothesis tooling, the finite domain covers archived checkouts,
+    country = "TheAxiomFoundation/rulespec-us"
+    rc, config = _completion_fixture(monkeypatch, tmp_path, [country])
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: tmp_path))
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    foreign = tmp_path / "foreign" / "rulespec-us"
+    legitimate = tmp_path / "country" / "rulespec-us"
+    foreign_sha = _provenance_checkout(
+        foreign, foreign_slug, "foreign rules actually staged\n", "us-co/fixture.yaml"
+    )
+    country_sha = _provenance_checkout(
+        legitimate, country, "legitimate country rules\n", "us-co/fixture.yaml"
+    )
+    assert foreign_sha != country_sha
+    country_path = legitimate if country_path_kind == "checkout" else legitimate / "us-co"
+    paths = [foreign, country_path] if foreign_first else [country_path, foreign]
+    roots = explicit_engine_roots(paths)
+    staged = [stage_pure_root(root, {"us-co"}, tmp_path / "stage") for root in roots]
+    expected_content = (
+        "foreign rules actually staged\n"
+        if foreign_first or country_path_kind == "jurisdiction"
+        else "legitimate country rules\n"
+    )
+    assert (staged[0] / "us-co" / "fixture.yaml").read_text() == expected_content
+    config["runner"] = {"parameters": {"rulespec_roots": [str(path) for path in paths]}}
+    output = tmp_path / "output.json"
+    output.write_text("{}")
+
+    block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+
+    assert {"repo": foreign_slug, "sha": foreign_sha} in block["rulespecs"]
+    assert {"repo": country, "sha": None} in block["rulespecs"]
+    selector = load_script_module("select_affected_suites")
+    affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+    [decision] = selector.select(
+        affected_map, {country: country_sha}, {"demo-suite": {"provenance": block}}
+    )
+    assert "rulespec-us: report ran against unknown SHA" in decision["reason"]
+
+    # A separate country's declared checkout cannot invalidate US freshness.
+    uk = tmp_path / "uk" / "rulespec-uk"
+    _provenance_checkout(uk, "TheAxiomFoundation/rulespec-uk", "UK rules")
+    config["runner"]["parameters"]["rulespec_roots"] = [str(uk), str(country_path)]
+    block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+    assert {"repo": country, "sha": country_sha} in block["rulespecs"]
+    assert selector.select(
+        affected_map, {country: country_sha}, {"demo-suite": {"provenance": block}}
+    ) == []
+
+
+def test_completion_property_over_mixed_declared_roots(monkeypatch, tmp_path):
+    """Retain all original root orders, adding foreign pairs and generated orders.
+
+    The finite domain and Hypothesis cover archived and foreign checkouts,
     country checkouts, jurisdiction directories within monorepos, and roots
     without a SHA. Freshness requires one agreed SHA from the declared roots;
     unrelated convention/clone SHAs can never fill missing evidence.
@@ -2426,17 +2489,26 @@ def test_completion_property_over_mixed_declared_roots(monkeypatch, tmp_path):
     bare = tmp_path / "bare" / "rulespec-us"
     bare.mkdir(parents=True)
     missing = tmp_path / "missing" / "rulespec-us"
-    roots = [checkout, jurisdiction, archived, bare, missing]
+    foreign_slug = "someone/rulespec-us"
+    foreign = tmp_path / "foreign" / "rulespec-us"
+    foreign_sha = _provenance_checkout(foreign, foreign_slug, "foreign rules")
+    foreign_jurisdiction = foreign / "us-co"
+    foreign_jurisdiction.mkdir()
+    original_roots = [checkout, jurisdiction, archived, bare, missing]
+    roots = [*original_roots, foreign, foreign_jurisdiction]
     own_shas = {checkout: country_sha, jurisdiction: monorepo_sha}
     assert len({borrowed_sha, country_sha, monorepo_sha, archived_sha}) == 4
-    orders = [order for size in range(1, 4) for order in permutations(roots, size)]
+    orders = [order for size in range(1, 4) for order in permutations(original_roots, size)]
     orders.extend([(checkout, checkout), (jurisdiction, jurisdiction)])
+    for foreign_path in (foreign, foreign_jurisdiction):
+        for country_path in (checkout, jurisdiction):
+            orders.extend([(foreign_path, country_path), (country_path, foreign_path)])
     output = tmp_path / "output.json"
     output.write_text("{}")
     selector = load_script_module("select_affected_suites")
     affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
 
-    for order in orders:
+    def check_order(order):
         config["runner"] = {
             "parameters": {"rulespec_roots": [str(root) for root in order]},
             "_cloned_rulespec_us_sha": borrowed_sha,
@@ -2449,6 +2521,8 @@ def test_completion_property_over_mixed_declared_roots(monkeypatch, tmp_path):
         assert all(entry["sha"] != borrowed_sha for entry in block["rulespecs"]), order
         if archived in order:
             assert {"repo": archived_slug, "sha": archived_sha} in block["rulespecs"]
+        if foreign in order or foreign_jurisdiction in order:
+            assert {"repo": foreign_slug, "sha": foreign_sha} in block["rulespecs"]
         reports = {"demo-suite": {"provenance": block}}
         for head in (borrowed_sha, country_sha, monorepo_sha):
             assert bool(selector.select(affected_map, {country: head}, reports)) == (
@@ -2457,6 +2531,16 @@ def test_completion_property_over_mixed_declared_roots(monkeypatch, tmp_path):
         # Bare and absent roots have no enclosing Git repository or known SHA.
         if bare in order or missing in order:
             assert provenance._git_sha(bare if bare in order else missing) is None
+
+    @settings(max_examples=40, derandomize=True, deadline=None, database=None)
+    @given(st.lists(st.sampled_from(roots), min_size=1, max_size=8))
+    def check_generated_order(order):
+        check_order(order)
+
+    check_generated_order()
+
+    for order in orders:
+        check_order(order)
 
 
 def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):
