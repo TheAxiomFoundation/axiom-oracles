@@ -1,7 +1,6 @@
 # axiom_oracles.attestation_waivers.v1 — hand-authored, shrink-only. See axiom_oracles/conformance/waivers.py.
 schema: axiom_oracles.attestation_waivers.v1
-_comment: 'Output-attestation waivers — covered policies whose committed report cannot bind its comparisons
-  to the universe''s registered outputs. HAND-AUTHORED and SHRINK-ONLY: a new unbound row fails the gate
-  (scripts/conformance_attestation.py --check) instead of landing here, and a waiver that is no longer
-  needed must be pruned. Execution attestation itself is never waivable.'
+_comment: 'Historical output-attestation migration metadata. HAND-AUTHORED and SHRINK-ONLY: all approved
+  bootstrap entries have been retired and cannot return. The remaining approval floor is empty. This metadata
+  never authorizes coverage; every covered policy requires a valid same-case registered-output pair.'
 waivers: []

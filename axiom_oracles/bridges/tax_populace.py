@@ -2947,17 +2947,25 @@ def compare_outputs(
                 else tax_entity_id(int(source_ids[index]))
             )
             outputs = result.get("outputs") or {}
-            result_errors = result.get("errors") or result.get("error")
-            if result_errors:
+            result_stopped = (
+                any(result.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
+                or ("executed" in result and result["executed"] is not True)
+            )
+            if result_stopped:
+                # Retain execution stops independently of displayed output
+                # rows, including missing returns and matching stopped rows.
                 errors.append({
-                    "engine": "axiom", "case_id": entity_id,
-                    "errors": result_errors,
+                    "engine": "axiom", "case_id": entity_id, "surface": surface,
+                    **{
+                        key: result[key]
+                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
+                        if key in result
+                    },
                 })
             pe_row = source_rows.iloc[index]
             for name, spec in output_specs.items():
                 axiom_value = output_number(outputs.get(spec["axiom"]))
                 returned_pe_value = pe_row[spec["pe"]]
-                pe_value = money(returned_pe_value)
                 # The money projection is used for comparison arithmetic, but
                 # it may turn a missing oracle result into zero. Keep the
                 # returned value itself as the output-attestation evidence.
@@ -2977,6 +2985,11 @@ def compare_outputs(
                         if key in result
                     },
                 })
+                # Returned stop-marked rows remain diagnostic evidence, but
+                # they are not comparisons and cannot add to any denominator.
+                if result_stopped:
+                    continue
+                pe_value = money(returned_pe_value)
                 diff = axiom_value - pe_value
                 abs_diff = abs(diff)
                 compared_values += 1

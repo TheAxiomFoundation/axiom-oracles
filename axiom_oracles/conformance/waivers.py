@@ -1,31 +1,18 @@
-"""Output-attestation waivers — the enumerated, shrink-only migration debt.
+"""Retired output-attestation migration metadata.
 
-Execution attestation (:mod:`axiom_oracles.conformance.attestation`) is
-unconditional: a report that cannot show a real run against the declared oracle
-never covers anything. Its second layer — binding the run's comparisons to the
-*registered outputs* of the policy the suite is named under — is enforced the
-same way, with one deliberate escape: the reports committed before attestation
-existed do not all record which oracle variable each compared concept was bound
-to, and those bindings cannot be reconstructed without re-running suites that
-need a UKMOD/EUROMOD runtime or a multi-million-comparison PolicyEngine pass.
+The bootstrap rows record historical reports whose comparisons could not be
+bound to registered outputs. Their suite, reason and complete artifact hashes
+remain available for historical lookup, but this metadata never supplies a
+missing same-case output pair or authorizes scoreboard coverage.
 
-Rather than fail those rows (which would retract badges backed by real
-evidence) or fail open (which is the bug axiom-oracles#355 reports), each is
-**named** in ``conformance/attestation_waivers.yaml`` with the suite it depends
-on and why the binding cannot be shown. That file is hand-authored and
-shrink-only:
+Every bootstrap row has been retired from
+``conformance/attestation_waivers.yaml``. Its immutable remaining approval floor
+is empty: the parser accepts an absent or schema-valid empty file and refuses
+every retired row, even when its original suite and reason still match. Deleted
+bootstrap entries cannot return by rewriting the editable current file.
 
-* a covered row that needs a waiver and has none is NOT covered — so a new lane
-  cannot green a suite whose comparisons are not tied to the policy;
-* a waiver that is no longer needed is stale and fails the gate — so the list
-  can only shrink as reports are regenerated with stamped attestations;
-* the current file must be a subset of the approved bootstrap rows, with each
-  suite and reason unchanged;
-* a waiver is pinned to the approved, unstamped report's content hash, so a
-  replacement report or a newly stamped report cannot inherit migration debt.
-
-``scripts/conformance_attestation.py`` reports, checks and prunes the file; the
-scoreboard consumes it.
+``scripts/conformance_attestation.py`` audits and serializes the file;
+``--prune`` only removes rows.
 """
 
 from __future__ import annotations
@@ -41,7 +28,7 @@ WAIVERS_SCHEMA = "axiom_oracles.attestation_waivers.v1"
 
 # Approved migration debt at reviewed PR head
 # e83d47f31be70e4028278507a17ee95e0f4ecfab. This baseline is independent of the
-# editable current waiver file: only deletions from that file are permitted.
+# editable current waiver file. Retired rows cannot regain approval from it.
 # Values are (suite, reason, SHA-256 of the complete canonical parsed report).
 # All approved artifacts predate runner stamps. Keep their hashes fixed when a
 # report is regenerated; the replacement must attest its own registered output.
@@ -128,13 +115,17 @@ BOOTSTRAP_WAIVERS: dict[tuple[str, str], tuple[str, str, str]] = {
     ),
 }
 
+# All bootstrap rows were retired by reviewed head 45ae02123. This fixed floor
+# cannot be expanded by editing the current YAML or restoring a bootstrap row.
+REMAINING_BOOTSTRAP_WAIVERS: frozenset[tuple[str, str]] = frozenset()
+
 
 def artifact_sha256(report: dict) -> str:
     """Hash all artifact content, independent of JSON whitespace or key order."""
     body = json.dumps(report, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
     return hashlib.sha256(body.encode()).hexdigest()
 
-#: Closed vocabulary — the two states a covered-but-unbound row can be in. Both
+#: Closed vocabulary — the two historical output-binding gaps. Both
 #: are produced by :meth:`ExecutionAttestation.binding_gap`, never hand-chosen.
 WAIVER_REASONS: tuple[str, ...] = (
     #: The report records every surface it compared and none is a registered
@@ -149,7 +140,7 @@ WAIVER_REASONS: tuple[str, ...] = (
 
 @dataclass(frozen=True)
 class AttestationWaiver:
-    """One covered policy whose output binding cannot be attested yet."""
+    """Historical metadata for a policy whose output binding was unattested."""
 
     jurisdiction: str
     policy_id: str
@@ -255,6 +246,10 @@ def parse(path: str | Path) -> WaiverIndex:
                 f"{waiver.policy_id}: suite and reason must match the approved "
                 "bootstrap waiver"
             )
+        elif waiver.key not in REMAINING_BOOTSTRAP_WAIVERS:
+            problems.append(
+                f"{waiver.policy_id}: retired bootstrap waiver cannot return"
+            )
     if problems:
         raise ValueError(f"{path}: " + "; ".join(problems))
     return WaiverIndex(waivers)
@@ -266,12 +261,11 @@ def serialize(waivers: list[AttestationWaiver]) -> str:
     document = {
         "schema": WAIVERS_SCHEMA,
         "_comment": (
-            "Output-attestation waivers — covered policies whose committed report "
-            "cannot bind its comparisons to the universe's registered outputs. "
-            "HAND-AUTHORED and SHRINK-ONLY: a new unbound row fails the gate "
-            "(scripts/conformance_attestation.py --check) instead of landing here, "
-            "and a waiver that is no longer needed must be pruned. Execution "
-            "attestation itself is never waivable."
+            "Historical output-attestation migration metadata. HAND-AUTHORED "
+            "and SHRINK-ONLY: all approved bootstrap entries have been retired "
+            "and cannot return. The remaining approval floor is empty. This "
+            "metadata never authorizes coverage; every covered policy requires "
+            "a valid same-case registered-output pair."
         ),
         "waivers": [waiver.to_row() for waiver in rows],
     }

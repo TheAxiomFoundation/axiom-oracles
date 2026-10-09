@@ -2859,6 +2859,12 @@ def test_attestation_gate_fails_when_a_waiver_is_removed_while_still_needed(
         jurisdiction="be", policy_id="be:tintb_be", suite="be-marital-quotient",
         reason="compared_surface_differs",
     )
+    # Exercise the historical still-approved state; the current approval floor
+    # is empty and independently rejects restoring any retired bootstrap row.
+    monkeypatch.setattr(
+        "axiom_oracles.conformance.waivers.REMAINING_BOOTSTRAP_WAIVERS",
+        frozenset({waiver.key}),
+    )
     report = json.loads(
         (REPO_ROOT / "tests/fixtures/attestations/approved-be-marital-quotient.json").read_text()
     )

@@ -4560,6 +4560,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     from collections import Counter, defaultdict
 
     from axiom_oracles.bridges.efrs_uk import SURFACE_SPECS
+    from axiom_oracles.conformance.observations import json_output_values
 
     dashboard_config = config.get("dashboard") or {}
     parent_concept = dashboard_config.get("parent_concept", UK_UNIVERSAL_CREDIT_PARENT)
@@ -4885,7 +4886,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     for key in ("error", "errors", "skipped", "skip_reason", "executed"):
         if key in raw:
             report[key] = raw[key]
-    return report
+    return json_output_values(report)
 
 
 def _limit_rows_by_output(rows: list[dict], *, limit_per_output: int) -> list[dict]:
@@ -5157,7 +5158,10 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "summary": {
             "comparison_count": parent_compared,
             "error_count": len(raw.get("errors") or []),
-            "errors_by_engine": {},
+            "errors_by_engine": dict(Counter(
+                row.get("engine", "axiom") for row in raw.get("errors") or []
+                if isinstance(row, dict)
+            )),
             "match_count": parent_matched,
             "mismatch_count": parent_mismatches,
             "mismatches_by_concept": mismatches_by_concept,

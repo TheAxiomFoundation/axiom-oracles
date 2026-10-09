@@ -1905,7 +1905,9 @@ class UKEFRSComparisonReport:
     errors: list[dict[str, Any]] = field(default_factory=list)
 
     def to_json(self) -> dict[str, Any]:
-        return {
+        from axiom_oracles.conformance.observations import json_output_values
+
+        return json_output_values({
             "compared_persons": self.compared_persons,
             "compared_benunits": self.compared_benunits,
             "compared_values": self.compared_values,
@@ -1918,7 +1920,7 @@ class UKEFRSComparisonReport:
             "projection_notes": self.projection_notes,
             "dataset_identity": self.dataset_identity,
             "errors": self.errors,
-        }
+        })
 
 
 def configure_parser(parser: argparse.ArgumentParser) -> None:

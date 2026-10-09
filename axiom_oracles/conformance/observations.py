@@ -88,7 +88,11 @@ class OutputEvidence:
         self.report = report
         self.observed_by_output = defaultdict(list)
         self.observed_by_case_output = defaultdict(list)
+        self.ledger_targets = defaultdict(set)
+        self.clean_ledger_targets = defaultdict(set)
         self.cases_by_id = defaultdict(list)
+        self.actual_comparisons_by_case = defaultdict(list)
+        self.actual_comparisons = []
         self.comparisons_by_case_concept = defaultdict(list)
         self.comparisons_by_engine_concept = defaultdict(list)
         self.top_mismatches_by_engine_concept = defaultdict(list)
@@ -128,6 +132,7 @@ class OutputEvidence:
             and row["comparison_count"] > 0
         }
         sole_concept = next(iter(compared_concepts)) if len(compared_concepts) == 1 else None
+        self.compared_concepts = compared_concepts
 
         observations = list(report.get("observed_outputs") or [])
         if self.native_fiit:
@@ -176,6 +181,9 @@ class OutputEvidence:
             if all(isinstance(row.get(key), str) for key in ("engine", "concept", "variable")):
                 key = (row["engine"], row["concept"], row["variable"])
                 self.observed_by_output[key].append(row)
+                self.ledger_targets[key[:2]].add(row["variable"])
+                if not _contradiction(row):
+                    self.clean_ledger_targets[key[:2]].add(row["variable"])
 
         for ordinal, case in enumerate(report.get("cases") or []):
             if not isinstance(case, dict):
@@ -185,6 +193,13 @@ class OutputEvidence:
             if report.get("suite") == "us-tariff-panel" and "case_id" not in case:
                 case = dict(case, case_id=ordinal)
             case_id = case.get("case_id")
+            retained = (
+                [(True, row) for row in case.get("matches") or [] if _actual_comparison(row, grid_engines)]
+                + [(False, row) for row in case.get("mismatches") or [] if _actual_comparison(row, grid_engines)]
+            )
+            self.actual_comparisons.extend(
+                (case_id, row) for _, row in retained if isinstance(row, dict)
+            )
             if not valid_case_id(case_id):
                 continue
             self.cases_by_id[case_id].append(case)
@@ -197,12 +212,10 @@ class OutputEvidence:
                 engine = case.get(f"{side}_engine", self.engines.get(side))
                 if isinstance(engine, str):
                     self.sides_by_engine[engine].add(side)
-            for matched, row in (
-                [(True, row) for row in case.get("matches") or []]
-                + [(False, row) for row in case.get("mismatches") or []]
-            ):
+            for matched, row in retained:
                 if not isinstance(row, dict):
                     continue
+                self.actual_comparisons_by_case[case_id].append(row)
                 concept = row.get("concept")
                 if isinstance(concept, str):
                     self.comparisons_by_case_concept[(case_id, concept)].append((case, row))
@@ -247,7 +260,12 @@ class OutputEvidence:
                             )
 
         for row in report.get("mismatches") or []:
+            if not _actual_comparison(row, grid_engines):
+                continue
+            if isinstance(row, dict):
+                self.actual_comparisons.append((row.get("case_id"), row))
             if isinstance(row, dict) and valid_case_id(row.get("case_id")):
+                self.actual_comparisons_by_case[row["case_id"]].append(row)
                 concept = row.get("concept")
                 if isinstance(concept, str):
                     self.mismatches_by_case_concept[(row["case_id"], concept)].append(row)
@@ -271,6 +289,25 @@ class OutputEvidence:
         stamp = report.get("attestation")
         summary = report.get("summary") or {}
         summary = summary if isinstance(summary, dict) else {}
+        # Every retained actual comparison must reconcile with the aggregate
+        # ledger, even when both of its labels have been changed. Case and
+        # top-level copies of one mismatch share one comparison identity.
+        identities = {
+            (case_id, row.get("concept") if isinstance(row.get("concept"), str) else None,
+             row.get("variable") if isinstance(row.get("variable"), str) else None)
+            for case_id, rows in self.actual_comparisons_by_case.items() for row in rows
+        }
+        count = summary.get("comparison_count")
+        self.comparisons_complete = (
+            isinstance(count, int) and not isinstance(count, bool) and 0 < count <= len(identities)
+        )
+        self.unreconciled_cases = {
+            case_id for case_id, rows in self.actual_comparisons_by_case.items()
+            if compared_concepts and any(
+                not isinstance(row.get("concept"), str) or row["concept"] not in compared_concepts
+                for row in rows
+            )
+        }
         by_engine = summary.get("errors_by_engine") or {}
         engine_errors = (
             any(by_engine.values()) if isinstance(by_engine, dict)
@@ -283,6 +320,8 @@ class OutputEvidence:
             and not _contradiction(report)
             and not _contradiction(summary) and not summary.get("error_count")
             and not summary.get("skipped_count") and not engine_errors
+            and all(valid_case_id(case_id) and not _comparison_stopped(row)
+                    for case_id, row in self.actual_comparisons)
         )
 
     def side_for_engine(self, engine):
@@ -414,6 +453,14 @@ def observed_output_value(
     evidence = evidence if evidence is not None else OutputEvidence(report)
     _check_context(report, evidence)
     if not evidence.execution_valid or not valid_case_id(case_id):
+        return False
+    if case_id in evidence.unreconciled_cases:
+        return False
+    if (evidence.comparisons_complete and evidence.ledger_targets.get((engine, concept))
+            and not evidence.comparisons_by_case_concept.get((case_id, concept))
+            and not evidence.mismatches_by_case_concept.get((case_id, concept))):
+        # Compacted reports can omit successful rows. Once all actual rows are
+        # retained, a leftover ledger entry must identify one of those rows.
         return False
     cases = evidence.cases_by_id.get(case_id, ())
     if len(cases) > 1:
@@ -568,6 +615,18 @@ def _comparison_stopped(row):
     return bool(row.get("error") or row.get("errors") or row.get("skipped")
                 or row.get("skip_reason")
                 or ("executed" in row and row["executed"] is not True))
+
+
+def _actual_comparison(row, engines=()):
+    """Disposition-only metadata has no comparison identity or returned value."""
+    return isinstance(row, dict) and (
+        any(key in row for key in (
+            "case_id", "concept", "variable", "left", "right", "value",
+            "counterpart_value", "difference", "kind",
+        ))
+        or any(engine in row for engine in engines)
+        or _contradiction(row)
+    )
 
 
 def valid_case_id(case_id):

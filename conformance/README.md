@@ -101,8 +101,9 @@ value into a final policy output.
 `attestation_waivers.yaml` preserves historical migration metadata for legacy
 reports that could not show their output binding. It is **hand-authored and
 shrink-only**: each approved entry is pinned to its suite, reason and complete
-legacy artifact's SHA-256, and the fixed bootstrap set in `conformance/waivers.py`
-rejects additions and suite/reason changes. The attestation check audits these
+legacy artifact's SHA-256. All bootstrap entries are now retired; the empty
+approval floor in `axiom_oracles/conformance/waivers.py` rejects their return
+as well as new entries and suite/reason changes. The attestation check audits these
 records and rejects stale entries; `--prune` only removes them. This metadata
 never authorizes coverage: the scoreboard requires a valid same-case pair for
 every covered policy and has no waiver bypass. The recorded reasons distinguish
@@ -426,9 +427,11 @@ committed composition are retracted until a real rerun retains valid Axiom and
 EUROMOD values for a registered `tintb_be` output in the same case and actual
 comparison; the suite remains available for that rerun. Its published
 dispositions predate the repaired rulespec-be#118
-pipeline and remain attached to the current committed 0/3 publication until a
-canonical comparison refresh replaces those observed mismatch rows; a
-supervised worktree validation is not itself a disposition-retirement event.
+pipeline. The historical baseline was 0/3 matches; the current committed report
+records 3/3 matches against `tin_s`, which still does not provide the registered
+`tintb_be` comparison. Retained disposition metadata describes the earlier
+mismatches; a supervised worktree validation is not itself a
+disposition-retirement event.
 
 ### CLI convenience
 
@@ -451,8 +454,8 @@ Wired in `.github/workflows/ci.yml`, following the repo's existing gate patterns
   refresh `conformance/compositions/<jur>.yaml`).
 * **Execution attestation** — every covered policy's report shows a real run
   against the declared oracle with a returned same-case pair for a registered
-  output. Historical waiver metadata is audited against the fixed bootstrap
-  set and cannot bypass the scoreboard's paired-output requirement.
+  output. All historical waiver entries are retired and cannot return or
+  bypass the scoreboard's paired-output requirement.
 * **Scoreboard freshness** — regenerated scoreboard + detail == committed copies.
 * **Ratchets** — no monotonic invariant regressed.
 * **Burn-down freshness** — regenerated series == committed.

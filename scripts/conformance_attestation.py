@@ -9,17 +9,11 @@ outputs. The scoreboard already refuses coverage to anything that fails; this
 script is the operator's view of the same computation, plus the gate on
 ``conformance/attestation_waivers.yaml``.
 
-The waiver file is hand-authored and **shrink-only**, so ``--check`` fails on:
-
-* a covered policy whose output binding is unattested and *not* waived — a new
-  lane cannot green a suite whose comparisons are not tied to the policy;
-* a waiver that is no longer needed (the report now attests the binding, or the
-  policy is no longer covered) — stale entries must be pruned so the debt only
-  falls;
-* a waiver whose ``reason`` disagrees with the computed one, or whose ``suite``
-  is not the suite the universe now names;
-* an addition or suite/reason change from the approved bootstrap set, or a
-  waiver applied to a different artifact or a runner-stamped report.
+The waiver file preserves historical migration metadata and never authorizes
+coverage. All bootstrap entries have been retired; the immutable remaining
+approval floor is empty. ``--check`` rejects a restored retired row, an added
+row, or a changed bootstrap suite/reason. It also rejects registered reports
+whose execution or registered-output comparison evidence is unattested.
 
 Usage::
 
@@ -153,8 +147,8 @@ def check(rows: list[dict], needed: list[AttestationWaiver]) -> list[str]:
                 f"{waiver.suite!r} but no registered output of that policy carries "
                 f"comparison evidence in the report ({waiver.reason}). Bind the "
                 "suite to the policy's outputs and regenerate the report. A "
-                "migration waiver can apply only to its approved bootstrap "
-                "suite, reason and unstamped artifact; new waivers are forbidden."
+                "migration record cannot replace registered-output evidence; "
+                "all bootstrap waivers are retired and cannot return."
             )
 
     for key in sorted(committed.keys() - set(needed_by_key)):

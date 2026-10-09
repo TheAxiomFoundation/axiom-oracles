@@ -446,7 +446,7 @@ def _stamp_problems(
     return problems
 
 
-def _targets(report, engine, concept, resolver):
+def _targets(report, engine, concept, resolver, value_evidence):
     if native_fiit_report(report):
         from .fiit import native_fiit_pairs
 
@@ -465,7 +465,8 @@ def _targets(report, engine, concept, resolver):
         if isinstance(recorded, dict) and ("outputs" in recorded or "output" in recorded):
             targets &= _as_names(recorded.get("outputs", recorded.get("output")))
         declared = _engines_map_variables(report, engine)
-        if declared:
+        engines = report.get("engines")
+        if isinstance(engines, dict) and engine in engines:
             targets &= declared
         return targets
     lbtt_pairs = native_lbtt_pairs(report)
@@ -500,7 +501,8 @@ def _targets(report, engine, concept, resolver):
     if native_targets is not None:
         declarations.append(native_targets)
     bindings = (report.get("engine_bindings") or {}).get(engine)
-    global_binding = report.get("concept") in {None, concept}
+    global_binding = (report.get("concept") in {None, concept}
+                      or report.get("concept") not in value_evidence.compared_concepts)
     if global_binding and isinstance(bindings, dict) and ("outputs" in bindings or "output" in bindings):
         # These are the custom producer's recorded comparison targets;
         # diagnostic_outputs and current generic mappings cannot replace them.
@@ -515,6 +517,15 @@ def _targets(report, engine, concept, resolver):
         # Keep the comparison's full identity: narrowing a sum to one returned
         # member must not turn it into an independently compared scalar.
         targets = declarations[0]
+        if isinstance((report.get("output_bindings") or {}).get(concept), dict):
+            # A primary declaration cannot discard the comparison's returned
+            # members. Current resolver names supplement invalid/missing ledger
+            # rows without replacing a native producer's different binding.
+            key = (engine, concept)
+            recorded = (value_evidence.clean_ledger_targets.get(key, set())
+                        | (value_evidence.ledger_targets.get(key, set()) & resolver.resolve(concept, engine)))
+            if not recorded <= targets:
+                return frozenset()
         return targets if all(targets <= names for names in declarations[1:]) else frozenset()
     resolved = resolver.resolve(concept, engine)
     if resolved:
@@ -558,7 +569,7 @@ def _efrs_targets(report, engine, concept):
 
 
 def _observed_cases(report, engine, concept, output, resolver, value_evidence):
-    targets = _targets(report, engine, concept, resolver)
+    targets = _targets(report, engine, concept, resolver, value_evidence)
     if output not in targets:
         return set()
     return {
@@ -577,8 +588,8 @@ def _observed_cases(report, engine, concept, output, resolver, value_evidence):
 
 def _paired_cases(report, oracle_engine, concept, output, resolver, value_evidence):
     """Intersect returned case identities for one unambiguous output comparison."""
-    oracle_targets = _targets(report, oracle_engine, concept, resolver)
-    axiom_targets = _targets(report, AXIOM_ENGINE, concept, resolver)
+    oracle_targets = _targets(report, oracle_engine, concept, resolver, value_evidence)
+    axiom_targets = _targets(report, AXIOM_ENGINE, concept, resolver, value_evidence)
     if value_evidence.native_fiit:
         from .fiit import native_fiit_pairs
 
@@ -646,7 +657,7 @@ def _attested_outputs(
             if not isinstance(concept, str):
                 complete = False
                 continue
-            targets = _targets(report, oracle_engine, concept, resolver)
+            targets = _targets(report, oracle_engine, concept, resolver, value_evidence)
             if not targets:
                 complete = False
             candidates.update((concept, target) for target in targets)
