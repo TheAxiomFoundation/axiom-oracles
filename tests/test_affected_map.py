@@ -7,6 +7,9 @@ import json
 from pathlib import Path
 
 import pytest
+from hypothesis import given, settings, strategies as st
+
+from axiom_oracles.provenance import US_STATE_CODES
 
 SCRIPTS = Path(__file__).parents[1] / "scripts"
 
@@ -25,10 +28,10 @@ def _load(name: str):
 
 def test_repo_from_path_and_prefix():
     gam = _load("generate_affected_map.py")
-    assert gam._repo_from_path("$HOME/roots/rulespec-us-co") == (
-        "TheAxiomFoundation/rulespec-us-co"
+    assert gam._repo_from_path("$HOME/roots/rulespec-uk") == (
+        "TheAxiomFoundation/rulespec-uk"
     )
-    assert gam._repo_from_prefix("us-co") == "TheAxiomFoundation/rulespec-us-co"
+    assert gam._repo_from_prefix("us") == "TheAxiomFoundation/rulespec-us"
     assert gam._repo_from_prefix("uk") == "TheAxiomFoundation/rulespec-uk"
     # NEGATIVE: a non-rulespec directory contributes no repo.
     assert gam._repo_from_path("$HOME/some/other/dir") is None
@@ -83,7 +86,8 @@ def test_concept_prefix_maps_to_repo():
             },
         }
     )
-    assert "TheAxiomFoundation/rulespec-us-co" in repos
+    # The state layer is rulespec-us/us-co; rulespec-us-co is archived.
+    assert repos == {"TheAxiomFoundation/rulespec-us"}
 
 
 def test_direct_oracle_baseline_has_no_rulespec_dependency():
@@ -107,7 +111,10 @@ def test_direct_oracle_baseline_has_no_rulespec_dependency():
     assert repos == set()
 
 
-def test_snap_encoder_lane_adds_state_and_federal():
+def test_snap_encoder_lane_maps_state_and_federal_to_the_monorepo():
+    """The bridge reads the state program from rulespec-us/us-<st> and the
+    federal chain from rulespec-us/us, so the lane depends on rulespec-us
+    alone (bridges/snap_populace.resolve_program_path)."""
     gam = _load("generate_affected_map.py")
     repos = gam.repos_for_registry_config(
         {
@@ -118,10 +125,7 @@ def test_snap_encoder_lane_adds_state_and_federal():
             },
         }
     )
-    assert repos == {
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ca",
-    }
+    assert repos == {"TheAxiomFoundation/rulespec-us"}
 
 
 def test_build_map_is_deterministic_and_check_passes():
@@ -208,8 +212,164 @@ def test_parameter_suite_entries_use_file_prefix():
             ]
         }
     )
-    assert entries[0]["repos"] == ["TheAxiomFoundation/rulespec-us-ga"]
+    # run_parameter_comparisons.py reads `git show origin/main:us-ga/...` from
+    # the ~/rulespec-us checkout: the file prefix is a monorepo directory.
+    assert entries[0]["repos"] == ["TheAxiomFoundation/rulespec-us"]
     assert entries[0]["report"] == "axiom-policyengine-ga-health-thresholds.json"
+
+
+# --- absorbed state repos: nothing mapped may be archived --------------------
+#
+# Regression fixtures from the author's reported 2026-09-24 GitHub query
+# (`gh repo list TheAxiomFoundation --json name,isArchived`) and 404 responses.
+# The source captures are not retained here, so these tests do not establish
+# current API status or archive dates. A 404 does not prove a repository never
+# existed. Frozen standalone SHAs and unreadable dependencies cannot establish
+# freshness against the country rules the harness reads.
+ARCHIVED_RULESPEC_REPOS = frozenset(
+    {f"rulespec-us-{st}" for st in (
+        "al ar az ca co de fl ga id ma md nc nh ny ok sc tn tx".split()
+    )}
+    | {
+        "rulespec-uk-kingston-upon-thames",
+        "rulespec-tz-znz",
+        "rulespec-compile",
+        "rulespec-syntax",
+        "rulespec-validators",
+    }
+)
+UNREADABLE_STATE_RULESPEC_REPOS = frozenset(
+    f"rulespec-us-{st}" for st in "ak hi ia ks me mi mn or ut wa".split()
+)
+COUNTRY_MONOREPO = r"TheAxiomFoundation/rulespec-[a-z]{2}"
+
+
+def _all_mapped_repos() -> dict[str, set[str]]:
+    """Every repo each committed map/freshness entry names, by source."""
+    root = Path(__file__).parents[1]
+    affected_map = json.loads((root / "comparisons" / "affected_map.json").read_text())
+    freshness = json.loads(
+        (root / "dashboard" / "public" / "data" / "freshness.json").read_text()
+    )
+    gam = _load("generate_affected_map.py")
+    return {
+        "comparisons/affected_map.json": {
+            repo for entry in affected_map["suites"] for repo in entry["repos"]
+        },
+        "build_map()": {
+            repo for entry in gam.build_map()["suites"] for repo in entry["repos"]
+        },
+        "freshness.json affected_repos": {
+            repo
+            for suite in freshness["suites"]
+            for repo in suite.get("affected_repos") or []
+        },
+    }
+
+
+def test_no_mapped_repo_is_archived_or_missing():
+    """NEGATIVE: reject the archived/unreadable regression names."""
+    import re
+
+    for source, repos in _all_mapped_repos().items():
+        assert repos, f"{source} names no repos at all"
+        names = {repo.split("/", 1)[1] for repo in repos}
+        assert not names & ARCHIVED_RULESPEC_REPOS, (
+            f"{source} maps suites to archived repos "
+            f"{sorted(names & ARCHIVED_RULESPEC_REPOS)}"
+        )
+        assert not names & UNREADABLE_STATE_RULESPEC_REPOS, (
+            f"{source} maps suites to unreadable repository names "
+            f"{sorted(names & UNREADABLE_STATE_RULESPEC_REPOS)}"
+        )
+        # Positive form: every mapped repo is a country monorepo, so a new
+        # sub-jurisdiction name (the shape absorption retired) fails here
+        # before anyone lists it. A country repo archived later is
+        # flagged live by the affected-rerun workflow's GitHub API check.
+        offenders = sorted(r for r in repos if not re.fullmatch(COUNTRY_MONOREPO, r))
+        assert not offenders, f"{source}: {offenders} are not country monorepos"
+
+
+def test_every_archived_state_repo_folds_into_the_monorepo():
+    """Cover the absorbed/unreadable fixtures; leave other archived fixtures
+    alone, so a suite naming one still trips the guard above."""
+    gam = _load("generate_affected_map.py")
+    from axiom_oracles.provenance import ABSORBED_RULESPEC_REPOS, US_STATE_CODES
+
+    absorbed = {
+        name for name in ARCHIVED_RULESPEC_REPOS if name.startswith("rulespec-us-")
+    } | {"rulespec-uk-kingston-upon-thames"}
+    for name in absorbed | UNREADABLE_STATE_RULESPEC_REPOS:
+        assert name in ABSORBED_RULESPEC_REPOS, name
+    for name in ARCHIVED_RULESPEC_REPOS - absorbed:
+        assert name not in ABSORBED_RULESPEC_REPOS, name
+        assert gam._slug(name) == f"TheAxiomFoundation/{name}"
+    # All 50 states and DC, through the prefix and path signals.
+    assert len(US_STATE_CODES) == 51
+    for code in US_STATE_CODES:
+        assert gam._repo_from_prefix(f"us-{code}") == "TheAxiomFoundation/rulespec-us"
+        assert gam._repo_from_path(f"$HOME/.axiom-oracles/roots/rulespec-us-{code}") == (
+            "TheAxiomFoundation/rulespec-us"
+        )
+    assert gam._repo_from_prefix("uk-kingston-upon-thames") == (
+        "TheAxiomFoundation/rulespec-uk"
+    )
+    # A declared remote is kept as-is, like the stamper keeps a git remote: a
+    # harness cloning it reads the archived repo, so the map says so and
+    # test_no_mapped_repo_is_archived_or_missing fails the commit.
+    assert gam._repo_from_remote(
+        "https://github.com/TheAxiomFoundation/rulespec-us-co.git"
+    ) == "TheAxiomFoundation/rulespec-us-co"
+
+
+@pytest.mark.parametrize(
+    "suite",
+    [
+        # parameter suites: `git show origin/main:us-<st>/...` from ~/rulespec-us
+        "ga-health-thresholds",
+        "hi-income-tax-parameters",  # an unreadable standalone-name fixture
+        # composed TANF programs over $HOME/rulespec-us
+        "al-tanf-ecps",
+        "ca-tanf-ecps",
+        "co-tanf-ecps",
+        "de-tanf-ecps",
+        "ga-tanf-ecps",
+        "az-tanf-ecps",
+        "ks-tanf-ecps",
+        "mn-tanf-ecps",
+        "ny-tanf-ecps",
+        "wa-tanf-ecps",
+        # encoder SNAP lane: program read from rulespec-us/us-<st>
+        "co-snap-ecps",
+        "or-snap-ecps",
+        "ut-snap-ecps",
+        # SNAP QC: one overlay built from a rulespec-us root
+        "co-snap-qc",
+        "tx-snap-qc",
+    ],
+)
+def test_state_suites_depend_on_the_monorepo_alone(suite):
+    gam = _load("generate_affected_map.py")
+    entries = {e["suite"]: e for e in gam.build_map()["suites"]}
+    assert entries[suite]["repos"] == ["TheAxiomFoundation/rulespec-us"]
+
+
+def test_roots_based_tanf_suites_read_the_monorepo_checkout():
+    """The five TANF suites that composed from rsync'd
+    ~/.axiom-oracles/roots/rulespec-us-<st> copies read ~/rulespec-us like the
+    rest of the state TANF lane, so their report provenance records the
+    monorepo checkout that ran (with its SHA), not a no-.git copy."""
+    import yaml
+
+    root = Path(__file__).parents[1]
+    for state in ("al", "ca", "co", "de", "ga", "az", "ks", "mn", "ny", "wa"):
+        config = yaml.safe_load(
+            (root / "comparisons" / f"{state}-tanf-ecps.yaml").read_text()
+        )
+        params = config["runner"]["parameters"]
+        assert params["rulespec_roots"] == ["$HOME/rulespec-us"], state
+        assert params["axiom_rulespec_repo_roots"] == "$HOME/rulespec-us", state
+        assert "rulespec-us-" not in config["description"], state
 
 
 # --- select_affected_suites -------------------------------------------------
@@ -635,10 +795,46 @@ def test_roots_revision_pins_every_exercised_repo():
             gen.pinned_repos_for_registry_config(config)
     config["runner"]["parameters"]["axiom_rulespec_repo_roots_revision"] = "ca2d424f"
     config["runner"]["parameters"]["concepts"].append("us-co:tax/income#liability")
+    assert gen.pinned_repos_for_registry_config(config) == {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+    }
+    config["runner"]["parameters"]["concepts"].append("uk:tax/income#liability")
     with pytest.raises(SystemExit, match="a pin needs exactly one"):
         gen.pinned_repos_for_registry_config(config)
     config["runner"]["parameters"].pop("axiom_rulespec_repo_roots_revision")
     assert gen.pinned_repos_for_registry_config(config) == {}
+
+
+@settings(max_examples=50, database=None, deadline=None)
+@given(
+    prefixes=st.lists(
+        st.sampled_from(["us", *(f"us-{code}" for code in sorted(US_STATE_CODES))]),
+        min_size=1,
+        max_size=6,
+    ),
+    revision=st.text(alphabet="0123456789abcdef", min_size=7, max_size=40),
+    other_country=st.sampled_from(["uk", "be"]),
+)
+def test_roots_revision_pin_depends_on_canonical_repo_set(
+    prefixes, revision, other_country
+):
+    """US jurisdictions share a pin; a second country requires its own pin."""
+    gen = _load("generate_affected_map.py")
+    parameters = {
+        "concepts": [f"{prefix}:tax/income#liability" for prefix in prefixes],
+        "axiom_rulespec_repo_roots": "$HOME/oracle-pins",
+        "axiom_rulespec_repo_roots_revision": revision,
+    }
+    config = {
+        "name": "roots-pin-property",
+        "runner": {"type": "axiom-oracles-compare", "parameters": parameters},
+    }
+    assert gen.pinned_repos_for_registry_config(config) == {
+        "TheAxiomFoundation/rulespec-us": revision
+    }
+    parameters["concepts"].append(f"{other_country}:tax/income#liability")
+    with pytest.raises(SystemExit, match="a pin needs exactly one"):
+        gen.pinned_repos_for_registry_config(config)
 
 
 def test_committed_roots_pinned_suites_carry_their_pin():

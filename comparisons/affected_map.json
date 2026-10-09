@@ -8,7 +8,7 @@
       "name": null,
       "report": "axiom-policyengine-ak-apa-state-supplement.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ak"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -17,7 +17,7 @@
       "name": null,
       "report": "axiom-policyengine-ak-atap-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ak"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -44,7 +44,7 @@
       "name": null,
       "report": "axiom-policyengine-al-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-al"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/al-tanf-ecps.yaml"
     },
@@ -53,7 +53,7 @@
       "name": null,
       "report": "axiom-policyengine-al-tanf-payment-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-al"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -98,7 +98,7 @@
       "name": null,
       "report": "axiom-policyengine-az-tanf-deductions.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-az"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -107,8 +107,7 @@
       "name": null,
       "report": "axiom-policyengine-az-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-az"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/az-tanf-ecps.yaml"
     },
@@ -225,7 +224,7 @@
       "name": null,
       "report": "axiom-policyengine-ca-capi-limits.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ca"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -277,7 +276,7 @@
       "name": null,
       "report": "axiom-policyengine-ca-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ca"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ca-tanf-ecps.yaml"
     },
@@ -295,8 +294,7 @@
       "name": null,
       "report": "axiom-policyengine-co-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-co"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/co-snap-ecps.yaml"
     },
@@ -332,7 +330,7 @@
       "name": null,
       "report": "axiom-policyengine-co-state-supplement.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-co"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -341,7 +339,7 @@
       "name": null,
       "report": "axiom-policyengine-co-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-co"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/co-tanf-ecps.yaml"
     },
@@ -405,7 +403,7 @@
       "name": null,
       "report": "axiom-policyengine-de-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-de"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/de-tanf-ecps.yaml"
     },
@@ -556,7 +554,7 @@
       "name": null,
       "report": "axiom-policyengine-fl-tca-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-fl"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -565,7 +563,7 @@
       "name": null,
       "report": "axiom-policyengine-ga-health-thresholds.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ga"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -610,7 +608,7 @@
       "name": null,
       "report": "axiom-policyengine-ga-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ga"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ga-tanf-ecps.yaml"
     },
@@ -619,7 +617,7 @@
       "name": null,
       "report": "axiom-policyengine-ga-tanf-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ga"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -718,7 +716,7 @@
       "name": null,
       "report": "axiom-policyengine-hi-income-tax-parameters.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-hi"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -736,7 +734,7 @@
       "name": null,
       "report": "axiom-policyengine-ia-income-tax-parameters.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ia"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -817,8 +815,7 @@
       "name": null,
       "report": "axiom-policyengine-ks-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ks"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ks-tanf-ecps.yaml"
     },
@@ -890,7 +887,7 @@
       "name": null,
       "report": "axiom-policyengine-md-tca-payments.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-md"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -908,7 +905,7 @@
       "name": null,
       "report": "axiom-policyengine-me-tanf-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-me"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -935,7 +932,7 @@
       "name": null,
       "report": "axiom-policyengine-mi-ssp-payments.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-mi"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -962,8 +959,7 @@
       "name": null,
       "report": "axiom-policyengine-mn-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-mn"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/mn-tanf-ecps.yaml"
     },
@@ -1107,8 +1103,7 @@
       "name": null,
       "report": "axiom-policyengine-ny-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ny"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ny-tanf-ecps.yaml"
     },
@@ -1117,7 +1112,7 @@
       "name": null,
       "report": "axiom-policyengine-ny-tanf-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ny"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -1162,8 +1157,7 @@
       "name": null,
       "report": "axiom-policyengine-or-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-or"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/or-snap-ecps.yaml"
     },
@@ -1350,7 +1344,7 @@
       "name": null,
       "report": "axiom-policyengine-tx-tanf-parameters.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-tx"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -1945,8 +1939,7 @@
       "name": null,
       "report": "axiom-policyengine-ut-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ut"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ut-snap-ecps.yaml"
     },
@@ -1982,8 +1975,7 @@
       "name": null,
       "report": "axiom-policyengine-wa-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-wa"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/wa-tanf-ecps.yaml"
     },
@@ -1992,7 +1984,7 @@
       "name": null,
       "report": "axiom-policyengine-wa-tanf-payment-standard.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-wa"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },

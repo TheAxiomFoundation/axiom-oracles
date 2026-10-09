@@ -769,18 +769,21 @@ def _affected_map_repos(config: dict) -> list[str]:
     return mapped_repos
 
 
-def _declared_repo_root_checkouts(config: dict, params: dict) -> list[str]:
+def _declared_repo_root_checkouts(params: dict) -> list[str]:
     """Checkouts an ``axiom_rulespec_repo_roots`` suite actually compiled against.
 
     ``_run_axiom_oracles_compare`` exports the suite's roots as
     AXIOM_RULESPEC_REPO_ROOTS, with AXIOM_RULESPEC_US_ROOT's parent first when
     that override is set (``_rulespec_repo_roots_env``). The engine lifts a
     root that is itself a ``rulespec-*`` checkout to its parent and resolves
-    each repo as ``<root>/<name>`` (``_default_rulespec_repo_roots`` in
-    adapters/axiom/runner.py). Mirroring that order keeps a pinned suite (e.g.
+    all country children (``_default_rulespec_repo_roots`` and
+    ``explicit_engine_roots`` in adapters/axiom/runner.py). Recording every
+    discovered checkout keeps a pinned suite (e.g.
     ``$HOME/oracle-pins`` at ``axiom_rulespec_repo_roots_revision``) from being
     stamped with whatever the developer's convention-path checkout is on.
     """
+    from axiom_oracles.engine_compat import explicit_engine_roots
+
     declared = params.get("axiom_rulespec_repo_roots")
     if not declared:
         return []
@@ -795,19 +798,12 @@ def _declared_repo_root_checkouts(config: dict, params: dict) -> list[str]:
         if root.name.startswith("rulespec-"):
             root = root.parent
         roots.append(root)
-    paths: list[str] = []
-    for repo in _affected_map_repos(config):
-        name = repo.split("/", 1)[-1]
-        for root in roots:
-            candidate = root / name
-            if candidate.exists():
-                paths.append(str(candidate))
-                break
-    return paths
+    return [str(path) for path in explicit_engine_roots(roots)]
 
 
 def _complete_rulespecs_from_affected_map(
-    config: dict, runner: dict, rulespecs: list[dict]
+    config: dict, runner: dict, rulespecs: list[dict],
+    *, declared_paths: list[str] | None = None,
 ) -> list[dict]:
     """Fill missing or SHA-less rulespec entries for the suite's mapped repos.
 
@@ -822,22 +818,107 @@ def _complete_rulespecs_from_affected_map(
       (:func:`axiom_oracles.provenance.resolve_rulespec_checkout` — the same
       locations the harnesses themselves search).
 
-    Entries that already carry a SHA are untouched, and declared-path entries
-    always win over convention lookups. Unresolvable repos keep or gain a
+    Declared paths never borrow clone or convention SHAs. GitHub identities
+    match case-insensitively, while raw remote spelling is retained. A mapped
+    SHA comes only from agreeing observations for all contributing declared
+    roots, including discovered workspace children. Missing or conflicting
+    SHAs, or a declared absorbed or foreign layer, leave country provenance ambiguous.
+    Unresolvable repos keep or gain a
     ``sha: None`` entry so the selector's conservative "cannot prove fresh"
-    reading stays intact. Never raises — provenance must annotate a run,
-    never fail one.
+    reading stays intact. So does a mapped repo that a declared checkout of an
+    absorbed repo folds into (a clone of an archived ``rulespec-us-<st>``,
+    stamped under its own name): that run read frozen rules, not the
+    monorepo, so no monorepo SHA is vouched for and the selector reruns the
+    suite. Never raises — provenance must annotate a run, never fail one.
     """
     try:
-        from axiom_oracles.provenance import resolve_rulespec_checkout
+        from axiom_oracles.engine_compat import explicit_engine_roots
+        from axiom_oracles.provenance import (
+            canonical_rulespec_slug,
+            checkout_remote_matches_slug,
+            resolve_rulespec_checkout,
+            rulespec_provenance,
+        )
 
         mapped_repos = _affected_map_repos(config)
         if not mapped_repos:
             return rulespecs
         by_repo = {e.get("repo"): e for e in rulespecs}
+        read_other_instead = {
+            canonical_rulespec_slug(e["repo"].rsplit("/", 1)[-1].casefold()).casefold()
+            for e in rulespecs
+            if e.get("repo")
+            and canonical_rulespec_slug(
+                e["repo"].rsplit("/", 1)[-1].casefold()
+            ).casefold() != e["repo"].casefold()
+        }
+        declared_roots = [Path(path) for path in declared_paths or []]
+        declared_roots.extend(
+            path for path in explicit_engine_roots(declared_roots) if path not in declared_roots
+        )
+        observations = [(path, rulespec_provenance([path])[0]) for path in declared_roots]
         completed = list(rulespecs)
         for repo in mapped_repos:
-            if by_repo.get(repo, {}).get("sha"):
+            country = repo.rsplit("/", 1)[-1].removeprefix("rulespec-").casefold()
+            # A foreign checkout can supply this country's rules even when its
+            # origin has another name. Inspect the layouts the composer and
+            # engine read, without invalidating separate-country checkouts.
+            contributing = [
+                (path, observation) for path, observation in observations
+                if (
+                    (observation.get("repo") or "").casefold() == repo.casefold()
+                    or canonical_rulespec_slug(path.name.casefold()).casefold() == repo.casefold()
+                    or path.name == country
+                    or path.name.startswith(f"{country}-")
+                    or any(
+                        child.is_dir()
+                        for pattern in (country, f"{country}-*")
+                        for child in path.glob(pattern)
+                    )
+                )
+            ]
+            contradictory_root = repo.casefold() in read_other_instead or any(
+                not checkout_remote_matches_slug(path, repo) for path, _ in contributing
+            )
+            # Any absorbed or contradictory layer makes country freshness
+            # unknown, even when a separate country root supplied a live SHA.
+            if contradictory_root:
+                for entry in completed:
+                    if (entry.get("repo") or "").casefold() == repo.casefold():
+                        entry["sha"] = None
+                if repo not in by_repo:
+                    entry = {"repo": repo, "sha": None}
+                    by_repo[repo] = entry
+                    completed.append(entry)
+                continue
+            matching = [
+                entry for entry in rulespecs
+                if (entry.get("repo") or "").casefold() == repo.casefold()
+            ]
+            if declared_paths or any(entry.get("sha") for entry in matching):
+                # The canonical selector key must describe these checkouts,
+                # even if a different convention checkout is newer. Unknown
+                # or contradictory declared origins cannot establish its SHA.
+                shas = {entry.get("sha") for entry in matching}
+                # A workspace child's unknown SHA and a layout-only jurisdiction
+                # observation must participate even when their stamp uses another
+                # name. Canonical known entries already carry any verified upstream
+                # SHA substitution performed by _build_run_provenance.
+                shas.update(
+                    observation.get("sha") for _, observation in contributing
+                    if observation.get("sha") is None
+                    or (observation.get("repo") or "").casefold() != repo.casefold()
+                )
+                sha = next(iter(shas)) if len(shas) == 1 else None
+                if sha is None:
+                    for entry in matching:
+                        entry["sha"] = None
+                if repo in by_repo:
+                    by_repo[repo]["sha"] = sha
+                else:
+                    entry = {"repo": repo, "sha": sha}
+                    by_repo[repo] = entry
+                    completed.append(entry)
                 continue
             sha = None
             if repo == "TheAxiomFoundation/rulespec-us":
@@ -889,8 +970,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         val = runner.get(key) or params.get(key)
         if val:
             rulespec_paths.append(str(_expand_path(val)))
-    if runner_type == "axiom-oracles-compare" and not rulespec_paths:
-        rulespec_paths.extend(_declared_repo_root_checkouts(config, params))
+    if runner_type == "axiom-oracles-compare":
+        rulespec_paths.extend(_declared_repo_root_checkouts(params))
     # The EUROMOD/UKMOD synthetic lane points `axiom_rulespec_repo_roots` at the
     # whole org directory and names the model country; the encoded rules live in
     # that country's `rulespec-<cc>` repo under the roots dir, so resolve it
@@ -922,6 +1003,14 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 rulespec_paths.append(str(ran_against))
         except Exception:  # provenance must annotate, never fail a run
             pass
+    # Workspace containers may contribute country children even when another
+    # composition path already supplied a SHA. Stamp the compiler's normalized
+    # children as well, retaining their raw origins and unknown SHA observations.
+    from axiom_oracles.engine_compat import explicit_engine_roots
+
+    rulespec_paths = list(dict.fromkeys([
+        *rulespec_paths, *(str(path) for path in explicit_engine_roots(rulespec_paths)),
+    ]))
     rulespecs = rulespec_provenance(rulespec_paths)
     verified_upstream_sha = params.get(_VERIFIED_RULESPEC_UPSTREAM_SHA)
     if verified_upstream_sha and rulespecs:
@@ -957,7 +1046,9 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         "axiom-oracles-compare",
         "de-axiom-oracle-compare",
     ):
-        rulespecs = _complete_rulespecs_from_affected_map(config, runner, rulespecs)
+        rulespecs = _complete_rulespecs_from_affected_map(
+            config, runner, rulespecs, declared_paths=rulespec_paths
+        )
     # A skip-capable runner that re-emitted the committed report never
     # executed any rules this run — no matter which path produced a rulespec
     # entry (configured roots included), its SHA must not be recorded, or the

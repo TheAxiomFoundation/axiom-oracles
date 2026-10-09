@@ -31,6 +31,7 @@ from typing import Any
 
 import yaml
 
+from ..provenance import checkout_remote_matches_slug
 from . import snapscreener
 from .population import (
     DEFAULT_US_POPULACE_YEAR,
@@ -69,7 +70,6 @@ COMMON_AXIOM_OUTPUT_ID_BY_LABEL = {
 class JurisdictionConfig:
     jurisdiction: str
     state_code: str
-    repo_name: str
     program_relative_path: Path
     output_id_by_label: dict[str, str]
     utility_allowance_labels: tuple[str, ...]
@@ -84,7 +84,6 @@ JURISDICTION_CONFIGS = {
     "us-co": JurisdictionConfig(
         jurisdiction="us-co",
         state_code="CO",
-        repo_name="rulespec-us-co",
         program_relative_path=Path(
             "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -124,7 +123,6 @@ JURISDICTION_CONFIGS = {
     "us-ca": JurisdictionConfig(
         jurisdiction="us-ca",
         state_code="CA",
-        repo_name="rulespec-us-ca",
         program_relative_path=Path(
             "policies/cdss/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -174,7 +172,6 @@ JURISDICTION_CONFIGS = {
     "us-az": JurisdictionConfig(
         jurisdiction="us-az",
         state_code="AZ",
-        repo_name="rulespec-us-az",
         program_relative_path=Path(
             "policies/des/faa5/na-eligibility-and-benefit-determination/"
             "fy-2026-benefit-calculation.yaml"
@@ -204,7 +201,6 @@ JURISDICTION_CONFIGS = {
     "us-ga": JurisdictionConfig(
         jurisdiction="us-ga",
         state_code="GA",
-        repo_name="rulespec-us-ga",
         program_relative_path=Path(
             "policies/dfcs/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -236,7 +232,6 @@ JURISDICTION_CONFIGS = {
     "us-md": JurisdictionConfig(
         jurisdiction="us-md",
         state_code="MD",
-        repo_name="rulespec-us-md",
         program_relative_path=Path(
             "policies/dhs/fia/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -268,7 +263,6 @@ JURISDICTION_CONFIGS = {
     "us-tx": JurisdictionConfig(
         jurisdiction="us-tx",
         state_code="TX",
-        repo_name="rulespec-us-tx",
         program_relative_path=Path(
             "policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.yaml"
         ),
@@ -300,7 +294,6 @@ JURISDICTION_CONFIGS = {
     "us-ny": JurisdictionConfig(
         jurisdiction="us-ny",
         state_code="NY",
-        repo_name="rulespec-us-ny",
         program_relative_path=Path(
             "policies/otda/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -813,19 +806,23 @@ def resolve_program_path(
 ) -> Path:
     if override is not None:
         return override.resolve()
-    cwd_program = Path.cwd() / config.program_relative_path
-    if cwd_program.exists():
+    # A CWD program may override the workspace copy only from a country/state
+    # monorepo layout, with a matching upstream identity when a GitHub origin
+    # is available. Bare rsync'd layouts still work without a git remote.
+    # There is no standalone-path fallback; a missing workspace program fails
+    # at load, naming the monorepo path.
+    cwd = Path.cwd()
+    cwd_program = cwd / config.program_relative_path
+    if (
+        cwd.name == config.jurisdiction
+        and (cwd.parent / "us").is_dir()
+        and checkout_remote_matches_slug(cwd.parent, "TheAxiomFoundation/rulespec-us")
+        and cwd_program.exists()
+    ):
         return cwd_program.resolve()
-    # The country monorepo's jurisdiction twin is the canonical copy — it is
-    # the only layout post-hard-cut engines can resolve imports from (a state
-    # repo is not a valid engine root) — so prefer it; the standalone state
-    # repo remains the supervised-machine fallback.
-    monorepo_program = (
+    return (
         workspace_root / "rulespec-us" / config.jurisdiction / config.program_relative_path
-    )
-    if monorepo_program.exists():
-        return monorepo_program.resolve()
-    return (workspace_root / config.repo_name / config.program_relative_path).resolve()
+    ).resolve()
 
 
 def resolve_test_template_path(program: Path, override: Path | None) -> Path:

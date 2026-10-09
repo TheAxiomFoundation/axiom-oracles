@@ -15,9 +15,18 @@ Derivation, per suite, unions three signals (all deterministic):
    ``rulespec_remote``. The path basename (or the remote's ``owner/repo``)
    names the repo directly. This is the authoritative signal.
 2. **concept id prefixes** — a concept like ``us-co:policies/…#co_tanf_benefit``
-   is encoded in ``rulespec-us-co``; ``us:statutes/…`` in ``rulespec-us``;
-   ``uk:…`` in the UK rulespec; ``be:…`` in ``rulespec-be``. This backstops
-   suites whose rulespec paths are indirected (e.g. rsync'd roots).
+   is encoded in ``rulespec-us`` (its ``us-co/`` directory), as is
+   ``us:statutes/…``; ``uk:…`` in the UK rulespec; ``be:…`` in ``rulespec-be``.
+   This backstops suites whose rulespec paths are indirected (e.g. rsync'd
+   roots). US state prefixes map to the country dependency ``rulespec-us``;
+   this routing does not depend on a standalone repository's existence or
+   archive history.
+   ``axiom_oracles.provenance.canonical_rulespec_slug`` folds absorbed names
+   (``ABSORBED_RULESPEC_REPOS``) in the path and prefix signals. A declared
+   ``rulespec_remote`` stays as-is, as the report stamper keeps a git remote:
+   a harness that clones an archived remote really reads it, and
+   ``tests/test_affected_map.py`` rejects the archived and unreadable names
+   in its regression fixtures and requires country-shaped dependency names.
 3. **parameter-suite ``file:`` prefixes** — the non-registry
    ``parameter-oracles.yaml`` names files like ``us-ga/policies/…`` whose top
    path segment maps to a rulespec repo the same way.
@@ -76,7 +85,7 @@ def _rel(path: Path) -> str:
 
 
 def _repo_from_path(path_str: str) -> str | None:
-    """``$HOME/.axiom-oracles/roots/rulespec-us-co`` → the repo slug."""
+    """``$HOME/.axiom-oracles/roots/rulespec-uk`` → the repo slug."""
     name = Path(os.path.expandvars(str(path_str))).name
     if not name.startswith("rulespec-"):
         return None
@@ -102,8 +111,9 @@ def _repo_from_remote(remote: str) -> str | None:
 
 def _repo_from_prefix(prefix: str) -> str | None:
     """Map a concept/file jurisdiction prefix (``us``, ``us-co``, ``uk``, ``be``)
-    to its rulespec repo slug. ``us`` → ``rulespec-us``; ``us-co`` →
-    ``rulespec-us-co``; ``uk``/``be`` → ``rulespec-uk``/``rulespec-be``."""
+    to its rulespec repo slug. ``us`` and ``us-co`` → ``rulespec-us`` (the
+    state lives in the monorepo's ``us-co/``); ``uk``/``be`` →
+    ``rulespec-uk``/``rulespec-be``."""
     prefix = prefix.strip().lower()
     if not prefix:
         return None
@@ -269,10 +279,10 @@ def repos_for_registry_config(config: dict) -> set[str]:
                 repos.add(slug)
 
     # The encoder SNAP lane (axiom-encode-snap-ecps-compare) names its state as
-    # `jurisdiction: us-ca` and runs the state's axiom-programs SNAP spec over
-    # federal SNAP rules. Map the jurisdiction to the state rulespec repo, and
-    # add federal rulespec-us since every state SNAP inherits the 7 USC/7 CFR
-    # federal chain.
+    # `jurisdiction: us-ca` and runs the state's SNAP program over federal SNAP
+    # rules. The bridge reads that program from rulespec-us/us-ca
+    # (bridges/snap_populace.resolve_program_path), and every state SNAP
+    # inherits the 7 USC/7 CFR federal chain, so both signals name rulespec-us.
     jurisdiction = params.get("jurisdiction")
     if runner.get("type") == "axiom-encode-snap-ecps-compare" and jurisdiction:
         state_slug = _repo_from_prefix(str(jurisdiction))
