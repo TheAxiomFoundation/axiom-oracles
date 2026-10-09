@@ -6881,7 +6881,10 @@ def policyengine_raw_output_value(spec: dict[str, Any], row: Any) -> float:
         return max(0.0, maximum_amount - income_reduction)
     if expression is not None:
         raise ValueError(f"unsupported PolicyEngine expression: {expression!r}")
-    return money(row_value(row, spec["pe"]))
+    raw_value = row_value(row, spec["pe"])
+    # Preserve an absent/nonfinite returned output through the comparison.
+    # Input money projections may default to zero; output evidence cannot.
+    return math.nan if raw_value is None else float(raw_value)
 
 
 def output_applies(spec: dict[str, Any], row: Any) -> bool:

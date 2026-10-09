@@ -68,6 +68,10 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
             "error_count": 0,
         },
         "aggregates": [{"concept": concept, "comparison_count": 1}],
+        "output_bindings": {concept: {
+            engine: list(targets),
+            "axiom": list(targets) if shape in {"grid-components", "yale-multiple-columns"} else "axiom_tax",
+        }},
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,
             "executed": True,
@@ -78,6 +82,10 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
         "cases": [],
         "observed_outputs": [],
     }
+    if shape == "fiit":
+        report["output_bindings"][concept]["axiom"] = "us:statutes/26/3101/b/1#hospital_insurance_wage_tax"
+    elif shape == "yale-singleton":
+        report["output_bindings"][concept]["axiom"] = output
     row = {
         "case_id": "c1", "engine": engine, "concept": concept,
         "variable": output, "value": value,
@@ -88,7 +96,10 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
             "comparisons": 1,
         }]
         if returned:
-            report["observed_outputs"] = [row]
+            report["observed_outputs"] = [row, {
+                "case_id": "c1", "engine": "axiom", "concept": concept,
+                "variable": "axiom_tax", "value": value,
+            }]
     elif shape == "role-scalar":
         if returned:
             report["cases"] = [{
@@ -102,6 +113,7 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
             report["cases"] = [{
                 "case_id": "c1", "axiom": 0, engine: 0,
                 f"{engine}_components": {"other_sum_component": 0, output: value},
+                "axiom_components": {"other_sum_component": 0, output: 0},
             }]
     elif shape == "fiit":
         report["provenance"] = {"generated_by": "scripts/run_comparison.py::fiit-ecps"}
@@ -110,7 +122,9 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
             "compared": 1, "mismatches": 0,
         }]
         if returned:
-            report["observed_outputs"] = [dict(row, surface="employee-medicare", output=output)]
+            report["observed_outputs"] = [dict(
+                row, surface="employee-medicare", output=output, counterpart_value=0,
+            )]
     else:
         report["provenance"] = {"generator": "scripts/generate_us_tariff_panel.py"}
         report["summary"]["slots"] = {concept: {"matches": 1, "mismatches": 0}}
@@ -126,7 +140,10 @@ def _shape_report(shape, value, *, returned=True, location="metadata"):
             "axiom": {concept: 0},
         }]
         if returned and len(targets) > 1:
-            report["observed_outputs"] = [row]
+            report["observed_outputs"] = [row, {
+                "case_id": "c1", "engine": "axiom", "concept": concept,
+                "variable": output, "value": 0,
+            }]
         elif not returned and len(targets) == 1:
             report["cases"][0]["expected"].pop(concept)
 
@@ -161,9 +178,13 @@ def _contradict(report, engine, concept, output, value, kind, *, case_id="c1", v
 
 
 def _coverage(report, engine, concept, output, targets, declared_type=None):
+    axiom_targets = report["output_bindings"][concept]["axiom"]
+    axiom_targets = (axiom_targets,) if isinstance(axiom_targets, str) else axiom_targets
     resolver = OracleTargetResolver(
-        concept_targets={concept: {engine: frozenset(targets)}},
-        output_types={} if declared_type is None else {(engine, output): declared_type},
+        concept_targets={concept: {engine: frozenset(targets), "axiom": frozenset(axiom_targets)}},
+        output_types={} if declared_type is None else {
+            (engine, output): declared_type, ("axiom", axiom_targets[0]): declared_type,
+        },
     )
     oracle = OracleIdentity(
         "policyengine-us" if engine == "policyengine" else "yale-statutory",
@@ -181,7 +202,7 @@ def _coverage(report, engine, concept, output, targets, declared_type=None):
 @given(
     finite_value=FINITE_VALUES,
     invalid_value=INVALID_VALUES,
-    invalid_execution=st.sampled_from((False, None, 1, "true", "missing-stamp", "missing-executed")),
+    invalid_execution=st.sampled_from((False, None, 1, "true")),
     location=st.sampled_from(("declarations", "schema", "metadata")),
     contradiction=st.sampled_from(("missing", "error", "skipped")),
     contradiction_concept=st.sampled_from(("same-concept", "different-concept", None)),
@@ -189,7 +210,7 @@ def _coverage(report, engine, concept, output, targets, declared_type=None):
 )
 @example(finite_value=0, invalid_value=None, invalid_execution=1, location="declarations",
          contradiction="missing", contradiction_concept="different-concept", unrelated="different-output")
-@example(finite_value=False, invalid_value=float("nan"), invalid_execution="missing-stamp",
+@example(finite_value=False, invalid_value=float("nan"), invalid_execution=False,
          location="metadata", contradiction="error", contradiction_concept="same-concept", unrelated="different-case")
 @example(finite_value=0, invalid_value=None, invalid_execution=False,
          location="schema", contradiction="missing", contradiction_concept=None, unrelated="none")

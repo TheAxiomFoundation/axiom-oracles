@@ -23,7 +23,8 @@ conformant  ⇔  covered == in_scope
   "all programs" accounting stays honest: an excluded-with-reason policy is
   neither covered nor silently dropped — it is counted and shown.
 * **`covered`** — an in-scope policy whose named suite has a **live committed
-  comparison report that attests execution** (see below). A suite named in the
+  comparison report with a returned same-case pair** for a registered output
+  (see below). A suite named in the
   universe with no report is in scope and *not* covered; so is one whose report
   did not run. Coverage is evidence, not intent.
 * **`unexplained_total`** — mismatches on covered suites with no explanatory
@@ -39,7 +40,7 @@ conformant *for that policy* when every one of its residuals is a documented
 upstream (oracle) behaviour — which is exactly the UK Universal Credit lane
 today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 
-## Execution attestation — a covered suite must have RUN
+## Execution attestation — a covered output needs a real comparison
 
 The predicate reads a report's mismatch signals. Nothing in it used to ask
 whether the report was the product of a run, and a report that ran *nothing*
@@ -60,48 +61,58 @@ Every candidate report is now attested against the universe's declared oracle
    oracle identity (`provenance.oracle`) that does not contradict the universe's
    *model* identity — a `UK_2026` run cannot attest a `BE_2025` universe, and
    policyengine-uk evidence cannot attest a policyengine-us claim, though both
-   write the same engine name; and a runner execution stamp with literal
-   `executed: true` and counts that agree with the report body — a stamp cannot
-   claim more than the artifact shows. A report failing any of these covers
+   write the same engine name. A runner execution stamp is optional; when
+   present its execution claim, output bindings and counts must agree with the
+   report body. A stamp cannot claim more than the artifact shows.
+   A report failing any of these covers
    nothing: the policy scores **uncovered**, with the reason on the drill-down
    row, rather than covered-with-zero-unexplained.
 2. **Output binding.** At least one of the universe row's registered
-   `output_vars` must carry a returned comparison value in the covering report.
-   The shared `observed_output_value` predicate requires a finite, non-null
-   numeric value or the output's registered declared type, with no missing,
-   error or skipped evidence contradicting that case and output. Zero and
-   `False` remain observations.
+   `output_vars` must have a returned value from **both Axiom and the declared
+   oracle in the same real case and actual comparison**. Each engine's binding
+   to that registered output must be unambiguous. The shared
+   `observed_output_value` predicate requires a finite, non-null numeric value
+   or an authoritative declared type, with no missing, error or skipped
+   evidence contradicting that case and output. The valid case identities are
+   intersected across engines: values returned in different cases cannot pair.
+   Zero and `False` remain observations.
    A suite that ran cleanly against some other surface does not attest the
    policy it is registered under.
 
 Runner stamps, grid engine-to-variable declarations, concept mappings and FIIT's
 `SURFACE_OUTPUTS` identify candidate output names. Every candidate must pass the
-same value predicate. Counts, declarations, variable lists, metadata and schema
-fields cannot prove observation. Native Comparator and FIIT reports retain
+same paired-value predicate. Counts, declarations, variable lists, metadata,
+schema fields and a stamp alone cannot prove observation. Historical unstamped
+reports can cover when their recorded values satisfy that predicate; never add
+stamps to historical artifacts to restore coverage. Native Comparator and FIIT reports retain
 per-case, per-output returned values in `observed_outputs`; scalar case values
 can supply evidence when their binding is unambiguous. Summed concept or Yale
 slot values do not prove individual component outputs. FIIT retains its raw
-returned oracle values separately from arithmetic projections, so converting a
-missing value to zero cannot create coverage.
+returned oracle values and their Axiom counterpart separately from arithmetic
+projections, so converting a missing value to zero cannot create coverage.
+Native FIIT diagnostic outputs bind only to their explicitly recorded native
+targets or per-output ledger; a grouped concept cannot promote an intermediate
+value into a final policy output.
 
-`attestation_waivers.yaml` names the reports that predate stamping and cannot
-show that binding. It is **hand-authored and shrink-only**: a new unbound row
-fails `scripts/conformance_attestation.py --check` instead of landing there, a
-waiver that is no longer needed is stale and fails too, and each is pinned to
-its suite and the complete approved legacy artifact's SHA-256. The fixed bootstrap
-set in `conformance/waivers.py` rejects additions and suite/reason changes;
-replacement artifacts and runner-stamped reports cannot use migration waivers.
-Two reasons are distinguished, and
-only the first is a statement about what a run did:
+`attestation_waivers.yaml` preserves historical migration metadata for legacy
+reports that could not show their output binding. It is **hand-authored and
+shrink-only**: each approved entry is pinned to its suite, reason and complete
+legacy artifact's SHA-256, and the fixed bootstrap set in `conformance/waivers.py`
+rejects additions and suite/reason changes. The attestation check audits these
+records and rejects stale entries; `--prune` only removes them. This metadata
+never authorizes coverage: the scoreboard requires a valid same-case pair for
+every covered policy and has no waiver bypass. The recorded reasons distinguish
+what the run compared from what the artifact failed to record:
 
 | Reason | Meaning |
 | --- | --- |
 | `compared_surface_differs` | The report records every surface it compared and none is a registered output — the suite ran against a different surface (e.g. a state grid comparing PolicyEngine's `*_before_refundable_credits` where the row registers the final `*_income_tax`). |
-| `oracle_variable_not_recorded` | The artifact does not record which oracle variable each compared concept was bound to, so the binding cannot be verified either way. Regenerating the report with a stamped attestation resolves it. |
+| `oracle_variable_not_recorded` | The artifact does not record which oracle variable each compared concept was bound to, so the binding cannot be verified either way. A rerun must retain unambiguous output bindings and same-case returned values from both engines. |
 
-Migration waivers cannot supply the required literal execution stamp or a
-returned value. The published `covered_with_waived_output_attestation` field
-remains visible; the current waiver file has no entries.
+Migration history cannot supply a missing same-case pair or resolve an
+ambiguous registered output. The published
+`covered_with_waived_output_attestation` compatibility field remains visible at
+zero; the current waiver file has no entries.
 
 ### Oracle release drift — measured, not blocking
 
@@ -119,14 +130,46 @@ report's release. The claim a badge makes is "Axiom conforms to *this* oracle at
 release (or re-pinning the universe to what the evidence actually covers).
 Making drift blocking is that scope decision, not a code change.
 
-All six published jurisdictions currently have zero covered policies: their
-committed legacy reports lack literal execution stamps. BE falls from 22 to 0
-and US-PE from 28 to 0 under the stricter observation rule. The policies remain
-in scope. Coverage can return when executed comparisons produce stamps and
-valid returned values for the registered outputs; neither summary counts nor
-migration waivers restore it. Coverage floors are reset to zero while all
-residual ceilings and scope denominators remain pinned. Max's d1097
-confirmation of the larger public coverage drop remains pending.
+The previous reviewed head `3becffa7c` reported BE 22 and US-PE 28 covered
+policies. The round-11 reviewed head `4f51296fb` then reported zero covered
+policies in every jurisdiction because it required literal execution stamps.
+Those are historical implementation baselines; `origin/main` is the primary
+publication baseline (114/226 covered at the start of this review). The current
+round-11 fix retains 53/226 covered under the same-case rule:
+
+| Jurisdiction | Covered on `origin/main` | Covered after round-11 fixes |
+| --- | --- | --- |
+| BE | 23/23 | 10/23 |
+| DK | 1/22 | 1/22 |
+| UK | 21/21 | 6/21 |
+| UK-PE | 23/23 | 13/23 |
+| US-PE | 36/127 | 15/127 |
+| Yale tariff | 10/10 | 8/10 |
+
+Conformant jurisdictions fall from four on `origin/main` to zero after these
+fixes. The generated scoreboard and detail files record the evidence for each
+policy. Suite registrations and ratchet floors are regenerated from the reports
+that pass; all policies remain in scope. A rerun restores missing coverage only by
+recording valid paired values for the actual registered output, followed by
+deliberate suite re-registration and artifact regeneration.
+
+### Custom-producer recovery
+
+An absent stamp alone no longer prevents a genuine custom run from covering.
+The following producer paths differ in the returned evidence they retain:
+
+| Producer | Recorded evidence and required recovery |
+| --- | --- |
+| UK EFRS (`_adapt_uk_efrs_to_v2`, `bridges/efrs_uk.py`) | The adapter records native Axiom/PolicyEngine output bindings and per-engine values for retained mismatch and divergence cases, preserving missing values and stop flags. Direct PolicyEngine outputs retain missing/nonfinite values rather than converting them to zero. The native report still drops matched case values; recovering a policy with only matching cases requires a per-output ledger written during `compare_outputs`, with stable entity IDs, both returned values and their direct native targets. `pe_expression` values such as the pre-takeup UC award have no final-output binding; run and retain the actual registered final output instead. |
+| UK VAT (`generate_uk_vat.py`) | No stamp migration is needed: `build_report` already records each real `case_id`, returned `axiom`/`policyengine` values, and the explicit `VAT_OUTPUT`/`vat` engine bindings. A clean rerun can restore the registered `vat` output using those pairs. |
+| Federal grids (`generate_federal_tax_liability.py`) | No stamp migration is needed for an unambiguous scored binding: `_build_report` already retains same-case returned scalars, named PolicyEngine components and the Axiom/PolicyEngine engine bindings. A comparison that sums oracle variables needs separate real Axiom counterparts for any registered component being claimed; `axiom_diagnostics` and bridge outputs are not final-output evidence. |
+| State grids (`generate_state_income_tax_liability.py`) | The report retains same-case Axiom, PolicyEngine and TAXSIM scalar comparisons with named oracle targets. Many grids compare `*_before_refundable_credits` while the universe registers final `*_income_tax`; restoring those policies requires executing the final boundary and retaining its Axiom and PolicyEngine pair. Record the exact Axiom output URI instead of only `_MODULE[state]`, identify the Axiom/PolicyEngine pair roles explicitly in case rows or write a separate report for that pair, and retain per-engine output bindings and missing/error evidence for each pair. |
+| Yale panel (`generate_us_tariff_panel.py`) | Single-column authority slots can use their recorded `expected`/`axiom` pairs with unambiguous slot bindings. Multi-column sums cannot cover constituent columns. Restoring their registered outputs requires retaining each real panel unit's source-column value and a separately executed Axiom counterpart, together with the exact column/output binding. Keep the family aggregation for presentation, but retain the unit identity and comparison ledger; never split or copy a summed slot value into its component columns. |
+
+The broader matched-case EFRS, final-boundary state and per-column Yale
+migrations are documented here rather than inferred from counts or added to
+historical artifacts. They require native producer changes and a genuine rerun
+before those missing pairs can restore coverage.
 
 ## The pieces
 
@@ -137,7 +180,7 @@ confirmation of the larger public coverage drop remains pending.
 | `detail/<jur>.json` | Per-policy drill-down (covered/uncovered/excluded, raw + explained rates). Mirrored to `dashboard/public/data/conformance_detail_<jur>.json`. | `scripts/conformance_scoreboard.py` |
 | `history/<jur>/<YYYY-MM-DD>.json` | Dated scoreboard snapshots — the burn-down source of truth (survives rebases). | `scripts/conformance_scoreboard.py --snapshot` |
 | `ratchet.yaml` | Monotonic floors/ceilings: `covered` may only rise; `unexplained`/`axiom_attributed_open`/`bridge_artifacts` may only fall. | `scripts/conformance_ratchet.py` |
-| `attestation_waivers.yaml` | Schema `axiom_oracles.attestation_waivers.v1`. The enumerated, shrink-only set of covered policies whose committed legacy report cannot bind its comparisons to the registered outputs, each pinned to its suite, reason, and complete artifact's SHA-256. HAND-AUTHORED; `--prune` only removes. | `scripts/conformance_attestation.py --prune` |
+| `attestation_waivers.yaml` | Schema `axiom_oracles.attestation_waivers.v1`. Historical migration metadata pinned to approved suites, reasons and complete legacy artifact SHA-256 values. It never authorizes coverage. HAND-AUTHORED and shrink-only; `--prune` only removes. | `scripts/conformance_attestation.py --prune` |
 | `pe-axiom-standard.yaml` | PolicyEngine-attributed mismatch explanations without their Axiom side, grandfathered at the standard's introduction (the list may only shrink); `open_max`, the attributions without a companion test (it may only fall, except by the increment of a recorded raise); and the `debt_raises` log (it only grows). Monotonic against every committed version, merge-safe. See `dispositions/README.md`. | `scripts/pe_axiom_standard.py` |
 | `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v2`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), query entity, flat and record-targeted supplied inputs, relation tuples, and engine→input bridges — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
 
@@ -373,8 +416,9 @@ related `Person` records beneath the queried `TaxUnit`: EUROMOD `yem` and
 `yemeq_s` bridge to spouse A's worker inputs, spouse B carries zero worker
 amounts, and live composition derivation retains both role facts and spouse→tax-unit
 relations. Under Max's ruling d1081 (2026-10-08), its covering registration and
-committed composition are retracted until a stamped rerun compares a registered
-`tintb_be` output; the suite remains available for that rerun. Its published
+committed composition are retracted until a real rerun retains valid Axiom and
+EUROMOD values for a registered `tintb_be` output in the same case and actual
+comparison; the suite remains available for that rerun. Its published
 dispositions predate the repaired rulespec-be#118
 pipeline and remain attached to the current committed 0/3 publication until a
 canonical comparison refresh replaces those observed mismatch rows; a
@@ -400,9 +444,9 @@ Wired in `.github/workflows/ci.yml`, following the repo's existing gate patterns
   it always bites: a covered suite whose program composition changed must
   refresh `conformance/compositions/<jur>.yaml`).
 * **Execution attestation** — every covered policy's report shows a real run
-  against the declared oracle, bound to a registered output or named in the
-  shrink-only waiver file. Derived from the committed reports, so it always
-  bites.
+  against the declared oracle with a returned same-case pair for a registered
+  output. Historical waiver metadata is audited against the fixed bootstrap
+  set and cannot bypass the scoreboard's paired-output requirement.
 * **Scoreboard freshness** — regenerated scoreboard + detail == committed copies.
 * **Ratchets** — no monotonic invariant regressed.
 * **Burn-down freshness** — regenerated series == committed.

@@ -12,8 +12,7 @@ comparisons for the outputs the universe registers (axiom-oracles#355).
 An **execution attestation** is that missing evidence, in two layers:
 
 1. **Execution** (blocking, no exceptions). The report must show a real run:
-   an execution stamp with literal ``executed: true``; strictly positive cases
-   AND comparisons,
+   strictly positive cases AND comparisons,
    zero errors at every level the schema records them, an engine pair that
    contains Axiom *and* the oracle the universe declares, and — when the
    artifact records one — an oracle identity that does not contradict the
@@ -22,18 +21,18 @@ An **execution attestation** is that missing evidence, in two layers:
    the policy it would cover scores as **uncovered**, not as
    covered-with-zero-unexplained.
 
-2. **Output binding** (blocking, waivable only through the committed
-   :mod:`conformance/attestation_waivers.yaml`). The comparisons must be
+2. **Output binding** (blocking). The comparisons must be
    *about the policy*: at least one of the universe row's registered
-   ``output_vars`` must carry positive comparison evidence in the covering
+   ``output_vars`` must carry a returned same-case pair in the covering
    report. A suite that ran perfectly against some other surface does not
    attest the policy it is registered under.
 
 Every binding path calls :func:`observed_output_value`. Stamps, engine maps,
 producer configuration and concept mappings supply candidate output names;
-none is returned-value evidence. Coverage requires a literal execution stamp
-and a finite, non-null returned comparison value, identified by case and output,
-with no contradictory missing/error/skipped evidence. Individual sum members
+none is returned-value evidence. Coverage requires finite, non-null returned
+comparison values from both engines in one real case, identified by output,
+with no contradictory missing/error/skipped evidence. Stamps are optional and
+must agree with recorded data when present. Individual sum members
 are recorded separately by producers; a summed scalar never proves its members.
 
 Producer and concept bindings are deductions, so they are tracked as such:
@@ -48,7 +47,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from functools import lru_cache
-from .observations import OutputEvidence, observed_output_value, returned_output_rows
+from .observations import (
+    OutputEvidence, native_fiit_report, native_lbtt_pairs, observed_output_value, returned_output_rows,
+)
 
 #: Schema id stamped into a runner-produced ``report["attestation"]`` block.
 EXECUTION_ATTESTATION_SCHEMA = "axiom_oracles.execution_attestation.v1"
@@ -111,7 +112,7 @@ class ExecutionAttestation:
         return bool(self.attested_outputs & set(output_vars))
 
     def binding_gap(self, output_vars: tuple[str, ...] | list[str]) -> str | None:
-        """The waiver reason a covered policy needs, or None when it binds.
+        """The recording gap, or None when the registered output has a pair.
 
         Two distinct states, deliberately not merged:
 
@@ -123,8 +124,8 @@ class ExecutionAttestation:
           ``*_income_tax``).
         * ``oracle_variable_not_recorded`` — the artifact does not record which
           oracle variable each compared concept was bound to, so the binding
-          cannot be machine-verified either way. Regenerating the report with a
-          stamped attestation resolves it.
+          cannot be machine-verified either way. A rerun retaining both returned
+          values and their native bindings resolves it.
         """
         if self.binds(output_vars):
             return None
@@ -221,7 +222,7 @@ def attest(
     executed = True
     if stamped:
         problems.extend(_stamp_problems(stamp, report, case_count, comparison_count, error_count, resolver, value_evidence))
-        if stamp.get("executed") is not True:
+        if stamp.get("executed", True) is not True:
             executed = False
             claim = "false" if stamp.get("executed") is False else repr(stamp.get("executed"))
             problems.append(
@@ -229,12 +230,9 @@ def attest(
                 + (f" ({stamp.get('skip_reason')})" if stamp.get("skip_reason") else "")
                 + " — a skipped or unconfirmed run cannot cover an in-scope policy"
             )
-    else:
+    elif stamp is not None:
         executed = False
-        problems.append(
-            f"{suite}: report has no literal `executed: true` execution stamp — "
-            "comparison counts cannot confirm execution"
-        )
+        problems.append(f"{suite}: attestation must be an object when present")
 
     if case_count <= 0:
         executed = False
@@ -448,22 +446,117 @@ def _stamp_problems(
 
 
 def _targets(report, engine, concept, resolver):
+    if native_fiit_report(report):
+        from .fiit import native_fiit_pairs
+
+        pairs = native_fiit_pairs(report)
+        targets = frozenset(
+            output if engine == "policyengine" else axiom
+            for (native_concept, output), axiom in pairs.items()
+            if native_concept == concept and engine in {"axiom", "policyengine"}
+        )
+        # A native ledger identifies the exact comparison, but cannot override
+        # a contradictory target explicitly recorded elsewhere in its report.
+        bindings = (report.get("output_bindings") or {}).get(concept, {})
+        if isinstance(bindings, dict) and engine in bindings:
+            targets &= _as_names(bindings[engine])
+        recorded = (report.get("engine_bindings") or {}).get(engine)
+        if isinstance(recorded, dict) and ("outputs" in recorded or "output" in recorded):
+            targets &= _as_names(recorded.get("outputs", recorded.get("output")))
+        declared = _engines_map_variables(report, engine)
+        if declared:
+            targets &= declared
+        return targets
+    lbtt_pairs = native_lbtt_pairs(report)
+    if lbtt_pairs is not None:
+        spec = lbtt_pairs.get(concept)
+        return frozenset({spec[0 if engine == "axiom" else 1]}) if spec and engine in {"axiom", "policyengine"} else frozenset()
+    if report.get("suite") == "us-tariff-panel" and engine in {"axiom", "yale_statutory"}:
+        from axiom_oracles.suites.us_tariff_panel import AUTHORITY_SLOTS
+
+        slot = AUTHORITY_SLOTS.get(concept)
+        targets = frozenset(slot[1]) if slot and slot[0] is not None else frozenset()
+        bindings = (report.get("output_bindings") or {}).get(concept, {})
+        declarations = []
+        if isinstance(bindings, dict) and engine in bindings:
+            declarations.append(bindings[engine])
+        recorded = (report.get("engine_bindings") or {}).get(engine)
+        if isinstance(recorded, dict) and ("outputs" in recorded or "output" in recorded):
+            declarations.append(recorded.get("outputs", recorded.get("output")))
+        for declaration in declarations:
+            names = _as_names(declaration)
+            if engine == "axiom" and slot and slot[0] in names:
+                # Native query URIs and their recorded slot column names
+                # identify the same returned authority value.
+                names |= frozenset(slot[1])
+            targets &= names
+        return targets
+    bindings = (report.get("output_bindings") or {}).get(concept, {})
+    if isinstance(bindings, dict) and engine in bindings:
+        names = _as_names(bindings[engine])
+        recorded = (report.get("engine_bindings") or {}).get(engine)
+        if isinstance(recorded, dict) and ("outputs" in recorded or "output" in recorded):
+            native_names = _as_names(recorded.get("outputs", recorded.get("output")))
+            if not names <= native_names:
+                return frozenset()
+        return names
+    native_targets = _efrs_targets(report, engine, concept)
+    if native_targets is not None:
+        return native_targets
+    bindings = (report.get("engine_bindings") or {}).get(engine)
+    global_binding = report.get("concept") in {None, concept}
+    if global_binding and isinstance(bindings, dict) and ("outputs" in bindings or "output" in bindings):
+        # These are the custom producer's recorded comparison targets;
+        # diagnostic_outputs and current generic mappings cannot replace them.
+        return _as_names(bindings.get("outputs", bindings.get("output")))
+    declared = _engines_map_variables(report, engine) if global_binding else frozenset()
+    if declared:
+        return declared
     resolved = resolver.resolve(concept, engine)
     if resolved:
         return resolved
-    bindings = (report.get("output_bindings") or {}).get(concept, {})
-    if isinstance(bindings, dict) and engine in bindings:
-        return _as_names(bindings[engine])
-    declared = _engines_map_variables(report, engine)
-    if declared:
-        return declared
+    recorded = {
+        row["variable"] for row in report.get("observed_outputs") or []
+        if isinstance(row, dict) and row.get("engine") == engine
+        and row.get("concept") == concept and isinstance(row.get("variable"), str)
+    }
+    if recorded:
+        return frozenset(recorded)
     # Stamps name candidates; they cannot identify a legacy value's comparison
     # target. Native per-output ledgers carry their own returned-value binding.
     return frozenset()
 
 
+def _efrs_targets(report, engine, concept):
+    """Resolve an explicitly recorded native output, including historical rows."""
+    if report.get("suite") != "uk-tax-benefits-efrs" or engine not in {"axiom", "policyengine"}:
+        return None
+    from axiom_oracles.bridges.efrs_uk import SURFACE_SPECS
+
+    rows = [
+        row for case in report.get("cases") or [] if isinstance(case, dict)
+        for row in (case.get("matches") or []) + (case.get("mismatches") or [])
+        if isinstance(row, dict) and row.get("concept") == concept
+    ] + [row for row in report.get("mismatches") or []
+         if isinstance(row, dict) and row.get("concept") == concept]
+    if not rows:
+        return None
+    names = set()
+    for row in rows:
+        surface = SURFACE_SPECS.get(row.get("surface"))
+        description = row.get("description")
+        output = description.rsplit(" — output=", 1)[-1] if isinstance(description, str) else None
+        spec = surface.outputs.get(output) if surface else None
+        if not spec or spec.get("axiom") != concept or not spec.get("pe"):
+            return frozenset()
+        names.add(spec["axiom" if engine == "axiom" else "pe"])
+    return frozenset(names)
+
+
 def _observed_cases(report, engine, concept, output, resolver, value_evidence):
     targets = _targets(report, engine, concept, resolver)
+    if output not in targets:
+        return set()
     return {
         row.get("case_id")
         for row in returned_output_rows(
@@ -478,6 +571,32 @@ def _observed_cases(report, engine, concept, output, resolver, value_evidence):
     }
 
 
+def _paired_cases(report, oracle_engine, concept, output, resolver, value_evidence):
+    """Intersect returned case identities for one unambiguous output comparison."""
+    oracle_targets = _targets(report, oracle_engine, concept, resolver)
+    axiom_targets = _targets(report, AXIOM_ENGINE, concept, resolver)
+    if value_evidence.native_fiit:
+        from .fiit import native_fiit_pairs
+
+        axiom = native_fiit_pairs(report).get((concept, output))
+    elif output in axiom_targets:
+        axiom = output
+    elif len(oracle_targets) == len(axiom_targets) == 1:
+        axiom = next(iter(axiom_targets))
+    else:
+        # A scalar total does not prove either side's individual components.
+        return set()
+    if axiom is None:
+        return set()
+    # Conflicting engine roles cannot pair values from one actual comparison.
+    if value_evidence.side_for_engine(AXIOM_ENGINE) is None or value_evidence.side_for_engine(oracle_engine) is None:
+        return set()
+    return (
+        _observed_cases(report, oracle_engine, concept, output, resolver, value_evidence)
+        & _observed_cases(report, AXIOM_ENGINE, concept, axiom, resolver, value_evidence)
+    )
+
+
 def _attested_outputs(
     report: dict,
     oracle_engine: str,
@@ -490,42 +609,42 @@ def _attested_outputs(
         return frozenset(), False
     candidates: set[tuple[str, str]] = set()
     complete = True
-    if stamp is not None and stamp.get("outputs") is not None:
+    if stamp is not None and isinstance(stamp.get("outputs"), list):
         for row in stamp.get("outputs") or []:
             if not isinstance(row, dict) or row.get("engine") != oracle_engine:
                 continue
             if isinstance(row.get("variable"), str) and isinstance(row.get("concept"), str):
                 candidates.add((row["concept"], row["variable"]))
         complete = stamp.get("outputs_complete", True) is not False
-    elif report.get("suite") == "fiit-ecps":
-        from .fiit import FIIT_SURFACE_CONCEPT_IDS
-        from axiom_oracles.bridges.tax_populace import SURFACE_OUTPUTS
+    if value_evidence.native_fiit:
+        from .fiit import native_fiit_pairs
 
-        provenance = report.get("provenance") or {}
-        if provenance.get("generated_by") != "scripts/run_comparison.py::fiit-ecps":
-            return frozenset(), False
-        for surface, concept in FIIT_SURFACE_CONCEPT_IDS.items():
-            candidates.update((concept, spec["pe"])
-                              for spec in SURFACE_OUTPUTS[surface].values())
+        candidates.update(native_fiit_pairs(report))
     elif oracle_engine == "yale_statutory":
-        candidates, complete = _yale_panel_candidates(report)
+        yale_candidates, complete = _yale_panel_candidates(report)
+        candidates.update(yale_candidates)
+    elif value_evidence.native_lbtt is not None:
+        candidates.update((concept, spec[1]) for concept, spec in value_evidence.native_lbtt.items())
+        complete = complete and bool(value_evidence.native_lbtt)
     else:
-        declared = _engines_map_variables(report, oracle_engine)
-        for row in report.get("aggregates") or []:
-            if not isinstance(row, dict) or _int(row.get("comparison_count")) <= 0:
-                continue
-            concept = row.get("concept")
+        concepts = {
+            row.get("concept") for row in report.get("aggregates") or []
+            if isinstance(row, dict) and _int(row.get("comparison_count")) > 0
+        }
+        if _int((report.get("summary") or {}).get("comparison_count")) > 0 and isinstance(report.get("concept"), str):
+            concepts.add(report["concept"])
+        for concept in concepts:
             if not isinstance(concept, str):
                 complete = False
                 continue
-            targets = resolver.resolve(concept, oracle_engine) or declared
+            targets = _targets(report, oracle_engine, concept, resolver)
             if not targets:
                 complete = False
             candidates.update((concept, target) for target in targets)
 
     names = {
         output for concept, output in candidates
-        if _observed_cases(report, oracle_engine, concept, output, resolver, value_evidence)
+        if _paired_cases(report, oracle_engine, concept, output, resolver, value_evidence)
     }
     return frozenset(names), bool(names) and complete and all(
         output in names for _, output in candidates

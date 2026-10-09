@@ -22,6 +22,27 @@ FIIT_SURFACE_CONCEPT_IDS = {
 FIIT_PARENT = "us:tax/federal-income-tax#liability"
 
 
+def native_fiit_pairs(report: dict) -> dict[tuple[str, str], str]:
+    """Bindings explicitly recorded by the native producer, never all configured outputs."""
+    pairs = {}
+    for row in report.get("output_summary") or []:
+        if not isinstance(row, dict) or _int(row.get("compared")) <= 0:
+            continue
+        concept = FIIT_SURFACE_CONCEPT_IDS.get(row.get("surface"))
+        spec = SURFACE_OUTPUTS.get(row.get("surface"), {}).get(row.get("output"))
+        if concept and spec:
+            pairs[(concept, spec["pe"])] = spec["axiom"]
+    for row in report.get("observed_outputs") or []:
+        if not isinstance(row, dict) or row.get("engine") != "policyengine":
+            continue
+        concept = FIIT_SURFACE_CONCEPT_IDS.get(row.get("surface"))
+        spec = SURFACE_OUTPUTS.get(row.get("surface"), {}).get(row.get("output"))
+        if (concept and spec and row.get("concept") == concept
+                and row.get("variable") == spec["pe"]):
+            pairs[(concept, spec["pe"])] = spec["axiom"]
+    return pairs
+
+
 def fiit_output_rows(
     output_summary: list[dict], *, report: dict | None = None,
 ) -> tuple[list[dict], bool]:
@@ -57,7 +78,7 @@ def fiit_output_rows(
             complete = False
             continue
         concept, target = key
-        if row.get("variable") != target:
+        if row.get("variable") != target or row.get("concept") != concept:
             complete = False
             continue
         if observed_output_value(

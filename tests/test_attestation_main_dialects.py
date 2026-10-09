@@ -70,33 +70,33 @@ def _panel_report(units=2):
     }
 
 
-def test_committed_dk_role_pair_keeps_engine_identity_but_requires_execution_stamp():
+def test_committed_dk_role_pair_keeps_engine_identity_and_returned_pair():
     report = _committed_report("axiom-euromod-dk-child-youth-benefit.json")
     universe = parse_universe(ROOT / "conformance/dk.yaml")
     evidence = attest(report, oracle=universe.oracle)
 
     assert "attestation" not in report
-    assert not evidence.eligible
-    assert not evidence.executed
+    assert evidence.eligible
+    assert evidence.executed
     assert evidence.engines == ("axiom", "euromod")
-    assert not evidence.attested_outputs
-    assert not evidence.outputs_complete
-    assert score_jurisdiction(universe, [report])[0].covered == 0
+    assert evidence.attested_outputs == {"bfachnm_s"}
+    assert evidence.outputs_complete
+    assert score_jurisdiction(universe, [report])[0].covered == 1
 
 
-def test_committed_yale_panel_requires_execution_stamp_before_attesting_columns():
+def test_committed_yale_panel_retains_single_column_pairs_without_stamp():
     report = _committed_report("axiom-yale-us-tariff-panel.json")
     universe = parse_universe(ROOT / "conformance/us-tariff-yale.yaml")
     evidence = attest(report, oracle=universe.oracle, resolver=OracleTargetResolver())
 
     assert "attestation" not in report
-    assert not evidence.eligible
-    assert not evidence.executed
+    assert evidence.eligible
+    assert evidence.executed
     assert evidence.engines == ("axiom", "yale_statutory")
-    assert not evidence.attested_outputs
+    assert evidence.binds(("statutory_base_rate",))
+    assert not evidence.binds(("statutory_rate_ieepa_recip",))
     assert not evidence.outputs_complete
-    assert all(not evidence.binds(policy.output_vars) for policy in universe.policies if policy.in_scope)
-    assert score_jurisdiction(universe, [report])[0].covered == 0
+    assert score_jurisdiction(universe, [report])[0].covered > 0
 
 
 def test_yale_direct_generator_provenance_uses_the_same_slot_bindings():

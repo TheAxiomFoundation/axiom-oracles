@@ -9,6 +9,73 @@ from math import isfinite
 from numbers import Number
 
 
+# Exact queries made by scripts/generate_uk_lbtt_ltt.py::TxnCase. The native
+# report records each query and country, while its engine heading groups both.
+_LBTT_NATIVE_OUTPUTS = {
+    "SCOTLAND": (
+        "uk:policies/govuk/lbtt#land_and_buildings_transaction_tax",
+        "land_and_buildings_transaction_tax",
+    ),
+    "WALES": (
+        "uk:policies/govuk/ltt#land_transaction_tax",
+        "land_transaction_tax",
+    ),
+}
+
+
+def _output_names(value):
+    if isinstance(value, str):
+        return frozenset(part.strip() for part in value.split(",") if part.strip())
+    if isinstance(value, (list, tuple)) and all(isinstance(name, str) for name in value):
+        return frozenset(value)
+    return frozenset()
+
+
+def native_lbtt_pairs(report):
+    """Resolve recorded native country/query pairs; values still need validation.
+
+    None denotes another dialect. An empty dictionary denotes a native report
+    whose recorded bindings contradict its actual per-case query identity.
+    """
+    provenance = report.get("provenance")
+    if (report.get("suite") != "uk-lbtt-ltt" or not isinstance(provenance, dict)
+            or provenance.get("generator") != "scripts/generate_uk_lbtt_ltt.py"):
+        return None
+    engines = report.get("engines") or {}
+    declared_oracle = _output_names(engines.get("policyengine"))
+    axiom_heading = engines.get("axiom")
+    declared_axiom = (
+        frozenset(spec[0] for spec in _LBTT_NATIVE_OUTPUTS.values())
+        if axiom_heading == "uk:policies/govuk/{lbtt,ltt} devolved transaction tax"
+        else _output_names(axiom_heading)
+    )
+    explicit = report.get("output_bindings") or {}
+    native = report.get("engine_bindings") or {}
+    if not isinstance(explicit, dict) or not isinstance(native, dict):
+        return {}
+    pairs = {}
+    for case in report.get("cases") or []:
+        if not isinstance(case, dict):
+            return {}
+        spec = _LBTT_NATIVE_OUTPUTS.get(case.get("country"))
+        if (spec is None or case.get("concept") != spec[0]
+                or spec[0] not in declared_axiom or spec[1] not in declared_oracle):
+            return {}
+        binding = explicit.get(spec[0], {})
+        if not isinstance(binding, dict):
+            return {}
+        for engine, target in zip(("axiom", "policyengine"), spec):
+            if engine in binding and _output_names(binding[engine]) != {target}:
+                return {}
+            engine_binding = native.get(engine)
+            if isinstance(engine_binding, dict) and ("outputs" in engine_binding or "output" in engine_binding):
+                recorded = _output_names(engine_binding.get("outputs", engine_binding.get("output")))
+                if target not in recorded:
+                    return {}
+        pairs[spec[0]] = spec
+    return pairs
+
+
 class OutputEvidence:
     """Indexes for one report, built after its producer finishes writing it.
 
@@ -32,9 +99,18 @@ class OutputEvidence:
         self.sides_by_engine = defaultdict(set)
         self._returned_rows = {}
         self._returned_by_case = {}
+        self.native_fiit = native_fiit_report(report)
+        self.native_lbtt = native_lbtt_pairs(report)
 
         engines = report.get("engines") or {}
         self.engines = engines if isinstance(engines, dict) else {}
+        self.grid_targets = {
+            engine: frozenset(part.strip() for part in targets.split(",") if part.strip())
+            if isinstance(targets, str) else frozenset(targets)
+            if isinstance(targets, (list, tuple)) else frozenset()
+            for engine, targets in self.engines.items()
+            if engine not in {"left", "right", "versions"}
+        }
         for side in ("left", "right"):
             engine = self.engines.get(side)
             if isinstance(engine, str):
@@ -52,7 +128,43 @@ class OutputEvidence:
         }
         sole_concept = next(iter(compared_concepts)) if len(compared_concepts) == 1 else None
 
-        for row in report.get("observed_outputs") or []:
+        observations = list(report.get("observed_outputs") or [])
+        if self.native_fiit:
+            from .fiit import FIIT_SURFACE_CONCEPT_IDS, native_fiit_pairs
+            from axiom_oracles.bridges.tax_populace import SURFACE_OUTPUTS
+
+            pairs = native_fiit_pairs(report)
+            retained = []
+            for row in observations:
+                if not isinstance(row, dict):
+                    continue
+                native_concept = FIIT_SURFACE_CONCEPT_IDS.get(row.get("surface"))
+                native_spec = SURFACE_OUTPUTS.get(row.get("surface"), {}).get(row.get("output"))
+                if row.get("engine") == "policyengine" and native_spec and (
+                    row.get("concept") != native_concept or row.get("variable") != native_spec["pe"]
+                ):
+                    # Both explicit names contradict this native binding;
+                    # neither label can hide the conflicting case/output.
+                    retained.extend([
+                        dict(row, missing=True),
+                        dict(row, concept=native_concept, variable=native_spec["pe"],
+                             value=None, missing=True),
+                    ])
+                    continue
+                target = pairs.get((row.get("concept"), row.get("variable")))
+                if row.get("engine") != "policyengine" or target is None:
+                    retained.append(row)
+                    continue
+                # This value was returned for the exact native Axiom output,
+                # in this oracle output's comparison, before money projection.
+                retained.extend([
+                    dict(row, require_counterpart=True),
+                    dict(row, engine="axiom", variable=target,
+                         value=row.get("counterpart_value"),
+                         counterpart_value=row.get("value"), require_counterpart=True),
+                ])
+            observations = retained
+        for row in observations:
             if not isinstance(row, dict):
                 continue
             if all(isinstance(row.get(key), str) for key in ("engine", "variable")):
@@ -138,8 +250,9 @@ class OutputEvidence:
             if isinstance(by_engine, list) else bool(by_engine)
         )
         self.execution_valid = (
-            isinstance(stamp, dict) and stamp.get("executed") is True
-            and not _contradiction(stamp) and not _contradiction(report)
+            (stamp is None or (isinstance(stamp, dict) and stamp.get("executed", True) is True
+                              and not _contradiction(stamp)))
+            and not _contradiction(report)
             and not _contradiction(summary) and not summary.get("error_count")
             and not summary.get("skipped_count") and not engine_errors
         )
@@ -154,7 +267,7 @@ class OutputEvidence:
         if key in self._returned_rows:
             return self._returned_rows[key]
         rows = list(self.observed_by_output.get((engine, concept, output), ()))
-        scalar = set(targets) == {output}
+        scalar = set(targets) == {output} and not self.native_fiit
         for case in self.grid_cases_by_engine_concept.get((engine, concept), ()):
             components = case.get(f"{engine}_components")
             if isinstance(components, dict) and output in targets and output in components:
@@ -162,7 +275,13 @@ class OutputEvidence:
                     case, case_id=case["case_id"], engine=engine,
                     concept=concept, output=output, value=components[output],
                 ))
-            if scalar and engine in case:
+            native_scalar = (
+                self.native_lbtt is not None and concept in self.native_lbtt
+                and engine in {"axiom", "policyengine"}
+                and output == self.native_lbtt[concept][0 if engine == "axiom" else 1]
+            )
+            if (scalar and engine in case and self.report.get("suite") != "us-tariff-panel"
+                    and (native_scalar or engine not in self.grid_targets or self.grid_targets[engine] == {output})):
                 rows.append(_value_row(
                     case, case_id=case["case_id"], engine=engine,
                     concept=concept, output=output, value=case[engine],
@@ -179,22 +298,22 @@ class OutputEvidence:
 
         # An expected slot is a returned column only for a single-column
         # authority. Its Axiom counterpart is part of the same comparison.
-        if engine == "yale_statutory" and self.report.get("suite") == "us-tariff-panel":
+        if engine in {"axiom", "yale_statutory"} and self.report.get("suite") == "us-tariff-panel":
             from axiom_oracles.suites.us_tariff_panel import AUTHORITY_SLOTS
 
             slot_spec = AUTHORITY_SLOTS.get(concept)
-            if slot_spec is not None and tuple(slot_spec[1]) == (output,):
+            if slot_spec is not None and slot_spec[0] is not None and tuple(slot_spec[1]) == (output,):
                 for cases in self.cases_by_id.values():
                     for case in cases:
-                        expected = case.get("expected")
-                        if not isinstance(expected, dict) or concept not in expected:
+                        values = case.get("expected" if engine == "yale_statutory" else "axiom")
+                        if not isinstance(values, dict) or concept not in values:
                             continue
-                        axiom = case.get("axiom")
+                        counterpart = case.get("axiom" if engine == "yale_statutory" else "expected")
                         rows.append(_value_row(
                             case, case_id=case["case_id"], engine=engine,
-                            concept=concept, output=output, value=expected[concept],
-                            counterpart_value=axiom.get(concept) if isinstance(axiom, dict) else None,
-                            require_counterpart=True,
+                            concept=concept, output=output, value=values[concept],
+                            counterpart_value=counterpart.get(concept) if isinstance(counterpart, dict) else None,
+                            require_counterpart=True, numeric_counterpart=True,
                         ))
 
         by_case = defaultdict(list)
@@ -231,6 +350,14 @@ def observed_output_value(
     _check_context(report, evidence)
     if not evidence.execution_valid or not valid_case_id(case_id):
         return False
+    cases = evidence.cases_by_id.get(case_id, ())
+    if len(cases) > 1:
+        concepts = [_case_concepts(case) for case in cases]
+        # Custom grids may record separate outputs of one real case in
+        # separate rows. Repeated comparisons of the same concept, or rows
+        # whose comparison identity is absent, cannot be paired across rows.
+        if any(not names for names in concepts) or sum(concept in names for names in concepts) > 1:
+            return False
     if not _valid_value(value, declared_type):
         return False
     same_case = evidence.rows_for_case(
@@ -244,8 +371,10 @@ def observed_output_value(
            or _contradiction(row) or _missing_side(row, side)
            or not _values_agree(row.get("value"), value)
            or (row.get("require_counterpart") and (
-               not _valid_value(row.get("value"), None, allow_bool=False)
-               or not _valid_value(row.get("counterpart_value"), None, allow_bool=False)
+               not _valid_value(row.get("value"), declared_type,
+                                allow_bool=not row.get("numeric_counterpart"))
+               or not _valid_value(row.get("counterpart_value"), declared_type,
+                                    allow_bool=not row.get("numeric_counterpart"))
            ))
            for row in (*same_case, *cross_concept)):
         return False
@@ -374,6 +503,31 @@ def valid_case_id(case_id):
     """A usable comparison case identity: an integer or nonempty string."""
     return ((isinstance(case_id, int) and not isinstance(case_id, bool))
             or (isinstance(case_id, str) and bool(case_id)))
+
+
+def native_fiit_report(report):
+    """Native FIIT diagnostics use output names, not generic concept targets."""
+    if ((report.get("suite") == "fiit-ecps" and "output_bindings" not in report)
+            or (report.get("provenance") or {}).get("generated_by")
+            == "scripts/run_comparison.py::fiit-ecps"):
+        return True
+    rows = [row for key in ("output_summary", "observed_outputs")
+            for row in report.get(key) or []
+            if isinstance(row, dict) and "surface" in row and "output" in row]
+    if not rows:
+        return False
+    from .fiit import FIIT_SURFACE_CONCEPT_IDS
+
+    return any(row.get("surface") in FIIT_SURFACE_CONCEPT_IDS for row in rows)
+
+
+def _case_concepts(case):
+    if isinstance(case.get("concept"), str):
+        return {case["concept"]}
+    return {
+        row["concept"] for row in (case.get("matches") or []) + (case.get("mismatches") or [])
+        if isinstance(row, dict) and isinstance(row.get("concept"), str)
+    }
 
 
 def json_output_values(value):

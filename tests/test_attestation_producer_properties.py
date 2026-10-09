@@ -74,7 +74,8 @@ def test_fiit_stamp_targets_equal_its_positive_producer_output_subset(counts):
             "output_summary": output_summary,
             "observed_outputs": [
                 {"case_id": index, "surface": surface, "output": output,
-                 "engine": "policyengine", "variable": variable, "value": 0}
+                 "engine": "policyengine", "variable": variable, "value": 0,
+                 "counterpart_value": 0}
                 for (surface, output, variable, _), count in zip(FIIT_OUTPUTS, counts)
                 for index in range(count)
             ],
@@ -149,4 +150,3 @@ def test_comparator_stamp_targets_equal_observed_list_subset_including_zero(
         for row in report["attestation"]["outputs"]
         if row["engine"] == "policyengine"
     } == present
-

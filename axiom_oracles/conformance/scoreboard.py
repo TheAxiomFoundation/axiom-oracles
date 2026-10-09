@@ -14,7 +14,7 @@ against an exact predicate:
 as covered only when its named suite has a committed comparison report that
 **attests execution** — a real run against the universe's declared oracle, with
 strictly positive cases and comparisons, zero errors, and comparison evidence
-bound to the policy's registered outputs or a committed migration waiver (see
+bound to the policy's registered outputs (see
 :mod:`axiom_oracles.conformance.attestation`). When that report carries a
 ``scope.column_exposure`` witness basis, the reference must also exercise at
 least one of the policy's output columns with a positive rate. Comparing an
@@ -255,9 +255,8 @@ def score_jurisdiction(
 ) -> tuple[JurisdictionScoreboard, list[PolicyScore]]:
     """Compute the scoreboard + per-policy drill-down for one jurisdiction.
 
-    ``waivers`` accounts for covered policies whose committed report predates
-    output attestation (see :mod:`axiom_oracles.conformance.waivers`); without
-    one, an unbound policy is uncovered. ``resolver`` is injectable so tests can
+    ``waivers`` retains the legacy migration API; migration metadata cannot
+    cover an output missing a returned same-case pair. ``resolver`` is injectable so tests can
     pin the concept→oracle-variable bindings instead of loading the packaged
     registry.
     """
@@ -372,22 +371,17 @@ def score_jurisdiction(
         if binding_gap is None:
             output_attestation = "attested"
         else:
-            waiver = waivers.waiver_for(
-                universe.jurisdiction, policy.id, policy.suite,
-                report=report, reason=binding_gap,
+            # Migration metadata cannot substitute for a same-case pair of
+            # returned values for this registered output.
+            uncovered_policies.append(policy.oracle_policy_name)
+            failure = (
+                f"{policy.suite}: no registered output of {policy.id} "
+                f"({', '.join(policy.output_vars) or 'none'}) carries "
+                f"comparison evidence in the covering report [{binding_gap}]"
             )
-            if waiver is None:
-                uncovered_policies.append(policy.oracle_policy_name)
-                failure = (
-                    f"{policy.suite}: no registered output of {policy.id} "
-                    f"({', '.join(policy.output_vars) or 'none'}) carries "
-                    f"comparison evidence in the covering report [{binding_gap}]"
-                )
-                attestation_failures.append(failure)
-                policy_scores.append(_uncovered_row(policy, "unbound", [failure]))
-                continue
-            output_attestation = f"waived:{waiver.reason}"
-            waived_output_attestation += 1
+            attestation_failures.append(failure)
+            policy_scores.append(_uncovered_row(policy, "unbound", [failure]))
+            continue
 
         if attestation.oracle_release_drift is not None:
             release_drift_count += 1

@@ -139,11 +139,7 @@ policies:
       - i_bch_br_new_20
       - i_bch_br_kho
       - i_bch_fl_ind_fam
-    suite: null
-    note: 'Coverage retracted under d1081: be-family-child-benefit-base has no literal execution attestation
-      with executed: true. Restore its registration after a stamped comparison records finite, non-null
-      returned values for a registered output (bch_s, sin01_s, sin04_s, sin10_s, sin15_s, sin11_s, sin13_s),
-      without contradictory missing/error/skipped evidence.'
+    suite: be-family-child-benefit-base
   - id: be:bchba_be
     oracle_policy_name: bchba_be
     oracle_policy_type: ben
@@ -152,11 +148,7 @@ policies:
       - bchba_s
     in_scope: true
     oracle_switch: 'on'
-    suite: null
-    note: 'Coverage retracted under d1081: be-family-birth-allowance has no literal execution attestation
-      with executed: true. Restore its registration after a stamped comparison records finite, non-null
-      returned values for a registered output (sin01_s, bchba_s), without contradictory missing/error/skipped
-      evidence.'
+    suite: be-family-birth-allowance
   - id: be:bed_be
     oracle_policy_name: bed_be
     oracle_policy_type: ben
@@ -215,12 +207,12 @@ policies:
       real dataset-configuration name (its !IsUsedDatabase gate matches only be_????_hhot dataset names),
       so the suite runs each household as its own engine run (axiom-oracles#168) and pins $bed_FlTakeUp/$bed_FrTakeUp
       to 1.0 via euromod_constant_overrides to hold bed_s on the statutory amount. Brussels'' random 90/10
-      split stays out of scope on hypothetical data. Coverage retracted under d1081: be-study-allowance
-      has no literal execution attestation with executed: true. Restore its registration after a stamped
-      comparison records finite, non-null returned values for a registered output (sin07_s, sin06_s, sin05_s,
-      sin42_s, sin43_s, sin03_s, sin02_s, sin44_s, sin45_s, sin46_s, sin47_s, bed_s, sin50_s, sin40_s,
-      sin08_s, sin48_s, sin49_s, sin14_s, sin15_s, sin16_s, sin17_s), without contradictory missing/error/skipped
-      evidence.'
+      split stays out of scope on hypothetical data. Current coverage retracted under the same-case execution
+      evidence rule: The retained case rows omit both returned comparison values for this registered output;
+      matches/counts alone cannot attest either side. Rerun `be-study-allowance` retaining same-case returned
+      values from both engines and explicit comparison bindings for a registered output (sin07_s, sin06_s,
+      sin05_s, sin42_s, sin43_s, sin03_s, sin02_s, sin44_s, sin45_s, sin46_s, sin47_s, bed_s, sin50_s,
+      sin40_s, sin08_s, sin48_s, sin49_s, sin14_s, sin15_s, sin16_s, sin17_s); then re-register.'
   - id: be:bfapl_be
     oracle_policy_name: bfapl_be
     oracle_policy_type: ben
@@ -271,10 +263,11 @@ policies:
       - i_durdays_temp
     suite: null
     note: 'BEN: maternity-leave indemnity. The be-maternity-leave suite live-compares bmact_s and matches
-      EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered. Coverage
-      retracted under d1081: be-maternity-leave has no literal execution attestation with executed: true.
-      Restore its registration after a stamped comparison records finite, non-null returned values for
-      a registered output (bmact_s), without contradictory missing/error/skipped evidence.'
+      EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered. Current
+      coverage retracted under the same-case execution evidence rule: The retained case rows omit both
+      returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `be-maternity-leave` retaining same-case returned values from both engines and explicit
+      comparison bindings for `bmact_s`; then re-register.'
   - id: be:bpact_be
     oracle_policy_name: bpact_be
     oracle_policy_type: ben
@@ -288,9 +281,10 @@ policies:
     suite: null
     note: 'BEN: paternity/birth-leave compensation. The be-birth-leave suite live-compares bpact_s and
       matches EUROMOD exactly (3/3); the published dashboard report exists, so the policy is now covered.
-      Coverage retracted under d1081: be-birth-leave has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (bpact_s), without contradictory missing/error/skipped evidence.'
+      Current coverage retracted under the same-case execution evidence rule: The retained case rows omit
+      both returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `be-birth-leave` retaining same-case returned values from both engines and explicit
+      comparison bindings for `bpact_s`; then re-register.'
   - id: be:bsa_be
     oracle_policy_name: bsa_be
     oracle_policy_type: ben
@@ -313,10 +307,11 @@ policies:
       - i_bsa_sort
       - nchildren
     suite: null
-    note: 'Coverage retracted under d1081: be-social-assistance has no literal execution attestation with
-      executed: true. Restore its registration after a stamped comparison records finite, non-null returned
-      values for a registered output (bsa_s, yiviy_s, yivpr_s, bsaen_s, sin01_s, bsamt01_s, bsamt03_s,
-      sin03_s, bsamt02_s, bsamt04_s), without contradictory missing/error/skipped evidence.'
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `be-social-assistance` retaining same-case returned values from both engines
+      and explicit comparison bindings for a registered output (bsa_s, yiviy_s, yivpr_s, bsaen_s, sin01_s,
+      bsamt01_s, bsamt03_s, sin03_s, bsamt02_s, bsamt04_s); then re-register.'
   - id: be:bsaoa_be
     oracle_policy_name: bsaoa_be
     oracle_policy_type: ben
@@ -334,10 +329,11 @@ policies:
       enables it). The be-elderly-income-support suite switches bsaoa_be on and live-compares bsaoa_s
       (garantie de revenus aux personnes agees) against the composed RuleSpec payable amount, matching
       EUROMOD exactly (1/1). Now covered; the prior not_a_policy exclusion is superseded by the published
-      activated suite. Coverage retracted under d1081: be-elderly-income-support has no literal execution
-      attestation with executed: true. Restore its registration after a stamped comparison records finite,
-      non-null returned values for a registered output (yiviy01_s, yivpr01_s, bsaoa_s, yeaoamn_s), without
-      contradictory missing/error/skipped evidence.'
+      activated suite. Current coverage retracted under the same-case execution evidence rule: The retained
+      case rows omit both returned comparison values for this registered output; matches/counts alone
+      cannot attest either side. Rerun `be-elderly-income-support` retaining same-case returned values
+      from both engines and explicit comparison bindings for a registered output (yiviy01_s, yivpr01_s,
+      bsaoa_s, yeaoamn_s); then re-register.'
   - id: be:bun_be
     oracle_policy_name: bun_be
     oracle_policy_type: ben
@@ -354,15 +350,12 @@ policies:
       - i_lunmy
       - bun
       - i_bunft
-    suite: null
-    note: 'Unemployment benefit marked ''PART SIMULATED'' and switched OFF in BE_2025 (unemployment income
+    suite: be-unemployment
+    note: Unemployment benefit marked 'PART SIMULATED' and switched OFF in BE_2025 (unemployment income
       carried from input data in a default run), but activatable per run via euromod_policy_switch_overrides
       (the bsaoa_be precedent) for hypothetical cases. The be-unemployment suite switches bun_be on and
       compares bun_s against the composed RD 25.11.1991 pilot; all four cases are dispositioned upstream_engine_gap
-      (EUROMOD''s stylised bun_s vs the statute''s Article 111/114/115 amounts). Coverage retracted under
-      d1081: be-unemployment has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (yempv_s,
-      bun_s), without contradictory missing/error/skipped evidence.'
+      (EUROMOD's stylised bun_s vs the statute's Article 111/114/115 amounts).
   - id: be:bwkrg_be
     oracle_policy_name: bwkrg_be
     oracle_policy_type: ben
@@ -370,10 +363,7 @@ policies:
       - bwkrg_s
     in_scope: true
     oracle_switch: 'on'
-    suite: null
-    note: 'Coverage retracted under d1081: be-flemish-jobbonus has no literal execution attestation with
-      executed: true. Restore its registration after a stamped comparison records finite, non-null returned
-      values for a registered output (bwkrg_s), without contradictory missing/error/skipped evidence.'
+    suite: be-flemish-jobbonus
   - id: be:byr_be
     oracle_policy_name: byr_be
     oracle_policy_type: ben
@@ -454,10 +444,11 @@ policies:
     in_scope: true
     oracle_switch: 'on'
     suite: null
-    note: 'Coverage retracted under d1081: be-flemish-social-protection-premium has no literal execution
-      attestation with executed: true. Restore its registration after a stamped comparison records finite,
-      non-null returned values for a registered output (tci_s, brv_s, kivhooo_s, sin01_s), without contradictory
-      missing/error/skipped evidence.'
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `be-flemish-social-protection-premium` retaining same-case returned values from
+      both engines and explicit comparison bindings for a registered output (tci_s, brv_s, kivhooo_s,
+      sin01_s); then re-register.'
   - id: be:tco_be
     oracle_policy_name: tco_be
     oracle_policy_type: tax
@@ -489,7 +480,7 @@ policies:
     oracle_switch: 'on'
     internal_only_vars:
       - n/a
-    suite: null
+    suite: be-work-bonus-credit
     note: 'TAX: PIT fiscal expenditures. The be-work-bonus-credit suite live-compares tinfe_be''s refundable
       Article 289ter/1 low-wage work-bonus credit output tintcly_s (which EUROMOD BE_2025 labels the earned-income/EITC
       credit) against the encoded belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit on a four-point
@@ -502,11 +493,7 @@ policies:
       Article 145/8 pension-savings reduction nor the Article 145/35 childcare-expense, Article 145/33
       donation, or service-voucher reductions (no input columns or constants for them in the model). Those
       encoded instruments therefore have no BE_2025 oracle counterpart and remain the documented residual
-      gap — coverage here is the work-bonus-EITC (tintcly_s) component only. Coverage retracted under
-      d1081: be-work-bonus-credit has no literal execution attestation with executed: true. Restore its
-      registration after a stamped comparison records finite, non-null returned values for a registered
-      output (tintcly_s, tintcch_s, sin17_s, tin_s, tintami_s, sin26_s, sin27_s, tintcmg_s, sin20_s, sin18_s,
-      sin22_s), without contradictory missing/error/skipped evidence.'
+      gap — coverage here is the work-bonus-EITC (tintcly_s) component only.'
   - id: be:tinkt_be
     oracle_policy_name: tinkt_be
     oracle_policy_type: tax
@@ -516,10 +503,11 @@ policies:
     oracle_switch: 'on'
     suite: null
     note: 'TAX: separately-taxed movable/capital income tax. The be-capital-income-tax suite live-compares
-      tinkt_s (movable_withholding) and matches EUROMOD exactly (3/3). Coverage retracted under d1081:
-      be-capital-income-tax has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (tinkt_s),
-      without contradictory missing/error/skipped evidence.'
+      tinkt_s (movable_withholding) and matches EUROMOD exactly (3/3). Current coverage retracted under
+      the same-case execution evidence rule: The retained case rows omit both returned comparison values
+      for this registered output; matches/counts alone cannot attest either side. Rerun `be-capital-income-tax`
+      retaining same-case returned values from both engines and explicit comparison bindings for `tinkt_s`;
+      then re-register.'
   - id: be:tinmu_be
     oracle_policy_name: tinmu_be
     oracle_policy_type: tax
@@ -530,10 +518,11 @@ policies:
     oracle_switch: 'on'
     suite: null
     note: 'TAX: municipal PIT surcharge (communal centimes). The be-local-municipal-pit suite live-compares
-      tinmu_s (communal_additions) and matches EUROMOD exactly (3/3). Coverage retracted under d1081:
-      be-local-municipal-pit has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (tinmu_s,
-      tin_s), without contradictory missing/error/skipped evidence.'
+      tinmu_s (communal_additions) and matches EUROMOD exactly (3/3). Current coverage retracted under
+      the same-case execution evidence rule: The retained case rows omit both returned comparison values
+      for this registered output; matches/counts alone cannot attest either side. Rerun `be-local-municipal-pit`
+      retaining same-case returned values from both engines and explicit comparison bindings for a registered
+      output (tinmu_s, tin_s); then re-register.'
   - id: be:tinna_be
     oracle_policy_name: tinna_be
     oracle_policy_type: tax
@@ -556,11 +545,7 @@ policies:
       - tmp_reduc_bun
       - temp_tintatb_notused
       - tmp_tintcri_extra
-    suite: null
-    note: 'Coverage retracted under d1081: be-worker-pit has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (tints_s, tintcri_s, tinna_s, tin_s, tintatb_s, tintatb01_s, tintatc_s,
-      tintatc01_s, sin08_s), without contradictory missing/error/skipped evidence.'
+    suite: be-worker-pit
   - id: be:tinrg_be
     oracle_policy_name: tinrg_be
     oracle_policy_type: tax
@@ -574,10 +559,11 @@ policies:
     note: 'TAX: regional PIT additional tax. The be-regional-pit-surcharge suite live-compares tinrg_s
       (special financing law of 16 January 1989 article 5/2 — the reduced State tax times the region''s
       additional-tax percentage, 32.591% Brussels / 33.257% Flanders and Wallonia) and matches EUROMOD
-      exactly (3/3, one case per region). Coverage retracted under d1081: be-regional-pit-surcharge has
-      no literal execution attestation with executed: true. Restore its registration after a stamped comparison
-      records finite, non-null returned values for a registered output (tinrg_s, tinrg01_s, tin_s), without
-      contradictory missing/error/skipped evidence.'
+      exactly (3/3, one case per region). Current coverage retracted under the same-case execution evidence
+      rule: The retained case rows omit both returned comparison values for this registered output; matches/counts
+      alone cannot attest either side. Rerun `be-regional-pit-surcharge` retaining same-case returned
+      values from both engines and explicit comparison bindings for a registered output (tinrg_s, tinrg01_s,
+      tin_s); then re-register.'
   - id: be:tintace_be
     oracle_policy_name: tintace_be
     oracle_policy_type: tax
@@ -592,10 +578,10 @@ policies:
       min(0.30 * il_netYem, 5930) on employment income after ordinary employee SSC; the encoded belgium_pit_pilot_worker_forfait_professional_expenses
       applies the identical Article 51 employee rate (30%) and indexed cap (5,930 EUR) to the pipeline''s
       own post-employee-SSC remuneration, bridged on the engine''s post-uprating gross (yem). Matches
-      EUROMOD exactly (5/5). Coverage retracted under d1081: be-article-51-forfait has no literal execution
-      attestation with executed: true. Restore its registration after a stamped comparison records finite,
-      non-null returned values for a registered output (tintace_s), without contradictory missing/error/skipped
-      evidence.'
+      EUROMOD exactly (5/5). Current coverage retracted under the same-case execution evidence rule: The
+      retained case rows omit both returned comparison values for this registered output; matches/counts
+      alone cannot attest either side. Rerun `be-article-51-forfait` retaining same-case returned values
+      from both engines and explicit comparison bindings for `tintace_s`; then re-register.'
   - id: be:tintb_be
     oracle_policy_name: tintb_be
     oracle_policy_type: tax
@@ -622,8 +608,14 @@ policies:
       - n/a
       - kivho
     suite: null
-    note: be-marital-quotient compares tin_s, not the registered tintb_be outputs such as tintasp_s; coverage
-      requires a stamped report recording an actual comparison of a registered tintb_be output.
+    note: 'be-marital-quotient compares tin_s, not the registered tintb_be outputs such as tintasp_s;
+      coverage requires a report recording an actual comparison of a registered tintb_be output. Current
+      coverage retracted under the same-case execution evidence rule: The report compares `tin_s`; no
+      registered marital-quotient output is compared. Add an actual final-output comparison and rerun
+      `be-marital-quotient` retaining same-case returned values from both engines and explicit comparison
+      bindings for a registered output (tintasp_s, tintals_s, tintami_s, tintcmg_s, sin03_s, sin04_s,
+      sin01_s, sin02_s, sin05_s, sin06_s, tintadt_s, sin30_s, sin31_s, sin32_s, sin33_s, xccfd_s); then
+      re-register.'
   - id: be:tprhm_be
     oracle_policy_name: tprhm_be
     oracle_policy_type: tax
@@ -633,9 +625,10 @@ policies:
     in_scope: true
     oracle_switch: 'on'
     suite: null
-    note: 'Coverage retracted under d1081: be-property-tax has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (tprhm_s, tprhmtr_s), without contradictory missing/error/skipped evidence.'
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `be-property-tax` retaining same-case returned values from both engines and explicit
+      comparison bindings for a registered output (tprhm_s, tprhmtr_s); then re-register.'
   - id: be:tscee_be
     oracle_policy_name: tscee_be
     oracle_policy_type: sic
@@ -657,11 +650,7 @@ policies:
       - i_tsceerdB_s
       - n/a
       - i_tsceerdA_s
-    suite: null
-    note: 'Coverage retracted under d1081: be-worker-ssc has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (yem01_s, tsceepi_s, tsceehl_s, tsceedi_s, tsceeui_s, tscee_s, tscdb_s,
-      yemeq_s, tsceerd_s, tsceerdwb02B_s), without contradictory missing/error/skipped evidence.'
+    suite: be-worker-ssc
   - id: be:tsceesp_be
     oracle_policy_name: tsceesp_be
     oracle_policy_type: sic
@@ -671,11 +660,7 @@ policies:
     oracle_switch: 'on'
     internal_only_vars:
       - n/a
-    suite: null
-    note: 'Coverage retracted under d1081: be-special-social-security-contribution has no literal execution
-      attestation with executed: true. Restore its registration after a stamped comparison records finite,
-      non-null returned values for a registered output (tsceesp_s), without contradictory missing/error/skipped
-      evidence.'
+    suite: be-special-social-security-contribution
   - id: be:tscer_be
     oracle_policy_name: tscer_be
     oracle_policy_type: sic
@@ -698,12 +683,7 @@ policies:
     oracle_switch: 'on'
     internal_only_vars:
       - n/a
-    suite: null
-    note: 'Coverage retracted under d1081: be-employer-ssc has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (tscersf_s, tscerui_s, tscerei_s, tscerhe_s, tscerpi_s, tscerhl_s, tscerfa_s,
-      tscerdc_s, tscer00_s, sin02_s, sin03_s, sin04_s, tscerrd_s, tscer_s), without contradictory missing/error/skipped
-      evidence.'
+    suite: be-employer-ssc
   - id: be:tscpe_be
     oracle_policy_name: tscpe_be
     oracle_policy_type: sic
@@ -718,10 +698,10 @@ policies:
       suite live-compares tscpe_s and matches EUROMOD exactly (6/6). rulespec-be#89 encoded the art. 191
       low-pension health floor and carried the indexed 2025 art. 68 solidarity thresholds, both grounded
       in the Service federal des Pensions 2025 withholding tables, clearing the two axiom_encoding_gap
-      residuals that previously held this uncovered. Coverage retracted under d1081: be-pensioner-contributions
-      has no literal execution attestation with executed: true. Restore its registration after a stamped
-      comparison records finite, non-null returned values for a registered output (tscpe_s), without contradictory
-      missing/error/skipped evidence.'
+      residuals that previously held this uncovered. Current coverage retracted under the same-case execution
+      evidence rule: The retained case rows omit both returned comparison values for this registered output;
+      matches/counts alone cannot attest either side. Rerun `be-pensioner-contributions` retaining same-case
+      returned values from both engines and explicit comparison bindings for `tscpe_s`; then re-register.'
   - id: be:tscse_be
     oracle_policy_name: tscse_be
     oracle_policy_type: sic
@@ -729,10 +709,7 @@ policies:
       - tscse_s
     in_scope: true
     oracle_switch: 'on'
-    suite: null
-    note: 'Coverage retracted under d1081: be-self-employed-ssc has no literal execution attestation with
-      executed: true. Restore its registration after a stamped comparison records finite, non-null returned
-      values for a registered output (tscse_s), without contradictory missing/error/skipped evidence.'
+    suite: be-self-employed-ssc
   - id: be:uprate_be
     oracle_policy_name: uprate_be
     oracle_policy_type: def

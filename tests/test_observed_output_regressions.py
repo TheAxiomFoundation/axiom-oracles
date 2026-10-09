@@ -1,6 +1,7 @@
 """Reviewer counterexamples must remain unbound through the real scoreboard."""
 
 from copy import deepcopy
+from dataclasses import replace
 
 import pytest
 
@@ -28,7 +29,12 @@ def _sum_mapping():
     )
 
 
-def _report(mapping, values, *, oracle_on_left=False):
+def _report(mapping, values, *, oracle_on_left=False, paired_components=False):
+    if paired_components:
+        mapping = replace(mapping, targets={
+            **mapping.targets,
+            "axiom": mapping.target_for_engine("policyengine"),
+        })
     targets = mapping.target_for_engine("axiom")
     axiom_values = (
         {target: 0 for target in targets}
@@ -141,30 +147,32 @@ def test_review_sum_stamp_cannot_invent_a_missing_component(oracle_on_left):
 
 @pytest.mark.parametrize("oracle_on_left", [False, True])
 @pytest.mark.parametrize("value", [0, False])
-def test_real_zero_and_false_sum_components_remain_individually_observed(oracle_on_left, value):
+def test_real_zero_and_false_oracle_members_do_not_invent_axiom_members(oracle_on_left, value):
     mapping = _sum_mapping()
     report = _report(mapping, {
         "income_tax_main_rates": 0, "capital_gains_tax": value,
     }, oracle_on_left=oracle_on_left)
     evidence = attest(report, oracle=ORACLE)
-    assert evidence.binds(("income_tax_main_rates",))
-    assert evidence.binds(("capital_gains_tax",))
+    assert not evidence.binds(("income_tax_main_rates",))
+    assert not evidence.binds(("capital_gains_tax",))
+    assert any(row["engine"] == "policyengine" and row["variable"] == "capital_gains_tax"
+               for row in report["attestation"]["outputs"])
     board, rows = _score(report)
-    assert board.covered == 1
-    assert board.conformant
-    assert rows[0].covered
+    assert board.covered == 0
+    assert not board.conformant
+    assert not rows[0].covered
 
 
 @pytest.mark.parametrize("oracle_on_left", [False, True])
-def test_observed_sum_component_survives_another_components_missing_value(oracle_on_left):
+def test_returned_oracle_sum_member_cannot_cover_without_its_axiom_member(oracle_on_left):
     mapping = _sum_mapping()
     report = _report(mapping, {
         "income_tax_main_rates": 0, "capital_gains_tax": None,
     }, oracle_on_left=oracle_on_left)
     evidence = attest(report, oracle=ORACLE)
-    assert evidence.binds(("income_tax_main_rates",))
+    assert not evidence.binds(("income_tax_main_rates",))
     assert not evidence.binds(("capital_gains_tax",))
-    assert _score(report, "income_tax_main_rates")[0].covered == 1
+    assert _score(report, "income_tax_main_rates")[0].covered == 0
     assert _score(report, "capital_gains_tax")[0].covered == 0
 
 
@@ -204,7 +212,8 @@ def test_same_case_output_contradiction_cannot_hide_under_another_concept(contra
         "observed_outputs": [{
             "case_id": "c1", "engine": "policyengine", "concept": "concept-a",
             "variable": output, "value": 0,
-        }, conflict],
+        }, {"case_id": "c1", "engine": "axiom", "concept": "concept-a",
+            "variable": output, "value": 0}, conflict],
     }
     evidence = attest(report, oracle=ORACLE)
     board, rows = _score(report)
@@ -220,7 +229,7 @@ def test_explicit_missing_sum_member_overrides_its_positive_stamp(location, orac
     mapping = _sum_mapping()
     report = _report(mapping, {
         "income_tax_main_rates": 0, "capital_gains_tax": 0,
-    }, oracle_on_left=oracle_on_left)
+    }, oracle_on_left=oracle_on_left, paired_components=True)
     side = "left" if oracle_on_left else "right"
     report["aggregates"][0][f"missing_{side}_count"] = 1
     missing = {
@@ -249,7 +258,7 @@ def test_case_output_contradiction_does_not_require_a_concept_label(
     mapping = _sum_mapping()
     report = _report(mapping, {
         "income_tax_main_rates": 0, "capital_gains_tax": 0,
-    }, oracle_on_left=oracle_on_left)
+    }, oracle_on_left=oracle_on_left, paired_components=True)
     value = None if contradiction == "missing" else 0
     conflict = {"case_id": "c1", "variable": "capital_gains_tax"}
     if concept_label == "null":

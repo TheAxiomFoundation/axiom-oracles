@@ -50,7 +50,7 @@ def test_missing_final_output_retracts_the_registration_without_excluding_the_po
     assert policy.note and "\n" not in policy.note
     assert missing_output in policy.note
     assert "comparison" in policy.note.lower()
-    assert "stamp" in policy.note.lower() or "attest" in policy.note.lower()
+    assert "same-case" in policy.note.lower()
 
 
 @PARAMETERS
@@ -124,6 +124,9 @@ def test_coverage_restores_only_with_a_registered_stamped_output_comparison(
             }],
         },
     }
+    report["observed_outputs"] += [
+        dict(row, engine="axiom") for row in report["observed_outputs"]
+    ]
     board, rows = score_jurisdiction(
         replace(universe, policies=[policy]), [report], resolver=OracleTargetResolver(),
     )

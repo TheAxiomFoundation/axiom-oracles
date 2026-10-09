@@ -42,7 +42,8 @@ def test_adapter_attests_only_positive_fiit_output_summary_rows(surface, output,
         "mismatches": [],
         "observed_outputs": [
             {"case_id": "tax_unit_1", "surface": surface, "output": output,
-             "engine": "policyengine", "variable": variable, "value": 0},
+             "engine": "policyengine", "variable": variable, "value": 0,
+             "counterpart_value": 0},
         ],
         "output_summary": [
             {"surface": surface, "output": output, "compared": 1, "mismatches": 0},
@@ -124,7 +125,7 @@ def test_unidentified_legacy_fiit_producer_cannot_use_generic_bindings():
     report.pop("provenance", None)
     evidence = attest(report, oracle="policyengine")
 
-    assert not evidence.eligible
+    assert evidence.eligible
     assert evidence.attested_outputs == frozenset()
     assert not evidence.outputs_complete
 
@@ -149,7 +150,7 @@ class _Frame:
         pytest.param("ctc", "ctc", None, 0, False, id="review-ctc-null-oracle"),
         pytest.param("employee-medicare", "employee_medicare_tax", float("inf"), 0, False,
                      id="infinite-oracle"),
-        pytest.param("employee-medicare", "employee_medicare_tax", 0, None, True,
+        pytest.param("employee-medicare", "employee_medicare_tax", 0, None, False,
                      id="observed-oracle-with-missing-axiom"),
         pytest.param("employee-medicare", "employee_medicare_tax", 0, 0, True,
                      id="observed-zero-control"),

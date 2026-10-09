@@ -83,10 +83,10 @@ def _held_waiver(report, waiver=None):
     )
 
 
-def test_unchanged_approved_legacy_waiver_cannot_replace_an_execution_stamp():
+def test_unchanged_approved_legacy_waiver_cannot_replace_a_registered_output_pair():
     report = _approved_report()
     # The artifact pin still accepts this exact approved report; execution
-    # requires a literal stamp independently of the historical output waiver.
+    # requires an actual registered-output pair independently of the waiver.
     assert _held_waiver(report) == _approved_waiver()
     board, scores = score_jurisdiction(
         _approved_universe(), [report],
@@ -94,7 +94,7 @@ def test_unchanged_approved_legacy_waiver_cannot_replace_an_execution_stamp():
     )
     assert board.covered == 0
     assert not board.conformant
-    assert scores[0].status == "unattested"
+    assert scores[0].status == "unbound"
     assert board.covered_with_waived_output_attestation == 0
 
 
@@ -108,7 +108,7 @@ def test_legacy_waiver_cannot_cover_a_replacement_report():
     )
     assert board.covered == 0
     assert not board.conformant
-    assert scores[0].status == "unattested"
+    assert scores[0].status == "unbound"
 
 
 def test_current_committed_replacement_cannot_inherit_legacy_waiver():
@@ -122,7 +122,7 @@ def test_current_committed_replacement_cannot_inherit_legacy_waiver():
     )
     assert board.covered == 0
     assert not board.conformant
-    assert scores[0].status == "unattested"
+    assert scores[0].status == "unbound"
 
 
 def test_newly_stamped_report_cannot_use_legacy_waiver():

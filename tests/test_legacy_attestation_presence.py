@@ -1,4 +1,4 @@
-"""Legacy bindings require returned oracle values, including for mapped sums."""
+"""Legacy bindings require same-case returned values from both engines."""
 
 import pytest
 from hypothesis import example, given, settings
@@ -41,7 +41,10 @@ def _legacy_report(values_by_case, oracle_on_left=False, *, compact=False, axiom
     # Exercise legacy binding deduction with explicit execution evidence. The
     # declaration and aggregate counts are not returned per-output values.
     report["attestation"].pop("outputs")
-    report["observed_outputs"] = [
+    axiom_observations = [
+        row for row in report["observed_outputs"] if row["engine"] == "axiom"
+    ]
+    report["observed_outputs"] = axiom_observations + [
         {
             "case_id": index, "engine": "policyengine", "concept": mapping.concept_id,
             "variable": variable, "value": value,
@@ -90,7 +93,8 @@ def test_legacy_partial_sum_cannot_cover_absent_output(oracle_on_left, compact, 
     assert board.covered == 0
     assert not board.conformant
     assert rows[0].status == "unbound"
-    assert evidence.attested_outputs == {"income_tax_main_rates"}
+    # The Axiom scalar is the whole sum, never a returned member of it.
+    assert not evidence.attested_outputs
     assert not evidence.outputs_complete
 
 
@@ -109,17 +113,17 @@ def test_legacy_positive_comparison_count_alone_is_not_output_evidence(oracle_on
 
 @pytest.mark.parametrize("oracle_on_left", [False, True])
 @pytest.mark.parametrize("value", [0, False])
-def test_legacy_complete_sum_retains_zero_and_false_evidence(oracle_on_left, value):
+def test_legacy_complete_sum_does_not_invent_axiom_component_values(oracle_on_left, value):
     report, _ = _legacy_report(
         [{"income_tax_main_rates": 0, "capital_gains_tax": value}], oracle_on_left,
     )
     board, _ = _score(report)
-    assert board.covered == 1
-    assert board.conformant
+    assert board.covered == 0
+    assert not board.conformant
 
 
 @pytest.mark.parametrize("oracle_on_left", [False, True])
-def test_compact_legacy_returned_output_rows_prove_complete_sum(oracle_on_left):
+def test_compact_legacy_returned_sum_rows_do_not_prove_axiom_components(oracle_on_left):
     report, _ = _legacy_report(
         [{"income_tax_main_rates": 0, "capital_gains_tax": 0}],
         oracle_on_left, compact=True,
@@ -127,23 +131,23 @@ def test_compact_legacy_returned_output_rows_prove_complete_sum(oracle_on_left):
     report["aggregates"] = [{
         "concept": report["aggregates"][0]["concept"], "comparison_count": 1,
     }]
-    assert _score(report)[0].covered == 1
+    assert _score(report)[0].covered == 0
 
 
-def test_legacy_grid_retains_its_explicit_variable_binding():
+def test_legacy_grid_cannot_expand_its_axiom_total_into_oracle_components():
     report, _ = _legacy_report([{"income_tax_main_rates": 0, "capital_gains_tax": 0}])
     report["engines"] = {
         "axiom": "federal_income_tax", "policyengine": "income_tax_main_rates,capital_gains_tax",
     }
     evidence = attest(report, oracle=ORACLE)
-    assert evidence.outputs_complete
-    assert evidence.attested_outputs == {"income_tax_main_rates", "capital_gains_tax"}
-    assert _score(report)[0].covered == 1
+    assert not evidence.outputs_complete
+    assert not evidence.attested_outputs
+    assert _score(report)[0].covered == 0
 
 
 @pytest.mark.parametrize("oracle_on_left", [False, True])
 @pytest.mark.parametrize("value", [0, False])
-def test_legacy_recorded_oracle_value_binds_when_axiom_value_is_missing(oracle_on_left, value):
+def test_legacy_recorded_oracle_value_cannot_bind_when_axiom_value_is_missing(oracle_on_left, value):
     report, _ = _legacy_report(
         [{"income_tax_main_rates": 0, "capital_gains_tax": value}],
         oracle_on_left, axiom_missing=True,
@@ -152,7 +156,7 @@ def test_legacy_recorded_oracle_value_binds_when_axiom_value_is_missing(oracle_o
         "concept": report["aggregates"][0]["concept"], "comparison_count": 1,
     }]
     assert report["summary"]["match_count"] == 0
-    assert _score(report)[0].covered == 1
+    assert _score(report)[0].covered == 0
 
 
 @settings(max_examples=40, deadline=None, database=None, derandomize=True)

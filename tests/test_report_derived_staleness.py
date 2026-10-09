@@ -80,9 +80,8 @@ def _minimal_universe_yaml() -> str:
 def _report(suite: str, *, comparisons: int, matches: int) -> dict:
     """A report that ATTESTS execution, so it actually covers the tx:a policy.
 
-    Coverage requires an execution attestation, and this fixture stands in for a
-    real bot-refreshed report — without the stamp it would cover nothing and the
-    staleness invariant below would pass vacuously.
+    The same-case output ledger stands in for a real bot-refreshed comparison,
+    so coverage and report staleness depend on returned values.
     """
     return {
         "suite": suite,
@@ -97,9 +96,9 @@ def _report(suite: str, *, comparisons: int, matches: int) -> dict:
         "mismatches": [],
         "aggregates": [{"concept": "tx:a", "comparison_count": comparisons}],
         "observed_outputs": [{
-            "case_id": index, "concept": "tx:a", "engine": "euromod",
+            "case_id": index, "concept": "tx:a", "engine": engine,
             "variable": "a_s", "value": 0,
-        } for index in range(comparisons)],
+        } for index in range(comparisons) for engine in ("euromod", "axiom")],
         "errors": [],
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,

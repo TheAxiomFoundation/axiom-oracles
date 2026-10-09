@@ -15,4 +15,232 @@ oracle:
   country: BE
   backend: euromod
   label: EUROMOD_J2.0/BE_2025
-compositions: []
+compositions:
+  - suite: be-employer-ssc
+    policy: be:tscer_be
+    entity: Person
+    entity_id: head
+    program:
+      target: be:regulations/social_security/workers/employer_contributions
+      imports:
+        - be:regulations/social_security/workers/employer_contributions
+      paths:
+        - rulespec-be/be/regulations/social_security/workers/employer_contributions.yaml
+    outputs:
+      - be:regulations/social_security/workers/employer_contributions#belgium_employer_social_security_ordinary_worker_contribution
+    supplied_input_boundaries:
+      - be:regulations/social_security/workers/employer_contributions#input.belgium_employer_social_security_contribution_base
+      - be:regulations/social_security/workers/employer_contributions#input.belgium_employer_social_security_employer_has_at_least_10_workers
+      - be:regulations/social_security/workers/employer_contributions#input.belgium_employer_social_security_employer_has_at_least_20_workers
+    input_bridge:
+      yem:
+        - be:regulations/social_security/workers/employer_contributions#input.belgium_employer_social_security_contribution_base
+  - suite: be-family-birth-allowance
+    policy: be:bchba_be
+    entity: Household
+    entity_id: household
+    program:
+      target: be:statutes/family_benefits/birth_allowance
+      imports:
+        - be:statutes/family_benefits/birth_allowance
+      paths:
+        - rulespec-be/be/statutes/family_benefits/birth_allowance.yaml
+    outputs:
+      - be:statutes/family_benefits/birth_allowance#belgium_family_benefits_birth_allowance_amount
+    supplied_input_boundaries:
+      - be:statutes/family_benefits/birth_allowance#input.belgium_family_benefits_birth_allowance_brussels_first_child_or_multiple_birth
+      - be:statutes/family_benefits/birth_allowance#input.belgium_family_benefits_birth_allowance_child_age_years
+      - be:statutes/family_benefits/birth_allowance#input.belgium_family_benefits_birth_allowance_german_speaking_community_pre_2025_index_factor
+      - be:statutes/family_benefits/birth_allowance#input.belgium_family_benefits_birth_allowance_region
+  - suite: be-family-child-benefit-base
+    policy: be:bch_be
+    entity: Household
+    entity_id: household
+    program:
+      target: be:statutes/family_benefits/child_benefit_base_2025
+      imports:
+        - be:statutes/family_benefits/child_benefit_base_2025
+      paths:
+        - rulespec-be/be/statutes/family_benefits/child_benefit_base_2025.yaml
+    outputs:
+      - be:statutes/family_benefits/child_benefit_base_2025#belgium_family_benefits_child_benefit_base_2025_annual_amount
+    supplied_input_boundaries:
+      - be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_age_years
+      - be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_child_enrolled_in_higher_education
+      - be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_household_child_count
+      - be:statutes/family_benefits/child_benefit_base_2025#input.belgium_family_benefits_child_benefit_region
+  - suite: be-flemish-jobbonus
+    policy: be:bwkrg_be
+    entity: Person
+    entity_id: head
+    program:
+      target: be-vlg:regulations/employment/jobbonus
+      imports:
+        - be-vlg:regulations/employment/jobbonus
+      paths:
+        - rulespec-be/be-vlg/regulations/employment/jobbonus.yaml
+    outputs:
+      - be-vlg:regulations/employment/jobbonus#flanders_jobbonus_annual_amount
+    supplied_input_boundaries:
+      - be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time
+      - be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_below_retirement_age_in_worked_quarter
+      - be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_beneficiary_class
+      - be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_domiciled_in_flanders_on_january_1_after_reference_year
+      - be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_is_full_time_worker
+      - be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_work_fraction
+    input_bridge:
+      yemeq_s:
+        inputs:
+          - be-vlg:regulations/employment/jobbonus#input.flanders_jobbonus_average_monthly_gross_wage_at_full_time
+        divide_by: 12
+  - suite: be-self-employed-ssc
+    policy: be:tscse_be
+    entity: Person
+    entity_id: head
+    program:
+      target: be:regulations/social_security/self_employed/contributions
+      imports:
+        - be:regulations/social_security/self_employed/contributions
+      paths:
+        - rulespec-be/be/regulations/social_security/self_employed/contributions.yaml
+    outputs:
+      - be:regulations/social_security/self_employed/contributions#belgium_self_employed_selected_annual_social_contribution
+    supplied_input_boundaries:
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_article_14_index_factor
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_article_28_cessation_income
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_article_28_exclusion_condition_met
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_early_retirement_pension_suspended_for_income_ceiling
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_gross_professional_income
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_has_reached_pension_age
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_is_secondary_activity
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_is_spouse_helper
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_is_starter_main_activity
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_is_student
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_prior_activity_income_taxed_current_year
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_professional_expenses
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_professional_losses
+      - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_receives_retirement_or_survivor_pension
+      - be:regulations/social_security/self_employed/contributions#input.belgium_spouse_helper_fiscally_attributed_professional_income
+      - be:regulations/social_security/self_employed/contributions#input.belgium_spouse_helper_only_indemnity_sector
+    input_bridge:
+      yse:
+        - be:regulations/social_security/self_employed/contributions#input.belgium_self_employed_gross_professional_income
+  - suite: be-special-social-security-contribution
+    policy: be:tsceesp_be
+    entity: Household
+    entity_id: household
+    program:
+      target: be:statutes/social_security/special_contribution
+      imports:
+        - be:statutes/social_security/special_contribution
+      paths:
+        - rulespec-be/be/statutes/social_security/special_contribution.yaml
+    outputs:
+      - be:statutes/social_security/special_contribution#belgium_special_social_security_article_108_annual_contribution
+    supplied_input_boundaries:
+      - be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_107_household_income
+      - be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_110_retained_or_supplement_paid
+      - be:statutes/social_security/special_contribution#input.belgium_special_social_security_household_has_article_106_person
+      - be:statutes/social_security/special_contribution#input.belgium_special_social_security_joint_assessment
+    input_bridge:
+      il_taxabley:
+        - be:statutes/social_security/special_contribution#input.belgium_special_social_security_article_107_household_income
+  - suite: be-unemployment
+    policy: be:bun_be
+    entity: Person
+    entity_id: head
+    program:
+      target: be:regulations/unemployment/pilot_oracle_pipeline
+      imports:
+        - be:regulations/unemployment/pilot_oracle_pipeline
+      paths:
+        - rulespec-be/be/regulations/unemployment/pilot_oracle_pipeline.yaml
+    outputs:
+      - be:regulations/unemployment/pilot_oracle_pipeline#belgium_unemployment_ordinary_pilot_monthly_payable_amount
+    supplied_input_boundaries:
+      - be:regulations/unemployment/benefit_amount#input.belgium_unemployment_article_111_wage_cap_selector
+      - be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage
+      - be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_household_status_code
+      - be:regulations/unemployment/minimum_daily_amounts#input.belgium_unemployment_indemnification_month_number
+      - be:regulations/unemployment/payable_amount#input.belgium_unemployment_monthly_compensable_days
+    input_bridge:
+      yempv_s:
+        inputs:
+          - be:regulations/unemployment/benefit_amount#input.belgium_unemployment_average_daily_wage
+        divide_by: 312
+  - suite: be-work-bonus-credit
+    policy: be:tinfe_be
+    entity: Person
+    entity_id: head
+    program:
+      target: be:statutes/income_tax/individual/pilot_worker_oracle_pipeline
+      imports:
+        - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline
+      paths:
+        - rulespec-be/be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml
+    outputs:
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_article_289ter1_low_wage_work_bonus_credit
+    supplied_input_boundaries:
+      - be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_communal_additional_tax_rate
+    input_bridge:
+      yem:
+        - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration
+      yemeq_s:
+        - be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration
+  - suite: be-worker-pit
+    policy: be:tinna_be
+    entity: Person
+    entity_id: head
+    program:
+      target: be:statutes/income_tax/individual/pilot_worker_oracle_pipeline
+      imports:
+        - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline
+      paths:
+        - rulespec-be/be/statutes/income_tax/individual/pilot_worker_oracle_pipeline.yaml
+    outputs:
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#belgium_pit_pilot_federal_and_local_tax_before_withholding
+    supplied_input_boundaries:
+      - be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_agglomeration_additional_tax_rate
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466_tax_share_on_nonprofessional_movable_income
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_hypothetical_total_tax_if_treaty_exempt_foreign_professional_income_were_belgian
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_466bis_treaty_exempt_foreign_professional_income_base_applies
+      - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_communal_additional_tax_rate
+    input_bridge:
+      yem:
+        - be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input.belgium_pit_article_23_worker_remuneration
+      yemeq_s:
+        - be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration
+  - suite: be-worker-ssc
+    policy: be:tscee_be
+    entity: Person
+    entity_id: head
+    program:
+      target: be:regulations/social_security/workers/employee_contributions
+      imports:
+        - be:regulations/social_security/workers/employee_contributions
+        - be:regulations/social_security/workers/work_bonus
+      paths:
+        - rulespec-be/be/regulations/social_security/workers/employee_contributions.yaml
+        - rulespec-be/be/regulations/social_security/workers/work_bonus.yaml
+    outputs:
+      - be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_article_38_contribution_before_reductions
+      - be:regulations/social_security/workers/employee_contributions#belgium_employee_social_security_ordinary_worker_contribution
+      - be:regulations/social_security/workers/work_bonus#belgium_worker_work_bonus_full_year_equal_monthly_total_reduction
+    supplied_input_boundaries:
+      - be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base
+      - be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_supplied_other_worker_reduction
+      - be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_supplied_work_bonus_reduction
+      - be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration
+    input_bridge:
+      yem:
+        - be:regulations/social_security/workers/employee_contributions#input.belgium_employee_social_security_contribution_base
+      yemeq_s:
+        - be:regulations/social_security/workers/work_bonus#input.belgium_worker_work_bonus_supplied_reference_annual_remuneration

@@ -31,7 +31,7 @@ def _report(*, claim_diagnostic, bind_actual=True):
         "engines": {"left": "axiom", "right": "policyengine"},
         "summary": {"comparison_count": 1, "match_count": 1, "mismatch_count": 0},
         "aggregates": [{"concept": CONCEPT, "comparison_count": 1}],
-        "output_bindings": {CONCEPT: {"policyengine": ACTUAL}},
+        "output_bindings": {CONCEPT: {"policyengine": ACTUAL, "axiom": "axiom_potential"}},
         "cases": [{
             "case_id": "single-one-below-50-percent-limit", "concept": CONCEPT,
             "axiom": 1000.0, "policyengine": 1000.0,
@@ -94,7 +94,9 @@ def test_equal_zero_diagnostic_cannot_become_a_compared_output_by_its_stamp(incl
 
 def test_registered_comparison_target_retains_the_real_grid_output():
     report = _report(claim_diagnostic=False, bind_actual=False)
-    resolver = OracleTargetResolver({CONCEPT: {"policyengine": frozenset({ACTUAL})}})
+    resolver = OracleTargetResolver({CONCEPT: {
+        "policyengine": frozenset({ACTUAL}), "axiom": frozenset({"axiom_potential"}),
+    }})
     evidence = attest(report, oracle=ORACLE, resolver=resolver)
     assert evidence.eligible
     assert evidence.binds((ACTUAL,))

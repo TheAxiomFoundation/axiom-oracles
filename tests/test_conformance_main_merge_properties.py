@@ -54,9 +54,9 @@ def _report(*, executed: bool = True, bound: bool = True, count: int = 1) -> dic
         },
         "aggregates": [{"concept": "tx:output", "comparison_count": count}],
         "observed_outputs": [{
-            "case_id": index, "concept": "tx:output", "engine": "euromod",
+            "case_id": index, "concept": "tx:output", "engine": engine,
             "variable": variable, "value": 0,
-        } for index in range(count)],
+        } for index in range(count) for engine in ("euromod", "axiom")],
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,
             "executed": executed,

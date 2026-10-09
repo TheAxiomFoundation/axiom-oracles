@@ -22,10 +22,11 @@ policies:
     suite: null
     note: 'The us-aca-ptc-grid suite compares six full-year 2026 IRC 36B cases. It binds PE-US used_aca_ptc
       rather than raw aca_ptc so the compared boundary includes the enrolled-plan premium cap present
-      in Axiom. The committed report is 6/6 within one cent and includes nonzero cases. Coverage retracted
-      under d1081: us-aca-ptc-grid has no literal execution attestation with executed: true. Restore its
-      registration after a stamped comparison records finite, non-null returned values for a registered
-      output (aca_ptc), without contradictory missing/error/skipped evidence.'
+      in Axiom. The committed report is 6/6 within one cent and includes nonzero cases. Current coverage
+      retracted under the same-case execution evidence rule: The recorded oracle comparison target is
+      `used_aca_ptc`, not registered `aca_ptc`. Add an actual final-output comparison and rerun `us-aca-ptc-grid`
+      retaining same-case returned values from both engines and explicit comparison bindings for `aca_ptc`;
+      then re-register.'
   - id: us-pe:acp
     oracle_policy_name: acp
     oracle_policy_type: rules
@@ -45,17 +46,14 @@ policies:
     output_vars:
       - additional_medicare_tax
     in_scope: true
-    suite: null
+    suite: us-additional-medicare-grid
     note: 'The us-additional-medicare-grid suite compares PE-US additional_medicare_tax with Axiom''s
       combined final only on the explicitly bounded tax-year-2026 zero-self-employment domain: five wage-only
       GRID-CONTRACT cases across single, joint, and married-filing-separately status, four nonzero. For
       zero-SE inputs, PE-US additional_medicare_tax equals the section 3101(b)(2) wage-only amount and
       Axiom''s combined output remains valid. The suite does not test or claim the section 1401(b)(2)
       self-employment leg; SE leg pending the 26 CFR 1.1401-1 operative-authority chain, axiom-corpus#523.
-      The committed report is 5/5 within one cent. Coverage retracted under d1081: us-additional-medicare-grid
-      has no literal execution attestation with executed: true. Restore its registration after a stamped
-      comparison records finite, non-null returned values for a registered output (additional_medicare_tax),
-      without contradictory missing/error/skipped evidence.'
+      The committed report is 5/5 within one cent.'
   - id: us-pe:ak_atap
     oracle_policy_name: ak_atap
     oracle_policy_type: rules
@@ -79,12 +77,9 @@ policies:
     output_vars:
       - al_tanf
     in_scope: true
-    suite: null
-    note: 'Previously registered to al-tanf-ecps — Alabama Family Assistance (al_tanf) vs PE-2026 at population
-      scale after requested-month regeneration (1441/1444 match, 3 unexplained). Coverage retracted under
-      d1081: al-tanf-ecps has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (al_tanf),
-      without contradictory missing/error/skipped evidence.'
+    suite: al-tanf-ecps
+    note: Covered by al-tanf-ecps — Alabama Family Assistance (al_tanf) vs PE-2026 at population scale
+      after requested-month regeneration (1441/1444 match, 3 unexplained).
   - id: us-pe:alternative_minimum_tax
     oracle_policy_name: alternative_minimum_tax
     oracle_policy_type: rules
@@ -99,10 +94,12 @@ policies:
       - american_opportunity_credit
     in_scope: true
     suite: null
-    note: 'Previously registered to fiit-ecps (us:tax/federal-income-tax#aotc). Coverage retracted under
-      d1081: fiit-ecps has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (american_opportunity_credit),
-      without contradictory missing/error/skipped evidence.'
+    note: 'Covered by fiit-ecps (us:tax/federal-income-tax#aotc). Current coverage retracted under the
+      same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired
+      returned values for registered `american_opportunity_credit`; grouped counts and diagnostic scalars
+      cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for
+      `american_opportunity_credit`; add a real final-output comparison where the native surface currently
+      compares intermediates.'
   - id: us-pe:ar_income_tax
     oracle_policy_name: ar_income_tax
     oracle_policy_type: rules
@@ -139,10 +136,11 @@ policies:
       - az_tanf
     in_scope: true
     suite: null
-    note: 'Previously registered to az-tanf-ecps — Arizona Cash Assistance (az_tanf) vs PE-2026 at population
-      scale. Coverage retracted under d1081: az-tanf-ecps has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (az_tanf), without contradictory missing/error/skipped evidence.'
+    note: 'Covered by az-tanf-ecps — Arizona Cash Assistance (az_tanf) vs PE-2026 at population scale.
+      Current coverage retracted under the same-case execution evidence rule: The retained case rows omit
+      both returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `az-tanf-ecps` retaining same-case returned values from both engines and explicit comparison
+      bindings for `az_tanf`; then re-register.'
   - id: us-pe:basic_income
     oracle_policy_name: basic_income
     oracle_policy_type: rules
@@ -170,12 +168,8 @@ policies:
     output_vars:
       - ca_tanf
     in_scope: true
-    suite: null
-    note: 'Previously registered to ca-tanf-ecps — CalWORKs (ca_tanf) vs PE-2026 at population scale;
-      residuals undispositioned. Coverage retracted under d1081: ca-tanf-ecps has no literal execution
-      attestation with executed: true. Restore its registration after a stamped comparison records finite,
-      non-null returned values for a registered output (ca_tanf), without contradictory missing/error/skipped
-      evidence.'
+    suite: ca-tanf-ecps
+    note: Covered by ca-tanf-ecps — CalWORKs (ca_tanf) vs PE-2026 at population scale; residuals undispositioned.
   - id: us-pe:capital_gains_tax
     oracle_policy_name: capital_gains_tax
     oracle_policy_type: rules
@@ -183,8 +177,13 @@ policies:
       - capital_gains_tax
     in_scope: true
     suite: null
-    note: FIIT compares capital-gain definitions and income_tax_main_rates, not the registered capital_gains_tax
-      output. Coverage requires a report comparing capital_gains_tax.
+    note: 'FIIT compares capital-gain definitions and income_tax_main_rates, not the registered capital_gains_tax
+      output. Coverage requires a report comparing capital_gains_tax. Current coverage retracted under
+      the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving
+      paired returned values for registered `capital_gains_tax`; grouped counts and diagnostic scalars
+      cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for
+      `capital_gains_tax`; add a real final-output comparison where the native surface currently compares
+      intermediates.'
   - id: us-pe:cdcc
     oracle_policy_name: cdcc
     oracle_policy_type: rules
@@ -192,10 +191,11 @@ policies:
       - cdcc
     in_scope: true
     suite: null
-    note: 'Previously registered to fiit-ecps (us:tax/federal-income-tax#cdcc). Coverage retracted under
-      d1081: fiit-ecps has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (cdcc),
-      without contradictory missing/error/skipped evidence.'
+    note: 'Covered by fiit-ecps (us:tax/federal-income-tax#cdcc). Current coverage retracted under the
+      same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired
+      returned values for registered `cdcc`; grouped counts and diagnostic scalars cannot supply it. Rerun
+      `fiit-ecps` with the output-level ledger retaining both actual values for `cdcc`; add a real final-output
+      comparison where the native surface currently compares intermediates.'
   - id: us-pe:child_support_received
     oracle_policy_name: child_support_received
     oracle_policy_type: pure_input
@@ -233,11 +233,8 @@ policies:
     output_vars:
       - co_tanf
     in_scope: true
-    suite: null
-    note: 'Previously registered to co-tanf-ecps — Colorado Works (co_tanf) vs PE-2026 at population scale.
-      Coverage retracted under d1081: co-tanf-ecps has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (co_tanf), without contradictory missing/error/skipped evidence.'
+    suite: co-tanf-ecps
+    note: Covered by co-tanf-ecps — Colorado Works (co_tanf) vs PE-2026 at population scale.
   - id: us-pe:commodity_supplemental_food_program
     oracle_policy_name: commodity_supplemental_food_program
     oracle_policy_type: rules
@@ -275,10 +272,11 @@ policies:
       - ctc
     in_scope: true
     suite: null
-    note: 'Previously registered to fiit-ecps (us:tax/federal-income-tax#ctc). Coverage retracted under
-      d1081: fiit-ecps has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (ctc),
-      without contradictory missing/error/skipped evidence.'
+    note: 'Covered by fiit-ecps (us:tax/federal-income-tax#ctc). Current coverage retracted under the
+      same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired
+      returned values for registered `ctc`; grouped counts and diagnostic scalars cannot supply it. Rerun
+      `fiit-ecps` with the output-level ledger retaining both actual values for `ctc`; add a real final-output
+      comparison where the native surface currently compares intermediates.'
   - id: us-pe:dc_income_tax
     oracle_policy_name: dc_income_tax
     oracle_policy_type: rules
@@ -314,12 +312,9 @@ policies:
     output_vars:
       - de_tanf
     in_scope: true
-    suite: null
-    note: 'Previously registered to de-tanf-ecps — Delaware TANF (de_tanf) vs PE-2026 at population scale
-      (781/781 match, 0 unexplained). Coverage retracted under d1081: de-tanf-ecps has no literal execution
-      attestation with executed: true. Restore its registration after a stamped comparison records finite,
-      non-null returned values for a registered output (de_tanf), without contradictory missing/error/skipped
-      evidence.'
+    suite: de-tanf-ecps
+    note: Covered by de-tanf-ecps — Delaware TANF (de_tanf) vs PE-2026 at population scale (781/781 match,
+      0 unexplained).
   - id: us-pe:early_head_start
     oracle_policy_name: early_head_start
     oracle_policy_type: rules
@@ -361,8 +356,12 @@ policies:
       - eitc
     in_scope: true
     suite: null
-    note: FIIT's recorded EITC surface compares intermediate and eligibility outputs. Its report does
-      not bind the registered final eitc award; coverage requires that output's evidence.
+    note: 'FIIT''s recorded EITC surface compares intermediate and eligibility outputs. Its report does
+      not bind the registered final eitc award; coverage requires that output''s evidence. Current coverage
+      retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger
+      proving paired returned values for registered `eitc`; grouped counts and diagnostic scalars cannot
+      supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `eitc`;
+      add a real final-output comparison where the native surface currently compares intermediates.'
   - id: us-pe:elderly_disabled_credit
     oracle_policy_name: elderly_disabled_credit
     oracle_policy_type: rules
@@ -374,10 +373,11 @@ policies:
       26 liability/credit-order cap on nine exactly expressible 2026 companion cases. It covers aged and
       proven permanent-total-disability branches plus Social Security and AGI reductions; the empty-relation
       no-qualified-person diagnostic is omitted because PE requires a TaxUnit member and the fixture supplies
-      no facts for one. The committed report is 9/9 within one cent. Coverage retracted under d1081: us-elderly-disabled-grid
-      has no literal execution attestation with executed: true. Restore its registration after a stamped
-      comparison records finite, non-null returned values for a registered output (elderly_disabled_credit),
-      without contradictory missing/error/skipped evidence.'
+      no facts for one. The committed report is 9/9 within one cent. Current coverage retracted under
+      the same-case execution evidence rule: The recorded oracle comparison target is `elderly_disabled_credit_potential`,
+      not final `elderly_disabled_credit`. Add an actual final-output comparison and rerun `us-elderly-disabled-grid`
+      retaining same-case returned values from both engines and explicit comparison bindings for `elderly_disabled_credit`;
+      then re-register.'
   - id: us-pe:employee_medicare_tax
     oracle_policy_name: employee_medicare_tax
     oracle_policy_type: rules
@@ -385,10 +385,11 @@ policies:
       - employee_medicare_tax
     in_scope: true
     suite: null
-    note: 'Previously registered to fiit-ecps (us:tax/payroll#employee_medicare). Coverage retracted under
-      d1081: fiit-ecps has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (employee_medicare_tax),
-      without contradictory missing/error/skipped evidence.'
+    note: 'Covered by fiit-ecps (us:tax/payroll#employee_medicare). Current coverage retracted under the
+      same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired
+      returned values for registered `employee_medicare_tax`; grouped counts and diagnostic scalars cannot
+      supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `employee_medicare_tax`;
+      add a real final-output comparison where the native surface currently compares intermediates.'
   - id: us-pe:employee_social_security_tax
     oracle_policy_name: employee_social_security_tax
     oracle_policy_type: rules
@@ -396,10 +397,12 @@ policies:
       - employee_social_security_tax
     in_scope: true
     suite: null
-    note: 'Previously registered to fiit-ecps (us:tax/payroll#employee_oasdi). Coverage retracted under
-      d1081: fiit-ecps has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (employee_social_security_tax),
-      without contradictory missing/error/skipped evidence.'
+    note: 'Covered by fiit-ecps (us:tax/payroll#employee_oasdi). Current coverage retracted under the
+      same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired
+      returned values for registered `employee_social_security_tax`; grouped counts and diagnostic scalars
+      cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for
+      `employee_social_security_tax`; add a real final-output comparison where the native surface currently
+      compares intermediates.'
   - id: us-pe:employer_medicare_tax
     oracle_policy_name: employer_medicare_tax
     oracle_policy_type: rules
@@ -407,10 +410,11 @@ policies:
       - employer_medicare_tax
     in_scope: true
     suite: null
-    note: 'Previously registered to fiit-ecps (us:tax/payroll#employer_medicare). Coverage retracted under
-      d1081: fiit-ecps has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (employer_medicare_tax),
-      without contradictory missing/error/skipped evidence.'
+    note: 'Covered by fiit-ecps (us:tax/payroll#employer_medicare). Current coverage retracted under the
+      same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired
+      returned values for registered `employer_medicare_tax`; grouped counts and diagnostic scalars cannot
+      supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `employer_medicare_tax`;
+      add a real final-output comparison where the native surface currently compares intermediates.'
   - id: us-pe:employer_social_security_tax
     oracle_policy_name: employer_social_security_tax
     oracle_policy_type: rules
@@ -418,10 +422,12 @@ policies:
       - employer_social_security_tax
     in_scope: true
     suite: null
-    note: 'Previously registered to fiit-ecps (us:tax/payroll#employer_oasdi). Coverage retracted under
-      d1081: fiit-ecps has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (employer_social_security_tax),
-      without contradictory missing/error/skipped evidence.'
+    note: 'Covered by fiit-ecps (us:tax/payroll#employer_oasdi). Current coverage retracted under the
+      same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired
+      returned values for registered `employer_social_security_tax`; grouped counts and diagnostic scalars
+      cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for
+      `employer_social_security_tax`; add a real final-output comparison where the native surface currently
+      compares intermediates.'
   - id: us-pe:energy_efficient_home_improvement_credit
     oracle_policy_name: energy_efficient_home_improvement_credit
     oracle_policy_type: rules
@@ -488,12 +494,9 @@ policies:
     output_vars:
       - ga_tanf
     in_scope: true
-    suite: null
-    note: 'Previously registered to ga-tanf-ecps — Georgia TANF (ga_tanf) vs PE-2026 at population scale
-      (1896/1897 match, 1 residual dispositioned bridge_artifact, 0 unexplained). Coverage retracted under
-      d1081: ga-tanf-ecps has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (ga_tanf),
-      without contradictory missing/error/skipped evidence.'
+    suite: ga-tanf-ecps
+    note: Covered by ga-tanf-ecps — Georgia TANF (ga_tanf) vs PE-2026 at population scale (1896/1897 match,
+      1 residual dispositioned bridge_artifact, 0 unexplained).
   - id: us-pe:head_start
     oracle_policy_name: head_start
     oracle_policy_type: rules
@@ -606,8 +609,12 @@ policies:
       - income_tax
     in_scope: true
     suite: null
-    note: FIIT's synthetic liability aggregate sums component counts but does not record the registered
-      final income_tax output. Coverage requires a report with that output's binding.
+    note: 'FIIT''s synthetic liability aggregate sums component counts but does not record the registered
+      final income_tax output. Coverage requires a report with that output''s binding. Current coverage
+      retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger
+      proving paired returned values for registered `income_tax`; grouped counts and diagnostic scalars
+      cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for
+      `income_tax`; add a real final-output comparison where the native surface currently compares intermediates.'
   - id: us-pe:income_tax_before_refundable_credits
     oracle_policy_name: income_tax_before_refundable_credits
     oracle_policy_type: rules
@@ -615,30 +622,31 @@ policies:
       - income_tax_before_refundable_credits
     in_scope: true
     suite: null
-    note: FIIT's recorded tax-before-credits surface compares income_tax_main_rates. The report does not
-      bind income_tax_before_refundable_credits; its former waiver reason was inferred from another producer's
-      mappings and cannot be retained.
+    note: 'FIIT''s recorded tax-before-credits surface compares income_tax_main_rates. The report does
+      not bind income_tax_before_refundable_credits; its former waiver reason was inferred from another
+      producer''s mappings and cannot be retained. Current coverage retracted under the same-case execution
+      evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for
+      registered `income_tax_before_refundable_credits`; grouped counts and diagnostic scalars cannot
+      supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `income_tax_before_refundable_credits`;
+      add a real final-output comparison where the native surface currently compares intermediates.'
   - id: us-pe:itemized_taxable_income_deductions
     oracle_policy_name: itemized_taxable_income_deductions
     oracle_policy_type: rules
     output_vars:
       - itemized_taxable_income_deductions
     in_scope: true
-    suite: null
-    note: 'The us-itemized-taxable-income-deductions-grid suite compares 17 engine-verified 2026 RuleSpec
+    suite: us-itemized-taxable-income-deductions-grid
+    note: The us-itemized-taxable-income-deductions-grid suite compares 17 engine-verified 2026 RuleSpec
       companion cases (16 nonzero) across all five filing statuses with PE-US 1.767.3 under PolicyEngine
       4.18.9 and Core 3.30.3. It binds the same six completed post-entitlement, post-limitation components
       and keeps the completed lawful taxable-income-without-section-68 scalar RuleSpec-only because PE
       derives a non-equivalent AGI-minus-exemptions proxy. This aggregate-only boundary does not certify
-      component entitlement, substantiation, components outside PE''s six-item inventory, miscellaneous
+      component entitlement, substantiation, components outside PE's six-item inventory, miscellaneous
       deductions above zero, or the section 63(e) itemization election. The section 68 wrong-base and
       truncated-rate cases remain visible as source divergences carried only by evidence-backed per-case
       dispositions; their upstream issues are itemized-68-other-deduction-base=policyengine-us#9170 and
       itemized-68-rational-rate=policyengine-us#9171. Suite coverage does not assert raw equality on those
-      cases. Coverage retracted under d1081: us-itemized-taxable-income-deductions-grid has no literal
-      execution attestation with executed: true. Restore its registration after a stamped comparison records
-      finite, non-null returned values for a registered output (itemized_taxable_income_deductions), without
-      contradictory missing/error/skipped evidence.'
+      cases.
   - id: us-pe:ks_income_tax
     oracle_policy_name: ks_income_tax
     oracle_policy_type: rules
@@ -656,8 +664,11 @@ policies:
       - ks_tanf
     in_scope: true
     suite: null
-    note: ks-tanf-ecps compares ks_tanf_maximum_benefit, not final ks_tanf; coverage requires a stamped
-      report recording an actual comparison of ks_tanf.
+    note: 'ks-tanf-ecps compares ks_tanf_maximum_benefit, not final ks_tanf; coverage requires a report
+      recording an actual comparison of ks_tanf. Current coverage retracted under the same-case execution
+      evidence rule: The recorded oracle comparison target is `ks_tanf_maximum_benefit`, not final `ks_tanf`.
+      Add an actual final-output comparison and rerun `ks-tanf-ecps` retaining same-case returned values
+      from both engines and explicit comparison bindings for `ks_tanf`; then re-register.'
   - id: us-pe:ky_income_tax
     oracle_policy_name: ky_income_tax
     oracle_policy_type: rules
@@ -698,14 +709,11 @@ policies:
     output_vars:
       - lifetime_learning_credit
     in_scope: true
-    suite: null
-    note: 'The us-llc-grid suite compares all 12 ground-truth section 25A(c) companion cases against PE-US
+    suite: us-llc-grid
+    note: The us-llc-grid suite compares all 12 ground-truth section 25A(c) companion cases against PE-US
       lifetime_learning_credit at the same final, liability-capped boundary. It includes exact phaseout
       endpoints, two-student aggregate expenses, and a diagnostic proving that a $2,000 potential is capped
-      to $500. The committed report is 12/12 within one cent. Coverage retracted under d1081: us-llc-grid
-      has no literal execution attestation with executed: true. Restore its registration after a stamped
-      comparison records finite, non-null returned values for a registered output (lifetime_learning_credit),
-      without contradictory missing/error/skipped evidence.'
+      to $500. The committed report is 12/12 within one cent.
   - id: us-pe:ma_income_tax
     oracle_policy_name: ma_income_tax
     oracle_policy_type: rules
@@ -766,12 +774,12 @@ policies:
       - medicaid
     in_scope: true
     suite: null
-    note: 'Previously registered to medicaid-magi-co-ecps — validates PE-US''s MAGI categorical eligibility
-      groups (infant/young-child/older-child/pregnant/adult/SSI-recipient, 42 CFR 435) that drive the
-      medicaid value vs PE-2026; CO-scoped run of the national eligibility logic. Coverage retracted under
-      d1081: medicaid-magi-co-ecps has no literal execution attestation with executed: true. Restore its
-      registration after a stamped comparison records finite, non-null returned values for a registered
-      output (medicaid), without contradictory missing/error/skipped evidence.'
+    note: 'Covered by medicaid-magi-co-ecps — validates PE-US''s MAGI categorical eligibility groups (infant/young-child/older-child/pregnant/adult/SSI-recipient,
+      42 CFR 435) that drive the medicaid value vs PE-2026; CO-scoped run of the national eligibility
+      logic. Current coverage retracted under the same-case execution evidence rule: The report compares
+      category eligibility outputs, not registered final `medicaid`. Add an actual final-output comparison
+      and rerun `medicaid-magi-co-ecps` retaining same-case returned values from both engines and explicit
+      comparison bindings for `medicaid`; then re-register.'
   - id: us-pe:mi_fip
     oracle_policy_name: mi_fip
     oracle_policy_type: rules
@@ -805,11 +813,8 @@ policies:
     output_vars:
       - mn_mfip
     in_scope: true
-    suite: null
-    note: 'Previously registered to mn-tanf-ecps — Minnesota MFIP (mn_mfip) vs PE-2026 at population scale.
-      Coverage retracted under d1081: mn-tanf-ecps has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (mn_mfip), without contradictory missing/error/skipped evidence.'
+    suite: mn-tanf-ecps
+    note: Covered by mn-tanf-ecps — Minnesota MFIP (mn_mfip) vs PE-2026 at population scale.
   - id: us-pe:mo_income_tax
     oracle_policy_name: mo_income_tax
     oracle_policy_type: rules
@@ -870,9 +875,12 @@ policies:
       - nc_income_tax
     in_scope: true
     suite: null
-    note: nc-income-tax-liability compares nc_income_tax_before_credits, not final nc_income_tax; coverage
-      requires a stamped report recording an actual comparison of nc_income_tax, even if the two values
-      coincide.
+    note: 'nc-income-tax-liability compares nc_income_tax_before_credits, not final nc_income_tax; coverage
+      requires a report recording an actual comparison of nc_income_tax, even if the two values coincide.
+      Current coverage retracted under the same-case execution evidence rule: The report compares `nc_income_tax_before_credits`,
+      not final `nc_income_tax`, even if the two values coincide. Add an actual final-output comparison
+      and rerun `nc-income-tax-liability` retaining same-case returned values from both engines and explicit
+      comparison bindings for `nc_income_tax`; then re-register.'
   - id: us-pe:nc_tanf
     oracle_policy_name: nc_tanf
     oracle_policy_type: rules
@@ -920,13 +928,10 @@ policies:
     output_vars:
       - net_investment_income_tax
     in_scope: true
-    suite: null
-    note: 'The us-niit-grid suite compares six 2026 individual section 1411 cases against PE-US net_investment_income_tax,
+    suite: us-niit-grid
+    note: The us-niit-grid suite compares six 2026 individual section 1411 cases against PE-US net_investment_income_tax,
       including status thresholds, mixed investment income, gains, and passive rent. With no section 911
-      amounts, both legs use AGI equal to NIIT MAGI; the committed report is 6/6 with nonzero cases. Coverage
-      retracted under d1081: us-niit-grid has no literal execution attestation with executed: true. Restore
-      its registration after a stamped comparison records finite, non-null returned values for a registered
-      output (net_investment_income_tax), without contradictory missing/error/skipped evidence.'
+      amounts, both legs use AGI equal to NIIT MAGI; the committed report is 6/6 with nonzero cases.
   - id: us-pe:new_clean_vehicle_credit
     oracle_policy_name: new_clean_vehicle_credit
     oracle_policy_type: rules
@@ -1012,11 +1017,8 @@ policies:
     output_vars:
       - ny_tanf
     in_scope: true
-    suite: null
-    note: 'Previously registered to ny-tanf-ecps — New York TANF (ny_tanf) vs PE-2026 at population scale.
-      Coverage retracted under d1081: ny-tanf-ecps has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (ny_tanf), without contradictory missing/error/skipped evidence.'
+    suite: ny-tanf-ecps
+    note: Covered by ny-tanf-ecps — New York TANF (ny_tanf) vs PE-2026 at population scale.
   - id: us-pe:oh_income_tax
     oracle_policy_name: oh_income_tax
     oracle_policy_type: rules
@@ -1091,15 +1093,12 @@ policies:
     output_vars:
       - qualified_business_income_deduction
     in_scope: true
-    suite: null
+    suite: us-qbid-grid
     note: 'The us-qbid-grid suite compares 11 ground-truth 2026 section 199A cases using the corrected
       $201,750/$403,500 thresholds and $75,000/$150,000 phase-in widths. The committed report is 10/11
       raw and fully dispositioned: PE-US 1.767.3 applies its $400 floor to all QBI because it lacks Axiom''s
       distinct active-business-QBI fact, producing $400 instead of zero in qbid-above-nowages. There are
-      no unexplained or Axiom-owned divergences. Coverage retracted under d1081: us-qbid-grid has no literal
-      execution attestation with executed: true. Restore its registration after a stamped comparison records
-      finite, non-null returned values for a registered output (qualified_business_income_deduction),
-      without contradictory missing/error/skipped evidence.'
+      no unexplained or Axiom-owned divergences.'
   - id: us-pe:recovery_rebate_credit
     oracle_policy_name: recovery_rebate_credit
     oracle_policy_type: rules
@@ -1161,8 +1160,8 @@ policies:
     output_vars:
       - salt_deduction
     in_scope: true
-    suite: null
-    note: 'The us-salt-deduction-grid suite compares 16 nonzero, engine-verified 2026 RuleSpec companion
+    suite: us-salt-deduction-grid
+    note: The us-salt-deduction-grid suite compares 16 nonzero, engine-verified 2026 RuleSpec companion
       cases across all five filing statuses with PE-US 1.767.3 under PolicyEngine 4.18.9 and Core 3.30.3.
       It binds completed elected personal income-or-sales tax and real-estate tax directly and bridges
       the guarded section 911 amount to PE-US foreign_earned_income_exclusion. The completed-return boundary
@@ -1172,10 +1171,7 @@ policies:
       cases remain visible as source divergences carried only by evidence-backed per-case dispositions.
       Their upstream issues are salt-low-agi-engine-cap=policyengine-us#9167, salt-magi-911-addback=policyengine-us#9168,
       and salt-personal-property-tax-probe=policyengine-us#9169. Suite coverage does not assert raw equality
-      on those cases. Coverage retracted under d1081: us-salt-deduction-grid has no literal execution
-      attestation with executed: true. Restore its registration after a stamped comparison records finite,
-      non-null returned values for a registered output (salt_deduction), without contradictory missing/error/skipped
-      evidence.'
+      on those cases.
   - id: us-pe:savers_credit
     oracle_policy_name: savers_credit
     oracle_policy_type: rules
@@ -1183,8 +1179,12 @@ policies:
       - savers_credit
     in_scope: true
     suite: null
-    note: us-savers-grid compares savers_credit_potential and records final savers_credit only as a diagnostic;
-      coverage requires a stamped report recording an actual comparison of liability-limited savers_credit.
+    note: 'us-savers-grid compares savers_credit_potential and records final savers_credit only as a diagnostic;
+      coverage requires a report recording an actual comparison of liability-limited savers_credit. Current
+      coverage retracted under the same-case execution evidence rule: The recorded oracle comparison target
+      is `savers_credit_potential`; final `savers_credit` is diagnostic only. Add an actual final-output
+      comparison and rerun `us-savers-grid` retaining same-case returned values from both engines and
+      explicit comparison bindings for `savers_credit`; then re-register.'
   - id: us-pe:sc_income_tax
     oracle_policy_name: sc_income_tax
     oracle_policy_type: rules
@@ -1215,14 +1215,11 @@ policies:
     output_vars:
       - self_employment_tax
     in_scope: true
-    suite: null
-    note: 'The us-seca-grid suite compares six 2026 ordinary SECA cases, including the $400 floor, OASDI
+    suite: us-seca-grid
+    note: The us-seca-grid suite compares six 2026 ordinary SECA cases, including the $400 floor, OASDI
       cap and wage coordination, against PE-US self_employment_tax summed from Person to TaxUnit. Both
       boundaries include OASDI plus ordinary Medicare and exclude the separate 0.9% Additional Medicare
-      Tax; the committed report is 6/6 with nonzero cases. Coverage retracted under d1081: us-seca-grid
-      has no literal execution attestation with executed: true. Restore its registration after a stamped
-      comparison records finite, non-null returned values for a registered output (self_employment_tax),
-      without contradictory missing/error/skipped evidence.'
+      Tax; the committed report is 6/6 with nonzero cases.
   - id: us-pe:snap
     oracle_policy_name: snap
     oracle_policy_type: rules
@@ -1230,8 +1227,11 @@ policies:
       - snap
     in_scope: true
     suite: null
-    note: ca-snap-ecps compares snap_normal_allotment and is_snap_eligible, not final snap; coverage requires
-      a stamped report recording an actual comparison of snap.
+    note: 'ca-snap-ecps compares snap_normal_allotment and is_snap_eligible, not final snap; coverage
+      requires a report recording an actual comparison of snap. Current coverage retracted under the same-case
+      execution evidence rule: The report compares `snap_normal_allotment` and `is_snap_eligible`, not
+      final national `snap`. Add an actual final-output comparison and rerun `ca-snap-ecps` retaining
+      same-case returned values from both engines and explicit comparison bindings for `snap`; then re-register.'
   - id: us-pe:social_security
     oracle_policy_name: social_security
     oracle_policy_type: rules
@@ -1263,12 +1263,9 @@ policies:
     output_vars:
       - ssi
     in_scope: true
-    suite: null
-    note: 'Previously registered to ssi-ecps — SSI benefit (42 USC 1382) vs PE-2026 at population scale;
-      all 2,990 requested-month residuals are evidence-backed bridge artifacts (0 unexplained). Coverage
-      retracted under d1081: ssi-ecps has no literal execution attestation with executed: true. Restore
-      its registration after a stamped comparison records finite, non-null returned values for a registered
-      output (ssi), without contradictory missing/error/skipped evidence.'
+    suite: ssi-ecps
+    note: Covered by ssi-ecps — SSI benefit (42 USC 1382) vs PE-2026 at population scale; all 2,990 requested-month
+      residuals are evidence-backed bridge artifacts (0 unexplained).
   - id: us-pe:standard_deduction
     oracle_policy_name: standard_deduction
     oracle_policy_type: rules
@@ -1276,10 +1273,12 @@ policies:
       - standard_deduction
     in_scope: true
     suite: null
-    note: 'Previously registered to fiit-ecps (us:tax/federal-income-tax#standard_deduction). Coverage
-      retracted under d1081: fiit-ecps has no literal execution attestation with executed: true. Restore
-      its registration after a stamped comparison records finite, non-null returned values for a registered
-      output (standard_deduction), without contradictory missing/error/skipped evidence.'
+    note: 'Covered by fiit-ecps (us:tax/federal-income-tax#standard_deduction). Current coverage retracted
+      under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving
+      paired returned values for registered `standard_deduction`; grouped counts and diagnostic scalars
+      cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for
+      `standard_deduction`; add a real final-output comparison where the native surface currently compares
+      intermediates.'
   - id: us-pe:survivor_benefits
     oracle_policy_name: survivor_benefits
     oracle_policy_type: pure_input
@@ -1398,10 +1397,11 @@ policies:
       - wa_tanf
     in_scope: true
     suite: null
-    note: 'Previously registered to wa-tanf-ecps — Washington TANF (wa_tanf) vs PE-2026 at population
-      scale. Coverage retracted under d1081: wa-tanf-ecps has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (wa_tanf), without contradictory missing/error/skipped evidence.'
+    note: 'Covered by wa-tanf-ecps — Washington TANF (wa_tanf) vs PE-2026 at population scale. Current
+      coverage retracted under the same-case execution evidence rule: The retained case rows omit both
+      returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `wa-tanf-ecps` retaining same-case returned values from both engines and explicit comparison
+      bindings for `wa_tanf`; then re-register.'
   - id: us-pe:wi_income_tax
     oracle_policy_name: wi_income_tax
     oracle_policy_type: rules

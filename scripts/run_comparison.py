@@ -4556,6 +4556,8 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     """Convert uk-efrs-compare output to axiom.comparison_report.v2."""
     from collections import Counter, defaultdict
 
+    from axiom_oracles.bridges.efrs_uk import SURFACE_SPECS
+
     dashboard_config = config.get("dashboard") or {}
     parent_concept = dashboard_config.get("parent_concept", UK_UNIVERSAL_CREDIT_PARENT)
     parent_category = dashboard_config.get("parent_category", "benefits")
@@ -4590,6 +4592,21 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         for row in raw.get("output_summary", [])
         if spec_for(row)
     }
+    output_bindings = {}
+    for row in by_output.values():
+        native_surface = SURFACE_SPECS.get(row.get("surface"))
+        native_output = (
+            native_surface.outputs.get(row.get("output"), {})
+            if native_surface is not None
+            else {}
+        )
+        # A native expression is not a returned final PolicyEngine variable.
+        # Keep that oracle binding explicitly unresolved rather than infer one
+        # from the dashboard concept's generic mapping.
+        output_bindings[spec_for(row)["concept"]] = {
+            "axiom": native_output.get("axiom", []),
+            "policyengine": native_output.get("pe", []),
+        }
     mismatch_rows = [
         {**row, "kind": "amount_difference"}
         for row in raw.get("mismatches", [])
@@ -4724,6 +4741,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
     cases_by_entity: dict[str, list[dict]] = defaultdict(list)
     flat_mismatches: list[dict] = []
+    observed_outputs: list[dict] = []
     for row in visible_difference_rows:
         spec = spec_for(row)
         if spec is None:
@@ -4737,15 +4755,36 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "difference": row.get("diff", 0),
             "issue_url": row.get("issue_url"),
             "kind": kind,
-            "left": row.get("axiom", 0),
+            "left": row.get("axiom"),
             "parent": parent_concept,
             "relative_tolerance": 2e-7,
-            "right": row.get("policyengine", 0),
+            "right": row.get("policyengine"),
             "surface": row.get("surface"),
             "tolerance": 0.01,
         }
         cases_by_entity[str(row["entity_id"])].append(mismatch)
         flat_mismatches.append(mismatch)
+        for key in ("error", "errors", "skipped", "skip_reason", "executed"):
+            if key in row:
+                mismatch[key] = row[key]
+        bindings = output_bindings.get(spec["concept"], {})
+        for engine in ("axiom", "policyengine"):
+            variable = bindings.get(engine)
+            if isinstance(variable, str) and variable:
+                observed_outputs.append(
+                    {
+                        "case_id": mismatch["case_id"],
+                        "concept": spec["concept"],
+                        "engine": engine,
+                        "variable": variable,
+                        "value": row.get(engine),
+                        **{
+                            key: row[key]
+                            for key in ("error", "errors", "skipped", "skip_reason", "executed")
+                            if key in row
+                        },
+                    }
+                )
 
     cases = []
     for entity_id, case_mismatches in cases_by_entity.items():
@@ -4800,7 +4839,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             }
         )
 
-    return {
+    report = {
         "aggregates": aggregates,
         "case_count": raw.get("compared_persons", 0) + raw.get("compared_benunits", 0),
         "cases": cases,
@@ -4809,6 +4848,8 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "errors": [],
         "locales": ["UK"],
         "mismatches": flat_mismatches,
+        "observed_outputs": observed_outputs,
+        "output_bindings": output_bindings,
         "population": "enhanced-frs",
         "projection_notes": raw.get("projection_notes", []),
         "schema_version": "axiom.comparison_report.v2",
@@ -4835,6 +4876,10 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             },
         },
     }
+    for key in ("error", "errors", "skipped", "skip_reason", "executed"):
+        if key in raw:
+            report[key] = raw[key]
+    return report
 
 
 def _limit_rows_by_output(rows: list[dict], *, limit_per_output: int) -> list[dict]:

@@ -31,9 +31,13 @@ def _report(*, suite="probe", total=1, aggregate=1, claim=1, variable="registere
             "error_count": 0,
         },
         "aggregates": [{"concept": "actual_tax", "comparison_count": aggregate}],
+        "output_bindings": {"actual_tax": {"axiom": "axiom_tax", "policyengine": variable}},
         "observed_outputs": [{
             "case_id": index, "concept": "actual_tax", "engine": "policyengine",
             "variable": variable, "value": 0,
+        } for index in range(total)] + [{
+            "case_id": index, "concept": "actual_tax", "engine": "axiom",
+            "variable": "axiom_tax", "value": 0,
         } for index in range(total)],
         "attestation": {
             "schema_version": EXECUTION_ATTESTATION_SCHEMA,

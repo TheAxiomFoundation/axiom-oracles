@@ -242,10 +242,11 @@ policies:
       cap-base scope boundary (the UC-only pilot does not add non-UC welfare to the reg-81 excess), not
       a defect in the reg-80A/81 reduction the pilot encodes, so it is documented here rather than compared.
       brd_s (the legacy-benefit reduction) likewise stays uncovered — the Axiom UC pilot is UC-only. Runs
-      on the x64 UKMOD runtime. Coverage retracted under d1081: uk-benefit-cap has no literal execution
-      attestation with executed: true. Restore its registration after a stamped comparison records finite,
-      non-null returned values for a registered output (bsadi02_s, brd_s, brduc_s), without contradictory
-      missing/error/skipped evidence.'
+      on the x64 UKMOD runtime. Current coverage retracted under the same-case execution evidence rule:
+      The retained case rows omit both returned comparison values for this registered output; matches/counts
+      alone cannot attest either side. Rerun `uk-benefit-cap` retaining same-case returned values from
+      both engines and explicit comparison bindings for a registered output (bsadi02_s, brd_s, brduc_s);
+      then re-register.'
   - id: uk:bch_uk
     oracle_policy_name: bch_uk
     oracle_policy_type: ben
@@ -265,9 +266,10 @@ policies:
       the suite also wires a net-of-charge surface (bch_s alone vs Axiom''s post-charge amount); the committed
       report exercises the gross bridge surface. The ~0.27% 52-vs-52.14-weeks convention residual is inside
       tolerance; all cases recover the same statutory weekly rates. bch_s is the compared surface, so
-      bch_uk is covered. Coverage retracted under d1081: uk-child-benefit has no literal execution attestation
-      with executed: true. Restore its registration after a stamped comparison records finite, non-null
-      returned values for a registered output (bch_s), without contradictory missing/error/skipped evidence.'
+      bch_uk is covered. Current coverage retracted under the same-case execution evidence rule: The retained
+      case rows omit both returned comparison values for this registered output; matches/counts alone
+      cannot attest either side. Rerun `uk-child-benefit` retaining same-case returned values from both
+      engines and explicit comparison bindings for `bch_s`; then re-register.'
   - id: uk:bched01_uk
     oracle_policy_name: bched01_uk
     oracle_policy_type: ben
@@ -350,9 +352,10 @@ policies:
       schema. Uncovered until the flat CWHA amount (Scotland, child under 18, highest-rate care) is encoded
       on top of that passport and a Scotland/disability surface is built with the care inputs supplied;
       requires the x64 UKMOD runtime to regenerate. Out of scope for the child-benefit + benefit-cap lane.
-      Coverage retracted under d1081: uk-child-winter-heating-payment has no literal execution attestation
-      with executed: true. Restore its registration after a stamped comparison records finite, non-null
-      returned values for a registered output (bchht_s), without contradictory missing/error/skipped evidence.'
+      Current coverage retracted under the same-case execution evidence rule: The retained case rows omit
+      both returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `uk-child-winter-heating-payment` retaining same-case returned values from both engines
+      and explicit comparison bindings for `bchht_s`; then re-register.'
   - id: uk:bchmt01_uk
     oracle_policy_name: bchmt01_uk
     oracle_policy_type: ben
@@ -371,7 +374,7 @@ policies:
       - bchmt_s
     in_scope: true
     oracle_switch: 'on'
-    suite: null
+    suite: uk-scottish-child-payment
     note: 'BEN: Scottish Child Payment (UKMOD comment "BEN: Child Payment (Scotland)"), not a Child Benefit
       means-test variant despite the bch* prefix (distinct from the excluded bchmt01_uk SCP bridging scheme).
       bchmt_s is a devolved Scotland-only (drgn1=12) means-tested payment: eligibility passports off il_bchmt
@@ -388,10 +391,7 @@ policies:
       fires, comparing scottish_child_payment_annual_amount against bchmt_s with the take-up constants
       pinned to 1.0 via euromod_constant_overrides ($SCPTUu6y/$SCPTU6to15y, per the #168 study-allowance/UC-PC
       take-up-pinning pattern) so bchmt_s reports the statutory entitlement; requires the x64 UKMOD runtime
-      to regenerate. Out of scope for the child-benefit + benefit-cap lane. Coverage retracted under d1081:
-      uk-scottish-child-payment has no literal execution attestation with executed: true. Restore its
-      registration after a stamped comparison records finite, non-null returned values for a registered
-      output (bchmt_s), without contradictory missing/error/skipped evidence.'
+      to regenerate. Out of scope for the child-benefit + benefit-cap lane.'
   - id: uk:bchrd_uk
     oracle_policy_name: bchrd_uk
     oracle_policy_type: ben
@@ -411,10 +411,11 @@ policies:
       is now corpus-grounded (axiom-corpus#221) and encoded on the Axiom side (rulespec-uk#84 closed #75),
       so a direct net-of-charge surface (bch_s alone vs Axiom''s post-charge entitlement) is wired into
       the suite too; the committed report exercises the gross bridge surface, which already consumes bchrd_s.
-      bchrd_s is a compared surface, so bchrd_uk is covered — mirroring bch_uk. Coverage retracted under
-      d1081: uk-child-benefit has no literal execution attestation with executed: true. Restore its registration
-      after a stamped comparison records finite, non-null returned values for a registered output (bch_s,
-      bchrd_s), without contradictory missing/error/skipped evidence.'
+      bchrd_s is a compared surface, so bchrd_uk is covered — mirroring bch_uk. Current coverage retracted
+      under the same-case execution evidence rule: The retained case rows omit both returned comparison
+      values for this registered output; matches/counts alone cannot attest either side. Rerun `uk-child-benefit`
+      retaining same-case returned values from both engines and explicit comparison bindings for a registered
+      output (bch_s, bchrd_s); then re-register.'
   - id: uk:bcrdicm_uk
     oracle_policy_name: bcrdicm_uk
     oracle_policy_type: ben
@@ -424,7 +425,7 @@ policies:
     oracle_switch: 'on'
     internal_only_vars:
       - i_bcrdi
-    suite: null
+    suite: uk-scottish-carer-supplement
     note: 'BEN: Scottish Carer''s Allowance Supplement (from Sept 2018). The UK_2026 policy is switch=on
       and computes a distinct payable instrument bcrdicm_s = the flat weekly supplement $CASupW, gated
       on being a Carer''s Allowance recipient in Scotland (Elig_Cond (bcrdi>0) & (drgn1=12)); it then
@@ -440,10 +441,7 @@ policies:
       unencoded (rulespec-uk#55, SSCBA 1992 s.70) — so CAS needs CA encoded first, then the flat weekly
       supplement layered on a Scottish-carer case. Uncovered next-wave surface pending that encoding;
       the supplied-receipt grid + x64 UKMOD regen make it gradable once encoded (evidence: UK.xml UK_2026
-      bcrdicm_uk function body; training_data.txt bcrdi column; rulespec-uk#55). Coverage retracted under
-      d1081: uk-scottish-carer-supplement has no literal execution attestation with executed: true. Restore
-      its registration after a stamped comparison records finite, non-null returned values for a registered
-      output (bcrdicm_s), without contradictory missing/error/skipped evidence.'
+      bcrdicm_uk function body; training_data.txt bcrdi column; rulespec-uk#55).'
   - id: uk:bdi_uk
     oracle_policy_name: bdi_uk
     oracle_policy_type: ben
@@ -515,7 +513,7 @@ policies:
       - i_bho_probtr
       - i_bho_yesUC
       - i_excess_nRooms
-    suite: null
+    suite: uk-housing-benefit
     note: 'BEN: Housing Benefit. The UK_2026 policy is switch=on and computes the full HB entitlement
       bho_s from statute: applicable amount (personal allowances i_bho_PersAllow by age/couple/lone-parent
       status + disability/carer/family premiums + child element with the two-child limit), the means test
@@ -537,10 +535,7 @@ policies:
       (or#168) so a runner regeneration returns statutory entitlements, disposing any residual zeros upstream_engine_gap
       (recharacterization per or#168/or#170). Uncovered until the x64 runner emits the committed report
       (UKMOD has no macOS wheel; scripts/regenerate_euromod_uk.sh is the source of the numbers) (evidence:
-      UK.xml UK_2026 bho_uk function body). Coverage retracted under d1081: uk-housing-benefit has no
-      literal execution attestation with executed: true. Restore its registration after a stamped comparison
-      records finite, non-null returned values for a registered output (bwkmtcmyn_s, ydg03_s, yiviy03_s,
-      ymn01_s, bho_s), without contradictory missing/error/skipped evidence.'
+      UK.xml UK_2026 bho_uk function body).'
   - id: uk:bhosc01_uk
     oracle_policy_name: bhosc01_uk
     oracle_policy_type: ben
@@ -597,10 +592,10 @@ policies:
       pipeline (SSCBA 1992 Part XII ss.164-166). Now COVERED by the uk-statutory-maternity-pay suite (5
       cases, 5/5 match). UKMOD applies the earnings-related 90% rate over the full 39-week period for
       the HHoT case rather than the flat prescribed rate. bmact_uk does not consume the stochastic take-up
-      draw i_rand_tu. Coverage retracted under d1081: uk-statutory-maternity-pay has no literal execution
-      attestation with executed: true. Restore its registration after a stamped comparison records finite,
-      non-null returned values for a registered output (bmact_s), without contradictory missing/error/skipped
-      evidence.'
+      draw i_rand_tu. Current coverage retracted under the same-case execution evidence rule: The retained
+      case rows omit both returned comparison values for this registered output; matches/counts alone
+      cannot attest either side. Rerun `uk-statutory-maternity-pay` retaining same-case returned values
+      from both engines and explicit comparison bindings for `bmact_s`; then re-register.'
   - id: uk:bmamt01_uk
     oracle_policy_name: bmamt01_uk
     oracle_policy_type: ben
@@ -618,10 +613,11 @@ policies:
       bmamt01_s=£443.21. It does NOT consume the stochastic i_rand_tu take-up draw, so it is a deterministic
       passported surface. Now COVERED by the uk-healthy-start suite (2 cases, 2/2 match): the composed
       rulespec-uk pilot (SI 2005/3262 reg.8) annualises the determined weekly value over 52 benefit weeks,
-      about 0.27% below UKMOD''s 365/7 convention, within the 0.3% relative tolerance. Coverage retracted
-      under d1081: uk-healthy-start has no literal execution attestation with executed: true. Restore
-      its registration after a stamped comparison records finite, non-null returned values for a registered
-      output (bmamt01_s), without contradictory missing/error/skipped evidence.'
+      about 0.27% below UKMOD''s 365/7 convention, within the 0.3% relative tolerance. Current coverage
+      retracted under the same-case execution evidence rule: The retained case rows omit both returned
+      comparison values for this registered output; matches/counts alone cannot attest either side. Rerun
+      `uk-healthy-start` retaining same-case returned values from both engines and explicit comparison
+      bindings for `bmamt01_s`; then re-register.'
   - id: uk:bmamt_uk
     oracle_policy_name: bmamt_uk
     oracle_policy_type: ben
@@ -638,10 +634,11 @@ policies:
       bmamt_s=£500.00 (= $BSurMaG). It does NOT consume the stochastic i_rand_tu take-up draw, so it is
       a deterministic passported surface. Now COVERED by the uk-sure-start-maternity-grant suite (1 case,
       1/1 match): the composed rulespec-uk pilot (SI 2005/3061 reg.5) exposes the £500 lump sum as a Person-level
-      annual entitlement, matching to the penny. Coverage retracted under d1081: uk-sure-start-maternity-grant
-      has no literal execution attestation with executed: true. Restore its registration after a stamped
-      comparison records finite, non-null returned values for a registered output (bmamt_s), without contradictory
-      missing/error/skipped evidence.'
+      annual entitlement, matching to the penny. Current coverage retracted under the same-case execution
+      evidence rule: The retained case rows omit both returned comparison values for this registered output;
+      matches/counts alone cannot attest either side. Rerun `uk-sure-start-maternity-grant` retaining
+      same-case returned values from both engines and explicit comparison bindings for `bmamt_s`; then
+      re-register.'
   - id: uk:bmanc_uk
     oracle_policy_name: bmanc_uk
     oracle_policy_type: ben
@@ -666,9 +663,10 @@ policies:
       bmanc_s is nonzero and earnings-responsive (self-employment £9k->£6,041.80, £15k->£10,069.67), reconstructed
       exactly by the composed rulespec-uk MA pipeline (SSCBA 1992 Part II ss.35/35A/35B). Now COVERED
       by the uk-maternity-allowance suite (3 cases, 3/3 match). bmanc_uk does not consume the stochastic
-      take-up draw. Coverage retracted under d1081: uk-maternity-allowance has no literal execution attestation
-      with executed: true. Restore its registration after a stamped comparison records finite, non-null
-      returned values for a registered output (bmanc_s), without contradictory missing/error/skipped evidence.'
+      take-up draw. Current coverage retracted under the same-case execution evidence rule: The retained
+      case rows omit both returned comparison values for this registered output; matches/counts alone
+      cannot attest either side. Rerun `uk-maternity-allowance` retaining same-case returned values from
+      both engines and explicit comparison bindings for `bmanc_s`; then re-register.'
   - id: uk:bmascmt01_uk
     oracle_policy_name: bmascmt01_uk
     oracle_policy_type: ben
@@ -687,10 +685,10 @@ policies:
       take-up draw, so it is a deterministic passported surface. Now COVERED by the uk-best-start-foods
       suite (2 cases, 2/2 match): the composed rulespec-uk pilot (SSI 2019/193 reg.13, £5.60 basic rate
       per SSI 2026/170) annualises the weekly value over 52 benefit weeks, about 0.27% below UKMOD''s
-      365/7 convention, within the 0.3% relative tolerance. Coverage retracted under d1081: uk-best-start-foods
-      has no literal execution attestation with executed: true. Restore its registration after a stamped
-      comparison records finite, non-null returned values for a registered output (bmascmt01_s), without
-      contradictory missing/error/skipped evidence.'
+      365/7 convention, within the 0.3% relative tolerance. Current coverage retracted under the same-case
+      execution evidence rule: The retained case rows omit both returned comparison values for this registered
+      output; matches/counts alone cannot attest either side. Rerun `uk-best-start-foods` retaining same-case
+      returned values from both engines and explicit comparison bindings for `bmascmt01_s`; then re-register.'
   - id: uk:bmascmt_uk
     oracle_policy_name: bmascmt_uk
     oracle_policy_type: ben
@@ -804,9 +802,10 @@ policies:
       deterministic comparable. Scotland (drgn1=12, $WFASc 211 / $WFAAdd80Sc giving GBP 211/317) runs
       a higher devolved instrument (Pension Age Winter Heating Payment, not SI 2025/969) that Axiom does
       not encode, so it is out of scope for this England-and-Wales surface. Runs on the x64 UKMOD runtime.
-      Coverage retracted under d1081: uk-winter-fuel has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (boaht_s), without contradictory missing/error/skipped evidence.'
+      Current coverage retracted under the same-case execution evidence rule: The retained case rows omit
+      both returned comparison values for this registered output; matches/counts alone cannot attest either
+      side. Rerun `uk-winter-fuel` retaining same-case returned values from both engines and explicit
+      comparison bindings for `boaht_s`; then re-register.'
   - id: uk:bpact_uk
     oracle_policy_name: bpact_uk
     oracle_policy_type: ben
@@ -826,10 +825,11 @@ policies:
       £25k->£860.66, below the £130 LEL->£0), reconstructed exactly by the composed rulespec-uk SPP pipeline
       (SSCBA 1992 Part 12ZA ss.171ZA/171ZE/171ZJ). Now COVERED by the uk-statutory-paternity-pay suite
       (5 cases, 5/5 match). UKMOD applies the earnings-related 90% rate over the 2-week period for the
-      HHoT case. bpact_uk does not consume the stochastic take-up draw. Coverage retracted under d1081:
-      uk-statutory-paternity-pay has no literal execution attestation with executed: true. Restore its
-      registration after a stamped comparison records finite, non-null returned values for a registered
-      output (bpact_s), without contradictory missing/error/skipped evidence.'
+      HHoT case. bpact_uk does not consume the stochastic take-up draw. Current coverage retracted under
+      the same-case execution evidence rule: The retained case rows omit both returned comparison values
+      for this registered output; matches/counts alone cannot attest either side. Rerun `uk-statutory-paternity-pay`
+      retaining same-case returned values from both engines and explicit comparison bindings for `bpact_s`;
+      then re-register.'
   - id: uk:bsa_uk
     oracle_policy_name: bsa_uk
     oracle_policy_type: ben
@@ -893,7 +893,7 @@ policies:
       - i_boamtxp_turob
       - i_boamtxp_probtu
       - afc_s
-    suite: null
+    suite: uk-pension-credit
     note: 'BEN: Social Assistance (income-based JSA, Income Support and Pension Credit). UKMOD computes
       Pension Credit inside this policy — boamt_s = guarantee credit boamtmm_s + savings credit boamtxp_s.
       The uk-pension-credit suite live-compares boamt_s against the composed RuleSpec guarantee-credit
@@ -903,10 +903,7 @@ policies:
       that can zero a hypothetical award away from entitlement (ukmod-pc-boamt-takeup-transition); those
       points are dispositioned upstream_engine_gap, so unexplained=0 and Axiom-attributed=0 and the surface
       is covered. (JSA/IS legs of bsa_uk are separate uncovered surfaces; Pension Credit boamt_s is the
-      compared one.) Coverage retracted under d1081: uk-pension-credit has no literal execution attestation
-      with executed: true. Restore its registration after a stamped comparison records finite, non-null
-      returned values for a registered output (ydg01_s, yiviy01_s, bunmt_s, bsa_s, boamtmm_s, boamtxp_s,
-      bfamt_s, boamt_s), without contradictory missing/error/skipped evidence.'
+      compared one.)'
   - id: uk:bsadi_uk
     oracle_policy_name: bsadi_uk
     oracle_policy_type: ben
@@ -1010,11 +1007,7 @@ policies:
       - i_bsauc_probtu
       - i_bsauc_s_ptu
       - seriously_ill_s
-    suite: null
-    note: 'Coverage retracted under d1081: uk-universal-credit has no literal execution attestation with
-      executed: true. Restore its registration after a stamped comparison records finite, non-null returned
-      values for a registered output (ydg02_s, yiviy02_s, bsauc_s), without contradictory missing/error/skipped
-      evidence.'
+    suite: uk-universal-credit
   - id: uk:bunct_uk
     oracle_policy_name: bunct_uk
     oracle_policy_type: ben
@@ -1026,7 +1019,7 @@ policies:
     oracle_switch: 'on'
     internal_only_vars:
       - i_bunct_IncDisregard
-    suite: null
+    suite: uk-contribution-based-jsa
     note: 'BEN: Contributory unemployment benefit (contribution-based Jobseeker''s Allowance). The UK_2026
       policy is switch=on and, once eligible, computes a distinct payable bunct_s from statute (age-banded
       rate $JSARate1824/$JSARate withdrawn pound-for-pound against the pension/earnings disregard base
@@ -1046,10 +1039,7 @@ policies:
       earnings withdrawal — is unencoded, adjacent to rulespec-uk#53). Uncovered next-wave surface, comparable
       under supplied-receipt cases once the contributory rates are encoded (evidence: UK.xml UK_2026 bunct_uk
       function body + verbatim "SEVERELY overestimate eligibility" switch-off comment; training_data.txt
-      bunct/liwwh columns; rulespec-uk#53). Coverage retracted under d1081: uk-contribution-based-jsa
-      has no literal execution attestation with executed: true. Restore its registration after a stamped
-      comparison records finite, non-null returned values for a registered output (bunct_s, liwmy_s, yempv_s),
-      without contradictory missing/error/skipped evidence.'
+      bunct/liwwh columns; rulespec-uk#53).'
   - id: uk:bwkmt_bfamt_uk
     oracle_policy_name: bwkmt_bfamt_uk
     oracle_policy_type: ben
@@ -1317,10 +1307,11 @@ policies:
       - i_tintsS_s
       - i_tintsD_s
     suite: null
-    note: 'Coverage retracted under d1081: uk-worker-pit has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (tints_s, tin_s, tin12_s, tin11_s, tin00_s, tinsa_s), without contradictory
-      missing/error/skipped evidence.'
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `uk-worker-pit` retaining same-case returned values from both engines and explicit
+      comparison bindings for a registered output (tints_s, tin_s, tin12_s, tin11_s, tin00_s, tinsa_s);
+      then re-register.'
   - id: uk:tinta_uk
     oracle_policy_name: tinta_uk
     oracle_policy_type: tax
@@ -1346,10 +1337,11 @@ policies:
       (comparisons/uk-personal-allowance-ukmod.yaml) regenerates on the x64 UKMOD runner via scripts/regenerate_euromod_uk.sh.
       Covered once that runner commits axiom-euromod-uk-personal-allowance.json (the euromod runtime has
       no macOS wheel, so the live match rate is generated on the provisioned runner, per axiom-oracles#190).
-      Evidence: UK.xml UK_2026 tinta_uk function body; rulespec-uk s.35 encoding. Coverage retracted under
-      d1081: uk-personal-allowance has no literal execution attestation with executed: true. Restore its
-      registration after a stamped comparison records finite, non-null returned values for a registered
-      output (tinta_s), without contradictory missing/error/skipped evidence.'
+      Evidence: UK.xml UK_2026 tinta_uk function body; rulespec-uk s.35 encoding. Current coverage retracted
+      under the same-case execution evidence rule: The retained case rows omit both returned comparison
+      values for this registered output; matches/counts alone cannot attest either side. Rerun `uk-personal-allowance`
+      retaining same-case returned values from both engines and explicit comparison bindings for `tinta_s`;
+      then re-register.'
   - id: uk:tpcee_uk
     oracle_policy_name: tpcee_uk
     oracle_policy_type: def
@@ -1383,9 +1375,10 @@ policies:
       - i_NI3cl4_semp_belowUPL
       - i_yse
     suite: null
-    note: 'Coverage retracted under d1081: uk-worker-nic has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (tscee_s, tscse_s), without contradictory missing/error/skipped evidence.'
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `uk-worker-nic` retaining same-case returned values from both engines and explicit
+      comparison bindings for a registered output (tscee_s, tscse_s); then re-register.'
   - id: uk:tscer_uk
     oracle_policy_name: tscer_uk
     oracle_policy_type: sic
@@ -1396,9 +1389,10 @@ policies:
     internal_only_vars:
       - n/a
     suite: null
-    note: 'Coverage retracted under d1081: uk-employer-nic has no literal execution attestation with executed:
-      true. Restore its registration after a stamped comparison records finite, non-null returned values
-      for a registered output (tscer_s), without contradictory missing/error/skipped evidence.'
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained case rows
+      omit both returned comparison values for this registered output; matches/counts alone cannot attest
+      either side. Rerun `uk-employer-nic` retaining same-case returned values from both engines and explicit
+      comparison bindings for `tscer_s`; then re-register.'
   - id: uk:ukpovertyline_uk
     oracle_policy_name: ukpovertyline_uk
     oracle_policy_type: def
