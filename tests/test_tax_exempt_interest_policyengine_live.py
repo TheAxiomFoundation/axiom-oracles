@@ -45,7 +45,11 @@ def _simulation(**person_income):
     situation = {
         "people": {
             "adult": {
-                "age": {YEAR: 40},
+                # Aged, so SNAP counts the member's income in full (no work-
+                # requirement proration), with SSI pinned to zero as the
+                # oracle's PolicyEngine runner pins every mapped income source.
+                "age": {YEAR: 70},
+                "ssi": {YEAR: 0},
                 **{name: {YEAR: value} for name, value in person_income.items()},
             }
         },
