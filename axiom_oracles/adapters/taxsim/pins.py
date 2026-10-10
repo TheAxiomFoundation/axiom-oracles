@@ -66,7 +66,11 @@ def pinned_version() -> str:
 
 
 def bundled_binaries() -> dict[str, dict[str, Any]]:
-    """Return the mapping of bundled-binary relative path -> {sha256, bytes}."""
+    """Return the mapping of bundled-binary relative path -> its pin entry.
+
+    Each entry carries ``sha256``, ``bytes``, ``format``, ``build`` and
+    ``law_years`` (``None`` for an executable that has not been run).
+    """
     return dict(load_pins()["bundled_binaries"])
 
 
