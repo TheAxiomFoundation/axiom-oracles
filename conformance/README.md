@@ -140,8 +140,8 @@ policies. The round-11 reviewed head `4f51296fb` then reported zero covered
 policies in every jurisdiction because it required literal execution stamps.
 Those are historical implementation baselines; `origin/main` is the primary
 publication baseline (114/226 covered at the start of this review). The current
-round-12 fixes retain the round-11 total of 53/226 covered under the same-case
-rule. The new guards reject synthetic attack reports that are not inputs to
+same-case rule was introduced at `5bf01dde2` with 53/226 covered, and later
+rounds retain that total. The new guards reject synthetic attack reports that are not inputs to
 these public coverage counts:
 
 | Jurisdiction | Covered on `origin/main` | Covered after round-12 fixes |
