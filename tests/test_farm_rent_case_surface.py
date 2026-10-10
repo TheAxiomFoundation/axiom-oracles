@@ -229,32 +229,35 @@ def test_niit_rents_input_adds_the_filers_farm_rent() -> None:
 
 
 @pytest.mark.parametrize(
-    ("farm_rent", "head_of_household"),
+    ("wages", "farm_rent", "head_of_household"),
     [
         # 5,499 of gross income is under the projection's 5,500 young-adult
         # limit; 5,500 is not. A loss is no gross income (26 USC 61(a)(5)
-        # rents enter as the positive part).
-        pytest.param(5_499, True, id="under-the-limit"),
-        pytest.param(5_500, False, id="at-the-limit"),
-        pytest.param(-20_000, True, id="a-loss-is-no-gross-income"),
+        # rents enter as the positive part), so it neither counts nor
+        # offsets the dependent's 6,000 of wages.
+        pytest.param(0, 5_499, True, id="under-the-limit"),
+        pytest.param(0, 5_500, False, id="at-the-limit"),
+        pytest.param(0, -20_000, True, id="a-loss-is-no-gross-income"),
+        pytest.param(6_000, -20_000, False, id="a-loss-does-not-offset-wages"),
     ],
 )
 def test_dependent_farm_rent_counts_in_the_head_of_household_gross_income_test(
-    farm_rent, head_of_household
+    wages, farm_rent, head_of_household
 ) -> None:
-    by_key = _by_key(
-        _case(
-            _person("person-1", "HeadOfHousehold", 48),
-            _person(
-                "person-2",
-                "Child",
-                21,
-                **{Concepts.FARM_RENT_INCOME: farm_rent},
-            ),
-        )
+    dependent = _person(
+        "person-2",
+        "Child",
+        21,
+        **{
+            Concepts.YEARLY_EARNED_INCOME: wages,
+            Concepts.FARM_RENT_INCOME: farm_rent,
+        },
     )
+    case = _case(_person("person-1", "HeadOfHousehold", 48), dependent)
 
-    assert by_key[("tax_unit", FILING_STATUS_INPUT)] == (3 if head_of_household else 0)
+    assert _by_key(case)[("tax_unit", FILING_STATUS_INPUT)] == (
+        3 if head_of_household else 0
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -297,16 +300,31 @@ def test_taxcalc_e27200_is_inside_e02000() -> None:
 
 
 @pytest.mark.parametrize(
-    ("farm_rent", "mars"),
-    # Tax-Calculator's own projection limit is 5,200.
-    [pytest.param(5_199, 4, id="under-the-limit"), pytest.param(5_200, 1, id="at")],
+    ("wages", "farm_rent", "mars"),
+    # The Tax-Calculator projection's own limit is 5,200 (the Axiom
+    # projection's is 5,500; axiom-oracles#611 tracks both against the
+    # $5,300 of Rev. Proc. 2025-32 section .23).
+    [
+        pytest.param(0, 5_199, 4, id="under-the-limit"),
+        pytest.param(0, 5_200, 1, id="at-the-limit"),
+        pytest.param(0, -20_000, 4, id="a-loss-is-no-gross-income"),
+        pytest.param(6_000, -20_000, 1, id="a-loss-does-not-offset-wages"),
+    ],
 )
-def test_taxcalc_head_of_household_test_counts_dependent_farm_rent(farm_rent, mars):
+def test_taxcalc_head_of_household_test_counts_dependent_farm_rent(
+    wages, farm_rent, mars
+):
+    dependent = _person(
+        "person-2",
+        "Child",
+        21,
+        **{
+            Concepts.YEARLY_EARNED_INCOME: wages,
+            Concepts.FARM_RENT_INCOME: farm_rent,
+        },
+    )
     row = taxcalc_input_for_case(
-        _case(
-            _person("person-1", "HeadOfHousehold", 48),
-            _person("person-2", "Child", 21, **{Concepts.FARM_RENT_INCOME: farm_rent}),
-        ),
+        _case(_person("person-1", "HeadOfHousehold", 48), dependent),
         record_id=1,
     )
     assert row["MARS"] == mars
