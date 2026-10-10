@@ -26,11 +26,15 @@ import yaml
 
 REPO_ROOT = Path(__file__).parents[1]
 SCRIPT = "scripts/commit_refreshed_report.sh"
-#: A committed report the tests perturb the way a rerun would (score-bearing
-#: dispositioned rate + provenance timestamp) — the exact 2026-07-14 class.
+#: Reports used for push/race and freshness controls. Their policies no longer
+#: have registered covering suites, so these cannot stale the scoreboard.
 REPORT = "dashboard/public/data/axiom-policyengine-taxsim-nc-income-tax-liability.json"
 SIBLING_REPORT = (
     "dashboard/public/data/axiom-policyengine-taxsim-mi-income-tax-liability.json"
+)
+#: A registered, attested covering report whose summary feeds policy detail.
+SCOREBOARD_REPORT = (
+    "dashboard/public/data/axiom-policyengine-us-additional-medicare-grid.json"
 )
 #: Everything the script and its regeneration scripts read or write. `docs`
 #: and `reports` (plus the root-level *.md files copied in seed_repo) are
@@ -136,6 +140,7 @@ _PERTURBED_SUITES = (
     "nc-income-tax-liability",
     "mi-income-tax-liability",
     "be-article-51-forfait",
+    "us-additional-medicare-grid",
 )
 
 
@@ -208,7 +213,7 @@ def _perturb_report(clone: Path, report: str = REPORT) -> str:
 
     Moves score-bearing summary counts direction-aware (a report with matches
     loses one to mismatch and vice versa, so counts stay valid — flipping the
-    conformance detail and the freshness register, the #282 incident class)
+    freshness register and, for a covered policy, conformance detail)
     and stamps a fresh, format-valid provenance timestamp. Only fields the
     dispositions merge PRESERVES are touched: for suites with a dispositions
     file, apply_dispositions.py recomputes the `summary.dispositioned` block
@@ -490,6 +495,7 @@ def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
     assert report["provenance"]["generated_at"] != sentinel
     report["provenance"]["generated_at"] = sentinel
     report_path.write_text(json.dumps(report, indent=2) + "\n")
+    assert _staleness_gate(clone, "de_unified_comparison.py").returncode == 1
 
     result = _run_script(clone, "de-worker-dual-oracle")
     assert result.returncode == 0, result.stderr
@@ -528,6 +534,7 @@ def test_be_refresh_regenerates_euromod_coverage_rollup(origin, tmp_path):
     doc["summary"]["match_count"] -= 1
     doc["summary"]["mismatch_count"] += 1
     path.write_text(json.dumps(doc, indent=2) + "\n")
+    assert _staleness_gate(clone, "apply_dispositions.py").returncode == 1
 
     result = _run_script(clone, "be-article-51-forfait")
     assert result.returncode == 0, result.stderr
@@ -612,7 +619,14 @@ def test_self_heals_preexisting_staleness(origin, tmp_path):
     # Reproduce the old broken bot: push a perturbed report WITHOUT
     # regenerating anything derived.
     broken = _clone(origin, tmp_path / "broken-bot")
-    _perturb_report(broken)
+    # NC no longer covers a registered output. Use a report that contributes
+    # actual scores, and guard against this control losing coverage again.
+    detail_path = "conformance/detail/us-pe.json"
+    policies = json.loads((broken / detail_path).read_text())["policies"]
+    policy = next(row for row in policies if row["id"] == "us-pe:additional_medicare_tax")
+    assert policy["covered"] and policy["output_attestation"] == "attested"
+    assert policy["attested_outputs"] == ["additional_medicare_tax"]
+    sentinel = _perturb_report(broken, SCOREBOARD_REPORT)
     _git(broken, "add", "--", "dashboard/public/data/")
     _git(broken, "commit", "-q", "-m", "data: refresh (no derived regen)")
     _git(broken, "push", "-q", "origin", "HEAD:main")
@@ -626,7 +640,13 @@ def test_self_heals_preexisting_staleness(origin, tmp_path):
     healer = _clone(origin, tmp_path / "healer")
     result = _run_script(healer)
     assert result.returncode == 0, result.stderr
-    _assert_origin_tip_green(origin, tmp_path)
+    verify = _assert_origin_tip_green(origin, tmp_path)
+    repaired = json.loads((verify / detail_path).read_text())["policies"]
+    repaired_policy = next(row for row in repaired if row["id"] == policy["id"])
+    assert repaired_policy["covered"]
+    assert repaired_policy["matches"] == policy["matches"] - 1
+    report = json.loads((verify / SCOREBOARD_REPORT).read_text())
+    assert report["provenance"]["generated_at"] == sentinel
 
 
 def test_refresh_regenerates_and_stages_nz_bound_evidence(origin, tmp_path):
@@ -874,6 +894,7 @@ def test_vacuous_gate_crash_refuses_push(origin, tmp_path):
     clone = _clone(origin, tmp_path / "job")
     before = _git(origin, "rev-parse", "main")
     _perturb_report(clone)
+    assert _staleness_gate(clone, "check_vacuous_gate.py").returncode == 1
     result = subprocess.run(
         [str(clone / SCRIPT), "nc-income-tax-liability", "main"],
         cwd=clone,

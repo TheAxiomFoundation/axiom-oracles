@@ -23,9 +23,18 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+from tempfile import TemporaryDirectory
+
+import pytest
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 REPO_ROOT = Path(__file__).parents[1]
 SCRIPTS = REPO_ROOT / "scripts"
+
+from axiom_oracles.conformance.attestation import (  # noqa: E402
+    EXECUTION_ATTESTATION_SCHEMA,
+)
 
 
 def _load_script(name: str):
@@ -49,6 +58,8 @@ def _sandbox_scoreboard(tmp_path):
     sb.DETAIL_DIR = conf / "detail"
     sb.SCOREBOARD_PATH = conf / "scoreboard.json"
     sb.DASHBOARD_SCOREBOARD_PATH = data / "conformance_scoreboard.json"
+    # No waivers in the sandbox: the synthetic report attests its own binding.
+    sb.WAIVERS_PATH = conf / "attestation_waivers.yaml"
     return sb, data, conf
 
 
@@ -72,15 +83,44 @@ def _minimal_universe_yaml() -> str:
 
 
 def _report(suite: str, *, comparisons: int, matches: int) -> dict:
+    """A report that ATTESTS execution, so it actually covers the tx:a policy.
+
+    The same-case output ledger stands in for a real bot-refreshed comparison,
+    so coverage and report staleness depend on returned values.
+    """
     return {
         "suite": suite,
         "engines": {"left": "euromod", "right": "axiom"},
+        "case_count": comparisons,
         "summary": {
             "comparison_count": comparisons,
             "match_count": matches,
             "mismatch_count": comparisons - matches,
+            "error_count": 0,
         },
         "mismatches": [],
+        "aggregates": [{"concept": "tx:a", "comparison_count": comparisons}],
+        "observed_outputs": [{
+            "case_id": index, "concept": "tx:a", "engine": engine,
+            "variable": "a_s", "value": 0,
+        } for index in range(comparisons) for engine in ("euromod", "axiom")],
+        "errors": [],
+        "attestation": {
+            "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+            "executed": True,
+            "case_count": comparisons,
+            "comparison_count": comparisons,
+            "error_count": 0,
+            "engines": {"left": "euromod", "right": "axiom"},
+            "outputs": [
+                {
+                    "concept": "tx:a",
+                    "engine": "euromod",
+                    "variable": "a_s",
+                    "comparisons": comparisons,
+                }
+            ],
+        },
     }
 
 
@@ -137,3 +177,60 @@ def test_committed_scoreboard_is_consistent_with_committed_reports():
             sb.DASHBOARD_DATA_DIR / f"conformance_detail_{jurisdiction}.json",
         ):
             assert path.read_text() == expected_detail, f"{path} is stale"
+
+
+@settings(max_examples=50, deadline=None, derandomize=True)
+@given(
+    comparisons=st.integers(min_value=1, max_value=5),
+    value=st.integers(min_value=-100_000, max_value=100_000),
+    delta=st.integers(min_value=1, max_value=100_000),
+    engine=st.sampled_from(("euromod", "axiom")),
+    perturbation=st.sampled_from(("mismatch", "null", "infinity", "nan", "text", "object")),
+)
+def test_attested_value_refresh_stays_stale_until_regenerated(
+    tmp_path_factory, comparisons, value, delta, engine, perturbation,
+):
+    """Changed verdicts or lost returned pairs must invalidate derived scores.
+
+    Valid numeric edits preserving every verdict and pair can leave scores
+    unchanged. Generate either a real mismatch refresh or invalid returned
+    values for every case on one engine, so no other pair hides the change.
+    """
+    with TemporaryDirectory(dir=tmp_path_factory.getbasetemp()) as directory:
+        sb, data, conf = _sandbox_scoreboard(Path(directory))
+        (conf / "tx.yaml").write_text(_minimal_universe_yaml())
+        report = _report("suite-a", comparisons=comparisons, matches=comparisons)
+        for row in report["observed_outputs"]:
+            row["value"] = value
+        report_path = data / "suite-a.json"
+        report_path.write_text(json.dumps(report))
+        _regenerate(sb)
+        with pytest.MonkeyPatch.context() as monkeypatch:
+            assert _run_check(sb, monkeypatch) == 0
+            _, details = sb.build_scoreboard()
+            assert details["tx"][0].covered
+            assert details["tx"][0].attested_outputs == ["a_s"]
+
+            replacement = {
+                "mismatch": value + delta,
+                "null": None,
+                "infinity": float("inf"),
+                "nan": float("nan"),
+                "text": "missing return",
+                "object": {},
+            }[perturbation]
+            for row in report["observed_outputs"]:
+                if row["engine"] == engine:
+                    row["value"] = replacement
+            if perturbation == "mismatch":
+                report["summary"]["match_count"] = 0
+                report["summary"]["mismatch_count"] = comparisons
+            report_path.write_text(json.dumps(report))
+
+            # Checking never repairs artifacts: they remain red until a write.
+            assert _run_check(sb, monkeypatch) == 1
+            assert _run_check(sb, monkeypatch) == 1
+            _regenerate(sb)
+            assert _run_check(sb, monkeypatch) == 0
+            _, details = sb.build_scoreboard()
+            assert details["tx"][0].covered is (perturbation == "mismatch")

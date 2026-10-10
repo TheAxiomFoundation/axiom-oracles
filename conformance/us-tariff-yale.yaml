@@ -22,9 +22,12 @@ policies:
     internal_only_vars:
       - rate_ieepa_fent
       - net_fentanyl
-    suite: us-tariff-panel
-    note: Compared jointly with ieepa_reciprocal via the suite's combined ieepa slot (the composition
-      encodes one IEEPA component).
+    suite: null
+    note: 'Compared jointly with ieepa_reciprocal via the suite''s combined ieepa slot (the composition
+      encodes one IEEPA component). Current coverage retracted under the same-case execution evidence
+      rule: Both engines record only the summed `ieepa` slot; neither component has its own paired returned
+      comparison. Extend and rerun `us-tariff-panel` to compare `statutory_rate_ieepa_fent` separately
+      on both engines; a repeated summed slot does not restore it.'
   - id: us-tariff-yale:ieepa_reciprocal
     oracle_policy_name: ieepa_reciprocal
     oracle_policy_type: content_split
@@ -34,10 +37,14 @@ policies:
     internal_only_vars:
       - rate_ieepa_recip
       - net_ieepa
-    suite: us-tariff-panel
+    suite: null
     note: 'Compared jointly with ieepa_fentanyl: the suite''s ieepa slot sums both statutory columns against
       the one encoded IEEPA component (AUTHORITY_SLOTS in axiom_oracles/suites/us_tariff_panel.py). The
-      Swiss framework floor''s statutory effect is carried in this column for framework countries.'
+      Swiss framework floor''s statutory effect is carried in this column for framework countries. Current
+      coverage retracted under the same-case execution evidence rule: Both engines record only the summed
+      `ieepa` slot; neither component has its own paired returned comparison. Extend and rerun `us-tariff-panel`
+      to compare `statutory_rate_ieepa_recip` separately on both engines; a repeated summed slot does
+      not restore it.'
   - id: us-tariff-yale:mfn_base
     oracle_policy_name: mfn_base
     oracle_policy_type: base

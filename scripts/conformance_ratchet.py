@@ -71,9 +71,9 @@ def _serialize(ratchets: dict[str, RatchetInvariant]) -> str:
         "_comment": (
             "Conformance ratchets — monotonic floors/ceilings enforced by "
             "scripts/conformance_ratchet.py --check. covered_min may only rise; "
-            "unexplained_max and axiom_attributed_open_max may only fall. "
-            "Re-pin with `uv run scripts/conformance_ratchet.py` after a genuine "
-            "improvement; the gate refuses regressions."
+            "unexplained_max, axiom_attributed_open_max and bridge_artifacts_max "
+            "may only fall. Re-pin with `uv run scripts/conformance_ratchet.py` "
+            "after a genuine improvement; the gate refuses regressions."
         ),
         "ratchets": rows,
     }
@@ -101,6 +101,11 @@ def _tighten(existing: RatchetInvariant, summary: dict) -> RatchetInvariant:
         ),
         # Track the live denominator so covered is read against the right base.
         policies_in_scope=candidate.policies_in_scope,
+        bridge_artifacts_max=(
+            candidate.bridge_artifacts_max
+            if existing.bridge_artifacts_max is None
+            else min(existing.bridge_artifacts_max, candidate.bridge_artifacts_max)
+        ),
     )
 
 

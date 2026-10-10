@@ -12,6 +12,8 @@ from .comparator import (
     require_unique_ids,
 )
 from .mappings import ProgramMapping
+from ..conformance.attestation import EXECUTION_ATTESTATION_SCHEMA
+from ..conformance.observations import observed_output_value
 from ..core.case import Case, Concepts
 from ..core.geography import GeographyScope
 from ..core.results import Value
@@ -115,6 +117,8 @@ class ComparisonReportAccumulator:
         self._match_weight = 0.0
         self._mismatch_weight = 0.0
         self._aggregate_buckets: dict[str, dict] = defaultdict(_aggregate_bucket)
+        self._output_counts: Counter[tuple[str, str, str]] = Counter()
+        self._output_rows: list[dict] = []
         self._mismatch_rows: list[dict] = []
         self._error_rows: list[dict] = []
         self._left_engine: str | None = None
@@ -200,6 +204,22 @@ class ComparisonReportAccumulator:
                     comparison,
                     weight,
                 )
+                for engine, values in (
+                    (item.left_engine, comparison.left_output_values),
+                    (item.right_engine, comparison.right_output_values),
+                ):
+                    rows = [dict(case_id=item.household_id, engine=engine,
+                                 concept=comparison.variable, variable=variable, value=value)
+                            for variable, value in values]
+                    self._output_rows.extend(rows)
+                    evidence = {"attestation": {"executed": True}, "observed_outputs": rows,
+                                "errors": list(item.left_errors) + list(item.right_errors)}
+                    for row in rows:
+                        if observed_output_value(
+                            evidence, case_id=item.household_id, engine=engine,
+                            concept=comparison.variable, output=row["variable"], value=row["value"],
+                        ):
+                            self._output_counts[(comparison.variable, engine, row["variable"])] += 1
 
         self._mismatch_rows.extend(
             _mismatch_rows(comparisons, cases_by_id, self._mappings_by_id)
@@ -249,9 +269,39 @@ class ComparisonReportAccumulator:
                 self._aggregate_buckets,
                 self.mappings,
             ),
+            "output_bindings": {
+                mapping.concept_id: {
+                    engine: mapping.target_for_engine(engine)
+                    for engine in (self._left_engine, self._right_engine) if engine
+                }
+                for mapping in self.mappings
+            },
+            "observed_outputs": list(self._output_rows),
+            "attestation": self._attestation(),
             "mismatches": list(self._mismatch_rows),
             "errors": list(self._error_rows),
             "cases": self._stored_case_rows() if include_cases else [],
+        }
+
+    def _attestation(self) -> dict:
+        """Stamp what this run actually executed (axiom-oracles#355).
+
+        The conformance scoreboard reads this block to decide whether a report
+        can cover an in-scope policy. Counts come from the same accumulators the
+        summary is built from — a stamp that disagrees with the report body is
+        rejected — and ``outputs`` names, per compared concept, the ENGINE
+        VARIABLE each side was read from, so a covered policy's registered
+        outputs can be tied to comparisons that really happened rather than to
+        the suite's name.
+        """
+        return {
+            "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+            "executed": True,
+            "case_count": self._case_count,
+            "comparison_count": self._comparison_count,
+            "error_count": len(self._error_rows),
+            "engines": {"left": self._left_engine, "right": self._right_engine},
+            "outputs": _attested_output_rows(self._output_counts),
         }
 
     def write_json(self, path: Path) -> None:
@@ -572,6 +622,27 @@ def _update_aggregate_bucket(
         bucket["right_weighted_sum"] += _to_number(comparison.right_value) * weight
     if comparison.left_value is None and comparison.right_value is None:
         bucket["missing_both_count"] += 1
+
+
+def _attested_output_rows(
+    counts: Counter[tuple[str, str, str]],
+) -> list[dict]:
+    """Per-concept, per-engine evidence of which variables the run compared.
+
+    Counts include only targets with a nonmissing value in each engine result.
+    A missing list component makes its mapped value ``None``; other nonmissing
+    components remain evidence of the variables the engine returned.
+    """
+    return [
+        {
+            "concept": concept,
+            "engine": engine,
+            "variable": variable,
+            "comparisons": count,
+        }
+        for (concept, engine, variable), count in sorted(counts.items())
+        if count > 0
+    ]
 
 
 def _aggregate_rows_from_buckets(

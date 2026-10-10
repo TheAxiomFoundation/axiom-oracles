@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import math
 import os
 import subprocess
 import tempfile
@@ -1774,6 +1775,101 @@ def test_uk_efrs_dashboard_adapter_separates_known_pe_divergence():
     )
     assert report["mismatches"][1]["kind"] == "known_policyengine_divergence"
     assert report["mismatches"][1]["issue_url"] == "https://example.test/pe-issue"
+
+
+def _efrs_native_row_report(row):
+    return {
+        "compared_persons": 0,
+        "compared_benunits": 1,
+        "mismatches": [row],
+        "output_summary": [
+            {
+                "surface": row["surface"],
+                "output": row["output"],
+                "compared": 1,
+                "mismatches": 1,
+            }
+        ],
+    }
+
+
+@pytest.mark.parametrize("missing_engine", ["axiom", "policyengine"])
+def test_uk_efrs_adapter_preserves_missing_counterpart(missing_engine):
+    row = {
+        "surface": "universal-credit-carer-element",
+        "output": "carer_element",
+        "entity_id": "benunit_1",
+        "axiom": 0,
+        "policyengine": 0,
+    }
+    del row[missing_engine]
+    report = load_run_comparison_module()._adapt_uk_efrs_to_v2(
+        _efrs_native_row_report(row), {}, suite="uk-universal-credit-efrs"
+    )
+
+    side = "left" if missing_engine == "axiom" else "right"
+    assert report["mismatches"][0][side] is None
+    evidence = {entry["engine"]: entry for entry in report["observed_outputs"]}
+    assert evidence[missing_engine]["value"] is None
+
+
+def test_uk_efrs_adapter_records_native_targets_and_zero_pairs():
+    report = load_run_comparison_module()._adapt_uk_efrs_to_v2(
+        _efrs_native_row_report(
+            {
+                "surface": "universal-credit-carer-element",
+                "output": "carer_element",
+                "entity_id": "benunit_1",
+                "axiom": 0,
+                "policyengine": 0,
+            }
+        ),
+        {},
+        suite="uk-universal-credit-efrs",
+    )
+
+    concept = "uk:regulations/uksi/2013/376/36#carer_element"
+    axiom_target = "uk:regulations/uksi/2013/376/36#carer_element_amount"
+    assert report["output_bindings"][concept] == {
+        "axiom": axiom_target,
+        "policyengine": "uc_carer_element",
+    }
+    assert {
+        (entry["engine"], entry["variable"], entry["case_id"], entry["value"])
+        for entry in report["observed_outputs"]
+    } == {
+        ("axiom", axiom_target, "uk-efrs-benunit_1", 0),
+        ("policyengine", "uc_carer_element", "uk-efrs-benunit_1", 0),
+    }
+
+
+def test_uk_efrs_expression_has_no_final_oracle_output_evidence():
+    report = load_run_comparison_module()._adapt_uk_efrs_to_v2(
+        _efrs_native_row_report(
+            {
+                "surface": "universal-credit-award",
+                "output": "universal_credit_award_amount",
+                "entity_id": "benunit_1",
+                "axiom": 12,
+                "policyengine": 10,
+            }
+        ),
+        {},
+        suite="uk-universal-credit-efrs",
+    )
+
+    concept = "uk:statutes/ukpga/2012/5/8#universal_credit_award_amount"
+    assert report["output_bindings"][concept]["policyengine"] == []
+    assert not any(
+        entry["engine"] == "policyengine" for entry in report["observed_outputs"]
+    )
+
+
+@given(st.one_of(st.none(), st.just(float("nan"))))
+def test_uk_efrs_native_missing_values_never_become_returned_zero(value):
+    from axiom_oracles.bridges.efrs_uk import policyengine_raw_output_value
+
+    assert math.isnan(policyengine_raw_output_value({"pe": "vat"}, {"vat": value}))
 
 
 def test_uk_efrs_dashboard_adapter_caps_known_divergence_examples():

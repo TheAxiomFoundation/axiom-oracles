@@ -1,0 +1,6 @@
+# axiom_oracles.attestation_waivers.v1 — hand-authored, shrink-only. See axiom_oracles/conformance/waivers.py.
+schema: axiom_oracles.attestation_waivers.v1
+_comment: 'Historical output-attestation migration metadata. HAND-AUTHORED and SHRINK-ONLY: all approved
+  bootstrap entries have been retired and cannot return. The remaining approval floor is empty. This metadata
+  never authorizes coverage; every covered policy requires a valid same-case registered-output pair.'
+waivers: []
