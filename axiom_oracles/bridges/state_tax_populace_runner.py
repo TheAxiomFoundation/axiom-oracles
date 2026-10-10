@@ -1672,6 +1672,7 @@ def calculate_taxsim_targets(
     contract: StateTaxPopulaceContract | Mapping[str, Any] | None = None,
     microsimulation_factory: Callable[[Any], Any] | None = None,
     taxsim_runner_factory: Callable[[Any], Any] | None = None,
+    identity_recorder: Any | None = None,
 ) -> dict[str, dict[int | str, float]]:
     """Calculate the TAXSIM oracle value for every ready-routed tax unit.
 
@@ -1683,6 +1684,11 @@ def calculate_taxsim_targets(
     output concept. Person identity, order, and tax-unit links are verified
     against the certified Populace tables before any values are used —
     the same fail-closed discipline as the PolicyEngine legs.
+
+    With the default runner, ``year`` is checked against the pinned law-year
+    range of the binary before any state runs, and an ``identity_recorder``
+    (:class:`axiom_oracles.adapters.taxsim.pins.TaxsimIdentityRecorder`)
+    receives the path, hash and printed build stamp of every run.
     """
 
     from ..adapters.taxsim.projection import taxsim_input_for_case
@@ -1849,9 +1855,10 @@ def calculate_taxsim_targets(
     if taxsim_runner_factory is None:
         from policyengine_taxsim.runners.taxsim_runner import TaxsimRunner
 
-        from ..adapters.taxsim.pins import installed_binary_path
+        from ..adapters.taxsim.pins import installed_binary_path, require_law_years
 
         binary = installed_binary_path()
+        require_law_years([year], binary_path=binary)
 
         def taxsim_runner_factory(frame: Any) -> Any:
             if binary is not None:
@@ -1888,6 +1895,15 @@ def calculate_taxsim_targets(
             result = runner.run(show_progress=False)
         except TypeError:
             result = runner.run()
+        binary_path = getattr(runner, "taxsim_path", None)
+        if identity_recorder is not None and binary_path is not None:
+            from ..adapters.taxsim.pins import build_stamp_from_columns
+
+            identity_recorder.observe(
+                Path(binary_path),
+                rows=len(rows),
+                build_observed=build_stamp_from_columns(result.columns),
+            )
         records = result.to_dict(orient="records")
         if len(records) != len(state_routes):
             raise StateTaxPopulationRoutingError(

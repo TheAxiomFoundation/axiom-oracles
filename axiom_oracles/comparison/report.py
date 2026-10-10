@@ -124,6 +124,9 @@ class ComparisonReportAccumulator:
         self._left_engine: str | None = None
         self._right_engine: str | None = None
         self._seen_case_ids: set[int | str] = set()
+        #: Executed-binary identity per engine (e.g. ``{"taxsim": {...}}``),
+        #: written as the report's top-level ``engine_identity`` when set.
+        self.engine_identity: dict | None = None
 
     @property
     def case_count(self) -> int:
@@ -235,7 +238,7 @@ class ComparisonReportAccumulator:
         )
 
     def to_dict(self, *, include_cases: bool = True) -> dict:
-        return {
+        report = {
             "schema_version": COMPARISON_REPORT_SCHEMA_VERSION,
             "suite": self.suite_name,
             "population": self.population,
@@ -282,6 +285,9 @@ class ComparisonReportAccumulator:
             "errors": list(self._error_rows),
             "cases": self._stored_case_rows() if include_cases else [],
         }
+        if self.engine_identity:
+            report["engine_identity"] = self.engine_identity
+        return report
 
     def _attestation(self) -> dict:
         """Stamp what this run actually executed (axiom-oracles#355).

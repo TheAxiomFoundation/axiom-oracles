@@ -156,7 +156,7 @@ def test_taxsim_projection_rejects_years_after_bundled_taxsim_support() -> None:
         ),
     )
 
-    with pytest.raises(RuntimeError, match="through 2026"):
+    with pytest.raises(RuntimeError, match="tax years after 2026; got 2027"):
         taxsim_input_for_case(case)
 
 

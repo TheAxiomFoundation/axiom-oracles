@@ -649,14 +649,27 @@ def test_adapter_runs_the_pinned_binary_without_phantom_rows() -> None:
     assert results[1].values == {"fiitax": 585.0, "siitax": 49.88}
     assert results[1].raw[DIAGNOSTICS_KEY] == [D2_SINGLE_30K] * 6
     assert DIAGNOSTICS_KEY not in results[2].raw
+    # The report records the binary that produced these rows.
+    [binary] = runner.taxsim_identity()["binaries"]
+    assert binary["pinned_key"] == "taxsimtest/taxsimtest-osx.exe"
+    assert binary["sha256"] == pins.bundled_binaries()[binary["pinned_key"]]["sha256"]
+    assert binary["build"] == binary["build_observed"] == "cdate-20260521"
+    assert binary["platform"] == "darwin"
+    assert binary["law_years"] == {"first": 1960, "last": 2026}
+    assert binary["rows"] == 5
 
 
 def test_adapter_runs_verbose_idtl5_with_the_pinned_formatter_and_binary() -> None:
     _pinned_binary()
 
-    [result] = TaxsimPackageRunner().run_cases(
+    runner = TaxsimPackageRunner()
+    [result] = runner.run_cases(
         _cases("california_idtl5_input.csv"), variables=["fiitax", "siitax"]
     )
+    # idtl=5 prints the build in its banner, without the "cdate-" prefix.
+    [binary] = runner.taxsim_identity()["binaries"]
+    assert binary["build"] == "cdate-20260521"
+    assert binary["build_observed"] == "20260521"
 
     assert result.household_id == "case-1"
     assert result.values == {"fiitax": 3820.0, "siitax": 980.7}

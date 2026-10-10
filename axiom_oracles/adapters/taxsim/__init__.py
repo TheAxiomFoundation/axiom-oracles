@@ -1,6 +1,7 @@
 """TAXSIM adapter."""
 
 from . import pins
+from .pins import TaxsimIdentityError, TaxsimLawYearError
 from .output import (
     TaxsimOutputError,
     TaxsimRecord,
@@ -13,6 +14,8 @@ from .runner import DIAGNOSTICS_KEY, TaxsimExecution, TaxsimPackageRunner
 __all__ = [
     "DIAGNOSTICS_KEY",
     "TaxsimExecution",
+    "TaxsimIdentityError",
+    "TaxsimLawYearError",
     "TaxsimOutputError",
     "TaxsimPackageRunner",
     "TaxsimRecord",

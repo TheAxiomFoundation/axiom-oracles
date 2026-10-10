@@ -233,9 +233,16 @@ explicit `metadata["taxsim_input"]` rows for hand-authored fixtures. The macOS
 executable bundled in `policyengine-taxsim` 2.30.0 (`taxsimtest-osx.exe`, build
 20260521) supports tax years through 2026, and comparisons involving TAXSIM
 default to tax year 2026 unless `--period` is supplied. The Linux executable in
-the same release (`taxsimtest-linux.exe`) is an older build that stops at 2024
-and fails on 2025 and 2026 rows. A 2026 TAXSIM comparison therefore fails on
-Linux; there, pass `--period 2024`. At 2026 the macOS build lacks the
+the same release (`taxsimtest-linux.exe`, build `cdate-compdate`) is a different
+build that accepts law years 1960-2024 only: run on 2025 or 2026 it prints
+`TAXSIM: Federal tax calculator available 1960 - 2024 only.` and exits with
+`STOP 1`. A 2025 or 2026 TAXSIM comparison therefore runs only on macOS; on
+Linux, `compare` stops before loading the population and names the pinned range,
+and `--period 2024` runs. Each bundled executable's build stamp and law-year
+range are pinned in `taxsim_pins.json`, and a report's `engine_identity.taxsim`
+(and `provenance.oracle.taxsim_binaries` in suite reports) records the path,
+SHA-256, build stamp and platform of the binary that produced it. At 2026 the
+macOS build lacks the
 qualifying-child credit rules: its CTC falls back to the $500 credit for other
 dependents, its ACTC and CDCC are zero, and its EITC ignores qualifying
 children, so a family with children gets the childless EITC. Treat any TAXSIM
