@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import replace
 from typing import Any
 
+from ...bridges.relation_binding import relation_tuple
 from ...core.case import Case, Concepts, Entity
 from .runner import (
     AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY,
@@ -3995,7 +3996,21 @@ def _relation_records(people: list[Entity]) -> list[dict[str, Any]]:
         records.extend(
             {
                 "name": relation_ref,
-                "tuple": [person.entity_id, _TAX_UNIT_ID],
+                "tuple": relation_tuple(
+                    None,
+                    relation_ref,
+                    owner_id=_TAX_UNIT_ID,
+                    owner_kind="TaxUnit",
+                    related_id=person.entity_id,
+                    related_kind="Person",
+                ),
+                "roles": {
+                    "owner_id": _TAX_UNIT_ID,
+                    "owner_kind": "TaxUnit",
+                    "related_id": person.entity_id,
+                    "related_kind": "Person",
+                    "legacy_owner_slot": 1,
+                },
             }
             for person in relation_people
         )

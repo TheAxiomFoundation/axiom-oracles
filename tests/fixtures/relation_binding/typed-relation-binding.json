@@ -1,0 +1,216 @@
+{
+  "mode": "explain",
+  "program": {
+    "units": [
+      {
+        "name": "USD",
+        "kind": "currency",
+        "minor_units": 2
+      }
+    ],
+    "relations": [
+      {
+        "name": "qualifying_person_of_tax_unit",
+        "arity": 2,
+        "slot_entities": [
+          "Person",
+          "TaxUnit"
+        ]
+      }
+    ],
+    "derived": [
+      {
+        "name": "qualifying_person",
+        "entity": "Person",
+        "dtype": "judgment",
+        "semantics": "judgment",
+        "expr": {
+          "kind": "comparison",
+          "left": {
+            "kind": "input",
+            "name": "is_eligible"
+          },
+          "op": "eq",
+          "right": {
+            "kind": "literal",
+            "value": {
+              "kind": "bool",
+              "value": true
+            }
+          }
+        },
+        "versions": [
+          {
+            "effective_from": "2026-01-01",
+            "semantics": "judgment",
+            "expr": {
+              "kind": "comparison",
+              "left": {
+                "kind": "input",
+                "name": "is_eligible"
+              },
+              "op": "eq",
+              "right": {
+                "kind": "literal",
+                "value": {
+                  "kind": "bool",
+                  "value": true
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "tax_unit_marker",
+        "entity": "TaxUnit",
+        "dtype": "integer",
+        "semantics": "scalar",
+        "expr": {
+          "kind": "input",
+          "name": "case_value"
+        },
+        "versions": [
+          {
+            "effective_from": "2026-01-01",
+            "semantics": "scalar",
+            "expr": {
+              "kind": "input",
+              "name": "case_value"
+            }
+          }
+        ]
+      },
+      {
+        "name": "qualifying_person_count",
+        "entity": "TaxUnit",
+        "dtype": "integer",
+        "semantics": "scalar",
+        "expr": {
+          "kind": "count_related",
+          "relation": "qualifying_person_of_tax_unit",
+          "current_slot": 1,
+          "related_slot": 0,
+          "where": {
+            "kind": "derived",
+            "name": "qualifying_person"
+          }
+        },
+        "versions": [
+          {
+            "effective_from": "2026-01-01",
+            "semantics": "scalar",
+            "expr": {
+              "kind": "count_related",
+              "relation": "qualifying_person_of_tax_unit",
+              "current_slot": 1,
+              "related_slot": 0,
+              "where": {
+                "kind": "derived",
+                "name": "qualifying_person"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "credit",
+        "entity": "TaxUnit",
+        "dtype": "decimal",
+        "unit": "USD",
+        "semantics": "scalar",
+        "expr": {
+          "kind": "mul",
+          "left": {
+            "kind": "derived",
+            "name": "qualifying_person_count"
+          },
+          "right": {
+            "kind": "literal",
+            "value": {
+              "kind": "decimal",
+              "value": "1500"
+            }
+          }
+        },
+        "versions": [
+          {
+            "effective_from": "2026-01-01",
+            "semantics": "scalar",
+            "expr": {
+              "kind": "mul",
+              "left": {
+                "kind": "derived",
+                "name": "qualifying_person_count"
+              },
+              "right": {
+                "kind": "literal",
+                "value": {
+                  "kind": "decimal",
+                  "value": "1500"
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "dataset": {
+    "inputs": [
+      {
+        "name": "is_eligible",
+        "entity": "Person",
+        "entity_id": "person-1",
+        "interval": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "value": {
+          "kind": "bool",
+          "value": true
+        }
+      },
+      {
+        "name": "case_value",
+        "entity": "TaxUnit",
+        "entity_id": "tax-unit-1",
+        "interval": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "value": {
+          "kind": "integer",
+          "value": 1
+        }
+      }
+    ],
+    "relations": [
+      {
+        "name": "qualifying_person_of_tax_unit",
+        "tuple": [
+          "person-1",
+          "tax-unit-1"
+        ],
+        "interval": {
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        }
+      }
+    ]
+  },
+  "queries": [
+    {
+      "entity_id": "tax-unit-1",
+      "period": {
+        "period_kind": "tax_year",
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "outputs": [
+        "qualifying_person_count",
+        "credit"
+      ]
+    }
+  ]
+}

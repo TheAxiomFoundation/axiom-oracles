@@ -21,6 +21,7 @@ from typing import Any, Callable
 
 import yaml
 
+from .relation_binding import relation_tuple
 from .tax_populace import (
     _version_tuple,
     input_record,
@@ -4038,6 +4039,7 @@ def build_axiom_request(
     pe_data: dict[str, Any],
     year: int,
     surface: str = "personal-allowance",
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if surface == "national-insurance-class-1":
         return build_national_insurance_class_1_request(pe_data=pe_data, year=year)
@@ -4055,7 +4057,9 @@ def build_axiom_request(
     if surface == "marriage-allowance":
         return build_marriage_allowance_request(pe_data=pe_data, year=year)
     if surface == "income-tax-income-base":
-        return build_income_tax_income_base_request(pe_data=pe_data, year=year)
+        return build_income_tax_income_base_request(
+            pe_data=pe_data, year=year, artifact=artifact,
+        )
     if surface == "income-tax-section-10-earned-income":
         return build_income_tax_section_10_request(pe_data=pe_data, year=year)
     if surface == "income-tax-section-11d-savings-income":
@@ -4188,6 +4192,9 @@ def build_axiom_request(
     raise ValueError(f"unsupported UK Populace surface: {surface}")
 
 
+# Input entity kinds follow each RuleSpec's scope. A benefit-unit projection
+# can represent a statutory Person (the claimant), so its ID prefix alone
+# does not determine whether its inputs belong to Person or Family.
 def build_national_insurance_class_1_request(
     *, pe_data: dict[str, Any], year: int
 ) -> dict[str, Any]:
@@ -4221,6 +4228,7 @@ def build_national_insurance_class_1_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4256,6 +4264,7 @@ def build_national_insurance_class_4_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4296,6 +4305,7 @@ def build_national_insurance_class_4_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4331,6 +4341,7 @@ def build_national_insurance_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4365,6 +4376,7 @@ def build_personal_allowance_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4419,6 +4431,7 @@ def build_marriage_allowance_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4439,7 +4452,7 @@ def build_marriage_allowance_request(
 
 
 def build_income_tax_income_base_request(
-    *, pe_data: dict[str, Any], year: int
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     interval = tax_year_interval(year)
     inputs: list[dict[str, Any]] = []
@@ -4453,19 +4466,26 @@ def build_income_tax_income_base_request(
                 person_id,
                 str(component["name"]),
             )
-            relations.append(
-                {
-                    "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
-                    "tuple": [payment_id, entity_id],
-                    "interval": interval,
-                }
-            )
+            relation_name = f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer"
+            roles = {
+                "owner_id": entity_id,
+                "owner_kind": "Person",
+                "related_id": payment_id,
+                "related_kind": "Payment",
+            }
+            relations.append({
+                "name": relation_name,
+                "tuple": relation_tuple(artifact, relation_name, **roles),
+                "interval": interval,
+                **({"roles": roles} if artifact is None else {}),
+            })
             inputs.append(
                 input_record(
                     f"{INCOME_TAX_SECTION_23_BASE}#input.amount_charged_to_income_tax",
                     payment_id,
                     interval,
                     money(component["amount_charged_to_income_tax"]),
+                    entity="Payment",
                 )
             )
             inputs.append(
@@ -4474,6 +4494,7 @@ def build_income_tax_income_base_request(
                     payment_id,
                     interval,
                     money(component["relief_deducted_under_section_24"]),
+                    entity="Payment",
                 )
             )
         for name, value in project_income_tax_section_23_inputs(row).items():
@@ -4483,6 +4504,7 @@ def build_income_tax_income_base_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4521,6 +4543,7 @@ def build_income_tax_section_10_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4559,6 +4582,7 @@ def build_income_tax_section_11d_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4597,6 +4621,7 @@ def build_income_tax_section_13_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4631,6 +4656,7 @@ def build_child_benefit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4663,6 +4689,7 @@ def build_benefit_cap_relevant_amount_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -4700,6 +4727,7 @@ def build_state_pension_credit_qualifying_age_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4735,6 +4763,7 @@ def build_pension_credit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4767,6 +4796,7 @@ def build_pension_credit_child_addition_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4802,6 +4832,7 @@ def build_pension_credit_deemed_income_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4843,6 +4874,7 @@ def build_legacy_weekly_tariff_income_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4940,6 +4972,7 @@ def build_housing_benefit_applicable_amount_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -4977,6 +5010,7 @@ def build_housing_benefit_non_dependant_deductions_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5012,6 +5046,7 @@ def build_housing_benefit_entitlement_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5049,6 +5084,7 @@ def build_state_pension_credit_guarantee_credit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5088,6 +5124,7 @@ def build_state_pension_credit_savings_credit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5151,6 +5188,7 @@ def build_universal_credit_childcare_element_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5188,6 +5226,7 @@ def build_universal_credit_childcare_work_condition_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5223,6 +5262,7 @@ def build_universal_credit_award_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5257,6 +5297,7 @@ def build_universal_credit_housing_costs_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5294,6 +5335,7 @@ def build_universal_credit_income_deduction_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5331,6 +5373,7 @@ def build_universal_credit_assessable_capital_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5366,6 +5409,7 @@ def build_universal_credit_tariff_income_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5401,6 +5445,7 @@ def build_universal_credit_work_allowance_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5436,6 +5481,7 @@ def build_student_loan_repayment_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5473,6 +5519,7 @@ def build_carers_allowance_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5510,6 +5557,7 @@ def build_carer_support_payment_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5545,6 +5593,7 @@ def build_scottish_child_payment_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5578,6 +5627,7 @@ def build_dla_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, 
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5602,7 +5652,9 @@ def build_pip_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, 
     for row in rows_for_surface(pe_data, "personal-independence-payment-final"):
         entity_id = person_entity_id(int(row_value(row, "person_id")))
         for name, value in project_pip_final_inputs(row).items():
-            inputs.append(input_record(name, entity_id, interval, value))
+            inputs.append(
+                input_record(name, entity_id, interval, value, entity="Person")
+            )
         queries.append(
             {
                 "entity_id": entity_id,

@@ -1,0 +1,24 @@
+{
+  "repository": "https://github.com/TheAxiomFoundation/axiom-rules-engine",
+  "commit": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+  "fixtures": [
+    {
+      "path": "relation-member-nested-if.json",
+      "source_path": "tests/fixtures/execution/relation-member-nested-if.json",
+      "sha256": "e2e1ce1e368c0a8385c5cd3551e431cda59ee8d2be590819e4b75e46a4ac4a07"
+    },
+    {
+      "path": "relation-scalar-context.json",
+      "source_path": "tests/fixtures/execution/relation-scalar-context.json",
+      "sha256": "a4cde19a9cbd428c0bc7fcbb6258892936f4b16098e6c8b8ff1f2967edd84568"
+    },
+    {
+      "path": "typed-relation-binding.json",
+      "source_path": "tests/relation_binding.rs",
+      "source_constant": "TYPED_RELATION_RULESPEC",
+      "generation": "Program compiled with the pinned engine library from_rulespec_str; dataset and queries from request(\"explain\", false, false). Default null fields, empty parameters and unused units omitted.",
+      "sha256": "fd0690dd03ecf9542370ca2b12f533d62cd0a11b6f4e3670e332d04e20059ae4",
+      "compiled_artifact_sha256": "2861af3c3989646b50b193792800b573102f8d39744ffe14129d41ac1e2f9177"
+    }
+  ]
+}

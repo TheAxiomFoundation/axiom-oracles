@@ -1079,6 +1079,13 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
         {
             "name": f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
             "tuple": ["tax_unit_1_person_0", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_0",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1088,6 +1095,13 @@ def test_build_eitc_request_uses_structural_child_relation_and_component_outputs
         {
             "name": f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
             "tuple": ["tax_unit_1_person_1", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_1",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1361,6 +1375,13 @@ def test_build_cdcc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
             "tuple": ["tax_unit_1_person_0", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_0",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1370,6 +1391,13 @@ def test_build_cdcc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
             "tuple": ["tax_unit_1_person_1", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_1",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1540,6 +1568,13 @@ def test_build_aotc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
             "tuple": ["tax_unit_1_person_0", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_0",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1549,6 +1584,13 @@ def test_build_aotc_request_uses_person_to_tax_unit_relation_and_outputs():
         {
             "name": f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
             "tuple": ["tax_unit_1_person_1", "tax_unit_1"],
+            "roles": {
+                "owner_id": "tax_unit_1",
+                "owner_kind": "TaxUnit",
+                "related_id": "tax_unit_1_person_1",
+                "related_kind": "Person",
+                "legacy_owner_slot": 1,
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -2394,7 +2436,7 @@ def test_build_oasdi_payroll_request_feeds_3121_taxable_wages():
     assert request["dataset"]["inputs"] == [
         {
             "name": "us:statutes/26/3101/a#input.wages",
-            "entity": "Entity",
+            "entity": "Person",
             "entity_id": "person_7",
             "interval": {
                 "period_kind": "tax_year",

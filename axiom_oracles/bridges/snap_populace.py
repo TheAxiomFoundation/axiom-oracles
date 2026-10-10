@@ -39,6 +39,7 @@ from .population import (
     load_populace_dataset,
     populace_data_requirement,
 )
+from .relation_binding import bind_request_relations, relation_tuple
 
 try:
     import numpy as np
@@ -1779,6 +1780,7 @@ def run_axiom_cases(
     inputs = []
     relations = []
     queries = []
+    artifact_payload = json.loads(artifact.read_text())
     for case in cases:
         entity_id = f"spm-{case.spm_unit_id}"
         for name, value in case.inputs.items():
@@ -1797,7 +1799,14 @@ def run_axiom_cases(
                 relations.append(
                     {
                         "name": current_relation_id,
-                        "tuple": [member_entity_id, entity_id],
+                        "tuple": relation_tuple(
+                            artifact_payload,
+                            current_relation_id,
+                            owner_id=entity_id,
+                            owner_kind="Household",
+                            related_id=member_entity_id,
+                            related_kind=member_entity_type,
+                        ),
                         "interval": interval,
                     }
                 )
@@ -1824,6 +1833,7 @@ def run_axiom_cases(
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": queries,
     }
+    request = bind_request_relations(request, artifact_payload)
     result = subprocess.run(
         [str(binary), "run-compiled", "--artifact", str(artifact)],
         input=json.dumps(request),

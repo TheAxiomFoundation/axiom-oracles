@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import json
 
+import pytest
+
 from axiom_oracles.adapters.axiom.generic_inputs import (
     GenericInputRecord,
     attach_generic_inputs,
@@ -15,6 +17,48 @@ from axiom_oracles.adapters.axiom.generic_inputs import (
     project_case_inputs,
 )
 from axiom_oracles.core.case import Case, Concepts, Entity
+from axiom_oracles.bridges.relation_binding import bind_request_relations
+
+
+@pytest.mark.parametrize("typed", [False, True])
+def test_generic_projector_relations_bind_without_inventing_member_inputs(tmp_path, typed):
+    relation = "us:statutes/7/2012/j#relation.member_of_household"
+    rules = [
+        {"name": "owner_flag", "entity": "Household", "expr": _input("owner_flag")},
+        {
+            "name": "member_count", "entity": "Household",
+            "expr": {"kind": "count_related", "relation": relation,
+                     "current_slot": 0 if typed else 1,
+                     "related_slot": 1 if typed else 0},
+        },
+    ]
+    if not typed:
+        rules.extend([
+            {"name": "member_flag", "entity": "Person", "expr": _input("member_flag")},
+            {"name": "amount", "entity": "StatutoryDollarAmount", "expr": _input("amount")},
+        ])
+    artifact = {"program": {
+        "relations": [{"name": relation, "arity": 2,
+                       **({"slot_entities": ["Household", "Person"]} if typed else {})}],
+        "derived": rules,
+    }}
+    path = tmp_path / "generic.compiled.json"
+    path.write_text(json.dumps(artifact))
+    [projected] = attach_generic_inputs(
+        [Case("probe", "2026-01", entities=(Entity("alice", "Person"),))],
+        compiled_program_path=path, load_default_mapping=False,
+    )
+    request = {"dataset": {
+        "inputs": projected.metadata["axiom_input_records"],
+        "relations": projected.metadata["axiom_relations"],
+    }}
+    bound = bind_request_relations(request, artifact)
+    if typed:
+        assert {record["entity_id"] for record in bound["dataset"]["inputs"]} == {"household"}
+        assert all(record["tuple"] == ["household", "member-0"]
+                   for record in bound["dataset"]["relations"])
+    else:
+        assert bound == request
 
 
 def _input(name: str) -> dict:
@@ -27,6 +71,51 @@ def _bool_literal(value: bool) -> dict:
 
 def _decimal_literal(value: str) -> dict:
     return {"kind": "literal", "value": {"kind": "decimal", "value": value}}
+
+
+@pytest.mark.parametrize(("typed", "only_pseudo_inputs"), [
+    (False, False), (False, True), (True, False),
+])
+def test_predicate_input_scope_does_not_identify_members(
+    tmp_path, typed, only_pseudo_inputs
+):
+    relation = "us:statutes/7/2012/j#relation.member_of_household"
+    rules = [
+        {"name": "amount", "entity": "StatutoryDollarAmount", "expr": _input("amount")},
+        {
+            "name": "member_count", "entity": "Household",
+            "expr": {
+                "kind": "count_related", "relation": relation,
+                "current_slot": 1, "related_slot": 0,
+                "where": {
+                    "kind": "comparison", "op": "gt",
+                    "left": {"kind": "derived", "name": "amount"},
+                    "right": _decimal_literal("0"),
+                },
+            },
+        },
+    ]
+    if not only_pseudo_inputs:
+        rules.extend([
+            {"name": "owner_flag", "entity": "Household", "expr": _input("owner_flag")},
+            {"name": "member_flag", "entity": "Person", "expr": _input("member_flag")},
+        ])
+    artifact = {"program": {
+        "relations": [{"name": relation, "arity": 2,
+                       **({"slot_entities": ["Person", "Household"]} if typed else {})}],
+        "derived": rules,
+    }}
+    path = tmp_path / "predicate.compiled.json"
+    path.write_text(json.dumps(artifact))
+    [projected] = attach_generic_inputs(
+        [Case("probe", "2026-01", entities=(Entity("alice", "Person"),))],
+        compiled_program_path=path, load_default_mapping=False,
+    )
+    request = {"dataset": {
+        "inputs": projected.metadata["axiom_input_records"],
+        "relations": projected.metadata["axiom_relations"],
+    }}
+    assert bind_request_relations(request, artifact) == request
 
 
 # ---------------------------------------------------------------------------

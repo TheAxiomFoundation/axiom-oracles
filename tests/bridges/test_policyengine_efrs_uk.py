@@ -318,6 +318,12 @@ def test_national_insurance_class_1_request_projects_weekly_inputs(monkeypatch):
         record["name"] + ":" + record["entity_id"]: record["value"]
         for record in request["dataset"]["inputs"]
     }
+    assert {
+        record["entity_id"]: record["entity"]
+        for record in request["dataset"]["inputs"]
+    } == {
+        "person_7": "Person",
+    }
     assert inputs[
         f"{NATIONAL_INSURANCE_SECTION_8_BASE}#input.primary_class_1_contribution_payable_as_mentioned_in_section_6_1_a:person_7"
     ] == {"kind": "bool", "value": True}
@@ -1012,6 +1018,10 @@ def test_income_tax_income_base_request_projects_section_23_relation():
         {
             "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
             "tuple": ["person_7_income_employment_income", "person_7"],
+            "roles": {
+                "owner_id": "person_7", "owner_kind": "Person",
+                "related_id": "person_7_income_employment_income", "related_kind": "Payment",
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1021,6 +1031,10 @@ def test_income_tax_income_base_request_projects_section_23_relation():
         {
             "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
             "tuple": ["person_7_income_private_pension_income", "person_7"],
+            "roles": {
+                "owner_id": "person_7", "owner_kind": "Person",
+                "related_id": "person_7_income_private_pension_income", "related_kind": "Payment",
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1035,6 +1049,14 @@ def test_income_tax_income_base_request_projects_section_23_relation():
     assert inputs[
         f"{INCOME_TAX_SECTION_23_BASE}#input.amount_charged_to_income_tax:person_7_income_employment_income"
     ] == {"kind": "decimal", "value": "30000.0"}
+    assert {
+        record["entity_id"]: record["entity"]
+        for record in request["dataset"]["inputs"]
+    } == {
+        "person_7": "Person",
+        "person_7_income_employment_income": "Payment",
+        "person_7_income_private_pension_income": "Payment",
+    }
     assert inputs[
         f"{INCOME_TAX_SECTION_23_BASE}#input.relief_deducted_under_section_24:person_7_income_employment_income"
     ] == {"kind": "decimal", "value": "750.0"}
@@ -1423,6 +1445,9 @@ def test_benefit_cap_relevant_amount_request_filters_to_finite_caps():
     )
 
     assert request["mode"] == "explain"
+    assert {record["entity"] for record in request["dataset"]["inputs"]} == {
+        "Family"
+    }
     assert request["queries"] == [
         {
             "entity_id": "benunit_12",

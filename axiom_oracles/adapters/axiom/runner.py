@@ -14,6 +14,7 @@ from typing import Any
 
 import yaml
 
+from ...bridges.relation_binding import bind_request_relations, relation_tuple
 from ...comparison.mappings import engine_targets_for_concepts
 from ...core.engine import EngineAdapter
 from ...core.household import Household
@@ -462,6 +463,12 @@ class AxiomRulesRunner(EngineAdapter):
             allowed_program_refs=allowed_program_refs,
             input_record_overlays=input_record_overlays,
         )
+        if request["dataset"]["relations"]:
+            artifact = json.loads(artifact_path.read_text())
+            _materialize_relation_roles(request, artifact)
+            request = bind_request_relations(
+                request, artifact
+            )
         process = self._subprocess_run(
             [
                 str(self.binary_path),
@@ -549,6 +556,12 @@ class AxiomRulesRunner(EngineAdapter):
             allowed_program_refs=allowed_program_refs,
             input_record_overlay=input_record_overlay,
         )
+        if request["dataset"]["relations"]:
+            artifact = json.loads(artifact_path.read_text())
+            _materialize_relation_roles(request, artifact)
+            request = bind_request_relations(
+                request, artifact
+            )
         process = self._subprocess_run(
             [
                 str(self.binary_path),
@@ -769,6 +782,7 @@ class AxiomRulesRunner(EngineAdapter):
                     "name": str(relation["name"]),
                     "tuple": [str(value) for value in relation["tuple"]],
                     "interval": _interval(period),
+                    **({"roles": dict(relation["roles"])} if "roles" in relation else {}),
                 }
             )
         return records
@@ -1394,7 +1408,21 @@ def _namespace_relation_record(
     namespaced["tuple"] = [
         _namespace_entity_id(namespace, value) for value in namespaced.get("tuple", [])
     ]
+    if "roles" in namespaced:
+        namespaced["roles"] = {
+            **namespaced["roles"],
+            "owner_id": _namespace_entity_id(namespace, namespaced["roles"]["owner_id"]),
+            "related_id": _namespace_entity_id(namespace, namespaced["roles"]["related_id"]),
+        }
     return namespaced
+
+
+def _materialize_relation_roles(request: dict[str, Any], artifact: dict[str, Any]) -> None:
+    """Resolve producer roles against the artifact actually sent to the engine."""
+    for record in request["dataset"]["relations"]:
+        roles = record.pop("roles", None)
+        if roles is not None:
+            record["tuple"] = relation_tuple(artifact, record["name"], **roles)
 
 
 def _namespace_entity_id(namespace: str, entity_id: Any) -> str:
