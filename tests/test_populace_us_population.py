@@ -312,6 +312,11 @@ class FakeMicrosimulation:
             "is_blind": [False, False, False],
             "is_veteran": [False, False, True],
             "has_medicaid_health_coverage_at_interview": [True, False, False],
+            # The loader reads these fail-closed (POPULACE_DIVIDEND_VARIABLES
+            # and the tax-unit line 7a table), so the fake must carry them.
+            "qualified_dividend_income": [0, 0, 0],
+            "non_qualified_dividend_income": [0, 0, 0],
+            "non_sch_d_capital_gains": [0, 0, 0],
         }
 
     def subsample(self, sample_size):

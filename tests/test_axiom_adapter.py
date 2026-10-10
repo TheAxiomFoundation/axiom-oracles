@@ -1101,7 +1101,7 @@ def test_cli_builds_generated_tax_axiom_runner_for_state_income_tax() -> None:
         generated_rules_by_name[
             "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception"
         ]["versions"][0]["formula"]
-        == "capital_gains_tax_short_term_capital_gains + capital_gains_tax_long_term_capital_gains"
+        == "capital_gains_tax_short_term_capital_gains + capital_gains_tax_long_term_capital_gains + non_sch_d_capital_gains"
     )
     assert "deduction_provided_in_section_199A" in generated_rule_names
     assert "us:statutes/26/24/d" not in US_TAX_ORACLE_IMPORTS

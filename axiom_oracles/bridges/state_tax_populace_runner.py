@@ -19,6 +19,8 @@ import subprocess
 from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlparse
 
+from ..core.investment_income import fold_capital_gain_distributions_into_schedule_d
+from ..populations.populace_us import POPULACE_DIVIDEND_VARIABLES
 from .state_tax_populace import (
     DEFAULT_COMPARISON_AGGREGATION,
     EXPECTED_STATE_FIPS,
@@ -1628,12 +1630,14 @@ def calculate_policyengine_targets(
 # input row. Concept keys mirror populations/populace_us.py's person loader so
 # the populace TAXSIM leg feeds the binary the same input surface as the
 # Enhanced-CPS lanes (adapters/taxsim/projection.taxsim_input_for_case is the
-# single row-assembly authority for both).
+# single row-assembly authority for both). Dividends come from the loader's
+# POPULACE_DIVIDEND_VARIABLES (Form 1040 line 3b = qualified + non-qualified,
+# line 3a = qualified), not from this table, and line 7a capital gain
+# distributions get the loader's Schedule D fold.
 _TAXSIM_PERSON_NON_WAGE_VARIABLES: dict[str, str] = {
     "self_employment_income": "self_employment_income",
-    "dividend_income": "dividend_income",
-    "qualified_dividend_income": "qualified_dividend_income",
     "interest_income": "taxable_interest_income",
+    "non_schedule_d_capital_gain_distributions": "non_sch_d_capital_gains",
     "short_term_capital_gains": "short_term_capital_gains",
     "long_term_capital_gains": "long_term_capital_gains",
     "pension_income": "taxable_pension_income",
@@ -1789,6 +1793,9 @@ def calculate_taxsim_targets(
         concept_key: _person_array(pe_variable)
         for concept_key, pe_variable in _TAXSIM_PERSON_NON_WAGE_VARIABLES.items()
     }
+    qualified_dividends, non_qualified_dividends = (
+        _person_array(pe_variable) for pe_variable in POPULACE_DIVIDEND_VARIABLES
+    )
 
     # Concept keys are Concepts member names lowercased, so the module-level
     # variable table stays the single place a new income source is added.
@@ -1803,6 +1810,8 @@ def calculate_taxsim_targets(
 
     def _case_for_tax_unit(tax_unit_id: int | str, state: str) -> Case:
         entities = []
+        member_facts: list[dict[str, Any]] = []
+        member_ids: list[str] = []
         for index in person_indices_by_tax_unit[tax_unit_id]:
             if bool(heads[index]):
                 relation = "head"
@@ -1829,13 +1838,18 @@ def calculate_taxsim_targets(
                     non_wage[key][index],
                     label=_TAXSIM_PERSON_NON_WAGE_VARIABLES[key],
                 )
-            entities.append(
-                Entity(
-                    entity_id=str(person_ids[index]),
-                    kind="person",
-                    facts=facts,
-                )
+            qualified = _finite_number(
+                qualified_dividends[index], label=POPULACE_DIVIDEND_VARIABLES[0]
             )
+            facts[Concepts.QUALIFIED_DIVIDEND_INCOME] = qualified
+            facts[Concepts.DIVIDEND_INCOME] = qualified + _finite_number(
+                non_qualified_dividends[index], label=POPULACE_DIVIDEND_VARIABLES[1]
+            )
+            member_facts.append(facts)
+            member_ids.append(str(person_ids[index]))
+        fold_capital_gain_distributions_into_schedule_d(member_facts)
+        for entity_id, facts in zip(member_ids, member_facts, strict=True):
+            entities.append(Entity(entity_id=entity_id, kind="person", facts=facts))
         return Case(
             case_id=tax_unit_id,
             period=str(year),
