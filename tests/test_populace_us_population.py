@@ -2,6 +2,8 @@ import hashlib
 import types
 
 import pytest
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from axiom_oracles.core.case import Concepts
 from axiom_oracles.core.geography import GeographyScope
@@ -216,6 +218,234 @@ def test_loader_can_project_sampled_ecps_tax_units_to_cases() -> None:
     )
 
 
+DIV = Concepts.DIVIDEND_INCOME
+QDIV = Concepts.QUALIFIED_DIVIDEND_INCOME
+CGD = Concepts.NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS
+STCG = Concepts.SHORT_TERM_CAPITAL_GAINS
+LTCG = Concepts.LONG_TERM_CAPITAL_GAINS
+
+
+def _load(case_unit, *, drop=(), **person_overrides):
+    """Cases plus the fake simulation that produced them.
+
+    The fake has persons 1 and 2 (a head and her child) in tax unit 1001 and
+    person 3 alone in tax unit 2002, one household each.
+    """
+    sims = []
+
+    def factory(dataset):
+        sims.append(
+            FakeMicrosimulation(dataset, person_overrides=person_overrides, drop=drop)
+        )
+        return sims[-1]
+
+    cases = load_populace_us_cases(
+        period="2026",
+        case_unit=case_unit,
+        microsimulation_factory=factory,
+    )
+    return cases, sims[-1]
+
+
+def _facts(cases):
+    return {
+        entity.entity_id: entity.facts for case in cases for entity in case.entities
+    }
+
+
+@pytest.mark.parametrize("case_unit", ["household", "tax_unit"])
+def test_loader_reads_form_1040_lines_3b_and_3a_from_the_dividend_split(
+    case_unit,
+) -> None:
+    cases, sim = _load(
+        case_unit,
+        qualified_dividend_income=[3_000, 0, 250],
+        non_qualified_dividend_income=[2_000, 0, 0],
+        # The artifact's stored legacy column: never line 3b.
+        dividend_income=[777, 777, 777],
+    )
+    facts = _facts(cases)
+
+    # Line 3b is qualified + non-qualified; line 3a is the qualified part.
+    assert facts["person-1"][DIV] == 5_000
+    assert facts["person-1"][QDIV] == 3_000
+    assert DIV not in facts["person-2"] and QDIV not in facts["person-2"]
+    assert facts["person-3"][DIV] == 250
+    assert facts["person-3"][QDIV] == 250
+    assert "dividend_income" not in sim.calculated
+    assert "ordinary_dividend_income" not in sim.calculated
+
+
+def test_loader_carries_line_7a_on_tax_unit_cases_only() -> None:
+    overrides = {"non_sch_d_capital_gains": [2_000, 0, 500]}
+
+    tax_cases, _ = _load("tax_unit", **overrides)
+    facts = _facts(tax_cases)
+    assert facts["person-1"][CGD] == 2_000
+    assert CGD not in facts["person-2"]
+    assert facts["person-3"][CGD] == 500
+    assert all(
+        "capital_gain_distributions_folded_into_schedule_d" not in case.metadata
+        for case in tax_cases
+    )
+
+    # Household Cases feed the benefit lanes, whose Axiom encodings read no
+    # capital gains: they neither carry nor calculate line 7a.
+    household_cases, household_sim = _load("household", **overrides)
+    assert all(CGD not in facts for facts in _facts(household_cases).values())
+    assert "non_sch_d_capital_gains" not in household_sim.calculated
+
+
+def test_loader_moves_line_7a_onto_schedule_d_when_the_return_files_one() -> None:
+    cases, _ = _load(
+        "tax_unit",
+        non_sch_d_capital_gains=[2_000, 300, 500],
+        # In tax unit 1001 the head's return has a long-term gain and the
+        # child's own return a short-term loss, so Exception 1 fails for
+        # each; tax unit 2002 has no Schedule D amount.
+        short_term_capital_gains=[0, -400, 0],
+        long_term_capital_gains=[5_000, 0, 0],
+    )
+    facts = _facts(cases)
+    by_id = {case.case_id: case for case in cases}
+
+    assert CGD not in facts["person-1"] and CGD not in facts["person-2"]
+    assert facts["person-1"][LTCG] == 7_000
+    assert facts["person-2"][LTCG] == 300
+    assert facts["person-2"][STCG] == -400
+    assert (
+        by_id["ecps-tax-unit-1001"].metadata[
+            "capital_gain_distributions_folded_into_schedule_d"
+        ]
+        == 2
+    )
+    assert facts["person-3"][CGD] == 500
+    assert LTCG not in facts["person-3"]
+    assert (
+        "capital_gain_distributions_folded_into_schedule_d"
+        not in by_id["ecps-tax-unit-2002"].metadata
+    )
+
+
+def test_loader_keeps_the_filers_line_7a_when_only_a_dependent_files_schedule_d() -> (
+    None
+):
+    cases, _ = _load(
+        "tax_unit",
+        non_sch_d_capital_gains=[2_000, 300, 0],
+        short_term_capital_gains=[0, -400, 0],
+    )
+    facts = _facts(cases)
+    by_id = {case.case_id: case for case in cases}
+
+    # Schedule D is per return: the child's loss is on her own return.
+    assert facts["person-1"][CGD] == 2_000
+    assert LTCG not in facts["person-1"]
+    assert CGD not in facts["person-2"]
+    assert facts["person-2"][LTCG] == 300
+    assert (
+        by_id["ecps-tax-unit-1001"].metadata[
+            "capital_gain_distributions_folded_into_schedule_d"
+        ]
+        == 1
+    )
+
+
+@pytest.mark.parametrize(
+    ("missing", "household_loads"),
+    [
+        ("qualified_dividend_income", False),
+        ("non_qualified_dividend_income", False),
+        ("non_sch_d_capital_gains", True),
+    ],
+)
+def test_loader_fails_closed_when_an_investment_variable_is_missing(
+    missing, household_loads
+) -> None:
+    # The shared table loads zeros for a variable PolicyEngine cannot
+    # calculate; that silently zeroed a concept for the whole population.
+    with pytest.raises(RuntimeError, match=missing):
+        _load("tax_unit", drop=(missing,))
+    if household_loads:
+        _load("household", drop=(missing,))
+    else:
+        with pytest.raises(RuntimeError, match=missing):
+            _load("household", drop=(missing,))
+
+
+def test_loader_dividend_sources_are_policyengine_inputs() -> None:
+    policyengine_us = pytest.importorskip("policyengine_us")
+    variables = policyengine_us.system.system.variables
+    from axiom_oracles.populations.populace_us import (
+        _TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
+        POPULACE_DIVIDEND_VARIABLES,
+    )
+
+    for name in (
+        *POPULACE_DIVIDEND_VARIABLES,
+        *_TAX_UNIT_PERSON_NON_WAGE_VARIABLES.values(),
+    ):
+        variable = variables[name]
+        assert variable.entity.key == "person"
+        assert not variable.formulas and not getattr(variable, "adds", None)
+    # PolicyEngine-US defines line 3b as exactly this sum.
+    assert list(variables["ordinary_dividend_income"].adds) == list(
+        POPULACE_DIVIDEND_VARIABLES
+    )
+    assert list(variables["dividend_income"].adds) == ["ordinary_dividend_income"]
+
+
+# Zero is drawn often: whether a return has any Schedule D amount, or any
+# distributions, is what the fold turns on.
+AMOUNTS = st.lists(st.just(0) | st.integers(0, 90_000), min_size=3, max_size=3)
+SIGNED = st.lists(st.just(0) | st.integers(-40_000, 90_000), min_size=3, max_size=3)
+
+
+@settings(max_examples=150, deadline=None, derandomize=True)
+@given(
+    qualified=AMOUNTS,
+    non_qualified=AMOUNTS,
+    distributions=AMOUNTS,
+    short_term=SIGNED,
+    long_term=SIGNED,
+)
+def test_property_loader_emits_coherent_form_1040_facts(
+    qualified, non_qualified, distributions, short_term, long_term
+) -> None:
+    overrides = {
+        "qualified_dividend_income": qualified,
+        "non_qualified_dividend_income": non_qualified,
+        "non_sch_d_capital_gains": distributions,
+        "short_term_capital_gains": short_term,
+        "long_term_capital_gains": long_term,
+    }
+    tax_cases, _ = _load("tax_unit", **overrides)
+    household_cases, _ = _load("household", **overrides)
+
+    for cases in (tax_cases, household_cases):
+        for index, facts in enumerate(_facts(cases).values()):
+            # Line 3b = qualified + non-qualified >= line 3a >= 0.
+            assert facts.get(DIV, 0) == qualified[index] + non_qualified[index]
+            assert facts.get(QDIV, 0) == qualified[index]
+            assert 0 <= facts.get(QDIV, 0) <= facts.get(DIV, 0)
+    assert all(CGD not in facts for facts in _facts(household_cases).values())
+
+    # Returns: person 1 (head of tax unit 1001), person 2 (her dependent
+    # child, on her own return), person 3 (head of tax unit 2002).
+    facts_by_person = _facts(tax_cases)
+    for index, person_id in enumerate(("person-1", "person-2", "person-3")):
+        row = facts_by_person[person_id]
+        files_schedule_d = bool(short_term[index] or long_term[index])
+        # Never both paths on one return.
+        assert not (files_schedule_d and CGD in row)
+        # The fold conserves long-term gain plus line 7a.
+        assert row.get(LTCG, 0) + row.get(CGD, 0) == (
+            long_term[index] + distributions[index]
+        )
+        if not files_schedule_d:
+            assert row.get(CGD, 0) == distributions[index]
+
+
 def test_loader_skips_geographically_unresolvable_records() -> None:
     loader = PopulaceUsCaseLoader(
         dataset="memory://fake",
@@ -288,9 +518,10 @@ class FakeSeries:
 
 
 class FakeMicrosimulation:
-    def __init__(self, dataset, *, place_fips=None):
+    def __init__(self, dataset, *, place_fips=None, person_overrides=None, drop=()):
         self.dataset = dataset
         self.subsample_size = None
+        self.calculated: list[str] = []
         self.household_data = {
             "household_id": [101, 202],
             "household_weight": [12.5, 34.0],
@@ -312,13 +543,22 @@ class FakeMicrosimulation:
             "is_blind": [False, False, False],
             "is_veteran": [False, False, True],
             "has_medicaid_health_coverage_at_interview": [True, False, False],
+            # The loader reads these fail-closed (POPULACE_DIVIDEND_VARIABLES
+            # and the tax-unit line 7a table), so the fake must carry them.
+            "qualified_dividend_income": [0, 0, 0],
+            "non_qualified_dividend_income": [0, 0, 0],
+            "non_sch_d_capital_gains": [0, 0, 0],
         }
+        self.person_data.update(person_overrides or {})
+        for variable in drop:
+            del self.person_data[variable]
 
     def subsample(self, sample_size):
         self.subsample_size = sample_size
 
     def calculate(self, variable, period, map_to=None):
         del period
+        self.calculated.append(variable)
         data = self.person_data if map_to == "person" else self.household_data
         if variable not in data:
             raise ValueError(variable)

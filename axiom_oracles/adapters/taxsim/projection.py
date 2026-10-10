@@ -5,6 +5,10 @@ from dataclasses import replace
 from typing import Any
 
 from ...core.case import Case, Concepts, Entity
+from ...core.investment_income import (
+    sum_dividends,
+    sum_non_schedule_d_capital_gain_distributions,
+)
 
 
 TAXSIM_MAX_YEAR = 2026
@@ -198,6 +202,7 @@ def taxsim_input_for_case(
     # Household-level inputs are summed across head + spouse for the columns
     # that TAXSIM models at the tax-unit level rather than per-spouse.
     earners = [head] + ([spouse] if spouse is not None else [])
+    dividends = sum_dividends(earners)
 
     row: dict[str, Any] = {
         "taxsimid": taxsimid if taxsimid is not None else case.case_id,
@@ -222,20 +227,28 @@ def taxsim_input_for_case(
             if spouse is not None
             else 0
         ),
-        # TAXSIM's dividends column is qualified-dividend income (taxed at
-        # the preferential rate); only the qualified leaf belongs there. The
-        # non-qualified remainder rides in otherprop with the other ordinary
-        # NIIT-subject property income so AGI stays whole.
-        "dividends": _qualified_dividends(earners),
+        # TAXSIM's dividends column is "Dividend Income (qualified dividends
+        # only for 2003 on)": Form 1040 line 3a. The rest of line 3b (the
+        # non-qualified dividends) rides in otherprop, which TAXSIM-35 lists
+        # as including "non-qualified dividends", so AGI stays whole.
+        "dividends": dividends.qualified,
         "intrec": _sum_fact(earners, Concepts.INTEREST_INCOME),
         "stcg": _sum_fact(earners, Concepts.SHORT_TERM_CAPITAL_GAINS),
-        "ltcg": _sum_fact(earners, Concepts.LONG_TERM_CAPITAL_GAINS),
+        # ltcg is "Long Term Capital Gains or losses". Form 1040 line 7a
+        # capital gain distributions reported without Schedule D are
+        # long-term gains (26 USC 852(b)(3)(B)) and TAXSIM-35 has no column
+        # of their own, so they ride here: AGI, the preferential rates, NIIT
+        # and the EITC investment-income test all see them, as on the return.
+        # The sum is the same whether or not the distributions were folded
+        # onto Schedule D (core/investment_income.with_schedule_d_fold).
+        "ltcg": _sum_fact(earners, Concepts.LONG_TERM_CAPITAL_GAINS)
+        + sum_non_schedule_d_capital_gain_distributions(earners),
         "pensions": _sum_fact(earners, Concepts.PENSION_INCOME),
         # Rental/royalty income flows through TAXSIM's other-property
         # column; zero-filling it depressed TAXSIM AGI on every
         # rental-income unit relative to the axiom side.
         "otherprop": _sum_fact(earners, Concepts.RENTAL_INCOME)
-        + _nonqualified_dividends(earners),
+        + dividends.non_qualified,
         "gssi": _sum_fact(earners, Concepts.SOCIAL_SECURITY_BENEFITS),
         "pui": _number(head.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0)),
         "sui": (
@@ -259,32 +272,6 @@ def taxsim_input_for_case(
 
 def _sum_fact(people: list[Entity], concept: str) -> float:
     return sum(_number(person.fact(concept, 0)) for person in people)
-
-
-def _qualified_dividends(people: list[Entity]) -> float:
-    # Qualified dividends are a subset of total dividends; some ECPS rows
-    # carry only the qualified leaf, so cap at the person's larger total.
-    return sum(
-        min(
-            _number(person.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
-            max(
-                _number(person.fact(Concepts.DIVIDEND_INCOME, 0)),
-                _number(person.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
-            ),
-        )
-        for person in people
-    )
-
-
-def _nonqualified_dividends(people: list[Entity]) -> float:
-    return sum(
-        max(
-            0.0,
-            _number(person.fact(Concepts.DIVIDEND_INCOME, 0))
-            - _number(person.fact(Concepts.QUALIFIED_DIVIDEND_INCOME, 0)),
-        )
-        for person in people
-    )
 
 
 def _people(case: Case) -> list[Entity]:

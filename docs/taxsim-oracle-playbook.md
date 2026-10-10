@@ -94,6 +94,13 @@ do not chase the Axiom encoding):
   benefits (`gssi`) follow the same rule: the §86 member is exactly
   0.85 × the non-earner members' benefits, plus the H.R.1 §70103
   senior-deduction phaseout knock-on of the shifted MAGI.
+- **Dividends and capital gain distributions**: the shared projection
+  sends Form 1040 line 3a to `dividends`, the rest of line 3b to
+  `otherprop` (TAXSIM-35 lists "non-qualified dividends" under that
+  column, its "Other property income subject to NIIT") and line 7a
+  distributions reported without Schedule D to `ltcg`; see
+  `docs/case-investment-income.md`. With §1411 out of the composed Axiom
+  program, the NIIT bullet above applies to this income too.
 - **SE-tax ALD**: the pinned binary deducts half of the §1401(b)(2)
   additional Medicare tax in its self-employment-tax ALD, which §164(f)(1)
   excludes (isolated probe: w=0, se=810,431 → ALD 24,759.23 = 22,291.28

@@ -5,6 +5,13 @@ from dataclasses import replace
 from typing import Any
 
 from ...core.case import Case, Concepts, Entity
+from ...core.investment_income import (
+    person_dividends,
+    person_non_schedule_d_capital_gain_distributions,
+    sum_dividends,
+    sum_non_schedule_d_capital_gain_distributions,
+    with_schedule_d_fold,
+)
 
 
 _SPOUSE_RELATIONS = {
@@ -60,6 +67,11 @@ def taxcalc_input_for_case(
             "Tax-Calculator projection requires at least one person entity."
         )
 
+    # Line 7a joins Schedule D on a return that files one
+    # (core/investment_income); relations and ages are untouched, so the
+    # filers are the same people before and after.
+    head = _head(people)
+    people = with_schedule_d_fold(people, (head, _spouse(people, head)))
     head = _head(people)
     spouse = _spouse(people, head)
     dependents = [
@@ -80,14 +92,10 @@ def taxcalc_input_for_case(
         if spouse is not None
         else 0
     )
-    dividend_income = _sum_fact(earners, Concepts.DIVIDEND_INCOME)
-    qualified_dividend_income = min(
-        dividend_income,
-        _sum_fact(
-            earners,
-            Concepts.QUALIFIED_DIVIDEND_INCOME,
-        ),
-    )
+    # Form 1040 lines 3b and 3a (core/investment_income): e00600 is
+    # "Ordinary dividends included in AGI" and e00650 "Qualified dividends
+    # included in ordinary dividends" (records_variables.json, 6.7.1).
+    dividends = sum_dividends(earners)
     pension_income = _sum_fact(earners, Concepts.PENSION_INCOME)
     rental_income = _sum_fact(earners, Concepts.RENTAL_INCOME)
 
@@ -116,10 +124,13 @@ def taxcalc_input_for_case(
         "e00900s": spouse_self_employment,
         "e00900": head_self_employment + spouse_self_employment,
         "e00300": _sum_fact(earners, Concepts.INTEREST_INCOME),
-        "e00600": dividend_income,
-        "e00650": qualified_dividend_income,
+        "e00600": dividends.ordinary,
+        "e00650": dividends.qualified,
         "p22250": _sum_fact(earners, Concepts.SHORT_TERM_CAPITAL_GAINS),
         "p23250": _sum_fact(earners, Concepts.LONG_TERM_CAPITAL_GAINS),
+        # "Capital gain distributions not reported on Sch D": Form 1040
+        # line 7a on the no-Schedule-D path.
+        "e01100": sum_non_schedule_d_capital_gain_distributions(earners),
         "e01500": pension_income,
         "e01700": pension_income,
         "e02000": rental_income,
@@ -199,10 +210,11 @@ def _dependent_gross_income(dependent: Entity) -> float:
     return (
         _number(dependent.fact(Concepts.YEARLY_EARNED_INCOME, 0))
         + max(0, _number(dependent.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0)))
-        + _number(dependent.fact(Concepts.DIVIDEND_INCOME, 0))
+        + person_dividends(dependent).ordinary
         + _number(dependent.fact(Concepts.INTEREST_INCOME, 0))
         + _number(dependent.fact(Concepts.SHORT_TERM_CAPITAL_GAINS, 0))
         + _number(dependent.fact(Concepts.LONG_TERM_CAPITAL_GAINS, 0))
+        + person_non_schedule_d_capital_gain_distributions(dependent)
         + _number(dependent.fact(Concepts.PENSION_INCOME, 0))
         + _number(dependent.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0))
         + max(0, _number(dependent.fact(Concepts.RENTAL_INCOME, 0)))

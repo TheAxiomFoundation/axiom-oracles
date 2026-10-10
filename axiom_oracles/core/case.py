@@ -76,11 +76,23 @@ class Concepts:
     STATE_CODE = "axiom:location/household#state_code"
 
     # Income components (person-level, annual)
+    # Form 1040 line 3b: total ordinary dividends (Form 1099-DIV box 1a),
+    # qualified dividends included. QUALIFIED_DIVIDEND_INCOME is line 3a, the
+    # qualified part of line 3b, never an addition to it. Projections read
+    # both through core/investment_income.py.
     DIVIDEND_INCOME = "axiom:income/person#dividend_income"
     QUALIFIED_DIVIDEND_INCOME = "axiom:income/person#qualified_dividend_income"
     INTEREST_INCOME = "axiom:income/person#interest_income"
+    # Schedule D net short- and long-term capital gain or loss.
     SHORT_TERM_CAPITAL_GAINS = "axiom:income/person#short_term_capital_gains"
     LONG_TERM_CAPITAL_GAINS = "axiom:income/person#long_term_capital_gains"
+    # Form 1040 line 7a when Schedule D is not required (the line 7b box):
+    # capital gain distributions from Form 1099-DIV box 2a, long-term under
+    # 26 USC 852(b)(3)(B). Disjoint from the Schedule D concepts above; see
+    # core/investment_income.py.
+    NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS = (
+        "axiom:income/person#non_schedule_d_capital_gain_distributions"
+    )
     PENSION_INCOME = "axiom:income/person#pension_income"
     TANF_BENEFITS = "axiom:income/person#tanf_benefits"
     SSI_BENEFITS = "axiom:income/person#ssi_benefits"
