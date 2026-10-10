@@ -1018,6 +1018,10 @@ def test_income_tax_income_base_request_projects_section_23_relation():
         {
             "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
             "tuple": ["person_7_income_employment_income", "person_7"],
+            "roles": {
+                "owner_id": "person_7", "owner_kind": "Person",
+                "related_id": "person_7_income_employment_income", "related_kind": "Payment",
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",
@@ -1027,6 +1031,10 @@ def test_income_tax_income_base_request_projects_section_23_relation():
         {
             "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
             "tuple": ["person_7_income_private_pension_income", "person_7"],
+            "roles": {
+                "owner_id": "person_7", "owner_kind": "Person",
+                "related_id": "person_7_income_private_pension_income", "related_kind": "Payment",
+            },
             "interval": {
                 "period_kind": "tax_year",
                 "start": "2026-01-01",

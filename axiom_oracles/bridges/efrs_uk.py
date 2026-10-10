@@ -21,6 +21,7 @@ from typing import Any, Callable
 
 import yaml
 
+from .relation_binding import relation_tuple
 from .tax_populace import (
     _version_tuple,
     input_record,
@@ -4034,6 +4035,7 @@ def build_axiom_request(
     pe_data: dict[str, Any],
     year: int,
     surface: str = "personal-allowance",
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if surface == "national-insurance-class-1":
         return build_national_insurance_class_1_request(pe_data=pe_data, year=year)
@@ -4051,7 +4053,9 @@ def build_axiom_request(
     if surface == "marriage-allowance":
         return build_marriage_allowance_request(pe_data=pe_data, year=year)
     if surface == "income-tax-income-base":
-        return build_income_tax_income_base_request(pe_data=pe_data, year=year)
+        return build_income_tax_income_base_request(
+            pe_data=pe_data, year=year, artifact=artifact,
+        )
     if surface == "income-tax-section-10-earned-income":
         return build_income_tax_section_10_request(pe_data=pe_data, year=year)
     if surface == "income-tax-section-11d-savings-income":
@@ -4444,7 +4448,7 @@ def build_marriage_allowance_request(
 
 
 def build_income_tax_income_base_request(
-    *, pe_data: dict[str, Any], year: int
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     interval = tax_year_interval(year)
     inputs: list[dict[str, Any]] = []
@@ -4458,13 +4462,19 @@ def build_income_tax_income_base_request(
                 person_id,
                 str(component["name"]),
             )
-            relations.append(
-                {
-                    "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
-                    "tuple": [payment_id, entity_id],
-                    "interval": interval,
-                }
-            )
+            relation_name = f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer"
+            roles = {
+                "owner_id": entity_id,
+                "owner_kind": "Person",
+                "related_id": payment_id,
+                "related_kind": "Payment",
+            }
+            relations.append({
+                "name": relation_name,
+                "tuple": relation_tuple(artifact, relation_name, **roles),
+                "interval": interval,
+                **({"roles": roles} if artifact is None else {}),
+            })
             inputs.append(
                 input_record(
                     f"{INCOME_TAX_SECTION_23_BASE}#input.amount_charged_to_income_tax",

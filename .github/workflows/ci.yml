@@ -286,6 +286,9 @@ jobs:
           uv run pytest -q
           tests/bridges/test_tax_relation_engine.py
           tests/bridges/test_relation_binding_engine_fixtures.py
+          tests/bridges/test_same_kind_ambiguity.py
+          tests/bridges/test_tax_producer_roles.py
+          tests/test_relation_tuple_producers.py
           --basetemp=${{ runner.temp }}/relation-engine-tests
           -ra
 

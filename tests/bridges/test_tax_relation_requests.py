@@ -145,13 +145,23 @@ def test_generated_tax_units_keep_entity_kinds_in_executable_slots(
         current = slots[relation["name"]]
         assert kinds[relation["tuple"][current]] == "TaxUnit"
         assert kinds[relation["tuple"][1 - current]] == "Person"
+    # Check retained producer roles, then compare every original wire field.
+    legacy_wire = deepcopy(legacy)
+    for relation in legacy_wire["dataset"]["relations"]:
+        assert relation.pop("roles") == {
+            "owner_id": relation["tuple"][1],
+            "owner_kind": "TaxUnit",
+            "related_id": relation["tuple"][0],
+            "related_kind": "Person",
+            "legacy_owner_slot": 1,
+        }
     # Restore only the known legacy orientation: every input, value, interval,
     # query, relation multiplicity and relation name must remain identical.
     legacy_oriented = deepcopy(request)
     for relation in legacy_oriented["dataset"]["relations"]:
         if slots[relation["name"]] == 0:
             relation["tuple"].reverse()
-    assert legacy_oriented == legacy
+    assert legacy_oriented == legacy_wire
     if all(slot == 1 for slot in slots.values()):
-        assert request == legacy
+        assert request == legacy_wire
     assert artifact == original_artifact

@@ -26,7 +26,7 @@ from typing import Any
 import yaml
 
 from .jurisdiction import jurisdiction_prefix
-from .relation_binding import bind_request_relations
+from .relation_binding import bind_request_relations, relation_tuple
 from .rulespec_paths import (
     _canonical_rulespec_compile_path,
     _rulespec_public_item_keys,
@@ -1097,6 +1097,33 @@ def policyengine_data_certification_override_required() -> bool:
     return False
 
 
+def tax_relation_record(
+    artifact: dict[str, Any] | None,
+    name: str,
+    *,
+    tax_unit_id: str,
+    person_id: str,
+    interval: dict[str, str],
+    legacy_owner_slot: int = 1,
+) -> dict[str, Any]:
+    """Keep source roles until compilation supplies executable tuple slots."""
+    roles = {
+        "owner_id": tax_unit_id,
+        "owner_kind": "TaxUnit",
+        "related_id": person_id,
+        "related_kind": "Person",
+        "legacy_owner_slot": legacy_owner_slot,
+    }
+    record = {
+        "name": name,
+        "tuple": relation_tuple(artifact, name, **roles),
+        "interval": interval,
+    }
+    if artifact is None:
+        record["roles"] = roles
+    return record
+
+
 def build_axiom_request(
     *,
     pe_data: dict[str, Any],
@@ -1182,18 +1209,22 @@ def build_ctc_request(
         ):
             person_id = f"{entity_id}_person_{person_index}"
             relations.append(
-                {
-                    "name": f"{CTC_BASE}#relation.ctc_qualifying_child_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{CTC_BASE}#relation.ctc_qualifying_child_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             relations.append(
-                {
-                    "name": f"{CTC_H_BASE}#relation.dependent_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{CTC_H_BASE}#relation.dependent_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             for name, value in project_ctc_person_inputs(person, context).items():
                 inputs.append(
@@ -1228,9 +1259,7 @@ def build_ctc_request(
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
-    return (
-        bind_request_relations(request, artifact) if artifact is not None else request
-    )
+    return request
 
 
 def build_cdcc_request(
@@ -1266,11 +1295,13 @@ def build_cdcc_request(
         ):
             person_id = f"{entity_id}_person_{person_index}"
             relations.append(
-                {
-                    "name": f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             for name, value in project_cdcc_person_inputs(person, context).items():
                 inputs.append(
@@ -1295,9 +1326,7 @@ def build_cdcc_request(
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
-    return (
-        bind_request_relations(request, artifact) if artifact is not None else request
-    )
+    return request
 
 
 def build_aotc_request(
@@ -1333,11 +1362,13 @@ def build_aotc_request(
         ):
             person_id = f"{entity_id}_person_{person_index}"
             relations.append(
-                {
-                    "name": f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             for name, value in project_aotc_person_inputs(person, context).items():
                 inputs.append(
@@ -1362,9 +1393,7 @@ def build_aotc_request(
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
-    return (
-        bind_request_relations(request, artifact) if artifact is not None else request
-    )
+    return request
 
 
 def build_nonrefundable_credits_request(
@@ -1672,11 +1701,13 @@ def build_eitc_request(
         ):
             person_id = f"{entity_id}_person_{person_index}"
             relations.append(
-                {
-                    "name": f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             for name, value in project_eitc_person_inputs(person, context).items():
                 inputs.append(
@@ -1714,9 +1745,7 @@ def build_eitc_request(
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
-    return (
-        bind_request_relations(request, artifact) if artifact is not None else request
-    )
+    return request
 
 
 def build_payroll_request(
@@ -2905,6 +2934,9 @@ def _runtime_axiom_request(
                 item["name"],
                 rulespec_root=rulespec_root,
             )
+            roles = item.pop("roles", None)
+            if roles is not None:
+                item["tuple"] = relation_tuple(artifact_payload, item["name"], **roles)
 
     public_output_by_runtime: dict[str, str] = {}
     for query in runtime_request.get("queries") or []:
@@ -2927,8 +2959,8 @@ def _runtime_axiom_request(
             runtime_outputs.append(runtime_output)
             public_output_by_runtime[runtime_output] = output
         query["outputs"] = runtime_outputs
-    # Bind only after compilation and name resolution: declarations alone may
-    # disagree with the executable slots of historical artifacts.
+    # Producers materialize explicit roles above, after compilation and name
+    # resolution. The binder also validates raw caller-supplied relation tuples.
     runtime_request = bind_request_relations(runtime_request, artifact_payload)
     return runtime_request, public_output_by_runtime
 

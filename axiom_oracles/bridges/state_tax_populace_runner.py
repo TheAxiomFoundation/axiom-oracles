@@ -213,9 +213,9 @@ _REVIEWED_PERSON_INPUT_SLOTS_BY_STATE = {
 }
 
 # A relation is emitted only when its complete state/legal ID is declared and
-# reviewed here. These reviewed argument orders preserve the projection
-# contract; run_axiom_program binds tuples to the actual compiled artifact
-# before execution, including artifacts with older aggregation directions.
+# reviewed here. These argument orders retain the public projection shape;
+# explicit roles are materialized against compiled executable slots before
+# execution, including artifacts with older aggregation directions.
 _REVIEWED_PERSON_TAX_UNIT_RELATIONS_BY_STATE = {
     "DC": {
         "us-dc:policies/income_tax/pilot_liability_pipeline#relation."
@@ -2812,6 +2812,7 @@ def _state_request(
     raw_persons: Any | None = None,
     all_tax_unit_ids: set[int | str] | None = None,
     comparison_aggregation: str = DEFAULT_COMPARISON_AGGREGATION,
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
@@ -2916,22 +2917,24 @@ def _state_request(
 
     relations: list[dict[str, Any]] = []
     relation_orders = _REVIEWED_PERSON_TAX_UNIT_RELATIONS_BY_STATE.get(state, {})
+    if declared_relations:
+        from .tax_populace import tax_relation_record
+
     for route in route_rows:
         tax_unit_entity_id = _tax_unit_entity_id(route.tax_unit_id)
         for person_id in persons_by_tax_unit.get(route.tax_unit_id, ()):
             person_entity_id = _person_entity_id(person_id)
-            entities = {
-                "TaxUnit": tax_unit_entity_id,
-                "Person": person_entity_id,
-            }
             for relation in declared_relations:
                 argument_order = relation_orders[relation]
                 relations.append(
-                    {
-                        "name": relation,
-                        "tuple": [entities[entity] for entity in argument_order],
-                        "interval": interval,
-                    }
+                    tax_relation_record(
+                        artifact,
+                        relation,
+                        tax_unit_id=tax_unit_entity_id,
+                        person_id=person_entity_id,
+                        interval=interval,
+                        legacy_owner_slot=argument_order.index("TaxUnit"),
+                    )
                 )
     return {
         "mode": "explain",

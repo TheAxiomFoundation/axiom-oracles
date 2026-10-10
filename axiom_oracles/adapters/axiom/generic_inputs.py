@@ -33,6 +33,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from axiom_oracles.bridges.relation_binding import UNIT_ENTITY_KINDS as _UNIT_ENTITIES
+from axiom_oracles.bridges.relation_binding import relation_owner_kind, relation_tuple
 
 
 # ---------------------------------------------------------------------------
@@ -556,14 +557,28 @@ def attach_generic_inputs(
         if member_relation not in variants:
             variants.insert(0, member_relation)
         emit_bare = bare_name != member_relation and len(variants) == 1
+        relation_names = [*variants, *([bare_name] if emit_bare else [])]
+        owner_kind_by_name = {
+            name: relation_owner_kind(
+                compiled, name, default_owner_kind=household_entity, related_kind="Person",
+            )
+            for name in relation_names
+        }
 
         relation_records: list[dict[str, Any]] = []
         for pid in person_ids:
-            tuple_pair = [pid, household_entity_id]
-            for name in variants:
-                relation_records.append({"name": name, "tuple": tuple_pair})
-            if emit_bare:
-                relation_records.append({"name": bare_name, "tuple": tuple_pair})
+            for name in relation_names:
+                roles = {
+                    "owner_id": household_entity_id,
+                    "owner_kind": owner_kind_by_name[name],
+                    "related_id": pid,
+                    "related_kind": "Person",
+                }
+                relation_records.append({
+                    "name": name,
+                    "tuple": relation_tuple(compiled, name, **roles),
+                    "roles": roles,
+                })
 
         metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = input_dicts
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [

@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 import pytest
-from hypothesis import given, settings, strategies as st
+from hypothesis import example, given, settings, strategies as st
 
 from axiom_oracles.bridges.relation_binding import (
     RelationBindingError,
@@ -377,7 +377,7 @@ def test_untyped_artifact_with_explicit_owner_first_usage_is_honored():
 
 @pytest.mark.parametrize("current_slot", [0, 1])
 @pytest.mark.parametrize("supplied_owner_slot", [0, 1])
-def test_untyped_member_without_inputs_uses_known_owner_kind(
+def test_untyped_member_without_inputs_preserves_undetermined_tuple(
     current_slot, supplied_owner_slot
 ):
     request = request_for(["child-1"])
@@ -385,16 +385,12 @@ def test_untyped_member_without_inputs_uses_known_owner_kind(
     if supplied_owner_slot == 0:
         request["dataset"]["relations"][0]["tuple"].reverse()
     before = deepcopy(request)
-    bound = bind_request_relations(
-        request, artifact_for(typed=False, current_slot=current_slot)
-    )
-    emitted = bound["dataset"]["relations"][0]["tuple"]
-    assert emitted[current_slot] == "unit-1"
-    assert emitted[1 - current_slot] == "child-1"
-    assert bound["dataset"]["inputs"] == before["dataset"]["inputs"]
+    with pytest.warns(UserWarning, match="members.*child-1"):
+        bound = bind_request_relations(
+            request, artifact_for(typed=False, current_slot=current_slot)
+        )
+    assert bound == before
     assert request == before
-    if current_slot == supplied_owner_slot:
-        assert bound == before
 
 
 @pytest.mark.parametrize("current_slot", [0, 1])
@@ -617,26 +613,20 @@ def test_swapping_declared_and_used_slots_reverses_every_generated_tuple(
 @given(
     member_numbers=st.lists(st.integers(0, 20), min_size=1, max_size=20),
     owner_slot=st.integers(0, 1), supplied_owner_slot=st.integers(0, 1),
-    ambiguous=st.booleans(),
-    pseudo_predicate=st.booleans(), only_pseudo_inputs=st.booleans(),
+    pseudo_inputs=st.booleans(), pseudo_predicate=st.booleans(),
     value=st.one_of(st.booleans(), st.integers(), st.text()),
 )
 def test_untyped_unresolved_scopes_preserve_entire_request(
-    member_numbers, owner_slot, supplied_owner_slot, ambiguous,
-    pseudo_predicate, only_pseudo_inputs, value
+    member_numbers, owner_slot, supplied_owner_slot, pseudo_inputs,
+    pseudo_predicate, value
 ):
     # Repeated ids deliberately exercise tuple multiplicity.
     request = request_for([f"member-{number}" for number in member_numbers])
-    if ambiguous:
-        request["dataset"]["inputs"].extend([
+    if pseudo_inputs:
+        request["dataset"]["inputs"] = [
             {"entity_id": record["entity_id"], "entity": "StatutoryDollarAmount"}
-            for record in list(request["dataset"]["inputs"])
-        ])
-        if only_pseudo_inputs:
-            request["dataset"]["inputs"] = [
-                record for record in request["dataset"]["inputs"]
-                if record["entity"] == "StatutoryDollarAmount"
-            ]
+            for record in request["dataset"]["inputs"]
+        ]
     else:
         request["dataset"]["inputs"] = []
     if supplied_owner_slot == 0:
@@ -661,6 +651,300 @@ def test_untyped_unresolved_scopes_preserve_entire_request(
     bound = bind_request_relations(request, artifact)
     assert bound == before
     assert bind_request_relations(bound, artifact) == bound
+    assert request == before
+
+
+@pytest.mark.parametrize("owner_slot", [0, 1])
+@pytest.mark.parametrize("supplied_owner_slot", [0, 1])
+def test_untyped_custom_owner_preserves_scalar_only_member(owner_slot, supplied_owner_slot):
+    artifact = artifact_for(owner="Organization", typed=False, current_slot=owner_slot)
+    artifact["program"]["derived"][0]["expr"]["where"] = {
+        "kind": "derived", "name": "payment_amount",
+    }
+    artifact["program"]["derived"].append({
+        "name": "payment_amount", "entity": "Payment",
+        "expr": {"kind": "input", "name": "amount"},
+    })
+    request = request_for(["payment-1"], "Organization")
+    request["dataset"]["inputs"][1]["entity"] = "Payment"
+    if supplied_owner_slot == 0:
+        request["dataset"]["relations"][0]["tuple"].reverse()
+    before = deepcopy(request)
+    with pytest.warns(UserWarning, match="members.*payment-1"):
+        bound = bind_request_relations(request, artifact)
+    assert bound == before
+    assert request == before
+
+
+@pytest.mark.parametrize("owner_slot", [0, 1])
+@pytest.mark.parametrize("supplied_owner_slot", [0, 1])
+def test_untyped_custom_owner_repairs_distinct_real_identities(owner_slot, supplied_owner_slot):
+    artifact = artifact_for(owner="Organization", typed=False, current_slot=owner_slot)
+    # A separate executable endpoint proves Payment is an identity, rather
+    # than a scalar broadcast scope inferred from a helper's entity name.
+    artifact["program"]["relations"].append({"name": "payment_proof", "arity": 2})
+    artifact["program"]["derived"].append({
+        "name": "payment_count", "entity": "Payment",
+        "expr": {"kind": "count_related", "relation": "payment_proof",
+                 "current_slot": 0, "related_slot": 1},
+    })
+    request = request_for(["payment-1"], "Organization")
+    request["dataset"]["inputs"][1]["entity"] = "Payment"
+    if supplied_owner_slot == 0:
+        request["dataset"]["relations"][0]["tuple"].reverse()
+    before = deepcopy(request)
+    bound = bind_request_relations(request, artifact)
+    assert bound["dataset"]["relations"][0]["tuple"][owner_slot] == "unit-1"
+    assert bind_request_relations(bound, artifact) == bound
+    assert request == before
+
+
+OWNER_KINDS = st.text(
+    alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", min_size=1, max_size=24
+).filter(lambda kind: kind not in {"Person", "StatutoryDollarAmount", "BroadcastThreshold"})
+
+
+@pytest.mark.parametrize("owner_slot", [0, 1])
+@pytest.mark.parametrize("supplied_owner_slot", [0, 1])
+def test_typed_count_only_ignores_known_scalar_member_scope(
+    owner_slot, supplied_owner_slot,
+):
+    artifact = artifact_for(current_slot=owner_slot)
+    artifact["program"]["derived"].append({
+        "name": "threshold", "entity": "BroadcastThreshold",
+        "expr": {"kind": "input", "name": "threshold"},
+    })
+    request = request_for(["child-1"])
+    request["dataset"]["inputs"][1]["entity"] = "BroadcastThreshold"
+    if supplied_owner_slot == 0:
+        request["dataset"]["relations"][0]["tuple"].reverse()
+    before = deepcopy(request)
+    bound = bind_request_relations(request, artifact)
+    assert bound["dataset"]["relations"][0]["tuple"][owner_slot] == "unit-1"
+    assert request == before
+    if owner_slot == supplied_owner_slot:
+        assert bound == before
+
+
+@settings(deadline=None)
+@example(
+    owner="Household", typed=False, member_numbers=[0, 0], owner_slot=1,
+    supplied_owner_slot=0, owner_pseudo=True, member_pseudo=True,
+    member_inputs=True, value=17,
+)
+@given(
+    owner=OWNER_KINDS, typed=st.booleans(),
+    member_numbers=st.lists(st.integers(0, 20), min_size=1, max_size=20),
+    owner_slot=st.integers(0, 1), supplied_owner_slot=st.integers(0, 1),
+    owner_pseudo=st.booleans(), member_pseudo=st.booleans(), member_inputs=st.booleans(),
+    value=st.one_of(st.booleans(), st.integers(), st.text()),
+)
+def test_real_identity_evidence_orders_tuples_through_broadcast_scopes(
+    owner, typed, member_numbers, owner_slot, supplied_owner_slot,
+    owner_pseudo, member_pseudo, member_inputs, value,
+):
+    # Executable owner context proves arbitrary kinds independently of naming.
+    # Broadcast scopes add no identity evidence. Untyped counts without
+    # member identities remain ambiguous. Repeated ids retain multiplicity.
+    member_ids = [f"member-{number}" for number in member_numbers]
+    request = request_for(member_ids, owner)
+    if not member_inputs:
+        request["dataset"]["inputs"] = request["dataset"]["inputs"][:1]
+    if owner_pseudo:
+        request["dataset"]["inputs"].append({
+            "entity_id": "unit-1", "entity": "StatutoryDollarAmount",
+        })
+    if member_pseudo:
+        request["dataset"]["inputs"].extend([
+            {"entity_id": member, "entity": "BroadcastThreshold"} for member in member_ids
+        ])
+    for record in request["dataset"]["inputs"]:
+        record.update(name="value", value=value)
+    request["queries"] = [{"entity_id": "unit-1", "outputs": ["count"], "period": "2026"}]
+    if supplied_owner_slot == 0:
+        for record in request["dataset"]["relations"]:
+            record["tuple"].reverse()
+    before = deepcopy(request)
+    artifact = artifact_for(owner=owner, typed=typed, current_slot=owner_slot)
+    artifact["program"]["derived"].extend([
+        {"name": "amount", "entity": "StatutoryDollarAmount", "expr": {"kind": "input"}},
+        {"name": "threshold", "entity": "BroadcastThreshold", "expr": {"kind": "input"}},
+    ])
+    if member_inputs:
+        artifact["program"]["derived"][0]["expr"]["where"] = {
+            "kind": "derived", "name": "person_value",
+        }
+        artifact["program"]["derived"].append({
+            "name": "person_value", "entity": "Person", "expr": {"kind": "input"},
+        })
+    expected = deepcopy(request)
+    if typed or member_inputs:
+        for record, member in zip(expected["dataset"]["relations"], member_ids, strict=True):
+            record["tuple"] = ["unit-1", member] if owner_slot == 0 else [member, "unit-1"]
+    bound = bind_request_relations(request, artifact)
+    assert bound == expected  # Only order changes: values, intervals, queries all survive.
+    assert bind_request_relations(bound, artifact) == bound
+    assert request == before
+    if supplied_owner_slot == owner_slot:
+        assert bound == before
+
+
+@settings(deadline=None)
+@example(
+    owner="Organization", owner_slot=0, supplied_owner_slot=1,
+    proof_first=False, pattern_metadata=False, owner_identity=False,
+)
+@given(
+    owner=OWNER_KINDS.filter(lambda kind: kind != "Household"),
+    owner_slot=st.integers(0, 1), supplied_owner_slot=st.integers(0, 1),
+    proof_first=st.booleans(), pattern_metadata=st.booleans(), owner_identity=st.booleans(),
+)
+def test_proved_custom_owner_context_is_available_to_nested_aggregates(
+    owner, owner_slot, supplied_owner_slot, proof_first, pattern_metadata, owner_identity,
+):
+    artifact = artifact_for(owner="Household", typed=False, current_slot=0)
+    program = artifact["program"]
+    program["relations"].extend([
+        {"name": "payments", "arity": 2}, {"name": "owner_proof", "arity": 2},
+    ])
+    zero = {"kind": "literal", "value": {"kind": "integer", "value": 0}}
+    program["derived"][0]["expr"]["where"] = {
+        "kind": "and", "items": [
+            {"kind": "comparison", "op": "gt", "right": zero,
+             "left": {"kind": "derived", "name": "owner_label"}},
+            {"kind": "comparison", "op": "gt", "right": zero, "left": {
+                "kind": "count_related", "relation": "payments",
+                "current_slot": owner_slot, "related_slot": 1 - owner_slot,
+            }},
+        ],
+    }
+    program["derived"].append({
+        "name": "owner_label", "entity": owner, "expr": {"kind": "input"},
+    })
+    proof = {
+        "name": "owner_count", "entity": owner,
+        "expr": {"kind": "count_related", "relation": "owner_proof",
+                 "current_slot": 0, "related_slot": 1},
+    }
+    program["derived"].insert(0 if proof_first else len(program["derived"]), proof)
+    if pattern_metadata:
+        comparison = program["derived"][0 if not proof_first else 1]["expr"]["where"]["items"][0]
+        reference = comparison["left"]
+        comparison["left"] = {
+            "kind": "if", "condition": {
+                "kind": "comparison", "op": "eq", "left": zero, "right": zero,
+            },
+            "then_expr": reference, "else_expr": {
+                "kind": "no_match", "subject": deepcopy(reference),
+                "patterns": [{"kind": "derived", "name": "person_metadata"}],
+            },
+        }
+        program["derived"].append({
+            "name": "person_metadata", "entity": "Person", "expr": {"kind": "input"},
+        })
+    request = request_for(["owner-1"], "Household")
+    request["dataset"]["inputs"][1]["entity"] = owner
+    request["dataset"]["inputs"].append({"entity_id": "payment-1", "entity": "Person"})
+    if not owner_identity:
+        # Without the outer member's identity the nested owner context is
+        # unknown. A scalar scope cannot establish that missing identity.
+        request["dataset"]["inputs"][1]["entity"] = "StatutoryDollarAmount"
+    request["dataset"]["relations"][0]["tuple"].reverse()
+    request["dataset"]["relations"].append({
+        "name": "payments",
+        "tuple": ["owner-1", "payment-1"] if supplied_owner_slot == 0
+        else ["payment-1", "owner-1"],
+    })
+    before = deepcopy(request)
+    expected = deepcopy(request)
+    if owner_identity:
+        expected["dataset"]["relations"][1]["tuple"] = (
+            ["owner-1", "payment-1"] if owner_slot == 0 else ["payment-1", "owner-1"]
+        )
+    bound = bind_request_relations(request, artifact)
+    assert bound == expected
+    assert bind_request_relations(bound, artifact) == bound
+    assert request == before
+
+
+@settings(deadline=None)
+@given(owner_slot=st.integers(0, 1), supplied_owner_slot=st.integers(0, 1))
+def test_no_match_pattern_metadata_supplies_no_executable_slots(
+    owner_slot, supplied_owner_slot,
+):
+    artifact = artifact_for(current_slot=owner_slot)
+    rule = artifact["program"]["derived"][0]
+    executable = rule["expr"]
+    one = {"kind": "literal", "value": {"kind": "integer", "value": 1}}
+    rule["expr"] = {
+        "kind": "if", "condition": {
+            "kind": "comparison", "op": "eq", "left": one, "right": one,
+        },
+        "then_expr": executable,
+        "else_expr": {
+            "kind": "no_match", "subject": one,
+            "patterns": [dict(executable, current_slot=1 - owner_slot, related_slot=owner_slot)],
+        },
+    }
+    request = request_for(["child-1"])
+    if supplied_owner_slot == 0:
+        request["dataset"]["relations"][0]["tuple"].reverse()
+    before = deepcopy(request)
+    bound = bind_request_relations(request, artifact)
+    assert bound["dataset"]["relations"][0]["tuple"][owner_slot] == "unit-1"
+    assert bind_request_relations(bound, artifact) == bound
+    assert request == before
+    if owner_slot == supplied_owner_slot:
+        assert bound == before
+
+
+@settings(deadline=None)
+@given(
+    owner=OWNER_KINDS, typed=st.booleans(), evidence=st.integers(0, 3),
+    owner_slot=st.integers(0, 1), supplied_owner_slot=st.integers(0, 1),
+    pseudo=st.booleans(), contradictory=st.booleans(),
+)
+def test_generated_binding_invariant(
+    owner, typed, evidence, owner_slot, supplied_owner_slot, pseudo, contradictory,
+):
+    artifact = artifact_for(owner=owner, typed=typed, current_slot=owner_slot)
+    artifact["program"]["derived"].append({
+        "name": "threshold", "entity": "BroadcastThreshold",
+        "expr": {"kind": "input"},
+    })
+    request = request_for(["member-1", "member-1"], owner)
+    request["dataset"]["inputs"] = [
+        record for record in request["dataset"]["inputs"]
+        if (record["entity_id"] == "unit-1" and evidence & 1)
+        or (record["entity_id"] == "member-1" and evidence & 2)
+    ]
+    if pseudo:
+        request["dataset"]["inputs"].extend([
+            {"entity_id": entity_id, "entity": "BroadcastThreshold"}
+            for entity_id in ("unit-1", "member-1")
+        ])
+    if contradictory:
+        request["dataset"]["inputs"].extend([
+            {"entity_id": "unit-1", "entity": owner},
+            {"entity_id": "unit-1", "entity": "Person"},
+        ])
+    if supplied_owner_slot == 0:
+        for record in request["dataset"]["relations"]:
+            record["tuple"].reverse()
+    before = deepcopy(request)
+    if contradictory:
+        with pytest.raises(RelationBindingError, match="needs one input entity kind"):
+            bind_request_relations(request, artifact)
+    else:
+        expected = deepcopy(request)
+        if evidence & 2 or (typed and evidence & 1):
+            for record in expected["dataset"]["relations"]:
+                record["tuple"] = (
+                    ["unit-1", "member-1"] if owner_slot == 0 else ["member-1", "unit-1"]
+                )
+        bound = bind_request_relations(request, artifact)
+        assert bound == expected
+        assert bind_request_relations(bound, artifact) == bound
     assert request == before
 
 
@@ -695,3 +979,162 @@ def test_typed_count_only_preserves_everything_except_tuple_order(
         record["tuple"] = old["tuple"]
     assert restored == before
     assert request == before
+
+
+@settings(deadline=None)
+@given(
+    owner=OWNER_KINDS, typed=st.booleans(), owner_slot=st.integers(0, 1),
+    supplied_owner_slot=st.integers(0, 1), alias_depth=st.integers(0, 3),
+    versions=st.booleans(), optional_default=st.booleans(),
+)
+@example(
+    owner="Household", typed=False, owner_slot=0, supplied_owner_slot=0,
+    alias_depth=0, versions=False, optional_default=False,
+)
+@example(
+    owner="Household", typed=False, owner_slot=0, supplied_owner_slot=0,
+    alias_depth=1, versions=True, optional_default=True,
+)
+def test_broadcast_constants_and_defaults_do_not_identify_members(
+    owner, typed, owner_slot, supplied_owner_slot, alias_depth, versions, optional_default,
+):
+    artifact = artifact_for(owner=owner, typed=typed, current_slot=owner_slot)
+    one = {"kind": "literal", "value": {"kind": "integer", "value": 1}}
+    body = {"kind": "input_or_else", "name": "optional_threshold", "default": one["value"]} \
+        if optional_default else one
+    for index in range(alias_depth + 1):
+        name = f"threshold_{index}"
+        rule = {"name": name, "entity": owner, "expr": deepcopy(body)}
+        if versions:
+            rule["versions"] = [{"effective_from": "2026-01-01", "expr": deepcopy(body)}]
+            rule["expr"] = {"kind": "input", "name": "ignored_base"}
+        artifact["program"]["derived"].append(rule)
+        body = {"kind": "derived", "name": name}
+    artifact["program"]["derived"][0]["expr"]["where"] = {
+        "kind": "comparison", "left": body, "op": "gt", "right": one,
+    }
+    request = request_for(["member-1", "member-1"], owner)
+    if supplied_owner_slot == 0:
+        for record in request["dataset"]["relations"]:
+            record["tuple"].reverse()
+    before = deepcopy(request)
+    expected = deepcopy(request)
+    for record in expected["dataset"]["relations"]:
+        record["tuple"] = ["unit-1", "member-1"] if owner_slot == 0 else ["member-1", "unit-1"]
+    bound = bind_request_relations(request, artifact)
+    assert bound == expected
+    assert bind_request_relations(bound, artifact) == bound
+    assert request == before
+    if owner_slot == supplied_owner_slot:
+        assert bound == before
+
+
+@settings(deadline=None)
+@given(
+    owner=st.one_of(st.just("Person"), OWNER_KINDS), typed=st.booleans(),
+    owner_slot=st.integers(0, 1), supplied_owner_slot=st.integers(0, 1), predicate=st.booleans(),
+    owner_pseudo=st.booleans(), member_pseudo=st.booleans(),
+)
+@example(
+    owner="Person", typed=False, owner_slot=0, supplied_owner_slot=1,
+    predicate=True, owner_pseudo=True, member_pseudo=True,
+)
+def test_equal_endpoint_identities_preserve_supplied_tuple(
+    owner, typed, owner_slot, supplied_owner_slot, predicate, owner_pseudo, member_pseudo,
+):
+    artifact = artifact_for(owner=owner, typed=typed, current_slot=owner_slot)
+    if typed:
+        artifact["program"]["relations"][0]["slot_entities"] = [owner, owner]
+    if predicate:
+        artifact["program"]["derived"][0]["expr"]["where"] = {
+            "kind": "comparison", "op": "gt",
+            "left": {"kind": "derived", "name": "member_value"},
+            "right": {"kind": "literal", "value": {"kind": "integer", "value": 0}},
+        }
+        artifact["program"]["derived"].append({
+            "name": "member_value", "entity": owner, "expr": {"kind": "input"},
+        })
+    artifact["program"]["derived"].append({
+        "name": "broadcast", "entity": "BroadcastThreshold", "expr": {"kind": "input"},
+    })
+    request = request_for(["member-1", "member-1"], owner)
+    for record in request["dataset"]["inputs"]:
+        if record["entity_id"] == "member-1":
+            record["entity"] = owner
+    for enabled, entity_id in [(owner_pseudo, "unit-1"), (member_pseudo, "member-1")]:
+        if enabled:
+            request["dataset"]["inputs"].append({
+                "entity_id": entity_id, "entity": "BroadcastThreshold",
+            })
+    if supplied_owner_slot == 0:
+        for record in request["dataset"]["relations"]:
+            record["tuple"].reverse()
+    before = deepcopy(request)
+    bound = bind_request_relations(request, artifact)
+    assert bound == before
+    assert bind_request_relations(bound, artifact) == bound
+    assert request == before
+
+
+@settings(deadline=None)
+@given(
+    owner=OWNER_KINDS, typed=st.booleans(), outer_slot=st.integers(0, 1),
+    nested_slot=st.integers(0, 1), supplied_nested_slot=st.integers(0, 1),
+    optional_default=st.booleans(),
+)
+@example(
+    owner="Household", typed=False, outer_slot=0, nested_slot=0,
+    supplied_nested_slot=1, optional_default=False,
+)
+def test_same_kind_member_identity_scopes_nested_broadcast_predicates(
+    owner, typed, outer_slot, nested_slot, supplied_nested_slot, optional_default,
+):
+    artifact = artifact_for(owner=owner, typed=typed, current_slot=outer_slot)
+    program = artifact["program"]
+    if typed:
+        program["relations"][0]["slot_entities"] = [owner, owner]
+    payments = {"name": "payments", "arity": 2}
+    if typed:
+        payments["slot_entities"] = ["Person", owner]
+    program["relations"].append(payments)
+    one = {"kind": "literal", "value": {"kind": "integer", "value": 1}}
+    zero = {"kind": "literal", "value": {"kind": "integer", "value": 0}}
+    program["derived"].append({
+        "name": "threshold", "entity": owner, "expr": {
+            "kind": "input_or_else", "name": "optional_threshold", "default": one["value"],
+        } if optional_default else one,
+    })
+    program["derived"][0]["expr"]["where"] = {
+        "kind": "and", "items": [{
+            "kind": "comparison", "op": "gt", "right": zero,
+            "left": {"kind": "derived", "name": "threshold"},
+        }, {
+            "kind": "comparison", "op": "gt", "right": zero,
+            "left": {"kind": "count_related", "relation": "payments",
+                     "current_slot": nested_slot, "related_slot": 1 - nested_slot},
+        }],
+    }
+    request = request_for(["member-1"], owner)
+    request["dataset"]["inputs"][1]["entity"] = owner
+    request["dataset"]["inputs"].append({"entity_id": "payment-1", "entity": "Person"})
+    request["dataset"]["relations"][0]["tuple"] = (
+        ["unit-1", "member-1"] if outer_slot == 0 else ["member-1", "unit-1"]
+    )
+    request["dataset"]["relations"].append({
+        "name": "payments", "tuple": ["member-1", "payment-1"]
+        if supplied_nested_slot == 0 else ["payment-1", "member-1"],
+    })
+    before = deepcopy(request)
+    expected = deepcopy(request)
+    expected["dataset"]["relations"][1]["tuple"] = (
+        ["member-1", "payment-1"] if nested_slot == 0 else ["payment-1", "member-1"]
+    )
+    bound = bind_request_relations(request, artifact)
+    assert bound == expected
+    assert bind_request_relations(bound, artifact) == bound
+    assert request == before
+    constructed = relation_tuple(
+        artifact, "payments", owner_id="member-1", owner_kind=owner,
+        related_id="payment-1", related_kind="Person",
+    )
+    assert constructed == expected["dataset"]["relations"][1]["tuple"]
