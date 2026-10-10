@@ -3661,6 +3661,121 @@ def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
     assert row["idtl"] == 2
 
 
+def _taxsim_row_for_investment_income(**person_overrides):
+    """The TAXSIM row the campaign projects for one joint tax unit with a
+    child, plus the PolicyEngine variables it calculated."""
+    calculated: list[str] = []
+
+    class FakeSimulation:
+        def __init__(self, dataset):
+            assert dataset == "dataset"
+
+        def calculate(self, variable, period, map_to=None):
+            calculated.append(variable)
+            person_values = {
+                "person_id": [1, 2, 3],
+                "age": [40, 38, 10],
+                "is_tax_unit_head": [True, False, False],
+                "is_tax_unit_spouse": [False, True, False],
+                "employment_income": [60000.0, 15000.0, 0.0],
+                **person_overrides,
+            }
+            if variable == "tax_unit_id" and map_to == "person":
+                return [7, 7, 7]
+            if variable in person_values:
+                return person_values[variable]
+            return [0.0, 0.0, 0.0]
+
+    captured: dict = {}
+
+    class FakeResult:
+        def to_dict(self, orient):
+            return [{"taxsimid": 7, "staxbc": 2700.0, "siitax": 2270.13}]
+
+    class FakeRunner:
+        def __init__(self, frame):
+            captured["frame"] = frame
+
+        def run(self, show_progress=False):
+            return FakeResult()
+
+    state_tax_runner.calculate_taxsim_targets(
+        dataset="dataset",
+        raw_tax_units=pd.DataFrame({"tax_unit_id": [7]}),
+        raw_persons=pd.DataFrame(
+            {"person_id": [1, 2, 3], "person_tax_unit_id": [7, 7, 7]}
+        ),
+        routes=(TaxUnitRoute(7, 1, "UT", "49", 2.5, DISPOSITION_READY),),
+        year=2026,
+        microsimulation_factory=FakeSimulation,
+        taxsim_runner_factory=FakeRunner,
+    )
+    return captured["frame"].to_dict(orient="records")[0], calculated
+
+
+def test_calculate_taxsim_targets_reads_form_1040_lines_3a_3b_and_7a() -> None:
+    row, calculated = _taxsim_row_for_investment_income(
+        qualified_dividend_income=[3000.0, 500.0, 40.0],
+        non_qualified_dividend_income=[2000.0, 0.0, 60.0],
+        non_sch_d_capital_gains=[2000.0, 0.0, 300.0],
+        rental_income=[1000.0, 0.0, 0.0],
+        # The artifact's stored legacy column must never be read as line 3b.
+        dividend_income=[777.0, 777.0, 777.0],
+    )
+
+    # Line 3a (head + spouse) is TAXSIM's qualified-dividend column; the rest
+    # of line 3b rides in otherprop with the rent; the child's amounts stay
+    # off the filers' row.
+    assert row["dividends"] == 3500.0
+    assert row["otherprop"] == 1000.0 + 2000.0
+    # Line 7a (no Schedule D amounts in the unit) is a long-term gain.
+    assert row["ltcg"] == 2000.0
+    assert row["stcg"] == 0.0
+    assert "dividend_income" not in calculated
+    assert {"qualified_dividend_income", "non_qualified_dividend_income"} <= set(
+        calculated
+    )
+
+
+def test_calculate_taxsim_targets_folds_line_7a_onto_schedule_d() -> None:
+    # The spouse's Schedule D gain means the return files Schedule D, so the
+    # head's distributions are reported there (Form 1040 line 7, Exception 1
+    # fails); the TAXSIM row sums both either way.
+    row, _ = _taxsim_row_for_investment_income(
+        non_sch_d_capital_gains=[2000.0, 0.0, 300.0],
+        long_term_capital_gains=[0.0, 4000.0, 0.0],
+        short_term_capital_gains=[0.0, -500.0, 0.0],
+    )
+
+    assert row["ltcg"] == 6000.0
+    assert row["stcg"] == -500.0
+
+
+def test_taxsim_person_table_mirrors_the_case_loader() -> None:
+    from axiom_oracles.core.case import Concepts
+    from axiom_oracles.populations import populace_us
+
+    campaign = {
+        getattr(Concepts, key.upper()): variable
+        for key, variable in state_tax_runner._TAXSIM_PERSON_NON_WAGE_VARIABLES.items()
+    }
+    loader = {
+        **populace_us._PERSON_NON_WAGE_VARIABLES,
+        **populace_us._TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
+    }
+    # No tax projection reads the SSI benefit or resource facts.
+    for concept in (Concepts.SSI_BENEFITS, Concepts.SSI_COUNTABLE_RESOURCES):
+        loader.pop(concept)
+    assert campaign == loader
+    # Both read dividends from the same PUF split, outside their tables.
+    assert Concepts.DIVIDEND_INCOME not in campaign
+    assert Concepts.QUALIFIED_DIVIDEND_INCOME not in campaign
+    assert (
+        state_tax_runner.POPULACE_DIVIDEND_VARIABLES
+        is populace_us.POPULACE_DIVIDEND_VARIABLES
+    )
+
+
 def test_calculate_taxsim_targets_skips_unmapped_jurisdictions() -> None:
     class FakeSimulation:
         def __init__(self, dataset):

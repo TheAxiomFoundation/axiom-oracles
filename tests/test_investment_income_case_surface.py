@@ -100,6 +100,7 @@ from hypothesis import strategies as st
 from axiom_oracles.adapters.axiom.generic_inputs import attach_generic_inputs
 from axiom_oracles.adapters.axiom.tax_projection import (
     US_TAX_ORACLE_BRIDGE_TARGET,
+    US_TAX_ORACLE_PROGRAM_RULES,
     attach_axiom_tax_inputs_to_case,
 )
 from axiom_oracles.adapters.policyengine.runner import (
@@ -418,6 +419,40 @@ def test_worked_household_axiom_inputs() -> None:
         ]
         == 8_000
     )
+
+
+def test_axiom_bridge_takes_line_7a_as_an_input_wherever_gains_flow() -> None:
+    formulas = {
+        rule["name"]: rule["versions"][0]["formula"]
+        for rule in US_TAX_ORACLE_PROGRAM_RULES
+        if "versions" in rule
+    }
+    # An input now, not the old generated rule with formula "0".
+    assert "non_sch_d_capital_gains" not in formulas
+    # AGI (26 USC 61): the filers' line 7a, beside the Schedule D leaf.
+    assert (
+        "+ non_sch_d_capital_gains_for_agi "
+        in formulas["gross_income_before_social_security_benefits"]
+    )
+    assert (
+        "person_non_sch_d_capital_gains" in formulas["non_sch_d_capital_gains_for_agi"]
+    )
+    assert (
+        "filer_adjusted_earnings_of_tax_unit"
+        in formulas["non_sch_d_capital_gains_for_agi"]
+    )
+    # 199A(a)(2) net capital gain and the 1411 net gain (Form 8960 line 5a).
+    assert "non_sch_d_capital_gains" in formulas["adjusted_net_capital_gain_for_qbid"]
+    assert (
+        "non_sch_d_capital_gains"
+        in formulas[
+            "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception"
+        ]
+    )
+    # The worksheet lines already read it.
+    for line in ("capital_gains_worksheet_line_9", "capital_gains_worksheet_line_10"):
+        assert "non_sch_d_capital_gains" in formulas[line]
+    assert "person_non_sch_d_capital_gains" in formulas["person_agi_for_co_withholding"]
 
 
 def test_worked_household_benefit_mapping_reads_line_3b_once(tmp_path) -> None:

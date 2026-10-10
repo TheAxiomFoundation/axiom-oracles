@@ -592,8 +592,9 @@ POPULACE_DIVIDEND_VARIABLES = (
 # Loaded only for case_unit == "tax_unit" Cases, and fail closed. Household
 # Cases feed the benefit lanes, whose Axiom encodings read no capital gains
 # (the populace_input_mapping.yaml income lists carry none), while
-# PolicyEngine counts line 7a in AGI and so in Medicaid MAGI; carrying it on
-# household Cases would hand PolicyEngine income Axiom never sees.
+# PolicyEngine's medicaid_magi starts from AGI, which includes line 7a from
+# policyengine-us#8839 on; carrying it on household Cases would hand
+# PolicyEngine income Axiom never sees.
 _TAX_UNIT_PERSON_NON_WAGE_VARIABLES = {
     Concepts.NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS: "non_sch_d_capital_gains",
 }

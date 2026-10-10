@@ -505,6 +505,22 @@ def _child(**facts):
             5_000,
             id="dependent-amounts-are-not-the-filers",
         ),
+        pytest.param(
+            [
+                _head(
+                    **{
+                        Concepts.INTEREST_INCOME: 1_000,
+                        Concepts.NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS: 4_000,
+                        Concepts.RENTAL_INCOME: -10_000,
+                    }
+                ),
+                _child(**{Concepts.NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS: 900}),
+            ],
+            5_000,
+            id="line-7a-capital-gain-distributions",
+            # line 1 = 1,000; line 5 = Form 1040 line 7a = 4,000 (the filer's
+            # distributions, reported without Schedule D); line 13 = 0
+        ),
     ],
 )
 def test_case_surface_matches_pub_596_worksheet_1(people, expected):
@@ -656,6 +672,7 @@ CASE_FILER_AMOUNTS = st.fixed_dictionaries(
         "non_qualified_dividends": NON_NEGATIVE,
         "short_term": SIGNED,
         "long_term": SIGNED,
+        "capital_gain_distributions": NON_NEGATIVE,
         "rental": SIGNED,
     }
 )
@@ -679,6 +696,10 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, child):
             Concepts.QUALIFIED_DIVIDEND_INCOME: amounts["qualified_dividends"],
             Concepts.SHORT_TERM_CAPITAL_GAINS: amounts["short_term"],
             Concepts.LONG_TERM_CAPITAL_GAINS: amounts["long_term"],
+            # Form 1040 line 7a without Schedule D: Worksheet 1 line 5.
+            Concepts.NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS: amounts[
+                "capital_gain_distributions"
+            ],
             Concepts.RENTAL_INCOME: amounts["rental"],
         }
 
@@ -689,6 +710,7 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, child):
             "non_qualified_dividend_income": amounts["non_qualified_dividends"],
             "short_term_capital_gains": amounts["short_term"],
             "long_term_capital_gains": amounts["long_term"],
+            "non_sch_d_capital_gains": amounts["capital_gain_distributions"],
             "rental_income": amounts["rental"],
         }
 
