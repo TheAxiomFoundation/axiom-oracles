@@ -47,6 +47,7 @@ _PERSON_INCOME_CONCEPT_TO_PE = {
     Concepts.SOCIAL_SECURITY_BENEFITS: "social_security",
     Concepts.UNEMPLOYMENT_INSURANCE_INCOME: "unemployment_compensation",
     Concepts.RENTAL_INCOME: "rental_income",
+    Concepts.FARM_RENT_INCOME: "farm_rent_income",
     Concepts.SELF_EMPLOYMENT_INCOME: "self_employment_income",
 }
 
