@@ -12,7 +12,7 @@ from axiom_oracles.populations.populace_us import (
     PopulacePin,
     PopulaceUsCaseLoader,
     _PERSON_NON_WAGE_VARIABLES,
-    _TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
+    _STRICT_PERSON_NON_WAGE_VARIABLES,
     _clean_number,
     _resolve_populace_dataset,
     _scope_from_geography,
@@ -235,10 +235,14 @@ def test_loader_skips_geographically_unresolvable_records() -> None:
     assert [case.case_id for case in cases] == ["ecps-202"]
 
 
-def test_tax_unit_cases_carry_tax_exempt_interest_for_nonzero_persons() -> None:
+@pytest.mark.parametrize("case_unit", ["tax_unit", "household"])
+def test_cases_carry_tax_exempt_interest_for_nonzero_persons(case_unit) -> None:
+    """Both Case units carry the fact: tax-unit Cases feed the tax engines,
+    household Cases the benefit lanes, whose Axiom inputs read it wherever the
+    program's income definition counts it (axiom-oracles#567)."""
     cases = load_populace_us_cases(
         period="2026",
-        case_unit="tax_unit",
+        case_unit=case_unit,
         microsimulation_factory=lambda dataset: FakeMicrosimulation(dataset),
     )
 
@@ -250,7 +254,8 @@ def test_tax_unit_cases_carry_tax_exempt_interest_for_nonzero_persons() -> None:
     assert Concepts.TAX_EXEMPT_INTEREST_INCOME not in child.facts
 
 
-def test_tax_unit_tax_exempt_interest_keeps_the_sign_it_is_given() -> None:
+@pytest.mark.parametrize("case_unit", ["tax_unit", "household"])
+def test_tax_exempt_interest_keeps_the_sign_it_is_given(case_unit) -> None:
     """Same cleaning as the shared table: the loader never floors (the
     pinned artifact has no negative tax-exempt interest; floors belong to
     the projections)."""
@@ -262,42 +267,37 @@ def test_tax_unit_tax_exempt_interest_keeps_the_sign_it_is_given() -> None:
 
     cases = load_populace_us_cases(
         period="2026",
-        case_unit="tax_unit",
+        case_unit=case_unit,
         microsimulation_factory=factory,
     )
 
     assert cases[0].entities[0].facts[Concepts.TAX_EXEMPT_INTEREST_INCOME] == -40
 
 
-def test_household_cases_never_carry_or_load_tax_exempt_interest() -> None:
-    """Household Cases feed the benefit lanes, where the Axiom encodings do
-    not read tax-exempt interest yet; the loader must neither attach it nor
-    pay for calculating it."""
-    sims = []
+def test_household_and_tax_unit_cases_carry_the_same_person_amounts() -> None:
+    """The two Case units regroup one person table; each person's tax-exempt
+    interest is identical whichever unit carries it."""
 
-    def factory(dataset):
-        sim = FakeMicrosimulation(dataset)
-        sims.append(sim)
-        return sim
+    def amounts(case_unit):
+        cases = load_populace_us_cases(
+            period="2026",
+            case_unit=case_unit,
+            microsimulation_factory=lambda dataset: FakeMicrosimulation(dataset),
+        )
+        return sorted(
+            entity.fact(Concepts.TAX_EXEMPT_INTEREST_INCOME, 0)
+            for case in cases
+            for entity in case.entities
+        )
 
-    cases = load_populace_us_cases(
-        period="2026",
-        case_unit="household",
-        microsimulation_factory=factory,
-    )
-
-    assert cases
-    assert all(
-        Concepts.TAX_EXEMPT_INTEREST_INCOME not in entity.facts
-        for case in cases
-        for entity in case.entities
-    )
-    assert "tax_exempt_interest_income" not in sims[0].calls
+    assert amounts("household") == amounts("tax_unit") == [0, 700, 2_500]
 
 
-def test_tax_unit_loader_fails_closed_when_tax_exempt_interest_is_missing() -> None:
-    """A renamed or missing PolicyEngine variable must stop a tax-unit load,
-    not load every unit's tax-exempt interest as zero."""
+@pytest.mark.parametrize("case_unit", ["tax_unit", "household"])
+def test_loader_fails_closed_when_tax_exempt_interest_is_missing(case_unit) -> None:
+    """A renamed or missing PolicyEngine variable must stop the load, not
+    load every person's tax-exempt interest as zero: on household Cases a
+    silent zero would hide income from PolicyEngine and Axiom alike."""
 
     def factory(dataset):
         sim = FakeMicrosimulation(dataset)
@@ -307,7 +307,7 @@ def test_tax_unit_loader_fails_closed_when_tax_exempt_interest_is_missing() -> N
     with pytest.raises(RuntimeError, match="'tax_exempt_interest_income'"):
         load_populace_us_cases(
             period="2026",
-            case_unit="tax_unit",
+            case_unit=case_unit,
             microsimulation_factory=factory,
         )
 
@@ -316,7 +316,7 @@ def test_tax_exempt_interest_reads_the_policyengine_us_person_input() -> None:
     """The loader asks for exactly ``tax_exempt_interest_income``, which the
     installed policyengine-us defines as a Person, yearly, stored float input
     (no formula, so no aggregate alias can double-count it)."""
-    assert _TAX_UNIT_PERSON_NON_WAGE_VARIABLES == {
+    assert _STRICT_PERSON_NON_WAGE_VARIABLES == {
         Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
     }
     assert Concepts.TAX_EXEMPT_INTEREST_INCOME not in _PERSON_NON_WAGE_VARIABLES

@@ -107,6 +107,9 @@ mappings:
         - { fact: SELF_EMPLOYMENT_INCOME, scale: 0.6 }
       aggregate: sum_over_people
 
+  # Arizona's NA-vocabulary name for the unearned income 7 CFR 273.9(b)(2)
+  # counts; it carries the same sources as snap_total_monthly_unearned_income
+  # below, rent, dividends and interest (taxable and tax-exempt) included.
   - match: { kind: substring, value: countable_monthly_unearned_income }
     scope: household
     source:
@@ -118,8 +121,19 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
+        - RENTAL_INCOME
+        - DIVIDEND_INCOME
+        - QUALIFIED_DIVIDEND_INCOME
+        - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
       aggregate: sum_over_people
 
+  # Interest counts whatever its federal tax treatment: 7 CFR 273.9(b)(2)(v)
+  # lists "dividends, interest, royalties", and no 273.9(c) exclusion turns
+  # on 26 USC 103. A state that excludes interest under the 273.9(c)(19)
+  # option (Florida's ESS 1810.1000) does so through the separate
+  # snap_income_exclusions input of 7 CFR 273.10, not by shrinking this
+  # gross total (axiom-oracles#567).
   - match: { kind: substring, value: snap_total_monthly_unearned_income }
     scope: household
     source:
@@ -135,6 +149,7 @@ mappings:
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
       aggregate: sum_over_people
 
   - match: { kind: substring, value: snap_gross_monthly_income }
@@ -157,6 +172,7 @@ mappings:
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
       aggregate: sum_over_people
 
   - match: { kind: substring, value: snap_monthly_household_income }
@@ -175,6 +191,7 @@ mappings:
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
       aggregate: sum_over_people
 
   # ---------------------------------------------------------------------
@@ -514,6 +531,15 @@ mappings:
       threshold: 65
       from_facts: [PERSON_AGE, BLIND, DISABLED]
 
+  # Countable unearned income before the $20/month general exclusion
+  # (programs/us/ssi/fy-2026.yaml applies only 1382a(b)(2) to this slot).
+  # Interest and dividends are left out, taxable and tax-exempt alike:
+  # 42 USC 1382a(b)(23) excludes "interest or dividend income from
+  # resources—(A) not excluded under section 1382b(a) ..., or (B) excluded
+  # pursuant to Federal law other than section 1382b(a)" (20 CFR
+  # 416.1124(c)(22)), and the deposits, stocks and bonds that pay them are
+  # countable resources (20 CFR 416.1201(b)). rulespec-us does not encode
+  # (b)(23) yet, so this slot carries the exclusion (axiom-oracles#567).
   - match: { kind: suffix, value: annual_income_not_paid_on_basis_of_need }
     scope: person
     source:
@@ -522,9 +548,6 @@ mappings:
       from_facts:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
-        - INTEREST_INCOME
-        - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
 
@@ -710,6 +733,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -821,6 +845,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -835,6 +860,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -893,6 +919,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1084,6 +1111,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1098,6 +1126,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1112,6 +1141,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1154,6 +1184,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1235,8 +1266,8 @@ mappings:
       kind: derived
       transform: monthly
       aggregate: sum_over_people
-      from_facts: [SOCIAL_SECURITY_BENEFITS, INTEREST_INCOME, DIVIDEND_INCOME,
-        QUALIFIED_DIVIDEND_INCOME]
+      from_facts: [SOCIAL_SECURITY_BENEFITS, INTEREST_INCOME,
+        TAX_EXEMPT_INTEREST_INCOME, DIVIDEND_INCOME, QUALIFIED_DIVIDEND_INCOME]
 
   # ---------------------------------------------------------------------
   # MN TANF / MFIP (us-mn/tanf program) — Combined Manual 0022.12.
@@ -1289,6 +1320,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1305,6 +1337,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1319,6 +1352,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1335,6 +1369,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1383,6 +1418,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1399,6 +1435,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1582,6 +1619,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
@@ -1664,6 +1702,7 @@ mappings:
         - SOCIAL_SECURITY_BENEFITS
         - PENSION_INCOME
         - INTEREST_INCOME
+        - TAX_EXEMPT_INTEREST_INCOME
         - DIVIDEND_INCOME
         - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
