@@ -24,7 +24,7 @@ from typing import Any, Literal
 from ..bridges.population import POPULACE_PINS as _CERTIFIED_POPULACE_PINS
 from ..core.case import Case, Concepts, Entity
 from ..core.geography import GeographyScope, normalize_scope, scope_contains
-from ..core.investment_income import fold_capital_gain_distributions_into_schedule_d
+from ..core.investment_income import fold_tax_unit_returns
 
 
 # The certified populace-us artifact is the standing US population: Enhanced
@@ -252,9 +252,19 @@ class PopulaceUsCaseLoader:
                 people_by_tax_unit[person.tax_unit_id].append(person)
             for tax_unit_id, tax_unit_people in people_by_tax_unit.items():
                 # Form 1040 line 7 Exception 1: a return with Schedule D
-                # amounts reports its capital gain distributions there.
-                folded = fold_capital_gain_distributions_into_schedule_d(
-                    person.non_wage_income for person in tax_unit_people
+                # amounts reports its capital gain distributions there. The
+                # filers share a return; a dependent's gains are her own.
+                folded = fold_tax_unit_returns(
+                    [
+                        person.non_wage_income
+                        for person in tax_unit_people
+                        if person.is_tax_unit_head or person.is_tax_unit_spouse
+                    ],
+                    [
+                        person.non_wage_income
+                        for person in tax_unit_people
+                        if not (person.is_tax_unit_head or person.is_tax_unit_spouse)
+                    ],
                 )
                 cases.append(
                     Case(
@@ -601,7 +611,7 @@ _TAX_UNIT_PERSON_NON_WAGE_VARIABLES = {
 
 #: Case metadata key recording how many tax-unit members had their Form 1040
 #: line 7a capital gain distributions moved onto Schedule D (long-term capital
-#: gains) because the tax unit also carries Schedule D amounts. Present only
+#: gains) because their return also carries Schedule D amounts. Present only
 #: when nonzero.
 SCHEDULE_D_FOLD_METADATA_KEY = "capital_gain_distributions_folded_into_schedule_d"
 

@@ -26,7 +26,10 @@ The Case carries these amounts the way Form 1040 (2025) reports them:
   amounts reported on Schedule D, and 26 USC 852(b)(3)(B) treats a capital
   gain dividend "as a gain from the sale or exchange of a capital asset held
   for more than 1 year". :func:`fold_capital_gain_distributions_into_schedule_d`
-  applies that rule to a producer's tax unit.
+  applies that rule to one return, :func:`fold_tax_unit_returns` to a
+  producer's tax unit (its filers, then each dependent), and
+  :func:`with_schedule_d_fold` to the people a tax projection is about to
+  price.
 
 Where the amounts flow on the 2025 return (each engine must follow them):
 line 3b and line 7a both enter total income (the Social Security Benefits
@@ -46,7 +49,7 @@ ordinary dividends are never less than the qualified part.
 from __future__ import annotations
 
 from collections.abc import Iterable, Mapping, MutableMapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import math
 from typing import Any
 
@@ -128,15 +131,15 @@ def normalized_investment_income_facts(facts: Mapping[str, Any]) -> dict[str, An
 def fold_capital_gain_distributions_into_schedule_d(
     members: Iterable[MutableMapping[str, Any]],
 ) -> int:
-    """Move a tax unit's line 7a distributions onto Schedule D when it files one.
+    """Move one return's line 7a distributions onto Schedule D when it files one.
 
-    ``members`` are the mutable fact mappings of one tax unit's people. When
-    any member carries a Schedule D amount (a nonzero short- or long-term
-    capital gain or loss), Exception 1 does not apply, so each member's
-    capital gain distributions are added to that member's long-term capital
-    gains (26 USC 852(b)(3)(B)) and the no-Schedule-D fact is removed.
-    Every engine aggregates capital gains over the tax unit, so folding at
-    the tax unit guarantees no engine sees both paths at once. Returns the
+    ``members`` are the mutable fact mappings of the people on one return:
+    the filers (head and spouse) of a tax unit, or one dependent, whose
+    capital gains belong on the dependent's own return. When any of them
+    carries a Schedule D amount (a nonzero short- or long-term capital gain
+    or loss), Exception 1 does not apply, so each member's capital gain
+    distributions are added to that member's long-term capital gains
+    (26 USC 852(b)(3)(B)) and the no-Schedule-D fact is removed. Returns the
     number of members whose distributions were folded.
     """
 
@@ -159,6 +162,48 @@ def fold_capital_gain_distributions_into_schedule_d(
         )
         folded += 1
     return folded
+
+
+def fold_tax_unit_returns(
+    filers: Iterable[MutableMapping[str, Any]],
+    others: Iterable[MutableMapping[str, Any]],
+) -> int:
+    """Fold a tax unit return by return: the filers together, then each
+    other member alone. Returns the number of members folded."""
+
+    folded = fold_capital_gain_distributions_into_schedule_d(filers)
+    for member in others:
+        folded += fold_capital_gain_distributions_into_schedule_d([member])
+    return folded
+
+
+def with_schedule_d_fold(
+    people: Iterable[Entity],
+    filers: Iterable[Entity | None],
+) -> list[Entity]:
+    """A tax unit's people with line 7a folded onto Schedule D, per return.
+
+    Every tax projection prices a Case's people as one tax unit and starts
+    from this list, so a Case whose filers carry both line 7a and Schedule D
+    amounts (which Exception 1 rules out) is priced the same way by every
+    engine. ``filers`` are the head and spouse among ``people`` (``None``
+    entries are ignored). The entities are returned as they are when nothing
+    is folded.
+    """
+
+    people = list(people)
+    filer_ids = {id(person) for person in filers if person is not None}
+    facts = [dict(person.facts) for person in people]
+    folded = fold_tax_unit_returns(
+        [f for person, f in zip(people, facts, strict=True) if id(person) in filer_ids],
+        [f for person, f in zip(people, facts, strict=True) if id(person) not in filer_ids],
+    )
+    if not folded:
+        return people
+    return [
+        replace(person, facts=person_facts)
+        for person, person_facts in zip(people, facts, strict=True)
+    ]
 
 
 def _fact(person: Entity | Mapping[str, Any], concept: str) -> float:

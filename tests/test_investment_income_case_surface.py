@@ -74,15 +74,19 @@ Invariants (property-tested, derandomized):
    ones that violate line 3a <= line 3b or carry negative amounts.
 2. In every view: 0 <= qualified <= ordinary; PolicyEngine's dividend_income
    alias equals qualified + non-qualified for every person.
-3. Raising line 7a by d moves exactly the line 7a inputs, each by d.
+3. Raising a filer's capital gain distributions by d moves exactly the
+   line 7a inputs, each by d, or exactly the Schedule D long-term inputs
+   when the return files Schedule D.
 4. Moving d from non-qualified to qualified at fixed line 3b moves only the
    qualified inputs (+d) and their non-qualified complements (-d); nothing
    that feeds AGI moves.
-5. A dependent's dividends and line 7a never reach the filers' TAXSIM row,
-   Tax-Calculator row, or the Axiom filer sums.
-6. The producer fold conserves each tax unit's long-term gain plus line 7a,
-   is idempotent, and leaves no tax unit with both line 7a and Schedule D
-   amounts.
+5. A dependent's dividends, line 7a and Schedule D amounts never reach the
+   filers' TAXSIM row, Tax-Calculator row, or the Axiom filer sums.
+6. The Schedule D fold (per return: the filers together, each dependent
+   alone) conserves long-term gain plus line 7a, is idempotent, and leaves
+   no return with both line 7a and Schedule D amounts. Every projection
+   applies it itself: a Case and the same Case folded in advance reach each
+   engine as identical inputs.
 7. No benefit income list sums QUALIFIED_DIVIDEND_INCOME beside
    DIVIDEND_INCOME (that would count line 3a twice).
 """
@@ -106,6 +110,7 @@ from axiom_oracles.adapters.axiom.tax_projection import (
 from axiom_oracles.adapters.policyengine.runner import (
     PolicyEngineRunner,
     _person_income_inputs,
+    _tax_unit_people,
 )
 from axiom_oracles.adapters.taxcalc.projection import taxcalc_input_for_case
 from axiom_oracles.adapters.taxsim.projection import taxsim_input_for_case
@@ -113,10 +118,12 @@ from axiom_oracles.core.case import Case, Concepts, Entity
 from axiom_oracles.core.investment_income import (
     Dividends,
     fold_capital_gain_distributions_into_schedule_d,
+    fold_tax_unit_returns,
     normalized_investment_income_facts,
     person_dividends,
     person_non_schedule_d_capital_gain_distributions,
     sum_dividends,
+    with_schedule_d_fold,
 )
 
 PROPERTY_SETTINGS = settings(max_examples=300, deadline=None, derandomize=True)
@@ -242,6 +249,34 @@ def test_fold_applies_form_1040_line_7_exception_1(members, folded, expected) ->
     assert members == expected
 
 
+def test_a_dependents_schedule_d_does_not_move_the_filers_line_7a() -> None:
+    # Schedule D is per return: the child's capital loss is on her own.
+    filers = [{CGD: 2_000}, {CGD: 100}]
+    child = {CGD: 300, STCG: -400}
+    assert fold_tax_unit_returns(filers, [child]) == 1
+    assert filers == [{CGD: 2_000}, {CGD: 100}]
+    assert child == {STCG: -400, LTCG: 300}
+
+
+def test_with_schedule_d_fold_keeps_entities_it_does_not_change() -> None:
+    head = _person("person-1", "HeadOfHousehold", 40, **{CGD: 2_000})
+    child = _person("person-2", "Child", 9, **{CGD: 300})
+    assert with_schedule_d_fold([head, child], [head, None]) == [head, child]
+    assert with_schedule_d_fold([head, child], [head, None])[0] is head
+
+    spouse = _person("person-3", "Spouse", 41, **{LTCG: -5_000})
+    folded = with_schedule_d_fold([head, spouse, child], [head, spouse])
+    assert [person.entity_id for person in folded] == [
+        "person-1",
+        "person-3",
+        "person-2",
+    ]
+    assert folded[0].facts[LTCG] == 2_000 and CGD not in folded[0].facts
+    assert folded[2].facts[CGD] == 300
+    # The input entities are not mutated.
+    assert head.facts[CGD] == 2_000 and LTCG not in head.facts
+
+
 # ---------------------------------------------------------------------------
 # Decoders: each engine's input representation back to the Form 1040 lines.
 # ---------------------------------------------------------------------------
@@ -259,25 +294,64 @@ def _filers(case):
     ]
 
 
+def _dependents(case):
+    return [person for person in case.entities if person not in _filers(case)]
+
+
+def _number(person, concept):
+    value = person.fact(concept, 0)
+    return float(value) if value not in (None, "") else 0.0
+
+
+def _return_lines(people):
+    """Form 1040 lines for the people on one return, read straight off the
+    facts: an independent statement of the normalization and of line 7's
+    Exception 1 that the module docstring quotes."""
+    qualified = sum(max(0.0, _number(p, QDIV)) for p in people)
+    ordinary = sum(max(0.0, _number(p, DIV), _number(p, QDIV)) for p in people)
+    distributions = sum(max(0.0, _number(p, CGD)) for p in people)
+    files_schedule_d = any(_number(p, STCG) or _number(p, LTCG) for p in people)
+    return {
+        "ordinary": ordinary,
+        "qualified": qualified,
+        "non_qualified": ordinary - qualified,
+        # With any Schedule D amount Exception 1 fails: the distributions
+        # are Schedule D long-term gain, not a line 7a entry of their own.
+        "line_7a": 0.0 if files_schedule_d else distributions,
+        "schedule_d_long_term": sum(_number(p, LTCG) for p in people)
+        + (distributions if files_schedule_d else 0.0),
+    }
+
+
+def _policyengine_rows(case):
+    """Person inputs exactly as the runner's three input paths build them."""
+    return {
+        person.entity_id: _person_income_inputs(person)
+        for person in _tax_unit_people(case)
+    }
+
+
 def _policyengine_view(case, people):
-    inputs = [_person_income_inputs(person) for person in people]
+    rows = _policyengine_rows(case)
+    inputs = [rows[person.entity_id] for person in people]
     return {
         "ordinary": sum(row["dividend_income"] for row in inputs),
         "qualified": sum(row["qualified_dividend_income"] for row in inputs),
         "non_qualified": sum(row["non_qualified_dividend_income"] for row in inputs),
         "line_7a": sum(row["non_sch_d_capital_gains"] for row in inputs),
+        "schedule_d_long_term": sum(row["long_term_capital_gains"] for row in inputs),
     }
 
 
 def _taxsim_view(case):
     row = taxsim_input_for_case(case)
-    rental = sum(float(p.fact(RENT, 0) or 0) for p in _filers(case))
-    long_term = sum(float(p.fact(LTCG, 0) or 0) for p in _filers(case))
+    rental = sum(_number(p, RENT) for p in _filers(case))
     return {
         "ordinary": row["dividends"] + (row["otherprop"] - rental),
         "qualified": row["dividends"],
         "non_qualified": row["otherprop"] - rental,
-        "line_7a": row["ltcg"] - long_term,
+        # TAXSIM has one long-term column for both paths.
+        "long_term_and_7a": row["ltcg"],
     }
 
 
@@ -288,6 +362,7 @@ def _taxcalc_view(case):
         "qualified": row["e00650"],
         "non_qualified": row["e00600"] - row["e00650"],
         "line_7a": row["e01100"],
+        "schedule_d_long_term": row["p23250"],
     }
 
 
@@ -306,24 +381,9 @@ def _axiom_filer_view(case):
         "line_7a": records[
             ("tax_unit", f"{BRIDGE}#input.filer_non_sch_d_capital_gains")
         ],
-    }
-
-
-def _reference(people):
-    """Form 1040 lines read straight off the facts: an independent statement
-    of the normalization the module docstring gives."""
-
-    def number(person, concept):
-        value = person.fact(concept, 0)
-        return float(value) if value not in (None, "") else 0.0
-
-    qualified = sum(max(0.0, number(p, QDIV)) for p in people)
-    ordinary = sum(max(0.0, number(p, DIV), number(p, QDIV)) for p in people)
-    return {
-        "ordinary": ordinary,
-        "qualified": qualified,
-        "non_qualified": ordinary - qualified,
-        "line_7a": sum(max(0.0, number(p, CGD)) for p in people),
+        "schedule_d_long_term": records[
+            ("tax_unit", f"{BRIDGE}#input.filer_long_term_capital_gains")
+        ],
     }
 
 
@@ -455,7 +515,11 @@ def test_axiom_bridge_takes_line_7a_as_an_input_wherever_gains_flow() -> None:
     assert "person_non_sch_d_capital_gains" in formulas["person_agi_for_co_withholding"]
 
 
-def test_worked_household_benefit_mapping_reads_line_3b_once(tmp_path) -> None:
+@pytest.fixture(scope="module")
+def benefit_program(tmp_path_factory) -> Path:
+    """A compiled program with one slot the mapping fills from the income
+    lists: `snap_gross_monthly_income` (earned income, benefits, rent,
+    dividends and interest, summed over people, monthly)."""
     compiled = {
         "program": {
             "derived": [
@@ -475,17 +539,94 @@ def test_worked_household_benefit_mapping_reads_line_3b_once(tmp_path) -> None:
             ]
         }
     }
-    compiled_path = tmp_path / "benefit.compiled.json"
-    compiled_path.write_text(json.dumps(compiled))
-    [projected] = attach_generic_inputs([WORKED], compiled_program_path=compiled_path)
+    path = tmp_path_factory.mktemp("benefit") / "benefit.compiled.json"
+    path.write_text(json.dumps(compiled))
+    return path
+
+
+def _benefit_gross_monthly_income(case, compiled_path) -> float:
+    [projected] = attach_generic_inputs([case], compiled_program_path=compiled_path)
     [record] = [
         item
         for item in projected.metadata["axiom_input_records"]
         if item["name"].endswith("#input.snap_gross_monthly_income")
     ]
+    return float(record["value"]["value"])
+
+
+def test_worked_household_benefit_mapping_reads_line_3b_once(benefit_program) -> None:
     # Earned 60,000 + rent 1,000 + line 3b (5,000 + the child's 700), counted
     # once (not 5,000 + 3,000 + 700 + 700), monthly.
-    assert float(record["value"]["value"]) == pytest.approx(66_700 / 12, abs=0.01)
+    assert _benefit_gross_monthly_income(WORKED, benefit_program) == pytest.approx(
+        66_700 / 12, abs=0.01
+    )
+
+
+def test_benefit_mapping_reads_a_qualified_only_row_as_line_3b(benefit_program) -> None:
+    # Line 3a without line 3b is still dividends: every tax projection reads
+    # it as 3b = 3a, so the benefit mapping must too.
+    case = _case(_person("person-1", "HeadOfHousehold", 40, **{QDIV: 1_200}))
+    assert _benefit_gross_monthly_income(case, benefit_program) == pytest.approx(100)
+    assert _person_income_inputs(case.entities[0])["dividend_income"] == 1_200
+
+
+# A joint return with a capital loss: Exception 1 fails, so both spouses'
+# distributions are Schedule D long-term gain and net against the loss. The
+# child's distributions stay on her own line 7a.
+MIXED = _case(
+    _person(
+        "person-1",
+        "HeadOfHousehold",
+        44,
+        **{Concepts.YEARLY_EARNED_INCOME: 50_000, CGD: 2_000, LTCG: -5_000},
+    ),
+    _person("person-2", "Spouse", 42, **{CGD: 500}),
+    _person("person-3", "Child", 11, **{CGD: 300}),
+)
+
+
+def test_mixed_return_nets_distributions_on_schedule_d_in_every_engine() -> None:
+    taxsim = taxsim_input_for_case(MIXED)
+    assert taxsim["ltcg"] == -2_500  # -5,000 + 2,000 + 500
+
+    taxcalc = taxcalc_input_for_case(MIXED)
+    assert taxcalc["p23250"] == -2_500
+    assert taxcalc["e01100"] == 0
+
+    situation = PolicyEngineRunner()._build_situation_from_case(MIXED)["people"]
+    assert situation["person-1"]["long_term_capital_gains"] == {2026: -3_000}
+    assert situation["person-1"]["non_sch_d_capital_gains"] == {2026: 0}
+    assert situation["person-2"]["long_term_capital_gains"] == {2026: 500}
+    assert situation["person-2"]["non_sch_d_capital_gains"] == {2026: 0}
+    assert situation["person-3"]["non_sch_d_capital_gains"] == {2026: 300}
+    household = PolicyEngineRunner()._build_household_calculator_input_from_case(MIXED)
+    assert [person["long_term_capital_gains"] for person in household["people"]] == [
+        -3_000,
+        500,
+        0,
+    ]
+
+    records = _axiom_records(MIXED)
+    assert (
+        records[("tax_unit", f"{BRIDGE}#input.filer_long_term_capital_gains")] == -2_500
+    )
+    assert records[("tax_unit", f"{BRIDGE}#input.filer_non_sch_d_capital_gains")] == 0
+    assert records[("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains")] == 300
+    assert (
+        records[("person-1", f"{BRIDGE}#input.person_long_term_capital_gains")]
+        == -3_000
+    )
+    assert records[("person-1", f"{BRIDGE}#input.person_non_sch_d_capital_gains")] == 0
+    # Worksheet 1 line 5: the return's line 7a is a loss, enter -0-.
+    assert (
+        records[
+            (
+                "tax_unit",
+                "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
+            )
+        ]
+        == 0
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -535,10 +676,18 @@ def _approx(view):
 @given(case=_tax_unit_cases())
 def test_property_every_engine_sees_the_same_filer_lines(case) -> None:
     filers = _filers(case)
-    reference = _reference(filers)
+    reference = _return_lines(filers)
     assert _policyengine_view(case, filers) == _approx(reference)
-    assert _taxsim_view(case) == _approx(reference)
     assert _taxcalc_view(case) == _approx(reference)
+    assert _taxsim_view(case) == _approx(
+        {
+            "ordinary": reference["ordinary"],
+            "qualified": reference["qualified"],
+            "non_qualified": reference["non_qualified"],
+            "long_term_and_7a": reference["line_7a"]
+            + reference["schedule_d_long_term"],
+        }
+    )
     axiom = _axiom_filer_view(case)
     assert axiom == _approx({k: reference[k] for k in axiom})
 
@@ -547,26 +696,34 @@ def test_property_every_engine_sees_the_same_filer_lines(case) -> None:
 @given(case=_tax_unit_cases())
 def test_property_member_sums_agree_where_engines_sum_every_member(case) -> None:
     people = list(case.entities)
-    reference = _reference(people)
+    # The filers share a return; each dependent's gains are her own return.
+    returns = [_return_lines(_filers(case))] + [
+        _return_lines([dependent]) for dependent in _dependents(case)
+    ]
+    total = {key: sum(lines[key] for lines in returns) for key in returns[0]}
     pe = _policyengine_view(case, people)
+    assert pe == _approx(total)
     records = _axiom_records(case)
     assert records[
         ("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains")
-    ] == pytest.approx(pe["line_7a"])
+    ] == pytest.approx(total["line_7a"])
+    assert records[
+        ("tax_unit", f"{BRIDGE}#input.capital_gains_tax_long_term_capital_gains")
+    ] == pytest.approx(total["schedule_d_long_term"])
     assert records[
         ("tax_unit", f"{BRIDGE}#input.capital_gains_tax_qualified_dividend_income")
-    ] == pytest.approx(pe["qualified"])
+    ] == pytest.approx(total["qualified"])
     assert records[
         ("tax_unit", "us:statutes/26/1411#input.dividend_income")
-    ] == pytest.approx(reference["ordinary"])
-    long_term = sum(float(p.fact(LTCG, 0) or 0) for p in people)
+    ] == pytest.approx(total["ordinary"])
+    # 26 USC 1222(3) long-term gain for the encoded 1(h) module: both paths.
     assert records[
         ("tax_unit", "us:statutes/26/1/h#input.long_term_capital_gains")
-    ] == pytest.approx(long_term + reference["line_7a"])
+    ] == pytest.approx(total["schedule_d_long_term"] + total["line_7a"])
     for person in people:
         assert records[
             (person.entity_id, f"{BRIDGE}#input.person_dividend_income")
-        ] == pytest.approx(_reference([person])["ordinary"])
+        ] == pytest.approx(_return_lines([person])["ordinary"])
 
 
 @PROPERTY_SETTINGS
@@ -612,29 +769,44 @@ def test_property_line_7a_moves_exactly_its_inputs(case, bump, spouse) -> None:
     person = filers[-1] if spouse else filers[0]
     current = person_non_schedule_d_capital_gain_distributions(person)
     bumped = _with_fact(case, person.entity_id, CGD, current + bump)
+    # With Schedule D amounts on the return the distributions are long-term
+    # gain there; otherwise they are line 7a.
+    on_schedule_d = any(_number(p, STCG) or _number(p, LTCG) for p in filers)
 
     taxsim = _changed(taxsim_input_for_case(case), taxsim_input_for_case(bumped))
     assert set(taxsim) == {"ltcg"}
     assert taxsim["ltcg"][1] - taxsim["ltcg"][0] == pytest.approx(bump)
 
     taxcalc = _changed(taxcalc_input_for_case(case), taxcalc_input_for_case(bumped))
-    assert set(taxcalc) == {"e01100"}
-    assert taxcalc["e01100"][1] - taxcalc["e01100"][0] == pytest.approx(bump)
+    column = "p23250" if on_schedule_d else "e01100"
+    assert set(taxcalc) == {column}
+    assert taxcalc[column][1] - taxcalc[column][0] == pytest.approx(bump)
 
     pe = _changed(
-        _person_income_inputs(person),
-        _person_income_inputs(bumped.entities[case.entities.index(person)]),
+        _policyengine_rows(case)[person.entity_id],
+        _policyengine_rows(bumped)[person.entity_id],
     )
-    assert set(pe) == {"non_sch_d_capital_gains"}
+    assert set(pe) == {
+        "long_term_capital_gains" if on_schedule_d else "non_sch_d_capital_gains"
+    }
 
     axiom = _changed(_axiom_records(case), _axiom_records(bumped))
-    exact = {
-        ("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains"),
-        ("tax_unit", f"{BRIDGE}#input.filer_non_sch_d_capital_gains"),
+    both_paths = {
         ("tax_unit", "us:statutes/26/1/h#input.long_term_capital_gains"),
         ("tax_unit", "us:tax/federal-income-tax#input.long_term_capital_gains"),
-        (person.entity_id, f"{BRIDGE}#input.person_non_sch_d_capital_gains"),
     }
+    if on_schedule_d:
+        exact = both_paths | {
+            ("tax_unit", f"{BRIDGE}#input.capital_gains_tax_long_term_capital_gains"),
+            ("tax_unit", f"{BRIDGE}#input.filer_long_term_capital_gains"),
+            (person.entity_id, f"{BRIDGE}#input.person_long_term_capital_gains"),
+        }
+    else:
+        exact = both_paths | {
+            ("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains"),
+            ("tax_unit", f"{BRIDGE}#input.filer_non_sch_d_capital_gains"),
+            (person.entity_id, f"{BRIDGE}#input.person_non_sch_d_capital_gains"),
+        }
     eitc = (
         "tax_unit",
         "us:tax/federal-income-tax#input.eitc_relevant_investment_income",
@@ -643,8 +815,8 @@ def test_property_line_7a_moves_exactly_its_inputs(case, bump, spouse) -> None:
     for key in exact:
         assert axiom[key][1] - axiom[key][0] == pytest.approx(bump)
     if eitc in axiom:
-        # Worksheet 1 line 5 floors a loss at zero, so line 7a can raise
-        # line 14 by less than the bump, never by more.
+        # Worksheet 1 line 5 floors a loss at zero, so the distributions can
+        # raise line 14 by less than the bump, never by more.
         assert 0 < axiom[eitc][1] - axiom[eitc][0] <= bump + 1e-6
 
 
@@ -714,7 +886,9 @@ def test_property_dependent_income_never_reaches_filer_rows(case, child) -> None
 
 @PROPERTY_SETTINGS
 @given(case=_tax_unit_cases())
-def test_property_benefit_mapping_reads_what_policyengine_reads(case) -> None:
+def test_property_benefit_mapping_reads_what_policyengine_reads(
+    case, benefit_program
+) -> None:
     for person in case.entities:
         normalized = normalized_investment_income_facts(person.facts)
         pe = _person_income_inputs(person)
@@ -722,6 +896,17 @@ def test_property_benefit_mapping_reads_what_policyengine_reads(case) -> None:
         assert float(normalized.get(QDIV, 0)) == pytest.approx(
             pe["qualified_dividend_income"]
         )
+    # Through the mapping itself: the income list's dividend term is exactly
+    # the dividend_income PolicyEngine is given, for every member.
+    annual = sum(
+        float(person.fact(Concepts.YEARLY_EARNED_INCOME, 0) or 0)
+        + float(person.fact(RENT, 0) or 0)
+        + _person_income_inputs(person)["dividend_income"]
+        for person in case.entities
+    )
+    assert _benefit_gross_monthly_income(case, benefit_program) == pytest.approx(
+        annual / 12, abs=0.011
+    )
 
 
 MEMBER = st.fixed_dictionaries(
@@ -755,6 +940,24 @@ def test_property_fold_conserves_and_is_idempotent(members) -> None:
     once = [dict(row) for row in members]
     assert fold_capital_gain_distributions_into_schedule_d(members) == 0
     assert members == once
+
+
+@PROPERTY_SETTINGS
+@given(case=_tax_unit_cases())
+def test_property_projections_fold_schedule_d_themselves(case) -> None:
+    """A Case and the same Case folded in advance reach every engine as
+    identical inputs: the Schedule D fold is part of each projection, not a
+    courtesy of the producer."""
+    folded = _case(*with_schedule_d_fold(case.entities, _filers(case)))
+
+    assert taxsim_input_for_case(folded) == taxsim_input_for_case(case)
+    assert taxcalc_input_for_case(folded) == taxcalc_input_for_case(case)
+    assert _axiom_records(folded) == _axiom_records(case)
+    assert _policyengine_rows(folded) == _policyengine_rows(case)
+    # And the folded Case never carries both paths on one return.
+    for people in ([*_filers(folded)], *([d] for d in _dependents(folded))):
+        files_schedule_d = any(_number(p, STCG) or _number(p, LTCG) for p in people)
+        assert not (files_schedule_d and any(_number(p, CGD) > 0 for p in people))
 
 
 def test_sum_dividends_adds_people() -> None:

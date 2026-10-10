@@ -9,6 +9,7 @@ from ...core.investment_income import (
     person_non_schedule_d_capital_gain_distributions,
     sum_dividends,
     sum_non_schedule_d_capital_gain_distributions,
+    with_schedule_d_fold,
 )
 from .runner import (
     AXIOM_INPUT_RECORD_OVERLAYS_METADATA_KEY,
@@ -3478,6 +3479,10 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
     people = _people(case)
     if not people:
         raise RuntimeError("Axiom federal tax projection requires at least one person.")
+    # Line 7a joins Schedule D on a return that files one
+    # (core/investment_income); relations, ages and earnings are untouched,
+    # so _tax_filers picks the same people afterwards.
+    people = with_schedule_d_fold(people, _tax_filers(people))
 
     records = _tax_unit_input_records(case, people)
     records.extend(_person_input_records(people))

@@ -10,6 +10,7 @@ from ...core.investment_income import (
     person_non_schedule_d_capital_gain_distributions,
     sum_dividends,
     sum_non_schedule_d_capital_gain_distributions,
+    with_schedule_d_fold,
 )
 
 
@@ -66,6 +67,11 @@ def taxcalc_input_for_case(
             "Tax-Calculator projection requires at least one person entity."
         )
 
+    # Line 7a joins Schedule D on a return that files one
+    # (core/investment_income); relations and ages are untouched, so the
+    # filers are the same people before and after.
+    head = _head(people)
+    people = with_schedule_d_fold(people, (head, _spouse(people, head)))
     head = _head(people)
     spouse = _spouse(people, head)
     dependents = [

@@ -296,12 +296,13 @@ def test_loader_carries_line_7a_on_tax_unit_cases_only() -> None:
     assert "non_sch_d_capital_gains" not in household_sim.calculated
 
 
-def test_loader_moves_line_7a_onto_schedule_d_when_the_tax_unit_files_one() -> None:
+def test_loader_moves_line_7a_onto_schedule_d_when_the_return_files_one() -> None:
     cases, _ = _load(
         "tax_unit",
         non_sch_d_capital_gains=[2_000, 300, 500],
-        # Tax unit 1001 has a Schedule D amount (the child's short-term
-        # loss), so Exception 1 fails for it; tax unit 2002 has none.
+        # In tax unit 1001 the head's return has a long-term gain and the
+        # child's own return a short-term loss, so Exception 1 fails for
+        # each; tax unit 2002 has no Schedule D amount.
         short_term_capital_gains=[0, -400, 0],
         long_term_capital_gains=[5_000, 0, 0],
     )
@@ -323,6 +324,30 @@ def test_loader_moves_line_7a_onto_schedule_d_when_the_tax_unit_files_one() -> N
     assert (
         "capital_gain_distributions_folded_into_schedule_d"
         not in by_id["ecps-tax-unit-2002"].metadata
+    )
+
+
+def test_loader_keeps_the_filers_line_7a_when_only_a_dependent_files_schedule_d() -> (
+    None
+):
+    cases, _ = _load(
+        "tax_unit",
+        non_sch_d_capital_gains=[2_000, 300, 0],
+        short_term_capital_gains=[0, -400, 0],
+    )
+    facts = _facts(cases)
+    by_id = {case.case_id: case for case in cases}
+
+    # Schedule D is per return: the child's loss is on her own return.
+    assert facts["person-1"][CGD] == 2_000
+    assert LTCG not in facts["person-1"]
+    assert CGD not in facts["person-2"]
+    assert facts["person-2"][LTCG] == 300
+    assert (
+        by_id["ecps-tax-unit-1001"].metadata[
+            "capital_gain_distributions_folded_into_schedule_d"
+        ]
+        == 1
     )
 
 
@@ -370,8 +395,10 @@ def test_loader_dividend_sources_are_policyengine_inputs() -> None:
     assert list(variables["dividend_income"].adds) == ["ordinary_dividend_income"]
 
 
-AMOUNTS = st.lists(st.integers(0, 90_000), min_size=3, max_size=3)
-SIGNED = st.lists(st.integers(-40_000, 90_000), min_size=3, max_size=3)
+# Zero is drawn often: whether a return has any Schedule D amount, or any
+# distributions, is what the fold turns on.
+AMOUNTS = st.lists(st.just(0) | st.integers(0, 90_000), min_size=3, max_size=3)
+SIGNED = st.lists(st.just(0) | st.integers(-40_000, 90_000), min_size=3, max_size=3)
 
 
 @settings(max_examples=150, deadline=None, derandomize=True)
@@ -403,22 +430,20 @@ def test_property_loader_emits_coherent_form_1040_facts(
             assert 0 <= facts.get(QDIV, 0) <= facts.get(DIV, 0)
     assert all(CGD not in facts for facts in _facts(household_cases).values())
 
-    members_by_unit = {"ecps-tax-unit-1001": (0, 1), "ecps-tax-unit-2002": (2,)}
-    for case in tax_cases:
-        members = members_by_unit[case.case_id]
-        facts = [entity.facts for entity in case.entities]
-        files_schedule_d = any(short_term[i] or long_term[i] for i in members)
-        carries_7a = any(CGD in row for row in facts)
-        # Never both paths in one tax unit.
-        assert not (files_schedule_d and carries_7a)
+    # Returns: person 1 (head of tax unit 1001), person 2 (her dependent
+    # child, on her own return), person 3 (head of tax unit 2002).
+    facts_by_person = _facts(tax_cases)
+    for index, person_id in enumerate(("person-1", "person-2", "person-3")):
+        row = facts_by_person[person_id]
+        files_schedule_d = bool(short_term[index] or long_term[index])
+        # Never both paths on one return.
+        assert not (files_schedule_d and CGD in row)
         # The fold conserves long-term gain plus line 7a.
-        assert sum(row.get(LTCG, 0) + row.get(CGD, 0) for row in facts) == sum(
-            long_term[i] + distributions[i] for i in members
+        assert row.get(LTCG, 0) + row.get(CGD, 0) == (
+            long_term[index] + distributions[index]
         )
         if not files_schedule_d:
-            assert [row.get(CGD, 0) for row in facts] == [
-                distributions[i] for i in members
-            ]
+            assert row.get(CGD, 0) == distributions[index]
 
 
 def test_loader_skips_geographically_unresolvable_records() -> None:

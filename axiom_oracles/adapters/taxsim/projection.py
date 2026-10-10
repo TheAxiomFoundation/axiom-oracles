@@ -239,6 +239,8 @@ def taxsim_input_for_case(
         # long-term gains (26 USC 852(b)(3)(B)) and TAXSIM-35 has no column
         # of their own, so they ride here: AGI, the preferential rates, NIIT
         # and the EITC investment-income test all see them, as on the return.
+        # The sum is the same whether or not the distributions were folded
+        # onto Schedule D (core/investment_income.with_schedule_d_fold).
         "ltcg": _sum_fact(earners, Concepts.LONG_TERM_CAPITAL_GAINS)
         + sum_non_schedule_d_capital_gain_distributions(earners),
         "pensions": _sum_fact(earners, Concepts.PENSION_INCOME),

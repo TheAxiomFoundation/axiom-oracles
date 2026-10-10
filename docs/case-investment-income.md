@@ -102,14 +102,32 @@ lanes, whose Axiom income lists (`data/populace_input_mapping.yaml`) read no
 capital gains, while PolicyEngine's `medicaid_magi` starts from AGI, which
 includes line 7a from policyengine-us#8839 on.
 
-When a tax unit also has a Schedule D amount (a nonzero short- or long-term
-gain or loss on any member), Exception 1 does not apply and the producer
-moves each member's line 7a into that member's long-term gain
-(`fold_capital_gain_distributions_into_schedule_d`), recording the count in
-`metadata["capital_gain_distributions_folded_into_schedule_d"]`. On the
-pinned artifact at period 2026 that is 23 of 87,519 tax units; 3,063 tax
-units carry line 7a. The state-tax campaign's TAXSIM leg
-(`bridges/state_tax_populace_runner.py`) uses the same sources and fold.
+## Schedule D fold
+
+Exception 1 is a condition on a return, so a return never has both line 7a
+and Schedule D amounts. When the people on one return carry a Schedule D
+amount (a nonzero short- or long-term gain or loss), each one's capital gain
+distributions are added to that person's long-term gain and the line 7a fact
+is dropped. A tax unit's filers (head and spouse) are one return; a
+dependent's gains are on the dependent's own return, so a child's capital
+loss never moves her parents' line 7a.
+
+The fold is applied twice, by the same function:
+
+- The Populace producer folds each tax-unit Case
+  (`fold_tax_unit_returns`) and records the number of members folded in
+  `metadata["capital_gain_distributions_folded_into_schedule_d"]`, so the
+  Case itself is a coherent return. In the pinned artifact 3,086 persons
+  carry line 7a, one per tax unit; 23 of them also carry a Schedule D
+  amount on the same row (14 a capital loss) and are folded, which leaves
+  3,063 tax units with line 7a.
+- Every tax projection folds the people it is about to price
+  (`with_schedule_d_fold`), so a hand-built or future Case that carries both
+  paths is still priced identically everywhere. TAXSIM needs no fold: its
+  `ltcg` column is Schedule D long-term gain plus line 7a on either path.
+
+The state-tax campaign's TAXSIM leg (`bridges/state_tax_populace_runner.py`)
+reads the same dividend and line 7a sources as the loader.
 
 ## Engine differences to expect
 

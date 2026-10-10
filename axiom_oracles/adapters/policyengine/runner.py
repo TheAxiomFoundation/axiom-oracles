@@ -10,6 +10,7 @@ from ...core.geography import pe_inputs_for_scope
 from ...core.investment_income import (
     person_dividends,
     person_non_schedule_d_capital_gain_distributions,
+    with_schedule_d_fold,
 )
 from ...core.household import Household
 from ...core.results import EngineResult
@@ -355,7 +356,7 @@ class PolicyEngineRunner(EngineAdapter):
         year = int(str(case.period).split("-", 1)[0])
         people = {}
         person_names = []
-        person_entities = list(case.entities_of_kind("person"))
+        person_entities = _tax_unit_people(case)
         head, spouse = _tax_filers(person_entities)
         for index, entity in enumerate(person_entities):
             person_name = entity.entity_id or f"person_{index}"
@@ -416,7 +417,7 @@ class PolicyEngineRunner(EngineAdapter):
         variables: list[str] | None = None,
     ) -> dict[str, Any]:
         year = int(str(case.period).split("-", 1)[0])
-        person_entities = list(case.entities_of_kind("person"))
+        person_entities = _tax_unit_people(case)
         head, spouse = _tax_filers(person_entities)
         people = []
         for entity in person_entities:
@@ -827,7 +828,7 @@ class PolicyEngineRunner(EngineAdapter):
             tax_unit_rows.append(tax_unit_row)
 
             person_ids = []
-            person_entities = list(case.entities_of_kind("person"))
+            person_entities = _tax_unit_people(case)
             head, spouse = _tax_filers(person_entities)
             for person_index, entity in enumerate(person_entities):
                 person_id = _namespaced_entity_id(
@@ -957,6 +958,13 @@ class PolicyEngineRunner(EngineAdapter):
         return list(requested)
 
 
+def _tax_unit_people(case: Case) -> list[Entity]:
+    """The Case's people, priced as one tax unit like every tax projection:
+    line 7a folded onto Schedule D per return (core/investment_income)."""
+    people = list(case.entities_of_kind("person"))
+    return with_schedule_d_fold(people, _tax_filers(people))
+
+
 def _person_income_inputs(entity: Entity) -> dict[str, float]:
     """Person income inputs, pinned for every mapped source.
 
@@ -969,7 +977,8 @@ def _person_income_inputs(entity: Entity) -> dict[str, float]:
     different income surfaces for the same household.
 
     Dividends and line 7a distributions are read through
-    core/investment_income, as every other projection reads them.
+    core/investment_income, as every other projection reads them; callers
+    pass people from ``_tax_unit_people``.
     ``Concepts.DIVIDEND_INCOME`` is Form 1040 line 3b and already includes
     line 3a, so PolicyEngine's ``dividend_income`` (its alias for
     ``ordinary_dividend_income`` = qualified + non-qualified, read by the

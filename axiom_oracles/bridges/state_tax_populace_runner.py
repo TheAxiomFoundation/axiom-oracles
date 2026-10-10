@@ -19,7 +19,6 @@ import subprocess
 from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlparse
 
-from ..core.investment_income import fold_capital_gain_distributions_into_schedule_d
 from ..populations.populace_us import POPULACE_DIVIDEND_VARIABLES
 from .state_tax_populace import (
     DEFAULT_COMPARISON_AGGREGATION,
@@ -1632,8 +1631,9 @@ def calculate_policyengine_targets(
 # Enhanced-CPS lanes (adapters/taxsim/projection.taxsim_input_for_case is the
 # single row-assembly authority for both). Dividends come from the loader's
 # POPULACE_DIVIDEND_VARIABLES (Form 1040 line 3b = qualified + non-qualified,
-# line 3a = qualified), not from this table, and line 7a capital gain
-# distributions get the loader's Schedule D fold.
+# line 3a = qualified), not from this table. The loader's Schedule D fold of
+# line 7a capital gain distributions is not applied: TAXSIM's ltcg takes
+# Schedule D long-term gain plus line 7a either way, so the row is the same.
 _TAXSIM_PERSON_NON_WAGE_VARIABLES: dict[str, str] = {
     "self_employment_income": "self_employment_income",
     "interest_income": "taxable_interest_income",
@@ -1810,8 +1810,6 @@ def calculate_taxsim_targets(
 
     def _case_for_tax_unit(tax_unit_id: int | str, state: str) -> Case:
         entities = []
-        member_facts: list[dict[str, Any]] = []
-        member_ids: list[str] = []
         for index in person_indices_by_tax_unit[tax_unit_id]:
             if bool(heads[index]):
                 relation = "head"
@@ -1845,11 +1843,13 @@ def calculate_taxsim_targets(
             facts[Concepts.DIVIDEND_INCOME] = qualified + _finite_number(
                 non_qualified_dividends[index], label=POPULACE_DIVIDEND_VARIABLES[1]
             )
-            member_facts.append(facts)
-            member_ids.append(str(person_ids[index]))
-        fold_capital_gain_distributions_into_schedule_d(member_facts)
-        for entity_id, facts in zip(member_ids, member_facts, strict=True):
-            entities.append(Entity(entity_id=entity_id, kind="person", facts=facts))
+            entities.append(
+                Entity(
+                    entity_id=str(person_ids[index]),
+                    kind="person",
+                    facts=facts,
+                )
+            )
         return Case(
             case_id=tax_unit_id,
             period=str(year),
