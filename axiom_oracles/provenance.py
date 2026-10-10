@@ -58,6 +58,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -65,6 +66,10 @@ import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+# Shared certificate commit identity. Reject the digit-only forgery shape
+# alongside non-string, abbreviated, and uppercase identities at admission.
+GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 
 PROVENANCE_SCHEMA_VERSION = "axiom_oracles.provenance.v1"
 

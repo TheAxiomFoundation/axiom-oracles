@@ -4,6 +4,8 @@ import importlib.util
 import json
 from pathlib import Path
 
+import pytest
+
 
 def _load_module():
     path = Path(__file__).parents[1] / "scripts" / "emit_case_artifacts.py"
@@ -110,6 +112,51 @@ def _write_fixture(
     index.update(index_updates or {})
     (out / "index.json").write_text(json.dumps(index))
     return {"basename": basename}
+
+
+def test_emitter_preserves_complete_legacy_corpus_without_full_source(tmp_path):
+    module = _load_module()
+    config = _write_fixture(
+        module, tmp_path, report=_canonical_report(), rows=_served_rows(),
+    )
+    module.REPORTS = tmp_path / "absent-reports"
+    corpus = module.OUT_ROOT / "test-suite"
+    before = {path.name: path.read_bytes() for path in corpus.iterdir()}
+
+    assert "preserve" in module.emit_suite("test-suite", config)
+    assert {path.name: path.read_bytes() for path in corpus.iterdir()} == before
+
+
+def test_emitter_refuses_stale_legacy_corpus_without_downgrading(tmp_path):
+    module = _load_module()
+    rows = _served_rows()
+    rows[0]["m"][0]["x"] = 101
+    config = _write_fixture(
+        module, tmp_path, report=_canonical_report(), rows=rows,
+    )
+    module.REPORTS = tmp_path / "absent-reports"
+    corpus = module.OUT_ROOT / "test-suite"
+    before = {path.name: path.read_bytes() for path in corpus.iterdir()}
+
+    with pytest.raises(ValueError, match="cannot preserve complete case corpus"):
+        module.emit_suite("test-suite", config)
+    assert {path.name: path.read_bytes() for path in corpus.iterdir()} == before
+
+
+@pytest.mark.parametrize("index", [[], False, None, {"partial": True}, {"partial": "unknown"}])
+def test_emitter_refuses_malformed_existing_index_without_deleting_cases(tmp_path, index):
+    module = _load_module()
+    config = _write_fixture(
+        module, tmp_path, report=_canonical_report(), rows=_served_rows(),
+    )
+    module.REPORTS = tmp_path / "absent-reports"
+    corpus = module.OUT_ROOT / "test-suite"
+    (corpus / "index.json").write_text(json.dumps(index))
+    before = {path.name: path.read_bytes() for path in corpus.iterdir()}
+
+    with pytest.raises(ValueError, match="index must be an object|unsupported.*partial mode"):
+        module.emit_suite("test-suite", config)
+    assert {path.name: path.read_bytes() for path in corpus.iterdir()} == before
 
 
 def test_case_artifact_check_accepts_exact_annotations_and_values(tmp_path):

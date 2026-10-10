@@ -39,6 +39,16 @@ adversarially audited.
   at the recorded commit and reproduces every committed case value exactly;
   the receipt binds the producer commits together.
 
+Threshold coverage is available as a read-only diagnostic with
+`python scripts/exercise_census.py --threshold-straddle` and
+`python scripts/certify.py --threshold-straddle`. The certificate command also
+offers `--enforce-pending-bindings` to diagnose the missing executable commit
+on pending DE candidates. These switches print proposed results to stdout,
+never write published artifacts, and cannot be combined with `--check`.
+They default off under Max's d1248 ruling (2026-10-10): adopting threshold
+coverage as an exercised prerequisite requires a separate decision about the
+existing public flags. The current certification definition remains v3.
+
 ## What closed requires (the completeness claim)
 
 Closed asserts that the program's **entire legal dependency graph** is

@@ -87,6 +87,38 @@ def _build_report(*, right_values=(125, 50)) -> dict:
     )
 
 
+@pytest.mark.parametrize("field", ["comparison_count", "match_count", "mismatch_count"])
+@pytest.mark.parametrize("raw", [True, False, -1, -0.5, 1.5, float("nan"), float("inf"), "1", None])
+def test_merge_rejects_invalid_summary_counts(field, raw) -> None:
+    report = _build_report()
+    report["summary"][field] = raw
+    with pytest.raises(ValueError, match=field):
+        apply_dispositions(report, _document([_entry()]))
+
+
+@pytest.mark.parametrize("raw", [None, False, [], ""])
+def test_merge_rejects_invalid_summary_shape(raw) -> None:
+    report = _build_report()
+    report["summary"] = raw
+    with pytest.raises(ValueError, match="summary must be an object"):
+        apply_dispositions(report, _document([_entry()]))
+
+
+def test_merge_accepts_integral_float_counts() -> None:
+    report = _build_report()
+    for field in ("comparison_count", "match_count", "mismatch_count"):
+        report["summary"][field] = float(report["summary"][field])
+    merged = apply_dispositions(report, _document([_entry()]))
+    assert merged["summary"]["dispositioned"]["unexplained_count"] == 0
+
+
+def test_classified_rows_cannot_exceed_reported_mismatches() -> None:
+    report = _build_report()
+    report["summary"]["mismatch_count"] = 0
+    with pytest.raises(ValueError, match="classified_rows.*exceeds mismatch_count"):
+        apply_dispositions(report, _document([_entry()]))
+
+
 # ---------------------------------------------------------------------------
 # Schema validation
 # ---------------------------------------------------------------------------

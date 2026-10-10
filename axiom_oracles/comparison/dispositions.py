@@ -97,19 +97,17 @@ from pathlib import Path
 
 import yaml
 
+from axiom_oracles.conformance.unexplained import (
+    CLASSIFIED_DISPOSITION_KINDS,
+    require_count,
+)
+
 from .pe_axiom_standard import validate_axiom_side_fields
 
 DISPOSITIONS_SCHEMA_VERSION = "axiom_oracles.dispositions.v1"
 DISPOSITIONED_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2.1"
 
-EXPLAINED_DISPOSITION_KINDS = (
-    "explained_residual",
-    "upstream_engine_gap",
-    "bridge_artifact",
-)
-CLASSIFIED_DISPOSITION_KINDS = EXPLAINED_DISPOSITION_KINDS + (
-    "axiom_encoding_gap",
-)
+EXPLAINED_DISPOSITION_KINDS = CLASSIFIED_DISPOSITION_KINDS[:3]
 DISPOSITION_KINDS = CLASSIFIED_DISPOSITION_KINDS + ("unexplained",)
 
 DEFAULT_ARITHMETIC_TOLERANCE = 0.005
@@ -641,10 +639,17 @@ def apply_dispositions(
     """
 
     merged = dict(report)
-    summary = dict(report.get("summary") or {})
-    comparison_count = summary.get("comparison_count") or 0
-    match_count = summary.get("match_count") or 0
-    mismatch_count = summary.get("mismatch_count") or 0
+    raw_summary = report.get("summary", {})
+    if not isinstance(raw_summary, dict):
+        raise ValueError("summary must be an object")
+    summary = dict(raw_summary)
+    admitted = {
+        field: require_count(summary.get(field, 0), field, report.get("suite", "<unknown>"))
+        for field in ("comparison_count", "match_count", "mismatch_count")
+    }
+    comparison_count = admitted["comparison_count"]
+    match_count = admitted["match_count"]
+    mismatch_count = admitted["mismatch_count"]
 
     entries = list((dispositions or {}).get("entries") or [])
     counts = {kind: 0 for kind in DISPOSITION_KINDS}
@@ -733,6 +738,11 @@ def apply_dispositions(
     classified_rows = sum(
         counts[kind] for kind in CLASSIFIED_DISPOSITION_KINDS
     )
+    if classified_rows > mismatch_count:
+        raise ValueError(
+            f"classified_rows ({classified_rows}) exceeds mismatch_count "
+            f"({mismatch_count})"
+        )
     summary["dispositioned"] = {
         "schema_version": DISPOSITIONS_SCHEMA_VERSION,
         "dispositions_file": dispositions_file,
@@ -746,7 +756,7 @@ def apply_dispositions(
         "explained_rate": _percentage(
             match_count + classified_rows, comparison_count
         ),
-        "unexplained_count": max(mismatch_count - classified_rows, 0),
+        "unexplained_count": mismatch_count - classified_rows,
         "counts": counts,
         "expired_entries": expired,
         "orphaned_entries": orphaned,

@@ -36,6 +36,11 @@ import yaml
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 ARTIFACT_PATH = REPO_ROOT / "conformance" / "closure" / "dk-boerne-og-ungeydelse.yaml"
 CORPUS_RELEASE_PATH = (
     Path.home()
@@ -85,11 +90,6 @@ _HEADER = """# axiom_oracles.closure.ledger.v3 — GENERATED facts + committed d
 # generator preserves those rows and --check fails on any other drift.
 """
 _HEX_SHA256 = re.compile(r"^[0-9a-f]{64}$")
-#: A git object id: 40 lowercase hex chars with at least one of a-f. A
-#: decimal-only 40-char string is not a realistic commit (P ≈ (10/16)^40)
-#: and is exactly the YAML !!str-digit forgery shape (delta-audit #8), so it
-#: is rejected outright rather than compared.
-_HEX_GIT_SHA = re.compile(r"^(?=[0-9a-f]{40}$)(?=.*[a-f])[0-9a-f]{40}$")
 _IDENTIFIER = re.compile(r"\b[A-Za-z_][A-Za-z0-9_]*\b")
 _FORMULA_PROOF_PATH = re.compile(r"^versions\[(0|[1-9][0-9]*)\]\.formula$")
 _RESERVED_FORMULA_WORDS = frozenset({"and", "else", "false", "if", "not", "or", "true"})
@@ -171,7 +171,7 @@ def _git_bytes(root: Path, *args: str) -> bytes:
 def _resolve_commit(root: Path, ref: str, *, label: str) -> str:
     commit = _git_bytes(root, "rev-parse", "--verify", f"{ref}^{{commit}}")
     value = commit.decode().strip()
-    if not _HEX_GIT_SHA.fullmatch(value):
+    if not GIT_SHA.fullmatch(value):
         raise _SourceError(f"{label} ref {ref!r} did not resolve to a full commit SHA")
     return value
 
@@ -1419,7 +1419,7 @@ def _generated_fact_errors(generated: Any) -> list[str]:
             )
         # isinstance first: `str(...)` would let a 40-DIGIT YAML integer
         # (a legal, silently-typed scalar) pass as a "sha" (delta-audit #7).
-        if not isinstance(corpus.get("commit"), str) or not _HEX_GIT_SHA.fullmatch(
+        if not isinstance(corpus.get("commit"), str) or not GIT_SHA.fullmatch(
             corpus["commit"]
         ):
             errors.append("corpus_release.commit must be a full git commit SHA")
@@ -1442,7 +1442,7 @@ def _generated_fact_errors(generated: Any) -> list[str]:
             errors.append(
                 "rulespec.repository must identify TheAxiomFoundation/rulespec-dk"
             )
-        if not isinstance(rulespec.get("commit"), str) or not _HEX_GIT_SHA.fullmatch(
+        if not isinstance(rulespec.get("commit"), str) or not GIT_SHA.fullmatch(
             rulespec["commit"]
         ):
             errors.append("rulespec.commit must be a full git commit SHA string")

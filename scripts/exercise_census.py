@@ -14,6 +14,11 @@ with committed per-case evidence (inline ``cases`` or
 values per evidence field and per verdict concept across all cases, and writes
 ``conformance/exercise-census.json``.
 
+Threshold straddling is experimental under ruling d1248. Its interpreter can
+reproduce SHA-bound trace outputs and measure live observations strictly below
+and above reachable parameter thresholds. The default generator does not use
+that assessment; ``--threshold-straddle`` prints a separate diagnostic only.
+
 Reading a row, three states matter per field:
 
 * **varied** — multiple distinct values across cases; the comparison carries
@@ -44,6 +49,7 @@ Modes::
     uv run python scripts/exercise_census.py           # write the census
     uv run python scripts/exercise_census.py --check   # CI: fail on drift
     uv run python scripts/exercise_census.py --markdown # human summary
+    uv run python scripts/exercise_census.py --threshold-straddle # diagnostic JSON
 """
 
 from __future__ import annotations
@@ -80,6 +86,72 @@ SCHEMA = "axiom_oracles.exercise_census.v1"
 MANIFEST_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "manifests"
 EXERCISE_RECEIPT_DIR = REPO_ROOT / "axiom_oracles" / "bridges" / "exercise_receipts"
 EXERCISE_RECEIPT_SCHEMA = "axiom_oracles.committed_exercise_receipt.v1"
+
+
+def _unavailable_threshold_straddle(reason: str | None = None) -> dict:
+    return {
+        "mode": "unavailable",
+        "reason": reason
+        or "no committed SHA-bound compiled IR is registered for this suite",
+    }
+
+
+def _threshold_straddle_for_view(report: dict, view: str, receipt: dict) -> dict:
+    """Bind NZ's compiled bytes to its report, traces and executable receipt.
+
+    Read artifact bytes on every call: caching a prior successful hash check
+    would let an in-process artifact edit retain a computed exercise verdict.
+    The caller has already validated the trace identity and view root receipt.
+    """
+    from scripts.threshold_straddle import compute_threshold_straddle
+
+    trace_ref = report["experiment"]["trace"]
+    executable_path = (
+        REPO_ROOT / "conformance/executable/nz-treasury-incomeexplorer.json"
+    )
+    try:
+        executable = strict_json_loads(executable_path.read_bytes())
+        if not isinstance(executable, dict):
+            raise ValueError("executable receipt is not a mapping")
+        compiled = executable.get("compiled_artifact")
+        if not isinstance(compiled, dict) or not isinstance(compiled.get("path"), str):
+            raise ValueError("executable receipt has no committed compiled artifact")
+        artifact_path = Path(compiled["path"])
+        if artifact_path.is_absolute() or ".." in artifact_path.parts:
+            raise ValueError("compiled artifact path is not repository-relative")
+        compiled_bytes = (REPO_ROOT / artifact_path).read_bytes()
+        trace_bytes = (REPO_ROOT / trace_ref["artifact"]).read_bytes()
+        if hashlib.sha256(trace_bytes).hexdigest() != trace_ref["sha256"]:
+            raise ValueError("evaluation trace bytes changed")
+        traces = strict_json_loads(trace_bytes)
+        digest = hashlib.sha256(compiled_bytes).hexdigest()
+        if compiled.get("sha256") != digest:
+            raise ValueError("compiled artifact bytes disagree with executable receipt")
+        if (report.get("compiled_program") or {}).get("artifact_sha256") != digest:
+            raise ValueError("compiled artifact bytes disagree with comparison report")
+    except (OSError, UnicodeDecodeError, ValueError) as exc:
+        return _unavailable_threshold_straddle(str(exc))
+    return compute_threshold_straddle(
+        compiled_bytes,
+        traces,
+        view=view,
+        roots=receipt["requested_output_roots"],
+    )
+
+
+def _view_threshold_fields(report: dict, view: str, receipt: dict) -> dict:
+    """Experimental fields; never emitted by the default census generator."""
+    block = _threshold_straddle_for_view(report, view, receipt)
+    return {
+        "threshold_straddle": block,
+        "exercised": (
+            receipt["evaluation_count"] > 0
+            and receipt["trace_binding"] == "bound"
+            and receipt["root_reconciliation"] == "exact"
+            and block.get("mode") == "computed"
+            and block.get("complete") is True
+        ),
+    }
 
 
 def _manifest_strict_clean() -> dict[str, bool]:
@@ -314,6 +386,8 @@ def _census_suite(
     report: dict,
     report_path: Path,
     view: str | None = None,
+    *,
+    threshold_straddle: bool = False,
 ) -> dict:
     # Unified records can carry a verifier-produced experiment receipt over
     # the engine's complete active input catalog. This is stronger than
@@ -339,15 +413,18 @@ def _census_suite(
                 "constant_fields": len(fields) - varied,
                 "bridged_through": {},
                 "requested_output_roots": receipt["requested_output_roots"],
-                "requested_output_root_sets": receipt[
-                    "requested_output_root_sets"
-                ],
+                "requested_output_root_sets": receipt["requested_output_root_sets"],
                 "root_set_receipts": receipt["root_set_receipts"],
                 "root_reconciliation": receipt["root_reconciliation"],
                 "trace_artifact": trace["artifact"],
                 "trace_sha256": trace["sha256"],
                 "trace_binding": receipt["trace_binding"],
                 "capture_lineage_mode": trace["capture_lineage_mode"],
+                **(
+                    _view_threshold_fields(report, view, receipt)
+                    if threshold_straddle
+                    else {}
+                ),
             }
         fields, bridged = _unified_experiment_fields(suite, experiment)
         cases = [case for case in report.get("cases") or [] if isinstance(case, dict)]
@@ -364,6 +441,16 @@ def _census_suite(
             "varied_fields": varied,
             "constant_fields": len(fields) - varied,
             "bridged_through": bridged,
+            **(
+                {
+                    "threshold_straddle": _unavailable_threshold_straddle(
+                        "threshold coverage requires a view-scoped requested-root receipt"
+                    ),
+                    "exercised": False,
+                }
+                if threshold_straddle
+                else {}
+            ),
         }
     field_values: dict[str, set[str]] = defaultdict(set)
     concept_values: dict[str, set[str]] = defaultdict(set)
@@ -375,9 +462,7 @@ def _census_suite(
         # Compact chunk rows: i = [{n, v}], v = [{c, l, x}].
         for record in case.get("i") or []:
             if isinstance(record, dict) and record.get("n") is not None:
-                field_values[str(record["n"])].add(
-                    _canonical_value(record.get("v"))
-                )
+                field_values[str(record["n"])].add(_canonical_value(record.get("v")))
         for verdict in case.get("v") or []:
             if isinstance(verdict, dict) and verdict.get("c"):
                 concept_values[str(verdict["c"])].add(
@@ -391,8 +476,7 @@ def _census_suite(
         execution = case.get("execution")
         if (
             isinstance(execution, dict)
-            and execution.get("schema_version")
-            == "axiom_oracles.case_execution.v1"
+            and execution.get("schema_version") == "axiom_oracles.case_execution.v1"
         ):
             axiom_inputs = execution.get("axiom_inputs")
             if isinstance(axiom_inputs, dict):
@@ -463,6 +547,14 @@ def _census_suite(
         # Audited means the validator finds nothing outstanding — not merely
         # that a manifest file exists (audit finding 5).
         "bridge_audited": MANIFEST_STRICT_CLEAN.get(suite, False),
+        **(
+            {
+                "threshold_straddle": _unavailable_threshold_straddle(),
+                "exercised": False,
+            }
+            if threshold_straddle
+            else {}
+        ),
         # Identity of the audited manifest, so the certificate's census
         # evidence sha moves whenever the manifest bytes move.
         "bridge_manifest_sha256": (
@@ -493,7 +585,9 @@ def _unified_experiment_fields(
         distinct = row.get("distinct")
         values = row.get("observed_values")
         if state not in {"varied", "constant"}:
-            raise ValueError(f"{suite}: active input {name!r} has invalid state {state!r}")
+            raise ValueError(
+                f"{suite}: active input {name!r} has invalid state {state!r}"
+            )
         if not isinstance(values, list) or not values:
             raise ValueError(f"{suite}: active input {name!r} has no observations")
         observed_distinct = len(set(map(str, values)))
@@ -566,7 +660,9 @@ def _unified_view_fields(
         distinct = row.get("distinct")
         expected_state = (
             "varied"
-            if isinstance(distinct, int) and not isinstance(distinct, bool) and distinct > 1
+            if isinstance(distinct, int)
+            and not isinstance(distinct, bool)
+            and distinct > 1
             else "constant"
             if distinct == 1
             else None
@@ -589,8 +685,7 @@ def _unified_view_fields(
         or {root for root_set in root_sets for root in root_set} != set(roots)
         or not isinstance(root_set_receipts, list)
         or any(not isinstance(row, dict) for row in root_set_receipts)
-        or [row.get("requested_output_roots") for row in root_set_receipts]
-        != root_sets
+        or [row.get("requested_output_roots") for row in root_set_receipts] != root_sets
         or sum(row.get("evaluation_count", 0) for row in root_set_receipts) != count
     ):
         raise ValueError(f"{suite}: view {view!r} requested-root receipt is not exact")
@@ -602,12 +697,15 @@ def _unified_view_fields(
     return normalized, receipt
 
 
-def _committed_exercise_rows() -> dict[str, dict]:
+def _committed_exercise_rows(*, threshold_straddle: bool = False) -> dict[str, dict]:
     """Load hash-bound campaign receipts that are too large for chunk storage."""
     rows: dict[str, dict] = {}
     for path in sorted(EXERCISE_RECEIPT_DIR.glob("*.json")):
         receipt = strict_json_loads(path.read_text())
-        if not isinstance(receipt, dict) or receipt.get("schema") != EXERCISE_RECEIPT_SCHEMA:
+        if (
+            not isinstance(receipt, dict)
+            or receipt.get("schema") != EXERCISE_RECEIPT_SCHEMA
+        ):
             raise ValueError(f"{path.name}: unsupported committed exercise receipt")
         suite = receipt.get("suite")
         report_name = receipt.get("report")
@@ -623,12 +721,16 @@ def _committed_exercise_rows() -> dict[str, dict]:
         if not isinstance(artifacts, list) or not artifacts:
             raise ValueError(f"{path.name}: receipt has no evidence artifacts")
         for artifact in artifacts:
-            if not isinstance(artifact, dict) or not isinstance(artifact.get("path"), str):
+            if not isinstance(artifact, dict) or not isinstance(
+                artifact.get("path"), str
+            ):
                 raise ValueError(f"{path.name}: malformed evidence artifact")
             artifact_path = REPO_ROOT / artifact["path"]
-            if not artifact_path.is_file() or artifact.get("sha256") != hashlib.sha256(
-                artifact_path.read_bytes()
-            ).hexdigest():
+            if (
+                not artifact_path.is_file()
+                or artifact.get("sha256")
+                != hashlib.sha256(artifact_path.read_bytes()).hexdigest()
+            ):
                 raise ValueError(f"{path.name}: evidence artifact drifted")
         fields = receipt.get("evidence_fields")
         if not isinstance(fields, dict) or not fields:
@@ -641,8 +743,12 @@ def _committed_exercise_rows() -> dict[str, dict]:
             state = field.get("state")
             expected = (
                 "varied"
-                if isinstance(distinct, int) and not isinstance(distinct, bool) and distinct > 1
-                else "constant" if distinct == 1 else None
+                if isinstance(distinct, int)
+                and not isinstance(distinct, bool)
+                and distinct > 1
+                else "constant"
+                if distinct == 1
+                else None
             )
             if state != expected:
                 raise ValueError(f"{path.name}: field {name!r} state/count disagree")
@@ -678,6 +784,14 @@ def _committed_exercise_rows() -> dict[str, dict]:
             # per-case evidence is committed and its complete bridge/input
             # boundary is strict-clean. Constants remain honest scope limits.
             "exercised": bridge_audited and per_case_evidence,
+            **(
+                {
+                    "threshold_straddle": _unavailable_threshold_straddle(),
+                    "exercised": False,
+                }
+                if threshold_straddle
+                else {}
+            ),
             "bridge_manifest_sha256": (
                 MANIFEST_STRICT_AUDIT.get(suite, {}).get("manifest_sha256")
                 if MANIFEST_STRICT_CLEAN.get(suite, False)
@@ -687,8 +801,14 @@ def _committed_exercise_rows() -> dict[str, dict]:
     return rows
 
 
-def build_census() -> dict:
+def build_census(*, threshold_straddle: bool = False) -> dict:
+    """Build the published census, or an explicitly opted-in threshold diagnostic.
+
+    Threshold enforcement is disabled by default under ruling d1248. Default
+    generation retains the published census and certificate evidence identity.
+    """
     suites: dict[str, dict] = {}
+    views: dict[str, dict[str, dict]] = {}
     contested: dict[str, list[str]] = defaultdict(list)
     for suite, report, path in _iter_suite_reports():
         # Unified records carry their own complete, verifier-produced
@@ -699,9 +819,19 @@ def build_census() -> dict:
         # certificate (and therefore preserves those certificates' evidence
         # identity when none of their suites changed).
         if report.get("record_schema") == "axiom.unified_comparison_record.v1":
+            if threshold_straddle:
+                experiment = report.get("experiment") or {}
+                for view in sorted(experiment.get("views") or {}):
+                    if view in views.setdefault(suite, {}):
+                        raise ValueError(f"{suite}: duplicate report for view {view!r}")
+                    views[suite][view] = _census_suite(
+                        suite, report, path, view=view, threshold_straddle=True
+                    )
             continue
         contested[suite].append(str(path.relative_to(REPO_ROOT)))
-        suites[suite] = _census_suite(suite, report, path)
+        suites[suite] = _census_suite(
+            suite, report, path, threshold_straddle=threshold_straddle
+        )
     # A suite claimed by more than one report is an ambiguity the census must
     # NOT resolve silently by sort order — it is recorded on the row so the
     # certificate can treat it as a defect (audit finding 4; live case:
@@ -711,7 +841,7 @@ def build_census() -> dict:
             suites[suite]["contested_reports"] = sorted(paths)
     # Large supervised campaigns commit bounded, hash-bound census receipts
     # instead of duplicating millions of raw rows into dashboard chunks.
-    suites.update(_committed_exercise_rows())
+    suites.update(_committed_exercise_rows(threshold_straddle=threshold_straddle))
     return {
         "schema": SCHEMA,
         "_comment": (
@@ -731,6 +861,7 @@ def build_census() -> dict:
             "program-registry suites."
         ),
         "suites": suites,
+        **({"views": views} if threshold_straddle else {}),
     }
 
 
@@ -745,6 +876,24 @@ def render_markdown(census: dict) -> str:
             f"| {row['constant_fields']} | "
             f"{'yes' if row['bridge_audited'] else 'no'} |"
         )
+    if census.get("views"):
+        lines.extend(
+            [
+                "",
+                "| view | evaluations | threshold sites | unstraddled | exercised |",
+                "|---|---:|---:|---:|---|",
+            ]
+        )
+        for views in census["views"].values():
+            for view, row in sorted(views.items()):
+                threshold = row["threshold_straddle"]
+                computed = threshold.get("mode") == "computed"
+                lines.append(
+                    f"| {view} | {row['evaluations_scanned']} | "
+                    f"{len(threshold['sites']) if computed else 'unavailable'} | "
+                    f"{len(threshold['unstraddled']) if computed else 'unavailable'} | "
+                    f"{'yes' if row['exercised'] else 'no'} |"
+                )
     return "\n".join(lines)
 
 
@@ -752,13 +901,25 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
     parser.add_argument("--markdown", action="store_true")
+    parser.add_argument(
+        "--threshold-straddle",
+        action="store_true",
+        help="print experimental threshold diagnostics without writing the published census",
+    )
     args = parser.parse_args()
 
-    census = build_census()
+    if args.threshold_straddle and args.check:
+        parser.error(
+            "--threshold-straddle is a diagnostic and cannot check the published census"
+        )
+    census = build_census(threshold_straddle=args.threshold_straddle)
     rendered = json.dumps(census, indent=2, sort_keys=True) + "\n"
 
     if args.markdown:
         print(render_markdown(census))
+        return 0
+    if args.threshold_straddle:
+        print(rendered, end="")
         return 0
     if args.check:
         if not OUTPUT_PATH.exists():
