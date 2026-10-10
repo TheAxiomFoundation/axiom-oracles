@@ -1,6 +1,6 @@
 {
   "schema_version": "axiom-oracles/taxsim-pin/v1",
-  "description": "Pinned identity of the TAXSIM executable used by the axiom-oracles TAXSIM adapter. The adapter shells out to a TAXSIM binary bundled inside the policyengine-taxsim distribution (imported dynamically as TaxsimRunner); the binary itself is not vendored in this repo. This file pins the reproducible provenance of that binary: the exact policyengine-taxsim release, its PyPI sdist/wheel SHA-256 (the source of truth for the bundled binary), and the SHA-256 + byte size of each bundled executable extracted from that wheel. Without this pin no oracle number produced against TAXSIM is reproducible (Phase-A item A2).",
+  "description": "Pinned identity of the TAXSIM executable used by the axiom-oracles TAXSIM adapter. The adapter shells out to a TAXSIM binary bundled inside the policyengine-taxsim distribution (imported dynamically as TaxsimRunner); the binary itself is not vendored in this repo. This file pins the reproducible provenance of that binary: the exact policyengine-taxsim release, its PyPI sdist/wheel SHA-256 (the source of truth for the bundled binary), and, for each bundled executable extracted from that wheel, its SHA-256, byte size, executable format, NBER build stamp and the law years it accepts. `build` is the quoted stamp embedded in the executable's bytes (pins.read_build_stamp); the macOS and Linux builds print the same stamp as the last column of their CSV output header. `law_years` records what the executable did when it was run, with the verbatim line it printed for a rejected year; null means it has not been executed. Without this pin no oracle number produced against TAXSIM is reproducible (Phase-A item A2).",
   "distribution": {
     "package": "policyengine-taxsim",
     "version": "2.30.0",
@@ -19,31 +19,57 @@
     }
   },
   "runtime_binary": {
-    "note": "policyengine-taxsim's TaxsimRunner selects the binary by platform.system() and searches {sys.prefix}/share/policyengine_taxsim/taxsimtest/<name>. taxsimtest-linux.exe is the binary exercised in CI and on Modal (Linux). max_tax_year is enforced separately by the adapter (TAXSIM_MAX_YEAR).",
+    "note": "policyengine-taxsim's TaxsimRunner selects the binary by platform.system() from {sys.prefix}/share/policyengine_taxsim/taxsimtest/<name>; axiom-oracles resolves the same file with pins.installed_binary_path() and passes it explicitly. The per-platform executables are different NBER builds with different law-year ranges (see each bundled_binaries entry): the Linux build accepts 1960-2024 and the macOS build 1960-2026, so TAXSIM law years 2025 and 2026 run only on macOS under this pin. Every TAXSIM caller checks the requested law years against the resolved binary's pinned range before running it (pins.require_law_years) and records the identity of the binary it ran (pins.binary_identity). No CI workflow installs the taxsim extra, and every TAXSIM comparison suite is ci: manual, so these binaries run only where a person runs them.",
     "install_subdir": "share/policyengine_taxsim/taxsimtest",
     "by_platform": {
       "linux": "taxsimtest/taxsimtest-linux.exe",
       "darwin": "taxsimtest/taxsimtest-osx.exe",
       "windows": "taxsimtest/taxsimtest-windows.exe"
-    },
-    "primary": "taxsimtest/taxsimtest-linux.exe"
+    }
   },
   "bundled_binaries": {
     "taxsimtest/taxsimtest-linux.exe": {
       "sha256": "0d934f202541f43a7999907b523e5431183a1258dadef4ddc6121d3f31120442",
-      "bytes": 3737960
+      "bytes": 3737960,
+      "format": "ELF 64-bit x86-64, statically linked (Linux)",
+      "build": "cdate-compdate",
+      "law_years": {
+        "first": 1960,
+        "last": 2024,
+        "rejection": " TAXSIM: Federal tax calculator available 1960 - 2024 only.",
+        "evidence": "Run 2026-10-10 through PolicyEngine/policyengine-taxsim resources/taxsimtest/taxsim-docker-wrapper.sh at 549beade32dbc43cb31d2f37e46bec983660d28d (ubuntu:24.04 + gfortran runtime, linux/amd64, colima on macOS) on one-record inputs: law years 1960, 2023 and 2024 produced output rows under the header stamp \"cdate-compdate\"; 2025, 2026 and 2027 each printed the rejection line, wrote 'STOP 1' to stderr and exited 1. The 5,000-row fiit-taxsim-ecps batch-13 input (period 2026) gave the same rejection and exit status."
+      }
     },
     "taxsimtest/taxsimtest-osx-new.exe": {
       "sha256": "8371718c4728604be595a6bfd3dd16a62a2830b85084557b2aaa0c74b342b679",
-      "bytes": 1712528
+      "bytes": 1712528,
+      "format": "ELF 64-bit x86-64, dynamically linked (Linux, despite the name)",
+      "build": "cdate-compdate",
+      "law_years": {
+        "first": 1960,
+        "last": 2026,
+        "rejection": " TAXSIM: Federal tax calculator available 1960 -         2026  only.",
+        "evidence": "Run 2026-10-10 through PolicyEngine/policyengine-taxsim resources/taxsimtest/taxsim-docker-wrapper.sh at 549beade32dbc43cb31d2f37e46bec983660d28d (ubuntu:24.04 + gfortran runtime, linux/amd64, colima on macOS) on one-record inputs: law years 1960, 2023, 2024, 2025 and 2026 produced output rows; 2027 printed the rejection line, wrote 'STOP 1' to stderr and exited 1. No platform selects this file. On the 5,000-row fiit-taxsim-ecps batch-13 input it printed seven rows, then ' TAXSIM: More CTC elegible than EIC elegible' for the record with taxsimid 8 and ' TAXSIM: Abandoning processing', and exited 1."
+      }
     },
     "taxsimtest/taxsimtest-osx.exe": {
       "sha256": "0d9e43a983055d44eec9e5de7edfc933fa061b2a336716d760fe98abf4336319",
-      "bytes": 1961912
+      "bytes": 1961912,
+      "format": "Mach-O 64-bit x86_64 (macOS)",
+      "build": "cdate-20260521",
+      "law_years": {
+        "first": 1960,
+        "last": 2026,
+        "rejection": " TAXSIM: Federal tax calculator available 1960 -         2026  only.",
+        "evidence": "Run 2026-10-10 on a macOS 26 arm64 host on one-record inputs: law years 1960, 2023, 2024, 2025 and 2026 produced output rows under the header stamp \"cdate-20260521\"; 2027 printed the rejection line, wrote 'STOP 1' to stderr and exited 1. The 5,000-row fiit-taxsim-ecps batch-13 input (period 2026) produced 5,000 rows and exited 0."
+      }
     },
     "taxsimtest/taxsimtest-windows.exe": {
       "sha256": "92e011693cbfd45634fe57a041e31099926246bddaad20b5143485ffac9297cb",
-      "bytes": 1921383
+      "bytes": 1921383,
+      "format": "PE32+ x86-64 console (Windows)",
+      "build": "cdate-2025Aug20",
+      "law_years": null
     }
   }
 }

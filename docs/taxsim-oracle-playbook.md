@@ -161,7 +161,12 @@ TAXSIM lane now fails CI.
    federal `qbid` and `v17` (itemized deductions allowed): unmapped until an
    Axiom concept exists.
 4. **Law year**: `TAXSIM_MAX_YEAR` (adapter) and the pinned release cap
-   modeled law at 2026. When Axiom moves to 2027 before NBER does, the
+   modeled law at 2026, but of the platform executables only the macOS one is
+   known to accept 2026. Each bundled executable's accepted range is pinned in
+   `taxsim_pins.json` (`law_years`; the Linux build stops at 2024), and every
+   TAXSIM caller refuses a law year
+   outside the resolved binary's range before running it
+   (`pins.require_law_years`). When Axiom moves to 2027 before NBER does, the
    TAXSIM lanes stay pinned at their last supported year and their suites'
    `period` must NOT silently advance — bump the pin (a new
    `taxsim_pins.json`, full identity refresh, and re-baselined dispositions)

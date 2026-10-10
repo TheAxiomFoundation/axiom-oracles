@@ -48,6 +48,7 @@ from axiom_oracles.comparison.dispositions import (
     apply_dispositions_from_dir,
     report_json_text,
 )
+from axiom_oracles.adapters.taxsim import pins as taxsim_pins
 from axiom_oracles.provenance import build_provenance, rulespec_provenance
 
 warnings.filterwarnings("ignore")
@@ -63,7 +64,9 @@ REPORTS = REPO_ROOT / "reports"
 DASH_PUBLIC = REPO_ROOT / "dashboard" / "public" / "data"
 
 VALIDATION_YEAR = 2026
-TAXSIM_YEAR = 2026  # policyengine-taxsim 2.30.0 models 2026 law incl. OBBBA
+# The pinned macOS binary accepts 2026; the pinned Linux binary stops at 2024,
+# so main() refuses to run on Linux (taxsim_pins.json law_years).
+TAXSIM_YEAR = 2026
 
 # TAXSIM state codes (not FIPS) from the adapter projection.
 _TAXSIM_STATE = {
@@ -994,7 +997,10 @@ def _taxsim_output_column(state: str) -> str:
     return targets[0]
 
 
-def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
+def _taxsim_liabilities(
+    cases: list[Case],
+    recorder: taxsim_pins.TaxsimIdentityRecorder,
+) -> dict[str, float]:
     from policyengine_taxsim.runners.taxsim_runner import TaxsimRunner
     import pandas as pd
 
@@ -1022,6 +1028,11 @@ def _taxsim_liabilities(cases: list[Case]) -> dict[str, float]:
         result = runner.run(show_progress=False)
     except TypeError:
         result = runner.run()
+    recorder.observe(
+        Path(runner.taxsim_path),
+        rows=len(rows),
+        build_observed=taxsim_pins.build_stamp_from_columns(result.columns),
+    )
     records = result.to_dict(orient="records")
     # One resolution per state, not per record — the resolver re-reads the
     # concept mapping and all of a grid's cases share one state anyway.
@@ -1160,6 +1171,7 @@ def _build_report(
     axiom: dict[tuple[str, str, int], float],
     pe: dict[str, float],
     taxsim: dict[str, float],
+    taxsim_identity: dict | None = None,
 ) -> dict:
     tol, rel = _TOL[state]
     concept = _LIABILITY_OUTPUT[state]
@@ -1242,7 +1254,7 @@ def _build_report(
     comparison_count = n * 2
     mismatch_count = len(mismatches)
     match_count = pe_matches + taxsim_matches
-    return {
+    report = {
         "schema_version": "axiom.comparison_report.v2",
         "suite": f"{state.lower()}-income-tax-liability",
         "concept": concept,
@@ -1289,6 +1301,9 @@ def _build_report(
             ),
         },
     }
+    if taxsim_identity:
+        report["engine_identity"] = {"taxsim": taxsim_identity}
+    return report
 
 
 def _finalize_report(
@@ -1303,12 +1318,18 @@ def _finalize_report(
         REPO_ROOT / "dispositions",
         repo_root=REPO_ROOT,
     )
+    taxsim = (report.get("engine_identity") or {}).get("taxsim") or {}
     finalized["provenance"] = build_provenance(
         generated_by=(
             "scripts/generate_state_income_tax_liability.py::"
             f"{report['suite']}"
         ),
         rulespecs=rulespecs,
+        oracle={
+            "name": "policyengine-taxsim",
+            "policyengine_taxsim": taxsim_pins.pinned_version(),
+            "taxsim_binaries": taxsim.get("binaries"),
+        },
         generated_at=generated_at,
     )
     return finalized
@@ -1328,6 +1349,10 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = _parse_args(argv)
+    try:
+        taxsim_pins.require_law_years([TAXSIM_YEAR], binary_path=_taxsim_binary())
+    except taxsim_pins.TaxsimLawYearError as exc:
+        raise SystemExit(str(exc)) from exc
     selected_states = (args.state,) if args.state else _STATES
     cases = _grid(selected_states)
     axiom = _axiom_liabilities(selected_states)
@@ -1405,7 +1430,10 @@ def main(argv: list[str] | None = None) -> int:
         for case in cases
         if case.state in runnable
     }
-    taxsim = _taxsim_liabilities([c for c in cases if c.state in runnable])
+    taxsim_recorder = taxsim_pins.TaxsimIdentityRecorder()
+    taxsim = _taxsim_liabilities(
+        [c for c in cases if c.state in runnable], taxsim_recorder
+    )
     REPORTS.mkdir(exist_ok=True)
     DASH_PUBLIC.mkdir(parents=True, exist_ok=True)
     stamp = date.today().isoformat()
@@ -1413,7 +1441,7 @@ def main(argv: list[str] | None = None) -> int:
     rulespecs = rulespec_provenance([RULESPEC_US])
     for state in runnable:
         report = _finalize_report(
-            _build_report(state, cases, axiom, pe, taxsim),
+            _build_report(state, cases, axiom, pe, taxsim, taxsim_recorder.to_dict()),
             generated_at=generated_at,
             rulespecs=rulespecs,
         )

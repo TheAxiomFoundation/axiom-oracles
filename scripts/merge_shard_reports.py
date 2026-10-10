@@ -5,7 +5,10 @@ Big states OOM a single compare process on constrained machines; the
 ``--case-shard K/N`` option runs disjoint case subsets in fresh processes.
 This merges the shard reports back into one ``axiom.comparison_report.v2``:
 counters and weights sum, row lists concatenate, aggregates re-sum by
-concept, and per-shard identity fields must agree.
+concept, and per-shard identity fields must agree. ``engine_identity``
+binaries (the TAXSIM executables each shard ran) merge by identity with
+their row counts summed; shards that ran different binaries keep one entry
+per binary.
 
 Usage:
     merge_shard_reports.py OUT.json SHARD0.json SHARD1.json [...]
@@ -122,6 +125,48 @@ def merge(shards: list[dict]) -> dict:
                         aggregate.get(key) or 0
                     )
     merged["aggregates"] = list(buckets.values())
+    engine_identity = _merge_engine_identity(shards)
+    if engine_identity is None:
+        merged.pop("engine_identity", None)
+    else:
+        merged["engine_identity"] = engine_identity
+    return merged
+
+
+def _merge_engine_identity(shards: list[dict]) -> dict | None:
+    blocks = [shard.get("engine_identity") for shard in shards]
+    if not any(blocks):
+        return None
+    if not all(blocks):
+        raise SystemExit(
+            "shards disagree on engine_identity: some record the binaries "
+            "they ran and some do not"
+        )
+    merged: dict = {}
+    for engine in sorted({key for block in blocks for key in block}):
+        parts = [block.get(engine) for block in blocks]
+        if not all(parts):
+            raise SystemExit(f"shards disagree on engine_identity.{engine}")
+        header = {k: v for k, v in parts[0].items() if k != "binaries"}
+        for part in parts[1:]:
+            other = {k: v for k, v in part.items() if k != "binaries"}
+            if other != header:
+                raise SystemExit(
+                    f"shards disagree on engine_identity.{engine}: "
+                    f"{header!r} vs {other!r}"
+                )
+        binaries: dict[str, dict] = {}
+        for part in parts:
+            for binary in part.get("binaries") or []:
+                key = json.dumps(
+                    {k: v for k, v in binary.items() if k != "rows"},
+                    sort_keys=True,
+                )
+                if key in binaries:
+                    binaries[key]["rows"] += int(binary.get("rows") or 0)
+                else:
+                    binaries[key] = {**binary, "rows": int(binary.get("rows") or 0)}
+        merged[engine] = {**header, "binaries": list(binaries.values())}
     return merged
 
 

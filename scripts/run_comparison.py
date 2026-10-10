@@ -1306,6 +1306,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
+        if "taxsim" in engines:
+            oracle.update(_taxsim_oracle_identity(output))
     elif runner_type in ("federal-tax-liability-grid", "snap-abawd-boundary-grid"):
         pins = _resolve_pe_oracle_pins(params)
         oracle = {
@@ -1321,7 +1323,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "policyengine_package": pins[0],
             "policyengine_us": pins[1].split("==", 1)[-1],
             "policyengine_core": pins[2].split("==", 1)[-1],
-            "policyengine_taxsim": _taxsim_pin_version(),
+            **_taxsim_oracle_identity(output),
         }
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
@@ -2042,6 +2044,48 @@ def _taxsim_pin_version() -> str:
     return pins.pinned_version()
 
 
+def _taxsim_oracle_identity(output: Path) -> dict:
+    """TAXSIM keys for ``provenance.oracle``, lifted from the written report.
+
+    ``policyengine_taxsim`` is the pinned package version the runner
+    installs. ``taxsim_binaries`` is the report's
+    ``engine_identity.taxsim.binaries``: the path, SHA-256, build stamp
+    (embedded and printed), platform and row count of each TAXSIM binary
+    the run executed. A report without that block (written before it
+    existed) records the version only.
+    """
+    identity: dict = {"policyengine_taxsim": _taxsim_pin_version()}
+    try:
+        report = json.loads(output.read_text())
+    except (OSError, json.JSONDecodeError):
+        return identity
+    taxsim = (
+        (report.get("engine_identity") or {}).get("taxsim")
+        if isinstance(report, dict)
+        else None
+    )
+    if isinstance(taxsim, dict) and taxsim.get("binaries"):
+        identity["taxsim_binaries"] = [dict(item) for item in taxsim["binaries"]]
+    return identity
+
+
+def _require_taxsim_law_year(period: object, suite: str) -> None:
+    """Stop before building anything when TAXSIM rejects the law year here.
+
+    Checks the pinned binary for this platform (what ``--with
+    policyengine-taxsim==<pin>`` installs into the run's environment), not
+    whatever this script's own venv holds.
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    try:
+        pins.require_law_years(
+            [int(str(period).split("-", 1)[0])], use_installed=False
+        )
+    except pins.TaxsimLawYearError as exc:
+        raise SystemExit(f"{suite}: {exc}") from exc
+
+
 def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
     """PE oracle pins for an in-repo compare, honoring per-comparison overrides.
 
@@ -2181,6 +2225,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     # Axiom side, so it needs neither a built engine binary nor a composed
     # program — skip the Rust dependency entirely rather than force a build.
     uses_axiom = "axiom" in engines
+    if "taxsim" in engines:
+        _require_taxsim_law_year(params["period"], params.get("suite") or "compare")
     if uses_axiom:
         _ensure_engine_binary(axiom_rules_repo, kind="release")
         _ensure_composed_axiom_program(params, axiom_rules_repo)
@@ -2826,6 +2872,10 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     unavailable; committed numerical reports are never silently reused.
     """
     params = runner["parameters"]
+    # The generator re-checks its own TAXSIM_YEAR against the binary it
+    # resolves; this stops a Linux host before the environment is built.
+    if params.get("taxsim_law_year") is not None:
+        _require_taxsim_law_year(params["taxsim_law_year"], str(params["state"]))
     rulespec_root, axiom_rules_repo = _resolve_state_income_tax_grid_repos(params)
     # The config object is shared with the outer provenance stamper. Record the
     # exact paths that actually execute, so a successful grid can never replace
