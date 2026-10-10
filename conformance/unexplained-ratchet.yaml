@@ -486,6 +486,8 @@ ratchets:
   unexplained_max: 0
 - suite: us-tariff-panel
   unexplained_max: 0
+- suite: us-taxable-income-grid
+  unexplained_max: 0
 - suite: ut-income-tax-liability
   unexplained_max: 0
 - suite: ut-income-tax-populace

@@ -15,6 +15,8 @@ from dataclasses import replace
 from pathlib import Path
 
 import pytest
+from hypothesis import example, given, settings
+from hypothesis import strategies as st
 
 REPO_ROOT = Path(__file__).parents[1]
 SCRIPTS = REPO_ROOT / "scripts"
@@ -718,6 +720,7 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         "us-seca-grid",
         "us-salt-deduction-grid",
         "us-itemized-taxable-income-deductions-grid",
+        "us-taxable-income-grid",
     }
     covered = {p.suite for p in universe.in_scope() if p.suite is not None}
     assert covered <= live_pe_suites
@@ -752,6 +755,12 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
     )
     assert by_name["salt_deduction"].suite == "us-salt-deduction-grid"
     assert "all five filing statuses" in by_name["salt_deduction"].note
+    assert by_name["taxable_income"].suite == "us-taxable-income-grid"
+    assert "14 engine-verified" in by_name["taxable_income"].note
+    assert "13 nonzero" in by_name["taxable_income"].note
+    assert "all five filing statuses" in by_name["taxable_income"].note
+    assert "resolved section 63(e)" in by_name["taxable_income"].note
+    assert "both 14/14" in by_name["taxable_income"].note
     chunk_one_suites = {
         "us-salt-deduction-grid",
         "us-itemized-taxable-income-deductions-grid",
@@ -771,12 +780,10 @@ def test_us_pe_covered_programs_name_a_live_pe_suite():
         for name in (
             "alternative_minimum_tax",
             "foreign_tax_credit",
-            "taxable_income",
         )
     } == {
         "alternative_minimum_tax": None,
         "foreign_tax_credit": None,
-        "taxable_income": None,
     }
     assert by_name["savers_credit"].suite == "us-savers-grid"
     assert "34 fixture-bound" in by_name["savers_credit"].note
@@ -1736,6 +1743,28 @@ def test_ratchet_fails_when_unexplained_rises():
                                axiom_attributed_open_max=0, policies_in_scope=10)
     violations = check_regressions(ratchet, _summary(4, 1, 0))
     assert violations and "unexplained_total" in violations[0]
+
+
+@settings(max_examples=50, deadline=None, database=None)
+@given(unexplained=st.integers(min_value=1, max_value=1_000_000))
+@example(unexplained=1)
+def test_us_pe_committed_ratchet_rejects_every_unexplained_mismatch(unexplained):
+    import yaml
+
+    document = yaml.safe_load(
+        (CONFORMANCE_DIR / "ratchet.yaml").read_text()
+    )
+    row = next(row for row in document["ratchets"] if row["jurisdiction"] == "us-pe")
+    ratchet = RatchetInvariant.from_row(row)
+    summary = {
+        "covered": ratchet.covered_min,
+        "unexplained_total": unexplained,
+        "axiom_attributed_open": 0,
+    }
+    assert any(
+        "unexplained_total" in violation
+        for violation in check_regressions(ratchet, summary)
+    )
 
 
 def test_ratchet_fails_when_axiom_gap_rises():
