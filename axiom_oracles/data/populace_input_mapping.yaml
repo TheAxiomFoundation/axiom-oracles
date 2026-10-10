@@ -537,8 +537,11 @@ mappings:
   # 42 USC 1382a(b)(23) excludes "interest or dividend income from
   # resources—(A) not excluded under section 1382b(a) ..., or (B) excluded
   # pursuant to Federal law other than section 1382b(a)" (20 CFR
-  # 416.1124(c)(22)), and the deposits, stocks and bonds that pay them are
-  # countable resources (20 CFR 416.1201(b)). rulespec-us does not encode
+  # 416.1124(c)(22)). The population carries annual totals with no link to
+  # the resource that paid them, so all of it is treated as income from
+  # ordinary deposits, stocks and bonds, which are countable resources (20
+  # CFR 416.1201(b)); income from a resource excluded under 1382b(a) follows
+  # that exclusion's own rule and is not modeled. rulespec-us does not encode
   # (b)(23) yet, so this slot carries the exclusion (axiom-oracles#567).
   - match: { kind: suffix, value: annual_income_not_paid_on_basis_of_need }
     scope: person

@@ -11,9 +11,9 @@ same household the same way wherever the law lets them:
 * SNAP, TANF (the federal source list) and Medicaid MAGI give a dollar of
   tax-exempt interest and a dollar of taxable interest the same weight.
 * SSI counts both, which 42 USC 1382a(b)(23) does not
-  (__PE_SSI_ISSUE__). That last test is a tripwire: when PolicyEngine
-  implements the exclusion it fails, and the ssi-ecps dispositions citing the
-  issue should be retired with it.
+  (PolicyEngine/policyengine-us#10079). That last test is a tripwire: when
+  PolicyEngine implements the exclusion it fails, and the ssi-ecps
+  dispositions citing the issue should be retired with it.
 
 Expected amounts come from the inputs alone: 12,000 a year is 1,000 a month,
 and a filer with no other income has AGI equal to the taxable interest.
@@ -97,11 +97,12 @@ def test_policyengine_weighs_tax_exempt_interest_like_taxable_interest(
 
 
 def test_policyengine_ssi_still_counts_interest(simulations) -> None:
-    """Tripwire for __PE_SSI_ISSUE__ (see the module docstring)."""
+    """Tripwire for PolicyEngine/policyengine-us#10079 (see the module docstring)."""
     for arm in ("taxable", "exempt"):
         assert _value(simulations[arm], "ssi_unearned_income", YEAR) == pytest.approx(
             ANNUAL_INTEREST
         ), (
             "PolicyEngine no longer counts interest as SSI unearned income: "
-            "retire the ssi-ecps dispositions that cite __PE_SSI_ISSUE__ and this test"
+            "retire the ssi-ecps dispositions that cite "
+            "PolicyEngine/policyengine-us#10079, and this test"
         )
