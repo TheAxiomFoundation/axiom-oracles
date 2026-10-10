@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
 import subprocess
 import tempfile
 from calendar import monthrange
@@ -125,40 +126,21 @@ class AxiomRulesRunner(EngineAdapter):
                 allowed_program_refs,
                 output_aliases=output_aliases,
             )
-            # Keep the compared outputs separate from full-evidence closure
-            # outputs. Cross-entity aggregation applies only to the requested
-            # comparison surface; per-entity intermediates remain component
-            # evidence and must not be presented as household sums.
-            aggregate_output_targets = tuple(execution_targets)
-            if self.record_all_outputs:
-                # Full-evidence mode: also query every derived rule in the
-                # compared concepts' dependency closure, so each case
-                # records the complete computation chain (intermediates
-                # included). Rules OUTSIDE the closure are not queried —
-                # forcing them evaluates program surfaces whose inputs the
-                # projector legitimately prunes (e.g. citizenship modules)
-                # and fails every case with missing-input errors.
-                known = set(execution_targets)
-                case_entity = str(
-                    cases[0].metadata.get(AXIOM_ENTITY_METADATA_KEY)
-                    or self.default_entity
-                )
-                execution_targets = execution_targets + [
-                    name
-                    for name in _derived_closure_ids(
-                        artifact_path,
-                        execution_targets,
-                        entity=case_entity,
-                    )
-                    if name not in known
-                ]
+            # Full-evidence mode (record_all_outputs) queries only the compared
+            # outputs and reads the rest of the computation chain from the
+            # explain-mode trace: every derived rule the engine evaluated for
+            # the queried entity. Querying the compared outputs' dependency
+            # closure instead forced the untaken branch of every conditional
+            # in it — e.g. 26 USC 21's creditable expenses when the claim
+            # requirements already zeroed the credit — whose inputs the
+            # projector need not supply, and that one missing input failed
+            # every case in the batch.
             results = self._run_cases(
                 cases,
                 execution_targets,
                 artifact_path,
                 allowed_program_refs=allowed_program_refs,
                 output_aliases=output_aliases,
-                aggregate_output_targets=aggregate_output_targets,
             )
             return [_remap_output_aliases(result, output_aliases) for result in results]
 
@@ -302,7 +284,6 @@ class AxiomRulesRunner(EngineAdapter):
         *,
         allowed_program_refs: "_AllowedProgramRefs | None" = None,
         output_aliases: Mapping[str, str] | None = None,
-        aggregate_output_targets: tuple[str, ...] = (),
     ) -> EngineResult:
         period = _period_for_case(case)
         input_record_overlays = _case_input_record_overlays(case, period)
@@ -315,7 +296,6 @@ class AxiomRulesRunner(EngineAdapter):
                         artifact_path,
                         allowed_program_refs=allowed_program_refs,
                         input_record_overlay=overlay,
-                        aggregate_output_targets=aggregate_output_targets,
                     ),
                     output_aliases or {},
                 )
@@ -327,7 +307,6 @@ class AxiomRulesRunner(EngineAdapter):
             output_targets,
             artifact_path,
             allowed_program_refs=allowed_program_refs,
-            aggregate_output_targets=aggregate_output_targets,
         )
 
     def _run_cases(
@@ -338,7 +317,6 @@ class AxiomRulesRunner(EngineAdapter):
         *,
         allowed_program_refs: "_AllowedProgramRefs | None" = None,
         output_aliases: Mapping[str, str] | None = None,
-        aggregate_output_targets: tuple[str, ...] = (),
     ) -> list[EngineResult]:
         if not output_targets:
             return [
@@ -357,7 +335,6 @@ class AxiomRulesRunner(EngineAdapter):
                     artifact_path,
                     allowed_program_refs=allowed_program_refs,
                     output_aliases=output_aliases,
-                    aggregate_output_targets=aggregate_output_targets,
                 )
                 for case in cases
             ]
@@ -383,7 +360,6 @@ class AxiomRulesRunner(EngineAdapter):
                     artifact_path,
                     allowed_program_refs=allowed_program_refs,
                     output_aliases=output_aliases,
-                    aggregate_output_targets=aggregate_output_targets,
                 )
                 for case in cases
             ]
@@ -476,6 +452,17 @@ class AxiomRulesRunner(EngineAdapter):
         )
         if process.returncode != 0:
             error = process.stderr.strip() or "Axiom RuleSpec execution failed"
+            failing_index = _namespaced_case_index(error, len(cases))
+            if failing_index is not None:
+                return self._isolate_case_failure(
+                    cases,
+                    output_targets,
+                    artifact_path,
+                    failing_index=failing_index,
+                    error=error,
+                    allowed_program_refs=allowed_program_refs,
+                    input_record_overlays=input_record_overlays,
+                )
             return [
                 EngineResult(
                     engine=self.name,
@@ -524,7 +511,10 @@ class AxiomRulesRunner(EngineAdapter):
             EngineResult(
                 engine=self.name,
                 household_id=case.case_id,
-                values=_values_from_query_result(query_result),
+                values=_values_from_query_result(
+                    query_result,
+                    include_trace=self.record_all_outputs,
+                ),
                 raw={
                     "metadata": payload.get("metadata"),
                     "result": query_result,
@@ -532,6 +522,58 @@ class AxiomRulesRunner(EngineAdapter):
             )
             for case, query_result in zip(cases, query_results, strict=True)
         ]
+
+    def _isolate_case_failure(
+        self,
+        cases: list[Case],
+        output_targets: list[str],
+        artifact_path: Path,
+        *,
+        failing_index: int,
+        error: str,
+        allowed_program_refs: "_AllowedProgramRefs | None",
+        input_record_overlays: list[list[dict[str, Any]]] | None,
+    ) -> list[EngineResult]:
+        """Keep one case's engine error from failing its whole batch.
+
+        ``run-compiled`` exits non-zero on the first query that errors, so a
+        single case's missing input used to fail every case in the batch.
+        An error naming exactly one batch namespace (``case-<i>::``) belongs
+        to that case: record it there, with the namespace stripped, and
+        rerun the remaining cases as two halves, isolating any further
+        failure the same way. Each case's records, relations and query sit
+        under its own namespace, so its values do not depend on its
+        batch-mates. Every failed run attributes a distinct case, so k
+        case-attributed failures cost at most 2k + 1 engine runs.
+        """
+
+        results = {
+            failing_index: EngineResult(
+                engine=self.name,
+                household_id=cases[failing_index].case_id,
+                values={},
+                errors=(error.replace(f"case-{failing_index}::", ""),),
+            )
+        }
+        remaining = [index for index in range(len(cases)) if index != failing_index]
+        middle = len(remaining) // 2
+        for half in (remaining[:middle], remaining[middle:]):
+            if not half:
+                continue
+            half_results = self._run_case_batch_once(
+                [cases[index] for index in half],
+                output_targets,
+                artifact_path,
+                allowed_program_refs=allowed_program_refs,
+                input_record_overlays=(
+                    [input_record_overlays[index] for index in half]
+                    if input_record_overlays is not None
+                    else None
+                ),
+            )
+            for index, result in zip(half, half_results, strict=True):
+                results[index] = result
+        return [results[index] for index in range(len(cases))]
 
     def _run_case_once(
         self,
@@ -541,7 +583,6 @@ class AxiomRulesRunner(EngineAdapter):
         *,
         allowed_program_refs: "_AllowedProgramRefs | None" = None,
         input_record_overlay: list[dict[str, Any]] | None = None,
-        aggregate_output_targets: tuple[str, ...] = (),
     ) -> EngineResult:
         request = self._execution_request(
             case,
@@ -582,12 +623,16 @@ class AxiomRulesRunner(EngineAdapter):
         aggregation = _case_result_aggregation(case)
         raw: Any = payload
         if aggregation is None:
-            values = _values_from_response(payload)
+            values = _values_from_response(
+                payload,
+                include_trace=self.record_all_outputs,
+            )
         else:
             values, components, aggregation_errors = _sum_query_results(
                 payload,
                 aggregation["entity_ids"],
-                aggregate_output_targets or tuple(output_targets),
+                tuple(output_targets),
+                include_trace=self.record_all_outputs,
             )
             raw = {
                 **payload,
@@ -835,63 +880,22 @@ def _generated_program_path(temp_dir: Path, target: str | None) -> Path:
     return temp_dir / f"rulespec-{prefix}" / relative_path.with_suffix(".yaml")
 
 
-def _derived_closure_ids(
-    artifact_path: Path,
-    roots: list[str],
-    *,
-    entity: str | None = None,
-) -> list[str]:
-    """Qualified ids of every derived rule reachable from ``roots``.
+_CASE_NAMESPACE_PATTERN = re.compile(r"\bcase-(\d+)::")
 
-    Walks ``{"kind": "derived", "name": ...}`` references in the compiled
-    expr trees. Roots may be qualified ids or local names.
+
+def _namespaced_case_index(error: str, case_count: int) -> int | None:
+    """Batch index of the one case an engine error names, else ``None``.
+
+    Batched requests namespace each case's entities as ``case-<i>::`` (see
+    ``_batched_execution_request``). An error naming no namespace, or more
+    than one, is not attributable to a single case and stays batch-wide.
     """
 
-    try:
-        compiled = json.loads(artifact_path.read_text())
-    except (OSError, json.JSONDecodeError):
-        return []
-    program = compiled.get("program", compiled)
-    rules = [r for r in program.get("derived", []) or [] if isinstance(r, dict)]
-    by_name: dict[str, dict] = {}
-    for rule in rules:
-        for key in (rule.get("name"), rule.get("id")):
-            if isinstance(key, str) and key:
-                by_name.setdefault(key, rule)
-
-    def refs(node) -> list[str]:
-        found = []
-        if isinstance(node, dict):
-            if node.get("kind") == "derived" and isinstance(node.get("name"), str):
-                found.append(node["name"])
-            for child in node.values():
-                found.extend(refs(child))
-        elif isinstance(node, list):
-            for child in node:
-                found.extend(refs(child))
-        return found
-
-    seen: set[str] = set()
-    queue = [root for root in roots if root in by_name]
-    closure_ids: list[str] = []
-    while queue:
-        key = queue.pop()
-        rule = by_name.get(key)
-        if rule is None:
-            continue
-        identifier = rule.get("id") or rule.get("name")
-        if not isinstance(identifier, str) or identifier in seen:
-            continue
-        seen.add(identifier)
-        # Queries evaluate at the case's entity; rules scoped to other
-        # entities (per-Person intermediates) would be force-evaluated at
-        # the wrong scope and fail on entity-mismatched inputs. They are
-        # still walked THROUGH so household-level rules beyond them stay
-        # reachable — just not queried.
-        if entity is None or (rule.get("entity") or entity) == entity:
-            closure_ids.append(identifier)
-        queue.extend(refs(rule.get("expr")))
-    return sorted(closure_ids)
+    indices = {int(match) for match in _CASE_NAMESPACE_PATTERN.findall(error)}
+    if len(indices) != 1:
+        return None
+    (index,) = indices
+    return index if index < case_count else None
 
 
 def _output_targets(variables: list[str] | None) -> list[str]:
@@ -1401,12 +1405,16 @@ def _namespace_entity_id(namespace: str, entity_id: Any) -> str:
     return f"{namespace}{entity_id}"
 
 
-def _values_from_response(payload: Mapping[str, Any]) -> dict[str, Any]:
+def _values_from_response(
+    payload: Mapping[str, Any],
+    *,
+    include_trace: bool = False,
+) -> dict[str, Any]:
     values: dict[str, Any] = {}
     for result in payload.get("results", []):
         if not isinstance(result, Mapping):
             continue
-        values.update(_values_from_query_result(result))
+        values.update(_values_from_query_result(result, include_trace=include_trace))
     return values
 
 
@@ -1414,8 +1422,14 @@ def _sum_query_results(
     payload: Mapping[str, Any],
     entity_ids: tuple[str, ...],
     aggregate_outputs: tuple[str, ...],
+    *,
+    include_trace: bool = False,
 ) -> tuple[dict[str, Any], list[dict[str, Any]], tuple[str, ...]]:
-    """Sum requested numeric outputs across ordered entity query results."""
+    """Sum requested numeric outputs across ordered entity query results.
+
+    Only ``aggregate_outputs`` are summed. Trace intermediates (full-evidence
+    mode) stay on their entity's component: they are not household sums.
+    """
 
     query_results = [
         result for result in payload.get("results", []) if isinstance(result, Mapping)
@@ -1423,7 +1437,7 @@ def _sum_query_results(
     components = [
         {
             "entity_id": entity_id,
-            "values": _values_from_query_result(result),
+            "values": _values_from_query_result(result, include_trace=include_trace),
         }
         for entity_id, result in zip(entity_ids, query_results)
     ]
@@ -1458,8 +1472,22 @@ def _sum_query_results(
     return aggregated, components, tuple(errors)
 
 
-def _values_from_query_result(result: Mapping[str, Any]) -> dict[str, Any]:
+def _values_from_query_result(
+    result: Mapping[str, Any],
+    *,
+    include_trace: bool = False,
+) -> dict[str, Any]:
     values: dict[str, Any] = {}
+    if include_trace:
+        # Explain mode's trace holds every derived rule the engine evaluated
+        # for this query's entity, keyed and shaped like outputs. Untaken
+        # branches never evaluate, so they are absent rather than forced.
+        # The queried outputs are written after it, so they always win.
+        trace = result.get("trace")
+        if isinstance(trace, Mapping):
+            for trace_key, node in trace.items():
+                if isinstance(node, Mapping):
+                    values[str(trace_key)] = _output_value(node)
     for output_key, output in result.get("outputs", {}).items():
         if not isinstance(output, Mapping):
             continue
