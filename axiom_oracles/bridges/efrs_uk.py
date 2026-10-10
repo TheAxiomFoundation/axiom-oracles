@@ -6886,11 +6886,10 @@ def policyengine_output_value(spec: dict[str, Any], row: Any) -> float:
     if spec.get("pe_transform") == "annual_to_weekly":
         return raw_value / WEEKS_IN_YEAR
     if spec.get("pe_transform") == "annual_to_weekly_per_carer":
-        return (
-            raw_value
-            / WEEKS_IN_YEAR
-            / max(1, int(money(row_value(row, "num_carers", 0))))
-        )
+        carers = row_value(row, "num_carers")
+        if carers is None or not math.isfinite(float(carers)):
+            return math.nan
+        return raw_value / WEEKS_IN_YEAR / max(1, int(carers))
     if spec.get("pe_transform") == "annual_to_monthly":
         return raw_value / MONTHS_IN_YEAR
     return raw_value
@@ -6899,8 +6898,14 @@ def policyengine_output_value(spec: dict[str, Any], row: Any) -> float:
 def policyengine_raw_output_value(spec: dict[str, Any], row: Any) -> float:
     expression = spec.get("pe_expression")
     if expression == "uc_award_before_takeup":
-        maximum_amount = money(row_value(row, "uc_maximum_amount", 0))
-        income_reduction = money(row_value(row, "uc_income_reduction", 0))
+        maximum = row_value(row, "uc_maximum_amount")
+        reduction = row_value(row, "uc_income_reduction")
+        if maximum is None or reduction is None:
+            return math.nan
+        maximum_amount, income_reduction = float(maximum), float(reduction)
+        # max(0, NaN) itself erases a missing return, so validate first.
+        if not all(math.isfinite(value) for value in (maximum_amount, income_reduction)):
+            return math.nan
         return max(0.0, maximum_amount - income_reduction)
     if expression is not None:
         raise ValueError(f"unsupported PolicyEngine expression: {expression!r}")

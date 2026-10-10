@@ -57,7 +57,7 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 SCOREBOARD_PATH = CONFORMANCE_DIR / "scoreboard.json"
 #: Dashboard-served mirror (identical bytes) so the static site can fetch it.
 DASHBOARD_SCOREBOARD_PATH = DASHBOARD_DATA_DIR / "conformance_scoreboard.json"
-#: Enumerated, shrink-only output-attestation debt (see conformance/waivers.py).
+#: Historical, shrink-only migration metadata; never authorizes coverage.
 WAIVERS_PATH = CONFORMANCE_DIR / "attestation_waivers.yaml"
 
 SCOREBOARD_SCHEMA = "axiom_oracles.conformance_scoreboard.v1"

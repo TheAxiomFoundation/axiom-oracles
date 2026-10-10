@@ -80,10 +80,9 @@ class PolicyScore:
     note: str | None = None
     #: One-word status for the drill-down table.
     status: str = "excluded"
-    #: How the covering report attests this policy's outputs: ``attested`` when
-    #: a registered output carries positive comparison evidence, ``waived:<reason>``
-    #: when the committed waiver file accounts for a binding the artifact cannot
-    #: show, None when the policy is not covered.
+    #: ``attested`` when a registered output carries a returned same-case pair;
+    #: None when the policy is not covered. Historical waiver metadata cannot
+    #: substitute for that pair.
     output_attestation: str | None = None
     #: Registered outputs the covering report shows positive comparisons for.
     attested_outputs: list[str] = field(default_factory=list)
@@ -112,9 +111,8 @@ class JurisdictionScoreboard:
     bridge_artifacts: int
     #: The exact conformance predicate.
     conformant: bool
-    #: Covered policies whose output binding rests on a committed waiver rather
-    #: than on evidence in the report. Published, not hidden: a conformant badge
-    #: with a non-zero count here is resting on that many un-attested bindings.
+    #: Historical compatibility field, always zero: coverage requires returned
+    #: same-case pairs and has no waiver bypass.
     covered_with_waived_output_attestation: int = 0
     #: Covered policies whose report records an oracle RELEASE other than the one
     #: this universe pins. Not blocking (reports legitimately lag a re-pin), but

@@ -5071,7 +5071,10 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             continue
         compared = sum(r["compared"] for r in rows)
         mismatches = sum(r["mismatches"] for r in rows)
-        matched = compared - mismatches
+        # Invalid returns remain diagnostic mismatches with engine errors,
+        # but have no arithmetic comparison weight and cannot consume a match.
+        uncompared_mismatches = sum(r.get("uncompared_mismatches", 0) for r in rows)
+        matched = compared - (mismatches - uncompared_mismatches)
         match_rate = (matched / compared * 100) if compared else 100.0
         aggregates.append(
             {
@@ -5086,7 +5089,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "match_rate": match_rate,
                 "match_weight": matched,
                 "mismatch_count": mismatches,
-                "mismatch_weight": mismatches,
+                "uncompared_mismatches": uncompared_mismatches,
+                "mismatch_weight": mismatches - uncompared_mismatches,
                 "missing_both_count": 0,
                 "missing_left_count": 0,
                 "missing_right_count": 0,
@@ -5100,7 +5104,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
     parent_compared = raw.get("compared_values", 0)
     parent_mismatches = raw.get("mismatch_count", 0)
-    parent_matched = parent_compared - parent_mismatches
+    parent_uncompared_mismatches = raw.get("uncompared_mismatches", 0)
+    parent_matched = parent_compared - (parent_mismatches - parent_uncompared_mismatches)
     parent_rate = (parent_matched / parent_compared * 100) if parent_compared else 100.0
     aggregates.insert(
         0,
@@ -5116,7 +5121,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "match_rate": parent_rate,
             "match_weight": parent_matched,
             "mismatch_count": parent_mismatches,
-            "mismatch_weight": parent_mismatches,
+            "uncompared_mismatches": parent_uncompared_mismatches,
+            "mismatch_weight": parent_mismatches - parent_uncompared_mismatches,
             "missing_both_count": 0,
             "missing_left_count": 0,
             "missing_right_count": 0,
@@ -5227,8 +5233,7 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         # Preserve the producer's output-level evidence; surface aggregates
         # cannot distinguish a subset from the full configured output list.
         "output_summary": raw.get("output_summary", []),
-        # Values are retained separately from numerical projection: native
-        # FIIT's money(None/NaN) == 0 must never become observation evidence.
+        # Preserve actual returned values, including invalid diagnostics.
         "observed_outputs": [
             {
                 **row,
@@ -5255,6 +5260,7 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             )),
             "match_count": parent_matched,
             "mismatch_count": parent_mismatches,
+            "uncompared_mismatches": parent_uncompared_mismatches,
             "mismatches_by_concept": mismatches_by_concept,
             "mismatches_by_kind": [
                 {"value": "amount_difference", "count": parent_mismatches}
@@ -5264,7 +5270,7 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "comparison_weight": parent_compared,
                 "match_rate": parent_rate,
                 "match_weight": parent_matched,
-                "mismatch_weight": parent_mismatches,
+                "mismatch_weight": parent_mismatches - parent_uncompared_mismatches,
             },
         },
     }

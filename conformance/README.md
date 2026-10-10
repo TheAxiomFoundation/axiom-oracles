@@ -379,7 +379,17 @@ and fails, naming the exact invariant, if any regressed:
   (`dispositions/README.md`) — so growth in it is invisible to the predicate,
   which is exactly why it is ratcheted. Confirm each new row really is a
   different-inputs artifact rather than an encoding or scope gap wearing that
-  label; if the growth is genuine, re-pin and say why in the PR.
+  label. Normal re-pinning cannot raise this ceiling: it retains
+  `min(previous_ceiling, current_count)`, and `--init` preserves existing rows.
+  Repair the bridge or reduce its residuals until the count is at or below the
+  pinned ceiling, then tighten the ratchet and verify it:
+  ```bash
+  uv run scripts/conformance_ratchet.py
+  uv run scripts/conformance_ratchet.py --check
+  ```
+  There is no supported ceiling-raising exception in this script. Accepting
+  genuine growth would require a separate, explicitly reviewed change to the
+  ratchet policy and baseline; a normal re-pin cannot accept it.
 
 The denominator (`policies_in_scope`) is recorded, not ratcheted: when the oracle
 model legitimately adds an in-scope policy, coverage is read against the new base.

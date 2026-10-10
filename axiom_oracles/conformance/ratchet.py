@@ -16,9 +16,9 @@ if any invariant regressed:
   without any gate noticing. Historical SSI dispositions cite a v1-slice scope
   omission alongside bridge-input divergence; residual debt remains in the
   underlying reports even when coverage is retracted for absent execution
-  evidence. Growth is legitimate sometimes, so this is a ratchet rather than a
-  block: raising it means re-pinning through
-  ``scripts/conformance_ratchet.py``, which shows up in review.
+  evidence. Normal re-pinning retains the lower of the existing ceiling and
+  current count; it cannot accept growth. Repair the bridge or reduce its
+  residuals before re-pinning. The script has no ceiling-raising exception.
 
 ``policies_in_scope`` is recorded too: when the oracle model adds an in-scope
 policy, the denominator legitimately grows — that is not a regression, but the
@@ -143,8 +143,9 @@ def check_regressions(
             "may only fall — new mismatches are being classed as harness "
             "input-boundary differences. Confirm each new row really is a "
             "different-inputs artifact (dispositions/README.md) and not an "
-            "encoding or scope gap wearing that label; if the growth is genuine, "
-            "re-pin with `uv run scripts/conformance_ratchet.py` and say why in "
-            "the PR."
+            "encoding or scope gap wearing that label. Repair the bridge or "
+            "reduce its residuals to the pinned ceiling, then re-pin with "
+            "`uv run scripts/conformance_ratchet.py` and run `--check`. Normal "
+            "re-pinning cannot raise a ceiling."
         )
     return violations

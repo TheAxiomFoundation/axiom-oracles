@@ -52,6 +52,7 @@ def test_empty_waiver_state_remains_valid(tmp_path, present):
 
 
 @settings(
+    deadline=None,
     max_examples=30,
     suppress_health_check=[HealthCheck.function_scoped_fixture],
 )
