@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 import yaml
-from hypothesis import given, settings, strategies as st
+from hypothesis import example, given, settings, strategies as st
 
 from axiom_oracles.comparison.dispositions import apply_dispositions
 from axiom_oracles.comparison.pe_axiom_standard import (
@@ -160,19 +160,33 @@ def test_eligibility_judgment_resolves_without_optional_kind(tmp_path, filtered)
     assert CompanionResolver(RecordedSource(record, "not_holds")).resolve(record) == []
 
 
-def test_conflicting_actual_row_types_fail_closed(tmp_path):
+@settings(max_examples=8, derandomize=True, deadline=None)
+@example(other_count=1)
+@given(other_count=st.integers(min_value=1, max_value=8))
+def test_conflicting_actual_row_types_fail_closed(tmp_path_factory, other_count):
     entry, report = _qbid()
     entry.pop("kind")
     entry.pop("pinned")
     case = entry.pop("case_id")
-    entry["case_selector"] = {"case_ids": [case, "other-case"]}
-    other = copy.deepcopy(report["mismatches"][0])
-    other.update(
-        case_id="other-case", kind="eligibility_right_only", left=False, right=True
-    )
-    report["mismatches"].append(other)
+    other_cases = [f"other-case-{index}" for index in range(other_count)]
+    entry["case_selector"] = {"case_ids": [case, *other_cases]}
+    for other_case in other_cases:
+        other = copy.deepcopy(report["mismatches"][0])
+        other.update(
+            case_id=other_case, kind="eligibility_right_only", left=False, right=True
+        )
+        report["mismatches"].append(other)
+    report["summary"]["comparison_count"] += other_count
+    report["summary"]["mismatch_count"] += other_count
     report = apply_dispositions(report, {"suite": report["suite"], "entries": [entry]})
-    records, errors = _write(tmp_path, report, entry=entry)
+    summary = report["summary"]
+    assert summary["mismatch_count"] == len(report["mismatches"])
+    assert summary["comparison_count"] == (
+        summary["match_count"] + summary["mismatch_count"]
+    )
+    records, errors = _write(
+        tmp_path_factory.mktemp("conflicting-kinds"), report, entry=entry
+    )
     assert errors == []
     record = records[0]
     assert any(

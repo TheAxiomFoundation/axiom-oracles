@@ -97,8 +97,47 @@ def _route_spec(route):
     return spec
 
 
+@settings(max_examples=100, deadline=None)
+@given(
+    closed_route=st.sampled_from(certify.CLOSED_ROUTES),
+    exec_route=st.sampled_from(certify.EXECUTABLE_ROUTES),
+    matches=st.integers(min_value=0, max_value=1_000_000),
+    mismatches=st.integers(min_value=0, max_value=1_000_000),
+)
+def test_route_pair_fixture_reports_reach_real_count_admission(
+    closed_route, exec_route, matches, mismatches
+):
+    """Every synthetic route pair supplies report evidence to real preflight."""
+    spec = _pair_spec(closed_route, exec_route)
+    report_path = certify.REPO_ROOT / "binding-control.json"
+    reports = {
+        report_path: {
+            "summary": {
+                "comparison_count": matches + mismatches,
+                "match_count": matches,
+                "mismatch_count": mismatches,
+            }
+        }
+    }
+    loaded = []
+
+    def load(path):
+        loaded.append(path)
+        return reports[path]
+
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(certify, "_load", load)
+        for entry in spec["suites"]:
+            certify._preflight_suite_count_admission(entry)
+
+    assert loaded == [report_path]
+
+
 def _pair_spec(closed_route, exec_route):
-    spec = {"period": "2025", "suites": [{"suite": "binding-control"}]}
+    spec = {
+        "period": "2025",
+        "suites": [{"suite": "binding-control", "report": "binding-control.json"}],
+    }
     for route in (closed_route, exec_route):
         part = _route_spec(route)
         if "computed" in part:
