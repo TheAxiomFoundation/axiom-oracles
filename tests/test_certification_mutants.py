@@ -830,6 +830,14 @@ def test_weighted_mass_must_be_finite_and_nonnegative():
             },
         )
         try:
+            if marker == "finite":
+                # Strict artifact admission rejects non-standard JSON before
+                # it can contribute any leg counts or weighted evidence.
+                with pytest.raises(
+                    ValueError, match="non-standard JSON numeric constant.*NaN"
+                ):
+                    _verdict(name)
+                continue
             leg, _e, defects = _verdict(name)
             assert leg["clean"] is False, marker
             assert any(marker in d for d in defects), (marker, defects)
@@ -3001,6 +3009,8 @@ def test_closure_check_pins_to_recorded_commit(tmp_path):
     cl = importlib.util.module_from_spec(spec)
     sys.modules["_mutant_closure_ledger"] = cl
     spec.loader.exec_module(cl)
+    if not cl.CORPUS_RELEASE_PATH.parent.is_dir():
+        pytest.skip("needs the local corpus checkout for full DK re-derivation")
     recorded = yaml.safe_load(
         (REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml").read_text()
     )["generated_facts"]["rulespec"]["commit"]
@@ -4151,6 +4161,9 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     certify = _load("certify")
     # The committed evidence is complete and computed; only the executable
     # verdict is forged here, in both directions.
+    closure_commit = json.loads((REPO / "closure/de/summary.json").read_text())[
+        "rulespec_commit"
+    ]
     signed = {
         "id": "signed-rulespec-estg-66-2025",
         "state": "valid",
@@ -4162,7 +4175,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
         "trusted_key_id": f"sha256:{'5' * 64}",
         "checkout_observation": {
             "repository": "TheAxiomFoundation/rulespec-de",
-            "commit": "6" * 40,
+            "commit": closure_commit,
             "tree": "7" * 40,
             "claim_mode": "attested",
         },
@@ -5482,7 +5495,7 @@ rules:
         == descriptor["encoding_manifest"]["source_file_sha256"]
     )
     wrong_checkout_commit = copy.deepcopy(descriptor)
-    wrong_checkout_commit["checkout_observation"]["commit"] = "0" * 40
+    wrong_checkout_commit["checkout_observation"]["commit"] = "a" * 40
     with pytest.raises(executable.DEExecutableError, match="pinned commit"):
         executable._validate_signed_descriptor_document(wrong_checkout_commit, manifest)
 
@@ -6247,3 +6260,17 @@ def test_de_census_and_certificate_carry_the_same_closure_blockers():
         )
         assert rows[program]["certificate_status"] == "pending"
         assert certificate["certified"]["value"] is False
+
+
+def test_de_certificate_leg_counts_completed_axiom_mismatches(monkeypatch):
+    certify = _load("certify")
+    entry = certify.PROGRAMS["de/kindergeld"]["suites"][0]
+    report = json.loads((REPO / entry["report"]).read_text())
+    axiom_leg = report["views"]["de/kindergeld"]["legs"][1]
+    axiom_leg["match_count"] -= 1
+    axiom_leg["mismatch_count"] += 1
+    monkeypatch.setattr(certify, "_load", lambda _path: report)
+    monkeypatch.setattr(certify, "_rederived_de_report", lambda: report)
+    leg, _evidence, _defects = certify._de_suite_verdict(entry)
+    assert leg["unexplained"] == leg["mismatches"] == 1
+    assert not leg["clean"]

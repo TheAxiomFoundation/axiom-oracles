@@ -46,6 +46,7 @@ if str(REPO_ROOT) not in sys.path:
 from axiom_oracles.evidence import (  # noqa: E402
     dashboard_delta,
     dashboard_match_rate,
+    strict_json_loads,
 )
 
 REPORTS = REPO_ROOT / "reports"
@@ -444,6 +445,27 @@ def emit_suite(suite: str, dashboard_config: dict) -> str:
     # changed report lacks producer-refreshed chunks.
     if has_versioned_chunks(suite):
         return f"preserve {suite}: versioned chunks (no full case rows in this run)"
+
+    # Complete legacy campaign corpora are also durable evidence. Without
+    # their ignored producer reports, emitting only mismatches would erase
+    # the matched households and their input/output evidence. Validate the
+    # existing corpus against the canonical report before preserving it;
+    # drift requires genuine source rows, never a destructive downgrade.
+    index_path = OUT_ROOT / suite / "index.json"
+    if index_path.exists():
+        index = strict_json_loads(index_path.read_bytes())
+        if not isinstance(index, dict):
+            raise ValueError(f"{suite}: existing case-artifact index must be an object")
+        if "partial" in index and index["partial"] != "mismatch-only":
+            raise ValueError(f"{suite}: unsupported case-artifact partial mode {index['partial']!r}")
+        if "partial" not in index:
+            problems, _stats = check_suite_artifacts(suite, dashboard_config)
+            if problems:
+                raise ValueError(
+                    f"{suite}: cannot preserve complete case corpus without "
+                    f"full source rows: {'; '.join(problems)}"
+                )
+            return f"preserve {suite}: complete legacy chunks (no full case rows in this run)"
 
     # No usable case rows — fall back to a mismatch-only queue, from the
     # annotated dashboard list when complete, else the full report's own.
