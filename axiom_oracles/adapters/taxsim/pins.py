@@ -40,7 +40,7 @@ PINS_PATH = Path(__file__).resolve().parent / "taxsim_pins.json"
 _BUILD_STAMP = r'"(cdate-[^"\s\x00]{1,32}|cd\d{10})"'
 _BUILD_STAMP_BYTES = re.compile(_BUILD_STAMP.encode())
 _BUILD_STAMP_TEXT = re.compile(_BUILD_STAMP)
-_BUILD_STAMP_COLUMN = re.compile(r'^"?(cdate-\S{1,32}|cd\d{10})"?$')
+_BUILD_STAMP_COLUMN = re.compile(r'^"?(cdate-[^"\s]{1,32}|cd\d{10})"?$')
 # idtl=5 output has no CSV header; its banner names the build instead:
 # " NBER TAXSIM @(#) $Version of: 20260521     With TCJA and BBB."
 _VERBOSE_VERSION = re.compile(r"\$Version of:\s*(\S+)")
@@ -266,11 +266,12 @@ def require_law_years(
 ) -> dict[str, Any] | None:
     """Refuse law years the TAXSIM binary that would run does not accept.
 
-    The binary is ``binary_path`` when given, else (with ``use_installed``)
-    the installed one for ``system`` (default: this host), else the pinned
-    binary for ``system`` (what the ``taxsim`` extra installs). A binary the
-    pin does not record, or whose range is unknown, is not checked. Returns
-    the identity of the existing binary that was resolved, else ``None``.
+    The binary is ``binary_path`` when it exists, else (with ``use_installed``
+    and no ``binary_path``) the installed one for ``system`` (default: this
+    host), else the pinned binary for ``system`` (what the ``taxsim`` extra
+    installs). A binary the pin does not record, or whose range is unknown,
+    is not checked. Returns the identity of the existing binary that was
+    resolved, else ``None``.
 
     Raises :class:`TaxsimLawYearError` naming the binary, its pinned range,
     the line it printed for a rejected year, and the pinned binaries that do
@@ -281,7 +282,11 @@ def require_law_years(
         return None
     system = _host_platform(system)
     path = binary_path
-    if path is None and use_installed:
+    if path is not None and not Path(path).is_file():
+        # A path that is not there cannot be hashed; the run will fail on it.
+        # Check what this platform would install instead.
+        path = None
+    elif path is None and use_installed:
         path = installed_binary_path(system)
     identity: dict[str, Any] | None = None
     if path is not None:

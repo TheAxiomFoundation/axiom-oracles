@@ -95,6 +95,7 @@ def test_build_stamps_are_read_from_bytes_header_banner_and_columns() -> None:
     assert pins.build_stamp_from_columns(['"cd2026081819"', "fiitax"]) == (
         "cd2026081819"
     )
+    assert pins.build_stamp_from_columns(['"cdate-20260521"']) == "cdate-20260521"
     assert pins.build_stamp_from_columns(["taxsimid", "fiitax"]) is None
 
 
@@ -206,6 +207,13 @@ def test_an_explicit_binary_is_identified_by_hash(tmp_path, monkeypatch) -> None
     )
     with pytest.raises(TaxsimLawYearError, match=f"{LINUX_KEY} at {binary}"):
         pins.require_law_years([2026], binary_path=binary, system="linux")
+
+
+def test_a_missing_explicit_binary_is_checked_against_the_pin(tmp_path) -> None:
+    missing = tmp_path / "taxsimtest-linux.exe"
+    with pytest.raises(TaxsimLawYearError, match=f"{LINUX_KEY} as pinned"):
+        pins.require_law_years([2026], binary_path=missing, system="linux")
+    assert pins.require_law_years([2024], binary_path=missing, system="linux") is None
 
 
 def test_use_installed_false_checks_the_pin_not_the_local_venv(
