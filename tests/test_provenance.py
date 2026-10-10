@@ -457,7 +457,13 @@ def test_pinned_repo_roots_win_over_the_convention_checkout(tmp_path, monkeypatc
     )
 
     assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pinned_sha}
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": pinned_sha,
+            "dirty": False,
+            "sha_toplevel": str((tmp_path / "oracle-pins" / "rulespec-us").resolve()),
+            "worktree_toplevel": str((tmp_path / "oracle-pins" / "rulespec-us").resolve()),
+        }
     ]
 
 
@@ -498,8 +504,18 @@ def test_pinned_repo_roots_honor_the_rulespec_us_override(tmp_path, monkeypatch,
     assert {entry["sha"] for entry in block["rulespecs"]} == {
         override_sha if agreeing else None
     }
-    if agreeing:
-        assert block["rulespecs"] == [{"repo": country, "sha": override_sha}]
+    # Equal commits in different checkouts retain separate state/root
+    # attestations. Every contributing root must still agree on the SHA.
+    assert block["rulespecs"] == [
+        {
+            "repo": country,
+            "sha": override_sha if agreeing else None,
+            "dirty": False,
+            "sha_toplevel": str(path.resolve()),
+            "worktree_toplevel": str(path.resolve()),
+        }
+        for path in (sibling, pinned)
+    ]
     assert all(entry["sha"] != unused_sha for entry in block["rulespecs"])
 
 
@@ -524,7 +540,13 @@ def test_a_root_naming_a_rulespec_checkout_is_lifted_to_its_parent(
     )
 
     assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": pinned_sha}
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": pinned_sha,
+            "dirty": False,
+            "sha_toplevel": str((tmp_path / "pins" / "rulespec-us").resolve()),
+            "worktree_toplevel": str((tmp_path / "pins" / "rulespec-us").resolve()),
+        }
     ]
 
 
@@ -546,7 +568,13 @@ def test_absent_pinned_roots_fall_back_to_the_convention_checkout(
     )
 
     assert block["rulespecs"] == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": convention_sha}
+        {
+            "repo": "TheAxiomFoundation/rulespec-us",
+            "sha": convention_sha,
+            "dirty": False,
+            "sha_toplevel": str(convention.resolve()),
+            "worktree_toplevel": str(convention.resolve()),
+        }
     ]
 
 

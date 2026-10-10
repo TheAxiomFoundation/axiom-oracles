@@ -30,6 +30,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.provenance import _git_env, _git_toplevel  # noqa: E402
 from axiom_oracles.suites.de_worker import DE_WORKER_OUTPUTS  # noqa: E402
 from scripts import de_unified_comparison  # noqa: E402
 
@@ -253,12 +254,14 @@ def _available_rulespec_root(
 
 
 def _git(root: Path, *args: str, binary: bool = False) -> str | bytes:
+    # Exact-pin evidence must use original objects, never local replace refs.
     try:
         result = subprocess.run(
             ["git", "-C", str(root), *args],
             check=True,
             capture_output=True,
             text=not binary,
+            env=_git_env(GIT_NO_REPLACE_OBJECTS="1"),
         )
     except (FileNotFoundError, OSError, subprocess.CalledProcessError) as exc:
         stderr = getattr(exc, "stderr", b"" if binary else "")
@@ -279,6 +282,8 @@ def inspect_pinned_ref(
 
     plan, config, commit, expected_tree = _shared_contract(oracle)
     root = _resolve_rulespec_root(config, rulespec_root)
+    if _git_toplevel(root) != str(root.resolve()):
+        raise DEAxiomLegError(f"RuleSpec repository root mismatch: {root}")
     try:
         resolved_commit = str(
             _git(root, "rev-parse", f"{commit}^{{commit}}")
@@ -903,6 +908,7 @@ def run_registered_leg(runner: dict[str, Any], output: Path) -> dict[str, Any]:
     # rather than the checkout's unrelated moving HEAD.
     params["_verified_rulespec_upstream_sha"] = commit
     params["_verified_rulespec_upstream_tree"] = tree
+    params["_verified_rulespec_upstream_toplevel"] = _git_toplevel(root)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(_serialized(record), encoding="utf-8")
     return record

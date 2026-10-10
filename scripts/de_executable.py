@@ -1964,7 +1964,7 @@ def build_status(
 
 def _git(repo: Path, *args: str, binary: bool = False) -> bytes | str:
     process = subprocess.run(
-        ["git", "-C", str(repo), *args],
+        ["git", "--no-replace-objects", "-C", str(repo), *args],
         capture_output=True,
         text=not binary,
         check=False,

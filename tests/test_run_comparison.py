@@ -2,12 +2,13 @@ import importlib.util
 import json
 import os
 import subprocess
+import tempfile
 from itertools import permutations
 from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from hypothesis import given, settings, strategies as st
+from hypothesis import example, given, settings, strategies as st
 
 
 def assert_pe_companion_pinned(cmd):
@@ -67,8 +68,20 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
         run_comparison, "_ensure_rulespec_us_checkout", lambda _remote: rulespec
     )
 
-    def fake_run(cmd, *, check, stdout=None, cwd=None, capture_output=False, text=False):
+    def fake_run(
+        cmd, *, check, stdout=None, cwd=None, capture_output=False, text=False,
+        env=None, input=None,
+    ):
         del check, cwd, capture_output, text
+        assert input is None
+        if cmd[0] == "git":
+            assert cmd[:3] == ["git", "-C", str(rulespec)]
+            assert env is not None
+            assert not any(key in env for key in (
+                "GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR",
+                "GIT_OBJECT_DIRECTORY", "GIT_ALTERNATE_OBJECT_DIRECTORIES",
+                "GIT_CEILING_DIRECTORIES",
+            ))
         calls.append(cmd)
         if stdout is not None:
             stdout.write("{}")
@@ -93,7 +106,7 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     }
     run_comparison._run_axiom_encode_tax_ecps_compare(runner_config, output)
 
-    cmd = calls[-1]
+    cmd = next(command for command in calls if command[0] == "uv")
     # The encoder renamed the subcommand in its ECPS→Populace rename; no
     # `tax-ecps-compare` alias survives on axiom-encode main (#296).
     assert "tax-populace-compare" in cmd
@@ -2114,6 +2127,20 @@ def _completion_fixture(monkeypatch, tmp_path, mapped_repos):
     return run_comparison, config
 
 
+def _rulespec_identities(entries):
+    return {(entry["repo"], entry["sha"]) for entry in entries}
+
+
+def _clean_rulespec_entry(repo, sha, root):
+    return {
+        "repo": repo,
+        "sha": sha,
+        "dirty": False,
+        "sha_toplevel": str(root.resolve()),
+        "worktree_toplevel": str(root.resolve()),
+    }
+
+
 def test_completion_fills_missing_repo_from_convention_checkout(
     monkeypatch, tmp_path
 ):
@@ -2130,8 +2157,16 @@ def test_completion_fills_missing_repo_from_convention_checkout(
     monkeypatch.setattr(rc, "_git_head_sha", lambda repo: "a" * 40)
 
     completed = rc._complete_rulespecs_from_affected_map(config, {}, [])
+    # The faked SHA sits on a directory git cannot inspect, so the worktree
+    # state is recorded as unverifiable rather than assumed clean.
     assert completed == [
-        {"repo": "TheAxiomFoundation/rulespec-us-az", "sha": "a" * 40}
+        {
+            "repo": "TheAxiomFoundation/rulespec-us-az",
+            "sha": "a" * 40,
+            "dirty": None,
+            "sha_toplevel": None,
+            "worktree_toplevel": None,
+        }
     ]
 
 
@@ -2220,11 +2255,13 @@ def test_archived_clone_run_is_never_stamped_fresh(monkeypatch, tmp_path):
     rc, config = _completion_fixture(
         monkeypatch, tmp_path, ["TheAxiomFoundation/rulespec-us"]
     )
-    monorepo_head = "m" * 40
-    monkeypatch.setattr(
-        provenance, "resolve_rulespec_checkout", lambda slug: tmp_path / "monorepo"
+    monorepo = tmp_path / "monorepo"
+    monorepo_head = _provenance_checkout(
+        monorepo, "TheAxiomFoundation/rulespec-us", "current country rules"
     )
-    monkeypatch.setattr(rc, "_git_head_sha", lambda repo: monorepo_head)
+    monkeypatch.setattr(
+        provenance, "resolve_rulespec_checkout", lambda slug: monorepo
+    )
 
     stamped = rulespec_provenance([clone])
     assert [e["repo"] for e in stamped] == ["TheAxiomFoundation/rulespec-us-co"]
@@ -2251,7 +2288,7 @@ def test_archived_clone_run_is_never_stamped_fresh(monkeypatch, tmp_path):
     # Control: the same run through a monorepo checkout is completed and fresh.
     completed = rc._complete_rulespecs_from_affected_map(config, {}, [])
     assert completed == [
-        {"repo": "TheAxiomFoundation/rulespec-us", "sha": monorepo_head}
+        _clean_rulespec_entry("TheAxiomFoundation/rulespec-us", monorepo_head, monorepo)
     ]
     report = {"suite": "demo-suite", "provenance": {"rulespecs": completed}}
     assert sel.select(
@@ -2316,8 +2353,8 @@ def test_absorbed_layer_keeps_country_sha_unknown(
     output = tmp_path / "output.json"
     output.write_text("{}")
     block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
-    assert {"repo": archived_slug, "sha": archived_sha} in block["rulespecs"]
-    assert {"repo": country_slug, "sha": None} in block["rulespecs"]
+    assert _clean_rulespec_entry(archived_slug, archived_sha, archived) in block["rulespecs"]
+    assert (country_slug, None) in _rulespec_identities(block["rulespecs"])
 
     selector = load_script_module("select_affected_suites")
     affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
@@ -2329,7 +2366,7 @@ def test_absorbed_layer_keeps_country_sha_unknown(
     # A run using only the live country checkout still proves freshness.
     config["runner"]["parameters"]["rulespec_roots"] = [str(monorepo)]
     block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
-    assert block["rulespecs"] == [{"repo": country_slug, "sha": country_sha}]
+    assert block["rulespecs"] == [_clean_rulespec_entry(country_slug, country_sha, monorepo)]
     assert selector.select(
         affected_map, {country_slug: country_sha}, {"demo-suite": {"provenance": block}}
     ) == []
@@ -2386,9 +2423,11 @@ def test_declared_country_checkout_never_borrows_convention_sha(
 
     block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
 
-    assert {"repo": origin, "sha": actual_sha} in block["rulespecs"]
+    assert _clean_rulespec_entry(origin, actual_sha, declared) in block["rulespecs"]
     expected = actual_sha if origin.casefold() == country.casefold() else None
-    assert {"repo": country, "sha": expected} in block["rulespecs"]
+    assert (country, expected) in _rulespec_identities(block["rulespecs"])
+    if expected:
+        assert _clean_rulespec_entry(country, expected, declared) in block["rulespecs"]
     assert all(entry["sha"] != convention_sha for entry in block["rulespecs"])
     selector = load_script_module("select_affected_suites")
     affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
@@ -2439,8 +2478,8 @@ def test_mixed_foreign_roots_never_prove_country_freshness(
 
     block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
 
-    assert {"repo": foreign_slug, "sha": foreign_sha} in block["rulespecs"]
-    assert {"repo": country, "sha": None} in block["rulespecs"]
+    assert _clean_rulespec_entry(foreign_slug, foreign_sha, foreign) in block["rulespecs"]
+    assert (country, None) in _rulespec_identities(block["rulespecs"])
     selector = load_script_module("select_affected_suites")
     affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
     [decision] = selector.select(
@@ -2453,7 +2492,7 @@ def test_mixed_foreign_roots_never_prove_country_freshness(
     _provenance_checkout(uk, "TheAxiomFoundation/rulespec-uk", "UK rules")
     config["runner"]["parameters"]["rulespec_roots"] = [str(uk), str(country_path)]
     block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
-    assert {"repo": country, "sha": country_sha} in block["rulespecs"]
+    assert _clean_rulespec_entry(country, country_sha, legitimate) in block["rulespecs"]
     assert selector.select(
         affected_map, {country: country_sha}, {"demo-suite": {"provenance": block}}
     ) == []
@@ -2520,9 +2559,17 @@ def test_completion_property_over_mixed_declared_roots(monkeypatch, tmp_path):
         assert canonical and {entry["sha"] for entry in canonical} == {expected}, order
         assert all(entry["sha"] != borrowed_sha for entry in block["rulespecs"]), order
         if archived in order:
-            assert {"repo": archived_slug, "sha": archived_sha} in block["rulespecs"]
+            assert _clean_rulespec_entry(archived_slug, archived_sha, archived) in block["rulespecs"]
         if foreign in order or foreign_jurisdiction in order:
-            assert {"repo": foreign_slug, "sha": foreign_sha} in block["rulespecs"]
+            assert (foreign_slug, foreign_sha) in _rulespec_identities(block["rulespecs"])
+            assert all(
+                entry["sha_toplevel"] == entry["worktree_toplevel"] == str(foreign.resolve())
+                for entry in block["rulespecs"] if entry["repo"] == foreign_slug
+            )
+        if expected:
+            for root in set(order):
+                measured_root = monorepo if root == jurisdiction else root
+                assert _clean_rulespec_entry(country, expected, measured_root) in canonical
         reports = {"demo-suite": {"provenance": block}}
         for head in (borrowed_sha, country_sha, monorepo_sha):
             assert bool(selector.select(affected_map, {country: head}, reports)) == (
@@ -2611,8 +2658,13 @@ def test_composed_program_provenance_includes_separate_compiler_roots(
     block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
     expected = None if compiler_kind == "foreign" else country_sha
     if compiler_kind == "foreign":
-        assert {"repo": foreign_slug, "sha": compiler_sha} in block["rulespecs"]
-    assert {"repo": country, "sha": expected} in block["rulespecs"]
+        assert _clean_rulespec_entry(foreign_slug, compiler_sha, compiler_root) in block["rulespecs"]
+    assert (country, expected) in _rulespec_identities(block["rulespecs"])
+    if expected:
+        assert block["rulespecs"] == [
+            _clean_rulespec_entry(country, expected, path)
+            for path in (legitimate, compiler_root)
+        ]
     selector = load_script_module("select_affected_suites")
     affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
     decisions = selector.select(
@@ -2714,6 +2766,12 @@ def test_adapter_provenance_includes_discovered_workspace_child(
     expected = country_sha if workspace_kind == "same-sha" else None
     canonical = [entry for entry in block["rulespecs"] if entry["repo"] == country]
     assert canonical and {entry["sha"] for entry in canonical} == {expected}
+    if expected:
+        assert {_entry["sha_toplevel"] for _entry in canonical} == {
+            str(path.resolve()) for path in (child, legitimate)
+        }
+        assert all(_clean_rulespec_entry(country, expected, Path(entry["sha_toplevel"])) == entry
+                   for entry in canonical)
     selector = load_script_module("select_affected_suites")
     affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
     decisions = selector.select(
@@ -2796,7 +2854,18 @@ def test_completion_property_over_composition_compiler_and_child_roots(
         canonical = [entry for entry in block["rulespecs"] if entry["repo"] == country]
         assert canonical and {entry["sha"] for entry in canonical} == {expected}, read_paths
         if any(path in (foreign, foreign / "us-co", foreign.parent) for path in read_paths):
-            assert {"repo": foreign_slug, "sha": foreign_sha} in block["rulespecs"], read_paths
+            assert (foreign_slug, foreign_sha) in _rulespec_identities(block["rulespecs"])
+            assert all(
+                entry["sha_toplevel"] == entry["worktree_toplevel"] == str(foreign.resolve())
+                for entry in block["rulespecs"] if entry["repo"] == foreign_slug
+            )
+        if expected:
+            for path in read_paths:
+                measured_root = next(
+                    root for root in (known, same, different)
+                    if path in (root, root / "us-co", root.parent)
+                )
+                assert _clean_rulespec_entry(country, expected, measured_root) in canonical
         reports = {"demo-suite": {"provenance": block}}
         for head in (known_sha, different_sha):
             assert bool(selector.select(affected_map, {country: head}, reports)) == (
@@ -2822,6 +2891,251 @@ def test_completion_property_over_composition_compiler_and_child_roots(
         ([different], different.parent),
     ):
         check_roots(composer_roots, compiler_root)
+
+
+def test_composer_and_compiler_attest_captured_content_property(monkeypatch, tmp_path):
+    """Every contributing checkout binds its captured SHA to its raw content."""
+    from axiom_oracles import provenance
+
+    country = "TheAxiomFoundation/rulespec-us"
+    alias = "theaxiomfoundation/RuleSpec-US"
+    initial_body = b"rate: 0.18\n"
+
+    @settings(max_examples=6, derandomize=True, deadline=None, database=None)
+    @example(body=b"rate: 0.17\n", compiler_origin=country)
+    @example(body=initial_body, compiler_origin=country)
+    @example(body=b"rate: 0.17\n", compiler_origin=alias)
+    @example(body=initial_body, compiler_origin=alias)
+    @given(body=st.binary(max_size=48), compiler_origin=st.sampled_from((country, alias)))
+    def check_content(body, compiler_origin):
+        with tempfile.TemporaryDirectory(dir=tmp_path) as directory:
+            scratch = Path(directory)
+            with monkeypatch.context() as patch:
+                patch.setattr(Path, "home", classmethod(lambda cls: scratch))
+                for key in ("AXIOM_RULESPEC_US_ROOT", "AXIOM_RULESPEC_ROOT",
+                            "AXIOM_RULESPEC_REPO_ROOTS"):
+                    patch.delenv(key, raising=False)
+                rc, config = _completion_fixture(patch, scratch, [country])
+                composer = scratch / "composer" / "rulespec-us"
+                compiler = scratch / "compiler" / "rulespec-us"
+                filename = "us-co/fixture.yaml"
+                captured_sha = _provenance_checkout(
+                    composer, country, initial_body.decode(), filename
+                )
+                _clone_provenance_checkout(composer, compiler, compiler_origin)
+
+                def git(*args):
+                    return subprocess.check_output(
+                        ["git", "-C", str(compiler), *args],
+                        env=provenance._git_env(),
+                    ).decode().strip()
+
+                git("config", "user.name", "test")
+                git("config", "user.email", "test@invalid")
+                git("config", "commit.gpgsign", "false")
+                (compiler / filename).write_bytes(body)
+                git("add", filename)
+                git("commit", "-q", "--allow-empty", "-m", "alternate content")
+                alternate_sha = git("rev-parse", "HEAD")
+                assert alternate_sha != captured_sha
+                git("checkout", "-q", "--detach", captured_sha)
+                real_sha = provenance._git_sha
+                raced = False
+
+                def capture_then_checkout(path):
+                    nonlocal raced
+                    sha = real_sha(path)
+                    if Path(path).resolve() == compiler.resolve() and not raced:
+                        assert sha == captured_sha
+                        git("checkout", "-q", "--detach", alternate_sha)
+                        raced = True
+                    return sha
+
+                patch.setattr(provenance, "_git_sha", capture_then_checkout)
+                config["runner"] = {"parameters": {
+                    "rulespec_roots": [str(composer / "us-co")],
+                    "axiom_rulespec_repo_roots": str(compiler.parent),
+                }}
+                output = scratch / "output.json"
+                output.write_text("{}")
+                block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+
+                assert raced
+                assert git("status", "--porcelain") == ""
+                assert (compiler / filename).read_bytes() == body
+                canonical = [entry for entry in block["rulespecs"] if entry["repo"] == country]
+                assert {entry["sha"] for entry in canonical} == {captured_sha}
+                assert {entry["sha_toplevel"] for entry in canonical} == {
+                    str(composer.resolve()), str(compiler.resolve())
+                }
+                assert _clean_rulespec_entry(country, captured_sha, composer) in canonical
+                [compiler_entry] = [
+                    entry for entry in canonical
+                    if entry["sha_toplevel"] == str(compiler.resolve())
+                ]
+                assert compiler_entry["worktree_toplevel"] == str(compiler.resolve())
+                dirty = body != initial_body
+                assert compiler_entry["dirty"] is dirty
+                if dirty:
+                    digest = compiler_entry["diff_sha256"]
+                    assert len(digest) == 64 and set(digest) <= set("0123456789abcdef")
+                else:
+                    assert "diff_sha256" not in compiler_entry
+                assert {**compiler_entry, "repo": compiler_origin} in block["rulespecs"]
+                selector = load_script_module("select_affected_suites")
+                affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+                decisions = selector.select(
+                    affected_map, {country: captured_sha}, {"demo-suite": {"provenance": block}}
+                )
+                assert bool(decisions) is dirty
+                if dirty:
+                    with pytest.raises(SystemExit, match="refused before publication"):
+                        rc._guard_unclean_rulespec_trees("content-probe", {**block, "run_kind": "weekly"})
+                else:
+                    rc._guard_unclean_rulespec_trees("content-probe", {**block, "run_kind": "weekly"})
+
+    check_content()
+
+
+@pytest.mark.parametrize("dirty", [False, True])
+def test_case_variant_country_origin_mirrors_full_attestation(monkeypatch, tmp_path, dirty):
+    country = "TheAxiomFoundation/rulespec-us"
+    alias = "theaxiomfoundation/RuleSpec-US"
+    rc, config = _completion_fixture(monkeypatch, tmp_path, [country])
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: tmp_path))
+    monkeypatch.delenv("AXIOM_RULESPEC_US_ROOT", raising=False)
+    root = tmp_path / "rulespec-us"
+    sha = _provenance_checkout(root, alias, "rate: 0.18\n", "us-co/fixture.yaml")
+    if dirty:
+        (root / "us-co" / "fixture.yaml").write_bytes(b"rate: 0.17\n")
+    config["runner"] = {"parameters": {"rulespec_roots": [str(root / "us-co")]}}
+    output = tmp_path / "output.json"
+    output.write_text("{}")
+    block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+
+    [raw] = [entry for entry in block["rulespecs"] if entry["repo"] == alias]
+    [canonical] = [entry for entry in block["rulespecs"] if entry["repo"] == country]
+    assert raw["sha"] == sha
+    assert raw["dirty"] is dirty
+    assert raw["sha_toplevel"] == raw["worktree_toplevel"] == str(root.resolve())
+    assert canonical == {**raw, "repo": country}
+    assert ("diff_sha256" in canonical) is dirty
+    selector = load_script_module("select_affected_suites")
+    affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+    assert bool(selector.select(
+        affected_map, {country: sha}, {"demo-suite": {"provenance": block}}
+    )) is dirty
+    if dirty:
+        with pytest.raises(SystemExit, match="refused before publication"):
+            rc._guard_unclean_rulespec_trees("alias-probe", {**block, "run_kind": "weekly"})
+    else:
+        rc._guard_unclean_rulespec_trees("alias-probe", {**block, "run_kind": "weekly"})
+
+
+def test_nested_rulespec_directory_keeps_enclosing_checkout_unverifiable(monkeypatch, tmp_path):
+    country = "TheAxiomFoundation/rulespec-us"
+    rc, config = _completion_fixture(monkeypatch, tmp_path, [country])
+    enclosing = tmp_path / "unrelated-checkout"
+    sha = _provenance_checkout(enclosing, country, "other tracked content")
+    nested = enclosing / "rulespec-us"
+    nested.mkdir()
+    config["runner"] = {"parameters": {"rulespec_roots": [str(nested)]}}
+    output = tmp_path / "output.json"
+    output.write_text("{}")
+    block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+    [entry] = [entry for entry in block["rulespecs"] if entry["repo"] == country]
+    assert entry["sha"] == sha
+    assert entry["dirty"] is None
+    assert entry["sha_toplevel"] == entry["worktree_toplevel"] == str(enclosing.resolve())
+    assert "diff_sha256" not in entry
+    selector = load_script_module("select_affected_suites")
+    affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+    assert selector.select(
+        affected_map, {country: sha}, {"demo-suite": {"provenance": block}}
+    )
+    with pytest.raises(SystemExit, match="refused before publication"):
+        rc._guard_unclean_rulespec_trees("nested-probe", {**block, "run_kind": "weekly"})
+
+
+@pytest.mark.parametrize("parent_name", ["rulespec-us", "unrelated-checkout"])
+@pytest.mark.parametrize("dirty", [False, True])
+def test_no_origin_jurisdiction_needs_country_checkout_identity(
+    monkeypatch, tmp_path, parent_name, dirty
+):
+    country = "TheAxiomFoundation/rulespec-us"
+    rc, config = _completion_fixture(monkeypatch, tmp_path, [country])
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: tmp_path))
+    for key in ("AXIOM_RULESPEC_US_ROOT", "AXIOM_RULESPEC_ROOT", "AXIOM_RULESPEC_REPO_ROOTS"):
+        monkeypatch.delenv(key, raising=False)
+    root = tmp_path / parent_name
+    sha = _provenance_checkout(root, country, "rate: 0.18\n", "us-co/fixture.yaml")
+    subprocess.run(["git", "-C", str(root), "remote", "remove", "origin"], check=True)
+    if dirty:
+        (root / "us-co" / "fixture.yaml").write_bytes(b"rate: 0.17\n")
+    config["runner"] = {"parameters": {"rulespec_roots": [str(root / "us-co")]}}
+    output = tmp_path / "output.json"
+    output.write_text("{}")
+    block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+
+    known_parent = parent_name == "rulespec-us"
+    canonical = [entry for entry in block["rulespecs"] if entry["repo"] == country]
+    assert canonical and {entry["sha"] for entry in canonical} == {sha if known_parent else None}
+    if known_parent:
+        [entry] = canonical
+        assert entry["sha_toplevel"] == entry["worktree_toplevel"] == str(root.resolve())
+        assert entry["dirty"] is dirty
+        assert ("diff_sha256" in entry) is dirty
+        if not dirty:
+            assert entry == _clean_rulespec_entry(country, sha, root)
+    else:
+        assert any(
+            entry.get("sha") == sha and entry.get("dirty") is None
+            and entry.get("sha_toplevel") == entry.get("worktree_toplevel") == str(root.resolve())
+            for entry in block["rulespecs"]
+        )
+    stale = dirty or not known_parent
+    selector = load_script_module("select_affected_suites")
+    affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+    assert bool(selector.select(
+        affected_map, {country: sha}, {"demo-suite": {"provenance": block}}
+    )) is stale
+    if stale:
+        with pytest.raises(SystemExit, match="refused before publication"):
+            rc._guard_unclean_rulespec_trees("no-origin-probe", {**block, "run_kind": "weekly"})
+    else:
+        rc._guard_unclean_rulespec_trees("no-origin-probe", {**block, "run_kind": "weekly"})
+
+
+def test_unknown_jurisdiction_cannot_hide_behind_same_sha_country_clone(monkeypatch, tmp_path):
+    country = "TheAxiomFoundation/rulespec-us"
+    rc, config = _completion_fixture(monkeypatch, tmp_path, [country])
+    monkeypatch.setattr(Path, "home", classmethod(lambda cls: tmp_path))
+    for key in ("AXIOM_RULESPEC_US_ROOT", "AXIOM_RULESPEC_ROOT", "AXIOM_RULESPEC_REPO_ROOTS"):
+        monkeypatch.delenv(key, raising=False)
+    generic = tmp_path / "unrelated-checkout"
+    sha = _provenance_checkout(generic, country, "rate: 0.18\n", "us-co/fixture.yaml")
+    subprocess.run(["git", "-C", str(generic), "remote", "remove", "origin"], check=True)
+    known = tmp_path / "known" / "rulespec-us"
+    _clone_provenance_checkout(generic, known, country)
+    config["runner"] = {"parameters": {"rulespec_roots": [str(known), str(generic / "us-co")]}}
+    output = tmp_path / "output.json"
+    output.write_text("{}")
+    block = rc._build_run_provenance(config, "axiom-oracles-compare", output)
+
+    canonical = [entry for entry in block["rulespecs"] if entry["repo"] == country]
+    assert canonical and {entry["sha"] for entry in canonical} == {None}
+    [unknown] = [entry for entry in block["rulespecs"] if entry.get("sha") == sha]
+    assert unknown["dirty"] is None
+    assert unknown["sha_toplevel"] == unknown["worktree_toplevel"] == str(generic.resolve())
+    assert "diff_sha256" not in unknown
+    selector = load_script_module("select_affected_suites")
+    affected_map = json.loads((rc.COMPARISONS_DIR / "affected_map.json").read_text())
+    [decision] = selector.select(
+        affected_map, {country: sha}, {"demo-suite": {"provenance": block}}
+    )
+    assert "rulespec-us: report ran against unknown SHA" in decision["reason"]
+    with pytest.raises(SystemExit, match="refused before publication"):
+        rc._guard_unclean_rulespec_trees("unknown-probe", {**block, "run_kind": "weekly"})
 
 
 def test_axiom_oracles_runner_honors_python_parameter(monkeypatch, tmp_path):

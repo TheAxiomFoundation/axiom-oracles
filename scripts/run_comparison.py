@@ -49,6 +49,13 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
+from axiom_oracles.provenance import (  # noqa: E402
+    _git_env,
+    _git_sha,
+    _git_toplevel,
+    _repository_mismatch,
+)
+
 # ---------------------------------------------------------------------------
 # tax-ecps-compare → v2 dashboard schema adapter
 # ---------------------------------------------------------------------------
@@ -648,6 +655,7 @@ def main() -> int:
         # report records exactly what it ran against and the affected-rerun
         # map can diff its SHAs.
         provenance = _build_run_provenance(config, runner_type, staging)
+        _guard_unclean_rulespec_trees(config["name"], provenance)
         compared_engines = {
             str(config["runner"]["parameters"].get("left", "")),
             str(config["runner"]["parameters"].get("right", "")),
@@ -736,6 +744,46 @@ def main() -> int:
     return 0
 
 
+def _guard_unclean_rulespec_trees(name: str, provenance: dict) -> None:
+    """Refuse a non-manual report from rules that differ from their recorded SHA.
+
+    Provenance names each rulespec checkout by its HEAD SHA, but the run read
+    the working tree, so a modified checkout would otherwise publish values
+    under a SHA whose committed rules cannot produce them. A ``weekly``,
+    ``pr-triggered`` or ``affected-rerun`` report is published as what the
+    committed rules compute, so it must come from trees whose state is recorded
+    and clean (untracked files do not count). Exits before stamping or
+    publication, so nothing this script publishes reaches reports/ or the
+    dashboard (a generator that writes its own files during the run is not
+    rolled back, as with --require-live). A ``manual`` run
+    may use a dirty tree: it is published with ``dirty: true`` and the diff
+    hash on each such entry, the affected-rerun selector treats it as stale,
+    and this warns on stderr.
+    """
+    from axiom_oracles.provenance import describe_rulespec_tree, unclean_rulespecs
+
+    unclean = unclean_rulespecs(provenance.get("rulespecs"), require_recorded=True)
+    if not unclean:
+        return
+    trees = "; ".join(describe_rulespec_tree(entry) for entry in unclean)
+    run_kind = provenance.get("run_kind")
+    if run_kind != "manual":
+        raise SystemExit(
+            f"{name}: {run_kind} run refused before publication: these "
+            "rulespec working trees are not verified clean against their "
+            f"recorded SHA: "
+            f"{trees}. Commit or discard the tracked changes (untracked files "
+            "are ignored), or run manually (AXIOM_ORACLES_RUN_KIND unset) to "
+            "publish a report marked dirty."
+        )
+    sys.stderr.write(
+        f"WARNING: {name}: these numbers come from rulespec working trees that "
+        f"are not verified clean against their recorded SHA: {trees}. The "
+        "report's provenance records this, and the affected-rerun selector "
+        "will treat the report as stale.\n"
+    )
+
+
 def _euromod_release_from_model_root(model_root: str | None) -> str | None:
     """Read the EUROMOD-platform release label off the model-root directory name.
 
@@ -813,10 +861,11 @@ def _complete_rulespecs_from_affected_map(
     repo this report cannot yet prove a SHA for, resolve one honestly:
 
     * the runner's own fresh-clone SHA when it recorded one
-      (``_cloned_rulespec_us_sha``, the tax lane's temp clone), else
+      (``_cloned_rulespec_us_sha``, the tax lane's temp clone, with the
+      worktree state the runner measured before deleting it), else
     * the checkout the supervised-layout conventions resolve
       (:func:`axiom_oracles.provenance.resolve_rulespec_checkout` — the same
-      locations the harnesses themselves search).
+      locations the harnesses themselves search), with its worktree state.
 
     Declared paths never borrow clone or convention SHAs. GitHub identities
     match case-insensitively, while raw remote spelling is retained. A mapped
@@ -838,6 +887,7 @@ def _complete_rulespecs_from_affected_map(
             checkout_remote_matches_slug,
             resolve_rulespec_checkout,
             rulespec_provenance,
+            worktree_attestation,
         )
 
         mapped_repos = _affected_map_repos(config)
@@ -859,6 +909,15 @@ def _complete_rulespecs_from_affected_map(
         observations = [(path, rulespec_provenance([path])[0]) for path in declared_roots]
         completed = list(rulespecs)
         for repo in mapped_repos:
+            # The selector uses canonical, case-sensitive keys. Preserve every
+            # attestation when mirroring a case-variant origin, including a
+            # dirty contributor alongside another clean canonical checkout.
+            for entry in list(completed):
+                if (entry.get("repo") or "").casefold() == repo.casefold() and entry["repo"] != repo:
+                    canonical = {**entry, "repo": repo}
+                    if canonical not in completed:
+                        completed.append(canonical)
+                    by_repo[repo] = canonical
             country = repo.rsplit("/", 1)[-1].removeprefix("rulespec-").casefold()
             # A foreign checkout can supply this country's rules even when its
             # origin has another name. Inspect the layouts the composer and
@@ -892,7 +951,7 @@ def _complete_rulespecs_from_affected_map(
                     completed.append(entry)
                 continue
             matching = [
-                entry for entry in rulespecs
+                entry for entry in completed
                 if (entry.get("repo") or "").casefold() == repo.casefold()
             ]
             if declared_paths or any(entry.get("sha") for entry in matching):
@@ -904,12 +963,20 @@ def _complete_rulespecs_from_affected_map(
                 # observation must participate even when their stamp uses another
                 # name. Canonical known entries already carry any verified upstream
                 # SHA substitution performed by _build_run_provenance.
+                known_roots = {
+                    entry["sha_toplevel"] for entry in matching
+                    if entry.get("sha") and entry.get("sha_toplevel")
+                }
                 shas.update(
-                    observation.get("sha") for _, observation in contributing
+                    observation.get("sha") if (
+                        (observation.get("repo") or "").casefold() == repo.casefold()
+                        or observation.get("sha_toplevel") in known_roots
+                    ) else None
+                    for _, observation in contributing
                     if observation.get("sha") is None
                     or (observation.get("repo") or "").casefold() != repo.casefold()
                 )
-                sha = next(iter(shas)) if len(shas) == 1 else None
+                sha = next(iter(shas)) if matching and len(shas) == 1 else None
                 if sha is None:
                     for entry in matching:
                         entry["sha"] = None
@@ -921,17 +988,28 @@ def _complete_rulespecs_from_affected_map(
                     completed.append(entry)
                 continue
             sha = None
+            state: dict = {}
             if repo == "TheAxiomFoundation/rulespec-us":
                 sha = runner.get("_cloned_rulespec_us_sha")
+                state = runner.get("_cloned_rulespec_us_worktree") or {}
+                if "_cloned_rulespec_us_sha_toplevel" in runner:
+                    state = {**state, "sha_toplevel": runner["_cloned_rulespec_us_sha_toplevel"]}
             if sha is None:
                 checkout = resolve_rulespec_checkout(repo)
                 if checkout is not None:
                     sha = _git_head_sha(checkout)
+                    state = {
+                        "sha_toplevel": _git_toplevel(checkout),
+                        **worktree_attestation(checkout, reference=sha),
+                    } if sha else {}
+            if _repository_mismatch(state):
+                state = {**state, "dirty": None}
+                state.pop("diff_sha256", None)
             if repo in by_repo:
                 if sha:
-                    by_repo[repo]["sha"] = sha
+                    by_repo[repo].update({"sha": sha, **state})
             else:
-                entry = {"repo": repo, "sha": sha}
+                entry = {"repo": repo, "sha": sha, **(state if sha else {})}
                 by_repo[repo] = entry
                 completed.append(entry)
         return completed
@@ -949,9 +1027,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     """
     from axiom_oracles.provenance import (
         build_provenance,
+        canonical_rulespec_slug,
         dataset_provenance_from_identity,
         engine_provenance,
         rulespec_provenance,
+        worktree_attestation,
     )
 
     runner = config.get("runner") or {}
@@ -1006,22 +1086,85 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # Workspace containers may contribute country children even when another
     # composition path already supplied a SHA. Stamp the compiler's normalized
     # children as well, retaining their raw origins and unknown SHA observations.
-    from axiom_oracles.engine_compat import explicit_engine_roots
+    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, explicit_engine_roots
 
     rulespec_paths = list(dict.fromkeys([
         *rulespec_paths, *(str(path) for path in explicit_engine_roots(rulespec_paths)),
     ]))
-    rulespecs = rulespec_provenance(rulespec_paths)
+    rulespecs = []
+    for raw in rulespec_paths:
+        [entry] = rulespec_provenance([raw])
+        path = Path(raw).resolve()
+        # Composition can read a direct jurisdiction inside a country repo.
+        # Measure that actual checkout against the already captured SHA;
+        # arbitrary nested rulespec directories remain unverifiable.
+        country_repo = canonical_rulespec_slug(f"rulespec-{path.name.split('-')[0]}")
+        country_origin = (entry.get("repo") or "").casefold() == country_repo.casefold()
+        country_layout = (
+            entry.get("repo") == path.name
+            and path.parent.name.casefold() == country_repo.rsplit("/", 1)[-1].casefold()
+        )
+        if (
+            entry.get("sha")
+            and JURISDICTION_DIR_NAME.fullmatch(path.name)
+            and entry.get("sha_toplevel") == str(path.parent)
+            and (country_origin or country_layout)
+        ):
+            if country_layout:
+                entry["repo"] = country_repo
+            entry.update(worktree_attestation(path.parent, reference=entry["sha"]))
+        if entry not in rulespecs:
+            rulespecs.append(entry)
     verified_upstream_sha = params.get(_VERIFIED_RULESPEC_UPSTREAM_SHA)
     if verified_upstream_sha and rulespecs:
-        # The federal runner set this private marker only after checking that
-        # the clean local snapshot's tree equals the public upstream tree pin.
-        # Record the merged-main commit whose content ran, not a local
-        # content-equivalent materialization commit.
+        # The pin was verified in this object database, which may differ from
+        # a configured root. Preserve that source so the publication gate can
+        # reject an attestation collected from another checkout.
         rulespecs = [
-            {**entry, "sha": str(verified_upstream_sha)}
+            {
+                **entry,
+                "sha_toplevel": params.get(
+                    _VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL, entry.get("sha_toplevel")
+                ),
+            }
             for entry in rulespecs
         ]
+        # Object-reading producers and working-tree runners need different
+        # attestations: the latter must remeasure against the pre-run tree.
+        if params.get(_VERIFIED_RULESPEC_UPSTREAM_TREE):
+            # The DE producer read the pinned commit straight from git objects
+            # (de_axiom_legs.inspect_pinned_ref: rev-parse, ls-tree and
+            # `git show <commit>:<path>`), so no working-tree file fed the run
+            # and the checkout's state, measured against its own HEAD, says
+            # nothing about the pin. What ran is the pin's committed content.
+            rulespecs = [
+                {
+                    "repo": entry.get("repo"),
+                    "sha": str(verified_upstream_sha),
+                    "sha_toplevel": entry.get("sha_toplevel"),
+                    "worktree_toplevel": entry.get("worktree_toplevel"),
+                    "dirty": False,
+                }
+                for entry in rulespecs
+            ]
+        else:
+            verified_tree = params.get(_VERIFIED_RULESPEC_WORKTREE_TREE)
+            for entry in rulespecs:
+                # Replace the local-HEAD measurement, including its digest.
+                entry.pop("diff_sha256", None)
+                entry.update(
+                    sha=str(verified_upstream_sha),
+                    **worktree_attestation(
+                        entry.get("worktree_toplevel"),
+                        reference=str(verified_tree or verified_upstream_sha),
+                    ),
+                )
+        for entry in rulespecs:
+            if _repository_mismatch(entry):
+                # A manual run may publish this entry, so record unknown
+                # rather than a clean flag the stale selector could trust.
+                entry["dirty"] = None
+                entry.pop("diff_sha256", None)
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote and not rulespecs:
         from axiom_oracles.provenance import repo_slug_from_remote
@@ -1052,9 +1195,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     # A skip-capable runner that re-emitted the committed report never
     # executed any rules this run — no matter which path produced a rulespec
     # entry (configured roots included), its SHA must not be recorded, or the
-    # selector would mark rules-stale numbers fresh (#296 review).
+    # selector would mark rules-stale numbers fresh (#296 review). The
+    # checkout's worktree state goes with it: no tree ran, clean or dirty.
     if runner.get("_reemitted_report"):
-        rulespecs = [{**entry, "sha": None} for entry in rulespecs]
+        rulespecs = [{"repo": entry.get("repo"), "sha": None} for entry in rulespecs]
 
     # Engine identity (Axiom side under test).
     axiom_rules_ref = runner.get("axiom_rules_repo") or params.get("axiom_rules_repo")
@@ -1440,6 +1584,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # against (a `sha: null` entry reads as "cannot prove fresh" to
     # select_affected_suites.py and re-selects the suite every run).
     runner["_cloned_rulespec_us_sha"] = _git_head_sha(rulespec_root)
+    runner["_cloned_rulespec_us_sha_toplevel"] = _git_toplevel(rulespec_root)
     params = runner["parameters"]
     pinned = params.get("pinned", True)
     # PolicyEngine-US 1.729.0 is the model version the certified pinned Populace
@@ -1514,6 +1659,13 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         with output.open("w") as f:
             subprocess.run(cmd, check=True, stdout=f)
     finally:
+        # Measure after execution against the captured commit, even if the
+        # harness or a concurrent checkout moved HEAD to a new clean commit.
+        from axiom_oracles.provenance import worktree_attestation
+
+        runner["_cloned_rulespec_us_worktree"] = worktree_attestation(
+            rulespec_root, reference=runner["_cloned_rulespec_us_sha"] or "HEAD"
+        )
         shutil.rmtree(rulespec_root.parent, ignore_errors=True)
 
 
@@ -2628,6 +2780,7 @@ def _resolve_state_income_tax_grid_repos(
                 check=True,
                 capture_output=True,
                 text=True,
+                env=_git_env(),
             ).stdout
         except (OSError, subprocess.CalledProcessError) as exc:
             raise SystemExit(
@@ -2698,6 +2851,13 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
 
 
 _VERIFIED_RULESPEC_UPSTREAM_SHA = "_verified_rulespec_upstream_sha"
+#: Set beside the SHA marker by scripts/de_axiom_legs.py once it has verified
+#: the pinned commit and tree in the object database it reads them from.
+_VERIFIED_RULESPEC_UPSTREAM_TREE = "_verified_rulespec_upstream_tree"
+_VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL = "_verified_rulespec_upstream_toplevel"
+#: Federal execution reads checkout files; retain its verified tree separately
+#: from the marker for producers that read pinned objects directly (DE).
+_VERIFIED_RULESPEC_WORKTREE_TREE = "_verified_rulespec_worktree_tree"
 
 
 def _pinned_snapshot_unusable_reason(root: Path, upstream_tree: str) -> str | None:
@@ -2709,18 +2869,22 @@ def _pinned_snapshot_unusable_reason(root: Path, upstream_tree: str) -> str | No
     non-fatally so a non-matching checkout falls through to pinned-revision
     materialization instead of failing the leg.
     """
+    if _git_toplevel(root) != str(root.resolve()):
+        return "not a git checkout rooted at the requested path"
     try:
         status = subprocess.run(
             ["git", "-C", str(root), "status", "--porcelain"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         local_tree = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.strip()
     except (OSError, subprocess.CalledProcessError):
         return "not a verifiable git work tree"
@@ -2773,6 +2937,8 @@ def _verify_federal_rulespec_snapshot(
         )
 
     root = roots[0].resolve()
+    if _git_toplevel(root) != str(root):
+        raise SystemExit(f"cannot verify pinned federal rulespec snapshot {root}: repository root mismatch")
     if root.name != "rulespec-us":
         raise SystemExit(
             "the pinned federal rulespec snapshot must use the canonical "
@@ -2784,18 +2950,21 @@ def _verify_federal_rulespec_snapshot(
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         local_head = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.strip()
         local_tree = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.strip()
     except (OSError, subprocess.CalledProcessError) as exc:
         raise SystemExit(
@@ -2812,6 +2981,8 @@ def _verify_federal_rulespec_snapshot(
         )
 
     params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = upstream_sha
+    params[_VERIFIED_RULESPEC_WORKTREE_TREE] = upstream_tree
+    params[_VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL] = _git_toplevel(root)
     print(
         "Verified rulespec-us snapshot "
         f"tree {local_tree[:12]} for upstream main {upstream_sha[:12]} "
@@ -2884,7 +3055,12 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
                     "rulespec_remote fallback is declared"
                 )
             roots = [_ensure_rulespec_us_checkout(str(remote), upstream_sha)]
-            params["rulespec_roots"] = [str(roots[0])]
+        # The config object is shared with the outer provenance stamper,
+        # which stamps the verified pin onto every recorded root. Record
+        # exactly the snapshot that runs: a set-aside or missing root would
+        # otherwise carry the pin's SHA without having run it (and, with no
+        # worktree state, refuse a non-manual run).
+        params["rulespec_roots"] = [str(root) for root in roots]
     elif not roots:
         remote = params.get("rulespec_remote")
         if not remote:
@@ -2951,6 +3127,7 @@ def _rulespec_checkout_unclean_reason(
             ["git", "-C", str(root), "rev-parse", "--is-inside-work-tree"],
             capture_output=True,
             text=True,
+            env=_git_env(),
         )
     except OSError:
         return "git is unavailable to verify it"
@@ -2960,6 +3137,7 @@ def _rulespec_checkout_unclean_reason(
         ["git", "-C", str(root), "status", "--porcelain"],
         capture_output=True,
         text=True,
+        env=_git_env(),
     )
     if status.returncode != 0:
         return "git status failed"
@@ -2969,6 +3147,7 @@ def _rulespec_checkout_unclean_reason(
         committed = subprocess.run(
             ["git", "-C", str(root), "show", f"HEAD:{relpath}"],
             capture_output=True,
+            env=_git_env(),
         )
         if committed.returncode != 0:
             return f"HEAD does not carry {relpath}"
@@ -3811,6 +3990,7 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.split()
         candidates = [
             path
@@ -3831,6 +4011,7 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         head_payload = json.loads(text)
         _validate_us_tariff_panel_payload(head_payload, f"HEAD:{committed}")
@@ -4349,21 +4530,10 @@ def _git_toplevel_head(path: Path) -> str | None:
     ``--show-toplevel`` keeps a non-checkout from borrowing an identity.
     """
     try:
-        toplevel = subprocess.run(
-            ["git", "-C", str(path), "rev-parse", "--show-toplevel"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-        if Path(toplevel).resolve() != path.resolve():
+        if _git_toplevel(path) != str(path.resolve()):
             return None
-        return subprocess.run(
-            ["git", "-C", str(path), "rev-parse", "HEAD"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-    except (subprocess.CalledProcessError, OSError):
+        return _git_sha(path)
+    except OSError:
         return None
 
 
@@ -4497,8 +4667,9 @@ def _ensure_rulespec_us_checkout(remote: str, revision: str | None = None) -> Pa
     target = workspace / "rulespec-us"
     print(f"Cloning rulespec-us into {target}...")
     subprocess.run(
-        ["git", "clone", "--depth", "1", "--quiet", remote, str(target)],
+        ["git", "-C", str(workspace), "clone", "--depth", "1", "--quiet", remote, str(target)],
         check=True,
+        env=_git_env(),
     )
     if revision:
         print(f"Materializing pinned rulespec-us revision {revision[:12]}...")
@@ -4506,27 +4677,20 @@ def _ensure_rulespec_us_checkout(remote: str, revision: str | None = None) -> Pa
             ["git", "-C", str(target), "fetch", "--depth", "1", "--quiet",
              "origin", revision],
             check=True,
+            env=_git_env(),
         )
         subprocess.run(
             ["git", "-C", str(target), "checkout", "--detach", "--quiet",
              revision],
             check=True,
+            env=_git_env(),
         )
     return target
 
 
 def _git_head_sha(repo: Path) -> str | None:
     """Best-effort HEAD SHA of a checkout; None when unresolvable."""
-    try:
-        result = subprocess.run(
-            ["git", "-C", str(repo), "rev-parse", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
-        return None
-    return result.stdout.strip() or None
+    return _git_sha(repo)
 
 
 def _print_summary(output: Path) -> None:

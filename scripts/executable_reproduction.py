@@ -528,7 +528,7 @@ def _source_reports(repo_root: Path = REPO_ROOT) -> list[dict[str, str]]:
 def _resolve_git_commit(repo: Path, ref: str) -> str:
     try:
         process = subprocess.run(
-            ["git", "-C", str(repo), "rev-parse", "--verify", f"{ref}^{{commit}}"],
+            ["git", "--no-replace-objects", "-C", str(repo), "rev-parse", "--verify", f"{ref}^{{commit}}"],
             check=True,
             capture_output=True,
             text=True,
@@ -548,7 +548,7 @@ def _materialize_rulespec_ref(repo: Path, sha: str, destination: Path) -> Path:
 
     try:
         archive = subprocess.run(
-            ["git", "-C", str(repo), "archive", "--format=tar", sha, "dk"],
+            ["git", "--no-replace-objects", "-C", str(repo), "archive", "--format=tar", sha, "dk"],
             check=True,
             capture_output=True,
         ).stdout
