@@ -358,10 +358,9 @@ that effective sparse-checkout patterns exclude; untracked files do not count,
 so build output never marks a tree dirty. Reads use a private Git directory with
 copies of the index and shared split-index files, preserving the checkout's
 index metadata. A DE pair run reads its pinned commit from git objects, so its
-entry records the pin as clean whatever the checkout holds. (As of 2026-10-09,
-Max Ghenis reports that a mutated scratch copy of rulespec-rw once reported
-`001fa4b` while running a 17% VAT rate; its execution evidence is not included
-here.)
+entry records the pin as clean whatever the checkout holds. Without this
+record, a checkout whose tracked files differ from its HEAD would be published
+under a SHA whose rules did not produce the values.
 `run_comparison.py` refuses
 to publish a `weekly`, `pr-triggered` or `affected-rerun` report unless every
 SHA-bearing rulespec entry is recorded clean. A `manual` run on a dirty tree

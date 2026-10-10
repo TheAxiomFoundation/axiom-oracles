@@ -45,8 +45,8 @@ free-form-but-validated enum (see :data:`RUN_KINDS`) resolved from the
 ``AXIOM_ORACLES_RUN_KIND`` environment variable, defaulting to ``manual`` so a
 local run is never mislabeled as a scheduled one.
 
-A ``sha`` names a commit, but a run reads the working tree: a mutated scratch
-copy of rulespec-rw once reported ``001fa4b`` while running a 17% VAT rate.
+A ``sha`` names a commit, but a run reads the working tree, so a modified
+checkout could report a commit whose rules it did not run.
 Every rulespec entry whose ``sha`` resolved therefore also records ``dirty``
 (:func:`worktree_state`): ``false`` when the tracked files match ``sha``,
 ``true`` plus a ``diff_sha256`` when they do not, and ``null`` when git could

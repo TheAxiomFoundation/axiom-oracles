@@ -748,9 +748,8 @@ def _guard_unclean_rulespec_trees(name: str, provenance: dict) -> None:
     """Refuse a non-manual report from rules that differ from their recorded SHA.
 
     Provenance names each rulespec checkout by its HEAD SHA, but the run read
-    the working tree: a mutated scratch copy of rulespec-rw reported 001fa4b
-    while running a 17% VAT rate, and the July rw-contributions report recorded
-    d814f2d for values only an uncommitted tree could produce. A ``weekly``,
+    the working tree, so a modified checkout would otherwise publish values
+    under a SHA whose committed rules cannot produce them. A ``weekly``,
     ``pr-triggered`` or ``affected-rerun`` report is published as what the
     committed rules compute, so it must come from trees whose state is recorded
     and clean (untracked files do not count). Exits before stamping or
