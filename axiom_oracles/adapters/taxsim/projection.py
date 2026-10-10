@@ -158,6 +158,10 @@ _ZERO_COLUMNS = (
 # component-level comparisons.
 DEFAULT_IDTL = 2
 
+# Case metadata key listing filer income the TAXSIM row cannot carry, so
+# residual triage can see what TAXSIM computed without.
+TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY = "taxsim_unprojected_inputs"
+
 
 def attach_taxsim_inputs(cases: list[Case]) -> list[Case]:
     """Attach TAXSIM input rows to cases that do not already carry them."""
@@ -168,6 +172,9 @@ def attach_taxsim_inputs(cases: list[Case]) -> list[Case]:
         row = metadata.get("taxsim_input") or case.fact("taxsim_input")
         if row is None:
             row = taxsim_input_for_case(case, taxsimid=index)
+            unprojected = taxsim_unprojected_inputs_for_case(case)
+            if unprojected:
+                metadata[TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY] = unprojected
         elif not isinstance(row, Mapping):
             raise RuntimeError(
                 "Case metadata['taxsim_input'] must be a mapping of TAXSIM "
@@ -227,6 +234,15 @@ def taxsim_input_for_case(
         # non-qualified remainder rides in otherprop with the other ordinary
         # NIIT-subject property income so AGI stays whole.
         "dividends": _qualified_dividends(earners),
+        # intrec is "Taxable Interest Received". TAXSIM-35 has no input for
+        # tax-exempt interest (Form 1040 line 2a): its documentation says
+        # "It is an error to include a variable not named above", and the
+        # pinned binary stops on an unknown column (STOP 901). So
+        # Concepts.TAX_EXEMPT_INTEREST_INCOME is deliberately left out of
+        # intrec, otherprop, and nonprop, and TAXSIM computes as if line 2a
+        # were 0; attach_taxsim_inputs records the dropped filer amount
+        # under metadata["taxsim_unprojected_inputs"]
+        # (docs/taxsim-oracle-playbook.md).
         "intrec": _sum_fact(earners, Concepts.INTEREST_INCOME),
         "stcg": _sum_fact(earners, Concepts.SHORT_TERM_CAPITAL_GAINS),
         "ltcg": _sum_fact(earners, Concepts.LONG_TERM_CAPITAL_GAINS),
@@ -255,6 +271,26 @@ def taxsim_input_for_case(
     for column in _ZERO_COLUMNS:
         row.setdefault(column, 0)
     return row
+
+
+def taxsim_unprojected_inputs_for_case(case: Case) -> dict[str, float]:
+    """Head + spouse income the TAXSIM row has no column for.
+
+    Only nonzero amounts are listed, keyed by Case income name, so a unit
+    with nothing dropped carries no entry. Today that is tax-exempt interest
+    alone (see the intrec comment in taxsim_input_for_case).
+    """
+
+    people = _people(case)
+    if not people:
+        return {}
+    head = _head(people)
+    spouse = _spouse(people, head)
+    earners = [head] + ([spouse] if spouse is not None else [])
+    tax_exempt_interest = _sum_fact(earners, Concepts.TAX_EXEMPT_INTEREST_INCOME)
+    if not tax_exempt_interest:
+        return {}
+    return {"tax_exempt_interest_income": tax_exempt_interest}
 
 
 def _sum_fact(people: list[Entity], concept: str) -> float:

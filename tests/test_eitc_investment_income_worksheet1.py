@@ -19,6 +19,15 @@ Form 1040 or 1040-SR":
     13. combine lines 11 and 12; if less than zero, enter -0-
     14. add lines 1, 2, 3, 4, 7, 10, and 13. This is your investment income
 
+Line 2 reads, verbatim (p. 7): "Enter any amount from Form 1040 or 1040-SR,
+line 2a, plus any amount on Form 8814, line 1b"; the Case carries Form 1040
+line 2a as Concepts.TAX_EXEMPT_INTEREST_INCOME. Line 15 of the 2025 worksheet
+asks "Is the amount on line 14 more than $11,950?"; for 2026 the limit is Rev.
+Proc. 2025-32 section .06(2) (printed page 15, axiom-corpus
+us/guidance/irs/rev-proc-2025-32/page-15): "For taxable years beginning in
+2026, the earned income tax credit is not allowed under § 32(i) if the
+aggregate amount of certain investment income exceeds $12,200."
+
 Every expected value below is that arithmetic done by hand from the stated
 inputs (axiom-oracles#562), never an engine's output.
 """
@@ -505,10 +514,102 @@ def _child(**facts):
             5_000,
             id="dependent-amounts-are-not-the-filers",
         ),
+        pytest.param(
+            [
+                _head(
+                    **{
+                        Concepts.INTEREST_INCOME: 6_000,
+                        Concepts.TAX_EXEMPT_INTEREST_INCOME: 6_500,
+                    }
+                )
+            ],
+            12_500,
+            id="tax-exempt-interest-is-line-2",
+            # line 1 = 6,000; line 2 = 6,500; line 14 = 12,500
+        ),
+        pytest.param(
+            [
+                _head(
+                    **{
+                        Concepts.INTEREST_INCOME: 3_000,
+                        Concepts.TAX_EXEMPT_INTEREST_INCOME: 2_500,
+                        Concepts.DIVIDEND_INCOME: 1_000,
+                        Concepts.RENTAL_INCOME: -6_000,
+                    }
+                )
+            ],
+            6_500,
+            id="worked-example-3-without-farm-rent",
+            # line 1 = 3,000; line 2 = 2,500; line 3 = 1,000; line 12 =
+            # -6,000, line 13 = max(0, -6,000) = 0; line 14 = 6,500. (The
+            # worked example's +4,000 Schedule E line 40 farm rent is left
+            # out: the Case carries no farm-rent concept. With it, line 13 =
+            # max(0, 4,000 - 6,000) = 0 and line 14 is still 6,500.)
+        ),
+        pytest.param(
+            [
+                _head(**{Concepts.INTEREST_INCOME: 5_000}),
+                _spouse(**{Concepts.TAX_EXEMPT_INTEREST_INCOME: 4_000}),
+            ],
+            9_000,
+            id="joint-spouse-tax-exempt-interest-is-line-2",
+            # one joint return: line 1 = 5,000; line 2 = 4,000
+        ),
+        pytest.param(
+            [
+                _head(
+                    **{
+                        Concepts.TAX_EXEMPT_INTEREST_INCOME: 3_000,
+                        Concepts.SHORT_TERM_CAPITAL_GAINS: -5_000,
+                        Concepts.RENTAL_INCOME: -4_000,
+                    }
+                )
+            ],
+            3_000,
+            id="losses-never-reduce-line-2",
+            # line 2 = 3,000; line 7 = 0 (a loss enters -0-); line 13 = 0
+        ),
+        pytest.param(
+            [
+                _head(**{Concepts.TAX_EXEMPT_INTEREST_INCOME: 5_000}),
+                _child(**{Concepts.TAX_EXEMPT_INTEREST_INCOME: 8_000}),
+            ],
+            5_000,
+            id="dependent-tax-exempt-interest-is-not-the-filers",
+            # a child's line 2a amount reaches line 2 only through Form 8814
+            # line 1b, which the projection does not model
+        ),
     ],
 )
 def test_case_surface_matches_pub_596_worksheet_1(people, expected):
     assert _case_investment_income(*people) == expected
+
+
+@pytest.mark.parametrize(
+    ("tax_exempt_interest", "expected", "exceeds_2026_limit"),
+    [
+        pytest.param(9_200, 12_200, False, id="at-the-12200-limit"),
+        pytest.param(9_201, 12_201, True, id="one-dollar-over"),
+    ],
+)
+def test_case_surface_tax_exempt_interest_at_the_2026_limit(
+    tax_exempt_interest, expected, exceeds_2026_limit
+):
+    """Rev. Proc. 2025-32 bars the 2026 credit when investment income
+    "exceeds $12,200". Line 1 = 3,000 of taxable interest; line 2 carries
+    the rest, so the dollar of tax-exempt interest that crosses the limit
+    must reach line 14 (the engine gate itself is exercised in
+    tests/test_axiom_tax_exempt_interest_engine.py)."""
+    line_14 = _case_investment_income(
+        _head(
+            **{
+                Concepts.INTEREST_INCOME: 3_000,
+                Concepts.TAX_EXEMPT_INTEREST_INCOME: tax_exempt_interest,
+            }
+        )
+    )
+    assert line_14 == expected
+    assert (line_14 > 12_200) is exceeds_2026_limit
 
 
 # ---------------------------------------------------------------------------
@@ -649,9 +750,15 @@ def test_property_dependents_never_change_the_tax_unit_input(filer, dependents):
     )
 
 
+# Farm rent and passive partnership/S-corp income are absent on purpose: the
+# Case deliberately carries no farm-rent concept (the Axiom federal oracle
+# bridge has no gross-income slot for it; axiom-oracles issue
+# #566) and no producer supplies a passive partnership/S-corp
+# amount, so both stay zero on both surfaces below.
 CASE_FILER_AMOUNTS = st.fixed_dictionaries(
     {
         "interest": NON_NEGATIVE,
+        "tax_exempt_interest": NON_NEGATIVE,
         "qualified_dividends": NON_NEGATIVE,
         "non_qualified_dividends": NON_NEGATIVE,
         "short_term": SIGNED,
@@ -674,6 +781,7 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, child):
     def case_facts(amounts):
         return {
             Concepts.INTEREST_INCOME: amounts["interest"],
+            Concepts.TAX_EXEMPT_INTEREST_INCOME: amounts["tax_exempt_interest"],
             Concepts.DIVIDEND_INCOME: amounts["qualified_dividends"]
             + amounts["non_qualified_dividends"],
             Concepts.QUALIFIED_DIVIDEND_INCOME: amounts["qualified_dividends"],
@@ -685,6 +793,7 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, child):
     def bridge_row(amounts):
         return {
             "taxable_interest_income": amounts["interest"],
+            "tax_exempt_interest_income": amounts["tax_exempt_interest"],
             "qualified_dividend_income": amounts["qualified_dividends"],
             "non_qualified_dividend_income": amounts["non_qualified_dividends"],
             "short_term_capital_gains": amounts["short_term"],

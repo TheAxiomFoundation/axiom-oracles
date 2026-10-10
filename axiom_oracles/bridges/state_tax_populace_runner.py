@@ -1625,15 +1625,20 @@ def calculate_policyengine_targets(
 
 
 # Person-level PolicyEngine variables projected into the per-tax-unit TAXSIM
-# input row. Concept keys mirror populations/populace_us.py's person loader so
-# the populace TAXSIM leg feeds the binary the same input surface as the
-# Enhanced-CPS lanes (adapters/taxsim/projection.taxsim_input_for_case is the
-# single row-assembly authority for both).
+# input row. Concept keys mirror populations/populace_us.py's tax-unit person
+# loader (less its SSI benefit and resource facts, which no tax projection
+# reads) so the populace TAXSIM leg feeds the binary the same input surface as
+# the Enhanced-CPS lanes (adapters/taxsim/projection.taxsim_input_for_case is
+# the single row-assembly authority for both);
+# tests/bridges/test_state_tax_populace_runner.py pins the mirror.
 _TAXSIM_PERSON_NON_WAGE_VARIABLES: dict[str, str] = {
     "self_employment_income": "self_employment_income",
     "dividend_income": "dividend_income",
     "qualified_dividend_income": "qualified_dividend_income",
     "interest_income": "taxable_interest_income",
+    # Carried for the mirror only: TAXSIM-35 has no tax-exempt-interest
+    # column, so taxsim_input_for_case drops it.
+    "tax_exempt_interest_income": "tax_exempt_interest_income",
     "short_term_capital_gains": "short_term_capital_gains",
     "long_term_capital_gains": "long_term_capital_gains",
     "pension_income": "taxable_pension_income",

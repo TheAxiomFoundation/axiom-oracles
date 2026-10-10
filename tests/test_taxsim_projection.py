@@ -210,3 +210,59 @@ def test_taxsim_projection_keeps_qualified_only_dividend_rows_whole() -> None:
 
     assert row["dividends"] == 4_000
     assert row["otherprop"] == 0
+
+
+def test_taxsim_projection_leaves_out_tax_exempt_interest_and_records_it() -> None:
+    """TAXSIM-35 has no Form 1040 line 2a input (taxsim.nber.org/taxsimtest:
+    "11. intrec Taxable Interest Received."; "It is an error to include a
+    variable not named above"), so the row is identical with or without it,
+    and attach_taxsim_inputs records the head + spouse amount it dropped
+    (4,000 + 1,500; the child's 900 is not the filers')."""
+
+    def case(head_interest, spouse_interest, child_interest):
+        return Case(
+            case_id="tax-exempt-interest",
+            period="2026",
+            facts={Concepts.STATE_CODE: "CO"},
+            entities=(
+                Entity(
+                    "person-1",
+                    "person",
+                    facts={
+                        Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                        Concepts.PERSON_AGE: 70,
+                        Concepts.INTEREST_INCOME: 2_000,
+                        Concepts.SOCIAL_SECURITY_BENEFITS: 24_000,
+                        Concepts.TAX_EXEMPT_INTEREST_INCOME: head_interest,
+                    },
+                ),
+                Entity(
+                    "person-2",
+                    "person",
+                    facts={
+                        Concepts.HOUSEHOLD_RELATION: "Spouse",
+                        Concepts.PERSON_AGE: 68,
+                        Concepts.TAX_EXEMPT_INTEREST_INCOME: spouse_interest,
+                    },
+                ),
+                Entity(
+                    "person-3",
+                    "person",
+                    facts={
+                        Concepts.HOUSEHOLD_RELATION: "Child",
+                        Concepts.PERSON_AGE: 15,
+                        Concepts.TAX_EXEMPT_INTEREST_INCOME: child_interest,
+                    },
+                ),
+            ),
+        )
+
+    [without] = attach_taxsim_inputs([case(0, 0, 0)])
+    [with_interest] = attach_taxsim_inputs([case(4_000, 1_500, 900)])
+
+    assert with_interest.metadata["taxsim_input"] == without.metadata["taxsim_input"]
+    assert with_interest.metadata["taxsim_input"]["intrec"] == 2_000
+    assert "taxsim_unprojected_inputs" not in without.metadata
+    assert with_interest.metadata["taxsim_unprojected_inputs"] == {
+        "tax_exempt_interest_income": 5_500
+    }

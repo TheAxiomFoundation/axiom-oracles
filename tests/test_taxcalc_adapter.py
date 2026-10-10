@@ -245,6 +245,145 @@ def test_taxcalc_package_runner_caps_qualified_dividends_at_total_dividends() ->
     assert captured_inputs[0]["e02000"] == 500
 
 
+def test_taxcalc_projection_maps_tax_exempt_interest_to_e00400() -> None:
+    """records_variables.json: e00400 is "Tax-exempt interest income", a
+    filing-unit input: the head's 4,000 plus the spouse's 1,500 (a child's
+    900 is not on the filers' Form 1040 line 2a)."""
+    captured_inputs: list[dict] = []
+
+    class FakeTaxCalcRunner:
+        def __init__(self, input_rows):
+            captured_inputs.extend(input_rows)
+
+        def run(self, variables=None):
+            del variables
+            return [{"RECID": 1, "iitax": 0}]
+
+    case = Case(
+        case_id="case-1",
+        period="2026",
+        entities=(
+            Entity(
+                "head",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: 70,
+                    Concepts.INTEREST_INCOME: 2_000,
+                    Concepts.TAX_EXEMPT_INTEREST_INCOME: 4_000,
+                },
+            ),
+            Entity(
+                "spouse",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Spouse",
+                    Concepts.PERSON_AGE: 68,
+                    Concepts.TAX_EXEMPT_INTEREST_INCOME: 1_500,
+                },
+            ),
+            Entity(
+                "child",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "Child",
+                    Concepts.PERSON_AGE: 15,
+                    Concepts.TAX_EXEMPT_INTEREST_INCOME: 900,
+                },
+            ),
+        ),
+    )
+
+    TaxCalcPackageRunner(runner_factory=FakeTaxCalcRunner).run_cases(
+        [case],
+        variables=[Concepts.FEDERAL_INCOME_TAX],
+    )
+
+    assert captured_inputs[0]["e00400"] == 5_500
+    assert captured_inputs[0]["e00300"] == 2_000
+
+
+def test_taxcalc_prices_tax_exempt_interest_when_installed() -> None:
+    """Live Tax-Calculator on two IRS-worksheet cases.
+
+    Social Security (Form 1040 Instructions (2025) p. 32 worksheet, "4. Enter
+    the amount, if any, from Form 1040 or 1040-SR, line 2a"): single, SS
+    20,000, wages 10,000, taxable interest 8,000. Line 3 = 18,000. With
+    10,000 of line 2a: line 5 = 10,000 + 18,000 + 10,000 = 38,000, line 9 =
+    13,000, line 11 = 4,000, line 13 = 4,500, taxable benefits = 4,500 +
+    3,400 = 7,900, so AGI = 18,000 + 7,900 = 25,900. Without it: line 5 =
+    28,000, line 9 = 3,000, taxable benefits = 1,500, AGI = 19,500.
+
+    EITC (Pub. 596 (2025) Worksheet 1 line 2 is Form 1040 line 2a; Rev. Proc.
+    2025-32: no 2026 credit if investment income "exceeds $12,200"): a
+    childless 30-year-old with 8,000 of wages keeps the same credit with
+    12,200 of tax-exempt interest (line 2a is not in AGI) and loses it at
+    12,201.
+    """
+    pytest.importorskip("taxcalc")
+
+    def single(age, **facts):
+        return (
+            Entity(
+                "head",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
+                    Concepts.PERSON_AGE: age,
+                    **facts,
+                },
+            ),
+        )
+
+    social_security = {
+        Concepts.YEARLY_EARNED_INCOME: 10_000,
+        Concepts.INTEREST_INCOME: 8_000,
+        Concepts.SOCIAL_SECURITY_BENEFITS: 20_000,
+    }
+    cases = [
+        Case(
+            case_id="ss-with-2a",
+            period="2026",
+            entities=single(
+                67, **social_security, **{Concepts.TAX_EXEMPT_INTEREST_INCOME: 10_000}
+            ),
+        ),
+        Case(
+            case_id="ss-without-2a",
+            period="2026",
+            entities=single(67, **social_security),
+        ),
+    ] + [
+        Case(
+            case_id=f"eitc-{interest}",
+            period="2026",
+            entities=single(
+                30,
+                **{
+                    Concepts.YEARLY_EARNED_INCOME: 8_000,
+                    Concepts.TAX_EXEMPT_INTEREST_INCOME: interest,
+                },
+            ),
+        )
+        for interest in (0, 12_200, 12_201)
+    ]
+
+    results = {
+        result.household_id: result.values
+        for result in TaxCalcPackageRunner().run_cases(
+            cases, variables=[Concepts.AGI, Concepts.EITC]
+        )
+    }
+
+    assert results["ss-with-2a"]["c00100"] == pytest.approx(25_900)
+    assert results["ss-without-2a"]["c00100"] == pytest.approx(19_500)
+    assert results["eitc-0"]["eitc"] > 0
+    assert results["eitc-12200"]["eitc"] == pytest.approx(results["eitc-0"]["eitc"])
+    assert results["eitc-12201"]["eitc"] == 0
+    for interest in (0, 12_200, 12_201):
+        assert results[f"eitc-{interest}"]["c00100"] == pytest.approx(8_000)
+
+
 def test_taxcalc_package_runner_reports_legal_eitc_entitlement_when_installed() -> None:
     pytest.importorskip("taxcalc")
 
