@@ -19,10 +19,12 @@ from axiom_oracles.bridges.state_tax_populace_runner import (
     NO_BROAD_PIT_FIPS,
     calculate_policyengine_targets,
     calculate_policyengine_projection_inputs,
+    calculate_taxsim_targets,
     compare_ready_state_tax_units,
     population_routing_report,
     route_tax_units,
     runtime_provenance,
+    select_ready_tax_units,
     validate_campaign_dataset_identity,
 )
 
@@ -372,6 +374,16 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--rulespec-root", type=Path, required=True)
     parser.add_argument("--axiom-rules-path", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--no-taxsim",
+        action="store_true",
+        help=(
+            "Skip the TAXSIM oracle leg. By default every ready state is "
+            "also graded against the pinned policyengine-taxsim binary "
+            "(adapters/taxsim/taxsim_pins.json); the run fails if the "
+            "package is missing rather than silently dropping the leg."
+        ),
+    )
     return parser
 
 
@@ -433,22 +445,67 @@ def main(argv: list[str] | None = None) -> int:
         if requested_states
         else routes
     )
+    # The comparison grades only the per-state selection; computing oracle
+    # targets for the full ready population would make a sampled smoke run
+    # as expensive as a full campaign (and the extra targets are discarded
+    # at grading time). Applying the same deterministic selection
+    # compare_ready_state_tax_units uses keeps the target legs and the
+    # graded set identical.
+    target_routes = select_ready_tax_units(
+        comparison_routes, sample_size_per_state=args.sample_size_per_state
+    )
+
+    # One Microsimulation shared across the three calculators: each builds
+    # its own by default, and two-to-three concurrent full-population sims
+    # OOM-killed every full campaign attempt on 2026-08-24. The calculators
+    # only ever .calculate() — sharing is read-only. Bound to the campaign
+    # dataset: any other source is a programming error, not a cache miss
+    # (a keyless memo here once silently served the first dataset to every
+    # caller). The import stays lazy so non-simulation paths run without
+    # the PolicyEngine extra.
+    _shared_sim: list = []
+
+    def _shared_microsimulation(source):
+        if source is not dataset:
+            raise ValueError(
+                "the shared campaign Microsimulation is bound to the loaded "
+                "Populace dataset; refusing to serve a different source"
+            )
+        if not _shared_sim:
+            from policyengine_us import Microsimulation
+
+            _shared_sim.append(Microsimulation(dataset=dataset))
+        return _shared_sim[0]
+
     targets = calculate_policyengine_targets(
         dataset=dataset,
         raw_tax_units=raw_tax_units,
         raw_persons=raw_persons,
-        routes=comparison_routes,
+        routes=target_routes,
         year=args.year,
         contract=contract,
+        microsimulation_factory=_shared_microsimulation,
     )
     projection_inputs = calculate_policyengine_projection_inputs(
         dataset=dataset,
         raw_tax_units=raw_tax_units,
         raw_persons=raw_persons,
-        routes=comparison_routes,
+        routes=target_routes,
         year=args.year,
         contract=contract,
+        microsimulation_factory=_shared_microsimulation,
     )
+    taxsim_targets = None
+    if not args.no_taxsim:
+        taxsim_targets = calculate_taxsim_targets(
+            dataset=dataset,
+            raw_tax_units=raw_tax_units,
+            raw_persons=raw_persons,
+            routes=target_routes,
+            year=args.year,
+            contract=contract,
+            microsimulation_factory=_shared_microsimulation,
+        )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -460,9 +517,11 @@ def main(argv: list[str] | None = None) -> int:
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),
         ),
+        # Diagnostics describe the selected (graded) population — the same
+        # routes the projection inputs were computed for.
         "projection_diagnostics": _projection_branch_diagnostics(
             projection_inputs,
-            tuple(comparison_routes),
+            target_routes,
             targets,
         ),
         "routing": population_routing_report(
@@ -476,11 +535,15 @@ def main(argv: list[str] | None = None) -> int:
             known_tax_unit_ids={route.tax_unit_id for route in routes},
             policyengine_targets=targets,
             policyengine_projection_inputs=projection_inputs,
+            taxsim_targets=taxsim_targets,
             year=args.year,
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),
             sample_size_per_state=args.sample_size_per_state,
             contract=contract,
+        ),
+        "taxsim_leg": (
+            "skipped" if args.no_taxsim else "graded"
         ),
     }
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")

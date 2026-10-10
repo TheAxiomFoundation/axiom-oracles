@@ -21,6 +21,7 @@ fi
 (cd scripts && ../.venv/bin/python run_medicaid_thresholds_comparison.py)
 
 for suite in fiit-ecps co-state-income-tax-ecps co-state-income-tax-taxsim \
+             co-tax-intersection-taxsim \
              ssi-ecps ny-tanf-ecps \
              wa-tanf-ecps co-tanf-ecps ca-tanf-ecps mn-tanf-ecps az-tanf-ecps \
              ks-tanf-ecps medicaid-magi-co-ecps \
@@ -48,6 +49,10 @@ done
 # Re-emit per-suite case artifacts for the dashboard's case explorer from
 # the fresh full reports (auto-discovers suites from comparisons/*.yaml).
 .venv/bin/python scripts/emit_case_artifacts.py || echo "!! case artifacts failed"
+# Validate producer-bound certified chunks against the exact refreshed reports.
+# Initial legacy indexes may migrate; existing v1 identities cannot be rebound
+# here, so an emitter failure or stale corpus stops the scheduled run.
+.venv/bin/python scripts/generate_chunk_indexes.py
 # Ship each disposition's prose explanation (evidence.mechanism) so the
 # dashboard can say WHY a class is dispositioned, not just that it is.
 .venv/bin/python scripts/emit_disposition_artifacts.py || echo "!! disposition artifacts failed"

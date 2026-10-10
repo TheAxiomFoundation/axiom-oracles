@@ -1,0 +1,3487 @@
+{
+  "requests": [
+    {
+      "id": "golden-00",
+      "program": "nz/main-benefits",
+      "request_sha256": "1ac639dd25ef790c315c1622ca064c20fad7d5f76e7ddbf13f9c5269dc6c5b08",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:sole-parent:0",
+            "outputs": {
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment",
+                "kind": "scalar",
+                "name": "sole_parent_support_net_weekly_payment",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "521.52"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_gross_weekly_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_gross_weekly_rate",
+                "kind": "scalar",
+                "name": "sole_parent_support_gross_weekly_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 2 clause 1",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "521.52"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_disregarded_for_childcare": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_disregarded_for_childcare",
+                "kind": "scalar",
+                "name": "sole_parent_support_income_disregarded_for_childcare",
+                "source": "Social Security Act 2018 Schedule 4 Part 2 clause 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test": {
+                "dependencies": [
+                  "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_disregarded_for_childcare"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test",
+                "kind": "scalar",
+                "name": "sole_parent_support_income_for_income_test",
+                "source": "Social Security Act 2018 Schedule 4 Part 2 clauses 1 and 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment": {
+                "dependencies": [
+                  "nz:statutes/social_security/main_benefits/rates#sole_parent_support_gross_weekly_rate",
+                  "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment",
+                "kind": "scalar",
+                "name": "sole_parent_support_net_weekly_payment",
+                "source": "Social Security Act 2018 Schedule 2 definition of Income Test 1; Schedule 4 Part 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "521.52"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction": {
+                "dependencies": [
+                  "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction",
+                "kind": "scalar",
+                "name": "sole_parent_support_weekly_income_test_reduction",
+                "source": "Social Security Act 2018 Schedule 2 definition of Income Test 1; Schedule 4 Part 2 clause 1",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "d658477c543a70f70f9fc0c786e82857fbac8ba0151676a6180ac7d06bf08c3f"
+    },
+    {
+      "id": "golden-01",
+      "program": "nz/income-tax",
+      "request_sha256": "328ae0ed64b7fbc665389a101847aaec10f05de7cb700d5e258eea870283096a",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "tax:31638.23376623376623376623376623376623376",
+            "outputs": {
+              "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
+                "kind": "scalar",
+                "name": "individual_income_tax_before_credits",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4444.690909090909090909090909"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
+                "kind": "scalar",
+                "name": "individual_income_tax_before_credits",
+                "source": "Income Tax Act 2007 Schedule 1 part A clause 1",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4444.690909090909090909090909"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "41ed419a75e628b9dc48421e205bc7b0e290a998c894f47b9b409bb22b1d4c7d"
+    },
+    {
+      "id": "golden-02",
+      "program": "nz/acc-earners-levy",
+      "request_sha256": "3b7e3f39bfbbb7c846bfaf095bdb31a79a46b3a306c0a34068e7284a4c0602c3",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "acc:0",
+            "outputs": {
+              "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst": {
+                "dtype": "decimal",
+                "id": "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst",
+                "kind": "scalar",
+                "name": "acc_standard_earners_levy_including_gst",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst",
+                "kind": "scalar",
+                "name": "acc_standard_earners_levy_including_gst",
+                "source": "Inland Revenue ACC earners' levy rates",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "7a2001214c732f99cde83bee1d7fdea95b8bf474e21d18dbad7488fc6c236d45"
+    },
+    {
+      "id": "golden-03",
+      "program": "nz/working-for-families",
+      "request_sha256": "462ad17e06666fcdf612d8bf147989a1fb9e902aa1245bb2bee3622171a2e16f",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:family:0",
+            "outputs": {
+              "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit": {
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit",
+                "kind": "judgment",
+                "name": "entitled_to_in_work_tax_credit",
+                "outcome": "not_holds",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income",
+                "kind": "scalar",
+                "name": "family_scheme_income",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "31638.233766233766233766233767"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
+                "kind": "scalar",
+                "name": "family_tax_credit_after_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "family_tax_credit_before_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "in_work_tax_credit_before_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit",
+                "kind": "scalar",
+                "name": "minimum_family_tax_credit",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit",
+                "kind": "scalar",
+                "name": "wff_abatement_remaining_after_family_tax_credit",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_age_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_benefit_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_earner_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_financially_dependent_child_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_residence_requirement"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit",
+                "kind": "judgment",
+                "name": "entitled_to_in_work_tax_credit",
+                "outcome": "not_holds",
+                "source": "Income Tax Act 2007 s MD 4",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_age_requirement": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_age_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_age_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 5",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_benefit_requirement": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_benefit_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_benefit_requirement",
+                "outcome": "not_holds",
+                "source": "Income Tax Act 2007 s MD 8",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_financially_dependent_child_requirement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_principal_caregiver"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_financially_dependent_child_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_financially_dependent_child_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 6(1) and (2)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_person_residence_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 7(2)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_principal_caregiver": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#wff_general_principal_caregiver"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_principal_caregiver",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_principal_caregiver",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MC 10(3)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_residence_requirement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_child_residence_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_residence_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_residence_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 7(1)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#wff_general_principal_caregiver": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#wff_general_principal_caregiver",
+                "kind": "judgment",
+                "name": "wff_general_principal_caregiver",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MC 10(1)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included",
+                "kind": "scalar",
+                "name": "family_scheme_activity_income_included",
+                "source": "Income Tax Act 2007 s MB 3(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest",
+                "kind": "scalar",
+                "name": "family_scheme_close_company_attributed_interest",
+                "source": "Income Tax Act 2007 s MB 4(5)",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income",
+                "kind": "scalar",
+                "name": "family_scheme_close_company_income",
+                "source": "Income Tax Act 2007 s MB 4(2), (3), (7), and (8)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income",
+                "kind": "scalar",
+                "name": "family_scheme_controlling_shareholder_fringe_benefit_income",
+                "source": "Income Tax Act 2007 s MB 8(1) and (2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
+                "kind": "scalar",
+                "name": "family_scheme_dependent_child_income",
+                "source": "Income Tax Act 2007 s MB 11(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income",
+                "kind": "scalar",
+                "name": "family_scheme_income",
+                "source": "Income Tax Act 2007 s MB 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "31638.233766233766233766233767"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment",
+                "kind": "scalar",
+                "name": "family_scheme_income_before_period_adjustment",
+                "source": "Income Tax Act 2007 ss MB 1 and MB 3 to MB 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "31638.233766233766233766233766"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income",
+                "kind": "scalar",
+                "name": "family_scheme_non_controlling_employee_benefit_income",
+                "source": "Income Tax Act 2007 s MB 7B(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income",
+                "kind": "scalar",
+                "name": "family_scheme_non_settlor_trust_payment_income",
+                "source": "Income Tax Act 2007 s MB 12B(2) and (3)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income",
+                "kind": "scalar",
+                "name": "family_scheme_other_replacement_or_living_expense_payment_income",
+                "source": "Income Tax Act 2007 s MB 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income",
+                "kind": "scalar",
+                "name": "family_scheme_partner_nonresident_foreign_sourced_income",
+                "source": "Income Tax Act 2007 s MB 12",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income",
+                "kind": "scalar",
+                "name": "family_scheme_pension_or_annuity_income",
+                "source": "Income Tax Act 2007 s MB 10(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_company_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trustee_adjusted_net_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income",
+                "kind": "scalar",
+                "name": "family_scheme_settlor_trust_income",
+                "source": "Income Tax Act 2007 s MB 7(2B) and (3)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income",
+                "kind": "scalar",
+                "name": "family_scheme_short_term_charge_facility_income",
+                "source": "Income Tax Act 2007 s MB 7B(2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold",
+                "kind": "scalar",
+                "name": "family_scheme_short_term_charge_facility_threshold",
+                "source": "Income Tax Act 2007 s MB 7B(2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
+                  "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
+                "kind": "scalar",
+                "name": "family_tax_credit_after_abatement",
+                "source": "Income Tax Act 2007 ss MA 4 and MD 2(2)(c)(i)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_prescribed_amount"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "family_tax_credit_before_abatement",
+                "source": "Income Tax Act 2007 s MD 3(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_prescribed_amount": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_prescribed_amount",
+                "kind": "scalar",
+                "name": "family_tax_credit_prescribed_amount",
+                "source": "Income Tax Act 2007 s MD 3(4) and (7)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit",
+                  "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_relevant_children"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "in_work_tax_credit_before_abatement",
+                "source": "Income Tax Act 2007 s MD 10(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_adjusted_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_adjusted_income",
+                "kind": "scalar",
+                "name": "minimum_family_adjusted_income",
+                "source": "Income Tax Act 2007 s ME 3(3)(a)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_net_family_scheme_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_adjusted_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_net_family_scheme_income",
+                "kind": "scalar",
+                "name": "minimum_family_net_family_scheme_income",
+                "source": "Income Tax Act 2007 s ME 3(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_net_family_scheme_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit",
+                "kind": "scalar",
+                "name": "minimum_family_tax_credit",
+                "source": "Income Tax Act 2007 ss MA 4 and ME 1(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
+                  "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit",
+                "kind": "scalar",
+                "name": "wff_abatement_remaining_after_family_tax_credit",
+                "source": "Income Tax Act 2007 s MD 2(2)(c)(i) and (ii)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_full_year_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_abatement",
+                "kind": "scalar",
+                "name": "wff_family_credit_abatement",
+                "source": "Income Tax Act 2007 s MD 13(2) and (3)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_full_year_abatement": {
+                "dependencies": [
+                  "wff_family_scheme_income_for_relationship_period"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_full_year_abatement",
+                "kind": "scalar",
+                "name": "wff_family_credit_full_year_abatement",
+                "source": "Income Tax Act 2007 s MD 13(3)(a)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "wff_family_scheme_income_for_relationship_period": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income"
+                ],
+                "dtype": "decimal",
+                "kind": "scalar",
+                "name": "wff_family_scheme_income_for_relationship_period",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "31638.233766233766233766233767"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "dcd917c02cb6c063378dcabe1bd901988217ded1d8da4806f8401e52aefcd691"
+    },
+    {
+      "id": "golden-04",
+      "program": "nz/working-for-families",
+      "request_sha256": "8ce38bae59aecf1a9b438c61a457ac3623c50fc89cccc1b9fa3bcc550a469001",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:child:0",
+            "outputs": {
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement",
+                "kind": "scalar",
+                "name": "best_start_credit_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit",
+                "kind": "scalar",
+                "name": "best_start_tax_credit",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4041"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "best_start_tax_credit_before_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4041"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "best_start_family_scheme_income_for_relationship_period": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income"
+                ],
+                "dtype": "decimal",
+                "kind": "scalar",
+                "name": "best_start_family_scheme_income_for_relationship_period",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "31638.233766233766233766233767"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included",
+                "kind": "scalar",
+                "name": "family_scheme_activity_income_included",
+                "source": "Income Tax Act 2007 s MB 3(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest",
+                "kind": "scalar",
+                "name": "family_scheme_close_company_attributed_interest",
+                "source": "Income Tax Act 2007 s MB 4(5)",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income",
+                "kind": "scalar",
+                "name": "family_scheme_close_company_income",
+                "source": "Income Tax Act 2007 s MB 4(2), (3), (7), and (8)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income",
+                "kind": "scalar",
+                "name": "family_scheme_controlling_shareholder_fringe_benefit_income",
+                "source": "Income Tax Act 2007 s MB 8(1) and (2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
+                "kind": "scalar",
+                "name": "family_scheme_dependent_child_income",
+                "source": "Income Tax Act 2007 s MB 11(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income",
+                "kind": "scalar",
+                "name": "family_scheme_income",
+                "source": "Income Tax Act 2007 s MB 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "31638.233766233766233766233767"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment",
+                "kind": "scalar",
+                "name": "family_scheme_income_before_period_adjustment",
+                "source": "Income Tax Act 2007 ss MB 1 and MB 3 to MB 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "31638.233766233766233766233766"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income",
+                "kind": "scalar",
+                "name": "family_scheme_non_controlling_employee_benefit_income",
+                "source": "Income Tax Act 2007 s MB 7B(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income",
+                "kind": "scalar",
+                "name": "family_scheme_non_settlor_trust_payment_income",
+                "source": "Income Tax Act 2007 s MB 12B(2) and (3)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income",
+                "kind": "scalar",
+                "name": "family_scheme_other_replacement_or_living_expense_payment_income",
+                "source": "Income Tax Act 2007 s MB 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income",
+                "kind": "scalar",
+                "name": "family_scheme_partner_nonresident_foreign_sourced_income",
+                "source": "Income Tax Act 2007 s MB 12",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income",
+                "kind": "scalar",
+                "name": "family_scheme_pension_or_annuity_income",
+                "source": "Income Tax Act 2007 s MB 10(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_company_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trustee_adjusted_net_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income",
+                "kind": "scalar",
+                "name": "family_scheme_settlor_trust_income",
+                "source": "Income Tax Act 2007 s MB 7(2B) and (3)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income",
+                "kind": "scalar",
+                "name": "family_scheme_short_term_charge_facility_income",
+                "source": "Income Tax Act 2007 s MB 7B(2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold",
+                "kind": "scalar",
+                "name": "family_scheme_short_term_charge_facility_threshold",
+                "source": "Income Tax Act 2007 s MB 7B(2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#best_start_full_year_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement",
+                "kind": "scalar",
+                "name": "best_start_credit_abatement",
+                "source": "Income Tax Act 2007 s MG 3(1) and (2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_full_year_abatement": {
+                "dependencies": [
+                  "best_start_family_scheme_income_for_relationship_period"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_full_year_abatement",
+                "kind": "scalar",
+                "name": "best_start_full_year_abatement",
+                "source": "Income Tax Act 2007 s MG 3(2)(a)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement",
+                  "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit",
+                "kind": "scalar",
+                "name": "best_start_tax_credit",
+                "source": "Income Tax Act 2007 ss MA 4 and MG 1(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4041"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "best_start_tax_credit_before_abatement",
+                "source": "Income Tax Act 2007 s MG 2(1) and (5)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4041"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "a187ad2a0087bedcbe46477b6e66cca5612f47c69c8616efee8dc6d7c8f91c7b"
+    },
+    {
+      "id": "golden-05",
+      "program": "nz/independent-earner-tax-credit",
+      "request_sha256": "8151eafc1061a5670725f5b21271c7bc59f13c936aac0e3db35ca1867259b057",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:p1:ietc:0",
+            "outputs": {
+              "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit",
+                "kind": "scalar",
+                "name": "independent_earner_tax_credit",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status",
+                  "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_status_requirement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit",
+                "kind": "scalar",
+                "name": "independent_earner_tax_credit",
+                "source": "Income Tax Act 2007 s LC 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_status_requirement": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_status_requirement",
+                "kind": "judgment",
+                "name": "independent_earner_tax_credit_status_requirement",
+                "outcome": "not_holds",
+                "source": "Income Tax Act 2007 s LC 13(1)",
+                "unit": null
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "a4c41132afea4241136fe6a43a4c60ffbcb1a14b224421354384bebb89913b8d"
+    },
+    {
+      "id": "golden-06",
+      "program": "nz/winter-energy-payment",
+      "request_sha256": "f9c4bc64114faa174cb870c2b7667f04000e930918ade4b01f26c2e9506594b7",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:winter-energy-rate",
+            "outputs": {
+              "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period",
+                "kind": "scalar",
+                "name": "winter_energy_payment_rate_per_winter_period",
+                "unit": "NZD",
+                "value": {
+                  "kind": "integer",
+                  "value": 700
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/winter_energy_payment/core#winter_energy_payment_rate_per_winter_period",
+                "kind": "scalar",
+                "name": "winter_energy_payment_rate_per_winter_period",
+                "source": "Social Security Act 2018 Schedule 4 Part 8",
+                "unit": "NZD",
+                "value": {
+                  "kind": "integer",
+                  "value": 700
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "6a4484ef7f67849600d6e9b1e87963757991d5c9108d607b489e44717648166b"
+    },
+    {
+      "id": "golden-07",
+      "program": "nz/main-benefits",
+      "request_sha256": "074a15620602b8de42f2bde008e8767b1db112d691bf072a8c7a723c9a4829b2",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:jobseeker:0",
+            "outputs": {
+              "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment",
+                "kind": "scalar",
+                "name": "jobseeker_support_net_weekly_payment",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "521.52"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate",
+                "kind": "scalar",
+                "name": "jobseeker_support_gross_weekly_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 1 clauses 1 and 3",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "521.52"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment": {
+                "dependencies": [
+                  "nz:statutes/social_security/main_benefits/rates#jobseeker_support_gross_weekly_rate",
+                  "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_net_weekly_payment",
+                "kind": "scalar",
+                "name": "jobseeker_support_net_weekly_payment",
+                "source": "Social Security Act 2018 Schedule 2 definitions of Income Tests 1, 3, and 4; Schedule 4 Part 1",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "521.52"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#jobseeker_support_weekly_income_test_reduction",
+                "kind": "scalar",
+                "name": "jobseeker_support_weekly_income_test_reduction",
+                "source": "Social Security Act 2018 Schedule 2 Income Tests 1, 3, and 4; Schedule 4 Part 1 clauses 1 and 3",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "d6b576fe971847ae9cb73c655c08852287f87b7c2e259feeb87a6cc9f153bcba"
+    },
+    {
+      "id": "golden-08",
+      "program": "nz/accommodation-supplement",
+      "request_sha256": "50636d0d291ed5cc33d26dc5d419cd87c252095aaae1d0e5b19397c1f5a5c2c1",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:as:statutory:0",
+            "outputs": {
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
+                "kind": "scalar",
+                "name": "accommodation_supplement_rounded_weekly_payment",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "303"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_amount_before_rounding",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.07678846153846153846153846"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                "kind": "scalar",
+                "name": "accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.07678846153846153846153846"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate",
+                "kind": "scalar",
+                "name": "accommodation_supplement_entry_threshold_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount",
+                "kind": "scalar",
+                "name": "accommodation_supplement_entry_threshold_weekly_amount",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6; Social Security Regulations 2018 reg 17",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "168.46173076923076923076923077"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap",
+                "kind": "scalar",
+                "name": "accommodation_supplement_formula_weekly_amount_before_cap",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.07678846153846153846153846"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate",
+                "kind": "scalar",
+                "name": "accommodation_supplement_maximum_weekly_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6; Work and Income 1 April 2026 Accommodation Supplement maximum rates",
+                "unit": "NZD",
+                "value": {
+                  "kind": "integer",
+                  "value": 305
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction",
+                "kind": "scalar",
+                "name": "accommodation_supplement_non_beneficiary_income_reduction",
+                "source": "Social Security Regulations 2018 reg 18",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
+                "kind": "scalar",
+                "name": "accommodation_supplement_rounded_weekly_payment",
+                "source": "Social Security Regulations 2018 reg 19",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "303"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_accommodation_costs",
+                "source": "Social Security Act 2018 s 65AAA definition of accommodation costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_accommodation_income",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clause 7 definition of accommodation income",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_amount_before_rounding",
+                "source": "Social Security Regulations 2018 regs 18 and 19",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.07678846153846153846153846"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clause 7 definition of weekly qualifying accommodation costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "faf1bfb2eec7f0e611c115458ea0de865b62e1c13a88701b97b2487938776f1e"
+    },
+    {
+      "id": "golden-09",
+      "program": "nz/accommodation-supplement",
+      "request_sha256": "fe4aa4dcf624098985e3b2684a3ad86eca9583dc53834bd8ad12f5d1b7052c4f",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:as:treasury-host:0",
+            "outputs": {
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
+                "kind": "scalar",
+                "name": "accommodation_supplement_rounded_weekly_payment",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "303"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_amount_before_rounding",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.14982191780821917808219178"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                "kind": "scalar",
+                "name": "accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.14982191780821917808219178"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate",
+                "kind": "scalar",
+                "name": "accommodation_supplement_entry_threshold_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount",
+                "kind": "scalar",
+                "name": "accommodation_supplement_entry_threshold_weekly_amount",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6; Social Security Regulations 2018 reg 17",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "168.35739726027397260273972603"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap",
+                "kind": "scalar",
+                "name": "accommodation_supplement_formula_weekly_amount_before_cap",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.14982191780821917808219178"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate",
+                "kind": "scalar",
+                "name": "accommodation_supplement_maximum_weekly_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6; Work and Income 1 April 2026 Accommodation Supplement maximum rates",
+                "unit": "NZD",
+                "value": {
+                  "kind": "integer",
+                  "value": 305
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction",
+                "kind": "scalar",
+                "name": "accommodation_supplement_non_beneficiary_income_reduction",
+                "source": "Social Security Regulations 2018 reg 18",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
+                "kind": "scalar",
+                "name": "accommodation_supplement_rounded_weekly_payment",
+                "source": "Social Security Regulations 2018 reg 19",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "303"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_accommodation_costs",
+                "source": "Social Security Act 2018 s 65AAA definition of accommodation costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_accommodation_income",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clause 7 definition of accommodation income",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_amount_before_rounding",
+                "source": "Social Security Regulations 2018 regs 18 and 19",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.14982191780821917808219178"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clause 7 definition of weekly qualifying accommodation costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "11563282b27f1651deaf4879caf6cfd85bce6853f9987645d50e43c73442a794"
+    },
+    {
+      "id": "golden-10",
+      "program": "nz/main-benefits",
+      "request_sha256": "5560a3bcb9289875a3dba1721c66eefe0e831e4903f70bf245651707dfc2e7db",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:sole-parent:740",
+            "outputs": {
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment",
+                "kind": "scalar",
+                "name": "sole_parent_support_net_weekly_payment",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "151.52"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_gross_weekly_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_gross_weekly_rate",
+                "kind": "scalar",
+                "name": "sole_parent_support_gross_weekly_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 2 clause 1",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "521.52"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_disregarded_for_childcare": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_disregarded_for_childcare",
+                "kind": "scalar",
+                "name": "sole_parent_support_income_disregarded_for_childcare",
+                "source": "Social Security Act 2018 Schedule 4 Part 2 clause 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test": {
+                "dependencies": [
+                  "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_disregarded_for_childcare"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test",
+                "kind": "scalar",
+                "name": "sole_parent_support_income_for_income_test",
+                "source": "Social Security Act 2018 Schedule 4 Part 2 clauses 1 and 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "740"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment": {
+                "dependencies": [
+                  "nz:statutes/social_security/main_benefits/rates#sole_parent_support_gross_weekly_rate",
+                  "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_net_weekly_payment",
+                "kind": "scalar",
+                "name": "sole_parent_support_net_weekly_payment",
+                "source": "Social Security Act 2018 Schedule 2 definition of Income Test 1; Schedule 4 Part 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "151.52"
+                }
+              },
+              "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction": {
+                "dependencies": [
+                  "nz:statutes/social_security/main_benefits/rates#sole_parent_support_income_for_income_test"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/main_benefits/rates#sole_parent_support_weekly_income_test_reduction",
+                "kind": "scalar",
+                "name": "sole_parent_support_weekly_income_test_reduction",
+                "source": "Social Security Act 2018 Schedule 2 definition of Income Test 1; Schedule 4 Part 2 clause 1",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "370"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "ac6d8ad039839cf285523f007cec93ff0f4b4f50b2d04a79db1cae8e351f9185"
+    },
+    {
+      "id": "golden-11",
+      "program": "nz/income-tax",
+      "request_sha256": "a88f9638b0f01370a2fdffc1f2664bdd4a48af59aa06054e73420c8dc78f69ef",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "tax:38585.71428571428571428571428571428571428",
+            "outputs": {
+              "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
+                "kind": "scalar",
+                "name": "individual_income_tax_before_credits",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "5660.5"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
+                "kind": "scalar",
+                "name": "individual_income_tax_before_credits",
+                "source": "Income Tax Act 2007 Schedule 1 part A clause 1",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "5660.5"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "94b6efc74eb7d0174abce527d9da5d024626cf91de3bdfbe2664f82391b7269b"
+    },
+    {
+      "id": "golden-12",
+      "program": "nz/income-tax",
+      "request_sha256": "0aa5401e19851db1c1a731e72511c0c5bd9e51367ff04b98634c72ce822737f4",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "tax:0",
+            "outputs": {
+              "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
+                "kind": "scalar",
+                "name": "individual_income_tax_before_credits",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/schedule_1/individual_income_tax#individual_income_tax_before_credits",
+                "kind": "scalar",
+                "name": "individual_income_tax_before_credits",
+                "source": "Income Tax Act 2007 Schedule 1 part A clause 1",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "9b3d65c020e0887922ccf52bd1a3ef9c07c5cc33fc04fba9686ca4d1ae170761"
+    },
+    {
+      "id": "golden-13",
+      "program": "nz/acc-earners-levy",
+      "request_sha256": "65c6f2606dbe8f5d14cabdd5dc2972e05d4271bf1b8b44f407aeab49310d2236",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "acc:38585.71428571428571428571428571428571428",
+            "outputs": {
+              "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst": {
+                "dtype": "decimal",
+                "id": "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst",
+                "kind": "scalar",
+                "name": "acc_standard_earners_levy_including_gst",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "675.25"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:regulations/acc/earners_levy#acc_standard_earners_levy_including_gst",
+                "kind": "scalar",
+                "name": "acc_standard_earners_levy_including_gst",
+                "source": "Inland Revenue ACC earners' levy rates",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "675.25"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "f5694c767fdb326169f21012673d5226348fae93d41d9731de3aac0e33ef5567"
+    },
+    {
+      "id": "golden-14",
+      "program": "nz/working-for-families",
+      "request_sha256": "7935cebb5b9d39e29aaf0f486a4c49574f48963f9645675444ed360c2a4cd9f3",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:family:740",
+            "outputs": {
+              "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit": {
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit",
+                "kind": "judgment",
+                "name": "entitled_to_in_work_tax_credit",
+                "outcome": "holds",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income",
+                "kind": "scalar",
+                "name": "family_scheme_income",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "38585.714285714285714285714285"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
+                "kind": "scalar",
+                "name": "family_tax_credit_after_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "family_tax_credit_before_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "in_work_tax_credit_before_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "7670"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit",
+                "kind": "scalar",
+                "name": "minimum_family_tax_credit",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "3768.9917808219178082191780819"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit",
+                "kind": "scalar",
+                "name": "wff_abatement_remaining_after_family_tax_credit",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_age_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_benefit_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_earner_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_financially_dependent_child_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_residence_requirement"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit",
+                "kind": "judgment",
+                "name": "entitled_to_in_work_tax_credit",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 4",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_age_requirement": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_age_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_age_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 5",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_benefit_requirement": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_benefit_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_benefit_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 8",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_earner_requirement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_birth_absence_route",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_close_company_earner_route",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_income_earner_route",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_legacy_compensation_route",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_recent_requirement_concession"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_earner_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_earner_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 9",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_financially_dependent_child_requirement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_principal_caregiver"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_financially_dependent_child_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_financially_dependent_child_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 6(1) and (2)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_income_earner_route": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_qualifying_income_derived"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_income_earner_route",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_income_earner_route",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 9(1)(a), (2), and (3)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_person_residence_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 7(2)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_principal_caregiver": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#wff_general_principal_caregiver"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_principal_caregiver",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_principal_caregiver",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MC 10(3)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_qualifying_income_derived": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_qualifying_income_derived",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_qualifying_income_derived",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 9(2) and (3)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_residence_requirement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_child_residence_requirement",
+                  "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_person_residence_requirement"
+                ],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#in_work_tax_credit_residence_requirement",
+                "kind": "judgment",
+                "name": "in_work_tax_credit_residence_requirement",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MD 7(1)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/eligibility#wff_general_principal_caregiver": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/family_scheme/eligibility#wff_general_principal_caregiver",
+                "kind": "judgment",
+                "name": "wff_general_principal_caregiver",
+                "outcome": "holds",
+                "source": "Income Tax Act 2007 s MC 10(1)",
+                "unit": null
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included",
+                "kind": "scalar",
+                "name": "family_scheme_activity_income_included",
+                "source": "Income Tax Act 2007 s MB 3(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest",
+                "kind": "scalar",
+                "name": "family_scheme_close_company_attributed_interest",
+                "source": "Income Tax Act 2007 s MB 4(5)",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income",
+                "kind": "scalar",
+                "name": "family_scheme_close_company_income",
+                "source": "Income Tax Act 2007 s MB 4(2), (3), (7), and (8)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income",
+                "kind": "scalar",
+                "name": "family_scheme_controlling_shareholder_fringe_benefit_income",
+                "source": "Income Tax Act 2007 s MB 8(1) and (2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
+                "kind": "scalar",
+                "name": "family_scheme_dependent_child_income",
+                "source": "Income Tax Act 2007 s MB 11(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income",
+                "kind": "scalar",
+                "name": "family_scheme_income",
+                "source": "Income Tax Act 2007 s MB 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "38585.714285714285714285714285"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment",
+                "kind": "scalar",
+                "name": "family_scheme_income_before_period_adjustment",
+                "source": "Income Tax Act 2007 ss MB 1 and MB 3 to MB 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "38585.714285714285714285714286"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income",
+                "kind": "scalar",
+                "name": "family_scheme_non_controlling_employee_benefit_income",
+                "source": "Income Tax Act 2007 s MB 7B(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income",
+                "kind": "scalar",
+                "name": "family_scheme_non_settlor_trust_payment_income",
+                "source": "Income Tax Act 2007 s MB 12B(2) and (3)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income",
+                "kind": "scalar",
+                "name": "family_scheme_other_replacement_or_living_expense_payment_income",
+                "source": "Income Tax Act 2007 s MB 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income",
+                "kind": "scalar",
+                "name": "family_scheme_partner_nonresident_foreign_sourced_income",
+                "source": "Income Tax Act 2007 s MB 12",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income",
+                "kind": "scalar",
+                "name": "family_scheme_pension_or_annuity_income",
+                "source": "Income Tax Act 2007 s MB 10(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_company_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trustee_adjusted_net_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income",
+                "kind": "scalar",
+                "name": "family_scheme_settlor_trust_income",
+                "source": "Income Tax Act 2007 s MB 7(2B) and (3)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income",
+                "kind": "scalar",
+                "name": "family_scheme_short_term_charge_facility_income",
+                "source": "Income Tax Act 2007 s MB 7B(2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold",
+                "kind": "scalar",
+                "name": "family_scheme_short_term_charge_facility_threshold",
+                "source": "Income Tax Act 2007 s MB 7B(2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "1200"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
+                  "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_after_abatement",
+                "kind": "scalar",
+                "name": "family_tax_credit_after_abatement",
+                "source": "Income Tax Act 2007 ss MA 4 and MD 2(2)(c)(i)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_prescribed_amount"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "family_tax_credit_before_abatement",
+                "source": "Income Tax Act 2007 s MD 3(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_prescribed_amount": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_prescribed_amount",
+                "kind": "scalar",
+                "name": "family_tax_credit_prescribed_amount",
+                "source": "Income Tax Act 2007 s MD 3(4) and (7)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "20829"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/eligibility#entitled_to_in_work_tax_credit",
+                  "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_relevant_children"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "in_work_tax_credit_before_abatement",
+                "source": "Income Tax Act 2007 s MD 10(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "7670"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_relevant_children": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#in_work_tax_credit_relevant_children",
+                "kind": "scalar",
+                "name": "in_work_tax_credit_relevant_children",
+                "source": "Income Tax Act 2007 s MD 10(3)(c)",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "3"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_adjusted_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_adjusted_income",
+                "kind": "scalar",
+                "name": "minimum_family_adjusted_income",
+                "source": "Income Tax Act 2007 s ME 3(3)(a)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "38480"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_net_family_scheme_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_adjusted_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_net_family_scheme_income",
+                "kind": "scalar",
+                "name": "minimum_family_net_family_scheme_income",
+                "source": "Income Tax Act 2007 s ME 3(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "32835.008219178082191780821918"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_net_family_scheme_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#minimum_family_tax_credit",
+                "kind": "scalar",
+                "name": "minimum_family_tax_credit",
+                "source": "Income Tax Act 2007 ss MA 4 and ME 1(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "3768.9917808219178082191780819"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#family_tax_credit_before_abatement",
+                  "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_abatement_remaining_after_family_tax_credit",
+                "kind": "scalar",
+                "name": "wff_abatement_remaining_after_family_tax_credit",
+                "source": "Income Tax Act 2007 s MD 2(2)(c)(i) and (ii)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_full_year_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_abatement",
+                "kind": "scalar",
+                "name": "wff_family_credit_abatement",
+                "source": "Income Tax Act 2007 s MD 13(2) and (3)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_full_year_abatement": {
+                "dependencies": [
+                  "wff_family_scheme_income_for_relationship_period"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#wff_family_credit_full_year_abatement",
+                "kind": "scalar",
+                "name": "wff_family_credit_full_year_abatement",
+                "source": "Income Tax Act 2007 s MD 13(3)(a)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "wff_family_scheme_income_for_relationship_period": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income"
+                ],
+                "dtype": "decimal",
+                "kind": "scalar",
+                "name": "wff_family_scheme_income_for_relationship_period",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "38585.714285714285714285714285"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "19308513ecade03812903b62bbc567129407675d02fe59c040130187d9ee4f4c"
+    },
+    {
+      "id": "golden-15",
+      "program": "nz/working-for-families",
+      "request_sha256": "a7779bcf38498c06f5f5d94cdfa0bc56e31c9d1d9bd45b287f5a33e2371d766a",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:child:0",
+            "outputs": {
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement",
+                "kind": "scalar",
+                "name": "best_start_credit_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit",
+                "kind": "scalar",
+                "name": "best_start_tax_credit",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4041"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "best_start_tax_credit_before_abatement",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4041"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "best_start_family_scheme_income_for_relationship_period": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income"
+                ],
+                "dtype": "decimal",
+                "kind": "scalar",
+                "name": "best_start_family_scheme_income_for_relationship_period",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "38585.714285714285714285714285"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included",
+                "kind": "scalar",
+                "name": "family_scheme_activity_income_included",
+                "source": "Income Tax Act 2007 s MB 3(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest",
+                "kind": "scalar",
+                "name": "family_scheme_close_company_attributed_interest",
+                "source": "Income Tax Act 2007 s MB 4(5)",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_attributed_interest"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income",
+                "kind": "scalar",
+                "name": "family_scheme_close_company_income",
+                "source": "Income Tax Act 2007 s MB 4(2), (3), (7), and (8)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income",
+                "kind": "scalar",
+                "name": "family_scheme_controlling_shareholder_fringe_benefit_income",
+                "source": "Income Tax Act 2007 s MB 8(1) and (2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
+                "kind": "scalar",
+                "name": "family_scheme_dependent_child_income",
+                "source": "Income Tax Act 2007 s MB 11(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income",
+                "kind": "scalar",
+                "name": "family_scheme_income",
+                "source": "Income Tax Act 2007 s MB 2",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "38585.714285714285714285714285"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_activity_income_included",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_close_company_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_controlling_shareholder_fringe_benefit_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_dependent_child_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_income_before_period_adjustment",
+                "kind": "scalar",
+                "name": "family_scheme_income_before_period_adjustment",
+                "source": "Income Tax Act 2007 ss MB 1 and MB 3 to MB 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "38585.714285714285714285714286"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_controlling_employee_benefit_income",
+                "kind": "scalar",
+                "name": "family_scheme_non_controlling_employee_benefit_income",
+                "source": "Income Tax Act 2007 s MB 7B(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_non_settlor_trust_payment_income",
+                "kind": "scalar",
+                "name": "family_scheme_non_settlor_trust_payment_income",
+                "source": "Income Tax Act 2007 s MB 12B(2) and (3)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_other_replacement_or_living_expense_payment_income",
+                "kind": "scalar",
+                "name": "family_scheme_other_replacement_or_living_expense_payment_income",
+                "source": "Income Tax Act 2007 s MB 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_partner_nonresident_foreign_sourced_income",
+                "kind": "scalar",
+                "name": "family_scheme_partner_nonresident_foreign_sourced_income",
+                "source": "Income Tax Act 2007 s MB 12",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_pension_or_annuity_income",
+                "kind": "scalar",
+                "name": "family_scheme_pension_or_annuity_income",
+                "source": "Income Tax Act 2007 s MB 10(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_company_income",
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trustee_adjusted_net_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_settlor_trust_income",
+                "kind": "scalar",
+                "name": "family_scheme_settlor_trust_income",
+                "source": "Income Tax Act 2007 s MB 7(2B) and (3)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_income",
+                "kind": "scalar",
+                "name": "family_scheme_short_term_charge_facility_income",
+                "source": "Income Tax Act 2007 s MB 7B(2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/family_scheme_income#family_scheme_short_term_charge_facility_threshold",
+                "kind": "scalar",
+                "name": "family_scheme_short_term_charge_facility_threshold",
+                "source": "Income Tax Act 2007 s MB 7B(2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "1200"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#best_start_full_year_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement",
+                "kind": "scalar",
+                "name": "best_start_credit_abatement",
+                "source": "Income Tax Act 2007 s MG 3(1) and (2)(b)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_full_year_abatement": {
+                "dependencies": [
+                  "best_start_family_scheme_income_for_relationship_period"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_full_year_abatement",
+                "kind": "scalar",
+                "name": "best_start_full_year_abatement",
+                "source": "Income Tax Act 2007 s MG 3(2)(a)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/family_scheme/tax_credits#best_start_credit_abatement",
+                  "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit",
+                "kind": "scalar",
+                "name": "best_start_tax_credit",
+                "source": "Income Tax Act 2007 ss MA 4 and MG 1(2)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4041"
+                }
+              },
+              "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/family_scheme/tax_credits#best_start_tax_credit_before_abatement",
+                "kind": "scalar",
+                "name": "best_start_tax_credit_before_abatement",
+                "source": "Income Tax Act 2007 s MG 2(1) and (5)",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "4041"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "f88fe2fedb0e407f03f29808805e9b4a111c595c5050fdbb73fb1bc9a5670f74"
+    },
+    {
+      "id": "golden-16",
+      "program": "nz/independent-earner-tax-credit",
+      "request_sha256": "e9294b6942424a8ed3c6708cb067c2c58adff96c0d0ceec0553e328f8439b9f4",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:p1:ietc:740",
+            "outputs": {
+              "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit": {
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit",
+                "kind": "scalar",
+                "name": "independent_earner_tax_credit",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit": {
+                "dependencies": [
+                  "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_before_status",
+                  "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_status_requirement"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit",
+                "kind": "scalar",
+                "name": "independent_earner_tax_credit",
+                "source": "Income Tax Act 2007 s LC 13",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_status_requirement": {
+                "dependencies": [],
+                "id": "nz:statutes/income_tax/credits/individual_credits#independent_earner_tax_credit_status_requirement",
+                "kind": "judgment",
+                "name": "independent_earner_tax_credit_status_requirement",
+                "outcome": "not_holds",
+                "source": "Income Tax Act 2007 s LC 13(1)",
+                "unit": null
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "17218ed2bc0335caaced3cf9f17bb50d32222b5a263e28afa04a26ee413c0755"
+    },
+    {
+      "id": "golden-17",
+      "program": "nz/accommodation-supplement",
+      "request_sha256": "e7953030142899a4fe20bf943874b1fcddff94b820c5d0692219640c00c637de",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:as:statutory:740",
+            "outputs": {
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
+                "kind": "scalar",
+                "name": "accommodation_supplement_rounded_weekly_payment",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "303"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_amount_before_rounding",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.07678846153846153846153846"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                "kind": "scalar",
+                "name": "accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.07678846153846153846153846"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate",
+                "kind": "scalar",
+                "name": "accommodation_supplement_entry_threshold_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount",
+                "kind": "scalar",
+                "name": "accommodation_supplement_entry_threshold_weekly_amount",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6; Social Security Regulations 2018 reg 17",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "168.46173076923076923076923077"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap",
+                "kind": "scalar",
+                "name": "accommodation_supplement_formula_weekly_amount_before_cap",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.07678846153846153846153846"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate",
+                "kind": "scalar",
+                "name": "accommodation_supplement_maximum_weekly_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6; Work and Income 1 April 2026 Accommodation Supplement maximum rates",
+                "unit": "NZD",
+                "value": {
+                  "kind": "integer",
+                  "value": 305
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction",
+                "kind": "scalar",
+                "name": "accommodation_supplement_non_beneficiary_income_reduction",
+                "source": "Social Security Regulations 2018 reg 18",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
+                "kind": "scalar",
+                "name": "accommodation_supplement_rounded_weekly_payment",
+                "source": "Social Security Regulations 2018 reg 19",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "303"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_accommodation_costs",
+                "source": "Social Security Act 2018 s 65AAA definition of accommodation costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_accommodation_income",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clause 7 definition of accommodation income",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_amount_before_rounding",
+                "source": "Social Security Regulations 2018 regs 18 and 19",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.07678846153846153846153846"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clause 7 definition of weekly qualifying accommodation costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "f09fc4538b50a11934de5b0547fbd51a1bea17e758ff16b8c7ac8c6a33bd53be"
+    },
+    {
+      "id": "golden-18",
+      "program": "nz/accommodation-supplement",
+      "request_sha256": "bb8cdff762b57f3cf023a3259ba93f112364f77a428169fd53f8fee36c0d44f9",
+      "response": {
+        "metadata": {
+          "actual_mode": "explain",
+          "fallback_reason": null,
+          "requested_mode": "explain"
+        },
+        "results": [
+          {
+            "entity_id": "single_parent_three_children_area1_rent:as:treasury-host:740",
+            "outputs": {
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
+                "kind": "scalar",
+                "name": "accommodation_supplement_rounded_weekly_payment",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "303"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_amount_before_rounding",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.14982191780821917808219178"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              }
+            },
+            "period": {
+              "end": "2027-03-31",
+              "period_kind": "tax_year",
+              "start": "2026-04-01"
+            },
+            "trace": {
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                "kind": "scalar",
+                "name": "accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.14982191780821917808219178"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate",
+                "kind": "scalar",
+                "name": "accommodation_supplement_entry_threshold_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": null,
+                "value": {
+                  "kind": "decimal",
+                  "value": "0.25"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_rate"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount",
+                "kind": "scalar",
+                "name": "accommodation_supplement_entry_threshold_weekly_amount",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6; Social Security Regulations 2018 reg 17",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "168.35739726027397260273972603"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_entry_threshold_weekly_amount",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_formula_weekly_amount_before_cap",
+                "kind": "scalar",
+                "name": "accommodation_supplement_formula_weekly_amount_before_cap",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.14982191780821917808219178"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_maximum_weekly_rate",
+                "kind": "scalar",
+                "name": "accommodation_supplement_maximum_weekly_rate",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clauses 1 to 6; Work and Income 1 April 2026 Accommodation Supplement maximum rates",
+                "unit": "NZD",
+                "value": {
+                  "kind": "integer",
+                  "value": 305
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction",
+                "kind": "scalar",
+                "name": "accommodation_supplement_non_beneficiary_income_reduction",
+                "source": "Social Security Regulations 2018 reg 18",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_rounded_weekly_payment",
+                "kind": "scalar",
+                "name": "accommodation_supplement_rounded_weekly_payment",
+                "source": "Social Security Regulations 2018 reg 19",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "303"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_accommodation_costs",
+                "source": "Social Security Act 2018 s 65AAA definition of accommodation costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income": {
+                "dependencies": [],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_accommodation_income",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clause 7 definition of accommodation income",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "0"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_assessed_weekly_amount_before_income_reduction",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_non_beneficiary_income_reduction"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_amount_before_rounding",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_amount_before_rounding",
+                "source": "Social Security Regulations 2018 regs 18 and 19",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "302.14982191780821917808219178"
+                }
+              },
+              "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs": {
+                "dependencies": [
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_costs",
+                  "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_accommodation_income"
+                ],
+                "dtype": "decimal",
+                "id": "nz:statutes/social_security/accommodation_supplement/core#accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "kind": "scalar",
+                "name": "accommodation_supplement_weekly_qualifying_accommodation_costs",
+                "source": "Social Security Act 2018 Schedule 4 Part 7 clause 7 definition of weekly qualifying accommodation costs",
+                "unit": "NZD",
+                "value": {
+                  "kind": "decimal",
+                  "value": "600"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "response_sha256": "3217ddd8225f7f65879f084c2c7a176a2d89111a3c7ad944220ccbf5c566b034"
+    }
+  ],
+  "schema": "axiom_oracles.nz_executable_full_responses.v1"
+}

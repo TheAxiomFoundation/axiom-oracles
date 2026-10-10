@@ -1,0 +1,34 @@
+{
+  "_comment": "Per-program closure denominators are monotone floors. Requested-output roots and reached citation roots may grow but must not fall below these reviewed counts.",
+  "programs": {
+    "nz/acc-earners-levy": {
+      "citation_count_min": 2,
+      "requested_output_count_min": 1
+    },
+    "nz/accommodation-supplement": {
+      "citation_count_min": 5,
+      "requested_output_count_min": 3
+    },
+    "nz/income-tax": {
+      "citation_count_min": 8,
+      "requested_output_count_min": 1
+    },
+    "nz/independent-earner-tax-credit": {
+      "citation_count_min": 1,
+      "requested_output_count_min": 1
+    },
+    "nz/main-benefits": {
+      "citation_count_min": 7,
+      "requested_output_count_min": 2
+    },
+    "nz/winter-energy-payment": {
+      "citation_count_min": 1,
+      "requested_output_count_min": 1
+    },
+    "nz/working-for-families": {
+      "citation_count_min": 33,
+      "requested_output_count_min": 10
+    }
+  },
+  "schema": "axiom_oracles.nz_closure_denominator_ratchet.v1"
+}

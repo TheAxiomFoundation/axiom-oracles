@@ -4,13 +4,17 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import subprocess
 import sys
+import tempfile
 from dataclasses import replace
 from pathlib import Path
 
 import pytest
 import yaml
+from hypothesis import example, given, settings
+from hypothesis import strategies as st
 
 
 REPO_ROOT = Path(__file__).parents[1]
@@ -64,12 +68,12 @@ def test_every_live_federal_grid_pins_its_reviewed_rulespec_snapshot():
         "7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb",
     )
     chunk1_snapshot = (
-        "ae64af274ab9a04d6ab04b4de56082f156ce8b09",
+        "ae64af2740340a40d04ed3c652254f53e62fab61",
         "40e08f7dbaa88a70660006f3a5a32bfa283ebd85",
     )
     chunk2_snapshot = (
-        "4ced8fb7065311338ea732cab0a26105e750c40f",
-        "9a4aaf64acd4c0cfe407cce5b3bb94516aaceacb",
+        "87d3cbd3b6ec580724f0b79a0472105347f79518",
+        "66562bc60977c02c6ea353de6323b57fe927bd4c",
     )
     chunk1_configs = {
         "us-itemized-taxable-income-deductions-grid.yaml",
@@ -1925,6 +1929,8 @@ def test_registry_runner_uses_suite_pin_overrides_and_configured_roots(
     assert "policyengine==4.18.9" in cmd
     assert "policyengine-us==1.767.3" in cmd
     assert "policyengine-core==3.30.3" in cmd
+    # spm-calculator 1.0.0 removed spm_calculator.geoadj, which PE-US imports.
+    assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
     assert cmd[cmd.index("--policy") + 1] == "net_investment_income_tax"
     assert cmd[cmd.index("--rulespec-root") + 1] == str(rulespec.resolve())
     assert cmd[cmd.index("--output") + 1] == str(output)
@@ -1981,12 +1987,102 @@ def test_registry_verifies_snapshot_tree_and_stamps_upstream_sha(tmp_path):
         "federal-tax-liability-grid",
         output,
     )
+    # The snapshot's tree is the pin's, so its measured (clean) worktree state
+    # still describes the recorded upstream SHA.
     assert block["rulespecs"] == [
         {
             "repo": "TheAxiomFoundation/rulespec-us",
             "sha": upstream_sha,
+            "dirty": False,
+            "sha_toplevel": str(rulespec.resolve()),
+            "worktree_toplevel": str(rulespec.resolve()),
         }
     ]
+
+
+@settings(max_examples=5, deadline=None, database=None)
+@given(
+    upstream_sha=st.text(alphabet="0123456789abcdef", min_size=40, max_size=40),
+    fixture_value=st.integers(min_value=0, max_value=1_000_000),
+)
+@example(
+    upstream_sha="87d3cbd3b6ec580724f0b79a0472105347f79518",
+    fixture_value=1,
+)
+def test_verified_federal_provenance_remeasures_worktree(upstream_sha, fixture_value):
+    """Verified equivalent trees stamp clean; later edits retain the pin and stamp dirty."""
+    runner = _load_runner()
+    git_environment = {
+        key: value
+        for key, value in os.environ.items()
+        if key not in {"GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE"}
+    }
+    with tempfile.TemporaryDirectory(
+        prefix="hub-axiom-oracles-430-provenance-",
+        dir="/private/tmp" if Path("/private/tmp").is_dir() else None,
+    ) as directory:
+        root = Path(directory)
+        rulespec = root / "rulespec-us"
+        rulespec.mkdir()
+
+        def git(*arguments):
+            return subprocess.run(
+                ["git", "-C", str(rulespec), *arguments],
+                capture_output=True,
+                text=True,
+                check=True,
+                env=git_environment,
+            ).stdout.strip()
+
+        git("init", "-q")
+        fixture = rulespec / "fixture.yaml"
+        fixture.write_text(f"value: {fixture_value}\n")
+        git("add", "fixture.yaml")
+        git(
+            "-c",
+            "user.name=Test",
+            "-c",
+            "user.email=test@example.com",
+            "commit",
+            "-qm",
+            "snapshot",
+        )
+        params = {
+            "rulespec_roots": [str(rulespec)],
+            "rulespec_upstream_sha": upstream_sha,
+            "rulespec_upstream_tree": git("rev-parse", "HEAD^{tree}"),
+        }
+        runner._verify_federal_rulespec_snapshot(params, [rulespec])
+        config = {
+            "name": "federal-test",
+            "runner": {
+                "type": "federal-tax-liability-grid",
+                "parameters": params,
+            },
+        }
+        report = root / "report.json"
+        report.write_text('{"suite": "federal-test"}\n')
+
+        def provenance():
+            block = runner._build_run_provenance(
+                config, "federal-tax-liability-grid", report
+            )
+            [entry] = block["rulespecs"]
+            assert entry["sha"] == upstream_sha
+            return entry
+
+        clean = provenance()
+        assert clean["dirty"] is False
+        assert "diff_sha256" not in clean
+
+        fixture.write_text(f"value: {fixture_value + 1}\n")
+        dirty = provenance()
+        assert dirty["dirty"] is True
+        assert len(dirty["diff_sha256"]) == 64
+        assert all(char in "0123456789abcdef" for char in dirty["diff_sha256"])
+        for entry in (clean, dirty):
+            assert entry["sha_toplevel"] == str(rulespec.resolve())
+            assert entry["worktree_toplevel"] == str(rulespec.resolve())
 
 
 def test_registry_rejects_dirty_or_tree_mismatched_snapshot(tmp_path):

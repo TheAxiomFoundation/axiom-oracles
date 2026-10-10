@@ -31,6 +31,7 @@ from typing import Any
 
 import yaml
 
+from ..provenance import checkout_remote_matches_slug
 from . import snapscreener
 from .population import (
     DEFAULT_US_POPULACE_YEAR,
@@ -69,7 +70,6 @@ COMMON_AXIOM_OUTPUT_ID_BY_LABEL = {
 class JurisdictionConfig:
     jurisdiction: str
     state_code: str
-    repo_name: str
     program_relative_path: Path
     output_id_by_label: dict[str, str]
     utility_allowance_labels: tuple[str, ...]
@@ -84,7 +84,6 @@ JURISDICTION_CONFIGS = {
     "us-co": JurisdictionConfig(
         jurisdiction="us-co",
         state_code="CO",
-        repo_name="rulespec-us-co",
         program_relative_path=Path(
             "policies/cdhs/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -124,7 +123,6 @@ JURISDICTION_CONFIGS = {
     "us-ca": JurisdictionConfig(
         jurisdiction="us-ca",
         state_code="CA",
-        repo_name="rulespec-us-ca",
         program_relative_path=Path(
             "policies/cdss/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -174,7 +172,6 @@ JURISDICTION_CONFIGS = {
     "us-az": JurisdictionConfig(
         jurisdiction="us-az",
         state_code="AZ",
-        repo_name="rulespec-us-az",
         program_relative_path=Path(
             "policies/des/faa5/na-eligibility-and-benefit-determination/"
             "fy-2026-benefit-calculation.yaml"
@@ -204,7 +201,6 @@ JURISDICTION_CONFIGS = {
     "us-ga": JurisdictionConfig(
         jurisdiction="us-ga",
         state_code="GA",
-        repo_name="rulespec-us-ga",
         program_relative_path=Path(
             "policies/dfcs/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -236,7 +232,6 @@ JURISDICTION_CONFIGS = {
     "us-md": JurisdictionConfig(
         jurisdiction="us-md",
         state_code="MD",
-        repo_name="rulespec-us-md",
         program_relative_path=Path(
             "policies/dhs/fia/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -268,7 +263,6 @@ JURISDICTION_CONFIGS = {
     "us-tx": JurisdictionConfig(
         jurisdiction="us-tx",
         state_code="TX",
-        repo_name="rulespec-us-tx",
         program_relative_path=Path(
             "policies/hhs/texas-works-handbook/fy-2026-benefit-calculation.yaml"
         ),
@@ -300,7 +294,6 @@ JURISDICTION_CONFIGS = {
     "us-ny": JurisdictionConfig(
         jurisdiction="us-ny",
         state_code="NY",
-        repo_name="rulespec-us-ny",
         program_relative_path=Path(
             "policies/otda/snap/fy-2026-benefit-calculation.yaml"
         ),
@@ -813,19 +806,23 @@ def resolve_program_path(
 ) -> Path:
     if override is not None:
         return override.resolve()
-    cwd_program = Path.cwd() / config.program_relative_path
-    if cwd_program.exists():
+    # A CWD program may override the workspace copy only from a country/state
+    # monorepo layout, with a matching upstream identity when a GitHub origin
+    # is available. Bare rsync'd layouts still work without a git remote.
+    # There is no standalone-path fallback; a missing workspace program fails
+    # at load, naming the monorepo path.
+    cwd = Path.cwd()
+    cwd_program = cwd / config.program_relative_path
+    if (
+        cwd.name == config.jurisdiction
+        and (cwd.parent / "us").is_dir()
+        and checkout_remote_matches_slug(cwd.parent, "TheAxiomFoundation/rulespec-us")
+        and cwd_program.exists()
+    ):
         return cwd_program.resolve()
-    # The country monorepo's jurisdiction twin is the canonical copy — it is
-    # the only layout post-hard-cut engines can resolve imports from (a state
-    # repo is not a valid engine root) — so prefer it; the standalone state
-    # repo remains the supervised-machine fallback.
-    monorepo_program = (
+    return (
         workspace_root / "rulespec-us" / config.jurisdiction / config.program_relative_path
-    )
-    if monorepo_program.exists():
-        return monorepo_program.resolve()
-    return (workspace_root / config.repo_name / config.program_relative_path).resolve()
+    ).resolve()
 
 
 def resolve_test_template_path(program: Path, override: Path | None) -> Path:
@@ -1357,10 +1354,6 @@ def load_policyengine_cases(
             **project_income_resource_inputs(config, values, idx),
             "household_size": int(values["snap_unit_size"][idx]),
             "household_shelter_costs_incurred": money(values["housing_cost"][idx]),
-            "household_lives_in_application_state": True,
-            "household_in_project_area_solely_for_vacation": False,
-            "household_contains_individual_participating_in_more_than_one_household_or_project_area": False,
-            "resident_of_battered_women_and_children_shelter_and_prior_abusive_household_member": False,
             **project_deduction_inputs(
                 config,
                 dependent_care_deduction=dependent_care_deduction,
@@ -1370,6 +1363,17 @@ def load_policyengine_cases(
             **project_jurisdiction_household_inputs(config, values, idx),
             **utility_inputs,
         }
+        # The Arizona composition's current first companion case does not
+        # expose these federal residence inputs. Do not inject unbound names:
+        # legalize_inputs would fail before the household can be compared.
+        # This is a coverage limit, not evidence of residence parity.
+        if config.jurisdiction != "us-az":
+            projected_inputs.update(
+                household_lives_in_application_state=True,
+                household_in_project_area_solely_for_vacation=False,
+                household_contains_individual_participating_in_more_than_one_household_or_project_area=False,
+                resident_of_battered_women_and_children_shelter_and_prior_abusive_household_member=False,
+            )
         for input_name, value in projected_inputs.items():
             set_input_value(inputs, input_name, value)
         set_input_value(
@@ -1452,18 +1456,17 @@ def project_jurisdiction_household_inputs(
         }
     if config.jurisdiction == "us-az":
         return {
-            "na_net_income": money(values["snap_net_income"][idx]),
             "na_budgetary_unit_is_eligible": bool(values["is_snap_eligible"][idx]),
             "budgetary_unit_participant_count": int(values["snap_unit_size"][idx]),
+            "az_utility_allowance_participant_count": int(
+                values["snap_unit_size"][idx]
+            ),
             "thrifty_food_plan_amount_for_budgetary_unit_size": money(
                 values["snap_max_allotment"][idx]
             ),
             "minimum_na_allotment": money(values["snap_min_allotment"][idx]),
             "initial_month_proration_applies": False,
             "prorated_initial_month_na_benefit": 0,
-            "snap_excess_shelter_deduction_for_net_income": money(
-                values["snap_excess_shelter_expense_deduction"][idx]
-            ),
         }
     return {}
 
@@ -1493,7 +1496,26 @@ def project_raw_utility_inputs(
     values: dict[str, np.ndarray],
     idx: int,
     utility_region: str,
-) -> dict[str, bool]:
+) -> dict[str, bool | int]:
+    if config.jurisdiction == "us-az":
+        heating = bool(values["heating_cooling_expense"][idx] > 0)
+        other_bills = [
+            bool(values[name][idx] > 0)
+            for name in (
+                "pre_subsidy_electricity_expense",
+                "water_expense",
+                "sewage_expense",
+                "trash_expense",
+                "gas_expense",
+                "phone_expense",
+            )
+        ]
+        return arizona_utility_inputs(
+            heating=heating,
+            non_heating_count=sum(other_bills),
+            telephone_only=other_bills[-1] and sum(other_bills) == 1 and not heating,
+            elderly_or_disabled=bool(values["has_usda_elderly_disabled"][idx]),
+        )
     if config.jurisdiction == "us-ca":
         return {
             "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": bool(
@@ -1546,7 +1568,14 @@ def project_raw_utility_inputs(
 
 def project_utility_allowance_type(
     config: JurisdictionConfig, utility_type: str, utility_region: str
-) -> dict[str, bool]:
+) -> dict[str, bool | int]:
+    if config.jurisdiction == "us-az":
+        return arizona_utility_inputs(
+            heating=utility_type == "SUA",
+            non_heating_count=2 if utility_type == "LUA" else 0,
+            telephone_only=utility_type == "TUA",
+            elderly_or_disabled=False,
+        )
     if config.jurisdiction == "us-ca":
         return {
             "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": (
@@ -1588,6 +1617,34 @@ def project_utility_allowance_type(
     elif utility_type == "IUA":
         inputs["household_pays_electricity_utility_cost"] = True
     return inputs
+
+
+def arizona_utility_inputs(
+    *,
+    heating: bool,
+    non_heating_count: int,
+    telephone_only: bool,
+    elderly_or_disabled: bool,
+) -> dict[str, bool | int]:
+    # Populace reports expenses but not DES verification or LIHEAP history.
+    # Treat a reported bill as verified for this diagnostic projection, and
+    # leave the unobserved LIHEAP conditions false. Neither assumption proves
+    # parity for households where those facts determine the allowance.
+    has_bill = heating or non_heating_count > 0 or telephone_only
+    return {
+        "budgetary_unit_billed_separately_for_utility_expenses": has_bill,
+        "budgetary_unit_obligated_to_pay_allowable_utility_expenses": has_bill,
+        "budgetary_unit_has_verified_allowable_utility_expenses": has_bill,
+        "budgetary_unit_obligated_to_pay_heating_or_cooling_expense_separately_from_rent_or_mortgage_on_regular_basis": heating,
+        "budgetary_unit_received_liheap_payment": False,
+        "liheap_annual_payment_amount": 0,
+        "liheap_payment_received_in_application_month_or_lookback_period": False,
+        "budgetary_unit_has_participant_who_is_elderly_or_has_disability": elderly_or_disabled,
+        "budgetary_unit_heating_or_cooling_expenses_exceed_energy_assistance_payments": False,
+        "budgetary_unit_obligated_to_pay_at_least_two_non_heating_or_non_cooling_utility_expenses": non_heating_count
+        >= 2,
+        "budgetary_unit_obligated_to_pay_only_telephone_expense": telephone_only,
+    }
 
 
 def new_york_utility_region_inputs(utility_region: str) -> dict[str, bool]:

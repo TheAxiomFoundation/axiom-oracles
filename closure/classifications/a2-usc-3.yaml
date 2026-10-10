@@ -1,0 +1,1075 @@
+rows:
+  - citation: "us/statute/7/2021/b/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph imposes permanent disqualification and civil penalties on a “retail food store or wholesale food concern” for trafficking and other retailer violations; it supplies no household eligibility or benefit rule."
+  - citation: "us/statute/7/2021/b/4"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision disqualifies a retailer for knowingly submitting an authorization or reauthorization application containing “false information about a substantive matter”; it regulates retailer authorization, not household computation."
+  - citation: "us/statute/7/2021/c"
+    heading: "Civil penalty and review of disqualification and penalty determinations"
+    status: excluded
+    reason: no_household_computation
+    basis: "This subsection authorizes a civil penalty “for each violation” in addition to retailer disqualification and makes that retailer sanction reviewable; neither paragraph governs a household determination."
+  - citation: "us/statute/7/2021/c/1"
+    heading: "Civil penalty"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may assess “a civil penalty in an amount not to exceed $100,000 for each violation” in addition to disqualification; this is a retailer sanction with no household computation."
+  - citation: "us/statute/7/2021/c/2"
+    heading: "Review"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph makes “disqualification or the imposition of a civil penalty” subject to review under section 2023; it concerns review of retailer sanctions only."
+  - citation: "us/statute/7/2021/d"
+    heading: "Conditions of authorization"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection regulates collateral bonds, letters of credit, forfeiture, and hearings for a sanctioned “retail food store or wholesale food concern”; it contains no household eligibility or benefit-amount rule."
+  - citation: "us/statute/7/2021/d/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph permits a collateral bond or irrevocable letter of credit as “a condition of authorization to accept and redeem benefits” for a sanctioned retailer; household computations are unaffected."
+  - citation: "us/statute/7/2021/d/2"
+    heading: "Collateral"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may require a previously sanctioned retail store or wholesale concern that incurs another sanction to submit collateral; the rule is entirely retailer-facing; the text states “The Secretary also may require a retail food store or wholesale food”."
+  - citation: "us/statute/7/2021/d/3"
+    heading: "Bond requirements"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph directs the Secretary to prescribe “the amount, terms, and conditions of such bond,” an authorization safeguard for stores rather than a household calculation; the text states “The Secretary shall, by regulation, prescribe the amount, terms, and conditions of”."
+  - citation: "us/statute/7/2021/d/4"
+    heading: "Forfeiture"
+    status: excluded
+    reason: no_household_computation
+    basis: "A store or concern that violates the chapter after furnishing a bond must forfeit an amount equal to improperly redeemed coupons; this computes retailer forfeiture, not household benefits; the text states “If the Secretary finds that such store or concern has accepted and”."
+  - citation: "us/statute/7/2021/d/5"
+    heading: "Hearing"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision gives a store or concern a hearing on bond forfeiture under section 2023; it is retailer review procedure with no household rule; the text states “A store or concern described in paragraph (4) may obtain a hearing”."
+  - citation: "us/statute/7/2021/e"
+    heading: "Transfer of ownership; penalty in lieu of disqualification period; fines for acceptance of loose coupons; judicial action to recover penalty or fine"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection sets penalties when ownership of a disqualified store is transferred, authorizes collection litigation, and permits fines for loose coupons; all of its objects are retailers or their owners; the text states “(1) In the event any retail food store or wholesale food concern”."
+  - citation: "us/statute/7/2021/e/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "When a disqualified retail store or wholesale concern is sold, the transferor owes a civil penalty reflecting “that portion of the disqualification period that has not yet expired”; this is retailer enforcement."
+  - citation: "us/statute/7/2021/e/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may ask the Attorney General to bring a civil action to collect a final retailer-transfer penalty; this judicial collection mechanism has no household computation; the text states “At any time after a civil penalty imposed under paragraph (1) has”."
+  - citation: "us/statute/7/2021/e/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may fine a store or concern that accepts coupons without the corresponding book cover and may collect that fine judicially; the paragraph regulates retailers only; the text states “The Secretary may impose a fine against any retail food store or”."
+  - citation: "us/statute/7/2021/f"
+    heading: "Fines for unauthorized acceptance"
+    status: excluded
+    reason: no_household_computation
+    basis: "This provision authorizes a fine against a person “not approved by the Secretary to accept and redeem food coupons” and judicial collection of the fine; it does not determine household benefits."
+  - citation: "us/statute/7/2021/g"
+    heading: "Disqualification of retailers who are disqualified under WIC program"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection requires SNAP disqualification criteria and terms for a retail store or wholesale concern already disqualified from WIC; its subject is retailer authorization, not a household; the text states “(1) In general The Secretary shall issue regulations providing criteria for the”."
+  - citation: "us/statute/7/2021/g/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must issue criteria for disqualifying an approved retailer or wholesaler that is disqualified from accepting WIC benefits; no household-level rule appears; the text states “The Secretary shall issue regulations providing criteria for the disqualification under this”."
+  - citation: "us/statute/7/2021/g/2"
+    heading: "Terms"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph sets the length, start date, and nonreviewability of a retailer’s cross-program disqualification; it does not affect household eligibility or allotment; the text states “A disqualification under paragraph (1)— (A) shall be for the same length”."
+  - citation: "us/statute/7/2021/h"
+    heading: "Flagrant violations"
+    status: excluded
+    reason: no_household_computation
+    basis: "This subsection permits suspension, forfeiture, or release of unsettled redemptions when a retail store or wholesale concern commits flagrant violations; it governs retailer payments and enforcement; the text states “(1) In general The Secretary, in consultation with the Inspector General of”."
+  - citation: "us/statute/7/2021/h/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must establish procedures to suspend “program benefit redemptions for a retail food store or wholesale food concern” pending disqualification action; household determinations are outside its scope."
+  - citation: "us/statute/7/2021/h/2"
+    heading: "Requirements"
+    status: excluded
+    reason: no_household_computation
+    basis: "For a retailer engaged in flagrant violations, unsettled redeemed benefits may be suspended, forfeited, or released depending on the disqualification outcome; this is retailer settlement administration; the text states “Under the procedures described in paragraph (1), if the Secretary, in consultation”."
+  - citation: "us/statute/7/2021/h/3"
+    heading: "No liability for interest"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary is not liable for interest on retailer redemption funds suspended under the subsection; this fiscal rule has no household-level content; the text states “The Secretary shall not be liable for the value of any interest”."
+  - citation: "us/statute/7/2021/i"
+    heading: "Pilot projects to improve Federal-State cooperation in identifying and reducing fraud in the supplemental nutrition assistance program"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection directs Federal-State pilot projects, selection criteria, evaluations, a congressional report, and reimbursement limits to investigate retailer fraud; it creates no household decision rule; the text states “(1) Pilot projects required (A) In general The Secretary shall carry out”."
+  - citation: "us/statute/7/2021/i/1"
+    heading: "Pilot projects required"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must carry out pilot projects testing Federal-State partnerships “to identify, investigate, and reduce fraud by retail food stores and wholesale food concerns”; this is program administration."
+  - citation: "us/statute/7/2021/i/2"
+    heading: "Selection criteria"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph lists criteria for selecting State fraud-investigation pilots, including law-enforcement collaboration and maintenance of State effort; it does not specify household eligibility or benefits; the text states “Pilot projects shall be selected based on criteria the Secretary establishes, which”."
+  - citation: "us/statute/7/2021/i/3"
+    heading: "Evaluation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must evaluate pilot projects for fraud-reduction capacity, effectiveness, and cost effectiveness; these are program-evaluation measures, not household calculations; the text states “(A) In general The Secretary shall evaluate the pilot projects selected under”."
+  - citation: "us/statute/7/2021/i/4"
+    heading: "Report to Congress"
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph required a congressional report describing each fraud pilot’s impact and costs; it is an agency reporting duty without household-level computational content; the text states “Not later than September 30, 2017 , the Secretary shall submit to”."
+  - citation: "us/statute/7/2021/i/5"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "State pilot costs above the prior fiscal year’s fraud-investigation spending are “not eligible for Federal reimbursement”; this allocates administrative funding rather than household benefits; the text states “Any costs incurred by a State to operate pilot projects under this”."
+  - citation: "us/statute/7/2022"
+    heading: "Disposition of claims"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The section concerns settling overissuance claims and recovering already-issued benefits through allotment offsets, unemployment compensation, Federal pay, or tax refunds; these are post-determination claims processes; the text states “(a) General authority of the Secretary (1) Determination of claims Except in”."
+  - citation: "us/statute/7/2022/a"
+    heading: "General authority of the Secretary"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The subsection gives the Secretary powers to settle or waive claims, assesses interest on State debts, and assigns liability for “the value of any overissuance”; it operates after an issuance rather than setting current eligibility or the base allotment."
+  - citation: "us/statute/7/2022/a/1"
+    heading: "Determination of claims"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The Secretary may determine, settle, adjust, compromise, deny, or waive claims arising from fraudulent and nonfraudulent overissuances; this is post-determination claim disposition; the text states “Except in the case of an at-risk amount required under section 2025(c)(1)(D)(i)(II)”."
+  - citation: "us/statute/7/2022/a/2"
+    heading: "Claims established under quality control system"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph imposes interest when a State agency does not pay a quality-control claim and requires repayment with interest if an appeal succeeds; the debtor and payment stream are the State agency; the text states “To the extent that a State agency does not pay a claim”."
+  - citation: "us/statute/7/2022/a/3"
+    heading: "Computation of interest"
+    status: excluded
+    reason: no_household_computation
+    basis: "Interest on the preceding State-agency claim is tied to “the average of the bond equivalent of the weekly 90-day Treasury bill auction rates”; it computes government debt, not household benefits."
+  - citation: "us/statute/7/2022/a/4"
+    heading: "Joint and several liability of household members"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The paragraph makes each adult household member jointly and severally liable for “the value of any overissuance”; it assigns liability for a past claim without changing point-in-time eligibility or the calculated allotment."
+  - citation: "us/statute/7/2022/b"
+    heading: "Collection of overissuances"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "Every paragraph addresses collection of an overissuance already issued to a household, including recovery methods, an offset cap, notices, payment schedules, and systemic-error claims; these are post-determination collection rules; the text states “(1) In general Except as otherwise provided in this subsection, a State”."
+  - citation: "us/statute/7/2022/b/1"
+    heading: "In general"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "A State agency must collect an existing overissuance by allotment reduction, unemployment withholding, Federal offset, or another means; the paragraph prescribes recovery after the benefit determination; the text states “Except as otherwise provided in this subsection, a State agency shall collect”."
+  - citation: "us/statute/7/2022/b/2"
+    heading: "Cost effectiveness"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "Collection is excused when the State demonstrates that all listed recovery means “are not cost effective”; this limits pursuit of a past claim, not current household computation."
+  - citation: "us/statute/7/2022/b/3"
+    heading: "Maximum reduction absent fraud"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "For a nonfraud overissuance, this paragraph caps a recovery offset at the greater of 10 percent of the monthly allotment or $10; the cap applies only to post-determination collection and does not calculate the underlying allotment; the text states “If a household received an overissuance of benefits without any member of”."
+  - citation: "us/statute/7/2022/b/4"
+    heading: "Procedures"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The State’s overissuance collection must follow its requirements for “providing notice, electing a means of payment, and establishing a time schedule for payment”; these are collection procedures."
+  - citation: "us/statute/7/2022/b/5"
+    heading: "Overissuances caused by systemic State errors"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The provision lets the Secretary prohibit household collection after a major systemic State error and prescribes State reporting, liability, appeals, and remittance; it resolves past overissuances rather than current determinations; the text states “(A) In general If the Secretary determines that a State agency overissued”."
+  - citation: "us/statute/7/2022/c"
+    heading: "Intercept of unemployment benefits"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The subsection defines an unrecovered overissuance and permits its recovery from unemployment compensation by agreement or garnishment; it is a post-determination debt-collection mechanism; the text states “(1) As used in this subsection, the term “uncollected overissuance” means the”."
+  - citation: "us/statute/7/2022/c/1"
+    heading: ""
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The defined “uncollected overissuance” is the portion of an overissuance that has not been recovered under subsection (b)(1); the definition is confined to post-issuance collection."
+  - citation: "us/statute/7/2022/c/2"
+    heading: ""
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "A State may periodically use unemployment-compensation information to determine whether an individual owes an uncollected overissuance; this identifies a debt for recovery, not SNAP eligibility or allotment; the text states “A State agency may determine on a periodic basis, from information supplied”."
+  - citation: "us/statute/7/2022/c/3"
+    heading: ""
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The paragraph recovers an uncollected overissuance through agreed withholding or a court garnishment of unemployment compensation; it is a post-determination collection procedure; the text states “A State agency may recover an uncollected overissuance— (A) by— (i) entering”."
+  - citation: "us/statute/7/2022/d"
+    heading: "Recovery of overissuance of benefits"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "An overissuance not recovered under subsection (b)(1) may be taken from Federal pay, pensions, or an income-tax refund; this is collection of a past claim, not household benefit computation; the text states “The amount of an overissuance of benefits, as determined under subsection (b)(1)”."
+  - citation: "us/statute/7/2023"
+    heading: "Administrative and judicial review; restoration of rights"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The section prescribes notice and administrative or judicial review of retailer and State-agency actions, plus a one-year limit on retroactive restoration of wrongfully withheld allotments; all content concerns review or post-determination remedies; the text states “(a) (1) Whenever an application of a retail food store or wholesale”."
+  - citation: "us/statute/7/2023/a"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "This subsection supplies notice, administrative review, hearings, and judicial review for retail stores, wholesale concerns, and State agencies; it does not govern household eligibility or benefit amounts; the text states “(1) Whenever an application of a retail food store or wholesale food”."
+  - citation: "us/statute/7/2023/a/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "Notice must issue when a retailer application is denied, a store is sanctioned or forfeits a bond, or a retailer or State-agency claim is denied; the named parties are program entities, not households; the text states “Whenever an application of a retail food store or wholesale food concern”."
+  - citation: "us/statute/7/2023/a/2"
+    heading: "Delivery of notices .—"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may choose any delivery form that “will provide evidence of the delivery” of the entity notice under paragraph (1); this is notice administration."
+  - citation: "us/statute/7/2023/a/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "An aggrieved store, concern, or State agency has ten days to request an opportunity to submit supporting information; this is entity-review procedure with no household calculation; the text states “If such store, concern, or State agency is aggrieved by such action”."
+  - citation: "us/statute/7/2023/a/4"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The administrative determination becomes final if the store, concern, or State agency does not request review or submit information; it concerns finality of entity sanctions and claims; the text states “If such a request is not made or if such store, concern”."
+  - citation: "us/statute/7/2023/a/5"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "A designated reviewer considers information from a store, concern, or State agency and issues a final determination effective after notice; the paragraph regulates entity review only; the text states “If such request is made by such store, concern, or State agency”."
+  - citation: "us/statute/7/2023/a/6"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "Section 2025(c) claim determinations, including good-cause findings about penalties, must be made on the record after an agency hearing before administrative law judges; this is State-agency claims procedure; the text states “Determinations regarding claims made pursuant to section 2025(c) of this title (including”."
+  - citation: "us/statute/7/2023/a/7"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "Administrative law judges may issue and enforce subpoenas and appoint expert witnesses for the referenced claim proceedings; this hearing authority has no household computational content; the text states “Such judges shall have authority to issue and enforce subpoenas in the”."
+  - citation: "us/statute/7/2023/a/8"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may not limit judges’ authority in determinations of section 2025(c) claims; this protects adjudicatory authority for State-agency claims; the text states “The Secretary may not limit the authority of such judges presiding over”."
+  - citation: "us/statute/7/2023/a/9"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must provide a summary procedure for section 2025(c) claims “in amounts less than $50,000”; this threshold selects State-agency review procedure, not household benefits."
+  - citation: "us/statute/7/2023/a/10"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The summary procedure for small section 2025(c) claims need not include an oral hearing; this is adjudicatory procedure without household-level content; the text states “Such summary procedure need not include an oral hearing”."
+  - citation: "us/statute/7/2023/a/11"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "For a claim below $50,000, the Secretary may permit full administrative review instead of summary review; the choice concerns State-agency claim procedure; the text states “On a petition by the State agency or sua sponte, the Secretary”."
+  - citation: "us/statute/7/2023/a/12"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "An administrative law judge’s section 2025(c) claim determination becomes final and effective thirty days after final notice; this is finality procedure for State-agency claims; the text states “Subject to the right of judicial review hereinafter provided, a determination made”."
+  - citation: "us/statute/7/2023/a/13"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "An aggrieved store, concern, or State agency may seek judicial review within thirty days in a specified court; this governs entity litigation, not household determinations; the text states “If the store, concern, or State agency feels aggrieved by such final”."
+  - citation: "us/statute/7/2023/a/14"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "A copy of the summons and complaint challenging an agency order must be sent to the Secretary or a designee; this is service-of-process administration; the text states “The copy of the summons and complaint required to be delivered to”."
+  - citation: "us/statute/7/2023/a/15"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "Judicial review is generally a trial de novo, while section 2025(c) claims are reviewed on the administrative record; this sets standards of entity review; the text states “The suit in the United States district court or State court shall”."
+  - citation: "us/statute/7/2023/a/16"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "If an administrative action is invalid, the reviewing court enters a judgment or order consistent with law and evidence; this remedial court authority contains no household rule; the text states “If the court determines that such administrative action is invalid, it shall”."
+  - citation: "us/statute/7/2023/a/17"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "An entity’s administrative action remains effective during judicial review unless a court grants a temporary stay after notice and hearing; this is litigation procedure; the text states “During the pendency of such judicial review, or any appeal therefrom, the”."
+  - citation: "us/statute/7/2023/a/18"
+    heading: "Suspension of stores pending review .—"
+    status: excluded
+    reason: no_household_computation
+    basis: "A retail store’s or wholesale concern’s permanent disqualification takes effect upon receipt of notice, and the Secretary owes no lost-sales value if it is reversed; this is retailer enforcement; the text states “Notwithstanding any other provision of this subsection, any permanent disqualification of a”."
+  - citation: "us/statute/7/2023/b"
+    heading: ""
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "In a judicial action, wrongfully withheld allotments may be restored only for a one-year lookback tied to filing or discovery dates; this limits a retroactive remedy and does not set point-in-time eligibility or allotment; the text states “In any judicial action arising under this chapter, any allotments found to”."
+  - citation: "us/statute/7/2024"
+    heading: "Violations and enforcement"
+    status: pending
+    note: "The section is mixed: most provisions establish criminal penalties, forfeiture, and enforcement administration, but subsections (b) and (c) let a court suspend an individual from SNAP participation for an additional period of up to 18 months, which affects household-level eligibility. The manifest-listed us/statutes/7/2015/b/1.yaml was inspected and implements the referenced mandatory section 2015(b)(1) disqualification (including the section 2024 conviction threshold), but not section 2024’s discretionary additional suspension; no section 2024 module appears in the manifest."
+  - citation: "us/statute/7/2024/a"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may arrange issuance or redemption “as necessary or appropriate to protect the interests of the United States or to ensure enforcement”; this is enforcement authority, not an ordinary household eligibility or benefit calculation; the text states “Notwithstanding any other provision of this chapter, the Secretary may provide for”."
+  
+  - citation: "us/statute/7/2024/b"
+    heading: "Unauthorized use, transfer, acquisition, alteration, or possession of benefits"
+    status: pending
+    note: "This subsection mixes criminal fines, imprisonment, and restitution with a household-relevant rule allowing the court to suspend a convicted person from SNAP for up to 18 additional months. us/statutes/7/2015/b/1.yaml covers the referenced mandatory disqualification under § 2015(b)(1), but not this additional court-imposed suspension."
+  - citation: "us/statute/7/2024/b/1"
+    heading: ""
+    status: pending
+    note: "Besides criminal penalties, this paragraph permits an additional SNAP suspension of up to 18 months, which can change a person’s point-in-time participation. us/statutes/7/2015/b/1.yaml covers the separate mandatory disqualification referenced here but does not encode this discretionary additional period."
+  - citation: "us/statute/7/2024/b/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph lets a court assign approved work “for the purpose of providing restitution” and suspend the criminal sentence after successful completion. It supplies no SNAP household eligibility or allotment rule."
+  - citation: "us/statute/7/2024/c"
+    heading: "Presentation for payment or redemption of benefits that have been illegally received, transferred, or used"
+    status: pending
+    note: "The provision chiefly sets criminal penalties for illegal presentation or redemption, but it also lets the court suspend the convicted person from SNAP for up to 18 additional months. The encoded mandatory disqualification in us/statutes/7/2015/b/1.yaml does not cover that extra discretionary period."
+  - citation: "us/statute/7/2024/d"
+    heading: "Benefits as obligations of the United States"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision only deems issued benefits to be “obligations of the United States” for purposes of title 18. It does not determine household eligibility or benefit amount."
+  - citation: "us/statute/7/2024/e"
+    heading: "Forfeiture of property involved in illegal benefit transactions"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision authorizes forfeiture of “nonfood items, moneys, negotiable instruments, securities, or other things of value” exchanged for benefits and directs regulatory disposal procedures. This is enforcement against transaction property, not a household eligibility or allotment computation."
+  - citation: "us/statute/7/2024/f"
+    heading: "Criminal forfeiture"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection orders forfeiture of property used in felony benefit offenses and distributes sale proceeds to enforcement agencies and retailer-compliance investigations. It contains no household-level SNAP determination; the text states “(1) In general In imposing a sentence on a person convicted of”."
+  - citation: "us/statute/7/2024/f/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires a sentencing court to order forfeiture “in addition to any other sentence” for a subsection (b) or (c) offense. It does not change household eligibility or benefits."
+  - citation: "us/statute/7/2024/f/2"
+    heading: "Property subject to forfeiture"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph makes real and personal property used to facilitate a non-misdemeanor violation, and traceable proceeds, subject to forfeiture. That property-enforcement rule supplies no SNAP household computation; the text states “All property, real and personal, used in a transaction or attempted transaction”."
+  - citation: "us/statute/7/2024/f/3"
+    heading: "Interest of owner"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph protects an owner’s interest when the relevant act or omission occurred “without the knowledge or consent of the owner.” It concerns forfeiture ownership, not SNAP eligibility or allotments."
+  - citation: "us/statute/7/2024/f/4"
+    heading: "Proceeds"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph prioritizes forfeiture proceeds for Justice Department, Inspector General, and law-enforcement costs and retailer investigations. Those agency reimbursements do not determine a household’s eligibility or benefit; the text states “The proceeds from any sale of forfeited property and any monies forfeited”."
+  - citation: "us/statute/7/2025"
+    heading: "Administrative cost-sharing and quality control"
+    status: pending
+    note: "Although most of the section concerns State funding, quality control, and administration, subsection (b) diverts household allotments and changes income, resource, and work-requirement treatment, subsection (e) imposes an SSN eligibility condition, and subsection (h)(1) contains an E&T pilot sanction. Only the SSN condition is fully operationalized; the section as a whole is not."
+  - citation: "us/statute/7/2025/a"
+    heading: "Administrative costs"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection sets the federal share of “administrative costs” paid to State agencies and the percentages States may retain from recoveries. Listing certification and issuance among reimbursable activities does not itself determine any household’s eligibility or allotment."
+  - citation: "us/statute/7/2025/b"
+    heading: "Work supplementation or support program"
+    status: pending
+    note: "This subsection replaces a participating household’s allotment with a job subsidy, excludes the subsidy from household income and resources, treats it as an allotment for other purposes, and creates a work-requirement exception while employed. The available allotment modules do not encode the substitution, 273/9 defers income-exclusion composition, and 273/7 does not encode this program-specific exception."
+  - citation: "us/statute/7/2025/b/1"
+    heading: "“Work supplementation or support program” defined"
+    status: pending
+    note: "The paragraph defines the employment arrangement that qualifies as the work-supplementation program triggering household allotment diversion, income and resource exclusions, and a work-requirement exception in the following paragraphs. No module encodes this upstream applicability rule or the resulting household treatment."
+  - citation: "us/statute/7/2025/b/2"
+    heading: "Program"
+    status: pending
+    note: "The paragraph authorizes a State to use “an amount equal to the allotment that would otherwise be issued to a household” as a job subsidy. Existing allotment modules calculate the underlying ordinary allotment but do not encode this household-specific diversion."
+  - citation: "us/statute/7/2025/b/3"
+    heading: "Procedure"
+    status: pending
+    note: "The paragraph replaces the household’s allotment, excludes the replacement amount from household income and resources, treats it as an allotment, and bars a concurrent allotment. us/regulations/7-cfr/273/9.yaml expressly defers income-exclusion composition, us/statutes/7/2014/g.yaml defers full resource composition, and no module encodes the benefit substitution."
+  - citation: "us/statute/7/2025/b/4"
+    heading: "Other work requirements"
+    status: pending
+    note: "The paragraph preserves work requirements except while the individual is employed under the work supplementation program, directly changing when a member is subject to eligibility-related work rules. us/regulations/7-cfr/273/7.yaml encodes general exemptions and compliance but not this program-specific employment exception."
+  - citation: "us/statute/7/2025/b/5"
+    heading: "Length of participation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires the State agency to describe how recipients will move from supported employment to employment “that is not supplemented or supported.” It imposes a program-planning requirement without a household eligibility or benefit formula."
+  - citation: "us/statute/7/2025/b/6"
+    heading: "Displacement"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph provides that a work supplementation program “shall not displace” workers who are not subsidized. This labor-program safeguard does not calculate SNAP eligibility or allotments."
+  - citation: "us/statute/7/2025/c"
+    heading: "Quality control system"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection establishes State payment-error measurement, fiscal liability, corrective action, reporting, and review. Its household samples measure program administration after determinations; they do not set any sampled household’s eligibility or allotment; the text states “(1) In general (A) System (i) In general In carrying out the”."
+  - citation: "us/statute/7/2025/c/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph creates fiscal incentives for State agencies with high error rates, calculates State “liability amount[s],” and governs State payments and corrective plans. These State-level quality-control finances have no point-in-time effect on household eligibility or benefit amount; the text states “(A) System (i) In general In carrying out the supplemental nutrition assistance”."
+  - citation: "us/statute/7/2025/c/2"
+    heading: "Error rate definitions"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph defines State-year overpayment and underpayment error rates from “a probability sample of participating households.” Those aggregate quality-control ratios measure prior issuances rather than determine a household’s current eligibility or allotment; the text states “As used in this section— (A) the term “payment error rate” means”."
+  - citation: "us/statute/7/2025/c/3"
+    heading: "Exclusions"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph excludes specified errors from the State “payment error rate” for management purposes. It does not forgive, create, or recalculate the underlying household eligibility or benefit determination."
+  - citation: "us/statute/7/2025/c/4"
+    heading: "Reporting requirements"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph permits the Secretary to require State records and systems access to determine State error rates, liabilities, investments, and performance. It is State reporting administration, not household computation; the text states “The Secretary may require a State agency to report any factors that”."
+  - citation: "us/statute/7/2025/c/5"
+    heading: "Procedures"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires State operational data and directs collection of amounts the State owes as a quality-control claim. Those submission and collection procedures do not determine household eligibility or benefits; the text states “To facilitate the implementation of this subsection, each State agency shall expeditiously”."
+  - citation: "us/statute/7/2025/c/6"
+    heading: "National performance measure for payment error rates"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph calculates a national performance measure from each State’s error rate and share of national allotments and uses it for State liability. It does not calculate an individual household’s allotment; the text states “(A) Announcement At the time the Secretary makes the notification to State”."
+  - citation: "us/statute/7/2025/c/7"
+    heading: "Administrative and judicial review"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph governs State review of a federal financial claim or quality-control liability and limits review of error-rate determinations. It is not a household fair-hearing or eligibility rule; the text states “(A) In general Except as provided in subparagraphs (B) and (C), if”."
+  - citation: "us/statute/7/2025/c/8"
+    heading: "Criteria for payment by a State agency"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph sets deadlines, evidence, and appeal procedures for determining whether “a payment is due by a State agency.” That State-Federal liability process has no household-level computational effect; the text states “(A) This paragraph applies to the determination of whether a payment is”."
+  - citation: "us/statute/7/2025/c/9"
+    heading: "“Good cause” defined"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph defines good cause for waiving a State agency’s quality-control payment claim, including disasters, strikes, and caseload growth. It does not define good cause for any household member’s eligibility; the text states “As used in this subsection, the term “good cause” includes— (A) a”."
+  - citation: "us/statute/7/2025/d"
+    heading: "State performance indicators"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection establishes State performance criteria and bonus-payment rules, including criteria about improving eligibility determinations. The recipient of every payment under it is a State agency, not a household; the text states “(1) Fiscal years 2003 and 2004 (A) Guidance With respect to fiscal”."
+  - citation: "us/statute/7/2025/d/1"
+    heading: "Fiscal years 2003 and 2004"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph directs performance guidance and $48,000,000 in State agency bonus payments for fiscal years 2003 and 2004. It does not determine household eligibility or benefit amount; the text states “(A) Guidance With respect to fiscal years 2003 and 2004, the Secretary”."
+  - citation: "us/statute/7/2025/d/2"
+    heading: "Fiscal years 2005 through 2017"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph directs performance regulations and State agency bonus payments for fiscal years 2005 through 2017. References to improving eligibility determinations are performance measures, not household determination rules; the text states “(A) Regulations With respect to fiscal year 2005 through fiscal year 2017”."
+  - citation: "us/statute/7/2025/d/3"
+    heading: "Prohibition on receipt of performance bonus payments"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph makes a State agency ineligible for a performance bonus when it has a quality-control liability amount. This affects State funding only; the text states “A State agency shall not be eligible for a performance bonus payment”."
+  - citation: "us/statute/7/2025/d/4"
+    heading: "Payments not subject to judicial review"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph bars administrative or judicial review of the Secretary’s State performance-bonus award. It supplies no household eligibility or allotment rule; the text states “A determination by the Secretary whether, and in what amount, to award”."
+  - citation: "us/statute/7/2025/d/5"
+    heading: "Use of performance bonus payments"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph limits a State agency’s bonus spending to program technology, administration, distribution, and fraud prevention. Those spending restrictions do not compute household benefits; the text states “A State agency may use a performance bonus payment received under this”."
+  - citation: "us/statute/7/2025/d/6"
+    heading: "Fiscal year 2018 and fiscal years thereafter"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph directs the Secretary to set State performance criteria and bars a fiscal-year 2019 bonus. The criteria concern administrative performance, not household eligibility or allotment formulas; the text states “(A) With respect to fiscal year 2018 and each fiscal year thereafter”."
+  - citation: "us/statute/7/2025/e"
+    heading: "Use of social security account numbers; access to information"
+    status: excluded
+    reason: "operationalized_by: us/regulations/7-cfr/273/6.yaml"
+    basis: "The provision makes furnishing each household member’s Social Security number “a condition of eligibility.” The regulation module computes refusal or failure, good cause, and the end of disqualification after an SSN is provided, fully realizing that eligibility condition; the remaining account-use and information-access terms are administrative; the text states “The Secretary and State agencies shall (1) require, as a condition of”."
+  - citation: "us/statute/7/2025/f"
+    heading: "Payment of certain legal fees"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision authorizes payment of counsel fees, court costs, bail, and defense expenses for Agriculture Department personnel sued over official duties. It has no household eligibility or allotment content; the text states “Notwithstanding any other provision of law, counsel may be employed and counsel”."
+  - citation: "us/statute/7/2025/g"
+    heading: "Cost sharing for computerization"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection governs federal reimbursement for State automated data-processing systems and limits duplicate or unrelated reimbursement. Requirements to test system effects on access and accuracy do not themselves state a household eligibility or benefit rule; the text states “(1) In general Except as provided in paragraph (2), the Secretary is”."
+  - citation: "us/statute/7/2025/g/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph authorizes payments to State agencies for planning, testing, installing, and operating automated systems. Its reference to testing “access for eligible households” is a system-approval criterion, not a household computation."
+  - citation: "us/statute/7/2025/g/2"
+    heading: "Limitation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph denies State computer-system reimbursement to the extent another federal program reimburses the cost or the system serves unrelated purposes. It does not affect a household’s SNAP determination; the text states “The Secretary shall not make payments to a State agency under paragraph”."
+  - citation: "us/statute/7/2025/h"
+    heading: "Funding of employment and training programs"
+    status: pending
+    note: "Most of the subsection allocates and reimburses State E&T funds, but paragraph (1)(F)(v) makes a work registrant ineligible for refusing pilot E&T without good cause and paragraph (1)(F)(vi) supplies eligibility-protective standards. us/regulations/7-cfr/273/7.yaml expressly defers detailed E&T program design, sanction timing, and good-cause adjudication."
+  - citation: "us/statute/7/2025/h/1"
+    heading: "In general.—"
+    status: pending
+    note: "This paragraph mixes State funding and pilot administration with a rule that “no work registrant shall be eligible” after refusal without good cause, standards preventing ineligibility for work loss beyond the person’s control, and credit for outside activities. us/regulations/7-cfr/273/7.yaml consumes resolved compliance but expressly defers E&T design, sanctions, and good-cause context."
+  - citation: "us/statute/7/2025/h/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires the Secretary to pay a State agency 50 percent of E&T costs above its allocation, including case-management costs. This is federal-State cost sharing rather than a household eligibility or allotment rule; the text states “If, in carrying out such program during such fiscal year, a State”."
+  - citation: "us/statute/7/2025/h/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph reimburses State agencies for 50 percent of transportation and other E&T payments or costs and caps federal reimbursement for dependent care. It regulates reimbursement to the State, not the participant’s SNAP eligibility or allotment; the text states “The Secretary shall also reimburse each State agency in an amount equal”."
+  - citation: "us/statute/7/2025/h/4"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph restricts federal funds to operating an E&T program or specified pilot and bars their use for other chapter provisions. This funding-use restriction has no household-level computation; the text states “Funds provided to a State agency under this subsection may be used”."
+  - citation: "us/statute/7/2025/h/5"
+    heading: "Monitoring.—"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires federal monitoring, State performance measures, reports, plan modifications, and periodic evaluation of E&T programs. Counting participants who are already ineligible under another section does not itself impose or calculate that ineligibility; the text states “(A) In general .— The Secretary shall monitor the employment and training”."
+  - citation: "us/statute/7/2025/i"
+    heading: "Geographical error-prone profiles"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection lets USDA identify high-error project areas and require new or modified certification procedures there. It provides no substantive eligibility, income, deduction, or benefit rule for a household; the text states “(1) The Department of Agriculture may use quality control information made available”."
+  - citation: "us/statute/7/2025/i/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph permits USDA to use quality-control information to identify project areas whose payment error rates impair program integrity. This geographic profiling does not determine any household’s eligibility or benefits; the text states “The Department of Agriculture may use quality control information made available under”."
+  - citation: "us/statute/7/2025/i/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph authorizes the Secretary to require unspecified “new or modified procedures for the certification of households” in identified areas. It states no rule changing who qualifies or how much a household receives."
+  - citation: "us/statute/7/2025/j"
+    heading: "Training materials regarding certification of farming households"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision requires annual instructional materials for personnel who certify households with a member engaged in farming. It is a staff-training mandate and supplies no farming-household computation; the text states “Not later than 180 days after September 19, 1988 , and annually”."
+  - citation: "us/statute/7/2025/k"
+    heading: "Reductions in payments for administrative costs"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection allocates common administrative costs among AFDC, Medicaid, and SNAP, reduces federal administrative payments to States, and provides State appeals. None of those interprogram cost allocations determines household eligibility or allotment; the text states “(1) Definitions In this subsection: (A) AFDC program The term “AFDC program””."
+  - citation: "us/statute/7/2025/k/1"
+    heading: "Definitions"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph defines the AFDC program, the historical “base period,” and the Medicaid program solely for administrative cost allocation. These definitions do not classify a household for SNAP; the text states “In this subsection: (A) AFDC program The term “AFDC program” means the”."
+  - citation: "us/statute/7/2025/k/2"
+    heading: "Determinations of amounts attributable to benefiting programs"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph directs HHS to determine annualized State administrative costs common to AFDC, SNAP, and Medicaid under alternative allocations. The households mentioned identify shared administrative work; their eligibility and benefits are not recalculated; the text states “Not later than 180 days after June 23, 1998 , the Secretary”."
+  - citation: "us/statute/7/2025/k/3"
+    heading: "Reduction in payment"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph reduces the amount the Secretary pays “to each State” for SNAP administration based on the interprogram allocation. It does not reduce a household allotment."
+  - citation: "us/statute/7/2025/k/4"
+    heading: "Appeal of determinations"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph establishes notice and appeals for a State challenging HHS administrative-cost determinations and continues reduced payments pending appeal. It is not a household eligibility appeal; the text states “(A) In general Not later than 5 days after the date on”."
+  - citation: "us/statute/7/2025/k/5"
+    heading: "Allocation of administrative costs"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph bars specified federal and State funds from paying administrative costs allocated for SNAP reimbursement. This restriction concerns program financing, not household eligibility or benefits; the text states “(A) In general No funds or expenditures described in subparagraph (B) may”."
+  - citation: "us/statute/7/2026"
+    heading: "Research, demonstration, and evaluations"
+    status: pending
+    note: "The section mixes research and evaluation administration with household-level rules for aggregate allotments, waiver demonstrations, cash-benefit alternatives, employment-initiative eligibility, resource exclusions, and increased pilot allotments. Those rules are not fully encoded; in particular, us/regulations/7-cfr/273/7.yaml expressly defers the employment-initiatives program."
+  - citation: "us/statute/7/2026/a"
+    heading: "Contracts or grants; issuance of aggregate allotments"
+    status: pending
+    note: "Paragraph (1) is research administration, but paragraph (2) lets certain households with monthly benefits not exceeding $20 elect aggregate allotments up to $60 for as many as three months and adds verification and timing conditions. No module encodes this alternative issuance computation."
+  - citation: "us/statute/7/2026/a/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph authorizes contracts and grants for research to improve SNAP administration and benefit delivery and extends waiver authority to that research. It does not state a household eligibility or benefit formula; the text states “The Secretary may enter into contracts with or make grants to public”."
+  - citation: "us/statute/7/2026/a/2"
+    heading: ""
+    status: pending
+    note: "The paragraph defines which households may elect combined allotments, caps them at $60 and three months of benefits, and conditions initial combined issuance on verification and timing. The ordinary allotment modules do not encode this aggregate-allotment option."
+  - citation: "us/statute/7/2026/b"
+    heading: "Pilot projects"
+    status: pending
+    note: "The subsection authorizes waivers that can change household benefits and recipient rights, restricts benefit reductions, permits cash alternatives for specified household populations, and requires sales-tax offsets. No encoded module fully realizes these demonstration-specific computations and constraints."
+  - citation: "us/statute/7/2026/b/1"
+    heading: ""
+    status: pending
+    note: "The paragraph contains household-level limits on demonstration benefit reductions, cash-payment rules for elderly, SSI, or TANF households, and an allotment increase or tax waiver for non-EBT assistance. These waiver- and demonstration-specific rules are not encoded by the ordinary eligibility and allotment modules."
+  - citation: "us/statute/7/2026/b/2"
+    heading: ""
+    status: pending
+    note: "The paragraph allows historical demonstrations to waive work requirements and recipient rights and convert SNAP benefits to cash with participant consent, while barring new waivers on or after August 22, 1996. Because it mixes substantive household effects with an expired grant of new-waiver authority, exclusion would overstate closure; no module encodes the demonstration terms."
+  - citation: "us/statute/7/2026/c"
+    heading: "Evaluation measures; pilot programs for nutritional monitoring"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision requires program-effectiveness evaluation, nutritional-monitoring pilots, and annual reports, including comparisons among household groups. Those research measurements do not determine any household’s eligibility or allotment; the text states “The Secretary shall develop and implement measures for evaluating, on an annual”."
+  - citation: "us/statute/7/2026/d"
+    heading: "Employment initiatives program"
+    status: pending
+    note: "The subsection defines a cash alternative to SNAP allotments, participant-household eligibility conditions, a ban on concurrent SNAP benefits, and a sales-tax increase. us/regulations/7-cfr/273/7.yaml expressly lists the employment-initiatives program and its cash-equivalent benefit administration as deferred."
+  - citation: "us/statute/7/2026/d/1"
+    heading: "Election to participate"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph lets a State elect the program only if at least 50 percent of its summer-1993 SNAP households also received the specified State-program benefits. That historical State program gate does not itself determine a current household’s eligibility or benefit; the text states “(A) In general Subject to the other provisions of this subsection, a”."
+  - citation: "us/statute/7/2026/d/2"
+    heading: "Procedure"
+    status: pending
+    note: "The paragraph substitutes cash equal to the otherwise payable allotment, bars concurrent SNAP benefits, and increases cash to offset applicable sales tax. us/regulations/7-cfr/273/7.yaml expressly defers employment-initiatives cash-equivalent benefit administration, so the household computation remains uncovered."
+  
+  - citation: "us/statute/7/2026/d/3"
+    heading: "Eligibility"
+    status: pending
+    note: "This paragraph directly makes a household eligible for cash benefits based on 90 days of work, monthly earnings of at least $350, TANF status, continuing earnings, and an election in lieu of SNAP benefits. The manifest-listed us/regulations/7-cfr/273/7.yaml expressly defers this employment-initiatives program, so the cash-in-lieu eligibility rule is not encoded."
+  
+  - citation: "us/statute/7/2026/d/4"
+    heading: "Evaluation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires a State operating the program for 2 years to provide a \"written evaluation of the impact of cash assistance\"; it governs program evaluation rather than a household's eligibility or benefit amount."
+  
+  - citation: "us/statute/7/2026/e"
+    heading: "Study and report to Congressional committees of effect of reduction of benefits"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must \"conduct a study of the effects of reductions\" and submit interim and final reports to congressional committees. It studies prior benefit and reporting rules but does not itself determine any household's eligibility or allotment."
+  
+  - citation: "us/statute/7/2026/f"
+    heading: "Demonstration projects for development and use of intelligent benefit cards to pay benefits"
+    status: excluded
+    reason: no_household_computation
+    basis: "This provision authorizes pilot delivery systems using intelligent benefit cards and specifies that a card store already-determined \"eligibility\" and \"the amount of benefits.\" It governs EBT technology and delivery, not the computation of those values."
+  
+  - citation: "us/statute/7/2026/g"
+    heading: "Study of effectiveness of employment and training programs"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision authorizes studies comparing participants and control groups using labor-force, wage, income, and benefit-receipt data. Its required data collection and use of study results concern program evaluation, not a household determination; the text states “In order to assess the effectiveness of the employment and training programs”."
+  
+  - citation: "us/statute/7/2026/g/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph requires a study to \"collect such data for up to 3 years\" after employment-and-training completion. It is a research-data requirement with no household eligibility or benefit calculation."
+  
+  - citation: "us/statute/7/2026/g/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph requires study results that \"can be generalized to the national program as a whole.\" That is a research-design requirement, not a household computation."
+  
+  - citation: "us/statute/7/2026/h"
+    heading: "Demonstration projects for vehicle exclusion limits"
+    status: pending
+    note: "The provision specifies a demonstration resource calculation using vehicle value above $4,500 and enumerated household-use exclusions. us/statutes/7/2014/g.yaml instead encodes the later $4,650 default rule with different exceptions, while us/regulations/7-cfr/273/8.yaml expressly defers vehicle valuation, so coverage is not complete."
+  
+  - citation: "us/statute/7/2026/h/1"
+    heading: ""
+    status: pending
+    note: "This paragraph supplies substantive vehicle exclusions for earned-income use, transport of an elderly or disabled member, and use as the household's home. The inspected 7 U.S.C. 2014(g) module has different current exceptions, and the 7 CFR 273.8 module defers vehicle valuation."
+  
+  - citation: "us/statute/7/2026/h/2"
+    heading: ""
+    status: pending
+    note: "This paragraph excludes one vehicle used for employment, employment-related education or training, securing food, or obtaining SNAP benefits in the demonstration calculation. The inspected vehicle modules do not fully encode this set of exclusions."
+  
+  - citation: "us/statute/7/2026/i"
+    heading: "Testing resource accumulation"
+    status: pending
+    note: "The provision lets up to 11,000 eligible households accumulate as much as $10,000 that \"shall be excluded from consideration as a resource\" for listed purposes. us/statutes/7/2014/g.yaml defers self-sufficiency resource exclusions, and us/regulations/7-cfr/273/8.yaml defers resource-exclusion composition."
+  
+  - citation: "us/statute/7/2026/j"
+    heading: "Demonstration projects directed at benefit trafficking"
+    status: excluded
+    reason: no_household_computation
+    basis: "The funds support demonstrations in which agencies and law enforcement \"investigate and prosecute benefit trafficking.\" The provision creates enforcement projects, not a point-in-time household eligibility or benefit rule."
+  
+  - citation: "us/statute/7/2026/k"
+    heading: "Pilot projects to evaluate health and nutrition promotion in the supplemental nutrition assistance program"
+    status: pending
+    note: "This subsection mixes grant, evaluation, reporting, and funding administration with paragraph (3)'s authority for increased household allotments and point-of-purchase incentives. No matching pilot-benefit module appears in the pinned tree, so the mixed provision remains pending."
+  
+  - citation: "us/statute/7/2026/k/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph directs the Secretary to develop and test methods to improve dietary and health status and reduce obesity. It states pilot objectives but prescribes no household eligibility condition or benefit amount; the text states “The Secretary shall carry out, under such terms and conditions as the”."
+  
+  - citation: "us/statute/7/2026/k/2"
+    heading: "Grants"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph governs competitively awarded contracts, cooperative agreements, grants, applications, and project-selection criteria; its 185-percent-of-poverty reference identifies a possible project target audience, not SNAP household eligibility or allotment; the text states “(A) In general In carrying out this subsection, the Secretary may enter”."
+  
+  - citation: "us/statute/7/2026/k/3"
+    heading: "Projects"
+    status: pending
+    note: "The authorized projects include \"increased supplemental nutrition assistance program benefit allotments\" and point-of-purchase incentives for participating households, both of which change household purchasing power. No module in the pinned tree encodes these pilot benefit or incentive calculations."
+  
+  - citation: "us/statute/7/2026/k/4"
+    heading: "Evaluation and reporting"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires independent evaluation, monitoring, reports to Congress, and public dissemination of pilot results. It measures impacts on participating households but does not determine their eligibility or benefit amount; the text states “(A) Evaluation (i) Independent evaluation (I) In general The Secretary shall provide”."
+  
+  - citation: "us/statute/7/2026/k/5"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph authorizes appropriations for fiscal years 2008 through 2012 and makes $20,000,000 available for a pilot project. These are program-funding directions with no household computation; the text states “(A) Authorization of appropriations There are authorized to be appropriated such sums”."
+  
+  - citation: "us/statute/7/2026/l"
+    heading: "Cooperation with program research and evaluation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision requires participating agencies and institutions to cooperate in evaluations and \"submit information\" as the Secretary requires. It governs research administration and data submission, not household determinations."
+  
+  - citation: "us/statute/7/2026/l/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph requires entities to \"cooperate\" with officials and contractors conducting evaluations and studies. It contains no household eligibility or benefit calculation."
+  
+  - citation: "us/statute/7/2026/l/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph requires entities to \"submit information\" at the time and in the manner required by the Secretary. It is a research-reporting obligation, not a household computation."
+  
+  - citation: "us/statute/7/2026/m"
+    heading: "Evaluation of child support enforcement cooperation requirements"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection requires an independent evaluation of State implementation and impacts of eligibility rules located in 7 U.S.C. 2015(l) through (n), plus State data cooperation and a report. It evaluates those separate rules but does not itself apply them to households; the text states “(1) In general The Secretary, in consultation with the Secretary of Health”."
+  
+  - citation: "us/statute/7/2026/m/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must \"conduct an independent evaluation\" assessing implementation, State choices, alternatives, and costs and benefits of child-support cooperation requirements. This is research about separately stated eligibility rules."
+  
+  - citation: "us/statute/7/2026/m/2"
+    heading: "Evaluation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph specifies matters the evaluation must assess, including implementation procedures, costs, outcomes, counts, and impacts. Those measurements do not themselves determine cooperation, good cause, eligibility, or benefits for a household; the text states “The evaluation under paragraph (1) shall include, to the maximum extent practicable”."
+  
+  - citation: "us/statute/7/2026/m/3"
+    heading: "State agency cooperation"
+    status: excluded
+    reason: no_household_computation
+    basis: "A selected State agency must \"provide information to the Secretary\" needed for the evaluation. This data-cooperation duty has no household computational rule."
+  
+  - citation: "us/statute/7/2026/m/4"
+    heading: "Report"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must submit to congressional committees \"a report describing the findings\" of the evaluation. Reporting findings does not change household eligibility or benefits."
+  
+  - citation: "us/statute/7/2026/n"
+    heading: "Longitudinal data for research"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection authorizes longitudinal databases used \"solely to conduct research\" and governs their standards, privacy, approval, grants, reporting, and funding. Recorded eligibility-system values are research inputs rather than calculations prescribed by this provision."
+  
+  - citation: "us/statute/7/2026/n/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph permits an approved State agency to establish a longitudinal database containing information about benefit-receiving households. It authorizes a research database, not a household determination; the text states “Subject to paragraphs (3) through (5), a State agency may, on approval”."
+  
+  - citation: "us/statute/7/2026/n/2"
+    heading: "Purpose"
+    status: excluded
+    reason: no_household_computation
+    basis: "A database must be used \"solely to conduct research on participation in and the operation\" of SNAP. That research purpose has no point-in-time effect on a household."
+  
+  - citation: "us/statute/7/2026/n/3"
+    heading: "Requirements for databases"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must set database formats, identifiers, security and privacy protections, funding arrangements, documentation, and consultation requirements. These are research-data administration requirements; the text states “Prior to the approval of State agencies to establish longitudinal databases under”."
+  
+  - citation: "us/statute/7/2026/n/4"
+    heading: "Included data"
+    status: excluded
+    reason: no_household_computation
+    basis: "The database stores monthly demographic, income, resource, expense, and allotment information \"taken from existing information collected by the State agency\" and must protect identities. It records preexisting determinations for research rather than computing them."
+  
+  - citation: "us/statute/7/2026/n/5"
+    heading: "Approval"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph sets criteria for the Secretary to approve States' longitudinal databases, including database compliance, representativeness, and data capacity. It governs State research infrastructure, not household eligibility; the text states “The Secretary shall approve the establishment of longitudinal databases under paragraph (1)”."
+  
+  - citation: "us/statute/7/2026/n/6"
+    heading: "Grants"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may award grants to approved States \"in such amounts and under such terms and conditions\" as necessary for the database purposes. This is grant administration."
+  
+  - citation: "us/statute/7/2026/n/7"
+    heading: "Report"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must report to Congress on the feasibility, cost, challenges, benefits, and alternatives for nationwide longitudinal databases. It is a research-infrastructure report with no household computation; the text states “(A) In general Not later than 4 years after the effective date”."
+  
+  - citation: "us/statute/7/2026/n/8"
+    heading: "Effect"
+    status: excluded
+    reason: no_household_computation
+    basis: "The savings clause says nothing in the subsection prevents State agencies from operating similar databases. It affects database authority only; the text states “Nothing in this subsection shall be construed to prevent or limit the”."
+  
+  - citation: "us/statute/7/2026/n/9"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph directs the Secretary to use specified fiscal-year amounts to carry out the longitudinal-data subsection. It is an appropriation allocation without a household rule; the text states “Of the funds made available under section 2027 of this title ”."
+  
+  - citation: "us/statute/7/2026a"
+    heading: "Healthy fluid milk incentives projects"
+    status: pending
+    note: "The section mixes grant and evaluation administration with a definition of qualifying fluid milk and a mandate for point-of-purchase incentives to SNAP households. No 7 U.S.C. 2026a or fluid-milk incentive module appears in the pinned RuleSpec tree."
+  
+  - citation: "us/statute/7/2026a/a"
+    heading: "Definition of fluid milk"
+    status: pending
+    note: "The definition supplies the product-qualification test for the household point-of-purchase incentive mandated by subsection (b), including flavoring, dietary, packaging, and vitamin criteria. No module in the pinned tree encodes that incentive-eligibility test."
+  
+  - citation: "us/statute/7/2026a/a/1"
+    heading: ""
+    status: pending
+    note: "The requirement that qualifying fluid milk be \"without flavoring or sweeteners\" is one input to the household purchase-incentive calculation, and no matching module appears in the pinned tree."
+  
+  - citation: "us/statute/7/2026a/a/2"
+    heading: ""
+    status: pending
+    note: "Consistency with the most recent dietary recommendations is one criterion for a purchase to qualify for the household fluid-milk incentive. No matching module appears in the pinned tree."
+  
+  - citation: "us/statute/7/2026a/a/3"
+    heading: ""
+    status: pending
+    note: "The liquid-packaging criterion helps determine which purchases qualify for the household fluid-milk incentive. No matching module appears in the pinned tree."
+  
+  - citation: "us/statute/7/2026a/a/4"
+    heading: ""
+    status: pending
+    note: "The vitamin A and D standards help determine which purchases qualify for the household fluid-milk incentive. No matching module appears in the pinned tree."
+  
+  - citation: "us/statute/7/2026a/b"
+    heading: "Projects"
+    status: pending
+    note: "The provision mandates projects that provide an incentive \"at the point of purchase\" to SNAP household members buying fluid milk, thereby changing household purchasing power for qualifying transactions. The pinned tree contains no module for this incentive."
+  
+  - citation: "us/statute/7/2026a/c"
+    heading: "Grants or cooperative agreements"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection governs competitive grants or cooperative agreements, organizational applications, project-selection criteria, and permissible use of project funds. It sets requirements for recipient entities and projects, not household eligibility or an incentive amount; the text states “(1) In general To carry out this section, the Secretary, on a”."
+  
+  - citation: "us/statute/7/2026a/c/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must competitively enter cooperative agreements with or provide grants to governmental entities or nonprofits. This is award administration rather than household computation; the text states “To carry out this section, the Secretary, on a competitive basis, shall”."
+  
+  - citation: "us/statute/7/2026a/c/2"
+    heading: "Application"
+    status: excluded
+    reason: no_household_computation
+    basis: "A governmental entity or nonprofit must submit an application to receive an agreement or grant. The eligibility addressed is organizational grant eligibility, not SNAP household eligibility; the text states “To be eligible to enter into a cooperative agreement or receive a”."
+  
+  - citation: "us/statute/7/2026a/c/3"
+    heading: "Selection criteria"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires publicly disseminated criteria for selecting projects with a scientifically based diet-quality strategy. It evaluates project proposals, not individual households or benefit amounts; the text states “Projects proposed in applications shall be evaluated against publicly disseminated criteria that”."
+  
+  - citation: "us/statute/7/2026a/c/4"
+    heading: "Use of funds"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph bars use of project funds for a project that \"limits the use of benefits.\" This funding guardrail does not calculate a household's eligibility, allotment, or incentive; the text states “Funds made available to carry out this section shall not be used”."
+  
+  - citation: "us/statute/7/2026a/d"
+    heading: "Evaluation and reporting"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection provides for independent evaluation, evaluation costs, biennial reports to Congress, and public dissemination. It measures project impacts but does not determine household eligibility or incentive amounts; the text states “(1) Evaluation (A) Independent evaluation (i) In general The Secretary shall provide”."
+  
+  - citation: "us/statute/7/2026a/d/1"
+    heading: "Evaluation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must independently evaluate project health and nutrition impacts using rigorous methods and may use up to 7 percent of funding for evaluation. Those are evaluation-design and cost rules; the text states “(A) Independent evaluation (i) In general The Secretary shall provide for an”."
+  
+  - citation: "us/statute/7/2026a/d/2"
+    heading: "Reporting"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must submit biennial reports describing project status and completed evaluation results. This congressional reporting duty has no household computational effect; the text states “Not later than December 31 of 2020, and biennially thereafter, the Secretary”."
+  
+  - citation: "us/statute/7/2026a/d/3"
+    heading: "Public dissemination"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires evaluation results to be \"shared publicly\" to promote successful strategies. Public dissemination is program administration."
+  
+  - citation: "us/statute/7/2026a/e"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection authorizes $20,000,000 for the projects and limits availability to funds appropriated in advance for the section. It governs program funding, not household calculations; the text states “(1) Authorization of appropriations There is authorized to be appropriated $20,000,000 to”."
+  
+  - citation: "us/statute/7/2026a/e/1"
+    heading: "Authorization of appropriations"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph authorizes $20,000,000 \"to carry out and evaluate\" the projects, remaining available until expended. It is an appropriation authorization."
+  
+  - citation: "us/statute/7/2026a/e/2"
+    heading: "Appropriations in advance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph limits project availability to funds appropriated in advance specifically for this section. It is a funding condition without household computation; the text states “Only funds appropriated under paragraph (1) in advance specifically to carry out”."
+  
+  - citation: "us/statute/7/2027"
+    heading: "Appropriations and allotments"
+    status: pending
+    note: "The section mixes appropriations, grants, claims-accounting, fund-transfer, and outreach provisions with subsections (b) through (d), which require and structure reductions in household allotments during an appropriation shortfall. The inspected us/regulations/7-cfr/273/10.yaml covers the ordinary allotment formula, not these contingent reductions."
+  
+  - citation: "us/statute/7/2027/a"
+    heading: "Authorization of allotments; monthly reports of expenditures to Congressional committees; restriction on use of funds; nutrition education improvements"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection authorizes appropriations, restricts uses of federal funds, and provides competitive nutrition-education grants, evaluations, reports, and dissemination. It does not prescribe household eligibility or allotment amounts; the text states “(1) To carry out this chapter, there are authorized to be appropriated”."
+  
+  - citation: "us/statute/7/2027/a/1"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph authorizes sums necessary to carry out the chapter and caps the share available for projects under section 2026. It allocates appropriations rather than calculating household benefits; the text states “To carry out this chapter, there are authorized to be appropriated such”."
+  
+  - citation: "us/statute/7/2027/a/2"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph prohibits use of federal funds to \"interfere with or impede\" implementation, with an exception for legal assistance. This is a restriction on funding and conduct, not household computation."
+  
+  - citation: "us/statute/7/2027/a/3"
+    heading: ""
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph caps and awards competitive grants for interagency nutrition education, then requires project evaluation, replication planning, reporting, and dissemination. These are grant and education administration rules; the text states “(A) Of the amounts made available under the second sentence of paragraph”."
+  
+  - citation: "us/statute/7/2027/b"
+    heading: "Limitation of value of allotments; reduction of allotments"
+    status: pending
+    note: "If State requirements exceed the appropriation, this subsection directs reductions in \"the value of such allotments\" issued to eligible households. That directly changes household benefit amounts, and no pinned module encodes the appropriation-shortfall reduction."
+  
+  - citation: "us/statute/7/2027/c"
+    heading: "Manner of reducing allotments"
+    status: pending
+    note: "This subsection requires reductions to reflect the ratio of household income to the income standard for equal-size households and permits special elderly or disabled provisions and minimum allotments. us/regulations/7-cfr/273/10.yaml encodes the ordinary net-income allotment formula but not this shortfall formula."
+  
+  - citation: "us/statute/7/2027/d"
+    heading: "Requisite action by Secretary to reduce allotments; statement to Congressional committees"
+    status: pending
+    note: "The provision combines congressional reporting with a mandatory trigger: the Secretary \"shall take the requisite action to reduce allotments\" within 60 days after the specified report. Because that trigger causes household benefit reductions and no matching module appears in the pinned tree, the mixed provision remains pending."
+  
+  - citation: "us/statute/7/2027/e"
+    heading: "Disposition of funds collected pursuant to claims"
+    status: excluded
+    reason: no_household_computation
+    basis: "Funds collected from household or State claims and overissuances are credited to the program appropriation account, and State payments are charged to the applicable fiscal-year account. This governs post-collection fiscal accounting, not claim or benefit calculation; the text states “Funds collected from claims against households or State agencies, including claims collected”."
+  
+  - citation: "us/statute/7/2027/f"
+    heading: "Transfer of funds"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision bars transferring chapter appropriations to two Department of Agriculture offices. It is an internal funds-transfer restriction; the text states “No funds appropriated to carry out this chapter may be transferred to”."
+  
+  - citation: "us/statute/7/2027/g"
+    heading: "Ban on recruitment and promotion activities"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection restricts the Secretary's use of appropriated funds for recruitment, advertising, and foreign-government promotion agreements, with a programmatic-activity exception. It governs outreach spending, not household determinations; the text states “(1) In general Except as provided in paragraph (2), no funds authorized”."
+  
+  - citation: "us/statute/7/2027/g/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph prohibits use of appropriated funds for recruitment, promotional advertisements, and foreign-government agreements designed to promote enrollment. It regulates agency outreach spending; the text states “Except as provided in paragraph (2), no funds authorized to be appropriated”."
+  
+  - citation: "us/statute/7/2027/g/2"
+    heading: "Limitation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph exempts certain section 2014(h) programmatic activities from the advertising-funds ban in paragraph (1)(B). It changes the scope of a funding restriction, not household eligibility or benefits; the text states “Paragraph (1)(B) shall not apply to programmatic activities undertaken with respect to”."
+
+findings:
+  - "All 206 physical JSONL rows in lines 415–620 are represented once, in source order; no duplicate citations or missing bodies were found. Source-null paragraph headings are preserved as empty strings."
+  - "None of the 21 manifest-listed direct us/statutes/7 modules covers a citation in this §§ 2021–2027 slice, so there are no directly encoded rows."
+  - "Section 2025(e)'s household SSN eligibility condition is fully realized by us/regulations/7-cfr/273/6.yaml; its remaining account-use and information-access language is administrative."
+  - "Sections 2024(b) and (c) remain pending because us/statutes/7/2015/b/1.yaml covers the referenced mandatory disqualification but not the court's additional discretionary suspension of up to 18 months."
+  - "Work-supplementation, E&T-pilot, and employment-initiative rows remain pending where they define applicability or alter household benefits or eligibility; us/regulations/7-cfr/273/7.yaml either omits the program-specific rule or expressly defers the needed program and sanction context."
+  - "Vehicle and resource demonstration rows remain pending because us/statutes/7/2014/g.yaml and us/regulations/7-cfr/273/8.yaml leave the needed exclusion and valuation composition incomplete."
+  - "Healthy-food and fluid-milk incentive definitions remain pending because they govern transactions that can increase household purchasing power and no matching module exists."
+  - "Appropriation-shortfall reductions in § 2027(b)–(d) remain pending: us/regulations/7-cfr/273/10.yaml encodes the ordinary allotment formula, not the contingent reduction and income-ratio rules."
+  - "The expired new-waiver authority in § 2026(b)(2) was not treated as reserved because the provision still states substantive historical demonstration terms; doubt was left pending."
+  - "Section 2022 overissuance provisions were excluded as procedural post-determination claims collection, including the recovery-offset cap, consistent with the sprint's express classification rule."
+

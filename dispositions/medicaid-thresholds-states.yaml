@@ -1,0 +1,344 @@
+schema: axiom_oracles.dispositions.v1
+suite: medicaid-thresholds-states
+updated: '2026-07-30'
+entries:
+- id: ak-pregnant-2024-expansion-not-encoded
+  concept: us-ak:policies/cms/alaska-medicaid-chip-bhp-eligibility-levels#alaska_pregnant_women_medicaid_effective_fpl_limit
+  case_id: medicaid-thresholds-states-ak-pregnant
+  kind: amount_difference
+  disposition: axiom_encoding_gap
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1185
+  evidence:
+    mechanism: >-
+      Axiom encodes 2.05 (200% + the 5-point MAGI disregard) from the CMS
+      Medicaid/CHIP eligibility-levels table, which predates Alaska's
+      expansion. Alaska added an optional eligibility group for pregnant
+      women with income 201%-225% FPL and 12-month postpartum coverage via
+      a Medicaid state plan amendment effective February 2024, making the
+      effective limit 230% (225% + 5). PolicyEngine's 2.30 matches the
+      current authoritative level (KFF, as of January 2026: Alaska pregnant
+      women 230%). Axiom's cited CMS table snapshot is stale; the encoding
+      needs the 2024 expansion.
+    arithmetic:
+    - expression: 2.30 - 2.05
+      equals: 0.25
+    - expression: (225 - 200) / 100
+      equals: 0.25
+    upstream_url: https://aws.state.ak.us/OnlinePublicNotices/Notices/View.aspx?id=212944
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://www.kff.org/affordable-care-act/state-indicator/medicaid-and-chip-income-eligibility-limits-for-pregnant-women-as-a-percent-of-the-federal-poverty-level/
+    - https://alaskapublic.org/news/2024-02-06/more-women-in-alaska-will-be-covered-by-medicaid-during-pregnancy-and-for-the-year-after-giving-birth
+  expires_on_source_change: true
+  pinned:
+    left: 2.05
+    right: 2.3
+- id: ia-infant-2025-reduction-not-encoded
+  concept: us-ia:policies/cms/iowa-medicaid-chip-bhp-eligibility-levels#iowa_children_medicaid_ages_0_to_1_effective_fpl_limit
+  case_id: medicaid-thresholds-states-ia-infant
+  kind: amount_difference
+  disposition: axiom_encoding_gap
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1185
+  evidence:
+    mechanism: >-
+      Axiom encodes 3.80 (375% + the 5-point MAGI disregard) from the CMS
+      eligibility-levels table, which predates Iowa's reduction. Iowa SF
+      2251 (2024) directed HHS to lower the Medicaid income limit for
+      infants and pregnant women to 215% FPL (220% effective with the
+      disregard); CMS approved the SPA in January 2025 and the reduction
+      took effect during 2025, so Axiom's 3.80 no longer reflects Iowa law
+      for 2026. PolicyEngine's 3.05 matches KFF's January-2026 infant
+      figure for Iowa (305%), which reflects the highest Medicaid/CHIP-
+      funded infant coverage (hawk-i CHIP), not the Medicaid-only limit
+      either; neither engine currently carries the Medicaid-only 2.20.
+      Classified as an Axiom encoding gap because Axiom's cited CMS
+      snapshot is stale against the authoritative 2025 change.
+    arithmetic:
+    - expression: 3.80 - 3.05
+      equals: 0.75
+    upstream_url: https://www.legis.iowa.gov/docs/publications/LGi/90/SF2251.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://www.healthinsurance.org/medicaid/iowa/
+    - https://www.kff.org/medicaid/state-indicator/medicaid-income-eligibility-limits-for-infants-ages-0-1/
+  expires_on_source_change: true
+  pinned:
+    left: 3.8
+    right: 3.05
+- id: nd-infant-2024-spa-not-encoded
+  concept: us-nd:policies/cms/north-dakota-medicaid-chip-bhp-eligibility-levels#north_dakota_children_medicaid_ages_0_to_1_effective_fpl_limit
+  case_id: medicaid-thresholds-states-nd-infant
+  kind: amount_difference
+  disposition: axiom_encoding_gap
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1185
+  evidence:
+    mechanism: >-
+      Axiom encodes 1.75 (170% + the 5-point MAGI disregard), the
+      pre-2024 North Dakota children's level. CMS-approved SPAs ND-24-0007
+      and companion ND-24-0101 raised the income standard for children
+      (including the title XXI-funded Medicaid expansion) from 170% to
+      200% FPL effective 2024-01-01, an effective 205% with the disregard.
+      PolicyEngine's 2.05 matches the authoritative post-SPA level; Axiom's
+      cited CMS table snapshot is stale.
+    arithmetic:
+    - expression: 2.05 - 1.75
+      equals: 0.3
+    - expression: (200 - 170) / 100
+      equals: 0.3
+    upstream_url: https://www.medicaid.gov/medicaid/spa/downloads/ND-24-0007.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://www.medicaid.gov/CHIP/Downloads/ND-24-0101.pdf
+  expires_on_source_change: true
+  pinned:
+    left: 1.75
+    right: 2.05
+- id: nd-young-child-2024-spa-not-encoded
+  concept: us-nd:policies/cms/north-dakota-medicaid-chip-bhp-eligibility-levels#north_dakota_children_medicaid_ages_1_to_5_effective_fpl_limit
+  case_id: medicaid-thresholds-states-nd-young_child
+  kind: amount_difference
+  disposition: axiom_encoding_gap
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1185
+  evidence:
+    mechanism: >-
+      Axiom encodes 1.75 (170% + the 5-point MAGI disregard), the
+      pre-2024 North Dakota children's level. CMS-approved SPAs ND-24-0007
+      and ND-24-0101 raised children's eligibility from 170% to 200% FPL
+      effective 2024-01-01 (effective 205% with the disregard).
+      PolicyEngine's 2.05 matches the authoritative post-SPA level; Axiom's
+      cited CMS table snapshot is stale.
+    arithmetic:
+    - expression: 2.05 - 1.75
+      equals: 0.3
+    upstream_url: https://www.medicaid.gov/medicaid/spa/downloads/ND-24-0007.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://www.medicaid.gov/CHIP/Downloads/ND-24-0101.pdf
+  expires_on_source_change: true
+  pinned:
+    left: 1.75
+    right: 2.05
+- id: nd-older-child-2024-spa-not-encoded
+  concept: us-nd:policies/cms/north-dakota-medicaid-chip-bhp-eligibility-levels#north_dakota_children_medicaid_ages_6_to_18_effective_fpl_limit
+  case_id: medicaid-thresholds-states-nd-older_child
+  kind: amount_difference
+  disposition: axiom_encoding_gap
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1185
+  evidence:
+    mechanism: >-
+      Axiom encodes 1.75 (170% + the 5-point MAGI disregard), the
+      pre-2024 North Dakota children's level. CMS-approved SPAs ND-24-0007
+      and ND-24-0101 raised children's eligibility from 170% to 200% FPL
+      effective 2024-01-01 (effective 205% with the disregard).
+      PolicyEngine's 2.05 matches the authoritative post-SPA level; Axiom's
+      cited CMS table snapshot is stale.
+    arithmetic:
+    - expression: 2.05 - 1.75
+      equals: 0.3
+    upstream_url: https://www.medicaid.gov/medicaid/spa/downloads/ND-24-0007.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://www.medicaid.gov/CHIP/Downloads/ND-24-0101.pdf
+  expires_on_source_change: true
+  pinned:
+    left: 1.75
+    right: 2.05
+- id: nv-pregnant-2024-2025-expansions-not-encoded
+  concept: us-nv:policies/cms/nevada-medicaid-chip-bhp-eligibility-levels#nevada_pregnant_women_medicaid_effective_fpl_limit
+  case_id: medicaid-thresholds-states-nv-pregnant
+  kind: amount_difference
+  disposition: axiom_encoding_gap
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1185
+  evidence:
+    mechanism: >-
+      Axiom encodes 1.65 (160% + the 5-point MAGI disregard), Nevada's
+      pre-2024 pregnant-women level. CMS-approved SPA NV-23-0030 raised
+      pregnant-women eligibility to 185% FPL (190% effective) from January
+      2024, and Nevada subsequently raised it again (SPA 25-0006 to 190%
+      effective July 2025, then to a 200% income standard per Nevada
+      Medicaid web announcement 3748 of 2025-10-20; KFF reports 205%
+      effective as of January 2026). PolicyEngine's 1.90 matches the 2024
+      level and is itself one update behind, but Axiom's 1.65 is stale
+      against every post-2023 authoritative level, so the row is an Axiom
+      encoding gap first. The pinned difference matches the 2024 SPA step.
+    arithmetic:
+    - expression: 1.90 - 1.65
+      equals: 0.25
+    - expression: (185 - 160) / 100
+      equals: 0.25
+    upstream_url: https://www.medicaid.gov/medicaid/spa/downloads/NV-23-0030.pdf
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://medicaid.nv.gov/Downloads/provider/web_announcement_3748_20251020.pdf
+    - https://www.kff.org/affordable-care-act/state-indicator/medicaid-and-chip-income-eligibility-limits-for-pregnant-women-as-a-percent-of-the-federal-poverty-level/
+  expires_on_source_change: true
+  pinned:
+    left: 1.6500000000000001
+    right: 1.9
+- id: ri-pregnant-medicaid-vs-chip-scope
+  concept: us-ri:policies/cms/rhode-island-medicaid-chip-bhp-eligibility-levels#rhode_island_pregnant_women_medicaid_effective_fpl_limit
+  case_id: medicaid-thresholds-states-ri-pregnant
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Scope difference between two current, defensible readings. Axiom's
+      concept is the Medicaid-only effective limit for pregnant women:
+      1.95 (190% Medicaid + the 5-point MAGI disregard), matching the CMS
+      eligibility-levels table (RI pregnant Medicaid 190%). PolicyEngine's
+      pregnant income_limit parameter stores the highest pregnancy
+      coverage including Rhode Island's CHIP-funded coverage: 2.58 (253%
+      CHIP + 5), matching both the CMS table's Pregnant Women CHIP column
+      (253%) and KFF's January-2026 RI CHIP figure (258%). The residual is
+      exactly the Medicaid-vs-CHIP column gap; neither engine misstates
+      its source.
+    arithmetic:
+    - expression: 2.58 - 1.95
+      equals: 0.63
+    - expression: (253 - 190) / 100
+      equals: 0.63
+    upstream_url: https://www.medicaid.gov/medicaid/national-medicaid-chip-program-information/medicaid-childrens-health-insurance-program-basic-health-program-eligibility-levels/index.html
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://www.kff.org/affordable-care-act/state-indicator/medicaid-and-chip-income-eligibility-limits-for-pregnant-women-as-a-percent-of-the-federal-poverty-level/
+  expires_on_source_change: true
+  pinned:
+    left: 1.95
+    right: 2.58
+- id: tn-infant-pe-value-contradicts-cms
+  concept: us-tn:policies/cms/tennessee-medicaid-chip-bhp-eligibility-levels#tennessee_children_medicaid_ages_0_to_1_effective_fpl_limit
+  case_id: medicaid-thresholds-states-tn-infant
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9182
+  evidence:
+    mechanism: >-
+      Axiom's 2.00 is the CMS eligibility-levels table value for TennCare
+      infants (195% Medicaid + the 5-point MAGI disregard), corroborated
+      by KFF's January-2026 infant table (Tennessee 195%). PolicyEngine
+      stores a flat 2.16 for all Tennessee child age bands, unchanged
+      since its 2018-01-01 entry, which matches neither the Medicaid
+      infant level (195%/200% effective) nor CoverKids separate CHIP
+      (250%/255% effective) in any current source. No PolicyEngine issue
+      tracks the Tennessee children's limits.
+    arithmetic:
+    - expression: 2.16 - 2.00
+      equals: 0.16
+    upstream_url: https://www.medicaid.gov/medicaid/national-medicaid-chip-program-information/medicaid-childrens-health-insurance-program-basic-health-program-eligibility-levels/index.html
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://www.kff.org/medicaid/state-indicator/medicaid-income-eligibility-limits-for-infants-ages-0-1/
+  expires_on_source_change: true
+  pinned:
+    left: 2.0
+    right: 2.16
+- id: tn-young-child-pe-value-contradicts-cms
+  concept: us-tn:policies/cms/tennessee-medicaid-chip-bhp-eligibility-levels#tennessee_children_medicaid_ages_1_to_5_effective_fpl_limit
+  case_id: medicaid-thresholds-states-tn-young_child
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9182
+  evidence:
+    mechanism: >-
+      Axiom's 1.47 is the CMS eligibility-levels table value for TennCare
+      children ages 1-5 (142% Medicaid + the 5-point MAGI disregard).
+      PolicyEngine stores a flat 2.16 for all Tennessee child age bands,
+      unchanged since its 2018-01-01 entry, matching neither the Medicaid
+      level for this band (142%/147% effective) nor CoverKids separate
+      CHIP (250%/255% effective) in any current source. No PolicyEngine
+      issue tracks the Tennessee children's limits.
+    arithmetic:
+    - expression: 2.16 - 1.47
+      equals: 0.69
+    upstream_url: https://www.medicaid.gov/medicaid/national-medicaid-chip-program-information/medicaid-childrens-health-insurance-program-basic-health-program-eligibility-levels/index.html
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+  expires_on_source_change: true
+  pinned:
+    left: 1.47
+    right: 2.16
+- id: tn-older-child-pe-value-contradicts-cms
+  concept: us-tn:policies/cms/tennessee-medicaid-chip-bhp-eligibility-levels#tennessee_children_medicaid_ages_6_to_18_effective_fpl_limit
+  case_id: medicaid-thresholds-states-tn-older_child
+  kind: amount_difference
+  disposition: upstream_engine_gap
+  linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/9182
+  evidence:
+    mechanism: >-
+      Axiom's 1.38 is the CMS eligibility-levels table value for TennCare
+      children ages 6-18 (133% Medicaid + the 5-point MAGI disregard).
+      PolicyEngine stores a flat 2.16 for all Tennessee child age bands,
+      unchanged since its 2018-01-01 entry, matching neither the Medicaid
+      level for this band (133%/138% effective) nor CoverKids separate
+      CHIP (250%/255% effective) in any current source. No PolicyEngine
+      issue tracks the Tennessee children's limits.
+    arithmetic:
+    - expression: 2.16 - 1.38
+      equals: 0.78
+    upstream_url: https://www.medicaid.gov/medicaid/national-medicaid-chip-program-information/medicaid-childrens-health-insurance-program-basic-health-program-eligibility-levels/index.html
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+  expires_on_source_change: true
+  pinned:
+    left: 1.3800000000000001
+    right: 2.16
+- id: tn-pregnant-medicaid-vs-coverkids-scope
+  concept: us-tn:policies/cms/tennessee-medicaid-chip-bhp-eligibility-levels#tennessee_pregnant_women_medicaid_effective_fpl_limit
+  case_id: medicaid-thresholds-states-tn-pregnant
+  kind: amount_difference
+  disposition: explained_residual
+  evidence:
+    mechanism: >-
+      Scope difference between two current, defensible readings. Axiom's
+      concept is the Medicaid-only effective limit: 2.00 (TennCare for
+      Pregnant Women at 195% + the 5-point MAGI disregard), matching the
+      CMS eligibility-levels table (Tennessee pregnant Medicaid 195%,
+      Pregnant CHIP N/A because CoverKids maternity coverage runs through
+      the unborn-child option). PolicyEngine's 2.55 is the highest
+      pregnancy coverage including CoverKids CHIP-funded maternity
+      coverage at 250% FPL (+5), the figure KFF reports for Tennessee as
+      of January 2026 (255%). The residual is exactly the
+      Medicaid-vs-CoverKids gap; neither engine misstates its source.
+    arithmetic:
+    - expression: 2.55 - 2.00
+      equals: 0.55
+    - expression: (250 - 195) / 100
+      equals: 0.55
+    upstream_url: https://www.medicaid.gov/medicaid/national-medicaid-chip-program-information/medicaid-childrens-health-insurance-program-basic-health-program-eligibility-levels/index.html
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://www.kidcentraltn.com/health/insurance/coverkids.html
+    - https://www.kff.org/affordable-care-act/state-indicator/medicaid-and-chip-income-eligibility-limits-for-pregnant-women-as-a-percent-of-the-federal-poverty-level/
+  expires_on_source_change: true
+  pinned:
+    left: 2.0
+    right: 2.55
+- id: wa-pregnant-2024-expansion-not-encoded
+  concept: us-wa:policies/cms/washington-medicaid-chip-bhp-eligibility-levels#washington_pregnant_women_medicaid_effective_fpl_limit
+  case_id: medicaid-thresholds-states-wa-pregnant
+  kind: amount_difference
+  disposition: axiom_encoding_gap
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1185
+  evidence:
+    mechanism: >-
+      Axiom encodes 1.98 (193% + the 5-point MAGI disregard) from the CMS
+      eligibility-levels table, which predates Washington's expansion. The
+      Washington Health Care Authority raised the income limit for Apple
+      Health for pregnant individuals (and After-Pregnancy Coverage) to
+      210% FPL effective 2024-11-01, an effective 215% with the disregard.
+      PolicyEngine's 2.15 matches the current authoritative level (WA HCA;
+      KFF as of January 2026: Washington 215%). Axiom's cited CMS table
+      snapshot is stale.
+    arithmetic:
+    - expression: 2.15 - 1.98
+      equals: 0.17
+    - expression: (210 - 193) / 100
+      equals: 0.17
+    upstream_url: https://www.hca.wa.gov/free-or-low-cost-health-care/i-help-others-apply-and-access-apple-health/apple-health-pregnant-individuals
+    sources:
+    - dashboard/public/data/axiom-policyengine-medicaid-thresholds-states.json
+    - https://www.kff.org/affordable-care-act/state-indicator/medicaid-and-chip-income-eligibility-limits-for-pregnant-women-as-a-percent-of-the-federal-poverty-level/
+  expires_on_source_change: true
+  pinned:
+    left: 1.98
+    right: 2.15

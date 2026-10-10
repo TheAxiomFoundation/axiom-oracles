@@ -1,0 +1,43 @@
+schema: axiom_oracles.dispositions.v1
+suite: ca-income-tax-liability
+updated: '2026-08-25'
+entries:
+- id: taxsim-ca-module-divergence-axiom-pe-agree
+  concept: us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ca-married-60000
+    - ca-single-30000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated TAXSIM-side divergence in California''s credit stack:
+      on both
+
+      selected rows axiom and PolicyEngine agree on California liability to the
+
+      cent (216.11 and 432.22 respectively; the case''s own
+
+      `axiom_vs_policyengine.match` is true in this report), while TAXSIM reports
+
+      a lower liability. TAXSIM''s California module is the only leg that moves,
+
+      so the residual is an upstream engine behaviour, not an axiom rules
+
+      disagreement. Deltas are not a flat per-filing-status offset (41.00 single
+
+      vs 10.72 married), which rules out the vintage-offset class seen in
+
+      Colorado and points at TAXSIM''s California exemption/renter credit
+
+      treatment. Resolves when TAXSIM''s California module is re-based; per-row
+
+      proof is the axiom==PolicyEngine agreement.'
+    arithmetic:
+    - expression: 216.11 - 175.11
+      equals: 41.0
+      tolerance: 0.05
+    - expression: 432.22 - 421.50
+      equals: 10.72
+      tolerance: 0.05
+  expires_on_source_change: true

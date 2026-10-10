@@ -1,0 +1,58 @@
+name: et-dispy
+title: Ethiopia disposable income (composed pipeline) — Axiom vs ETMOD
+description: >-
+  Compares the rulespec-et composed monthly disposable-income pipeline (the
+  Proclamation 1395/2025 Article 11 employment income tax on gross monthly
+  income, less the Proclamation 715/2011 employee 7 percent pension share)
+  against ETMOD ils_dispy (SOUTHMOD A4.0, country ET, system ET_2025 =
+  EFY2025/26, dataset et_2022_a2) on the FULL grid - the statutory base is
+  gross (Proclamation 979/2016 Articles 10(3) and 65(1)(c) verified) and ETMOD
+  taxes gross, so unlike Ghana and Zambia there is no base divergence and no
+  shared-nil restriction. Run live exact at five incomes from 1,500 to 20,000
+  birr a month. The pipeline is Month-period, so the suite runs with
+  euromod_annualize_outputs off and the engine's monthly post-uprating yem is
+  bridged unchanged to both imported inputs, making parity index-proof.
+  Results are based on the tax-benefit microsimulation model for Ethiopia
+  (ETMOD) in SOUTHMOD_A4.0, developed, maintained and managed by UNU-WIDER
+  with SASPRI, the LSE International Inequalities Institute and local
+  partners, run on the EUROMOD software (EM_Executable 1.0.0 via the euromod
+  connector 0.2.18) under the et_2022_a2 dataset configuration (Central
+  Statistical Agency of Ethiopia, Ethiopia Socioeconomic Panel Survey Wave 5,
+  2021-2022); only the dataset's variable list is read and every household is
+  synthetic. The results and their interpretation are Axiom's responsibility.
+  The SOUTHMOD bundle is licensed and non-redistributable: it is referenced
+  only by path (euromod_model_root), and no model XML, dataset row, or DRD
+  text is committed.
+
+# Not runnable on the CI matrix runners. The SOUTHMOD bundle is licensed to
+# Axiom by UNU-WIDER under the SOUTHMOD_A4.0 Adhesion Agreement, which bars
+# providing the model or its input datasets to any third party (clause 4), so
+# no shared runner can hold it; the runner also needs the x64 EUROMOD engine
+# (EM_Executable.dll) under EUROMOD_PYTHON and a .NET runtime. Manual lane
+# only: scripts/regenerate_euromod_et.sh, where the licensed bundle and
+# runtime exist, refreshes the committed report. This marker stays unless
+# UNU-WIDER licenses a runner-held copy.
+ci: manual
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: et-dispy
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: ET
+    euromod_system: ET_2025
+    euromod_dataset: et_2022_a2
+    euromod_annualize_outputs: false
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-et-dispy.json
+
+artifacts:
+  report_basename: axiom-euromod-et-dispy
+
+dashboard:
+  filename: axiom-euromod-et-dispy.json
+  suite: et-dispy

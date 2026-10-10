@@ -6,13 +6,20 @@ from axiom_oracles import Case, Concepts, Entity
 from axiom_oracles.adapters.accessnyc import AccessNycInputMapper, AccessNycPythonRunner
 from axiom_oracles.adapters.policyengine import PolicyEngineRunner
 from axiom_oracles.adapters.policyengine import runner as policyengine_runner_module
-from axiom_oracles.comparison.comparator import Comparator
+from axiom_oracles.comparison.comparator import (
+    Comparator,
+    HouseholdComparison,
+    VariableComparison,
+)
 from axiom_oracles.comparison.mappings import (
     comparable_mappings,
     comparison_scope_for_targets,
     load_program_mappings,
 )
-from axiom_oracles.cli import _apply_euromod_to_axiom_input_bridge
+from axiom_oracles.cli import (
+    _apply_euromod_to_axiom_input_bridge,
+    _filter_comparisons_for_case_outputs,
+)
 from axiom_oracles.core.geography import GeographyScope
 from axiom_oracles.core.household import Household, Person
 from axiom_oracles.core.results import EngineResult
@@ -164,6 +171,47 @@ def test_parent_concepts_expand_components_when_requested() -> None:
     ]
 
 
+def test_case_declared_outputs_filter_a_heterogeneous_suite_union() -> None:
+    first = Case(case_id="first", period="2025", outputs=("concept:a",))
+    second = Case(case_id="second", period="2025", outputs=("concept:b",))
+    rows = [
+        HouseholdComparison(
+            household_id=case.case_id,
+            left_engine="left",
+            right_engine="right",
+            comparisons=[
+                VariableComparison("concept:a", 1, 1, True),
+                VariableComparison("concept:b", 2, 2, True),
+            ],
+        )
+        for case in (first, second)
+    ]
+
+    filtered = _filter_comparisons_for_case_outputs([first, second], rows)
+
+    assert [[item.variable for item in row.comparisons] for row in filtered] == [
+        ["concept:a"],
+        ["concept:b"],
+    ]
+
+
+def test_explicitly_empty_case_outputs_filter_the_comparison_union() -> None:
+    case = Case(case_id="unsupported", period="2025")
+    row = HouseholdComparison(
+        household_id=case.case_id,
+        left_engine="left",
+        right_engine="right",
+        comparisons=[
+            VariableComparison("concept:a", 1, 1, True),
+            VariableComparison("concept:b", 2, 2, True),
+        ],
+    )
+
+    [filtered] = _filter_comparisons_for_case_outputs([case], [row])
+
+    assert filtered.comparisons == []
+
+
 def test_accessnyc_targets_are_locale_filtered() -> None:
     mappings = comparable_mappings(
         "accessnyc",
@@ -199,6 +247,13 @@ def test_belgium_euromod_concepts_are_locale_filtered() -> None:
         Concepts.BE_ARTICLE_51_EMPLOYEE_FORFAIT,
         Concepts.BE_ARTICLE_289TER1_WORK_BONUS_CREDIT,
         Concepts.BE_MARITAL_QUOTIENT_COUPLE_PIT_BEFORE_WITHHOLDING,
+        Concepts.BE_PENSIONER_PIT_BEFORE_WITHHOLDING,
+        Concepts.BE_PENSIONER_ANNUAL_SOCIAL_WITHHOLDING,
+        Concepts.BE_PENSIONER_REPLACEMENT_REDUCTION,
+        Concepts.BE_REPLACEMENT_UNEMPLOYMENT_REDUCTION,
+        Concepts.BE_REPLACEMENT_SICKNESS_INVALIDITY_REDUCTION,
+        Concepts.BE_SELF_EMPLOYMENT_PIT_BEFORE_WITHHOLDING,
+        Concepts.BE_SELF_EMPLOYMENT_COMBINED_TAXABLE_INCOME,
         Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS_BEFORE_REDUCTIONS,
         Concepts.BE_EMPLOYEE_WORK_BONUS_REDUCTION,
         Concepts.BE_EMPLOYEE_SOCIAL_CONTRIBUTIONS,
@@ -451,6 +506,261 @@ def test_belgium_worker_suites_define_oracle_concepts_and_inputs() -> None:
         == [special_contribution_income_input]
         for case in disposable_income_list_cases
     )
+
+
+def test_belgium_marital_quotient_suite_feeds_related_person_records() -> None:
+    cases = load_suite("be-marital-quotient")
+
+    assert [case.case_id for case in cases] == [
+        "be-marital-quotient-30k",
+        "be-marital-quotient-45k",
+        "be-marital-quotient-60k",
+    ]
+    assert [case.metadata["yearly_earned_income"] for case in cases] == [
+        30_000,
+        45_000,
+        60_000,
+    ]
+    assert {case.metadata["axiom_entity"] for case in cases} == {"TaxUnit"}
+    assert {case.metadata["axiom_entity_id"] for case in cases} == {"taxunit"}
+    assert {case.outputs for case in cases} == {
+        (Concepts.BE_MARITAL_QUOTIENT_COUPLE_PIT_BEFORE_WITHHOLDING,)
+    }
+
+    couple_module = "be:statutes/income_tax/individual/couple_pit_oracle_pipeline"
+    worker_module = "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline"
+    joint_module = "be:statutes/income_tax/individual/joint_assessment"
+    tax_free_module = "be:statutes/income_tax/individual/tax_free_amount_tax"
+    work_bonus_module = "be:regulations/social_security/workers/work_bonus"
+    gross_input = (
+        f"{worker_module}#input.belgium_pit_article_23_worker_remuneration"
+    )
+    reference_input = (
+        f"{work_bonus_module}#input."
+        "belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+    )
+    is_spouse_a = (
+        f"{couple_module}#input.belgium_pit_couple_worker_is_spouse_a"
+    )
+    is_spouse_b = (
+        f"{couple_module}#input.belgium_pit_couple_worker_is_spouse_b"
+    )
+    relation = (
+        f"{couple_module}#relation.belgium_pit_couple_spouse_of_tax_unit"
+    )
+    article_134_selector = (
+        f"{tax_free_module}#input."
+        "belgium_pit_article_134_joint_lower_income_spouse_supplement_"
+        "assignment_reduces_joint_state_tax"
+    )
+    convention_inputs = {
+        f"{joint_module}#input."
+        "belgium_pit_spouse_a_convention_exempt_professional_income_"
+        "not_counted_for_other_tax",
+        f"{joint_module}#input."
+        "belgium_pit_spouse_b_convention_exempt_professional_income_"
+        "not_counted_for_other_tax",
+    }
+    article_126_false_inputs = {
+        f"{joint_module}#input."
+        "belgium_pit_article_126_year_of_marriage_or_legal_cohabitation_"
+        "declaration",
+        f"{joint_module}#input."
+        "belgium_pit_article_126_legal_cohabitants_marry_after_prior_year_"
+        "declaration",
+        f"{joint_module}#input."
+        "belgium_pit_article_126_factual_separation_effective_for_entire_"
+        "taxable_period_after_separation_year",
+        f"{joint_module}#input."
+        "belgium_pit_article_126_year_of_marriage_dissolution_legal_"
+        "separation_or_cohabitation_cessation",
+        f"{joint_module}#input.belgium_pit_article_126_dissolution_by_death",
+        f"{joint_module}#input."
+        "belgium_pit_article_126_survivor_or_heirs_joint_assessment_election_"
+        "made",
+    }
+
+    for case in cases:
+        inputs = case.metadata["axiom_inputs"]
+        assert len(inputs) == 13
+        assert inputs[article_134_selector] is False
+        assert inputs[
+            f"{joint_module}#input."
+            "belgium_pit_article_126_married_or_legal_cohabiting"
+        ] is True
+        assert inputs[
+            f"{joint_module}#input."
+            "belgium_pit_article_87_88_no_tax_increase_condition_met"
+        ] is True
+        assert all(inputs[name] == 0 for name in convention_inputs)
+        assert all(inputs[name] is False for name in article_126_false_inputs)
+        assert all("professional_income_after_article_89" not in name for name in inputs)
+        assert inputs[
+            f"{couple_module}#input.belgium_pit_couple_communal_additional_tax_rate"
+        ] == 0
+        assert inputs[
+            f"{couple_module}#input."
+            "belgium_pit_couple_agglomeration_additional_tax_rate"
+        ] == 0
+
+        records = {
+            (record["entity_id"], record["name"]): record["value"]
+            for record in case.metadata["axiom_input_records"]
+        }
+        assert len(records) == 8
+        assert records == {
+            ("head", gross_input): case.metadata["yearly_earned_income"],
+            ("head", reference_input): 0,
+            ("head", is_spouse_a): True,
+            ("head", is_spouse_b): False,
+            ("spouse", gross_input): 0,
+            ("spouse", reference_input): 0,
+            ("spouse", is_spouse_a): False,
+            ("spouse", is_spouse_b): True,
+        }
+        assert all(
+            record["entity"] == "Person"
+            for record in case.metadata["axiom_input_records"]
+        )
+        assert case.metadata["axiom_relations"] == {
+            relation: [["head", "taxunit"], ["spouse", "taxunit"]]
+        }
+        assert case.metadata["euromod_to_axiom_input_bridge"] == {
+            "yem": {
+                "records": [
+                    {
+                        "name": gross_input,
+                        "entity": "Person",
+                        "entity_id": "head",
+                    }
+                ]
+            },
+            "yemeq_s": {
+                "records": [
+                    {
+                        "name": reference_input,
+                        "entity": "Person",
+                        "entity_id": "head",
+                    }
+                ]
+            },
+        }
+
+
+def test_belgium_marital_quotient_bridge_updates_only_spouse_a_worker_records() -> None:
+    [case, *_] = load_suite("be-marital-quotient")
+    gross_input = (
+        "be:statutes/income_tax/individual/pilot_worker_oracle_pipeline#input."
+        "belgium_pit_article_23_worker_remuneration"
+    )
+    reference_input = (
+        "be:regulations/social_security/workers/work_bonus#input."
+        "belgium_worker_work_bonus_supplied_reference_annual_remuneration"
+    )
+
+    [bridged] = _apply_euromod_to_axiom_input_bridge(
+        [case],
+        [
+            EngineResult(
+                "euromod",
+                case.case_id,
+                {"yem": 31_650.67178502879, "yemeq_s": 27_285.06188364551},
+            )
+        ],
+    )
+
+    worker_values = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in bridged.metadata["axiom_input_records"]
+        if record["name"] in {gross_input, reference_input}
+    }
+    assert worker_values == {
+        ("head", gross_input): 31_650.67178502879,
+        ("head", reference_input): 27_285.06188364551,
+        ("spouse", gross_input): 0,
+        ("spouse", reference_input): 0,
+    }
+    assert bridged.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        f"Person[head]::{gross_input}": 31_650.67178502879,
+        f"Person[head]::{reference_input}": 27_285.06188364551,
+    }
+
+
+def test_belgium_pensioner_pit_suite_uses_merged_person_fixtures() -> None:
+    cases = load_suite("be-pensioner-pit")
+
+    assert len(cases) == 4
+    assert all(len(case.metadata["axiom_input_records"]) == 19 for case in cases)
+    assert all("axiom_inputs" not in case.metadata for case in cases)
+    assert all("axiom_relations" not in case.metadata for case in cases)
+    assert all(
+        {record["entity"] for record in case.metadata["axiom_input_records"]}
+        == {"Person"}
+        for case in cases
+    )
+    assert all(
+        {record["entity_id"] for record in case.metadata["axiom_input_records"]}
+        == {"head"}
+        for case in cases
+    )
+    assert [len(case.outputs) for case in cases] == [3, 3, 3, 1]
+    assert cases[-1].outputs == (Concepts.BE_PENSIONER_PIT_BEFORE_WITHHOLDING,)
+    assert cases[-1].metadata["euromod_inputs"][0]["yem"] == pytest.approx(
+        15_000 / 12 / 1.055022392834293
+    )
+    assert set(cases[-1].metadata["euromod_to_axiom_input_bridge"]) == {
+        "poa",
+        "yem",
+        "yemeq_s",
+    }
+
+
+def test_belgium_self_employment_pit_suite_preserves_negative_yse_semantics() -> None:
+    cases = load_suite("be-self-employment-pit")
+    by_id = {case.case_id: case for case in cases}
+
+    assert len(cases) == 5
+    assert all(len(case.metadata["axiom_input_records"]) == 29 for case in cases)
+    assert all("axiom_inputs" not in case.metadata for case in cases)
+    assert all("axiom_relations" not in case.metadata for case in cases)
+    assert [len(case.outputs) for case in cases] == [1, 1, 1, 1, 1]
+
+    mixed = by_id["be-self-employment-pit-yem-30k-yse-20k"]
+    assert set(mixed.metadata["euromod_to_axiom_input_bridge"]) == {"yem", "yse"}
+    assert len(mixed.metadata["euromod_to_axiom_input_bridge"]["yem"]["records"]) == 2
+
+    negative = by_id["be-self-employment-pit-negative-yse-1k-yem-10k"]
+    assert negative.outputs == (Concepts.BE_SELF_EMPLOYMENT_COMBINED_TAXABLE_INCOME,)
+    assert negative.metadata["euromod_inputs"][0]["yse"] == pytest.approx(
+        -1_000 / 12 / 1.055022392834293
+    )
+    assert set(negative.metadata["euromod_to_axiom_input_bridge"]) == {
+        "yem",
+        "yemeq_s",
+    }
+
+
+def test_belgium_replacement_income_pit_suite_bridges_input_bun_and_bhl() -> None:
+    cases = load_suite("be-replacement-income-pit")
+    by_id = {case.case_id: case for case in cases}
+
+    assert len(cases) == 5
+    assert all(len(case.metadata["axiom_input_records"]) == 19 for case in cases)
+    assert all("axiom_inputs" not in case.metadata for case in cases)
+    assert all("axiom_relations" not in case.metadata for case in cases)
+    assert [len(case.outputs) for case in cases] == [2, 2, 2, 2, 1]
+    assert all(
+        "bun" in case.metadata["euromod_to_axiom_input_bridge"]
+        for case in cases
+        if "bun" in str(case.case_id)
+    )
+    sickness = by_id["be-replacement-income-pit-bhl-18k"]
+    assert "bhl" in sickness.metadata["euromod_to_axiom_input_bridge"]
+    assert sickness.metadata["euromod_inputs"][0]["bhl"] == pytest.approx(
+        18_000 / 12 / 1.1096513390601312
+    )
+    mixed = by_id["be-replacement-income-pit-bun-15k-yem-15k"]
+    assert mixed.outputs == (Concepts.BE_PENSIONER_PIT_BEFORE_WITHHOLDING,)
 
 
 def test_belgium_self_employed_suite_defines_oracle_concept_and_inputs() -> None:

@@ -6,6 +6,7 @@ from axiom_oracles.adapters.policyengine import PolicyEngineTaxsimRunner
 from axiom_oracles.adapters.taxsim import TaxsimPackageRunner
 from axiom_oracles.cli import (
     _apply_euromod_to_axiom_input_bridge,
+    _attach_axiom_outputs,
     _build_runner,
     _euromod_to_axiom_bridge_outputs,
     _load_population_cases,
@@ -26,8 +27,7 @@ from axiom_oracles.suites import load_suite
 
 def test_unknown_engines_do_not_get_implicit_concept_targets() -> None:
     concept_ids = {
-        mapping.concept_id
-        for mapping in comparable_mappings("taxsim", "policyengine")
+        mapping.concept_id for mapping in comparable_mappings("taxsim", "policyengine")
     }
 
     assert "us:statutes/7/2014/o#snap_eligible" not in concept_ids
@@ -52,8 +52,7 @@ def test_package_targets_have_us_scope_and_intersect_with_accessnyc() -> None:
 
 def test_prd_defaults_to_mapped_policyengine_intersection() -> None:
     concept_ids = {
-        mapping.concept_id
-        for mapping in comparable_mappings("prd", "policyengine")
+        mapping.concept_id for mapping in comparable_mappings("prd", "policyengine")
     }
 
     assert concept_ids == {"us:statutes/7/2014/u#snap_benefit"}
@@ -97,6 +96,7 @@ def test_cli_builds_euromod_runner_from_environment(monkeypatch) -> None:
     monkeypatch.setenv("EUROMOD_SYSTEM", "BE_2025")
     monkeypatch.setenv("EUROMOD_DATASET", "BE_2024_c1_2015_03_e2")
     monkeypatch.setenv("EUROMOD_TEMPLATE_DATASET", "BE_training_data")
+    monkeypatch.setenv("EUROMOD_EXTRA_COLUMNS", "drgn1,bhl,drgn1")
     monkeypatch.setenv("EUROMOD_SWITCHES", "Belmod_endo=on,BTA=off")
     monkeypatch.setenv("EUROMOD_POLICY_SWITCHES", "bsaoa_be=on,bun_be=off")
 
@@ -108,6 +108,7 @@ def test_cli_builds_euromod_runner_from_environment(monkeypatch) -> None:
     assert runner.system == "BE_2025"
     assert runner.dataset == "BE_2024_c1_2015_03_e2"
     assert runner.template_dataset == "BE_training_data"
+    assert runner.extra_columns == ("drgn1", "bhl")
     assert runner.switches == (("Belmod_endo", True), ("BTA", False))
     assert runner.policy_switch_overrides == (("bsaoa_be", True), ("bun_be", False))
 
@@ -437,6 +438,124 @@ def test_euromod_bridge_overwrites_employer_ssc_base() -> None:
     assert bridged.metadata["euromod_to_axiom_input_bridge_applied"] == {
         contribution_input: 31_651.0,
     }
+
+
+def test_euromod_bridge_targets_one_entity_input_record() -> None:
+    income_input = "dk:statutes/example#input.own_income"
+    case = Case(
+        case_id="dk-couple",
+        period="2025",
+        metadata={
+            "axiom_input_records": [
+                {
+                    "name": income_input,
+                    "entity": "Person",
+                    "entity_id": entity_id,
+                    "value": 0,
+                }
+                for entity_id in ("earner", "non-earner")
+            ],
+            "euromod_to_axiom_input_bridge": {
+                "tintbto_s": {
+                    "records": [
+                        {
+                            "name": income_input,
+                            "entity": "Person",
+                            "entity_id": "earner",
+                        }
+                    ]
+                }
+            },
+        },
+    )
+
+    [bridged] = _apply_euromod_to_axiom_input_bridge(
+        [case],
+        [EngineResult("euromod", case.case_id, {"tintbto_s": 1_380_000.0})],
+    )
+
+    values_by_entity = {
+        record["entity_id"]: record["value"]
+        for record in bridged.metadata["axiom_input_records"]
+    }
+    assert values_by_entity == {"earner": 1_380_000.0, "non-earner": 0}
+    assert bridged.metadata["euromod_to_axiom_input_bridge_applied"] == {
+        f"Person[earner]::{income_input}": 1_380_000.0
+    }
+
+
+def test_euromod_bridge_targets_one_input_record_interval() -> None:
+    income_input = "dk:statutes/example#input.own_income"
+    interval_2025 = {"start": "2025-01-01", "end": "2025-12-31"}
+    interval_2026 = {"start": "2026-01-01", "end": "2026-12-31"}
+    case = Case(
+        case_id="dk-couple-interval",
+        period="2025",
+        metadata={
+            "axiom_input_records": [
+                {
+                    "name": income_input,
+                    "entity": "Person",
+                    "entity_id": "earner",
+                    "interval": interval,
+                    "value": 0,
+                }
+                for interval in (interval_2025, interval_2026)
+            ],
+            "euromod_to_axiom_input_bridge": {
+                "tintbto_s": {
+                    "records": [
+                        {
+                            "name": income_input,
+                            "entity": "Person",
+                            "entity_id": "earner",
+                            "interval": interval_2025,
+                        }
+                    ]
+                }
+            },
+        },
+    )
+
+    [bridged] = _apply_euromod_to_axiom_input_bridge(
+        [case],
+        [EngineResult("euromod", case.case_id, {"tintbto_s": 1_380_000.0})],
+    )
+
+    assert [
+        (record["interval"], record["value"])
+        for record in bridged.metadata["axiom_input_records"]
+    ] == [(interval_2025, 1_380_000.0), (interval_2026, 0)]
+
+
+def test_attach_axiom_outputs_preserves_per_entity_intermediates() -> None:
+    [case] = load_suite("dk-child-youth-benefit-couple")
+    concept = Concepts.DK_COUPLE_CHILD_YOUTH_BENEFIT
+    result = EngineResult(
+        "axiom",
+        case.case_id,
+        {concept: 8_384},
+        raw={
+            "aggregation": {
+                "strategy": "sum",
+                "components": [
+                    {
+                        "entity_id": "earner",
+                        "values": {concept: 0, "own_reduction": 9_260},
+                    },
+                    {
+                        "entity_id": "non_earner",
+                        "values": {concept: 8_384, "own_reduction": 0},
+                    },
+                ],
+            }
+        },
+    )
+
+    [attached] = _attach_axiom_outputs([case], [result], (concept,))
+
+    components = attached.metadata["axiom_result_aggregation_applied"]["components"]
+    assert components == result.raw["aggregation"]["components"]
 
 
 def test_uk_worker_pit_suite_shape() -> None:

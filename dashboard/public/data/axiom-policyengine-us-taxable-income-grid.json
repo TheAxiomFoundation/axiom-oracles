@@ -2767,7 +2767,7 @@
   "population": "case-grid",
   "provenance": {
     "engine": {},
-    "generated_at": "2026-07-30T04:02:44Z",
+    "generated_at": "2026-10-10T13:26:05Z",
     "generated_by": "scripts/run_comparison.py::us-taxable-income-grid",
     "oracle": {
       "name": "policyengine",
@@ -2777,11 +2777,14 @@
     },
     "rulespecs": [
       {
+        "dirty": false,
         "repo": "TheAxiomFoundation/rulespec-us",
-        "sha": "87d3cbd3b6ec580724f0b79a0472105347f79518"
+        "sha": "87d3cbd3b6ec580724f0b79a0472105347f79518",
+        "sha_toplevel": "/private/tmp/hub-axiom-oracles-430-rulespec/rulespec-us",
+        "worktree_toplevel": "/private/tmp/hub-axiom-oracles-430-rulespec/rulespec-us"
       }
     ],
-    "run_kind": "manual",
+    "run_kind": "pr-triggered",
     "schema": "axiom_oracles.provenance.v1"
   },
   "scenario_count": 14,

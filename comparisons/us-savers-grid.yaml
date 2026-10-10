@@ -55,7 +55,7 @@ runner:
     policyengine_core_version: "3.30.3"
     rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
     rulespec_roots:
-      - /private/tmp/oracle-rerun/rulespec-us
+      - $HOME/TheAxiomFoundation/rulespec-us
     rulespec_upstream_sha: dcbae4344c522b4ad8004169316266cbc153186f
     rulespec_upstream_tree: 7ee3ca44edd11cdaaf5d074a6a2a6c32d2f25dfb
 

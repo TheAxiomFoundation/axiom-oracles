@@ -227,6 +227,10 @@
       "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
       "description": "AL TANF (Family Assistance) monthly benefit",
       "difference": -35.390533447265625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "al-childcare-deduction-missing-37103"
+      },
       "kind": "amount_difference",
       "left": 18.0,
       "parent": null,
@@ -243,6 +247,10 @@
       "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
       "description": "AL TANF (Family Assistance) monthly benefit",
       "difference": -29.929443359375,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "al-childcare-deduction-missing-37187"
+      },
       "kind": "amount_difference",
       "left": 250.0,
       "parent": null,
@@ -259,6 +267,10 @@
       "concept": "us-al:policies/dhr/tanf#al_tanf_benefit",
       "description": "AL TANF (Family Assistance) monthly benefit",
       "difference": -29.26275634765625,
+      "disposition": {
+        "disposition": "bridge_artifact",
+        "id": "al-childcare-deduction-missing-37415"
+      },
       "kind": "amount_difference",
       "left": 305.0,
       "parent": null,
@@ -308,18 +320,18 @@
     "dispositioned": {
       "counts": {
         "axiom_encoding_gap": 0,
-        "bridge_artifact": 0,
+        "bridge_artifact": 3,
         "explained_residual": 0,
         "unexplained": 0,
         "upstream_engine_gap": 0
       },
-      "dispositions_file": null,
+      "dispositions_file": "dispositions/al-tanf-ecps.yaml",
       "expired_entries": [],
-      "explained_rate": 99.792244,
+      "explained_rate": 100,
       "orphaned_entries": [],
       "raw_match_rate": 99.792244,
       "schema_version": "axiom_oracles.dispositions.v1",
-      "unexplained_count": 3
+      "unexplained_count": 0
     },
     "error_count": 0,
     "errors_by_engine": [],

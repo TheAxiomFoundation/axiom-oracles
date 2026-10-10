@@ -1,0 +1,57 @@
+schema: axiom_oracles.dispositions.v1
+suite: mn-income-tax-liability
+updated: '2026-08-25'
+entries:
+- id: taxsim-mn-module-divergence-axiom-pe-agree
+  concept: us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - mn-married-120000
+    - mn-married-300000
+    - mn-married-60000
+    - mn-single-150000
+    - mn-single-30000
+    - mn-single-60000
+  disposition: upstream_engine_gap
+  evidence:
+    mechanism: 'Triangulated TAXSIM-side divergence across the Minnesota grid: on
+      every
+
+      selected row axiom and PolicyEngine agree to the cent, with
+
+      `axiom_vs_policyengine.match` true on all six, while TAXSIM reports a
+
+      lower liability. Two distinct signatures share the class: the
+
+      mn-single-30000 row diverges by 398.53 on a 789.12 liability (TAXSIM
+
+      returns roughly half, consistent with a refundable working-family credit
+
+      its module applies and the encoded 2026 pilot does not), while the
+
+      remaining rows carry modest 13.23-225.78 residuals that grow with income.
+
+      Deltas are therefore heterogeneous by construction; the per-row proof is
+
+      the axiom==PolicyEngine agreement.'
+    arithmetic:
+    - expression: 789.12 - 390.60
+      equals: 398.52
+      tolerance: 0.05
+    - expression: 2560.01 - 2546.46
+      equals: 13.55
+      tolerance: 0.05
+    - expression: 8946.08 - 8922.67
+      equals: 23.41
+      tolerance: 0.05
+    - expression: 1575.58 - 1562.35
+      equals: 13.23
+      tolerance: 0.05
+    - expression: 5376.45 - 5354.58
+      equals: 21.87
+      tolerance: 0.05
+    - expression: 18727.88 - 18502.10
+      equals: 225.78
+      tolerance: 0.05
+  expires_on_source_change: true

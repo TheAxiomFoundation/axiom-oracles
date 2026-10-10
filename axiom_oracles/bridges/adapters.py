@@ -3,6 +3,29 @@
 import re
 from dataclasses import dataclass
 
+# How a replay reads ``parameter_path`` (and a ``boolean_input_parameter_check``
+# parameter) for the household state: "bool" and "inverted_bool" compare the
+# parameter's truth value or its negation, and "float" compares its number.
+PARAMETER_VALUE_MODES = frozenset({"bool", "inverted_bool", "float"})
+BOOLEAN_PARAMETER_VALUE_MODES = frozenset({"bool", "inverted_bool"})
+
+# 7 CFR 273.9(c)(17) excludes legally obligated child support paid to
+# nonhousehold members from gross income unless the State agency elects the
+# 273.9(d)(5) deduction instead. PolicyEngine-US models the election as this
+# state parameter, which is TRUE when the state EXCLUDES; its values have that
+# sense from policyengine-us 2.11.4 (PolicyEngine/policyengine-us#9586).
+SNAP_CHILD_SUPPORT_TREATMENT_PARAMETER = "gov.usda.snap.income.deductions.child_support"
+SNAP_CHILD_SUPPORT_ELECTION_INPUT = "snap_state_agency_chose_child_support_deduction"
+SNAP_CHILD_SUPPORT_PAYMENTS_INPUT = (
+    "snap_legally_obligated_child_support_payments_to_nonhousehold_members"
+)
+# 273.9(d)(5) never includes alimony in the child support deduction.
+SNAP_ALIMONY_PAYMENTS_INPUT = "snap_alimony_payments_to_nonhousehold_members"
+# Replay states for the election: TX deducts and CA excludes in every dated
+# value of the parameter since policyengine-us 2.11.4.
+SNAP_CHILD_SUPPORT_DEDUCTION_STATE = "TX"
+SNAP_CHILD_SUPPORT_EXCLUSION_STATE = "CA"
+
 
 @dataclass(frozen=True)
 class PolicyEngineUSVarAdapter:
@@ -45,6 +68,41 @@ class PolicyEngineUSVarAdapter:
     parameter_path: str | None = None
     parameter_value_mode: str = "bool"
     target_person_role: str | None = None
+    # (input_key, parameter_path, value_mode). PolicyEngine models some
+    # household-facing elections as state parameters. When a test supplies
+    # input_key, the replay reads parameter_path for the replay state under
+    # value_mode and reports the case unsupported if the two disagree, since
+    # PolicyEngine cannot represent that household in that state.
+    boolean_input_parameter_check: tuple[str, str, str] | None = None
+
+    def __post_init__(self) -> None:
+        if self.parameter_value_mode not in PARAMETER_VALUE_MODES:
+            raise ValueError(
+                f"{self.pe_var}: unsupported parameter_value_mode "
+                f"{self.parameter_value_mode!r}; expected one of "
+                f"{sorted(PARAMETER_VALUE_MODES)}"
+            )
+        if self.boolean_input_parameter_check is not None:
+            _input_key, _parameter_path, value_mode = self.boolean_input_parameter_check
+            if value_mode not in BOOLEAN_PARAMETER_VALUE_MODES:
+                raise ValueError(
+                    f"{self.pe_var}: unsupported boolean_input_parameter_check "
+                    f"mode {value_mode!r}; expected one of "
+                    f"{sorted(BOOLEAN_PARAMETER_VALUE_MODES)}"
+                )
+
+
+def boolean_parameter_reading(
+    parameters, parameter_path: str, value_mode: str, state: str
+) -> bool:
+    """Read a state-keyed PolicyEngine parameter under a boolean value mode."""
+    if value_mode not in BOOLEAN_PARAMETER_VALUE_MODES:
+        raise ValueError(f"unsupported boolean parameter value mode {value_mode!r}")
+    node = parameters
+    for part in parameter_path.split("."):
+        node = getattr(node, part)
+    value = bool(node[state])
+    return not value if value_mode == "inverted_bool" else value
 
 
 def normalize_state_code_from_utility_region(region: str) -> str:
@@ -53,6 +111,37 @@ def normalize_state_code_from_utility_region(region: str) -> str:
     if match:
         return match.group(1)
     return region
+
+
+# Shared replay for the 273.9(c)(17) exclusion and (d)(5) deduction amounts.
+# The election picks a PolicyEngine state with that election. The payments go
+# to the payer's annual child_support_expense and also override the SPM unit's
+# countable expense; alimony goes to alimony_expense, which PolicyEngine's SNAP
+# child support variables do not read. Without the override, PolicyEngine
+# prorates the replay's default adult (30, no work hours) as an ABAWD
+# time-limit ineligible member under 273.11(c)(2)
+# (is_snap_prorated_income_member), which leaves a one-adult household a
+# counted share of 0 in TX, GA, TN and NY, so the 273.9 amounts would compare
+# against 0.
+_SNAP_CHILD_SUPPORT_REPLAY = {
+    "annualized_person_inputs": (
+        (SNAP_CHILD_SUPPORT_PAYMENTS_INPUT, "child_support_expense"),
+        (SNAP_ALIMONY_PAYMENTS_INPUT, "alimony_expense"),
+    ),
+    "direct_spm_overrides": (
+        (SNAP_CHILD_SUPPORT_PAYMENTS_INPUT, "snap_countable_child_support_expense"),
+    ),
+    "state_code_from_boolean_input": (
+        SNAP_CHILD_SUPPORT_ELECTION_INPUT,
+        SNAP_CHILD_SUPPORT_DEDUCTION_STATE,
+        SNAP_CHILD_SUPPORT_EXCLUSION_STATE,
+    ),
+    "boolean_input_parameter_check": (
+        SNAP_CHILD_SUPPORT_ELECTION_INPUT,
+        SNAP_CHILD_SUPPORT_TREATMENT_PARAMETER,
+        "inverted_bool",
+    ),
+}
 
 
 PE_US_VAR_ADAPTERS = (
@@ -252,11 +341,27 @@ PE_US_VAR_ADAPTERS = (
         monthly=True,
         spm=True,
     ),
+    # The 273.9(d)(5) election hook holds when the state provides the
+    # deduction, which is the negation of PolicyEngine's exclusion parameter.
     PolicyEngineUSVarAdapter(
-        rule_names=("snap_state_uses_child_support_deduction",),
-        pe_var="snap_state_uses_child_support_deduction",
-        default_state_code="TN",
-        parameter_path="gov.usda.snap.income.deductions.child_support",
+        rule_names=(
+            "snap_state_agency_provides_child_support_deduction",
+            "snap_state_uses_child_support_deduction",
+        ),
+        pe_var="snap_state_agency_provides_child_support_deduction",
+        comparison="boolean",
+        state_code_from_boolean_input=(
+            SNAP_CHILD_SUPPORT_ELECTION_INPUT,
+            SNAP_CHILD_SUPPORT_DEDUCTION_STATE,
+            SNAP_CHILD_SUPPORT_EXCLUSION_STATE,
+        ),
+        parameter_path=SNAP_CHILD_SUPPORT_TREATMENT_PARAMETER,
+        parameter_value_mode="inverted_bool",
+        boolean_input_parameter_check=(
+            SNAP_CHILD_SUPPORT_ELECTION_INPUT,
+            SNAP_CHILD_SUPPORT_TREATMENT_PARAMETER,
+            "inverted_bool",
+        ),
     ),
     PolicyEngineUSVarAdapter(
         rule_names=("snap_self_employment_expense_based_deduction_applies",),
@@ -694,19 +799,31 @@ PE_US_VAR_ADAPTERS = (
             ("housing_cost", "monthly_to_annual", ("housing_cost",)),
         ),
     ),
+    # 7 CFR 273.9(c)(17) exclusion. PolicyEngine names this amount a "gross
+    # income deduction": the state parameter times countable child support.
     PolicyEngineUSVarAdapter(
-        rule_names=("snap_child_support_deduction",),
+        rule_names=("snap_child_support_income_exclusion",),
         pe_var="snap_child_support_gross_income_deduction",
+        unit="USD",
+        comparison="money",
         monthly=True,
         spm=True,
-        annualized_person_inputs=(
-            ("snap_child_support_payments_made", "child_support_expense"),
+        **_SNAP_CHILD_SUPPORT_REPLAY,
+    ),
+    # 7 CFR 273.9(d)(5) deduction, subtracted in net income. State modules
+    # such as us-ga:policies/dfcs/snap/3616 name their deduction
+    # snap_child_support_deduction.
+    PolicyEngineUSVarAdapter(
+        rule_names=(
+            "snap_child_support_deduction_for_net_income",
+            "snap_child_support_deduction",
         ),
-        state_code_from_boolean_input=(
-            "snap_state_uses_child_support_deduction",
-            "TX",
-            "CA",
-        ),
+        pe_var="snap_child_support_deduction",
+        unit="USD",
+        comparison="money",
+        monthly=True,
+        spm=True,
+        **_SNAP_CHILD_SUPPORT_REPLAY,
     ),
     PolicyEngineUSVarAdapter(
         rule_names=("snap_excess_medical_expense_deduction",),

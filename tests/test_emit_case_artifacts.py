@@ -58,7 +58,7 @@ def _served_rows() -> list[dict]:
                     "c": "benefit",
                     "l": 24,
                     "x": 100,
-                    "d": -76,
+                    "d": 76,
                     "e": "bridge_artifact",
                 }
             ],
@@ -129,6 +129,57 @@ def test_case_artifact_check_accepts_exact_annotations_and_values(tmp_path):
         "mismatches": 2,
         "annotated": 1,
         "silent": 0,
+    }
+
+
+def test_case_artifact_check_accepts_v1_chunk_descriptors(tmp_path):
+    module = _load_module()
+    config = _write_fixture(
+        module,
+        tmp_path,
+        report=_canonical_report(),
+        rows=_served_rows(),
+        index_updates={
+            "schema_version": "axiom_oracles.chunk_index.v1",
+            "chunk_count": 1,
+            "chunks": [
+                {
+                    "name": "chunk-0.json",
+                    "sha256": "0" * 64,
+                    "cases": 2,
+                }
+            ],
+        },
+    )
+
+    problems, stats = module.check_suite_artifacts("test-suite", config)
+
+    assert problems == []
+    assert stats["cases"] == 2
+
+
+def test_compact_case_preserves_exact_execution_inputs():
+    module = _load_module()
+    inputs = {"benefit#input.amount": 919999.9999999999, "benefit#input.flag": False}
+    row = module.compact_case(
+        {
+            "case_id": "case-1",
+            "matches": [{"concept": "benefit", "left": 1, "right": 1}],
+            "mismatches": [],
+            "metadata": {
+                "axiom_entity": "Person",
+                "axiom_entity_id": "recipient",
+                "axiom_inputs": inputs,
+            },
+        },
+        {},
+    )
+
+    assert row["execution"] == {
+        "schema_version": "axiom_oracles.case_execution.v1",
+        "axiom_entity": "Person",
+        "axiom_entity_id": "recipient",
+        "axiom_inputs": inputs,
     }
 
 
@@ -228,3 +279,46 @@ def test_case_artifact_check_fails_closed_on_incomplete_canonical_list(tmp_path)
         "test-suite: canonical mismatch list is incomplete (2/3); "
         "compact parity is uncheckable"
     ]
+
+
+def test_served_delta_parity_accepts_either_faithful_convention():
+    """PR #475 CI: two served-delta sign conventions coexist on main — this
+    emitter writes right-minus-left (dashboard_delta) while the populace
+    campaign artifacts (AL/MA/NC/SC/TN SNAP) serve the report's stored
+    left-minus-right `difference`. The parity check must accept either
+    (both are faithful projections of the same (l, x)) and reject anything
+    else — otherwise whichever suite is being worked on silently redefines
+    the contract for the rest."""
+    import importlib.util
+    from pathlib import Path
+
+    repo = Path(__file__).resolve().parents[1]
+    spec = importlib.util.spec_from_file_location(
+        "_eca", repo / "scripts" / "emit_case_artifacts.py"
+    )
+    eca = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(eca)
+    report = {
+        "mismatches": [
+            {"case_id": "c1", "concept": "k", "left": 10.0, "right": 16.0, "difference": -6.0},
+        ]
+    }
+    canonical, problems = eca._canonical_mismatch_payloads(report)
+    assert not problems
+    payload = canonical[("c1", "k")]
+    assert payload["d"] == -6.0  # stored (left-minus-right)
+    assert payload["d_alt"] == eca.dashboard_delta(10.0, 16.0)  # right-minus-left
+    assert payload["d_alt"] == 6.0
+    # a served row carrying either is parity-clean; a third value is drift
+    for served_d, ok in ((-6.0, True), (6.0, True), (5.0, False), (None, False)):
+        served = {("c1", "k"): {"l": 10.0, "x": 16.0, "d": served_d, "e": None}}
+        drift = [
+            key
+            for key in served
+            if any(canonical[key][f] != served[key][f] for f in ("l", "x"))
+            or not (
+                served[key]["d"] == canonical[key]["d"]
+                or served[key]["d"] == canonical[key]["d_alt"]
+            )
+        ]
+        assert (not drift) is ok, (served_d, drift)

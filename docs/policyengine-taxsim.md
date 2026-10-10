@@ -1,7 +1,11 @@
-# PolicyEngine/TAXSIM Validation
+# PolicyEngine/TAXSIM comparison
 
 This page documents how `axiom-oracles` compares PolicyEngine against TAXSIM,
 how to reproduce the current smoke test, and how to triage residual mismatches.
+
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
 
 ## Comparison Path
 
@@ -58,24 +62,78 @@ intersection from `axiom_oracles/config/concept_mappings.yaml`:
 
 ## Law-Year Support Of The Pinned Binary
 
-The pinned policyengine-taxsim 2.30.0 binary (see
-`axiom_oracles/adapters/taxsim/taxsim_pins.json`; `cdate-20260521`) accepts
-law years through 2026, and TAXSIM comparisons now default to the 2026
-validation year (`TAXSIM_DEFAULT_PERIOD` in `axiom_oracles/cli.py`). Scope of
-its 2026 model, verified empirically against the binary:
+The macOS binary in the pinned policyengine-taxsim 2.30.0 release
+(`taxsimtest-osx.exe`, `cdate-20260521`; see
+`axiom_oracles/adapters/taxsim/taxsim_pins.json`) accepts law years through
+2026, and TAXSIM comparisons now default to the 2026 validation year
+(`TAXSIM_DEFAULT_PERIOD` in `axiom_oracles/cli.py`). The Linux binary in the
+same release (`taxsimtest-linux.exe`) is an older build that stops at 2024 and
+fails on 2025 and 2026 rows, so on Linux pass `--period 2024`. Scope of the
+macOS binary's 2026 model, verified empirically against that binary:
 
 - **Modeled at 2026**: the OBBBA federal rate schedule and standard
   deduction, childless EITC, FICA/SECA (`tfica`), AGI (`v10`).
 - **Missing at 2026** (fine at 2024/2025): the qualifying-child credit
-  machinery. The CTC collapses to the $500 ODC path, and ACTC, CDCC, and
-  EITC-with-children all return zero. 2025 models all of them, including the
-  OBBBA $2,200/child CTC. A 2026 comparison of child-credit concepts must
-  treat TAXSIM zeros as an NBER gap, not evidence.
+  machinery. The CTC collapses to the $500 ODC path, ACTC and CDCC return
+  zero, and the EITC ignores qualifying children, so a family with children
+  gets the childless EITC. 2025 models all of them, including the OBBBA
+  $2,200/child CTC. A 2026 comparison of child-credit concepts must treat
+  these TAXSIM values as an NBER gap, not evidence.
 - **Projected at 2026**: state modules extrapolate many parameters
   (fractional-dollar deductions/credits in the `idtl=2` detail) and in some
   states retain un-enacted rates (e.g. KY 4.0% vs enacted 3.5%, NC 4.25% vs
   3.99%, GA 5.19% vs 4.99%). The state income-tax liability suites
   disposition each such residual per case.
+
+## Diagnostic Lines In TAXSIM Stdout
+
+The binary writes Fortran diagnostics to the same stdout stream as its CSV
+table. In the bundled fixtures, the pinned macOS build prints six copies of
+a line such as `" d2       29126       25000         103         346"`
+immediately before the CSV rows of Utah (TAXSIM state 45) profiles with
+$30,000 wages and primary filers aged 73, 74, and 80. The `idtl=0` fixture
+places those lines before the header itself. These captures establish the
+behavior for their input profiles, not an age-only trigger (fixtures in
+`tests/fixtures/taxsim/`, captured 2026-09-27).
+
+The original `fiit-taxsim-ecps` batch-13 failure and solo/complement checks
+were reported on 2026-09-27; those historical inputs and captures are not
+bundled here.
+policyengine-taxsim's `TaxsimRunner.run()` reads the stream with
+`pandas.read_csv` and coerces every column to numeric, so each diagnostic line
+became a phantom row with a NaN `taxsimid` and the comparator failed with
+`unexpected [nan, nan, ...]`.
+
+`TaxsimPackageRunner` therefore uses policyengine-taxsim only to format the
+input file and locate the binary, runs the binary itself, and parses stdout
+with `axiom_oracles.adapters.taxsim.output.parse_taxsim_stdout`:
+
+- duplicate normalized submitted ids are rejected before either runner path
+  executes, with an error naming the id and colliding cases;
+- a line is a record when it has the header's field count and a numeric first
+  field; every other non-blank line is a diagnostic attributed to the record
+  whose row follows it, kept on `EngineResult.raw["taxsim_stdout_diagnostics"]`
+  and summarized in one `WARNING` log line per batch;
+- a submitted case with no output row gets an `errors` entry naming its
+  `taxsimid` (plus stderr and any trailing stdout), so it surfaces in the
+  report's `errors` rows instead of vanishing;
+- an output row matching no submitted case, a duplicate row, a nonzero exit,
+  or trailing diagnostics that no missing case can own abort the batch with
+  the offending ids or lines in the message.
+
+These stdout and result-row checks apply to `TaxsimPackageRunner`.
+`PolicyEngineTaxsimRunner` uses its own in-process result conversion.
+
+Verbose `idtl=5` output is also accepted: each `Basic Output` record and its
+`Marginal Rates` section supply the same fields as the pinned package's verbose
+parser, including `state_name`. Numeric fields must be finite and complete;
+records use their output IDs for the same duplicate and case-attribution checks.
+Input echoes and detailed tax calculations do not become result rows. A recorded
+California fixture and tests with the pinned formatter and binary cover this mode.
+
+The pinned Linux build (`taxsimtest-linux.exe`) refuses law year 2026
+outright (`TAXSIM: Federal tax calculator available 1960 - 2024 only.`,
+`STOP 1`), so 2026 TAXSIM suites currently run only with the macOS build.
 
 ## Reproduce The Smoke Test
 

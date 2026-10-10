@@ -12,7 +12,9 @@ v2.1-dispositioned schemas) and produces, per jurisdiction:
   one row per universe policy (covered/uncovered/excluded, raw/explained rates).
 
 The predicate is
-``conformant = covered==in_scope && unexplained_total==0 && axiom_attributed_open==0``.
+``conformant = covered==in_scope && unexplained_total==0 &&
+axiom_attributed_open==0 && !invalid_exclusions`` (an excluded policy whose
+output column shows nonzero live exposure invalidates its exclusion).
 
 Modes::
 
@@ -71,11 +73,15 @@ def _load_reports() -> list[dict]:
     return reports
 
 
+# Monotonic ratchets that live beside the universe files but are not universes.
+_NON_UNIVERSE_STEMS = {"ratchet", "unexplained-ratchet", "pe-axiom-standard"}
+
+
 def _universe_paths() -> list[Path]:
     return sorted(
         p
         for p in CONFORMANCE_DIR.glob("*.yaml")
-        if p.stem not in {"ratchet"}
+        if p.stem not in _NON_UNIVERSE_STEMS
     )
 
 
@@ -136,6 +142,7 @@ def _snapshot_document(summary: dict, date: str) -> dict:
         "excluded": summary["excluded"],
         "unexplained_total": summary["unexplained_total"],
         "axiom_attributed_open": summary["axiom_attributed_open"],
+        "temporal_debt": summary.get("temporal_debt"),
         "conformant": summary["conformant"],
     }
 

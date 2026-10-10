@@ -8,7 +8,7 @@
       "name": null,
       "report": "axiom-policyengine-ak-apa-state-supplement.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ak"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -17,7 +17,7 @@
       "name": null,
       "report": "axiom-policyengine-ak-atap-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ak"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -32,7 +32,7 @@
     },
     {
       "suite": "al-snap-ecps",
-      "name": "al-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-al-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -41,10 +41,10 @@
     },
     {
       "suite": "al-tanf-ecps",
-      "name": "al-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-al-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-al"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/al-tanf-ecps.yaml"
     },
@@ -53,7 +53,7 @@
       "name": null,
       "report": "axiom-policyengine-al-tanf-payment-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-al"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -68,7 +68,7 @@
     },
     {
       "suite": "az-income-tax-liability",
-      "name": "az-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-az-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -77,7 +77,7 @@
     },
     {
       "suite": "az-snap-ecps",
-      "name": "az-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-az-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -86,11 +86,10 @@
     },
     {
       "suite": "az-snap-qc",
-      "name": "az-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-az-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-az"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/az-snap-qc.yaml"
     },
@@ -99,23 +98,22 @@
       "name": null,
       "report": "axiom-policyengine-az-tanf-deductions.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-az"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "az-tanf-ecps",
-      "name": "az-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-az-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-az"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/az-tanf-ecps.yaml"
     },
     {
       "suite": "be-article-51-forfait",
-      "name": "be-article-51-forfait",
+      "name": null,
       "report": "axiom-euromod-be-article-51-forfait.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -124,7 +122,7 @@
     },
     {
       "suite": "be-capital-income-tax",
-      "name": "be-capital-income-tax",
+      "name": null,
       "report": "axiom-euromod-be-capital-income-tax.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -133,7 +131,7 @@
     },
     {
       "suite": "be-elderly-income-support",
-      "name": "be-elderly-income-support",
+      "name": null,
       "report": "axiom-euromod-be-elderly-income-support.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -142,7 +140,7 @@
     },
     {
       "suite": "be-local-municipal-pit",
-      "name": "be-local-municipal-pit",
+      "name": null,
       "report": "axiom-euromod-be-local-municipal-pit.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -151,7 +149,7 @@
     },
     {
       "suite": "be-marital-quotient",
-      "name": "be-marital-quotient",
+      "name": null,
       "report": "axiom-euromod-be-marital-quotient.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -160,7 +158,7 @@
     },
     {
       "suite": "be-pensioner-contributions",
-      "name": "be-pensioner-contributions",
+      "name": null,
       "report": "axiom-euromod-be-pensioner-contributions.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -168,8 +166,17 @@
       "source": "comparisons/be-pensioner-contributions.yaml"
     },
     {
+      "suite": "be-pensioner-pit",
+      "name": null,
+      "report": "axiom-euromod-be-pensioner-pit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-pensioner-pit.yaml"
+    },
+    {
       "suite": "be-regional-pit-surcharge",
-      "name": "be-regional-pit-surcharge",
+      "name": null,
       "report": "axiom-euromod-be-regional-pit-surcharge.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -177,8 +184,26 @@
       "source": "comparisons/be-regional-pit-surcharge.yaml"
     },
     {
+      "suite": "be-replacement-income-pit",
+      "name": null,
+      "report": "axiom-euromod-be-replacement-income-pit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-replacement-income-pit.yaml"
+    },
+    {
+      "suite": "be-self-employment-pit",
+      "name": null,
+      "report": "axiom-euromod-be-self-employment-pit.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-be"
+      ],
+      "source": "comparisons/be-self-employment-pit.yaml"
+    },
+    {
       "suite": "be-study-allowance",
-      "name": "be-study-allowance",
+      "name": null,
       "report": "axiom-euromod-be-study-allowance.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -187,7 +212,7 @@
     },
     {
       "suite": "be-work-bonus-credit",
-      "name": "be-work-bonus-credit",
+      "name": null,
       "report": "axiom-euromod-be-work-bonus-credit.json",
       "repos": [
         "TheAxiomFoundation/rulespec-be"
@@ -199,20 +224,20 @@
       "name": null,
       "report": "axiom-policyengine-ca-capi-limits.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ca"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "ca-federal-schedule-tax-spsm",
-      "name": "ca-federal-schedule-tax-spsm",
+      "name": null,
       "report": "axiom-spsm-ca-federal-schedule-tax.json",
       "repos": [],
       "source": "comparisons/ca-federal-schedule-tax-spsm.yaml"
     },
     {
       "suite": "ca-income-tax-liability",
-      "name": "ca-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ca-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -230,7 +255,7 @@
     },
     {
       "suite": "ca-snap-ecps",
-      "name": "ca-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-ca-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -239,26 +264,25 @@
     },
     {
       "suite": "ca-snap-qc",
-      "name": "ca-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-ca-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ca"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ca-snap-qc.yaml"
     },
     {
       "suite": "ca-tanf-ecps",
-      "name": "ca-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-ca-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ca"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ca-tanf-ecps.yaml"
     },
     {
       "suite": "co-income-tax-liability",
-      "name": "co-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-co-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -267,27 +291,25 @@
     },
     {
       "suite": "co-snap-ecps",
-      "name": "co-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-co-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-co"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/co-snap-ecps.yaml"
     },
     {
       "suite": "co-snap-qc",
-      "name": "co-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-co-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-co"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/co-snap-qc.yaml"
     },
     {
       "suite": "co-state-income-tax-ecps",
-      "name": "co-state-income-tax-ecps",
+      "name": null,
       "report": "axiom-policyengine-co-state-income-tax-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -296,7 +318,7 @@
     },
     {
       "suite": "co-state-income-tax-taxsim",
-      "name": "co-state-income-tax-taxsim",
+      "name": null,
       "report": "axiom-taxsim-co-state-income-tax-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -308,27 +330,30 @@
       "name": null,
       "report": "axiom-policyengine-co-state-supplement.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-co"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "co-tanf-ecps",
-      "name": "co-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-co-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-co"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/co-tanf-ecps.yaml"
     },
     {
       "suite": "co-tax-intersection-taxsim",
-      "name": "co-tax-intersection-taxsim",
+      "name": null,
       "report": "axiom-taxsim-co-tax-intersection-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/co-tax-intersection-taxsim.yaml"
+      "source": "comparisons/co-tax-intersection-taxsim.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+      }
     },
     {
       "suite": "csfp-parameters",
@@ -350,7 +375,7 @@
     },
     {
       "suite": "dc-income-tax-liability",
-      "name": "dc-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-dc-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -367,11 +392,18 @@
       "source": "comparisons/state-income-tax-populace.yaml"
     },
     {
+      "suite": "de-kindergeld-eligibility",
+      "name": "de-kindergeld-eligibility",
+      "report": "euromod-gettsim-de-kindergeld-eligibility.json",
+      "repos": [],
+      "source": "comparisons/de-kindergeld-eligibility.yaml"
+    },
+    {
       "suite": "de-tanf-ecps",
-      "name": "de-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-de-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-de"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/de-tanf-ecps.yaml"
     },
@@ -383,8 +415,32 @@
       "source": "comparisons/de-worker-dual-oracle.yaml"
     },
     {
+      "suite": "de-worker-dual-oracle-axiom-euromod",
+      "name": "de-worker-dual-oracle-axiom-euromod",
+      "report": "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-de"
+      ],
+      "source": "comparisons/de-worker-dual-oracle-axiom-euromod.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-de": "d83ba3db30e2f63376aacf822d116687589b8564"
+      }
+    },
+    {
+      "suite": "de-worker-dual-oracle-axiom-gettsim",
+      "name": "de-worker-dual-oracle-axiom-gettsim",
+      "report": "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-de"
+      ],
+      "source": "comparisons/de-worker-dual-oracle-axiom-gettsim.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-de": "d83ba3db30e2f63376aacf822d116687589b8564"
+      }
+    },
+    {
       "suite": "dk-child-youth-benefit",
-      "name": "dk-child-youth-benefit-euromod",
+      "name": null,
       "report": "axiom-euromod-dk-child-youth-benefit.json",
       "repos": [
         "TheAxiomFoundation/rulespec-dk"
@@ -392,8 +448,80 @@
       "source": "comparisons/dk-child-youth-benefit-euromod.yaml"
     },
     {
+      "suite": "dk-child-youth-benefit-2023",
+      "name": null,
+      "report": "axiom-euromod-dk-child-youth-benefit-2023.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-dk"
+      ],
+      "source": "comparisons/dk-child-youth-benefit-2023-euromod.yaml"
+    },
+    {
+      "suite": "dk-child-youth-benefit-couple",
+      "name": null,
+      "report": "axiom-euromod-dk-child-youth-benefit-couple.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-dk"
+      ],
+      "source": "comparisons/dk-child-youth-benefit-couple-euromod.yaml"
+    },
+    {
+      "suite": "et-business-mat",
+      "name": null,
+      "report": "axiom-euromod-et-business-mat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-business-mat.yaml"
+    },
+    {
+      "suite": "et-dispy",
+      "name": null,
+      "report": "axiom-euromod-et-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-dispy.yaml"
+    },
+    {
+      "suite": "et-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-et-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "et-pension-contributions",
+      "name": null,
+      "report": "axiom-euromod-et-pension-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-pension-contributions.yaml"
+    },
+    {
+      "suite": "et-presumptive",
+      "name": null,
+      "report": "axiom-euromod-et-presumptive.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-presumptive.yaml"
+    },
+    {
+      "suite": "et-vat",
+      "name": null,
+      "report": "axiom-euromod-et-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-et"
+      ],
+      "source": "comparisons/et-vat.yaml"
+    },
+    {
       "suite": "fiit-ecps",
-      "name": "fiit-ecps",
+      "name": null,
       "report": "axiom-policyengine-fiit-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -401,8 +529,20 @@
       "source": "comparisons/fiit-ecps.yaml"
     },
     {
+      "suite": "fiit-taxsim-ecps",
+      "name": null,
+      "report": "axiom-taxsim-fiit-ecps.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/fiit-taxsim-ecps.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+      }
+    },
+    {
       "suite": "fl-snap-ecps",
-      "name": "fl-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-fl-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -414,7 +554,7 @@
       "name": null,
       "report": "axiom-policyengine-fl-tca-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-fl"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
@@ -423,13 +563,13 @@
       "name": null,
       "report": "axiom-policyengine-ga-health-thresholds.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ga"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "ga-income-tax-liability",
-      "name": "ga-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ga-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -447,7 +587,7 @@
     },
     {
       "suite": "ga-snap-ecps",
-      "name": "ga-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-ga-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -456,20 +596,19 @@
     },
     {
       "suite": "ga-snap-qc",
-      "name": "ga-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-ga-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ga"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ga-snap-qc.yaml"
     },
     {
       "suite": "ga-tanf-ecps",
-      "name": "ga-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-ga-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ga"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ga-tanf-ecps.yaml"
     },
@@ -478,13 +617,94 @@
       "name": null,
       "report": "axiom-policyengine-ga-tanf-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ga"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "gh-capital-income",
+      "name": null,
+      "report": "axiom-euromod-gh-capital-income.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-capital-income.yaml"
+    },
+    {
+      "suite": "gh-dispy",
+      "name": null,
+      "report": "axiom-euromod-gh-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-dispy.yaml"
+    },
+    {
+      "suite": "gh-excise",
+      "name": null,
+      "report": "axiom-euromod-gh-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-excise.yaml"
+    },
+    {
+      "suite": "gh-income-tax-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-gh-income-tax-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-income-tax-rate-schedule.yaml"
+    },
+    {
+      "suite": "gh-personal-reliefs",
+      "name": null,
+      "report": "axiom-euromod-gh-personal-reliefs.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-personal-reliefs.yaml"
+    },
+    {
+      "suite": "gh-presumptive-turnover",
+      "name": null,
+      "report": "axiom-euromod-gh-presumptive-turnover.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-presumptive-turnover.yaml"
+    },
+    {
+      "suite": "gh-ssnit-contributions",
+      "name": null,
+      "report": "axiom-euromod-gh-ssnit-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-ssnit-contributions.yaml"
+    },
+    {
+      "suite": "gh-transfers",
+      "name": null,
+      "report": "axiom-euromod-gh-transfers.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-transfers.yaml"
+    },
+    {
+      "suite": "gh-vat-levies",
+      "name": null,
+      "report": "axiom-euromod-gh-vat-levies.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-gh"
+      ],
+      "source": "comparisons/gh-vat-levies.yaml"
+    },
+    {
       "suite": "hi-income-tax-liability",
-      "name": "hi-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-hi-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -496,13 +716,13 @@
       "name": null,
       "report": "axiom-policyengine-hi-income-tax-parameters.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-hi"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "ia-income-tax-liability",
-      "name": "ia-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ia-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -514,13 +734,13 @@
       "name": null,
       "report": "axiom-policyengine-ia-income-tax-parameters.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ia"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "id-income-tax-liability",
-      "name": "id-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-id-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -529,7 +749,7 @@
     },
     {
       "suite": "il-income-tax-liability",
-      "name": "il-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-il-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -547,7 +767,7 @@
     },
     {
       "suite": "in-income-tax-liability",
-      "name": "in-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-in-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -574,7 +794,7 @@
     },
     {
       "suite": "ks-income-tax-liability",
-      "name": "ks-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ks-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -592,17 +812,16 @@
     },
     {
       "suite": "ks-tanf-ecps",
-      "name": "ks-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-ks-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ks"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ks-tanf-ecps.yaml"
     },
     {
       "suite": "ky-income-tax-liability",
-      "name": "ky-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ky-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -611,7 +830,7 @@
     },
     {
       "suite": "la-income-tax-liability",
-      "name": "la-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-la-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -629,7 +848,7 @@
     },
     {
       "suite": "ma-income-tax-liability",
-      "name": "ma-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ma-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -638,7 +857,7 @@
     },
     {
       "suite": "ma-snap-ecps",
-      "name": "ma-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-ma-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -647,7 +866,7 @@
     },
     {
       "suite": "md-income-tax-liability",
-      "name": "md-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-md-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -656,11 +875,10 @@
     },
     {
       "suite": "md-snap-qc",
-      "name": "md-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-md-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-md"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/md-snap-qc.yaml"
     },
@@ -669,13 +887,13 @@
       "name": null,
       "report": "axiom-policyengine-md-tca-payments.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-md"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "me-income-tax-liability",
-      "name": "me-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-me-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -687,13 +905,13 @@
       "name": null,
       "report": "axiom-policyengine-me-tanf-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-me"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "medicaid-magi-co-ecps",
-      "name": "medicaid-magi-co-ecps",
+      "name": null,
       "report": "axiom-policyengine-medicaid-magi-co-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -702,7 +920,7 @@
     },
     {
       "suite": "mi-income-tax-liability",
-      "name": "mi-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-mi-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -714,13 +932,13 @@
       "name": null,
       "report": "axiom-policyengine-mi-ssp-payments.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-mi"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "mn-income-tax-liability",
-      "name": "mn-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-mn-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -738,17 +956,16 @@
     },
     {
       "suite": "mn-tanf-ecps",
-      "name": "mn-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-mn-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-mn"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/mn-tanf-ecps.yaml"
     },
     {
       "suite": "mo-income-tax-liability",
-      "name": "mo-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-mo-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -757,7 +974,7 @@
     },
     {
       "suite": "ms-income-tax-liability",
-      "name": "ms-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ms-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -775,7 +992,7 @@
     },
     {
       "suite": "mt-income-tax-liability",
-      "name": "mt-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-mt-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -793,7 +1010,7 @@
     },
     {
       "suite": "nc-income-tax-liability",
-      "name": "nc-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-nc-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -802,7 +1019,7 @@
     },
     {
       "suite": "nc-snap-ecps",
-      "name": "nc-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-nc-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -811,7 +1028,7 @@
     },
     {
       "suite": "nd-income-tax-liability",
-      "name": "nd-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-nd-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -820,7 +1037,7 @@
     },
     {
       "suite": "ne-income-tax-liability",
-      "name": "ne-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ne-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -829,7 +1046,7 @@
     },
     {
       "suite": "nj-income-tax-liability",
-      "name": "nj-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-nj-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -838,7 +1055,7 @@
     },
     {
       "suite": "nm-income-tax-liability",
-      "name": "nm-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-nm-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -847,7 +1064,7 @@
     },
     {
       "suite": "ny-income-tax-liability",
-      "name": "ny-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ny-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -865,7 +1082,7 @@
     },
     {
       "suite": "ny-snap-ecps",
-      "name": "ny-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-ny-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -874,21 +1091,19 @@
     },
     {
       "suite": "ny-snap-qc",
-      "name": "ny-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-ny-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ny"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ny-snap-qc.yaml"
     },
     {
       "suite": "ny-tanf-ecps",
-      "name": "ny-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-ny-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ny"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ny-tanf-ecps.yaml"
     },
@@ -897,13 +1112,13 @@
       "name": null,
       "report": "axiom-policyengine-ny-tanf-standards.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-ny"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "oh-income-tax-liability",
-      "name": "oh-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-oh-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -921,7 +1136,7 @@
     },
     {
       "suite": "ok-income-tax-liability",
-      "name": "ok-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ok-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -930,7 +1145,7 @@
     },
     {
       "suite": "or-income-tax-liability",
-      "name": "or-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-or-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -942,14 +1157,13 @@
       "name": null,
       "report": "axiom-policyengine-or-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-or"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/or-snap-ecps.yaml"
     },
     {
       "suite": "pa-income-tax-liability",
-      "name": "pa-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-pa-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -976,7 +1190,7 @@
     },
     {
       "suite": "ri-income-tax-liability",
-      "name": "ri-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ri-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -984,8 +1198,80 @@
       "source": "comparisons/ri-income-tax-liability.yaml"
     },
     {
+      "suite": "rw-cbhi-tiers",
+      "name": null,
+      "report": "axiom-euromod-rw-cbhi-tiers.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-cbhi-tiers.yaml"
+    },
+    {
+      "suite": "rw-contributions",
+      "name": null,
+      "report": "axiom-euromod-rw-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-contributions.yaml"
+    },
+    {
+      "suite": "rw-dispy",
+      "name": null,
+      "report": "axiom-euromod-rw-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-dispy.yaml"
+    },
+    {
+      "suite": "rw-excise",
+      "name": null,
+      "report": "axiom-euromod-rw-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-excise.yaml"
+    },
+    {
+      "suite": "rw-lump-sum",
+      "name": null,
+      "report": "axiom-euromod-rw-lump-sum.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-lump-sum.yaml"
+    },
+    {
+      "suite": "rw-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-rw-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "rw-rental",
+      "name": null,
+      "report": "axiom-euromod-rw-rental.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-rental.yaml"
+    },
+    {
+      "suite": "rw-vat",
+      "name": null,
+      "report": "axiom-euromod-rw-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-rw"
+      ],
+      "source": "comparisons/rw-vat.yaml"
+    },
+    {
       "suite": "sc-income-tax-liability",
-      "name": "sc-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-sc-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1003,7 +1289,7 @@
     },
     {
       "suite": "sc-snap-ecps",
-      "name": "sc-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-sc-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1012,7 +1298,7 @@
     },
     {
       "suite": "ssi-ecps",
-      "name": "ssi-ecps",
+      "name": null,
       "report": "axiom-policyengine-ssi-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1037,7 +1323,7 @@
     },
     {
       "suite": "tn-snap-ecps",
-      "name": "tn-snap-ecps",
+      "name": null,
       "report": "axiom-policyengine-tn-snap-ecps.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1046,11 +1332,10 @@
     },
     {
       "suite": "tx-snap-qc",
-      "name": "tx-snap-qc",
+      "name": null,
       "report": "axiom-snapqc-tx-snap.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-tx"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/tx-snap-qc.yaml"
     },
@@ -1059,13 +1344,94 @@
       "name": null,
       "report": "axiom-policyengine-tx-tanf-parameters.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-tx"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
+      "suite": "ug-dispy",
+      "name": null,
+      "report": "axiom-euromod-ug-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-dispy.yaml"
+    },
+    {
+      "suite": "ug-fuel-excise",
+      "name": null,
+      "report": "axiom-euromod-ug-fuel-excise.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-fuel-excise.yaml"
+    },
+    {
+      "suite": "ug-lst",
+      "name": null,
+      "report": "axiom-euromod-ug-lst.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-lst.yaml"
+    },
+    {
+      "suite": "ug-nssf-contributions",
+      "name": null,
+      "report": "axiom-euromod-ug-nssf-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-nssf-contributions.yaml"
+    },
+    {
+      "suite": "ug-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-ug-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "ug-presumptive",
+      "name": null,
+      "report": "axiom-euromod-ug-presumptive.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-presumptive.yaml"
+    },
+    {
+      "suite": "ug-rental",
+      "name": null,
+      "report": "axiom-euromod-ug-rental.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-rental.yaml"
+    },
+    {
+      "suite": "ug-scg",
+      "name": null,
+      "report": "axiom-euromod-ug-scg.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-scg.yaml"
+    },
+    {
+      "suite": "ug-vat",
+      "name": null,
+      "report": "axiom-euromod-ug-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-ug"
+      ],
+      "source": "comparisons/ug-vat.yaml"
+    },
+    {
       "suite": "uk-attendance-allowance-pe",
-      "name": "uk-attendance-allowance-pe",
+      "name": null,
       "report": "axiom-policyengine-uk-attendance-allowance-pe.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1074,7 +1440,7 @@
     },
     {
       "suite": "uk-benefit-cap",
-      "name": "uk-benefit-cap-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-benefit-cap.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1083,7 +1449,7 @@
     },
     {
       "suite": "uk-best-start-foods",
-      "name": "uk-best-start-foods-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-best-start-foods.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1092,7 +1458,7 @@
     },
     {
       "suite": "uk-business-rates",
-      "name": "uk-business-rates",
+      "name": null,
       "report": "axiom-policyengine-uk-business-rates.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1101,7 +1467,7 @@
     },
     {
       "suite": "uk-capital-gains-tax",
-      "name": "uk-capital-gains-tax",
+      "name": null,
       "report": "axiom-policyengine-uk-capital-gains-tax.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1110,7 +1476,7 @@
     },
     {
       "suite": "uk-child-benefit",
-      "name": "uk-child-benefit-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-child-benefit.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1119,7 +1485,7 @@
     },
     {
       "suite": "uk-child-winter-heating-payment",
-      "name": "uk-child-winter-heating-payment-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-child-winter-heating-payment.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1128,7 +1494,7 @@
     },
     {
       "suite": "uk-contribution-based-jsa",
-      "name": "uk-contribution-based-jsa-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-contribution-based-jsa.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1137,7 +1503,7 @@
     },
     {
       "suite": "uk-council-tax-reduction",
-      "name": "uk-council-tax-reduction",
+      "name": null,
       "report": "axiom-policyengine-uk-council-tax-reduction.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1146,7 +1512,7 @@
     },
     {
       "suite": "uk-employer-nic",
-      "name": "uk-employer-nic-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-employer-nic.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1155,7 +1521,7 @@
     },
     {
       "suite": "uk-fuel-duty",
-      "name": "uk-fuel-duty",
+      "name": null,
       "report": "axiom-policyengine-uk-fuel-duty.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1164,7 +1530,7 @@
     },
     {
       "suite": "uk-healthy-start",
-      "name": "uk-healthy-start-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-healthy-start.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1173,7 +1539,7 @@
     },
     {
       "suite": "uk-housing-benefit",
-      "name": "uk-housing-benefit-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-housing-benefit.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1182,7 +1548,7 @@
     },
     {
       "suite": "uk-income-tax-dividend",
-      "name": "uk-income-tax-dividend-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-income-tax-dividend.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1191,7 +1557,7 @@
     },
     {
       "suite": "uk-income-tax-mixed",
-      "name": "uk-income-tax-mixed-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-income-tax-mixed.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1200,7 +1566,7 @@
     },
     {
       "suite": "uk-income-tax-savings",
-      "name": "uk-income-tax-savings-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-income-tax-savings.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1209,7 +1575,7 @@
     },
     {
       "suite": "uk-income-tax-scottish",
-      "name": "uk-income-tax-scottish-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-income-tax-scottish.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1218,7 +1584,7 @@
     },
     {
       "suite": "uk-lbtt-ltt",
-      "name": "uk-lbtt-ltt",
+      "name": null,
       "report": "axiom-policyengine-uk-lbtt-ltt.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1227,7 +1593,7 @@
     },
     {
       "suite": "uk-maternity-allowance",
-      "name": "uk-maternity-allowance-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-maternity-allowance.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1236,7 +1602,7 @@
     },
     {
       "suite": "uk-pension-credit",
-      "name": "uk-pension-credit-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-pension-credit.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1245,7 +1611,7 @@
     },
     {
       "suite": "uk-personal-allowance",
-      "name": "uk-personal-allowance-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-personal-allowance.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1254,7 +1620,7 @@
     },
     {
       "suite": "uk-scottish-carer-supplement",
-      "name": "uk-scottish-carer-supplement-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-scottish-carer-supplement.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1263,7 +1629,7 @@
     },
     {
       "suite": "uk-scottish-child-payment",
-      "name": "uk-scottish-child-payment-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-scottish-child-payment.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1272,7 +1638,7 @@
     },
     {
       "suite": "uk-self-employed-nic",
-      "name": "uk-self-employed-nic-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-self-employed-nic.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1281,7 +1647,7 @@
     },
     {
       "suite": "uk-statutory-maternity-pay",
-      "name": "uk-statutory-maternity-pay-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-statutory-maternity-pay.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1290,7 +1656,7 @@
     },
     {
       "suite": "uk-statutory-paternity-pay",
-      "name": "uk-statutory-paternity-pay-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-statutory-paternity-pay.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1299,7 +1665,7 @@
     },
     {
       "suite": "uk-sure-start-maternity-grant",
-      "name": "uk-sure-start-maternity-grant-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-sure-start-maternity-grant.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1308,7 +1674,7 @@
     },
     {
       "suite": "uk-tax-benefits-efrs",
-      "name": "uk-tax-benefits-efrs",
+      "name": null,
       "report": "axiom-policyengine-uk-tax-benefits-efrs.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1317,7 +1683,7 @@
     },
     {
       "suite": "uk-tax-free-childcare-pe",
-      "name": "uk-tax-free-childcare-pe",
+      "name": null,
       "report": "axiom-policyengine-uk-tax-free-childcare-pe.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1326,7 +1692,7 @@
     },
     {
       "suite": "uk-tv-licence",
-      "name": "uk-tv-licence",
+      "name": null,
       "report": "axiom-policyengine-uk-tv-licence.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1335,7 +1701,7 @@
     },
     {
       "suite": "uk-universal-credit",
-      "name": "uk-universal-credit-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-universal-credit.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1344,7 +1710,7 @@
     },
     {
       "suite": "uk-universal-credit-efrs",
-      "name": "uk-universal-credit-efrs",
+      "name": null,
       "report": "axiom-policyengine-uk-universal-credit-efrs.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1353,7 +1719,7 @@
     },
     {
       "suite": "uk-vat",
-      "name": "uk-vat",
+      "name": null,
       "report": "axiom-policyengine-uk-vat.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1362,7 +1728,7 @@
     },
     {
       "suite": "uk-winter-fuel",
-      "name": "uk-winter-fuel-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-winter-fuel.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1371,7 +1737,7 @@
     },
     {
       "suite": "uk-winter-fuel-payment-pe",
-      "name": "uk-winter-fuel-payment-pe",
+      "name": null,
       "report": "axiom-policyengine-uk-winter-fuel-payment-pe.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1380,7 +1746,7 @@
     },
     {
       "suite": "uk-worker-nic",
-      "name": "uk-worker-nic-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-worker-nic.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1389,7 +1755,7 @@
     },
     {
       "suite": "uk-worker-pit",
-      "name": "uk-worker-pit-ukmod",
+      "name": null,
       "report": "axiom-euromod-uk-worker-pit.json",
       "repos": [
         "TheAxiomFoundation/rulespec-uk"
@@ -1403,7 +1769,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-aca-ptc-grid.yaml"
+      "source": "comparisons/us-aca-ptc-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "3373e8411f7e141fd50879e3de964386f606f7f6"
+      }
     },
     {
       "suite": "us-additional-medicare-grid",
@@ -1412,7 +1781,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-additional-medicare-grid.yaml"
+      "source": "comparisons/us-additional-medicare-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "3373e8411f7e141fd50879e3de964386f606f7f6"
+      }
     },
     {
       "suite": "us-elderly-disabled-grid",
@@ -1421,7 +1793,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-elderly-disabled-grid.yaml"
+      "source": "comparisons/us-elderly-disabled-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "3373e8411f7e141fd50879e3de964386f606f7f6"
+      }
     },
     {
       "suite": "us-itemized-taxable-income-deductions-grid",
@@ -1430,7 +1805,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-itemized-taxable-income-deductions-grid.yaml"
+      "source": "comparisons/us-itemized-taxable-income-deductions-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ae64af2740340a40d04ed3c652254f53e62fab61"
+      }
     },
     {
       "suite": "us-llc-grid",
@@ -1439,7 +1817,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-llc-grid.yaml"
+      "source": "comparisons/us-llc-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "3373e8411f7e141fd50879e3de964386f606f7f6"
+      }
     },
     {
       "suite": "us-niit-grid",
@@ -1448,7 +1829,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-niit-grid.yaml"
+      "source": "comparisons/us-niit-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "3373e8411f7e141fd50879e3de964386f606f7f6"
+      }
     },
     {
       "suite": "us-qbid-grid",
@@ -1457,7 +1841,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-qbid-grid.yaml"
+      "source": "comparisons/us-qbid-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "3373e8411f7e141fd50879e3de964386f606f7f6"
+      }
     },
     {
       "suite": "us-salt-deduction-grid",
@@ -1466,7 +1853,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-salt-deduction-grid.yaml"
+      "source": "comparisons/us-salt-deduction-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ae64af2740340a40d04ed3c652254f53e62fab61"
+      }
     },
     {
       "suite": "us-savers-grid",
@@ -1475,7 +1865,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-savers-grid.yaml"
+      "source": "comparisons/us-savers-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "dcbae4344c522b4ad8004169316266cbc153186f"
+      }
     },
     {
       "suite": "us-seca-grid",
@@ -1484,7 +1877,44 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-seca-grid.yaml"
+      "source": "comparisons/us-seca-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "3373e8411f7e141fd50879e3de964386f606f7f6"
+      }
+    },
+    {
+      "suite": "us-snap-abawd-grid",
+      "name": "us-snap-abawd-grid",
+      "report": "axiom-policyengine-us-snap-abawd-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-snap-abawd-grid.yaml"
+    },
+    {
+      "suite": "us-tariff",
+      "name": null,
+      "report": "axiom-usitc-us-tariff.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-tariff.yaml"
+    },
+    {
+      "suite": "us-tariff-panel",
+      "name": null,
+      "report": "axiom-yale-us-tariff-panel.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-tariff-panel.yaml"
+    },
+    {
+      "suite": "us-tariff-schedule",
+      "name": null,
+      "report": "axiom-yale-us-tariff-schedule.json",
+      "repos": [],
+      "source": "comparisons/us-tariff-schedule.yaml"
     },
     {
       "suite": "us-taxable-income-grid",
@@ -1493,11 +1923,14 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/us-taxable-income-grid.yaml"
+      "source": "comparisons/us-taxable-income-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "87d3cbd3b6ec580724f0b79a0472105347f79518"
+      }
     },
     {
       "suite": "ut-income-tax-liability",
-      "name": "ut-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-ut-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1518,14 +1951,13 @@
       "name": null,
       "report": "axiom-policyengine-ut-snap-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-ut"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/ut-snap-ecps.yaml"
     },
     {
       "suite": "va-income-tax-liability",
-      "name": "va-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-va-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1534,7 +1966,7 @@
     },
     {
       "suite": "vt-income-tax-liability",
-      "name": "vt-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-vt-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1543,7 +1975,7 @@
     },
     {
       "suite": "wa-income-tax-liability",
-      "name": "wa-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-wa-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1552,11 +1984,10 @@
     },
     {
       "suite": "wa-tanf-ecps",
-      "name": "wa-tanf-ecps",
+      "name": null,
       "report": "axiom-policyengine-wa-tanf-ecps.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us",
-        "TheAxiomFoundation/rulespec-us-wa"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/wa-tanf-ecps.yaml"
     },
@@ -1565,13 +1996,13 @@
       "name": null,
       "report": "axiom-policyengine-wa-tanf-payment-standard.json",
       "repos": [
-        "TheAxiomFoundation/rulespec-us-wa"
+        "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/parameter-oracles.yaml"
     },
     {
       "suite": "wi-income-tax-liability",
-      "name": "wi-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-wi-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
@@ -1580,12 +2011,84 @@
     },
     {
       "suite": "wv-income-tax-liability",
-      "name": "wv-income-tax-liability",
+      "name": null,
       "report": "axiom-policyengine-taxsim-wv-income-tax-liability.json",
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
       "source": "comparisons/wv-income-tax-liability.yaml"
+    },
+    {
+      "suite": "zm-dispy",
+      "name": null,
+      "report": "axiom-euromod-zm-dispy.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-dispy.yaml"
+    },
+    {
+      "suite": "zm-excise-ad-valorem",
+      "name": null,
+      "report": "axiom-euromod-zm-excise-ad-valorem.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-excise-ad-valorem.yaml"
+    },
+    {
+      "suite": "zm-napsa-contributions",
+      "name": null,
+      "report": "axiom-euromod-zm-napsa-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-napsa-contributions.yaml"
+    },
+    {
+      "suite": "zm-nhima-contributions",
+      "name": null,
+      "report": "axiom-euromod-zm-nhima-contributions.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-nhima-contributions.yaml"
+    },
+    {
+      "suite": "zm-paye-rate-schedule",
+      "name": null,
+      "report": "axiom-euromod-zm-paye-rate-schedule.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-paye-rate-schedule.yaml"
+    },
+    {
+      "suite": "zm-sct",
+      "name": null,
+      "report": "axiom-euromod-zm-sct.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-sct.yaml"
+    },
+    {
+      "suite": "zm-turnover",
+      "name": null,
+      "report": "axiom-euromod-zm-turnover.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-turnover.yaml"
+    },
+    {
+      "suite": "zm-vat",
+      "name": null,
+      "report": "axiom-euromod-zm-vat.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-zm"
+      ],
+      "source": "comparisons/zm-vat.yaml"
     }
   ]
 }

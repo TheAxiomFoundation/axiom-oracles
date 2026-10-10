@@ -1,0 +1,439 @@
+{
+  "aggregates": [
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution",
+      "description": "Ghana SSNIT worker contribution (Act 766 s.3(1), 5.5% of qualifying employment income)",
+      "left_weighted_sum": 37950,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 37950,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 4,
+      "comparison_weight": 4,
+      "components": [],
+      "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution",
+      "description": "Ghana SSNIT employer contribution (Act 766 s.3(2), 13% of qualifying employment income)",
+      "left_weighted_sum": 89700,
+      "match_rate": 100,
+      "match_weight": 4,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 89700,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 4,
+  "cases": [
+    {
+      "case_id": "gh-ssnit-10k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution",
+          "left": 550.0,
+          "right": 550.0
+        },
+        {
+          "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution",
+          "left": 1300.0,
+          "right": 1300.0
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income": 10000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 232.1201562789631,
+            "yem00": 232.1201562789631
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income": 10000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            10000.0
+          ],
+          "yearly_earned_income_total": 10000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-ssnit-contributions",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 10000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-ssnit-60k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution",
+          "left": 3299.999999999999,
+          "right": 3299.999999999999
+        },
+        {
+          "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution",
+          "left": 7799.999999999998,
+          "right": 7799.999999999998
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income": 59999.999999999985
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 1392.7209376737785,
+            "yem00": 1392.7209376737785
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income": 59999.999999999985
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            60000.0
+          ],
+          "yearly_earned_income_total": 60000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-ssnit-contributions",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 60000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-ssnit-120k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution",
+          "left": 6599.999999999998,
+          "right": 6599.999999999998
+        },
+        {
+          "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution",
+          "left": 15599.999999999996,
+          "right": 15599.999999999996
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income": 119999.99999999997
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 2785.441875347557,
+            "yem00": 2785.441875347557
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income": 119999.99999999997
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            120000.0
+          ],
+          "yearly_earned_income_total": 120000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-ssnit-contributions",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 120000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "gh-ssnit-500k",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution",
+          "left": 27500.0,
+          "right": 27500.0
+        },
+        {
+          "concept": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution",
+          "left": 65000.0,
+          "right": 65000.0
+        }
+      ],
+      "metadata": {
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income": 500000.0
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "yem": 11606.007813948154,
+            "yem00": 11606.007813948154
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#input.qualifying_employment_income": 500000.0
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            500000.0
+          ],
+          "yearly_earned_income_total": 500000.0
+        },
+        "locale": "GH",
+        "scenario": "single-formal-employee-ssnit-contributions",
+        "scope": {
+          "geoid": "GH",
+          "type": "country"
+        },
+        "yearly_earned_income": 500000.0
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ghana SSNIT worker contribution (Act 766 s.3(1), 5.5% of qualifying employment income)",
+      "id": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employee_social_security_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Ghana SSNIT employer contribution (Act 766 s.3(2), 13% of qualifying employment income)",
+      "id": "gh:statutes/act-766/national-pensions-2008/section-3-contributions-to-the-scheme#employer_social_security_contribution",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "GH"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T13:52:58Z",
+    "generated_by": "scripts/run_comparison.py::gh-ssnit-contributions",
+    "oracle": {
+      "euromod_country": "GH",
+      "euromod_dataset": "gh_2017_a8",
+      "euromod_system": "GH_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-gh",
+        "sha": "4d84b152548663313d3ef09c6538c27e51e411b1"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "gh-ssnit-contributions",
+  "summary": {
+    "comparison_count": 8,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 8,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 8,
+      "match_rate": 100,
+      "match_weight": 8,
+      "mismatch_weight": 0
+    }
+  }
+}

@@ -21,7 +21,7 @@ XMLs and a bundled demo-schema file are required.
 |---|---|---|
 | EUROMOD (JRC) | all EU member states | direct download, no registration: `EUROMOD_RELEASES_J*.zip` from the JRC download page |
 | UKMOD (CeMPA) | UK + nations | `git clone --branch <release> https://github.com/centreformicrosimulation/UKMOD-PUBLIC` |
-| SOUTHMOD (UNU-WIDER) | ET, GH, MZ, TZ, UG, ZM, RW, SA (SAMOD), VN, EC (ECUAMOD), BO, PE, CO, … | free non-commercial access via the UNU-WIDER SOUTHMOD request form (per-model bundles; same engine, so the adapter applies unchanged — verify each bundle ships a demo/training dataset and note its DRD provenance) |
+| SOUTHMOD (UNU-WIDER) | Ethiopia, Ghana, Mozambique, Tanzania, Uganda, Zambia, Rwanda, South Africa (SAMOD), Vietnam, Ecuador (ECUAMOD), Bolivia, Peru, Colombia, … | free non-commercial access via the UNU-WIDER SOUTHMOD request form (per-model bundles; same engine, so the adapter applies unchanged — verify each bundle ships a demo/training dataset and note its DRD provenance) |
 
 Each release documents its demo data in a per-country DRD
 (`Input/DRD_<CC>_training_data.xls`). The EUROMOD training datasets are
@@ -114,8 +114,17 @@ semantics; the rows are ours.
    convention, so end-to-end liability comparisons need a composed
    `pilot_worker_oracle_pipeline`-style module on the rulespec side.
 4. **Issue ledger**: engine/model findings go in
-   `axiom_oracles/data/euromod_issues.json` (dashboard panel reads it);
-   encoding findings go on the `rulespec-<cc>` repo with the exact
+   `axiom_oracles/data/euromod_issues.json` (EUROMOD and UKMOD) or, for a
+   SOUTHMOD country, `axiom_oracles/data/<model>_issues.json` registered in
+   `axiom_oracles/southmod_issues.py`, whose closed field allowlist and
+   licence lint every SOUTHMOD ledger must pass. After editing a ledger run
+   `uv run scripts/publish_issue_ledgers.py` to refresh the dashboard copies
+   (`dashboard/public/data/euromod-issues.json`, `southmod-issues.json`); CI
+   runs it with `--check`. Run it before pushing a SOUTHMOD ledger edit: this
+   repository is public, so a pushed branch is already published, and the
+   licence lint only gates the merge. The SOUTHMOD oracle page renders the SOUTHMOD
+   ledgers; the EUROMOD copy is published but no page renders it yet.
+   Encoding findings go on the `rulespec-<cc>` repo with the exact
    arithmetic decomposition (see TheAxiomFoundation/rulespec-be#1 for the
    template).
 5. **Expectations**: hand-compute against post-uprating gross, exactly as

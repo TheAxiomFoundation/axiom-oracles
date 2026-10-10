@@ -307,10 +307,7 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom",
-    "versions": {
-      "axiom_rules_engine": "0.1.0"
-    }
+    "right": "axiom"
   },
   "errors": [],
   "locales": [
@@ -385,25 +382,12 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "13a86a737f2e791e272b7aeb0ce8d5f5cc7e69c3",
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-30T03:42:27Z",
+    "generated_at": "2026-07-05T19:41:44Z",
     "generated_by": "scripts/run_comparison.py::uk-income-tax-mixed-ukmod",
-    "oracle": {
-      "euromod_country": "UK",
-      "euromod_dataset": "training_data",
-      "euromod_release": "B2026.03",
-      "euromod_system": "UK_2026",
-      "name": "euromod"
-    },
-    "rulespecs": [
-      {
-        "repo": "TheAxiomFoundation/rulespec-uk",
-        "sha": null
-      }
-    ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

@@ -5,13 +5,22 @@ comparison reports (what Axiom actually matches) into one per-jurisdiction verdi
 against an exact predicate:
 
     conformant  ⇔  covered == in_scope
-                    AND unexplained_total == 0
-                    AND axiom_attributed_open == 0
+                   AND unexplained_total == 0
+                   AND axiom_attributed_open == 0
+                   AND no invalidated exclusions (nonzero live exposure on an
+                       excluded policy's output column blocks the verdict)
 
 "Covered" is decided from *live evidence*, not intent: an in-scope policy counts
-as covered only when its named suite has a committed comparison report present.
-A suite named in the universe but with no report is in scope and NOT covered —
-the honest gap the predicate is built to expose.
+as covered only when its named suite has a committed comparison report present
+AND — when that report carries a ``scope.column_exposure`` witness basis — the
+reference actually exercises at least one of the policy's output columns with a
+positive rate. A comparison of an all-zero column against an implicit 0 verifies
+nothing: it would mark an absent implementation "covered" while never probing a
+unit where the authority applies (sol stack review F3). Such a policy scores
+``unwitnessed`` and is NOT covered. A suite named in the universe but with no
+report is in scope and NOT covered — the honest gap the predicate is built to
+expose. Reports without an exposure basis (other jurisdictions) keep the
+presence-only coverage rule.
 
 Attribution splits the residual mismatches by whose defect they are:
 
@@ -84,9 +93,22 @@ class JurisdictionScoreboard:
     conformant: bool
     #: Uncovered in-scope policies (the gap list) by name.
     uncovered_policies: list[str] = field(default_factory=list)
+    #: In-scope policies whose covering report's exposure basis never
+    #: exercises their output columns with a positive rate (subset of the
+    #: uncovered gap; sol stack review F3).
+    unwitnessed_policies: list[str] = field(default_factory=list)
+    #: Aggregated temporal-debt account from covered reports that carry one
+    #: (``scope.temporal_debt``): intervals the comparison domain does NOT
+    #: reach, surfaced instead of silently clipped (sol stack review F4).
+    #: None when no covered report carries a debt account.
+    temporal_debt: dict | None = None
     #: Human-readable reasons the predicate is not yet satisfied (empty when
     #: conformant) — so a reader sees *why*, not just a red badge.
     blocking_reasons: list[str] = field(default_factory=list)
+    #: Excluded policies invalidated by nonzero live exposure on their output
+    #: columns (the enforced re-inclusion tripwire; sol closing review F1).
+    #: Non-empty blocks conformance.
+    invalid_exclusions: list[str] = field(default_factory=list)
 
     def to_summary(self) -> dict:
         return asdict(self)
@@ -164,11 +186,15 @@ def score_jurisdiction(
 ) -> tuple[JurisdictionScoreboard, list[PolicyScore]]:
     """Compute the scoreboard + per-policy drill-down for one jurisdiction."""
     suite_index = _report_suite_index(reports)
+    #: The raw, uncollapsed report list — exclusion-tripwire scans must see
+    #: every report, order-independently (sol closing review r2 finding 1).
+    all_reports = list(reports)
 
     policy_scores: list[PolicyScore] = []
     excluded_by_reason: dict[str, int] = {}
     covered = 0
     uncovered_policies: list[str] = []
+    unwitnessed_policies: list[str] = []
     #: Suites of the DISTINCT covered reports, so each report's mismatch signals
     #: are counted once toward the jurisdiction headline even when several
     #: in-scope policies share one report (the PE-UK case: 12 programs covered by
@@ -178,10 +204,33 @@ def score_jurisdiction(
     #: policy's covering-report stats; only the headline dedupes.
     covered_report_suites: set[str] = set()
 
+    #: Excluded policies whose output columns the reference DOES exercise in a
+    #: live report (sol closing review F1): an exclusion grounded in "the
+    #: reference never exercises this column" is invalidated the moment any
+    #: covering report records nonzero exposure for one of its output vars.
+    #: This is the enforced re-inclusion tripwire — it blocks conformance
+    #: until the universe row returns to scope with a witness requirement.
+    invalid_exclusions: list[str] = []
+
     for policy in universe.policies:
         if not policy.in_scope:
             reason = policy.exclusion_reason or "unspecified"
             excluded_by_reason[reason] = excluded_by_reason.get(reason, 0) + 1
+            # Scan EVERY raw report, not the collapsed suite index — a
+            # zero-exposure duplicate must never shadow a nonzero one
+            # (order-independence; sol closing review r2 finding 1).
+            exclusion_violated = False
+            if policy.output_vars:
+                for report in all_reports:
+                    exposure = (report.get("scope") or {}).get("column_exposure")
+                    if isinstance(exposure, dict) and any(
+                        (exposure.get(var) or 0) > 0
+                        for var in policy.output_vars
+                    ):
+                        exclusion_violated = True
+                        break
+            if exclusion_violated:
+                invalid_exclusions.append(policy.oracle_policy_name)
             policy_scores.append(
                 PolicyScore(
                     id=policy.id,
@@ -191,7 +240,11 @@ def score_jurisdiction(
                     suite=None,
                     covered=False,
                     note=policy.note,
-                    status=f"excluded:{reason}",
+                    status=(
+                        "excluded:INVALID-nonzero-exposure"
+                        if exclusion_violated
+                        else f"excluded:{reason}"
+                    ),
                 )
             )
             continue
@@ -212,6 +265,33 @@ def score_jurisdiction(
                 )
             )
             continue
+
+        # Positive-exposure witness (sol stack review F3): when the covering
+        # report carries an exposure basis, the reference must exercise at
+        # least one of the policy's output columns with a positive rate.
+        # An all-zero column compared against an implicit 0 witnesses
+        # nothing — the policy is NOT covered by that comparison.
+        exposure = (report.get("scope") or {}).get("column_exposure")
+        if isinstance(exposure, dict) and policy.output_vars:
+            witnessed = any(
+                (exposure.get(var) or 0) > 0 for var in policy.output_vars
+            )
+            if not witnessed:
+                uncovered_policies.append(policy.oracle_policy_name)
+                unwitnessed_policies.append(policy.oracle_policy_name)
+                policy_scores.append(
+                    PolicyScore(
+                        id=policy.id,
+                        oracle_policy_name=policy.oracle_policy_name,
+                        in_scope=True,
+                        exclusion_reason=None,
+                        suite=policy.suite,
+                        covered=False,
+                        note=policy.note,
+                        status="unwitnessed",
+                    )
+                )
+                continue
 
         # Covered: pull the report's comparison stats + disposition signals.
         covered += 1
@@ -264,31 +344,68 @@ def score_jurisdiction(
     axiom_attributed_open = 0
     oracle_attributed = 0
     bridge_artifacts = 0
-    for suite in covered_report_suites:
+    temporal_debt: dict | None = None
+    for suite in sorted(covered_report_suites):
         report = suite_index[suite]
         unexplained, axiom_open, oracle_gap, bridge = _disposition_signals(report)
         unexplained_total += unexplained
         axiom_attributed_open += axiom_open
         oracle_attributed += oracle_gap
         bridge_artifacts += bridge
+        # Temporal-debt surface (sol stack review F4): intervals the
+        # comparison domain does not reach are carried onto the scoreboard
+        # instead of silently clipped out of the coverage story.
+        debt = (report.get("scope") or {}).get("temporal_debt")
+        if isinstance(debt, dict):
+            if temporal_debt is None:
+                temporal_debt = {
+                    "pre_domain_intervals": 0,
+                    "straddle_clipped_intervals": 0,
+                    "addressable_records": 0,
+                }
+            temporal_debt["pre_domain_intervals"] += int(
+                debt.get("pre_domain_intervals") or 0
+            )
+            temporal_debt["straddle_clipped_intervals"] += int(
+                debt.get("straddle_clipped_intervals") or 0
+            )
+            temporal_debt["addressable_records"] += len(debt.get("records") or [])
 
     in_scope = len(universe.in_scope())
     covered_pct = _round(100 * covered / in_scope) if in_scope else 0.0
 
-    # The exact predicate.
+    # The exact predicate. An invalidated exclusion (nonzero live exposure on
+    # an excluded policy's output column) blocks conformance outright — the
+    # excluded row must return to scope and earn a witness before any
+    # conformant verdict.
     predicate_covered = covered == in_scope
     conformant = (
         predicate_covered
         and unexplained_total == 0
         and axiom_attributed_open == 0
+        and not invalid_exclusions
     )
 
     blocking_reasons: list[str] = []
+    if invalid_exclusions:
+        blocking_reasons.append(
+            f"{len(invalid_exclusions)} excluded polic"
+            f"{'y is' if len(invalid_exclusions) == 1 else 'ies are'} "
+            "invalidated by nonzero live exposure on their output columns "
+            "(re-inclusion required): " + ", ".join(sorted(invalid_exclusions))
+        )
     if not predicate_covered:
         blocking_reasons.append(
             f"{in_scope - covered} of {in_scope} in-scope policies are not "
             f"covered by a live suite: {', '.join(uncovered_policies)}"
         )
+        if unwitnessed_policies:
+            blocking_reasons.append(
+                f"{len(unwitnessed_policies)} of those have a report but no "
+                "positive-exposure witness — the reference never exercises "
+                "their output columns with a nonzero rate: "
+                f"{', '.join(unwitnessed_policies)}"
+            )
     if unexplained_total > 0:
         blocking_reasons.append(
             f"{unexplained_total} unexplained mismatch(es) across covered suites"
@@ -312,6 +429,9 @@ def score_jurisdiction(
         bridge_artifacts=bridge_artifacts,
         conformant=conformant,
         uncovered_policies=uncovered_policies,
+        unwitnessed_policies=unwitnessed_policies,
+        temporal_debt=temporal_debt,
         blocking_reasons=blocking_reasons,
+        invalid_exclusions=sorted(invalid_exclusions),
     )
     return scoreboard, policy_scores

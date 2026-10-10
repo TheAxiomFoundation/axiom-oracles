@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -133,10 +134,18 @@ def legacy_mapping_path() -> Path:
     return Path(__file__).resolve().parents[1] / "config" / "program_mappings.yaml"
 
 
-def _load_mapping_data(path: str | Path | None = None) -> dict[str, Any]:
-    mapping_path = Path(path) if path else default_mapping_path()
-    with mapping_path.open() as f:
+@functools.lru_cache(maxsize=8)
+def _load_mapping_data_cached(mapping_path: str) -> dict[str, Any]:
+    with Path(mapping_path).open() as f:
         return yaml.safe_load(f)
+
+
+def _load_mapping_data(path: str | Path | None = None) -> dict[str, Any]:
+    # Cached: per-jurisdiction column resolution calls this in loops, and
+    # an uncached reparse of the full mapping costs ~85 ms per call. The
+    # returned structure is shared — treat it as immutable.
+    mapping_path = Path(path) if path else default_mapping_path()
+    return _load_mapping_data_cached(str(mapping_path.resolve()))
 
 
 def load_program_mappings(path: str | Path | None = None) -> list[ProgramMapping]:

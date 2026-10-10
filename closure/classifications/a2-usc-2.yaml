@@ -1,0 +1,1142 @@
+rows:
+  - citation: "us/statute/7/2016/b"
+    heading: "Use"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The rule that benefits may be used “only to purchase food from retail food stores” governs transaction use and retailer participation; it does not determine household eligibility or an allotment amount.'
+  
+  - citation: "us/statute/7/2016/c"
+    heading: "Design"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The subsection requires EBT cards to be “simple in design” and bars public officials’ names from cards, which are card-design requirements with no household computation.'
+  
+  - citation: "us/statute/7/2016/c/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The requirement that EBT cards be “simple in design” and contain only explanatory words or illustrations concerns card appearance, not eligibility or benefit amount.'
+  
+  - citation: "us/statute/7/2016/c/2"
+    heading: "Prohibition"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The prohibition that a public official’s name “shall not appear on any EBT card” regulates card design and has no household-level computational rule.'
+  
+  - citation: "us/statute/7/2016/d"
+    heading: "Delivery and control procedures"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The Secretary must prescribe benefit-delivery controls “to ensure adequate accountability”; this governs issuers and administrative control, not household eligibility or allotment calculation.'
+  
+  - citation: "us/statute/7/2016/e"
+    heading: "State issuance liability"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The State agency is “strictly liable to the Secretary” for issuance-related financial losses, a Federal-State liability rule that does not compute any household’s eligibility or benefits.'
+  
+  - citation: "us/statute/7/2016/f"
+    heading: "Alternative benefit delivery"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The subsection directs States to “issue or deliver benefits using alternative methods” and governs retailer point-of-sale costs, obsolete coupon and voucher media, and terminal identifiers; none of those provisions determines household eligibility or allotment amount.'
+  
+  - citation: "us/statute/7/2016/f/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The Secretary may require a State agency to “issue or deliver benefits using alternative methods” for program integrity, which changes delivery administration rather than a household determination.'
+  
+  - citation: "us/statute/7/2016/f/2"
+    heading: "Imposition of costs"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph allocates “100 percent of the costs” of EBT point-of-sale equipment to participating retailers, subject to retailer exemptions; it contains no household computation.'
+  
+  - citation: "us/statute/7/2016/f/3"
+    heading: "Devaluation and termination of issuance of paper coupons"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph provides that “only an EBT card issued under subsection (i) shall be eligible for exchange” and terminates paper coupon issuance and redemption; it regulates benefit media rather than household eligibility or allotment value.'
+  
+  - citation: "us/statute/7/2016/f/4"
+    heading: "Termination of manual vouchers"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The rule states that “no State shall issue manual vouchers” except in circumstances such as system failures or disasters, a payment-media rule with no household-level computation.'
+  
+  - citation: "us/statute/7/2016/f/5"
+    heading: "Unique identification number required"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph requires EBT service providers to maintain “unique terminal identification number information” and regulates point-of-sale devices; it does not determine household eligibility or benefit amount.'
+  
+  - citation: "us/statute/7/2016/g"
+    heading: "Staggered issuance procedures"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: 'The subsection permits staggering issuance dates and limits the interval between issuances while expressly requiring the procedure to “not reduce the allotment”; it changes scheduling, not point-in-time eligibility or amount.'
+  
+  - citation: "us/statute/7/2016/g/1"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: 'The paragraph authorizes a procedure for “staggering the issuance of benefits” across days of the month, which affects delivery timing but not household eligibility or allotment amount.'
+  
+  - citation: "us/statute/7/2016/g/2"
+    heading: "Requirements.—"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: 'The requirements say staggered issuance must “not reduce the allotment” and must avoid intervals longer than 40 days; these are scheduling safeguards with no point-in-time determination effect.'
+  
+  - citation: "us/statute/7/2016/h"
+    heading: "Electronic benefit transfers"
+    status: pending
+    note: 'Most of the subsection regulates EBT systems, retailers, fees, and access, but paragraph (8)(A) authorizes a card-replacement charge “by reducing the monthly allotment” and no module in the pinned file tree encodes that household-level amount rule.'
+  
+  - citation: "us/statute/7/2016/h/1"
+    heading: "In general.—"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph requires States to implement systems in which independently determined benefits “are issued from and stored in a central databank”; it governs EBT procurement and operation, not the underlying household determination.'
+  
+  - citation: "us/statute/7/2016/h/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The Secretary must establish “standards for the approval of such a system” covering recipient protection, retailer participation, security, reliability, testing, and procurement; those system standards contain no household eligibility or allotment calculation.'
+  
+  - citation: "us/statute/7/2016/h/3"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph conditions approval of mandatory EBT systems on “a sufficient number of eligible retail food stores” and operational equipment, protecting retail access without computing a household’s eligibility or allotment.'
+  
+  - citation: "us/statute/7/2016/h/4"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The provision makes EBT administrative costs “eligible for reimbursement” under Federal-State funding rules; it does not govern a household determination.'
+  
+  - citation: "us/statute/7/2016/h/5"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The Secretary must “periodically inform State agencies” about advantages of electronic benefit systems over coupons, an interagency communication duty with no household computation.'
+  
+  - citation: "us/statute/7/2016/h/6"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The provision says the subsection “shall not diminish the authority of the Secretary” to test automated or electronic delivery systems; it neither determines household eligibility nor calculates benefits.'
+  
+  - citation: "us/statute/7/2016/h/7"
+    heading: "Replacement of benefits .—"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph directs that EBT replacement-and-liability regulations be “similar to” paper-system regulations, but supplies no household eligibility predicate or replacement-amount calculation of its own.'
+  
+  - citation: "us/statute/7/2016/h/8"
+    heading: "Replacement of cards .—"
+    status: pending
+    note: 'Subparagraph (A) permits a State charge for a replacement card “by reducing the monthly allotment,” a direct household amount rule absent from the pinned module tree; the remainder mixes card-withholding procedure and protections for vulnerable households.'
+  
+  - citation: "us/statute/7/2016/h/9"
+    heading: "Optional photographic identification.—"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph permits an EBT card to “contain a photograph of 1 or more members” and requires procedures allowing other household members or authorized representatives to use it; these are card-access rules, not eligibility or benefit computations.'
+  
+  - citation: "us/statute/7/2016/h/10"
+    heading: "Federal law not applicable .—"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The provision says 15 U.S.C. § 1693o-2 “shall not apply to electronic benefit transfer or reimbursement systems”, a systems-law rule with no household-level calculation.'
+  
+  - citation: "us/statute/7/2016/h/11"
+    heading: "Application of anti-tying restrictions to electronic benefit transfer systems.—"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The rule that “A company may not sell or provide electronic benefit transfer services” on specified tying conditions regulates vendors and contracts rather than household determinations.'
+  
+  - citation: "us/statute/7/2016/h/12"
+    heading: "Recovering electronic benefits.—"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: 'The paragraph directs a State agency to “expunge benefits that have not been accessed” after the specified inactivity period and establishes related storage, notice, and restoration procedures; it does not alter point-in-time SNAP eligibility or the allotment originally determined.'
+  
+  - citation: "us/statute/7/2016/h/13"
+    heading: "Fees.—"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The rule that “No interchange fees shall apply” to EBT transactions regulates payment-system charges without computing household eligibility or allotment.'
+  
+  - citation: "us/statute/7/2016/h/14"
+    heading: "Mobile technologies.—"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph directs the Secretary to “authorize the use of mobile technologies” and prescribes demonstration-project plans, retailer costs, security, evaluation, and reporting; these are access and program-administration requirements, not household computations.'
+  
+  - citation: "us/statute/7/2016/i"
+    heading: "State option to issue benefits to certain individuals made ineligible by welfare reform"
+    status: pending
+    note: 'Paragraph (1) permits benefits for individuals otherwise ineligible under named welfare-reform provisions, and paragraph (4) delegates “eligibility standards” and “benefit levels” to an approved State plan. The pinned 7 CFR 273.4 module covers ordinary Federal citizenship and alien-status eligibility, not this State-funded option, so coverage is not complete.'
+  
+  - citation: "us/statute/7/2016/i/1"
+    heading: "In general"
+    status: pending
+    note: 'This State option changes who may receive benefits by reaching an individual “ineligible ... solely as a result of” named welfare-reform provisions. The pinned 7 CFR 273.4 module encodes ordinary Federal citizenship and alien-status eligibility but does not encode this optional State-funded eligibility override.'
+  
+  - citation: "us/statute/7/2016/i/2"
+    heading: "State payments to Secretary"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph requires the State to reimburse the Secretary for “the value of the benefits” and Federal issuance costs and directs how receipts are credited; that is intergovernmental accounting, not a household computation.'
+  
+  - citation: "us/statute/7/2016/i/3"
+    heading: "Reporting"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The State agency must comply with Secretary-established “reporting requirements” to use the option, an administrative condition that does not itself determine any household’s eligibility or benefit level.'
+  
+  - citation: "us/statute/7/2016/i/4"
+    heading: "Plan"
+    status: pending
+    note: 'The required State plan expressly contains “eligibility standards” and “benefit levels,” which are household-level computational rules delegated outside this provision. No pinned module covers those State-plan standards.'
+  
+  - citation: "us/statute/7/2016/i/5"
+    heading: "Violations"
+    status: pending
+    note: 'The paragraph makes any Federal “sanction, disqualification, fine, or other penalty” apply to violations involving these benefits. Because disqualification can change household eligibility and the incorporated penalty rules are not fully realized by a confirmed module for this option, exclusion would overstate closure.'
+  
+  - citation: "us/statute/7/2016/i/6"
+    heading: "Ineligibility for administrative reimbursement"
+    status: excluded
+    reason: no_household_computation
+    basis: 'Administrative and other issuance costs “shall not be eligible for Federal funding”; this allocates government costs without determining household eligibility or benefit amount.'
+  
+  - citation: "us/statute/7/2016/i/7"
+    heading: "Exclusion from enhanced payment accuracy systems"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The provision says § 2025(c) “shall not apply to benefits issued under this subsection”, an exclusion from payment-accuracy administration with no household-level determination rule.'
+  
+  - citation: "us/statute/7/2016/j"
+    heading: "Interoperability and portability of electronic benefit transfer transactions"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The subsection requires that “supplemental nutrition assistance program benefits are portable, among all States”, sets contract standards and waivers, and funds switching and settlement costs; it regulates systems and State administration, not household eligibility or allotment.'
+  
+  - citation: "us/statute/7/2016/j/1"
+    heading: "Definitions"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph defines interoperability as “a system that enables program benefits” to be redeemed in any State and defines related EBT terms for payment-system administration; none is a household eligibility or benefit formula.'
+  
+  - citation: "us/statute/7/2016/j/2"
+    heading: "Requirement"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The Secretary must ensure EBT systems are interoperable and benefits are portable “among all States”, which governs transaction infrastructure rather than household computation.'
+  
+  - citation: "us/statute/7/2016/j/3"
+    heading: "Cost"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The cost of interoperability and portability “shall not be imposed on any retail store” or approved wholesale concern, a vendor-cost rule with no household determination.'
+  
+  - citation: "us/statute/7/2016/j/4"
+    heading: "Standards"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph orders the Secretary to “adopt a uniform national standard of interoperability and portability” and require compatible EBT contract terms, which are system and procurement requirements rather than household-level computations.'
+  
+  - citation: "us/statute/7/2016/j/5"
+    heading: "Exemptions"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph permits the Secretary to “temporarily exempt” a State agency and supplies contract and smart-card exemptions from EBT interoperability requirements; those exemptions concern State systems, not household eligibility or benefit amount.'
+  
+  - citation: "us/statute/7/2016/j/6"
+    heading: "Funding"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The Secretary “shall pay 100 percent of the costs incurred by a State agency” for qualifying switching and settlement, subject to a $500,000 annual cap; this is an administrative reimbursement rule with no household computation.'
+  
+  - citation: "us/statute/7/2016/k"
+    heading: "Acceptance of program benefits through online transactions"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The subsection requires retailers to “ensure benefits are not used to pay delivery, ordering, convenience, or other fees or charges” and governs approval, protections, State access duties, and demonstrations; it does not calculate household eligibility or allotments.'
+  
+  - citation: "us/statute/7/2016/k/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The Secretary must “approve retail food stores to accept benefits” through online transactions, a retailer-participation rule without household computational content.'
+  
+  - citation: "us/statute/7/2016/k/2"
+    heading: "Requirements to accept benefits"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The retailer must “ensure benefits are not used to pay delivery, ordering, convenience, or other fees or charges”, disclose charges, and secure transactions; these regulate benefit use and retail operations, not eligibility or allotment amount.'
+  
+  - citation: "us/statute/7/2016/k/3"
+    heading: "State agency action"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The State agency must ensure recipients can use benefits online “as appropriate”, an access-administration duty that contains no household computation.'
+  
+  - citation: "us/statute/7/2016/k/4"
+    heading: "Demonstration project on acceptance of benefits through on-line transactions"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph directs projects to “test the feasibility of allowing retail food stores to accept benefits through on-line transactions” and retailer plans covering controls, education, testing, data, reporting, and security; it does not determine household eligibility or allotment.'
+  
+  - citation: "us/statute/7/2016a"
+    heading: "EBT benefit fraud prevention"
+    status: pending
+    note: 'The section is mostly security guidance, coordination, appropriations, and reporting, but subsection (b)(2) computes household replacement benefits as the lesser of stolen benefits or two months of prior allotments and adds household frequency and date conditions. No pinned module encodes that rule.'
+  
+  - citation: "us/statute/7/2016a/a"
+    heading: "Guidance; rulemaking"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The subsection directs the Secretary to “issue guidance to State agencies” along with rulemaking, interagency coordination, data standards, and a congressional report; even its instruction to issue replacement procedures supplies no household formula or eligibility criterion itself.'
+  
+  - citation: "us/statute/7/2016a/a/1"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph orders guidance describing measures for “detecting and preventing theft of benefits,” including skimming and cloning, which is State and payment-system administration with no household computation.'
+  
+  - citation: "us/statute/7/2016a/a/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The Secretary must “promulgate regulations through notice-and-comment rulemaking” requiring State security measures described in guidance; this is an agency rulemaking command, not a household eligibility or amount rule.'
+  
+  - citation: "us/statute/7/2016a/a/3"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph sets a deadline for regulations requiring “procedures for the replacement of benefits consistent with subsection (b)”, but it supplies no independent household eligibility predicate or replacement calculation.'
+  
+  - citation: "us/statute/7/2016a/a/4"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The Secretary must coordinate with agencies, retailers, and contractors to study theft and “establish standard reporting methods for States”; those are program-security duties with no household computation.'
+  
+  - citation: "us/statute/7/2016a/a/5"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph requires “a report that includes” information on theft, industry standards, State plans, and prevention recommendations; reporting does not determine household eligibility or benefit amount.'
+  
+  - citation: "us/statute/7/2016a/b"
+    heading: "Replacement of benefits"
+    status: pending
+    note: 'The subsection mixes State-plan and claims procedures with a household formula: replacement is capped at the lesser of the stolen amount or two months of the household’s prior monthly allotment, with frequency and theft-date conditions. No module in the pinned tree encodes these replacement determinations.'
+  
+  - citation: "us/statute/7/2016a/b/1"
+    heading: null
+    status: pending
+    note: 'The required State plan mixes reporting and hearing procedure with “criteria to determine if a submitted claim is valid,” which determines household access to replacement benefits. Those delegated validation criteria are not covered by a confirmed pinned module.'
+  
+  - citation: "us/statute/7/2016a/b/2"
+    heading: null
+    status: pending
+    note: 'This paragraph directly caps a household replacement at the lesser of the stolen amount or two months of its prior allotment, limits replacement frequency, and applies a theft-date window. No pinned module encodes that household-level computation.'
+  
+  - citation: "us/statute/7/2016a/b/3"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'Approved State replacement plans “will remain in effect until the effective date” of the replacement regulation; this plan-transition rule does not itself determine household eligibility or amount.'
+  
+  - citation: "us/statute/7/2016a/b/4"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph says compliant replacements “shall not be regarded as losses” for State-liability purposes, an accounting classification with no household computation.'
+  
+  - citation: "us/statute/7/2016a/c"
+    heading: "Definitions"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The subsection merely adopts the meanings of “allotment,” “benefit,” “household,” “retail food store,” and “State agency” from § 2012 and contains no independent computational rule.'
+  
+  - citation: "us/statute/7/2016a/d"
+    heading: "Rescission"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The subsection provides that “$8,000,000 is hereby rescinded” from unobligated program balances, an appropriations action that does not determine any household’s eligibility or benefits.'
+  
+  - citation: "us/statute/7/2016a/e"
+    heading: "Comptroller General"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The subsection requires “a report that examines risks” related to EBT payment-system security, management practices, oversight, and policy options; it has no household-level computation.'
+  
+  - citation: "us/statute/7/2016a/e/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The paragraph requires “a report that examines risks” related to EBT security and stolen benefits; this reporting mandate does not determine household eligibility or allotment.'
+  
+  - citation: "us/statute/7/2016a/e/2"
+    heading: "Contents"
+    status: excluded
+    reason: no_household_computation
+    basis: 'The rule that the report “shall include an assessment” of Department, State, retailer, oversight, and security practices and policy options contains no household computation.'
+  
+  - citation: "us/statute/7/2017"
+    heading: "Value of allotment"
+    status: pending
+    note: 'The pinned us/statutes/7/2017/a.yaml fully covers subsection (a), and us/regulations/7-cfr/273/10.yaml covers the initial-month under-$10 nonissuance, but the section also contains uncovered household rules including § 2017(c) day proration, public-assistance sanction adjustments, and facility-resident allotments. Coverage of this containing section is therefore partial.'
+  
+  - citation: "us/statute/7/2017/a"
+    heading: "Calculation"
+    status: encoded
+    encoded_by: ["us/statutes/7/2017/a.yaml"]
+
+  - citation: "us/statute/7/2017/b"
+    heading: "Benefits not deemed income or resources for certain purposes"
+    status: pending
+    note: "This is a household-level cross-program computation rule: SNAP benefits may not be counted as income or resources under other laws, and other assistance may not be decreased because of SNAP receipt. No listed statute or regulation module covers that full cross-program rule."
+  
+  - citation: "us/statute/7/2017/c"
+    heading: "First month benefits prorated"
+    status: pending
+    note: "The subsection changes household allotment amounts through day proration and a $10 initial-month floor, and defines when those rules apply. us/regulations/7-cfr/273/10.yaml encodes the under-$10 nonissuance rule but explicitly defers month-of-application determinations and does not encode the statutory day-proration formula; paragraph (3) is issuance procedure."
+  
+  - citation: "us/statute/7/2017/c/1"
+    heading: null
+    status: pending
+    note: "This paragraph computes an initial allotment as the ratio of days remaining to total days and suppresses an allotment below $10. us/regulations/7-cfr/273/10.yaml covers the $10 rule but not the day-proration formula, so coverage is partial."
+  
+  - citation: "us/statute/7/2017/c/2"
+    heading: null
+    status: pending
+    note: "The definition of “initial month” determines which households receive prorated benefits, including a special rule for migrant or seasonal farmworker households after more than 30 days without participation. No listed module encodes this definition."
+  
+  - citation: "us/statute/7/2017/c/3"
+    heading: "Optional combined allotment for expedited households .—"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The State may issue the initial and following-month allotments together, but the combined issuance must be “equal to the total amount of the initial allotment and the first regular allotment.” It changes delivery timing, not eligibility or total benefit amount."
+  
+  - citation: "us/statute/7/2017/d"
+    heading: "Reduction of public assistance benefits"
+    status: pending
+    note: "The subsection can prevent an income-related allotment increase and permit a State reduction of up to 25 percent when another means-tested benefit is sanctioned. That household benefit computation is not covered by us/regulations/7-cfr/273/11/c.yaml or another listed module."
+  
+  - citation: "us/statute/7/2017/d/1"
+    heading: "In general"
+    status: pending
+    note: "The paragraph bars an allotment increase attributable to a public-assistance sanction and permits a household allotment reduction “by not more than 25 percent.” No listed module encodes this sanction computation."
+  
+  - citation: "us/statute/7/2017/d/2"
+    heading: "Rules and procedures"
+    status: pending
+    note: "Although phrased as authorization to use TANF “rules and procedures,” those imported rules may govern whether and how a household’s SNAP allotment is reduced. With no encoding of that cross-program reduction and no basis to isolate procedure from substantive effect, exclusion would be unsafe."
+  
+  - citation: "us/statute/7/2017/e"
+    heading: "Allotments for households residing in centers"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "For an already-covered individual, the subsection governs delivery of the allotment to “the center as an authorized representative” and to the individual after departure. It does not alter eligibility or calculate the allotment amount."
+  
+  - citation: "us/statute/7/2017/e/1"
+    heading: "In general"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The paragraph permits an existing allotment to be provided to “the center as an authorized representative” for part of a month and to the individual on leaving. This is an issuance arrangement, not an eligibility or amount rule."
+  
+  - citation: "us/statute/7/2017/e/2"
+    heading: "Direct payment"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "It permits the State to require designation of a treatment center “as the authorized representative” for receiving an allotment. The designation does not determine whether the individual is eligible or how much the individual receives."
+  
+  - citation: "us/statute/7/2017/f"
+    heading: "Alternative procedures for residents of certain group facilities"
+    status: pending
+    note: "Paragraph (1) contains household-level amount rules for residents of covered facilities, including standardized allotments and proration after departure, while paragraphs (2) and (3) govern pilots and nationwide authorization. No listed module encodes the paragraph (1) computations, so the mixed parent remains pending."
+  
+  - citation: "us/statute/7/2017/f/1"
+    heading: "In general"
+    status: pending
+    note: "The paragraph requires each resident’s allotment to be calculated under standardized procedures, limits a facility to the resident’s proportion of the month, and requires a post-departure allotment for remaining days. Those household amount rules are not encoded by any listed module."
+  
+  - citation: "us/statute/7/2017/f/2"
+    heading: "Pilot projects"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must conduct pilot projects and a State project plan must specify facilities, reports, and “procedures for standardizing allotment amounts.” The quoted “procedures for standardizing allotment amounts” establish pilot administration but supply no operative household eligibility or benefit formula."
+  
+  - citation: "us/statute/7/2017/f/3"
+    heading: "Authorization of implementation in all States"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must “determine whether to authorize implementation of paragraph (1) in all States” and must notify congressional committees and terminate pilots after specified findings. Those program-governance decisions contain no household eligibility or benefit computation."
+  
+  - citation: "us/statute/7/2018"
+    heading: "Approval of retail food stores and wholesale food concerns"
+    status: excluded
+    reason: no_household_computation
+    basis: "The section regulates authorization, oversight, incentives, and redemption by retailers, wholesalers, facilities, and private establishments—for example, applicants seek approval to “accept and redeem benefits”. It contains no rule computing a household’s eligibility or allotment."
+  
+  - citation: "us/statute/7/2018/a"
+    heading: "Authorization to accept and redeem benefits"
+    status: excluded
+    reason: no_household_computation
+    basis: "This subsection governs applications, certificates, visits, reauthorization, authorization periods, and EBT-provider guidance for retail and wholesale firms. Its applicants are firms seeking authority to “accept and redeem benefits”, not households seeking an eligibility or benefit determination."
+  
+  - citation: "us/statute/7/2018/a/1"
+    heading: "Applications.—"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph sets retailer and wholesaler application factors such as “the nature and extent of the food business,” transaction volume, business integrity, and a required store visit. The quoted “nature and extent of the food business” is a firm qualification factor, not a household computation."
+  
+  - citation: "us/statute/7/2018/a/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "It directs the Secretary to regulate “periodic reauthorization” and send periodic definitional notices to participating retail and wholesale concerns. These are retailer-administration requirements with no household computation."
+  
+  - citation: "us/statute/7/2018/a/3"
+    heading: "Authorization periods .—"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must establish the periods during which a firm’s authorization “to accept and redeem benefits” is valid. The rule concerns retailer participation, not a household’s eligibility or benefit amount."
+  
+  - citation: "us/statute/7/2018/a/4"
+    heading: "Electronic benefit transfer equipment and service providers .—"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must “issue guidance for retail food stores” on selecting EBT equipment and service providers capable of minimizing fraud. This equipment-provider requirement supplies no household-level computation."
+  
+  - citation: "us/statute/7/2018/b"
+    heading: "Effective and efficient operation of program; effect of disqualification; posting of bond"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection begins, “No wholesale food concern may be authorized”, and then governs co-located and successor firms, penalties, and bonds. Even its household-hardship factor concerns firm authorization rather than household eligibility or allotment."
+  
+  - citation: "us/statute/7/2018/b/1"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph begins, “No wholesale food concern may be authorized”, and restricts co-located concerns and simultaneous retail and wholesale authorization. The reference to household hardship is a retailer-authorization factor, not a household computation."
+  
+  - citation: "us/statute/7/2018/b/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "A non-bona-fide buyer “may not accept or redeem benefits until the Secretary receives full payment” of the firm’s penalty, while a transferee is protected from a specified bond requirement. These firm-transfer rules do not calculate household eligibility or benefits."
+  
+  - citation: "us/statute/7/2018/c"
+    heading: "Information submitted by applicants; safeguards; disclosure to and use by State agencies"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection requires an applicant retail or wholesale concern to “submit information,” including tax, invoice, EBT, transaction, and redemption records, and governs verification and disclosure. It determines firm qualification and information safeguards, not household eligibility or allotment."
+  
+  - citation: "us/statute/7/2018/d"
+    heading: "Hearing upon failure of applicant to receive approval; waiting period for new application"
+    status: excluded
+    reason: no_household_computation
+    basis: "A retail or wholesale concern denied approval “may obtain a hearing” and must wait at least six months before reapplying. These are firm-approval and review rules with no household-level computation."
+  
+  - citation: "us/statute/7/2018/e"
+    heading: "Reporting of abuses by public"
+    status: excluded
+    reason: no_household_computation
+    basis: "Approved retail food stores must “display a sign providing information” on reporting program abuses. A reporting-sign requirement does not determine household eligibility or benefits."
+  
+  - citation: "us/statute/7/2018/f"
+    heading: "Limitation on participation of house-to-house trade routes"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must limit house-to-house trade routes where they damage program integrity while preserving routes “reasonably necessary to provide adequate access.” The exact operative fragment “reasonably necessary to provide adequate access” governs vendor participation, not household computation."
+  
+  - citation: "us/statute/7/2018/g"
+    heading: "EBT service requirement"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision requires an approved retail food store to “provide adequate EBT service”. It regulates retailer service and does not calculate a household’s eligibility or allotment."
+  
+  - citation: "us/statute/7/2018/h"
+    heading: "Private establishments"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection governs authorization and transition rules for private establishments offering concessional meals and requires an annual congressional report. Its “documented need” test applies to establishment participation, not household eligibility or benefit amount."
+  
+  - citation: "us/statute/7/2018/h/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "A contracting private establishment may accept and redeem benefits only if participation is “required to meet a documented need”. This is an establishment-authorization condition, not a household computation."
+  
+  - citation: "us/statute/7/2018/h/2"
+    heading: "Existing contracts"
+    status: excluded
+    reason: no_household_computation
+    basis: "For an existing contract, the Secretary must “allow the operation of the private establishment to continue” for a transition of up to 180 days and justify a termination. These contract-transition rules have no household eligibility or allotment formula."
+  
+  - citation: "us/statute/7/2018/h/3"
+    heading: "Report to Congress"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must submit an annual report on the effectiveness of the private-establishment program and “the manner in which benefits are used.” Congressional reporting does not compute household eligibility or benefits."
+  
+  - citation: "us/statute/7/2018/i"
+    heading: "Review of program operations"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection directs the Secretary to “review a representative sample” of authorized facilities, gather information, report recommendations, and limits certain authorization denials. It is facility oversight, not household computation."
+  
+  - citation: "us/statute/7/2018/i/1"
+    heading: "Review by the Secretary"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must “review a representative sample” of facilities, gather information, and report findings and oversight recommendations to Congress. These review duties do not establish household eligibility or calculate an allotment."
+  
+  - citation: "us/statute/7/2018/i/2"
+    heading: "Limitation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph states, “Nothing in this subsection shall authorize the Secretary to deny” specified facility authorization applications based on institutional-residence findings before December 31, 2022. It regulates facility authorization rather than household eligibility."
+  
+  - citation: "us/statute/7/2018/j"
+    heading: "Incentives"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection provides that “The Secretary shall issue guidance” for a retailer incentive waiver process, alongside food definitions, benefit-use protections, and reporting. It neither determines household eligibility nor computes the SNAP allotment."
+  
+  - citation: "us/statute/7/2018/j/1"
+    heading: "Definition of eligible incentive food"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph defines “eligible incentive food” as specified staple foods and fruits, vegetables, dairy, or whole grains. It classifies products for a retailer incentive program, not households or their allotments."
+  
+  - citation: "us/statute/7/2018/j/2"
+    heading: "Guidance"
+    status: excluded
+    reason: no_household_computation
+    basis: "A retail store must “provide to the Secretary information describing the incentive program,” including incentive types, foods, and dietary goals. This retailer approval process supplies no household eligibility or benefit formula."
+  
+  - citation: "us/statute/7/2018/j/3"
+    heading: "No limitation on benefits"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision bars an incentive waiver from being used for an activity that “limits the use of benefits.” The exact fragment “limits the use of benefits” protects benefit use but does not determine household eligibility or the amount issued."
+  
+  - citation: "us/statute/7/2018/j/4"
+    heading: "Effect"
+    status: excluded
+    reason: no_household_computation
+    basis: "The retailer-incentive guidance “shall not affect any requirements under section 7517”, including a retailer’s project eligibility. The affected eligibility is the retail food store’s, not a household’s."
+  
+  - citation: "us/statute/7/2018/j/5"
+    heading: "Report"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must submit an “annual report describing the types of incentives approved” under the subsection. This reporting duty has no household-level computational rule."
+  
+  - citation: "us/statute/7/2019"
+    heading: "Redemption of program benefits"
+    status: excluded
+    reason: no_household_computation
+    basis: "Regulations must “provide for the redemption of benefits accepted by retail food stores” through wholesalers or financial institutions, with rules for facilities, online purchase timing, and fees. Redemption after household issuance does not determine household eligibility or allotment."
+  
+  - citation: "us/statute/7/2020"
+    heading: "Administration"
+    status: pending
+    note: "The section mixes extensive State and federal administration with household-level substantive rules, including expedited-service criteria, prisoner and deceased-person exclusions, and transitional-benefit eligibility and amounts. No listed module covers the full section, so the section-level row cannot be excluded."
+  
+  - citation: "us/statute/7/2020/a"
+    heading: "State responsibility"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection assigns the State “responsibility for certifying applicant households and issuing EBT cards”, along with recordkeeping, audits, and operational review. It governs agency administration and access monitoring without supplying household eligibility criteria or an allotment formula."
+  
+  - citation: "us/statute/7/2020/a/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "It assigns each participating State agency responsibility for “certifying applicant households and issuing EBT cards.” The assignment of institutional responsibility contains no household-level computation."
+  
+  - citation: "us/statute/7/2020/a/2"
+    heading: "Local administration"
+    status: excluded
+    reason: no_household_computation
+    basis: "State responsibility “shall not be affected by whether the program is operated” on a State- or county-administered basis. This allocation of administrative responsibility does not determine household eligibility or benefits."
+  
+  - citation: "us/statute/7/2020/a/3"
+    heading: "Records"
+    status: excluded
+    reason: no_household_computation
+    basis: "Covered records and information systems must be “made available for inspection and audit” and preserved for at least three years. These recordkeeping duties do not compute household eligibility or allotments."
+  
+  - citation: "us/statute/7/2020/a/4"
+    heading: "Review of major changes in program design"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must “develop standards for identifying major changes” in State operations, and States must notify and collect information about effects. This operational-review regime supplies no household eligibility or benefit rule."
+  
+  - citation: "us/statute/7/2020/b"
+    heading: "Correction of improper denials and under­issuances"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "After an agency learns that it “improperly denied, terminated, or underissued benefits,” it must restore benefits and prevent recurrence. The exact fragment “improperly denied, terminated, or underissued benefits” describes a post-determination corrective remedy rather than a point-in-time calculation."
+  
+  - citation: "us/statute/7/2020/c"
+    heading: "Civil rights compliance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection provides that “there shall be no discrimination” in certification and requires compliance with four civil-rights statutes. These commands do not provide household eligibility criteria or an allotment formula."
+  
+  - citation: "us/statute/7/2020/c/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "It prohibits discrimination in household certification “by reason of race, sex, religious creed, national origin, or political affiliation.” The civil-rights command contains no computational eligibility or benefit rule."
+  
+  - citation: "us/statute/7/2020/c/2"
+    heading: "Relation to other laws"
+    status: excluded
+    reason: no_household_computation
+    basis: "State administration “shall be consistent with the rights of households” under the Age Discrimination Act, Rehabilitation Act, ADA, and Title VI. This cross-reference establishes civil-rights compliance, not a household eligibility or allotment computation."
+  
+  - citation: "us/statute/7/2020/d"
+    heading: "Plan of operation by State agency; approval by Secretary; Indians"
+    status: excluded
+    reason: no_household_computation
+    basis: "Each participating State must “submit for approval a plan of operation”, and the subsection governs reservation administration, consultation, training, and technical assistance. References to household rights and benefit levels constrain plan review but do not themselves calculate either."
+  
+  - citation: "us/statute/7/2020/e"
+    heading: "Requisites of State plan of operation"
+    status: pending
+    note: "The State-plan subsection mixes administrative provisions with household-level rules, including eligibility constraints, expedited-service thresholds, continuation of pre-reduction benefits during an appeal, prisoner exclusion, and simplified-program benefit methods. The listed 7 CFR modules cover only fragments, not this full subsection."
+  
+  - citation: "us/statute/7/2020/e/1"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The State must comply with rules requiring the “use of appropriate bilingual personnel and printed material” in specified areas. These communication and staffing requirements do not compute eligibility or benefits."
+  
+  - citation: "us/statute/7/2020/e/2"
+    heading: null
+    status: pending
+    note: "Most clauses govern office and application procedure, but the paragraph makes a minimally signed application filed on submission and a telephonic signature’s date “the date of application for all purposes,” which can affect the initial benefit period and amount; it also addresses certification of homeless individuals. us/regulations/7-cfr/273/2/j.yaml is limited to PA/GA households and does not cover these rules."
+  
+  - citation: "us/statute/7/2020/e/3"
+    heading: null
+    status: pending
+    note: "The paragraph mixes verification and a 30-day processing standard with an entitlement to an allotment “retroactive to the period of application.” Because that retroactivity can affect the household’s benefit period and amount and the full §273.2 certification context is not encoded, a purely procedural exclusion would be unsafe."
+  
+  - citation: "us/statute/7/2020/e/4"
+    heading: null
+    status: pending
+    note: "Alongside notice and recertification timing, the paragraph directs that a household found ineligible or eligible for a smaller allotment may not continue at the prior level even after a timely fair-hearing request. That clause changes point-in-time participation or benefit amount, and no listed module covers it."
+  
+  - citation: "us/statute/7/2020/e/5"
+    heading: null
+    status: pending
+    note: "The paragraph constrains the eligibility standards applied to households to those in §§2014 and 2015 and bars additional State requirements. This affects who may be eligible, and no listed module fully encodes the constraint."
+  
+  - citation: "us/statute/7/2020/e/6"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The State must follow “general procedures prescribed by the Secretary” for certification and employ personnel under merit-system standards. These procedural and staffing requirements do not themselves alter household eligibility or benefit amounts."
+  
+  - citation: "us/statute/7/2020/e/7"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "An applicant household “may be represented in the certification process”, and a designee may also act in issuance or food purchase. Representation changes who may complete those processes, not the household’s eligibility or allotment."
+  
+  - citation: "us/statute/7/2020/e/8"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires “safeguards which prohibit the use or disclosure of information”, with audit, law-enforcement, and collection exceptions. Information governance contains no household eligibility or benefit calculation."
+  
+  - citation: "us/statute/7/2020/e/9"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The income, resource, and shelter comparisons identify households that must receive service “no later than 7 days after the date of application.” The exact fragment “no later than 7 days after the date of application” accelerates delivery but does not change underlying eligibility or amount."
+  
+  - citation: "us/statute/7/2020/e/10"
+    heading: null
+    status: pending
+    note: "The paragraph mixes fair-hearing and withdrawal procedure with a substantive continuation rule: a timely requester generally continues to receive benefits at the pre-adverse-action level until an adverse decision or certification-period end. That point-in-time benefit effect prevents procedural exclusion, and no listed module encodes it."
+  
+  - citation: "us/statute/7/2020/e/11"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "Upon a request or discovery of loss, the State must provide “prompt restoration in the form of benefits”, subject to a one-year lookback. This is a post-determination remedy, not a rule setting current eligibility or calculating the current allotment."
+  
+  - citation: "us/statute/7/2020/e/12"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The State plan must provide for “submission of such reports and other information” as the Secretary requires. Agency reporting supplies no household eligibility or benefit computation."
+  
+  - citation: "us/statute/7/2020/e/13"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision calls for “indicators of expected performance in the administration of the program.” The exact fragment “indicators of expected performance in the administration of the program” concerns administration, not household computation."
+  
+  - citation: "us/statute/7/2020/e/14"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The disaster plan must include “procedures for informing the public about the disaster program”, coordination, application procedure, fraud deterrence, and caseworker instruction. It establishes disaster-program administration but no household eligibility criterion or benefit formula."
+
+  - citation: "us/statute/7/2020/e/15"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "This paragraph requires ‘immediate reporting to the Immigration and Naturalization Service’ after an ineligibility determination; it supplies no eligibility or benefit calculation."
+  - citation: "us/statute/7/2020/e/16"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision concerns the optional ‘establishment and operation of an automatic data processing and information retrieval system’ for program administration, not a household eligibility or benefit rule."
+  - citation: "us/statute/7/2020/e/17"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The paragraph permits information to be ‘requested and exchanged for purposes of income and eligibility verification’; it governs verification data exchange rather than the eligibility criteria or benefit formula."
+  - citation: "us/statute/7/2020/e/18"
+    heading: null
+    status: pending
+    note: "Subparagraph (A) is duplicate-participation verification, whose substantive bar is covered by us/regulations/7-cfr/273/3.yaml, but subparagraph (B) directly excludes a detained individual from household participation and no module in the pinned inventory covers that prisoner rule. Partial coverage requires pending."
+  - citation: "us/statute/7/2020/e/19"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "This State-plan requisite asks for ‘the plans of the State agency for carrying out employment and training programs’, including coverage, coordination, and the basis for exemptions; it does not itself prescribe a household eligibility or benefit computation."
+  - citation: "us/statute/7/2020/e/20"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires ‘the establishment and operation of a unit for the detection of fraud’ in large project areas, an enforcement-administration function with no household eligibility or benefit formula."
+  - citation: "us/statute/7/2020/e/21"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The State option is for ‘procedures necessary to obtain payment of uncollected overissuance’ from unemployment compensation, a post-issuance collection mechanism with no point-in-time eligibility or benefit effect."
+  - citation: "us/statute/7/2020/e/22"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision merely requires inclusion of ‘the guidelines the State agency uses in carrying out section 2015(i)’ in the State plan; it states no household rule of its own."
+  - citation: "us/statute/7/2020/e/23"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph requires a State electing a simplified program to describe ‘the plans of the State agency for operating the program,’ including its rules, shelter-cost approach, and quality control; it does not itself supply those household computations."
+  - citation: "us/statute/7/2020/e/24"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The paragraph directs the State agency to ‘request wage data directly from the National Directory of New Hires’ at certification; that is an evidence-gathering step, not an income-counting or allotment rule."
+  - citation: "us/statute/7/2020/e/25"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The text requires ‘the plans of the State agency for operating the program’ and ‘a report by the State agency to the Secretary annually’ for contracts with private meal establishments; it does not define the referenced eligibility categories or compute household benefits."
+  - citation: "us/statute/7/2020/e/26"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "This provision limits when a State must ‘pursue clarification and verification’ of data-match information; it governs case-processing verification triggers without changing eligibility standards or the benefit formula."
+  - citation: "us/statute/7/2020/f"
+    heading: "Repealed. Pub. L. 111–296, title II, § 241(b)(2) , Dec. 13, 2010 , 124 Stat. 3236"
+    status: excluded
+    reason: reserved
+    basis: "The source supplies no body and labels the subsection ‘Repealed.’"
+  - citation: "us/statute/7/2020/g"
+    heading: "State noncompliance; correction of failures"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection gives a noncompliant State agency time to correct a failure and then permits the Secretary to ‘withhold from the State such funds’ or seek injunctive relief; these are Federal-State enforcement remedies, not household computations."
+  - citation: "us/statute/7/2020/h"
+    heading: "Deposit by State to cover fraudulently or negligently issued benefits"
+    status: excluded
+    reason: no_household_computation
+    basis: "When State-agency negligence or fraud caused issuance, the State must ‘deposit into the Treasury’ the face value of the benefits; this allocates governmental financial liability and does not determine a household’s current eligibility or allotment."
+  - citation: "us/statute/7/2020/i"
+    heading: "Application and denial procedures"
+    status: pending
+    note: "Paragraph (1) is application assistance, but paragraph (2) bars household denial or termination solely because another public-assistance program denied or terminated benefits and requires a separate SNAP determination. No pinned module confirms coverage of that household determination safeguard."
+  - citation: "us/statute/7/2020/i/1"
+    heading: "Application procedures"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The provision requires SSI households to ‘be assisted in making a simple application’ and to be certified using Social Security Administration files; these are application and information-source procedures, not substantive eligibility or benefit rules."
+  - citation: "us/statute/7/2020/i/2"
+    heading: "Denial and termination"
+    status: pending
+    note: "The paragraph prohibits denying or terminating SNAP solely because another public-assistance program did so and requires ‘a separate determination’ under SNAP eligibility requirements. That household determination constraint has no confirmed encoding in the pinned module set."
+  - citation: "us/statute/7/2020/j"
+    heading: "Notice of availability of benefits and applications; revision of memorandum of understanding"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The subsection requires individuals to be ‘informed of the availability of benefits’ and governs application forwarding and an interagency reimbursement memorandum; none changes point-in-time household eligibility or benefit amount."
+  - citation: "us/statute/7/2020/j/1"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The paragraph requires certain Social Security applicants and recipients to ‘be informed of the availability of benefits’ and of a simple application; it is notice and application procedure only."
+  - citation: "us/statute/7/2020/j/2"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "This paragraph revises an interagency memorandum so that applications ‘will be forwarded immediately to the State agency’ and Social Security Administration costs are reimbursed; those processing arrangements do not set eligibility or benefit amounts."
+  - citation: "us/statute/7/2020/k"
+    heading: "Use of post offices"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection allows post offices to ‘provide, on request by the State agency,’ benefits to already eligible households; it concerns a benefit-delivery channel, not eligibility or allotment calculation."
+  - citation: "us/statute/7/2020/l"
+    heading: "Special financial audit review of high participation States"
+    status: excluded
+    reason: no_household_computation
+    basis: "A State participation-to-population ratio above 60 percent triggers an Inspector General ‘financial audit review of a sample of project areas’; the ratio governs agency audit selection, not any household determination."
+  - citation: "us/statute/7/2020/m"
+    heading: "Alaskan fee agents; use and services"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "Fee agents may distribute and assist with applications, interview, verify, and forward documents, but their services ‘shall not include making final decisions on household eligibility or benefit levels.’"
+  - citation: "us/statute/7/2020/n"
+    heading: "Verification by State agencies"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The subsection requires States to ‘conduct verification and implement other measures’ to enforce separately referenced limits on concurrent assistance; it prescribes verification activity rather than a household eligibility or benefit formula."
+  - citation: "us/statute/7/2020/o"
+    heading: "Data processing systems; model plan; comprehensive automation and computerization; State plans; evaluation and report to Congress; corrective measures by State; time for implementation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection governs a ‘model plan for the comprehensive automation of data processing’, State system plans, evaluation, corrective measures, and deadlines; although systems may process eligibility and benefits, the text supplies no household computation."
+  - citation: "us/statute/7/2020/o/1"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must develop ‘a model plan for the comprehensive automation of data processing and computerization of information systems’; the listed system functions include eligibility and benefit calculation but no rule for either."
+  - citation: "us/statute/7/2020/o/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "Each State must submit a plan for an ‘automated data processing and information retrieval system to administer’ SNAP, including implementation time frames; this is system-planning administration."
+  - citation: "us/statute/7/2020/o/3"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must report to Congress on the ‘degree and sufficiency’ of State computerized information systems and needed improvements; the paragraph contains no household-level rule."
+  - citation: "us/statute/7/2020/o/4"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may direct a State to ‘automate data processing systems or computerize information systems’ to correct administrative shortcomings; this governs State infrastructure rather than household determinations."
+  - citation: "us/statute/7/2020/o/5"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "This paragraph requires a State agency to ‘commence implementation of its plan’ and meet its time frames, while permitting good-faith extensions; those data-system deadlines contain no household computation."
+  - citation: "us/statute/7/2020/p"
+    heading: "State verification option"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The State must use immigration-status and income-and-eligibility verification systems ‘in accordance with standards set by the Secretary’; the provision specifies verification tools, not substantive eligibility or allotment rules."
+  - citation: "us/statute/7/2020/q"
+    heading: "Denial of benefits for prisoners"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection directs the Secretary to ‘assist States’ in implementing computer matches or other systems for the prisoner rule already stated in subsection (e)(18)(B); it adds implementation support but no new eligibility criterion or calculation."
+  - citation: "us/statute/7/2020/r"
+    heading: "Denial of benefits for deceased individuals"
+    status: pending
+    note: "Paragraph (1) is a data-sharing arrangement, but paragraph (2) directly requires that benefits not be issued to deceased individuals. No pinned statute or regulation module covers that person-level issuance bar."
+  - citation: "us/statute/7/2020/r/1"
+    heading: null
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The paragraph requires a cooperative arrangement with the Commissioner of Social Security ‘to obtain information on individuals who are deceased’; it is a data-acquisition procedure."
+  - citation: "us/statute/7/2020/r/2"
+    heading: null
+    status: pending
+    note: "The paragraph requires the State to ensure ‘that benefits are not issued to individuals who are deceased,’ a direct person-level issuance restriction with no confirmed encoding in the pinned module inventory."
+  - citation: "us/statute/7/2020/s"
+    heading: "Transitional benefits option"
+    status: pending
+    note: "The subsection directly governs which households may receive transitional benefits, a five-month maximum, the transitional allotment formula, disqualifying conditions, and the effect of recertification. The pinned inventory has no modules for 7 CFR 273.26–273.32, so this computational package is unencoded."
+  - citation: "us/statute/7/2020/s/1"
+    heading: "In general"
+    status: pending
+    note: "This paragraph defines the households a State may cover with transitional SNAP benefits after cash assistance ends. No pinned module covers this transitional-eligibility option."
+  - citation: "us/statute/7/2020/s/2"
+    heading: "Transitional benefits period"
+    status: pending
+    note: "The paragraph sets a household-level maximum transitional-benefit period of five months after cash assistance terminates. No pinned module encodes that duration rule."
+  - citation: "us/statute/7/2020/s/3"
+    heading: "Amount of benefits"
+    status: pending
+    note: "The paragraph computes the transitional allotment from the immediately preceding allotment, adjusted for the termination of cash assistance and optionally other-program information. No pinned module encodes this transitional-benefit formula."
+  - citation: "us/statute/7/2020/s/4"
+    heading: "Determination of future eligibility"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The paragraph allows recertification and a new certification period to begin ‘In the final month of the transitional benefits period’; it governs recertification timing and workflow, not the eligibility criteria or allotment amount."
+  - citation: "us/statute/7/2020/s/5"
+    heading: "Limitation"
+    status: pending
+    note: "The paragraph directly makes households ineligible for transitional benefits based on loss of section 2015 eligibility, a cash-assistance sanction, or a State-designated category. No pinned module covers these transitional-benefit exclusions."
+  - citation: "us/statute/7/2020/s/6"
+    heading: "Applications for recertification"
+    status: pending
+    note: "Subparagraph (A) is an application-timing rule, but subparagraph (B) changes all subsequent household allotments by requiring them to be determined without the transitional-benefit subsection. The mixed provision is not fully encoded."
+  - citation: "us/statute/7/2020/t"
+    heading: "Grants for simplified application and eligibility determination systems and improved access to benefits"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection authorizes the Secretary to ‘make grants’ for simplified application and eligibility-system projects and governs project types, costs, grantees, and selection; it does not establish household eligibility or benefit rules."
+  - citation: "us/statute/7/2020/t/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary may use up to $5,000,000 ‘to make grants to pay 100 percent of the costs’ of simplified application and eligibility-system projects; this is an appropriation and grant-administration rule."
+  - citation: "us/statute/7/2020/t/2"
+    heading: "Types of projects"
+    status: excluded
+    reason: no_household_computation
+    basis: "Eligible projects coordinate application and verification processes or improve the ‘administrative infrastructure used in processing applications and determining eligibility’; no household computation is prescribed."
+  - citation: "us/statute/7/2020/t/3"
+    heading: "Limitation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph bars a grant for ‘the ongoing cost of carrying out any project’; it is a funding limitation unrelated to household eligibility or benefits."
+  - citation: "us/statute/7/2020/t/4"
+    heading: "Eligible entities"
+    status: excluded
+    reason: no_household_computation
+    basis: "The phrase ‘eligible to receive a grant’ applies to listed governments, agencies, public entities, and private nonprofits; this organizational grant eligibility is not household SNAP eligibility."
+  - citation: "us/statute/7/2020/t/5"
+    heading: "Selection of eligible entities"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary ‘shall develop criteria for the selection of eligible entities’ and may prefer governmental-nongovernmental partnerships; the rule concerns grant recipients, not SNAP households."
+  - citation: "us/statute/7/2020/u"
+    heading: "Agreement for direct certification and cooperation"
+    status: pending
+    note: "Paragraph (1) is interagency administration, but paragraph (2) directly makes a child receiving SNAP eligible for free lunches and breakfasts without further application. No pinned module covers that cross-program eligibility rule."
+  - citation: "us/statute/7/2020/u/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "Each SNAP State agency ‘shall enter into an agreement’ with the State agency administering the school lunch program; this is interagency administration."
+  - citation: "us/statute/7/2020/u/2"
+    heading: "Contents"
+    status: pending
+    note: "The paragraph directly makes a child receiving SNAP eligible for free lunches and breakfasts ‘without further application.’ No pinned module covers that cross-program eligibility computation."
+  - citation: "us/statute/7/2020/v"
+    heading: "Data exchange standards for improved interoperability"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection requires the Secretary to ‘designate data exchange standards’, specifies technical and accounting properties, and preserves effective existing standards; it governs information infrastructure."
+  - citation: "us/statute/7/2020/v/1"
+    heading: "Designation"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must designate standards for information that State agencies ‘electronically exchange with another State agency’ and for Federal reporting; no household eligibility or benefit rule appears."
+  - citation: "us/statute/7/2020/v/2"
+    heading: "Requirements"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph requires ‘a widely accepted, nonproprietary, searchable, computer-readable format’ plus interoperability, accounting consistency, cost-effectiveness, and upgradability; these are technical administration requirements."
+  - citation: "us/statute/7/2020/v/3"
+    heading: "Rules of construction"
+    status: excluded
+    reason: no_household_computation
+    basis: "The provision preserves ‘existing data exchange standards for Federal reporting’ when effective and efficient; it has no household-level computational content."
+  - citation: "us/statute/7/2020/w"
+    heading: "Advice regarding employment and training services"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "At recertification, the State must ‘advise members of the household’ who meet listed conditions about available employment and training services; advice alone does not change eligibility or benefit amount."
+  - citation: "us/statute/7/2020/x"
+    heading: "National Accuracy Clearinghouse"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection establishes an ‘interstate data system’ and governs data matching, protection, regulations, and timing; it administers detection of duplicate issuance but does not prescribe which household determination or amount follows a match."
+  - citation: "us/statute/7/2020/x/1"
+    heading: "Definition of indication of multiple issuance"
+    status: excluded
+    reason: no_household_computation
+    basis: "The term means ‘an indication, based on a computer match’ that more than one State is issuing benefits simultaneously; it defines an administrative data-match flag rather than a household eligibility or benefit outcome."
+  - citation: "us/statute/7/2020/x/2"
+    heading: "Establishment"
+    status: excluded
+    reason: no_household_computation
+    basis: "The paragraph directs the Secretary to ‘establish an interstate data system’, limits matched information, and sets use, retention, privacy, and security protections; it specifies no household decision produced from a match."
+  - citation: "us/statute/7/2020/x/3"
+    heading: "Issuance of interim final regulations"
+    status: excluded
+    reason: no_household_computation
+    basis: "The Secretary must issue regulations governing State action on match indications and the Clearinghouse’s information and privacy safeguards; ‘appropriate action’ is left to the Secretary, so this paragraph contains no household computation itself."
+  - citation: "us/statute/7/2020/x/4"
+    heading: "Timing"
+    status: excluded
+    reason: procedural_no_point_in_time_effect
+    basis: "The provision sets a three-year deadline for the ‘initial match and corresponding actions’; an implementation deadline does not alter household eligibility or benefit amount."
+  - citation: "us/statute/7/2021"
+    heading: "Civil penalties and disqualification of retail food stores and wholesale food concerns"
+    status: excluded
+    reason: no_household_computation
+    basis: "The section regulates ‘retail food store or wholesale food concern’ sanctions, bonds, forfeitures, ownership transfers, redemption suspensions, and fraud pilots; it contains no household eligibility or benefit calculation."
+  - citation: "us/statute/7/2021/a"
+    heading: "Disqualification"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection authorizes disqualification and civil penalties against an ‘approved retail food store or wholesale food concern’ and requires evidentiary criteria for those sanctions; it does not regulate household computations."
+  - citation: "us/statute/7/2021/a/1"
+    heading: "In general"
+    status: excluded
+    reason: no_household_computation
+    basis: "A violating store or wholesaler may be ‘disqualified for a specified period of time’, ‘assessed a civil penalty of up to $100,000 for each violation’, or both; these sanctions apply to a business, not a household."
+  - citation: "us/statute/7/2021/a/2"
+    heading: "Regulations"
+    status: excluded
+    reason: no_household_computation
+    basis: "The regulations must set criteria for ‘the suspension or disqualification of and the assessment of a civil penalty against’ a retailer or wholesaler; no household eligibility or allotment rule is present."
+  - citation: "us/statute/7/2021/b"
+    heading: "Period of disqualification"
+    status: excluded
+    reason: no_household_computation
+    basis: "The subsection makes a business disqualification ‘permanent’ for specified repeated violations, trafficking, or prohibited sales and sets other sanction periods; these are retailer and wholesaler participation rules."
+  - citation: "us/statute/7/2021/b/1"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The five-year maximum applies ‘upon the first occasion of disqualification’ of a retailer or wholesaler under subsection (a), not to a household’s SNAP eligibility."
+  - citation: "us/statute/7/2021/b/2"
+    heading: null
+    status: excluded
+    reason: no_household_computation
+    basis: "The ten-year maximum applies ‘upon the second occasion of disqualification’ of a retailer or wholesaler under subsection (a), with no household-level computational content."
+findings:
+  - "The only directly encoded provision in this slice is § 2017(a): `us/statutes/7/2017/a.yaml` exists in the pinned inventory and its summary and rules cover the statutory allotment formula. The containing § 2017 row remains pending because subsections (b)–(f) include additional unencoded household rules."
+  - "No `operationalized_by` exclusion was safe in this slice. In particular, `us/regulations/7-cfr/273/10.yaml` realizes the initial-month under-$10 nonissuance rule in § 2017(c)(1), but not that paragraph's day-proration formula or the full initial-month context, so § 2017(c) and (c)(1) remain pending."
+  - "`us/regulations/7-cfr/273/3.yaml` covers the duplicate-participation bar implicated by § 2020(e)(18)(A), but no pinned module covers that row's prisoner exclusion in subparagraph (B); the mixed row therefore remains pending."
+  - "Unencoded household computations include the § 2016(h)(8) card-fee allotment reduction, § 2016a stolen-benefit claim and cap rules, the § 2016(i) State-funded eligibility option, § 2017(d) sanctions, § 2017(f) facility-resident allotments, and § 2020(s) transitional benefits."
+  - "Numeric expedited-service screens in § 2020(e)(9) were excluded as procedural because they control only the seven-day delivery timeline, while § 2020(e)(10) remains pending because continuation during an appeal changes the household's point-in-time benefit level."
+  - "The cross-program rules in § 2017(b) and § 2020(u)(2) remain pending: the former controls treatment of SNAP benefits in other laws, and the latter directly confers free-lunch and free-breakfast eligibility; no pinned module covers either effect."
+  - "Section 2016a(b)(2) contains a theft-date window ending December 20, 2024. The current source still supplies that household replacement computation, and the taxonomy has no expired-provision exclusion, so it was left pending rather than treated as reserved."
+  - "The assigned slice contains 207 unique citation paths in source order, with no duplicate citations or missing bodies except the intentionally empty repealed § 2020(f). Its 57 null source headings are preserved as YAML null."

@@ -47,6 +47,14 @@ def _merge_count_rows(rows_lists: list[list[dict]]) -> list[dict]:
     ]
 
 
+def _merge_count_objects(count_objects: list[dict[str, int]]) -> dict[str, int]:
+    totals: dict[str, int] = defaultdict(int)
+    for counts in count_objects:
+        for value, count in counts.items():
+            totals[str(value)] += int(count or 0)
+    return dict(sorted(totals.items()))
+
+
 def merge(shards: list[dict]) -> dict:
     first = shards[0]
     for key in ("schema_version", "suite", "population", "engines", "locales"):
@@ -71,11 +79,16 @@ def merge(shards: list[dict]) -> dict:
         "mismatches_by_concept",
         "mismatches_by_kind",
         "mismatches_by_scenario",
-        "errors_by_engine",
     ):
         summary[key] = _merge_count_rows(
             [(s.get("summary") or {}).get(key) or [] for s in shards]
         )
+    summary["errors_by_engine"] = _merge_count_objects(
+        [
+            (s.get("summary") or {}).get("errors_by_engine") or {}
+            for s in shards
+        ]
+    )
     weighted_lists = [
         (s.get("summary") or {}).get("weighted") for s in shards
     ]

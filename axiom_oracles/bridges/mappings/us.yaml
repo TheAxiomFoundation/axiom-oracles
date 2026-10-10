@@ -4900,6 +4900,40 @@ mappings:
     candidate_priority: P4
     rationale: ACL 14-63 denial/discontinuance judgment for zero-benefit CE/MCE households of three or more; PolicyEngine's is_snap_eligible and snap_normal_allotment are downstream outcomes, not this denial predicate.
 
+  - legal_id: us:policies/income_tax/taxable_income_pipeline#taxable_income_pipeline_verified_domain_applies
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    entity: tax_unit
+    period: year
+    comparison: decision
+    candidate_priority: P4
+    rationale: This RuleSpec judgment fail-closes the taxable-income composition unless the filing status, section 63(c)(6) standard-deduction eligibility, imported component domains, completed worksheet boundaries, itemization election, and nonnegative amount constraints all hold. PolicyEngine-US 1.767.3 exposes no one-to-one judgment for that legal-domain contract.
+
+  - legal_id: us:policies/income_tax/taxable_income_pipeline#federal_taxable_income
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: taxable_income
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both companion-asserted outputs are annual TaxUnit federal taxable income, floored at zero after subtracting section 151 exemptions and the selected taxable-income deductions from adjusted gross income. The 14-case grid binds all five filing statuses and the resolved election at this direct shared boundary.
+
+  - legal_id: us:policies/income_tax/taxable_income_pipeline#federal_taxable_income_deductions
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: taxable_income_deductions
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both companion-asserted outputs are the annual TaxUnit total of the election-selected 2026 below-line deduction inventory. The oracle binds the same resolved itemization election and completed component boundaries, while independently deriving the standard and senior deductions in PolicyEngine-US 1.767.3.
+
   - legal_id: us-ca:policies/cdss/snap/fy-2026-benefit-calculation#shelter_costs
     country: us
     program: snap
@@ -7430,6 +7464,38 @@ mappings:
     comparison: boolean
     rationale: Same federal SNAP net-income eligibility test.
 
+  - legal_id: us:regulations/7-cfr/273/9/c/17#snap_child_support_income_exclusion
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_child_support_gross_income_deduction
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same 7 CFR 273.9(c)(17) child support exclusion from gross income. PolicyEngine-US calls the excluded amount a gross income deduction (its state exclusion parameter times countable child support). The adapter replays the test's State election in a state with that election (TX deducts, CA excludes from policyengine-us 2.11.4) and reports the case unsupported when that state's parameter disagrees.
+
+  - legal_id: us:regulations/7-cfr/273/9/d/5#snap_child_support_deduction_for_net_income
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_child_support_deduction
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same optional 7 CFR 273.9(d)(5) child support deduction taken in net income. PolicyEngine-US deducts countable child support that its state parameter does not exclude. The adapter replays the test's State election as for the (c)(17) exclusion.
+
+  - legal_id: us:regulations/7-cfr/273/9/d/5#snap_state_agency_provides_child_support_deduction
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_state_agency_provides_child_support_deduction
+    entity: household
+    period: month
+    comparison: boolean
+    rationale: Same 7 CFR 273.9(d)(5) State election to provide the child support deduction instead of the (c)(17) exclusion. PolicyEngine-US has no variable for it; the adapter reads the negation of gov.usda.snap.income.deductions.child_support, which is true when the state excludes.
+
   - legal_id: us:regulations/7-cfr/273/10#snap_gross_monthly_income
     country: us
     program: snap
@@ -8414,40 +8480,6 @@ mappings:
     comparison: money
     candidate_priority: P1
     rationale: Both outputs are the annual TaxUnit six-component itemized taxable-income deduction aggregate after section 68. PolicyEngine-US 1.767.3's non-equivalent section 68 base and truncated-rate behavior are implementation divergences on this shared final quantity and remain visible in the itemized grid rather than changing the mapping boundary.
-
-  - legal_id: us:policies/income_tax/taxable_income_pipeline#taxable_income_pipeline_verified_domain_applies
-    country: us
-    program: tax
-    mapping_type: not_comparable
-    entity: tax_unit
-    period: year
-    comparison: decision
-    candidate_priority: P4
-    rationale: This RuleSpec judgment fail-closes the taxable-income composition unless the filing status, section 63(c)(6) standard-deduction eligibility, imported component domains, completed worksheet boundaries, itemization election, and nonnegative amount constraints all hold. PolicyEngine-US 1.767.3 exposes no one-to-one judgment for that legal-domain contract.
-
-  - legal_id: us:policies/income_tax/taxable_income_pipeline#federal_taxable_income_deductions
-    country: us
-    program: tax
-    mapping_type: direct_variable
-    policyengine_variable: taxable_income_deductions
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    candidate_priority: P1
-    rationale: Both companion-asserted outputs are the annual TaxUnit total of the election-selected 2026 below-line deduction inventory. The oracle binds the same resolved itemization election and completed component boundaries, while independently deriving the standard and senior deductions in PolicyEngine-US 1.767.3.
-
-  - legal_id: us:policies/income_tax/taxable_income_pipeline#federal_taxable_income
-    country: us
-    program: tax
-    mapping_type: direct_variable
-    policyengine_variable: taxable_income
-    entity: tax_unit
-    period: year
-    unit: USD
-    comparison: money
-    candidate_priority: P1
-    rationale: Both companion-asserted outputs are annual TaxUnit federal taxable income, floored at zero after subtracting section 151 exemptions and the selected taxable-income deductions from adjusted gross income. The 14-case grid binds all five filing statuses and the resolved election at this direct shared boundary.
 
   - legal_id: us:policies/income_tax/savers_credit_pipeline#federal_savers_credit
     country: us
@@ -32423,6 +32455,47 @@ mappings:
     unit: USD
     comparison: money
     rationale: Both outputs apply Delaware Code title 30 section 1102(a)(14)'s tax-year-2026 schedule to one Person's completed Delaware taxable income before nonrefundable credits. This mapping excludes filing-method selection, combined-return computation, TaxUnit aggregation, credits, payments, and final liability.
+
+  # The strict-cutover candidate still carries the earlier narrow TaxUnit
+  # pipeline. It accepts completed taxable income and the selected bracket as
+  # caller-supplied boundaries, so only its final before-credit amount shares a
+  # one-to-one PolicyEngine surface. These exact records intentionally override
+  # the broad us-ms fallback below.
+  - legal_id: us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_taxable_income
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: ms_taxable_income_joint
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P4
+    rationale: This RuleSpec output normalizes one caller-supplied completed Mississippi taxable-income amount at TaxUnit/year. PolicyEngine's adjacent ms_taxable_income_joint target and its individual-filing counterpart are separate Person-grain constructed candidates, so neither is a one-to-one generic TaxUnit taxable-income boundary.
+
+  - legal_id: us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_schedule_tax
+    country: us
+    program: tax
+    mapping_type: not_comparable
+    policyengine_variable: ms_income_tax_before_credits_unit
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P4
+    rationale: This RuleSpec output is an intermediate computed from caller-supplied bracket base, floor, and marginal rate before the pipeline's final nonnegativity guard. PolicyEngine exposes the adjacent final TaxUnit before-credit result after selecting and aggregating its Person-grain filing-method candidates, not this supplied-schedule intermediate.
+
+  - legal_id: us-ms:policies/income_tax/pilot_liability_pipeline#ms_pit_pilot_income_tax_liability
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: ms_income_tax_before_credits_unit
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    candidate_priority: P1
+    rationale: Both outputs are the annual TaxUnit Mississippi individual income tax before credits. The RuleSpec pipeline consumes completed taxable income and the selected current-law bracket as explicit inputs, while PolicyEngine constructs and selects its filing-method-specific Person candidates; this mapping adopts only the shared final before-credit amount, not PolicyEngine's taxable-income construction or filing-method selection.
 
   # Mississippi's canonical TY2026 section 27-7-5 surface applies the enacted
   # Person-grain schedule to one caller-completed Mississippi taxable-income

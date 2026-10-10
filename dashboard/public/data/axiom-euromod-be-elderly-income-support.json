@@ -102,10 +102,7 @@
   ],
   "engines": {
     "left": "euromod",
-    "right": "axiom",
-    "versions": {
-      "axiom_rules_engine": "0.1.0"
-    }
+    "right": "axiom"
   },
   "errors": [],
   "locales": [
@@ -119,10 +116,10 @@
       "source": "config"
     },
     "engine": {
-      "axiom_rules_engine_sha": "13a86a737f2e791e272b7aeb0ce8d5f5cc7e69c3",
+      "axiom_rules_engine_sha": "aa1ff025906c7216c053e9b9c4097cc0dfef1811",
       "axiom_rules_engine_version": "0.1.0"
     },
-    "generated_at": "2026-07-30T03:41:00Z",
+    "generated_at": "2026-07-05T21:39:52Z",
     "generated_by": "scripts/run_comparison.py::be-elderly-income-support",
     "oracle": {
       "euromod_country": "BE",
@@ -134,10 +131,10 @@
     "rulespecs": [
       {
         "repo": "TheAxiomFoundation/rulespec-be",
-        "sha": null
+        "sha": "b27976688ad74221c301dbf1d5c827f24fb7cff1"
       }
     ],
-    "run_kind": "affected-rerun",
+    "run_kind": "manual",
     "schema": "axiom_oracles.provenance.v1"
   },
   "schema_version": "axiom.comparison_report.v2.1",

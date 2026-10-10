@@ -1,0 +1,45 @@
+name: de-worker-dual-oracle-axiom-euromod
+title: Germany workers — Axiom vs EUROMOD
+description: >-
+  Runs the pinned rulespec-de snapshot over the canonical 13-household German
+  worker grid and compares every fully supported output with EUROMOD DE_2025.
+  Outputs without a complete RuleSpec dependency closure remain explicit
+  leg-pending views; missing modules never count as agreement.
+documentation: docs/de-dual-oracle-playbook.md
+
+runner:
+  type: de-axiom-oracle-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    oracle: euromod
+    suite: de-worker-dual-oracle-axiom-euromod
+    population: de-worker-dual-oracle-13-households
+    sample_size: 13
+    period: "2025"
+    output_dependency_plan: comparisons/de-worker-dual-oracle/output-dependencies.json
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-de.git
+    rulespec_root: $HOME/TheAxiomFoundation/rulespec-de
+    rulespec_upstream_sha: d83ba3db30e2f63376aacf822d116687589b8564
+    rulespec_upstream_tree: 1e75a045e32100544f057ffe335065c1ef99c1bc
+    engine_archive: $AXIOM_RULES_ENGINE_RELEASE_ARCHIVE
+    signing_public_key: $AXIOM_RULESPEC_APPLY_PUBLIC_KEY
+    euromod_model_root: $EUROMOD_MODEL_ROOT_DE
+    euromod_python: $EUROMOD_PYTHON_DE
+    euromod_country: DE
+    euromod_system: DE_2025
+    euromod_dataset: DE_2024_b1_2015_03_e2
+    euromod_template_dataset: DE_training_data
+    concepts:
+      - de:policies/worker_dual_oracle_baseline#employee_health_insurance_contribution_monthly
+      - de:policies/worker_dual_oracle_baseline#employee_pension_insurance_contribution_monthly
+      - de:policies/worker_dual_oracle_baseline#employee_unemployment_insurance_contribution_monthly
+      - de:policies/worker_dual_oracle_baseline#employee_long_term_care_insurance_contribution_monthly
+      - de:policies/worker_dual_oracle_baseline#income_tax_including_solidarity_surcharge_annual
+      - de:policies/worker_dual_oracle_baseline#kindergeld_monthly
+
+artifacts:
+  report_basename: de-worker-dual-oracle-axiom-euromod
+  canonical_record: comparisons/de-worker-dual-oracle/axiom-euromod.json
+
+selector:
+  report: comparisons/de-worker-dual-oracle/axiom-euromod.json
