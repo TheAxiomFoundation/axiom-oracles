@@ -1412,6 +1412,13 @@ mappings:
       transform: sum
       aggregate: sum_over_people
       from_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
+  # Interest here is an upper bound, taxable and tax-exempt alike: A.A.C.
+  # R6-12-503(29) does not count "Dividends, interest, and royalty payments
+  # left on deposit or converted into additional securities", and the
+  # population carries annual totals only, so every dollar is treated as
+  # paid out. DES stops counting interest altogether from the June 2026
+  # benefit month (bulletin of 2026-05-15), after these suites' January
+  # period.
   - match: { kind: suffix, value: caretaker_relative_family_unearned_income }
     scope: household
     source:
