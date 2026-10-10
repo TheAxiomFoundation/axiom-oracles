@@ -3452,6 +3452,15 @@ def attach_axiom_tax_inputs_to_case(case: Case) -> Case:
     people = _people(case)
     if not people:
         raise RuntimeError("Axiom federal tax projection requires at least one person.")
+    if any(person.entity_id == _TAX_UNIT_ID for person in people):
+        # The engine keys input records by (name, entity_id), and every
+        # person repeats the tax unit's numeric defaults under the same refs
+        # (see _person_input_records); a person sharing the tax unit's id
+        # would let those zeros collide with the tax unit's values.
+        raise RuntimeError(
+            f"Axiom federal tax projection reserves entity id {_TAX_UNIT_ID!r} "
+            "for the tax unit; rename the person."
+        )
 
     records = _tax_unit_input_records(case, people)
     records.extend(_person_input_records(people))
@@ -3492,13 +3501,16 @@ def _eitc_relevant_investment_income(
     a dependent's income enters Worksheet 1 only through Form 8814. The
     capital (lines 5-7) and passive (lines 11-13) baskets are floored at
     zero before the baskets are added, so a loss in one basket never
-    offsets income in another. On the Case surface, interest and dividends
-    (lines 1-3) are taxable interest plus ordinary dividends, since the
-    Case has no tax-exempt interest concept; capital gain net income is
-    short- plus long-term gains; and passive activity income is rental
-    income, since the Case has no partnership/S-corp or farm-rental
-    concept. Form 4797 amounts, royalties, and estate/trust passive income
-    are not modeled either.
+    offsets income in another; lines 1-3 are added unfloored. On the Case
+    surface, interest and dividends (lines 1-3) are taxable interest,
+    tax-exempt interest (line 2, Form 1040 line 2a), and ordinary
+    dividends; capital gain net income is short- plus long-term gains; and
+    passive activity income is rental income only. The Case deliberately
+    carries no farm-rent concept, because the Axiom federal oracle bridge
+    has no gross-income slot for it (axiom-oracles issue
+    #566), and no passive partnership/S-corp concept,
+    because no pinned producer supplies one. Form 4797 amounts, royalties,
+    and estate/trust passive income are not modeled either.
     """
     return (
         interest_and_dividends
@@ -3517,6 +3529,14 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
     earners = [person for person in (head, spouse) if person is not None]
     filer_dividends = _sum_dividends(earners)
     filer_interest = _sum_concept(earners, Concepts.INTEREST_INCOME)
+    # Form 1040 line 2a, filers only: 26 USC 86(b)(2)(B) adds interest
+    # "received or accrued by the taxpayer" (PolicyEngine's taxable_ss_magi
+    # likewise counts non-dependents). 26 USC 103(a) keeps it out of gross
+    # income, so it feeds no AGI leaf.
+    filer_tax_exempt_interest = _sum_concept(
+        earners,
+        Concepts.TAX_EXEMPT_INTEREST_INCOME,
+    )
     filer_short_capital_gains = _sum_concept(
         earners,
         Concepts.SHORT_TERM_CAPITAL_GAINS,
@@ -3573,7 +3593,9 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         # units above the $12,200 limit — the
         # ecps-projection-defaults-eitc-investment-income class.
         "eitc_relevant_investment_income": _eitc_relevant_investment_income(
-            interest_and_dividends=filer_interest + filer_dividends,
+            interest_and_dividends=(
+                filer_interest + filer_tax_exempt_interest + filer_dividends
+            ),
             capital_gain_net_income=(
                 filer_short_capital_gains + filer_long_capital_gains
             ),
@@ -3590,7 +3612,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "married_filing_separate_return": False,
         "married_joint_return_filed": spouse is not None,
         "may_be_claimed_as_dependent_by_another_taxpayer": False,
-        "tax_exempt_interest_received_or_accrued": 0,
+        "tax_exempt_interest_received_or_accrued": filer_tax_exempt_interest,
         "spouse_has_attained_age_65_before_close_of_taxable_year": bool(
             spouse and _age(spouse) >= 65
         ),
@@ -3851,6 +3873,11 @@ def _person_input_records(people: list[Entity]) -> list[dict[str, Any]]:
         }
         for name in _BOOLEAN_DEFAULTS_FALSE:
             inputs.setdefault(name, False)
+        # These Person zeros share refs with TaxUnit inputs such as the
+        # 86(b)(2)(B) tax-exempt interest and eitc_relevant_investment_income.
+        # They never shadow the TaxUnit values: the engine indexes input
+        # records by (name, entity_id), and no person may use the tax unit's
+        # id (attach_axiom_tax_inputs_to_case enforces that).
         for name in _TAX_UNIT_NUMERIC_DEFAULTS:
             inputs.setdefault(name, 0)
         for name, value in inputs.items():
@@ -4134,6 +4161,9 @@ def _hoh_qualifying_dependent(dependent: Entity) -> bool:
 
 
 def _dependent_gross_income(dependent: Entity) -> float:
+    # 26 USC 152(d)(1)(B) tests gross income, so tax-exempt interest stays
+    # out: 26 USC 103(a), "gross income does not include interest on any
+    # State or local bond".
     return (
         _earned_income(dependent)
         + max(0, _number(dependent.fact(Concepts.SELF_EMPLOYMENT_INCOME, 0)))

@@ -3597,6 +3597,62 @@ def test_taxsim_target_column_is_mapping_declared_or_none() -> None:
     assert taxsim_target_column(by_state["CA"].output) is None
 
 
+def test_taxsim_person_table_mirrors_the_populace_tax_unit_loader() -> None:
+    """The campaign's TAXSIM leg builds its Cases from its own person table;
+    it must load the same concept -> PolicyEngine variable pairs as the
+    Enhanced-CPS tax-unit loader, less the SSI benefit and resource facts
+    (benefit-lane inputs that no TAXSIM column reads), or a source added to
+    one silently goes missing from the other."""
+    from axiom_oracles.adapters.taxsim.projection import taxsim_input_for_case
+    from axiom_oracles.core.case import Case, Concepts, Entity
+    from axiom_oracles.populations import populace_us
+
+    loader_tax_unit_table = {
+        **populace_us._PERSON_NON_WAGE_VARIABLES,
+        **populace_us._TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
+    }
+    benefit_only = {Concepts.SSI_BENEFITS, Concepts.SSI_COUNTABLE_RESOURCES}
+    campaign_table = {
+        getattr(Concepts, key.upper()): pe_variable
+        for key, pe_variable in state_tax_runner._TAXSIM_PERSON_NON_WAGE_VARIABLES.items()
+    }
+
+    assert campaign_table == {
+        concept: pe_variable
+        for concept, pe_variable in loader_tax_unit_table.items()
+        if concept not in benefit_only
+    }
+
+    # The exclusion is sound only while the TAXSIM row ignores those facts.
+    def head(**facts):
+        return Case(
+            case_id=1,
+            period="2026",
+            entities=(
+                Entity(
+                    "1",
+                    "person",
+                    facts={
+                        Concepts.HOUSEHOLD_RELATION: "head",
+                        Concepts.PERSON_AGE: 70,
+                        **facts,
+                    },
+                ),
+            ),
+            metadata={"state": "UT"},
+        )
+
+    assert taxsim_input_for_case(
+        head(
+            **{
+                Concepts.SSI_BENEFITS: 9_000,
+                Concepts.SSI_COUNTABLE_RESOURCES: 1_500,
+            }
+        ),
+        taxsimid=1,
+    ) == taxsim_input_for_case(head(), taxsimid=1)
+
+
 def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
     class FakeSimulation:
         def __init__(self, dataset):
