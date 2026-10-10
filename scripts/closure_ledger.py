@@ -158,7 +158,7 @@ def _sha256_bytes(data: bytes) -> str:
 
 def _git_bytes(root: Path, *args: str) -> bytes:
     result = subprocess.run(
-        ["git", "-C", str(root), *args],
+        ["git", "--no-replace-objects", "-C", str(root), *args],
         capture_output=True,
         check=False,
     )

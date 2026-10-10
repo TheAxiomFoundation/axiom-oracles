@@ -47,6 +47,7 @@ today (raw 42%, explained 100%, unexplained 0, axiom-attributed 0).
 | `detail/<jur>.json` | Per-policy drill-down (covered/uncovered/excluded, raw + explained rates). Mirrored to `dashboard/public/data/conformance_detail_<jur>.json`. | `scripts/conformance_scoreboard.py` |
 | `history/<jur>/<YYYY-MM-DD>.json` | Dated scoreboard snapshots — the burn-down source of truth (survives rebases). | `scripts/conformance_scoreboard.py --snapshot` |
 | `ratchet.yaml` | Monotonic floors/ceilings: `covered` may only rise; `unexplained`/`axiom_attributed_open` may only fall. | `scripts/conformance_ratchet.py` |
+| `pe-axiom-standard.yaml` | PolicyEngine-attributed mismatch explanations without their Axiom side, grandfathered at the standard's introduction (the list may only shrink); `open_max`, the attributions without a companion test (it may only fall, except by the increment of a recorded raise); and the `debt_raises` log (it only grows). Monotonic against every committed version, merge-safe. See `dispositions/README.md`. | `scripts/pe_axiom_standard.py` |
 | `compositions/<jur>.yaml` | Schema `axiom_oracles.compositions.v2`. Per covered suite: the runnable Axiom **program** the harness composes (RuleSpec import-set + repo-relative files), query entity, flat and record-targeted supplied inputs, relation tuples, and engine→input bridges — so the covered verdict is reproducible outside the harness. | `scripts/generate_conformance_compositions.py` |
 
 `dashboard/public/data/conformance_burndown.json` is built from the dated

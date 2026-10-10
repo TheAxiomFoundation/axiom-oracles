@@ -265,8 +265,11 @@ The runner rejects missing or different pins. Optional `parameters`: `python`
 ### `snap-qc-compare`
 
 Replays USDA SNAP Quality Control public-use reviews through the Axiom RuleSpec
-SNAP composition and compares the constructed benefit (FSBEN) plus its stage
-intermediates against the QC file's own recomputed values. Unlike the
+SNAP composition and compares the composition's benefit and stage
+intermediates with the file's constructed values (`FSBEN`, `FSGRINC`,
+`FSSTDDED`, `FSSLTDED`, `FSNETINC`), which Mathematica calculates for USDA from
+each edited case record; the maximum allotment is checked against the
+oracle's FY2024 table. Unlike the
 `axiom-encode-*` runners this calls the in-repo bridge
 (`axiom_oracles.bridges.snap_qc_compare.run_snap_qc_comparison`) **in process** —
 the oracle lives in this repo, so there is no encoder CLI to shell out to.
@@ -335,6 +338,36 @@ dataset identity (reused from `dataset_identity`, axiom-encode#952 / populace#80
 a checked-in report records exactly what produced it. `axiom_oracles/provenance.py`
 builds it; committed pre-provenance reports can be stamped from their git commit
 date with `scripts/backfill_report_provenance.py`.
+
+A SHA names a commit, but a run reads the working tree. So every
+`provenance.rulespecs[]` entry with a SHA also records `dirty`: `false` when
+the checkout's tracked index and raw files match that commit, `true` plus
+`diff_sha256` when they do not, and `null` when inspection fails. Each entry
+records the resolved checkout roots in `sha_toplevel` and
+`worktree_toplevel`; the non-manual publication gate refuses mismatched or unverifiable
+roots, and an enclosing repository cannot attest a requested subdirectory.
+The check compares raw Git blob identities without clean filters or line-ending
+normalization, so converted or smudged checkout bytes that differ from the
+commit count as dirty. `diff_sha256` hashes a canonical manifest of each
+changed path's HEAD, index and raw working-tree content ids. Initialized
+submodules are inspected recursively; their HEAD and recursive dirty digest
+enter the parent manifest, and an unverifiable child makes the parent
+unverifiable (see `worktree_state`). Edits and deletions hidden behind
+`skip-worktree` or `assume-unchanged` count, except absent skip-worktree files
+that effective sparse-checkout patterns exclude; untracked files do not count,
+so build output never marks a tree dirty. Reads use a private Git directory with
+copies of the index and shared split-index files, preserving the checkout's
+index metadata. A DE pair run reads its pinned commit from git objects, so its
+entry records the pin as clean whatever the checkout holds. Without this
+record, a checkout whose tracked files differ from its HEAD would be published
+under a SHA whose rules did not produce the values.
+`run_comparison.py` refuses
+to publish a `weekly`, `pr-triggered` or `affected-rerun` report unless every
+SHA-bearing rulespec entry is recorded clean. A `manual` run on a dirty tree
+publishes with the flag and a stderr warning. `select_affected_suites.py`
+treats a dirty or unverifiable entry as stale whatever its SHA, and
+`check_vacuous_gate.py` lists the repos as `dirty_rulespecs` on the suite's
+`freshness.json` row (only when there are any) with a CI warning.
 
 ## Affected-comparison map + rerun (O2)
 

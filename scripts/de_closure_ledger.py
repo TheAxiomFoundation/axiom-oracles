@@ -251,7 +251,7 @@ def _git(root: Path, *args: str) -> bytes:
         }
     )
     result = subprocess.run(
-        ["git", "-C", str(root), *args],
+        ["git", "--no-replace-objects", "-C", str(root), *args],
         capture_output=True,
         check=False,
         env=environment,

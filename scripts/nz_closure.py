@@ -104,7 +104,7 @@ class ClosureError(ValueError):
 
 def _git(repo: Path, *args: str) -> str:
     process = subprocess.run(
-        ["git", "-C", str(repo), *args], capture_output=True, text=True, check=False
+        ["git", "--no-replace-objects", "-C", str(repo), *args], capture_output=True, text=True, check=False
     )
     if process.returncode:
         raise ClosureError(process.stderr.strip() or process.stdout.strip())
@@ -454,7 +454,7 @@ def _history_note(message: str) -> None:
 
 def _git_history(*args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        ["git", "-C", str(REPO_ROOT), *args],
+        ["git", "--no-replace-objects", "-C", str(REPO_ROOT), *args],
         capture_output=True,
         text=True,
         check=False,

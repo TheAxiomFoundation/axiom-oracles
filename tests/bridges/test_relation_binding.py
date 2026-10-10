@@ -477,3 +477,82 @@ def test_every_generated_member_occupies_its_expected_kind_slot(
         assert emitted[expected_owner_slot] == "unit-1"
     if not typed:
         assert bound == legacy
+
+
+@settings(deadline=None)
+@given(
+    entity_kinds=st.sampled_from(
+        [
+            ("TaxUnit", "Person"),
+            ("Household", "Person"),
+            ("Person", "Payment"),
+            ("Organization", "Payment"),
+        ]
+    ),
+    owner_slot=st.integers(min_value=0, max_value=1),
+    supplied_owner_slot=st.integers(min_value=0, max_value=1),
+    member_numbers=st.lists(
+        st.integers(min_value=0), unique=True, min_size=1, max_size=20
+    ),
+    used=st.booleans(),
+)
+def test_swapping_declared_and_used_slots_reverses_every_generated_tuple(
+    entity_kinds, owner_slot, supplied_owner_slot, member_numbers, used
+):
+    owner_kind, member_kind = entity_kinds
+    member_ids = [f"member-{number}" for number in member_numbers]
+    request = request_for(member_ids, owner_kind)
+    for record in request["dataset"]["inputs"][1:]:
+        record["entity"] = member_kind
+    if supplied_owner_slot == 0:
+        for record in request["dataset"]["relations"]:
+            record["tuple"].reverse()
+    original = deepcopy(request)
+
+    def artifact_at(slot):
+        artifact = artifact_for(
+            owner=owner_kind, current_slot=slot, declared_owner_slot=slot
+        )
+        artifact["program"]["relations"][0]["slot_entities"][1 - slot] = (
+            member_kind
+        )
+        if not used:
+            artifact["program"]["derived"] = []
+        return artifact
+
+    artifact = artifact_at(owner_slot)
+    swapped_artifact = artifact_at(1 - owner_slot)
+    bound = bind_request_relations(request, artifact)
+    swapped = bind_request_relations(request, swapped_artifact)
+    assert bind_request_relations(bound, artifact) == bound
+    assert bind_request_relations(swapped, swapped_artifact) == swapped
+    assert bound["dataset"]["inputs"] == original["dataset"]["inputs"]
+    assert bound["targets"] == original["targets"]
+    assert swapped["dataset"]["inputs"] == original["dataset"]["inputs"]
+    assert swapped["targets"] == original["targets"]
+    for member, before, emitted, reversed_record in zip(
+        member_ids,
+        original["dataset"]["relations"],
+        bound["dataset"]["relations"],
+        swapped["dataset"]["relations"],
+        strict=True,
+    ):
+        assert emitted["tuple"] == relation_tuple(
+            artifact,
+            "members",
+            owner_id="unit-1",
+            owner_kind=owner_kind,
+            related_id=member,
+            related_kind=member_kind,
+        )
+        assert emitted["tuple"][owner_slot] == "unit-1"
+        assert emitted["tuple"][1 - owner_slot] == member
+        assert reversed_record["tuple"] == emitted["tuple"][::-1]
+        assert sorted(emitted["tuple"]) == sorted(before["tuple"])
+        assert {key: value for key, value in emitted.items() if key != "tuple"} == {
+            key: value for key, value in before.items() if key != "tuple"
+        }
+        assert {
+            key: value for key, value in reversed_record.items() if key != "tuple"
+        } == {key: value for key, value in before.items() if key != "tuple"}
+    assert request == original

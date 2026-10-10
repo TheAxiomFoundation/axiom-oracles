@@ -73,11 +73,15 @@ def _load_reports() -> list[dict]:
     return reports
 
 
+# Monotonic ratchets that live beside the universe files but are not universes.
+_NON_UNIVERSE_STEMS = {"ratchet", "unexplained-ratchet", "pe-axiom-standard"}
+
+
 def _universe_paths() -> list[Path]:
     return sorted(
         p
         for p in CONFORMANCE_DIR.glob("*.yaml")
-        if p.stem not in {"ratchet", "unexplained-ratchet"}
+        if p.stem not in _NON_UNIVERSE_STEMS
     )
 
 

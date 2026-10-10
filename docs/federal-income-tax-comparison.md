@@ -8,6 +8,8 @@ PolicyEngine 4.11.0, PolicyEngine Core 3.26.11, and PolicyEngine-US 1.729.0 —
 the model version the certified pinned Populace artifact was built with, and
 the floor the tax harness now enforces (`>= 1.723`).
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
+
 The comparison is one entry in the [comparisons registry](../comparisons/);
 see [`comparisons/README.md`](../comparisons/README.md) for the registry
 pattern and the available runner types. FIIT is **the same unified path** as

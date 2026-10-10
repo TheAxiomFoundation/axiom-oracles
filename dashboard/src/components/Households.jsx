@@ -143,7 +143,7 @@ function Triangulation({ runs, bySuite, onPick }) {
           })}
         </div>
         <span className="tri-hint mono">
-          disagreeing with independent engines points at the encoding; oracles
+          disagreeing with the other engines points at the encoding; oracles
           disagreeing with each other lets it arbitrate
         </span>
       </div>

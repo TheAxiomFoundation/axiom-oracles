@@ -53,6 +53,12 @@ Validation rules (enforced in CI via ``scripts/apply_dispositions.py
 * ``evidence.sources`` entries that are not URLs must be repo-relative paths
   (an optional ``#fragment`` may name an entry inside the file) and the file
   must exist, so citations cannot dangle.
+* ``axiom_companion`` / ``axiom_encoding_debt`` (at most one, only on
+  ``upstream_engine_gap`` entries) must be well formed: companion legal ids
+  are ``<jurisdiction>:<path>#<output>`` and companion tests are
+  ``rulespec-<jur>@<40-hex sha>:<path>.test.yaml#<case>``; debt is a
+  TheAxiomFoundation ``rulespec-*`` issue URL. Which entries MUST carry one is
+  decided by attribution in ``scripts/pe_axiom_standard.py --check``.
 * ``expires_on_source_change`` is required. When true and the entry carries
   ``pinned`` engine values, the disposition only applies while the live
   mismatch row still shows those values; when the source engines change, the
@@ -91,6 +97,8 @@ from pathlib import Path
 
 import yaml
 
+from .pe_axiom_standard import validate_axiom_side_fields
+
 DISPOSITIONS_SCHEMA_VERSION = "axiom_oracles.dispositions.v1"
 DISPOSITIONED_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2.1"
 
@@ -125,6 +133,10 @@ _ENTRY_KEYS = {
     "receipt",
     "reason",
     "comment",
+    # The Axiom side of a PolicyEngine-attributed upstream_engine_gap (see
+    # axiom_oracles/comparison/pe_axiom_standard.py): exactly one of these.
+    "axiom_companion",
+    "axiom_encoding_debt",
 }
 _EVIDENCE_KEYS = {
     "mechanism", "arithmetic", "upstream_url", "sources",
@@ -423,6 +435,16 @@ def _validate_entry(
     if linked_issue is not None and not _is_url(linked_issue):
         errors.append(f"{label} linked_issue must be an http(s) URL")
 
+    errors.extend(
+        validate_axiom_side_fields(
+            entry,
+            label,
+            disposition_kind=disposition
+            if disposition in DISPOSITION_KINDS
+            else None,
+        )
+    )
+
     evidence = entry.get("evidence")
     if not isinstance(evidence, dict) or not evidence:
         errors.append(
@@ -679,6 +701,7 @@ def apply_dispositions(
     annotated_mismatches = []
     for row, winner in zip(source_rows, row_winner):
         annotated = dict(row)
+        annotated.pop("disposition", None)
         if winner is not None and winner not in binding_violated:
             entry = entry_by_id[winner]
             disposition_kind = entry["disposition"]

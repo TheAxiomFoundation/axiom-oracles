@@ -77,7 +77,7 @@ def _git_commit_date(path: Path) -> str | None:
         ).stdout.strip()
         introduced = subprocess.run(
             [
-                "git", "-C", str(REPO_ROOT), "log", "--reverse", "--format=%cI",
+                "git", "--no-replace-objects", "-C", str(REPO_ROOT), "log", "--reverse", "--format=%cI",
                 f"--find-object={blob}", "--", str(path),
             ],
             capture_output=True,
@@ -85,7 +85,7 @@ def _git_commit_date(path: Path) -> str | None:
             check=True,
         ).stdout.split()
         result = subprocess.run(
-            ["git", "-C", str(REPO_ROOT), "log", "-1", "--format=%cI", "--", str(path)],
+            ["git", "--no-replace-objects", "-C", str(REPO_ROOT), "log", "-1", "--format=%cI", "--", str(path)],
             capture_output=True,
             text=True,
             check=True,

@@ -68,6 +68,8 @@ export function engineLabel(name) {
     accessnyc: "ACCESS NYC",
     prd: "PRD",
     euromod: "EUROMOD",
+    ukmod: "UKMOD",
+    southmod: "SOUTHMOD",
     taxcalc: "Tax-Calculator",
     gettsim: "GETTSIM",
   };

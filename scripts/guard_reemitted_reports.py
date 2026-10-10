@@ -46,7 +46,7 @@ def _git(*args: str, check: bool = True) -> subprocess.CompletedProcess:
     # valid UTF-8 then fails to parse (not a report) instead of crashing the
     # push loop.
     return subprocess.run(
-        ["git", *args],
+        ["git", "--no-replace-objects", *args],
         cwd=REPO_ROOT,
         capture_output=True,
         encoding="utf-8",

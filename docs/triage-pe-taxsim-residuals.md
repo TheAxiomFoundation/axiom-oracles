@@ -3,6 +3,10 @@
 This document classifies the residual mismatches from the PE/TAXSIM smoke test
 (issue #6) and identifies their root causes.
 
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine,
+and our TAXSIM runs use the TAXSIM executable that PolicyEngine packages
+(`policyengine-taxsim`, pinned in `axiom_oracles/adapters/taxsim/taxsim_pins.json`).
+
 ## Summary
 
 All federal income tax mismatches trace to **two NBER TAXSIM modeling gaps** in
@@ -146,10 +150,13 @@ projection issues. They are NBER TAXSIM modeling gaps:
 3. **ACTC at zero liability:** When tax liability is zero, TAXSIM does not
    compute the refundable ACTC at all, missing $1,700/child.
 
-## Scaled Validation (policyengine-taxsim compare)
+## Scaled comparison (policyengine-taxsim compare)
 
-Cross-validated using the local `policyengine-taxsim` repo's `compare` command,
-which runs the **actual NBER TAXSIM binary** (`taxsimtest-osx.exe`) against PE.
+These runs use the `compare` command in a local `policyengine-taxsim`
+checkout. It runs the TAXSIM executable that PolicyEngine packages
+(`taxsimtest-osx.exe` on macOS) against PE. The axiom-oracles TAXSIM adapter
+calls the same `TaxsimRunner`, so the triage rerun below can show that the
+rows reproduce; it cannot show whether TAXSIM is right.
 
 ### Triage cases (5 rows, 2024)
 

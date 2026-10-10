@@ -252,7 +252,7 @@ SKIP_DIRS = re.compile(
 
 def git(repo: Path, *args: str) -> str:
     return subprocess.run(
-        ["git", "-C", str(repo), *args],
+        ["git", "--no-replace-objects", "-C", str(repo), *args],
         capture_output=True,
         text=True,
         check=True,

@@ -46,4 +46,9 @@ entries:
         - https://www.irs.gov/irb/2025-49_IRB
         - https://www.law.cornell.edu/uscode/text/26/25B#b
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/parameters/gov/irs/credits/retirement_saving/rate/joint.yaml
+    axiom_companion:
+      legal_ids:
+        - us:policies/income_tax/savers_credit_pipeline#federal_savers_credit
+      tests:
+        - rulespec-us@dcb2e47e0af964be6d59f80688f519d0a6a96a71:us/policies/income_tax/savers_credit_pipeline.test.yaml#single-at-50-percent-limit-inclusive
     expires_on_source_change: true

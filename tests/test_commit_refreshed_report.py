@@ -274,6 +274,7 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
         "conformance_burndown.py",
         "check_vacuous_gate.py",
         "generate_dashboard_overview.py",
+        "publish_issue_ledgers.py",
         "exercise_census.py",
         "certify.py",
     ):

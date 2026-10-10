@@ -1,4 +1,5 @@
 import shutil
+import subprocess
 from datetime import date
 from pathlib import Path
 from types import SimpleNamespace
@@ -164,6 +165,56 @@ def test_california_projectors_use_california_snap_input_surface():
         "household_has_heating_and_cooling_costs_separate_from_rent_or_mortgage": False
     }
     assert snap_populace.medical_expenses_for_deduction(150) == 185
+
+
+def test_arizona_projection_uses_composed_financial_outputs_not_pe_values():
+    config = JURISDICTION_CONFIGS["us-az"]
+    values = {
+        "snap_unit_size": [1],
+        "is_snap_eligible": [True],
+        "snap_max_allotment": [298],
+        "snap_min_allotment": [24],
+        "snap_dependent_care_deduction": [0],
+    }
+
+    projected = project_jurisdiction_household_inputs(config, values, 0)
+
+    assert projected["na_budgetary_unit_is_eligible"] is True
+    assert projected["az_utility_allowance_participant_count"] == 1
+    assert "na_net_income" not in projected
+    assert "snap_excess_shelter_deduction_for_net_income" not in projected
+
+
+def test_arizona_raw_utility_projection_uses_arizona_input_surface():
+    config = JURISDICTION_CONFIGS["us-az"]
+    values = {
+        "heating_cooling_expense": [20],
+        "pre_subsidy_electricity_expense": [0],
+        "water_expense": [0],
+        "sewage_expense": [0],
+        "trash_expense": [0],
+        "gas_expense": [0],
+        "phone_expense": [0],
+        "has_usda_elderly_disabled": [False],
+    }
+
+    projected = project_raw_utility_inputs(config, values, 0, "")
+
+    assert projected["budgetary_unit_billed_separately_for_utility_expenses"] is True
+    assert (
+        projected[
+            "budgetary_unit_obligated_to_pay_heating_or_cooling_expense_separately_from_rent_or_mortgage_on_regular_basis"
+        ]
+        is True
+    )
+    assert projected["budgetary_unit_received_liheap_payment"] is False
+    assert "household_pays_electricity_utility_cost" not in projected
+    assert (
+        project_utility_allowance_type(config, "TUA", "")[
+            "budgetary_unit_obligated_to_pay_only_telephone_expense"
+        ]
+        is True
+    )
 
 
 @pytest.mark.parametrize("typed", [False, True])
@@ -449,3 +500,122 @@ var SnapAPI = {
             "errors": [],
         }
     ]
+
+
+@pytest.mark.parametrize("jurisdiction", sorted(snap_populace.JURISDICTION_CONFIGS))
+def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
+    jurisdiction, monkeypatch, tmp_path
+):
+    """Every standalone rulespec-us-<st> repo is archived into
+    rulespec-us/us-<st>, so the program is read from the monorepo's
+    jurisdiction directory. NEGATIVE: an archived standalone clone beside it
+    (as supervised machines keep) is never a fallback, even when the monorepo
+    copy is missing or the bridge runs from inside the clone; the load then
+    fails naming the monorepo path, instead of silently running frozen rules
+    the affected map does not list."""
+    config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
+    workspace = tmp_path / "TheAxiomFoundation"
+    standalone = (
+        workspace / f"rulespec-{jurisdiction}" / config.program_relative_path
+    )
+    standalone.parent.mkdir(parents=True)
+    standalone.write_text("archived\n")
+    monkeypatch.chdir(tmp_path)
+    expected = (
+        workspace / "rulespec-us" / jurisdiction / config.program_relative_path
+    ).resolve()
+
+    assert snap_populace.resolve_program_path(config, workspace, None) == expected
+
+    expected.parent.mkdir(parents=True)
+    expected.write_text("monorepo\n")
+    assert snap_populace.resolve_program_path(config, workspace, None) == expected
+
+    # Run from inside the archived clone, the monorepo copy still wins.
+    monkeypatch.chdir(workspace / f"rulespec-{jurisdiction}")
+    assert snap_populace.resolve_program_path(config, workspace, None) == expected
+
+    # Run from inside a monorepo jurisdiction directory (e.g. a rulespec-us
+    # worktree's us-co/), that directory's program wins.
+    worktree_dir = tmp_path / "rulespec-us-worktree" / jurisdiction
+    (worktree_dir.parent / "us").mkdir(parents=True)
+    worktree_program = worktree_dir / config.program_relative_path
+    worktree_program.parent.mkdir(parents=True)
+    worktree_program.write_text("worktree\n")
+    monkeypatch.chdir(worktree_dir)
+    assert snap_populace.resolve_program_path(config, workspace, None) == (
+        worktree_program.resolve()
+    )
+
+    override = tmp_path / "explicit.yaml"
+    assert snap_populace.resolve_program_path(config, workspace, override) == (
+        override.resolve()
+    )
+
+
+@pytest.mark.parametrize("jurisdiction", sorted(snap_populace.JURISDICTION_CONFIGS))
+@pytest.mark.parametrize("cwd_kind", ["unrelated", "renamed-archived", "other-owner"])
+def test_implicit_program_ignores_a_cwd_without_monorepo_identity(
+    jurisdiction, cwd_kind, monkeypatch, tmp_path
+):
+    """A jurisdiction basename alone cannot establish live monorepo membership."""
+    config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
+    workspace = tmp_path / "workspace"
+    expected = (
+        workspace / "rulespec-us" / jurisdiction / config.program_relative_path
+    )
+    expected.parent.mkdir(parents=True)
+    expected.write_text("live monorepo\n")
+
+    checkout = tmp_path / "elsewhere" / "rulespec-us"
+    cwd = checkout / jurisdiction
+    cwd_program = cwd / config.program_relative_path
+    cwd_program.parent.mkdir(parents=True)
+    cwd_program.write_text("unrelated or frozen rules\n")
+    if cwd_kind != "unrelated":
+        # Even a renamed checkout with a plausible country/state layout must
+        # not override the live monorepo when its origin identifies other rules.
+        (checkout / "us").mkdir()
+        remote = (
+            f"https://github.com/TheAxiomFoundation/rulespec-{jurisdiction}.git"
+            if cwd_kind == "renamed-archived"
+            else "https://github.com/OtherOwner/rulespec-us.git"
+        )
+        subprocess.run(["git", "init", "-q", str(checkout)], check=True)
+        subprocess.run(
+            ["git", "-C", str(checkout), "remote", "add", "origin", remote],
+            check=True,
+        )
+    monkeypatch.chdir(cwd)
+
+    assert snap_populace.resolve_program_path(config, workspace, None) == (
+        expected.resolve()
+    )
+    # Deliberately selecting a program remains an explicit supported exception.
+    assert snap_populace.resolve_program_path(config, workspace, cwd_program) == (
+        cwd_program.resolve()
+    )
+
+
+def test_implicit_program_accepts_a_renamed_live_monorepo_checkout(
+    monkeypatch, tmp_path
+):
+    config = snap_populace.JURISDICTION_CONFIGS["us-co"]
+    checkout = tmp_path / "current-worktree"
+    (checkout / "us").mkdir(parents=True)
+    program = checkout / config.jurisdiction / config.program_relative_path
+    program.parent.mkdir(parents=True)
+    program.write_text("live worktree\n")
+    subprocess.run(["git", "init", "-q", str(checkout)], check=True)
+    subprocess.run(
+        [
+            "git", "-C", str(checkout), "remote", "add", "origin",
+            "https://github.com/theaxiomfoundation/RuleSpec-US.git",
+        ],
+        check=True,
+    )
+    monkeypatch.chdir(checkout / config.jurisdiction)
+
+    assert snap_populace.resolve_program_path(config, tmp_path / "workspace", None) == (
+        program.resolve()
+    )
