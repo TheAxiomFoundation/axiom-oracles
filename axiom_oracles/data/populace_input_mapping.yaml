@@ -906,6 +906,10 @@ mappings:
   # belong to transitively imported rules outside the compared rollup.
   # ---------------------------------------------------------------------
 
+  # MAGI-based income follows 26 USC 36B(d)(2)(B) (42 CFR 435.603(e)), whose
+  # clause (ii) adds back "any amount of interest received or accrued by the
+  # taxpayer during the taxable year which is exempt from tax", so tax-exempt
+  # interest counts here beside the taxable interest already in AGI.
   - match: { kind: exact, value: household_income_as_fraction_of_fpl }
     scope: household
     source:
