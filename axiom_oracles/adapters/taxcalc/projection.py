@@ -131,10 +131,10 @@ def taxcalc_input_for_case(
         # records_variables.json: e02000 is "Sch E total rental, royalty,
         # partnership, S-corporation, etc, income/loss (includes e26270 and
         # e27200)", and e27200 is "Sch E: Farm rent net income or loss
-        # (included in e02000)". e02000 carries farm rent into AGI and EITC
-        # investment income; e27200 alone feeds QBI (qbinc). Setting e27200
-        # without adding it to e02000 would grant QBID on income outside
-        # AGI, which Tax-Calculator does not check.
+        # (included in e02000)". AGI (ymod1) and EITC investment income
+        # read e02000; QBI (qbinc) reads e27200. Nothing in Tax-Calculator
+        # ties the two, so setting e27200 without adding it to e02000 would
+        # grant QBID on income that never reaches AGI.
         "e02000": rental_income + farm_rent_income,
         "e27200": farm_rent_income,
         "e02300": _sum_fact(earners, Concepts.UNEMPLOYMENT_INSURANCE_INCOME),
