@@ -12,6 +12,14 @@ from copy import deepcopy
 from typing import Any
 
 
+# Generic projection keys these entity kinds by a household id. Other scopes
+# can broadcast inputs to Person ids without describing endpoint identities.
+UNIT_ENTITY_KINDS = frozenset({
+    "Household", "SnapUnit", "TaxUnit", "SpmUnit", "TanfUnit",
+    "AssistanceUnit", "Family",
+})
+
+
 class RelationBindingError(ValueError):
     """A producer cannot determine a safe tuple order from the artifact."""
 
@@ -25,6 +33,15 @@ class _ArtifactRelations:
         program = artifact.get("program", artifact)
         self.schemas = {
             relation["name"]: relation for relation in program.get("relations", [])
+        }
+        self.declared_kinds = {
+            kind
+            for schema in self.schemas.values()
+            for slots in (
+                schema.get("slot_entities", []),
+                (schema.get("derivation") or {}).get("slot_entities", []),
+            )
+            for kind in slots
         }
         self.rules = {}
         for rule in program.get("derived", []):
@@ -129,7 +146,13 @@ class _ArtifactRelations:
                 if kind == "derived":
                     rule = self.rules.get(value.get("name"), {})
                     entity = rule.get("entity")
-                    if entity and entity != "Scalar":
+                    # A referenced rule's entity can be a broadcast input
+                    # scope. Only endpoint identities constrain tuple slots.
+                    if (
+                        entity in self.declared_kinds
+                        or entity == "Person"
+                        or entity in UNIT_ENTITY_KINDS
+                    ):
                         kinds.add(entity)
                 for child in value.values():
                     collect(child)
@@ -157,7 +180,12 @@ class _ArtifactRelations:
                 member = None
                 schema = self.schema(node["relation"])
                 if kind == "relation_member":
-                    owner, member = context or (entity, None)
+                    # Membership consumes the enclosing derived pair. Without
+                    # that pair the engine rejects execution, so this node
+                    # supplies no evidence about the relation's slot order.
+                    if context is None:
+                        return
+                    owner, member = context
                 else:
                     derivation = (schema or {}).get("derivation") or {}
                     if entity is not None and derivation.get("entity") == entity:
@@ -173,12 +201,11 @@ class _ArtifactRelations:
                 if kind != "relation_member":
                     self._walk(node.get("where"), kinds[related])
                 return
-            # A derivation's pair context belongs to judgment membership.
-            # Comparisons enter scalar expressions, whose conditional
-            # judgments use the current entity, not that outer pair context.
-            child_context = None if kind in {"comparison", "if"} else context
+            # Scalar operands and conditions run on the same bound pair.
+            # Only an aggregate's where clause starts a new entity context
+            # (handled above without forwarding context).
             for child in node.values():
-                self._walk(child, entity, child_context)
+                self._walk(child, entity, context)
 
     def expected(self, name: str) -> list[str | None] | None:
         schema = self.schema(name)
@@ -203,6 +230,23 @@ class _ArtifactRelations:
             result.append(next(iter(candidates)) if candidates else None)
         return result
 
+    def endpoint_kinds(self) -> set[str]:
+        """Kinds the artifact identifies as relation endpoints, not input scopes."""
+        kinds = set(self.declared_kinds)
+        kinds.update(
+            kind
+            for usages in self.usages.values()
+            for usage in usages
+            for kind in usage
+            if kind == "Person" or kind in UNIT_ENTITY_KINDS
+        )
+        # The generic projector's member inventory is Person even when a
+        # count-only artifact never reads a member input. Other input scopes
+        # can be broadcast onto these ids, but a unit kind cannot identify
+        # the same member as well.
+        kinds.add("Person")
+        return kinds
+
 
 def _ordered_tuple(
     name: str,
@@ -223,7 +267,7 @@ def _ordered_tuple(
         )
     ]
     if preserve_ambiguous and candidates:
-        # Old artifacts can count members without reading any member inputs.
+        # Artifacts can count members without reading any member inputs.
         # Prefer the orientation supported by known labels, while retaining
         # the existing tuple if absent labels leave both orders unresolved.
         scores = [
@@ -289,16 +333,18 @@ def bind_request_relations(
 
     Call after resolving request relation names against the artifact. Released
     untyped artifacts retain their related-first order through executable slots.
-    Input labels are authoritative; conflicting or missing kinds are errors for
-    typed tuples because the producer cannot safely infer an order from ids.
-    Untyped artifacts can count members without member inputs: use the known
-    labels when they determine an order, otherwise retain the supplied tuple.
+    Input entity labels also describe broadcast scopes, so multiple labels need
+    not contradict an endpoint's identity. Conflicting known endpoint kinds
+    are errors. Ambiguous untyped scopes retain the supplied tuple. Missing
+    labels permit ordering by a uniquely known endpoint, including typed counts
+    without member inputs; otherwise the supplied tuple is retained.
     """
     result = deepcopy(request)
     records = result.get("dataset", {}).get("relations", [])
     if not records:
         return result
     relations = _ArtifactRelations(artifact)
+    endpoint_kinds = relations.endpoint_kinds()
     labels: dict[str, set[str]] = defaultdict(set)
     for record in result.get("dataset", {}).get("inputs", []):
         if "entity_id" in record and "entity" in record:
@@ -316,15 +362,24 @@ def bind_request_relations(
             raise RelationBindingError(f"Relation {name!r} requires a two-slot tuple")
         kinds = []
         untyped = not schema.get("slot_entities")
+        ambiguous = False
         for entity_id in ids:
             possible = labels.get(entity_id, set())
-            if len(possible) > 1 or (not possible and not untyped):
+            identities = possible & endpoint_kinds
+            if len(identities) > 1:
                 raise RelationBindingError(
                     f"Relation {name!r} entity {entity_id!r} needs one input entity "
-                    f"kind; got {sorted(possible)!r}"
+                    f"kind; got {sorted(identities)!r}"
                 )
-            kinds.append(next(iter(possible)) if possible else None)
+            ambiguous |= len(possible) > 1
+            if not untyped and len(possible) == 1:
+                # A unique typed label must match the executable slots.
+                kinds.append(next(iter(possible)))
+            else:
+                kinds.append(next(iter(identities)) if identities else None)
+        if untyped and ambiguous:
+            continue
         record["tuple"] = _ordered_tuple(
-            name, expected, ids, kinds, preserve_ambiguous=untyped
+            name, expected, ids, kinds, preserve_ambiguous=True
         )
     return result

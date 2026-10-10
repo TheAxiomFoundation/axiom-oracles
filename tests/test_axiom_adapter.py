@@ -350,7 +350,8 @@ def test_axiom_runner_accepts_explicit_input_records(tmp_path: Path) -> None:
 
 
 @pytest.mark.parametrize(
-    ("typed", "member_inputs"), [(False, False), (False, True), (True, True)]
+    ("typed", "member_inputs"),
+    [(False, False), (False, True), (True, False), (True, True)],
 )
 @pytest.mark.parametrize("batched", [False, True])
 def test_axiom_runner_binds_relations_against_the_executed_artifact(

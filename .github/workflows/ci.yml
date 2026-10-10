@@ -201,6 +201,94 @@ jobs:
       - name: Build package
         run: uv build
 
+  # Native relation regressions need both sides of the strict-binding change,
+  # plus the original encoded tax modules. Missing prerequisites fail this job.
+  relation-engine-live:
+    runs-on: ubuntu-latest
+    env:
+      AXIOM_REQUIRE_RELATION_ENGINE_TESTS: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package
+        run: uv sync --extra dev
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@3c5f7ea28cd621ae0bf5283f0e981fb97b8a7af9
+        with:
+          toolchain: "1.94.1"
+
+      - name: Cache pinned relation engine builds
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            ${{ runner.temp }}/relation-engine-target
+          key: relation-engine-${{ runner.os }}-1.94.1-6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a-6031295780586e255b37e2bc7d5df880897ad6b4
+
+      - name: Checkout strict engine (#190)
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-rules-engine
+          ref: 6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a
+          path: .ci/relation-engine-strict
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout pre-strict engine (parent of #190)
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/axiom-rules-engine
+          ref: 6031295780586e255b37e2bc7d5df880897ad6b4
+          path: .ci/relation-engine-legacy
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout encoded RuleSpec source
+        uses: actions/checkout@v4
+        with:
+          repository: TheAxiomFoundation/rulespec-us
+          ref: 16a6677190194da2431a78fcaa5b6548cd0e2845
+          path: .ci/rulespec-us
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build pinned engines and record binary digests
+        env:
+          AXIOM_STRICT_RELATION_ENGINE_BIN: ${{ runner.temp }}/relation-engine-bin/strict
+          AXIOM_LEGACY_RELATION_ENGINE_BIN: ${{ runner.temp }}/relation-engine-bin/legacy
+          CARGO_TARGET_DIR: ${{ runner.temp }}/relation-engine-target
+        run: |
+          set -euo pipefail
+          mkdir -p "$(dirname "$AXIOM_STRICT_RELATION_ENGINE_BIN")"
+          # Both refs use the same package/version; rebuild it for each source.
+          # Package cleaning preserves the cached dependency builds.
+          cargo clean --release --package axiom-rules-engine --manifest-path .ci/relation-engine-strict/Cargo.toml
+          cargo build --locked --release --jobs 2 --manifest-path .ci/relation-engine-strict/Cargo.toml --bin axiom-rules-engine
+          cp "$CARGO_TARGET_DIR/release/axiom-rules-engine" "$AXIOM_STRICT_RELATION_ENGINE_BIN"
+          cargo clean --release --package axiom-rules-engine --manifest-path .ci/relation-engine-legacy/Cargo.toml
+          cargo build --locked --release --jobs 2 --manifest-path .ci/relation-engine-legacy/Cargo.toml --bin axiom-rules-engine
+          cp "$CARGO_TARGET_DIR/release/axiom-rules-engine" "$AXIOM_LEGACY_RELATION_ENGINE_BIN"
+          sha256sum "$AXIOM_STRICT_RELATION_ENGINE_BIN" "$AXIOM_LEGACY_RELATION_ENGINE_BIN"
+
+      - name: Native tax and engine-fixture relation regressions
+        env:
+          AXIOM_STRICT_RELATION_ENGINE_BIN: ${{ runner.temp }}/relation-engine-bin/strict
+          AXIOM_LEGACY_RELATION_ENGINE_BIN: ${{ runner.temp }}/relation-engine-bin/legacy
+          AXIOM_RULESPEC_ROOT: ${{ github.workspace }}/.ci/rulespec-us
+        run: >-
+          uv run pytest -q
+          tests/bridges/test_tax_relation_engine.py
+          tests/bridges/test_relation_binding_engine_fixtures.py
+          --basetemp=${{ runner.temp }}/relation-engine-tests
+          -ra
+
   # The GETTSIM adapter's live oracle tests skip when the optional dependency
   # is absent, and the dev sync above cannot install it (the gettsim extra is
   # a declared uv conflict fork against the policyengine/taxsim extras). This

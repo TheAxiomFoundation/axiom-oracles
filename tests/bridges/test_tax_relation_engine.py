@@ -3,6 +3,7 @@
 Set AXIOM_STRICT_RELATION_ENGINE_BIN to a #190 strict-binding engine and
 AXIOM_RULESPEC_ROOT to a rulespec-us checkout. AXIOM_LEGACY_RELATION_ENGINE_BIN
 optionally reproduces the silent zero with the post-#179, pre-#190 engine.
+AXIOM_REQUIRE_RELATION_ENGINE_TESTS=1 makes missing prerequisites fail in CI.
 The compiled law and the reference case come unchanged from rulespec-us.
 """
 
@@ -35,11 +36,40 @@ _OUTPUT = f"{CDCC_BASE}#cdcc"
 _CTC_OUTPUT = f"{CTC_BASE}#ctc_before_advance_payments"
 
 
+def _missing_prerequisite(message: str) -> None:
+    if os.environ.get("AXIOM_REQUIRE_RELATION_ENGINE_TESTS") == "1":
+        pytest.fail(message, pytrace=False)
+    pytest.skip(message)
+
+
 def _configured_path(variable: str) -> Path:
     value = os.environ.get(variable)
     if not value or not Path(value).exists():
-        pytest.skip(f"{variable} must point to an existing live-test prerequisite")
+        _missing_prerequisite(
+            f"{variable} must point to an existing live-test prerequisite"
+        )
     return Path(value).resolve()
+
+
+@pytest.mark.parametrize("variable", [
+    "AXIOM_STRICT_RELATION_ENGINE_BIN",
+    "AXIOM_LEGACY_RELATION_ENGINE_BIN",
+    "AXIOM_RULESPEC_ROOT",
+])
+@pytest.mark.parametrize("configured", [False, True])
+def test_required_native_prerequisites_fail_instead_of_skip(
+    monkeypatch, tmp_path, variable, configured,
+):
+    monkeypatch.setenv("AXIOM_REQUIRE_RELATION_ENGINE_TESTS", "1")
+    if configured:
+        monkeypatch.setenv(variable, str(tmp_path / "missing"))
+    else:
+        monkeypatch.delenv(variable, raising=False)
+    with pytest.raises(pytest.fail.Exception, match=variable):
+        try:
+            _configured_path(variable)
+        except pytest.skip.Exception as error:
+            raise AssertionError("Required native tests must not skip") from error
 
 
 @pytest.fixture(scope="module")
@@ -49,8 +79,11 @@ def live_cdcc(tmp_path_factory):
     relative = Path("us/statutes/26/21.yaml")
     source = source_root / relative
     if not source.is_file():
-        pytest.skip(f"The canonical CDCC RuleSpec is unavailable: {source}")
-    examples = yaml.safe_load(source.with_suffix(".test.yaml").read_text())
+        _missing_prerequisite(f"The canonical CDCC RuleSpec is unavailable: {source}")
+    companion = source.with_suffix(".test.yaml")
+    if not companion.is_file():
+        _missing_prerequisite(f"The canonical CDCC companion is unavailable: {companion}")
+    examples = yaml.safe_load(companion.read_text())
     example = next(
         case for case in examples if case["name"] == "single_one_child_low_agi_credit"
     )
@@ -89,7 +122,7 @@ def live_ctc(tmp_path_factory):
     for relative in ("us/statutes/26/24.yaml", "us/statutes/26/24/h.yaml"):
         source = source_root / relative
         if not source.is_file():
-            pytest.skip(f"The canonical CTC RuleSpec is unavailable: {source}")
+            _missing_prerequisite(f"The canonical CTC RuleSpec is unavailable: {source}")
         target = rulespec_root / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(source, target)

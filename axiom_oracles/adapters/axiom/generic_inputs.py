@@ -32,6 +32,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+from axiom_oracles.bridges.relation_binding import UNIT_ENTITY_KINDS as _UNIT_ENTITIES
+
 
 # ---------------------------------------------------------------------------
 # Input enumeration + type inference
@@ -60,19 +62,6 @@ class InputSlot:
 # back to Judgment because the SNAP program is judgment-dominated.
 _BOOLEAN_OPS = {"and", "or", "not", "comparison", "if"}
 _NUMERIC_OPS = {"add", "sub", "mul", "div", "max", "min", "ceil", "floor"}
-
-
-# Entities the engine keys by the case's household id; anything else is a
-# pseudo entity whose inputs get broadcast per person too (see below).
-_UNIT_ENTITIES = {
-    "Household",
-    "SnapUnit",
-    "TaxUnit",
-    "SpmUnit",
-    "TanfUnit",
-    "AssistanceUnit",
-    "Family",
-}
 
 
 def enumerate_inputs(compiled_program: Mapping[str, Any]) -> list[InputSlot]:
