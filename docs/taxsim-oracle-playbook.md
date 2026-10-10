@@ -118,6 +118,27 @@ do not chase the Axiom encoding):
   wage/UBIA limitation, no H.R.1 §70105 $400 minimum, no rental in the
   QBI base. Rows above the phase-in ceiling collapse to axiom's $400
   floor vs TAXSIM's full 20%.
+- Units with **farm rental income** (Schedule E line 40, Form 4835): the
+  shared projection adds the head+spouse amount to `otherprop`, which
+  taxsimtest describes as including "rent not eligible for QBI deduction"
+  (its QBI columns `pbusinc`/`sbusinc` are "Subject to NIIT, SECA and
+  Medicare additional Earnings Tax", and Form 4835 income is "Not Subject
+  to Self-Employment Tax"). TAXSIM's AGI (`v10`) and EITC investment
+  income both take it, agreeing with Axiom up to the 2026 limit
+  (probe: a childless worker with 1,000 of earnings, a 3,000 capital loss
+  and 12,200 of farm rent gets 76.50 from Axiom, PolicyEngine,
+  Tax-Calculator and TAXSIM alike). Two departures follow, both
+  TAXSIM-side:
+  - **QBID.** The Axiom bridge treats farm rent as QBI, the same
+    convention as Part I rents (`docs/case-farm-rent-income.md`), so a
+    farm-rent unit with taxable income carries a QBID gap
+    of up to 20% of its farm rent, the "no rental in the QBI base" class
+    above.
+  - **Investment-income limit.** One dollar over $12,200, Axiom and
+    Tax-Calculator deny the credit (Rev. Proc. 2025-32 .06(2)) while the
+    binary pays 75.50 (76.50 − 1): it reduces the credit dollar for dollar
+    instead of denying it, as for Part I rent and interest, which is the
+    `taxsim-2026-eitc-investment-limit-vintage` disposition class.
 - **§461(l)**: the binary DOES cap excess business losses, at its own
   projected 332,389.95 single / 664,779.90 joint, and it treats net
   positive capital gain as business gross income (the allowance grows

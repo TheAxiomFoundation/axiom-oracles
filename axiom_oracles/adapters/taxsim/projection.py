@@ -249,8 +249,15 @@ def taxsim_input_for_case(
         "pensions": _sum_fact(earners, Concepts.PENSION_INCOME),
         # Rental/royalty income flows through TAXSIM's other-property
         # column; zero-filling it depressed TAXSIM AGI on every
-        # rental-income unit relative to the axiom side.
+        # rental-income unit relative to the axiom side. Schedule E line 40
+        # farm rent joins it: taxsimtest lists "rent not eligible for QBI
+        # deduction" under otherprop, while pbusinc/sbusinc are "Subject to
+        # NIIT, SECA and Medicare additional Earnings Tax" and Form 4835
+        # income is "Not Subject to Self-Employment Tax". So TAXSIM grants
+        # farm rent no QBID, as with Part I rent
+        # (docs/taxsim-oracle-playbook.md).
         "otherprop": _sum_fact(earners, Concepts.RENTAL_INCOME)
+        + _sum_fact(earners, Concepts.FARM_RENT_INCOME)
         + _nonqualified_dividends(earners),
         "gssi": _sum_fact(earners, Concepts.SOCIAL_SECURITY_BENEFITS),
         "pui": _number(head.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0)),

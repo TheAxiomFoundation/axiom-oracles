@@ -90,6 +90,7 @@ def taxcalc_input_for_case(
     )
     pension_income = _sum_fact(earners, Concepts.PENSION_INCOME)
     rental_income = _sum_fact(earners, Concepts.RENTAL_INCOME)
+    farm_rent_income = _sum_fact(earners, Concepts.FARM_RENT_INCOME)
 
     row: dict[str, Any] = {
         "RECID": record_id if record_id is not None else case.case_id,
@@ -127,7 +128,15 @@ def taxcalc_input_for_case(
         "p23250": _sum_fact(earners, Concepts.LONG_TERM_CAPITAL_GAINS),
         "e01500": pension_income,
         "e01700": pension_income,
-        "e02000": rental_income,
+        # records_variables.json: e02000 is "Sch E total rental, royalty,
+        # partnership, S-corporation, etc, income/loss (includes e26270 and
+        # e27200)", and e27200 is "Sch E: Farm rent net income or loss
+        # (included in e02000)". e02000 carries farm rent into AGI and EITC
+        # investment income; e27200 alone feeds QBI (qbinc). Setting e27200
+        # without adding it to e02000 would grant QBID on income outside
+        # AGI, which Tax-Calculator does not check.
+        "e02000": rental_income + farm_rent_income,
+        "e27200": farm_rent_income,
         "e02300": _sum_fact(earners, Concepts.UNEMPLOYMENT_INSURANCE_INCOME),
         "e02400": _sum_fact(earners, Concepts.SOCIAL_SECURITY_BENEFITS),
         "e18500": _number(case.fact(Concepts.PROPERTY_TAX_PAID, 0)),
@@ -211,6 +220,7 @@ def _dependent_gross_income(dependent: Entity) -> float:
         + _number(dependent.fact(Concepts.PENSION_INCOME, 0))
         + _number(dependent.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0))
         + max(0, _number(dependent.fact(Concepts.RENTAL_INCOME, 0)))
+        + max(0, _number(dependent.fact(Concepts.FARM_RENT_INCOME, 0)))
     )
 
 

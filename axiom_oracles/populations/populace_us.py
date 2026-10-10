@@ -541,19 +541,19 @@ _PERSON_NON_WAGE_VARIABLES = {
     # lives in the axiom:resources/person namespace, so it never mixes with the
     # income concepts downstream — only the SSI resource input slot reads it.
     Concepts.SSI_COUNTABLE_RESOURCES: "ssi_countable_resources",
-    # The Case deliberately carries no farm-rent concept: the Axiom federal
-    # oracle bridge has no gross-income slot for it (axiom-oracles issue
-    # #566), so loading it would hand the other engines income
-    # Axiom never sees.
 }
 
 # Loaded only for case_unit == "tax_unit" Cases. Household Cases feed the
-# benefit lanes (SNAP/TANF/SSI/Medicaid), where PolicyEngine counts tax-exempt
-# interest (through interest_income and MAGI) but the Axiom benefit encodings
-# do not read it yet, so carrying it on household Cases would hand
-# PolicyEngine income Axiom never sees (axiom-oracles#567).
+# benefit lanes (SNAP/TANF/SSI/Medicaid), where PolicyEngine counts these
+# sources but the Axiom benefit encodings do not read them yet, so carrying
+# them on household Cases would hand PolicyEngine income Axiom never sees:
+# tax-exempt interest through interest_income and MAGI (axiom-oracles#567);
+# farm rent through AGI (Medicaid MAGI) and the TX, IL and SC TANF unearned
+# income lists (axiom-oracles#610).
 _TAX_UNIT_PERSON_NON_WAGE_VARIABLES = {
     Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
+    # PUF E27200, "Sch E: Farm rent net income or loss" (Schedule E line 40).
+    Concepts.FARM_RENT_INCOME: "farm_rent_income",
 }
 
 

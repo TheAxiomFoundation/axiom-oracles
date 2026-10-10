@@ -535,16 +535,67 @@ def _child(**facts):
                         Concepts.TAX_EXEMPT_INTEREST_INCOME: 2_500,
                         Concepts.DIVIDEND_INCOME: 1_000,
                         Concepts.RENTAL_INCOME: -6_000,
+                        Concepts.FARM_RENT_INCOME: 4_000,
                     }
                 )
             ],
             6_500,
-            id="worked-example-3-without-farm-rent",
-            # line 1 = 3,000; line 2 = 2,500; line 3 = 1,000; line 12 =
-            # -6,000, line 13 = max(0, -6,000) = 0; line 14 = 6,500. (The
-            # worked example's +4,000 Schedule E line 40 farm rent is left
-            # out: the Case carries no farm-rent concept. With it, line 13 =
-            # max(0, 4,000 - 6,000) = 0 and line 14 is still 6,500.)
+            id="worked-example-3",
+            # line 1 = 3,000; line 2 = 2,500; line 3 = 1,000; line 11 =
+            # 4,000 (Sch E line 40); line 12 = -6,000 (line 26); line 13 =
+            # max(0, 4,000 - 6,000) = 0; line 14 = 6,500
+        ),
+        pytest.param(
+            [
+                _head(
+                    **{
+                        Concepts.INTEREST_INCOME: 8_000,
+                        Concepts.FARM_RENT_INCOME: 3_000,
+                        Concepts.RENTAL_INCOME: -1_000,
+                    }
+                )
+            ],
+            10_000,
+            id="farm-rent-is-schedule-e-line-40",
+            # line 11 = 3,000 (Sch E line 40); line 12 = -1,000 (line 26);
+            # line 13 = 2,000; line 14 = 8,000 + 2,000
+        ),
+        pytest.param(
+            [
+                _head(
+                    **{
+                        Concepts.INTEREST_INCOME: 12_500,
+                        Concepts.FARM_RENT_INCOME: -10_000,
+                    }
+                )
+            ],
+            12_500,
+            id="farm-rent-loss-does-not-offset-interest",
+            # line 12 = -10,000; line 13 = max(0, -10,000) = 0
+        ),
+        pytest.param(
+            [
+                _head(
+                    **{
+                        Concepts.INTEREST_INCOME: 1_000,
+                        Concepts.RENTAL_INCOME: 4_000,
+                    }
+                ),
+                _spouse(**{Concepts.FARM_RENT_INCOME: -6_000}),
+            ],
+            1_000,
+            id="joint-spouse-farm-rent-loss-nets-with-head-rent",
+            # one joint return: line 11 = 4,000; line 12 = -6,000;
+            # line 13 = 0
+        ),
+        pytest.param(
+            [
+                _head(**{Concepts.INTEREST_INCOME: 5_000}),
+                _child(**{Concepts.FARM_RENT_INCOME: 9_000}),
+            ],
+            5_000,
+            id="dependent-farm-rent-is-not-the-filers",
+            # a dependent's Schedule E is on the dependent's own return
         ),
         pytest.param(
             [
@@ -607,6 +658,26 @@ def test_case_surface_tax_exempt_interest_at_the_2026_limit(
                 Concepts.TAX_EXEMPT_INTEREST_INCOME: tax_exempt_interest,
             }
         )
+    )
+    assert line_14 == expected
+    assert (line_14 > 12_200) is exceeds_2026_limit
+
+
+@pytest.mark.parametrize(
+    ("farm_rent", "expected", "exceeds_2026_limit"),
+    [
+        pytest.param(12_200, 12_200, False, id="at-the-12200-limit"),
+        pytest.param(12_201, 12_201, True, id="one-dollar-over"),
+    ],
+)
+def test_case_surface_farm_rent_at_the_2026_limit(
+    farm_rent, expected, exceeds_2026_limit
+):
+    """Farm rent alone, all on line 11, carries line 14 across the Rev.
+    Proc. 2025-32 limit at the same dollar (the engine gate is exercised in
+    tests/test_axiom_farm_rent_engine.py)."""
+    line_14 = _case_investment_income(
+        _head(**{Concepts.FARM_RENT_INCOME: farm_rent})
     )
     assert line_14 == expected
     assert (line_14 > 12_200) is exceeds_2026_limit
@@ -750,11 +821,8 @@ def test_property_dependents_never_change_the_tax_unit_input(filer, dependents):
     )
 
 
-# Farm rent and passive partnership/S-corp income are absent on purpose: the
-# Case deliberately carries no farm-rent concept (the Axiom federal oracle
-# bridge has no gross-income slot for it; axiom-oracles issue
-# #566) and no producer supplies a passive partnership/S-corp
-# amount, so both stay zero on both surfaces below.
+# Passive partnership/S-corp income is absent on purpose: no producer supplies
+# it, so the Case has no concept for it and it stays zero on both surfaces.
 CASE_FILER_AMOUNTS = st.fixed_dictionaries(
     {
         "interest": NON_NEGATIVE,
@@ -764,6 +832,7 @@ CASE_FILER_AMOUNTS = st.fixed_dictionaries(
         "short_term": SIGNED,
         "long_term": SIGNED,
         "rental": SIGNED,
+        "farm_rent": SIGNED,
     }
 )
 
@@ -788,6 +857,7 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, child):
             Concepts.SHORT_TERM_CAPITAL_GAINS: amounts["short_term"],
             Concepts.LONG_TERM_CAPITAL_GAINS: amounts["long_term"],
             Concepts.RENTAL_INCOME: amounts["rental"],
+            Concepts.FARM_RENT_INCOME: amounts["farm_rent"],
         }
 
     def bridge_row(amounts):
@@ -799,6 +869,7 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, child):
             "short_term_capital_gains": amounts["short_term"],
             "long_term_capital_gains": amounts["long_term"],
             "rental_income": amounts["rental"],
+            "farm_rent_income": amounts["farm_rent"],
         }
 
     people = [_head(**case_facts(head))]

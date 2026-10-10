@@ -316,14 +316,94 @@ def test_tax_exempt_interest_reads_the_policyengine_us_person_input() -> None:
     """The loader asks for exactly ``tax_exempt_interest_income``, which the
     installed policyengine-us defines as a Person, yearly, stored float input
     (no formula, so no aggregate alias can double-count it)."""
-    assert _TAX_UNIT_PERSON_NON_WAGE_VARIABLES == {
-        Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
-    }
+    assert (
+        _TAX_UNIT_PERSON_NON_WAGE_VARIABLES[Concepts.TAX_EXEMPT_INTEREST_INCOME]
+        == "tax_exempt_interest_income"
+    )
     assert Concepts.TAX_EXEMPT_INTEREST_INCOME not in _PERSON_NON_WAGE_VARIABLES
 
     policyengine_us = pytest.importorskip("policyengine_us")
     variable = policyengine_us.CountryTaxBenefitSystem().variables[
         "tax_exempt_interest_income"
+    ]
+    assert variable.entity.key == "person"
+    assert variable.definition_period == "year"
+    assert variable.value_type is float
+    assert not variable.formulas
+    assert not getattr(variable, "adds", None)
+
+
+def test_tax_unit_cases_carry_signed_farm_rent_for_nonzero_persons() -> None:
+    """Schedule E line 40 is net income or (loss): the loader keeps the sign
+    and drops zeros, like every other non-wage source."""
+    cases = load_populace_us_cases(
+        period="2026",
+        case_unit="tax_unit",
+        microsimulation_factory=lambda dataset: FakeMicrosimulation(dataset),
+    )
+
+    head, child = cases[0].entities
+    (other_head,) = cases[1].entities
+    assert head.facts[Concepts.FARM_RENT_INCOME] == -1_200
+    assert other_head.facts[Concepts.FARM_RENT_INCOME] == 3_400
+    assert Concepts.FARM_RENT_INCOME not in child.facts
+
+
+def test_household_cases_never_carry_or_load_farm_rent() -> None:
+    """PolicyEngine counts farm rent in benefit income (AGI-based Medicaid
+    MAGI; TX, IL and SC TANF unearned income) that the Axiom benefit
+    encodings do not read yet, so household Cases must neither attach it
+    nor calculate it."""
+    sims = []
+
+    def factory(dataset):
+        sim = FakeMicrosimulation(dataset)
+        sims.append(sim)
+        return sim
+
+    cases = load_populace_us_cases(
+        period="2026",
+        case_unit="household",
+        microsimulation_factory=factory,
+    )
+
+    assert cases
+    assert all(
+        Concepts.FARM_RENT_INCOME not in entity.facts
+        for case in cases
+        for entity in case.entities
+    )
+    assert "farm_rent_income" not in sims[0].calls
+
+
+def test_tax_unit_loader_fails_closed_when_farm_rent_is_missing() -> None:
+    def factory(dataset):
+        sim = FakeMicrosimulation(dataset)
+        del sim.person_data["farm_rent_income"]
+        return sim
+
+    with pytest.raises(RuntimeError, match="'farm_rent_income'"):
+        load_populace_us_cases(
+            period="2026",
+            case_unit="tax_unit",
+            microsimulation_factory=factory,
+        )
+
+
+def test_farm_rent_reads_the_policyengine_us_person_input() -> None:
+    """The loader asks for exactly ``farm_rent_income``, a Person, yearly,
+    stored float input in the installed policyengine-us (no formula and no
+    adds, so nothing else is folded into it), and the household table never
+    names it."""
+    assert _TAX_UNIT_PERSON_NON_WAGE_VARIABLES == {
+        Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
+        Concepts.FARM_RENT_INCOME: "farm_rent_income",
+    }
+    assert Concepts.FARM_RENT_INCOME not in _PERSON_NON_WAGE_VARIABLES
+
+    policyengine_us = pytest.importorskip("policyengine_us")
+    variable = policyengine_us.CountryTaxBenefitSystem().variables[
+        "farm_rent_income"
     ]
     assert variable.entity.key == "person"
     assert variable.definition_period == "year"
@@ -413,6 +493,9 @@ class FakeMicrosimulation:
             "is_veteran": [False, False, True],
             "has_medicaid_health_coverage_at_interview": [True, False, False],
             "tax_exempt_interest_income": [2_500.0, 0.0, 700.0],
+            # Signed, as the pinned artifact carries it (320 of its 1,065
+            # nonzero rows are losses).
+            "farm_rent_income": [-1_200.0, 0.0, 3_400.0],
         }
 
     def subsample(self, sample_size):
