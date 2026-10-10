@@ -202,11 +202,7 @@ class PopulaceUsCaseLoader:
 
         calculation_period = _year(period)
         households = self._households(sim, calculation_period)
-        people_by_household = self._people_by_household(
-            sim,
-            calculation_period,
-            case_unit=case_unit,
-        )
+        people_by_household = self._people_by_household(sim, calculation_period)
         cases = []
         for household in households:
             household_scope = household.scope
@@ -351,8 +347,6 @@ class PopulaceUsCaseLoader:
         self,
         sim,
         period: int,
-        *,
-        case_unit: CaseUnit = "household",
     ) -> dict[int | str, list["_PersonRow"]]:
         household_ids = _values(
             sim.calculate("household_id", period=period, map_to="person")
@@ -459,25 +453,22 @@ class PopulaceUsCaseLoader:
             )
             for concept, pe_variable in _PERSON_NON_WAGE_VARIABLES.items()
         }
-        if case_unit == "tax_unit":
-            # Tax-unit-only sources fail closed: a renamed or missing
-            # variable must stop the load, not zero the concept.
-            non_wage_income.update(
-                {
-                    concept: _calculate_values(
-                        sim,
-                        pe_variable,
-                        period,
-                        map_to="person",
-                        default=0,
-                        size=size,
-                        strict=True,
-                    )
-                    for concept, pe_variable in (
-                        _TAX_UNIT_PERSON_NON_WAGE_VARIABLES.items()
-                    )
-                }
-            )
+        # These sources fail closed: a renamed or missing variable must stop
+        # the load, not zero the concept.
+        non_wage_income.update(
+            {
+                concept: _calculate_values(
+                    sim,
+                    pe_variable,
+                    period,
+                    map_to="person",
+                    default=0,
+                    size=size,
+                    strict=True,
+                )
+                for concept, pe_variable in _STRICT_PERSON_NON_WAGE_VARIABLES.items()
+            }
+        )
 
         people_by_household: dict[int | str, list[_PersonRow]] = defaultdict(list)
         for index, household_id in enumerate(household_ids):
@@ -547,12 +538,13 @@ _PERSON_NON_WAGE_VARIABLES = {
     # Axiom never sees.
 }
 
-# Loaded only for case_unit == "tax_unit" Cases. Household Cases feed the
-# benefit lanes (SNAP/TANF/SSI/Medicaid), where PolicyEngine counts tax-exempt
-# interest (through interest_income and MAGI) but the Axiom benefit encodings
-# do not read it yet, so carrying it on household Cases would hand
-# PolicyEngine income Axiom never sees (axiom-oracles#567).
-_TAX_UNIT_PERSON_NON_WAGE_VARIABLES = {
+# Loaded onto every Case (tax-unit and household), failing closed. Household
+# Cases feed the benefit lanes: the Axiom input projection
+# (data/populace_input_mapping.yaml) counts tax-exempt interest wherever the
+# program's own income definition does (SNAP, TANF, Medicaid MAGI) and leaves
+# it out of SSI, whose 42 USC 1382a(b)(23) excludes interest on countable
+# resources (axiom-oracles#567).
+_STRICT_PERSON_NON_WAGE_VARIABLES = {
     Concepts.TAX_EXEMPT_INTEREST_INCOME: "tax_exempt_interest_income",
 }
 

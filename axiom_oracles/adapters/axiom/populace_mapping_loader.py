@@ -215,11 +215,13 @@ def _build_derived_mapper(scope: str, source: dict) -> Callable[..., Any]:
             members = [facts] + [
                 f for f in facts.get("__others__", []) if _abd2(f)
             ][:1]
+            # Same sources as the individual slot
+            # (annual_income_not_paid_on_basis_of_need): interest and
+            # dividends from countable resources are not income under 42 USC
+            # 1382a(b)(23) / 20 CFR 416.1124(c)(22), taxable or tax-exempt.
             unearned_keys = [
                 Concepts.SOCIAL_SECURITY_BENEFITS,
                 Concepts.PENSION_INCOME,
-                Concepts.INTEREST_INCOME,
-                Concepts.DIVIDEND_INCOME,
                 Concepts.RENTAL_INCOME,
                 Concepts.UNEMPLOYMENT_INSURANCE_INCOME,
             ]
