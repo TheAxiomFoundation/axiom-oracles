@@ -616,6 +616,36 @@ def compare(
         _echo_resolved_axiom_composition(
             report_suite or suite_name, {left, right}, axiom_program
         )
+        population_concepts = concepts
+        population_categories = categories
+        if population == "enhanced-cps":
+            # Grain follows the mapped output surface, including the default
+            # engine intersection. A nonempty tax-only surface loads tax units;
+            # any benefit or mixed surface keeps household Cases. Synthetic
+            # suite construction and the loader's household default stay intact.
+            population_mappings = comparable_mappings(
+                left,
+                right,
+                locales=set(locales) or None,
+                scope=comparison_scope,
+                concepts=set(concepts) or None,
+                categories=set(categories) or None,
+                include_components=include_components,
+            )
+            try:
+                population_mappings = _filter_for_accessnyc_mode(
+                    population_mappings,
+                    left,
+                    right,
+                    accessnyc_mode,
+                    accessnyc_python_path,
+                )
+            except RuntimeError as exc:
+                raise click.ClickException(str(exc)) from exc
+            population_concepts = tuple(
+                mapping.concept_id for mapping in population_mappings
+            )
+            population_categories = ()
         cases = _load_population_cases(
             population=population,
             suite_name=suite_name,
@@ -623,8 +653,8 @@ def compare(
             period=period,
             sample_size=sample_size,
             ecps_dataset=ecps_dataset,
-            categories=categories,
-            concepts=concepts,
+            categories=population_categories,
+            concepts=population_concepts,
         )
         if jurisdiction_fips and _wants_snap(concepts):
             cases = [

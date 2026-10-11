@@ -750,11 +750,13 @@ def test_property_dependents_never_change_the_tax_unit_input(filer, dependents):
     )
 
 
-# Farm rent and passive partnership/S-corp income are absent on purpose: the
-# Case deliberately carries no farm-rent concept (the Axiom federal oracle
-# bridge has no gross-income slot for it; axiom-oracles issue
-# #566) and no producer supplies a passive partnership/S-corp
-# amount, so both stay zero on both surfaces below.
+# These generated inputs omit farm rent and a dedicated passive partnership/
+# S-corp split, so both stay zero on the two surfaces below. The Case has no
+# farm-rent concept (the Axiom bridge has no gross-income slot; issue #566).
+# The review checked only PE-US 1.764.6: it has generic partnership and S-corp
+# inputs but no dedicated passive split. The original author reported no
+# passive-income column in the pinned Populace artifact; this test uses fakes
+# and does not audit that artifact or other producer versions.
 CASE_FILER_AMOUNTS = st.fixed_dictionaries(
     {
         "interest": NON_NEGATIVE,

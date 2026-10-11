@@ -14,7 +14,11 @@ from ...core.engine import EngineAdapter
 from ...core.household import Household
 from ...core.results import EngineResult
 from .output import TaxsimRecord, TaxsimStdout, id_key, parse_taxsim_stdout
-from .projection import taxsim_input_for_case
+from .projection import (
+    TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY,
+    taxsim_input_for_case,
+    taxsim_unprojected_inputs_for_case,
+)
 
 log = logging.getLogger(__name__)
 
@@ -296,13 +300,20 @@ class TaxsimPackageRunner(EngineAdapter):
         first_missing = missing[0][0] if missing else None
         for key, case in expected:
             record = by_key.get(key)
+            unprojected = taxsim_unprojected_inputs_for_case(case) or case.metadata.get(
+                TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY
+            )
             if record is None:
                 results.append(
                     EngineResult(
                         engine=self.name,
                         household_id=case.case_id,
                         values={},
-                        raw=None,
+                        raw=(
+                            {TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY: unprojected}
+                            if unprojected
+                            else None
+                        ),
                         errors=(
                             _missing_row_error(
                                 self.id_column,
@@ -315,6 +326,8 @@ class TaxsimPackageRunner(EngineAdapter):
                 )
                 continue
             raw: dict[str, Any] = dict(record.values)
+            if unprojected:
+                raw[TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY] = unprojected
             if record.diagnostics:
                 raw[DIAGNOSTICS_KEY] = list(record.diagnostics)
             results.append(

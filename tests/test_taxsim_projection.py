@@ -1,6 +1,11 @@
+from dataclasses import replace
+
 import pytest
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from axiom_oracles.adapters.taxsim.projection import (
+    TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY,
     attach_taxsim_inputs,
     taxsim_input_for_case,
 )
@@ -266,3 +271,73 @@ def test_taxsim_projection_leaves_out_tax_exempt_interest_and_records_it() -> No
     assert with_interest.metadata["taxsim_unprojected_inputs"] == {
         "tax_exempt_interest_income": 5_500
     }
+
+
+def _tax_exempt_interest_case(head_interest, spouse_interest, child_interest):
+    return Case(
+        case_id="diagnostic",
+        period="2026",
+        facts={Concepts.STATE_CODE: "CO"},
+        entities=tuple(
+            Entity(
+                relation,
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: relation,
+                    Concepts.PERSON_AGE: age,
+                    Concepts.TAX_EXEMPT_INTEREST_INCOME: amount,
+                },
+            )
+            for relation, age, amount in (
+                ("head", 70, head_interest),
+                ("spouse", 68, spouse_interest),
+                ("child", 15, child_interest),
+            )
+        ),
+    )
+
+
+@pytest.mark.parametrize("row_location", ["metadata", "facts"])
+def test_preprojected_taxsim_cases_record_dropped_filer_input(row_location) -> None:
+    case = _tax_exempt_interest_case(4_000, 1_500, 900)
+    row = taxsim_input_for_case(case, taxsimid="custom-id")
+    case = replace(
+        case,
+        **{row_location: {**getattr(case, row_location), "taxsim_input": row}},
+    )
+
+    [projected] = attach_taxsim_inputs([case])
+
+    assert projected.metadata["taxsim_input"] == row
+    assert projected.metadata[TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY] == {
+        "tax_exempt_interest_income": 5_500
+    }
+    assert TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY not in case.metadata
+
+
+@settings(max_examples=100, deadline=None, derandomize=True)
+@given(
+    head=st.integers(min_value=-100_000, max_value=100_000),
+    spouse=st.integers(min_value=-100_000, max_value=100_000),
+    child=st.integers(min_value=-100_000, max_value=100_000),
+    row_location=st.sampled_from(["fresh", "metadata", "facts"]),
+)
+def test_taxsim_diagnostic_is_filer_sum_regardless_of_projection_path(
+    head, spouse, child, row_location
+) -> None:
+    case = _tax_exempt_interest_case(head, spouse, child)
+    row = taxsim_input_for_case(case, taxsimid=1)
+    if row_location != "fresh":
+        case = replace(
+            case,
+            **{row_location: {**getattr(case, row_location), "taxsim_input": row}},
+        )
+
+    [projected] = attach_taxsim_inputs([case])
+
+    expected = {"tax_exempt_interest_income": head + spouse} if head + spouse else {}
+    assert (
+        projected.metadata.get(TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY, {})
+        == expected
+    )
+    assert projected.metadata["taxsim_input"] == row

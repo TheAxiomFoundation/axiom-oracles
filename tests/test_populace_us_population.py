@@ -1,7 +1,11 @@
 import hashlib
+import importlib
 import types
 
 import pytest
+from click.testing import CliRunner
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 from axiom_oracles.core.case import Concepts
 from axiom_oracles.core.geography import GeographyScope
@@ -251,9 +255,9 @@ def test_tax_unit_cases_carry_tax_exempt_interest_for_nonzero_persons() -> None:
 
 
 def test_tax_unit_tax_exempt_interest_keeps_the_sign_it_is_given() -> None:
-    """Same cleaning as the shared table: the loader never floors (the
-    pinned artifact has no negative tax-exempt interest; floors belong to
-    the projections)."""
+    """Same cleaning as the shared table: the loader never floors. The
+    original author reported no negative tax-exempt interest in the pinned
+    artifact; this fake-population test does not audit that artifact."""
 
     def factory(dataset):
         sim = FakeMicrosimulation(dataset)
@@ -425,3 +429,150 @@ class FakeMicrosimulation:
         if variable not in data:
             raise ValueError(variable)
         return FakeSeries(data[variable])
+
+
+class _InputsCaptured(Exception):
+    """Stop the real CLI after runner construction, before engine execution."""
+
+
+def _capture_cli_population(monkeypatch, arguments, *, build_runners=False):
+    cli_module = importlib.import_module("axiom_oracles.cli")
+    original_loader = cli_module.load_populace_us_cases
+    original_build_runner = cli_module._build_runner
+    captured = {"runners": {}}
+
+    def fake_source_loader(**kwargs):
+        captured["loader_kwargs"] = kwargs.copy()
+        cases = original_loader(
+            **kwargs, microsimulation_factory=FakeMicrosimulation
+        )
+        captured["cases"] = cases
+        return cases
+
+    def capture_runner(engine, *args, **kwargs):
+        captured["concepts"] = args[3]
+        if build_runners:
+            captured["runners"][engine] = original_build_runner(
+                engine, *args, **kwargs
+            )
+            if len(captured["runners"]) < 2:
+                return captured["runners"][engine]
+        raise _InputsCaptured
+
+    monkeypatch.setattr(cli_module, "load_populace_us_cases", fake_source_loader)
+    monkeypatch.setattr(cli_module, "_build_runner", capture_runner)
+    monkeypatch.setattr(
+        cli_module, "_echo_resolved_axiom_composition", lambda *args: None
+    )
+    result = CliRunner().invoke(cli_module.cli, ["compare", *arguments])
+    assert isinstance(result.exception, _InputsCaptured), (
+        result.output, result.exception
+    )
+    return captured
+
+
+TAX_SURFACE_SELECTIONS = (
+    (),
+    ("--category", "tax"),
+    ("--concept", Concepts.FEDERAL_INCOME_TAX),
+    ("--suite", "nyc-synthetic"),
+    ("--category", "tax", "--category", "food"),
+)
+
+
+@pytest.mark.parametrize("selection", TAX_SURFACE_SELECTIONS)
+def test_cli_tax_surface_carries_interest_to_both_real_runner_inputs(
+    monkeypatch, selection
+):
+    """A tax-only mapped surface always loads tax units, even with no filters.
+
+    ECPS's --suite is a label; synthetic suite construction stays separate.
+    These assertions inspect real runner inputs, without executing liabilities.
+    """
+    from axiom_oracles.adapters.policyengine import PolicyEngineRunner
+    from axiom_oracles.adapters.taxcalc import TaxCalcPackageRunner
+
+    captured = _capture_cli_population(
+        monkeypatch, ["taxcalc", "policyengine", *selection], build_runners=True
+    )
+    taxcalc = captured["runners"]["taxcalc"]
+    policyengine = captured["runners"]["policyengine"]
+    assert type(taxcalc) is TaxCalcPackageRunner
+    assert type(policyengine) is PolicyEngineRunner
+    case = captured["cases"][0]
+    head = case.entities[0]
+    pe_inputs = policyengine._build_situation_from_case(case)["people"]
+    assert pe_inputs[head.entity_id]["tax_exempt_interest_income"] == {2026: 2_500}
+    assert taxcalc._input_rows([case])[0]["e00400"] == 2_500
+    assert captured["concepts"] == (Concepts.FEDERAL_INCOME_TAX,)
+    assert captured["loader_kwargs"]["case_unit"] == "tax_unit"
+    assert case.case_id == "ecps-tax-unit-1001"
+
+
+@settings(max_examples=25, deadline=None, derandomize=True)
+@given(
+    selection=st.sampled_from(TAX_SURFACE_SELECTIONS),
+    reversed_pair=st.booleans(),
+)
+def test_property_cli_tax_grain_is_independent_of_surface_selection(
+    selection, reversed_pair
+):
+    # Use a fresh patch context per generated command, without fixture reuse.
+    pair = ["policyengine", "taxcalc"] if reversed_pair else ["taxcalc", "policyengine"]
+    with pytest.MonkeyPatch.context() as patches:
+        captured = _capture_cli_population(patches, [*pair, *selection])
+    assert captured["concepts"] == (Concepts.FEDERAL_INCOME_TAX,)
+    assert captured["loader_kwargs"]["case_unit"] == "tax_unit"
+    assert captured["cases"][0].entities[0].fact(
+        Concepts.TAX_EXEMPT_INTEREST_INCOME
+    ) == 2_500
+
+
+@pytest.mark.parametrize(
+    "selection",
+    [
+        (),
+        ("--category", "food"),
+        ("--category", "tax", "--category", "food"),
+        ("--concept", Concepts.SNAP_BENEFIT),
+        ("--concept", Concepts.FEDERAL_INCOME_TAX, "--concept", Concepts.SNAP_BENEFIT),
+        ("--suite", "nyc-synthetic", "--category", "food"),
+    ],
+)
+def test_cli_benefit_and_mixed_surfaces_preserve_household_cases(
+    monkeypatch, selection
+):
+    """Household construction keeps the same ids, facts, people and metadata."""
+    captured = _capture_cli_population(
+        monkeypatch, ["axiom", "policyengine", *selection]
+    )
+    assert captured["loader_kwargs"]["case_unit"] == "household"
+    before = load_populace_us_cases(
+        **captured["loader_kwargs"], microsimulation_factory=FakeMicrosimulation
+    )
+    assert captured["cases"] == before
+    assert [case.case_id for case in before] == ["ecps-101", "ecps-202"]
+    assert all(
+        Concepts.TAX_EXEMPT_INTEREST_INCOME not in person.facts
+        for case in before
+        for person in case.entities
+    )
+
+
+def test_cli_grain_uses_mapped_outputs_instead_of_category_label(monkeypatch):
+    """Even a tax category cannot convert a mapped benefit into a tax unit."""
+    cli_module = importlib.import_module("axiom_oracles.cli")
+    from axiom_oracles.comparison.mappings import ProgramMapping
+
+    benefit = ProgramMapping(
+        standard=Concepts.SNAP_BENEFIT,
+        description="Benefit with a broad category label",
+        category="tax",
+        targets={"axiom": "snap", "policyengine": "snap"},
+    )
+    monkeypatch.setattr(cli_module, "comparable_mappings", lambda *a, **kw: [benefit])
+    captured = _capture_cli_population(
+        monkeypatch, ["axiom", "policyengine", "--category", "tax"]
+    )
+    assert captured["concepts"] == (Concepts.SNAP_BENEFIT,)
+    assert captured["loader_kwargs"]["case_unit"] == "household"
