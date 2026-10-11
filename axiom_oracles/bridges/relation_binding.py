@@ -7,8 +7,10 @@ This module reads that executable metadata; it does not evaluate any rules.
 
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import Counter, OrderedDict, defaultdict
+from collections.abc import Callable, Iterable
 from copy import deepcopy
+from dataclasses import dataclass, field
 from typing import Any
 import warnings
 
@@ -74,6 +76,7 @@ class _ArtifactRelations:
         self.usages: dict[str, list[list[str | None]]] = defaultdict(list)
         self.owner_slots: dict[str, set[int]] = defaultdict(set)
         self.executable_kinds: set[str] = set()
+        self._expected_by_name: dict[str, list[str | None] | None] = {}
         self._read_usages(program)
         # Direct aggregate owners and structural pairs prove endpoint kinds
         # before scalar references use them, independently of rule order.
@@ -345,6 +348,12 @@ class _ArtifactRelations:
                 self._walk(child, entity, context)
 
     def expected(self, name: str) -> list[str | None] | None:
+        if name not in self._expected_by_name:
+            self._expected_by_name[name] = self._expected(name)
+        expected = self._expected_by_name[name]
+        return list(expected) if expected is not None else None
+
+    def _expected(self, name: str) -> list[str | None] | None:
         schema = self.schema(name)
         if schema is None:
             return None
@@ -385,6 +394,59 @@ class _ArtifactRelations:
         return kinds
 
 
+@dataclass
+class _CachedArtifactRelations:
+    artifact: dict[str, Any]
+    program_snapshot: dict[str, Any]
+    analyses: OrderedDict[tuple[str, str, str] | None, _ArtifactRelations] = field(
+        default_factory=OrderedDict,
+    )
+
+
+_ARTIFACT_RELATION_CACHE: OrderedDict[int, _CachedArtifactRelations] = OrderedDict()
+_MAX_CACHED_ARTIFACTS = 8
+_MAX_CACHED_CONSTRUCTOR_HINTS = 128
+
+
+def _artifact_relation_analysis(
+    artifact: dict[str, Any], *, constructor_hint: tuple[str, str, str] | None = None,
+) -> _ArtifactRelations:
+    """Reuse constructor analysis, with the same result as a fresh program walk.
+
+    Artifact dictionaries can be edited in place, so identity alone cannot key
+    their executable slots. Compare a retained snapshot before reuse. Retaining
+    the original object prevents recycled ids from hitting a different artifact,
+    and bounded entries avoid retaining every program loaded by a long run.
+    Request identity pairs are deliberately analyzed outside this cache.
+    """
+    program = artifact.get("program", artifact)
+    key = id(artifact)
+    cached = _ARTIFACT_RELATION_CACHE.get(key)
+    if cached is None or cached.artifact is not artifact or program != cached.program_snapshot:
+        cached = _CachedArtifactRelations(artifact, deepcopy(program))
+        _ARTIFACT_RELATION_CACHE[key] = cached
+    _ARTIFACT_RELATION_CACHE.move_to_end(key)
+    while len(_ARTIFACT_RELATION_CACHE) > _MAX_CACHED_ARTIFACTS:
+        _ARTIFACT_RELATION_CACHE.popitem(last=False)
+
+    if constructor_hint and cached.analyses:
+        schema = next(iter(cached.analyses.values())).schema(constructor_hint[0])
+        if schema is not None:
+            constructor_hint = (schema["name"], *constructor_hint[1:])
+    relations = cached.analyses.get(constructor_hint)
+    if relations is None:
+        relations = _ArtifactRelations(artifact, constructor_hint=constructor_hint)
+        if constructor_hint:
+            schema = relations.schema(constructor_hint[0])
+            if schema is not None:
+                constructor_hint = (schema["name"], *constructor_hint[1:])
+        cached.analyses[constructor_hint] = relations
+    cached.analyses.move_to_end(constructor_hint)
+    while len(cached.analyses) > _MAX_CACHED_CONSTRUCTOR_HINTS:
+        cached.analyses.popitem(last=False)
+    return relations
+
+
 def _ordered_tuple(
     name: str,
     expected: list[str | None],
@@ -392,6 +454,7 @@ def _ordered_tuple(
     kinds: list[str | None],
     *,
     preserve_ambiguous: bool = False,
+    report_ambiguity: bool = True,
 ) -> list[str]:
     candidates = [
         order
@@ -406,7 +469,8 @@ def _ordered_tuple(
     if preserve_ambiguous and len(candidates) == 2:
         # A matching label is no evidence against the other orientation when
         # its endpoint is unknown. Preferences can corrupt a correct request.
-        warnings.warn(RelationBindingAmbiguityWarning(name, ids), stacklevel=3)
+        if report_ambiguity:
+            warnings.warn(RelationBindingAmbiguityWarning(name, ids), stacklevel=3)
         return list(ids)
     if (
         len(candidates) == 2
@@ -427,7 +491,7 @@ def relation_owner_kind(
     artifact: dict[str, Any], name: str, *, default_owner_kind: str, related_kind: str,
 ) -> str:
     """Read a projected unit's real kind from the artifact's endpoint slots."""
-    relations = _ArtifactRelations(artifact)
+    relations = _artifact_relation_analysis(artifact)
     schema = relations.schema(name)
     if schema is None:
         return default_owner_kind
@@ -460,7 +524,7 @@ def relation_tuple(
     ids = [related_id, owner_id] if legacy_owner_slot == 1 else [owner_id, related_id]
     if artifact is None:
         return ids
-    relations = _ArtifactRelations(
+    relations = _artifact_relation_analysis(
         artifact, constructor_hint=(name, owner_kind, related_kind),
     )
     expected = relations.expected(name)
@@ -499,12 +563,22 @@ def bind_request_relations(
     records = result.get("dataset", {}).get("relations", [])
     if not records:
         return result
+    # Producer roles determine these tuples by construction. Do not reinterpret
+    # them through incomplete or broadcast input identity labels.
+    raw_records = []
+    for record in records:
+        if "roles" in record:
+            record["tuple"] = relation_tuple(artifact, record["name"], **record["roles"])
+        else:
+            raw_records.append(record)
+    if not raw_records:
+        return result
     labels: dict[str, set[str]] = defaultdict(set)
     for record in result.get("dataset", {}).get("inputs", []):
         if "entity_id" in record and "entity" in record:
             labels[record["entity_id"]].add(record["entity"])
     identity_pairs: dict[str, list[list[set[str]]]] = defaultdict(list)
-    for record in records:
+    for record in raw_records:
         if len(record.get("tuple", [])) == 2:
             identity_pairs[record["name"]].append([
                 labels.get(entity_id, set()) for entity_id in record["tuple"]
@@ -514,14 +588,14 @@ def bind_request_relations(
     scalar_scopes = {
         rule["entity"] for rule in relations.rules.values() if rule.get("entity")
     } - endpoint_kinds
-    for record in records:
+    for record in raw_records:
         name = record["name"]
         schema = relations.schema(name)
         if schema is None or schema.get("arity", 2) != 2:
             continue
         expected = relations.expected(name)
         if expected is None:
-            if len(record.get("tuple", [])) == 2:
+            if relations.usages.get(schema["name"]) and len(record.get("tuple", [])) == 2:
                 warnings.warn(
                     RelationBindingAmbiguityWarning(name, record["tuple"]), stacklevel=2
                 )
@@ -546,6 +620,104 @@ def bind_request_relations(
             else:
                 kinds.append(next(iter(identities)) if identities else None)
         record["tuple"] = _ordered_tuple(
-            name, expected, ids, kinds, preserve_ambiguous=True
+            name, expected, ids, kinds, preserve_ambiguous=True,
+            report_ambiguity=bool(relations.usages.get(schema["name"])),
         )
     return result
+
+
+RELATION_BINDING_SAMPLE_LIMIT = 20
+
+
+def bind_materialized_relations(
+    request: dict[str, Any], artifact: dict[str, Any], *,
+    materialized: set[int], binder: Callable = bind_request_relations,
+) -> tuple[dict[str, Any], list[RelationBindingAmbiguityWarning]]:
+    """Bind raw tuples and capture every ambiguity, including repeats.
+
+    The indexes identify records already constructed from explicit roles.
+    Neither diagnostics nor role metadata is added to the engine request.
+    """
+    records = request.get("dataset", {}).get("relations", [])
+    if not records or len(materialized) == len(records):
+        return request, []
+    pending = {
+        **request,
+        "dataset": {**request["dataset"], "relations": [
+            record for index, record in enumerate(records) if index not in materialized
+        ]},
+    }
+    with warnings.catch_warnings(record=True) as captured:
+        warnings.simplefilter("always", RelationBindingAmbiguityWarning)
+        bound = binder(pending, artifact)
+    raw_records = iter(bound["dataset"]["relations"])
+    bound["dataset"]["relations"] = [
+        record if index in materialized else next(raw_records)
+        for index, record in enumerate(records)
+    ]
+    return bound, [
+        report.message for report in captured
+        if isinstance(report.message, RelationBindingAmbiguityWarning)
+    ]
+
+
+def relation_binding_diagnostics(
+    ambiguities: Iterable[RelationBindingAmbiguityWarning], *,
+    namespace: str | None = None, entity_id: str | None = None,
+) -> dict[str, Any]:
+    """Count all matching tuples while retaining at most twenty examples."""
+    counts: Counter[str] = Counter()
+    samples = []
+    for ambiguity in ambiguities:
+        if namespace is not None and not any(
+            value.startswith(namespace) for value in ambiguity.tuple
+        ):
+            continue
+        if entity_id is not None and entity_id not in ambiguity.tuple:
+            continue
+        counts[ambiguity.relation] += 1
+        if len(samples) < RELATION_BINDING_SAMPLE_LIMIT:
+            samples.append({"relation": ambiguity.relation, "tuple": list(ambiguity.tuple)})
+    return {"count": sum(counts.values()), "by_relation": dict(counts), "samples": samples}
+
+
+def merge_relation_binding_diagnostics(target: dict, source: dict) -> None:
+    """Accumulate counts across batches without deduplicating occurrences."""
+    target["count"] = target.get("count", 0) + source.get("count", 0)
+    counts = Counter(target.get("by_relation", {}))
+    counts.update(source.get("by_relation", {}))
+    target["by_relation"] = dict(counts)
+    target["samples"] = (target.get("samples", []) + source.get("samples", []))[
+        :RELATION_BINDING_SAMPLE_LIMIT
+    ]
+
+
+def attach_relation_binding_diagnostics(
+    results: list[dict], ambiguities: list[RelationBindingAmbiguityWarning],
+) -> None:
+    """Attach every occurrence once, including tuples without a queried id.
+
+    Prefer the first result whose entity is an endpoint. Unattributed request
+    diagnostics accompany the first result rather than disappearing.
+    """
+    if not results or not ambiguities:
+        return
+    indexes = {}
+    for index, result in enumerate(results):
+        indexes.setdefault(result.get("entity_id"), index)
+    groups: dict[int, list[RelationBindingAmbiguityWarning]] = defaultdict(list)
+    for ambiguity in ambiguities:
+        matches = [indexes[value] for value in ambiguity.tuple if value in indexes]
+        groups[min(matches) if matches else 0].append(ambiguity)
+    for index, group in groups.items():
+        results[index]["relation_binding_diagnostics"] = relation_binding_diagnostics(group)
+
+
+def with_relation_binding_diagnostics(raw: Any, diagnostics: dict) -> Any:
+    """Keep successful and failed execution evidence alongside diagnostics."""
+    if not diagnostics.get("count"):
+        return raw
+    return {
+        **(raw if isinstance(raw, dict) else {"response": raw}),
+        "relation_binding_diagnostics": diagnostics,
+    }

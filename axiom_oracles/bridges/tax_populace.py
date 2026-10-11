@@ -26,7 +26,13 @@ from typing import Any
 import yaml
 
 from .jurisdiction import jurisdiction_prefix
-from .relation_binding import bind_request_relations, relation_tuple
+from .relation_binding import (
+    attach_relation_binding_diagnostics,
+    bind_materialized_relations,
+    bind_request_relations,
+    merge_relation_binding_diagnostics,
+    relation_tuple,
+)
 from .rulespec_paths import (
     _canonical_rulespec_compile_path,
     _rulespec_public_item_keys,
@@ -566,9 +572,13 @@ class TaxComparisonReport:
     output_summary: list[dict[str, Any]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
+    relation_binding_diagnostics: dict[str, Any] | None = None
 
     def to_json(self) -> dict[str, Any]:
         return {
+            **({"provenance": {
+                "relation_binding_diagnostics": self.relation_binding_diagnostics,
+            }} if self.relation_binding_diagnostics else {}),
             "compared_tax_units": self.compared_tax_units,
             "compared_persons": self.compared_persons,
             "compared_values": self.compared_values,
@@ -2887,10 +2897,12 @@ def run_axiom_program(
                 compile_result.stderr.strip() or compile_result.stdout.strip()
             )
         artifact_payload = json.loads(artifact.read_text())
+        ambiguities = []
         runtime_request, public_output_by_runtime = _runtime_axiom_request(
             request,
             artifact_payload=artifact_payload,
             rulespec_root=rulespec_root,
+            binding_ambiguities=ambiguities,
         )
         run_result = subprocess.run(
             [str(binary), "run-compiled", "--artifact", str(artifact)],
@@ -2908,6 +2920,7 @@ def run_axiom_program(
             results,
             public_output_by_runtime=public_output_by_runtime,
         )
+        attach_relation_binding_diagnostics(results, ambiguities)
         return results
 
 
@@ -2916,19 +2929,21 @@ def _runtime_axiom_request(
     *,
     artifact_payload: dict[str, Any],
     rulespec_root: Path,
+    binding_ambiguities: list | None = None,
 ) -> tuple[dict[str, Any], dict[str, str]]:
     runtime_by_public_output = _runtime_output_ids_by_public_name(
         artifact_payload,
         rulespec_root=rulespec_root,
     )
     runtime_request = copy.deepcopy(request)
+    materialized = set()
     for item in (runtime_request.get("dataset") or {}).get("inputs") or []:
         if isinstance(item, dict) and isinstance(item.get("name"), str):
             item["name"] = _runtime_rulespec_name(
                 item["name"],
                 rulespec_root=rulespec_root,
             )
-    for item in (runtime_request.get("dataset") or {}).get("relations") or []:
+    for index, item in enumerate((runtime_request.get("dataset") or {}).get("relations") or []):
         if isinstance(item, dict) and isinstance(item.get("name"), str):
             item["name"] = _runtime_rulespec_name(
                 item["name"],
@@ -2937,6 +2952,7 @@ def _runtime_axiom_request(
             roles = item.pop("roles", None)
             if roles is not None:
                 item["tuple"] = relation_tuple(artifact_payload, item["name"], **roles)
+                materialized.add(index)
 
     public_output_by_runtime: dict[str, str] = {}
     for query in runtime_request.get("queries") or []:
@@ -2961,7 +2977,11 @@ def _runtime_axiom_request(
         query["outputs"] = runtime_outputs
     # Producers materialize explicit roles above, after compilation and name
     # resolution. The binder also validates raw caller-supplied relation tuples.
-    runtime_request = bind_request_relations(runtime_request, artifact_payload)
+    runtime_request, ambiguities = bind_materialized_relations(
+        runtime_request, artifact_payload, materialized=materialized, binder=bind_request_relations,
+    )
+    if binding_ambiguities is not None:
+        binding_ambiguities.extend(ambiguities)
     return runtime_request, public_output_by_runtime
 
 
@@ -3022,6 +3042,10 @@ def compare_outputs(
     relative_tolerance: float,
 ) -> TaxComparisonReport:
     mismatches: list[TaxComparisonRow] = []
+    diagnostics: dict = {}
+    for results in axiom_outputs_by_surface.values():
+        for result in results:
+            merge_relation_binding_diagnostics(diagnostics, result.get("relation_binding_diagnostics", {}))
     summary: dict[str, dict[str, Any]] = {
         f"{surface}:{name}": {
             "surface": surface,
@@ -3112,6 +3136,7 @@ def compare_outputs(
         mismatches=mismatches,
         output_summary=list(summary.values()),
         dataset_identity=pe_data.get("dataset_identity") or None,
+        relation_binding_diagnostics=diagnostics if diagnostics.get("count") else None,
         projection_notes=[
             "Current CTC projection uses Populace raw tax-unit membership, age, "
             "student status, separation status, and SSN-card type to reconstruct "

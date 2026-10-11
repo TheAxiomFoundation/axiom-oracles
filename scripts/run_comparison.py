@@ -679,7 +679,9 @@ def main() -> int:
                 config,
                 suite=suite,
             )
-            adapted["provenance"] = provenance
+            adapted["provenance"] = _preserve_relation_binding_diagnostics(
+                provenance, adapted.get("provenance")
+            )
         preserve_existing_versioned = bool(
             config["runner"].get("_reemitted_report")
         )
@@ -1423,6 +1425,19 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     return provenance
 
 
+def _preserve_relation_binding_diagnostics(
+    provenance: dict,
+    existing_provenance: object,
+) -> dict:
+    """Keep run diagnostics while replacing other runner provenance."""
+    combined = dict(provenance)
+    if isinstance(existing_provenance, dict):
+        key = "relation_binding_diagnostics"
+        if key in existing_provenance:
+            combined[key] = existing_provenance[key]
+    return combined
+
+
 def _stamp_report_provenance(
     output: Path,
     provenance: dict,
@@ -1460,7 +1475,9 @@ def _stamp_report_provenance(
             },
         }
     else:
-        data["provenance"] = provenance
+        data["provenance"] = _preserve_relation_binding_diagnostics(
+            provenance, existing_provenance
+        )
     engines = data.get("engines")
     if require_engine_versions and not isinstance(engines, dict):
         raise SystemExit(
@@ -2000,8 +2017,20 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
         with csv_path.open(newline="") as f:
             rows = list(csv.DictReader(f))
+        # The bridge's optional sidecar carries run diagnostics separately
+        # from the CSV rows. Read them before removing the temporary files.
+        identity_path = csv_path.with_suffix(csv_path.suffix + ".dataset_identity.json")
+        try:
+            sidecar = json.loads(identity_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            sidecar = {}
+        diagnostic_provenance = _preserve_relation_binding_diagnostics({}, sidecar)
 
     report = _adapt_snap_ecps_csv_to_v2(rows, runner)
+    if diagnostic_provenance:
+        report["provenance"] = _preserve_relation_binding_diagnostics(
+            report.get("provenance") or {}, diagnostic_provenance
+        )
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
@@ -4787,17 +4816,22 @@ def _print_quality_flags(aggregates: list) -> None:
 def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) -> dict:
     raw = json.loads(raw_path.read_text())
     if runner_type == "axiom-encode-tax-ecps-compare":
-        return _adapt_tax_ecps_to_v2(raw, config, suite=suite)
-    if runner_type == "axiom-encode-uk-efrs-compare":
-        return _adapt_uk_efrs_to_v2(raw, config, suite=suite)
+        adapted = _adapt_tax_ecps_to_v2(raw, config, suite=suite)
+    elif runner_type == "axiom-encode-uk-efrs-compare":
+        adapted = _adapt_uk_efrs_to_v2(raw, config, suite=suite)
+    else:
+        adapted = raw
+    diagnostic_provenance = _preserve_relation_binding_diagnostics({}, raw.get("provenance"))
+    if diagnostic_provenance:
+        adapted["provenance"] = {**adapted.get("provenance", {}), **diagnostic_provenance}
     # axiom-oracles-compare already emits v2 — pass through, but override
     # the suite with the comparison-config value. The upstream report
     # stamps the population/synthetic-subset name (e.g. "nyc-synthetic"),
     # not the per-comparison identity, so without this override every
     # state's SNAP report collapses into one suite bucket in the
     # dashboard's suite selector.
-    raw["suite"] = suite
-    return raw
+    adapted["suite"] = suite
+    return adapted
 
 
 def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:

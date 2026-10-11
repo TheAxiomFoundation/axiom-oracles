@@ -29,6 +29,7 @@ class HouseholdComparison:
     comparisons: list[VariableComparison] = field(default_factory=list)
     left_errors: tuple[str, ...] = field(default_factory=tuple)
     right_errors: tuple[str, ...] = field(default_factory=tuple)
+    relation_binding_diagnostics: dict[str, dict] = field(default_factory=dict)
 
     @property
     def match_count(self) -> int:
@@ -114,6 +115,12 @@ class Comparator:
                     comparisons=variable_comparisons,
                     left_errors=left.errors,
                     right_errors=right.errors,
+                    relation_binding_diagnostics={
+                        result.engine: result.raw["relation_binding_diagnostics"]
+                        for result in (left, right)
+                        if isinstance(result.raw, Mapping)
+                        and result.raw.get("relation_binding_diagnostics", {}).get("count")
+                    },
                 )
             )
 

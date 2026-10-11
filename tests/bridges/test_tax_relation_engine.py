@@ -15,11 +15,15 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import warnings
 
 import pandas as pd
 import pytest
 import yaml
 
+from axiom_oracles.adapters.axiom import runner, tax_projection
+from axiom_oracles.bridges.relation_binding import RelationBindingAmbiguityWarning
+from axiom_oracles.core.case import Case, Concepts, Entity
 from axiom_oracles.bridges.tax_populace import (
     CDCC_BASE,
     CTC_BASE,
@@ -320,3 +324,57 @@ def test_ctc_pre_strict_engine_reproduces_silent_zero(live_ctc):
         record["entity"] = "Entity"
     assert _credit(_run(binary, artifact_path, legacy), _CTC_OUTPUT) == 0
     assert _credit(_run(binary, artifact_path, corrected), _CTC_OUTPUT) == 2200
+
+
+def test_real_ctc_tax_case_batch_has_no_false_ambiguity_diagnostics(live_ctc, tmp_path):
+    """Unused bridge data and explicit producer roles need no inference."""
+    binary, _, compiled = live_ctc
+    artifact = copy.deepcopy(compiled)
+    bridge_relations = [
+        name for name in tax_projection._RELATION_REFS
+        if name.startswith("us:tax/oracle-bridge#")
+    ]
+    assert len(bridge_relations) == 5
+    for index, name in enumerate(bridge_relations):
+        # These are the generated bridge's five untyped data declarations.
+        artifact["program"]["relations"].append({"name": name, "arity": 2})
+        if "co_withheld_income_tax_member_of_tax_unit" not in name:
+            artifact["program"]["derived"].append({
+                "name": f"bridge_count_{index}", "entity": "TaxUnit",
+                "dtype": "integer", "semantics": "scalar",
+                "expr": {"kind": "count_related", "relation": name,
+                         "current_slot": 1, "related_slot": 0},
+            })
+    artifact_path = tmp_path / "ctc-with-bridge-data.compiled.json"
+    artifact_path.write_text(json.dumps(artifact))
+    cases = [
+        tax_projection.attach_axiom_tax_inputs_to_case(Case(
+            case_id=f"tax-{index}", period="2026", entities=(
+                Entity(f"head-{index}", "Person", facts={
+                    Concepts.PERSON_AGE: 38,
+                    Concepts.YEARLY_EARNED_INCOME: 30_000,
+                    Concepts.HOUSEHOLD_RELATION: "head",
+                }),
+                Entity(f"child-{index}", "Person", facts={
+                    Concepts.PERSON_AGE: 8, Concepts.HOUSEHOLD_RELATION: "child",
+                }),
+            ), metadata={"state": "CO"},
+        ))
+        for index in range(3)
+    ]
+
+    def fake_run(command, **kwargs):
+        request = json.loads(kwargs["input"])
+        assert all("roles" not in row for row in request["dataset"]["relations"])
+        return subprocess.CompletedProcess(
+            command, 0, stdout=json.dumps({"results": [{"outputs": {}}] * 3}),
+            stderr="",
+        )
+
+    adapter = runner.AxiomRulesRunner(binary_path=binary, subprocess_run=fake_run)
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always", RelationBindingAmbiguityWarning)
+        results = adapter._run_case_batch_once(cases, ["unused_output"], artifact_path)
+    assert len(results) == 3
+    assert not [item for item in caught if issubclass(item.category, RelationBindingAmbiguityWarning)]
+    assert all(not result.raw.get("relation_binding_diagnostics") for result in results)
