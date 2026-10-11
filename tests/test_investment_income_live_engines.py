@@ -80,6 +80,10 @@ from axiom_oracles.comparison.mappings import mappings_by_concept
 from axiom_oracles.core.case import Case, Concepts, Entity
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+# CI's investment-income-live job installs PolicyEngine-US and Tax-Calculator
+# and sets this, so those two engines cannot ride in on a skip. TAXSIM and
+# the pinned Axiom engine still skip there.
+REQUIRE_LIVE = os.environ.get("AXIOM_ORACLES_REQUIRE_INVESTMENT_INCOME_LIVE") == "1"
 PIN_SUITE = REPO_ROOT / "comparisons" / "fiit-taxsim-ecps.yaml"
 COLORADO = {"state": "CO", "scope": {"type": "census_state", "geoid": "08"}}
 
@@ -210,29 +214,41 @@ def _run(engine, **runner_kwargs):
     return _by_concept(runner, runner.run_cases(cases, list(OUTPUTS)))
 
 
+def _import_or_skip(module: str, *, required: bool = False):
+    try:
+        return __import__(module)
+    except ImportError:
+        if required and REQUIRE_LIVE:
+            pytest.fail(f"{module} must be installed when live tests are required")
+        pytest.skip(f"{module} is not installed")
+
+
 @pytest.fixture(scope="module")
 def taxcalc_values():
-    pytest.importorskip("taxcalc")
+    _import_or_skip("taxcalc", required=True)
     return _run("taxcalc")
 
 
 @pytest.fixture(scope="module")
 def taxsim_values():
-    pytest.importorskip("policyengine_taxsim")
+    _import_or_skip("policyengine_taxsim")
     return _run("taxsim")
 
 
 @pytest.fixture(scope="module")
 def policyengine_values():
-    policyengine_us = pytest.importorskip("policyengine_us")
+    policyengine_us = _import_or_skip("policyengine_us", required=True)
     sources = policyengine_us.system.system.parameters.gov.irs.gross_income.sources(
         "2026-01-01"
     )
     if "non_sch_d_capital_gains" not in sources:
-        pytest.skip(
+        message = (
             "installed PolicyEngine-US predates policyengine-us#8839 "
             "(non_sch_d_capital_gains is not in gross income)"
         )
+        if REQUIRE_LIVE:
+            pytest.fail(message)
+        pytest.skip(message)
     return _run("policyengine")
 
 
@@ -446,7 +462,7 @@ TAXSIM_INVESTMENT_COLUMNS = {
 
 @pytest.fixture(scope="module")
 def taxsim_2024_eitc():
-    pytest.importorskip("policyengine_taxsim")
+    _import_or_skip("policyengine_taxsim")
     cases = [
         Case(
             case_id=f"{column}:{amount}",
