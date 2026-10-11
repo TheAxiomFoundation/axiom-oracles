@@ -188,6 +188,15 @@ def _exposure_number(value: object) -> int | float | None:
     return value
 
 
+def _output_witnessed(report: dict, output_vars: tuple[str, ...]) -> bool:
+    """A supplied exposure basis must exercise a registered output."""
+    exposure = (report.get("scope") or {}).get("column_exposure")
+    return not isinstance(exposure, dict) or not output_vars or any(
+        (value := _exposure_number(exposure.get(var))) is not None and value > 0
+        for var in output_vars
+    )
+
+
 def _attestation_index(
     suite_index: dict[str, dict],
     universe: Universe,
@@ -247,23 +256,41 @@ def score_jurisdiction(
         repo_root = None
     universe_suites = {policy.suite for policy in universe.in_scope() if policy.suite}
     relevant_reports = [r for r in reports if r.get("suite") in universe_suites]
-    suite_index = _report_suite_index(
-        relevant_reports, known_causes=known_causes, repo_root=repo_root,
-    )
-    attestations = _attestation_index(suite_index, universe, resolver)
     suite_files: dict[str, list[str]] = {}
-    report_defects: set[str] = set()
     for report in relevant_reports:
         suite = report["suite"]
         filename = report.get("_file") or "<unnamed report>"
         suite_files.setdefault(suite, []).append(filename)
+    contested_suites = {suite for suite, files in suite_files.items() if len(files) > 1}
+    suite_index = {report["suite"]: report for report in relevant_reports}
+    attestations = _attestation_index(suite_index, universe, resolver)
+    assessable_suites = {
+        policy.suite for policy in universe.in_scope()
+        if policy.suite in attestations
+        and attestations[policy.suite].eligible
+        and attestations[policy.suite].binds(policy.output_vars)
+        and _output_witnessed(suite_index[policy.suite], policy.output_vars)
+    }
+    # A single report rejected by execution/output/exposure gates contributes no counts.
+    # Preserve that verdict even when its unused summary is stale or malformed.
+    # Duplicates always undergo strict assessment so one cannot hide bad counts.
+    assessed_reports = [
+        report for report in relevant_reports
+        if report["suite"] in assessable_suites or report["suite"] in contested_suites
+    ]
+    suite_index.update(_report_suite_index(
+        assessed_reports, known_causes=known_causes, repo_root=repo_root,
+    ))
+    report_defects: set[str] = set()
+    for report in assessed_reports:
+        suite = report["suite"]
+        filename = report.get("_file") or "<unnamed report>"
         assessment = assess_unexplained(
             report, known_causes=known_causes, repo_root=repo_root,
         )
         report_defects.update(
             f"[{suite}] {filename}: {defect}" for defect in assessment.defects
         )
-    contested_suites = {suite for suite, files in suite_files.items() if len(files) > 1}
     #: The raw, uncollapsed report list — exclusion-tripwire scans must see
     #: every report, order-independently (sol closing review r2 finding 1).
     all_reports = list(reports)
@@ -361,17 +388,11 @@ def score_jurisdiction(
         # least one of the policy's output columns with a positive rate.
         # An all-zero column compared against an implicit 0 witnesses
         # nothing — the policy is NOT covered by that comparison.
-        exposure = (report.get("scope") or {}).get("column_exposure")
-        if isinstance(exposure, dict) and policy.output_vars:
-            witnessed = any(
-                (value := _exposure_number(exposure.get(var))) is not None and value > 0
-                for var in policy.output_vars
-            )
-            if not witnessed:
-                uncovered_policies.append(policy.oracle_policy_name)
-                unwitnessed_policies.append(policy.oracle_policy_name)
-                policy_scores.append(_uncovered_row(policy, "unwitnessed"))
-                continue
+        if not _output_witnessed(report, policy.output_vars):
+            uncovered_policies.append(policy.oracle_policy_name)
+            unwitnessed_policies.append(policy.oracle_policy_name)
+            policy_scores.append(_uncovered_row(policy, "unwitnessed"))
+            continue
 
         binding_gap = attestation.binding_gap(policy.output_vars)
         if binding_gap is None:

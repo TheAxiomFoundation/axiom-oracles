@@ -141,9 +141,24 @@ def _universe():
     ])
 
 
+def _attested_report():
+    """Reach the scoring gates with an actual returned comparison pair."""
+    report = _report(0)
+    report["engines"] = {"left": "euromod", "right": "axiom"}
+    report["case_count"] = 1
+    report["summary"].update(comparison_count=1, match_count=1, error_count=0)
+    report["aggregates"] = [{"concept": "tx:output", "comparison_count": 1}]
+    report["observed_outputs"] = [
+        {"case_id": 0, "concept": "tx:output", "engine": engine,
+         "variable": "x_s", "value": 0}
+        for engine in ("euromod", "axiom")
+    ]
+    return report
+
+
 @pytest.mark.parametrize("exposure", [float("nan"), float("inf"), -float("inf"), "5", None, True, [], {}])
 def test_invalid_exposure_cannot_witness_or_support_an_exclusion(exposure):
-    report = _report(0)
+    report = _attested_report()
     report["scope"] = {"column_exposure": {"x_s": exposure, "z_s": exposure}}
     board, _ = score_jurisdiction(_universe(), [report])
     assert board.covered == 0
@@ -174,7 +189,7 @@ def test_duplicate_cannot_hide_malformed_summary_count():
 
 def test_scoreboard_file_validation_is_off_and_preserves_existing_badge(tmp_path, monkeypatch):
     assert scoreboard_module.SCOREBOARD_DISPOSITION_FILE_VALIDATION_ENABLED is False
-    report = _report(0)
+    report = _attested_report()
     report["summary"]["dispositioned"]["dispositions_file"] = "dispositions/missing.yaml"
     board, rows = score_jurisdiction(_universe(), [report], known_causes=[], repo_root=tmp_path)
     assert board.conformant is True
