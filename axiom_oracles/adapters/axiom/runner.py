@@ -542,13 +542,15 @@ class AxiomRulesRunner(EngineAdapter):
         is recorded on it; the remaining cases are then rerun as two halves,
         isolating any further failure the same way. If the named case
         computes alone, or the error names no single case, this returns
-        ``None`` and the caller fails the batch as before.
+        ``None`` and the caller fails this batch (the whole batch, or the
+        half being rerun) as before.
 
         The adapter namespaces every input record, relation and query per
         case, so no rule evaluated for one case reads another case's facts
         and a case computes the same alone as in any batch. Each isolated
         failure costs one failed batch run and at most one confirming run,
-        so k of them cost at most 3k + 1 engine runs.
+        so k of them cost at most 3k + 1 engine runs, plus one for each
+        hint that the confirming run does not bear out.
         """
 
         if len(cases) == 1:
@@ -577,6 +579,8 @@ class AxiomRulesRunner(EngineAdapter):
                 ),
             )
 
+        # Any error from the run alone confirms the suspect, including a
+        # malformed engine response: it is that case's own result either way.
         [alone] = run([suspect])
         if not alone.errors:
             return None
@@ -923,13 +927,13 @@ def _suspect_case_index(error: str, case_count: int) -> int | None:
 
 
 def _strip_batch_namespace(error: str, index: int) -> str:
-    """Drop the generated ``case-<index>::`` prefix from the entity field.
+    """Drop the generated ``case-<index>::`` prefix from each entity field.
 
-    Only the outer prefix on the first entity field goes: a case whose own
-    entity id starts with the same text keeps it.
+    Only the outer prefix goes: a case whose own entity id starts with the
+    same text keeps it.
     """
 
-    return error.replace(f"entity `case-{index}::", "entity `", 1)
+    return error.replace(f"entity `case-{index}::", "entity `")
 
 
 def _output_targets(variables: list[str] | None) -> list[str]:

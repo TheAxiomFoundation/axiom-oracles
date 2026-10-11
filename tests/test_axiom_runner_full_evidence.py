@@ -22,7 +22,8 @@ Invariants (property-tested over random batches below):
   intermediates are exactly the rules the engine evaluated on the queried
   entity.
 - Bounded isolation: a batch whose k failing cases each isolate costs at
-  most 3k + 1 engine runs; an error naming no case fails its batch in one.
+  most 3k + 1 engine runs (plus one per hint a confirming run does not bear
+  out); an error naming no case fails its batch in one.
 """
 
 from __future__ import annotations
@@ -504,6 +505,110 @@ def test_unconfirmed_attribution_keeps_the_failure_batch_wide(tmp_path):
     assert all(
         result.errors == ("missing input `x` for entity `case-0::tax_unit` over 2026",)
         for result in results
+    )
+
+
+def _rewriting(inner: _GuardedEngine, rewrite):
+    """Wrap the fake engine, passing each failure's error through ``rewrite``."""
+
+    def run(args, **kwargs):
+        process = inner(args, **kwargs)
+        if process.returncode:
+            request = json.loads(kwargs["input"])
+            return subprocess.CompletedProcess(
+                args, 1, stdout="", stderr=rewrite(request, process.stderr)
+            )
+        return process
+
+    return run
+
+
+def test_unconfirmed_hint_in_a_rerun_half_fails_only_that_half(tmp_path):
+    """Review finding: isolation recurses into the halves, and a half whose
+    hint is not borne out fails as a unit while the rest stays isolated."""
+
+    artifact = _artifact(tmp_path)
+    cases = [_case(f"unit-{i}", True, True, 100) for i in range(7)]
+    cases[2] = _case("unit-2", True, ABSENT, 100)
+    cases[5] = _case("unit-5", True, ABSENT, 100)
+    inner = _GuardedEngine()
+
+    def misname_in_halves(request, error):
+        # In the three-case half the engine names its first, healthy case.
+        if len(request["queries"]) == 3:
+            return error.replace("`case-1::", "`case-0::")
+        return error
+
+    results = _runner(
+        artifact, _rewriting(inner, misname_in_halves), full_evidence=False
+    ).run_cases(cases, [OUTPUT])
+
+    # Whole batch, unit-2 alone, half [0, 1, 3], half [4, 5, 6], unit-4 alone.
+    assert [len(request["queries"]) for request in inner.requests] == [7, 1, 3, 3, 1]
+    assert [bool(result.errors) for result in results] == [
+        False,
+        False,
+        True,
+        False,
+        True,
+        True,
+        True,
+    ]
+    assert "entity `tax_unit`" in results[2].errors[0]
+    assert all(
+        "entity `case-0::tax_unit`" in results[index].errors[0] for index in (4, 5, 6)
+    )
+
+
+def test_confirming_run_error_is_the_one_recorded(tmp_path):
+    """Review finding: the isolated case carries the error it raises alone,
+    even when that differs from what the batch reported."""
+
+    artifact = _artifact(tmp_path)
+    cases = [
+        _case("healthy-0", True, True, 100),
+        _case("broken", True, ABSENT, 200),
+        _case("healthy-2", True, True, 300),
+    ]
+
+    def differ_when_alone(request, error):
+        if len(request["queries"]) == 1:
+            return error.replace("expense_requirements_satisfied", "another_input")
+        return error
+
+    healthy_0, broken, healthy_2 = _runner(
+        artifact, _rewriting(_GuardedEngine(), differ_when_alone), full_evidence=False
+    ).run_cases(cases, [OUTPUT])
+
+    assert healthy_0.errors == healthy_2.errors == ()
+    assert broken.errors == (
+        "missing input `another_input` for entity `tax_unit` "
+        "over 2026-01-01..2026-12-31",
+    )
+
+
+def test_related_entity_field_attributes_its_case(tmp_path):
+    """Review finding: an error raised on a case's related entity
+    (``case-<i>::person-1``) still points at case i."""
+
+    artifact = _artifact(tmp_path)
+    cases = [
+        _case("healthy-0", True, True, 100),
+        _case("broken", True, ABSENT, 200),
+        _case("healthy-2", True, True, 300),
+    ]
+
+    def on_a_member(request, error):
+        return error.replace("::tax_unit`", "::person-1`")
+
+    healthy_0, broken, healthy_2 = _runner(
+        artifact, _rewriting(_GuardedEngine(), on_a_member), full_evidence=False
+    ).run_cases(cases, [OUTPUT])
+
+    assert healthy_0.errors == healthy_2.errors == ()
+    assert broken.errors == (
+        "missing input `expense_requirements_satisfied` for entity `person-1` "
+        "over 2026-01-01..2026-12-31",
     )
 
 
