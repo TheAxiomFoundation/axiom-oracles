@@ -3634,9 +3634,10 @@ def _eitc_relevant_investment_income(
     passive activity income is Schedule E line 26 rents plus line 40 farm
     rent (lines 11-12 name both), netted before the line 13 floor. The
     Case carries no passive partnership/S-corp concept (line 29a col. (h)
-    / 29b col. (g)), because no pinned producer supplies one. Form 4797
-    amounts, royalties, and estate/trust passive income are not modeled
-    either.
+    / 29b col. (g)). The checked PolicyEngine-US 1.764.6 source has generic
+    partnership and S-corporation inputs but no dedicated passive split;
+    other producer versions were not checked. Form 4797 amounts, royalties,
+    and estate/trust passive income are not modeled either.
     """
     return (
         interest_and_dividends

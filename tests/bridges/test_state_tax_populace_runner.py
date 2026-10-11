@@ -3665,6 +3665,7 @@ def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
                 "is_tax_unit_head": [True, False, False],
                 "is_tax_unit_spouse": [False, True, False],
                 "employment_income": [60000.0, 15000.0, 0.0],
+                "tax_exempt_interest_income": [4_000.0, 1_500.0, 900.0],
             }
             if variable == "tax_unit_id" and map_to == "person":
                 return [7, 7, 7]
@@ -3693,6 +3694,7 @@ def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
         {"person_id": [1, 2, 3], "person_tax_unit_id": [7, 7, 7]}
     )
 
+    unprojected_inputs = {}
     targets = state_tax_runner.calculate_taxsim_targets(
         dataset="dataset",
         raw_tax_units=raw_tax_units,
@@ -3701,6 +3703,7 @@ def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
         year=2026,
         microsimulation_factory=FakeSimulation,
         taxsim_runner_factory=FakeRunner,
+        unprojected_inputs=unprojected_inputs,
     )
 
     # UT's concept maps staxbc — the pre-credit value, not siitax.
@@ -3715,6 +3718,34 @@ def test_calculate_taxsim_targets_projects_and_grades_ready_units() -> None:
     assert row["depx"] == 1
     assert row["page"] == 40 and row["sage"] == 38
     assert row["idtl"] == 2
+    assert unprojected_inputs == {
+        "UT": {7: {"tax_exempt_interest_income": 5_500.0}}
+    }
+    assert "taxsim_unprojected_inputs" not in row
+
+
+def test_state_taxsim_comparison_persists_dropped_input_metadata(tmp_path) -> None:
+    report = compare_ready_state_tax_units(
+        routes=(TaxUnitRoute(7, 1, "UT", "49", 2.5, DISPOSITION_READY),),
+        policyengine_targets={"UT": {7: 0.0}},
+        policyengine_projection_inputs={"UT": _ut_inputs({7: 0.0})},
+        taxsim_targets={"UT": {7: 100.0}},
+        taxsim_unprojected_inputs={
+            "UT": {7: {"tax_exempt_interest_income": 5_500.0}}
+        },
+        year=2026,
+        rulespec_root=tmp_path / "rulespec-us",
+        axiom_rules_path=tmp_path / "axiom-rules",
+        axiom_runner=_fake_axiom_zero_runner,
+    )
+
+    [row] = report["states"]["UT"]["cases"]
+    assert row["metadata"]["taxsim_unprojected_inputs"] == {
+        "tax_exempt_interest_income": 5_500.0
+    }
+    # A diagnostic explains the input surface; it never suppresses grading.
+    assert row["taxsim_matched"] is False
+    assert report["taxsim_mismatch_count"] == 1
 
 
 def test_calculate_taxsim_targets_skips_unmapped_jurisdictions() -> None:

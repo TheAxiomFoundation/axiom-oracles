@@ -1679,6 +1679,7 @@ def calculate_taxsim_targets(
     contract: StateTaxPopulaceContract | Mapping[str, Any] | None = None,
     microsimulation_factory: Callable[[Any], Any] | None = None,
     taxsim_runner_factory: Callable[[Any], Any] | None = None,
+    unprojected_inputs: dict[str, dict[int | str, dict[str, float]]] | None = None,
 ) -> dict[str, dict[int | str, float]]:
     """Calculate the TAXSIM oracle value for every ready-routed tax unit.
 
@@ -1690,9 +1691,15 @@ def calculate_taxsim_targets(
     output concept. Person identity, order, and tax-unit links are verified
     against the certified Populace tables before any values are used —
     the same fail-closed discipline as the PolicyEngine legs.
+
+    When supplied, ``unprojected_inputs`` collects nonzero dropped filer
+    inputs by state and tax-unit id for comparison-row metadata.
     """
 
-    from ..adapters.taxsim.projection import taxsim_input_for_case
+    from ..adapters.taxsim.projection import (
+        taxsim_input_for_case,
+        taxsim_unprojected_inputs_for_case,
+    )
     from ..core.case import Case, Concepts, Entity
 
     resolved_contract = (
@@ -1879,10 +1886,15 @@ def calculate_taxsim_targets(
         state_routes = ready_by_state[state]
         rows = []
         for route in state_routes:
+            case = _case_for_tax_unit(route.tax_unit_id, state)
             row = taxsim_input_for_case(
-                _case_for_tax_unit(route.tax_unit_id, state),
+                case,
                 taxsimid=route.tax_unit_id,
             )
+            if unprojected_inputs is not None:
+                dropped = taxsim_unprojected_inputs_for_case(case)
+                if dropped:
+                    unprojected_inputs.setdefault(state, {})[route.tax_unit_id] = dropped
             if row["state"] != jurisdiction.taxsim_state_code:
                 raise StateTaxPopulationRoutingError(
                     f"{state}: projected TAXSIM state code {row['state']} "
@@ -2485,6 +2497,9 @@ def compare_ready_state_tax_units(
     ]
     | None = None,
     taxsim_targets: Mapping[str, Mapping[int | str, float]] | None = None,
+    taxsim_unprojected_inputs: Mapping[
+        str, Mapping[int | str, Mapping[str, float]]
+    ] | None = None,
     year: int,
     rulespec_root: Path,
     axiom_rules_path: Path,
@@ -2741,6 +2756,15 @@ def compare_ready_state_tax_units(
                     )
                 case_row["taxsim"] = round(taxsim_value, 2)
                 case_row["taxsim_matched"] = taxsim_matched
+                dropped = (
+                    taxsim_unprojected_inputs.get(state, {}).get(route.tax_unit_id)
+                    if taxsim_unprojected_inputs is not None
+                    else None
+                )
+                if dropped:
+                    case_row["metadata"] = {
+                        "taxsim_unprojected_inputs": dict(dropped)
+                    }
             case_rows.append(case_row)
 
         comparisons[state] = {

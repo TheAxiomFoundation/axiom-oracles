@@ -821,8 +821,12 @@ def test_property_dependents_never_change_the_tax_unit_input(filer, dependents):
     )
 
 
-# Passive partnership/S-corp income is absent on purpose: no producer supplies
-# it, so the Case has no concept for it and it stays zero on both surfaces.
+# These generated inputs omit a dedicated passive partnership/S-corp split, so
+# it stays zero on the two surfaces below. The review checked only PE-US
+# 1.764.6: it has generic partnership and S-corp inputs but no dedicated
+# passive split. The original author reported no passive-income column in the
+# pinned Populace artifact; this test uses fakes and does not audit that
+# artifact or other producer versions.
 CASE_FILER_AMOUNTS = st.fixed_dictionaries(
     {
         "interest": NON_NEGATIVE,

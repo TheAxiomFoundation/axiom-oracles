@@ -27,8 +27,9 @@ Pub. 596 (2025), p. 7, Worksheet 1 line 2: "Enter any amount from Form 1040 or
 1040-SR, line 2a, plus any amount on Form 8814, line 1b", added unfloored on
 line 14 (tests/test_eitc_investment_income_worksheet1.py has the worksheet).
 
-26 USC 103(a) (uscode.house.gov, current through Pub. L. 119-111, fetched
-2026-09-27): "Except as provided in subsection (b), gross income does not
+26 USC 103(a) (uscode.house.gov; original author's reported fetch date: 2026-09-27;
+current through Pub. L. 119-111): "Except as provided in subsection (b), gross
+income does not
 include interest on any State or local bond."
 26 USC 152(d)(1)(B) (axiom-corpus us/statute/26/152/d/1): a qualifying
 relative is an individual "whose gross income for the calendar year in which
@@ -210,9 +211,10 @@ def test_tax_exempt_interest_changes_no_gross_income_leaf() -> None:
 
 def test_person_zero_records_cannot_shadow_the_tax_unit_value() -> None:
     """Every person repeats the tax unit's numeric defaults as zeros under
-    the same ref. The engine keys input records by (name, entity_id), so
-    the tax unit's value stays distinct only while no person uses the tax
-    unit's id — which the projection refuses."""
+    the same ref. This test checks distinct projected entity ids and the
+    reserved-id guard; it does not verify the engine's storage key. The
+    original author reported (name, entity_id) storage-key and swap probes,
+    but no archived probe transcript accompanies this test."""
     case = _case(
         _single_social_security_filer(10_000),
         _person("person-2", "Child", 12),
