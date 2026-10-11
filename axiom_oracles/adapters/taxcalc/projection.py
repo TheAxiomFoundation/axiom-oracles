@@ -116,6 +116,11 @@ def taxcalc_input_for_case(
         "e00900s": spouse_self_employment,
         "e00900": head_self_employment + spouse_self_employment,
         "e00300": _sum_fact(earners, Concepts.INTEREST_INCOME),
+        # records_variables.json: e00400 is "Tax-exempt interest income", a
+        # filing-unit input. Tax-Calculator adds it to the taxable Social
+        # Security modified AGI (ymod2) and to EITC investment income
+        # (invinc), and to AGI only through taxable Social Security.
+        "e00400": _sum_fact(earners, Concepts.TAX_EXEMPT_INTEREST_INCOME),
         "e00600": dividend_income,
         "e00650": qualified_dividend_income,
         "p22250": _sum_fact(earners, Concepts.SHORT_TERM_CAPITAL_GAINS),
