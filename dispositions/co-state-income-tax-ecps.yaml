@@ -1,20 +1,261 @@
-# Auto-characterized from the committed report; see axiom-oracles#229.
+# Classified from the 2026-10-11 rerun on the pinned stack (engine 0c39023e,
+# rulespec-us ca2d424f, policyengine-us 1.752.2): 1,201 Colorado tax units,
+# 1,132 match, 69 differ. Every row is reconciled to the cent from the Axiom
+# explain trace and a PolicyEngine component decomposition on the same Case
+# objects. None is attributed to PolicyEngine: 37 are a harness artifact on
+# the PolicyEngine leg, 32 are gaps on the Axiom leg.
 schema: axiom_oracles.dispositions.v1
 suite: co-state-income-tax-ecps
-updated: '2026-07-08'
+updated: '2026-10-11'
 entries:
-- id: co-state-income-tax-ecps-liability-composed-vs-pe-bridge
+- id: pe-leg-dividends-total-and-qualified-summed
   concept: us:tax/state-income-tax#liability
+  kind: amount_difference
   case_selector:
-    case_id_prefix: ecps-tax-unit-
+    case_ids:
+    - ecps-tax-unit-135515
+    - ecps-tax-unit-135872
+    - ecps-tax-unit-136102
+    - ecps-tax-unit-136109
+    - ecps-tax-unit-136160
+    - ecps-tax-unit-136201
+    - ecps-tax-unit-136279
+    - ecps-tax-unit-136434
+    - ecps-tax-unit-58477
+    - ecps-tax-unit-58480
+    - ecps-tax-unit-58573
+    - ecps-tax-unit-58574
+    - ecps-tax-unit-58649
+    - ecps-tax-unit-58763
+    - ecps-tax-unit-58789
+    - ecps-tax-unit-58812
+    - ecps-tax-unit-58850
+    - ecps-tax-unit-58887
+    - ecps-tax-unit-58890
+    - ecps-tax-unit-58928
+    - ecps-tax-unit-58933
+    - ecps-tax-unit-59020
+    - ecps-tax-unit-59070
+    - ecps-tax-unit-59093
+    - ecps-tax-unit-59117
+    - ecps-tax-unit-59119
+    - ecps-tax-unit-59124
+    - ecps-tax-unit-59132
+    - ecps-tax-unit-59138
+    - ecps-tax-unit-59165
+    - ecps-tax-unit-59166
+    - ecps-tax-unit-59181
+    - ecps-tax-unit-59182
+    - ecps-tax-unit-59214
+    - ecps-tax-unit-59242
+    - ecps-tax-unit-59245
+    - ecps-tax-unit-59261
   disposition: bridge_artifact
   evidence:
-    mechanism: 'Composed CO state income tax (refundable credits) vs PolicyEngine: 31 liability mismatches
-      (28 axiom>PE, 0 PE=0, 0 axiom=0; max |diff| 1107). Structural bridge/projection + composed-slice
-      divergence between Axiom''s composed state program and PE''s full model, not a rulespec statutory-encoding
-      defect. Representative: ecps-tax-unit-135552 axiom=-5617.75 PE=-4511.0; ecps-tax-unit-58419 axiom=-19.0
-      PE=-141.7828369140625; ecps-tax-unit-58437 axiom=-19.0 PE=-185.0. Per-suite grounding: axiom-oracles#229.'
+    mechanism: >-
+      The two legs are fed different ordinary-dividend totals from the same Case facts. For a person carrying both a dividend total X and a qualified amount Q, the PolicyEngine leg sends dividend_income = X + Q (adapters/policyengine/runner.py _person_income_inputs, since 2026-08-05), while the Axiom leg sends max(X, Q) (adapters/axiom/tax_projection.py _sum_dividends), as the TAXSIM leg does. PolicyEngine's AGI is therefore higher by the sum of min(X, Q) over the unit's members, and the Colorado difference is 4.4 percent of the resulting gap in Colorado taxable income, after the gap's own knock-on effects (85 percent Social Security inclusion, the senior-deduction phase-out, the state-tax addbacks of an itemizer). Verified by execution: re-running PolicyEngine on these 37 units with dividend_income = max(X, Q) moves every one of them onto Axiom's value to the cent (largest remaining difference 0.0035). On 58477 the 7,000 gap also makes 5,950 more Social Security taxable, which Colorado subtracts again, and Axiom's Colorado taxable income is floored at zero from -1,989.36, so the difference is 4.4 percent of 5,010.64. The populace-us facts are not nested (unit 58812 has X = 675.00 and Q = 3,361.60), so neither engine is wrong here; the harness is.
+    arithmetic:
+    - expression: 0.044 * 675.00
+      equals: 29.7
+      tolerance: 0.005
+    - expression: 0.044 * 20000.00
+      equals: 880.0
+      tolerance: 0.005
+    - expression: 0.044 * 65000.02
+      equals: 2860.0
+      tolerance: 0.005
+    - expression: 0.044 * (7000 - 1989.36)
+      equals: 220.47
+      tolerance: 0.005
     sources:
-    - PROGRESS.md
-  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/229
+    - axiom_oracles/adapters/policyengine/runner.py
+    - axiom_oracles/adapters/axiom/tax_projection.py
+    - axiom_oracles/adapters/taxsim/projection.py
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/617
   expires_on_source_change: true
+  selector_binding:
+    units: 37
+    rows_sha256: 483b2bfd3012c2ffa76d2ec558d8d352fc8a7f5dcf27b62e3468225e6ad6e845
+- id: axiom-co-eitc-under-25-branch-not-composed
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135604
+    - ecps-tax-unit-135744
+    - ecps-tax-unit-135892
+    - ecps-tax-unit-58419
+    - ecps-tax-unit-58437
+    - ecps-tax-unit-58438
+    - ecps-tax-unit-58568
+    - ecps-tax-unit-58575
+    - ecps-tax-unit-58588
+    - ecps-tax-unit-58670
+    - ecps-tax-unit-58742
+    - ecps-tax-unit-58831
+    - ecps-tax-unit-58870
+    - ecps-tax-unit-58932
+    - ecps-tax-unit-58951
+    - ecps-tax-unit-59025
+    - ecps-tax-unit-59054
+    - ecps-tax-unit-59095
+    - ecps-tax-unit-59175
+    - ecps-tax-unit-59178
+    - ecps-tax-unit-59206
+    - ecps-tax-unit-59226
+    - ecps-tax-unit-59256
+    - ecps-tax-unit-59265
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: >-
+      Axiom side. Every selected unit is a single filer aged 19 to 24 with no dependents. The federal EITC is 0 on both sides (the filer is under the federal minimum age), and PolicyEngine pays a Colorado credit of 25 percent of the childless federal credit the filer would get but for that age floor, its reading of C.R.S. 39-22-123.5(2.7). Axiom pays none: the oracle bridge composes co_eitc as the federal EITC times 0.25, and the encoded module us-co:statutes/39/39-22-123.5 declares the (2.7) branch a deferred output. On all 24 units the whole row difference equals PolicyEngine's Colorado credit, which reproduces to the cent from the 2026 childless schedule (7.65 percent phase-in, 664 maximum, phase-out from 10,860) on the unit's earnings and AGI.
+    arithmetic:
+    - expression: 0.25 * 0.0765 * 6800.94
+      equals: 130.07
+      tolerance: 0.005
+    - expression: 0.25 * 664
+      equals: 166.0
+      tolerance: 0.005
+    - expression: 0.25 * (664 - 0.0765 * (13119.72 - 10860))
+      equals: 122.78
+      tolerance: 0.005
+    sources:
+    - axiom_oracles/adapters/axiom/tax_projection.py
+  linked_issue: https://github.com/TheAxiomFoundation/rulespec-us/issues/1647
+  expires_on_source_change: true
+  selector_binding:
+    units: 24
+    rows_sha256: becddda41da77a89085b34f28f496c84d235acd4b122238b2a2db329443450a2
+- id: axiom-eitc-se-loss-not-netted-co-match
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-135552
+    - ecps-tax-unit-135799
+    - ecps-tax-unit-135880
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: >-
+      Axiom side. Each selected unit has wages and a self-employment loss. The Axiom projection floors self-employment at zero in the section 32 earned-income input (net_earnings_from_self_employment_after_self_employment_tax_deduction = max(0, self_employment) x ...), so the loss never nets against wages, while 26 USC 32(c)(2)(A)(ii) defines earned income through net earnings from self-employment. PolicyEngine nets it. The federal EITC difference reaches Colorado through the 25 percent match. 135552 (wages 14,204.28, loss 425,168.66): netted earned income is negative and no credit is allowed; Axiom pays the one-child maximum 4,427.00. 135799 (loss 973.98): both sides are in the one-child phase-out at 15.98 percent. 135880 (loss 1,122.78): the childless phase-out at 7.65 percent on 16,011.53 against 14,946.30, the federal row already dispositioned in the TAXSIM lanes.
+    arithmetic:
+    - expression: 0.25 * 4427.00
+      equals: 1106.75
+      tolerance: 0.005
+    - expression: 0.25 * 0.1598 * 973.98
+      equals: 38.91
+      tolerance: 0.005
+    - expression: 0.25 * 0.0765 * (16011.53 - 14946.30)
+      equals: 20.37
+      tolerance: 0.005
+    sources:
+    - axiom_oracles/adapters/axiom/tax_projection.py
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/622
+  expires_on_source_change: true
+  selector_binding:
+    units: 3
+    rows_sha256: cfc8116e7c0a243f596c0dc7571370216b30b16c9e083c19069a7b36ddce5066
+- id: axiom-dependent-social-security-in-filer-agi
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_selector:
+    case_ids:
+    - ecps-tax-unit-58696
+    - ecps-tax-unit-59151
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: >-
+      Axiom side. The Axiom projection sums Social Security benefits over every person in the tax unit (_sum_concept(people, SOCIAL_SECURITY_BENEFITS)), so a dependent's benefits are taxed under 26 USC 86 in the filers' gross income; PolicyEngine leaves them with the dependent. 58696: an 18-year-old child's 65,028.39 of benefits makes 11,106.08 taxable to joint filers with 17,492.96 of wages, which lifts AGI one 5,000 step over Colorado's 26,000 family affordability threshold, so Axiom reduces the 2,454.75 credit by 6.875 percent. 59151: a 37-year-old dependent's 23,091.88 adds 85 percent of itself to AGI; Colorado subtracts the taxable benefits again, but the higher AGI shrinks the two filers' senior deductions by 6 percent each.
+    arithmetic:
+    - expression: 0.85 * (17492.96 + 0.5 * 65028.39 - 44000) + 6000
+      equals: 11106.08
+      tolerance: 0.01
+    - expression: 2454.75 * 0.06875
+      equals: 168.76
+      tolerance: 0.005
+    - expression: 0.85 * 23091.88
+      equals: 19628.1
+      tolerance: 0.005
+    - expression: 0.044 * 2 * 0.06 * 19628.10
+      equals: 103.64
+      tolerance: 0.005
+    sources:
+    - axiom_oracles/adapters/axiom/tax_projection.py
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/623
+  expires_on_source_change: true
+  selector_binding:
+    units: 2
+    rows_sha256: 7bd9c2567ec33092fd8fc8537958064f69f33bfd82fbf1189bba67569c4601d8
+- id: axiom-state-minimizing-itemization-candidate
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_id: ecps-tax-unit-162440
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: >-
+      Axiom side, in the harness. With state income tax as the only compared concept the lane reports the Axiom itemization candidate with the lower Colorado tax (cli.py _select_axiom_state_income_tax_candidate), not the federal election. This single filer's itemized deductions are 17,415.41 against a 16,100 standard deduction, so PolicyEngine itemizes: that adds a state addback of 1,315.41 and raises the federal-deduction addback by 1,315.41, while lowering federal taxable income by 1,315.41. Colorado taxable income is 1,315.43 higher than on Axiom's standard-deduction candidate.
+    arithmetic:
+    - expression: 17415.41 - 16100
+      equals: 1315.41
+      tolerance: 0.005
+    - expression: 0.044 * 1315.43
+      equals: 57.88
+      tolerance: 0.005
+    sources:
+    - axiom_oracles/cli.py
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/624
+  expires_on_source_change: true
+  pinned:
+    left: 17536.8147
+    right: 17594.6934
+- id: axiom-single-vs-head-of-household-disabled-adult-dependent
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_id: ecps-tax-unit-136208
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: >-
+      Axiom side. A 64-year-old filer with one dependent, age 29, whom the Case marks disabled and blind. The Axiom projection counts a dependent toward head of household only under 19, or under 24 with gross income under 5,500 (tax_projection.py _hoh_qualifying_dependent), so it files single with a 16,100 standard deduction. PolicyEngine files head of household with 24,150, as TAXSIM does on this unit. The 8,050 difference also moves the qualified business income deduction from 474.66 to 843.71, and federal and Colorado taxable income differ by the sum. The statute turns on the dependent's relationship, which the Case does not record; 26 USC 152(c)(3)(B) removes the age test for a permanently and totally disabled child.
+    arithmetic:
+    - expression: (24150 - 16100) + (843.71 - 474.66)
+      equals: 8419.05
+      tolerance: 0.005
+    - expression: 0.044 * 8419.06
+      equals: 370.44
+      tolerance: 0.005
+    sources:
+    - axiom_oracles/adapters/axiom/tax_projection.py
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/625
+  expires_on_source_change: true
+  pinned:
+    left: 10783.5521
+    right: 10413.1133
+- id: composite-pe-dividends-and-axiom-itemization-candidate
+  concept: us:tax/state-income-tax#liability
+  kind: amount_difference
+  case_id: ecps-tax-unit-59285
+  disposition: axiom_encoding_gap
+  evidence:
+    mechanism: >-
+      Two parts, one on each leg. (1) PolicyEngine leg: the dividend artifact of pe-leg-dividends-total-and-qualified-summed (axiom-oracles#617). The filer carries a dividend total of 30,000.00 and qualified dividends of 9,454.50; re-running PolicyEngine with max(X, Q) moves it from 18,072.55 to 17,638.25. The gap is 4.4 percent of 9,454.51 plus the same 4.4 percent again through an itemizer's state-tax deduction, which Colorado adds back. (2) Axiom leg: the state-minimizing candidate of axiom-state-minimizing-itemization-candidate (axiom-oracles#624). Axiom reports its standard-deduction candidate 17,578.54; its itemizing candidate is 17,638.25, PolicyEngine's corrected value, and they differ by Axiom's own state addback of 1,357.14.
+    arithmetic:
+    - expression: 0.044 * 1.044 * 9454.51
+      equals: 434.3
+      tolerance: 0.005
+    - expression: 0.044 * 1357.14
+      equals: 59.71
+      tolerance: 0.005
+    - expression: 17578.54 - 18072.55
+      equals: -494.01
+      tolerance: 0.005
+    - expression: 434.30 + 59.71
+      equals: 494.01
+      tolerance: 0.005
+    sources:
+    - axiom_oracles/adapters/policyengine/runner.py
+    - axiom_oracles/cli.py
+  linked_issue: https://github.com/TheAxiomFoundation/axiom-oracles/issues/624
+  expires_on_source_change: true
+  pinned:
+    left: 17578.5356
+    right: 18072.5527
