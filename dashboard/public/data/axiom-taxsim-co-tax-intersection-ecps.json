@@ -92948,9 +92948,9 @@
       "description": "Federal taxable income",
       "difference": 12565.02151252587,
       "disposition": {
-        "disposition": "bridge_artifact",
+        "disposition": "axiom_encoding_gap",
         "id": "taxsim-input-gssi-earners-scope-taxable-income",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/623"
       },
       "kind": "amount_difference",
       "left": 109386.35151252587,
@@ -94271,9 +94271,9 @@
       "description": "Federal taxable income",
       "difference": 15188.406894531247,
       "disposition": {
-        "disposition": "bridge_artifact",
+        "disposition": "axiom_encoding_gap",
         "id": "taxsim-input-gssi-earners-scope-taxable-income",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/623"
       },
       "kind": "amount_difference",
       "left": 81386.31689453125,
@@ -98452,9 +98452,9 @@
       "description": "Federal taxable income",
       "difference": 21983.46897412109,
       "disposition": {
-        "disposition": "bridge_artifact",
+        "disposition": "axiom_encoding_gap",
         "id": "taxsim-input-gssi-earners-scope-taxable-income",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/623"
       },
       "kind": "amount_difference",
       "left": 152582.36897412108,
@@ -120300,8 +120300,8 @@
     "comparison_count": 12010,
     "dispositioned": {
       "counts": {
-        "axiom_encoding_gap": 321,
-        "bridge_artifact": 281,
+        "axiom_encoding_gap": 324,
+        "bridge_artifact": 278,
         "explained_residual": 590,
         "unexplained": 0,
         "upstream_engine_gap": 925

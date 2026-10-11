@@ -1396,7 +1396,7 @@
    "concept": "us:tax/state-income-tax#liability",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "The same TAXSIM-side Colorado flat-tax offset already triangulated in the co-state-income-tax-taxsim suite (axiom equals PolicyEngine on every one of these tax units; the divergence is TAXSIM's Colorado vintage, a TABOR-mechanism rate/threshold difference). Every case id selected here is identically a member of the corresponding triangulated class in dispositions/co-state-income-tax-taxsim.yaml; the observed intersection-lane deltas sit within 5 cents of the same flat values (30.80 MFJ, 20.70 single). Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml). Nine of this entry's units are among them, under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom. On the current stack PolicyEngine equals axiom to the cent on each once it is fed the same total (triage counterfactual, 2026-10-11), so the agreement this entry rests on holds.",
+   "mechanism": "The same TAXSIM-side Colorado flat-tax offset already triangulated in the co-state-income-tax-taxsim suite (axiom equals PolicyEngine on every one of these tax units; the divergence is TAXSIM's Colorado vintage, a TABOR-mechanism rate/threshold difference). Every case id selected here is identically a member of the corresponding triangulated class in dispositions/co-state-income-tax-taxsim.yaml; the observed intersection-lane deltas sit within 5 cents of the same flat values (30.80 MFJ, 20.70 single). Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml). Nine of this entry's units are among them, under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom. This lane's stored axiom value for each equals the one the current axiom-vs-PE lane computes, and PolicyEngine comes within half a cent of it once it is fed the same total (triage counterfactual, 2026-10-11), so the agreement this entry rests on holds for them.",
    "cases": [
     "ecps-tax-unit-135572",
     "ecps-tax-unit-135757",
@@ -1542,7 +1542,7 @@
    "concept": "us:tax/state-income-tax#liability",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "The same TAXSIM-side Colorado flat-tax offset already triangulated in the co-state-income-tax-taxsim suite (axiom equals PolicyEngine on every one of these tax units; the divergence is TAXSIM's Colorado vintage, a TABOR-mechanism rate/threshold difference). Every case id selected here is identically a member of the corresponding triangulated class in dispositions/co-state-income-tax-taxsim.yaml; the observed intersection-lane deltas sit within 5 cents of the same flat values (30.80 MFJ, 20.70 single). Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml). One of this entry's units is among them, under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom. On the current stack PolicyEngine equals axiom to the cent on it once it is fed the same total (triage counterfactual, 2026-10-11), so the agreement this entry rests on holds.",
+   "mechanism": "The same TAXSIM-side Colorado flat-tax offset already triangulated in the co-state-income-tax-taxsim suite (axiom equals PolicyEngine on every one of these tax units; the divergence is TAXSIM's Colorado vintage, a TABOR-mechanism rate/threshold difference). Every case id selected here is identically a member of the corresponding triangulated class in dispositions/co-state-income-tax-taxsim.yaml; the observed intersection-lane deltas sit within 5 cents of the same flat values (30.80 MFJ, 20.70 single). Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml). One of this entry's units is among them, under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom. This lane's stored axiom value for it equals the one the current axiom-vs-PE lane computes, and PolicyEngine comes within half a cent of it once it is fed the same total (triage counterfactual, 2026-10-11), so the agreement this entry rests on holds for it.",
    "cases": [
     "ecps-tax-unit-154437",
     "ecps-tax-unit-154974",
@@ -1590,7 +1590,7 @@
    "concept": "us:tax/state-income-tax#liability",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "Triangulated TAXSIM-side divergence in Colorado's refundable credit stack: on every selected row axiom and PolicyEngine agree on Colorado liability to the cent (the tax unit is absent from the complete 31-row axiom-vs-PE mismatch set for the same 1,201-unit population), while TAXSIM's own idtl=2 state decomposition shows the divergence arising in its state credit columns (sctc family-affordability/CTC, srebate) rather than the flat-tax leg: staxbc matches the rate mechanics while net siitax departs, going negative on refundable- credit households. TAXSIM's 2026-05-21 Colorado module carries a different family-affordability-credit vintage (the credit's TABOR scale factor is determined annually) and couples its Colorado EITC to its broken 2026 federal credit machinery. These rows have no federal taxable-income mismatch: the divergence is entirely state-side. Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml). Six of this entry's units are among them, under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom. On the current stack PolicyEngine equals axiom to the cent on each once it is fed the same total (triage counterfactual, 2026-10-11), so the agreement this entry rests on holds.",
+   "mechanism": "Triangulated TAXSIM-side divergence in Colorado's refundable credit stack: on every selected row axiom and PolicyEngine agree on Colorado liability to the cent (the tax unit is absent from the complete 31-row axiom-vs-PE mismatch set for the same 1,201-unit population), while TAXSIM's own idtl=2 state decomposition shows the divergence arising in its state credit columns (sctc family-affordability/CTC, srebate) rather than the flat-tax leg: staxbc matches the rate mechanics while net siitax departs, going negative on refundable- credit households. TAXSIM's 2026-05-21 Colorado module carries a different family-affordability-credit vintage (the credit's TABOR scale factor is determined annually) and couples its Colorado EITC to its broken 2026 federal credit machinery. These rows have no federal taxable-income mismatch: the divergence is entirely state-side. Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml). Six of this entry's units are among them, under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom. This lane's stored axiom value for each equals the one the current axiom-vs-PE lane computes, and PolicyEngine comes within half a cent of it once it is fed the same total (triage counterfactual, 2026-10-11), so the agreement this entry rests on holds for them.",
    "cases": [
     "ecps-tax-unit-135468",
     "ecps-tax-unit-135476",
@@ -2129,7 +2129,7 @@
    "concept": "us:tax/state-income-tax#liability",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "Intersection-lane echo of the triangulated TAXSIM Colorado refundable-credit vintage divergence: on every selected row the intersection state-liability difference equals, to within five cents, the difference already dispositioned as taxsim-co-refundable-credit- vintage for the identical tax unit in the co-state-income-tax-taxsim suite (where axiom equals PolicyEngine on the same unit - none of these case ids appears in the 31-row axiom-vs-PE mismatch set for the same 1,201-unit population). Delta equality across the two lanes proves the intersection row carries the same TAXSIM-side state credit-stack divergence, not a new intersection artifact, even where the unit also has a dispositioned federal-side residual. Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml). One of this entry's units is among them, under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom. On the current stack PolicyEngine equals axiom to the cent on it once it is fed the same total (triage counterfactual, 2026-10-11), so the agreement this entry rests on holds.",
+   "mechanism": "Intersection-lane echo of the triangulated TAXSIM Colorado refundable-credit vintage divergence: on every selected row the intersection state-liability difference equals, to within five cents, the difference already dispositioned as taxsim-co-refundable-credit- vintage for the identical tax unit in the co-state-income-tax-taxsim suite (where axiom equals PolicyEngine on the same unit - none of these case ids appears in the 31-row axiom-vs-PE mismatch set for the same 1,201-unit population). Delta equality across the two lanes proves the intersection row carries the same TAXSIM-side state credit-stack divergence, not a new intersection artifact, even where the unit also has a dispositioned federal-side residual. Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml). One of this entry's units is among them, under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom. This lane's stored axiom value for it equals the one the current axiom-vs-PE lane computes, and PolicyEngine comes within half a cent of it once it is fed the same total (triage counterfactual, 2026-10-11), so the agreement this entry rests on holds for it.",
    "cases": [
     "ecps-tax-unit-135472",
     "ecps-tax-unit-135485",
@@ -2832,7 +2832,7 @@
    "concept": "us:tax/state-income-tax#liability",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "Triangulated TAXSIM-side divergence in Colorado's credit stack, the same mechanism and proof standard as taxsim-co-refundable-credit-vintage in co-state-income-tax-taxsim: on every selected row axiom and PolicyEngine agree on Colorado liability (the tax unit is absent from the complete 31-row axiom-vs-PE mismatch set of dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json over the same 1,201-unit population), while TAXSIM departs. The pinned binary's idtl=2 decomposition locates the divergence in TAXSIM's state credit columns (sctc family-affordability/CTC and sptcr; e.g. sctc 2,528.67 on ecps-tax-unit-58696) plus a before-credits component on units whose federal taxable income carries the dispositioned QBID rental-convention gap (Colorado starts from federal taxable income, so -400.00 x 0.044 = -17.60 flows through). Deltas are heterogeneous because the credit stack varies per household; the per-row proof is the axiom==PolicyEngine agreement. The seven units where that triangulation FAILS (the documented co-state-open-rows-axiom-pe-divergent class) are excluded and stay raw. Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml), not 31. Five of this entry's units are among them. Four are there under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom, and on the current stack PolicyEngine equals axiom to the cent on each once it is fed the same total (triage counterfactual, 2026-10-11). The fifth, ecps-tax-unit-162440, is there only through that lane's state-minimizing itemization candidate (axiom-oracles#624); on this lane the candidate is chosen by federal tax and axiom equals PolicyEngine exactly (17,594.69). ecps-tax-unit-59151 left this entry: PolicyEngine and TAXSIM agree on it within 8.50, and its residual is axiom's (co-intersection-state-rows-axiom-side-component-pe-pivot).",
+   "mechanism": "Triangulated TAXSIM-side divergence in Colorado's credit stack, the same mechanism and proof standard as taxsim-co-refundable-credit-vintage in co-state-income-tax-taxsim: on every selected row axiom and PolicyEngine agree on Colorado liability (the tax unit is absent from the complete 31-row axiom-vs-PE mismatch set of dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json over the same 1,201-unit population), while TAXSIM departs. The pinned binary's idtl=2 decomposition locates the divergence in TAXSIM's state credit columns (sctc family-affordability/CTC and sptcr; e.g. sctc 2,528.67 on ecps-tax-unit-58696) plus a before-credits component on units whose federal taxable income carries the dispositioned QBID rental-convention gap (Colorado starts from federal taxable income, so -400.00 x 0.044 = -17.60 flows through). Deltas are heterogeneous because the credit stack varies per household; the per-row proof is the axiom==PolicyEngine agreement. The seven units where that triangulation FAILS (the documented co-state-open-rows-axiom-pe-divergent class) are excluded and stay raw. Update 2026-10-11: the axiom-vs-PolicyEngine report was regenerated and now lists 69 rows (dispositions/co-state-income-tax-ecps.yaml), not 31. Five of this entry's units are among them. Four are there under the PolicyEngine-leg dividend artifact (axiom-oracles#617): the harness sends PolicyEngine a larger ordinary-dividend total than it sends axiom. This lane's stored axiom value for each equals the one the current axiom-vs-PE lane computes, and PolicyEngine comes within half a cent of it once it is fed the same total (triage counterfactual, 2026-10-11). The fifth, ecps-tax-unit-162440, is there only through that lane's state-minimizing itemization candidate (axiom-oracles#624); on this lane the candidate is chosen by federal tax and the stored axiom value equals PolicyEngine's (17,594.69). ecps-tax-unit-59151 left this entry: PolicyEngine and TAXSIM differ on it by 8.50, inside the 15.00 tolerance, and its residual is axiom's (co-intersection-state-rows-axiom-side-component-pe-pivot).",
    "cases": [
     "ecps-tax-unit-135519",
     "ecps-tax-unit-135614",
@@ -2924,7 +2924,7 @@
    "concept": "us:tax/state-income-tax#liability",
    "kind": "amount_difference",
    "disposition": "upstream_engine_gap",
-   "mechanism": "TAXSIM-side. Axiom's Colorado value on this lane is 17,638.25, its itemizing candidate (the candidate is chosen by federal tax here). PolicyEngine gives the same 17,638.25 once it is fed the dividend total axiom gets; the axiom-vs-PE report shows 18,072.55 for this unit because of the PolicyEngine-leg dividend artifact (axiom-oracles#617; dispositions/co-state-income-tax-ecps.yaml, 2026-10-11). TAXSIM's value reproduces from the pinned binary's idtl=2 decomposition as staxbc - sptcr = 18,429.21 - 63.86: it itemizes its own computed state income tax automatically. The six other units this entry used to hold moved to co-intersection-state-rows-axiom-side-component-pe-pivot, because the re-triaged axiom-vs-PE lane shows an axiom-side gap on each.",
+   "mechanism": "TAXSIM-side. Axiom's Colorado value on this lane is 17,638.25, its itemizing candidate (the candidate is chosen by federal tax here). PolicyEngine gives the same 17,638.25 once it is fed the dividend total axiom gets; the axiom-vs-PE report shows 18,072.55 for this unit because of the PolicyEngine-leg dividend artifact (axiom-oracles#617; dispositions/co-state-income-tax-ecps.yaml, 2026-10-11). TAXSIM's value reproduces from the pinned binary's idtl=2 decomposition as staxbc - sptcr = 18,429.21 - 63.86: it itemizes its own computed state income tax automatically. The six other units this entry used to hold moved to co-intersection-state-rows-axiom-side-component-pe-pivot.",
    "cases": [
     "ecps-tax-unit-59285"
    ],
@@ -2934,8 +2934,8 @@
      "equals": 18365.35
     },
     {
-     "expression": "17638.25 - 18365.34",
-     "equals": -727.09
+     "expression": "17638.2496 - 18365.3400",
+     "equals": -727.0904
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
@@ -2945,7 +2945,7 @@
    "concept": "us:tax/state-income-tax#liability",
    "kind": "amount_difference",
    "disposition": "axiom_encoding_gap",
-   "mechanism": "Rows whose residual is partly axiom's own. The 2026-10-11 rerun of the axiom-vs-PolicyEngine lane classifies the axiom-vs-PE difference on each of these units as an axiom-side gap (dispositions/co-state-income-tax-ecps.yaml), so axiom's Colorado value is not an independent reference here, as these rows' earlier disposition assumed. With PolicyEngine as the pivot each residual splits exactly into (axiom - PE), the axiom-side part, plus (PE - TAXSIM), the TAXSIM-side stack this lane already documents (TAXSIM's Colorado EITC at half of its 2026 childless federal credit, the child-credit and family-affordability vintage, automatic itemization of its own state tax). 135552, 135799, 135880: section 32 earned income does not net a self-employment loss (axiom-oracles#622): -1,106.75, 38.91 and 20.37. 58696: a dependent's Social Security benefits are counted in the filers' AGI (axiom-oracles#623): 168.77. 136208: axiom files single where PolicyEngine and TAXSIM file head of household (axiom-oracles#625): 370.44. 59151: the same dependent Social Security gap (axiom-oracles#623) is the whole row: PolicyEngine and TAXSIM agree within 8.50 (4,751.03 and 4,759.53), and axiom is 103.63 above PolicyEngine. 136404: this lane's committed axiom value (-2,658.75) predates a later axiom-side fix; on the current stack axiom is -1,777.73, equal to PolicyEngine, so -881.02 of this row clears when the lane is regenerated. TAXSIM's own values still reproduce from its idtl=2 decomposition as staxbc - sctc - sptcr - 0.5 x v25 (135552: 0 - 2,528.67 - 41.20 = -2,569.87).",
+   "mechanism": "Rows whose residual is partly axiom's own. The 2026-10-11 rerun of the axiom-vs-PolicyEngine lane classifies the axiom-vs-PE difference on six of these units as an axiom-side gap (dispositions/co-state-income-tax-ecps.yaml), and their stored axiom values here equal the current ones. So axiom's Colorado value is not an independent reference on them, as these rows' earlier disposition assumed. With PolicyEngine as the pivot each residual splits into (axiom - PE), the axiom-side part, plus (PE - TAXSIM), the TAXSIM-side stack this lane already documents (TAXSIM's Colorado EITC at half of its 2026 childless federal credit, the child-credit and family-affordability vintage, automatic itemization of its own state tax). 135552, 135799, 135880: section 32 earned income does not net a self-employment loss (axiom-oracles#622): -1,106.75, 38.91 and 20.37. 58696: a dependent's Social Security benefits are counted in the filers' AGI (axiom-oracles#623): 168.76. 136208: axiom files single where PolicyEngine and TAXSIM file head of household (axiom-oracles#625): 370.44. 59151: the same dependent Social Security gap (axiom-oracles#623). Axiom is 103.64 above PolicyEngine, while PolicyEngine and TAXSIM differ by only 8.50, inside the 15.00 tolerance; the row's 95.13 is their sum. The remaining unit, 136404, is historical: its stored axiom value (-2,658.75) is the one the 2026-07-21 axiom-vs-PE report showed against PolicyEngine's -1,777.73, a difference of -881.03. On the current stack axiom is -1,777.73, equal to PolicyEngine, so that part clears when this lane is regenerated. TAXSIM's own values still reproduce from its idtl=2 decomposition as staxbc - sctc - sptcr - 0.5 x v25 (135552: 0 - 2,528.67 - 41.20 = -2,569.87).",
    "cases": [
     "ecps-tax-unit-135552",
     "ecps-tax-unit-135799",
@@ -2957,32 +2957,32 @@
    ],
    "arithmetic": [
     {
-     "expression": "(-5617.75 + 4511.00) + (-4511.00 + 2569.87)",
+     "expression": "(-5617.7500 - (-4511.0000)) + (-4511.0000 - (-2569.8700))",
      "equals": -3047.88
     },
     {
-     "expression": "(-490.70 + 529.61) + (-529.61 + 703.68)",
-     "equals": 212.98
+     "expression": "(-490.7038 - (-529.6146)) + (-529.6146 - (-703.6800))",
+     "equals": 212.9762
     },
     {
-     "expression": "(-86.48 + 106.85) + (-106.85 + 196.30)",
-     "equals": 109.82
+     "expression": "(-86.4771 - (-106.8495)) + (-106.8495 - (-196.3000))",
+     "equals": 109.8229
     },
     {
-     "expression": "(-4085.28 + 4254.05) + (-4254.05 + 2901.87)",
-     "equals": -1183.41
+     "expression": "(-4085.2820 - (-4254.0459)) + (-4254.0459 - (-2901.8700))",
+     "equals": -1183.412
     },
     {
-     "expression": "(10783.55 - 10413.11) + (10413.11 - 10279.65)",
-     "equals": 503.9
+     "expression": "(10783.5521 - (10413.1133)) + (10413.1133 - (10279.6500))",
+     "equals": 503.9021
     },
     {
-     "expression": "(-2658.75 + 1777.73) + (-1777.73 + 1918.26)",
-     "equals": -740.49
+     "expression": "(4854.6629 - (4751.0264)) + (4751.0264 - (4759.5300))",
+     "equals": 95.1329
     },
     {
-     "expression": "(4854.66 - 4751.03) + (4751.03 - 4759.53)",
-     "equals": 95.13
+     "expression": "(-2658.7546 - (-1777.7262)) + (-1777.7262 - (-1918.2600))",
+     "equals": -740.4946
     },
     {
      "expression": "0 - 2528.67 - 41.20",
@@ -3238,8 +3238,8 @@
    "id": "taxsim-input-gssi-earners-scope-taxable-income",
    "concept": "us:tax/federal-income-tax#taxable_income",
    "kind": "amount_difference",
-   "disposition": "bridge_artifact",
-   "mechanism": "Harness input-scope difference, reconciled to the cent per row: the\nTAXSIM projection sums gssi over head+spouse only\n(axiom_oracles/adapters/taxsim/projection.py, earners = [head] +\n[spouse]), while the axiom projection sums social-security benefits over\nevery unit member. Each unit has a third member receiving benefits that\nTAXSIM never sees; both engines then apply the identical section 86\n85%-cap inclusion, so the AGI member is exactly 0.85 x (missing\nbenefits): 58950 0.85 x 14,771.48 = 12,555.75; 59011 0.85 x 17,868.72 =\n15,188.41 (gssi sent was 0 - all benefits belong to the non-earner);\n59151 0.85 x 23,091.88 = 19,628.10. The residual closes with the H.R.1\nsection 70103 senior-deduction phaseout knock-on of the shifted MAGI\n(58950: 0.06 x 158.32 = 9.50 - only axiom's MAGI crosses 150,000;\n59151: two eligible seniors phase at 6% each, 2 x 0.06 x 19,628.10 =\n2,355.37). Not an engine defect on either side.",
+   "disposition": "axiom_encoding_gap",
+   "mechanism": "Axiom-side projection gap, reconciled to the cent per row: the TAXSIM projection sums gssi over head+spouse only (axiom_oracles/adapters/taxsim/projection.py, earners = [head] + [spouse]), while the axiom projection sums social-security benefits over every unit member. Each unit has a third member receiving benefits that TAXSIM never sees; both engines then apply the identical section 86 85%-cap inclusion, so the AGI member is exactly 0.85 x (missing benefits): 58950 0.85 x 14,771.48 = 12,555.75; 59011 0.85 x 17,868.72 = 15,188.41 (gssi sent was 0 - all benefits belong to the non-earner); 59151 0.85 x 23,091.88 = 19,628.10. The residual closes with the H.R.1 section 70103 senior-deduction phaseout knock-on of the shifted MAGI (58950: 0.06 x 158.32 = 9.50 - only axiom's MAGI crosses 150,000; 59151: two eligible seniors phase at 6% each, 2 x 0.06 x 19,628.10 = 2,355.37). The axiom projection is the side that departs: 26 USC 86(d)(1) defines a social security benefit as an amount received by the taxpayer, so a dependent's benefits are not the filers', and on 59151 PolicyEngine leaves them out as the TAXSIM projection does (axiom-oracles#623). Classified as our own projection defect, the same attribution the state-liability row for 59151 carries in co-intersection-state-rows-axiom-side-component-pe-pivot.",
    "cases": [
     "ecps-tax-unit-58950",
     "ecps-tax-unit-59011",
@@ -3259,7 +3259,7 @@
      "equals": 21983.47
     }
    ],
-   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+   "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/623"
   },
   {
    "id": "se-loss-461l-cap-vintage-two-sided-extension",

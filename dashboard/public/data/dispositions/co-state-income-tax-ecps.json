@@ -7,7 +7,7 @@
    "concept": "us:tax/state-income-tax#liability",
    "kind": "amount_difference",
    "disposition": "bridge_artifact",
-   "mechanism": "The two legs are fed different ordinary-dividend totals from the same Case facts. For a person carrying both a dividend total X and a qualified amount Q, the PolicyEngine leg sends dividend_income = X + Q (adapters/policyengine/runner.py _person_income_inputs, since 2026-08-05), while the Axiom leg sends max(X, Q) (adapters/axiom/tax_projection.py _sum_dividends), as the TAXSIM leg does. PolicyEngine's AGI is therefore higher by the sum of min(X, Q) over the unit's members, and the Colorado difference is 4.4 percent of the resulting gap in Colorado taxable income, after the gap's own knock-on effects (85 percent Social Security inclusion, the senior-deduction phase-out, the state-tax addbacks of an itemizer). Verified by execution: re-running PolicyEngine on these 37 units with dividend_income = max(X, Q) moves every one of them onto Axiom's value to the cent (largest remaining difference 0.0035). On 58477 the 7,000 gap also makes 5,950 more Social Security taxable, which Colorado subtracts again, and Axiom's Colorado taxable income is floored at zero from -1,989.36, so the difference is 4.4 percent of 5,010.64. The populace-us facts are not nested (unit 58812 has X = 675.00 and Q = 3,361.60), so neither engine is wrong here; the harness is.",
+   "mechanism": "The two legs are fed different ordinary-dividend totals from the same Case facts. For a person carrying both a dividend total X and a qualified amount Q, the PolicyEngine leg sends dividend_income = X + Q (adapters/policyengine/runner.py _person_income_inputs, since 2026-08-05), while the Axiom leg sends max(X, Q) (adapters/axiom/tax_projection.py _sum_dividends), as the TAXSIM leg does. PolicyEngine's ordinary-dividend income is therefore higher by the sum of min(X, Q) over the unit's members, before any knock-on effect, and the Colorado difference is 4.4 percent of the resulting gap in Colorado taxable income after those effects (85 percent Social Security inclusion, the senior-deduction phase-out, the state-tax addbacks of an itemizer). Verified by execution: re-running PolicyEngine on these 37 units with dividend_income = max(X, Q) moves every one of them to within half a cent of Axiom's value (largest remaining difference 0.0035). On 58477 the 7,000 gap also makes 5,950 more Social Security taxable, which Colorado subtracts again, and Axiom's Colorado taxable income is floored at zero from -1,989.36, so the difference is 4.4 percent of 5,010.64. The populace-us facts are not nested (unit 58812 has X = 675.00 and Q = 3,361.60), so neither engine is wrong here; the harness is.",
    "cases": [
     "ecps-tax-unit-135515",
     "ecps-tax-unit-135872",
@@ -219,11 +219,27 @@
    "concept": "us:tax/state-income-tax#liability",
    "kind": "amount_difference",
    "disposition": "axiom_encoding_gap",
-   "mechanism": "Two parts, one on each leg. (1) PolicyEngine leg: the dividend artifact of pe-leg-dividends-total-and-qualified-summed (axiom-oracles#617). The filer carries a dividend total of 30,000.00 and qualified dividends of 9,454.50; re-running PolicyEngine with max(X, Q) moves it from 18,072.55 to 17,638.25. The gap is 4.4 percent of 9,454.51 plus the same 4.4 percent again through an itemizer's state-tax deduction, which Colorado adds back. (2) Axiom leg: the state-minimizing candidate of axiom-state-minimizing-itemization-candidate (axiom-oracles#624). Axiom reports its standard-deduction candidate 17,578.54; its itemizing candidate is 17,638.25, PolicyEngine's corrected value, and they differ by Axiom's own state addback of 1,357.14.",
+   "mechanism": "Two parts, one on each leg. (1) PolicyEngine leg: the dividend artifact of pe-leg-dividends-total-and-qualified-summed (axiom-oracles#617). The filer carries a dividend total of 30,000.00 and qualified dividends of 9,454.50; re-running PolicyEngine with max(X, Q) moves it from 18,072.5527 to 17,638.2500, a gap of 434.3027: 4.4 percent of 9,454.51 plus the same 4.4 percent again through an itemizer's state-tax deduction, which Colorado adds back. (2) Axiom leg: the state-minimizing candidate of axiom-state-minimizing-itemization-candidate (axiom-oracles#624). Axiom reports its standard-deduction candidate 17,578.5356; its itemizing candidate is 17,638.25, PolicyEngine's corrected value, and the 59.7144 between them is 4.4 percent of Axiom's own state addback of 1,357.14. Together 494.0171, which rounds to the row's 494.02.",
    "cases": [
     "ecps-tax-unit-59285"
    ],
    "arithmetic": [
+    {
+     "expression": "18072.5527 - 17638.2500",
+     "equals": 434.3027
+    },
+    {
+     "expression": "17638.2500 - 17578.5356",
+     "equals": 59.7144
+    },
+    {
+     "expression": "434.3027 + 59.7144",
+     "equals": 494.0171
+    },
+    {
+     "expression": "17578.5356 - 18072.5527",
+     "equals": -494.0171
+    },
     {
      "expression": "0.044 * 1.044 * 9454.51",
      "equals": 434.3
@@ -231,14 +247,6 @@
     {
      "expression": "0.044 * 1357.14",
      "equals": 59.71
-    },
-    {
-     "expression": "17578.54 - 18072.55",
-     "equals": -494.01
-    },
-    {
-     "expression": "434.30 + 59.71",
-     "equals": 494.01
     }
    ],
    "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/624"
