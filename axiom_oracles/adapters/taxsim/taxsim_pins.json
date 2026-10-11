@@ -1,6 +1,6 @@
 {
   "schema_version": "axiom-oracles/taxsim-pin/v1",
-  "description": "Pinned identity of the TAXSIM executable used by the axiom-oracles TAXSIM adapter. The adapter shells out to a TAXSIM binary bundled inside the policyengine-taxsim distribution (imported dynamically as TaxsimRunner); the binary itself is not vendored in this repo. This file pins the reproducible provenance of that binary: the exact policyengine-taxsim release, its PyPI sdist/wheel SHA-256 (the source of truth for the bundled binary), and, for each bundled executable extracted from that wheel, its SHA-256, byte size, executable format, NBER build stamp and the law years it accepts. `build` is the quoted stamp embedded in the executable's bytes (pins.read_build_stamp); the macOS and Linux builds print the same stamp as the last column of their CSV output header. `law_years` records what the executable did when it was run: the law years it was given that produced output (`ran`), the ones it refused (`rejected`), the verbatim first line it printed for a refused year (`rejection`), and `first`/`last`, the range that line states. Years between `ran` entries were not run. null means the executable has not been executed. `format` is what file(1) reported. Without this pin no oracle number produced against TAXSIM is reproducible (Phase-A item A2).",
+  "description": "Pinned identity of the TAXSIM executable used by the axiom-oracles TAXSIM adapter. The adapter shells out to a TAXSIM binary bundled inside the policyengine-taxsim distribution (imported dynamically as TaxsimRunner); the binary itself is not vendored in this repo. This file pins the reproducible provenance of that binary: the exact policyengine-taxsim release, its PyPI sdist/wheel SHA-256 (the source of truth for the bundled binary), and, for each bundled executable extracted from that wheel, its SHA-256, byte size, executable format, NBER build stamp and the law years it accepts. `build` is the quoted stamp embedded in the executable's bytes (pins.read_build_stamp); the macOS and Linux builds print the same stamp as the last column of their CSV output header. `law_years` records what the executable did when it was run: the law years it was given that produced output (`ran`), the ones it refused (`rejected`), the verbatim first line it printed for a refused year (`rejection`), and `first`/`last`, the range that line states. Years between `ran` entries were not run. null means the executable has not been executed. `format` is the description file(1) (file-5.41) printed for the executable, verbatim. Without this pin no oracle number produced against TAXSIM is reproducible (Phase-A item A2).",
   "distribution": {
     "package": "policyengine-taxsim",
     "version": "2.30.0",
@@ -19,7 +19,7 @@
     }
   },
   "runtime_binary": {
-    "note": "policyengine-taxsim's TaxsimRunner selects the binary by platform.system() from {sys.prefix}/share/policyengine_taxsim/taxsimtest/<name>; axiom-oracles resolves the same file with pins.installed_binary_path() and passes it explicitly. The per-platform executables are different NBER builds (see each bundled_binaries entry). They accept different law years: the Linux build refused 2025-2027 and the macOS build refused only 2027, so TAXSIM law years 2025 and 2026 run only on macOS under this pin. They also disagree in years both accept: on one single filer with $50,000 of wages (state 0, idtl 0) at 2024 the Linux build returned fiitax 4016.12 and frate 12.00 where the macOS build returned 4016.00 and 0.00, and at 1960 fiitax 25668.00 where the macOS build returned 0.00. A TAXSIM number is therefore specific to the binary that produced it. The callers that run the pinned binary check the requested law years against its pinned range first (pins.require_law_years) and record the identity of the binary they ran (pins.binary_identity). No CI workflow installs the taxsim extra, and every TAXSIM comparison suite is ci: manual, so these binaries run only where a person runs them.",
+    "note": "policyengine-taxsim's TaxsimRunner selects the binary by platform.system() from {sys.prefix}/share/policyengine_taxsim/taxsimtest/<name>; axiom-oracles resolves the same file with pins.installed_binary_path() and passes it explicitly. The per-platform executables are different NBER builds (see each bundled_binaries entry). They accept different law years: the Linux build refused 2025-2027 and the macOS build refused only 2027, so of the platform binaries that have been run, only the macOS one accepts law years 2025 and 2026 (the Windows binary has not been run). They also disagree in years both accept: on one single filer with $50,000 of wages (state 0, idtl 0) at 2024 the Linux build returned fiitax 4016.12 and frate 12.00 where the macOS build returned 4016.00 and 0.00, and at 1960 fiitax 25668.00 where the macOS build returned 0.00. A TAXSIM number is therefore specific to the binary that produced it. The callers that run the pinned binary check the requested law years against its pinned range first (pins.require_law_years) and record the identity of the binary they ran (pins.binary_identity). No CI workflow installs the taxsim extra, and every TAXSIM comparison suite is ci: manual, so these binaries run only where a person runs them.",
     "install_subdir": "share/policyengine_taxsim/taxsimtest",
     "by_platform": {
       "linux": "taxsimtest/taxsimtest-linux.exe",
@@ -31,7 +31,7 @@
     "taxsimtest/taxsimtest-linux.exe": {
       "sha256": "0d934f202541f43a7999907b523e5431183a1258dadef4ddc6121d3f31120442",
       "bytes": 3737960,
-      "format": "ELF 64-bit LSB executable, x86-64, statically linked",
+      "format": "ELF 64-bit LSB executable, x86-64, version 1 (GNU/Linux), statically linked, BuildID[sha1]=55fc7463f04ab12db709a41240862a96ad2a900c, for GNU/Linux 3.2.0, with debug_info, not stripped",
       "build": "cdate-compdate",
       "law_years": {
         "first": 1960,
@@ -53,7 +53,7 @@
     "taxsimtest/taxsimtest-osx-new.exe": {
       "sha256": "8371718c4728604be595a6bfd3dd16a62a2830b85084557b2aaa0c74b342b679",
       "bytes": 1712528,
-      "format": "ELF 64-bit LSB pie executable, x86-64, dynamically linked (a Linux executable, despite the name)",
+      "format": "ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=b4698a0870124877793e90c387400e02189d00a7, for GNU/Linux 3.2.0, not stripped",
       "build": "cdate-compdate",
       "law_years": {
         "first": 1960,
@@ -69,7 +69,7 @@
           2027
         ],
         "rejection": " TAXSIM: Federal tax calculator available 1960 -         2026  only.",
-        "evidence": "Run 2026-10-10 through PolicyEngine/policyengine-taxsim resources/taxsimtest/taxsim-docker-wrapper.sh at 549beade32dbc43cb31d2f37e46bec983660d28d (ubuntu:24.04 + gfortran runtime, linux/amd64, colima on macOS) on one-record inputs. The `ran` years exited 0 with output rows; 2027 printed the rejection line first, wrote 'STOP 1' to stderr and exited 1. No platform selects this file. On the 5,000-row fiit-taxsim-ecps batch-13 input it printed seven rows, then ' TAXSIM: More CTC elegible than EIC elegible' for the record with taxsimid 8 and ' TAXSIM: Abandoning processing', and exited 1."
+        "evidence": "Run 2026-10-10 through PolicyEngine/policyengine-taxsim resources/taxsimtest/taxsim-docker-wrapper.sh at 549beade32dbc43cb31d2f37e46bec983660d28d (ubuntu:24.04 + gfortran runtime, linux/amd64, colima on macOS) on one-record inputs. The `ran` years exited 0 with output rows; 2027 printed the rejection line first, wrote 'STOP 1' to stderr and exited 1. Despite its name it is a Linux ELF executable (see format), and no platform selects it. On the 5,000-row fiit-taxsim-ecps batch-13 input it printed seven rows, then ' TAXSIM: More CTC elegible than EIC elegible' for the record with taxsimid 8 and ' TAXSIM: Abandoning processing', and exited 1."
       }
     },
     "taxsimtest/taxsimtest-osx.exe": {

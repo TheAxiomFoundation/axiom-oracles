@@ -236,7 +236,8 @@ default to tax year 2026 unless `--period` is supplied. The Linux executable in
 the same release (`taxsimtest-linux.exe`, build `cdate-compdate`) is a different
 build that accepts law years 1960-2024 only: run on 2025 or 2026 it prints
 `TAXSIM: Federal tax calculator available 1960 - 2024 only.` and exits with
-`STOP 1`. A 2025 or 2026 TAXSIM comparison therefore runs only on macOS; on
+`STOP 1`. Of the platform executables that have been run, only the macOS one
+accepts 2025 and 2026 (the Windows one has not been run); on
 Linux, `compare` stops before loading the population and names the pinned range
 (2024 is the last year that build accepts). The two builds also differ in years
 both accept, so a TAXSIM number is specific to the platform that produced it.

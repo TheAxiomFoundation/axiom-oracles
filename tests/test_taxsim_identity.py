@@ -8,8 +8,8 @@ running the binaries on 2026-10-10 and are recorded in ``taxsim_pins.json``.
 ``linux_2026_rejection_stdout.txt`` / ``_stderr.txt`` are the verbatim output
 of the Linux binary (run through pe-taxsim's ``taxsim-docker-wrapper.sh``) on
 the 5,000-row fiit-taxsim-ecps batch-13 input at law year 2026; that input is
-not bundled. These tests check every caller refuses a year outside the
-resolved binary's pinned range before running it, and that reports record
+not bundled. These tests check the callers that run the pinned binary refuse
+a year outside its pinned range before running it, and that reports record
 the binary that ran.
 """
 
@@ -133,15 +133,21 @@ def test_linux_refuses_2025_and_2026_and_names_the_macos_binary(on_host) -> None
     with pytest.raises(TaxsimLawYearError) as caught:
         pins.require_law_years([2026])
     message = str(caught.value)
-    assert message.startswith("TAXSIM cannot run law year 2026 on linux")
-    assert "taxsimtest/taxsimtest-linux.exe as pinned" in message
-    assert "build cdate-compdate) accepts law years 1960-2024 only" in message
+    assert message.startswith(
+        "TAXSIM cannot run law year 2026 on linux: "
+        "taxsimtest/taxsimtest-linux.exe as pinned (sha256 0d934f202541, build "
+        "cdate-compdate, pinned for policyengine-taxsim "
+    )
+    assert ") accepts law years 1960-2024 only." in message
+    # The rejection line is quoted exactly as the binary printed it.
     assert (
-        "Run on 2025, 2026, 2027, it printed 'TAXSIM: Federal tax calculator "
+        "Run on 2025, 2026, 2027, it printed ' TAXSIM: Federal tax calculator "
         "available 1960 - 2024 only.' and exited 1." in message
     )
     assert "The pinned binary for darwin (taxsimtest/taxsimtest-osx.exe" in message
     assert "or use a law year in 1960-2024" in message
+    # The Windows binary has not been run, and the message says so.
+    assert "(Not run, so unknown: the windows binary.)" in message
 
     with pytest.raises(TaxsimLawYearError, match=r"law years 2025, 2026 on linux"):
         pins.require_law_years([2024, 2025, 2026])
@@ -151,7 +157,11 @@ def test_linux_refuses_2025_and_2026_and_names_the_macos_binary(on_host) -> None
 def test_macos_accepts_2026_and_nothing_accepts_2027(on_host) -> None:
     on_host("darwin")
     assert pins.require_law_years([2026, 2025]) is None
-    with pytest.raises(TaxsimLawYearError, match="No pinned binary accepts 2027"):
+    with pytest.raises(
+        TaxsimLawYearError,
+        match=r"No pinned binary that has been run accepts 2027; .* "
+        r"\(Not run, so unknown: the windows binary\.\)",
+    ):
         pins.require_law_years([2027])
 
 

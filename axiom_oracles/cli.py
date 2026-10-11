@@ -1346,10 +1346,10 @@ def _select_axiom_state_income_tax_candidate(case: Case) -> Case:
 def _require_taxsim_law_year(period: str) -> None:
     """Fail before any work when the host's TAXSIM binary rejects the year.
 
-    The Linux and macOS executables in one policyengine-taxsim release are
-    different NBER builds with different law-year ranges (taxsim_pins.json);
-    without this check a Linux run loads the whole population and then dies
-    on the binary's ``STOP 1``.
+    The Linux and macOS executables in the pinned policyengine-taxsim release
+    are different NBER builds with different law-year ranges
+    (taxsim_pins.json); without this check a Linux run loads the whole
+    population and then dies on the binary's ``STOP 1``.
     """
     try:
         year = int(str(period).split("-", 1)[0])

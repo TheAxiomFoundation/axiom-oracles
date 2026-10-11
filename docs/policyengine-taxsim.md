@@ -165,7 +165,8 @@ year 2026), writes this to stdout, `STOP 1` to stderr, and exits 1:
 ```
 
 (full capture: `tests/fixtures/taxsim/linux_2026_rejection_stdout.txt`). So
-2025 and 2026 TAXSIM suites run only on macOS under this pin. No platform
+of the platform binaries that have been run, only the macOS one accepts 2025
+and 2026 (the Windows binary has not been run). No platform
 selects `taxsimtest-osx-new.exe`; on the same batch it abandons processing at
 the record with taxsimid 8 (`TAXSIM: More CTC elegible than EIC elegible`), so
 it cannot stand in for the Linux build.
@@ -203,11 +204,12 @@ bytes (`build`) and the one the run printed (`build_observed`, the last CSV
 header column or the `idtl=5` banner), host platform and machine, whether the
 SHA-256 is pinned, the pinned law-year range, the installed policyengine-taxsim
 version, and the rows it ran. The path is the absolute path on the host that
-ran it, as other provenance paths in these reports are. A printed stamp that
+ran it, as provenance paths in several other committed reports are. A printed stamp that
 names a different build than the hashed bytes raises `TaxsimIdentityError`.
 `scripts/run_comparison.py` copies the binaries into
 `provenance.oracle.taxsim_binaries`, and `scripts/merge_shard_reports.py` sums
-their rows across shards, keeping one entry per distinct binary and path. Reports
+their rows across shards, keeping one entry per distinct binary and path; it
+refuses to merge shards when only some of them record a binary. Reports
 generated before this existed (such as the committed
 `axiom-taxsim-fiit-ecps.json`, generated 2026-08-28) do not say which binary
 produced them.

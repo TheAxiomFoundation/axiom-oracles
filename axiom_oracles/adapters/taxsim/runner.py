@@ -430,8 +430,7 @@ def _frame_records(frame: Any) -> list[dict[str, Any]]:
 def _frame_years(frame: Any) -> set[int]:
     """Distinct law years in a TAXSIM input frame.
 
-    Rows with no year, or one that is not a number, are skipped: the binary
-    reports those itself.
+    Rows with no year, or one that is not a number, are skipped.
     """
     years = set()
     for row in _frame_records(frame):

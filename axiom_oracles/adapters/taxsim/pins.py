@@ -14,9 +14,9 @@ its hash so a test can confirm the installed binary still matches the pin,
 (:func:`require_law_years`), and (d) describe the binary a run used, for
 report provenance (:func:`binary_identity`, :class:`TaxsimIdentityRecorder`).
 
-The per-platform executables in one release are different NBER builds with
-different law-year ranges (each bundled binary's ``law_years`` in the pin
-file), so the platform decides which law years can run.
+In the pinned release the per-platform executables are different NBER builds
+with different law-year ranges (each bundled binary's ``law_years`` in the
+pin file), so the platform decides which law years can run.
 """
 
 from __future__ import annotations
@@ -328,29 +328,32 @@ def _law_year_message(
     shown = ", ".join(str(year) for year in rejected)
     noun = "law year" if len(rejected) == 1 else "law years"
     message = (
-        f"TAXSIM cannot run {noun} {shown} on {system}: the binary "
-        f"policyengine-taxsim {pinned_version()} uses here ({where}, sha256 "
-        f"{entry['sha256'][:12]}, build {entry.get('build')}) accepts law years "
+        f"TAXSIM cannot run {noun} {shown} on {system}: {where} (sha256 "
+        f"{entry['sha256'][:12]}, build {entry.get('build')}, pinned for "
+        f"policyengine-taxsim {pinned_version()}) accepts law years "
         f"{first}-{last} only."
     )
     observed = entry.get("law_years") or {}
     if observed.get("rejection") and observed.get("rejected"):
         tried = ", ".join(str(year) for year in observed["rejected"])
         message += (
-            f" Run on {tried}, it printed {observed['rejection'].strip()!r} "
-            "and exited 1."
+            f" Run on {tried}, it printed {observed['rejection']!r} and exited 1."
         )
-    alternatives = [
-        f"{other_system} ({other_key}, build "
-        f"{bundled_binaries()[other_key].get('build')}, "
-        f"{other_range[0]}-{other_range[1]})"
-        for other_system, other_key in load_pins()["runtime_binary"][
-            "by_platform"
-        ].items()
-        if other_system != system
-        and (other_range := law_year_range(bundled_binaries()[other_key]))
-        and all(other_range[0] <= year <= other_range[1] for year in rejected)
-    ]
+    by_platform = load_pins()["runtime_binary"]["by_platform"]
+    alternatives = []
+    not_run = []
+    for other_system, other_key in by_platform.items():
+        if other_system == system:
+            continue
+        other_range = law_year_range(bundled_binaries()[other_key])
+        if other_range is None:
+            not_run.append(other_system)
+        elif all(other_range[0] <= year <= other_range[1] for year in rejected):
+            alternatives.append(
+                f"{other_system} ({other_key}, build "
+                f"{bundled_binaries()[other_key].get('build')}, "
+                f"{other_range[0]}-{other_range[1]})"
+            )
     if alternatives:
         message += (
             f" The pinned binary for {' and '.join(alternatives)} accepts "
@@ -358,9 +361,11 @@ def _law_year_message(
         )
     else:
         message += (
-            f" No pinned binary accepts {shown}; use a law year in "
-            f"{first}-{last}."
+            f" No pinned binary that has been run accepts {shown}; use a law "
+            f"year in {first}-{last}."
         )
+    if not_run:
+        message += f" (Not run, so unknown: the {', '.join(not_run)} binary.)"
     return f"{message} (Pinned ranges: axiom_oracles/adapters/taxsim/taxsim_pins.json.)"
 
 
