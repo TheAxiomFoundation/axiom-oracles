@@ -372,6 +372,57 @@ def test_taxsim_package_runner_projects_cases_and_maps_canonical_concepts() -> N
     assert results[0].values == {"fiitax": 100, "siitax": 25}
 
 
+@pytest.mark.parametrize("preprojected", [False, True])
+@pytest.mark.parametrize("output_present", [False, True])
+def test_direct_taxsim_package_runner_persists_dropped_input(
+    preprojected, output_present
+) -> None:
+    from axiom_oracles.adapters.taxsim.projection import taxsim_input_for_case
+
+    captured_rows = []
+
+    class FakeTaxsimRunner:
+        def __init__(self, frame):
+            captured_rows.extend(frame.to_dict(orient="records"))
+
+        def run(self, show_progress=False):
+            return [{"taxsimid": 1, "fiitax": 100}] if output_present else []
+
+    case = Case(
+        case_id=1,
+        period="2026",
+        facts={Concepts.STATE_CODE: "CO"},
+        entities=(
+            Entity(
+                "head",
+                "person",
+                facts={
+                    Concepts.HOUSEHOLD_RELATION: "head",
+                    Concepts.PERSON_AGE: 70,
+                    Concepts.TAX_EXEMPT_INTEREST_INCOME: 10_000,
+                },
+            ),
+        ),
+    )
+    if preprojected:
+        from dataclasses import replace
+
+        case = replace(
+            case,
+            metadata={"taxsim_input": taxsim_input_for_case(case, taxsimid=1)},
+        )
+
+    [result] = TaxsimPackageRunner(runner_factory=FakeTaxsimRunner).run_cases([case])
+
+    assert result.raw["taxsim_unprojected_inputs"] == {
+        "tax_exempt_interest_income": 10_000
+    }
+    assert result.values == ({"fiitax": 100} if output_present else {})
+    assert bool(result.errors) is not output_present
+    assert "taxsim_unprojected_inputs" not in captured_rows[0]
+    assert "taxsim_unprojected_inputs" not in case.metadata
+
+
 def test_policyengine_taxsim_runner_maps_taxsim_output_to_policyengine_targets() -> (
     None
 ):
