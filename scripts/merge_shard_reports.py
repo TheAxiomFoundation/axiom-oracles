@@ -21,6 +21,7 @@ from pathlib import Path
 _SUM_SUMMARY = (
     "match_count",
     "mismatch_count",
+    "uncompared_mismatches",
     "comparison_count",
     "error_count",
 )
@@ -30,6 +31,7 @@ _SUM_AGGREGATE = (
     "match_count",
     "match_weight",
     "mismatch_count",
+    "uncompared_mismatches",
     "mismatch_weight",
     "missing_left_count",
     "missing_right_count",
