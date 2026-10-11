@@ -168,10 +168,10 @@ def _attach_axiom_outputs(
 ) -> list[Case]:
     """Stash the axiom engine's non-compared outputs into case metadata.
 
-    In full-evidence mode the runner records every derived rule the engine
-    evaluated for the case (its explain trace); the values beyond the
-    compared concepts' targets are the household's computation chain
-    (intermediates included). Ordinary results land under
+    In full-evidence mode the runner records the derived rules the engine
+    evaluated on the case's queried entity (its explain trace); the values
+    beyond the compared concepts' targets are the household's computation
+    chain (intermediates included). Ordinary results land under
     ``axiom_all_outputs``. For cross-entity aggregation, intermediate values
     are not meaningful household sums, so they remain attached to their
     executed entity under ``axiom_result_aggregation_applied.components``.

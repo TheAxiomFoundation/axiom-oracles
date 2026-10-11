@@ -3,24 +3,26 @@
 The fixture program has the shape of 26 USC 21: a credit that reads its
 creditable expenses only when the claim is allowed, and creditable expenses
 whose requirements input is read only on that branch. Before the fix, full
-evidence force-queried the untaken branch (a missing input for every unit
-whose claim was disallowed), and any one case's engine error failed every
-case in its batch. A Case-surface Axiom-vs-PolicyEngine tax run therefore
-errored on every tax unit while the same concepts computed against TAXSIM,
-whose full-population run is too large to switch full evidence on.
+evidence queried the compared outputs' whole dependency closure, which forced
+creditable expenses for every unit whose claim was disallowed (a missing
+input), and any one case's engine error failed every case in its batch. A
+Case-surface Axiom-vs-PolicyEngine tax run therefore errored on every tax
+unit while the same concepts computed against TAXSIM, whose full-population
+run is too large to switch full evidence on.
 
 Invariants (property-tested over random batches below):
 
 - Evidence invariance: switching full evidence on never changes any
   compared value or any error.
-- Batch independence: a case's result does not depend on its batch-mates
-  or the batch size.
+- Batch independence: a case's result does not depend on its batch-mates,
+  its position in the batch or the batch size.
 - Error attribution: exactly the cases whose taken branch lacks an input
   error, and their messages carry no ``case-<i>::`` batch namespace.
 - No forcing: every query asks only for the compared outputs; evidence
-  intermediates are exactly the rules the engine evaluated.
-- Bounded isolation: a batch with k case-attributed failures costs at most
-  2k + 1 engine runs; an error naming no case fails its batch in one run.
+  intermediates are exactly the rules the engine evaluated on the queried
+  entity.
+- Bounded isolation: a batch whose k failing cases each isolate costs at
+  most 3k + 1 engine runs; an error naming no case fails its batch in one.
 """
 
 from __future__ import annotations
@@ -90,7 +92,14 @@ def _isolated_rulespec_roots(monkeypatch, tmp_path):
     monkeypatch.setenv("AXIOM_RULESPEC_ROOT", str(tmp_path / "no-roots"))
 
 
-def _case(case_id: str, claim: bool, satisfied: bool | str, expenses: int) -> Case:
+def _case(
+    case_id: str,
+    claim: bool,
+    satisfied: bool | str,
+    expenses: int,
+    *,
+    entity_id: str = "tax_unit",
+) -> Case:
     inputs: dict[str, object] = {
         "claim_requirements_met": claim,
         "expenses_paid": expenses,
@@ -101,15 +110,16 @@ def _case(case_id: str, claim: bool, satisfied: bool | str, expenses: int) -> Ca
         case_id=case_id,
         period="2026",
         metadata={
+            "axiom_entity_id": entity_id,
             "axiom_input_records": [
                 {
                     "name": name,
                     "entity": "TaxUnit",
-                    "entity_id": "tax_unit",
+                    "entity_id": entity_id,
                     "value": value,
                 }
                 for name, value in inputs.items()
-            ]
+            ],
         },
     )
 
@@ -134,7 +144,12 @@ def _scalar(value):
 class _GuardedEngine:
     """``run-compiled`` for PROGRAM: queries run in order, each derived rule
     is evaluated lazily and cached per entity, the trace lists what was
-    evaluated for the query's entity, and the first error exits non-zero."""
+    evaluated for the query's entity, and the first error exits non-zero.
+
+    Like newer engines, the trace also lists an instance evaluated on a
+    related entity under ``<rule>@entity:<hex of that entity's id>``; the id
+    carries the batch namespace, so the key differs with batch position.
+    """
 
     def __init__(self, *, global_error: str | None = None) -> None:
         self.requests: list[dict] = []
@@ -190,47 +205,90 @@ class _GuardedEngine:
                 return subprocess.CompletedProcess(
                     args, 1, stdout="", stderr=str(error)
                 )
+            related = f"{entity_id}/member".encode().hex()
             results.append(
                 {
                     "entity_id": entity_id,
                     "outputs": outputs,
-                    "trace": {name: _scalar(value) for name, value in cache.items()},
+                    "trace": {
+                        **{name: _scalar(value) for name, value in cache.items()},
+                        f"member_amount@entity:{related}": _scalar(1),
+                    },
                 }
             )
         return subprocess.CompletedProcess(
             args,
             0,
             stdout=json.dumps(
-                {"metadata": {"actual_mode": "explain"}, "results": results}
+                {"metadata": {"actual_mode": request["mode"]}, "results": results}
             ),
             stderr="",
         )
 
 
-def _artifact(tmp_path: Path) -> Path:
-    path = tmp_path / "program.compiled.json"
-    path.write_text(
-        json.dumps(
-            {
-                "program": {
-                    "derived": [
-                        {"name": "claim_allowed", "entity": "TaxUnit"},
-                        {"name": "creditable_expenses", "entity": "TaxUnit"},
-                        {"name": "credit", "entity": "TaxUnit"},
-                    ]
-                }
-            }
-        )
-    )
+def _input(name: str) -> dict:
+    return {"kind": "input", "name": name}
+
+
+def _derived(name: str) -> dict:
+    return {"kind": "derived", "name": name}
+
+
+# PROGRAM's dependency structure, as the engine compiles it: a closure walk
+# from ``credit`` reaches ``creditable_expenses`` through the claim branch.
+DERIVED = [
+    {
+        "name": "claim_allowed",
+        "entity": "TaxUnit",
+        "expr": _input("claim_requirements_met"),
+    },
+    {
+        "name": "creditable_expenses",
+        "entity": "TaxUnit",
+        "expr": {
+            "kind": "if",
+            "condition": _input("expense_requirements_satisfied"),
+            "then_expr": _input("expenses_paid"),
+            "else_expr": {"kind": "literal", "value": 0},
+        },
+    },
+    {
+        "name": "credit",
+        "entity": "TaxUnit",
+        "expr": {
+            "kind": "if",
+            "condition": _derived("claim_allowed"),
+            "then_expr": {
+                "kind": "mul",
+                "left": _derived("creditable_expenses"),
+                "right": {"kind": "literal", "value": 0.2},
+            },
+            "else_expr": {"kind": "literal", "value": 0},
+        },
+    },
+]
+
+
+def _artifact(directory: Path, derived: list[dict] | None = None) -> Path:
+    path = directory / "program.compiled.json"
+    path.write_text(json.dumps({"program": {"derived": derived or DERIVED}}))
     return path
 
 
-def _runner(artifact: Path, engine, *, full_evidence: bool, batch_size: int = 5_000):
+def _runner(
+    artifact: Path,
+    engine,
+    *,
+    full_evidence: bool,
+    batch_size: int = 5_000,
+    mode: str = "explain",
+):
     return AxiomRulesRunner(
         compiled_artifact_path=artifact,
         binary_path=artifact.parent / "axiom-rules-engine",
         record_all_outputs=full_evidence,
         batch_size=batch_size,
+        mode=mode,
         subprocess_run=engine,
     )
 
@@ -266,26 +324,26 @@ def test_full_evidence_and_isolation_invariants(tmp_path_factory, specs, batch_s
             for request in engine.requests
             for query in request["queries"]
         )
-        # Bounded isolation, per batch chunk: <= 2k + 1 runs.
+        # Bounded isolation, per batch chunk: <= 3k + 1 runs.
         failing = sum(_expected(*spec) is None for spec in specs)
         chunks = -(-len(cases) // batch_size)
-        assert len(engine.requests) <= 2 * failing + chunks
+        assert len(engine.requests) <= 3 * failing + chunks
 
         for spec, result in zip(specs, results, strict=True):
             expected = _expected(*spec)
             if expected is None:
                 assert result.values == {}
-                assert len(result.errors) == 1
-                assert (
-                    "missing input `expense_requirements_satisfied`" in result.errors[0]
+                assert result.errors == (
+                    "missing input `expense_requirements_satisfied` for entity "
+                    "`tax_unit` over 2026-01-01..2026-12-31",
                 )
-                assert "case-" not in result.errors[0]
                 continue
             credit, intermediates = expected
             assert result.errors == ()
             assert result.values[OUTPUT] == pytest.approx(credit)
             if full_evidence:
-                # Evidence is exactly what the engine evaluated.
+                # Evidence is exactly what the engine evaluated on the
+                # queried entity: no related-entity instance, no forced rule.
                 assert set(result.values) == {OUTPUT, *intermediates}
                 for name, value in intermediates.items():
                     assert result.values[name] == value
@@ -354,8 +412,9 @@ def test_case_specific_error_stays_on_its_case(tmp_path):
     assert [result.values.get(OUTPUT) for result in results] == [
         pytest.approx(20.0 * i) if i != 4 else None for i in range(7)
     ]
-    # One failed run attributes unit-4, then the two halves succeed.
-    assert len(engine.requests) == 3
+    # The failed batch, unit-4 alone to confirm it, then the two halves.
+    assert len(engine.requests) == 4
+    assert [len(request["queries"]) for request in engine.requests] == [7, 1, 3, 3]
 
 
 def test_error_naming_no_case_fails_the_batch_in_one_run(tmp_path):
@@ -370,6 +429,176 @@ def test_error_naming_no_case_fails_the_batch_in_one_run(tmp_path):
 
     assert len(engine.requests) == 1
     assert all(result.errors == (error,) for result in results)
+
+
+def test_namespace_text_outside_the_entity_field_blames_no_case(tmp_path):
+    """Review finding: an input value that merely contains ``case-1::`` must
+    not send the error to the healthy case at batch index 1."""
+
+    artifact = _artifact(tmp_path)
+    cases = [_case(f"unit-{i}", True, True, 100) for i in range(4)]
+    error = "input `expenses_paid` has invalid decimal literal `case-1::oops`"
+    engine = _GuardedEngine(global_error=error)
+
+    results = _runner(artifact, engine, full_evidence=False).run_cases(cases, [OUTPUT])
+
+    assert len(engine.requests) == 1
+    assert all(result.errors == (error,) for result in results)
+
+
+def test_entity_id_that_looks_like_a_namespace_is_preserved(tmp_path):
+    """Review finding: a case whose own entity id starts with ``case-0::``
+    is still attributed by the generated outer prefix alone, and keeps its id."""
+
+    artifact = _artifact(tmp_path)
+    own_id = "case-0::tax_unit"
+    cases = [
+        _case("healthy-0", True, True, 100, entity_id=own_id),
+        _case("broken", True, ABSENT, 200, entity_id=own_id),
+        _case("healthy-2", True, True, 300, entity_id=own_id),
+    ]
+    engine = _GuardedEngine()
+
+    healthy_0, broken, healthy_2 = _runner(
+        artifact, engine, full_evidence=False
+    ).run_cases(cases, [OUTPUT])
+
+    assert healthy_0.errors == healthy_2.errors == ()
+    assert healthy_0.values[OUTPUT] == pytest.approx(20.0)
+    assert healthy_2.values[OUTPUT] == pytest.approx(60.0)
+    assert broken.errors == (
+        "missing input `expense_requirements_satisfied` for entity "
+        f"`{own_id}` over 2026-01-01..2026-12-31",
+    )
+
+
+def test_unconfirmed_attribution_keeps_the_failure_batch_wide(tmp_path):
+    """The entity field is only a hint: when the case it names computes
+    alone, no case is singled out and the batch fails as it did before."""
+
+    artifact = _artifact(tmp_path)
+    cases = [
+        _case("healthy-0", True, True, 100),
+        _case("healthy-1", True, True, 200),
+        _case("broken", True, ABSENT, 300),
+    ]
+    inner = _GuardedEngine()
+
+    def blames_case_zero(args, **kwargs):
+        process = inner(args, **kwargs)
+        if process.returncode:
+            return subprocess.CompletedProcess(
+                args,
+                1,
+                stdout="",
+                stderr="missing input `x` for entity `case-0::tax_unit` over 2026",
+            )
+        return process
+
+    results = _runner(artifact, blames_case_zero, full_evidence=False).run_cases(
+        cases, [OUTPUT]
+    )
+
+    # The failed batch, then healthy-0 alone, which computes.
+    assert [len(request["queries"]) for request in inner.requests] == [3, 1]
+    assert all(
+        result.errors == ("missing input `x` for entity `case-0::tax_unit` over 2026",)
+        for result in results
+    )
+
+
+def _aliased_engine(calls: list[dict]):
+    """An artifact keys the compared credit by a qualified id and a different
+    intermediate by the bare name the caller requests."""
+
+    def run(args, **kwargs):
+        request = json.loads(kwargs["input"])
+        calls.append(request)
+        results = []
+        for query in request["queries"]:
+            assert query["outputs"] == ["us:statutes/example#credit"]
+            results.append(
+                {
+                    "entity_id": query["entity_id"],
+                    "outputs": {"us:statutes/example#credit": _scalar(200)},
+                    "trace": {
+                        "us:statutes/example#credit": _scalar(200),
+                        "credit": _scalar(1_000),
+                    },
+                }
+            )
+        return subprocess.CompletedProcess(
+            args, 0, stdout=json.dumps({"results": results}), stderr=""
+        )
+
+    return run
+
+
+ALIASED_DERIVED = [
+    {"name": "credit", "id": "us:statutes/example#credit", "entity": "TaxUnit"},
+    {"name": "creditable_expenses", "id": "credit", "entity": "TaxUnit"},
+]
+
+
+@pytest.mark.parametrize("full_evidence", [False, True])
+def test_trace_entry_cannot_shadow_a_compared_output_alias(tmp_path, full_evidence):
+    """Review finding: with evidence on, a trace entry keyed ``credit`` (a
+    different rule) must not replace the compared credit requested by that
+    name."""
+
+    artifact = _artifact(tmp_path, ALIASED_DERIVED)
+    [result] = _runner(
+        artifact, _aliased_engine([]), full_evidence=full_evidence
+    ).run_cases([_case("unit", True, True, 1_000)], [OUTPUT])
+
+    assert result.errors == ()
+    assert result.values[OUTPUT] == 200.0
+    assert result.values["us:statutes/example#credit"] == 200.0
+
+
+def test_trace_entry_cannot_shadow_an_alias_in_aggregation_components(tmp_path):
+    artifact = _artifact(tmp_path, ALIASED_DERIVED)
+    case = _case("unit", True, True, 1_000)
+    case = Case(
+        case_id=case.case_id,
+        period=case.period,
+        metadata={
+            **case.metadata,
+            "axiom_result_aggregation": {
+                "strategy": "sum",
+                "entity_ids": ["tax_unit", "second_unit"],
+            },
+        },
+    )
+
+    [result] = _runner(artifact, _aliased_engine([]), full_evidence=True).run_cases(
+        [case], [OUTPUT]
+    )
+
+    assert result.errors == ()
+    assert result.values[OUTPUT] == 400.0
+    assert [
+        component["values"][OUTPUT]
+        for component in result.raw["aggregation"]["components"]
+    ] == [200.0, 200.0]
+
+
+@pytest.mark.parametrize(
+    ("full_evidence", "expected_mode"), [(True, "explain"), (False, "fast")]
+)
+def test_full_evidence_always_executes_in_explain_mode(
+    tmp_path, full_evidence, expected_mode
+):
+    """Review finding: fast mode returns no trace, so a fast-mode runner
+    asked for full evidence would silently record no intermediates."""
+
+    engine = _GuardedEngine()
+    [result] = _runner(
+        _artifact(tmp_path), engine, full_evidence=full_evidence, mode="fast"
+    ).run_cases([_case("unit", True, True, 1_000)], [OUTPUT])
+
+    assert [request["mode"] for request in engine.requests] == [expected_mode]
+    assert ("creditable_expenses" in result.values) is full_evidence
 
 
 ENGINE_BINARY = os.environ.get("AXIOM_RULES_ENGINE_BINARY")

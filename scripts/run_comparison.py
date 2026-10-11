@@ -5851,6 +5851,7 @@ def _refresh_versioned_case_chunks(report: dict) -> dict | None:
         MAX_CASES,
         compact_case,
         explained_lookup,
+        finalize_slot_dictionaries,
     )
 
     if len(raw_cases) > MAX_CASES:
@@ -5859,20 +5860,7 @@ def _refresh_versioned_case_chunks(report: dict) -> dict | None:
         )
     explained = explained_lookup(report)
     rows = [compact_case(case, explained) for case in raw_cases]
-    input_slots = sorted(
-        {
-            record.get("name")
-            for row in rows
-            for record in row.get("_all_input_names", [])
-            if record.get("name")
-        }
-    )
-    output_slots = sorted(
-        {name for row in rows for name in row.get("_all_output_names", [])}
-    )
-    for row in rows:
-        row.pop("_all_input_names", None)
-        row.pop("_all_output_names", None)
+    input_slots, output_slots = finalize_slot_dictionaries(rows)
 
     out_dir = DASHBOARD_DATA_DIR / "cases" / suite
     out_dir.mkdir(parents=True, exist_ok=True)
