@@ -3,7 +3,7 @@ from __future__ import annotations
 import functools
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
 
@@ -37,6 +37,8 @@ class ProgramMapping:
     priority: str = "normal"
     components: tuple[str, ...] = field(default_factory=tuple)
     parent: str | None = None
+    # Comparison grain, independent of category and engine output entity.
+    case_unit: Literal["household", "tax_unit"] = "household"
 
     def __post_init__(self) -> None:
         # A repeated sum term has a different comparison identity from its

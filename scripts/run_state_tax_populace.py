@@ -496,6 +496,7 @@ def main(argv: list[str] | None = None) -> int:
         microsimulation_factory=_shared_microsimulation,
     )
     taxsim_targets = None
+    taxsim_unprojected_inputs = {}
     if not args.no_taxsim:
         taxsim_targets = calculate_taxsim_targets(
             dataset=dataset,
@@ -505,6 +506,7 @@ def main(argv: list[str] | None = None) -> int:
             year=args.year,
             contract=contract,
             microsimulation_factory=_shared_microsimulation,
+            unprojected_inputs=taxsim_unprojected_inputs,
         )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
@@ -536,6 +538,7 @@ def main(argv: list[str] | None = None) -> int:
             policyengine_targets=targets,
             policyengine_projection_inputs=projection_inputs,
             taxsim_targets=taxsim_targets,
+            taxsim_unprojected_inputs=taxsim_unprojected_inputs,
             year=args.year,
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),

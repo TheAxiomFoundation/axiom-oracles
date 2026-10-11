@@ -1866,6 +1866,7 @@ concepts:
   us:tax/federal-income-tax#liability:
     description: Federal income tax liability
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 15
     priority: high
@@ -1895,6 +1896,7 @@ concepts:
   us:tax/federal-income-tax#agi:
     description: Federal adjusted gross income
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -1906,6 +1908,7 @@ concepts:
   us:tax/federal-income-tax#standard_deduction:
     description: Federal standard deduction
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -1918,6 +1921,7 @@ concepts:
   us:tax/federal-income-tax#taxable_income:
     description: Federal taxable income
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -1930,6 +1934,7 @@ concepts:
   us:tax/federal-income-tax#tax_before_credits:
     description: Federal tax before credits
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -1970,6 +1975,7 @@ concepts:
   us:tax/federal-income-tax#nonrefundable_credits:
     description: Federal capped nonrefundable credits
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -1980,6 +1986,7 @@ concepts:
   us:tax/federal-income-tax#eitc:
     description: Earned Income Tax Credit
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -1992,6 +1999,7 @@ concepts:
   us:tax/federal-income-tax#ctc:
     description: Child Tax Credit value
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2004,6 +2012,7 @@ concepts:
   us:tax/federal-income-tax#cdcc:
     description: Child and Dependent Care Credit
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2020,6 +2029,7 @@ concepts:
   us:tax/federal-income-tax#aotc:
     description: American Opportunity Credit
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2030,6 +2040,7 @@ concepts:
   us:tax/federal-income-tax#amt:
     description: Alternative Minimum Tax
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2042,6 +2053,7 @@ concepts:
   us:tax/federal-income-tax#capital_gain:
     description: Federal capital gain definitions
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2052,6 +2064,7 @@ concepts:
   us:tax/payroll#employee_oasdi:
     description: Employee OASDI (Social Security)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2062,6 +2075,7 @@ concepts:
   us:tax/payroll#employee_medicare:
     description: Employee Medicare
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2072,6 +2086,7 @@ concepts:
   us:tax/payroll#employer_oasdi:
     description: Employer OASDI (Social Security)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2082,6 +2097,7 @@ concepts:
   us:tax/payroll#employer_medicare:
     description: Employer Medicare
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2092,6 +2108,7 @@ concepts:
   us:tax/payroll#employee_fica:
     description: Employee-side FICA plus self-employment tax (TAXSIM tfica scope)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 5
     parent: us:tax/federal-income-tax#liability
@@ -2118,6 +2135,7 @@ concepts:
   us:tax/state-income-tax#liability:
     description: State income tax liability
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 15
     relative_tolerance: 0.0000002
@@ -2363,6 +2381,7 @@ concepts:
   us-ca:policies/income_tax/pilot_liability_pipeline#ca_pit_pilot_income_tax_liability:
     description: California personal income tax liability (resident wage earner; RTC 17041 bracket tax less RTC 17054 personal exemption credit)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine ca_income_tax_before_refundable_credits, the
     # exact statutory analog of this core (RTC 17041 bracket tax less the RTC
@@ -2391,6 +2410,7 @@ concepts:
   us-il:policies/income_tax/pilot_liability_pipeline#il_pit_pilot_income_tax_liability:
     description: Illinois individual income tax liability (flat 4.95 per cent on base income after the standard exemption)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine il_income_tax_before_non_refundable_credits, the
     # exact statutory analog of this core (4.95 per cent on base income after the
@@ -2419,6 +2439,7 @@ concepts:
   us-ma:policies/income_tax/pilot_liability_pipeline#ma_pit_pilot_income_tax_liability:
     description: Massachusetts Part B income tax liability (flat 5 per cent plus the 4 per cent section 4(d) surtax)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Flat-rate state; PolicyEngine ma_income_tax at 2026 and TAXSIM's 2024 law
     # year both apply the same 5 per cent rate and equal exemptions, so the
@@ -2442,6 +2463,7 @@ concepts:
   us-ny:policies/income_tax/pilot_liability_pipeline#ny_pit_pilot_main_income_tax:
     description: New York 2026 Tax Law section 601 main income tax before supplemental tax and credits
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # The statute publishes rounded cumulative bracket bases while PolicyEngine
     # represents the same schedules as continuous marginal scales. The reviewed
@@ -2466,6 +2488,7 @@ concepts:
   us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_income_tax_liability:
     description: Ohio nonbusiness income tax liability before nonrefundable credits (section 5747.02 tax-year-2026 schedule on completed-return Ohio taxable nonbusiness income)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine oh_income_tax_before_non_refundable_credits,
     # the exact section 5747.02 schedule-tax analog before credits. Against TAXSIM 2024
@@ -2491,6 +2514,7 @@ concepts:
   us-va:policies/income_tax/pilot_liability_pipeline#va_pit_pilot_income_tax_liability:
     description: Virginia individual income tax liability (resident wage earner; Va. Code 58.1-320 four-bracket progressive tax on Virginia taxable income)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine va_income_tax_before_non_refundable_credits,
     # the exact 58.1-320 bracket-tax analog on Virginia taxable income; on the
@@ -2518,6 +2542,7 @@ concepts:
   us-ut:policies/income_tax/2026_full_year_resident_before_credit_schedule#ut_pit_2026_resident_income_tax_before_credits:
     description: Utah full-year-resident income tax before credits, including the section 59-10-104.1 exemption gate
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # PolicyEngine publishes the section 59-10-104 pre-credit amount and the
     # section 59-10-104.1 exemption separately. The reviewed derived target
@@ -2548,6 +2573,7 @@ concepts:
   us-al:policies/income_tax/2026_section_40_18_5_schedule_before_credits#al_pit_2026_section_40_18_5_schedule_before_credits:
     description: Alabama Code section 40-18-5 graduated schedule tax on completed Alabama taxable income, before nonrefundable credits
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     relative_tolerance: 0.0000001
@@ -2571,6 +2597,7 @@ concepts:
   us-id:policies/income_tax/pilot_liability_pipeline#id_pit_pilot_income_tax_liability:
     description: Idaho income tax liability (resident wage earner; the section 63-3024 tax (5.3 per cent) on Idaho taxable income above the indexed filing-status no-tax threshold)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine id_income_tax_before_refundable_credits, the exact statutory analog of
     # this core; the pipeline reproduces it to a hundredth of a cent across the
@@ -2595,6 +2622,7 @@ concepts:
   us-ky:policies/income_tax/2026_krs_141_020_schedule_before_credits#ky_pit_2026_krs_141_020_schedule_before_credits:
     description: Kentucky KRS 141.020 tax-year-2026 schedule tax before credits (3.5 percent of completed nonnegative Kentucky net income)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # PolicyEngine's unit-level before-nonrefundable-credit variable is the
     # direct pre-credit analog. The Axiom grid projects only its completed net
@@ -2622,6 +2650,7 @@ concepts:
   us-ne:policies/income_tax/pilot_liability_pipeline#ne_pit_pilot_income_tax_liability:
     description: Nebraska individual income tax liability (resident wage earner; Neb. Rev. Stat. 77-2715.03 four-bracket progressive tax on Nebraska taxable income, before the 77-2716.01 personal exemption credit)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine ne_income_tax_before_credits, the pure
     # 77-2715.03 four-bracket tax on Nebraska taxable income (AGI less the
@@ -2649,6 +2678,7 @@ concepts:
   us-de:policies/income_tax/pilot_liability_pipeline#de_pit_pilot_separate_schedule_tax:
     description: Delaware section 1102(a)(14) individual schedule component before nonrefundable credits, summed from Person to TaxUnit only for Populace comparison accounting
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine's Person-grain individual schedule before
     # nonrefundable credits. Filing-method selection, combined-return
@@ -2675,6 +2705,7 @@ concepts:
   us-md:policies/income_tax/pilot_liability_pipeline#md_pit_pilot_income_tax_liability:
     description: Maryland STATE income tax liability (resident wage earner; the section 10-105 graduated state tax on Maryland taxable income; the county income tax is a separate PolicyEngine variable, excluded)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine md_income_tax_before_credits, the state schedule
     # tax before credits (county income tax is a separate variable). The pipeline
@@ -2699,6 +2730,7 @@ concepts:
   us-me:policies/income_tax/pilot_liability_pipeline#me_pit_pilot_income_tax_liability:
     description: Maine income tax liability (resident wage earner; the indexed section 5111 graduated tax on Maine taxable income (AGI less the section 5124-C standard deduction and section 5126-A exemption))
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine me_income_tax_before_refundable_credits, the exact
     # statutory analog of this core; the pipeline reproduces it to the cent across the
@@ -2723,6 +2755,7 @@ concepts:
   us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_income_tax_liability:
     description: Minnesota income tax liability (resident wage earner; the indexed section 290.06 subd. 2c graduated tax; the top married case carries the section 290.091 alternative minimum tax)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine mn_income_tax_before_refundable_credits, the exact
     # statutory analog of this core; the pipeline reproduces it to the cent across the
@@ -2747,6 +2780,7 @@ concepts:
   us-co:policies/income_tax/pilot_liability_pipeline#co_pit_pilot_income_tax_liability:
     description: Colorado C.R.S. section 39-22-104(1.7)(c) individual-income base tax before section 39-22-627 temporary rate adjustments and all credits
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # At 2026, PolicyEngine's before-non-refundable-credits target has no active
     # section 39-22-627 reduction and uses the same completed Colorado
@@ -2772,6 +2806,7 @@ concepts:
   us-az:policies/income_tax/pilot_liability_pipeline#az_pit_pilot_income_tax_liability:
     description: Arizona individual income tax liability (resident wage earner; the A.R.S. 43-1011 flat 2.5 per cent tax on Arizona taxable income = AGI less the section 43-1041 standard deduction)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine az_income_tax, which equals
     # az_income_tax_before_refundable_credits on this childless grid (no refundable
@@ -2797,6 +2832,7 @@ concepts:
   us-ga:policies/income_tax/2026_annual_tax_before_nonrefundable_credits#ga_pit_2026_annual_tax_before_nonrefundable_credits:
     description: Georgia tax-year-2026 annual O.C.G.A. 48-7-20 tax before nonrefundable credits (the flat 4.99 per cent rate on caller-completed Georgia taxable net income)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine ga_income_tax_before_non_refundable_credits,
     # with PolicyEngine ga_taxable_income projected only as the distinct direct
@@ -2822,6 +2858,7 @@ concepts:
   us-mi:policies/income_tax/pilot_liability_pipeline#mi_pit_pilot_income_tax_liability:
     description: Michigan individual income tax liability (resident wage earner; the MCL 206.51(1) flat 4.25 per cent tax on Michigan taxable income = AGI less the section 206.30 personal exemptions)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine mi_income_tax_before_non_refundable_credits,
     # the exact MCL 206.51 flat-tax analog (equals the final mi_income_tax on
@@ -2847,6 +2884,7 @@ concepts:
   us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability:
     description: North Carolina individual income tax liability (resident wage earner; the G.S. 105-153.7 flat 3.99 per cent tax on North Carolina taxable income = AGI less the section 105-153.5(a) standard deduction)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     # Compared against PolicyEngine nc_income_tax_before_credits, the exact
     # 105-153.7 flat-tax analog (equals the final nc_income_tax on this
@@ -2872,6 +2910,7 @@ concepts:
   us-dc:policies/income_tax/pilot_liability_pipeline#dc_pit_pilot_income_tax_liability:
     description: District of Columbia individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -2890,6 +2929,7 @@ concepts:
   us-hi:policies/income_tax/pilot_liability_pipeline#hi_pit_pilot_income_tax_liability:
     description: Hawaii 2026 individual income tax before nonrefundable credits under the complete HRS 235-51(a)-(c) schedules and the subsection (f) computation from completed Form N-11 worksheet line 10
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -2908,6 +2948,7 @@ concepts:
   us-ia:policies/income_tax/pilot_liability_pipeline#ia_pit_pilot_income_tax_liability:
     description: Iowa individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -2926,6 +2967,7 @@ concepts:
   us-in:policies/income_tax/pilot_liability_pipeline#in_pit_pilot_income_tax_liability:
     description: Indiana individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -2944,6 +2986,7 @@ concepts:
   us-la:policies/income_tax/pilot_liability_pipeline#la_pit_pilot_income_tax_liability:
     description: Louisiana individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -2962,6 +3005,7 @@ concepts:
   us-mt:policies/income_tax/pilot_liability_pipeline#mt_pit_pilot_income_tax_liability:
     description: Montana individual income tax liability (complete 2026 ordinary and net-long-term-capital-gain schedules)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     relative_tolerance: 0.0000001
@@ -2981,6 +3025,7 @@ concepts:
   us-nm:policies/income_tax/pilot_liability_pipeline#nm_pit_pilot_income_tax_liability:
     description: New Mexico individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -2999,6 +3044,7 @@ concepts:
   us-ok:policies/income_tax/pilot_liability_pipeline#ok_pit_pilot_income_tax_liability:
     description: Oklahoma individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3017,6 +3063,7 @@ concepts:
   us-or:policies/income_tax/pilot_liability_pipeline#or_pit_pilot_income_tax_liability:
     description: Oregon individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3035,6 +3082,7 @@ concepts:
   us-ri:policies/income_tax/pilot_liability_pipeline#ri_pit_pilot_income_tax_liability:
     description: Rhode Island individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3053,6 +3101,7 @@ concepts:
   us-wi:policies/income_tax/pilot_liability_pipeline#wi_pit_pilot_income_tax_liability:
     description: Wisconsin individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3067,6 +3116,7 @@ concepts:
   us-wa:policies/income_tax/pilot_liability_pipeline#wa_pit_pilot_income_tax_liability:
     description: Washington RCW 82.87 capital-gains tax liability (individual core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3081,6 +3131,7 @@ concepts:
   us-nj:policies/income_tax/pilot_liability_pipeline#nj_pit_pilot_income_tax_liability:
     description: New Jersey gross income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3095,6 +3146,7 @@ concepts:
   us-sc:policies/income_tax/pilot_liability_pipeline#sc_pit_pilot_income_tax_liability:
     description: South Carolina individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3109,6 +3161,7 @@ concepts:
   us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_sciad:
     description: South Carolina Income Adjusted Deduction on the shared 2026 resident-core profile
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     priority: high
@@ -3122,6 +3175,7 @@ concepts:
   us-sc:policies/income_tax/2026_full_year_resident_core#sc_pit_2026_candidate_net_capital_gain_deduction:
     description: South Carolina net-capital-gain deduction on aligned 2026 inputs
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     priority: high
@@ -3135,6 +3189,7 @@ concepts:
   us-ks:policies/income_tax/pilot_liability_pipeline#ks_pit_pilot_income_tax_liability:
     description: Kansas individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3149,6 +3204,7 @@ concepts:
   us-nd:policies/income_tax/pilot_liability_pipeline#nd_pit_pilot_income_tax_liability:
     description: North Dakota individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3163,6 +3219,7 @@ concepts:
   us-pa:policies/income_tax/pilot_liability_pipeline#pa_pit_pilot_income_tax_liability:
     description: Pennsylvania personal income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3177,6 +3234,7 @@ concepts:
   us-mo:policies/income_tax/pilot_liability_pipeline#mo_pit_pilot_income_tax_liability:
     description: Missouri individual income tax liability (ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3191,6 +3249,7 @@ concepts:
   us-ar:policies/income_tax/pilot_liability_pipeline#ar_pit_pilot_income_tax_before_non_refundable_credits_indiv:
     description: Arkansas Act 2 individual schedule component before nonrefundable credits, summed from Person to TaxUnit only for Populace comparison accounting
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     relative_tolerance: 0.0000001
@@ -3210,6 +3269,7 @@ concepts:
   us-ms:policies/income_tax/2026_section_27_7_5_schedule#ms_pit_2026_section_27_7_5_schedule_tax:
     description: Mississippi tax-year-2026 section 27-7-5 Person-grain schedule tax on caller-completed taxable income
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     priority: high
@@ -3227,6 +3287,7 @@ concepts:
   us-wv:policies/income_tax/pilot_liability_pipeline#wv_pit_pilot_income_tax_liability:
     description: West Virginia individual income tax liability (2026 section 11-21-4J ordinary resident wage-earner core)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3241,6 +3302,7 @@ concepts:
   us-vt:policies/income_tax/pilot_liability_pipeline#vt_pit_pilot_income_tax_liability:
     description: Vermont individual income tax liability before nonrefundable credits (completed current-year normal-tax boundary and independently encoded section 5822 three-percent federal-AGI minimum)
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3264,6 +3326,7 @@ concepts:
   us-ct:policies/income_tax/2026_resident_ordinary_tax_before_personal_credit#ct_pit_2026_resident_ordinary_tax_before_personal_credit:
     description: Connecticut full-year-resident section 12-700 ordinary tax before the personal tax credit
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     relative_tolerance: 0.0000001
@@ -3279,6 +3342,7 @@ concepts:
   us-dc:policies/income_tax/2026_section_47_1806_03_schedule_before_credits#dc_pit_2026_section_47_1806_03_schedule_before_credits:
     description: District of Columbia section 47-1806.03 schedule tax on completed DC taxable income, before credits
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     relative_tolerance: 0.0000001
@@ -3294,6 +3358,7 @@ concepts:
   us-ks:policies/income_tax/2026_k40es_schedule_before_credits#ks_pit_2026_k40es_schedule_before_credits:
     description: Kansas K-40ES schedule tax on completed Kansas taxable income, before credits
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     relative_tolerance: 0.0000001
@@ -3309,6 +3374,7 @@ concepts:
   us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_schedule_tax:
     description: Minnesota section 290.06 basic schedule tax on completed Minnesota taxable income, before credits
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 1
     priority: high
@@ -3323,6 +3389,7 @@ concepts:
   us-oh:policies/income_tax/pilot_liability_pipeline#oh_pit_pilot_schedule_tax:
     description: Ohio section 5747.02 nonbusiness schedule tax on completed Ohio taxable nonbusiness income, before nonrefundable credits
     category: tax
+    case_unit: tax_unit
     comparison: amount
     tolerance: 0.01
     relative_tolerance: 0.0000001
