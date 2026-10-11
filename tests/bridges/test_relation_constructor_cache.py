@@ -117,6 +117,33 @@ def test_constructor_aliases_reuse_the_same_analysis(monkeypatch):
     assert len(calls) == 2
 
 
+@settings(deadline=None)
+@given(
+    owner_slot=st.integers(0, 1),
+    namespaces=st.lists(st.integers(), min_size=2, max_size=30, unique=True),
+)
+def test_constructor_aliases_share_one_expected_kind_cache_entry(owner_slot, namespaces):
+    artifact = _artifact(owner_slot)
+    schema = artifact["program"]["relations"][0]
+    schema.update(name="example:module#relation.members", id="example:relation-id")
+    before = deepcopy(artifact)
+    aliases = ["members", schema["name"], schema["id"], *(
+        f"namespace-{namespace}#relation.members" for namespace in namespaces
+    )]
+    expected = ["house", "person"] if owner_slot == 0 else ["person", "house"]
+    for alias in aliases:
+        assert relation_binding.relation_tuple(
+            artifact, alias, owner_id="house", owner_kind="Household",
+            related_id="person", related_kind="Person",
+        ) == expected
+
+    entry = relation_binding._ARTIFACT_RELATION_CACHE[id(artifact)]
+    assert len(entry.analyses) == 1
+    analysis = next(iter(entry.analyses.values()))
+    assert set(analysis._expected_by_name) == {schema["name"]}
+    assert artifact == before
+
+
 def test_constructor_cache_retains_bounded_artifacts_and_hints(monkeypatch):
     monkeypatch.setattr(relation_binding, "_MAX_CACHED_ARTIFACTS", 2)
     monkeypatch.setattr(relation_binding, "_MAX_CACHED_CONSTRUCTOR_HINTS", 2)

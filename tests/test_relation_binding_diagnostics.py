@@ -119,8 +119,7 @@ def test_repeated_batch_names_count_in_report_provenance(tmp_path):
     assert diagnostics["count"] == 50
     assert diagnostics["by_relation"] == {"members": 50}
     assert len(diagnostics["samples"]) == 20
-    assert diagnostics["samples"][0]["case_id"] == "first"
-    assert diagnostics["samples"][0]["engine"] == "axiom"
+    assert diagnostics["samples"] == [{"relation": "members"}] * 20
     path = tmp_path / "report.json"
     accumulator.write_json(path)
     assert json.loads(path.read_text())["provenance"] == report["provenance"]

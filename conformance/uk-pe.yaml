@@ -90,7 +90,12 @@ policies:
     internal_only_vars:
       - child_benefit
       - child_benefit_entitlement
-    suite: uk-tax-benefits-efrs
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained historical
+      rows contain no same-case returned Axiom/oracle pair bound to this registered final output; counts
+      and intermediate rows cannot supply it. Rerun `uk-tax-benefits-efrs` retaining same-case returned
+      values from both engines and explicit comparison bindings for `child_benefit_respective_amount`;
+      then re-register.'
   - id: uk-pe:council_tax
     oracle_policy_name: council_tax
     oracle_policy_type: pure_input
@@ -186,7 +191,12 @@ policies:
       - housing_benefit
       - housing_benefit_applicable_amount
     in_scope: true
-    suite: uk-tax-benefits-efrs
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained historical
+      rows contain no same-case returned Axiom/oracle pair bound to this registered final output; counts
+      and intermediate rows cannot supply it. Rerun `uk-tax-benefits-efrs` retaining same-case returned
+      values from both engines and explicit comparison bindings for a registered output (housing_benefit,
+      housing_benefit_applicable_amount); then re-register.'
   - id: uk-pe:incapacity_benefit
     oracle_policy_name: incapacity_benefit
     oracle_policy_type: pure_input
@@ -207,7 +217,12 @@ policies:
       - income_tax
       - personal_allowance
     in_scope: true
-    suite: uk-tax-benefits-efrs
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained historical
+      rows contain no same-case returned Axiom/oracle pair bound to this registered final output; counts
+      and intermediate rows cannot supply it. Rerun `uk-tax-benefits-efrs` retaining same-case returned
+      values from both engines and explicit comparison bindings for a registered output (income_tax, personal_allowance);
+      then re-register.'
   - id: uk-pe:lbtt_ltt
     oracle_policy_name: lbtt_ltt
     oracle_policy_type: rules
@@ -219,10 +234,10 @@ policies:
     note: Covered by the uk-lbtt-ltt case-grid suite. The rulespec modules (uk/policies/govuk/lbtt.yaml,
       SSI 2015/126 + LBTT(S)A 2013 Sch 2A; uk/policies/govuk/ltt.yaml, WSI 2018/128 + LTT(W)A 2017 s.24)
       reproduce PE-UK's land_and_buildings_transaction_tax and land_transaction_tax band splits on the
-      supplied main and additional residential purchase prices. LBTT main-home purchases match to the penny;
-      the LBTT Additional Dwelling Supplement (PE-UK 6% vs the statutory 8% from 5 December 2024) and the
-      stale Welsh LTT primary and higher-rate scales are dispositioned as upstream PolicyEngine staleness
-      (matrix row 31 → LBTT(S)A 2013 / LTT(W)A 2017; PolicyEngine-UK #1795, #1796).
+      supplied main and additional residential purchase prices. LBTT main-home purchases match to the
+      penny; the LBTT Additional Dwelling Supplement (PE-UK 6% vs the statutory 8% from 5 December 2024)
+      and the stale Welsh LTT primary and higher-rate scales are dispositioned as upstream PolicyEngine
+      staleness (matrix row 31 → LBTT(S)A 2013 / LTT(W)A 2017; PolicyEngine-UK
   - id: uk-pe:legacy_means_tested
     oracle_policy_name: legacy_means_tested
     oracle_policy_type: rules
@@ -248,7 +263,11 @@ policies:
     output_vars:
       - marriage_allowance
     in_scope: true
-    suite: uk-tax-benefits-efrs
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained historical
+      rows contain no same-case returned Axiom/oracle pair bound to this registered final output; counts
+      and intermediate rows cannot supply it. Rerun `uk-tax-benefits-efrs` retaining same-case returned
+      values from both engines and explicit comparison bindings for `marriage_allowance`; then re-register.'
   - id: uk-pe:national_insurance
     oracle_policy_name: national_insurance
     oracle_policy_type: rules
@@ -261,7 +280,12 @@ policies:
     in_scope: true
     internal_only_vars:
       - national_insurance
-    suite: uk-tax-benefits-efrs
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained historical
+      rows contain no same-case returned Axiom/oracle pair bound to this registered final output; counts
+      and intermediate rows cannot supply it. Rerun `uk-tax-benefits-efrs` retaining same-case returned
+      values from both engines and explicit comparison bindings for a registered output (ni_class_1_employee_primary,
+      ni_class_1_employee_additional, ni_class_4_main, ni_class_4_maximum, ni_class_2); then re-register.'
   - id: uk-pe:pension_credit
     oracle_policy_name: pension_credit
     oracle_policy_type: rules
@@ -270,7 +294,12 @@ policies:
       - guarantee_credit
       - savings_credit
     in_scope: true
-    suite: uk-tax-benefits-efrs
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained historical
+      rows contain no same-case returned Axiom/oracle pair bound to this registered final output; counts
+      and intermediate rows cannot supply it. Rerun `uk-tax-benefits-efrs` retaining same-case returned
+      values from both engines and explicit comparison bindings for a registered output (pension_credit,
+      guarantee_credit, savings_credit); then re-register.'
   - id: uk-pe:pip
     oracle_policy_name: pip
     oracle_policy_type: rate_from_category
@@ -280,18 +309,26 @@ policies:
     in_scope: true
     internal_only_vars:
       - pip
-    suite: uk-tax-benefits-efrs
+    suite: null
     comparability: rate_only
-    note: rates-given-category — PE-UK applies the PIP daily-living/mobility rate tables over a frozen
+    note: 'rates-given-category — PE-UK applies the PIP daily-living/mobility rate tables over a frozen
       pip_dl_category/pip_m_category FRS input, so the comparison binds the rate schedule, not the award-eligibility
-      rules. Compared via personal-independence-payment-final (matrix row 8).
+      rules. Compared via personal-independence-payment-final (matrix row 8). Current coverage retracted
+      under the same-case execution evidence rule: The retained historical rows contain no same-case returned
+      Axiom/oracle pair bound to this registered final output; counts and intermediate rows cannot supply
+      it. Rerun `uk-tax-benefits-efrs` retaining same-case returned values from both engines and explicit
+      comparison bindings for a registered output (pip_dl, pip_m); then re-register.'
   - id: uk-pe:scottish_child_payment
     oracle_policy_name: scottish_child_payment
     oracle_policy_type: rules
     output_vars:
       - scottish_child_payment
     in_scope: true
-    suite: uk-tax-benefits-efrs
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained historical
+      rows contain no same-case returned Axiom/oracle pair bound to this registered final output; counts
+      and intermediate rows cannot supply it. Rerun `uk-tax-benefits-efrs` retaining same-case returned
+      values from both engines and explicit comparison bindings for `scottish_child_payment`; then re-register.'
   - id: uk-pe:sda
     oracle_policy_name: sda
     oracle_policy_type: reported_ceiling
@@ -355,7 +392,12 @@ policies:
       - student_loan_repayments
       - student_loan_repayment
     in_scope: true
-    suite: uk-tax-benefits-efrs
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained historical
+      rows contain no same-case returned Axiom/oracle pair bound to this registered final output; counts
+      and intermediate rows cannot supply it. Rerun `uk-tax-benefits-efrs` retaining same-case returned
+      values from both engines and explicit comparison bindings for a registered output (student_loan_repayments,
+      student_loan_repayment); then re-register.'
   - id: uk-pe:tax_free_childcare
     oracle_policy_name: tax_free_childcare
     oracle_policy_type: rules
@@ -392,7 +434,11 @@ policies:
     output_vars:
       - universal_credit
     in_scope: true
-    suite: uk-universal-credit-efrs
+    suite: null
+    note: 'Current coverage retracted under the same-case execution evidence rule: The retained historical
+      rows contain no same-case returned Axiom/oracle pair bound to this registered final output; counts
+      and intermediate rows cannot supply it. Rerun `uk-universal-credit-efrs` retaining same-case returned
+      values from both engines and explicit comparison bindings for `universal_credit`; then re-register.'
   - id: uk-pe:vat
     oracle_policy_name: vat
     oracle_policy_type: rules

@@ -105,6 +105,13 @@ FIIT_SURFACE_CONCEPTS: dict[str, dict] = {
         "category": "tax",
         "tolerance": 5,
     },
+    "income-tax": {
+        "concept": "us:tax/federal-income-tax#income_tax",
+        "description": "Federal income tax and refundable credits",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
     "nonrefundable-credits": {
         "concept": "us:tax/federal-income-tax#nonrefundable_credits",
         "description": "Federal capped nonrefundable credits",
@@ -1429,12 +1436,16 @@ def _preserve_relation_binding_diagnostics(
     provenance: dict,
     existing_provenance: object,
 ) -> dict:
-    """Keep run diagnostics while replacing other runner provenance."""
+    """Keep public-safe run diagnostics while replacing runner provenance."""
+    from axiom_oracles.bridges.relation_binding import public_relation_binding_diagnostics
+
     combined = dict(provenance)
+    key = "relation_binding_diagnostics"
+    if key in combined:
+        combined[key] = public_relation_binding_diagnostics(combined[key])
     if isinstance(existing_provenance, dict):
-        key = "relation_binding_diagnostics"
         if key in existing_provenance:
-            combined[key] = existing_provenance[key]
+            combined[key] = public_relation_binding_diagnostics(existing_provenance[key])
     return combined
 
 
@@ -1477,6 +1488,10 @@ def _stamp_report_provenance(
     else:
         data["provenance"] = _preserve_relation_binding_diagnostics(
             provenance, existing_provenance
+        )
+    if preserve_runner_provenance:
+        data["provenance"] = _preserve_relation_binding_diagnostics(
+            data["provenance"], data["provenance"],
         )
     engines = data.get("engines")
     if require_engine_versions and not isinstance(engines, dict):
@@ -1901,6 +1916,11 @@ def _compose_uk_universal_credit_program(params: dict) -> Path | None:
 
 
 def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
+    from axiom_oracles.bridges.relation_binding import (
+        merge_relation_binding_diagnostics,
+        public_relation_binding_diagnostics,
+    )
+
     if not reports:
         return {
             "compared_persons": 0,
@@ -1908,6 +1928,7 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
             "compared_values": 0,
             "mismatch_count": 0,
             "mismatches": [],
+            "errors": [],
             "oracle_divergence_count": 0,
             "oracle_divergences": [],
             "output_summary": [],
@@ -1915,12 +1936,18 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
             "projection_notes": [],
         }
     if len(reports) == 1:
-        return reports[0]
+        report = dict(reports[0])
+        if "provenance" in report:
+            report["provenance"] = _preserve_relation_binding_diagnostics(
+                report["provenance"], report["provenance"],
+            )
+        return report
     merged = {
         "compared_persons": max(r.get("compared_persons", 0) for r in reports),
         "compared_benunits": max(r.get("compared_benunits", 0) for r in reports),
         "compared_values": sum(r.get("compared_values", 0) for r in reports),
         "mismatches": [],
+        "errors": [],
         "oracle_divergences": [],
         "output_summary": [],
         "skipped_surfaces": [],
@@ -1928,7 +1955,12 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
     }
     seen_notes: set[str] = set()
     seen_skipped: set[str] = set()
+    diagnostics: dict = {}
     for report in reports:
+        merge_relation_binding_diagnostics(diagnostics, public_relation_binding_diagnostics(
+            (report.get("provenance") or {}).get("relation_binding_diagnostics", {}),
+        ))
+        merged["errors"].extend(report.get("errors") or [])
         merged["mismatches"].extend(report.get("mismatches", []))
         merged["oracle_divergences"].extend(report.get("oracle_divergences", []))
         merged["output_summary"].extend(report.get("output_summary", []))
@@ -1943,6 +1975,8 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
                 merged["projection_notes"].append(note)
     merged["mismatch_count"] = len(merged["mismatches"])
     merged["oracle_divergence_count"] = len(merged["oracle_divergences"])
+    if diagnostics.get("count"):
+        merged["provenance"] = {"relation_binding_diagnostics": diagnostics}
     return merged
 
 
@@ -4838,6 +4872,9 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     """Convert uk-efrs-compare output to axiom.comparison_report.v2."""
     from collections import Counter, defaultdict
 
+    from axiom_oracles.bridges.efrs_uk import SURFACE_SPECS
+    from axiom_oracles.conformance.observations import json_output_values
+
     dashboard_config = config.get("dashboard") or {}
     parent_concept = dashboard_config.get("parent_concept", UK_UNIVERSAL_CREDIT_PARENT)
     parent_category = dashboard_config.get("parent_category", "benefits")
@@ -4872,6 +4909,21 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         for row in raw.get("output_summary", [])
         if spec_for(row)
     }
+    output_bindings = {}
+    for row in by_output.values():
+        native_surface = SURFACE_SPECS.get(row.get("surface"))
+        native_output = (
+            native_surface.outputs.get(row.get("output"), {})
+            if native_surface is not None
+            else {}
+        )
+        # A native expression is not a returned final PolicyEngine variable.
+        # Keep that oracle binding explicitly unresolved rather than infer one
+        # from the dashboard concept's generic mapping.
+        output_bindings[spec_for(row)["concept"]] = {
+            "axiom": native_output.get("axiom", []),
+            "policyengine": native_output.get("pe", []),
+        }
     mismatch_rows = [
         {**row, "kind": "amount_difference"}
         for row in raw.get("mismatches", [])
@@ -5006,6 +5058,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
     cases_by_entity: dict[str, list[dict]] = defaultdict(list)
     flat_mismatches: list[dict] = []
+    observed_outputs: list[dict] = []
     for row in visible_difference_rows:
         spec = spec_for(row)
         if spec is None:
@@ -5019,15 +5072,36 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "difference": row.get("diff", 0),
             "issue_url": row.get("issue_url"),
             "kind": kind,
-            "left": row.get("axiom", 0),
+            "left": row.get("axiom"),
             "parent": parent_concept,
             "relative_tolerance": 2e-7,
-            "right": row.get("policyengine", 0),
+            "right": row.get("policyengine"),
             "surface": row.get("surface"),
             "tolerance": 0.01,
         }
         cases_by_entity[str(row["entity_id"])].append(mismatch)
         flat_mismatches.append(mismatch)
+        for key in ("error", "errors", "skipped", "skip_reason", "executed"):
+            if key in row:
+                mismatch[key] = row[key]
+        bindings = output_bindings.get(spec["concept"], {})
+        for engine in ("axiom", "policyengine"):
+            variable = bindings.get(engine)
+            if isinstance(variable, str) and variable:
+                observed_outputs.append(
+                    {
+                        "case_id": mismatch["case_id"],
+                        "concept": spec["concept"],
+                        "engine": engine,
+                        "variable": variable,
+                        "value": row.get(engine),
+                        **{
+                            key: row[key]
+                            for key in ("error", "errors", "skipped", "skip_reason", "executed")
+                            if key in row
+                        },
+                    }
+                )
 
     cases = []
     for entity_id, case_mismatches in cases_by_entity.items():
@@ -5082,7 +5156,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             }
         )
 
-    return {
+    report = {
         "aggregates": aggregates,
         "case_count": raw.get("compared_persons", 0) + raw.get("compared_benunits", 0),
         "cases": cases,
@@ -5091,6 +5165,8 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "errors": [],
         "locales": ["UK"],
         "mismatches": flat_mismatches,
+        "observed_outputs": observed_outputs,
+        "output_bindings": output_bindings,
         "population": "enhanced-frs",
         "projection_notes": raw.get("projection_notes", []),
         "schema_version": "axiom.comparison_report.v2",
@@ -5099,8 +5175,11 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "summary": {
             "alarms": alarms,
             "comparison_count": parent_compared,
-            "error_count": 0,
-            "errors_by_engine": {},
+            "error_count": len(raw.get("errors") or []),
+            "errors_by_engine": dict(Counter(
+                row.get("engine", "axiom") for row in raw.get("errors") or []
+                if isinstance(row, dict)
+            )),
             "known_policyengine_divergence_count": parent_known_divergences,
             "match_count": parent_matched,
             "mismatch_count": parent_mismatches,
@@ -5117,6 +5196,10 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             },
         },
     }
+    for key in ("error", "errors", "skipped", "skip_reason", "executed"):
+        if key in raw:
+            report[key] = raw[key]
+    return json_output_values(report)
 
 
 def _limit_rows_by_output(rows: list[dict], *, limit_per_output: int) -> list[dict]:
@@ -5184,6 +5267,10 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     """
     from collections import Counter, defaultdict
 
+    from axiom_oracles.conformance.attestation import EXECUTION_ATTESTATION_SCHEMA
+    from axiom_oracles.conformance.fiit import FIIT_SURFACE_CONCEPT_IDS, fiit_output_rows
+    from axiom_oracles.conformance.observations import valid_case_id
+
     identity = _normalize_dataset_identity(raw)
     dataset_label = _dataset_label_from_identity(identity, fallback="enhanced_cps")
 
@@ -5206,7 +5293,10 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             continue
         compared = sum(r["compared"] for r in rows)
         mismatches = sum(r["mismatches"] for r in rows)
-        matched = compared - mismatches
+        # Invalid returns remain diagnostic mismatches with engine errors,
+        # but have no arithmetic comparison weight and cannot consume a match.
+        uncompared_mismatches = sum(r.get("uncompared_mismatches", 0) for r in rows)
+        matched = compared - (mismatches - uncompared_mismatches)
         match_rate = (matched / compared * 100) if compared else 100.0
         aggregates.append(
             {
@@ -5221,7 +5311,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "match_rate": match_rate,
                 "match_weight": matched,
                 "mismatch_count": mismatches,
-                "mismatch_weight": mismatches,
+                "uncompared_mismatches": uncompared_mismatches,
+                "mismatch_weight": mismatches - uncompared_mismatches,
                 "missing_both_count": 0,
                 "missing_left_count": 0,
                 "missing_right_count": 0,
@@ -5235,7 +5326,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
     parent_compared = raw.get("compared_values", 0)
     parent_mismatches = raw.get("mismatch_count", 0)
-    parent_matched = parent_compared - parent_mismatches
+    parent_uncompared_mismatches = raw.get("uncompared_mismatches", 0)
+    parent_matched = parent_compared - (parent_mismatches - parent_uncompared_mismatches)
     parent_rate = (parent_matched / parent_compared * 100) if parent_compared else 100.0
     aggregates.insert(
         0,
@@ -5251,7 +5343,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "match_rate": parent_rate,
             "match_weight": parent_matched,
             "mismatch_count": parent_mismatches,
-            "mismatch_weight": parent_mismatches,
+            "uncompared_mismatches": parent_uncompared_mismatches,
+            "mismatch_weight": parent_mismatches - parent_uncompared_mismatches,
             "missing_both_count": 0,
             "missing_left_count": 0,
             "missing_right_count": 0,
@@ -5356,19 +5449,40 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "cases": cases,
         "concepts": concepts,
         "engines": {"left": "axiom", "right": "policyengine"},
-        "errors": [],
+        "errors": raw.get("errors") or [],
         "locales": [],
         "mismatches": flat_mismatches,
+        # Preserve the producer's output-level evidence; surface aggregates
+        # cannot distinguish a subset from the full configured output list.
+        "output_summary": raw.get("output_summary", []),
+        # Preserve actual returned values, including invalid diagnostics.
+        "observed_outputs": [
+            {
+                **row,
+                "case_id": (
+                    f"ecps-{row['case_id']}"
+                    if valid_case_id(row.get("case_id"))
+                    else row.get("case_id")
+                ),
+                "concept": FIIT_SURFACE_CONCEPT_IDS.get(row.get("surface")),
+            }
+            for row in raw.get("observed_outputs") or []
+            if isinstance(row, dict)
+        ],
         "population": "enhanced-cps",
         "schema_version": "axiom.comparison_report.v2",
         "scope": {"geoid": "US", "type": "country"},
         "suite": suite,
         "summary": {
             "comparison_count": parent_compared,
-            "error_count": 0,
-            "errors_by_engine": {},
+            "error_count": len(raw.get("errors") or []),
+            "errors_by_engine": dict(Counter(
+                row.get("engine", "axiom") for row in raw.get("errors") or []
+                if isinstance(row, dict)
+            )),
             "match_count": parent_matched,
             "mismatch_count": parent_mismatches,
+            "uncompared_mismatches": parent_uncompared_mismatches,
             "mismatches_by_concept": mismatches_by_concept,
             "mismatches_by_kind": [
                 {"value": "amount_difference", "count": parent_mismatches}
@@ -5378,10 +5492,33 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "comparison_weight": parent_compared,
                 "match_rate": parent_rate,
                 "match_weight": parent_matched,
-                "mismatch_weight": parent_mismatches,
+                "mismatch_weight": parent_mismatches - parent_uncompared_mismatches,
             },
         },
     }
+    for key in ("error", "skipped", "skip_reason", "executed"):
+        if key in raw:
+            report[key] = raw[key]
+    report["attestation"] = {
+        "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+        "executed": (
+            report["case_count"] > 0 and parent_compared > 0
+            and raw.get("executed", True) is True
+            and not any(raw.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
+        ),
+        "case_count": report["case_count"],
+        "comparison_count": parent_compared,
+        "error_count": report["summary"]["error_count"],
+        "engines": dict(report["engines"]),
+        **{key: raw[key] for key in ("error", "skipped", "skip_reason") if key in raw},
+    }
+    output_rows, outputs_complete = fiit_output_rows(
+        report["output_summary"], report=report,
+    )
+    report["attestation"].update(
+        outputs=output_rows,
+        outputs_complete=outputs_complete,
+    )
     # Thread encode's dataset identity onto the report top-level so the
     # checked-in FIIT report records which pinned Populace artifact produced
     # it — and so it survives even when `cases` is slimmed to empty on a run
@@ -6037,6 +6174,10 @@ def _write_dashboard_report(
     from axiom_oracles.comparison.report import strip_heavy_case_metadata
 
     report = _merge_dispositions(report)
+    report = dict(report)
+    for key in ("provenance", "dataset_identity"):
+        if isinstance(report.get(key), dict):
+            report[key] = _preserve_relation_binding_diagnostics(report[key], report[key])
     versioned_case_chunks = _uses_versioned_case_chunks(report)
     if preserve_existing_versioned and versioned_case_chunks:
         # A skip-capable runner copied the committed dashboard view and did

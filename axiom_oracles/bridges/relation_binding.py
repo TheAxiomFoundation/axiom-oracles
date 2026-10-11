@@ -11,6 +11,7 @@ from collections import Counter, OrderedDict, defaultdict
 from collections.abc import Callable, Iterable
 from copy import deepcopy
 from dataclasses import dataclass, field
+import re
 from typing import Any
 import warnings
 
@@ -348,9 +349,14 @@ class _ArtifactRelations:
                 self._walk(child, entity, context)
 
     def expected(self, name: str) -> list[str | None] | None:
-        if name not in self._expected_by_name:
-            self._expected_by_name[name] = self._expected(name)
-        expected = self._expected_by_name[name]
+        schema = self.schema(name)
+        if schema is None:
+            return None
+        # Namespace aliases share one entry; unknown names are not retained.
+        key = schema["name"]
+        if key not in self._expected_by_name:
+            self._expected_by_name[key] = self._expected(name)
+        expected = self._expected_by_name[key]
         return list(expected) if expected is not None else None
 
     def _expected(self, name: str) -> list[str | None] | None:
@@ -690,6 +696,32 @@ def merge_relation_binding_diagnostics(target: dict, source: dict) -> None:
     target["samples"] = (target.get("samples", []) + source.get("samples", []))[
         :RELATION_BINDING_SAMPLE_LIMIT
     ]
+
+
+def public_relation_binding_diagnostics(source: dict[str, Any]) -> dict[str, Any]:
+    """Publish counts and bounded relation names without request identifiers.
+
+    Exact endpoint samples remain in native execution evidence. Namespace
+    aliases can contain caller data, so only a bounded identifier fragment is
+    retained; other names share a redacted bucket whose counts are summed.
+    """
+    def safe_name(name: Any) -> str:
+        fragment = _fragment(name) if isinstance(name, str) else ""
+        if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.-]{0,127}", fragment):
+            return fragment
+        return "redacted_relation"
+
+    counts: Counter[str] = Counter()
+    for name, count in source.get("by_relation", {}).items():
+        counts[safe_name(name)] += count
+    return {
+        "count": source.get("count", 0),
+        "by_relation": dict(counts),
+        "samples": [
+            {"relation": safe_name(sample.get("relation"))}
+            for sample in source.get("samples", [])[:RELATION_BINDING_SAMPLE_LIMIT]
+        ],
+    }
 
 
 def attach_relation_binding_diagnostics(

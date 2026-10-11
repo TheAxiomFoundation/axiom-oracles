@@ -1,36 +1,43 @@
 # axiom_oracles.conformance_ratchet.v1 — GENERATED; advance only via the ratchet script.
 schema: axiom_oracles.conformance_ratchet.v1
 _comment: Conformance ratchets — monotonic floors/ceilings enforced by scripts/conformance_ratchet.py
-  --check. covered_min may only rise; unexplained_max and axiom_attributed_open_max may only fall. Re-pin
-  with `uv run scripts/conformance_ratchet.py` after a genuine improvement; the gate refuses regressions.
+  --check. covered_min may only rise; unexplained_max, axiom_attributed_open_max and bridge_artifacts_max
+  may only fall. Re-pin with `uv run scripts/conformance_ratchet.py` after a genuine improvement; the
+  gate refuses regressions.
 ratchets:
 - jurisdiction: be
-  covered_min: 23
+  covered_min: 10
   unexplained_max: 0
   axiom_attributed_open_max: 0
+  bridge_artifacts_max: 0
   policies_in_scope: 23
 - jurisdiction: dk
   covered_min: 1
   unexplained_max: 0
   axiom_attributed_open_max: 0
+  bridge_artifacts_max: 0
   policies_in_scope: 22
 - jurisdiction: uk
-  covered_min: 21
+  covered_min: 6
   unexplained_max: 0
   axiom_attributed_open_max: 0
+  bridge_artifacts_max: 0
   policies_in_scope: 21
 - jurisdiction: uk-pe
-  covered_min: 23
+  covered_min: 13
   unexplained_max: 0
   axiom_attributed_open_max: 0
+  bridge_artifacts_max: 0
   policies_in_scope: 23
 - jurisdiction: us-pe
-  covered_min: 36
+  covered_min: 15
   unexplained_max: 0
   axiom_attributed_open_max: 0
+  bridge_artifacts_max: 3210
   policies_in_scope: 127
 - jurisdiction: us-tariff-yale
-  covered_min: 10
+  covered_min: 8
   unexplained_max: 0
   axiom_attributed_open_max: 0
+  bridge_artifacts_max: 0
   policies_in_scope: 10

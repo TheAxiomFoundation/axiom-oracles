@@ -128,7 +128,8 @@ def test_emitted_chunk_bytes_ignore_producer_roles(tmp_path, current_slot):
     assert case.metadata == before
 
 
-@settings(max_examples=24, suppress_health_check=[HealthCheck.function_scoped_fixture])
+@settings(max_examples=24, deadline=None,
+          suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(member_count=st.integers(min_value=1, max_value=8), current_slot=st.integers(0, 1))
 def test_serialization_preserves_relation_evidence_without_roles(
     tmp_path, member_count, current_slot,

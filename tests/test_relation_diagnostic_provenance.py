@@ -1,4 +1,4 @@
-"""Registry provenance stamping keeps this run's relation diagnostics."""
+"""Registry provenance stamping publishes counts without relation endpoints."""
 
 import importlib.util
 import json
@@ -23,7 +23,16 @@ def _diagnostics(count=2):
     return {
         "count": count,
         "by_relation": {"members": count},
-        "samples": [{"relation": "members", "tuple": ["member", "owner"]}],
+        "samples": [{"relation": "members", "tuple": [
+            "SSN-123-45-6789", "</script><img src=x onerror=alert(1)>",
+        ]}],
+    }
+
+
+def _published_diagnostics(count=2):
+    return {
+        "count": count, "by_relation": {"members": count},
+        "samples": [{"relation": "members"}],
     }
 
 
@@ -31,7 +40,10 @@ def _fresh_provenance():
     return {"generated_at": "2026-10-11T00:00:00Z", "run_kind": "manual"}
 
 
-def test_stamp_preserves_only_relation_diagnostics_from_report(tmp_path):
+@pytest.mark.parametrize("preserve_runner_provenance", [False, True])
+def test_stamp_preserves_only_relation_diagnostics_from_report(
+    tmp_path, preserve_runner_provenance,
+):
     registry = _registry()
     path = tmp_path / "report.json"
     diagnostics = _diagnostics()
@@ -42,11 +54,17 @@ def test_stamp_preserves_only_relation_diagnostics_from_report(tmp_path):
         "relation_binding_diagnostics": diagnostics,
     }}))
 
-    registry._stamp_report_provenance(path, fresh, preserve_runner_provenance=False)
+    registry._stamp_report_provenance(
+        path, fresh, preserve_runner_provenance=preserve_runner_provenance,
+    )
 
-    assert json.loads(path.read_text())["provenance"] == {
-        **fresh, "relation_binding_diagnostics": diagnostics,
-    }
+    expected = {**fresh, "relation_binding_diagnostics": _published_diagnostics()}
+    if preserve_runner_provenance:
+        expected.update({
+            "generated_at": "stale", "obsolete_runner_key": True,
+            "registry_run": {"generated_by": None, "generated_at": fresh["generated_at"]},
+        })
+    assert json.loads(path.read_text())["provenance"] == expected
     assert fresh == before
 
 
@@ -86,7 +104,7 @@ def test_registry_publication_keeps_relation_diagnostics(tmp_path, monkeypatch, 
     [full] = reports.glob("*.json")
     path = full if artifact == "full" else dashboard / "diagnostic-suite.json"
     assert json.loads(path.read_text())["provenance"] == {
-        **fresh, "relation_binding_diagnostics": diagnostics,
+        **fresh, "relation_binding_diagnostics": _published_diagnostics(),
     }
 
 
@@ -101,7 +119,7 @@ def test_native_report_adaptation_keeps_relation_diagnostics(tmp_path, runner_ty
         "relation_binding_diagnostics": diagnostics,
     }}))
     adapted = registry._adapt_to_v2(path, runner_type, {}, suite="diagnostic-suite")
-    assert adapted["provenance"]["relation_binding_diagnostics"] == diagnostics
+    assert adapted["provenance"]["relation_binding_diagnostics"] == _published_diagnostics()
 
 
 @pytest.mark.parametrize("sidecar", ["diagnostics", "identity-only", "missing", "malformed"])
@@ -139,7 +157,9 @@ def test_snap_csv_runner_transfers_only_sidecar_diagnostics(tmp_path, monkeypatc
     )
     report = json.loads(path.read_text())
     if sidecar == "diagnostics":
-        assert report["provenance"] == {"relation_binding_diagnostics": diagnostics}
+        assert report["provenance"] == {
+            "relation_binding_diagnostics": _published_diagnostics(7),
+        }
     else:
         assert "provenance" not in report
     assert "dataset_identity" not in report
@@ -148,7 +168,8 @@ def test_snap_csv_runner_transfers_only_sidecar_diagnostics(tmp_path, monkeypatc
     assert report["case_count"] == 1
 
 
-@settings(max_examples=16, suppress_health_check=[HealthCheck.function_scoped_fixture])
+@settings(max_examples=16, deadline=None,
+          suppress_health_check=[HealthCheck.function_scoped_fixture])
 @given(count=st.integers(min_value=1, max_value=200), stale=st.dictionaries(
     st.text(alphabet="abcdefgh", min_size=1, max_size=8), st.integers(), max_size=8,
 ))
@@ -163,5 +184,5 @@ def test_stamping_preserves_diagnostic_counts_without_stale_keys(tmp_path, count
     }}))
     registry._stamp_report_provenance(path, fresh)
     assert json.loads(path.read_text())["provenance"] == {
-        **fresh, "relation_binding_diagnostics": diagnostics,
+        **fresh, "relation_binding_diagnostics": _published_diagnostics(count),
     }

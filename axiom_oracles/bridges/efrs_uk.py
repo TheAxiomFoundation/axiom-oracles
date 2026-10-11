@@ -14,14 +14,18 @@ import json
 import math
 import sys
 from collections import Counter, defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, Callable
 
 import yaml
 
-from .relation_binding import relation_tuple
+from .relation_binding import (
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
+    relation_tuple,
+)
 from .tax_populace import (
     _version_tuple,
     input_record,
@@ -1903,9 +1907,13 @@ class UKEFRSComparisonReport:
     skipped_surfaces: list[dict[str, str]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
+    errors: list[dict[str, Any]] = field(default_factory=list)
+    relation_binding_diagnostics: dict[str, Any] = field(default_factory=dict)
 
     def to_json(self) -> dict[str, Any]:
-        return {
+        from axiom_oracles.conformance.observations import json_output_values
+
+        return json_output_values({
             "compared_persons": self.compared_persons,
             "compared_benunits": self.compared_benunits,
             "compared_values": self.compared_values,
@@ -1917,7 +1925,13 @@ class UKEFRSComparisonReport:
             "skipped_surfaces": self.skipped_surfaces,
             "projection_notes": self.projection_notes,
             "dataset_identity": self.dataset_identity,
-        }
+            "errors": self.errors,
+            **({"provenance": {
+                "relation_binding_diagnostics": public_relation_binding_diagnostics(
+                    self.relation_binding_diagnostics,
+                ),
+            }} if self.relation_binding_diagnostics.get("count") else {}),
+        })
 
 
 def configure_parser(parser: argparse.ArgumentParser) -> None:
@@ -6578,6 +6592,8 @@ def compare_outputs(
 ) -> UKEFRSComparisonReport:
     mismatches: list[UKEFRSComparisonRow] = []
     oracle_divergences: list[UKEFRSOracleDivergence] = []
+    errors: list[dict[str, Any]] = []
+    diagnostics: dict[str, Any] = {}
     summary: dict[str, dict[str, Any]] = {
         f"{surface}:{name}": {
             "surface": surface,
@@ -6602,8 +6618,28 @@ def compare_outputs(
                 f"for {len(persons):,} PolicyEngine rows"
             )
         for index, result in enumerate(axiom_outputs):
+            merge_relation_binding_diagnostics(diagnostics, public_relation_binding_diagnostics(
+                result.get("relation_binding_diagnostics") or {},
+            ))
             pe_row = persons[index]
             entity_id = entity_id_for_surface(surface, pe_row)
+            if (
+                any(result.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
+                or ("executed" in result and result["executed"] is not True)
+            ):
+                # Keep stop evidence independently of displayed mismatches,
+                # including results whose returned values would have matched.
+                errors.append({
+                    "engine": "axiom",
+                    "case_id": entity_id,
+                    "surface": surface,
+                    **{
+                        key: result[key]
+                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
+                        if key in result
+                    },
+                })
+                continue
             outputs = result.get("outputs") or {}
             for name, spec in output_specs.items():
                 if not output_applies(spec, pe_row):
@@ -6660,6 +6696,8 @@ def compare_outputs(
         oracle_divergences=oracle_divergences,
         output_summary=list(summary.values()),
         dataset_identity=pe_data.get("dataset_identity") or None,
+        errors=errors,
+        relation_binding_diagnostics=diagnostics,
         skipped_surfaces=SKIPPED_SURFACES,
         projection_notes=[
             "Personal allowance projection supplies validation-population adjusted net income "
@@ -6915,11 +6953,10 @@ def policyengine_output_value(spec: dict[str, Any], row: Any) -> float:
     if spec.get("pe_transform") == "annual_to_weekly":
         return raw_value / WEEKS_IN_YEAR
     if spec.get("pe_transform") == "annual_to_weekly_per_carer":
-        return (
-            raw_value
-            / WEEKS_IN_YEAR
-            / max(1, int(money(row_value(row, "num_carers", 0))))
-        )
+        carers = row_value(row, "num_carers")
+        if carers is None or not math.isfinite(float(carers)):
+            return math.nan
+        return raw_value / WEEKS_IN_YEAR / max(1, int(carers))
     if spec.get("pe_transform") == "annual_to_monthly":
         return raw_value / MONTHS_IN_YEAR
     return raw_value
@@ -6928,12 +6965,21 @@ def policyengine_output_value(spec: dict[str, Any], row: Any) -> float:
 def policyengine_raw_output_value(spec: dict[str, Any], row: Any) -> float:
     expression = spec.get("pe_expression")
     if expression == "uc_award_before_takeup":
-        maximum_amount = money(row_value(row, "uc_maximum_amount", 0))
-        income_reduction = money(row_value(row, "uc_income_reduction", 0))
+        maximum = row_value(row, "uc_maximum_amount")
+        reduction = row_value(row, "uc_income_reduction")
+        if maximum is None or reduction is None:
+            return math.nan
+        maximum_amount, income_reduction = float(maximum), float(reduction)
+        # max(0, NaN) itself erases a missing return, so validate first.
+        if not all(math.isfinite(value) for value in (maximum_amount, income_reduction)):
+            return math.nan
         return max(0.0, maximum_amount - income_reduction)
     if expression is not None:
         raise ValueError(f"unsupported PolicyEngine expression: {expression!r}")
-    return money(row_value(row, spec["pe"]))
+    raw_value = row_value(row, spec["pe"])
+    # Preserve an absent/nonfinite returned output through the comparison.
+    # Input money projections may default to zero; output evidence cannot.
+    return math.nan if raw_value is None else float(raw_value)
 
 
 def output_applies(spec: dict[str, Any], row: Any) -> bool:

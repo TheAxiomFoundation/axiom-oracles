@@ -44,6 +44,7 @@ from .relation_binding import (
     bind_materialized_relations,
     bind_request_relations,
     merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
     relation_tuple,
 )
 
@@ -2195,7 +2196,9 @@ def main(args: argparse.Namespace | None = None) -> int:
     for result in results:
         merge_relation_binding_diagnostics(diagnostics, result.get("relation_binding_diagnostics", {}))
     if diagnostics.get("count"):
-        dataset_identity["relation_binding_diagnostics"] = diagnostics
+        dataset_identity["relation_binding_diagnostics"] = public_relation_binding_diagnostics(
+            diagnostics,
+        )
     if "snapscreener" in args.external_oracle:
         bundle = snapscreener.ensure_api_js(
             api_js=args.snapscreener_api_js,
