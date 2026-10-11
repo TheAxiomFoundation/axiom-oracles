@@ -126,7 +126,11 @@ def test_failed_batch_is_bisected_after_its_garbage_is_collected(monkeypatch) ->
 
     def fake_once(self, cases, variables):
         attempts.append((len(cases), sum(ref() is not None for ref in batch_garbage)))
-        batch_garbage.append(weakref.ref(_Cyclic()))
+        # Held by this frame while the exception propagates, as a real
+        # attempt's simulation would be: it is freed only once the handler
+        # has been left and a collection runs.
+        simulation = _Cyclic()
+        batch_garbage.append(weakref.ref(simulation))
         if len(cases) > 1:
             raise ValueError("one bad case")
         raise ValueError("still bad")
