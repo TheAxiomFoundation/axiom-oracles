@@ -3609,6 +3609,7 @@ def test_taxsim_person_table_mirrors_the_populace_tax_unit_loader() -> None:
 
     loader_tax_unit_table = {
         **populace_us._PERSON_NON_WAGE_VARIABLES,
+        **populace_us._STRICT_PERSON_NON_WAGE_VARIABLES,
         **populace_us._TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
     }
     benefit_only = {Concepts.SSI_BENEFITS, Concepts.SSI_COUNTABLE_RESOURCES}
@@ -3622,6 +3623,14 @@ def test_taxsim_person_table_mirrors_the_populace_tax_unit_loader() -> None:
         for concept, pe_variable in loader_tax_unit_table.items()
         if concept not in benefit_only
     }
+    # Both read dividends from the same PUF split (Form 1040 line 3b =
+    # qualified + non-qualified, line 3a = qualified), outside their tables.
+    assert Concepts.DIVIDEND_INCOME not in campaign_table
+    assert Concepts.QUALIFIED_DIVIDEND_INCOME not in campaign_table
+    assert (
+        state_tax_runner.POPULACE_DIVIDEND_VARIABLES
+        is populace_us.POPULACE_DIVIDEND_VARIABLES
+    )
 
     # The exclusion is sound only while the TAXSIM row ignores those facts.
     def head(**facts):
@@ -3837,31 +3846,6 @@ def test_calculate_taxsim_targets_adds_line_7a_to_schedule_d_gain() -> None:
 
     assert row["ltcg"] == 6000.0
     assert row["stcg"] == -500.0
-
-
-def test_taxsim_person_table_mirrors_the_case_loader() -> None:
-    from axiom_oracles.core.case import Concepts
-    from axiom_oracles.populations import populace_us
-
-    campaign = {
-        getattr(Concepts, key.upper()): variable
-        for key, variable in state_tax_runner._TAXSIM_PERSON_NON_WAGE_VARIABLES.items()
-    }
-    loader = {
-        **populace_us._PERSON_NON_WAGE_VARIABLES,
-        **populace_us._STRICT_PERSON_NON_WAGE_VARIABLES,
-    }
-    # No tax projection reads the SSI benefit or resource facts.
-    for concept in (Concepts.SSI_BENEFITS, Concepts.SSI_COUNTABLE_RESOURCES):
-        loader.pop(concept)
-    assert campaign == loader
-    # Both read dividends from the same PUF split, outside their tables.
-    assert Concepts.DIVIDEND_INCOME not in campaign
-    assert Concepts.QUALIFIED_DIVIDEND_INCOME not in campaign
-    assert (
-        state_tax_runner.POPULACE_DIVIDEND_VARIABLES
-        is populace_us.POPULACE_DIVIDEND_VARIABLES
-    )
 
 
 def test_calculate_taxsim_targets_skips_unmapped_jurisdictions() -> None:
