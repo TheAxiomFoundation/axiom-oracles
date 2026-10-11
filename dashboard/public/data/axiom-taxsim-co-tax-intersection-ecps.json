@@ -78469,9 +78469,9 @@
       "description": "State income tax liability",
       "difference": -3047.88,
       "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "co-intersection-state-open-rows-axiom-pe-divergent",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "disposition": "axiom_encoding_gap",
+        "id": "co-intersection-state-rows-axiom-side-component-pe-pivot",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/622"
       },
       "kind": "amount_difference",
       "left": -5617.75,
@@ -85651,9 +85651,9 @@
       "description": "State income tax liability",
       "difference": 212.97618457031245,
       "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "co-intersection-state-open-rows-axiom-pe-divergent",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "disposition": "axiom_encoding_gap",
+        "id": "co-intersection-state-rows-axiom-side-component-pe-pivot",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/622"
       },
       "kind": "amount_difference",
       "left": -490.7038154296875,
@@ -86823,9 +86823,9 @@
       "description": "State income tax liability",
       "difference": -1183.41203125,
       "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "co-intersection-state-open-rows-axiom-pe-divergent",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "disposition": "axiom_encoding_gap",
+        "id": "co-intersection-state-rows-axiom-side-component-pe-pivot",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/622"
       },
       "kind": "amount_difference",
       "left": -4085.28203125,
@@ -87703,9 +87703,9 @@
       "description": "State income tax liability",
       "difference": 109.82294177246095,
       "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "co-intersection-state-open-rows-axiom-pe-divergent",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "disposition": "axiom_encoding_gap",
+        "id": "co-intersection-state-rows-axiom-side-component-pe-pivot",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/622"
       },
       "kind": "amount_difference",
       "left": -86.47705822753906,
@@ -92948,9 +92948,9 @@
       "description": "Federal taxable income",
       "difference": 12565.02151252587,
       "disposition": {
-        "disposition": "bridge_artifact",
+        "disposition": "axiom_encoding_gap",
         "id": "taxsim-input-gssi-earners-scope-taxable-income",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/623"
       },
       "kind": "amount_difference",
       "left": 109386.35151252587,
@@ -94271,9 +94271,9 @@
       "description": "Federal taxable income",
       "difference": 15188.406894531247,
       "disposition": {
-        "disposition": "bridge_artifact",
+        "disposition": "axiom_encoding_gap",
         "id": "taxsim-input-gssi-earners-scope-taxable-income",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/623"
       },
       "kind": "amount_difference",
       "left": 81386.31689453125,
@@ -96220,9 +96220,9 @@
       "description": "State income tax liability",
       "difference": 503.90207320175614,
       "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "co-intersection-state-open-rows-axiom-pe-divergent",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "disposition": "axiom_encoding_gap",
+        "id": "co-intersection-state-rows-axiom-side-component-pe-pivot",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/622"
       },
       "kind": "amount_difference",
       "left": 10783.552073201756,
@@ -98452,9 +98452,9 @@
       "description": "Federal taxable income",
       "difference": 21983.46897412109,
       "disposition": {
-        "disposition": "bridge_artifact",
+        "disposition": "axiom_encoding_gap",
         "id": "taxsim-input-gssi-earners-scope-taxable-income",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/623"
       },
       "kind": "amount_difference",
       "left": 152582.36897412108,
@@ -98493,9 +98493,9 @@
       "description": "State income tax liability",
       "difference": 95.13294931445307,
       "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "taxsim-co-credit-stack-vintage-intersection-lane",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "disposition": "axiom_encoding_gap",
+        "id": "co-intersection-state-rows-axiom-side-component-pe-pivot",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/622"
       },
       "kind": "amount_difference",
       "left": 4854.662949314453,
@@ -102278,9 +102278,9 @@
       "description": "State income tax liability",
       "difference": -740.4946158630371,
       "disposition": {
-        "disposition": "upstream_engine_gap",
-        "id": "co-intersection-state-open-rows-axiom-pe-divergent",
-        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/304"
+        "disposition": "axiom_encoding_gap",
+        "id": "co-intersection-state-rows-axiom-side-component-pe-pivot",
+        "linked_issue": "https://github.com/TheAxiomFoundation/axiom-oracles/issues/622"
       },
       "kind": "amount_difference",
       "left": -2658.754615863037,
@@ -120300,11 +120300,11 @@
     "comparison_count": 12010,
     "dispositioned": {
       "counts": {
-        "axiom_encoding_gap": 314,
-        "bridge_artifact": 281,
+        "axiom_encoding_gap": 324,
+        "bridge_artifact": 278,
         "explained_residual": 590,
         "unexplained": 0,
-        "upstream_engine_gap": 932
+        "upstream_engine_gap": 925
       },
       "dispositions_file": "dispositions/co-tax-intersection-taxsim.yaml",
       "expired_entries": [],

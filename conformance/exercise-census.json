@@ -3077,23 +3077,522 @@
       "bridge_declared": false,
       "bridge_manifest_sha256": null,
       "bridged_through": {},
-      "cases_scanned": 31,
+      "cases_scanned": 1201,
       "chunk_manifest": [
         {
-          "cases": 31,
+          "cases": 500,
           "chunk": "dashboard/public/data/cases/co-state-income-tax-ecps/chunk-0.json",
-          "sha256": "ee1d9324033859ca9ee3bccfa5d93d1eabdbadaa7777994c0126a11236c54027"
+          "sha256": "1416167df53c14cebd15c2f7ce4c41d64dbe121ebec33aebefd9525a8c8ba83c"
+        },
+        {
+          "cases": 500,
+          "chunk": "dashboard/public/data/cases/co-state-income-tax-ecps/chunk-1.json",
+          "sha256": "1e0c04d0534e7c3645aedc9caacdb5cecf64e51306a145dcc9d94b22bffd87f0"
+        },
+        {
+          "cases": 201,
+          "chunk": "dashboard/public/data/cases/co-state-income-tax-ecps/chunk-2.json",
+          "sha256": "397b36320b0b1cebb0c711506552e692bf8aad6d42984433672bb5556c0cb323"
         }
       ],
-      "constant_fields": 0,
-      "evidence_fields": {},
+      "constant_fields": 69,
+      "evidence_fields": {
+        "us:policies/irs/rev-proc-2025-32/standard-deduction#input.additional_standard_deduction_entitlement_count_under_subsection_f": {
+          "distinct": 3,
+          "state": "varied"
+        },
+        "us:policies/irs/rev-proc-2025-32/standard-deduction#input.individual_is_unmarried_and_not_surviving_spouse": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/1/h#input.long_term_capital_gains": {
+          "distinct": 354,
+          "state": "varied"
+        },
+        "us:statutes/26/1/h#input.qualified_dividend_income": {
+          "distinct": 387,
+          "state": "varied"
+        },
+        "us:statutes/26/1/h#input.short_term_capital_gains": {
+          "distinct": 270,
+          "state": "varied"
+        },
+        "us:statutes/26/1401#input.filing_status": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "us:statutes/26/1401#input.wages_taken_into_account_for_additional_medicare_tax": {
+          "distinct": 713,
+          "state": "varied"
+        },
+        "us:statutes/26/1402/a#input.self_employment_trade_or_business_gross_income": {
+          "distinct": 122,
+          "state": "varied"
+        },
+        "us:statutes/26/1411#input.dividend_income": {
+          "distinct": 467,
+          "state": "varied"
+        },
+        "us:statutes/26/1411#input.is_individual": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/1411#input.rental_income": {
+          "distinct": 180,
+          "state": "varied"
+        },
+        "us:statutes/26/1411#input.taxable_interest_income": {
+          "distinct": 492,
+          "state": "varied"
+        },
+        "us:statutes/26/151#input.age": {
+          "distinct": 81,
+          "state": "varied"
+        },
+        "us:statutes/26/151#input.filing_status": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "us:statutes/26/151#input.is_spouse_of_taxpayer": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/151#input.is_taxpayer": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/151#input.qualified_individual_social_security_number_included_on_return": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/151#input.taxable_year_begins_after_exemption_amount_zero_start": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/151#input.taxable_year_begins_before_senior_deduction_termination": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/151#input.taxpayer_is_individual": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/151#input.tin_included_on_return_claiming_exemption": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/152/c#input.child_resided_with_taxpayer_parent_for_longest_period": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/152/c#input.individual_age_at_close_of_calendar_year": {
+          "distinct": 81,
+          "state": "varied"
+        },
+        "us:statutes/26/152/c#input.individual_is_child_of_taxpayer_or_descendant_of_such_child": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/152/c#input.individual_is_younger_than_taxpayer": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/152/c#input.individual_principal_place_of_abode_with_taxpayer_fraction": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/152/c#input.parents_filing_status": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/152/c#input.taxpayer_adjusted_gross_income_higher_than_highest_parent_adjusted_gross_income": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/152/c#input.taxpayer_has_highest_adjusted_gross_income_among_claiming_taxpayers": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/152/c#input.taxpayer_is_parent_of_individual": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/164/f#input.taxpayer_is_individual": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/21#input.married_at_close_of_taxable_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/21#input.married_joint_return_filed": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/21#input.spouse_earned_income_for_cdcc": {
+          "distinct": 149,
+          "state": "varied"
+        },
+        "us:statutes/26/21#input.taxpayer_earned_income_for_cdcc": {
+          "distinct": 585,
+          "state": "varied"
+        },
+        "us:statutes/26/24/d#input.qualifying_children_count": {
+          "distinct": 5,
+          "state": "varied"
+        },
+        "us:statutes/26/24/h#input.ctc_child_satisfies_subsection_c": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/24/h#input.ctc_person_satisfies_dependency_rules": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/24/h#input.dependent_under_section_152": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/24/h#input.filing_status_is_joint_return": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/24/h#input.qualifying_child_described_in_subsection_c": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/24/h#input.qualifying_child_ssn_included_on_return": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/24/h#input.qualifying_child_ssn_is_valid_for_subsection_h": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/24/h#input.taxpayer_or_spouse_ssn_included_on_return": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/24/h#input.taxpayer_or_spouse_ssn_is_valid_for_subsection_h": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.childless_taxpayer_or_spouse_age_eligible_for_eitc": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.qualifying_child_name_age_and_tin_included_on_return": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.qualifying_child_principal_place_of_abode_is_in_united_states": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.qualifying_child_under_section_152_c_as_modified_for_eitc": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.spouse_includes_required_social_security_number_on_return": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.taxable_year_is_full_12_months": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.taxpayer_entitled_to_section_151_deduction_for_child_or_would_be_but_for_section_152_e": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.taxpayer_includes_required_social_security_number_on_return": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32#input.taxpayer_is_married_under_section_7703_a": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/32/c/2#input.employee_compensation_includible_in_gross_income": {
+          "distinct": 713,
+          "state": "varied"
+        },
+        "us:statutes/26/63/c#input.cost_of_living_adjustment_under_section_1_f_3": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/63/c#input.is_blind": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/63/c#input.taxable_year_begins_after_2025": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/63/f#input.additional_exemption_allowable_for_spouse_under_section_151_b": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/63/f#input.spouse_has_attained_age_65_before_close_of_taxable_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/63/f#input.spouse_is_blind_as_of_close_of_taxable_year_or_time_of_death": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/63/f#input.taxpayer_has_attained_age_65_before_close_of_taxable_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/63/f#input.taxpayer_is_blind_at_close_of_taxable_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/7703#input.child_principal_abode_fraction_of_taxable_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/7703#input.person_is_child_within_federal_tax_child_definition": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/7703#input.taxpayer_household_is_child_principal_place_of_abode": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/7703#input.taxpayer_married_at_close_of_taxable_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/7703#input.taxpayer_married_at_time_of_spouse_death": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/7703#input.would_be_entitled_to_child_deduction_but_for_parent_release_rule": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:statutes/26/86#input.title_II_monthly_benefits_received_during_taxable_year": {
+          "distinct": 266,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.age": {
+          "distinct": 81,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.age_at_close_of_taxable_year": {
+          "distinct": 81,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.earned_income": {
+          "distinct": 685,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.eitc_relevant_investment_income": {
+          "distinct": 714,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.filer_meets_eitc_identification_requirements": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.filing_status": {
+          "distinct": 2,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.has_same_principal_place_of_abode_more_than_half_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.is_qualifying_child_dependent": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.is_section_152_a_1_dependent": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.is_spouse": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.is_tax_unit_dependent": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.is_taxpayer": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.long_term_capital_gains": {
+          "distinct": 354,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.meets_ctc_child_identification_requirements": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.meets_eitc_identification_requirements": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.net_earnings_from_self_employment_after_self_employment_tax_deduction": {
+          "distinct": 85,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.pension_annuity_disability_benefits_received": {
+          "distinct": 184,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.qualified_dividend_income": {
+          "distinct": 387,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.short_term_capital_gains": {
+          "distinct": 270,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.taxable_year_begins_after_2024_and_before_2029": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.taxable_year_begins_before_2027": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/federal-income-tax#input.unemployment_compensation": {
+          "distinct": 32,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.wages": {
+          "distinct": 713,
+          "state": "varied"
+        },
+        "us:tax/federal-income-tax#input.wages_paid_to_individual_for_section_1401_a": {
+          "distinct": 713,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.capital_gains_tax_long_term_capital_gains": {
+          "distinct": 354,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.capital_gains_tax_qualified_dividend_income": {
+          "distinct": 387,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.capital_gains_tax_short_term_capital_gains": {
+          "distinct": 270,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.filer_dividend_income": {
+          "distinct": 467,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.filer_long_term_capital_gains": {
+          "distinct": 354,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.filer_pension_annuity_disability_benefits_received": {
+          "distinct": 184,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.filer_rental_income": {
+          "distinct": 180,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.filer_short_term_capital_gains": {
+          "distinct": 270,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.filer_taxable_interest_income": {
+          "distinct": 491,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.filer_unemployment_compensation": {
+          "distinct": 32,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.is_colorado_tax_unit": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/oracle-bridge#input.oracle_person_age": {
+          "distinct": 81,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.oracle_person_is_qualifying_child_dependent": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/oracle-bridge#input.oracle_person_is_tax_unit_dependent": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/oracle-bridge#input.person_dividend_income": {
+          "distinct": 459,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.person_long_term_capital_gains": {
+          "distinct": 354,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.person_payroll_earnings": {
+          "distinct": 685,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.person_pension_income": {
+          "distinct": 187,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.person_rental_income_for_qbid": {
+          "distinct": 181,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.person_self_employment_income_for_qbid": {
+          "distinct": 122,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.person_short_term_capital_gains": {
+          "distinct": 270,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.person_social_security_benefits": {
+          "distinct": 288,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.person_taxable_interest_income": {
+          "distinct": 520,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.person_unemployment_compensation": {
+          "distinct": 32,
+          "state": "varied"
+        },
+        "us:tax/oracle-bridge#input.spouse_has_attained_age_55_before_close_of_taxable_year": {
+          "distinct": 1,
+          "state": "constant"
+        },
+        "us:tax/oracle-bridge#input.taxpayer_has_attained_age_55_before_close_of_taxable_year": {
+          "distinct": 1,
+          "state": "constant"
+        }
+      },
       "evidence_source": "chunks",
-      "inline_cases_not_counted": 31,
-      "reconciliation": "none",
+      "inline_cases_not_counted": 69,
+      "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-policyengine-co-state-income-tax-ecps.json",
-      "report_sha256": "634f61b75a91675fe073b1ff59ecb0576df4c2633bbba6b73e2b9dd516db9311",
-      "varied_fields": 0,
-      "verdict_concepts": {}
+      "report_sha256": "0c7dadd99915ddba68ee307ba816efbadd9c14de1403acdd9db8f43bb3421f13",
+      "varied_fields": 52,
+      "verdict_concepts": {
+        "us:tax/state-income-tax#liability": {
+          "distinct_left_values": 922
+        }
+      }
     },
     "co-state-income-tax-taxsim": {
       "binding": "unbound",
@@ -3133,7 +3632,7 @@
       "inline_cases_not_counted": 530,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-taxsim-co-state-income-tax-ecps.json",
-      "report_sha256": "2e86416e2e17462c7c409b2f6368ada1e6a7c88910ba11657e037a107a9e2aa0",
+      "report_sha256": "436ccafb01a7731633e8b0114903c36bb368a283e03a1c37e4911183a56bc54a",
       "varied_fields": 0,
       "verdict_concepts": {}
     },
@@ -3296,7 +3795,7 @@
       "inline_cases_not_counted": 688,
       "reconciliation": "none",
       "report": "dashboard/public/data/axiom-taxsim-co-tax-intersection-ecps.json",
-      "report_sha256": "2bfe4e557e1fb461b747b836635b9f7c1e9ee2e64a283911b3b22e3f4bd0d09a",
+      "report_sha256": "16fa3fd5e2488e55c4fbd6d473a483296e96ba6e4028548dffab312047ac2e4a",
       "varied_fields": 0,
       "verdict_concepts": {}
     },

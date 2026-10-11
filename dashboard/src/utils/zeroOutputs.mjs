@@ -7,11 +7,11 @@
  * evaluated for the case, so it is not listed.
  *
  * A case with no zero-valued output (`o0` absent) has none to list. A case
- * with `o0` but no `oz` comes from a chunk written before per-case masks.
- * That evidence queried every recorded rule for every case, so its zeros are
- * read as every slot it does not list as non-zero. That over-lists a slot
- * whose value the writer dropped for the case (an undetermined judgment or a
- * non-numeric value), which only a per-case mask can tell apart.
+ * with `o0` but no `oz` comes from a chunk written before per-case masks, so
+ * the fallback treats every suite slot absent from its `o` as zero. That can
+ * over-list: a slot the case never queried, or one whose value the writer
+ * dropped (an undetermined judgment or a non-numeric value), looks the same
+ * without a per-case mask.
  */
 export function zeroOutputNames(caseRow, outputSlots) {
   if (!Array.isArray(outputSlots)) return [];
