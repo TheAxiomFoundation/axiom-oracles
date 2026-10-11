@@ -1645,6 +1645,8 @@ _TAXSIM_PERSON_NON_WAGE_VARIABLES: dict[str, str] = {
     "social_security_benefits": "social_security",
     "unemployment_insurance_income": "unemployment_compensation",
     "rental_income": "rental_income",
+    # Schedule E line 40; taxsim_input_for_case routes it to otherprop.
+    "farm_rent_income": "farm_rent_income",
 }
 
 

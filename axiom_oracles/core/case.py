@@ -91,6 +91,12 @@ class Concepts:
     SOCIAL_SECURITY_BENEFITS = "axiom:income/person#social_security_benefits"
     UNEMPLOYMENT_INSURANCE_INCOME = "axiom:income/person#unemployment_insurance"
     RENTAL_INCOME = "axiom:income/person#rental_income"
+    # Schedule E (Form 1040) line 40: net farm rental income or (loss) from
+    # Form 4835 (crop and livestock shares received by a landowner who did not
+    # materially participate), signed. RENTAL_INCOME is Schedule E Part I.
+    # Line 40 joins line 41 and Schedule 1 (Form 1040) line 5; it is "Income
+    # Not Subject to Self-Employment Tax" (Form 4835 header).
+    FARM_RENT_INCOME = "axiom:income/person#farm_rent_income"
     SELF_EMPLOYMENT_INCOME = "axiom:income/person#self_employment_income"
 
     # Resources (person-level stock). SSI countable resources — 42 USC 1382b(a)
