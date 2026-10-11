@@ -3762,7 +3762,7 @@ def test_taxsim_person_table_mirrors_the_case_loader() -> None:
     }
     loader = {
         **populace_us._PERSON_NON_WAGE_VARIABLES,
-        **populace_us._TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
+        **populace_us._STRICT_PERSON_NON_WAGE_VARIABLES,
     }
     # No tax projection reads the SSI benefit or resource facts.
     for concept in (Concepts.SSI_BENEFITS, Concepts.SSI_COUNTABLE_RESOURCES):

@@ -203,11 +203,7 @@ class PopulaceUsCaseLoader:
 
         calculation_period = _year(period)
         households = self._households(sim, calculation_period)
-        people_by_household = self._people_by_household(
-            sim,
-            calculation_period,
-            case_unit=case_unit,
-        )
+        people_by_household = self._people_by_household(sim, calculation_period)
         cases = []
         for household in households:
             household_scope = household.scope
@@ -227,7 +223,31 @@ class PopulaceUsCaseLoader:
                 **({"scope": household_scope.as_dict()} if household_scope else {}),
                 **_locale_metadata(household_scope),
             }
+            people_by_tax_unit: dict[int | str, list[_PersonRow]] = defaultdict(list)
+            for person in people:
+                people_by_tax_unit[person.tax_unit_id].append(person)
+            # Form 1040 line 7 Exception 1: a return with Schedule D amounts
+            # reports its capital gain distributions there. The filers share
+            # a return; a dependent's gains are on the dependent's own.
+            folded_by_tax_unit = {
+                tax_unit_id: fold_tax_unit_returns(
+                    [
+                        person.non_wage_income
+                        for person in tax_unit_people
+                        if person.is_tax_unit_head or person.is_tax_unit_spouse
+                    ],
+                    [
+                        person.non_wage_income
+                        for person in tax_unit_people
+                        if not (person.is_tax_unit_head or person.is_tax_unit_spouse)
+                    ],
+                )
+                for tax_unit_id, tax_unit_people in people_by_tax_unit.items()
+            }
             if case_unit == "household":
+                folded = sum(folded_by_tax_unit.values())
+                if folded:
+                    metadata[SCHEDULE_D_FOLD_METADATA_KEY] = folded
                 entities = [
                     _person_entity(person, index, case_unit=case_unit)
                     for index, person in enumerate(people)
@@ -247,25 +267,8 @@ class PopulaceUsCaseLoader:
                 )
                 continue
 
-            people_by_tax_unit: dict[int | str, list[_PersonRow]] = defaultdict(list)
-            for person in people:
-                people_by_tax_unit[person.tax_unit_id].append(person)
             for tax_unit_id, tax_unit_people in people_by_tax_unit.items():
-                # Form 1040 line 7 Exception 1: a return with Schedule D
-                # amounts reports its capital gain distributions there. The
-                # filers share a return; a dependent's gains are her own.
-                folded = fold_tax_unit_returns(
-                    [
-                        person.non_wage_income
-                        for person in tax_unit_people
-                        if person.is_tax_unit_head or person.is_tax_unit_spouse
-                    ],
-                    [
-                        person.non_wage_income
-                        for person in tax_unit_people
-                        if not (person.is_tax_unit_head or person.is_tax_unit_spouse)
-                    ],
-                )
+                folded = folded_by_tax_unit[tax_unit_id]
                 cases.append(
                     Case(
                         case_id=f"ecps-tax-unit-{tax_unit_id}",
@@ -372,8 +375,6 @@ class PopulaceUsCaseLoader:
         self,
         sim,
         period: int,
-        *,
-        case_unit: CaseUnit = "household",
     ) -> dict[int | str, list["_PersonRow"]]:
         household_ids = _values(
             sim.calculate("household_id", period=period, map_to="person")
@@ -502,23 +503,20 @@ class PopulaceUsCaseLoader:
                 qualified, non_qualified, strict=True
             )
         ]
-        if case_unit == "tax_unit":
-            non_wage_income.update(
-                {
-                    concept: _calculate_values(
-                        sim,
-                        pe_variable,
-                        period,
-                        map_to="person",
-                        default=0,
-                        size=size,
-                        strict=True,
-                    )
-                    for concept, pe_variable in (
-                        _TAX_UNIT_PERSON_NON_WAGE_VARIABLES.items()
-                    )
-                }
-            )
+        non_wage_income.update(
+            {
+                concept: _calculate_values(
+                    sim,
+                    pe_variable,
+                    period,
+                    map_to="person",
+                    default=0,
+                    size=size,
+                    strict=True,
+                )
+                for concept, pe_variable in _STRICT_PERSON_NON_WAGE_VARIABLES.items()
+            }
+        )
 
         people_by_household: dict[int | str, list[_PersonRow]] = defaultdict(list)
         for index, household_id in enumerate(household_ids):
@@ -599,20 +597,18 @@ POPULACE_DIVIDEND_VARIABLES = (
     "non_qualified_dividend_income",
 )
 
-# Loaded only for case_unit == "tax_unit" Cases, and fail closed. Household
-# Cases feed the benefit lanes, whose Axiom encodings read no capital gains
-# (the populace_input_mapping.yaml income lists carry none), while
-# PolicyEngine's medicaid_magi starts from AGI, which includes line 7a from
-# policyengine-us#8839 on; carrying it on household Cases would hand
-# PolicyEngine income Axiom never sees.
-_TAX_UNIT_PERSON_NON_WAGE_VARIABLES = {
+# Loaded fail closed, on both case units like the Schedule D gains above:
+# line 7a and Schedule D are two reports of one kind of income, and the fold
+# between them must give a person the same facts on either Case. No Axiom
+# benefit income list reads capital gains of either kind yet.
+_STRICT_PERSON_NON_WAGE_VARIABLES = {
     Concepts.NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS: "non_sch_d_capital_gains",
 }
 
-#: Case metadata key recording how many tax-unit members had their Form 1040
-#: line 7a capital gain distributions moved onto Schedule D (long-term capital
-#: gains) because their return also carries Schedule D amounts. Present only
-#: when nonzero.
+#: Case metadata key recording how many of the Case's people had their Form
+#: 1040 line 7a capital gain distributions moved onto Schedule D (long-term
+#: capital gains) because their return also carries Schedule D amounts.
+#: Present only when nonzero.
 SCHEDULE_D_FOLD_METADATA_KEY = "capital_gain_distributions_folded_into_schedule_d"
 
 

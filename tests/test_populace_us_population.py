@@ -228,7 +228,7 @@ LTCG = Concepts.LONG_TERM_CAPITAL_GAINS
 def _load(case_unit, *, drop=(), **person_overrides):
     """Cases plus the fake simulation that produced them.
 
-    The fake has persons 1 and 2 (a head and her child) in tax unit 1001 and
+    The fake has persons 1 and 2 (a head and a child) in tax unit 1001 and
     person 3 alone in tax unit 2002, one household each.
     """
     sims = []
@@ -276,24 +276,18 @@ def test_loader_reads_form_1040_lines_3b_and_3a_from_the_dividend_split(
     assert "ordinary_dividend_income" not in sim.calculated
 
 
-def test_loader_carries_line_7a_on_tax_unit_cases_only() -> None:
-    overrides = {"non_sch_d_capital_gains": [2_000, 0, 500]}
+@pytest.mark.parametrize("case_unit", ["household", "tax_unit"])
+def test_loader_carries_line_7a_on_both_case_units(case_unit) -> None:
+    cases, _ = _load(case_unit, non_sch_d_capital_gains=[2_000, 0, 500])
+    facts = _facts(cases)
 
-    tax_cases, _ = _load("tax_unit", **overrides)
-    facts = _facts(tax_cases)
     assert facts["person-1"][CGD] == 2_000
     assert CGD not in facts["person-2"]
     assert facts["person-3"][CGD] == 500
     assert all(
         "capital_gain_distributions_folded_into_schedule_d" not in case.metadata
-        for case in tax_cases
+        for case in cases
     )
-
-    # Household Cases feed the benefit lanes, whose Axiom encodings read no
-    # capital gains: they neither carry nor calculate line 7a.
-    household_cases, household_sim = _load("household", **overrides)
-    assert all(CGD not in facts for facts in _facts(household_cases).values())
-    assert "non_sch_d_capital_gains" not in household_sim.calculated
 
 
 def test_loader_moves_line_7a_onto_schedule_d_when_the_return_files_one() -> None:
@@ -326,6 +320,25 @@ def test_loader_moves_line_7a_onto_schedule_d_when_the_return_files_one() -> Non
         not in by_id["ecps-tax-unit-2002"].metadata
     )
 
+    # A person has the same facts on a household Case: the fold follows the
+    # return, not the Case unit.
+    household_cases, _ = _load(
+        "household",
+        non_sch_d_capital_gains=[2_000, 300, 500],
+        short_term_capital_gains=[0, -400, 0],
+        long_term_capital_gains=[5_000, 0, 0],
+    )
+    household_facts = _facts(household_cases)
+    for person_id in ("person-1", "person-2", "person-3"):
+        for concept in (CGD, STCG, LTCG):
+            assert household_facts[person_id].get(concept) == facts[person_id].get(
+                concept
+            )
+    assert [
+        case.metadata.get("capital_gain_distributions_folded_into_schedule_d")
+        for case in household_cases
+    ] == [2, None]
+
 
 def test_loader_keeps_the_filers_line_7a_when_only_a_dependent_files_schedule_d() -> (
     None
@@ -338,7 +351,7 @@ def test_loader_keeps_the_filers_line_7a_when_only_a_dependent_files_schedule_d(
     facts = _facts(cases)
     by_id = {case.case_id: case for case in cases}
 
-    # Schedule D is per return: the child's loss is on her own return.
+    # Schedule D is per return: the child's loss is on the child's return.
     assert facts["person-1"][CGD] == 2_000
     assert LTCG not in facts["person-1"]
     assert CGD not in facts["person-2"]
@@ -356,7 +369,7 @@ def test_loader_keeps_the_filers_line_7a_when_only_a_dependent_files_schedule_d(
     [
         ("qualified_dividend_income", False),
         ("non_qualified_dividend_income", False),
-        ("non_sch_d_capital_gains", True),
+        ("non_sch_d_capital_gains", False),
     ],
 )
 def test_loader_fails_closed_when_an_investment_variable_is_missing(
@@ -377,13 +390,13 @@ def test_loader_dividend_sources_are_policyengine_inputs() -> None:
     policyengine_us = pytest.importorskip("policyengine_us")
     variables = policyengine_us.system.system.variables
     from axiom_oracles.populations.populace_us import (
-        _TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
+        _STRICT_PERSON_NON_WAGE_VARIABLES,
         POPULACE_DIVIDEND_VARIABLES,
     )
 
     for name in (
         *POPULACE_DIVIDEND_VARIABLES,
-        *_TAX_UNIT_PERSON_NON_WAGE_VARIABLES.values(),
+        *_STRICT_PERSON_NON_WAGE_VARIABLES.values(),
     ):
         variable = variables[name]
         assert variable.entity.key == "person"
@@ -424,14 +437,20 @@ def test_property_loader_emits_coherent_form_1040_facts(
 
     for cases in (tax_cases, household_cases):
         for index, facts in enumerate(_facts(cases).values()):
-            # Line 3b = qualified + non-qualified >= line 3a >= 0.
+            # Line 3b = qualified + non-qualified, line 3a = qualified; for
+            # the non-negative amounts drawn here, 3b >= 3a >= 0.
             assert facts.get(DIV, 0) == qualified[index] + non_qualified[index]
             assert facts.get(QDIV, 0) == qualified[index]
             assert 0 <= facts.get(QDIV, 0) <= facts.get(DIV, 0)
-    assert all(CGD not in facts for facts in _facts(household_cases).values())
+    # A person carries the same income facts on either Case unit.
+    for person_id, facts in _facts(tax_cases).items():
+        household = _facts(household_cases)[person_id]
+        for concept in (DIV, QDIV, CGD, STCG, LTCG):
+            assert household.get(concept) == facts.get(concept)
 
-    # Returns: person 1 (head of tax unit 1001), person 2 (her dependent
-    # child, on her own return), person 3 (head of tax unit 2002).
+    # Returns: person 1 (head of tax unit 1001), person 2 (that head's
+    # dependent child, on the child's own return), person 3 (head of tax
+    # unit 2002).
     facts_by_person = _facts(tax_cases)
     for index, person_id in enumerate(("person-1", "person-2", "person-3")):
         row = facts_by_person[person_id]

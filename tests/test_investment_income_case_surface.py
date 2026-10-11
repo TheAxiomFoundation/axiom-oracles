@@ -65,21 +65,26 @@ So on the Case: DIVIDEND_INCOME is line 3b and includes QUALIFIED_DIVIDEND_INCOM
 (line 3a); NON_SCHEDULE_D_CAPITAL_GAIN_DISTRIBUTIONS is line 7a on the
 no-Schedule-D path, a long-term gain disjoint from the Schedule D concepts.
 
-Invariants (property-tested, derandomized):
+Invariants (property-tested, derandomized), for Cases whose relations name
+the head and spouse (the engines' own fallbacks for picking filers when they
+do not are older and differ):
 
 1. Every engine projection sees the same filer line 3b, line 3a and line 7a,
    decoded from its own input representation (PolicyEngine person inputs,
    TAXSIM dividends/otherprop/ltcg, Tax-Calculator e00600/e00650/e01100, the
-   Axiom bridge inputs, the Axiom benefit mapping), on any Case, including
-   ones that violate line 3a <= line 3b or carry negative amounts.
-2. In every view: 0 <= qualified <= ordinary; PolicyEngine's dividend_income
-   alias equals qualified + non-qualified for every person.
+   Axiom bridge inputs, the Axiom benefit mapping), including on Cases that
+   violate line 3a <= line 3b or carry negative amounts. One older exception
+   is not changed here: the Axiom bridge's qualified-dividend and Schedule D
+   leaves sum every tax-unit member, dependents included, as PolicyEngine
+   does (PolicyEngine/policyengine-us#9869). Line 7a does not.
+2. In every view 0 <= qualified <= ordinary, and the three PolicyEngine
+   dividend inputs agree (alias = qualified + non-qualified) for every person.
 3. Raising a filer's capital gain distributions by d moves exactly the
    line 7a inputs, each by d, or exactly the Schedule D long-term inputs
    when the return files Schedule D.
 4. Moving d from non-qualified to qualified at fixed line 3b moves only the
-   qualified inputs (+d) and their non-qualified complements (-d); nothing
-   that feeds AGI moves.
+   qualified inputs (+d) and their non-qualified complements (-d); each
+   engine's total going into AGI is unchanged.
 5. A dependent's dividends, line 7a and Schedule D amounts never reach the
    filers' TAXSIM row, Tax-Calculator row, or the Axiom filer sums.
 6. The Schedule D fold (per return: the filers together, each dependent
@@ -89,6 +94,10 @@ Invariants (property-tested, derandomized):
    engine as identical inputs.
 7. No benefit income list sums QUALIFIED_DIVIDEND_INCOME beside
    DIVIDEND_INCOME (that would count line 3a twice).
+
+Not modelled: Exception 1's second condition. Form 1099-DIV boxes 2b, 2c and
+2d (unrecaptured section 1250 gain, section 1202 gain, collectibles gain)
+have no Case concept, so a return is taken to meet it.
 """
 
 from __future__ import annotations
@@ -250,7 +259,7 @@ def test_fold_applies_form_1040_line_7_exception_1(members, folded, expected) ->
 
 
 def test_a_dependents_schedule_d_does_not_move_the_filers_line_7a() -> None:
-    # Schedule D is per return: the child's capital loss is on her own.
+    # Schedule D is per return: the child's capital loss is on the child's.
     filers = [{CGD: 2_000}, {CGD: 100}]
     child = {CGD: 300, STCG: -400}
     assert fold_tax_unit_returns(filers, [child]) == 1
@@ -378,9 +387,7 @@ def _axiom_filer_view(case):
     records = _axiom_records(case)
     return {
         "ordinary": records[("tax_unit", f"{BRIDGE}#input.filer_dividend_income")],
-        "line_7a": records[
-            ("tax_unit", f"{BRIDGE}#input.filer_non_sch_d_capital_gains")
-        ],
+        "line_7a": records[("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains")],
         "schedule_d_long_term": records[
             ("tax_unit", f"{BRIDGE}#input.filer_long_term_capital_gains")
         ],
@@ -404,7 +411,7 @@ WORKED = _case(
             RENT: 1_000,
         },
     ),
-    # The child's dividends are hers, not the filer's (no Form 8814 here).
+    # The child's dividends are the child's, not the filer's (no Form 8814).
     _person("person-2", "Child", 10, **{DIV: 700, QDIV: 700, CGD: 300}),
 )
 
@@ -441,21 +448,20 @@ def test_worked_household_taxcalc_row() -> None:
 def test_worked_household_axiom_inputs() -> None:
     records = _axiom_records(WORKED)
     assert records[("tax_unit", f"{BRIDGE}#input.filer_dividend_income")] == 5_000
+    # Line 7a is the filers': the child's 300 is on the child's own return,
+    # in AGI and in the 1(h) base alike.
+    assert records[("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains")] == 2_000
     assert (
-        records[("tax_unit", f"{BRIDGE}#input.filer_non_sch_d_capital_gains")] == 2_000
+        records[("tax_unit", "us:statutes/26/1/h#input.long_term_capital_gains")]
+        == 2_000
     )
-    # The worksheet leaves sum every member, as PolicyEngine's
-    # add(tax_unit, ...) does.
-    assert records[("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains")] == 2_300
+    # The older qualified-dividend leaves still sum every member, as
+    # PolicyEngine's add(tax_unit, ...) does (policyengine-us#9869).
     assert (
         records[
             ("tax_unit", f"{BRIDGE}#input.capital_gains_tax_qualified_dividend_income")
         ]
         == 3_700
-    )
-    assert (
-        records[("tax_unit", "us:statutes/26/1/h#input.long_term_capital_gains")]
-        == 2_300
     )
     assert (
         records[("tax_unit", "us:statutes/26/1/h#input.qualified_dividend_income")]
@@ -509,9 +515,13 @@ def test_axiom_bridge_takes_line_7a_as_an_input_wherever_gains_flow() -> None:
             "taxable_net_gain_from_dispositions_after_active_partnership_s_corporation_exception"
         ]
     )
-    # The worksheet lines already read it.
+    # The worksheet lines already read it. Line 9 adds it outside the
+    # conditional, so no reading of the formula can count it twice.
     for line in ("capital_gains_worksheet_line_9", "capital_gains_worksheet_line_10"):
         assert "non_sch_d_capital_gains" in formulas[line]
+    assert formulas["capital_gains_worksheet_line_9"].startswith(
+        "max(0, non_sch_d_capital_gains + (if non_sch_d_capital_gains > 0: 0 else: "
+    )
     assert "person_non_sch_d_capital_gains" in formulas["person_agi_for_co_withholding"]
 
 
@@ -572,7 +582,7 @@ def test_benefit_mapping_reads_a_qualified_only_row_as_line_3b(benefit_program) 
 
 # A joint return with a capital loss: Exception 1 fails, so both spouses'
 # distributions are Schedule D long-term gain and net against the loss. The
-# child's distributions stay on her own line 7a.
+# child's distributions stay on the child's own line 7a.
 MIXED = _case(
     _person(
         "person-1",
@@ -610,8 +620,9 @@ def test_mixed_return_nets_distributions_on_schedule_d_in_every_engine() -> None
     assert (
         records[("tax_unit", f"{BRIDGE}#input.filer_long_term_capital_gains")] == -2_500
     )
-    assert records[("tax_unit", f"{BRIDGE}#input.filer_non_sch_d_capital_gains")] == 0
-    assert records[("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains")] == 300
+    # The filers' distributions are on Schedule D; the child's 300 is not
+    # the filers' line 7a.
+    assert records[("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains")] == 0
     assert (
         records[("person-1", f"{BRIDGE}#input.person_long_term_capital_gains")]
         == -3_000
@@ -696,17 +707,19 @@ def test_property_every_engine_sees_the_same_filer_lines(case) -> None:
 @given(case=_tax_unit_cases())
 def test_property_member_sums_agree_where_engines_sum_every_member(case) -> None:
     people = list(case.entities)
-    # The filers share a return; each dependent's gains are her own return.
+    # The filers share a return; each dependent's gains are on their own.
     returns = [_return_lines(_filers(case))] + [
         _return_lines([dependent]) for dependent in _dependents(case)
     ]
     total = {key: sum(lines[key] for lines in returns) for key in returns[0]}
+    filer_line_7a = returns[0]["line_7a"]
     pe = _policyengine_view(case, people)
     assert pe == _approx(total)
     records = _axiom_records(case)
+    # Line 7a reaches the Axiom bridge for the filers only.
     assert records[
         ("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains")
-    ] == pytest.approx(total["line_7a"])
+    ] == pytest.approx(filer_line_7a)
     assert records[
         ("tax_unit", f"{BRIDGE}#input.capital_gains_tax_long_term_capital_gains")
     ] == pytest.approx(total["schedule_d_long_term"])
@@ -716,10 +729,11 @@ def test_property_member_sums_agree_where_engines_sum_every_member(case) -> None
     assert records[
         ("tax_unit", "us:statutes/26/1411#input.dividend_income")
     ] == pytest.approx(total["ordinary"])
-    # 26 USC 1222(3) long-term gain for the encoded 1(h) module: both paths.
+    # 26 USC 1222(3) long-term gain for the encoded 1(h) module: the
+    # Schedule D leaf (every member, as before) plus the filers' line 7a.
     assert records[
         ("tax_unit", "us:statutes/26/1/h#input.long_term_capital_gains")
-    ] == pytest.approx(total["schedule_d_long_term"] + total["line_7a"])
+    ] == pytest.approx(total["schedule_d_long_term"] + filer_line_7a)
     for person in people:
         assert records[
             (person.entity_id, f"{BRIDGE}#input.person_dividend_income")
@@ -804,7 +818,6 @@ def test_property_line_7a_moves_exactly_its_inputs(case, bump, spouse) -> None:
     else:
         exact = both_paths | {
             ("tax_unit", f"{BRIDGE}#input.non_sch_d_capital_gains"),
-            ("tax_unit", f"{BRIDGE}#input.filer_non_sch_d_capital_gains"),
             (person.entity_id, f"{BRIDGE}#input.person_non_sch_d_capital_gains"),
         }
     eitc = (

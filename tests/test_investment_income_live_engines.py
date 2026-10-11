@@ -50,10 +50,12 @@ With all 5,000 qualified: line 5 = 43,900; tax = 1,240 + 12% x 31,500 =
 
 Known engine differences this module records rather than hides:
 
-- TAXSIM-35 at law year 2026 taxes 1,000.67 of the 5,000 at 15% instead of
-  1,450 (its zero-rate breakpoint differs from Rev. Proc. 2025-32), so only
-  its AGI, taxable income and the Schedule D equivalence are asserted for the
-  line 7a household.
+- TAXSIM-35 at law year 2026 gives 5,410.10 on the line 7a return, 67.40
+  below the worksheet, and the same on the Schedule D version, so only its
+  AGI, taxable income and that equivalence are asserted for those two.
+- TAXSIM-35 has no child EITC at law year 2026. Its investment-income test
+  is exercised at 2024 instead: every column the projection uses counts,
+  but the credit falls dollar for dollar above the limit rather than to zero.
 - Tax-Calculator 6.7.1 leaves e01100 out of its EITC investment income
   (calcfunctions.py: ``invinc = (e00400 + e00300 + e00600 + max(0., c01000)
   + max(0., (e02000 - e26270)))``), although Pub. 596 Worksheet 1 line 5 is
@@ -88,9 +90,23 @@ LTCG = Concepts.LONG_TERM_CAPITAL_GAINS
 WAGES = Concepts.YEARLY_EARNED_INCOME
 
 OUTPUTS = (
+    Concepts.AGI,
     Concepts.TAXABLE_INCOME,
     Concepts.TAX_BEFORE_CREDITS,
     Concepts.EITC,
+)
+# The Axiom AGI and capital gains worksheet are bridge rules with no concept
+# mapping; they are requested by their rule ids.
+BRIDGE = "us:tax/oracle-bridge#"
+AXIOM_AGI = BRIDGE + "adjusted_gross_income"
+AXIOM_WORKSHEET_LINE_9 = BRIDGE + "capital_gains_worksheet_line_9"
+AXIOM_WORKSHEET_LINE_10 = BRIDGE + "capital_gains_worksheet_line_10"
+AXIOM_NET_CAPITAL_GAIN = "us:statutes/26/1/h#net_capital_gain"
+AXIOM_RULE_OUTPUTS = (
+    AXIOM_AGI,
+    AXIOM_WORKSHEET_LINE_9,
+    AXIOM_WORKSHEET_LINE_10,
+    AXIOM_NET_CAPITAL_GAIN,
 )
 
 
@@ -137,6 +153,14 @@ WORKED = {
     "all-qualified": (48_900, 5_020),
     "none-qualified": (48_900, 5_620),
 }
+# AGI: wages 60,000 + line 3b 5,000 (+ the 2,000 of line 7a or Schedule D gain).
+WORKED_AGI = {
+    "line-7a": 67_000,
+    "schedule-d": 67_000,
+    "no-gain": 65_000,
+    "all-qualified": 65_000,
+    "none-qualified": 65_000,
+}
 
 
 def _cases():
@@ -169,15 +193,20 @@ def _by_concept(runner, results):
     return values
 
 
-def _run(engine, **runner_kwargs):
+def _runner_and_cases(engine, cases=None, **runner_kwargs):
     runner = _build_runner(
         engine, "api", None, None, (Concepts.FEDERAL_INCOME_TAX,), **runner_kwargs
     )
-    cases = _prepare_cases_for_engines(
-        _cases(),
+    prepared = _prepare_cases_for_engines(
+        _cases() if cases is None else cases,
         {engine, "taxsim"} if engine == "axiom" else {engine},
         OUTPUTS,
     )
+    return runner, prepared
+
+
+def _run(engine, **runner_kwargs):
+    runner, cases = _runner_and_cases(engine, **runner_kwargs)
     return _by_concept(runner, runner.run_cases(cases, list(OUTPUTS)))
 
 
@@ -221,7 +250,9 @@ def _checkout_at(path: Path, revision: str) -> bool:
 
 
 @pytest.fixture(scope="module")
-def axiom_values():
+def pinned_axiom():
+    """The engine binary and rulespec roots comparisons/fiit-taxsim-ecps.yaml
+    pins, or a skip when that checkout is absent (as on CI)."""
     runner = yaml.safe_load(PIN_SUITE.read_text())["runner"]
     parameters = runner["parameters"]
     engine_repo = Path(os.path.expandvars(runner["axiom_rules_repo"])).expanduser()
@@ -237,11 +268,32 @@ def axiom_values():
         roots / "rulespec-us", str(parameters["axiom_rulespec_repo_roots_revision"])
     ):
         pytest.skip(f"{roots}/rulespec-us is not at the pinned revision")
+    return binary, roots
+
+
+@pytest.fixture(scope="module")
+def axiom_values(pinned_axiom):
+    binary, roots = pinned_axiom
     with pytest.MonkeyPatch.context() as env:
         # The suite pin is authoritative, as in scripts/run_comparison.py.
         env.setenv("AXIOM_RULESPEC_REPO_ROOTS", str(roots))
         env.delenv("AXIOM_RULESPEC_ROOT", raising=False)
         return _run("axiom", axiom_engine_binary=binary)
+
+
+@pytest.fixture(scope="module")
+def axiom_rule_values(pinned_axiom):
+    binary, roots = pinned_axiom
+    with pytest.MonkeyPatch.context() as env:
+        env.setenv("AXIOM_RULESPEC_REPO_ROOTS", str(roots))
+        env.delenv("AXIOM_RULESPEC_ROOT", raising=False)
+        runner, cases = _runner_and_cases("axiom", axiom_engine_binary=binary)
+        results = runner.run_cases(cases, list(AXIOM_RULE_OUTPUTS))
+    values = {}
+    for result in results:
+        assert not result.errors, result.errors
+        values[result.household_id] = result.values
+    return values
 
 
 ENGINES_WITH_RATE_PARITY = ("axiom_values", "policyengine_values", "taxcalc_values")
@@ -254,6 +306,41 @@ def test_engine_reproduces_the_worksheet(engine, case_id, request) -> None:
     taxable_income, tax = WORKED[case_id]
     assert values[Concepts.TAXABLE_INCOME] == pytest.approx(taxable_income, abs=0.01)
     assert values[Concepts.TAX_BEFORE_CREDITS] == pytest.approx(tax, abs=0.01)
+
+
+@pytest.mark.parametrize(
+    "engine", ["policyengine_values", "taxcalc_values", "taxsim_values"]
+)
+@pytest.mark.parametrize("case_id", sorted(WORKED_AGI))
+def test_engine_agi_counts_line_3b_once_and_line_7a(engine, case_id, request) -> None:
+    values = request.getfixturevalue(engine)[case_id]
+    assert values[Concepts.AGI] == pytest.approx(WORKED_AGI[case_id], abs=0.01)
+
+
+@pytest.mark.parametrize("case_id", sorted(WORKED_AGI))
+def test_axiom_agi_counts_line_3b_once_and_line_7a(axiom_rule_values, case_id) -> None:
+    assert axiom_rule_values[case_id][AXIOM_AGI] == pytest.approx(
+        WORKED_AGI[case_id], abs=0.01
+    )
+
+
+@pytest.mark.parametrize(
+    ("case_id", "line_9", "line_10", "net_capital_gain"),
+    [
+        # Line 9 is the gain taxed at the preferential rates other than
+        # qualified dividends; line 10 adds the 3,000 of line 3a.
+        ("line-7a", 2_000, 5_000, 5_000),
+        ("schedule-d", 2_000, 5_000, 5_000),
+        ("no-gain", 0, 3_000, 3_000),
+    ],
+)
+def test_axiom_worksheet_counts_line_7a_once(
+    axiom_rule_values, case_id, line_9, line_10, net_capital_gain
+) -> None:
+    values = axiom_rule_values[case_id]
+    assert values[AXIOM_WORKSHEET_LINE_9] == pytest.approx(line_9)
+    assert values[AXIOM_WORKSHEET_LINE_10] == pytest.approx(line_10)
+    assert values[AXIOM_NET_CAPITAL_GAIN] == pytest.approx(net_capital_gain)
 
 
 @pytest.mark.parametrize("case_id", sorted(WORKED))
@@ -336,3 +423,70 @@ def test_eitc_investment_income_gate_counts_the_line(engine, source, request) ->
     over_limit = values[f"eitc-{source}-over-limit"][Concepts.EITC]
     assert at_limit > 0
     assert over_limit == 0
+
+
+# ---------------------------------------------------------------------------
+# TAXSIM's own EITC investment-income test, by input column.
+# ---------------------------------------------------------------------------
+#
+# The pinned binary has no child EITC at law year 2026, so its test is
+# exercised at 2024, when the limit was $11,600 (Pub. 596 (2024), Rule 6:
+# "Your Investment Income Must Be $11,600 or Less"). Parent with one child,
+# wages 5,000, so AGI stays below the phase-out and only the investment-income
+# rule can move the credit.
+
+TAXSIM_2024_LIMIT = 11_600
+TAXSIM_INVESTMENT_COLUMNS = {
+    "intrec": lambda amount: {Concepts.INTEREST_INCOME: amount},
+    "dividends": lambda amount: {DIV: amount, QDIV: amount},
+    "otherprop": lambda amount: {DIV: amount},  # non-qualified dividends
+    "ltcg": lambda amount: {CGD: amount},  # line 7a
+}
+
+
+@pytest.fixture(scope="module")
+def taxsim_2024_eitc():
+    pytest.importorskip("policyengine_taxsim")
+    cases = [
+        Case(
+            case_id=f"{column}:{amount}",
+            period="2024",
+            entities=(
+                _person(
+                    "person-1",
+                    "HeadOfHousehold",
+                    35,
+                    **{WAGES: 5_000, **facts(amount)},
+                ),
+                _person("person-2", "Child", 8),
+            ),
+            outputs=(Concepts.EITC,),
+            metadata=dict(COLORADO),
+        )
+        for column, facts in TAXSIM_INVESTMENT_COLUMNS.items()
+        for amount in (0, TAXSIM_2024_LIMIT, TAXSIM_2024_LIMIT + 100)
+    ]
+    runner, prepared = _runner_and_cases("taxsim", cases)
+    values = _by_concept(runner, runner.run_cases(prepared, [Concepts.EITC]))
+    return {case_id: row[Concepts.EITC] for case_id, row in values.items()}
+
+
+def test_taxsim_counts_every_case_line_in_its_investment_income_test(
+    taxsim_2024_eitc,
+) -> None:
+    """Interest, line 3a (``dividends``), the rest of line 3b (``otherprop``)
+    and line 7a (``ltcg``) all count, identically.
+
+    The binary applies 26 USC 32(i) as a dollar-for-dollar reduction above
+    the limit, not as the disallowance the statute and Pub. 596 state: 100
+    over the limit costs 100 of credit instead of all of it. That is TAXSIM's
+    model, recorded here; what this change needs is that every column the
+    projection uses is inside the test.
+    """
+    for column in TAXSIM_INVESTMENT_COLUMNS:
+        without = taxsim_2024_eitc[f"{column}:0"]
+        at_limit = taxsim_2024_eitc[f"{column}:{TAXSIM_2024_LIMIT}"]
+        over_limit = taxsim_2024_eitc[f"{column}:{TAXSIM_2024_LIMIT + 100}"]
+        assert without > 0
+        assert at_limit == pytest.approx(without)
+        assert over_limit == pytest.approx(at_limit - 100)

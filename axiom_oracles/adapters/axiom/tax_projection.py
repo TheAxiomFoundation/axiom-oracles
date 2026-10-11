@@ -1261,8 +1261,9 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         formula=(
             "max("
             "0, "
-            "(if non_sch_d_capital_gains > 0: "
             "non_sch_d_capital_gains "
+            "+ (if non_sch_d_capital_gains > 0: "
+            "0 "
             "else: "
             "max("
             "0, "
@@ -1270,9 +1271,9 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "capital_gains_tax_long_term_capital_gains "
             "+ capital_gains_tax_qualified_dividend_income, "
             "net_capital_gains"
-            ") "
-            ") + non_sch_d_capital_gains"
-            ") - min(0, investment_income_form_4952)"
+            ")"
+            ")) "
+            "- min(0, investment_income_form_4952)"
             ")"
         ),
     ),
@@ -3420,7 +3421,6 @@ _INPUT_REF_OVERRIDES.update(
             "capital_gains_tax_short_term_capital_gains",
             "filer_dividend_income",
             "filer_long_term_capital_gains",
-            "filer_non_sch_d_capital_gains",
             "filer_pension_annuity_disability_benefits_received",
             "filer_rental_income",
             "filer_short_term_capital_gains",
@@ -3547,13 +3547,13 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         earners,
         Concepts.LONG_TERM_CAPITAL_GAINS,
     )
-    filer_non_sch_d_capital_gains = sum_non_schedule_d_capital_gain_distributions(
-        earners
-    )
+    # Form 1040 line 7a without Schedule D, over the filers: a dependent's
+    # distributions are on the dependent's own return, in AGI and in the
+    # 1(h) base alike. The older capital_gains_tax_* leaves below still sum
+    # every member, as PolicyEngine's add(tax_unit, ...) does
+    # (PolicyEngine/policyengine-us#9869).
+    non_sch_d_capital_gains = sum_non_schedule_d_capital_gain_distributions(earners)
     capital_gains_tax_qualified_dividends = sum_dividends(people).qualified
-    # Form 1040 line 7a without Schedule D, over every member like the other
-    # capital_gains_tax_* worksheet leaves (PolicyEngine's add(tax_unit, ...)).
-    non_sch_d_capital_gains = sum_non_schedule_d_capital_gain_distributions(people)
     capital_gains_tax_short_capital_gains = _sum_concept(
         people,
         Concepts.SHORT_TERM_CAPITAL_GAINS,
@@ -3610,7 +3610,7 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
             capital_gain_net_income=(
                 filer_short_capital_gains
                 + filer_long_capital_gains
-                + filer_non_sch_d_capital_gains
+                + non_sch_d_capital_gains
             ),
             passive_activity_income=filer_rental,
         ),
@@ -3663,7 +3663,6 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "filer_taxable_interest_income": filer_interest,
         "filer_short_term_capital_gains": filer_short_capital_gains,
         "filer_long_term_capital_gains": filer_long_capital_gains,
-        "filer_non_sch_d_capital_gains": filer_non_sch_d_capital_gains,
         "non_sch_d_capital_gains": non_sch_d_capital_gains,
         "filer_rental_income": filer_rental,
         "filer_pension_annuity_disability_benefits_received": filer_pensions,
