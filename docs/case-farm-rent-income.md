@@ -75,8 +75,10 @@ So the question is whether the rental is a trade or business:
   may constitute a trade or business if it meets the standard described
   above."
 - Rev. Proc. 2019-38 gives a safe harbor for a "rental real estate
-  enterprise", which needs "250 or more hours of rental services" a year and
-  leaves out "Real estate rented or leased under a triple net lease". It does
+  enterprise", which needs "250 or more hours of rental services" in the year
+  (or, once the enterprise is four years old, "in any three of the five
+  consecutive taxable years") and leaves out "Real estate rented or leased
+  under a triple net lease". It does
   not decide the question here: the Case carries no hours, and the Form 8995
   instructions add that rental real estate outside the safe harbor "may still
   be treated as a trade or business for purposes of the QBI deduction if it’s

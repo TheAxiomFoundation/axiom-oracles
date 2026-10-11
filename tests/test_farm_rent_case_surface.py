@@ -276,7 +276,7 @@ def test_niit_rents_input_adds_the_filers_farm_rent() -> None:
     [
         # 5,499 is under the projection's 5,500 young-adult limit; 5,500 is
         # not. Pub. 501 (2025): "Gross receipts from rental property are
-        # gross income. Don't deduct taxes, repairs, or other expenses to
+        # gross income. Don’t deduct taxes, repairs, or other expenses to
         # determine the gross income from rental property." The Case
         # carries only the net amount, so the projection counts its
         # positive part (as for Part I rents): a net loss adds nothing and
