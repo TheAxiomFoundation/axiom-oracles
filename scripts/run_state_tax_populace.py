@@ -428,6 +428,7 @@ def main(argv: list[str] | None = None) -> int:
             f"campaign Populace year is {contract.populace_year}, "
             f"got {args.populace_year}"
         )
+    requested_states = _requested_states(args.states, contract=contract)
     if not args.no_taxsim:
         # Before the dataset loads: the host's TAXSIM binary may stop short
         # of the validation year (the pinned Linux build accepts 1960-2024).
@@ -435,7 +436,6 @@ def main(argv: list[str] | None = None) -> int:
             require_law_years([args.year])
         except TaxsimLawYearError as exc:
             raise SystemExit(str(exc)) from exc
-    requested_states = _requested_states(args.states, contract=contract)
     identity: dict = {}
     dataset = load_populace_dataset(
         "us",

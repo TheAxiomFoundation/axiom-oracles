@@ -428,13 +428,17 @@ def _frame_records(frame: Any) -> list[dict[str, Any]]:
 
 
 def _frame_years(frame: Any) -> set[int]:
-    """Distinct law years in a TAXSIM input frame (rows without one skipped)."""
+    """Distinct law years in a TAXSIM input frame.
+
+    Rows with no year, or one that is not a number, are skipped: the binary
+    reports those itself.
+    """
     years = set()
     for row in _frame_records(frame):
-        year = row.get("year")
-        if year is None or year != year:
+        try:
+            years.add(int(float(row.get("year"))))
+        except (TypeError, ValueError, OverflowError):
             continue
-        years.add(int(year))
     return years
 
 

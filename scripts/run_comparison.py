@@ -2079,9 +2079,13 @@ def _require_taxsim_law_year(period: object, suite: str) -> None:
     from axiom_oracles.adapters.taxsim import pins
 
     try:
-        pins.require_law_years(
-            [int(str(period).split("-", 1)[0])], use_installed=False
-        )
+        year = int(str(period).split("-", 1)[0])
+    except ValueError as exc:
+        raise SystemExit(
+            f"{suite}: period {period!r} does not start with a law year"
+        ) from exc
+    try:
+        pins.require_law_years([year], use_installed=False)
     except pins.TaxsimLawYearError as exc:
         raise SystemExit(f"{suite}: {exc}") from exc
 
@@ -2873,9 +2877,11 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     """
     params = runner["parameters"]
     # The generator re-checks its own TAXSIM_YEAR against the binary it
-    # resolves; this stops a Linux host before the environment is built.
-    if params.get("taxsim_law_year") is not None:
-        _require_taxsim_law_year(params["taxsim_law_year"], str(params["state"]))
+    # resolves; this stops a Linux host before the environment is built. A
+    # config that declares neither year is left to the generator's check.
+    declared_year = params.get("taxsim_law_year", params.get("period"))
+    if declared_year is not None:
+        _require_taxsim_law_year(declared_year, str(params["state"]))
     rulespec_root, axiom_rules_repo = _resolve_state_income_tax_grid_repos(params)
     # The config object is shared with the outer provenance stamper. Record the
     # exact paths that actually execute, so a successful grid can never replace

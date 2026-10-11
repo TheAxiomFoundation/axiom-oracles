@@ -69,7 +69,9 @@ DEFAULT_PERIOD = "2026-05"
 # (taxsimtest-linux.exe, build cdate-compdate) is a different NBER build that
 # accepts law years 1960-2024 only, so `compare` refuses 2025 and 2026 on Linux
 # before loading the population (_require_taxsim_law_year; each binary's range
-# is pinned in taxsim_pins.json); on Linux, pass --period 2024. Known 2026 gap in the
+# is pinned in taxsim_pins.json); 2024 is the last year a Linux host can pass,
+# and the two builds differ even there (docs/policyengine-taxsim.md). Known
+# 2026 gap in the
 # macOS build, verified empirically: the qualifying-child credit machinery is
 # absent at 2026 — CTC collapses to the $500 ODC path, ACTC and CDCC return
 # zero, and the EITC ignores qualifying children, so a family with children

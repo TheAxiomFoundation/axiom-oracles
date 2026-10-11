@@ -68,6 +68,11 @@ def test_pin_document_structure() -> None:
         assert str(years["first"]) in years["rejection"], name
         assert str(years["last"]) in years["rejection"], name
         assert years["evidence"], name
+        # The years the executable was run on bracket the edge of its range.
+        assert all(years["first"] <= year <= years["last"] for year in years["ran"])
+        assert all(not years["first"] <= year <= years["last"] for year in years["rejected"])
+        assert years["last"] in years["ran"], name
+        assert years["last"] + 1 in years["rejected"], name
 
 
 def test_runtime_binary_points_at_pinned_entries() -> None:

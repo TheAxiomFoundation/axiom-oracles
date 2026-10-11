@@ -1686,9 +1686,12 @@ def calculate_taxsim_targets(
     the same fail-closed discipline as the PolicyEngine legs.
 
     With the default runner, ``year`` is checked against the pinned law-year
-    range of the binary before any state runs, and an ``identity_recorder``
+    range of the binary before the Microsimulation is built, and an
+    ``identity_recorder``
     (:class:`axiom_oracles.adapters.taxsim.pins.TaxsimIdentityRecorder`)
-    receives the path, hash and printed build stamp of every run.
+    receives the path, hash and printed build stamp of every run. A
+    ``taxsim_runner_factory`` supplied by the caller is neither checked nor,
+    unless its runner exposes ``taxsim_path``, recorded.
     """
 
     from ..adapters.taxsim.projection import taxsim_input_for_case
@@ -1703,6 +1706,14 @@ def calculate_taxsim_targets(
         raise StateTaxPopulationRoutingError(
             f"comparison year must be {resolved_contract.validation_year}; got {year}"
         )
+    default_binary: Path | None = None
+    if taxsim_runner_factory is None:
+        # Before the Microsimulation is built: the host's TAXSIM binary may
+        # not accept this year (the pinned Linux build stops at 2024).
+        from ..adapters.taxsim.pins import installed_binary_path, require_law_years
+
+        default_binary = installed_binary_path()
+        require_law_years([year], binary_path=default_binary)
     _require_columns(raw_tax_units, {"tax_unit_id"}, "tax_unit")
     tax_unit_ids = [_clean_id(value) for value in raw_tax_units["tax_unit_id"]]
     _reject_duplicate_ids(tax_unit_ids, "tax_unit_id")
@@ -1855,14 +1866,9 @@ def calculate_taxsim_targets(
     if taxsim_runner_factory is None:
         from policyengine_taxsim.runners.taxsim_runner import TaxsimRunner
 
-        from ..adapters.taxsim.pins import installed_binary_path, require_law_years
-
-        binary = installed_binary_path()
-        require_law_years([year], binary_path=binary)
-
         def taxsim_runner_factory(frame: Any) -> Any:
-            if binary is not None:
-                return TaxsimRunner(frame, taxsim_path=binary)
+            if default_binary is not None:
+                return TaxsimRunner(frame, taxsim_path=default_binary)
             return TaxsimRunner(frame)
 
     import pandas as pd

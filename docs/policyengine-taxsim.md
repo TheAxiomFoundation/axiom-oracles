@@ -68,8 +68,9 @@ The macOS binary in the pinned policyengine-taxsim 2.30.0 release
 2026, and TAXSIM comparisons now default to the 2026 validation year
 (`TAXSIM_DEFAULT_PERIOD` in `axiom_oracles/cli.py`). The Linux binary in the
 same release (`taxsimtest-linux.exe`) is a different build that accepts law
-years 1960-2024 only, so on Linux pass `--period 2024` (see
-[Platforms and binary identity](#platforms-and-binary-identity)). Scope of the
+years 1960-2024 only, so 2024 is the last year a Linux host can pass as
+`--period` (see [Platforms and binary identity](#platforms-and-binary-identity)).
+Scope of the
 macOS binary's 2026 model, verified empirically against that binary:
 
 - **Modeled at 2026**: the OBBBA federal rate schedule and standard
@@ -135,11 +136,14 @@ California fixture and tests with the pinned formatter and binary cover this mod
 ## Platforms and binary identity
 
 The executables bundled in the pinned policyengine-taxsim 2.30.0 wheel are
-different NBER builds. Each was run on 2026-10-10 on one-record inputs for law
-years 1960, 2023-2027 (Linux builds through pe-taxsim's
+different NBER builds. Each was run on 2026-10-10 on a one-record input (a
+single filer aged 40 with $50,000 of wages, state 0, `idtl=0`) at law years
+1960, 2023, 2024, 2025, 2026 and 2027: the Linux builds through pe-taxsim's
 `resources/taxsimtest/taxsim-docker-wrapper.sh`, the macOS build on a macOS
-arm64 host); `taxsim_pins.json` records each one's build stamp, accepted range,
-and the line it printed for a rejected year.
+arm64 host. `taxsim_pins.json` records each one's build stamp, the years that
+ran and the years it refused, and the line it printed for a refused year. The
+range in the table is the one that line states; years between those run were
+not run.
 
 | Platform | Executable | SHA-256 | Build stamp | Law years accepted |
 | --- | --- | --- | --- | --- |
@@ -166,24 +170,44 @@ selects `taxsimtest-osx-new.exe`; on the same batch it abandons processing at
 the record with taxsimid 8 (`TAXSIM: More CTC elegible than EIC elegible`), so
 it cannot stand in for the Linux build.
 
-Every caller that runs the binary checks the requested law years against the
-resolved binary's pinned range first (`pins.require_law_years`): `compare`
-before it loads the population, `scripts/run_comparison.py` before it builds
-the environment, `scripts/generate_state_income_tax_liability.py` and
-`scripts/run_state_tax_populace.py` before any engine runs, and
+The Linux and macOS builds also disagree in years both accept. On the
+one-record input above:
+
+| Law year | Linux build (`cdate-compdate`) | macOS build (`cdate-20260521`) |
+| --- | --- | --- |
+| 2024 | `fiitax` 4016.12, `frate` 12.00 | `fiitax` 4016.00, `frate` 0.00 |
+| 2023 | `fiitax` 4118.00, `frate` 12.00 | `fiitax` 4118.00, `frate` 0.00 |
+| 1960 | `fiitax` 25668.00, `frate` 72.00 | `fiitax` 0.00, `frate` 0.00 |
+
+A TAXSIM number under this pin is therefore specific to the platform that
+produced it, even at 2024: a Linux `--period 2024` run is not interchangeable
+with a macOS one. That is what the recorded binary identity below is for.
+
+The code paths that run the pinned binary check the requested law years
+against its pinned range first (`pins.require_law_years`): `compare` before it
+loads the population, `scripts/run_comparison.py` before it builds the
+environment, `scripts/generate_state_income_tax_liability.py` and
+`scripts/run_state_tax_populace.py` before any engine runs,
+`calculate_taxsim_targets` before it builds the Microsimulation, and
 `TaxsimPackageRunner` before each batch. The error names the binary, its range,
-the line it printed, and the pinned binary that does accept the year. A binary
-the pin does not record (other SHA-256) is not checked.
+the years it was run on and the line it printed, and the pinned binary that
+does accept the year. Three things are not checked: a binary the pin does not
+record (other SHA-256), a pinned binary that has not been run (Windows), and a
+runner the caller injects (`TaxsimPackageRunner(runner_factory=…)` or
+`(executor=…)`, `calculate_taxsim_targets(taxsim_runner_factory=…)`; tests use
+these, no suite does).
 
 Each run records the binary it executed in the report's top-level
 `engine_identity.taxsim`: path, SHA-256, size, the build stamp embedded in the
 bytes (`build`) and the one the run printed (`build_observed`, the last CSV
 header column or the `idtl=5` banner), host platform and machine, whether the
 SHA-256 is pinned, the pinned law-year range, the installed policyengine-taxsim
-version, and the rows it ran. A printed stamp that names a different build
-than the hashed bytes raises `TaxsimIdentityError`. `scripts/run_comparison.py`
-copies the binaries into `provenance.oracle.taxsim_binaries`, and
-`scripts/merge_shard_reports.py` sums their rows across shards. Reports
+version, and the rows it ran. The path is the absolute path on the host that
+ran it, as other provenance paths in these reports are. A printed stamp that
+names a different build than the hashed bytes raises `TaxsimIdentityError`.
+`scripts/run_comparison.py` copies the binaries into
+`provenance.oracle.taxsim_binaries`, and `scripts/merge_shard_reports.py` sums
+their rows across shards, keeping one entry per distinct binary and path. Reports
 generated before this existed (such as the committed
 `axiom-taxsim-fiit-ecps.json`, generated 2026-08-28) do not say which binary
 produced them.
@@ -199,15 +223,20 @@ batch-13 input:
   `4a17af9c…`, both stamped `cd2026081819`. Both accept 2026, and on batch 13
   their stdout is byte-identical.
 - Against the pinned macOS build (`cdate-20260521`), that newer build differs
-  on batch 13 in `siitax` for 306 of 5,000 rows, `tfica` for 289, `fiitax` for
-  32 and `v10` for 21. Five 2026 probe households, with and without
-  children, get the same EITC, CTC, ACTC and CDCC from both macOS builds, so
-  the newer build has the same 2026 child-credit gap.
+  on batch 13 in at least one of 23 output columns on 1,840 of 5,000 rows. Of
+  the 12 TAXSIM columns `concept_mappings.yaml` grades, 9 differ: `siitax` on
+  306 rows, `tfica` on 289, `staxbc` on 222, `v13` on 35, `fiitax` on 32,
+  `v18` on 28, `v28` on 27, `v10` on 21 and `v22` on 2 (`v24`, `v25` and `v27`
+  do not). The most-affected columns overall are `sptcr` (676 rows), `v32`
+  (553), `fica` and `v29` (508 each).
+- Five 2026 probe households (federal only, state 0), with and without
+  children, got identical EITC, CTC, ACTC and CDCC values from both macOS
+  builds.
 
-Moving the pin would therefore change the TAXSIM numbers of every suite, on
-macOS as well as Linux. Choosing the benchmark's NBER build is the open
-question in axiom-oracles#559, which moves the pin together with
-re-baselined dispositions.
+So on the one batch measured, moving the pin changes TAXSIM results on macOS
+as well as Linux; no other suite was run against the newer build. Choosing
+the benchmark's NBER build is the open question in axiom-oracles#559, which
+moves the pin together with re-baselined dispositions.
 
 ## Reproduce The Smoke Test
 

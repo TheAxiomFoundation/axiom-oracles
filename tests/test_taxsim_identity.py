@@ -19,6 +19,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -135,7 +136,10 @@ def test_linux_refuses_2025_and_2026_and_names_the_macos_binary(on_host) -> None
     assert message.startswith("TAXSIM cannot run law year 2026 on linux")
     assert "taxsimtest/taxsimtest-linux.exe as pinned" in message
     assert "build cdate-compdate) accepts law years 1960-2024 only" in message
-    assert "'TAXSIM: Federal tax calculator available 1960 - 2024 only.'" in message
+    assert (
+        "Run on 2025, 2026, 2027, it printed 'TAXSIM: Federal tax calculator "
+        "available 1960 - 2024 only.' and exited 1." in message
+    )
     assert "The pinned binary for darwin (taxsimtest/taxsimtest-osx.exe" in message
     assert "or use a law year in 1960-2024" in message
 
@@ -176,18 +180,46 @@ def test_refusal_holds_exactly_outside_the_pinned_range(year, system) -> None:
     key = pins.load_pins()["runtime_binary"]["by_platform"][system]
     years = pins.law_year_range(pins.bundled_binaries()[key])
     expect_refusal = years is not None and not years[0] <= year <= years[1]
-    original = (pins._host_platform, pins.installed_binary_path)
-    pins._host_platform = lambda override=None: (override or system).lower()
-    pins.installed_binary_path = lambda system=None: None
-    try:
+    with pytest.MonkeyPatch.context() as patch:
+        patch.setattr(
+            pins, "_host_platform", lambda override=None: (override or system).lower()
+        )
+        patch.setattr(pins, "installed_binary_path", lambda system=None: None)
         try:
             pins.require_law_years([year])
             refused = False
         except TaxsimLawYearError:
             refused = True
-    finally:
-        pins._host_platform, pins.installed_binary_path = original
     assert refused == expect_refusal
+
+
+@pytest.mark.parametrize(
+    ("system", "year", "refused"),
+    [
+        # Each row is a year the binary itself was run on (taxsim_pins.json
+        # law_years.ran / .rejected), not a value read back from the pin.
+        ("linux", 1960, False),
+        ("linux", 2023, False),
+        ("linux", 2024, False),
+        ("linux", 2025, True),
+        ("linux", 2026, True),
+        ("linux", 2027, True),
+        ("darwin", 1960, False),
+        ("darwin", 2024, False),
+        ("darwin", 2025, False),
+        ("darwin", 2026, False),
+        ("darwin", 2027, True),
+    ],
+)
+def test_refusal_matches_what_each_binary_did_when_run(
+    on_host, system, year, refused
+) -> None:
+    on_host(system)
+    if refused:
+        with pytest.raises(TaxsimLawYearError):
+            pins.require_law_years([year])
+    else:
+        assert pins.require_law_years([year]) is None
 
 
 def test_an_explicit_binary_is_identified_by_hash(tmp_path, monkeypatch) -> None:
@@ -205,13 +237,15 @@ def test_an_explicit_binary_is_identified_by_hash(tmp_path, monkeypatch) -> None
     monkeypatch.setattr(
         pins, "pinned_entry_for_sha", lambda sha: (LINUX_KEY, dict(linux))
     )
-    with pytest.raises(TaxsimLawYearError, match=f"{LINUX_KEY} at {binary}"):
+    with pytest.raises(
+        TaxsimLawYearError, match=re.escape(f"{LINUX_KEY} at {binary}")
+    ):
         pins.require_law_years([2026], binary_path=binary, system="linux")
 
 
 def test_a_missing_explicit_binary_is_checked_against_the_pin(tmp_path) -> None:
     missing = tmp_path / "taxsimtest-linux.exe"
-    with pytest.raises(TaxsimLawYearError, match=f"{LINUX_KEY} as pinned"):
+    with pytest.raises(TaxsimLawYearError, match=re.escape(f"{LINUX_KEY} as pinned")):
         pins.require_law_years([2026], binary_path=missing, system="linux")
     assert pins.require_law_years([2024], binary_path=missing, system="linux") is None
 
@@ -406,6 +440,21 @@ def test_runner_refuses_output_from_a_build_other_than_the_hashed_file(
     runner = _runner_with(binary, tmp_path)
     with pytest.raises(TaxsimIdentityError):
         runner.run_cases([_case(2026)])
+
+
+def test_frame_years_reads_numeric_years_and_skips_the_rest() -> None:
+    from axiom_oracles.adapters.taxsim.runner import _frame_years
+
+    rows = [
+        {"year": 2026},
+        {"year": 2026.0},
+        {"year": "2024.0"},
+        {"year": "latest"},
+        {"year": None},
+        {"year": float("nan")},
+        {},
+    ]
+    assert _frame_years(rows) == {2024, 2026}
 
 
 def test_the_linux_rejection_output_still_fails_loudly_if_it_is_reached() -> None:
@@ -603,6 +652,14 @@ def test_run_comparison_stops_before_building_on_linux(on_host, monkeypatch) -> 
             {"parameters": {"state": "AZ", "period": "2026", "taxsim_law_year": 2026}},
             Path("/nonexistent/report.json"),
         )
+    # A grid config that declares only `period` is checked on that year.
+    with pytest.raises(SystemExit, match="RI: TAXSIM cannot run law year 2026"):
+        run_comparison._run_state_income_tax_liability_grid(
+            {"parameters": {"state": "RI", "period": "2026"}},
+            Path("/nonexistent/report.json"),
+        )
+    with pytest.raises(SystemExit, match="does not start with a law year"):
+        run_comparison._require_taxsim_law_year("latest", "suite")
 
 
 def test_run_comparison_checks_the_pin_not_its_own_venv(
@@ -699,6 +756,28 @@ def test_grid_generator_stops_on_linux_and_records_binaries(
     with pytest.raises(SystemExit, match="TAXSIM cannot run law year 2026 on linux"):
         generator.main(["--state", "AZ"])
 
+    # One binary run covers every state; each report counts its own rows.
+    cases = [
+        generator.Case("dc-single-30000", "DC", "single", 30_000.0),
+        generator.Case("dc-married-60000", "DC", "married", 60_000.0),
+        generator.Case("az-single-30000", "AZ", "single", 30_000.0),
+    ]
+    built = generator._build_report(
+        "DC",
+        cases,
+        {("DC", "single", 30_000): 1.0, ("DC", "married", 60_000): 2.0},
+        {case.case_id: 0.0 for case in cases},
+        {case.case_id: 0.0 for case in cases},
+        {
+            "pinned_policyengine_taxsim": "2.30.0",
+            "binaries": [{**_BINARY_ENTRY, "rows": 3}],
+        },
+    )
+    assert built["case_count"] == 2
+    assert built["engine_identity"]["taxsim"]["binaries"] == [
+        {**_BINARY_ENTRY, "rows": 2}
+    ]
+
     report = {
         "schema_version": "axiom.comparison_report.v2",
         "suite": "az-income-tax-liability",
@@ -742,3 +821,29 @@ def test_populace_campaign_stops_on_linux_before_loading_data(
         campaign.main(args)
     with pytest.raises(AssertionError, match="dataset loaded"):
         campaign.main([*args, "--no-taxsim"])
+    # A bad --state is still reported as a bad state, not as a TAXSIM error.
+    with pytest.raises(SystemExit, match="unknown campaign state abbreviation"):
+        campaign.main([*args, "--state", "XX"])
+
+
+def test_bridge_checks_the_year_before_building_the_microsimulation(on_host) -> None:
+    import pandas as pd
+
+    from axiom_oracles.bridges import state_tax_populace_runner as bridge
+
+    on_host("linux")
+
+    def refuse(dataset):
+        raise AssertionError("microsimulation built")
+
+    with pytest.raises(TaxsimLawYearError, match="law year 2026 on linux"):
+        bridge.calculate_taxsim_targets(
+            dataset="dataset",
+            raw_tax_units=pd.DataFrame({"tax_unit_id": [7]}),
+            raw_persons=pd.DataFrame(
+                {"person_id": [1], "person_tax_unit_id": [7]}
+            ),
+            routes=(),
+            year=2026,
+            microsimulation_factory=refuse,
+        )

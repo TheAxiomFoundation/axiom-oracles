@@ -1302,7 +1302,17 @@ def _build_report(
         },
     }
     if taxsim_identity:
-        report["engine_identity"] = {"taxsim": taxsim_identity}
+        # One binary run covers every selected state; this report's rows are
+        # the ones for this state.
+        report["engine_identity"] = {
+            "taxsim": {
+                **taxsim_identity,
+                "binaries": [
+                    {**binary, "rows": n}
+                    for binary in taxsim_identity.get("binaries", [])
+                ],
+            }
+        }
     return report
 
 

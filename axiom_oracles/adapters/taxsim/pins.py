@@ -205,9 +205,12 @@ def pinned_entry_for_sha(sha256: str) -> tuple[str, dict[str, Any]] | None:
 
 
 def law_year_range(entry: dict[str, Any] | None) -> tuple[int, int] | None:
-    """Return the ``(first, last)`` law years a pinned binary was run on.
+    """Return the ``(first, last)`` law years a pinned binary accepts.
 
-    ``None`` when the binary has not been executed (its range is unknown).
+    The range is the one the binary states in the line it prints for a
+    refused year; the pin's ``ran`` and ``rejected`` lists say which years
+    were actually run. ``None`` when the binary has not been executed (its
+    range is unknown).
     """
     years = (entry or {}).get("law_years")
     if not years:
@@ -330,11 +333,12 @@ def _law_year_message(
         f"{entry['sha256'][:12]}, build {entry.get('build')}) accepts law years "
         f"{first}-{last} only."
     )
-    rejection = (entry.get("law_years") or {}).get("rejection")
-    if rejection:
+    observed = entry.get("law_years") or {}
+    if observed.get("rejection") and observed.get("rejected"):
+        tried = ", ".join(str(year) for year in observed["rejected"])
         message += (
-            f" Run on law years outside that range, it printed "
-            f"{rejection.strip()!r} and exited 1."
+            f" Run on {tried}, it printed {observed['rejection'].strip()!r} "
+            "and exited 1."
         )
     alternatives = [
         f"{other_system} ({other_key}, build "

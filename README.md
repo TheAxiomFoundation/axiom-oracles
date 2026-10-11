@@ -237,8 +237,10 @@ the same release (`taxsimtest-linux.exe`, build `cdate-compdate`) is a different
 build that accepts law years 1960-2024 only: run on 2025 or 2026 it prints
 `TAXSIM: Federal tax calculator available 1960 - 2024 only.` and exits with
 `STOP 1`. A 2025 or 2026 TAXSIM comparison therefore runs only on macOS; on
-Linux, `compare` stops before loading the population and names the pinned range,
-and `--period 2024` runs. Each bundled executable's build stamp and law-year
+Linux, `compare` stops before loading the population and names the pinned range
+(2024 is the last year that build accepts). The two builds also differ in years
+both accept, so a TAXSIM number is specific to the platform that produced it.
+Each bundled executable's build stamp and law-year
 range are pinned in `taxsim_pins.json`, and a report's `engine_identity.taxsim`
 (and `provenance.oracle.taxsim_binaries` in suite reports) records the path,
 SHA-256, build stamp and platform of the binary that produced it. At 2026 the
