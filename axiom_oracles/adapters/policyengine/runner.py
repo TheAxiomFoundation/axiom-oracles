@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gc
 from collections.abc import Mapping, Sequence
 from functools import lru_cache
 from typing import Any
@@ -176,6 +177,11 @@ class PolicyEngineRunner(EngineAdapter):
         for start in range(0, len(cases), self.batch_size):
             batch = cases[start : start + self.batch_size]
             results.extend(self._run_case_batch(batch, pe_variables))
+            # A batch's policyengine.py Simulation is reachable only through
+            # reference cycles, so it is freed by a full collection and not when
+            # the batch returns. Allocation thresholds rarely trigger one between
+            # batches, and each uncollected batch holds several gigabytes.
+            gc.collect()
         return results
 
     def run_case(self, case: Case, variables: list[str]) -> EngineResult:
