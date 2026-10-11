@@ -954,6 +954,22 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         source="Oracle comparison bridge identifying person rental losses",
         formula="person_rental_loss_for_agi > 0",
     ),
+    # A dependent's Schedule E is on the dependent's own return, so every
+    # computed leg (gross income, 461(l), QBI, the Colorado proxy) reads farm
+    # rent through this filer-only amount.
+    _generated_person_rule(
+        "person_filer_farm_rent_income",
+        dtype="Money",
+        unit="USD",
+        source=(
+            "Oracle comparison bridge keeping a dependent's Schedule E "
+            "(Form 1040) line 40 off the filers' return"
+        ),
+        formula=(
+            "if oracle_person_is_tax_unit_dependent: 0 "
+            "else: person_farm_rent_income"
+        ),
+    ),
     _generated_person_rule(
         "person_positive_farm_rent_income_for_agi",
         dtype="Money",
@@ -962,7 +978,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "26 USC 61(a)(5), net farm rental income from Form 4835 line 32 "
             "via Schedule E (Form 1040) lines 40-41 to Schedule 1 line 5"
         ),
-        formula="max(0, person_farm_rent_income)",
+        formula="max(0, person_filer_farm_rent_income)",
     ),
     _generated_person_rule(
         "person_farm_rent_loss_for_agi",
@@ -972,7 +988,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "26 USC 461(l), farm rental loss from Form 4835 line 34c via "
             "Schedule E (Form 1040) lines 40-41"
         ),
-        formula="max(0, -person_farm_rent_income)",
+        formula="max(0, -person_filer_farm_rent_income)",
     ),
     _generated_person_rule(
         "person_has_positive_farm_rent_income_for_agi",
@@ -1174,10 +1190,36 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "0, "
             "person_self_employment_income_for_qbid "
             "+ person_rental_income_for_qbid "
-            "+ person_farm_rent_income "
+            "+ person_filer_farm_rent_income "
             "- person_self_employment_tax_ald_for_qbid"
             ")"
         ),
+    ),
+    # 26 USC 199A(i)(2)(B) limits the minimum deduction to trades or
+    # businesses "in which the taxpayer materially participates (within the
+    # meaning of section 469(h))". Form 4835 is for a landowner who "did not
+    # materially participate (for self-employment tax purposes) in the
+    # operation or management of the farm", so farm rent stays out of the
+    # active amount; Schedule C and Part I rents stay in, as before.
+    _generated_person_rule(
+        "active_business_income_for_qbid",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge approximating 26 USC 199A(i)(2) active qualified business income from ECPS leaves",
+        formula=(
+            "max("
+            "0, "
+            "person_self_employment_income_for_qbid "
+            "+ person_rental_income_for_qbid "
+            "- person_self_employment_tax_ald_for_qbid"
+            ")"
+        ),
+    ),
+    _generated_person_rule(
+        "active_business_income_counts_for_qbid",
+        dtype="Judgment",
+        source="Oracle comparison bridge identifying members with positive 26 USC 199A(i)(2) active business income",
+        formula="active_business_income_for_qbid > 0",
     ),
     _generated_person_rule(
         "business_income_counts_for_qbid",
@@ -1197,6 +1239,22 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "business_income_of_tax_unit, "
             "business_income_for_qbid, "
             "business_income_counts_for_qbid"
+            ")"
+            ")"
+        ),
+    ),
+    _generated_tax_unit_rule(
+        "active_qualified_business_income",
+        dtype="Money",
+        unit="USD",
+        source="Oracle comparison bridge applying 26 USC 199A(i)(2)(A) to ECPS self-employment and rental income leaves",
+        formula=(
+            "max("
+            "0, "
+            "sum_where("
+            "business_income_of_tax_unit, "
+            "active_business_income_for_qbid, "
+            "active_business_income_counts_for_qbid"
             ")"
             ")"
         ),
@@ -1592,7 +1650,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
             "person_payroll_earnings "
             "+ person_self_employment_income_for_qbid "
             "+ person_rental_income_for_qbid "
-            "+ person_farm_rent_income "
+            "+ person_filer_farm_rent_income "
             "+ person_dividend_income "
             "+ person_taxable_interest_income "
             "+ person_short_term_capital_gains "
@@ -1914,7 +1972,7 @@ US_TAX_ORACLE_PROGRAM_RULES = (
         unit="USD",
         source="Oracle comparison bridge applying H.R.1 section 70105 qualified business income deduction floor",
         formula=(
-            "if qualified_business_income >= qualified_business_income_deduction_floor_threshold: "
+            "if active_qualified_business_income >= qualified_business_income_deduction_floor_threshold: "
             "qualified_business_income_deduction_floor_amount "
             "else: 0"
         ),
@@ -3634,9 +3692,9 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         Concepts.UNEMPLOYMENT_INSURANCE_INCOME,
     )
     filer_rental = _sum_concept(earners, Concepts.RENTAL_INCOME)
-    # Schedule E line 40, filers only, as the AGI leaves sum it. Its gross
-    # income, 461(l), and QBI legs are bridge rules over the per-person
-    # person_farm_rent_income input.
+    # Schedule E line 40, filers only. Its gross income, 461(l), and QBI
+    # legs are bridge rules over the per-person person_farm_rent_income
+    # input, which they read through person_filer_farm_rent_income.
     filer_farm_rent = _sum_concept(earners, Concepts.FARM_RENT_INCOME)
     self_employment = _sum_concept(earners, Concepts.SELF_EMPLOYMENT_INCOME)
 
@@ -4255,7 +4313,10 @@ def _dependent_gross_income(dependent: Entity) -> float:
         + _number(dependent.fact(Concepts.PENSION_INCOME, 0))
         + _number(dependent.fact(Concepts.UNEMPLOYMENT_INSURANCE_INCOME, 0))
         + max(0, _number(dependent.fact(Concepts.RENTAL_INCOME, 0)))
-        # 26 USC 61(a)(5) rents, as the AGI leaf counts them.
+        # Gross rents are gross income whatever the expenses (Pub. 501:
+        # "Gross receipts from rental property are gross income"). The Case
+        # carries only the net amount, so its positive part stands in, as
+        # for RENTAL_INCOME; a net loss can hide gross rents over the limit.
         + max(0, _number(dependent.fact(Concepts.FARM_RENT_INCOME, 0)))
     )
 

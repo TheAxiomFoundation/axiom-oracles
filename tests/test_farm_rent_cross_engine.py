@@ -18,13 +18,26 @@ its record instead of asserting agreement:
   and above the 2026 investment-income limit it reduces the childless credit
   instead of denying it (the taxsim-2026-eitc-investment-limit-vintage
   disposition class).
+- The pinned PolicyEngine-US sums a dependent's QBI into the filers'
+  deduction and lets a dependent's loss reduce the filers' AGI
+  (PolicyEngine/policyengine-us#9646 for the loss; PolicyEngine main sums
+  filers only). Marked strict xfail.
+- PolicyEngine and Tax-Calculator test the 26 USC 199A(i) $400 minimum
+  against all QBI. The bridge leaves Form 4835 rent out of the active amount
+  (docs/case-farm-rent-income.md), so it differs from both on a farm-rent-only
+  filer whose regular deduction is under $400.
+- The bridge and the pinned PolicyEngine floor each spouse's QBI before
+  summing; Tax-Calculator nets the joint return (axiom-oracles#618).
 """
 
 from __future__ import annotations
 
 import pytest
 
-from axiom_oracles.adapters.axiom.tax_projection import attach_axiom_tax_inputs_to_case
+from axiom_oracles.adapters.axiom.tax_projection import (
+    attach_axiom_tax_inputs_to_case,
+    attach_axiom_tax_itemization_choice_to_case,
+)
 from axiom_oracles.core.case import Case, Concepts, Entity
 from tests.test_axiom_farm_rent_engine import BRIDGE_461L_THRESHOLD, _pinned_engine
 
@@ -35,17 +48,26 @@ SE = Concepts.SELF_EMPLOYMENT_INCOME
 STCG = Concepts.SHORT_TERM_CAPITAL_GAINS
 
 
+def _person(entity_id, relation, age, **facts):
+    return Entity(
+        entity_id,
+        "person",
+        facts={
+            Concepts.HOUSEHOLD_RELATION: relation,
+            Concepts.PERSON_AGE: age,
+            **facts,
+        },
+    )
+
+
 def _single(age, **facts):
+    return (_person("person-1", "HeadOfHousehold", age, **facts),)
+
+
+def _with_child(child_farm_rent):
     return (
-        Entity(
-            "person-1",
-            "person",
-            facts={
-                Concepts.HOUSEHOLD_RELATION: "HeadOfHousehold",
-                Concepts.PERSON_AGE: age,
-                **facts,
-            },
-        ),
+        _person("person-1", "HeadOfHousehold", 40, **{W: 60_000}),
+        _person("person-2", "Child", 10, **{F: child_farm_rent}),
     )
 
 
@@ -58,6 +80,13 @@ HOUSEHOLDS = {
     "eitc-12200": _single(30, **{W: 1_000, STCG: -3_000, F: 12_200}),
     "eitc-12201": _single(30, **{W: 1_000, STCG: -3_000, F: 12_201}),
     "eitc-netted-12200": _single(30, **{W: 1_000, STCG: -3_000, F: 13_201, R: -1_001}),
+    "child-farm-rent": _with_child(20_000),
+    "child-farm-loss": _with_child(-20_000),
+    "minimum-farm-rent-only": _single(40, **{F: 17_500}),
+    "joint-split": (
+        _person("person-1", "HeadOfHousehold", 50, **{W: 60_000, F: 5_000}),
+        _person("person-2", "Spouse", 48, **{F: -2_000}),
+    ),
 }
 
 
@@ -104,8 +133,15 @@ def axiom():
             "qbid": "qualified_business_income_deduction",
             "eitc": "us:statutes/26/32#eitc",
         }
+        # The itemization choice lets the engine pick the standard
+        # deduction, as scripts/run_comparison.py does for the tax suites.
         results = runner.run_cases(
-            [attach_axiom_tax_inputs_to_case(case) for case in _cases()],
+            [
+                attach_axiom_tax_itemization_choice_to_case(
+                    attach_axiom_tax_inputs_to_case(case)
+                )
+                for case in _cases()
+            ],
             list(names.values()),
         )
     return _values(results, names)
@@ -177,6 +213,68 @@ def test_farm_rent_qbid_agrees_where_farm_rent_is_qbi(request, engine) -> None:
 
 def test_taxsim_grants_no_qbid_on_otherprop(taxsim) -> None:
     assert taxsim["qbi-farm-rent"]["qbid"] == 0
+
+
+@pytest.mark.parametrize("engine", ("axiom", "taxcalc", "taxsim"))
+@pytest.mark.parametrize("case_id", ("child-farm-rent", "child-farm-loss"))
+def test_a_dependents_farm_rent_is_not_on_the_filers_return(
+    request, engine, case_id
+) -> None:
+    """Head of household, wages 60,000, and a 10-year-old's farm rent of
+    +/-20,000: the filer's AGI is the wages and there is no QBI."""
+    values = request.getfixturevalue(engine)
+    assert values[case_id]["agi"] == pytest.approx(60_000)
+    assert values[case_id]["qbid"] == 0
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "the pinned PolicyEngine-US sums a dependent's QBI into the filers' "
+        "deduction (PolicyEngine main sums filers only)"
+    ),
+)
+def test_policyengine_keeps_a_dependents_qbi_off_the_filers_return(
+    policyengine,
+) -> None:
+    assert policyengine["child-farm-rent"]["qbid"] == 0
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "the pinned PolicyEngine-US deducts a dependent's loss from the "
+        "filers' AGI (PolicyEngine/policyengine-us#9646)"
+    ),
+)
+def test_policyengine_keeps_a_dependents_loss_off_the_filers_return(
+    policyengine,
+) -> None:
+    assert policyengine["child-farm-loss"]["agi"] == pytest.approx(60_000)
+
+
+def test_the_199a_i_minimum_on_farm_rent_alone(
+    axiom, policyengine, taxcalc, taxsim
+) -> None:
+    """Single, farm rent 17,500: taxable income before the deduction is
+    17,500 - 16,100 = 1,400, so the regular deduction is 280. The bridge
+    stops there (Form 4835 rent is not active QBI); PolicyEngine and
+    Tax-Calculator raise it to the $400 minimum; TAXSIM grants none."""
+    assert axiom["minimum-farm-rent-only"]["qbid"] == pytest.approx(280)
+    assert policyengine["minimum-farm-rent-only"]["qbid"] == pytest.approx(400)
+    assert taxcalc["minimum-farm-rent-only"]["qbid"] == pytest.approx(400)
+    assert taxsim["minimum-farm-rent-only"]["qbid"] == 0
+
+
+def test_joint_qbi_aggregation_differs_between_engines(
+    axiom, policyengine, taxcalc
+) -> None:
+    """Joint, farm rent +5,000 and -2,000: Tax-Calculator nets the return
+    (0.20 x 3,000 = 600); the bridge and the pinned PolicyEngine floor each
+    spouse first (0.20 x 5,000 = 1,000). axiom-oracles#618."""
+    assert taxcalc["joint-split"]["qbid"] == pytest.approx(600)
+    assert axiom["joint-split"]["qbid"] == pytest.approx(1_000)
+    assert policyengine["joint-split"]["qbid"] == pytest.approx(1_000)
 
 
 @pytest.mark.parametrize("engine", ("axiom", "policyengine"))

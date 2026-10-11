@@ -31,7 +31,7 @@ rents. 26 CFR 1.199A-1(b)(14): "Trade or business means a trade or business
 that is a trade or business under section 162 (a section 162 trade or
 business) other than the trade or business of performing services as an
 employee." Instructions for Form 8995 (2025): "Material participation under
-section 469 isn't required to qualify for the QBI deduction." and "The
+section 469 isn’t required to qualify for the QBI deduction." and "The
 ownership and rental of real property may constitute a trade or business if
 it meets the standard described above."
 
@@ -158,15 +158,34 @@ def test_each_person_carries_their_signed_schedule_e_line_40() -> None:
     assert by_key[("person-3", PERSON_FARM_RENT_INPUT)] == 0
 
 
+def test_every_computed_leg_reads_farm_rent_through_the_filer_only_amount() -> None:
+    """A dependent's Schedule E is on the dependent's own return. One rule
+    zeroes a dependent's farm rent, and no other rule reads the raw input,
+    so no computed leg (gross income, 461(l), QBI, the Colorado proxy) can
+    pick up a dependent's amount."""
+    assert _formula("person_filer_farm_rent_income") == (
+        "if oracle_person_is_tax_unit_dependent: 0 else: person_farm_rent_income"
+    )
+    readers = [
+        name
+        for name, rule in RULES.items()
+        if any(
+            "person_farm_rent_income" in version.get("formula", "")
+            for version in rule.get("versions", [])
+        )
+    ]
+    assert readers == ["person_filer_farm_rent_income"]
+
+
 def test_gross_income_takes_the_positive_part_and_461l_the_loss() -> None:
     """Line 40 is net income or (loss). As with Part I rents, the positive
     part is a 26 USC 61 gross-income leaf and the loss is an above-the-line
     deduction inside the 461(l) business-loss sum, filers only."""
     assert _formula("person_positive_farm_rent_income_for_agi") == (
-        "max(0, person_farm_rent_income)"
+        "max(0, person_filer_farm_rent_income)"
     )
     assert _formula("person_farm_rent_loss_for_agi") == (
-        "max(0, -person_farm_rent_income)"
+        "max(0, -person_filer_farm_rent_income)"
     )
     assert "positive_farm_rent_income_for_agi" in _formula(
         "gross_income_before_social_security_benefits"
@@ -195,11 +214,35 @@ def test_farm_rent_is_qbi_like_part_i_rents() -> None:
     rental streams take the same convention."""
     formula = _formula("business_income_for_qbid")
     assert "+ person_rental_income_for_qbid " in formula
-    assert "+ person_farm_rent_income " in formula
+    assert "+ person_filer_farm_rent_income " in formula
+
+
+def test_farm_rent_is_not_active_income_for_the_199a_i_minimum() -> None:
+    """26 USC 199A(i)(2)(B): the $400 minimum needs a trade or business "in
+    which the taxpayer materially participates (within the meaning of
+    section 469(h))". Form 4835 is for a landowner who "did not materially
+    participate (for self-employment tax purposes) in the operation or
+    management of the farm", so the floor is tested on an amount without
+    farm rent; Schedule C income and Part I rents stay in it, as before."""
+    active = _formula("active_business_income_for_qbid")
+    assert "farm_rent" not in active
+    assert active == _formula("business_income_for_qbid").replace(
+        "+ person_filer_farm_rent_income ", ""
+    )
+    assert _formula("active_qualified_business_income") == _formula(
+        "qualified_business_income"
+    ).replace("business_income_for_qbid", "active_business_income_for_qbid").replace(
+        "business_income_counts_for_qbid", "active_business_income_counts_for_qbid"
+    )
+    assert _formula("qualified_business_income_deduction_floor").startswith(
+        "if active_qualified_business_income >= "
+    )
 
 
 def test_colorado_withholding_proxy_reads_farm_rent_like_part_i_rents() -> None:
-    assert "+ person_farm_rent_income " in _formula("person_agi_for_co_withholding")
+    assert "+ person_filer_farm_rent_income " in _formula(
+        "person_agi_for_co_withholding"
+    )
     assert "+ person_positive_farm_rent_income_for_agi " in _formula(
         "person_gross_income_for_co_withholding_count"
     )
@@ -231,14 +274,17 @@ def test_niit_rents_input_adds_the_filers_farm_rent() -> None:
 @pytest.mark.parametrize(
     ("wages", "farm_rent", "head_of_household"),
     [
-        # 5,499 of gross income is under the projection's 5,500 young-adult
-        # limit; 5,500 is not. A loss is no gross income (26 USC 61(a)(5)
-        # rents enter as the positive part), so it neither counts nor
-        # offsets the dependent's 6,000 of wages.
+        # 5,499 is under the projection's 5,500 young-adult limit; 5,500 is
+        # not. Pub. 501 (2025): "Gross receipts from rental property are
+        # gross income. Don't deduct taxes, repairs, or other expenses to
+        # determine the gross income from rental property." The Case
+        # carries only the net amount, so the projection counts its
+        # positive part (as for Part I rents): a net loss adds nothing and
+        # never offsets the dependent's 6,000 of wages.
         pytest.param(0, 5_499, True, id="under-the-limit"),
         pytest.param(0, 5_500, False, id="at-the-limit"),
-        pytest.param(0, -20_000, True, id="a-loss-is-no-gross-income"),
-        pytest.param(6_000, -20_000, False, id="a-loss-does-not-offset-wages"),
+        pytest.param(0, -20_000, True, id="a-net-loss-adds-nothing"),
+        pytest.param(6_000, -20_000, False, id="a-net-loss-does-not-offset-wages"),
     ],
 )
 def test_dependent_farm_rent_counts_in_the_head_of_household_gross_income_test(
@@ -307,8 +353,8 @@ def test_taxcalc_e27200_is_inside_e02000() -> None:
     [
         pytest.param(0, 5_199, 4, id="under-the-limit"),
         pytest.param(0, 5_200, 1, id="at-the-limit"),
-        pytest.param(0, -20_000, 4, id="a-loss-is-no-gross-income"),
-        pytest.param(6_000, -20_000, 1, id="a-loss-does-not-offset-wages"),
+        pytest.param(0, -20_000, 4, id="a-net-loss-adds-nothing"),
+        pytest.param(6_000, -20_000, 1, id="a-net-loss-does-not-offset-wages"),
     ],
 )
 def test_taxcalc_head_of_household_test_counts_dependent_farm_rent(
@@ -470,8 +516,8 @@ def test_property_dependents_farm_rent_reaches_only_their_input_and_the_hoh_test
 ) -> None:
     """A dependent's Schedule E is on the dependent's own return: it moves
     only that dependent's person input and, through the 152(d) gross-income
-    test, the filing status. No TAXSIM or Tax-Calculator income column
-    moves."""
+    test, the filing-status inputs. No relation moves, and no TAXSIM or
+    Tax-Calculator column other than MARS moves."""
     head, spouse, dependents = household
     base_case = _household_case(head, spouse, dependents)
     varied_dependents = [
@@ -483,15 +529,22 @@ def test_property_dependents_farm_rent_reaches_only_their_input_and_the_hoh_test
     base = _by_key(base_case)
     varied = _by_key(varied_case)
     assert set(base) == set(varied)
+    assert (
+        attach_axiom_tax_inputs_to_case(varied_case).metadata["axiom_relations"]
+        == attach_axiom_tax_inputs_to_case(base_case).metadata["axiom_relations"]
+    )
     changed = {key for key in base if base[key] != varied[key]}
-    allowed = {
+    dependent_inputs = {
         (dependent.entity_id, PERSON_FARM_RENT_INPUT) for dependent in dependents
     }
-    filing_status_moved = base[("tax_unit", FILING_STATUS_INPUT)] != (
+    filing_status_inputs = {
+        key for key in base if key[1].endswith("#input.filing_status")
+    }
+    assert changed <= dependent_inputs | filing_status_inputs
+    if base[("tax_unit", FILING_STATUS_INPUT)] == (
         varied[("tax_unit", FILING_STATUS_INPUT)]
-    )
-    if not filing_status_moved:
-        assert changed <= allowed
+    ):
+        assert changed <= dependent_inputs
     for dependent, amount in zip(dependents, dependent_rent):
         assert varied[(dependent.entity_id, PERSON_FARM_RENT_INPUT)] == amount
 

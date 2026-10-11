@@ -27,7 +27,21 @@ keep 469 from binding). AGI = 50,000 - 8,000 = 42,000.
 
 Example 3, joint: head wages 60,000 and farm rent 5,000; spouse farm rent
 -2,000; child farm rent 4,000. The child's Schedule E is on the child's own
-return, so AGI = 60,000 + 5,000 - 2,000 = 63,000.
+return, so AGI = 60,000 + 5,000 - 2,000 = 63,000, and nothing on the filers'
+return (AGI, the loss deduction, QBI, the QBI deduction, taxable income) may
+differ from the same household without the child's farm rent. 26 USC
+199A(c)(1) makes QBI "the net amount of qualified items of income, gain,
+deduction, and loss with respect to any qualified trade or business of the
+taxpayer", and a joint return is one taxpayer, so the filers' QBI is 5,000 -
+2,000 = 3,000. The bridge floors each person's QBI at zero before summing (as
+it does for Schedule C income and Part I rents) and reports 5,000; that
+existing convention is tracked in axiom-oracles#618 and pinned here as a
+strict xfail.
+
+Example 3b, head of household: wages 60,000; a 10-year-old child with farm
+rent 20,000 (or -20,000). Nothing reaches the filer's return: AGI 60,000, QBI
+0, and taxable income 60,000 - 24,150 = 35,850 (Rev. Proc. 2025-32 section
+.14: "Heads of Households ... $24,150").
 
 Excess business loss, 26 USC 461(l)(3)(A): the excess of "the aggregate
 deductions ... attributable to trades or businesses" over "the aggregate gross
@@ -53,6 +67,24 @@ percent of taxable income less net capital gain. Example 6, single: wages
 60,000; farm rent 20,000; QBID = 0.20 x 20,000 = 4,000 (the cap, 0.20 x
 (80,000 - 16,100) = 12,780 under the standard deduction, does not bind). With
 wages 80,000 and no farm rent there is no QBI and no deduction.
+
+Minimum deduction, 26 USC 199A(i): the deduction is "the greater of" the
+regular amount "or $400" for a taxpayer "whose aggregate qualified business
+income with respect to all active qualified trades or businesses ... is at
+least $1,000", where an active trade or business is one "in which the
+taxpayer materially participates (within the meaning of section 469(h))".
+Form 4835 is for a landowner who "did not materially participate (for
+self-employment tax purposes) in the operation or management of the farm".
+
+Example 6b, single: farm rent 17,500 and nothing else. Taxable income before
+the QBI deduction is 17,500 - 16,100 = 1,400 (Rev. Proc. 2025-32 section .14:
+"Unmarried Individuals ... $16,100"). QBID = 0.20 x min(17,500, 1,400) = 280,
+with no minimum because the farm rent is not active QBI; taxable income is
+1,120. Contrast, single: Schedule C income 19,000 and nothing else. The
+deductible half of SE tax is 0.5 x 0.153 x 0.9235 x 19,000 = 1,342.31, so AGI
+and QBI are 17,657.69, taxable income before the deduction is 1,557.69, and
+20 percent of it is 311.54; the active QBI is over $1,000, so the deduction is
+the $400 minimum.
 
 EITC, Pub. 596 (2025) Worksheet 1: "11. Enter the total of any net income
 from passive activities (such as income included on Schedule E, line 26, 29a
@@ -84,6 +116,7 @@ import yaml
 from axiom_oracles.adapters.axiom.tax_projection import (
     US_TAX_ORACLE_PROGRAM_RULES,
     attach_axiom_tax_inputs_to_case,
+    attach_axiom_tax_itemization_choice_to_case,
 )
 from axiom_oracles.cli import _build_runner
 from axiom_oracles.core.case import Case, Concepts, Entity
@@ -94,6 +127,7 @@ AGI = "adjusted_gross_income"
 LOSS_ALD = "loss_ald"
 QBID = "qualified_business_income_deduction"
 QBI = "qualified_business_income"
+TAXABLE_INCOME = "us:tax/oracle-bridge#taxable_income"
 # The axiom target of us:tax/federal-income-tax#eitc in
 # axiom_oracles/config/concept_mappings.yaml.
 EITC = "us:statutes/26/32#eitc"
@@ -179,6 +213,25 @@ CASES = {
         _person("person-2", "Spouse", 48, **{F: -2_000}),
         _person("person-3", "Child", 15, **{F: 4_000}),
     ),
+    "joint-child-without-farm-rent": (
+        _person("person-1", "HeadOfHousehold", 50, **{W: 60_000, F: 5_000}),
+        _person("person-2", "Spouse", 48, **{F: -2_000}),
+        _person("person-3", "Child", 15),
+    ),
+    "hoh-child-farm-rent": (
+        _person("person-1", "HeadOfHousehold", 40, **{W: 60_000}),
+        _person("person-2", "Child", 10, **{F: 20_000}),
+    ),
+    "hoh-child-farm-loss": (
+        _person("person-1", "HeadOfHousehold", 40, **{W: 60_000}),
+        _person("person-2", "Child", 10, **{F: -20_000}),
+    ),
+    "hoh-child-without-farm-rent": (
+        _person("person-1", "HeadOfHousehold", 40, **{W: 60_000}),
+        _person("person-2", "Child", 10),
+    ),
+    "minimum-farm-rent-only": _single(40, **{F: 17_500}),
+    "minimum-schedule-c-only": _single(40, **{SE: 19_000}),
     "ebl-farm-rent-income": _single(55, **{W: 400_000, SE: -350_000, F: 50_000}),
     "ebl-farm-rent-loss": _single(55, **{W: 400_000, F: -350_000}),
     "qbi-farm-rent": _single(40, **{W: 60_000, F: 20_000}),
@@ -204,13 +257,19 @@ def engine_values() -> dict[str, dict]:
             (Concepts.FEDERAL_INCOME_TAX,),
             axiom_engine_binary=binary,
         )
+        # The itemization choice lets the engine pick the standard deduction,
+        # as scripts/run_comparison.py does for the tax suites.
         cases = [
-            attach_axiom_tax_inputs_to_case(
-                Case(case_id=case_id, period="2026", entities=people)
+            attach_axiom_tax_itemization_choice_to_case(
+                attach_axiom_tax_inputs_to_case(
+                    Case(case_id=case_id, period="2026", entities=people)
+                )
             )
             for case_id, people in CASES.items()
         ]
-        results = runner.run_cases(cases, [AGI, LOSS_ALD, QBI, QBID, EITC])
+        results = runner.run_cases(
+            cases, [AGI, LOSS_ALD, QBI, QBID, TAXABLE_INCOME, EITC]
+        )
     values = {}
     for result in results:
         assert not result.errors, result.errors
@@ -229,6 +288,68 @@ def engine_values() -> dict[str, dict]:
 )
 def test_engine_agi_takes_schedule_e_line_40(engine_values, case_id, agi) -> None:
     assert engine_values[case_id][AGI] == pytest.approx(agi)
+
+
+FILERS_RETURN = (AGI, LOSS_ALD, QBI, QBID, TAXABLE_INCOME, EITC)
+
+
+@pytest.mark.parametrize(
+    ("with_dependent_farm_rent", "without"),
+    [
+        pytest.param(
+            "joint-with-child", "joint-child-without-farm-rent", id="example-3"
+        ),
+        pytest.param(
+            "hoh-child-farm-rent", "hoh-child-without-farm-rent", id="example-3b"
+        ),
+        pytest.param(
+            "hoh-child-farm-loss",
+            "hoh-child-without-farm-rent",
+            id="example-3b-loss",
+        ),
+    ],
+)
+def test_engine_dependents_farm_rent_reaches_nothing_on_the_filers_return(
+    engine_values, with_dependent_farm_rent, without
+) -> None:
+    for output in FILERS_RETURN:
+        assert engine_values[with_dependent_farm_rent][output] == pytest.approx(
+            engine_values[without][output]
+        ), output
+
+
+def test_engine_head_of_household_with_a_childs_farm_rent(engine_values) -> None:
+    values = engine_values["hoh-child-farm-rent"]
+
+    assert values[AGI] == pytest.approx(60_000)
+    assert values[QBI] == 0
+    assert values[QBID] == 0
+    assert values[TAXABLE_INCOME] == pytest.approx(60_000 - 24_150)
+
+
+@pytest.mark.xfail(
+    strict=True,
+    reason=(
+        "the bridge floors each person's QBI before summing, so a spouse's "
+        "loss does not reduce the other spouse's QBI (axiom-oracles#618)"
+    ),
+)
+def test_engine_joint_qbi_nets_the_spouses_farm_rent(engine_values) -> None:
+    assert engine_values["joint-with-child"][QBI] == pytest.approx(5_000 - 2_000)
+
+
+def test_engine_farm_rent_alone_does_not_earn_the_199a_i_minimum(engine_values) -> None:
+    farm_rent = engine_values["minimum-farm-rent-only"]
+    schedule_c = engine_values["minimum-schedule-c-only"]
+
+    assert farm_rent[AGI] == pytest.approx(17_500)
+    assert farm_rent[QBI] == pytest.approx(17_500)
+    assert farm_rent[QBID] == pytest.approx(0.20 * (17_500 - 16_100))
+    assert farm_rent[TAXABLE_INCOME] == pytest.approx(1_120)
+
+    assert schedule_c[AGI] == pytest.approx(17_657.69, abs=0.01)
+    assert 0.20 * (schedule_c[AGI] - 16_100) < 400
+    assert schedule_c[QBID] == pytest.approx(400)
 
 
 def test_engine_positive_farm_rent_raises_the_461l_allowance(engine_values) -> None:
@@ -255,6 +376,7 @@ def test_engine_farm_rent_is_qualified_business_income(engine_values) -> None:
     assert with_farm_rent[AGI] == without[AGI] == pytest.approx(80_000)
     assert with_farm_rent[QBI] == pytest.approx(20_000)
     assert with_farm_rent[QBID] == pytest.approx(0.20 * 20_000)
+    assert with_farm_rent[TAXABLE_INCOME] == pytest.approx(80_000 - 16_100 - 4_000)
     assert without[QBI] == 0
     assert without[QBID] == 0
 
