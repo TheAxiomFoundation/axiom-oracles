@@ -827,6 +827,11 @@ def compare(
                     raise click.ClickException(
                         f"Invalid comparison results: {exc}"
                     ) from exc
+                # Automatic collection is off for the whole run, so free this
+                # batch's engine objects (simulations held in reference
+                # cycles, for every runner) before the next batch starts.
+                del accumulator_cases, left_results, right_results
+                gc.collect()
 
             if not accumulator.case_count:
                 raise click.ClickException(
