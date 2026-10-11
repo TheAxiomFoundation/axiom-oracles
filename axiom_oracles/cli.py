@@ -37,6 +37,7 @@ from .comparison.mappings import (
     comparable_mappings,
     comparison_scope_for_targets,
     engine_targets_for_concepts,
+    load_program_mappings,
 )
 from .comparison.report import (
     FULL_CASE_INPUT_LIMIT,
@@ -52,6 +53,7 @@ from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
 from .core.geography import GeographyScope, scope_contains
 from .populations import load_populace_us_cases
+from .populations.populace_us import CaseUnit, CaseUnitSelector
 from .suites import available_suites, load_suite
 
 
@@ -616,36 +618,39 @@ def compare(
         _echo_resolved_axiom_composition(
             report_suite or suite_name, {left, right}, axiom_program
         )
-        population_concepts = concepts
-        population_categories = categories
+        population_mappings = None
+        population_mapping_locales = None
+        case_unit_selector: CaseUnitSelector | None = None
         if population == "enhanced-cps":
-            # Grain follows the mapped output surface, including the default
-            # engine intersection. A nonempty tax-only surface loads tax units;
-            # any benefit or mixed surface keeps household Cases. Synthetic
-            # suite construction and the loader's household default stay intact.
-            population_mappings = comparable_mappings(
-                left,
-                right,
-                locales=set(locales) or None,
-                scope=comparison_scope,
-                concepts=set(concepts) or None,
-                categories=set(categories) or None,
-                include_components=include_components,
-            )
-            try:
-                population_mappings = _filter_for_accessnyc_mode(
-                    population_mappings,
+
+            def case_unit_selector(population_locales: set[str]) -> CaseUnit:
+                nonlocal population_mappings, population_mapping_locales
+                # Invariant: tax_unit iff every output of the final supported
+                # surface is a tax-unit concept. Empty surfaces never compare.
+                population_mapping_locales = (
+                    set(locales) if locales else population_locales
+                )
+                population_mappings = comparable_mappings(
                     left,
                     right,
-                    accessnyc_mode,
-                    accessnyc_python_path,
+                    locales=population_mapping_locales,
+                    scope=comparison_scope,
+                    concepts=set(concepts) or None,
+                    categories=set(categories) or None,
+                    include_components=include_components,
                 )
-            except RuntimeError as exc:
-                raise click.ClickException(str(exc)) from exc
-            population_concepts = tuple(
-                mapping.concept_id for mapping in population_mappings
-            )
-            population_categories = ()
+                try:
+                    population_mappings = _filter_for_accessnyc_mode(
+                        population_mappings,
+                        left,
+                        right,
+                        accessnyc_mode,
+                        accessnyc_python_path,
+                    )
+                except RuntimeError as exc:
+                    raise click.ClickException(str(exc)) from exc
+                return _populace_us_case_unit((), (), mappings=population_mappings)
+
         cases = _load_population_cases(
             population=population,
             suite_name=suite_name,
@@ -653,8 +658,9 @@ def compare(
             period=period,
             sample_size=sample_size,
             ecps_dataset=ecps_dataset,
-            categories=population_categories,
-            concepts=population_concepts,
+            categories=categories,
+            concepts=concepts,
+            case_unit_selector=case_unit_selector,
         )
         if jurisdiction_fips and _wants_snap(concepts):
             cases = [
@@ -668,25 +674,31 @@ def compare(
             )
         case_locales = set(locales) if locales else _case_locales(cases)
         requested_concepts = set(concepts) or _case_output_concepts(cases) or None
-        mappings = comparable_mappings(
-            left,
-            right,
-            locales=case_locales,
-            scope=comparison_scope,
-            concepts=requested_concepts,
-            categories=set(categories) or None,
-            include_components=include_components,
-        )
-        try:
-            mappings = _filter_for_accessnyc_mode(
-                mappings,
+        if (
+            population_mappings is not None
+            and population_mapping_locales == case_locales
+        ):
+            mappings = population_mappings
+        else:
+            mappings = comparable_mappings(
                 left,
                 right,
-                accessnyc_mode,
-                accessnyc_python_path,
+                locales=case_locales,
+                scope=comparison_scope,
+                concepts=requested_concepts,
+                categories=set(categories) or None,
+                include_components=include_components,
             )
-        except RuntimeError as exc:
-            raise click.ClickException(str(exc)) from exc
+            try:
+                mappings = _filter_for_accessnyc_mode(
+                    mappings,
+                    left,
+                    right,
+                    accessnyc_mode,
+                    accessnyc_python_path,
+                )
+            except RuntimeError as exc:
+                raise click.ClickException(str(exc)) from exc
         if not mappings:
             raise click.ClickException(
                 "No comparable concepts found for those engines, locales, and filters."
@@ -1221,6 +1233,7 @@ def _load_population_cases(
     ecps_dataset: str | None,
     categories: tuple[str, ...] = (),
     concepts: tuple[str, ...] = (),
+    case_unit_selector: CaseUnitSelector | None = None,
 ) -> list[Case]:
     if population == "enhanced-cps":
         return load_populace_us_cases(
@@ -1229,6 +1242,7 @@ def _load_population_cases(
             sample_size=sample_size or None,
             dataset=ecps_dataset,
             case_unit=_populace_us_case_unit(categories, concepts),
+            case_unit_selector=case_unit_selector,
         )
     if population == "synthetic":
         cases = [
@@ -1244,10 +1258,22 @@ def _load_population_cases(
 def _populace_us_case_unit(
     categories: tuple[str, ...],
     concepts: tuple[str, ...],
-) -> str:
-    if categories and set(categories) == {"tax"}:
-        return "tax_unit"
-    if concepts and all(concept.startswith("us:tax/") for concept in concepts):
+    *,
+    mappings: list[ProgramMapping] | None = None,
+) -> CaseUnit:
+    if mappings is None:
+        mappings = (
+            [
+                mapping
+                for mapping in load_program_mappings()
+                if (not concepts or mapping.concept_id in concepts)
+                and (not categories or mapping.category in categories)
+                and mapping.target_for_engine("policyengine")
+            ]
+            if concepts or categories
+            else []
+        )
+    if mappings and all(mapping.case_unit == "tax_unit" for mapping in mappings):
         return "tax_unit"
     return "household"
 

@@ -88,6 +88,7 @@ POPULACE_PINS: dict[tuple[str, str], PopulacePin] = {
 
 MicrosimulationFactory = Callable[[str], Any]
 CaseUnit = Literal["household", "tax_unit"]
+CaseUnitSelector = Callable[[set[str]], CaseUnit]
 
 
 def dataset_for_scope(scope: GeographyScope | dict[str, Any] | None) -> str:
@@ -166,6 +167,7 @@ def load_populace_us_cases(
     sample_size: int | None = None,
     dataset: str | None = None,
     case_unit: CaseUnit = "household",
+    case_unit_selector: CaseUnitSelector | None = None,
     microsimulation_factory: MicrosimulationFactory | None = None,
 ) -> list[Case]:
     return PopulaceUsCaseLoader(
@@ -176,6 +178,7 @@ def load_populace_us_cases(
         period=period,
         sample_size=sample_size,
         case_unit=case_unit,
+        case_unit_selector=case_unit_selector,
     )
 
 
@@ -191,6 +194,7 @@ class PopulaceUsCaseLoader:
         period: str = "2026",
         sample_size: int | None = None,
         case_unit: CaseUnit = "household",
+        case_unit_selector: CaseUnitSelector | None = None,
     ) -> list[Case]:
         if case_unit not in {"household", "tax_unit"}:
             raise ValueError("case_unit must be 'household' or 'tax_unit'.")
@@ -202,11 +206,37 @@ class PopulaceUsCaseLoader:
 
         calculation_period = _year(period)
         households = self._households(sim, calculation_period)
+        household_ids = _values(
+            sim.calculate("household_id", period=calculation_period, map_to="person")
+        )
+        if case_unit_selector is not None:
+            # Resolve grain from the same sampled, populated and scoped
+            # households that will produce Cases, before loading tax-only facts.
+            populated_ids = {_clean_id(value) for value in household_ids}
+            locales = {
+                locale
+                for household in households
+                if household.household_id in populated_ids
+                and (
+                    normalized_scope is None
+                    or (
+                        household.scope is not None
+                        and scope_contains(normalized_scope, household.scope)
+                    )
+                )
+                if (locale := _locale_metadata(household.scope).get("locale"))
+            }
+            del populated_ids
+            case_unit = case_unit_selector(locales)
+            if case_unit not in {"household", "tax_unit"}:
+                raise ValueError("case_unit must be 'household' or 'tax_unit'.")
         people_by_household = self._people_by_household(
             sim,
             calculation_period,
             case_unit=case_unit,
+            household_ids=household_ids,
         )
+        del household_ids
         cases = []
         for household in households:
             household_scope = household.scope
@@ -353,10 +383,12 @@ class PopulaceUsCaseLoader:
         period: int,
         *,
         case_unit: CaseUnit = "household",
+        household_ids: list[Any] | None = None,
     ) -> dict[int | str, list["_PersonRow"]]:
-        household_ids = _values(
-            sim.calculate("household_id", period=period, map_to="person")
-        )
+        if household_ids is None:
+            household_ids = _values(
+                sim.calculate("household_id", period=period, map_to="person")
+            )
         size = len(household_ids)
         person_ids = _calculate_values(
             sim,

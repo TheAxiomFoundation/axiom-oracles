@@ -300,9 +300,9 @@ class TaxsimPackageRunner(EngineAdapter):
         first_missing = missing[0][0] if missing else None
         for key, case in expected:
             record = by_key.get(key)
-            unprojected = taxsim_unprojected_inputs_for_case(case) or case.metadata.get(
-                TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY
-            )
+            unprojected = taxsim_unprojected_inputs_for_case(case)
+            if unprojected is None:
+                unprojected = case.metadata.get(TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY)
             if record is None:
                 results.append(
                     EngineResult(

@@ -180,6 +180,8 @@ def attach_taxsim_inputs(cases: list[Case]) -> list[Case]:
         unprojected = taxsim_unprojected_inputs_for_case(case)
         if unprojected:
             metadata[TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY] = unprojected
+        elif unprojected is not None:
+            metadata.pop(TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY, None)
         metadata["taxsim_input"] = row
         projected.append(replace(case, metadata=metadata))
     return projected
@@ -273,17 +275,19 @@ def taxsim_input_for_case(
     return row
 
 
-def taxsim_unprojected_inputs_for_case(case: Case) -> dict[str, float]:
+def taxsim_unprojected_inputs_for_case(case: Case) -> dict[str, float] | None:
     """Head + spouse income the TAXSIM row has no column for.
 
     Only nonzero amounts are listed, keyed by Case income name, so a unit
     with nothing dropped carries no entry. Today that is tax-exempt interest
     alone (see the intrec comment in taxsim_input_for_case).
+    None means person source facts are unavailable on a row-only Case;
+    an empty dict means current filer facts give zero and supersede metadata.
     """
 
     people = _people(case)
     if not people:
-        return {}
+        return None
     head = _head(people)
     spouse = _spouse(people, head)
     earners = [head] + ([spouse] if spouse is not None else [])

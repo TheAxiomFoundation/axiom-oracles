@@ -9,6 +9,7 @@ from axiom_oracles.adapters.taxsim.projection import (
     attach_taxsim_inputs,
     taxsim_input_for_case,
 )
+from axiom_oracles.adapters.taxsim.runner import TaxsimPackageRunner
 from axiom_oracles.core.case import Case, Concepts, Entity
 
 
@@ -341,3 +342,91 @@ def test_taxsim_diagnostic_is_filer_sum_regardless_of_projection_path(
         == expected
     )
     assert projected.metadata["taxsim_input"] == row
+
+
+def _taxsim_diagnostic_result(case, output_present):
+    class FixedRunner:
+        def __init__(self, frame):
+            pass
+
+        def run(self, show_progress=False):
+            return [{"taxsimid": 1, "fiitax": 100}] if output_present else []
+
+    [result] = TaxsimPackageRunner(runner_factory=FixedRunner).run_cases([case])
+    return result
+
+
+@pytest.mark.parametrize("output_present", [True, False])
+def test_taxsim_repeated_attachment_clears_diagnostic_after_zeroing(
+    output_present,
+) -> None:
+    [original] = attach_taxsim_inputs([_tax_exempt_interest_case(10_000, 0, 900)])
+    zeroed = replace(
+        original, entities=_tax_exempt_interest_case(0, 0, 900).entities
+    )
+
+    [reattached] = attach_taxsim_inputs([zeroed])
+    result = _taxsim_diagnostic_result(reattached, output_present)
+
+    assert TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY not in reattached.metadata
+    assert TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY not in (result.raw or {})
+    assert reattached.metadata["taxsim_input"] == original.metadata["taxsim_input"]
+    assert original.metadata[TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY] == {
+        "tax_exempt_interest_income": 10_000
+    }
+    assert result.values == ({"fiitax": 100} if output_present else {})
+    assert bool(result.errors) is not output_present
+
+
+@pytest.mark.parametrize("output_present", [True, False])
+def test_taxsim_direct_result_uses_current_zero_instead_of_stale_diagnostic(
+    output_present,
+) -> None:
+    [original] = attach_taxsim_inputs([_tax_exempt_interest_case(10_000, 0, 900)])
+    zeroed = replace(
+        original, entities=_tax_exempt_interest_case(0, 0, 900).entities
+    )
+
+    result = _taxsim_diagnostic_result(zeroed, output_present)
+
+    assert TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY not in (result.raw or {})
+    assert result.values == ({"fiitax": 100} if output_present else {})
+    assert bool(result.errors) is not output_present
+
+
+@pytest.mark.parametrize("output_present", [True, False])
+def test_taxsim_row_only_case_retains_diagnostic_without_source_facts(
+    output_present,
+) -> None:
+    [original] = attach_taxsim_inputs([_tax_exempt_interest_case(10_000, 0, 900)])
+    row_only = replace(original, entities=())
+
+    [reattached] = attach_taxsim_inputs([row_only])
+    result = _taxsim_diagnostic_result(reattached, output_present)
+
+    expected = {"tax_exempt_interest_income": 10_000}
+    assert reattached.metadata[TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY] == expected
+    assert result.raw[TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY] == expected
+    assert result.values == ({"fiitax": 100} if output_present else {})
+    assert bool(result.errors) is not output_present
+
+
+@settings(max_examples=100, deadline=None, derandomize=True)
+@given(
+    initial=st.integers(min_value=1, max_value=100_000),
+    head=st.integers(min_value=-100_000, max_value=100_000),
+    child=st.integers(min_value=-100_000, max_value=100_000),
+)
+def test_taxsim_reattachment_clears_diagnostic_when_current_filers_sum_to_zero(
+    initial, head, child
+) -> None:
+    """Current filer facts replace prior diagnostics, including signed cancellation."""
+    [original] = attach_taxsim_inputs([_tax_exempt_interest_case(initial, 0, child)])
+    zeroed = replace(
+        original, entities=_tax_exempt_interest_case(head, -head, child).entities
+    )
+
+    [reattached] = attach_taxsim_inputs([zeroed])
+
+    assert TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY not in reattached.metadata
+    assert reattached.metadata["taxsim_input"] == original.metadata["taxsim_input"]

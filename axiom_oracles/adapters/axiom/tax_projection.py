@@ -3508,9 +3508,11 @@ def _eitc_relevant_investment_income(
     passive activity income is rental income only. The Case deliberately
     carries no farm-rent concept, because the Axiom federal oracle bridge
     has no gross-income slot for it (axiom-oracles issue
-    #566), and no passive partnership/S-corp concept,
-    because no pinned producer supplies one. Form 4797 amounts, royalties,
-    and estate/trust passive income are not modeled either.
+    #566), and no passive partnership/S-corp concept. The checked
+    PolicyEngine-US 1.764.6 source has generic partnership and S-corporation
+    inputs but no dedicated passive split; other producer versions were not
+    checked. Form 4797 amounts, royalties, and estate/trust passive income
+    are not modeled either.
     """
     return (
         interest_and_dividends
