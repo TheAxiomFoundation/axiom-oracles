@@ -8,18 +8,22 @@
       "oracle_policy_name": "aca_ptc",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "us-aca-ptc-grid",
-      "covered": true,
-      "comparisons": 6,
-      "matches": 6,
-      "raw_match_rate": 100,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
-      "bridge_artifacts": 0,
-      "note": "The us-aca-ptc-grid suite compares six full-year 2026 IRC 36B cases. It binds PE-US used_aca_ptc rather than raw aca_ptc so the compared boundary includes the enrolled-plan premium cap present in Axiom. The committed report is 6/6 within one cent and includes nonzero cases.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "The us-aca-ptc-grid suite compares six full-year 2026 IRC 36B cases. It binds PE-US used_aca_ptc rather than raw aca_ptc so the compared boundary includes the enrolled-plan premium cap present in Axiom. The committed report is 6/6 within one cent and includes nonzero cases. Current coverage retracted under the same-case execution evidence rule: The recorded oracle comparison target is `used_aca_ptc`, not registered `aca_ptc`. Add an actual final-output comparison and rerun `us-aca-ptc-grid` retaining same-case returned values from both engines and explicit comparison bindings for `aca_ptc`; then re-register.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:acp",
@@ -37,7 +41,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Lapsed before the 2026 validation year: the Affordable Connectivity Program (47 USC 1752; IIJA 2021 sec. 60502) stopped new enrollments 2024-02-07 and paid its last partial benefit for May 2024 as appropriated funds were exhausted. PolicyEngine-US 1.767.3 zeroes gov.fcc.acp.amount for 2026, so acp pays 0 for every synthetic case even with is_acp_eligible forced on and broadband_cost 2400 (probe evidence: scripts/probe_us_repealed_federal.py). Axiom encodes current law and has no current-law ACP surface to compare.",
-      "status": "excluded:oracle_models_repealed_law"
+      "status": "excluded:oracle_models_repealed_law",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:additional_medicare_tax",
@@ -55,7 +63,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "The us-additional-medicare-grid suite compares PE-US additional_medicare_tax with Axiom's combined final only on the explicitly bounded tax-year-2026 zero-self-employment domain: five wage-only GRID-CONTRACT cases across single, joint, and married-filing-separately status, four nonzero. For zero-SE inputs, PE-US additional_medicare_tax equals the section 3101(b)(2) wage-only amount and Axiom's combined output remains valid. The suite does not test or claim the section 1401(b)(2) self-employment leg; SE leg pending the 26 CFR 1.1401-1 operative-authority chain, axiom-corpus#523. The committed report is 5/5 within one cent.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "additional_medicare_tax"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ak_atap",
@@ -73,7 +87,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:al_income_tax",
@@ -91,7 +109,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The al-income-tax-populace evidence compares only the canonical section 40-18-5 schedule-before-credits output to al_income_tax_before_non_refundable_credits after validated projection of completed al_taxable_income and schedule status. It does not prove final annual al_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:al_tanf",
@@ -109,7 +131,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 3,
       "note": "Covered by al-tanf-ecps \u2014 Alabama Family Assistance (al_tanf) vs PE-2026 at population scale after requested-month regeneration (1441/1444 match, 3 unexplained).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "al_tanf"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:alternative_minimum_tax",
@@ -127,25 +155,33 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:american_opportunity_credit",
       "oracle_policy_name": "american_opportunity_credit",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#aotc).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#aotc). Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `american_opportunity_credit`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `american_opportunity_credit`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ar_income_tax",
@@ -163,7 +199,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The state-tax Populace campaign validates the narrower Arkansas Act 2 individual schedule component ar_income_tax_before_non_refundable_credits_indiv at Person grain and sums both sides to TaxUnit only for accounting. The reviewed RuleSpec does not expose broad final ar_income_tax or the former six-case liability-grid output, so that stale grid suite has been retired and broad ar_income_tax remains uncovered.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ar_tea",
@@ -181,7 +221,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:az_income_tax",
@@ -199,25 +243,33 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The az-income-tax-liability grid and full-Populace campaign validate only az_income_tax_before_non_refundable_credits. Final az_income_tax also applies charitable-contribution, dependent, family, increased-excise-tax, and property-tax credits; 499 of 1,585 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:az_tanf",
       "oracle_policy_name": "az_tanf",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "az-tanf-ecps",
-      "covered": true,
-      "comparisons": 1341,
-      "matches": 1341,
-      "raw_match_rate": 100,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
-      "bridge_artifacts": 0,
-      "note": "Covered by az-tanf-ecps \u2014 Arizona Cash Assistance (az_tanf) vs PE-2026 at population scale.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by az-tanf-ecps \u2014 Arizona Cash Assistance (az_tanf) vs PE-2026 at population scale. Current coverage retracted under the same-case execution evidence rule: The retained case rows omit both returned comparison values for this registered output; matches/counts alone cannot attest either side. Rerun `az-tanf-ecps` retaining same-case returned values from both engines and explicit comparison bindings for `az_tanf`; then re-register.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:basic_income",
@@ -235,7 +287,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Reform lever, not a baseline statutory program: basic_income is $0 in the baseline and only set by a UBI reform. PE computes it, but there is no enacted statute to conform against \u2014 reform scaffolding.",
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ca_income_tax",
@@ -253,7 +309,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ca-income-tax-liability suite is a six-case ordinary resident single/joint grid against ca_income_tax_before_refundable_credits. It does not cover refundable credits, and its RuleSpec slice also excludes the high-rate, head-of-household, AMT, and mental-health-tax branches, so it does not establish final ca_income_tax liability.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ca_tanf",
@@ -271,43 +331,57 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 177,
       "note": "Covered by ca-tanf-ecps \u2014 CalWORKs (ca_tanf) vs PE-2026 at population scale; residuals undispositioned.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "ca_tanf"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": "1.752.2"
     },
     {
       "id": "us-pe:capital_gains_tax",
       "oracle_policy_name": "capital_gains_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#capital_gain).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "FIIT compares capital-gain definitions and income_tax_main_rates, not the registered capital_gains_tax output. Coverage requires a report comparing capital_gains_tax. Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `capital_gains_tax`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `capital_gains_tax`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:cdcc",
       "oracle_policy_name": "cdcc",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#cdcc).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#cdcc). Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `cdcc`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `cdcc`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:child_support_received",
@@ -325,7 +399,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Reported income carried from the CPS (no formula); PE-US carries it into net income but computes no award from statute \u2014 a carried input, not a simulated program.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:chip",
@@ -343,7 +421,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PolicyEngine-US 1.767.3 imputes this annual Person value as state separate-CHIP spending divided by enrollment, using calibration.gov.hhs.cms.chip.spending.separate_chip.total[state_code] and calibration.gov.hhs.cms.chip.enrollment.separate_chip[state_code], then gates it on chip_enrolled (eligibility plus take-up). This is a per-capita expenditure imputation, not a statutory amount formula; is_chip_eligible is compared separately.",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:co_income_tax",
@@ -361,7 +443,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "In-scope uncovered \u2014 the reviewed Colorado Populace comparison validates only the C.R.S. section 39-22-104(1.7)(c) base tax on completed-return Colorado taxable income. Section 39-22-627 temporary rate adjustments and credits needed for final co_income_tax remain outside that suite.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:co_tanf",
@@ -379,7 +465,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 3,
       "note": "Covered by co-tanf-ecps \u2014 Colorado Works (co_tanf) vs PE-2026 at population scale.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "co_tanf"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": "1.752.2"
     },
     {
       "id": "us-pe:commodity_supplemental_food_program",
@@ -397,7 +489,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PolicyEngine-US 1.767.3 imputes this annual Person value directly from gov.usda.csfp.amount, an administrative cost-per-participant parameter derived from program cost divided by participation, and gates it on commodity_supplemental_food_program_eligible. This is a food-package/caseload service-value imputation, not a statutory amount formula; commodity_supplemental_food_program_eligible is compared separately (rulespec-us PR #1008).",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ct_income_tax",
@@ -415,7 +511,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ct-income-tax-populace campaign validates only the canonical full-year-resident ordinary section 12-700 tax before the personal credit, recovered exactly from ct_income_tax_after_personal_credits and ct_personal_credit_rate. It does not claim the personal credit, alternative minimum tax, property-tax or stillborn credits, refundable ct_eitc, payments, refunds, or final ct_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ct_tfa",
@@ -433,25 +533,33 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ctc",
       "oracle_policy_name": "ctc",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#ctc).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#ctc). Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `ctc`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `ctc`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:dc_income_tax",
@@ -469,7 +577,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The dc-income-tax-liability suite is a six-case ordinary resident wage-earner grid against dc_income_tax_before_credits. It does not cover nonrefundable or refundable credits or establish the full-population filing-method branches required for final dc_income_tax liability.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:dc_tanf",
@@ -487,7 +599,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:de_income_tax",
@@ -505,7 +621,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The state-tax Populace campaign validates only the narrower Delaware section 1102(a)(14) individual schedule component de_income_tax_before_non_refundable_credits_indv at Person grain and sums both sides to TaxUnit only for accounting. It does not validate filing-method selection, combined-return computation, personal, aged-personal, child-care, nonrefundable-EITC, or refundable-EITC credits, payments, or final de_income_tax. The stale six-case broad-liability grid has been retired.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:de_tanf",
@@ -523,7 +643,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by de-tanf-ecps \u2014 Delaware TANF (de_tanf) vs PE-2026 at population scale (781/781 match, 0 unexplained).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "de_tanf"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:early_head_start",
@@ -541,7 +667,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PolicyEngine-US 1.767.3 imputes this annual Person value as state Early Head Start spending per funded slot, gov.hhs.head_start.early_head_start.spending[state_code_str] / gov.hhs.head_start.early_head_start.enrollment[state_code_str] (zero for nonpositive enrollment), multiplied by takes_up_early_head_start_if_eligible. This is an administrative slot-cost imputation, not a statutory amount formula; is_early_head_start_eligible is compared separately (rulespec-us PR #1010).",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ebb",
@@ -559,7 +689,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Lapsed before the 2026 validation year: the Emergency Broadband Benefit (Consolidated Appropriations Act 2021; 47 USC 1752 note) closed enrollment and transitioned to the Affordable Connectivity Program on 2021-12-31. PolicyEngine-US 1.767.3 sets gov.fcc.ebb.amount to 0 for 2026, so ebb pays 0 for every synthetic case even with is_ebb_eligible forced on and broadband_cost 2400 (probe evidence: scripts/probe_us_repealed_federal.py). No current-law EBB surface exists for Axiom to compare.",
-      "status": "excluded:oracle_models_repealed_law"
+      "status": "excluded:oracle_models_repealed_law",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:educational_assistance",
@@ -577,115 +711,143 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Reported income carried from the CPS (no formula); PE-US carries it into net income but computes no award from statute \u2014 a carried input, not a simulated program.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:eitc",
       "oracle_policy_name": "eitc",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#eitc) \u2014 the largest federal residual, undispositioned.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "FIIT's recorded EITC surface compares intermediate and eligibility outputs. Its report does not bind the registered final eitc award; coverage requires that output's evidence. Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `eitc`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `eitc`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:elderly_disabled_credit",
       "oracle_policy_name": "elderly_disabled_credit",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "us-elderly-disabled-grid",
-      "covered": true,
-      "comparisons": 9,
-      "matches": 9,
-      "raw_match_rate": 100,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
-      "bridge_artifacts": 0,
-      "note": "The us-elderly-disabled-grid suite compares the statutory section 22 potential before the section 26 liability/credit-order cap on nine exactly expressible 2026 companion cases. It covers aged and proven permanent-total-disability branches plus Social Security and AGI reductions; the empty-relation no-qualified-person diagnostic is omitted because PE requires a TaxUnit member and the fixture supplies no facts for one. The committed report is 9/9 within one cent.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "The us-elderly-disabled-grid suite compares the statutory section 22 potential before the section 26 liability/credit-order cap on nine exactly expressible 2026 companion cases. It covers aged and proven permanent-total-disability branches plus Social Security and AGI reductions; the empty-relation no-qualified-person diagnostic is omitted because PE requires a TaxUnit member and the fixture supplies no facts for one. The committed report is 9/9 within one cent. Current coverage retracted under the same-case execution evidence rule: The recorded oracle comparison target is `elderly_disabled_credit_potential`, not final `elderly_disabled_credit`. Add an actual final-output comparison and rerun `us-elderly-disabled-grid` retaining same-case returned values from both engines and explicit comparison bindings for `elderly_disabled_credit`; then re-register.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:employee_medicare_tax",
       "oracle_policy_name": "employee_medicare_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/payroll#employee_medicare).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by fiit-ecps (us:tax/payroll#employee_medicare). Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `employee_medicare_tax`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `employee_medicare_tax`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:employee_social_security_tax",
       "oracle_policy_name": "employee_social_security_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/payroll#employee_oasdi).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by fiit-ecps (us:tax/payroll#employee_oasdi). Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `employee_social_security_tax`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `employee_social_security_tax`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:employer_medicare_tax",
       "oracle_policy_name": "employer_medicare_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/payroll#employer_medicare).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by fiit-ecps (us:tax/payroll#employer_medicare). Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `employer_medicare_tax`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `employer_medicare_tax`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:employer_social_security_tax",
       "oracle_policy_name": "employer_social_security_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/payroll#employer_oasdi).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by fiit-ecps (us:tax/payroll#employer_oasdi). Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `employer_social_security_tax`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `employer_social_security_tax`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:energy_efficient_home_improvement_credit",
@@ -703,7 +865,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Lapsed before the 2026 validation year: IRC 25C(i), as amended by the One Big Beautiful Bill Act, Pub. L. No. 119-21, sec. 70505 (2025), provides that the credit does not apply to property placed in service after 2025-12-31. PolicyEngine-US 1.767.3 sets gov.irs.credits.energy_efficient_home_improvement.in_effect to false throughout 2026, so energy_efficient_home_improvement_credit is 0 even with employment_income 200000 and heat_pump_expenditures 50000; the otherwise computed capped component is 2000 and the tax-liability limit is 36734 (probe evidence: scripts/probe_us_ira_2026.py). Axiom encodes current law and has no live 2026 section 25C surface to compare.",
-      "status": "excluded:oracle_models_repealed_law"
+      "status": "excluded:oracle_models_repealed_law",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:financial_assistance",
@@ -721,7 +887,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Reported income carried from the CPS (no formula); PE-US carries it into net income but computes no award from statute \u2014 a carried input, not a simulated program.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:fl_tca",
@@ -739,7 +909,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:foreign_tax_credit",
@@ -757,7 +931,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:free_school_meals",
@@ -775,7 +953,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PolicyEngine-US 1.767.3 imputes this annual SPM-unit value from the FREE branch of school_meal_tier: the NSLP-plus-SBP reimbursement differential over the paid tier from gov.usda.school_meals.amount.nslp[state_group_str][tier] and gov.usda.school_meals.amount.sbp[state_group_str][tier], multiplied by gov.usda.school_meals.school_days and the SPM-unit count of is_in_k12_school. This is a reimbursement-rate service-value imputation, not a statutory amount formula; the school_meal_tier eligibility classification is compared separately.",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ga_income_tax",
@@ -793,7 +975,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ga-income-tax-liability grid and full-Populace campaign validate only ga_income_tax_before_non_refundable_credits. Final ga_income_tax also applies child-care, low-income, child, and itemizer credits; 670 of 2,187 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ga_tanf",
@@ -811,7 +997,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 1,
       "note": "Covered by ga-tanf-ecps \u2014 Georgia TANF (ga_tanf) vs PE-2026 at population scale (1896/1897 match, 1 residual dispositioned bridge_artifact, 0 unexplained).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "ga_tanf"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:head_start",
@@ -829,7 +1021,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PolicyEngine-US 1.767.3 imputes this annual Person value as state Head Start spending per funded slot, gov.hhs.head_start.spending[state_code_str] / gov.hhs.head_start.enrollment[state_code_str] (zero for nonpositive enrollment), multiplied by takes_up_head_start_if_eligible. This is an administrative slot-cost imputation, not a statutory amount formula; is_head_start_eligible is compared separately (rulespec-us PR #1010).",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:hi_income_tax",
@@ -847,7 +1043,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The hi-income-tax-liability grid and full-Populace campaign validate only hi_income_tax_before_non_refundable_credits. Final hi_income_tax additionally subtracts the food-excise, child-care, low-income-renter, and EITC refundable credits; 583 of 1,519 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:hi_tanf",
@@ -865,7 +1065,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:high_efficiency_electric_home_rebate",
@@ -883,7 +1087,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ia_fip",
@@ -901,7 +1109,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ia_income_tax",
@@ -919,7 +1131,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ia-income-tax-liability grid and full-Populace campaign validate only ia_income_tax_before_credits. Final ia_income_tax also applies the exemption credit, tax-exempt and reduced-tax alternatives, and refundable CDCC and EITC; 795 of 976 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:id_income_tax",
@@ -937,7 +1153,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The id-income-tax-liability suite is a six-case childless wage-earner grid against id_income_tax_before_refundable_credits. It excludes the refundable grocery credit and does not establish the public-benefit-fund and refundable-credit adjustments in final id_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:id_tafi",
@@ -955,7 +1175,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:il_income_tax",
@@ -973,7 +1197,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The il-income-tax-liability grid and full-Populace campaign validate only il_income_tax_before_non_refundable_credits. Final il_income_tax also applies property-tax and K-12-expense credits plus pass-through withholding, pass-through-entity, EITC, and child-tax refundable credits; 855 of 2,332 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:il_tanf",
@@ -991,7 +1219,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:in_income_tax",
@@ -1009,7 +1241,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The in-income-tax-liability grid and full-Populace campaign validate only in_agi_tax. Final in_income_tax additionally applies the 529-plan credit, refundable EITC, and unified elderly credit; 207 of 1,292 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:in_tanf",
@@ -1027,43 +1263,55 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:income_tax",
       "oracle_policy_name": "income_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps \u2014 the federal income tax ECPS bridge compares PE-US income_tax (us:tax/federal-income-tax#liability) at population scale vs PE-2026; residuals concentrate in EITC and tax-before-credits and are not yet dispositioned (counted unexplained).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "FIIT's synthetic liability aggregate sums component counts but does not record the registered final income_tax output. Coverage requires a report with that output's binding. Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `income_tax`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `income_tax`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:income_tax_before_refundable_credits",
       "oracle_policy_name": "income_tax_before_refundable_credits",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#tax_before_credits).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "FIIT's recorded tax-before-credits surface compares income_tax_main_rates. The report does not bind income_tax_before_refundable_credits; its former waiver reason was inferred from another producer's mappings and cannot be retained. Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `income_tax_before_refundable_credits`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `income_tax_before_refundable_credits`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:itemized_taxable_income_deductions",
@@ -1081,7 +1329,13 @@
       "oracle_attributed": 2,
       "bridge_artifacts": 0,
       "note": "The us-itemized-taxable-income-deductions-grid suite compares 17 engine-verified 2026 RuleSpec companion cases (16 nonzero) across all five filing statuses with PE-US 1.767.3 under PolicyEngine 4.18.9 and Core 3.30.3. It binds the same six completed post-entitlement, post-limitation components and keeps the completed lawful taxable-income-without-section-68 scalar RuleSpec-only because PE derives a non-equivalent AGI-minus-exemptions proxy. This aggregate-only boundary does not certify component entitlement, substantiation, components outside PE's six-item inventory, miscellaneous deductions above zero, or the section 63(e) itemization election. The section 68 wrong-base and truncated-rate cases remain visible as source divergences carried only by evidence-backed per-case dispositions; their upstream issues are itemized-68-other-deduction-base=policyengine-us#9170 and itemized-68-rational-rate=policyengine-us#9171. Suite coverage does not assert raw equality on those cases.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "itemized_taxable_income_deductions"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ks_income_tax",
@@ -1099,25 +1353,33 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ks-income-tax-liability grid and full-Populace campaign validate only ks_income_tax_before_credits. Final ks_income_tax additionally applies CDCC, nonrefundable EITC, and refundable EITC; 115 of 989 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ks_tanf",
       "oracle_policy_name": "ks_tanf",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "ks-tanf-ecps",
-      "covered": true,
-      "comparisons": 861,
-      "matches": 643,
-      "raw_match_rate": 74.680604,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
-      "bridge_artifacts": 218,
-      "note": "Covered by ks-tanf-ecps \u2014 Kansas TANF (ks_tanf) vs PE-2026 at population scale.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "ks-tanf-ecps compares ks_tanf_maximum_benefit, not final ks_tanf; coverage requires a report recording an actual comparison of ks_tanf. Current coverage retracted under the same-case execution evidence rule: The recorded oracle comparison target is `ks_tanf_maximum_benefit`, not final `ks_tanf`. Add an actual final-output comparison and rerun `ks-tanf-ecps` retaining same-case returned values from both engines and explicit comparison bindings for `ks_tanf`; then re-register.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ky_income_tax",
@@ -1135,7 +1397,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ky-income-tax-liability suite validates the narrow KRS 141.020 schedule before credits against ky_income_tax_before_non_refundable_credits_unit. It does not encode or establish final ky_income_tax because upstream annual-return construction and all credits remain outside this surface.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ky_ktap",
@@ -1153,7 +1419,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:la_fitap",
@@ -1171,7 +1441,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:la_income_tax",
@@ -1189,7 +1463,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The la-income-tax-liability grid and full-Populace campaign validate only la_income_tax_before_non_refundable_credits. Final la_income_tax additionally applies nonrefundable CDCC, refundable CDCC, and EITC; 305 of 1,847 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:lifetime_learning_credit",
@@ -1207,7 +1485,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "The us-llc-grid suite compares all 12 ground-truth section 25A(c) companion cases against PE-US lifetime_learning_credit at the same final, liability-capped boundary. It includes exact phaseout endpoints, two-student aggregate expenses, and a diagnostic proving that a $2,000 potential is capped to $500. The committed report is 12/12 within one cent.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "lifetime_learning_credit"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ma_income_tax",
@@ -1225,7 +1509,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ma-income-tax-liability suite compares only a six-case Part B resident wage-earner and surtax grid against ma_income_tax. It assumes Part A and Part C income, additional deductions and exemptions, and credits are absent and has no certified full-Populace projection, so it does not establish final ma_income_tax liability.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ma_tafdc",
@@ -1243,7 +1531,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:md_income_tax",
@@ -1261,7 +1553,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The md-income-tax-liability suite is a six-case resident wage-earner grid; the legally matching campaign target is md_income_tax_before_credits. It excludes all credits, and the full-Populace capital-gains-surtax comparison has unresolved oracle-law differences, so it does not establish final md_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:md_tca",
@@ -1279,7 +1575,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:me_income_tax",
@@ -1297,7 +1597,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The me-income-tax-liability suite is a six-case resident wage-earner grid against me_income_tax_before_refundable_credits. It excludes refundable credits, and the official 2026 main schedule disagrees with the pinned oracle on the full population, so it does not establish final me_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:me_tanf",
@@ -1315,25 +1619,33 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:medicaid",
       "oracle_policy_name": "medicaid",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "medicaid-magi-co-ecps",
-      "covered": true,
-      "comparisons": 6270,
-      "matches": 6224,
-      "raw_match_rate": 99.266348,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
-      "bridge_artifacts": 46,
-      "note": "Covered by medicaid-magi-co-ecps \u2014 validates PE-US's MAGI categorical eligibility groups (infant/young-child/older-child/pregnant/adult/SSI-recipient, 42 CFR 435) that drive the medicaid value vs PE-2026; CO-scoped run of the national eligibility logic.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by medicaid-magi-co-ecps \u2014 validates PE-US's MAGI categorical eligibility groups (infant/young-child/older-child/pregnant/adult/SSI-recipient, 42 CFR 435) that drive the medicaid value vs PE-2026; CO-scoped run of the national eligibility logic. Current coverage retracted under the same-case execution evidence rule: The report compares category eligibility outputs, not registered final `medicaid`. Add an actual final-output comparison and rerun `medicaid-magi-co-ecps` retaining same-case returned values from both engines and explicit comparison bindings for `medicaid`; then re-register.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:mi_fip",
@@ -1351,7 +1663,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:mi_income_tax",
@@ -1369,7 +1685,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The mi-income-tax-liability grid and full-Populace campaign validate only mi_income_tax_before_non_refundable_credits. Final mi_income_tax additionally subtracts EITC, home-heating, and homestead-property-tax refundable credits; 381 of 1,788 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:mn_income_tax",
@@ -1387,7 +1707,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The mn-income-tax-liability suite is a six-case childless wage-earner grid against mn_income_tax_before_refundable_credits. It excludes working-family and other refundable credits and has no certified full-Populace projection, so it does not establish final mn_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:mn_mfip",
@@ -1405,7 +1729,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "Covered by mn-tanf-ecps \u2014 Minnesota MFIP (mn_mfip) vs PE-2026 at population scale.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "mn_mfip"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:mo_income_tax",
@@ -1423,7 +1753,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The mo-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid against mo_income_tax_before_credits. It excludes nonrefundable and refundable credits and has no certified full-Populace projection, so it does not establish final mo_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:mo_tanf",
@@ -1441,7 +1775,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ms_income_tax",
@@ -1459,7 +1797,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Broad final ms_income_tax remains uncovered. The ms-income-tax-liability artifact and state-tax Populace campaign validate only the narrower Person-grain section 27-7-5 schedule-before-credits surface against PolicyEngine ms_income_tax_before_credits_joint, summed to TaxUnit only for comparison. They do not choose a filing method or encode every credit needed for final Mississippi liability.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ms_tanf",
@@ -1477,7 +1819,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:mt_income_tax",
@@ -1495,7 +1841,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The mt-income-tax-liability grid and full-Populace campaign validate only mt_income_tax_before_non_refundable_credits_joint. Final mt_income_tax selects Person-grain separate liability when mt_files_separately and subtracts EITC and the elderly-homeowner-or-renter credit in both filing branches; 153 of 1,171 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:mt_tanf",
@@ -1513,25 +1863,33 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nc_income_tax",
       "oracle_policy_name": "nc_income_tax",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "nc-income-tax-liability",
-      "covered": true,
-      "comparisons": 12,
-      "matches": 6,
-      "raw_match_rate": 50,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
-      "bridge_artifacts": 0,
-      "note": "Covered by nc-income-tax-liability. The grid and certified full-Populace campaign compare nc_income_tax_before_credits; all 2,169 positive-weight routed North Carolina tax units also have exact equality with final nc_income_tax in PolicyEngine-US 1.752.2. The only listed downstream credit is the repealed nc_ctc, whose schedule amounts have been zero since 2018; PolicyEngine models no refundable North Carolina income-tax credit in 2026.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "nc-income-tax-liability compares nc_income_tax_before_credits, not final nc_income_tax; coverage requires a report recording an actual comparison of nc_income_tax, even if the two values coincide. Current coverage retracted under the same-case execution evidence rule: The report compares `nc_income_tax_before_credits`, not final `nc_income_tax`, even if the two values coincide. Add an actual final-output comparison and rerun `nc-income-tax-liability` retaining same-case returned values from both engines and explicit comparison bindings for `nc_income_tax`; then re-register.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nc_tanf",
@@ -1549,7 +1907,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nd_income_tax",
@@ -1567,7 +1929,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The nd-income-tax-liability suite is a six-case official-schedule grid against nd_income_tax_before_credits. It excludes all credits, and the pinned oracle uses stale 2025 thresholds on the full population, so it does not establish final nd_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nd_tanf",
@@ -1585,7 +1951,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ne_adc",
@@ -1603,7 +1973,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ne_income_tax",
@@ -1621,7 +1995,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ne-income-tax-liability suite is a six-case single/joint schedule grid against ne_income_tax_before_credits. It excludes the personal-exemption and other nonrefundable credits, the federal-liability adjustment, and refundable credits, so it does not establish final ne_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:net_investment_income_tax",
@@ -1639,7 +2017,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "The us-niit-grid suite compares six 2026 individual section 1411 cases against PE-US net_investment_income_tax, including status thresholds, mixed investment income, gains, and passive rent. With no section 911 amounts, both legs use AGI equal to NIIT MAGI; the committed report is 6/6 with nonzero cases.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "net_investment_income_tax"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:new_clean_vehicle_credit",
@@ -1657,7 +2041,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nh_fanf",
@@ -1675,7 +2063,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nh_income_tax",
@@ -1693,7 +2085,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "EXCLUDED oracle_models_repealed_law. RSA Chapter 77 was repealed in its entirety by 2021, 91:189, II, effective January 1, 2025. PolicyEngine-US 1.767.3 retains the nh_income_tax output and legacy interest-and-dividends tax base, but its in_effect parameter is false from 2025. A positive interest-and-dividend activation probe produces a nonzero 2024 liability and exactly zero nh_income_tax_before_refundable_credits and nh_income_tax in 2025 and 2026 (probe evidence: scripts/probe_us_nh_repealed_income_tax.py). There is no current-law Chapter 77 tax instrument to compare; the RuleSpec repeal-result module records that legal absence rather than an operative zero-rate schedule.",
-      "status": "excluded:oracle_models_repealed_law"
+      "status": "excluded:oracle_models_repealed_law",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nj_income_tax",
@@ -1711,7 +2107,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The nj-income-tax-liability grid and full-Populace campaign validate only nj_main_income_tax. Final nj_income_tax also applies the AGI filing-threshold zero-tax branch and property-tax, EITC, CDCC, and child-tax refundable credits; 314 of 1,693 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nj_wfnj",
@@ -1729,7 +2129,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nm_income_tax",
@@ -1747,7 +2151,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The nm-income-tax-liability grid and full-Populace campaign validate only nm_income_tax_before_non_refundable_credits. Final nm_income_tax additionally subtracts CDCC, CTC, medical-expense, EITC, low-income-comprehensive, and property-tax refundable credits; 674 of 1,475 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nm_works",
@@ -1765,7 +2173,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:nv_tanf",
@@ -1783,7 +2195,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ny_income_tax",
@@ -1801,7 +2217,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "In-scope uncovered \u2014 ny-income-tax-liability now validates only the complete 2026 Tax Law section 601 main-tax schedules. The section 601(d-5) supplemental tax and credits needed for the final ny_income_tax program remain outside that suite.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ny_tanf",
@@ -1819,7 +2239,13 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 36,
       "note": "Covered by ny-tanf-ecps \u2014 New York TANF (ny_tanf) vs PE-2026 at population scale.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "ny_tanf"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:oh_income_tax",
@@ -1837,7 +2263,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The oh-income-tax-liability grid and full-Populace campaign validate only oh_income_tax_before_non_refundable_credits. Final oh_income_tax additionally applies EITC, CDCC, senior, retirement, non-public-school, exemption, and joint-filing credits; 481 of 2,144 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:oh_owf",
@@ -1855,7 +2285,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ok_income_tax",
@@ -1873,7 +2307,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ok-income-tax-liability grid and full-Populace campaign validate only ok_income_tax_before_credits. Final ok_income_tax additionally applies the child-care-or-child-tax credit plus refundable property-tax, sales-tax, and EITC branches; 396 of 1,292 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ok_tanf",
@@ -1891,7 +2329,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:or_income_tax",
@@ -1909,7 +2351,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The or-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid against or_income_tax_before_credits. It excludes nonrefundable and refundable credits and has no certified full-Populace projection, so it does not establish final or_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:or_tanf",
@@ -1927,7 +2373,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:pa_income_tax",
@@ -1945,7 +2395,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The pa-income-tax-liability grid and full-Populace campaign validate only pa_income_tax_before_forgiveness. Final pa_income_tax additionally applies pa_tax_forgiveness_amount and refundable CDCC and EITC; 496 of 2,457 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:pa_tanf",
@@ -1963,7 +2417,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:qualified_business_income_deduction",
@@ -1981,7 +2439,13 @@
       "oracle_attributed": 1,
       "bridge_artifacts": 0,
       "note": "The us-qbid-grid suite compares 11 ground-truth 2026 section 199A cases using the corrected $201,750/$403,500 thresholds and $75,000/$150,000 phase-in widths. The committed report is 10/11 raw and fully dispositioned: PE-US 1.767.3 applies its $400 floor to all QBI because it lacks Axiom's distinct active-business-QBI fact, producing $400 instead of zero in qbid-above-nowages. There are no unexplained or Axiom-owned divergences.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "qualified_business_income_deduction"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:recovery_rebate_credit",
@@ -1999,7 +2463,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Lapsed before the 2026 validation year: the economic impact payment credits under IRC 6428 (CARES Act, 2020), 6428A (CAA 2021, for 2020) and 6428B (ARPA 2021, for 2021) applied only to the 2020-2021 tax years. PolicyEngine-US 1.767.3 sums rrc_cares + rrc_caa + rrc_arpa, each 0 at 2026, so recovery_rebate_credit is 0 for every synthetic case (probe evidence: scripts/probe_us_repealed_federal.py). There is no current-law recovery rebate for 2026 for Axiom to compare.",
-      "status": "excluded:oracle_models_repealed_law"
+      "status": "excluded:oracle_models_repealed_law",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:reduced_price_school_meals",
@@ -2017,7 +2485,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PolicyEngine-US 1.767.3 imputes this annual SPM-unit value from the REDUCED branch of school_meal_tier: the NSLP-plus-SBP reimbursement differential over the paid tier from gov.usda.school_meals.amount.nslp[state_group_str][tier] and gov.usda.school_meals.amount.sbp[state_group_str][tier], multiplied by gov.usda.school_meals.school_days and the SPM-unit count of is_in_k12_school. This is a reimbursement-rate service-value imputation, not a statutory amount formula; the school_meal_tier eligibility classification is compared separately.",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:residential_clean_energy_credit",
@@ -2035,7 +2507,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:residential_efficiency_electrification_rebate",
@@ -2053,7 +2529,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ri_income_tax",
@@ -2071,7 +2551,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ri-income-tax-liability suite is a six-case full-year resident wage-earner schedule grid against ri_income_tax_before_non_refundable_credits. It excludes nonrefundable and refundable credits and has no certified full-Populace projection, so it does not establish final ri_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ri_works",
@@ -2089,7 +2573,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:salt_deduction",
@@ -2107,25 +2595,35 @@
       "oracle_attributed": 3,
       "bridge_artifacts": 0,
       "note": "The us-salt-deduction-grid suite compares 16 nonzero, engine-verified 2026 RuleSpec companion cases across all five filing statuses with PE-US 1.767.3 under PolicyEngine 4.18.9 and Core 3.30.3. It binds completed elected personal income-or-sales tax and real-estate tax directly and bridges the guarded section 911 amount to PE-US foreign_earned_income_exclusion. The completed-return boundary excludes business and section 212 taxes, acquisition-capitalized taxes, refunds, nondeductible taxes, state-liability synthesis, and any unlisted section 911 individual; personal-property tax remains RuleSpec-only. The low-AGI simulation ceiling, omitted personal-property-tax source, and AGI-instead-of-statutory-MAGI cases remain visible as source divergences carried only by evidence-backed per-case dispositions. Their upstream issues are salt-low-agi-engine-cap=policyengine-us#9167, salt-magi-911-addback=policyengine-us#9168, and salt-personal-property-tax-probe=policyengine-us#9169. Suite coverage does not assert raw equality on those cases.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "salt_deduction"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:savers_credit",
       "oracle_policy_name": "savers_credit",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "us-savers-grid",
-      "covered": true,
-      "comparisons": 34,
-      "matches": 23,
-      "raw_match_rate": 67.647059,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 11,
-      "bridge_artifacts": 0,
-      "note": "The us-savers-grid suite compares Axiom's pre-section-26 section 25B amount with its reviewed direct PE-US target, savers_credit_potential, on 34 fixture-bound tax-year-2026 cases. It does not compare PE's liability-limited public credit. The grid covers all five filing statuses, every exact Notice 2025-67 tier ceiling plus B-1 and B+1, per-person contribution caps, the section 25B(e) section 911 add-back, and the age/student/dependent screens. The raw report is 23/34. All 11 differences remain the exact-ceiling cases explained by https://github.com/PolicyEngine/policyengine-us/issues/9151: PE-US 1.767.3 carries the correct values, but Core 3.30.3 digitizes equality into the next tier despite section 25B(b)'s inclusive ceilings. The dispositioned report is 100% explained. The section 911 case's observed match is cancellation between PE's omitted add-back and #9151, not evidence of add-back parity.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "us-savers-grid compares savers_credit_potential and records final savers_credit only as a diagnostic; coverage requires a report recording an actual comparison of liability-limited savers_credit. Current coverage retracted under the same-case execution evidence rule: The recorded oracle comparison target is `savers_credit_potential`; final `savers_credit` is diagnostic only. Add an actual final-output comparison and rerun `us-savers-grid` retaining same-case returned values from both engines and explicit comparison bindings for `savers_credit`; then re-register.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:sc_income_tax",
@@ -2143,7 +2641,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The sc-income-tax-liability grid and full-Populace campaign validate only sc_income_tax_before_non_refundable_credits. Final sc_income_tax additionally applies CDCC, EITC, two-wage-earner, and refundable tuition credits; 184 of 1,457 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:sc_tanf",
@@ -2161,7 +2663,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:sd_tanf",
@@ -2179,7 +2685,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:self_employment_tax",
@@ -2197,25 +2707,35 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 0,
       "note": "The us-seca-grid suite compares six 2026 ordinary SECA cases, including the $400 floor, OASDI cap and wage coordination, against PE-US self_employment_tax summed from Person to TaxUnit. Both boundaries include OASDI plus ordinary Medicare and exclude the separate 0.9% Additional Medicare Tax; the committed report is 6/6 with nonzero cases.",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "self_employment_tax"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:snap",
       "oracle_policy_name": "snap",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "ca-snap-ecps",
-      "covered": true,
-      "comparisons": 14202,
-      "matches": 13718,
-      "raw_match_rate": 96.592029,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 20,
-      "bridge_artifacts": 464,
-      "note": "SNAP is one national PE-US variable (snap). Covered by ca-snap-ecps, the largest of 11 state-scoped SNAP suites validating the same snap surface vs PE-2026. The ten month-scoped suites regenerated on PolicyEngine 4.18.9 / PolicyEngine-US 1.767.3 / PolicyEngine-Core 3.30.3 retain AL/AZ/CA/FL/GA/MA/NC/NY/SC/TN unexplained counts of 40/0/241/774/75/92/49/240/110/43 after evidence-backed dispositions. For CA, PUB 275 issuance or online access is a household administrative fact absent from Enhanced CPS; both facts remain unmapped, and neither the population encode nor the oracle assumes them, leaving 157 bridge-attributed residual rows. Resolving them requires a population source carrying household PUB 275 issuance/access or PolicyEngine modeling the same household gate. PolicyEngine-US issues https://github.com/PolicyEngine/policyengine-us/issues/9175 and https://github.com/PolicyEngine/policyengine-us/issues/9176 remain independently verified divergences on the pinned stack, but the corrected bridge cannot currently expose them because the household MCE gate is unobserved. The row registers the canonical largest-population suite; the other ten corroborate and their residuals remain tracked \u2014 the scoreboard scores one suite per row, not silently dropped.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "ca-snap-ecps compares snap_normal_allotment and is_snap_eligible, not final snap; coverage requires a report recording an actual comparison of snap. Current coverage retracted under the same-case execution evidence rule: The report compares `snap_normal_allotment` and `is_snap_eligible`, not final national `snap`. Add an actual final-output comparison and rerun `ca-snap-ecps` retaining same-case returned values from both engines and explicit comparison bindings for `snap`; then re-register.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:social_security",
@@ -2233,7 +2753,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PE-US sums reported OASDI benefit components (retirement, disability, dependents, survivors) carried from the CPS; it computes no Title II entitlement from earnings history, so there is no simulated statutory surface to compare \u2014 a reported passthrough.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:spm_unit_capped_housing_subsidy",
@@ -2251,7 +2775,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Technical SPM resource-accounting construct, not a statutory housing benefit: PolicyEngine-US 1.767.3 computes min(housing_assistance, max(spm_unit_spm_threshold_housing_portion - hud_ttp, 0)). The housing-assistance and tenant-payment operands are modeled HUD amounts, but the outer cap comes from Census SPM thresholds, tenure housing shares, and geographic adjustment rather than a statutory payment parameter; forcing housing_assistance 30000, the SPM housing portion 17720, and hud_ttp 10000 returns 7720 (probe evidence: scripts/probe_us_ira_2026.py). Validate Section 8 or HAP against hud_hap, or against housing_assistance with take-up pinned, and exclude this SPM post-processing row as technical.",
-      "status": "excluded:technical"
+      "status": "excluded:technical",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ssi",
@@ -2269,25 +2797,35 @@
       "oracle_attributed": 0,
       "bridge_artifacts": 2990,
       "note": "Covered by ssi-ecps \u2014 SSI benefit (42 USC 1382) vs PE-2026 at population scale; all 2,990 requested-month residuals are evidence-backed bridge artifacts (0 unexplained).",
-      "status": "conformant"
+      "status": "conformant",
+      "output_attestation": "attested",
+      "attested_outputs": [
+        "ssi"
+      ],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:standard_deduction",
       "oracle_policy_name": "standard_deduction",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "fiit-ecps",
-      "covered": true,
-      "comparisons": 3881635,
-      "matches": 3862844,
-      "raw_match_rate": 99.5159,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 16660,
-      "bridge_artifacts": 0,
-      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#standard_deduction).",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by fiit-ecps (us:tax/federal-income-tax#standard_deduction). Current coverage retracted under the same-case execution evidence rule: Native FIIT records no per-output binding/ledger proving paired returned values for registered `standard_deduction`; grouped counts and diagnostic scalars cannot supply it. Rerun `fiit-ecps` with the output-level ledger retaining both actual values for `standard_deduction`; add a real final-output comparison where the native surface currently compares intermediates.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:survivor_benefits",
@@ -2305,7 +2843,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Reported income carried from the CPS (no formula); PE-US carries it into net income but computes no award from statute \u2014 a carried input, not a simulated program.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:taxable_income",
@@ -2323,7 +2865,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:tn_ff",
@@ -2341,7 +2887,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:tx_tanf",
@@ -2359,7 +2909,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:unemployment_compensation",
@@ -2377,7 +2931,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Reported unemployment compensation carried from the CPS (no formula); PE-US taxes it downstream but computes no UC award from statute \u2014 a carried input.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:used_clean_vehicle_credit",
@@ -2395,7 +2953,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ut_fep",
@@ -2413,7 +2975,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:ut_income_tax",
@@ -2431,7 +2997,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The ut-income-tax-liability grid and full-Populace campaign validate only ut_income_tax_before_credits. Final ut_income_tax also applies the taxpayer credit, tax-exempt branch, EITC, retirement, Social Security, at-home-parent, child, military-retirement, and 529-plan credits; 872 of 1,251 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:va_income_tax",
@@ -2449,7 +3019,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The va-income-tax-liability grid and full-Populace campaign validate only va_income_tax_before_non_refundable_credits. Final va_income_tax additionally applies nonrefundable EITC, the spouse-tax adjustment, and refundable EITC; 419 of 1,710 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:va_tanf",
@@ -2467,7 +3041,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:vt_income_tax",
@@ -2485,7 +3063,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The vt-income-tax-liability grid and full-Populace campaign validate only vt_income_tax_before_non_refundable_credits. Final vt_income_tax additionally applies charitable and 529-plan credits, adds child-care contributions, and subtracts refundable EITC, CDCC, CTC, and veteran credits; 437 of 922 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:vt_reach_up",
@@ -2503,7 +3085,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:wa_income_tax",
@@ -2521,25 +3107,33 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The wa-income-tax-liability suite is a six-case RCW 82.87 capital-gains grid against wa_income_tax_before_refundable_credits. It excludes refundable credits and does not certify the full-population asset-sourcing and loss-carryforward surface, so it does not establish final wa_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:wa_tanf",
       "oracle_policy_name": "wa_tanf",
       "in_scope": true,
       "exclusion_reason": null,
-      "suite": "wa-tanf-ecps",
-      "covered": true,
-      "comparisons": 1467,
-      "matches": 1467,
-      "raw_match_rate": 100,
-      "explained_rate": 100,
-      "unexplained": 0,
-      "axiom_attributed_open": 0,
-      "oracle_attributed": 0,
-      "bridge_artifacts": 0,
-      "note": "Covered by wa-tanf-ecps \u2014 Washington TANF (wa_tanf) vs PE-2026 at population scale.",
-      "status": "conformant"
+      "suite": null,
+      "covered": false,
+      "comparisons": null,
+      "matches": null,
+      "raw_match_rate": null,
+      "explained_rate": null,
+      "unexplained": null,
+      "axiom_attributed_open": null,
+      "oracle_attributed": null,
+      "bridge_artifacts": null,
+      "note": "Covered by wa-tanf-ecps \u2014 Washington TANF (wa_tanf) vs PE-2026 at population scale. Current coverage retracted under the same-case execution evidence rule: The retained case rows omit both returned comparison values for this registered output; matches/counts alone cannot attest either side. Rerun `wa-tanf-ecps` retaining same-case returned values from both engines and explicit comparison bindings for `wa_tanf`; then re-register.",
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:wi_income_tax",
@@ -2557,7 +3151,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The wi-income-tax-liability suite is a six-case ordinary resident wage-earner schedule grid against wi_income_tax_before_credits. It excludes credits and the retirement-income-exclusion alternative, and the pinned oracle has stale or unrounded 2026 brackets, so it does not establish final wi_income_tax.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:wi_works",
@@ -2575,7 +3173,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:wic",
@@ -2593,7 +3195,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "PolicyEngine-US 1.767.3 imputes this monthly Person value from the average food-package parameter gov.usda.wic.value[wic_food_package_str], adjusted with gov.usda.wic.cvb.current, gov.usda.wic.cvb.included_in_value, and gov.usda.wic.cvb.replaces_included_value, then gates it on is_wic_eligible and would_claim_wic (subject to gov.usda.wic.abolish_wic). This is a package-value imputation, not a statutory amount formula; is_wic_eligible is compared separately (rulespec-us PR #1010).",
-      "status": "excluded:oracle_models_nonstatutory_amount"
+      "status": "excluded:oracle_models_nonstatutory_amount",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:workers_compensation",
@@ -2611,7 +3217,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "Reported income carried from the CPS (no formula); PE-US carries it into net income but computes no award from statute \u2014 a carried input, not a simulated program.",
-      "status": "excluded:input_carrying"
+      "status": "excluded:input_carrying",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:wv_income_tax",
@@ -2629,7 +3239,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": "The wv-income-tax-liability grid and full-Populace campaign validate only wv_income_tax_before_non_refundable_credits. Final wv_income_tax additionally applies low-income-family and CDCC credits plus refundable state-CTC and homestead-excess-property-tax credits; 217 of 1,608 routed units differ from the narrow target.",
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:wv_works",
@@ -2647,7 +3261,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     },
     {
       "id": "us-pe:wy_power",
@@ -2665,7 +3283,11 @@
       "oracle_attributed": null,
       "bridge_artifacts": null,
       "note": null,
-      "status": "uncovered"
+      "status": "uncovered",
+      "output_attestation": null,
+      "attested_outputs": [],
+      "attestation_problems": [],
+      "oracle_release_drift": null
     }
   ]
 }

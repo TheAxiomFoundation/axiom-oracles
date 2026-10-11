@@ -17,7 +17,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
@@ -565,18 +565,27 @@ class TaxComparisonReport:
     output_summary: list[dict[str, Any]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
+    observed_outputs: list[dict[str, Any]] = field(default_factory=list)
+    errors: list[dict[str, Any]] = field(default_factory=list)
 
     def to_json(self) -> dict[str, Any]:
-        return {
+        from axiom_oracles.conformance.observations import json_output_values
+
+        return json_output_values({
             "compared_tax_units": self.compared_tax_units,
             "compared_persons": self.compared_persons,
             "compared_values": self.compared_values,
             "mismatch_count": len(self.mismatches),
+            "uncompared_mismatches": sum(
+                row.get("uncompared_mismatches", 0) for row in self.output_summary
+            ),
             "mismatches": [row.__dict__ for row in self.mismatches],
             "output_summary": self.output_summary,
             "projection_notes": self.projection_notes,
             "dataset_identity": self.dataset_identity,
-        }
+            "observed_outputs": self.observed_outputs,
+            "errors": self.errors,
+        })
 
 
 @dataclass(frozen=True)
@@ -866,6 +875,21 @@ def calculate(sim: Any, name: str, period: str | int) -> np.ndarray:
     return array(sim.calculate(name, period=period))
 
 
+def validate_policyengine_outputs(
+    values: Any, *, variable: str, entity_ids: Any, entity: str,
+) -> None:
+    """Reject invalid calculated support values before input money projections."""
+    if variable == "filing_status":  # PolicyEngine's categorical enum.
+        return
+    finite = np.isfinite(np.asarray(values, dtype=float))
+    invalid = np.flatnonzero(~finite)
+    if len(invalid):
+        entity_id = int(entity_ids.iloc[int(invalid[0])])
+        raise ValueError(
+            f"PolicyEngine {entity}_{entity_id} {variable}: missing or nonfinite output"
+        )
+
+
 def load_policyengine_tax_data(
     *,
     year: int,
@@ -902,9 +926,17 @@ def load_policyengine_tax_data(
     tax_unit_outputs = raw_tax_units[["tax_unit_id"]].copy()
     for variable in tax_unit_variables:
         tax_unit_outputs[variable] = calculate(sim, variable, year)
+        validate_policyengine_outputs(
+            tax_unit_outputs[variable], variable=variable,
+            entity_ids=raw_tax_units["tax_unit_id"], entity="tax_unit",
+        )
     person_outputs = raw_persons[["person_id"]].copy()
     for variable in person_variables:
         person_outputs[variable] = calculate(sim, variable, year)
+        validate_policyengine_outputs(
+            person_outputs[variable], variable=variable,
+            entity_ids=raw_persons["person_id"], entity="person",
+        )
     indices = select_tax_unit_indices(
         raw_tax_units=raw_tax_units,
         raw_persons=raw_persons,
@@ -2905,12 +2937,15 @@ def compare_outputs(
     relative_tolerance: float,
 ) -> TaxComparisonReport:
     mismatches: list[TaxComparisonRow] = []
+    observed_outputs: list[dict[str, Any]] = []
+    errors: list[dict[str, Any]] = []
     summary: dict[str, dict[str, Any]] = {
         f"{surface}:{name}": {
             "surface": surface,
             "output": name,
             "compared": 0,
             "mismatches": 0,
+            "uncompared_mismatches": 0,
             "max_abs_diff": 0.0,
             "max_relative_diff": 0.0,
         }
@@ -2939,14 +2974,71 @@ def compare_outputs(
                 else tax_entity_id(int(source_ids[index]))
             )
             outputs = result.get("outputs") or {}
+            result_stopped = (
+                any(result.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
+                or ("executed" in result and result["executed"] is not True)
+            )
+            if result_stopped:
+                # Retain execution stops independently of displayed output
+                # rows, including missing returns and matching stopped rows.
+                errors.append({
+                    "engine": "axiom", "case_id": entity_id, "surface": surface,
+                    **{
+                        key: result[key]
+                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
+                        if key in result
+                    },
+                })
             pe_row = source_rows.iloc[index]
             for name, spec in output_specs.items():
                 axiom_value = output_number(outputs.get(spec["axiom"]))
-                pe_value = money(pe_row[spec["pe"]])
+                returned_pe_value = pe_row[spec["pe"]]
+                # Keep actual returns independently of comparison arithmetic.
+                if np is not None and isinstance(returned_pe_value, np.generic):
+                    returned_pe_value = returned_pe_value.item()
+                observed_outputs.append({
+                    "case_id": entity_id,
+                    "surface": surface,
+                    "output": name,
+                    "engine": "policyengine",
+                    "variable": spec["pe"],
+                    "value": returned_pe_value,
+                    "counterpart_value": axiom_value,
+                    **{
+                        key: result[key]
+                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
+                        if key in result
+                    },
+                })
+                # Returned stop-marked rows remain diagnostic evidence, but
+                # they are not comparisons and cannot add to any denominator.
+                if result_stopped:
+                    continue
+                pe_value = math.nan if returned_pe_value is None else float(returned_pe_value)
+                summary_key = f"{surface}:{name}"
+                invalid_engines = [
+                    engine for engine, value in (
+                        ("axiom", axiom_value), ("policyengine", pe_value),
+                    ) if not math.isfinite(value)
+                ]
+                if invalid_engines:
+                    for engine in invalid_engines:
+                        errors.append({
+                            "engine": engine, "case_id": entity_id, "surface": surface,
+                            "output": name, "error": "missing_or_nonfinite_output",
+                        })
+                    # Preserve missing Axiom and Infinity mismatch diagnostics,
+                    # but no invalid pair is an arithmetic comparison or match.
+                    summary[summary_key]["mismatches"] += 1
+                    summary[summary_key]["uncompared_mismatches"] += 1
+                    mismatches.append(TaxComparisonRow(
+                        surface=surface, entity_id=entity_id, output=name,
+                        axiom=axiom_value, policyengine=pe_value, diff=math.nan,
+                    ))
+                    continue
                 diff = axiom_value - pe_value
                 abs_diff = abs(diff)
                 compared_values += 1
-                summary_key = f"{surface}:{name}"
                 summary[summary_key]["compared"] += 1
                 summary[summary_key]["max_abs_diff"] = max(
                     summary[summary_key]["max_abs_diff"], abs_diff
@@ -2994,6 +3086,8 @@ def compare_outputs(
         compared_values=compared_values,
         mismatches=mismatches,
         output_summary=list(summary.values()),
+        observed_outputs=observed_outputs,
+        errors=errors,
         dataset_identity=pe_data.get("dataset_identity") or None,
         projection_notes=[
             "Current CTC projection uses Populace raw tax-unit membership, age, "
