@@ -262,7 +262,10 @@ jobs:
       - name: PolicyEngine live adapter tests
         env:
           AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE: "1"
-        run: uv run --no-sync pytest -q tests/bridges/test_snap_child_support_adapters.py
+        run: >-
+          uv run --no-sync pytest -q
+          tests/bridges/test_snap_child_support_adapters.py
+          tests/test_tax_exempt_interest_policyengine_live.py
 
   # The dashboard deploys by hand (vercel --prod from dashboard/), so no
   # Vercel check runs on pull requests: build it here and run its

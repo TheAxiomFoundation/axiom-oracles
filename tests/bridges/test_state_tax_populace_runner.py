@@ -3609,7 +3609,7 @@ def test_taxsim_person_table_mirrors_the_populace_tax_unit_loader() -> None:
 
     loader_tax_unit_table = {
         **populace_us._PERSON_NON_WAGE_VARIABLES,
-        **populace_us._TAX_UNIT_PERSON_NON_WAGE_VARIABLES,
+        **populace_us._STRICT_PERSON_NON_WAGE_VARIABLES,
     }
     benefit_only = {Concepts.SSI_BENEFITS, Concepts.SSI_COUNTABLE_RESOURCES}
     campaign_table = {
