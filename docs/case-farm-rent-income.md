@@ -95,8 +95,11 @@ So the question is whether the rental is a trade or business:
 
 **What the sources do not say.** No IRS form, instruction, publication or FAQ
 read here, and nothing in the T.D. 9847 preamble, says Form 4835 income is, or
-is not, QBI as such. The 2025 Schedule E instructions and Form 4835
-instructions do not mention the QBI deduction.
+is not, QBI as such. The 2025 Schedule E instructions say only, in a tip
+before line 1a, that "Income you report on Schedule E may be qualified
+business income and entitle you to a deduction", and they have no
+instructions for line 40. Form 4835 and its instructions do not mention the
+QBI deduction.
 
 **The decision.** Whether one landowner's rental is a section 162 trade or
 business depends on facts the Case does not carry (the lease terms, the
@@ -141,6 +144,14 @@ treats it the same way here, as it does Part I rents and as PolicyEngine's
 - the positive part is a gross-income leaf and counts as business gross
   income, so it raises the loss allowance;
 - the loss is deducted above the line inside the limited business-loss sum.
+
+One source cuts the other way and does not explain itself. The 2025 Schedule
+E instructions' reminder reads "If you report a loss on line 26, 32, 37, or
+39 of your Schedule E (Form 1040), you may be subject to a business loss
+limitation", which leaves out line 40, while their general instructions say
+the rules "apply to losses from all noncorporate trades or businesses" and
+Form 461 line 5 takes Schedule 1 line 5 in full. The treatment only matters
+for a farm rental loss large enough to reach the threshold.
 
 Not modeled: the passive loss rules. Form 4835 says "Use this form only if
 the activity was a rental activity for purposes of the passive activity loss
