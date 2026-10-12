@@ -2139,8 +2139,8 @@ def _execute_release_archive_raw(
         "engine archive SHA-256",
     )
     with tempfile.TemporaryDirectory(prefix="de-kindergeld-replay-") as raw_tmp:
-        # Canonical path: macOS temp dirs live under the /var -> /private/var
-        # alias and the engine rejects aliased RuleSpec roots.
+        # Canonical path: macOS temporary directories can have aliases,
+        # and the engine rejects aliased RuleSpec roots.
         temp = Path(raw_tmp).resolve()
         archive = temp / engine["asset"]
         archive.write_bytes(archive_bytes)

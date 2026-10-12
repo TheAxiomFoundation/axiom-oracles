@@ -1119,7 +1119,7 @@ def test_bridge_manifest_identity_fields_are_typed():
 
 
 def test_dropping_strict_opt_in_drops_bridge_audited():
-    """MUTANT (delta-audit finding): a strict-clean lane that removes or
+    """MUTANT: a strict-clean lane that removes or
     falsifies its `strict: true` opt-in must LOSE bridge_audited — otherwise
     the lane could silence future --strict enforcement while its census row
     and certificate kept claiming audited/exercised. The opt-in is part of the
@@ -2814,7 +2814,7 @@ def test_census_binds_strict_manifest_identity():
     assert census._manifest_strict_audit()["dk-child-youth-benefit"] == before
 
 
-# ── strict covered_by: typed, suite-bound evidence (delta audits #2–#5) ─────
+# ── strict covered_by: typed, suite-bound evidence ────────────────────────
 
 
 COUPLE_REPORT = "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
@@ -3032,7 +3032,7 @@ def test_closure_check_pins_to_recorded_commit(tmp_path):
 
 
 def test_strict_evidence_rejects_never_shipped_files():
-    """MUTANT (delta-audit #4): a gitignored __pycache__/*.pyc under an
+    """MUTANT: a gitignored __pycache__/*.pyc under an
     evidence root exists on this disk but in no clone and not in the refresh
     bot's rsync'd tree; it passed as strict evidence. Never-shipped
     components/suffixes are rejected outright, and — when the tree is a git
@@ -3062,7 +3062,7 @@ def test_strict_evidence_rejects_never_shipped_files():
 
 
 def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
-    """MUTANT (delta-audit #6): the closure ledger and executable receipt each
+    """MUTANT: the closure ledger and executable receipt each
     verify their OWN recorded pin, so a ledger coherently regenerated at
     9986b603 passes its own check while the receipt sits at bbc987b0 (byte-
     identical modules, different commit). certify must refuse to treat those
@@ -3159,7 +3159,7 @@ def test_nz_program_scoped_producers_must_agree_on_one_rulespec_commit(
 
 
 def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
-    """MUTANT (delta-audit #7): a 40-DIGIT YAML integer is a legal scalar
+    """MUTANT: a 40-DIGIT YAML integer is a legal scalar
     that `str(commit)` turned into a passing "sha"; certification then emitted
     a computed closed premise while the commit cross-check silently skipped
     the non-string. The validator now requires a string SHA and ref==commit
@@ -3178,7 +3178,7 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     assert cl._validation_errors(baseline) == []
 
     digits = int("1" * 40)  # a 40-digit integer, not a hex string
-    # delta-audit #8: the !!str-tagged form is a 40-char DECIMAL string, which
+    # The !!str-tagged form is a 40-char DECIMAL string, which
     # is syntactically valid hex — it must still fail (a real git object id
     # has at least one of a-f; a decimal-only id is the forgery shape).
     digit_str = "1234567890123456789012345678901234567890"
@@ -3226,7 +3226,7 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     ]
     assert cert["certified"]["value"] is False
 
-    # delta-audit #8: COORDINATED equal digit-only strings on both computed
+    # COORDINATED equal digit-only strings on both computed
     # sides satisfied plain equality. Equality now counts only between values
     # that are each a canonical git object id.
     original_exec = certify._producer_executable_verdict
@@ -3264,7 +3264,7 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
 
 
 def test_executable_receipt_rejects_digit_only_sha():
-    """delta-audit #8: the receipt's own sha regex accepted a decimal-only
+    """The receipt's own sha regex accepted a decimal-only
     40-char string; canonical git object ids need at least one of a-f."""
     er = _load("executable_reproduction")
     document = json.loads(

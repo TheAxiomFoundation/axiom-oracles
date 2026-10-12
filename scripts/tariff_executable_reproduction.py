@@ -52,9 +52,12 @@ PINNED_RULESPEC_SHA = "96d5e7c1e6309dc205b7320bbddaae8dd5d410df"
 PINNED_ENGINE_SHA256 = (
     "674ca6e70afdccb59c3d6847933bc24b4590105e49db54790f2dcd0bdbbe32d7"
 )
-DEFAULT_RULESPEC_ROOT = Path("/Users/maxghenis/TheAxiomFoundation/_b1wt/rulespec-us")
-DEFAULT_ENGINE_BINARY = Path(
-    "/Users/maxghenis/TheAxiomFoundation/axiom-rules-engine-pinned/target/release/axiom-rules-engine"
+DEFAULT_RULESPEC_ROOT = Path.home() / "TheAxiomFoundation" / "rulespec-us"
+DEFAULT_ENGINE_BINARY = (
+    Path.home()
+    / "TheAxiomFoundation"
+    / "axiom-rules-engine-pinned"
+    / "target/release/axiom-rules-engine"
 )
 OUTPUT_PATH = REPO_ROOT / "conformance/executable/us-tariff-witness.json"
 REPORT_PATH = Path("reports/axiom-yale-us-tariff-panel-all-2026-08-03.json")

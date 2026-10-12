@@ -766,6 +766,66 @@ def test_strict_yaml_rejects_duplicate_keys(tmp_path):
         certify._load(path)
 
 
+def test_strict_yaml_rejects_duplicate_keys_in_merge_sources():
+    with pytest.raises(ValueError, match="duplicate"):
+        certify._strict_yaml_loads("<<: {commit: first, commit: second}\n")
+
+
+def test_strict_yaml_rejects_overridden_nonfinite_merge_sources():
+    with pytest.raises(ValueError, match="non-finite"):
+        certify._strict_yaml_loads("<<: {v: .nan}\nv: 0\n")
+
+
+@given(
+    depth=st.integers(min_value=0, max_value=3),
+    merge_form=st.sampled_from(("mapping", "sequence", "alias")),
+    defect=st.sampled_from(("duplicate", ".nan", ".inf", "-.inf")),
+    key=st.sampled_from(("commit", "comparison_count", "receipt")),
+)
+@settings(deadline=None)
+def test_yaml_merge_sources_are_admitted_before_overrides(
+    depth, merge_form, defect, key
+):
+    source = (
+        f"{{{key}: first, {key}: second}}"
+        if defect == "duplicate"
+        else f"{{{key}: {defect}}}"
+    )
+    for _ in range(depth):
+        source = f"{{<<: {source}, {key}: 0}}"
+    if merge_form == "sequence":
+        source = f"[{source}, {{retained: 1}}]"
+    elif merge_form == "alias":
+        source = f"[&source {source}, *source]"
+    raw = f"outer: [{{<<: {source}, {key}: 0}}]"
+    with pytest.raises(
+        ValueError, match="duplicate" if defect == "duplicate" else "non-finite"
+    ):
+        certify._strict_yaml_loads(raw)
+
+
+@pytest.mark.parametrize(
+    "raw,expected",
+    (
+        ("<<: {commit: first}\ncommit: explicit\n", {"commit": "explicit"}),
+        (
+            "<<: [{commit: first, retained: 1}, {commit: second}]\n",
+            {"commit": "first", "retained": 1},
+        ),
+        (
+            "<<: {<<: {commit: first}, commit: second}\ncommit: explicit\n",
+            {"commit": "explicit"},
+        ),
+        (
+            "<<: [&source {commit: first, retained: 1}, *source]\ncommit: explicit\n",
+            {"commit": "explicit", "retained": 1},
+        ),
+    ),
+)
+def test_strict_yaml_preserves_explicit_overrides_and_merge_precedence(raw, expected):
+    assert certify._strict_yaml_loads(raw) == expected
+
+
 def test_certify_has_no_raw_artifact_parser_outside_strict_loaders():
     tree = ast.parse((REPO / "scripts/certify.py").read_text())
     violations = []

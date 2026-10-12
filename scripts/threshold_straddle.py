@@ -1,6 +1,6 @@
 """Experimental, SHA-bound threshold evidence for the pinned compiled-program IR.
 
-Threshold admission is opt-in under ruling d1248; the default census and
+Threshold admission is opt-in; the default census and
 certificate generators do not apply these results to published exercise flags.
 
 The sparse evaluator at engine d59969b53430ae2fd97eb4349d44ad23ce930d85

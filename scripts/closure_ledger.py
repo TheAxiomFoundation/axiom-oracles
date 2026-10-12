@@ -1418,7 +1418,7 @@ def _generated_fact_errors(generated: Any) -> list[str]:
                 "sha, never a branch name)"
             )
         # isinstance first: `str(...)` would let a 40-DIGIT YAML integer
-        # (a legal, silently-typed scalar) pass as a "sha" (delta-audit #7).
+        # (a legal, silently-typed scalar) pass as a "sha".
         if not isinstance(corpus.get("commit"), str) or not GIT_SHA.fullmatch(
             corpus["commit"]
         ):

@@ -14,7 +14,7 @@ with committed per-case evidence (inline ``cases`` or
 values per evidence field and per verdict concept across all cases, and writes
 ``conformance/exercise-census.json``.
 
-Threshold straddling is experimental under ruling d1248. Its interpreter can
+Threshold straddling is an experimental diagnostic. Its interpreter can
 reproduce SHA-bound trace outputs and measure live observations strictly below
 and above reachable parameter thresholds. The default generator does not use
 that assessment; ``--threshold-straddle`` prints a separate diagnostic only.
@@ -184,7 +184,7 @@ def _manifest_strict_audit() -> dict[str, dict]:
         errors, findings = module.validate(path, manifest)
         # The manifest's own bytes are part of the audited claim: the census
         # binds their sha so an evidence edit that keeps the validator green
-        # (delta-audit #2, item 7) can never leave census/certificate bytes
+        # can never leave census/certificate bytes
         # identical — every manifest change is visible downstream.
         manifest_sha = hashlib.sha256(Path(path).read_bytes()).hexdigest()
         # Global collisions are a property of the SET, so a per-manifest
@@ -194,8 +194,8 @@ def _manifest_strict_audit() -> dict[str, dict]:
         # enforcement (`strict: true`) AND is clean. Without the flag
         # requirement a strict-clean lane could drop the opt-in — silencing
         # future --strict CI enforcement — while its census row kept
-        # bridge_audited=true and its certificate kept exercised=true
-        # (delta-audit finding). The opt-in is part of the certified claim.
+        # bridge_audited=true and its certificate kept exercised=true.
+        # The opt-in is part of the certified claim.
         declared_strict = isinstance(manifest, dict) and manifest.get("strict") is True
         ok = declared_strict and not errors and not findings and not collisions
         if isinstance(manifest, dict):
@@ -804,7 +804,7 @@ def _committed_exercise_rows(*, threshold_straddle: bool = False) -> dict[str, d
 def build_census(*, threshold_straddle: bool = False) -> dict:
     """Build the published census, or an explicitly opted-in threshold diagnostic.
 
-    Threshold enforcement is disabled by default under ruling d1248. Default
+    Threshold enforcement is disabled by default. Default
     generation retains the published census and certificate evidence identity.
     """
     suites: dict[str, dict] = {}

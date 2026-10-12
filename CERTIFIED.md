@@ -45,16 +45,15 @@ Threshold coverage is available as a read-only diagnostic with
 offers `--enforce-pending-bindings` to diagnose the missing executable commit
 on pending DE candidates. These switches print proposed results to stdout,
 never write published artifacts, and cannot be combined with `--check`.
-They default off under Max's d1248 ruling (2026-10-10): adopting threshold
-coverage as an exercised prerequisite requires a separate decision about the
-existing public flags. The current certification definition remains v3.
+They default off: adopting threshold coverage as an exercised prerequisite
+requires a separate decision about the existing public flags. The current
+certification definition remains v3.
 
 ## What closed requires (the completeness claim)
 
 Closed asserts that the program's **entire legal dependency graph** is
-accounted for — "we have to encode everything that is potentially upstream
-of the policy, every single dependency, whether it's a reg or not" (Max,
-2026-08-20). Concretely, all of:
+accounted for, including every dependency potentially upstream of the policy,
+whether or not it is a regulation. Concretely, all of:
 
 1. **Spine closure.** Every provision of the governing act (derived from
    the pinned corpus release, body-hashed per row) is encoded, classified,
@@ -89,8 +88,8 @@ of the policy, every single dependency, whether it's a reg or not" (Max,
    may not be case-supplied, and its presence computes `closed = false`
    until the defining rules are encoded and the boundary moves down to
    observable facts. Narrowing the certificate's scope around such a leaf
-   ("supplied under a documented contract") does not close it; that was
-   ruled insufficient for the word certified (Max, 2026-08-20, twice).
+   ("supplied under a documented contract") does not close it; that is
+   insufficient for the word certified.
 4. **Boundary honesty.** Every leaf carries a committed grounding row:
    its kind, its reason, and — for anything touching law — the governing
    instrument cited. The frontier is explicit, typed, and auditable; the
@@ -113,7 +112,8 @@ certified claim ships only after a launch-grade adversarial audit of the
 committed decisions themselves (the validators prove consistency; audits
 prove honesty — they have caught a gerrymandered exclusion, a
 misclassified regulation, and pages nobody had read). And no certification
-is announced anywhere, in any words, without Max's explicit clear.
+is announced anywhere, in any words, without the designated certification
+approver's explicit clearance.
 
 ## Definition history
 

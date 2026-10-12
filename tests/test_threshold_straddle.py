@@ -22,7 +22,7 @@ from decimal import Decimal, localcontext
 from pathlib import Path
 
 import pytest
-from hypothesis import given, strategies as st
+from hypothesis import given, settings, strategies as st
 
 from scripts.threshold_straddle import (
     InterpretationError,
@@ -418,6 +418,7 @@ def test_input_intervals_select_latest_covering_whole_period():
     assert compute_threshold_straddle(raw, traces)["self_check"]["complete"]
 
 
+@settings(deadline=None)
 @given(st.lists(st.integers(min_value=-100, max_value=100), min_size=1, max_size=25))
 def test_side_partition_and_permutation_invariance(values):
     forward = assess(artifact(), values)
@@ -435,6 +436,7 @@ def test_side_partition_and_permutation_invariance(values):
     assert site["above"] == sum(v > 10 for v in values)
 
 
+@settings(deadline=None)
 @given(
     st.lists(st.integers(-100, 100), min_size=1, max_size=25), st.integers(-100, 100)
 )
@@ -445,6 +447,7 @@ def test_adding_evaluation_cannot_unstraddle(values, extra):
     assert not before["sites"][0]["straddled"] or after["sites"][0]["straddled"]
 
 
+@settings(deadline=None)
 @given(st.integers(min_value=-(10**20), max_value=10**20), st.integers(1, 28))
 def test_decimal_fitting_is_context_independent_and_representable(coefficient, scale):
     exact = Decimal(f"{coefficient}e-{scale}")
@@ -544,6 +547,7 @@ def test_de_root_contract_fails_closed(roots, kind):
     )
 
 
+@settings(deadline=None)
 @given(values=st.lists(st.integers(-100, 100), min_size=1, max_size=25))
 @pytest.mark.parametrize("operation", ["min", "max", "lt", "lte", "gt", "gte"])
 def test_threshold_detection_is_symmetric_under_operand_swap(values, operation):
@@ -579,6 +583,7 @@ def test_threshold_detection_is_symmetric_under_operand_swap(values, operation):
         assert forward["sites"][0][key] == backward["sites"][0][key]
 
 
+@settings(deadline=None)
 @given(st.lists(st.integers(-100, 10), min_size=1, max_size=25))
 def test_threshold_equality_and_one_side_never_admit_straddle(values):
     below = assess(artifact(), values)

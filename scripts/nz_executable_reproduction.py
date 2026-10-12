@@ -106,13 +106,8 @@ SOURCE_COMPARISON_HARNESS = {
 EVALUATION_COUNT = 883
 PERIOD = {"period_kind": "tax_year", "start": "2026-04-01", "end": "2027-03-31"}
 
-DEFAULT_RULESPEC_ROOT = (
-    Path("/Users/maxghenis/TheAxiomFoundation/_axiom-worktrees/")
-    / "rulespec-nz-emtr/rulespec-nz"
-)
-DEFAULT_ENGINE_ROOT = Path(
-    "/Users/maxghenis/TheAxiomFoundation/_worktrees/engine-release-clone"
-)
+DEFAULT_RULESPEC_ROOT = Path.home() / "TheAxiomFoundation" / "rulespec-nz"
+DEFAULT_ENGINE_ROOT = Path.home() / "TheAxiomFoundation" / "axiom-rules-engine"
 DEFAULT_ENGINE_BINARY = DEFAULT_ENGINE_ROOT / "target/release/axiom-rules-engine"
 
 # This mapping is declaration-side comparison scope only. Request/root

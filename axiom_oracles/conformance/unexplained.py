@@ -25,7 +25,7 @@ CLASSIFIED_DISPOSITION_KINDS = (
 )
 KNOWN_DISPOSITION_KINDS = (*CLASSIFIED_DISPOSITION_KINDS, "unexplained")
 
-# Max's d1248 ruling: split out fixes that leave public numbers unchanged.
+# Publication-changing fixes require a separate decision about public numbers.
 # Do not enable this as part of an unrelated report refresh.
 CONSERVATIVE_UNEXPLAINED_ENABLED = False
 

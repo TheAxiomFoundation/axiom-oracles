@@ -537,17 +537,36 @@ def _strict_yaml_loads(raw: str) -> object:
     """Reject ambiguous mappings, cycles and non-finite numbers in YAML evidence."""
 
     class UniqueLoader(yaml.SafeLoader):
-        pass
+        def construct_document(self, node):
+            # Merge flattening can discard source values and erase their
+            # explicit-key boundaries, so admit the original graph first.
+            validate_node(self, node, set())
+            return super().construct_document(node)
+
+    def validate_node(loader, node, ancestors):
+        if id(node) in ancestors:
+            raise ValueError("cyclic YAML evidence")
+        ancestors = ancestors | {id(node)}
+        if isinstance(node, yaml.ScalarNode):
+            if node.tag == "tag:yaml.org,2002:float" and not math.isfinite(
+                loader.construct_object(node)
+            ):
+                raise ValueError("non-finite YAML number")
+        elif isinstance(node, yaml.MappingNode):
+            keys = set()
+            for key_node, value_node in node.value:
+                validate_node(loader, key_node, ancestors)
+                if key_node.tag != "tag:yaml.org,2002:merge":
+                    key = loader.construct_object(key_node)
+                    if key in keys:
+                        raise ValueError(f"duplicate YAML key {key!r}")
+                    keys.add(key)
+                validate_node(loader, value_node, ancestors)
+        elif isinstance(node, yaml.SequenceNode):
+            for child in node.value:
+                validate_node(loader, child, ancestors)
 
     def mapping(loader, node, deep=False):
-        keys = set()
-        for key_node, _ in node.value:
-            if key_node.tag == "tag:yaml.org,2002:merge":
-                continue
-            key = loader.construct_object(key_node, deep=deep)
-            if key in keys:
-                raise ValueError(f"duplicate YAML key {key!r}")
-            keys.add(key)
         loader.flatten_mapping(node)
         return loader.construct_mapping(node, deep=deep)
 

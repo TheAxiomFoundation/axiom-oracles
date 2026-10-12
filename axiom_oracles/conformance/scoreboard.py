@@ -19,8 +19,8 @@ bound to the policy's registered outputs (see
 ``scope.column_exposure`` witness basis, the reference must also exercise at
 least one of the policy's output columns with a positive rate. Comparing an
 all-zero column against an implicit 0 verifies nothing about units where the
-authority applies; such a policy scores ``unwitnessed`` and is NOT covered
-(sol stack review F3). Reports without an exposure basis still require execution
+authority applies; such a policy scores ``unwitnessed`` and is NOT covered.
+Reports without an exposure basis still require execution
 and output attestation. A missing, skipped or errored report leaves the policy
 in scope and NOT covered (axiom-oracles#355).
 
@@ -58,7 +58,7 @@ from axiom_oracles.conformance.waivers import WaiverIndex
 
 # Full file validation currently flips the published BE badge true -> false:
 # be-marital-quotient and be-pensioner-contributions cite missing files despite
-# having zero mismatches. Keep this correction separately reviewable (d1248).
+# having zero mismatches. Keep this correction separately reviewable.
 SCOREBOARD_DISPOSITION_FILE_VALIDATION_ENABLED = False
 
 def _round(value: float, places: int = 4) -> float:
@@ -131,18 +131,18 @@ class JurisdictionScoreboard:
     uncovered_policies: list[str] = field(default_factory=list)
     #: In-scope policies whose covering report's exposure basis never
     #: exercises their output columns with a positive rate (subset of the
-    #: uncovered gap; sol stack review F3).
+    #: uncovered gap).
     unwitnessed_policies: list[str] = field(default_factory=list)
     #: Aggregated temporal-debt account from covered reports that carry one
     #: (``scope.temporal_debt``): intervals the comparison domain does NOT
-    #: reach, surfaced instead of silently clipped (sol stack review F4).
+    #: reach, surfaced instead of silently clipped.
     #: None when no covered report carries a debt account.
     temporal_debt: dict | None = None
     #: Human-readable reasons the predicate is not yet satisfied (empty when
     #: conformant) — so a reader sees *why*, not just a red badge.
     blocking_reasons: list[str] = field(default_factory=list)
     #: Excluded policies invalidated by nonzero live exposure on their output
-    #: columns (the enforced re-inclusion tripwire; sol closing review F1).
+    #: columns (the enforced re-inclusion tripwire).
     #: Non-empty blocks conformance.
     invalid_exclusions: list[str] = field(default_factory=list)
 
@@ -292,7 +292,7 @@ def score_jurisdiction(
             f"[{suite}] {filename}: {defect}" for defect in assessment.defects
         )
     #: The raw, uncollapsed report list — exclusion-tripwire scans must see
-    #: every report, order-independently (sol closing review r2 finding 1).
+    #: every report, order-independently.
     all_reports = list(reports)
 
     policy_scores: list[PolicyScore] = []
@@ -315,7 +315,7 @@ def score_jurisdiction(
     covered_report_suites: set[str] = set()
 
     #: Excluded policies whose output columns the reference DOES exercise in a
-    #: live report (sol closing review F1): an exclusion grounded in "the
+    #: live report: an exclusion grounded in "the
     #: reference never exercises this column" is invalidated the moment any
     #: covering report records nonzero exposure for one of its output vars.
     #: This is the enforced re-inclusion tripwire — it blocks conformance
@@ -328,7 +328,7 @@ def score_jurisdiction(
             excluded_by_reason[reason] = excluded_by_reason.get(reason, 0) + 1
             # Scan EVERY raw report, not the collapsed suite index — a
             # zero-exposure duplicate must never shadow a nonzero one
-            # (order-independence; sol closing review r2 finding 1).
+            # regardless of order.
             exclusion_violated = False
             if policy.output_vars:
                 for report in all_reports:
@@ -383,7 +383,7 @@ def score_jurisdiction(
             )
             continue
 
-        # Positive-exposure witness (sol stack review F3): when the covering
+        # Positive-exposure witness: when the covering
         # report carries an exposure basis, the reference must exercise at
         # least one of the policy's output columns with a positive rate.
         # An all-zero column compared against an implicit 0 witnesses
@@ -491,7 +491,7 @@ def score_jurisdiction(
         axiom_attributed_open += axiom_open
         oracle_attributed += oracle_gap
         bridge_artifacts += bridge
-        # Temporal-debt surface (sol stack review F4): intervals the
+        # Temporal-debt surface: intervals the
         # comparison domain does not reach are carried onto the scoreboard
         # instead of silently clipped out of the coverage story.
         debt = (report.get("scope") or {}).get("temporal_debt")

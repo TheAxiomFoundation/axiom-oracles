@@ -440,7 +440,7 @@ def _premerged_fixture(tmp_path: Path) -> tuple[object, Path, dict, dict]:
     report, dispositions document). The full report carries TWO mismatch
     rows classified by two entries of EQUAL cardinality but different
     disposition classes — the shape whose class swap keeps every aggregate
-    count identical (sol stack review r2). The slim copy embeds the
+    count identical. The slim copy embeds the
     ``summary.dispositioned`` block a fresh merge over the full report
     produces, bound to its source via the ``source_report`` pointer and
     the row-level ``assignment_sha256``, and retains one annotated
@@ -565,7 +565,7 @@ def test_partial_reports_are_not_full_merge_targets(tmp_path: Path) -> None:
 
 
 def test_equal_cardinality_class_swap_is_flagged(tmp_path: Path) -> None:
-    # Sol stack review r2 F2 residual: swapping the disposition classes of
+    # Swapping the disposition classes of
     # two equal-cardinality entries keeps EVERY aggregate count identical,
     # so the aggregate comparison stays silent — the row-level assignment
     # digest and the retained row's annotation must catch it.
@@ -620,7 +620,7 @@ def test_missing_pointer_with_committed_full_report_is_flagged(
 
 
 def test_dangling_source_pointer_fails_closed(tmp_path: Path) -> None:
-    # Sol stack review r2 MED: an absent source must fail --check, never
+    # An absent source must fail --check, never
     # fall back to trusting the embedded block.
     module, slim_path, slim, doc = _premerged_fixture(tmp_path)
     (tmp_path / "reports" / "example-suite-full.json").unlink()
@@ -674,8 +674,7 @@ def test_source_pointer_outside_reports_dir_is_rejected(
 
 def test_absolute_source_pointer_path_is_rejected(tmp_path: Path) -> None:
     # The pointer contract is repo-relative; an absolute path — even one
-    # that resolves inside reports/ — must be rejected (sol stack review
-    # r3).
+    # that resolves inside reports/ — must be rejected.
     module, slim_path, slim, doc = _premerged_fixture(tmp_path)
     slim["summary"]["dispositioned"]["source_report"]["path"] = str(
         tmp_path / "reports" / "example-suite-full.json"
@@ -690,7 +689,7 @@ def test_non_mapping_json_source_is_a_problem_not_a_crash(
 ) -> None:
     # A hash-matching source whose JSON is valid but not a report object
     # (e.g. a bare list) must produce a validation problem, not an
-    # AttributeError (sol stack review r3).
+    # AttributeError.
     module, slim_path, slim, doc = _premerged_fixture(tmp_path)
     full_path = tmp_path / "reports" / "example-suite-full.json"
     payload = "[1]"
@@ -713,8 +712,8 @@ def _premerged_multi_concept_fixture(
     A report validly emits one mismatch row per (case, concept); a digest
     or row map keyed by case_id alone collapses same-case rows, so a
     count-preserving swap confined to rows shadowed in that map — and to
-    rows not retained in the dashboard sample — would go unseen (sol
-    stack review r3). Two single-row entries of different classes annotate
+    rows not retained in the dashboard sample — would go unseen.
+    Two single-row entries of different classes annotate
     the income-tax row of each case; the payroll rows stay unannotated,
     and the retained dashboard row is an unannotated payroll row.
     """
@@ -821,7 +820,7 @@ def _premerged_multi_concept_fixture(
 
 
 def test_same_case_multi_concept_swap_is_flagged(tmp_path: Path) -> None:
-    # Sol stack review r3: with one mismatch row per (case, concept), a
+    # With one mismatch row per (case, concept), a
     # case_id-keyed digest lets later concept rows shadow earlier ones, so
     # swapping the classes of two single-row entries that annotate only
     # shadowed, non-retained rows preserved aggregates, digest, and
@@ -884,11 +883,11 @@ def test_panel_dashboard_block_is_bound_to_committed_full_report() -> None:
 
 
 def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
-    """expires_on_source_change made real for selector entries (sol closing
-    review F4): a selector_binding records the selected population's unit
+    """expires_on_source_change made real for selector entries:
+    a selector_binding records the selected population's unit
     count and summed |difference|; a source change that moves any selected
     value violates the binding, EXPIRES the entry, and returns its rows to
-    unexplained. This is sol's exact counterfactual — before the binding, an
+    unexplained. Before the binding, an
     in-memory value mutation stayed classified with zero unexplained."""
     entry = {
         "id": "sel-bound",
@@ -929,7 +928,7 @@ def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
     assert "binding_violated_entries" not in block
     assert merged["mismatches"][0]["disposition"]["id"] == "sel-bound"
 
-    # Sol's mutation: one selected row's value drifts (.145 -> .89).
+    # One selected row's value drifts (.145 -> .89).
     mutated = json.loads(json.dumps(report))
     mutated["mismatches"][1]["right"] = 0.99
     mutated["mismatches"][1]["difference"] = -0.89
@@ -940,7 +939,7 @@ def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
     assert block["unexplained_count"] == 2
     assert all("disposition" not in row for row in merged["mismatches"])
 
-    # Sol r2 finding 2: a sign flip preserves unit count and |difference|
+    # A sign flip preserves unit count and |difference|
     # aggregates — the per-row digest must still trip.
     flipped = json.loads(json.dumps(report))
     flipped["mismatches"][1]["left"] = 0.145

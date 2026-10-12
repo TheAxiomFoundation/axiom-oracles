@@ -135,7 +135,7 @@ def test_resolve_run_kind_env(monkeypatch):
 # --- repo slug + rulespec provenance ---------------------------------------
 
 
-def test_repo_slug_from_remote_forms():
+def test_repo_slug_from_remote_forms(tmp_path):
     assert (
         repo_slug_from_remote("git@github.com:TheAxiomFoundation/rulespec-us.git")
         == "TheAxiomFoundation/rulespec-us"
@@ -145,7 +145,7 @@ def test_repo_slug_from_remote_forms():
         == "TheAxiomFoundation/rulespec-us"
     )
     # NEGATIVE: a non-GitHub remote yields no slug rather than a wrong one.
-    assert repo_slug_from_remote("file:///tmp/rulespec-us") is None
+    assert repo_slug_from_remote((tmp_path / "rulespec-us").as_uri()) is None
     assert repo_slug_from_remote(None) is None
 
 

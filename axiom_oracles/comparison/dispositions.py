@@ -555,7 +555,7 @@ def selected_rows_sha256(rows: list[dict]) -> str:
     Sorted by case id; each row contributes its identity plus the exact
     ``left``/``right``/signed ``difference`` values, so any value movement —
     sign flips, balanced multi-row swaps, anything that preserves aggregates —
-    changes the digest (sol closing review r2 finding 2).
+    changes the digest.
     """
     canonical = sorted(
         [
@@ -681,7 +681,7 @@ def apply_dispositions(
             break
         row_winner.append(winner)
 
-    # Selector-binding validation (sol closing review F4, hardened in r2):
+    # Selector-binding validation:
     # the binding pins a canonical per-row digest of the selected population
     # — identity plus left/right/signed difference — so ANY value movement,
     # including sign flips and balanced multi-row changes that preserve
@@ -780,12 +780,11 @@ def assignment_digest(report: dict) -> str:
     list and hashes it. Aggregate counts cannot distinguish two entries of
     equal cardinality swapping disposition classes; this digest can, so a
     premerged-slim dashboard block that embeds it is bound to the exact
-    row-level assignment a fresh merge over the full report produces (sol
-    stack review r2, F2 residual). A sorted LIST — never a mapping keyed
+    row-level assignment a fresh merge over the full report produces.
+    A sorted LIST — never a mapping keyed
     by case_id — because a case validly carries one mismatch row per
     concept, and a map would let same-case rows overwrite each other,
-    hiding count-preserving reclassifications among them (sol stack
-    review r3).
+    hiding count-preserving reclassifications among them.
     """
 
     assignment: list[list[str | None]] = []

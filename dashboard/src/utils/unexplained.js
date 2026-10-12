@@ -11,7 +11,7 @@ const CLASSIFIED_KINDS = [
   "axiom_encoding_gap",
 ];
 const KNOWN_KINDS = [...CLASSIFIED_KINDS, "unexplained"];
-// Max's d1248 split preserves the published headline until a separate decision.
+// Preserve the published headline until a separate publication decision.
 export const CONSERVATIVE_UNEXPLAINED_ENABLED = false;
 const object = value => value !== null && typeof value === "object" && !Array.isArray(value);
 const has = (value, key) => Object.hasOwn(value, key);
