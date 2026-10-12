@@ -1,4 +1,4 @@
-"""Offline ports of review 20261004-124541's known-cause/kind witnesses.
+"""Offline ports of known-cause/kind witnesses.
 
 Fixtures retain the committed Colorado 1032-vs-967 and QBID 0-vs-400 rows;
 the companion assertions are the review's deliberately incorrect witnesses.
