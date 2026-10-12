@@ -1,9 +1,11 @@
 from copy import deepcopy
+import warnings
 
 import pytest
 from hypothesis import example, given, settings, strategies as st
 
 from axiom_oracles.bridges.relation_binding import (
+    RelationBindingAmbiguityWarning,
     RelationBindingError,
     bind_request_relations,
     relation_tuple,
@@ -59,6 +61,16 @@ def artifact_for(
                 },
             },
         ])
+    elif not typed:
+        # These controls identify real Person endpoints through an independent
+        # executable role, rather than an untyped producer convention.
+        artifact["program"]["relations"].append({"name": "person_proof", "arity": 2})
+        artifact["program"]["derived"].append({
+            "name": "person_count", "entity": "Person", "expr": {
+                "kind": "count_related", "relation": "person_proof",
+                "current_slot": 0, "related_slot": 1,
+            },
+        })
     return artifact
 
 
@@ -408,11 +420,17 @@ def test_untyped_conflicting_input_kinds_still_fail():
         {"entity_id": "unit-1", "entity": "Household"}
     )
     artifact = artifact_for(typed=False, current_slot=1)
-    # Household is a true identity kind here because another relation binds
-    # it as an endpoint, rather than an unrelated broadcast input scope.
+    # An independently established aggregate owner makes Household a true
+    # identity kind, rather than a broadcast scope or an unused declaration.
     artifact["program"]["relations"].append({
         "name": "household_members", "arity": 2,
         "slot_entities": ["Household", "Person"],
+    })
+    artifact["program"]["derived"].append({
+        "name": "household_count", "entity": "Household", "expr": {
+            "kind": "count_related", "relation": "household_members",
+            "current_slot": 0, "related_slot": 1,
+        },
     })
     with pytest.raises(RelationBindingError, match="needs one input entity kind"):
         bind_request_relations(request, artifact)
@@ -1138,3 +1156,101 @@ def test_same_kind_member_identity_scopes_nested_broadcast_predicates(
         related_id="payment-1", related_kind="Person",
     )
     assert constructed == expected["dataset"]["relations"][1]["tuple"]
+
+
+@settings(max_examples=80, deadline=None)
+@example(typed=True, proof=False, scope="Person", owner_slot=0,
+         supplied_owner_slot=0, owner_input=True, member_input=True, executed=True,
+         unrelated_slots=[["Organization", "Person"]], derived_declarations=False,
+         nested_declaration_count=False)
+@example(typed=False, proof=True, scope="Person", owner_slot=0,
+         supplied_owner_slot=0, owner_input=True, member_input=True, executed=True,
+         unrelated_slots=[["Organization", "Person"]], derived_declarations=True,
+         nested_declaration_count=False)
+@example(typed=True, proof=False, scope="Person", owner_slot=0,
+         supplied_owner_slot=0, owner_input=True, member_input=True, executed=True,
+         unrelated_slots=[["Organization", "Person"]], derived_declarations=True,
+         nested_declaration_count=True)
+@given(
+    typed=st.booleans(), proof=st.booleans(),
+    scope=st.sampled_from(["Person", "Organization", "Family", "BroadcastThreshold"]),
+    owner_slot=st.integers(0, 1), supplied_owner_slot=st.integers(0, 1),
+    owner_input=st.booleans(), member_input=st.booleans(), executed=st.booleans(),
+    derived_declarations=st.booleans(),
+    nested_declaration_count=st.booleans(),
+    unrelated_slots=st.lists(
+        st.lists(st.one_of(OWNER_KINDS, st.sampled_from(["Person", "Payment", "Family"])),
+                 min_size=2, max_size=3), min_size=1, max_size=4,
+    ),
+)
+def test_unrelated_relation_declarations_never_change_binding(
+    typed, proof, scope, owner_slot, supplied_owner_slot,
+    owner_input, member_input, executed, unrelated_slots, derived_declarations,
+    nested_declaration_count,
+):
+    schema = {"name": "payments", "arity": 2}
+    if typed:
+        schema["slot_entities"] = ["Household", "Payment"]
+    count = {"kind": "count_related", "relation": "payments",
+             "current_slot": owner_slot, "related_slot": 1 - owner_slot}
+    if executed:
+        count["where"] = {"kind": "derived", "name": "threshold"}
+    artifact = {"program": {"relations": [schema], "derived": [
+        {"name": "n", "entity": "Household", "expr": count},
+        {"name": "amount", "entity": "Payment", "expr": {"kind": "input"}},
+        {"name": "threshold", "entity": scope, "expr": {"kind": "input"}},
+    ]}}
+    if proof:
+        artifact["program"]["relations"].append({"name": "payment_proof", "arity": 2})
+        artifact["program"]["derived"].append({
+            "name": "payment_count", "entity": "Payment", "expr": {
+                "kind": "count_related", "relation": "payment_proof",
+                "current_slot": 0, "related_slot": 1,
+            },
+        })
+    request = {"mode": "explain", "dataset": {"inputs": [], "relations": [{
+        "name": "payments", "tuple": ["house", "payment"]
+        if supplied_owner_slot == 0 else ["payment", "house"],
+        "interval": {"start": "2026-01-01", "end": "2026-12-31"},
+    }]}, "queries": [{"entity_id": "house", "outputs": ["n"]}]}
+    if owner_input:
+        request["dataset"]["inputs"].append({"entity_id": "house", "entity": "Household"})
+    if member_input:
+        request["dataset"]["inputs"].append({"entity_id": "payment", "entity": "Payment"})
+    request["dataset"]["inputs"].append({"entity_id": "payment", "entity": scope})
+    before, program_before = deepcopy(request), deepcopy(artifact)
+
+    def bind(program):
+        with warnings.catch_warnings(record=True) as captured:
+            warnings.simplefilter("always", RelationBindingAmbiguityWarning)
+            result = bind_request_relations(request, program)
+        return result, [(item.message.relation, item.message.tuple) for item in captured]
+
+    baseline = bind(artifact)
+    extended = deepcopy(artifact)
+    for index, slots in enumerate(unrelated_slots):
+        declaration = {"name": f"unrelated_{index}", "arity": len(slots),
+                       "slot_entities": slots}
+        if derived_declarations:
+            source = f"unrelated_source_{index}"
+            extended["program"]["relations"].append({"name": source, "arity": len(slots)})
+            declaration["derivation"] = {
+                "source_relation": source, "slot_entities": slots,
+                "current_slot": 0, "related_slot": 1,
+                "predicate": {"kind": "literal", "value": {"kind": "bool", "value": True}},
+            }
+            if nested_declaration_count:
+                probe = f"unrelated_probe_{index}"
+                extended["program"]["relations"].append({"name": probe, "arity": 2})
+                declaration["derivation"]["predicate"] = {
+                    "kind": "comparison", "op": "gt",
+                    "left": {"kind": "count_related", "relation": probe,
+                             "current_slot": 0, "related_slot": 1},
+                    "right": {"kind": "literal", "value": {"kind": "integer", "value": 0}},
+                }
+        extended["program"]["relations"].append(declaration)
+    assert bind(extended) == baseline
+    if not typed and not proof:
+        assert baseline == (before, [("payments", tuple(before["dataset"]["relations"][0]["tuple"]))])
+    assert request == before
+    assert artifact == program_before

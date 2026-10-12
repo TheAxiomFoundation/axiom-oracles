@@ -3366,9 +3366,10 @@ def person_money_sum(persons: list[Any], column: str | tuple[str, ...]) -> float
 
 
 def input_record(
-    name: str, entity_id: str, interval: dict[str, str], value: Any, *, entity: str
+    name: str, entity_id: str, interval: dict[str, str], value: Any, *,
+    entity: str = "Entity",
 ) -> dict[str, Any]:
-    """Label inputs explicitly; the engine uses this kind to bind relations."""
+    """Label input kinds while preserving the generic four-argument API."""
     return {
         "name": name,
         "entity": entity,

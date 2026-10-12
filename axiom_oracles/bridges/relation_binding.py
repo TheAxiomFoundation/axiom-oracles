@@ -58,15 +58,6 @@ class _ArtifactRelations:
         self.schemas = {
             relation["name"]: relation for relation in program.get("relations", [])
         }
-        self.declared_kinds = {
-            kind
-            for schema in self.schemas.values()
-            for slots in (
-                schema.get("slot_entities", []),
-                (schema.get("derivation") or {}).get("slot_entities", []),
-            )
-            for kind in slots
-        }
         self.rules = {}
         for rule in program.get("derived", []):
             self.rules[rule["name"]] = rule
@@ -76,12 +67,13 @@ class _ArtifactRelations:
         self.constructor_hint = constructor_hint
         self.usages: dict[str, list[list[str | None]]] = defaultdict(list)
         self.owner_slots: dict[str, set[int]] = defaultdict(set)
+        self.aggregate_owner_kinds: set[str] = set()
         self.executable_kinds: set[str] = set()
         self._expected_by_name: dict[str, list[str | None] | None] = {}
         self._read_usages(program)
-        # Keep the first walk's independently proven endpoint kinds separate
-        # from the conventional input inventory used by untyped relations.
-        # Scalar references can then use them independently of rule order.
+        # Only executable roles establish kinds independently of the relation
+        # being bound. An unused declaration cannot prove an input's identity.
+        # The second walk can use these roles independently of rule order.
         self.executable_kinds = self.endpoint_kinds()
         self.usages.clear()
         self.owner_slots.clear()
@@ -135,7 +127,8 @@ class _ArtifactRelations:
                     derivation["source_relation"], current, related, owner, member
                 )
                 self._walk(
-                    derivation.get("predicate", {}), member, (owner, member)
+                    derivation.get("predicate", {}), member, (owner, member),
+                    independent_owner=False,
                 )
 
     def schema(self, name: str) -> dict[str, Any] | None:
@@ -209,8 +202,9 @@ class _ArtifactRelations:
             )
         return kinds
 
-    def _referenced_kind(self, node: Any) -> str | None:
+    def _referenced_kind(self, node: Any, relation: str) -> str | None:
         kinds: set[str] = set()
+        identity_kinds = self._input_identity_kinds(relation)
 
         def depends_on_row(value: Any, stack: tuple[str, ...] = ()) -> bool:
             if isinstance(value, list):
@@ -248,8 +242,7 @@ class _ArtifactRelations:
                     rule = self.rules.get(name, {})
                     entity = rule.get("entity")
                     if (
-                        entity in self.declared_kinds
-                        or entity in self.executable_kinds
+                        entity in identity_kinds
                         or entity == "Person"
                         or entity in UNIT_ENTITY_KINDS
                     ) and depends_on_row(value):
@@ -274,14 +267,17 @@ class _ArtifactRelations:
         node: Any,
         entity: str | None,
         context: tuple[str | None, str | None] | None = None,
+        *, independent_owner: bool = True,
     ) -> None:
         if isinstance(node, list):
             for child in node:
-                self._walk(child, entity, context)
+                self._walk(child, entity, context, independent_owner=independent_owner)
         elif isinstance(node, dict):
             kind = node.get("kind")
             if kind == "no_match":
-                self._walk(node.get("subject"), entity, context)
+                self._walk(
+                    node.get("subject"), entity, context, independent_owner=independent_owner,
+                )
                 return
             if kind in {"count_related", "sum_related", "relation_member"}:
                 current, related = self._slots(node)
@@ -306,7 +302,7 @@ class _ArtifactRelations:
                         if current < len(structural):
                             owner = structural[current]
                     member_scope = self._referenced_kind(
-                        [node.get("value"), node.get("where")]
+                        [node.get("value"), node.get("where")], node["relation"],
                     )
                     member = member_scope
                     declared = (schema or {}).get("slot_entities", [])
@@ -334,6 +330,8 @@ class _ArtifactRelations:
                             # A scalar's execution scope is not proof of a
                             # request endpoint's identity, even for Person.
                             member = None
+                if independent_owner and kind != "relation_member" and owner is not None:
+                    self.aggregate_owner_kinds.add(owner)
                 kinds = self._record(
                     node["relation"], current, related, owner, member
                 )
@@ -342,13 +340,14 @@ class _ArtifactRelations:
                         node.get("where"),
                         kinds[related] if self.identity_pairs or kinds[related] is not None
                         else member_scope,
+                        independent_owner=independent_owner,
                     )
                 return
             # Scalar operands and conditions run on the same bound pair.
             # Only an aggregate's where clause starts a new entity context
             # (handled above without forwarding context).
             for child in node.values():
-                self._walk(child, entity, context)
+                self._walk(child, entity, context, independent_owner=independent_owner)
 
     def expected(self, name: str) -> list[str | None] | None:
         schema = self.schema(name)
@@ -385,29 +384,20 @@ class _ArtifactRelations:
         return result
 
     def endpoint_kinds(self) -> set[str]:
-        """Kinds recorded by relation metadata and the current executable walk."""
-        kinds = set(self.declared_kinds)
-        kinds.update(
-            kind
-            for usages in self.usages.values()
-            for usage in usages
-            for kind in usage
-            if kind is not None
-        )
-        return kinds
+        """Owner roles proven by aggregates, independently of declarations."""
+        return set(self.aggregate_owner_kinds)
 
     def _input_identity_kinds(self, name: str) -> set[str]:
-        """Combine proven endpoint kinds with a relation's untyped inventory."""
+        """Combine independent executable roles with this relation's metadata."""
         kinds = set(self.executable_kinds)
         schema = self.schema(name)
-        if (
-            kinds and schema is not None and not schema.get("slot_entities")
-            and not (schema.get("derivation") or {}).get("slot_entities")
-        ):
-            # The generic producer convention identifies Person members of
-            # untyped relations. Keep it out of the first walk and typed
-            # relations, where a Person input can be only a scalar scope.
-            kinds.add("Person")
+        if schema is not None:
+            kinds.update(schema.get("slot_entities", []))
+            kinds.update((schema.get("derivation") or {}).get("slot_entities", []))
+            kinds.update(
+                kind for usage in self.usages.get(schema["name"], [])
+                for kind in usage if kind is not None
+            )
         return kinds
 
 
@@ -601,9 +591,9 @@ def bind_request_relations(
                 labels.get(entity_id, set()) for entity_id in record["tuple"]
             ])
     relations = _ArtifactRelations(artifact, identity_pairs=identity_pairs)
-    scalar_scopes = {
+    rule_scopes = {
         rule["entity"] for rule in relations.rules.values() if rule.get("entity")
-    } - relations.executable_kinds
+    }
     for record in raw_records:
         name = record["name"]
         schema = relations.schema(name)
@@ -622,6 +612,7 @@ def bind_request_relations(
         kinds = []
         untyped = not schema.get("slot_entities")
         identity_kinds = relations._input_identity_kinds(name)
+        scalar_scopes = rule_scopes - identity_kinds
         for entity_id in ids:
             possible = labels.get(entity_id, set())
             identities = possible & identity_kinds

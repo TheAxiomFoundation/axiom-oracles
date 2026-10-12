@@ -511,6 +511,8 @@ def _person_scalar_scope_request(*, used, owner_slot=0, threshold=10, untyped_me
          "semantics": "scalar", "expr": {"kind": "input", "name": "amount"}},
         {"name": "person_threshold", "entity": "Person", "dtype": "integer",
          "semantics": "scalar", "expr": {"kind": "input", "name": "threshold"}},
+        {"name": "house_marker", "entity": "Household", "dtype": "integer",
+         "semantics": "scalar", "expr": {"kind": "input", "name": "marker"}},
     ]
     interval = deepcopy(request["dataset"]["inputs"][0]["interval"])
     request["dataset"]["inputs"] = [
@@ -586,6 +588,51 @@ def test_strict_engine_person_scalar_scope_accepts_payment_identity(strict_engin
     request["mode"] = mode
     # The unchanged request is the native control for both the unused scope
     # and its execution on the Payment endpoint's id.
+    assert _strict_integer_outputs(strict_engine, request, "n") == [1]
+    before = deepcopy(request)
+    bound = bind_request_relations(request, {"program": request["program"]})
+    assert bound == before
+    assert request == before
+    assert _strict_integer_outputs(strict_engine, bound, "n") == [1]
+
+
+def _unrelated_scalar_scope_request(scope_kind, *, typed):
+    request = _person_scalar_scope_request(used=True)
+    threshold = next(
+        rule for rule in request["program"]["derived"]
+        if rule["name"] == "person_threshold"
+    )
+    threshold["entity"] = scope_kind
+    request["dataset"]["inputs"][2]["entity"] = scope_kind
+    if typed:
+        # A declaration with no data or executable use cannot establish an
+        # identity for either endpoint of the payments relation.
+        request["program"]["relations"].append({
+            "name": "unrelated", "arity": 2,
+            "slot_entities": ["Organization", "Person" if scope_kind == "Organization" else scope_kind],
+        })
+    else:
+        request["program"]["relations"][0].pop("slot_entities")
+        # This independently proves the Payment role without typing payments
+        # or treating the executed Person scalar's nominal scope as identity.
+        request["program"]["relations"].append({"name": "payment_proof", "arity": 2})
+        request["program"]["derived"].append({
+            "name": "payment_count", "entity": "Payment", "dtype": "integer",
+            "semantics": "scalar", "expr": {
+                "kind": "count_related", "relation": "payment_proof",
+                "current_slot": 0, "related_slot": 1,
+            },
+        })
+    return request
+
+
+@pytest.mark.parametrize(("scope_kind", "typed"), [
+    ("Person", True), ("Organization", True), ("Family", True), ("Person", False),
+], ids=["typed_person", "typed_organization", "typed_family", "untyped_person"])
+def test_strict_engine_scalar_scope_inventory_cannot_change_payment_identity(
+    strict_engine, scope_kind, typed,
+):
+    request = _unrelated_scalar_scope_request(scope_kind, typed=typed)
     assert _strict_integer_outputs(strict_engine, request, "n") == [1]
     before = deepcopy(request)
     bound = bind_request_relations(request, {"program": request["program"]})

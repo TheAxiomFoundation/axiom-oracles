@@ -13,6 +13,7 @@ from axiom_oracles.bridges.tax_populace import (
     CTC_H_BASE,
     EITC_BASE,
     build_axiom_request,
+    input_record,
 )
 
 RELATIONS = {
@@ -24,6 +25,32 @@ RELATIONS = {
     "aotc": [f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit"],
     "eitc": [f"{EITC_BASE}#relation.qualifying_child_of_tax_unit"],
 }
+
+
+def test_input_record_preserves_four_argument_public_api():
+    interval = {"start": "2026-01-01", "end": "2027-01-01"}
+
+    record = input_record("n", "id", interval, 1)
+
+    assert record == {
+        "name": "n", "entity": "Entity", "entity_id": "id",
+        "interval": interval, "value": {"kind": "integer", "value": 1},
+    }
+
+
+@settings(max_examples=24, deadline=None)
+@given(value=st.one_of(
+    st.booleans(), st.integers(),
+    st.floats(allow_nan=False, allow_infinity=False), st.text(max_size=40),
+))
+def test_input_record_compatibility_default_keeps_explicit_entity_encoding(value):
+    interval = {"start": "2026-01-01", "end": "2027-01-01"}
+    before = deepcopy(interval)
+
+    assert input_record("n", "id", interval, value) == input_record(
+        "n", "id", interval, value, entity="Entity",
+    )
+    assert interval == before
 
 
 def population(member_ages):
