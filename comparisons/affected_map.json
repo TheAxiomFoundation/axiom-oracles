@@ -1917,6 +1917,18 @@
       "source": "comparisons/us-tariff-schedule.yaml"
     },
     {
+      "suite": "us-taxable-income-grid",
+      "name": "us-taxable-income-grid",
+      "report": "axiom-policyengine-us-taxable-income-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-taxable-income-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "87d3cbd3b6ec580724f0b79a0472105347f79518"
+      }
+    },
+    {
       "suite": "ut-income-tax-liability",
       "name": null,
       "report": "axiom-policyengine-taxsim-ut-income-tax-liability.json",
