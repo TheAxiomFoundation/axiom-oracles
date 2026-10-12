@@ -264,6 +264,36 @@ jobs:
           AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE: "1"
         run: uv run --no-sync pytest -q tests/bridges/test_snap_child_support_adapters.py
 
+  # The dividend and Form 1040 line 7a tests price hand-worked returns
+  # through PolicyEngine-US and Tax-Calculator and skip when either is
+  # absent, which the dev sync leaves them. This job installs both locked
+  # extras and turns their skips into failures, so two of the four engines'
+  # agreement with the worksheets gates merges. TAXSIM and the pinned Axiom
+  # engine still skip here; they run on the fleet host.
+  investment-income-live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package with the locked PolicyEngine and Tax-Calculator extras
+        run: uv sync --extra dev --extra policyengine --extra taxcalc
+
+      - name: Ensure the live tests cannot silently skip
+        run: uv run --no-sync python -c "import policyengine_us, taxcalc; print('taxcalc', taxcalc.__version__)"
+
+      - name: Dividend and line 7a live engine tests
+        env:
+          AXIOM_ORACLES_REQUIRE_INVESTMENT_INCOME_LIVE: "1"
+        run: uv run --no-sync pytest -q -rs tests/test_investment_income_live_engines.py
+
   # The dashboard deploys by hand (vercel --prod from dashboard/), so no
   # Vercel check runs on pull requests: build it here and run its
   # self-contained tests. The oracle attribution test checks every report

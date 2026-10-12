@@ -203,7 +203,12 @@ def test_taxcalc_package_runner_limits_head_of_household_to_qualifying_dependent
     assert captured_inputs[0]["MARS"] == 1
 
 
-def test_taxcalc_package_runner_caps_qualified_dividends_at_total_dividends() -> None:
+def test_taxcalc_package_runner_raises_ordinary_dividends_to_the_qualified_part() -> None:
+    # Form 1040 line 3a is part of line 3b. A Case whose qualified dividends
+    # exceed its ordinary dividends is read as ordinary = qualified, the same
+    # way every other engine projection reads it (core/investment_income);
+    # capping qualified at ordinary instead dropped $150 of qualified
+    # dividends that Axiom and TAXSIM kept.
     captured_inputs: list[dict] = []
 
     class FakeTaxCalcRunner:
@@ -238,8 +243,9 @@ def test_taxcalc_package_runner_caps_qualified_dividends_at_total_dividends() ->
         variables=[Concepts.FEDERAL_INCOME_TAX],
     )
 
-    assert captured_inputs[0]["e00600"] == 100
-    assert captured_inputs[0]["e00650"] == 100
+    assert captured_inputs[0]["e00600"] == 250
+    assert captured_inputs[0]["e00650"] == 250
+    assert captured_inputs[0]["e01100"] == 0
     assert captured_inputs[0]["e01500"] == 1_000
     assert captured_inputs[0]["e01700"] == 1_000
     assert captured_inputs[0]["e02000"] == 500

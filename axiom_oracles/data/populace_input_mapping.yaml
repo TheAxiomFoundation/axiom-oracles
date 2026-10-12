@@ -36,6 +36,13 @@
 #                  transform: all_people_any_positive  (every person has at
 #                              least one positive fact from from_facts)
 #
+# Dividends: DIVIDEND_INCOME is Form 1040 line 3b, total ordinary dividends,
+# which already includes the qualified dividends of line 3a
+# (QUALIFIED_DIVIDEND_INCOME). An income list counts dividends once, through
+# DIVIDEND_INCOME; listing QUALIFIED_DIVIDEND_INCOME beside it double-counts
+# line 3a (tests/test_investment_income_case_surface.py enforces this). The
+# projector normalizes both facts first (core/investment_income.py).
+#
 # Scope:
 #   scope: person | household
 #     person    — slot evaluated per-person; transforms see the Person facts
@@ -133,7 +140,6 @@ mappings:
         - UNEMPLOYMENT_INSURANCE_INCOME
         - RENTAL_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - INTEREST_INCOME
       aggregate: sum_over_people
 
@@ -155,7 +161,6 @@ mappings:
         - UNEMPLOYMENT_INSURANCE_INCOME
         - RENTAL_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - INTEREST_INCOME
       aggregate: sum_over_people
 
@@ -173,7 +178,6 @@ mappings:
         - UNEMPLOYMENT_INSURANCE_INCOME
         - RENTAL_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - INTEREST_INCOME
       aggregate: sum_over_people
 
@@ -524,7 +528,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
 
@@ -711,7 +714,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
 
@@ -822,7 +824,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
   - match: { kind: suffix, value: countable_unearned_income_after_exclusions_and_disregards }
@@ -836,7 +837,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
 
@@ -894,7 +894,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
 
@@ -1085,7 +1084,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
   - match: { kind: substring, value: unearned_income_received }
@@ -1099,7 +1097,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
   - match: { kind: substring, value: countable_gross_unearned_income_after_disregards }
@@ -1113,7 +1110,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
 
@@ -1155,7 +1151,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
 
@@ -1235,8 +1230,7 @@ mappings:
       kind: derived
       transform: monthly
       aggregate: sum_over_people
-      from_facts: [SOCIAL_SECURITY_BENEFITS, INTEREST_INCOME, DIVIDEND_INCOME,
-        QUALIFIED_DIVIDEND_INCOME]
+      from_facts: [SOCIAL_SECURITY_BENEFITS, INTEREST_INCOME, DIVIDEND_INCOME]
 
   # ---------------------------------------------------------------------
   # MN TANF / MFIP (us-mn/tanf program) — Combined Manual 0022.12.
@@ -1290,7 +1284,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
   - match: { kind: suffix, value: unit_receives_no_income_other_than_mfip }
@@ -1306,7 +1299,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
   - match: { kind: suffix, value: unit_receives_unearned_income_only }
@@ -1320,7 +1312,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
       zero_facts: [YEARLY_EARNED_INCOME, SELF_EMPLOYMENT_INCOME]
@@ -1336,7 +1327,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
   # Contextually correct: this branch is only reached after the
@@ -1384,7 +1374,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
   - match: { kind: suffix, value: gross_countable_income }
@@ -1400,7 +1389,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
   - match: { kind: suffix, value: ca_earned_income_deductions }
@@ -1583,7 +1571,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
   - match: { kind: exact, value: income_deemed_from_non_assistance_unit_members }
@@ -1665,7 +1652,6 @@ mappings:
         - PENSION_INCOME
         - INTEREST_INCOME
         - DIVIDEND_INCOME
-        - QUALIFIED_DIVIDEND_INCOME
         - RENTAL_INCOME
         - UNEMPLOYMENT_INSURANCE_INCOME
 

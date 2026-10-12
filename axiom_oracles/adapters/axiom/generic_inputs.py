@@ -32,6 +32,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+from ...core.investment_income import normalized_investment_income_facts
+
 
 # ---------------------------------------------------------------------------
 # Input enumeration + type inference
@@ -504,8 +506,13 @@ def attach_generic_inputs(
         # Build facts dicts so the generic resolver can look up values by
         # unqualified input name. The household-level dict includes the case's
         # own facts plus hidden keys for transforms that need people or
-        # metadata context.
-        person_facts = [dict(person.facts) for person in people]
+        # metadata context. Dividend and Form 1040 line 7a facts are
+        # normalized exactly as the tax projections read them
+        # (core/investment_income), so DIVIDEND_INCOME is line 3b, which
+        # already includes the qualified line 3a.
+        person_facts = [
+            normalized_investment_income_facts(person.facts) for person in people
+        ]
         # Person-scope transforms sometimes need the rest of the household
         # (e.g. SSI eligible-spouse detection). Expose each person's
         # co-members under a hidden key, mirroring the case-level
