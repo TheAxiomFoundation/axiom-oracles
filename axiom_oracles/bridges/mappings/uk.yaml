@@ -1949,7 +1949,7 @@ mappings:
     unit: year
     comparison: count
     candidate_priority: P3
-    rationale: State Pension Credit Act section 1 defines a source-level qualifying age at day granularity. The UK Populace oracle supplies PolicyEngine UK's state_pension_age to both statutory pensionable-age leaves on a representative day, matching the modern equalized-age surface exposed by PolicyEngine.
+    rationale: State Pension Credit Act section 1 defines a source-level qualifying age at day granularity. The UK Populace oracle supplies PolicyEngine UK's state_pension_age, each person's own State Pension age from their date of birth since policyengine-uk#1899, to both statutory pensionable-age leaves on 6 October of the fiscal year, the day PolicyEngine reads State Pension age status on from #1899. PolicyEngine has no separate Pension Credit qualifying age; it differs from State Pension age only for men born before 6 December 1953, who are over both from 2019-20.
 
   - legal_id: uk:statutes/ukpga/2002/16/1#claimant_has_attained_qualifying_age
     country: uk
@@ -1960,7 +1960,7 @@ mappings:
     period: day
     comparison: boolean
     candidate_priority: P3
-    rationale: State Pension Credit Act section 1 tests whether the claimant has attained the statutory qualifying age at day granularity. The UK Populace oracle compares RuleSpec's judgment output to PolicyEngine UK's annual is_SP_age predicate after supplying the same age and state_pension_age projection used for qualifying_age.
+    rationale: State Pension Credit Act section 1 tests whether the claimant has attained the statutory qualifying age at day granularity. The UK Populace oracle compares RuleSpec's judgment output to PolicyEngine UK's is_SP_age, which since policyengine-uk#1899 tests exact age on 6 October, after supplying the state_pension_age projection used for qualifying_age and the exact age floor(age) + months_since_last_birthday / 12 (months capped at 12 - 1e-4, as in PolicyEngine) as claimant_age (whole age on earlier PolicyEngine UK releases, which compare whole age).
 
   - legal_id: uk:statutes/ukpga/2002/16/2#guarantee_credit
     country: uk

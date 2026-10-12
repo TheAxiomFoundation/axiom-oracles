@@ -1467,7 +1467,7 @@ def test_pension_credit_projection_uses_relation_type():
     }
 
 
-def test_state_pension_credit_qualifying_age_projection_uses_equalized_age():
+def test_state_pension_credit_qualifying_age_projection_without_months_uses_whole_age():
     assert project_state_pension_credit_qualifying_age_inputs(
         {
             "gender": "FEMALE",
@@ -1516,8 +1516,8 @@ def test_state_pension_credit_qualifying_age_request_projects_people():
             "period": {
                 "period_kind": "custom",
                 "name": "day",
-                "start": "2026-04-06",
-                "end": "2026-04-06",
+                "start": "2026-10-06",
+                "end": "2026-10-06",
             },
             "outputs": list(
                 output["axiom"]
@@ -3526,6 +3526,7 @@ def test_policyengine_variables_for_surfaces_deduplicates_person_variables():
         "age",
         "gender",
         "is_SP_age",
+        "months_since_last_birthday",
         "state_pension_age",
     )
     assert policyengine_person_variables_for_surfaces(
