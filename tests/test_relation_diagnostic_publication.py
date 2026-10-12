@@ -153,6 +153,62 @@ def test_dashboard_writer_redacts_preexisting_diagnostic_samples(
     assert report == before
 
 
+@pytest.mark.parametrize("with_observation", [False, True])
+def test_tax_report_preserves_legacy_positional_observations_and_errors(with_observation):
+    from axiom_oracles.bridges.tax_populace import TaxComparisonReport
+
+    identity = {"population": "synthetic"}
+    observations = (
+        [{"case_id": "tax_unit_1", "engine": "axiom", "value": 10}]
+        if with_observation else []
+    )
+    errors = [{"case_id": "tax_unit_1", "engine": "axiom", "error": "stopped"}]
+    before = deepcopy((identity, observations, errors))
+
+    report = TaxComparisonReport(1, 0, 1, [], [], [], identity, observations, errors)
+    published = report.to_json()
+
+    assert published["dataset_identity"] == identity
+    assert published["observed_outputs"] == observations
+    assert published["errors"] == errors
+    assert "provenance" not in published
+    assert (identity, observations, errors) == before
+
+
+@settings(max_examples=24, deadline=None)
+@given(
+    values=st.lists(st.integers(), max_size=5),
+    error_messages=st.lists(st.text(max_size=40), min_size=1, max_size=5),
+    with_diagnostics=st.booleans(),
+)
+def test_tax_report_positional_ledgers_are_independent_of_keyword_diagnostics(
+    values, error_messages, with_diagnostics,
+):
+    from axiom_oracles.bridges.tax_populace import TaxComparisonReport
+
+    observations = [{"case_id": "tax_unit_1", "value": value} for value in values]
+    errors = [{"case_id": "tax_unit_1", "error": error} for error in error_messages]
+    diagnostics = {"count": 1, "by_relation": {"members": 1}, "samples": [
+        {"relation": "members", "tuple": ["member", "owner"]},
+    ]}
+    before = deepcopy((observations, errors, diagnostics))
+    kwargs = {"relation_binding_diagnostics": diagnostics} if with_diagnostics else {}
+    report = TaxComparisonReport(1, 0, len(values), [], [], [], None,
+                                 observations, errors, **kwargs)
+
+    published = json.loads(json.dumps(report.to_json(), allow_nan=False))
+
+    assert published["observed_outputs"] == observations
+    assert published["errors"] == errors
+    if with_diagnostics:
+        assert published["provenance"]["relation_binding_diagnostics"] == {
+            "count": 1, "by_relation": {"members": 1}, "samples": [{"relation": "members"}],
+        }
+    else:
+        assert "provenance" not in published
+    assert (observations, errors, diagnostics) == before
+
+
 def test_tax_report_serialization_redacts_diagnostics_and_keeps_execution_evidence():
     from axiom_oracles.bridges.tax_populace import TaxComparisonReport
 

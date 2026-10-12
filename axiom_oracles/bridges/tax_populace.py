@@ -573,7 +573,7 @@ class TaxComparisonReport:
     output_summary: list[dict[str, Any]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
-    relation_binding_diagnostics: dict[str, Any] | None = None
+    relation_binding_diagnostics: dict[str, Any] | None = field(default=None, kw_only=True)
     observed_outputs: list[dict[str, Any]] = field(default_factory=list)
     errors: list[dict[str, Any]] = field(default_factory=list)
 

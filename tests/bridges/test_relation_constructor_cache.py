@@ -97,6 +97,72 @@ def test_constructor_cache_observes_in_place_artifact_mutation():
     assert _tuple(artifact) == ["house", "person"]
 
 
+def _replace_relation_containers(artifact, replacement):
+    """Detach schemas without changing the artifact's content."""
+    program = artifact["program"]
+    if replacement == "program":
+        artifact["program"] = deepcopy(program)
+    elif replacement == "relations":
+        program["relations"] = deepcopy(program["relations"])
+    else:
+        program["relations"][:] = [deepcopy(schema) for schema in program["relations"]]
+
+
+@pytest.mark.parametrize("replacement", ["program", "relations", "schemas"])
+@settings(deadline=None)
+@given(owner_slot=st.integers(0, 1))
+def test_constructor_cache_ignores_detached_schema_name_mutation(replacement, owner_slot):
+    artifact = _artifact(owner_slot, owner="Person", member="Person", typed=True)
+    detached_schema = artifact["program"]["relations"][0]
+    before = deepcopy(artifact)
+    arguments = {
+        "owner_id": "owner", "owner_kind": "Person",
+        "related_id": "related", "related_kind": "Person",
+        "legacy_owner_slot": 1 - owner_slot,
+    }
+    expected = ["owner", "related"] if owner_slot == 0 else ["related", "owner"]
+    assert relation_binding.relation_tuple(artifact, "members", **arguments) == expected
+
+    _replace_relation_containers(artifact, replacement)
+    detached_schema["name"] = "detached-members"
+    assert artifact == before
+    with patch.object(
+        relation_binding, "_artifact_relation_analysis",
+        side_effect=relation_binding._ArtifactRelations,
+    ):
+        assert relation_binding.relation_tuple(artifact, "members", **arguments) == expected
+    assert relation_binding.relation_tuple(artifact, "members", **arguments) == expected
+
+
+@pytest.mark.parametrize("replacement", ["program", "relations", "schemas"])
+@settings(deadline=None)
+@given(detached_arity=st.integers(3, 10))
+def test_owner_kind_cache_ignores_detached_schema_arity_mutation(replacement, detached_arity):
+    artifact = _artifact(typed=True)
+    detached_schema = {
+        "name": "other-members", "arity": 2,
+        "slot_entities": ["Household", "Person"],
+    }
+    artifact["program"]["relations"].append(detached_schema)
+    before = deepcopy(artifact)
+    arguments = {"default_owner_kind": "TaxUnit", "related_kind": "Person"}
+    assert relation_binding.relation_owner_kind(artifact, "members", **arguments) == "Household"
+
+    _replace_relation_containers(artifact, replacement)
+    detached_schema["arity"] = detached_arity
+    assert artifact == before
+    with patch.object(
+        relation_binding, "_artifact_relation_analysis",
+        side_effect=relation_binding._ArtifactRelations,
+    ):
+        assert relation_binding.relation_owner_kind(
+            artifact, "other-members", **arguments,
+        ) == "Household"
+    assert relation_binding.relation_owner_kind(
+        artifact, "other-members", **arguments,
+    ) == "Household"
+
+
 def test_constructor_aliases_reuse_the_same_analysis(monkeypatch):
     artifact = _artifact()
     schema = artifact["program"]["relations"][0]

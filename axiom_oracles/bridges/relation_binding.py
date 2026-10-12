@@ -79,8 +79,9 @@ class _ArtifactRelations:
         self.executable_kinds: set[str] = set()
         self._expected_by_name: dict[str, list[str | None] | None] = {}
         self._read_usages(program)
-        # Direct aggregate owners and structural pairs prove endpoint kinds
-        # before scalar references use them, independently of rule order.
+        # Keep the first walk's independently proven endpoint kinds separate
+        # from the conventional input inventory used by untyped relations.
+        # Scalar references can then use them independently of rule order.
         self.executable_kinds = self.endpoint_kinds()
         self.usages.clear()
         self.owner_slots.clear()
@@ -99,12 +100,13 @@ class _ArtifactRelations:
         if owner is None:
             return None
         schema = self.schema(name)
+        identity_kinds = self._input_identity_kinds(name)
         inferred: set[str] = set()
         for supplied_name, pairs in self.identity_pairs.items():
             if schema is None or self.schema(supplied_name) is not schema:
                 continue
             for pair in pairs:
-                known = [labels & self.executable_kinds for labels in pair]
+                known = [labels & identity_kinds for labels in pair]
                 if len(known) != 2 or any(len(kinds) > 1 for kinds in known):
                     return None
                 candidates = {
@@ -383,7 +385,7 @@ class _ArtifactRelations:
         return result
 
     def endpoint_kinds(self) -> set[str]:
-        """Kinds the artifact identifies as relation endpoints, not input scopes."""
+        """Kinds recorded by relation metadata and the current executable walk."""
         kinds = set(self.declared_kinds)
         kinds.update(
             kind
@@ -392,11 +394,20 @@ class _ArtifactRelations:
             for kind in usage
             if kind is not None
         )
-        # The generic projector's member inventory is Person even when a
-        # count-only artifact never reads a member input. Other input scopes
-        # can be broadcast onto these ids, but a unit kind cannot identify
-        # the same member as well.
-        kinds.add("Person")
+        return kinds
+
+    def _input_identity_kinds(self, name: str) -> set[str]:
+        """Combine proven endpoint kinds with a relation's untyped inventory."""
+        kinds = set(self.executable_kinds)
+        schema = self.schema(name)
+        if (
+            kinds and schema is not None and not schema.get("slot_entities")
+            and not (schema.get("derivation") or {}).get("slot_entities")
+        ):
+            # The generic producer convention identifies Person members of
+            # untyped relations. Keep it out of the first walk and typed
+            # relations, where a Person input can be only a scalar scope.
+            kinds.add("Person")
         return kinds
 
 
@@ -441,7 +452,7 @@ def _artifact_relation_analysis(
             constructor_hint = (schema["name"], *constructor_hint[1:])
     relations = cached.analyses.get(constructor_hint)
     if relations is None:
-        relations = _ArtifactRelations(artifact, constructor_hint=constructor_hint)
+        relations = _ArtifactRelations(cached.program_snapshot, constructor_hint=constructor_hint)
         if constructor_hint:
             schema = relations.schema(constructor_hint[0])
             if schema is not None:
@@ -590,10 +601,9 @@ def bind_request_relations(
                 labels.get(entity_id, set()) for entity_id in record["tuple"]
             ])
     relations = _ArtifactRelations(artifact, identity_pairs=identity_pairs)
-    endpoint_kinds = relations.endpoint_kinds()
     scalar_scopes = {
         rule["entity"] for rule in relations.rules.values() if rule.get("entity")
-    } - endpoint_kinds
+    } - relations.executable_kinds
     for record in raw_records:
         name = record["name"]
         schema = relations.schema(name)
@@ -611,9 +621,10 @@ def bind_request_relations(
             raise RelationBindingError(f"Relation {name!r} requires a two-slot tuple")
         kinds = []
         untyped = not schema.get("slot_entities")
+        identity_kinds = relations._input_identity_kinds(name)
         for entity_id in ids:
             possible = labels.get(entity_id, set())
-            identities = possible & endpoint_kinds
+            identities = possible & identity_kinds
             if len(identities) > 1:
                 raise RelationBindingError(
                     f"Relation {name!r} entity {entity_id!r} needs one input entity "

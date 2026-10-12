@@ -491,6 +491,109 @@ def _strict_integer_outputs(binary, request, name):
     return [int(row["outputs"][name]["value"]["value"]) for row in response["results"]]
 
 
+def _person_scalar_scope_request(*, used, owner_slot=0, threshold=10, untyped_members=False):
+    request = _fixture("typed-relation-binding.json")
+    request["program"]["relations"] = [{
+        "name": "payments", "arity": 2, "slot_entities": ["Household", "Payment"],
+    }]
+    count = {
+        "kind": "count_related", "relation": "payments",
+        "current_slot": owner_slot, "related_slot": 1 - owner_slot,
+    }
+    if used:
+        count["where"] = _compare(
+            {"kind": "derived", "name": "person_threshold"}, "gt", _integer(0),
+        )
+    request["program"]["derived"] = [
+        {"name": "n", "entity": "Household", "dtype": "integer",
+         "semantics": "scalar", "expr": count},
+        {"name": "payment_amount", "entity": "Payment", "dtype": "integer",
+         "semantics": "scalar", "expr": {"kind": "input", "name": "amount"}},
+        {"name": "person_threshold", "entity": "Person", "dtype": "integer",
+         "semantics": "scalar", "expr": {"kind": "input", "name": "threshold"}},
+    ]
+    interval = deepcopy(request["dataset"]["inputs"][0]["interval"])
+    request["dataset"]["inputs"] = [
+        {"name": name, "entity": kind, "entity_id": entity_id,
+         "interval": deepcopy(interval), "value": {"kind": "integer", "value": value}}
+        for name, kind, entity_id, value in [
+            ("marker", "Household", "house", 1),
+            ("amount", "Payment", "payment", 1),
+            ("threshold", "Person", "payment", threshold),
+        ]
+    ]
+    request["dataset"]["relations"] = [{
+        "name": "payments", "interval": deepcopy(interval),
+        "tuple": ["house", "payment"] if owner_slot == 0 else ["payment", "house"],
+    }]
+    if untyped_members:
+        request["program"]["relations"].append({"name": "members", "arity": 2})
+        request["program"]["derived"].append({
+            "name": "other_count", "entity": "Household", "dtype": "integer",
+            "semantics": "scalar", "expr": {
+                "kind": "count_related", "relation": "members",
+                "current_slot": 0, "related_slot": 1,
+            },
+        })
+        request["dataset"]["inputs"].append({
+            "name": "marker", "entity": "Person", "entity_id": "member",
+            "interval": deepcopy(interval), "value": {"kind": "integer", "value": 1},
+        })
+        request["dataset"]["relations"].append({
+            "name": "members", "tuple": ["house", "member"], "interval": deepcopy(interval),
+        })
+    request["queries"][0].update(entity_id="house", outputs=["n"])
+    return request
+
+
+@pytest.mark.parametrize("used", [False, True], ids=["unused", "executed"])
+def test_person_scalar_scope_does_not_contradict_payment_identity(used):
+    request = _person_scalar_scope_request(used=used)
+    before = deepcopy(request)
+    bound = bind_request_relations(request, {"program": request["program"]})
+    assert bound == before
+    assert request == before
+    assert bind_request_relations(bound, {"program": bound["program"]}) == bound
+
+
+@pytest.mark.parametrize("used", [False, True], ids=["unused", "executed"])
+def test_person_scalar_inventory_stays_scoped_to_untyped_members(used):
+    request = _person_scalar_scope_request(used=used, untyped_members=True)
+    _assert_identity_binding(request, request)
+
+
+@settings(max_examples=40, deadline=None)
+@given(
+    used=st.booleans(), owner_slot=st.integers(0, 1), reversed_tuple=st.booleans(),
+    threshold=st.integers(), untyped_members=st.booleans(),
+)
+def test_generated_person_scalar_scope_preserves_endpoint_binding(
+    used, owner_slot, reversed_tuple, threshold, untyped_members,
+):
+    expected = _person_scalar_scope_request(
+        used=used, owner_slot=owner_slot, threshold=threshold, untyped_members=untyped_members,
+    )
+    request = deepcopy(expected)
+    if reversed_tuple:
+        request["dataset"]["relations"][0]["tuple"].reverse()
+    _assert_identity_binding(request, expected)
+
+
+@pytest.mark.parametrize("used", [False, True], ids=["unused", "executed"])
+@pytest.mark.parametrize("mode", ["explain", "fast"])
+def test_strict_engine_person_scalar_scope_accepts_payment_identity(strict_engine, used, mode):
+    request = _person_scalar_scope_request(used=used)
+    request["mode"] = mode
+    # The unchanged request is the native control for both the unused scope
+    # and its execution on the Payment endpoint's id.
+    assert _strict_integer_outputs(strict_engine, request, "n") == [1]
+    before = deepcopy(request)
+    bound = bind_request_relations(request, {"program": request["program"]})
+    assert bound == before
+    assert request == before
+    assert _strict_integer_outputs(strict_engine, bound, "n") == [1]
+
+
 @settings(max_examples=80, deadline=None)
 @given(case=_IDENTITY_CASES)
 @example(case=_MIXED_SCOPE_CASE)
