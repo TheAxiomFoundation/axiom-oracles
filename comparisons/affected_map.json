@@ -314,7 +314,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/co-state-income-tax-ecps.yaml"
+      "source": "comparisons/co-state-income-tax-ecps.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+      }
     },
     {
       "suite": "co-state-income-tax-taxsim",
