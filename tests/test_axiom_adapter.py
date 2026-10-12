@@ -146,10 +146,13 @@ def test_axiom_runner_sums_outputs_across_entity_queries(tmp_path: Path) -> None
             "earner",
             "non-earner",
         ]
-        assert request["queries"][0]["outputs"] == [
-            "annual_benefit",
-            "own_reduction",
-        ]
+        # Full evidence queries only the compared output; the intermediate
+        # comes back in the explain trace, never as a forced query.
+        assert request["queries"][0]["outputs"] == ["annual_benefit"]
+
+        def scalar(value):
+            return {"kind": "scalar", "value": {"kind": "integer", "value": value}}
+
         return subprocess.CompletedProcess(
             args,
             0,
@@ -157,28 +160,18 @@ def test_axiom_runner_sums_outputs_across_entity_queries(tmp_path: Path) -> None
                 {
                     "results": [
                         {
-                            "outputs": {
-                                "annual_benefit": {
-                                    "kind": "scalar",
-                                    "value": {"kind": "integer", "value": 0},
-                                },
-                                "own_reduction": {
-                                    "kind": "scalar",
-                                    "value": {"kind": "integer", "value": 9260},
-                                },
-                            }
+                            "outputs": {"annual_benefit": scalar(0)},
+                            "trace": {
+                                "annual_benefit": scalar(0),
+                                "own_reduction": scalar(9260),
+                            },
                         },
                         {
-                            "outputs": {
-                                "annual_benefit": {
-                                    "kind": "scalar",
-                                    "value": {"kind": "integer", "value": 8384},
-                                },
-                                "own_reduction": {
-                                    "kind": "scalar",
-                                    "value": {"kind": "integer", "value": 0},
-                                },
-                            }
+                            "outputs": {"annual_benefit": scalar(8384)},
+                            "trace": {
+                                "annual_benefit": scalar(8384),
+                                "own_reduction": scalar(0),
+                            },
                         },
                     ]
                 }
