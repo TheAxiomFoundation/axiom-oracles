@@ -11,8 +11,9 @@ their row counts summed; equivalent printed build stamps share one entry
 and retain the first shard's observed spelling. Shards that ran different
 binaries keep one entry per binary.
 
-Usage:
-    merge_shard_reports.py OUT.json SHARD0.json SHARD1.json [...]
+Usage (the script imports axiom_oracles, so run it in the project
+environment):
+    uv run scripts/merge_shard_reports.py OUT.json SHARD0.json SHARD1.json [...]
 """
 
 from __future__ import annotations

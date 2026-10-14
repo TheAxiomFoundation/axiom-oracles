@@ -89,8 +89,13 @@ def test_cli_preflight_accepts_the_source_layout_binary_that_runs(
 
 
 @pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
+@pytest.mark.parametrize(
+    "taxsim_input",
+    [{"taxsimid": 1, "year": 2026}, {"taxsimid": 1}],
+    ids=["checked-year", "no-year"],
+)
 def test_package_runner_rejects_later_replacement_after_pre_run_hash(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, taxsim_input
 ):
     binary = tmp_path / "taxsim"
 
@@ -110,7 +115,7 @@ def test_package_runner_rejects_later_replacement_after_pre_run_hash(
         Case(
             case_id="probe",
             period="2026",
-            metadata={"taxsim_input": {"taxsimid": 1, "year": 2026}},
+            metadata={"taxsim_input": dict(taxsim_input)},
         )
     ]
     [first] = adapter.run_cases(cases, variables=["fiitax"])
