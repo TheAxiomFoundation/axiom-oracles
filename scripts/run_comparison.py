@@ -5606,6 +5606,10 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "difference": m.get("diff", 0),
                 "kind": "amount_difference",
                 "left": m.get("axiom", 0),
+                # One concept covers several compared outputs, so a case can
+                # carry several rows under it; dispositions select by output
+                # (case_selector.case_ids_by_output).
+                "output": m["output"],
                 "parent": spec["parent"],
                 "right": m.get("policyengine", 0),
                 "tolerance": spec["tolerance"],

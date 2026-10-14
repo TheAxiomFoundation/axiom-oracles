@@ -244,11 +244,18 @@ def _premerged_block_problems(
     embedded_core = {
         k: v for k, v in embedded.items() if k not in _BINDING_KEYS
     }
-    # One retained row per (case_id, concept): a case validly carries one
-    # mismatch row per concept, so keying by case_id alone would collapse
-    # same-case rows and hide drift among them (sol stack review r3).
+    # One retained row per (case_id, concept, output): a case carries one
+    # mismatch row per concept, or one per compared output where a concept
+    # covers several (rows then name their `output`), so keying by case_id
+    # alone would collapse same-case rows and hide drift among them (sol
+    # stack review r3).
     embedded_rows = [
-        (row.get("case_id"), row.get("concept"), row.get("disposition"))
+        (
+            row.get("case_id"),
+            row.get("concept"),
+            row.get("output"),
+            row.get("disposition"),
+        )
         for row in report.get("mismatches") or []
     ]
     for full_path, full in sources:
@@ -277,19 +284,24 @@ def _premerged_block_problems(
                 "the embedded block; refresh the report"
             )
         merged_by_row = {
-            (row.get("case_id"), row.get("concept")): row.get("disposition")
+            (row.get("case_id"), row.get("concept"), row.get("output")): row.get(
+                "disposition"
+            )
             for row in merged.get("mismatches") or []
         }
-        for case_id, concept, annotation in embedded_rows:
-            key = (case_id, concept)
+        for case_id, concept, output, annotation in embedded_rows:
+            key = (case_id, concept, output)
+            label = f"{case_id!r}/{concept!r}" + (
+                f"/{output!r}" if output is not None else ""
+            )
             if key not in merged_by_row:
                 problems.append(
-                    f"{rel} retains mismatch row {case_id!r}/{concept!r} "
+                    f"{rel} retains mismatch row {label} "
                     f"that the fresh merge over {full_rel} does not produce"
                 )
             elif annotation != merged_by_row[key]:
                 problems.append(
-                    f"{rel} retained mismatch row {case_id!r}/{concept!r} "
+                    f"{rel} retained mismatch row {label} "
                     "carries a disposition annotation that does not match "
                     f"the fresh merge over {full_rel} — refresh the report"
                 )

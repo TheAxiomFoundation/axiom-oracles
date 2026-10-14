@@ -928,3 +928,120 @@ def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
     assert merged["summary"]["dispositioned"]["expired_entries"] == [
         "sel-bound"
     ]
+
+
+# ---------------------------------------------------------------------------
+# case_selector.case_ids_by_output: one concept can cover several compared
+# outputs (fiit-ecps's EITC surface compares eleven), so a case can carry
+# several rows under one concept with different mechanisms. The row-level
+# selector attributes each row by its `output`.
+# ---------------------------------------------------------------------------
+
+from hypothesis import given, settings, strategies as st  # noqa: E402
+
+from axiom_oracles.comparison.dispositions import _entry_selects_row  # noqa: E402
+
+
+def _by_output_entry(mapping, **overrides):
+    entry = _entry(case_selector={"case_ids_by_output": mapping}, **overrides)
+    entry.pop("case_id")
+    return entry
+
+
+def _row(case_id, output, concept="us:test#income_tax"):
+    return {"case_id": case_id, "concept": concept, "output": output}
+
+
+def test_case_ids_by_output_is_valid() -> None:
+    assert validate_dispositions(
+        _document([_by_output_entry({"eitc_earned_income": ["c1", "c2"]})])
+    ) == []
+
+
+@pytest.mark.parametrize(
+    "selector",
+    [
+        {"case_ids_by_output": {}},
+        {"case_ids_by_output": {"eitc_earned_income": []}},
+        {"case_ids_by_output": {"eitc_earned_income": "c1"}},
+        {"case_ids_by_output": {"": ["c1"]}},
+        {"case_ids_by_output": ["c1"]},
+        {"case_ids_by_output": {"eitc_earned_income": ["c1"]}, "case_ids": ["c1"]},
+        {"case_ids_by_output": {"x": ["c1"]}, "case_id_prefix": "c"},
+    ],
+)
+def test_case_ids_by_output_rejects_malformed_selectors(selector) -> None:
+    entry = _entry(case_selector=selector)
+    entry.pop("case_id")
+    errors = validate_dispositions(_document([entry]))
+    assert any("case_selector" in error for error in errors), errors
+
+
+def test_case_ids_by_output_selects_only_the_named_output() -> None:
+    entry = _by_output_entry({"eitc_earned_income": ["c1"]})
+    assert _entry_selects_row(entry, _row("c1", "eitc_earned_income"))
+    # Same case and concept, another output: a different mechanism's row.
+    assert not _entry_selects_row(entry, _row("c1", "eitc_investment_income_eligible"))
+    assert not _entry_selects_row(entry, _row("c2", "eitc_earned_income"))
+    # Rows that do not name their output are never selected by output.
+    assert not _entry_selects_row(entry, {"case_id": "c1", "concept": "us:test#income_tax"})
+    assert not _entry_selects_row(
+        entry, _row("c1", "eitc_earned_income", concept="us:test#other")
+    )
+
+
+def test_merge_splits_one_cases_rows_by_output() -> None:
+    first = _by_output_entry(
+        {"eitc_earned_income": ["c1"]}, id="earned", disposition="bridge_artifact"
+    )
+    second = _by_output_entry({"eitc_investment_income_eligible": ["c1"]}, id="investment")
+    report = {
+        "schema_version": "axiom.comparison_report.v2",
+        "summary": {"comparison_count": 4, "match_count": 2, "mismatch_count": 2},
+        "mismatches": [
+            {**_row("c1", "eitc_earned_income"), "left": 1, "right": 2, "difference": -1},
+            {**_row("c1", "eitc_investment_income_eligible"), "left": 0, "right": 1,
+             "difference": -1},
+        ],
+    }
+    merged = apply_dispositions(report, _document([first, second]))
+    assert [row["disposition"]["id"] for row in merged["mismatches"]] == [
+        "earned", "investment",
+    ]
+    counts = merged["summary"]["dispositioned"]["counts"]
+    assert counts["bridge_artifact"] == 1 and counts["upstream_engine_gap"] == 1
+
+
+_cases = st.sampled_from([f"c{i}" for i in range(8)])
+_outputs = st.sampled_from(["a", "b", "c", "d"])
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    mapping=st.dictionaries(_outputs, st.lists(_cases, min_size=1), min_size=1),
+    rows=st.lists(st.tuples(_cases, _outputs), max_size=30),
+    extra=st.lists(st.tuples(_cases, _outputs), max_size=10),
+)
+def test_case_ids_by_output_selects_exactly_its_pairs(mapping, rows, extra) -> None:
+    """For all inputs: a row is selected iff its (case, output) pair is listed,
+    and adding rows elsewhere never changes which listed rows are selected."""
+    entry = _by_output_entry(mapping)
+    listed = {(case, output) for output, cases in mapping.items() for case in cases}
+    selected = {pair for pair in rows if _entry_selects_row(entry, _row(*pair))}
+    assert selected == set(rows) & listed
+    selected_with_extra = {
+        pair for pair in rows + extra if _entry_selects_row(entry, _row(*pair))
+    }
+    assert selected_with_extra & set(rows) == selected
+
+
+def test_selector_cache_sees_an_edited_selector() -> None:
+    entry = _by_output_entry({"eitc_earned_income": ["c1"]})
+    assert not _entry_selects_row(entry, _row("c2", "eitc_earned_income"))
+    entry["case_selector"]["case_ids_by_output"]["eitc_earned_income"].append("c2")
+    assert _entry_selects_row(entry, _row("c2", "eitc_earned_income"))
+    plain = _entry(case_selector={"case_ids": ["c1"]})
+    plain.pop("case_id")
+    assert not _entry_selects_row(plain, {"case_id": "c3", "concept": "us:test#income_tax"})
+    plain["case_selector"]["case_ids"].append("c3")
+    assert _entry_selects_row(plain, {"case_id": "c3", "concept": "us:test#income_tax"})

@@ -142,7 +142,7 @@ _EVIDENCE_KEYS = {
     "mechanism", "arithmetic", "upstream_url", "sources",
     "receipt_type", "instrument_receipt",
 }
-_SELECTOR_KEYS = {"case_ids", "case_id_prefix"}
+_SELECTOR_KEYS = {"case_ids", "case_id_prefix", "case_ids_by_output"}
 _PINNED_KEYS = {"left", "right", "difference"}
 
 
@@ -357,10 +357,32 @@ def _validate_entry(
                     f"{label} case_selector.case_id_prefix must be a "
                     "non-empty string"
                 )
-            if not (case_ids or prefix):
+            by_output = case_selector.get("case_ids_by_output")
+            if by_output is not None:
+                if not isinstance(by_output, dict) or not by_output or any(
+                    not isinstance(output, str)
+                    or not output
+                    or not isinstance(ids, list)
+                    or not ids
+                    or any(
+                        not isinstance(value, str | int) or str(value) == ""
+                        for value in ids
+                    )
+                    for output, ids in by_output.items()
+                ):
+                    errors.append(
+                        f"{label} case_selector.case_ids_by_output must map "
+                        "each output name to a non-empty list of case ids"
+                    )
+                if case_ids is not None or prefix is not None:
+                    errors.append(
+                        f"{label} case_selector.case_ids_by_output cannot be "
+                        "combined with case_ids or case_id_prefix"
+                    )
+            elif not (case_ids or prefix):
                 errors.append(
-                    f"{label} case_selector needs case_ids or "
-                    "case_id_prefix"
+                    f"{label} case_selector needs case_ids, case_id_prefix "
+                    "or case_ids_by_output"
                 )
 
     kind = entry.get("kind")
@@ -606,15 +628,57 @@ def _entry_selects_row(entry: dict, row: dict) -> bool:
     if signatures is not None:
         return row.get("signature") in signatures
     selector = entry.get("case_selector") or {}
+    by_output = selector.get("case_ids_by_output")
+    if by_output is not None:
+        # Row-level: a case can carry several rows under one concept (one per
+        # compared output), and each may have its own mechanism.
+        cases = _selector_case_sets(selector)["by_output"].get(row.get("output"))
+        return cases is not None and row_case in cases
     case_ids = selector.get("case_ids")
-    if case_ids is not None and row_case not in {
-        str(value) for value in case_ids
-    }:
+    if case_ids is not None and row_case not in _selector_case_sets(selector)["ids"]:
         return False
     prefix = selector.get("case_id_prefix")
     if prefix is not None and not row_case.startswith(prefix):
         return False
     return True
+
+
+#: Membership sets per selector mapping. A selector can list tens of
+#: thousands of case ids and is tested once per mismatch row, so the sets are
+#: built once. The selector itself is kept in the value so its id cannot be
+#: reused by another object while the entry is cached.
+_SELECTOR_SETS: dict[int, tuple[dict, tuple, dict]] = {}
+
+
+def _selector_shape(selector: dict) -> tuple:
+    """Cheap identity of a selector's lists, so an edit invalidates the cache."""
+    case_ids = selector.get("case_ids")
+    by_output = selector.get("case_ids_by_output")
+    return (
+        id(case_ids),
+        len(case_ids) if isinstance(case_ids, list) else None,
+        id(by_output),
+        tuple(
+            (output, id(ids), len(ids) if isinstance(ids, list) else None)
+            for output, ids in (by_output or {}).items()
+        ),
+    )
+
+
+def _selector_case_sets(selector: dict) -> dict:
+    shape = _selector_shape(selector)
+    cached = _SELECTOR_SETS.get(id(selector))
+    if cached is not None and cached[0] is selector and cached[1] == shape:
+        return cached[2]
+    sets = {
+        "ids": {str(value) for value in selector.get("case_ids") or []},
+        "by_output": {
+            str(output): {str(value) for value in ids}
+            for output, ids in (selector.get("case_ids_by_output") or {}).items()
+        },
+    }
+    _SELECTOR_SETS[id(selector)] = (selector, shape, sets)
+    return sets
 
 
 def _percentage(numerator: float, denominator: float) -> float:

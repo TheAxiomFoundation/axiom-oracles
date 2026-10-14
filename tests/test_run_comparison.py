@@ -1274,6 +1274,8 @@ def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
     assert len(report["cases"]) == 2
     assert report["cases"][0]["metadata"]["entity_id"] == "tax_unit_1"
     assert report["mismatches"][0]["concept"] == "us:tax/federal-income-tax#ctc"
+    # Rows name their output: one concept covers several compared outputs.
+    assert report["mismatches"][0]["output"] == "ctc_before_advance_payments"
     assert any(
         aggregate["concept"] == "us:tax/federal-income-tax#cdcc"
         for aggregate in report["aggregates"]
@@ -4280,3 +4282,71 @@ def test_from_report_refuses_a_report_outside_reports(tmp_path, monkeypatch):
     )
     with pytest.raises(SystemExit, match="must be under"):
         run_comparison.main()
+
+
+def test_from_report_binding_holds_when_one_cases_rows_split_by_output(
+    tmp_path, monkeypatch
+):
+    """Two rows of one case under one concept, attributed to different
+    entries by output, must survive the premerged binding check (it keys
+    retained rows by output as well as case and concept)."""
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    raw = _raw_tax_ecps_report(units=1001)
+    raw["mismatches"].append(
+        {
+            "entity_id": "tax_unit_0",
+            "surface": "eitc",
+            "output": "eitc_earned_income",
+            "axiom": 10,
+            "policyengine": 0,
+            "diff": 10,
+        }
+    )
+    raw["mismatch_count"] = len(raw["mismatches"])
+    (repo / "dispositions" / "fiit-ecps.yaml").write_text(
+        "schema: axiom_oracles.dispositions.v1\n"
+        "suite: fiit-ecps\n"
+        'updated: "2026-10-14"\n'
+        "entries:\n"
+        "  - id: demographic\n"
+        "    concept: us:tax/federal-income-tax#eitc\n"
+        "    case_selector:\n"
+        "      case_ids_by_output:\n"
+        "        eitc_demographic_eligible: [ecps-tax_unit_0]\n"
+        "    disposition: upstream_engine_gap\n"
+        "    evidence:\n"
+        "      mechanism: Fixture age mechanism.\n"
+        "      upstream_url: https://example.test/issue/1\n"
+        "    expires_on_source_change: true\n"
+        "  - id: earned\n"
+        "    concept: us:tax/federal-income-tax#eitc\n"
+        "    case_selector:\n"
+        "      case_ids_by_output:\n"
+        "        eitc_earned_income: [ecps-tax_unit_0]\n"
+        "    disposition: bridge_artifact\n"
+        "    evidence:\n"
+        "      mechanism: Fixture input mechanism.\n"
+        "      upstream_url: https://example.test/issue/2\n"
+        "    expires_on_source_change: true\n"
+    )
+    raw_path = repo / "reports" / "axiom-policyengine-fiit-ecps-0-2026-10-14.json"
+    raw_path.write_text(json.dumps(raw))
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+    assert run_comparison.main() == 0
+
+    from axiom_oracles.comparison.dispositions import load_dispositions
+
+    dashboard_path = repo / "dashboard/public/data/axiom-policyengine-fiit-ecps.json"
+    dashboard = json.loads(dashboard_path.read_text())
+    counts = dashboard["summary"]["dispositioned"]["counts"]
+    assert counts["upstream_engine_gap"] == 1 and counts["bridge_artifact"] == 1
+    apply_dispositions = load_script_module("apply_dispositions")
+    monkeypatch.setattr(apply_dispositions, "REPO_ROOT", repo)
+    dispositions = load_dispositions(
+        repo / "dispositions" / "fiit-ecps.yaml", repo_root=repo
+    )
+    assert apply_dispositions._premerged_block_problems(
+        dashboard_path, dashboard, dispositions
+    ) == []
