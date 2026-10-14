@@ -38,6 +38,7 @@ from .population import (
     populace_data_requirement,
     population_table,
 )
+from .tax_unit_roles import apply_source_tax_unit_roles, dataset_year, normalize_role
 
 try:
     import numpy as np
@@ -918,11 +919,22 @@ def load_policyengine_tax_data(
         provenance=dataset_identity,
     )
     sim = Microsimulation(dataset=dataset)
-    log("Running PolicyEngine tax outputs...")
 
     raw_tax_units = population_table(dataset, "tax_unit")
     raw_persons = population_table(dataset, "person")
     raw_households = population_table(dataset, "household")
+    # PolicyEngine's role flags decide its filing status and every credit, and
+    # this bridge's filers and person contexts read the same flags, so the
+    # constructor's roles go in before anything is calculated
+    # (axiom-oracles#633).
+    tax_unit_roles = apply_source_tax_unit_roles(
+        sim,
+        raw_persons,
+        data_year=dataset_year(dataset, populace_year),
+        year=year,
+    )
+    log(f"Populace tax-unit roles: {tax_unit_roles}")
+    log("Running PolicyEngine tax outputs...")
     tax_unit_outputs = raw_tax_units[["tax_unit_id"]].copy()
     for variable in tax_unit_variables:
         tax_unit_outputs[variable] = calculate(sim, variable, year)
@@ -979,6 +991,7 @@ def load_policyengine_tax_data(
         "tax_unit_ids": [int(value) for value in selected["tax_unit_id"]],
         "person_ids": [int(value) for value in selected_persons["person_id"]],
         "dataset_identity": dataset_identity,
+        "tax_unit_roles": tax_unit_roles,
     }
 
 
@@ -2596,7 +2609,24 @@ def project_tax_unit_person_contexts(
     return contexts
 
 
+def source_tax_unit_role(person: Any) -> str:
+    """The Populace constructor's ``tax_unit_role_input``; unsupplied is ``""``."""
+    return normalize_role(row_value(person, "tax_unit_role_input", ""))
+
+
 def tax_unit_head_spouse_indices(persons: list[Any]) -> tuple[int | None, int | None]:
+    """The head's and spouse's positions in ``persons``, by one rule.
+
+    1. PolicyEngine's role flags (``is_tax_unit_head`` / ``is_tax_unit_spouse``),
+       when the rows carry them. ``load_policyengine_tax_data`` sets those flags
+       from the Populace constructor's roles (``apply_source_tax_unit_roles``),
+       so on Populace rows they are the constructor's HEAD and SPOUSE, and the
+       PolicyEngine filing status the bridge passes through is computed for
+       that same unit (axiom-oracles#633).
+    2. Otherwise the constructor's ``tax_unit_role_input`` HEAD and SPOUSE.
+    3. Otherwise the oldest adult heads the unit, and the next-oldest adult is
+       the spouse unless a member is separated.
+    """
     has_explicit_tax_unit_roles = any(
         "is_tax_unit_head" in person or "is_tax_unit_spouse" in person
         for person in persons
@@ -2615,6 +2645,13 @@ def tax_unit_head_spouse_indices(persons: list[Any]) -> tuple[int | None, int | 
         return (
             head_indices[0] if head_indices else None,
             spouse_indices[0] if spouse_indices else None,
+        )
+
+    roles = [source_tax_unit_role(person) for person in persons]
+    if "HEAD" in roles:
+        return (
+            roles.index("HEAD"),
+            roles.index("SPOUSE") if "SPOUSE" in roles else None,
         )
 
     adult_indices = [
@@ -2641,37 +2678,17 @@ def tax_unit_head_spouse_indices(persons: list[Any]) -> tuple[int | None, int | 
 def tax_unit_filers(persons: list[Any]) -> list[Any]:
     """The tax unit's head and spouse, in that order; dependents are dropped.
 
-    These are the filers of the unit the bridge projects. Rows that carry
-    PolicyEngine role flags (``is_tax_unit_head`` / ``is_tax_unit_spouse``)
-    use them, because the bridge also passes through PolicyEngine's filing
-    status for that same unit. PolicyEngine-US before 2.34.0 derives those
-    flags by age, so it can file a head with an adult the Populace
-    constructor marks a dependent; axiom-oracles#633 tracks moving the whole
-    unit (filers and filing status) to the constructor's roles together.
-    Rows with no role flags at all take the constructor's
-    ``tax_unit_role_input`` HEAD and SPOUSE rows when present.
+    These are the filers of the unit the bridge projects, taken by
+    ``tax_unit_head_spouse_indices``, the rule the person contexts use too.
 
-    Every tax unit files a return, so when neither the role flags nor the
-    adult-age fallback name a head (a 17-year-old filing alone, whose
-    PolicyEngine role flags are all false), the head is the source
+    Every tax unit files a return, so when that rule names no head (rows
+    whose role flags are all false, such as a 17-year-old filing alone under a
+    PolicyEngine-US that ranks by age), the head is the source
     ``tax_unit_role_input`` HEAD row, and failing that the oldest member not
-    already known to be the spouse or a source DEPENDENT. A spouse the flags
-    already identify is kept; otherwise a source SPOUSE row is the spouse.
+    already known to be the spouse or a source DEPENDENT. A spouse the rule
+    already identifies is kept; otherwise a source SPOUSE row is the spouse.
     """
-    roles = [
-        str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
-        for person in persons
-    ]
-    has_role_flags = any(
-        "is_tax_unit_head" in person or "is_tax_unit_spouse" in person
-        for person in persons
-    )
-    if not has_role_flags and "HEAD" in roles:
-        head_index = roles.index("HEAD")
-        spouse_index = roles.index("SPOUSE") if "SPOUSE" in roles else None
-        return [
-            persons[index] for index in (head_index, spouse_index) if index is not None
-        ]
+    roles = [source_tax_unit_role(person) for person in persons]
     head_index, spouse_index = tax_unit_head_spouse_indices(persons)
     if head_index is None:
         candidates = [

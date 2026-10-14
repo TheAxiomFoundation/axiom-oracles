@@ -115,10 +115,12 @@ def test_bridge_dependent_listed_first_does_not_count():
 # One filer list. The age test, investment income and the identification test
 # all read tax_unit_filers, so the three inputs always describe one return.
 # Rows with PolicyEngine role flags use them: the bridge passes through
-# PolicyEngine's filing status for that unit, and PolicyEngine-US 1.764.6
-# derives the flags by age (axiom-oracles#633 moves filers and filing status
-# to the constructor's roles together). Rows without flags take the
-# constructor's tax_unit_role_input.
+# PolicyEngine's filing status for that unit. The Populace loaders set those
+# flags from the constructor's roles (axiom-oracles#633,
+# tests/test_source_tax_unit_roles.py), so on Populace rows flags and roles
+# agree; these tests also give flags that disagree with the roles, as
+# PolicyEngine-US 1.764.6's age ranking did before #633, to pin the flags-first
+# rule. Rows without flags take the constructor's tax_unit_role_input.
 
 
 def _source_person(age, role, *, pe_head=False, pe_spouse=False, flags=True, **facts):
@@ -179,9 +181,9 @@ def test_bridge_age_test_uses_source_roles_without_flags(persons, expected):
 def _unit_57137(*, flags):
     """Populace unit 57137's shape: source DEPENDENT 85, HEAD 65, SPOUSE 64.
 
-    PolicyEngine-US 1.764.6's flags head the unit with 85 and make 65 the
-    spouse. The dependent has 13,000 of interest; the source spouse has no
-    valid SSN.
+    The flags are the ones PolicyEngine-US 1.764.6's age ranking gave before
+    axiom-oracles#633: they head the unit with 85 and make 65 the spouse. The
+    dependent has 13,000 of interest; the source spouse has no valid SSN.
     """
     return [
         _source_person(
@@ -319,11 +321,12 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, dependents):
 
 @st.composite
 def flagged_units(draw, *, head_required=True):
-    """Rows as the Populace loader delivers them: PolicyEngine flags (at most
-    one head and one spouse) beside arbitrary constructor roles, SSNs and
-    interest, in any order. With ``head_required=False`` the flags may name
-    no head, which PolicyEngine-US 1.764.6 produces when no member is
-    ``~is_child`` (its head is the oldest such member)."""
+    """Rows with PolicyEngine flags (at most one head and one spouse) beside
+    arbitrary constructor roles, SSNs and interest, in any order: the shapes
+    the loader delivered before axiom-oracles#633 made the flags follow the
+    roles. With ``head_required=False`` the flags may name no head, which
+    PolicyEngine-US 1.764.6 produces when no member is ``~is_child`` (its
+    head is the oldest such member)."""
     size = draw(st.integers(min_value=1, max_value=5))
     unit_ages = draw(st.lists(ages, min_size=size, max_size=size))
     indices = st.integers(min_value=0, max_value=size - 1)
@@ -371,12 +374,13 @@ def test_property_populace_case_loader_agrees_with_the_bridge(unit):
     """The production Case path (populace_us._person_entity over the same
     PolicyEngine flags) projects the same age input as the bridge.
 
-    The rows follow PolicyEngine-US 1.764.6's role formulas: one head
-    whenever some member is ``~is_child`` (the oldest such member), and
-    ``is_tax_unit_dependent = ~head & ~spouse``, so the loader never emits its
-    "Other" relation. A dataset or PolicyEngine version that supplied
-    non-dependent non-filers would need its own differential: the Case
-    surface's ``_tax_filers`` promotes an "Other" adult to spouse."""
+    The flags name one head whenever some member is ``~is_child``, and
+    ``is_tax_unit_dependent = ~head & ~spouse`` (PolicyEngine-US's formula in
+    1.764.6 and 2.42.7), so the loader never emits its "Other" relation. A dataset
+    or PolicyEngine version that supplied non-dependent non-filers would need
+    its own differential: the Case surface's ``_tax_filers`` promotes an
+    "Other" adult to spouse. tests/test_source_tax_unit_roles.py checks the
+    two surfaces agree when the flags come from the constructor's roles."""
     persons, head, spouse = unit
     rows = [
         _PersonRow(

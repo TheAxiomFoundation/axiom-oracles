@@ -241,6 +241,9 @@ jobs:
   # policyengine-us 1.764.6 predates PolicyEngine/policyengine-us#9586 and
   # gives the state child support election the opposite sense. This job
   # installs a policyengine-us with the fix and turns any skip into a failure.
+  # It also runs the Populace tax-unit role tests (axiom-oracles#633):
+  # 2.15.13 predates PolicyEngine/policyengine-us#9617, so they take the
+  # input path there; policyengine-roles-native below runs the native path.
   policyengine-live:
     runs-on: ubuntu-latest
     steps:
@@ -262,7 +265,39 @@ jobs:
       - name: PolicyEngine live adapter tests
         env:
           AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE: "1"
-        run: uv run --no-sync pytest -q tests/bridges/test_snap_child_support_adapters.py
+          AXIOM_ORACLES_EXPECT_ROLE_PATH: inputs
+        run: >-
+          uv run --no-sync pytest -q
+          tests/bridges/test_snap_child_support_adapters.py
+          tests/test_source_tax_unit_roles_live.py
+
+  # The Populace tax-unit role tests under a policyengine-us with
+  # PolicyEngine/policyengine-us#9617 (first in 2.34.0), which reads
+  # tax_unit_role_input itself. The same expectations as on the input path
+  # above, so the two paths are checked against each other.
+  policyengine-roles-native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package with a policyengine-us that has #9617
+        run: |
+          uv sync --extra dev
+          uv pip install "policyengine-us==2.42.7"
+
+      - name: Populace tax-unit role tests, native path
+        env:
+          AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE: "1"
+          AXIOM_ORACLES_EXPECT_ROLE_PATH: native
+        run: uv run --no-sync pytest -q tests/test_source_tax_unit_roles_live.py
 
   # The dashboard deploys by hand (vercel --prod from dashboard/), so no
   # Vercel check runs on pull requests: build it here and run its

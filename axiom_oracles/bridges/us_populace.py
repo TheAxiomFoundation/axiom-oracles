@@ -39,6 +39,7 @@ from .population import (
     load_populace_dataset,
     population_table,
 )
+from .tax_unit_roles import apply_source_tax_unit_roles, dataset_year
 from .registry import PolicyEngineMapping, load_policyengine_registry
 
 STATE_FIPS_TO_CODE = {
@@ -458,6 +459,14 @@ def load_policyengine_variable_data(
     )
     sim = Microsimulation(dataset=dataset)
     persons = population_table(dataset, "person")
+    # Role-dependent PolicyEngine variables follow the constructor's
+    # tax-unit roles, as in every Populace simulation (axiom-oracles#633).
+    apply_source_tax_unit_roles(
+        sim,
+        persons,
+        data_year=dataset_year(dataset, populace_year),
+        year=year,
+    )
     households = population_table(dataset, "household")
     spm_units = population_table(dataset, "spm_unit")
     person_frame = persons[

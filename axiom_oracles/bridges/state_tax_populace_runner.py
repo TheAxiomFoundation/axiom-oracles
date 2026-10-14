@@ -19,6 +19,7 @@ import subprocess
 from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlparse
 
+from .tax_unit_roles import dataset_year, populace_us_microsimulation
 from .state_tax_populace import (
     DEFAULT_COMPARISON_AGGREGATION,
     EXPECTED_STATE_FIPS,
@@ -816,13 +817,15 @@ def calculate_policyengine_targets(
     }
     if microsimulation_factory is None:
         try:
-            from policyengine_us import Microsimulation
+            import policyengine_us  # noqa: F401 - fail early without the extra
         except ImportError as exc:  # pragma: no cover - optional runtime dependency
             raise RuntimeError(
                 "Install the PolicyEngine extra to calculate state-tax targets."
             ) from exc
         def microsimulation_factory(source: Any) -> Any:
-            return Microsimulation(dataset=source)
+            return populace_us_microsimulation(
+                source, data_year=dataset_year(source, year), year=year
+            )
     sim = microsimulation_factory(dataset)
 
     targets: dict[str, dict[int | str, float]] = {}
@@ -1741,14 +1744,16 @@ def calculate_taxsim_targets(
 
     if microsimulation_factory is None:
         try:
-            from policyengine_us import Microsimulation
+            import policyengine_us  # noqa: F401 - fail early without the extra
         except ImportError as exc:  # pragma: no cover - optional runtime dependency
             raise RuntimeError(
                 "Install the PolicyEngine extra to calculate TAXSIM targets."
             ) from exc
 
         def microsimulation_factory(source: Any) -> Any:
-            return Microsimulation(dataset=source)
+            return populace_us_microsimulation(
+                source, data_year=dataset_year(source, year), year=year
+            )
 
     sim = microsimulation_factory(dataset)
 
@@ -1982,14 +1987,16 @@ def calculate_policyengine_projection_inputs(
         )
     if microsimulation_factory is None:
         try:
-            from policyengine_us import Microsimulation
+            import policyengine_us  # noqa: F401 - fail early without the extra
         except ImportError as exc:  # pragma: no cover - optional runtime dependency
             raise RuntimeError(
                 "Install the PolicyEngine extra to calculate state-tax inputs."
             ) from exc
 
         def microsimulation_factory(source: Any) -> Any:
-            return Microsimulation(dataset=source)
+            return populace_us_microsimulation(
+                source, data_year=dataset_year(source, year), year=year
+            )
 
     sim = microsimulation_factory(dataset)
     for state in sorted(selected_states):

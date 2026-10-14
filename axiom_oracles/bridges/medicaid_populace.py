@@ -37,6 +37,11 @@ from .population import (
     load_populace_dataset,
     populace_data_requirement,
 )
+from .tax_unit_roles import (
+    apply_source_tax_unit_roles,
+    dataset_person_table,
+    dataset_year,
+)
 
 try:
     import numpy as np
@@ -766,6 +771,15 @@ def load_policyengine_cases(
     sim = Microsimulation(dataset=dataset)
 
     year = period.year
+    # The MAGI household PolicyEngine builds reads the tax-unit roles, so they
+    # follow the constructor's roles, as in every Populace simulation
+    # (axiom-oracles#633).
+    apply_source_tax_unit_roles(
+        sim,
+        dataset_person_table(dataset),
+        data_year=dataset_year(dataset, populace_year),
+        year=year,
+    )
     print(f"Calculating PolicyEngine {COMPARED_POLICYENGINE_OUTPUT}...", flush=True)
     pe_eligible = calculate(sim, COMPARED_POLICYENGINE_OUTPUT, year).astype(bool)
     count = len(pe_eligible)

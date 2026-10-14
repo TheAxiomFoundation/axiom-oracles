@@ -72,6 +72,15 @@ A successful canonical report has `errored_count: 0`. Dataset, compilation, or
 engine failures abort the command without publishing a canonical report; they
 are operational failures, not case exclusions or parity results.
 
+The campaign's shared PolicyEngine simulation takes the constructor's tax-unit
+roles (`tax_unit_role_input`) before anything is calculated
+(`axiom_oracles/bridges/tax_unit_roles.py`, axiom-oracles#633). A
+PolicyEngine-US with PolicyEngine/policyengine-us#9617 reads them itself; an
+older one gets them as `is_tax_unit_head` / `is_tax_unit_spouse` inputs. The
+filers the TAXSIM leg and the DC filer predicate read, and PolicyEngine's own
+filing status, are therefore the constructor's. A simulation whose role flags
+differ from those roles stops the campaign.
+
 Current household state is not proof of full-year residency. This campaign
 therefore discloses one uniform modeling assumption:
 `household_state_as_full_year_residence`. It includes every positive-weight
