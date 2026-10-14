@@ -73,6 +73,13 @@ runner:
     pinned: true
     policyengine_version: "4.11.0"
     policyengine_us_version: "1.729.0"
+    # PyPI no longer serves policyengine-us 1.729.0 (checked 2026-10-14: the
+    # index lists 1.726.0 and then 1.730.0). This is its release commit, the
+    # "Update PolicyEngine US" version bump of 2026-06-14. Built from this
+    # archive, the package is byte-identical to the 1.729.0 PyPI wheel (all
+    # 15,007 files, compared against a cached copy on 2026-10-14). The runner
+    # checks that the installed version matches the label before it runs.
+    policyengine_us_source: https://github.com/PolicyEngine/policyengine-us/archive/180410fe35209fb8201378c1b32dadd38051c342.tar.gz
     policyengine_core_version: "3.26.11"
     allow_policyengine_us_version: true
     # Deprecated no-op on this harness (Populace validation no longer loads

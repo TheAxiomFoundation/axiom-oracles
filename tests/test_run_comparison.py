@@ -131,6 +131,186 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     assert output.read_text() == "{}"
 
 
+PE_US_1729_SOURCE = (
+    "https://github.com/PolicyEngine/policyengine-us/archive/"
+    "180410fe35209fb8201378c1b32dadd38051c342.tar.gz"
+)
+
+
+def _tax_ecps_runner_fixture(monkeypatch, tmp_path, *, installed_version="1.729.0"):
+    """Run the tax-ecps runner against a fake `uv`; return (calls, envs)."""
+    run_comparison = load_run_comparison_module()
+    axiom_encode = tmp_path / "axiom-encode"
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    rulespec = tmp_path / "workspace" / "rulespec-us"
+    for path in (axiom_encode, axiom_rules, rulespec):
+        path.mkdir(parents=True)
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
+    )
+    monkeypatch.setattr(
+        run_comparison, "_ensure_rulespec_us_checkout", lambda _remote: rulespec
+    )
+    calls: list[list[str]] = []
+    envs: list[dict | None] = []
+
+    def fake_run(cmd, *, check, stdout=None, cwd=None, capture_output=False,
+                 text=False, env=None, input=None):
+        del check, cwd, capture_output, text, input
+        calls.append(cmd)
+        envs.append(env)
+        if cmd[0] == "uv" and cmd[-3:-1] == ["python", "-c"]:
+            return subprocess.CompletedProcess(
+                cmd, 0, stdout=f"{installed_version}\n", stderr=""
+            )
+        if stdout is not None:
+            stdout.write("{}")
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    runner_config = {
+        "axiom_encode_repo": str(axiom_encode),
+        "axiom_rules_repo": str(axiom_rules),
+        "rulespec_remote": "https://example.test/rulespec-us.git",
+        "parameters": {
+            "sample_size": 0,
+            "year": 2026,
+            "python": "3.13",
+            "surface": "all",
+            "pinned": True,
+            "policyengine_us_version": "1.729.0",
+            "policyengine_us_source": PE_US_1729_SOURCE,
+        },
+    }
+    return run_comparison, runner_config, calls, envs
+
+
+def test_tax_ecps_runner_overlays_this_checkouts_bridge(monkeypatch, tmp_path):
+    """tax-populace-compare re-exports axiom_oracles.bridges.tax_populace, so the
+    harness must import this checkout's bridge, not axiom-encode's pinned copy."""
+    run_comparison, runner_config, calls, envs = _tax_ecps_runner_fixture(
+        monkeypatch, tmp_path
+    )
+    run_comparison._run_axiom_encode_tax_ecps_compare(
+        runner_config, tmp_path / "report.json"
+    )
+    harness_index = next(
+        index for index, cmd in enumerate(calls) if "tax-populace-compare" in cmd
+    )
+    env = envs[harness_index]
+    assert env is not None
+    assert env["PYTHONPATH"].split(os.pathsep)[0] == str(run_comparison.REPO_ROOT)
+
+
+def test_tax_ecps_runner_installs_commit_pinned_policyengine_us(monkeypatch, tmp_path):
+    run_comparison, runner_config, calls, _envs = _tax_ecps_runner_fixture(
+        monkeypatch, tmp_path
+    )
+    run_comparison._run_axiom_encode_tax_ecps_compare(
+        runner_config, tmp_path / "report.json"
+    )
+    uv_calls = [cmd for cmd in calls if cmd[0] == "uv"]
+    # The version pre-flight runs first, in the same environment as the run.
+    preflight, harness = uv_calls
+    assert preflight[-3:-1] == ["python", "-c"]
+    assert "tax-populace-compare" in harness
+    requirement = f"policyengine-us @ {PE_US_1729_SOURCE}"
+    for cmd in (preflight, harness):
+        assert cmd[cmd.index(requirement) - 1] == "--with"
+        assert not any(arg.startswith("policyengine-us==") for arg in cmd)
+        assert "policyengine==4.11.0" in cmd
+        assert "policyengine-core==3.26.11" in cmd
+        assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
+    assert preflight[: preflight.index("python")] == harness[
+        : harness.index("axiom-encode", harness.index(requirement))
+    ]
+
+
+def test_tax_ecps_runner_refuses_source_that_installs_another_version(
+    monkeypatch, tmp_path
+):
+    run_comparison, runner_config, calls, _envs = _tax_ecps_runner_fixture(
+        monkeypatch, tmp_path, installed_version="1.730.0"
+    )
+    with pytest.raises(SystemExit, match="1.730.0"):
+        run_comparison._run_axiom_encode_tax_ecps_compare(
+            runner_config, tmp_path / "report.json"
+        )
+    assert not any("tax-populace-compare" in cmd for cmd in calls)
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        # Movable refs: a branch, a tag, a short SHA.
+        "https://github.com/PolicyEngine/policyengine-us/archive/main.tar.gz",
+        "https://github.com/PolicyEngine/policyengine-us/archive/1.729.0.tar.gz",
+        "https://github.com/PolicyEngine/policyengine-us/archive/180410fe35.tar.gz",
+        # Another repository or host, and a git URL uv would clone at HEAD.
+        "https://github.com/someone/policyengine-us/archive/"
+        "180410fe35209fb8201378c1b32dadd38051c342.tar.gz",
+        "https://example.test/PolicyEngine/policyengine-us/archive/"
+        "180410fe35209fb8201378c1b32dadd38051c342.tar.gz",
+        "git+https://github.com/PolicyEngine/policyengine-us",
+        # Uppercase hex is not the canonical SHA spelling.
+        "https://github.com/PolicyEngine/policyengine-us/archive/"
+        "180410FE35209FB8201378C1B32DADD38051C342.tar.gz",
+        PE_US_1729_SOURCE + "?ref=main",
+    ],
+)
+def test_policyengine_us_source_rejects_movable_or_foreign_refs(source):
+    run_comparison = load_run_comparison_module()
+    with pytest.raises(SystemExit, match="policyengine_us_source"):
+        run_comparison._policyengine_us_source_requirement(source)
+
+
+def test_policyengine_us_source_accepts_any_full_commit():
+    run_comparison = load_run_comparison_module()
+
+    @given(st.text(alphabet="0123456789abcdef", min_size=40, max_size=40))
+    def accepts(sha):
+        source = (
+            f"https://github.com/PolicyEngine/policyengine-us/archive/{sha}.tar.gz"
+        )
+        assert (
+            run_comparison._policyengine_us_source_requirement(source)
+            == f"policyengine-us @ {source}"
+        )
+
+    accepts()
+
+
+def test_tax_ecps_provenance_records_policyengine_us_source(tmp_path):
+    run_comparison = load_run_comparison_module()
+    output = tmp_path / "report.json"
+    output.write_text("{}")
+    config = {
+        "name": "fiit-ecps",
+        "ci": "manual",
+        "runner": {
+            "type": "axiom-encode-tax-ecps-compare",
+            "rulespec_remote": "https://github.com/TheAxiomFoundation/rulespec-us.git",
+            "parameters": {
+                "pinned": True,
+                "policyengine_us_version": "1.729.0",
+                "policyengine_us_source": PE_US_1729_SOURCE,
+            },
+        },
+    }
+    block = run_comparison._build_run_provenance(
+        config, "axiom-encode-tax-ecps-compare", output
+    )
+    assert block["oracle"]["policyengine_us"] == "1.729.0"
+    assert block["oracle"]["model_source"] == PE_US_1729_SOURCE
+    # Attestation reads every `policyengine_*` key as a country-model version.
+    assert not any(
+        key.startswith("policyengine_") and key not in (
+            "policyengine_package", "policyengine_us"
+        )
+        for key in block["oracle"]
+    )
+
+
 def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
     run_comparison = load_run_comparison_module()
     axiom_rules = tmp_path / "axiom-rules-engine"

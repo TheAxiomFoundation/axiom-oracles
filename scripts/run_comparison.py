@@ -16,6 +16,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -1251,6 +1252,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 else None
             ),
         }
+        # Not a `policyengine_*` key: attestation reads those as country-model
+        # versions (conformance/attestation.py).
+        if params.get("pinned", True) and params.get("policyengine_us_source"):
+            oracle["model_source"] = str(params["policyengine_us_source"])
     elif runner_type == "axiom-encode-uk-efrs-compare":
         oracle = {
             "name": "policyengine",
@@ -1606,19 +1611,23 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # --allow-policyengine-us-version to the harness.
     # Oracle PE stack. The pinned versions default to the model version the
     # certified Populace artifact was built with (1.729.0), but a comparison can
-    # override them to validate against a newer certified oracle — the us-pe
-    # universe pins policyengine-us 1.767.3, which carries the #8614 partnership
-    # self-employment split absent from 1.729.0's eitc_earned_income. The harness
-    # still runs against the pinned Populace inputs (--allow-policyengine-us-version
-    # bypasses the build_with gate), so only the PE computation vintage moves.
+    # override them to validate against a newer certified oracle (the us-pe
+    # universe pins policyengine-us 1.767.3). The harness still runs against the
+    # pinned Populace inputs (--allow-policyengine-us-version bypasses the
+    # build_with gate), so only the PE computation vintage moves.
     pe_meta = params.get("policyengine_version", "4.11.0")
     pe_us = params.get("policyengine_us_version", "1.729.0")
     pe_core = params.get("policyengine_core_version", "3.26.11")
+    pe_us_source = params.get("policyengine_us_source")
     pe_pins = (
         _pe_oracle_with_args(
             (
                 f"policyengine=={pe_meta}",
-                f"policyengine-us=={pe_us}",
+                (
+                    _policyengine_us_source_requirement(pe_us_source)
+                    if pe_us_source
+                    else f"policyengine-us=={pe_us}"
+                ),
                 f"policyengine-core=={pe_core}",
             )
         )
@@ -1632,7 +1641,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
             "policyengine-core",
         ]
     )
-    cmd = [
+    uv_prefix = [
         "uv",
         "run",
         "--python",
@@ -1641,6 +1650,24 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         "--with-editable",
         str(axiom_encode_repo),
         *pe_pins,
+    ]
+    if pinned and pe_us_source:
+        # The source is an immutable commit, but the suite labels it with a
+        # version; refuse to spend a population run under a label the
+        # installed distribution does not carry.
+        _require_installed_policyengine_us_version(uv_prefix, pe_us)
+    # Overlay THIS checkout's bridge over the encoder's pinned axiom-oracles
+    # dependency, as the UK EFRS runner does: tax-populace-compare is a thin
+    # re-export of axiom_oracles.bridges.tax_populace, so without the overlay
+    # a suite run validates whatever axiom-oracles commit axiom-encode pins,
+    # not this checkout. uv rejects a second URL for one package, so the
+    # overlay rides PYTHONPATH, which precedes site-packages on sys.path.
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(
+        [str(REPO_ROOT)] + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else [])
+    )
+    cmd = [
+        *uv_prefix,
         "axiom-encode",
         "tax-populace-compare",
         "--rulespec-root",
@@ -1666,7 +1693,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         cmd.append("--allow-uncertified-policyengine-data")
     try:
         with output.open("w") as f:
-            subprocess.run(cmd, check=True, stdout=f)
+            subprocess.run(cmd, check=True, stdout=f, cwd=REPO_ROOT, env=env)
     finally:
         # Measure after execution against the captured commit, even if the
         # harness or a concurrent checkout moved HEAD to a new clean commit.
@@ -2126,6 +2153,50 @@ def _pe_oracle_with_args(pins) -> list[str]:
         for pin in (*pins, *_PE_US_COMPANION_PINS)
         for arg in ("--with", pin)
     ]
+
+
+# PolicyEngine prunes old policyengine-us releases from PyPI (1.705.1 and
+# 1.729.0 were gone by 2026-10-14), so a suite can pin its oracle to the
+# release commit instead. Only GitHub's archive of a full 40-hex commit is
+# accepted: a branch, tag or short SHA could move under the version label.
+_PE_US_SOURCE_RE = re.compile(
+    r"https://github\.com/PolicyEngine/policyengine-us/archive/[0-9a-f]{40}\.tar\.gz"
+)
+
+
+def _policyengine_us_source_requirement(source: str) -> str:
+    """PEP 508 direct reference for a commit-pinned policyengine-us source."""
+    if not isinstance(source, str) or not _PE_US_SOURCE_RE.fullmatch(source):
+        raise SystemExit(
+            "policyengine_us_source must be "
+            "https://github.com/PolicyEngine/policyengine-us/archive/<40-hex "
+            f"commit>.tar.gz; got {source!r}"
+        )
+    return f"policyengine-us @ {source}"
+
+
+def _require_installed_policyengine_us_version(
+    uv_prefix: list[str], expected: str
+) -> None:
+    """Fail unless the environment ``uv_prefix`` builds holds ``expected``."""
+    result = subprocess.run(
+        [
+            *uv_prefix,
+            "python",
+            "-c",
+            "from importlib.metadata import version; "
+            "print(version('policyengine-us'))",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    installed = result.stdout.strip().splitlines()[-1] if result.stdout else ""
+    if installed != str(expected):
+        raise SystemExit(
+            f"policyengine_us_source installs policyengine-us {installed!r}, "
+            f"but the suite labels its oracle {expected!r}; refusing to run"
+        )
 
 # The compare and sanity subprocesses share this import shim — extracted to
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
