@@ -118,6 +118,15 @@ SECTION_1402_A_BASE = "us:statutes/26/1402/a"
 SECTION_1402_B_BASE = "us:statutes/26/1402/b"
 SECTION_7703_BASE = "us:statutes/26/7703"
 
+# The engine's fast mode returns exactly what explain returns except the
+# trace (axiom-rules-engine docs/execution-semantics.md, "Fast mode
+# contract"), and the bridge reads only output values. Explain builds each
+# query's trace by scanning every cached value in the request (engine
+# `evaluated_trace_instances`), so over a population request its cost grows
+# with the square of the number of tax units. The Medicaid and SNAP Populace
+# bridges already request fast.
+AXIOM_REQUEST_MODE = "fast"
+
 
 def contribution_and_benefit_base_program_path(year: int) -> Path:
     return Path(f"policies/ssa/contribution-and-benefit-base/{year}.yaml")
@@ -1227,7 +1236,7 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
                 )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
             {
@@ -1282,7 +1291,7 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
                 )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
             {
@@ -1334,7 +1343,7 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
                 )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
             {
@@ -1371,7 +1380,7 @@ def build_nonrefundable_credits_request(
             )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": []},
         "queries": [
             {
@@ -1408,7 +1417,7 @@ def build_income_tax_request(*, pe_data: dict[str, Any], year: int) -> dict[str,
             )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": []},
         "queries": [
             {
@@ -1449,7 +1458,7 @@ def build_standard_deduction_request(
             )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": []},
         "queries": [
             {
@@ -1492,7 +1501,7 @@ def build_capital_gain_definitions_request(
             )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": []},
         "queries": [
             {
@@ -1553,7 +1562,7 @@ def build_tax_before_credits_request(
             )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": []},
         "queries": [
             {
@@ -1658,7 +1667,7 @@ def build_eitc_request(
                 )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
             {
@@ -1716,7 +1725,7 @@ def build_payroll_request(
         )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": []},
         "queries": [
             {
@@ -1741,7 +1750,7 @@ def build_contribution_and_benefit_base_request(
     }
     requested_output = output or contribution_and_benefit_base_output(year)
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": [], "relations": []},
         "queries": [
             {
@@ -1851,7 +1860,7 @@ def build_oasdi_wage_base_request(
             )
 
     return {
-        "mode": "explain",
+        "mode": AXIOM_REQUEST_MODE,
         "dataset": {"inputs": inputs, "relations": []},
         "queries": [
             {
@@ -2865,7 +2874,14 @@ def run_axiom_program(
         )
         if run_result.returncode != 0:
             raise SystemExit(run_result.stderr.strip() or run_result.stdout.strip())
-        results = json.loads(run_result.stdout)["results"]
+        response = json.loads(run_result.stdout)
+        metadata = response.get("metadata") or {}
+        if metadata.get("fallback_reason"):
+            log(
+                f"{program.name}: engine ran {metadata.get('actual_mode')} instead "
+                f"of {runtime_request.get('mode')}: {metadata['fallback_reason']}"
+            )
+        results = response["results"]
         _restore_public_axiom_outputs(
             results,
             public_output_by_runtime=public_output_by_runtime,

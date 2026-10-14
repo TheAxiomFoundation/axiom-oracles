@@ -2009,7 +2009,7 @@ def test_build_contribution_and_benefit_base_request_queries_encoded_ssa_policy(
     request = build_contribution_and_benefit_base_request(year=2026)
 
     assert request == {
-        "mode": "explain",
+        "mode": "fast",
         "dataset": {"inputs": [], "relations": []},
         "queries": [
             {
