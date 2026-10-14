@@ -177,6 +177,17 @@ def apply_source_tax_unit_roles(
     import numpy as np
 
     person_ids = _person_ids(sim, data_year)
+    # Roles are matched by person_id. A simulation person missing from the
+    # table (a loader that renumbered people) would otherwise read as having
+    # no supplied role and keep PolicyEngine's age ranking unnoticed.
+    table_ids = {int(value) for value in person_table["person_id"]}
+    unknown = [pid for pid in person_ids if pid not in table_ids]
+    if unknown:
+        raise SourceTaxUnitRoleError(
+            f"{len(unknown)} simulation people are not in the Populace person "
+            f"table (person_id {', '.join(str(pid) for pid in unknown[:5])}), "
+            "so their roles cannot be matched"
+        )
     supplied = np.array([pid in roles for pid in person_ids], dtype=bool)
     source = {
         flag: np.array([roles.get(pid) == role for pid in person_ids], dtype=bool)

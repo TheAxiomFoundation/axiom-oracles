@@ -383,6 +383,16 @@ def test_roles_are_matched_by_person_id_not_row_order():
     )
 
 
+def test_a_simulation_person_missing_from_the_table_raises():
+    """A renumbered person cannot be matched to a role; it must not silently
+    keep PolicyEngine's age ranking."""
+    table = person_table({138: UNIT_138})
+    sim = AgeRankedSimulation(table)
+    sim.person_ids = [1, 99]
+    with pytest.raises(SourceTaxUnitRoleError, match="person_id 99"):
+        apply_source_tax_unit_roles(sim, table, data_year=DATA_YEAR, year=YEAR)
+
+
 def test_populace_us_microsimulation_applies_the_roles(monkeypatch):
     table = person_table({138: UNIT_138})
     built = []
