@@ -6,6 +6,8 @@ import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
+from axiom_oracles.adapters.taxsim.pins import same_build
+
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -102,6 +104,32 @@ def test_merge_updates_existing_taxsim_provenance(second_sha: str) -> None:
     assert shards == original
 
 
+def test_merge_equivalent_observed_taxsim_stamps() -> None:
+    """CSV and verbose observations of one build share the first stamp."""
+    binary = {
+        "path": "/one-binary",
+        "sha256": "a" * 64,
+        "build": "cdate-20260521",
+    }
+    shards = [
+        _taxsim_shard(
+            [{**binary, "build_observed": "cdate-20260521", "rows": 3}]
+        ),
+        _taxsim_shard([{**binary, "build_observed": "20260521", "rows": 4}]),
+    ]
+    original = deepcopy(shards)
+
+    merged = _load_merge_shard_reports().merge(shards)
+
+    binaries = merged["engine_identity"]["taxsim"]["binaries"]
+    assert binaries == [
+        {**binary, "build_observed": "cdate-20260521", "rows": 7}
+    ]
+    assert merged["provenance"]["oracle"]["taxsim_binaries"] == binaries
+    assert merged["case_count"] == 7
+    assert shards == original
+
+
 @settings(max_examples=100, deadline=None)
 @given(
     partition=st.lists(
@@ -138,3 +166,86 @@ def test_merge_taxsim_provenance_conserves_rows_per_binary(partition) -> None:
     assert {
         binary["sha256"]: binary["rows"] for binary in provenance_binaries
     } == expected
+
+
+@settings(max_examples=100, deadline=None)
+@given(
+    partition=st.lists(
+        st.lists(
+            st.tuples(
+                st.sampled_from(["a", "b", "c"]),
+                st.sampled_from(["/binary-1", "/binary-2"]),
+                st.sampled_from(
+                    [
+                        "cdate-20260521",
+                        "20260521",
+                        "cd2026081819",
+                        "2026081819",
+                        "cdate-compdate",
+                        "compdate",
+                    ]
+                ),
+                st.integers(1, 10_000),
+            ),
+            max_size=6,
+        ),
+        min_size=1,
+        max_size=6,
+    )
+)
+def test_merge_taxsim_stamp_partitions_conserve_rows(partition) -> None:
+    """Every shard split preserves rows and one entry per equivalent stamp."""
+    shards = [
+        _taxsim_shard(
+            [
+                {
+                    "path": path,
+                    "sha256": sha * 64,
+                    "build_observed": stamp,
+                    "rows": rows,
+                }
+                for sha, path, stamp, rows in part
+            ]
+        )
+        for part in partition
+    ]
+    expected_rows: dict[tuple[str, str], int] = {}
+    expected_groups: list[dict] = []
+    for shard in shards:
+        for binary in shard["engine_identity"]["taxsim"]["binaries"]:
+            key = (binary["sha256"], binary["path"])
+            expected_rows[key] = expected_rows.get(key, 0) + binary["rows"]
+            group = next(
+                (
+                    item
+                    for item in expected_groups
+                    if (item["sha256"], item["path"]) == key
+                    and same_build(item["build_observed"], binary["build_observed"])
+                ),
+                None,
+            )
+            if group is None:
+                expected_groups.append(dict(binary))
+            else:
+                group["rows"] += binary["rows"]
+
+    merged = _load_merge_shard_reports().merge(shards)
+
+    binaries = merged["engine_identity"]["taxsim"]["binaries"]
+    assert merged["provenance"]["oracle"]["taxsim_binaries"] == binaries
+    assert len(binaries) == len(expected_groups)
+    actual_rows: dict[tuple[str, str], int] = {}
+    for binary in binaries:
+        key = (binary["sha256"], binary["path"])
+        actual_rows[key] = actual_rows.get(key, 0) + binary["rows"]
+    assert actual_rows == expected_rows
+    assert merged["case_count"] == sum(expected_rows.values())
+    for expected in expected_groups:
+        matches = [
+            binary
+            for binary in binaries
+            if (binary["sha256"], binary["path"])
+            == (expected["sha256"], expected["path"])
+            and same_build(binary["build_observed"], expected["build_observed"])
+        ]
+        assert matches == [expected]

@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import os
 import platform
+import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -14,7 +15,12 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from axiom_oracles import cli
-from axiom_oracles.adapters.taxsim import TaxsimLawYearError, TaxsimPackageRunner, pins
+from axiom_oracles.adapters.taxsim import (
+    TaxsimIdentityError,
+    TaxsimLawYearError,
+    TaxsimPackageRunner,
+    pins,
+)
 from axiom_oracles.adapters.taxsim import runner as runner_module
 from axiom_oracles.core.case import Case
 
@@ -80,6 +86,109 @@ def test_cli_preflight_accepts_the_source_layout_binary_that_runs(
     [recorded] = adapter.taxsim_identity()["binaries"]
     assert Path(recorded["path"]).resolve() == Path(checked["path"]).resolve()
     assert recorded["sha256"] == checked["sha256"]
+
+
+@pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
+@pytest.mark.parametrize(
+    "taxsim_input",
+    [{"taxsimid": 1, "year": 2026}, {"taxsimid": 1}],
+    ids=["checked-year", "no-year"],
+)
+def test_package_runner_rejects_replacement_during_the_first_batch(
+    tmp_path, monkeypatch, taxsim_input
+):
+    # With nothing recorded yet, only a hash taken before the run can tell
+    # that the bytes that ran are not the bytes that were checked.
+    binary = tmp_path / "taxsim"
+
+    def write_binary(liability):
+        binary.write_text(
+            '#!/bin/sh\n# "cdate-20260521"\ncat >/dev/null\n'
+            "printf 'taxsimid,year,fiitax,\"cdate-20260521\"\\n'\n"
+            f"printf '1,2026,{liability},0\\n'\n"
+        )
+        binary.chmod(0o755)
+
+    write_binary(42)
+    monkeypatch.setattr(pins, "installed_binary_path", lambda system=None: binary)
+    _native_runner(monkeypatch, tmp_path / "input.csv")
+    run = subprocess.run
+
+    def replace_then_run(*args, **kwargs):
+        write_binary(99)
+        return run(*args, **kwargs)
+
+    monkeypatch.setattr(subprocess, "run", replace_then_run)
+    adapter = TaxsimPackageRunner()
+    cases = [
+        Case(
+            case_id="probe",
+            period="2026",
+            metadata={"taxsim_input": dict(taxsim_input)},
+        )
+    ]
+    with pytest.raises(TaxsimIdentityError, match="changed during the run"):
+        adapter.run_cases(cases, variables=["fiitax"])
+    assert adapter.taxsim_identity() is None or not adapter.taxsim_identity().get(
+        "binaries"
+    )
+
+
+@pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
+@pytest.mark.parametrize(
+    "taxsim_input",
+    [{"taxsimid": 1, "year": 2026}, {"taxsimid": 1}],
+    ids=["checked-year", "no-year"],
+)
+def test_package_runner_rejects_later_replacement_after_pre_run_hash(
+    tmp_path, monkeypatch, taxsim_input
+):
+    binary = tmp_path / "taxsim"
+
+    def write_binary(liability):
+        binary.write_text(
+            '#!/bin/sh\n# "cdate-20260521"\ncat >/dev/null\n'
+            "printf 'taxsimid,year,fiitax,\"cdate-20260521\"\\n'\n"
+            f"printf '1,2026,{liability},0\\n'\n"
+        )
+        binary.chmod(0o755)
+
+    write_binary(42)
+    monkeypatch.setattr(pins, "installed_binary_path", lambda system=None: binary)
+    _native_runner(monkeypatch, tmp_path / "input.csv")
+    adapter = TaxsimPackageRunner()
+    cases = [
+        Case(
+            case_id="probe",
+            period="2026",
+            metadata={"taxsim_input": dict(taxsim_input)},
+        )
+    ]
+    [first] = adapter.run_cases(cases, variables=["fiitax"])
+    assert first.values == {"fiitax": 42.0}
+    original = adapter.taxsim_identity()
+    executed = []
+    published = []
+    run = subprocess.run
+
+    def replace_then_run(*args, **kwargs):
+        # The adapter has already captured the checked binary's hash.
+        write_binary(99)
+        digest = pins.sha256_file(binary)
+        result = run(*args, **kwargs)
+        executed.append((digest, result.stdout))
+        return result
+
+    monkeypatch.setattr(subprocess, "run", replace_then_run)
+    with pytest.raises(TaxsimIdentityError, match="changed during the run"):
+        published.extend(adapter.run_cases(cases, variables=["fiitax"]))
+
+    [(digest, stdout)] = executed
+    assert digest != original["binaries"][0]["sha256"]
+    assert digest == pins.sha256_file(binary)
+    assert b"1,2026,99,0" in stdout
+    assert published == []
+    assert adapter.taxsim_identity() == original
 
 
 @settings(max_examples=100, deadline=None)
