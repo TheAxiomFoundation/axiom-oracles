@@ -774,7 +774,12 @@ def test_eitc_projection_matches_policyengine_age_and_identification_edges():
     projected = project_eitc_tax_unit_inputs(row=row, persons=persons)
     contexts = project_tax_unit_person_contexts(persons)
 
-    assert projected["childless_taxpayer_or_spouse_age_eligible_for_eitc"] is True
+    # 26 USC 32(c)(1)(A)(ii)(II) tests "such individual (or, if the individual
+    # is married, either the individual or the individual's spouse)". The only
+    # filer here is 66, and the 34-year-old is a dependent, so the test fails.
+    # PolicyEngine-US 1.764.6 counted the dependent's age; PolicyEngine-US
+    # #9132 (first released in 1.779.8) restricts it to the filer and spouse.
+    assert projected["childless_taxpayer_or_spouse_age_eligible_for_eitc"] is False
     assert (
         projected["taxpayer_includes_required_social_security_number_on_return"] is True
     )
