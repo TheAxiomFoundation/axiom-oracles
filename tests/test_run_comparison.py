@@ -4159,6 +4159,16 @@ def _raw_tax_ecps_report(*, units=1001, generated_by="scripts/run_comparison.py:
             }
             for index in range(units)
         ],
+        "observed_outputs": [
+            {
+                "case_id": f"tax_unit_{index}",
+                "surface": "eitc",
+                "output": "eitc_demographic_eligible",
+                "axiom": 0,
+                "policyengine": 1,
+            }
+            for index in range(units)
+        ],
         "provenance": provenance,
     }
 
@@ -4199,6 +4209,8 @@ def test_from_report_republishes_and_binds_to_a_full_v2_report(tmp_path, monkeyp
     full = json.loads(full_path.read_text())
     assert full["suite"] == "fiit-ecps"
     assert "cases" not in full
+    assert "observed_outputs" not in full
+    assert "attestation" in full
     assert len(full["mismatches"]) == full["summary"]["mismatch_count"] == 1001
     assert full["provenance"]["generated_by"] == "scripts/run_comparison.py::fiit-ecps"
     dashboard = json.loads(

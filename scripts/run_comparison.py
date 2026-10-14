@@ -848,6 +848,9 @@ def _is_v2_report_for(path: Path, suite: object) -> bool:
     )
 
 
+_FULL_V2_REPORT_OMITTED_KEYS = frozenset({"cases", "observed_outputs"})
+
+
 def _write_full_v2_report(adapted: dict, output: Path) -> Path:
     """Publish the adapted v2 report, every mismatch row kept, beside ``output``.
 
@@ -855,11 +858,18 @@ def _write_full_v2_report(adapted: dict, output: Path) -> Path:
     the raw report under reports/ is not a v2 report and cannot be the
     source a premerged dashboard copy binds to: apply_dispositions.py
     --check requires the pointed file to be this suite's FULL v2 report.
-    This writes that report, without ``cases`` (the dashboard's case chunks
-    carry them, and the consumer re-derives only from ``summary`` and
-    ``mismatches``), atomically in the same directory.
+    This writes that report atomically in the same directory, without the
+    two per-row blocks the consumer never reads: ``cases`` (the dashboard's
+    case chunks carry them) and ``observed_outputs`` (one row per compared
+    value; about 3.9 million rows and 1 GB for fiit-ecps). The consumer
+    re-derives only from ``summary`` and ``mismatches``, and the report keeps
+    its ``attestation`` block with the per-output counts.
     """
-    full = {key: value for key, value in adapted.items() if key != "cases"}
+    full = {
+        key: value
+        for key, value in adapted.items()
+        if key not in _FULL_V2_REPORT_OMITTED_KEYS
+    }
     target = output.with_name(f"{output.stem}-v2{output.suffix}")
     fd, name = tempfile.mkstemp(
         dir=target.parent, prefix=f".{target.name}.", suffix=".tmp"

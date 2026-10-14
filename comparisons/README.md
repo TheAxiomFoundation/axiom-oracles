@@ -178,7 +178,8 @@ the runner checks that the installed version equals the label before it runs.
 The report records it as `provenance.oracle.model_source`.
 
 The harness writes its own JSON shape, so beside the raw report the runner
-publishes the adapted v2 report (every mismatch row, no `cases`) as
+publishes the adapted v2 report (every mismatch row; no `cases` or
+`observed_outputs`, which the binding check never reads) as
 `reports/<basename>-<sample>-<date>-v2.json`. The premerged dashboard copy
 binds to that file, which `apply_dispositions.py --check` re-derives from.
 After a dispositions edit, rebuild the dashboard copy without re-running the
