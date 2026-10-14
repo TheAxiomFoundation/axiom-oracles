@@ -322,8 +322,8 @@ def flagged_units(draw, *, head_required=True):
     """Rows as the Populace loader delivers them: PolicyEngine flags (at most
     one head and one spouse) beside arbitrary constructor roles, SSNs and
     interest, in any order. With ``head_required=False`` the flags may name
-    no head, which the age-ranked PolicyEngine-US 1.764.6 formula produces
-    for a unit with no adult."""
+    no head, which PolicyEngine-US 1.764.6 produces when no member is
+    ``~is_child`` (its head is the oldest such member)."""
     size = draw(st.integers(min_value=1, max_value=5))
     unit_ages = draw(st.lists(ages, min_size=size, max_size=size))
     indices = st.integers(min_value=0, max_value=size - 1)
@@ -372,7 +372,7 @@ def test_property_populace_case_loader_agrees_with_the_bridge(unit):
     PolicyEngine flags) projects the same age input as the bridge.
 
     The rows follow PolicyEngine-US 1.764.6's role formulas: one head
-    whenever the unit has an adult (the oldest non-child), and
+    whenever some member is ``~is_child`` (the oldest such member), and
     ``is_tax_unit_dependent = ~head & ~spouse``, so the loader never emits its
     "Other" relation. A dataset or PolicyEngine version that supplied
     non-dependent non-filers would need its own differential: the Case
