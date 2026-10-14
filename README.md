@@ -98,6 +98,72 @@ the locked fork, since a bare pip install can drift the pinned engine:
 uv sync --extra gettsim --extra dev
 ```
 
+## Generated data and dashboard publication
+
+Automated refreshes publish to the dedicated
+[`oracle-data` branch](https://github.com/TheAxiomFoundation/axiom-oracles/tree/oracle-data).
+`main` holds the reviewed code, configuration, and committed data baseline;
+CI validates that baseline on pull requests. The data branch is a full repository
+snapshot that incorporates current `main` before each publication. Publishers
+use normal pushes with an explicit branch target, and a merge conflict stops
+publication rather than overwriting a reviewed change.
+
+The affected rerun publishes reports together with their derived conformance
+artifacts. The scheduled comparison workflow publishes the per-rule verification
+KPI to the same branch; its manually dispatched KPI run still only computes and
+summarizes the result. Both Actions publication jobs share the
+`oracle-data-publication` concurrency group, so they write in sequence. Weekly
+comparison reports remain workflow artifacts.
+The unattended regeneration scripts also publish their dashboard data to
+`oracle-data`, retaining their existing build and deployment sequence. Run them
+from a dedicated clean checkout: `prepare` rebuilds their baseline from current
+remote `main` source and published data before computing. The generic KPI and
+dashboard publisher refuses publication if either remote branch advances during
+generation. This refusal leaves generated edits available for inspection, and
+the next unattended run refuses the dirty checkout. Retry from a fresh clean
+dedicated checkout, or explicitly clean the generated paths after review and
+then prepare and regenerate.
+
+To inspect current published data or run a local consumer against it, use a
+checkout with full Git history and run:
+
+```bash
+python3 scripts/oracle_data.py materialize
+```
+
+This combines the checkout's source revision with the published snapshot and
+applies only generated data changes, including deletions, to the existing file
+paths. Repeated materialization refreshes previously loaded data and refuses
+to overwrite overlapping local or staged generated changes. A missing
+`oracle-data` branch uses the committed baseline. Run it before
+data-reading scripts or `uv build` when a local wheel should include the current
+generated Belgium coverage rollup. Packages built by CI retain the reviewed
+`main` snapshot.
+
+In a full Git checkout, dashboard `bun run build` and `bun run dev` materialize
+the published data before starting Next.js, so report, overview, freshness,
+case, and disposition requests keep their existing `/oracles/data/` URLs.
+Uploaded or archived dashboards use their bundled `public/data` snapshot
+without requiring Python or Git. Materialize in the source checkout before
+uploading or manually deploying the dashboard so that snapshot includes current
+published data. For offline work or validation of the reviewed checkout, set
+`AXIOM_ORACLES_DATA_SOURCE=checkout`; PR CI uses this setting so mutable
+published data cannot replace the changes under review.
+
+After this change merges, initialize publication by manually dispatching the
+affected rerun from `main`:
+
+```bash
+gh workflow run affected-rerun.yml \
+  --repo TheAxiomFoundation/axiom-oracles --ref main -f force_all=true
+```
+
+Verify that its successful refreshes created or advanced `oracle-data` and that
+the run left `main` unchanged, then materialize the data before deployment or
+manual inspections. GitHub workflows publish data without deploying the
+dashboard. See [comparisons/README.md](comparisons/README.md) for the publication
+and validation gates.
+
 ## ACCESS NYC Rule Audit
 
 The static audit does not need API credentials. It inspects the public Drools

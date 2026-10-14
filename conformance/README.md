@@ -138,8 +138,9 @@ Making drift blocking is that scope decision, not a code change.
 The previous reviewed head `3becffa7c` reported BE 22 and US-PE 28 covered
 policies. The round-11 reviewed head `4f51296fb` then reported zero covered
 policies in every jurisdiction because it required literal execution stamps.
-Those are historical implementation baselines; `origin/main` is the primary
-publication baseline (114/226 covered at the start of this review). The current
+Those are historical implementation baselines; the reviewed `origin/main`
+snapshot had 114/226 covered at the start of this review. Automated publication
+now uses `oracle-data` (see below). The current
 same-case rule was introduced at `5bf01dde2` with 53/226 covered, and later
 rounds retain that total. The new guards reject synthetic attack reports that are not inputs to
 these public coverage counts:
@@ -195,9 +196,21 @@ before those missing pairs can restore coverage.
 snapshots by `scripts/conformance_burndown.py`. The affected-rerun workflow
 regenerates the dispositions merge (and its EUROMOD-BE coverage rollup),
 appends the daily snapshot, and regenerates the scoreboard, detail, and
-burn-down atomically with every report refresh it commits
-(`scripts/commit_refreshed_report.sh`), so these derived artifacts can never
-lag a bot-pushed report. The ratchet is the exception: it is never re-pinned
+burn-down atomically with every report refresh it publishes to `oracle-data`
+(`scripts/commit_refreshed_report.sh`). The published snapshot incorporates
+current `main` and passes the existing staleness gates before a normal push to
+the data branch. To inspect that snapshot or run these consumers locally:
+
+```bash
+python3 scripts/oracle_data.py materialize
+```
+
+The helper applies the generated data changes and deletions at their existing
+paths while keeping the checkout's source revision. CI uses
+`AXIOM_ORACLES_DATA_SOURCE=checkout` to validate the committed PR baseline;
+dashboard builds in a full Git checkout materialize published data, while
+uploaded or archived builds use their bundled snapshot. Materialize before
+uploading or manually deploying. The ratchet is the exception: it is never re-pinned
 by the bot — advance it deliberately with `uv run
 scripts/conformance_ratchet.py` after a genuine improvement.
 
@@ -472,12 +485,15 @@ Wired in `.github/workflows/ci.yml`, following the repo's existing gate patterns
 
 Every gate has negative tests in `tests/test_conformance.py` proving it can fail.
 
-The scoreboard/detail are derived from the committed comparison reports, so
-anything that refreshes a report must regenerate them in the same change or the
-freshness gate reds main. Interactive PRs do this by hand; the automated
-**affected-rerun** bot does it per matrix leg via
-`scripts/commit_refreshed_report.sh` (see `comparisons/README.md` →
-*Affected-comparison map + rerun*, and the behavioral tests in
-`tests/test_commit_refreshed_report.py`). Both trace back to the
+The scoreboard/detail are derived from the comparison reports, so anything
+that refreshes a report must regenerate them in the same change. Interactive
+PRs update the reviewed baseline and its derivatives together. The automated
+**affected-rerun** bot vets each matrix leg, then publishes all passing bundles
+and their regenerated derivatives in one commit to `oracle-data` via
+`scripts/commit_refreshed_report.sh` (see
+[comparisons/README.md](../comparisons/README.md#affected-comparison-map--rerun-o2),
+and the behavioral tests in `tests/test_commit_refreshed_report.py`). It never
+pushes to `main`; PR gates continue checking committed snapshots, without
+loading mutable branch data. Both validation paths trace back to the
 2026-07-14 incident (#282), where four income-tax report refreshes redded main
 for every open PR until the scoreboard was regenerated manually.

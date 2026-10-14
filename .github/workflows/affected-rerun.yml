@@ -4,7 +4,7 @@ name: Affected suite rerun
 # was last generated, on a 6-hourly cadence (plus repository_dispatch, so a
 # rulespec repo can trigger it on push). The weekly full matrix
 # (comparisons.yml) is only a CI signal: it uploads reports as artifacts and
-# never commits them. This workflow is what keeps the committed reports fresh,
+# never commits them. This workflow keeps the reports on oracle-data fresh,
 # without paying for the whole matrix every 6 hours. Suites whose
 # map entry has `name: null` (parameter suites, and suites declaring
 # `ci: manual`, such as the SNAP QC replays, the EUROMOD/UKMOD suites, the UK
@@ -28,8 +28,8 @@ name: Affected suite rerun
 # repository. One `publish` job then downloads every bundle and runs
 # `--publish` once: it rebuilds on the current tip, applies every bundle,
 # regenerates the derived artifacts once, re-runs every gate, and pushes ONE
-# commit, retrying only a rejected push (never rebasing). Until 2026-09-26 each
-# leg pushed on its own, and ~47 legs regenerating and racing for main lost
+# commit to oracle-data, retrying only a rejected push (never rebasing). Until
+# 2026-09-26 each leg pushed on its own, and ~47 legs regenerating and racing for main lost
 # 7-11 legs a sweep to the 90-minute timeout (runs 36239293795, 35958364304).
 # The ratchet (conformance/ratchet.yaml) is never re-pinned from this bot
 # path — re-pinning after a genuine improvement stays a deliberate human
@@ -73,6 +73,9 @@ jobs:
       count: ${{ steps.select.outputs.count }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
@@ -80,6 +83,9 @@ jobs:
 
       - name: Install PyYAML
         run: pip install pyyaml
+
+      - name: Load published data for selection
+        run: python3 scripts/oracle_data.py materialize --baseline
 
       - name: Resolve affected rulespec repo HEADs
         id: heads
@@ -187,10 +193,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: axiom-oracles
-          # The default branch's tip, explicitly (schedule/repository_dispatch
-          # would otherwise leave a detached HEAD): pack diffs the run's
-          # outputs against it and vets the refresh on it.
-          ref: ${{ github.event.repository.default_branch }}
+          # Source stays on main; published data becomes the pack baseline.
+          ref: main
+          fetch-depth: 0
 
       - name: Checkout axiom-encode
         uses: actions/checkout@v4
@@ -231,6 +236,10 @@ jobs:
       - name: Install orchestrator deps + axiom-oracles
         working-directory: axiom-oracles
         run: uv pip install --system -e '.[policyengine]'
+
+      - name: Load published data for the comparison and pack baseline
+        working-directory: axiom-oracles
+        run: python3 scripts/oracle_data.py materialize --baseline
 
       - name: Cache pinned populace-us artifact (HF hub cache)
         uses: actions/cache@v4
@@ -301,7 +310,7 @@ jobs:
           retention-days: 7
 
   publish:
-    # The ONLY job that writes to the default branch. It commits every bundle
+    # The ONLY job that writes to oracle-data. It commits every bundle
     # the legs uploaded in ONE commit, so there is no sibling to race: a push
     # is retried only when another workflow or a human moved the branch.
     # Runs when some legs failed (their bundles simply are not there, and the
@@ -310,6 +319,9 @@ jobs:
     if: ${{ !cancelled() && needs.select.outputs.count != '0' }}
     runs-on: ubuntu-latest
     timeout-minutes: 45
+    concurrency:
+      group: oracle-data-publication
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
@@ -336,8 +348,9 @@ jobs:
         if: steps.bundles.outputs.count != '0'
         uses: actions/checkout@v4
         with:
-          # The branch publish fetches, rebuilds on and pushes to.
-          ref: ${{ github.event.repository.default_branch }}
+          # Publisher merges current main source with the oracle-data tip.
+          ref: main
+          fetch-depth: 0
 
       # The legs' interpreter setup. Derived regeneration needs only this
       # repository: it runs on a bare clone exactly as ci.yml's gates do (no
@@ -365,4 +378,4 @@ jobs:
         # the gates refuse (naming every suite) or the push never lands.
         run: |
           scripts/commit_refreshed_report.sh --publish \
-            "$RUNNER_TEMP/refreshed" "${{ github.event.repository.default_branch }}"
+            "$RUNNER_TEMP/refreshed" "oracle-data"

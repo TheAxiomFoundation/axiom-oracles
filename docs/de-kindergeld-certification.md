@@ -63,6 +63,7 @@ module-not-on-main`; that state never counts as conformance.
 The signing/oracle lane produces every mutually dependent artifact in one run:
 
 ```sh
+python3 scripts/oracle_data.py materialize
 python scripts/de_executable.py --run \
   --engine-archive /path/to/axiom-rules-engine-x86_64-unknown-linux-gnu.tar.xz \
   --rulespec-root /path/to/rulespec-de \
@@ -104,10 +105,19 @@ prefix of the six-file bundle, rerunning the command rebuilds the canonical
 source population without trusting those replaceable files and repairs the
 bundle; ordinary status regeneration remains fail-closed in the meantime.
 
-After the bundle lands, run `scripts/commit_refreshed_report.sh` (or the same
-derived regeneration/check sequence in CI). The refresh chain rederives the
-unified record, executable status, DE census, and certificates; there is no
-manual certificate-status edit.
+Materialization reads current published evidence from `oracle-data` into the
+existing generated paths before the live run or a manual inspection. Reviewed
+leg-config pins and executable manifests continue to change through pull
+requests to `main`; set `AXIOM_ORACLES_DATA_SOURCE=checkout` when validating
+that committed baseline.
+
+After the bundle lands, publish from a disposable checkout with
+`scripts/commit_refreshed_report.sh <suite> oracle-data` (or use the same derived
+regeneration/check sequence when updating the reviewed baseline in a PR). The
+refresh chain rederives the unified record, executable status, DE census, and
+certificates before publishing to the data branch; there is no manual
+certificate-status edit. See the
+[publication and rollout instructions](../README.md#generated-data-and-dashboard-publication).
 
 ## Claim labels
 

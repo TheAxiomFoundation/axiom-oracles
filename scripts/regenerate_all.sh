@@ -6,13 +6,22 @@
 set -e
 cd "$(dirname "$0")/.."
 
-# Unattended runs commit and deploy production — never do that from a
-# review branch someone left checked out.
+# Unattended runs publish data and deploy production. Use a dedicated
+# checkout; never run from a review branch someone left checked out.
 branch=$(git rev-parse --abbrev-ref HEAD)
-if [ "$branch" != "main" ]; then
-  echo "!! refusing unattended regen on branch '$branch' (expected main)"
+if [ "$branch" != "main" ] && [ "$branch" != "oracle-data" ]; then
+  echo "!! refusing unattended regen on branch '$branch' (expected main or oracle-data)"
   exit 1
 fi
+
+# Prepare before computing, so generations read current source and live data.
+# Refuse local edits before the disposable checkout is rebuilt.
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "!! refusing unattended regen with local tracked changes"
+  exit 1
+fi
+.venv/bin/python scripts/oracle_data.py prepare
+git switch -C oracle-data
 
 ./scripts/sync_rulespec_roots.sh
 
@@ -64,10 +73,9 @@ done
 .venv/bin/python -m pytest tests/ -q
 
 if ! git diff --quiet dashboard/public/data; then
-  git add dashboard/public/data
-  git commit -m "data: scheduled oracle regeneration $(date +%Y-%m-%d)"
-  git push origin main
-  (cd dashboard && bun run build && vercel --prod)
+  .venv/bin/python scripts/oracle_data.py publish --group dashboard \
+    --message "data: scheduled oracle regeneration $(date +%Y-%m-%d)"
+  (cd dashboard && AXIOM_ORACLES_DATA_SOURCE=checkout bun run build && vercel --prod)
 else
   echo "no data changes"
 fi

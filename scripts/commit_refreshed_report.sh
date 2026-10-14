@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Commit refreshed comparison reports atomically with every artifact derived
 # from them: vet each suite's refresh where it ran (pack), then commit every
-# vetted refresh from one job (publish), retrying only a rejected push.
+# vetted refresh from one job (publish) to oracle-data, retrying only a rejected
+# push. The protected main branch is a source-code input, never a push target.
 #
 # Refreshing a dashboard/public/data/*.json report changes the inputs of
 # derived, CI-validated artifacts:
@@ -88,9 +89,9 @@
 # ratchet gate failing on main IS the alarm working as designed — this script
 # keeps mechanical staleness out of CI; it must not muffle real regressions.
 #
-# Usage: scripts/commit_refreshed_report.sh <suite-name> <branch>
+# Usage: scripts/commit_refreshed_report.sh <suite-name> oracle-data
 #        scripts/commit_refreshed_report.sh --pack <bundles-dir> <suite-name>
-#        scripts/commit_refreshed_report.sh --publish <bundles-dir> <branch>
+#        scripts/commit_refreshed_report.sh --publish <bundles-dir> oracle-data
 # Env:   PYTHON            interpreter for the regeneration scripts (python3)
 #        MAX_ATTEMPTS      push attempts before failing loudly     (10)
 #        PUSH_RETRY_DELAY  seconds between attempts (default: growing + jitter)
@@ -99,9 +100,9 @@ set -euo pipefail
 
 usage() {
   {
-    echo "usage: commit_refreshed_report.sh <suite-name> <branch>"
+    echo "usage: commit_refreshed_report.sh <suite-name> oracle-data"
     echo "       commit_refreshed_report.sh --pack <bundles-dir> <suite-name>"
-    echo "       commit_refreshed_report.sh --publish <bundles-dir> <branch>"
+    echo "       commit_refreshed_report.sh --publish <bundles-dir> oracle-data"
   } >&2
   exit 2
 }
@@ -144,6 +145,12 @@ case "$suite" in
 esac
 [ "$mode" = publish ] || [ -n "$suite" ] || usage
 [ "$mode" = pack ] || [ -n "$branch" ] || usage
+# Never accept another ref, even in simulate mode or an empty publication.
+# Validate before configuring git or collecting any private outputs.
+if [ "$mode" != pack ] && [ "$branch" != oracle-data ]; then
+  echo "refusing publication target '$branch'; expected oracle-data" >&2
+  exit 2
+fi
 
 PYTHON="${PYTHON:-python3}"
 # 10, not the old per-leg 60: one publisher no longer races 40+ siblings, so
@@ -609,10 +616,10 @@ PY
 
   push_landed=""
   for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
-    # Rebuild from scratch on the current remote tip (fetch + hard reset; never
-    # rebase). git clean keeps the generated trees hermetic across attempts.
-    git fetch origin "$target"
-    git reset --hard FETCH_HEAD --quiet
+    # Rebuild from current main source and the latest oracle-data snapshot.
+    # prepare merges both histories before resetting the checkout, bootstraps
+    # from main when the data branch is absent, and fails closed on conflicts.
+    "$PYTHON" scripts/oracle_data.py prepare
     git clean -fdq -- "${derived_paths[@]}"
 
     # Apply every bundle's private outputs and deletions, in sorted order.
@@ -695,11 +702,11 @@ PY
       -m "Includes the regenerated derived conformance artifacts (dispositioned
 reports + EUROMOD-BE coverage rollup, DE unified/closure/census/executable
 status, scoreboard, detail, daily history snapshot, burn-down, freshness) so
-main CI's staleness gates stay green.
+the published snapshot passes CI's staleness gates.
 Committed by scripts/commit_refreshed_report.sh; the ratchet is never
 re-pinned here."
 
-    if git push origin "HEAD:$target"; then
+    if git push origin "HEAD:refs/heads/oracle-data"; then
       push_landed=1
       break
     fi
