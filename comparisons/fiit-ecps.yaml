@@ -19,19 +19,26 @@ description: >-
   Populace US validation population.
 documentation: docs/federal-income-tax-comparison.md
 
-# Not CI-runnable: the axiom leg's engine-main compile of rulespec-us main is
-# blocked by rulespec-us#1049/#1050 (canonical-path root scan; removed plural
-# corpus_citation_paths), and the 2026-08-05 sweeps additionally saw the hosted
-# runner receive a shutdown signal minutes into the PolicyEngine outputs pass
-# in consecutive runs -- consistent with runner memory limits at sample_size 0.
-# Manual lane only; re-verify both before dropping this marker
-# (axiom-oracles#455 tracks the flip-back).
+# Not CI-runnable. Engine main cannot compile rulespec-us main's surfaces:
+# on 2026-10-14 (engine 97dee100, rulespec-us 172bf04e) the 26 USC 1(h),
+# 1(j), 32 and 25A programs failed to load on the
+# `module.source_verification.values` schema change (rulespec-us#1050). The
+# suite therefore pins the engine line rulespec-us builds its program
+# artifacts with (`axiom_artifact_rules_engine_ref` in rulespec-us
+# .axiom/workflow-toolchain.toml: 98af0dce, release/v0.1, v0.1.2), which
+# compiles all thirteen. The 2026-08-05 sweeps also saw the hosted runner
+# receive a shutdown signal minutes into the PolicyEngine outputs pass,
+# consistent with runner memory limits at sample_size 0. Manual lane only;
+# re-verify both before dropping this marker (axiom-oracles#455 tracks the
+# flip-back).
 ci: manual
 
 runner:
   type: axiom-encode-tax-ecps-compare
   axiom_encode_repo: $HOME/axiom-encode
   axiom_rules_repo: $HOME/axiom-rules
+  # The runner refuses an axiom_rules_repo checkout at any other commit.
+  axiom_rules_repo_revision: 98af0dcec5a09e1dca12d1458e08ccb02516c1ef
   rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
   parameters:
     # No `data_folder`: Populace loads from the sha256-pinned Hugging Face cache
