@@ -36,6 +36,34 @@ generated report top-level and into each case's `metadata`, so a checked-in
 FIIT report is self-documenting about its data provenance. (Older harness
 output without the block falls back to the legacy `enhanced_cps` label.)
 
+### Tax-unit roles: the constructor's, in every PolicyEngine simulation
+
+The pinned artifact carries the tax units its constructor built and each
+member's role in the person column `tax_unit_role_input` (`HEAD` / `SPOUSE` /
+`DEPENDENT`). PolicyEngine-US before 2.34.0 has no variable of that name: its
+`is_tax_unit_head` / `is_tax_unit_spouse` rank members by age, which files a
+head together with an adult the constructor marks a dependent as a joint return
+(axiom-oracles#633).
+
+Every PolicyEngine-US simulation this repo builds over Populace therefore goes
+through `axiom_oracles/bridges/tax_unit_roles.py`:
+
+- a PolicyEngine-US with PolicyEngine/policyengine-us#9617 (2.34.0 and later)
+  reads `tax_unit_role_input` itself;
+- an older one, such as the locked 1.764.6 or a comparison's own pin, gets the
+  same roles as `is_tax_unit_head` / `is_tax_unit_spouse` inputs.
+
+The simulation's role flags are then checked against the constructor's roles,
+and any difference stops the run. PolicyEngine's filing status, dependents and
+credits, the bridge's filers and person contexts, and the Case loader's
+relations all read those flags, so they describe one unit. Filing status is
+never supplied: PolicyEngine computes it from the roles (decision d318), and the
+artifact's `filing_status_input` column is not read.
+
+`fiit-ecps` runs this repo's bridge through axiom-encode's pinned copy of
+axiom-oracles, so it follows the constructor's roles once axiom-encode moves
+that pin past the change.
+
 ## TL;DR — run it locally
 
 ```bash
