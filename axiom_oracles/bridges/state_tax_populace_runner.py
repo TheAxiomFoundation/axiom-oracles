@@ -1722,9 +1722,9 @@ def calculate_taxsim_targets(
     if taxsim_runner_factory is None:
         # Before the Microsimulation is built: the host's TAXSIM binary may
         # not accept this year (the pinned Linux build stops at 2024).
-        from ..adapters.taxsim.pins import installed_binary_path, require_law_years
+        from ..adapters.taxsim.pins import require_law_years, resolve_binary_path
 
-        default_binary = installed_binary_path()
+        default_binary = resolve_binary_path()
         require_law_years([year], binary_path=default_binary)
     _require_columns(raw_tax_units, {"tax_unit_id"}, "tax_unit")
     tax_unit_ids = [_clean_id(value) for value in raw_tax_units["tax_unit_id"]]
@@ -1914,18 +1914,23 @@ def calculate_taxsim_targets(
                 )
             rows.append(row)
         runner = taxsim_runner_factory(pd.DataFrame(rows))
+        binary_path = getattr(runner, "taxsim_path", None)
+        binary_sha256 = None
+        if identity_recorder is not None and binary_path is not None:
+            from ..adapters.taxsim.pins import build_stamp_from_columns, sha256_file
+
+            binary_path = Path(binary_path)
+            binary_sha256 = sha256_file(binary_path)
         try:
             result = runner.run(show_progress=False)
         except TypeError:
             result = runner.run()
-        binary_path = getattr(runner, "taxsim_path", None)
         if identity_recorder is not None and binary_path is not None:
-            from ..adapters.taxsim.pins import build_stamp_from_columns
-
             identity_recorder.observe(
-                Path(binary_path),
+                binary_path,
                 rows=len(rows),
                 build_observed=build_stamp_from_columns(result.columns),
+                sha256=binary_sha256,
             )
         records = result.to_dict(orient="records")
         if len(records) != len(state_routes):

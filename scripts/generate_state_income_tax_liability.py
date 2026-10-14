@@ -1024,14 +1024,17 @@ def _taxsim_liabilities(
         )
     frame = pd.DataFrame(rows)
     runner = TaxsimRunner(frame, taxsim_path=_taxsim_binary())
+    binary_path = Path(runner.taxsim_path)
+    binary_sha256 = taxsim_pins.sha256_file(binary_path)
     try:
         result = runner.run(show_progress=False)
     except TypeError:
         result = runner.run()
     recorder.observe(
-        Path(runner.taxsim_path),
+        binary_path,
         rows=len(rows),
         build_observed=taxsim_pins.build_stamp_from_columns(result.columns),
+        sha256=binary_sha256,
     )
     records = result.to_dict(orient="records")
     # One resolution per state, not per record — the resolver re-reads the

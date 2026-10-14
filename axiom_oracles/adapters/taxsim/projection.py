@@ -373,9 +373,10 @@ def _year(period: str) -> int:
     year = int(str(period).split("-", maxsplit=1)[0])
     if year > TAXSIM_MAX_YEAR:
         raise RuntimeError(
-            f"No pinned TAXSIM executable accepts tax years after "
-            f"{TAXSIM_MAX_YEAR}; got {year}. Each executable's range is in "
-            "adapters/taxsim/taxsim_pins.json (the Linux build stops at 2024)."
+            "Among pinned TAXSIM executables that have been run, none accepts "
+            f"tax years after {TAXSIM_MAX_YEAR}; got {year}. Each executable's "
+            "range is in adapters/taxsim/taxsim_pins.json (the Linux build "
+            "stops at 2024; the Windows law-year range is unknown)."
         )
     return year
 

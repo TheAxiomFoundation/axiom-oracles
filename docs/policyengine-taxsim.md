@@ -68,10 +68,11 @@ The macOS binary in the pinned policyengine-taxsim 2.30.0 release
 2026, and TAXSIM comparisons now default to the 2026 validation year
 (`TAXSIM_DEFAULT_PERIOD` in `axiom_oracles/cli.py`). The Linux binary in the
 same release (`taxsimtest-linux.exe`) is a different build that accepts law
-years 1960-2024 only, so 2024 is the last year a Linux host can pass as
-`--period` (see [Platforms and binary identity](#platforms-and-binary-identity)).
-Scope of the
-macOS binary's 2026 model, verified empirically against that binary:
+years 1960-2024 only, so 2024 is the last year that pinned Linux binary can
+accept as `--period` (see
+[Platforms and binary identity](#platforms-and-binary-identity)).
+Scope of the macOS binary's 2026 model, recorded by the original author;
+these child-credit probes were not re-run for these fixes:
 
 - **Modeled at 2026**: the OBBBA federal rate schedule and standard
   deduction, childless EITC, FICA/SECA (`tfica`), AGI (`v10`).
@@ -136,11 +137,14 @@ California fixture and tests with the pinned formatter and binary cover this mod
 ## Platforms and binary identity
 
 The executables bundled in the pinned policyengine-taxsim 2.30.0 wheel are
-different NBER builds. Each was run on 2026-10-10 on a one-record input (a
+different NBER builds. The Linux executables and the macOS executable were
+recorded by the original author as run on 2026-10-10 on a one-record input (a
 single filer aged 40 with $50,000 of wages, state 0, `idtl=0`) at law years
 1960, 2023, 2024, 2025, 2026 and 2027: the Linux builds through pe-taxsim's
 `resources/taxsimtest/taxsim-docker-wrapper.sh`, the macOS build on a macOS
-arm64 host. `taxsim_pins.json` records each one's build stamp, the years that
+arm64 host. Windows was not run; its law-year range is unknown. The original
+execution dates, hosts and Linux runs were not re-run for these fixes.
+`taxsim_pins.json` records each executed binary's build stamp, the years that
 ran and the years it refused, and the line it printed for a refused year. The
 range in the table is the one that line states; years between those run were
 not run.
@@ -198,6 +202,14 @@ runner the caller injects (`TaxsimPackageRunner(runner_factory=…)` or
 `(executor=…)`, `calculate_taxsim_targets(taxsim_runner_factory=…)`; tests use
 these, no suite does).
 
+Preflight and the default runner share the executable resolver, including
+the native `resources/taxsimtest` source-layout fallback when no installed
+share-tree binary is present. Preflight hashes the resolved file and uses
+only the range belonging to that hash. An unpinned hash does not inherit the
+host platform's pinned range: its range check is skipped, its identity has
+`pinned: false` and `law_years: null`, and any year rejection from the actual
+executable surfaces when it runs.
+
 Each run records the binary it executed in the report's top-level
 `engine_identity.taxsim`: path, SHA-256, size, the build stamp embedded in the
 bytes (`build`) and the one the run printed (`build_observed`, the last CSV
@@ -206,6 +218,9 @@ SHA-256 is pinned, the pinned law-year range, the installed policyengine-taxsim
 version, and the rows it ran. The path is the absolute path on the host that
 ran it, as provenance paths in several other committed reports are. A printed stamp that
 names a different build than the hashed bytes raises `TaxsimIdentityError`.
+The adapter and direct state runners hash the actual runner path before
+each invocation. A changed hash raises `TaxsimIdentityError`; a rejected
+observation adds neither an identity nor rows to the recorder.
 `scripts/run_comparison.py` copies the binaries into
 `provenance.oracle.taxsim_binaries`, and `scripts/merge_shard_reports.py` sums
 their rows across shards, keeping one entry per distinct binary and path; it
@@ -216,8 +231,12 @@ produced them.
 
 ### Why the pin was not moved for Linux
 
-Newer policyengine-taxsim releases were checked on 2026-10-10 with the same
-batch-13 input:
+The following 19-wheel investigation, row and column counts, stdout
+equivalence, and child-credit probes were recorded by the original author
+and were not re-run for these fixes. The batch-13 input and raw output
+receipts are not bundled here; these numbers remain a historical record.
+The author reported checking newer policyengine-taxsim releases on
+2026-10-10 with the same batch-13 input:
 
 - 2.31.0 and 2.31.1 bundle Linux build `4dea6830…` (`cdate-2025Dec24`). It
   rejects 2026 the same way.
@@ -235,12 +254,17 @@ batch-13 input:
   children, got identical EITC, CTC, ACTC and CDCC values from both macOS
   builds.
 
-So on the one batch measured, moving the pin changes TAXSIM results on macOS
-as well as Linux; no other suite was run against the newer build. Choosing
-the benchmark's NBER build is the open question in axiom-oracles#559, which
-moves the pin together with re-baselined dispositions.
+On that recorded batch, moving the pin changes TAXSIM results on macOS
+as well as Linux; the author reported no other suite run against the newer
+build. Choosing the benchmark's NBER build is the open question in
+axiom-oracles#559, which moves the pin together with re-baselined dispositions.
 
 ## Reproduce The Smoke Test
+
+Historical Linux smoke numbers and the comparison counts below were
+recorded by the original author and were not re-run for these fixes.
+Results depend on the executable that runs; use this command for a fresh
+comparison.
 
 ```bash
 uv run --extra policyengine --extra taxsim axiom-oracles compare \
@@ -250,7 +274,7 @@ uv run --extra policyengine --extra taxsim axiom-oracles compare \
   --output reports/policyengine-taxsim-ecps-2024-sample10.json
 ```
 
-Expected result after the state-code and shared-row fixes:
+Result originally recorded after the state-code and shared-row fixes:
 
 ```text
 20 comparisons
@@ -261,7 +285,8 @@ Expected result after the state-code and shared-row fixes:
 
 ## Current Residual Mismatches
 
-The latest 10-case Enhanced CPS smoke test leaves three mismatches:
+The original author's 10-case Enhanced CPS smoke record reports three
+mismatches:
 
 | Case | TAXSIM state | TAXSIM input summary | Concept | PolicyEngine | TAXSIM | Difference |
 | --- | ---: | --- | --- | ---: | ---: | ---: |

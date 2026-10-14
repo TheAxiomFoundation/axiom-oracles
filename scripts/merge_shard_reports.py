@@ -130,6 +130,13 @@ def merge(shards: list[dict]) -> dict:
         merged.pop("engine_identity", None)
     else:
         merged["engine_identity"] = engine_identity
+        taxsim = engine_identity.get("taxsim")
+        if taxsim and isinstance(merged.get("provenance"), dict):
+            provenance = dict(merged["provenance"])
+            oracle = dict(provenance.get("oracle") or {})
+            oracle["taxsim_binaries"] = [dict(item) for item in taxsim["binaries"]]
+            provenance["oracle"] = oracle
+            merged["provenance"] = provenance
     return merged
 
 

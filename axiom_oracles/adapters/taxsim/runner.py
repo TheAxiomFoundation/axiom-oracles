@@ -191,12 +191,10 @@ class TaxsimPackageRunner(EngineAdapter):
                 # policyengine-taxsim's own executable search assumes
                 # sys.prefix carries the wheel's share/ data files, which is
                 # false inside uv `--with` overlay environments — resolve the
-                # bundled binary ourselves (pins.installed_binary_path also
-                # walks the sys.path archive roots) and pass it explicitly;
-                # None keeps its native search for source-layout dev runs.
-                from .pins import installed_binary_path
-
-                binary = installed_binary_path()
+                # binary with the same resolver preflight uses (including
+                # sys.path archive roots and native source-layout dev runs)
+                # and pass it explicitly.
+                binary = pins.resolve_binary_path()
                 if binary is not None:
                     # Its signature annotates taxsim_path as str, but
                     # _validate_executable calls .exists() on it — a Path is

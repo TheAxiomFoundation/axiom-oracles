@@ -130,6 +130,24 @@ def installed_binary_path(system: str | None = None) -> Path | None:
     return None
 
 
+def resolve_binary_path(system: str | None = None) -> Path | None:
+    """Resolve the executable used by preflight and the default runner.
+
+    Preserve the adapter's installed share-tree preference (including uv
+    overlays), then the upstream runner's native source-layout lookup.
+    Return an absolute path so both callers select the same file.
+    """
+    installed = installed_binary_path(system)
+    if installed is not None:
+        return installed.resolve()
+    key = platform_binary_key(system)
+    if key is not None:
+        source = Path("resources") / key
+        if source.is_file():
+            return source.resolve()
+    return None
+
+
 class TaxsimLawYearError(RuntimeError):
     """A requested law year lies outside the resolved TAXSIM binary's range."""
 
@@ -270,11 +288,12 @@ def require_law_years(
     """Refuse law years the TAXSIM binary that would run does not accept.
 
     The binary is ``binary_path`` when it exists, else (with ``use_installed``
-    and no ``binary_path``) the installed one for ``system`` (default: this
-    host), else the pinned binary for ``system`` (what the ``taxsim`` extra
-    installs). A binary the pin does not record, or whose range is unknown,
-    is not checked. Returns the identity of the existing binary that was
-    resolved, else ``None``.
+    and no ``binary_path``) the installed or source-layout one resolved for
+    ``system`` (default: this host), else the pinned binary for ``system``
+    (what the ``taxsim`` extra installs). An existing binary is hashed
+    before selecting its range: an unpinned hash, or a hash whose range is
+    unknown, is not checked against any platform pin. Returns the identity
+    of the existing binary that was resolved, else ``None``.
 
     Raises :class:`TaxsimLawYearError` naming the binary, its pinned range,
     the line it printed for a rejected year, and the pinned binaries that do
@@ -290,7 +309,7 @@ def require_law_years(
         # Check what this platform would install instead.
         path = None
     elif path is None and use_installed:
-        path = installed_binary_path(system)
+        path = resolve_binary_path(system)
     identity: dict[str, Any] | None = None
     if path is not None:
         identity = binary_identity(Path(path), system=system)
@@ -396,9 +415,6 @@ class TaxsimIdentityRecorder:
         identity = self._identities.get(key)
         if identity is None:
             identity = binary_identity(Path(path))
-            self._identities[key] = identity
-            self._rows[key] = 0
-            self._observed[key] = None
         if sha256 is not None and sha256 != identity["sha256"]:
             raise TaxsimIdentityError(
                 f"TAXSIM binary {path} changed during the run: sha256 "
@@ -414,12 +430,18 @@ class TaxsimIdentityRecorder:
                     f"hashed at {path} (sha256 {identity['sha256'][:12]}) "
                     f"embeds build {identity['build']!r}"
                 )
-            previous = self._observed[key]
-            if previous is not None and previous != build_observed:
+            previous = self._observed.get(key)
+            if previous is not None and not same_build(previous, build_observed):
                 raise TaxsimIdentityError(
                     f"TAXSIM binary {path} printed build {previous!r} and "
                     f"later {build_observed!r} in one run"
                 )
+        # Publish an identity only after its hash and printed build agree.
+        if key not in self._identities:
+            self._identities[key] = identity
+            self._rows[key] = 0
+            self._observed[key] = None
+        if build_observed is not None:
             self._observed[key] = build_observed
         self._rows[key] += int(rows)
         return identity
