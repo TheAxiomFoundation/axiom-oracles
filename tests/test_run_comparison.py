@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 import json
 import math
@@ -4088,3 +4089,182 @@ def test_federal_grid_accepts_configured_root_matching_pin(monkeypatch, tmp_path
     )
 
     assert params["rulespec_roots"] == [str(good_root)]
+
+
+# ---------------------------------------------------------------------------
+# A runner whose harness emits its own JSON (tax-populace-compare) publishes a
+# FULL v2 report beside the raw one, so the premerged dashboard copy binds to
+# a file apply_dispositions.py --check accepts; --from-report rebuilds that
+# copy from an earlier real run after a dispositions edit, executing nothing.
+# ---------------------------------------------------------------------------
+
+_FROM_REPORT_SUITE_YAML = (
+    "name: fiit-ecps\n"
+    "ci: manual\n"
+    "runner:\n"
+    "  type: axiom-encode-tax-ecps-compare\n"
+    "  parameters: {sample_size: 0}\n"
+    "artifacts:\n"
+    "  report_basename: axiom-policyengine-fiit-ecps\n"
+    "dashboard:\n"
+    "  filename: axiom-policyengine-fiit-ecps.json\n"
+    "  suite: fiit-ecps\n"
+)
+
+
+_FROM_REPORT_DISPOSITIONS = (
+    "schema: axiom_oracles.dispositions.v1\n"
+    "suite: fiit-ecps\n"
+    'updated: "2026-10-14"\n'
+    "entries:\n"
+    "  - id: one-open-row\n"
+    "    concept: us:tax/federal-income-tax#eitc\n"
+    "    case_id: ecps-tax_unit_0\n"
+    "    disposition: unexplained\n"
+    "    evidence:\n"
+    "      mechanism: An open investigation recorded for the fixture.\n"
+    "      upstream_url: https://example.test/issue/1\n"
+    "    expires_on_source_change: false\n"
+)
+
+
+def _raw_tax_ecps_report(*, units=1001, generated_by="scripts/run_comparison.py::fiit-ecps",
+                         reemitted=False):
+    """A stamped raw tax-populace-compare report large enough to slim."""
+    provenance = {"generated_by": generated_by, "run_kind": "manual"}
+    if reemitted:
+        provenance["reemitted_report"] = True
+    return {
+        "compared_tax_units": units,
+        "compared_values": units * 2,
+        "mismatch_count": units,
+        "output_summary": [
+            {
+                "surface": "eitc",
+                "output": "eitc_demographic_eligible",
+                "compared": units * 2,
+                "mismatches": units,
+                "max_abs_diff": 1,
+                "max_relative_diff": 1,
+            }
+        ],
+        "mismatches": [
+            {
+                "entity_id": f"tax_unit_{index}",
+                "surface": "eitc",
+                "output": "eitc_demographic_eligible",
+                "axiom": 0,
+                "policyengine": 1,
+                "diff": -1,
+            }
+            for index in range(units)
+        ],
+        "provenance": provenance,
+    }
+
+
+def _from_report_repo(tmp_path, monkeypatch):
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    for sub in ("reports", "dashboard/public/data", "comparisons", "dispositions"):
+        (repo / sub).mkdir(parents=True)
+    (repo / "comparisons" / "fiit-ecps.yaml").write_text(_FROM_REPORT_SUITE_YAML)
+    (repo / "dispositions" / "fiit-ecps.yaml").write_text(_FROM_REPORT_DISPOSITIONS)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", repo / "comparisons")
+    monkeypatch.setattr(
+        run_comparison, "DASHBOARD_DATA_DIR", repo / "dashboard" / "public" / "data"
+    )
+
+    def refuse(*_args, **_kwargs):
+        raise AssertionError("--from-report must not execute the runner")
+
+    monkeypatch.setitem(run_comparison.RUNNERS, "axiom-encode-tax-ecps-compare", refuse)
+    return run_comparison, repo
+
+
+def test_from_report_republishes_and_binds_to_a_full_v2_report(tmp_path, monkeypatch):
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    raw_path = repo / "reports" / "axiom-policyengine-fiit-ecps-0-2026-10-14.json"
+    raw_text = json.dumps(_raw_tax_ecps_report())
+    raw_path.write_text(raw_text)
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+
+    assert run_comparison.main() == 0
+
+    assert raw_path.read_text() == raw_text  # the run's own bytes are untouched
+    full_path = raw_path.with_name("axiom-policyengine-fiit-ecps-0-2026-10-14-v2.json")
+    full = json.loads(full_path.read_text())
+    assert full["suite"] == "fiit-ecps"
+    assert "cases" not in full
+    assert len(full["mismatches"]) == full["summary"]["mismatch_count"] == 1001
+    assert full["provenance"]["generated_by"] == "scripts/run_comparison.py::fiit-ecps"
+    dashboard = json.loads(
+        (repo / "dashboard/public/data/axiom-policyengine-fiit-ecps.json").read_text()
+    )
+    block = dashboard["summary"]["dispositioned"]
+    assert block["source_report"]["path"] == f"reports/{full_path.name}"
+    assert block["source_report"]["sha256"] == hashlib.sha256(
+        full_path.read_bytes()
+    ).hexdigest()
+
+    # The consumer accepts the binding: the pointed file is this suite's FULL
+    # v2 report, and a fresh merge over it reproduces the embedded block.
+    apply_dispositions = load_script_module("apply_dispositions")
+    monkeypatch.setattr(apply_dispositions, "REPO_ROOT", repo)
+    from axiom_oracles.comparison.dispositions import load_dispositions
+
+    dashboard_path = repo / "dashboard/public/data/axiom-policyengine-fiit-ecps.json"
+    dispositions = load_dispositions(
+        repo / "dispositions" / "fiit-ecps.yaml", repo_root=repo
+    )
+    assert block["counts"]["unexplained"] == 1
+    assert apply_dispositions._premerged_block_problems(
+        dashboard_path, dashboard, dispositions
+    ) == []
+
+
+def test_raw_harness_output_is_not_a_v2_binding_source(tmp_path):
+    run_comparison = load_run_comparison_module()
+    raw = tmp_path / "raw.json"
+    raw.write_text(json.dumps(_raw_tax_ecps_report(units=1)))
+    assert not run_comparison._is_v2_report_for(raw, "fiit-ecps")
+    v2 = tmp_path / "v2.json"
+    v2.write_text(json.dumps({"suite": "fiit-ecps", "summary": {}, "mismatches": []}))
+    assert run_comparison._is_v2_report_for(v2, "fiit-ecps")
+    assert not run_comparison._is_v2_report_for(v2, "fiit-taxsim-ecps")
+    assert not run_comparison._is_v2_report_for(tmp_path / "missing.json", "fiit-ecps")
+
+
+@pytest.mark.parametrize(
+    "raw_kwargs, message",
+    [
+        ({"generated_by": "scripts/run_comparison.py::fiit-taxsim-ecps"}, "generated by"),
+        ({"reemitted": True}, "re-emission"),
+    ],
+)
+def test_from_report_refuses_reports_that_are_not_this_suites_real_run(
+    tmp_path, monkeypatch, raw_kwargs, message
+):
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    raw_path = repo / "reports" / "raw.json"
+    raw_path.write_text(json.dumps(_raw_tax_ecps_report(units=2, **raw_kwargs)))
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+    with pytest.raises(SystemExit, match=message):
+        run_comparison.main()
+    assert not any((repo / "dashboard/public/data").iterdir())
+
+
+def test_from_report_refuses_a_report_outside_reports(tmp_path, monkeypatch):
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    raw_path = repo / "elsewhere.json"
+    raw_path.write_text(json.dumps(_raw_tax_ecps_report(units=2)))
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+    with pytest.raises(SystemExit, match="must be under"):
+        run_comparison.main()

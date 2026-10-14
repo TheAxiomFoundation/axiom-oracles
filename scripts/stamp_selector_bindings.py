@@ -37,7 +37,39 @@ from axiom_oracles.comparison.dispositions import (  # noqa: E402
 )
 
 
+def bound_source_report(suite: str) -> Path | None:
+    """The FULL report the suite's dashboard copy is bound to, if any.
+
+    A premerged dashboard copy names its source in
+    ``summary.dispositioned.source_report``; apply_dispositions.py --check
+    re-derives the copy from exactly that file, so bindings must be stamped
+    against it rather than against whichever report a filename glob finds.
+    """
+    for path in sorted((REPO / "dashboard" / "public" / "data").glob("*.json")):
+        try:
+            data = json.loads(path.read_text())
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(data, dict) or data.get("suite") != suite:
+            continue
+        block = (data.get("summary") or {}).get("dispositioned")
+        pointer = block.get("source_report") if isinstance(block, dict) else None
+        if not isinstance(pointer, dict) or not isinstance(pointer.get("path"), str):
+            continue
+        candidate = REPO / pointer["path"]
+        if not candidate.is_file():
+            raise SystemExit(
+                f"{path.relative_to(REPO)} binds to {pointer['path']}, which "
+                "does not exist"
+            )
+        return candidate
+    return None
+
+
 def full_report_path(suite: str) -> Path:
+    bound = bound_source_report(suite)
+    if bound is not None:
+        return bound
     candidates = sorted(REPO.glob(f"reports/axiom-yale-{suite}-all-*.json"))
     if not candidates:
         candidates = sorted(REPO.glob(f"reports/*{suite}*-all-*.json"))
