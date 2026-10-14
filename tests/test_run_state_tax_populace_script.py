@@ -106,6 +106,9 @@ def test_repeatable_state_filter_preserves_national_routing_report(
         campaign, "calculate_policyengine_projection_inputs", projections
     )
     monkeypatch.setattr(campaign, "calculate_taxsim_targets", taxsim_targets)
+    # The TAXSIM leg is stubbed, so the host's binary is not consulted: the
+    # pinned Linux build would refuse the 2026 validation year (CI is Linux).
+    monkeypatch.setattr(campaign, "require_law_years", lambda years: None)
     monkeypatch.setattr(campaign, "population_routing_report", routing_report)
     monkeypatch.setattr(campaign, "compare_ready_state_tax_units", comparison)
     monkeypatch.setattr(campaign, "runtime_provenance", lambda **kwargs: {})

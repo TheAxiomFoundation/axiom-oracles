@@ -1678,6 +1678,7 @@ def calculate_taxsim_targets(
     microsimulation_factory: Callable[[Any], Any] | None = None,
     taxsim_runner_factory: Callable[[Any], Any] | None = None,
     unprojected_inputs: dict[str, dict[int | str, dict[str, float]]] | None = None,
+    identity_recorder: Any | None = None,
 ) -> dict[str, dict[int | str, float]]:
     """Calculate the TAXSIM oracle value for every ready-routed tax unit.
 
@@ -1692,6 +1693,14 @@ def calculate_taxsim_targets(
 
     When supplied, ``unprojected_inputs`` collects nonzero dropped filer
     inputs by state and tax-unit id for comparison-row metadata.
+
+    With the default runner, ``year`` is checked against the pinned law-year
+    range of the binary before the Microsimulation is built, and an
+    ``identity_recorder``
+    (:class:`axiom_oracles.adapters.taxsim.pins.TaxsimIdentityRecorder`)
+    receives the path, hash and printed build stamp of every run. A
+    ``taxsim_runner_factory`` supplied by the caller is neither checked nor,
+    unless its runner exposes ``taxsim_path``, recorded.
     """
 
     from ..adapters.taxsim.projection import (
@@ -1709,6 +1718,14 @@ def calculate_taxsim_targets(
         raise StateTaxPopulationRoutingError(
             f"comparison year must be {resolved_contract.validation_year}; got {year}"
         )
+    default_binary: Path | None = None
+    if taxsim_runner_factory is None:
+        # Before the Microsimulation is built: the host's TAXSIM binary may
+        # not accept this year (the pinned Linux build stops at 2024).
+        from ..adapters.taxsim.pins import require_law_years, resolve_binary_path
+
+        default_binary = resolve_binary_path()
+        require_law_years([year], binary_path=default_binary)
     _require_columns(raw_tax_units, {"tax_unit_id"}, "tax_unit")
     tax_unit_ids = [_clean_id(value) for value in raw_tax_units["tax_unit_id"]]
     _reject_duplicate_ids(tax_unit_ids, "tax_unit_id")
@@ -1861,13 +1878,9 @@ def calculate_taxsim_targets(
     if taxsim_runner_factory is None:
         from policyengine_taxsim.runners.taxsim_runner import TaxsimRunner
 
-        from ..adapters.taxsim.pins import installed_binary_path
-
-        binary = installed_binary_path()
-
         def taxsim_runner_factory(frame: Any) -> Any:
-            if binary is not None:
-                return TaxsimRunner(frame, taxsim_path=binary)
+            if default_binary is not None:
+                return TaxsimRunner(frame, taxsim_path=default_binary)
             return TaxsimRunner(frame)
 
     import pandas as pd
@@ -1901,10 +1914,24 @@ def calculate_taxsim_targets(
                 )
             rows.append(row)
         runner = taxsim_runner_factory(pd.DataFrame(rows))
+        binary_path = getattr(runner, "taxsim_path", None)
+        binary_sha256 = None
+        if identity_recorder is not None and binary_path is not None:
+            from ..adapters.taxsim.pins import build_stamp_from_columns, sha256_file
+
+            binary_path = Path(binary_path)
+            binary_sha256 = sha256_file(binary_path)
         try:
             result = runner.run(show_progress=False)
         except TypeError:
             result = runner.run()
+        if identity_recorder is not None and binary_path is not None:
+            identity_recorder.observe(
+                binary_path,
+                rows=len(rows),
+                build_observed=build_stamp_from_columns(result.columns),
+                sha256=binary_sha256,
+            )
         records = result.to_dict(orient="records")
         if len(records) != len(state_routes):
             raise StateTaxPopulationRoutingError(

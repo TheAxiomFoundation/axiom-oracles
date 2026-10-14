@@ -8,6 +8,11 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from axiom_oracles.adapters.taxsim.pins import (
+    TaxsimIdentityRecorder,
+    TaxsimLawYearError,
+    require_law_years,
+)
 from axiom_oracles.provenance import resolve_run_kind
 from axiom_oracles.bridges.population import load_populace_dataset, population_table
 from axiom_oracles.bridges.state_tax_populace import (
@@ -424,6 +429,13 @@ def main(argv: list[str] | None = None) -> int:
             f"got {args.populace_year}"
         )
     requested_states = _requested_states(args.states, contract=contract)
+    if not args.no_taxsim:
+        # Before the dataset loads: the host's TAXSIM binary may stop short
+        # of the validation year (the pinned Linux build accepts 1960-2024).
+        try:
+            require_law_years([args.year])
+        except TaxsimLawYearError as exc:
+            raise SystemExit(str(exc)) from exc
     identity: dict = {}
     dataset = load_populace_dataset(
         "us",
@@ -497,6 +509,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     taxsim_targets = None
     taxsim_unprojected_inputs = {}
+    taxsim_recorder = TaxsimIdentityRecorder()
     if not args.no_taxsim:
         taxsim_targets = calculate_taxsim_targets(
             dataset=dataset,
@@ -507,6 +520,7 @@ def main(argv: list[str] | None = None) -> int:
             contract=contract,
             microsimulation_factory=_shared_microsimulation,
             unprojected_inputs=taxsim_unprojected_inputs,
+            identity_recorder=taxsim_recorder,
         )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
@@ -549,6 +563,8 @@ def main(argv: list[str] | None = None) -> int:
             "skipped" if args.no_taxsim else "graded"
         ),
     }
+    if taxsim_recorder.to_dict():
+        report["engine_identity"] = {"taxsim": taxsim_recorder.to_dict()}
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     return 0
 

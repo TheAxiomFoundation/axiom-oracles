@@ -471,6 +471,10 @@ def _capture_cli_population(
 
     monkeypatch.setattr(cli_module, "load_populace_us_cases", fake_source_loader)
     monkeypatch.setattr(cli_module, "_build_runner", capture_runner)
+    # The CLI is stopped before any engine runs, so the host's TAXSIM binary
+    # is never consulted. Skip the law-year check: the pinned Linux build
+    # refuses the default 2026 period, and CI is Linux.
+    monkeypatch.setattr(cli_module, "_require_taxsim_law_year", lambda period: None)
     monkeypatch.setattr(
         cli_module, "_echo_resolved_axiom_composition", lambda *args: None
     )

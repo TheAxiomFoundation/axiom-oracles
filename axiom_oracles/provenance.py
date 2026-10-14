@@ -32,6 +32,21 @@ The block shape (``axiom_oracles.provenance.v1``)::
         euromod_release: J2.0
         euromod_system: BE_2025
         euromod_dataset: BE_2024_c1_2015_03_e2
+        # …and, when the NBER TAXSIM binary ran:
+        policyengine_taxsim: 2.30.0    # the pinned package that bundles it
+        taxsim_binaries:               # one entry per executable that ran
+          - path: …/taxsimtest/taxsimtest-osx.exe
+            sha256: 0d9e43a9…          # 64-hex of the bytes executed
+            bytes: 1961912
+            build: cdate-20260521      # NBER stamp embedded in the bytes
+            build_observed: cdate-20260521  # stamp the run printed
+            platform: darwin
+            machine: arm64
+            pinned: true               # sha256 is in taxsim_pins.json
+            pinned_key: taxsimtest/taxsimtest-osx.exe
+            law_years: {first: 1960, last: 2026}
+            policyengine_taxsim: 2.30.0  # installed package version
+            rows: 5000                 # input rows it was given
       dataset:                         # reuse the pinned-populace identity (#80/#952)
         source: populace-hf
         repo_id: policyengine/populace-us
