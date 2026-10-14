@@ -472,9 +472,21 @@ def main(argv: list[str] | None = None) -> int:
                 "Populace dataset; refusing to serve a different source"
             )
         if not _shared_sim:
-            from policyengine_us import Microsimulation
+            # Its role flags follow the Populace constructor's roles, so every
+            # calculator's filers and PolicyEngine's filing status describe
+            # the constructor's unit (axiom-oracles#633).
+            from axiom_oracles.bridges.tax_unit_roles import (
+                dataset_year,
+                populace_us_microsimulation,
+            )
 
-            _shared_sim.append(Microsimulation(dataset=dataset))
+            _shared_sim.append(
+                populace_us_microsimulation(
+                    dataset,
+                    data_year=dataset_year(dataset, args.year),
+                    year=args.year,
+                )
+            )
         return _shared_sim[0]
 
     targets = calculate_policyengine_targets(

@@ -39,6 +39,11 @@ from .population import (
     load_populace_dataset,
     populace_data_requirement,
 )
+from .tax_unit_roles import (
+    apply_source_tax_unit_roles,
+    dataset_person_table,
+    dataset_year,
+)
 
 try:
     import numpy as np
@@ -1221,6 +1226,15 @@ def load_policyengine_cases(
 
     period_label = period.label
     year = period.year
+    # Role-dependent PolicyEngine variables (SNAP's student and work-rule
+    # tests read the tax-unit roles) follow the constructor's roles, as in
+    # every Populace simulation (axiom-oracles#633).
+    apply_source_tax_unit_roles(
+        sim,
+        dataset_person_table(dataset),
+        data_year=dataset_year(dataset, populace_year),
+        year=year,
+    )
     spm_ids = calculate(sim, "spm_unit_id", year)
     spm_unit_size = calculate(sim, "spm_unit_size", year)
     snap_unit_size = calculate(sim, "snap_unit_size", period_label)

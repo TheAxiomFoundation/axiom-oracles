@@ -22,6 +22,11 @@ from dataclasses import dataclass
 from typing import Any, Literal
 
 from ..bridges.population import POPULACE_PINS as _CERTIFIED_POPULACE_PINS
+from ..bridges.tax_unit_roles import (
+    apply_source_tax_unit_roles,
+    dataset_person_table,
+    dataset_year,
+)
 from ..core.case import Case, Concepts, Entity
 from ..core.geography import GeographyScope, normalize_scope, scope_contains
 
@@ -200,11 +205,22 @@ class PopulaceUsCaseLoader:
             raise ValueError("case_unit must be 'household' or 'tax_unit'.")
         normalized_scope = normalize_scope(scope)
         dataset = self.dataset or dataset_for_scope(normalized_scope)
-        sim = self._build_microsimulation(dataset)
+        sim, engine_dataset = self._build_microsimulation_and_dataset(dataset)
         if sample_size:
             sim.subsample(sample_size)
 
         calculation_period = _year(period)
+        if engine_dataset is not None:
+            # The tax-unit relations below read PolicyEngine's role flags, so
+            # they follow the Populace constructor's roles, as the tax bridge's
+            # filers do (axiom-oracles#633). After subsample, which rebuilds
+            # the simulation.
+            apply_source_tax_unit_roles(
+                sim,
+                dataset_person_table(engine_dataset),
+                data_year=dataset_year(engine_dataset, calculation_period),
+                year=calculation_period,
+            )
         households = self._households(sim, calculation_period)
         household_ids = _values(
             sim.calculate("household_id", period=calculation_period, map_to="person")
@@ -299,9 +315,11 @@ class PopulaceUsCaseLoader:
                 )
         return cases
 
-    def _build_microsimulation(self, dataset: str):
+    def _build_microsimulation_and_dataset(self, dataset: str) -> tuple[Any, Any]:
+        """The simulation, and the engine dataset it was built from when this
+        loader built one over a ``populace://`` artifact (else ``None``)."""
         if self.microsimulation_factory is not None:
-            return self.microsimulation_factory(dataset)
+            return self.microsimulation_factory(dataset), None
         try:
             import policyengine as pe
         except ImportError as exc:
@@ -321,10 +339,14 @@ class PopulaceUsCaseLoader:
             from policyengine_us.data import USSingleYearDataset
 
             local_path = _resolve_populace_dataset(dataset)
-            return Microsimulation(dataset=USSingleYearDataset(file_path=local_path))
-        return pe.us.managed_microsimulation(
-            dataset=dataset,
-            allow_unmanaged=dataset != ENHANCED_CPS_DATASET,
+            engine_dataset = USSingleYearDataset(file_path=local_path)
+            return Microsimulation(dataset=engine_dataset), engine_dataset
+        return (
+            pe.us.managed_microsimulation(
+                dataset=dataset,
+                allow_unmanaged=dataset != ENHANCED_CPS_DATASET,
+            ),
+            None,
         )
 
     def _households(self, sim, period: int) -> list["_HouseholdRow"]:
@@ -642,6 +664,9 @@ def _relation_for_person(
     *,
     case_unit: CaseUnit,
 ) -> str:
+    """A tax-unit Case's relations come from PolicyEngine's role flags, which
+    ``load_cases`` sets from the Populace constructor's ``tax_unit_role_input``
+    (``apply_source_tax_unit_roles``)."""
     if case_unit == "tax_unit":
         if person.is_tax_unit_head:
             return "HeadOfHousehold"
