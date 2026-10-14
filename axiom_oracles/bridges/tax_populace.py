@@ -2708,6 +2708,29 @@ def filer_meets_eitc_identification_requirements(persons: list[Any]) -> bool:
     )
 
 
+# One engine call evaluates a whole surface over the selected population, so a
+# full Populace run on a loaded host can outlast the defaults; a population
+# lane raises them through the environment rather than editing the bridge.
+ENGINE_COMPILE_TIMEOUT_ENV = "AXIOM_ENGINE_COMPILE_TIMEOUT_SECONDS"
+ENGINE_RUN_TIMEOUT_ENV = "AXIOM_ENGINE_RUN_TIMEOUT_SECONDS"
+
+
+def engine_timeout_seconds(name: str, default: int) -> int:
+    """Seconds for an engine subprocess: ``$name`` when set, else ``default``."""
+    raw = os.environ.get(name, "").strip()
+    if not raw:
+        return default
+    try:
+        value = int(raw)
+    except ValueError:
+        value = 0
+    if value <= 0:
+        raise SystemExit(
+            f"{name} must be a positive whole number of seconds; got {raw!r}"
+        )
+    return value
+
+
 def run_axiom_program(
     *,
     program: Path,
@@ -2807,7 +2830,7 @@ def run_axiom_program(
             text=True,
             cwd=str(axiom_rules_path),
             env=env,
-            timeout=60,
+            timeout=engine_timeout_seconds(ENGINE_COMPILE_TIMEOUT_ENV, 60),
         )
         if (
             compile_result.returncode != 0
@@ -2819,7 +2842,7 @@ def run_axiom_program(
                 text=True,
                 cwd=str(axiom_rules_path),
                 env=env,
-                timeout=60,
+                timeout=engine_timeout_seconds(ENGINE_COMPILE_TIMEOUT_ENV, 60),
             )
         if compile_result.returncode != 0:
             raise SystemExit(
@@ -2838,7 +2861,7 @@ def run_axiom_program(
             text=True,
             cwd=str(axiom_rules_path),
             env=env,
-            timeout=600,
+            timeout=engine_timeout_seconds(ENGINE_RUN_TIMEOUT_ENV, 600),
         )
         if run_result.returncode != 0:
             raise SystemExit(run_result.stderr.strip() or run_result.stdout.strip())

@@ -2610,3 +2610,62 @@ def test_policyengine_data_certification_override_noop_for_populace(monkeypatch)
     tax_populace._install_policyengine_data_certification_override()
 
     assert "POLICYENGINE_SKIP_COUNTRY_IMPORTS" not in tax_populace.os.environ
+
+
+def test_engine_timeouts_default_without_an_override(monkeypatch):
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.delenv(tp.ENGINE_RUN_TIMEOUT_ENV, raising=False)
+    monkeypatch.setenv(tp.ENGINE_COMPILE_TIMEOUT_ENV, "  ")
+    assert tp.engine_timeout_seconds(tp.ENGINE_RUN_TIMEOUT_ENV, 600) == 600
+    assert tp.engine_timeout_seconds(tp.ENGINE_COMPILE_TIMEOUT_ENV, 60) == 60
+
+
+def test_engine_timeouts_take_a_positive_override(monkeypatch):
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.setenv(tp.ENGINE_RUN_TIMEOUT_ENV, "7200")
+    assert tp.engine_timeout_seconds(tp.ENGINE_RUN_TIMEOUT_ENV, 600) == 7200
+
+
+@pytest.mark.parametrize("raw", ["0", "-5", "1.5", "ten", "600s"])
+def test_engine_timeouts_refuse_a_malformed_override(monkeypatch, raw):
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.setenv(tp.ENGINE_RUN_TIMEOUT_ENV, raw)
+    with pytest.raises(SystemExit, match=tp.ENGINE_RUN_TIMEOUT_ENV):
+        tp.engine_timeout_seconds(tp.ENGINE_RUN_TIMEOUT_ENV, 600)
+
+
+def test_run_axiom_program_passes_the_configured_timeouts(monkeypatch, tmp_path):
+    """The override reaches both engine subprocesses: compile and run."""
+    from axiom_oracles.bridges import tax_populace as tp
+
+    monkeypatch.setenv(tp.ENGINE_COMPILE_TIMEOUT_ENV, "90")
+    monkeypatch.setenv(tp.ENGINE_RUN_TIMEOUT_ENV, "7200")
+    seen = []
+
+    class Stop(Exception):
+        pass
+
+    real_run = tp.subprocess.run
+
+    def fake_run(cmd, **kwargs):
+        if not str(cmd[0]).endswith("axiom-rules-engine"):
+            return real_run(cmd, **kwargs)
+        seen.append((cmd[1], kwargs.get("timeout")))
+        raise Stop
+
+    monkeypatch.setattr(tp.subprocess, "run", fake_run)
+    rulespec = tmp_path / "rulespec-us"
+    (rulespec / "us" / "statutes").mkdir(parents=True)
+    program = rulespec / "us" / "statutes" / "p.yaml"
+    program.write_text("format: rulespec/v1\n")
+    engine = tmp_path / "engine"
+    (engine / "target" / "release").mkdir(parents=True)
+    (engine / "target" / "release" / "axiom-rules-engine").write_text("")
+    with pytest.raises(Stop):
+        tp.run_axiom_program(
+            program=program, request={}, rulespec_root=rulespec, axiom_rules_path=engine
+        )
+    assert seen == [("compile", 90)]
