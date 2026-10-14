@@ -32,7 +32,10 @@ from hypothesis import given, settings
 from hypothesis import strategies as st
 
 from axiom_oracles.adapters.axiom.tax_projection import attach_axiom_tax_inputs_to_case
-from axiom_oracles.bridges.tax_populace import project_eitc_tax_unit_inputs
+from axiom_oracles.bridges.tax_populace import (
+    project_eitc_tax_unit_inputs,
+    tax_unit_filers,
+)
 from axiom_oracles.core.case import Case, Concepts, Entity
 from axiom_oracles.populations.populace_us import _person_entity, _PersonRow
 
@@ -212,8 +215,9 @@ def _unit_57137(*, flags):
             },
             id="source-roles-filers-65-and-64",
             # clause (II): the 64-year-old spouse qualifies; the dependent's
-            # interest is not on the return; Pub. 596 Rule 2: the spouse's
-            # SSN is required and missing
+            # interest is not on the return; 32(c)(1)(E)(ii) requires "if the
+            # individual is married, the taxpayer identification number of
+            # such individual's spouse", and the spouse has no valid SSN
         ),
     ],
 )
@@ -314,18 +318,17 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, dependents):
 
 
 @st.composite
-def flagged_units(draw):
-    """Rows as the Populace loader delivers them: PolicyEngine flags (one head,
-    at most one spouse) beside arbitrary constructor roles, in any order."""
+def flagged_units(draw, *, head_required=True):
+    """Rows as the Populace loader delivers them: PolicyEngine flags (at most
+    one head and one spouse) beside arbitrary constructor roles, SSNs and
+    interest, in any order. With ``head_required=False`` the flags may name
+    no head, which the age-ranked PolicyEngine-US 1.764.6 formula produces
+    for a unit with no adult."""
     size = draw(st.integers(min_value=1, max_value=5))
     unit_ages = draw(st.lists(ages, min_size=size, max_size=size))
-    head = draw(st.integers(min_value=0, max_value=size - 1))
-    spouse = draw(
-        st.none()
-        | st.integers(min_value=0, max_value=size - 1).filter(
-            lambda index: index != head
-        )
-    )
+    indices = st.integers(min_value=0, max_value=size - 1)
+    head = draw(indices if head_required else st.none() | indices)
+    spouse = draw(st.none() | indices.filter(lambda index: index != head))
     persons = [
         _source_person(
             age,
@@ -341,15 +344,19 @@ def flagged_units(draw):
 
 
 @PROPERTY_SETTINGS
-@given(unit=flagged_units())
-def test_property_bridge_eitc_inputs_share_the_flagged_filers(unit):
+@given(unit=flagged_units(head_required=False))
+def test_property_bridge_eitc_inputs_share_one_filer_list(unit):
+    """The age test, investment income and identification all read
+    ``tax_unit_filers``; when the flags name a head, that list is the flagged
+    head and spouse."""
     persons, head, spouse = unit
-    filers = [persons[index] for index in (head, spouse) if index is not None]
+    filers = tax_unit_filers(persons)
+    if head is not None:
+        flagged = [persons[index] for index in (head, spouse) if index is not None]
+        assert [id(person) for person in filers] == [id(p) for p in flagged]
     row = {"filing_status": "JOINT", "adjusted_gross_income": 10_000}
     projected = project_eitc_tax_unit_inputs(row=row, persons=persons)
-    assert projected[AGE_INPUT] is _clause_ii_ii(
-        filers[0]["age"], filers[1]["age"] if len(filers) > 1 else None
-    )
+    assert projected[AGE_INPUT] is any(25 <= person["age"] < 65 for person in filers)
     assert projected["eitc_relevant_investment_income"] == sum(
         person["taxable_interest_income"] for person in filers
     )
@@ -362,7 +369,14 @@ def test_property_bridge_eitc_inputs_share_the_flagged_filers(unit):
 @given(unit=flagged_units())
 def test_property_populace_case_loader_agrees_with_the_bridge(unit):
     """The production Case path (populace_us._person_entity over the same
-    PolicyEngine flags) projects the same age input as the bridge."""
+    PolicyEngine flags) projects the same age input as the bridge.
+
+    The rows follow PolicyEngine-US 1.764.6's role formulas: one head
+    whenever the unit has an adult (the oldest non-child), and
+    ``is_tax_unit_dependent = ~head & ~spouse``, so the loader never emits its
+    "Other" relation. A dataset or PolicyEngine version that supplied
+    non-dependent non-filers would need its own differential: the Case
+    surface's ``_tax_filers`` promotes an "Other" adult to spouse."""
     persons, head, spouse = unit
     rows = [
         _PersonRow(

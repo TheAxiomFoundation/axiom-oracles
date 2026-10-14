@@ -807,7 +807,23 @@ def test_eitc_projection_matches_policyengine_age_and_identification_edges():
     )
 
 
-def test_eitc_projection_treats_tax_units_without_explicit_filers_as_id_eligible():
+@pytest.mark.parametrize(
+    ("ssn_card_type", "expected"),
+    [("CITIZEN", True), ("OTHER", False)],
+)
+def test_eitc_projection_identification_checks_the_fallback_filer(
+    ssn_card_type, expected
+):
+    """PolicyEngine names no head here: a 16-year-old alone, every role flag
+    false. ``tax_unit_filers`` still files the 16-year-old, and identification
+    reads that same filer, so the answer is that filer's own SSN.
+
+    26 USC 32(c)(1)(E): "No credit shall be allowed under this section to an
+    eligible individual who does not include on the return of tax for the
+    taxable year— (i) such individual's taxpayer identification number".
+    The person contexts still treat the 16-year-old as a dependent; moving
+    them onto the same filer list is axiom-oracles#633.
+    """
     row = {
         "filing_status": "HEAD_OF_HOUSEHOLD",
         "adjusted_gross_income": 0,
@@ -815,7 +831,7 @@ def test_eitc_projection_treats_tax_units_without_explicit_filers_as_id_eligible
     persons = [
         {
             "age": 16,
-            "ssn_card_type": "CITIZEN",
+            "ssn_card_type": ssn_card_type,
             "is_tax_unit_head": False,
             "is_tax_unit_spouse": False,
             "is_tax_unit_head_or_spouse": False,
@@ -829,10 +845,12 @@ def test_eitc_projection_treats_tax_units_without_explicit_filers_as_id_eligible
     context = project_tax_unit_person_contexts(persons)[0]
 
     assert (
-        projected["taxpayer_includes_required_social_security_number_on_return"] is True
+        projected["taxpayer_includes_required_social_security_number_on_return"]
+        is expected
     )
     assert (
-        projected["spouse_includes_required_social_security_number_on_return"] is True
+        projected["spouse_includes_required_social_security_number_on_return"]
+        is expected
     )
     assert context.is_tax_unit_dependent is True
     assert context.qualifying_child_under_section_152_c is True
