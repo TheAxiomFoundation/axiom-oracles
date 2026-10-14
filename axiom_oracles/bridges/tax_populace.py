@@ -2641,37 +2641,43 @@ def tax_unit_head_spouse_indices(persons: list[Any]) -> tuple[int | None, int | 
 def tax_unit_filers(persons: list[Any]) -> list[Any]:
     """The tax unit's head and spouse, in that order; dependents are dropped.
 
-    Every tax unit files a return, so when neither the role flags nor the
-    adult-age fallback name a head (a 17-year-old filing alone, whose
-    PolicyEngine role flags are all false), the head is the source
-    ``tax_unit_role_input`` HEAD row, and failing that the oldest member not
-    already known to be the spouse or a source DEPENDENT. A spouse the flags
-    already identify is kept; otherwise a source SPOUSE row is the spouse.
+    The Populace constructor's roles (``tax_unit_role_input``) decide who
+    files: its HEAD row is the head, its SPOUSE row the spouse, and a source
+    DEPENDENT is never a filer. They outrank the PolicyEngine role flags,
+    which PolicyEngine-US before 2.34.0 re-derives by age, making the oldest
+    adult the head and the next-oldest the spouse even when the source marks
+    them dependents (axiom-oracles#633). Where the source names no head or
+    no spouse, the flags' answer stands unless it points at a member the
+    source assigns another role.
+
+    Every tax unit files a return, so when none of these names a head (a
+    17-year-old filing alone, whose PolicyEngine role flags are all false),
+    the head is the oldest member not already known to be the spouse or a
+    source DEPENDENT.
     """
+    roles = [
+        str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
+        for person in persons
+    ]
     head_index, spouse_index = tax_unit_head_spouse_indices(persons)
+    if "HEAD" in roles:
+        head_index = roles.index("HEAD")
+    elif head_index is not None and roles[head_index] in {"SPOUSE", "DEPENDENT"}:
+        head_index = None
+    if "SPOUSE" in roles:
+        spouse_index = roles.index("SPOUSE")
+    elif spouse_index is not None and roles[spouse_index] in {"HEAD", "DEPENDENT"}:
+        spouse_index = None
     if head_index is None:
-        roles = [
-            str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
-            for person in persons
-        ]
         candidates = [
             index
             for index in range(len(persons))
             if index != spouse_index and roles[index] != "DEPENDENT"
         ]
-        pool = [index for index in candidates if roles[index] == "HEAD"] or candidates
-        if pool:
+        if candidates:
             head_index = max(
-                pool, key=lambda index: money(row_value(persons[index], "age", 0))
-            )
-        if spouse_index is None:
-            spouse_index = next(
-                (
-                    index
-                    for index, role in enumerate(roles)
-                    if role == "SPOUSE" and index != head_index
-                ),
-                None,
+                candidates,
+                key=lambda index: money(row_value(persons[index], "age", 0)),
             )
     return [persons[index] for index in (head_index, spouse_index) if index is not None]
 

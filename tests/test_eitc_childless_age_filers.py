@@ -108,6 +108,73 @@ def test_bridge_dependent_listed_first_does_not_count():
     assert project_eitc_tax_unit_inputs(row=row, persons=persons)[AGE_INPUT] is False
 
 
+# Source roles outrank PolicyEngine's age-ranked flags (axiom-oracles#633).
+# PolicyEngine-US 1.764.6 heads every unit with its oldest adult and makes the
+# next-oldest the spouse, whatever the Populace constructor's
+# tax_unit_role_input says. Clause (II) applies to the constructor's filers.
+
+
+def _source_person(age, role, *, pe_head=False, pe_spouse=False, flags=True):
+    person = {"age": age, "ssn_card_type": "CITIZEN", "tax_unit_role_input": role}
+    if flags:
+        person.update(
+            is_tax_unit_head=pe_head,
+            is_tax_unit_spouse=pe_spouse,
+            is_tax_unit_head_or_spouse=pe_head or pe_spouse,
+        )
+    return person
+
+
+SOURCE_ROLE_CASES = [
+    pytest.param(
+        [
+            _source_person(85, "DEPENDENT", pe_head=True),
+            _source_person(65, "HEAD", pe_spouse=True),
+            _source_person(64, "SPOUSE"),
+        ],
+        True,
+        id="populace-57137-source-spouse-64-counts",
+        # the constructor's filers are 65 and 64; the 64-year-old spouse is
+        # 25 to 64
+    ),
+    pytest.param(
+        [
+            _source_person(85, "HEAD", pe_head=True),
+            _source_person(60, "DEPENDENT", pe_spouse=True),
+        ],
+        False,
+        id="populace-138-dependent-60-is-not-a-spouse",
+        # the only filer is 85; the source files SURVIVING_SPOUSE
+    ),
+    pytest.param(
+        [
+            _source_person(30, "DEPENDENT", pe_head=True),
+            _source_person(22, "HEAD", pe_spouse=True),
+        ],
+        False,
+        id="head-22-dependent-30-ranked-head-by-age",
+    ),
+    pytest.param(
+        [
+            _source_person(30, "HEAD", flags=False),
+            _source_person(70, "DEPENDENT", flags=False),
+            _source_person(75, "DEPENDENT", flags=False),
+        ],
+        True,
+        id="head-30-dependents-70-75-without-flags",
+        # the age fallback alone would pick 75 and 70
+    ),
+]
+
+
+@pytest.mark.parametrize(("persons", "expected"), SOURCE_ROLE_CASES)
+def test_bridge_age_test_follows_source_roles(persons, expected):
+    row = {"filing_status": "JOINT", "adjusted_gross_income": 10_000}
+    assert project_eitc_tax_unit_inputs(row=row, persons=persons)[AGE_INPUT] is (
+        expected
+    )
+
+
 # ---------------------------------------------------------------------------
 # Case surface: attach_axiom_tax_inputs_to_case with household relations.
 # ---------------------------------------------------------------------------
@@ -192,3 +259,40 @@ def test_property_case_surface_dependents_never_change_the_input(
 @given(head=ages, spouse=spouse_ages, dependents=dependent_age_lists)
 def test_property_case_surface_agrees_with_the_bridge(head, spouse, dependents):
     assert _case(head, spouse, dependents) is _bridge(head, spouse, dependents)
+
+
+@st.composite
+def source_role_units(draw):
+    """A unit with constructor roles, arbitrary PolicyEngine flags and order."""
+    head = draw(ages)
+    spouse = draw(spouse_ages)
+    dependents = draw(dependent_age_lists)
+    members = [(head, "HEAD")]
+    if spouse is not None:
+        members.append((spouse, "SPOUSE"))
+    members.extend((age, "DEPENDENT") for age in dependents)
+    members = draw(st.permutations(members))
+    indices = st.none() | st.integers(min_value=0, max_value=len(members) - 1)
+    pe_head = draw(indices)
+    pe_spouse = draw(indices.filter(lambda index: index is None or index != pe_head))
+    persons = [
+        _source_person(
+            age,
+            role,
+            pe_head=index == pe_head,
+            pe_spouse=index == pe_spouse,
+            flags=draw(st.booleans()),
+        )
+        for index, (age, role) in enumerate(members)
+    ]
+    return persons, _clause_ii_ii(head, spouse)
+
+
+@PROPERTY_SETTINGS
+@given(unit=source_role_units())
+def test_property_bridge_follows_source_roles_whatever_the_flags(unit):
+    persons, expected = unit
+    row = {"filing_status": "JOINT", "adjusted_gross_income": 10_000}
+    assert project_eitc_tax_unit_inputs(row=row, persons=persons)[AGE_INPUT] is (
+        expected
+    )
