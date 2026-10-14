@@ -2203,16 +2203,21 @@ def project_eitc_tax_unit_inputs(row: Any, persons: list[Any]) -> dict[str, Any]
     filer_meets_id_requirements = filer_meets_eitc_identification_requirements(
         persons,
     )
+    filers = tax_unit_filers(persons)
     return {
         "filing_status": filing_status_numeric,
         "adjusted_gross_income": money(row["adjusted_gross_income"]),
         "eitc_relevant_investment_income": project_eitc_relevant_investment_income(
             row=row,
-            persons=tax_unit_filers(persons),
+            persons=filers,
         ),
         "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": True,
+        # 26 USC 32(c)(1)(A)(ii)(II) tests "such individual (or, if the
+        # individual is married, either the individual or the individual's
+        # spouse)", so only the head and spouse count; a dependent's age
+        # never does.
         "childless_taxpayer_or_spouse_age_eligible_for_eitc": any(
-            25 <= money(person["age"]) < 65 for person in persons
+            25 <= money(person["age"]) < 65 for person in filers
         ),
         "taxpayer_is_dependent_for_section_151_to_another_taxpayer": False,
         "taxpayer_is_qualifying_child_of_another_taxpayer": False,
@@ -2636,6 +2641,16 @@ def tax_unit_head_spouse_indices(persons: list[Any]) -> tuple[int | None, int | 
 def tax_unit_filers(persons: list[Any]) -> list[Any]:
     """The tax unit's head and spouse, in that order; dependents are dropped.
 
+    These are the filers of the unit the bridge projects. Rows that carry
+    PolicyEngine role flags (``is_tax_unit_head`` / ``is_tax_unit_spouse``)
+    use them, because the bridge also passes through PolicyEngine's filing
+    status for that same unit. PolicyEngine-US before 2.34.0 derives those
+    flags by age, so it can file a head with an adult the Populace
+    constructor marks a dependent; axiom-oracles#633 tracks moving the whole
+    unit (filers and filing status) to the constructor's roles together.
+    Rows with no role flags at all take the constructor's
+    ``tax_unit_role_input`` HEAD and SPOUSE rows when present.
+
     Every tax unit files a return, so when neither the role flags nor the
     adult-age fallback name a head (a 17-year-old filing alone, whose
     PolicyEngine role flags are all false), the head is the source
@@ -2643,12 +2658,22 @@ def tax_unit_filers(persons: list[Any]) -> list[Any]:
     already known to be the spouse or a source DEPENDENT. A spouse the flags
     already identify is kept; otherwise a source SPOUSE row is the spouse.
     """
+    roles = [
+        str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
+        for person in persons
+    ]
+    has_role_flags = any(
+        "is_tax_unit_head" in person or "is_tax_unit_spouse" in person
+        for person in persons
+    )
+    if not has_role_flags and "HEAD" in roles:
+        head_index = roles.index("HEAD")
+        spouse_index = roles.index("SPOUSE") if "SPOUSE" in roles else None
+        return [
+            persons[index] for index in (head_index, spouse_index) if index is not None
+        ]
     head_index, spouse_index = tax_unit_head_spouse_indices(persons)
     if head_index is None:
-        roles = [
-            str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
-            for person in persons
-        ]
         candidates = [
             index
             for index in range(len(persons))
@@ -2672,21 +2697,14 @@ def tax_unit_filers(persons: list[Any]) -> list[Any]:
 
 
 def filer_meets_eitc_identification_requirements(persons: list[Any]) -> bool:
-    has_explicit_head_or_spouse = any(
-        "is_tax_unit_head_or_spouse" in person for person in persons
-    )
-    if has_explicit_head_or_spouse:
-        return not any(
-            bool_value(person.get("is_tax_unit_head_or_spouse", False))
-            and not valid_child_ssn_type(str(person.get("ssn_card_type", "")))
-            for person in persons
-        )
+    """Every filer in ``tax_unit_filers`` carries a valid SSN.
 
-    head_index, spouse_index = tax_unit_head_spouse_indices(persons)
-    filer_indices = [index for index in (head_index, spouse_index) if index is not None]
+    The same filer list as the age test and investment income, so the three
+    EITC inputs always describe one return.
+    """
     return all(
-        valid_child_ssn_type(str(persons[index].get("ssn_card_type", "")))
-        for index in filer_indices
+        valid_child_ssn_type(str(person.get("ssn_card_type", "")))
+        for person in tax_unit_filers(persons)
     )
 
 
