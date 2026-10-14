@@ -2641,63 +2641,70 @@ def tax_unit_head_spouse_indices(persons: list[Any]) -> tuple[int | None, int | 
 def tax_unit_filers(persons: list[Any]) -> list[Any]:
     """The tax unit's head and spouse, in that order; dependents are dropped.
 
-    The Populace constructor's roles (``tax_unit_role_input``) decide who
-    files: its HEAD row is the head, its SPOUSE row the spouse, and a source
-    DEPENDENT is never a filer. They outrank the PolicyEngine role flags,
-    which PolicyEngine-US before 2.34.0 re-derives by age, making the oldest
-    adult the head and the next-oldest the spouse even when the source marks
-    them dependents (axiom-oracles#633). Where the source names no head or
-    no spouse, the flags' answer stands unless it points at a member the
-    source assigns another role.
+    These are the filers of the unit the bridge projects. Rows that carry
+    PolicyEngine role flags (``is_tax_unit_head`` / ``is_tax_unit_spouse``)
+    use them, because the bridge also passes through PolicyEngine's filing
+    status for that same unit. PolicyEngine-US before 2.34.0 derives those
+    flags by age, so it can file a head with an adult the Populace
+    constructor marks a dependent; axiom-oracles#633 tracks moving the whole
+    unit (filers and filing status) to the constructor's roles together.
+    Rows with no role flags at all take the constructor's
+    ``tax_unit_role_input`` HEAD and SPOUSE rows when present.
 
-    Every tax unit files a return, so when none of these names a head (a
-    17-year-old filing alone, whose PolicyEngine role flags are all false),
-    the head is the oldest member not already known to be the spouse or a
-    source DEPENDENT.
+    Every tax unit files a return, so when neither the role flags nor the
+    adult-age fallback name a head (a 17-year-old filing alone, whose
+    PolicyEngine role flags are all false), the head is the source
+    ``tax_unit_role_input`` HEAD row, and failing that the oldest member not
+    already known to be the spouse or a source DEPENDENT. A spouse the flags
+    already identify is kept; otherwise a source SPOUSE row is the spouse.
     """
     roles = [
         str(row_value(person, "tax_unit_role_input", "") or "").strip().upper()
         for person in persons
     ]
-    head_index, spouse_index = tax_unit_head_spouse_indices(persons)
-    if "HEAD" in roles:
+    has_role_flags = any(
+        "is_tax_unit_head" in person or "is_tax_unit_spouse" in person
+        for person in persons
+    )
+    if not has_role_flags and "HEAD" in roles:
         head_index = roles.index("HEAD")
-    elif head_index is not None and roles[head_index] in {"SPOUSE", "DEPENDENT"}:
-        head_index = None
-    if "SPOUSE" in roles:
-        spouse_index = roles.index("SPOUSE")
-    elif spouse_index is not None and roles[spouse_index] in {"HEAD", "DEPENDENT"}:
-        spouse_index = None
+        spouse_index = roles.index("SPOUSE") if "SPOUSE" in roles else None
+        return [
+            persons[index] for index in (head_index, spouse_index) if index is not None
+        ]
+    head_index, spouse_index = tax_unit_head_spouse_indices(persons)
     if head_index is None:
         candidates = [
             index
             for index in range(len(persons))
             if index != spouse_index and roles[index] != "DEPENDENT"
         ]
-        if candidates:
+        pool = [index for index in candidates if roles[index] == "HEAD"] or candidates
+        if pool:
             head_index = max(
-                candidates,
-                key=lambda index: money(row_value(persons[index], "age", 0)),
+                pool, key=lambda index: money(row_value(persons[index], "age", 0))
+            )
+        if spouse_index is None:
+            spouse_index = next(
+                (
+                    index
+                    for index, role in enumerate(roles)
+                    if role == "SPOUSE" and index != head_index
+                ),
+                None,
             )
     return [persons[index] for index in (head_index, spouse_index) if index is not None]
 
 
 def filer_meets_eitc_identification_requirements(persons: list[Any]) -> bool:
-    has_explicit_head_or_spouse = any(
-        "is_tax_unit_head_or_spouse" in person for person in persons
-    )
-    if has_explicit_head_or_spouse:
-        return not any(
-            bool_value(person.get("is_tax_unit_head_or_spouse", False))
-            and not valid_child_ssn_type(str(person.get("ssn_card_type", "")))
-            for person in persons
-        )
+    """Every filer in ``tax_unit_filers`` carries a valid SSN.
 
-    head_index, spouse_index = tax_unit_head_spouse_indices(persons)
-    filer_indices = [index for index in (head_index, spouse_index) if index is not None]
+    The same filer list as the age test and investment income, so the three
+    EITC inputs always describe one return.
+    """
     return all(
-        valid_child_ssn_type(str(persons[index].get("ssn_card_type", "")))
-        for index in filer_indices
+        valid_child_ssn_type(str(person.get("ssn_card_type", "")))
+        for person in tax_unit_filers(persons)
     )
 
 

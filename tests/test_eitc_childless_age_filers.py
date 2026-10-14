@@ -34,6 +34,7 @@ from hypothesis import strategies as st
 from axiom_oracles.adapters.axiom.tax_projection import attach_axiom_tax_inputs_to_case
 from axiom_oracles.bridges.tax_populace import project_eitc_tax_unit_inputs
 from axiom_oracles.core.case import Case, Concepts, Entity
+from axiom_oracles.populations.populace_us import _person_entity, _PersonRow
 
 AGE_INPUT = "childless_taxpayer_or_spouse_age_eligible_for_eitc"
 CASE_AGE_INPUT = f"us:statutes/26/32#input.{AGE_INPUT}"
@@ -108,14 +109,22 @@ def test_bridge_dependent_listed_first_does_not_count():
     assert project_eitc_tax_unit_inputs(row=row, persons=persons)[AGE_INPUT] is False
 
 
-# Source roles outrank PolicyEngine's age-ranked flags (axiom-oracles#633).
-# PolicyEngine-US 1.764.6 heads every unit with its oldest adult and makes the
-# next-oldest the spouse, whatever the Populace constructor's
-# tax_unit_role_input says. Clause (II) applies to the constructor's filers.
+# One filer list. The age test, investment income and the identification test
+# all read tax_unit_filers, so the three inputs always describe one return.
+# Rows with PolicyEngine role flags use them: the bridge passes through
+# PolicyEngine's filing status for that unit, and PolicyEngine-US 1.764.6
+# derives the flags by age (axiom-oracles#633 moves filers and filing status
+# to the constructor's roles together). Rows without flags take the
+# constructor's tax_unit_role_input.
 
 
-def _source_person(age, role, *, pe_head=False, pe_spouse=False, flags=True):
-    person = {"age": age, "ssn_card_type": "CITIZEN", "tax_unit_role_input": role}
+def _source_person(age, role, *, pe_head=False, pe_spouse=False, flags=True, **facts):
+    person = {
+        "age": age,
+        "ssn_card_type": "CITIZEN",
+        "tax_unit_role_input": role,
+        **facts,
+    }
     if flags:
         person.update(
             is_tax_unit_head=pe_head,
@@ -125,35 +134,7 @@ def _source_person(age, role, *, pe_head=False, pe_spouse=False, flags=True):
     return person
 
 
-SOURCE_ROLE_CASES = [
-    pytest.param(
-        [
-            _source_person(85, "DEPENDENT", pe_head=True),
-            _source_person(65, "HEAD", pe_spouse=True),
-            _source_person(64, "SPOUSE"),
-        ],
-        True,
-        id="populace-57137-source-spouse-64-counts",
-        # the constructor's filers are 65 and 64; the 64-year-old spouse is
-        # 25 to 64
-    ),
-    pytest.param(
-        [
-            _source_person(85, "HEAD", pe_head=True),
-            _source_person(60, "DEPENDENT", pe_spouse=True),
-        ],
-        False,
-        id="populace-138-dependent-60-is-not-a-spouse",
-        # the only filer is 85; the source files SURVIVING_SPOUSE
-    ),
-    pytest.param(
-        [
-            _source_person(30, "DEPENDENT", pe_head=True),
-            _source_person(22, "HEAD", pe_spouse=True),
-        ],
-        False,
-        id="head-22-dependent-30-ranked-head-by-age",
-    ),
+UNFLAGGED_SOURCE_ROLE_CASES = [
     pytest.param(
         [
             _source_person(30, "HEAD", flags=False),
@@ -161,17 +142,88 @@ SOURCE_ROLE_CASES = [
             _source_person(75, "DEPENDENT", flags=False),
         ],
         True,
-        id="head-30-dependents-70-75-without-flags",
-        # the age fallback alone would pick 75 and 70
+        id="head-30-dependents-70-75",
+        # the filer is 30; an age ranking alone would pick 75 and 70
+    ),
+    pytest.param(
+        [
+            _source_person(30, "DEPENDENT", flags=False),
+            _source_person(22, "HEAD", flags=False),
+        ],
+        False,
+        id="head-22-dependent-30",
+    ),
+    pytest.param(
+        [
+            _source_person(85, "DEPENDENT", flags=False),
+            _source_person(65, "HEAD", flags=False),
+            _source_person(64, "SPOUSE", flags=False),
+        ],
+        True,
+        id="head-65-spouse-64-dependent-85",
     ),
 ]
 
 
-@pytest.mark.parametrize(("persons", "expected"), SOURCE_ROLE_CASES)
-def test_bridge_age_test_follows_source_roles(persons, expected):
+@pytest.mark.parametrize(("persons", "expected"), UNFLAGGED_SOURCE_ROLE_CASES)
+def test_bridge_age_test_uses_source_roles_without_flags(persons, expected):
     row = {"filing_status": "JOINT", "adjusted_gross_income": 10_000}
     assert project_eitc_tax_unit_inputs(row=row, persons=persons)[AGE_INPUT] is (
         expected
+    )
+
+
+def _unit_57137(*, flags):
+    """Populace unit 57137's shape: source DEPENDENT 85, HEAD 65, SPOUSE 64.
+
+    PolicyEngine-US 1.764.6's flags head the unit with 85 and make 65 the
+    spouse. The dependent has 13,000 of interest; the source spouse has no
+    valid SSN.
+    """
+    return [
+        _source_person(
+            85, "DEPENDENT", pe_head=True, flags=flags, taxable_interest_income=13_000
+        ),
+        _source_person(65, "HEAD", pe_spouse=True, flags=flags),
+        _source_person(64, "SPOUSE", flags=flags, ssn_card_type="OTHER"),
+    ]
+
+
+@pytest.mark.parametrize(
+    ("flags", "expected"),
+    [
+        pytest.param(
+            True,
+            {
+                AGE_INPUT: False,
+                "eitc_relevant_investment_income": 13_000,
+                "taxpayer_includes_required_social_security_number_on_return": True,
+            },
+            id="pe-flags-filers-85-and-65",
+            # clause (II) over 85 and 65 fails; Worksheet 1 line 1 is the
+            # 85-year-old filer's 13,000; both filers have valid SSNs
+        ),
+        pytest.param(
+            False,
+            {
+                AGE_INPUT: True,
+                "eitc_relevant_investment_income": 0,
+                "taxpayer_includes_required_social_security_number_on_return": False,
+            },
+            id="source-roles-filers-65-and-64",
+            # clause (II): the 64-year-old spouse qualifies; the dependent's
+            # interest is not on the return; Pub. 596 Rule 2: the spouse's
+            # SSN is required and missing
+        ),
+    ],
+)
+def test_bridge_eitc_inputs_describe_one_return(flags, expected):
+    row = {"filing_status": "JOINT", "adjusted_gross_income": 10_000}
+    projected = project_eitc_tax_unit_inputs(row=row, persons=_unit_57137(flags=flags))
+    assert {name: projected[name] for name in expected} == expected
+    assert (
+        projected["spouse_includes_required_social_security_number_on_return"]
+        is expected["taxpayer_includes_required_social_security_number_on_return"]
     )
 
 
@@ -262,37 +314,85 @@ def test_property_case_surface_agrees_with_the_bridge(head, spouse, dependents):
 
 
 @st.composite
-def source_role_units(draw):
-    """A unit with constructor roles, arbitrary PolicyEngine flags and order."""
-    head = draw(ages)
-    spouse = draw(spouse_ages)
-    dependents = draw(dependent_age_lists)
-    members = [(head, "HEAD")]
-    if spouse is not None:
-        members.append((spouse, "SPOUSE"))
-    members.extend((age, "DEPENDENT") for age in dependents)
-    members = draw(st.permutations(members))
-    indices = st.none() | st.integers(min_value=0, max_value=len(members) - 1)
-    pe_head = draw(indices)
-    pe_spouse = draw(indices.filter(lambda index: index is None or index != pe_head))
+def flagged_units(draw):
+    """Rows as the Populace loader delivers them: PolicyEngine flags (one head,
+    at most one spouse) beside arbitrary constructor roles, in any order."""
+    size = draw(st.integers(min_value=1, max_value=5))
+    unit_ages = draw(st.lists(ages, min_size=size, max_size=size))
+    head = draw(st.integers(min_value=0, max_value=size - 1))
+    spouse = draw(
+        st.none()
+        | st.integers(min_value=0, max_value=size - 1).filter(
+            lambda index: index != head
+        )
+    )
     persons = [
         _source_person(
             age,
-            role,
-            pe_head=index == pe_head,
-            pe_spouse=index == pe_spouse,
-            flags=draw(st.booleans()),
+            draw(st.sampled_from(["HEAD", "SPOUSE", "DEPENDENT", ""])),
+            pe_head=index == head,
+            pe_spouse=index == spouse,
+            ssn_card_type=draw(st.sampled_from(["CITIZEN", "OTHER"])),
+            taxable_interest_income=draw(st.integers(min_value=0, max_value=20_000)),
         )
-        for index, (age, role) in enumerate(members)
+        for index, age in enumerate(unit_ages)
     ]
-    return persons, _clause_ii_ii(head, spouse)
+    return persons, head, spouse
 
 
 @PROPERTY_SETTINGS
-@given(unit=source_role_units())
-def test_property_bridge_follows_source_roles_whatever_the_flags(unit):
-    persons, expected = unit
+@given(unit=flagged_units())
+def test_property_bridge_eitc_inputs_share_the_flagged_filers(unit):
+    persons, head, spouse = unit
+    filers = [persons[index] for index in (head, spouse) if index is not None]
     row = {"filing_status": "JOINT", "adjusted_gross_income": 10_000}
-    assert project_eitc_tax_unit_inputs(row=row, persons=persons)[AGE_INPUT] is (
-        expected
+    projected = project_eitc_tax_unit_inputs(row=row, persons=persons)
+    assert projected[AGE_INPUT] is _clause_ii_ii(
+        filers[0]["age"], filers[1]["age"] if len(filers) > 1 else None
     )
+    assert projected["eitc_relevant_investment_income"] == sum(
+        person["taxable_interest_income"] for person in filers
+    )
+    assert projected[
+        "taxpayer_includes_required_social_security_number_on_return"
+    ] is all(person["ssn_card_type"] == "CITIZEN" for person in filers)
+
+
+@PROPERTY_SETTINGS
+@given(unit=flagged_units())
+def test_property_populace_case_loader_agrees_with_the_bridge(unit):
+    """The production Case path (populace_us._person_entity over the same
+    PolicyEngine flags) projects the same age input as the bridge."""
+    persons, head, spouse = unit
+    rows = [
+        _PersonRow(
+            person_id=index,
+            tax_unit_id=1,
+            is_tax_unit_head=index == head,
+            is_tax_unit_spouse=index == spouse,
+            is_tax_unit_dependent=index not in (head, spouse),
+            age=person["age"],
+            yearly_earned_income=8_000.0 if index == head else 0.0,
+            pregnant=False,
+            disabled=False,
+            blind=False,
+            veteran=False,
+            benefits_medicaid=False,
+            non_wage_income={},
+        )
+        for index, person in enumerate(persons)
+    ]
+    entities = tuple(
+        _person_entity(row, index, case_unit="tax_unit")
+        for index, row in enumerate(rows)
+    )
+    projected = attach_axiom_tax_inputs_to_case(
+        Case(case_id="populace-loader", period="2026", entities=entities)
+    )
+    by_key = {
+        (record["entity_id"], record["name"]): record["value"]
+        for record in projected.metadata["axiom_input_records"]
+    }
+    row = {"filing_status": "JOINT", "adjusted_gross_income": 10_000}
+    bridge = project_eitc_tax_unit_inputs(row=row, persons=persons)[AGE_INPUT]
+    assert by_key[("tax_unit", CASE_AGE_INPUT)] is bridge
