@@ -163,11 +163,34 @@ sha256-verified inside axiom-encode; axiom-encode#952). The harness emits a
 `dataset_identity` block in its `--json` output; the dashboard adapter threads
 it onto the generated v2 report so a checked-in report records which pinned
 artifact produced it. This is the FIIT lane of the A9 runner unification — one
-runner, one schema, one dashboard. The ~19k LOC oracle bridge itself now lives
-in this repo as `axiom_oracles/bridges/` (axiom-encode re-exports it as thin
-shims); this runner still shells out to the encoder CLI in a pinned
-PolicyEngine environment, and pointing it at the in-repo package is a
-follow-up.
+runner, one schema, one dashboard. The ~19k LOC oracle bridge itself lives in
+this repo as `axiom_oracles/bridges/` (axiom-encode re-exports it as thin
+shims). The runner still shells out to the encoder CLI in a pinned
+PolicyEngine environment, but it overlays this checkout's bridge over the
+encoder's pinned axiom-oracles dependency via `PYTHONPATH`, as the UK EFRS
+runner does, so a suite run validates the current bridge.
+
+Optional `parameters.policyengine_us_source` pins the oracle to a release
+commit when PyPI no longer serves the labelled `policyengine_us_version`
+(PolicyEngine prunes old releases). It must be
+`https://github.com/PolicyEngine/policyengine-us/archive/<40-hex>.tar.gz`, and
+the runner checks that the installed version equals the label before it runs.
+The report records it as `provenance.oracle.model_source`.
+
+The harness writes its own JSON shape, so beside the raw report the runner
+publishes the adapted v2 report (every mismatch row, no `cases`) as
+`reports/<basename>-<sample>-<date>-v2.json`. The premerged dashboard copy
+binds to that file, which `apply_dispositions.py --check` re-derives from.
+After a dispositions edit, rebuild the dashboard copy without re-running the
+population:
+
+```bash
+uv run scripts/run_comparison.py fiit-ecps --from-report reports/axiom-policyengine-fiit-ecps-0-<date>.json
+```
+
+`--from-report` accepts only this suite's stamped report from a real run
+(`provenance.generated_by` names the suite; not a re-emission) under
+`reports/`, executes nothing, and keeps the provenance the run recorded.
 
 Required runner keys: `axiom_encode_repo`, `axiom_rules_repo`,
 `rulespec_remote`. Required `parameters`: `sample_size`, `year`, `surface`.

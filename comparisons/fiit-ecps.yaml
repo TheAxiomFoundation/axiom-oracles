@@ -49,27 +49,28 @@ runner:
     # built_with policyengine-us 1.729.0. Model and data are pinned together on
     # purpose.
     #
-    # The us-pe universe LABELS its oracle 1.767.3 (which carries PE-US #8614,
-    # "Split partnership and S-corp income inputs"), on the theory that #8614
-    # would add partnership self-employment net earnings to eitc_earned_income and
-    # resolve the EITC divergence. Regenerating against 1.767.3 empirically does
-    # NOT (verified 2026-07-08): the pinned f0af251 build stores partnership income
-    # under the pre-#8614 layout, so 1.767.3's eitc_earned_income still reads $0
-    # partnership (e.g. tax_unit 154343 axiom 117,741.43 vs PE 0.00, identical to
-    # 1.729.0). Resolving EITC needs a NEW Populace build that feeds PE the split
-    # input — not a model bump. Worse, 1.767.3 drifts from the pinned Axiom
-    # rulespec on capital gains (adjusted_net_capital_gain: 8 float residuals at
-    # 1.729.0 -> 6,173 large divergences at 1.767.3, e.g. tax_unit 103 axiom
-    # 4,334.86 vs PE 7,192.42) and downstream tax_before_credits (2,118 -> 4,655),
-    # lifting unexplained 18,791 -> 27,513.
+    # Both 1.729.0 and the us-pe universe's 1.767.3 carry PE-US #8614 ("Split
+    # partnership and S-corp income inputs", merged 2026-06-14 as 1de4bff6,
+    # an ancestor of 1.729.0's release commit 180410fe). Both read partnership
+    # self-employment earnings from `partnership_self_employment_net_earnings`
+    # (the variable #8614 renamed from `partnership_se_income`). The pinned
+    # f0af251 artifact still stores the old `partnership_se_income` column
+    # (6,392 nonzero person rows) and has no
+    # `partnership_self_employment_net_earnings`, so either version reads $0
+    # partnership earnings while the bridge feeds Axiom the old column (e.g.
+    # tax_unit 154343 axiom 117,741.43 vs PE 0.00 under both). That is a data
+    # layout gap (PolicyEngine/microcosm#35's rename did not reach this build),
+    # not a model vintage: a model bump cannot resolve it, a Populace build
+    # that stores the renamed column can. 1.767.3 also drifts from the pinned
+    # Axiom rulespec on capital gains (adjusted_net_capital_gain: 8 float
+    # residuals at 1.729.0 -> 6,173 large divergences at 1.767.3, e.g.
+    # tax_unit 103 axiom 4,334.86 vs PE 7,192.42) and downstream
+    # tax_before_credits (2,118 -> 4,655), lifting unexplained 18,791 -> 27,513
+    # (measured 2026-07-08).
     #
-    # So we pin the oracle to 1.729.0 — coherent with the built_with of the pinned
-    # data — which keeps capital-gain/tax clean and isolates EITC as the sole
-    # structural divergence (an upstream #8614 gap in PE 1.729.0; Axiom correctly
-    # includes partnership SE net earnings per 26 USC 32(c)(2)/1402(a)). The
-    # conformance scoreboard matches reports by suite, not oracle-version label, so
-    # this coherent pairing is what drives an honest unexplained count. See
-    # dispositions/fiit-ecps.yaml.
+    # So we pin the oracle to 1.729.0, the built_with of the pinned data. The
+    # conformance scoreboard matches reports by suite, not oracle-version
+    # label. See dispositions/fiit-ecps.yaml for every residual mechanism.
     pinned: true
     policyengine_version: "4.11.0"
     policyengine_us_version: "1.729.0"
