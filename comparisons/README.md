@@ -39,7 +39,10 @@ running a comparison, the workflows run
 the latest `oracle-data` snapshot. This makes published report provenance and
 fallback reports available at their existing paths while retaining current
 source code. `--baseline` records the combined tree as a disposable detached
-baseline, so packing a run measures its own generated changes.
+baseline, so packing a run measures its own generated changes. It requires a
+clean tracked worktree and index; save or commit local edits before using it.
+For manual publication, run it before the producer as shown
+[below](#manual-single-suite-publication).
 
 Engine compiles follow the post-hard-cut contract via
 `axiom_oracles/engine_compat.py`: explicit repeatable `--rulespec-root` flags
@@ -406,13 +409,17 @@ conformance scoreboard + detail, the daily history snapshot, the burn-down,
 census and certificates), self-checks the tree against ci.yml's staleness
 gates and the unexplained ratchet before pushing, and rebuilds the commit from
 scratch on the current `oracle-data` tip whenever a push is rejected. Each
-attempt incorporates current `main` first, and merge conflicts fail publication
-without changing either remote branch. A missing data branch is seeded from
+attempt incorporates current `main` first. Conflicts in regenerated aggregates
+use `main`'s version before regeneration and verification; the shared manifest
+retains an append-only union of both report lists. Primary report and authored
+input conflicts refuse publication and materialization until a maintainer
+performs the [source-data conflict recovery](#recovering-source-data-conflicts).
+Readers resolve aggregate conflicts to the published data version, which
+matches the reports they load. A missing data branch is seeded from
 `main`; successful pushes explicitly target `HEAD:refs/heads/oracle-data`
-without force. Run by hand,
-`scripts/commit_refreshed_report.sh <suite> oracle-data` commits one suite
-(pack, then publish that one bundle). The publisher refuses `main`, `master`,
-and other targets.
+without force. The [manual sequence below](#manual-single-suite-publication)
+packs and publishes one suite. The publisher refuses `main`, `master`, and
+other targets.
 The conformance ratchet is never re-pinned from that bot path. Stale suites
 with `name: null` (parameter suites and `ci: manual` suites) are listed as
 awaiting the manual lane, not rerun. The weekly full matrix (`comparisons.yml`)
@@ -425,6 +432,39 @@ The affected publisher and KPI job share the `oracle-data-publication`
 concurrency group, serializing their writes to the data branch.
 Regenerate the map after adding a comparison:
 `uv run scripts/generate_affected_map.py`.
+
+### Manual single-suite publication
+
+Use a clean disposable checkout of current `main` with full history and the
+suite's required dependencies. Establish the published baseline before running
+the producer; for example:
+
+```bash
+python3 scripts/oracle_data.py materialize --baseline
+uv run scripts/run_comparison.py fiit-ecps --summary
+scripts/commit_refreshed_report.sh fiit-ecps oracle-data
+```
+
+Substitute the registry suite name and its documented producer when the lane
+uses a specialized live-run command. `--baseline` requires no tracked staged
+or unstaged edits and records the combined snapshot in a detached local
+commit. Plain `materialize` leaves `HEAD` unchanged and is insufficient for
+packing a refresh after prior publication. Single-suite and `--pack` modes
+refuse when the locally known `oracle-data` tip is missing from `HEAD`'s
+history; packing itself never fetches. If this guard fires, save the output
+for inspection, restart in a clean checkout, run `materialize --baseline`,
+then rerun the producer and pack. If a remote report changes after packing,
+the stale-bundle guard similarly requires regeneration and repacking.
+
+### Recovering source-data conflicts
+
+For a primary report conflict, follow the
+[recovery procedure](../README.md#recovering-a-source-data-conflict): reconcile
+current `main` into the data branch in a separate checkout, keep reviewed
+`main` report corrections, regenerate and verify derived outputs, and publish
+the merge with a normal push to `oracle-data`. Then rerun selection and rebuild
+old bundles. Do not resolve that refusal by pushing an older bundle over the
+reviewed report.
 
 Regenerating these aggregates with the report is required because they are
 *derived* from its bytes. The `oracle-data` snapshot keeps the reports,

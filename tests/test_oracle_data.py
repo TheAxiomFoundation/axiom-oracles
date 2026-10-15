@@ -11,6 +11,7 @@ import sys
 from types import SimpleNamespace
 
 import pytest
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 SCRIPT = Path(__file__).parents[1] / "scripts" / "oracle_data.py"
 spec = importlib.util.spec_from_file_location("oracle_data", SCRIPT)
@@ -327,6 +328,47 @@ def test_materialize_baseline_keeps_current_source_and_pins_published_data(repo)
     assert remote_main(repo) == latest
 
 
+@pytest.mark.parametrize("published", [False, True], ids=["no-data-delta", "published-data"])
+@pytest.mark.parametrize("edits", ["unstaged", "staged", "both"])
+@settings(max_examples=4, deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
+@given(edit=st.text(alphabet="abcdefghijklmnopqrstuvwxyz", min_size=1, max_size=40))
+def test_baseline_refuses_tracked_source_edits_without_changing_checkout(repo, published, edits, edit):
+    """A detached baseline must never discard tracked work, staged or unstaged."""
+    if published and not git(repo.origin, "show-ref", "--verify", data.DATA_REF, check=False):
+        seed_data(repo, {REPORT: "published data\n"})
+    if edits in ("unstaged", "both"):
+        (repo.checkout / "source.py").write_text(edit + "\n")
+    if edits in ("staged", "both"):
+        (repo.checkout / RATCHET).write_text("staged " + edit + "\n")
+        git(repo.checkout, "add", RATCHET)
+    before = {
+        "head": git(repo.checkout, "rev-parse", "HEAD"),
+        "index": git(repo.checkout, "write-tree"),
+        "status": git(repo.checkout, "status", "--porcelain"),
+        "report": (repo.checkout / REPORT).read_bytes(),
+    }
+
+    with pytest.raises(data.DataError, match="baseline requires a clean tracked checkout"):
+        data.materialize(repo.checkout, baseline=True)
+
+    assert git(repo.checkout, "rev-parse", "HEAD") == before["head"]
+    assert git(repo.checkout, "write-tree") == before["index"]
+    assert git(repo.checkout, "status", "--porcelain") == before["status"]
+    assert (repo.checkout / "source.py").read_text() == (edit + "\n" if edits in ("unstaged", "both") else "original source\n")
+    assert (repo.checkout / RATCHET).read_text() == ("staged " + edit + "\n" if edits in ("staged", "both") else "human baseline\n")
+    assert (repo.checkout / REPORT).read_bytes() == before["report"]
+
+
+def test_baseline_records_published_ancestry_even_without_data_delta(repo):
+    tip = seed_data(repo, {"source.py": "newer source carried by data\n"})
+
+    assert data.materialize(repo.checkout, baseline=True) == []
+
+    assert data._ancestor(repo.checkout, tip, git(repo.checkout, "rev-parse", "HEAD"))
+    assert (repo.checkout / "source.py").read_text() == "original source\n"
+    assert git(repo.checkout, "status", "--porcelain") == ""
+
+
 def test_materialize_fetches_new_data_after_previous_read(repo):
     seed_data(repo, {REPORT: "first data\n"})
     data.materialize(repo.checkout)
@@ -605,7 +647,22 @@ def test_missing_branch_after_materialization_restores_head_and_removes_addition
     git(repo.seed, "push", "origin", ":refs/heads/oracle-data")
     before_index = git(repo.checkout, "write-tree")
 
-    assert set(data.materialize(repo.checkout, baseline=baseline)) == {REPORT, KPI, new}
+    if baseline:
+        # Plain materialization is a tracked overlay. Verify the new baseline
+        # refusal preserves it, then recover through the ordinary reader.
+        before_status = git(repo.checkout, "status", "--porcelain")
+        with pytest.raises(data.DataError, match="baseline requires a clean tracked checkout"):
+            data.materialize(repo.checkout, baseline=True)
+        assert git(repo.checkout, "status", "--porcelain") == before_status
+        assert (repo.checkout / REPORT).read_text() == "previously published data\n"
+        assert (repo.checkout / new).read_text() == "published addition\n"
+        assert not (repo.checkout / KPI).exists()
+        assert git(repo.checkout, "write-tree") == before_index
+        assert git(repo.checkout, "rev-parse", "HEAD") == repo.main
+        assert set(data.materialize(repo.checkout)) == {REPORT, KPI, new}
+        assert data.materialize(repo.checkout, baseline=True) == []
+    else:
+        assert set(data.materialize(repo.checkout, baseline=baseline)) == {REPORT, KPI, new}
 
     assert (repo.checkout / REPORT).read_text() == "original data\n"
     assert (repo.checkout / KPI).read_text() == "original kpi\n"

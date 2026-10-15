@@ -105,10 +105,16 @@ Automated refreshes publish to the dedicated
 `main` holds the reviewed code, configuration, and committed data baseline;
 CI validates that baseline on pull requests. The data branch is a full repository
 snapshot that incorporates current `main` before each publication. Publishers
-use normal pushes with an explicit branch target. A merge conflict stops
-publication. Affected bundles record each replaced or deleted file's baseline
-SHA256 and refuse application if the prepared file matches neither that baseline
-nor the bundled result, protecting reviewed corrections made after packing.
+use normal pushes with an explicit branch target. Conflicts in regenerated
+aggregates are resolved mechanically: publishers start from `main`'s version
+and regenerate and verify the derived artifacts before affected publication;
+readers keep the published version that matches the published reports. The
+shared report manifest retains additions from both branches. Conflicts in
+primary reports or authored inputs stop the operation for the
+[recovery procedure below](#recovering-a-source-data-conflict). Affected
+bundles record each replaced or deleted file's baseline SHA256 and refuse
+application if the prepared file matches neither that baseline nor the bundled
+result, protecting reviewed corrections made after packing.
 
 The affected rerun publishes reports together with their derived conformance
 artifacts. The scheduled comparison workflow publishes the per-rule verification
@@ -152,6 +158,14 @@ data-reading scripts or `uv build` when a local wheel should include the current
 generated Belgium coverage rollup. Packages built by CI retain the reviewed
 `main` snapshot.
 
+For a refresh that will be packed or published, start in a clean disposable
+checkout and run `python3 scripts/oracle_data.py materialize --baseline`
+**before** the report producer. This records the published data as a detached
+baseline so packing compares against the previous publication. It refuses
+tracked staged or unstaged edits anywhere in the checkout. Plain
+`materialize` is for readers and does not establish that packing baseline.
+See the [manual publication sequence](comparisons/README.md#manual-single-suite-publication).
+
 In a full Git checkout, dashboard `bun run build` and `bun run dev` materialize
 the published data before starting Next.js, so report, overview, freshness,
 case, and disposition requests keep their existing `/oracles/data/` URLs.
@@ -162,7 +176,8 @@ published data. For offline work or validation of the reviewed checkout, set
 `AXIOM_ORACLES_DATA_SOURCE=checkout`; PR CI uses this setting so mutable
 published data cannot replace the changes under review.
 
-After this change merges, initialize publication by manually dispatching the
+Merge this change before the companion axiom.org reader migration (#345).
+Initialize publication immediately after merging by manually dispatching the
 affected rerun from `main`:
 
 ```bash
@@ -171,10 +186,48 @@ gh workflow run affected-rerun.yml \
 ```
 
 Verify that its successful refreshes created or advanced `oracle-data` and that
-the run left `main` unchanged, then materialize the data before deployment or
-manual inspections. GitHub workflows publish data without deploying the
-dashboard. See [comparisons/README.md](comparisons/README.md) for the publication
-and validation gates.
+the run left `main` unchanged. Confirm the branch and its public report links
+exist before landing axiom.org#345; its `blob/oracle-data/` links require the
+branch even while its API readers can fall back to `main`. Then materialize
+the data before deployment or manual inspections. GitHub workflows publish
+data without deploying the dashboard. See
+[comparisons/README.md](comparisons/README.md) for the publication and validation gates.
+
+### Recovering a source-data conflict
+
+Routine edits to generated aggregates on both branches are handled
+automatically. A conflict in a primary report or another authored file needs
+maintainer reconciliation; readers and publishers leave the checkout unchanged
+when they refuse that merge. A reviewed primary report on `main` is
+authoritative, so an older bot refresh or packed bundle must not replace it.
+
+1. Save any local work and use a separate clean, full-history checkout. Fetch
+   current `main` and `oracle-data`, create a recovery branch at
+   `origin/oracle-data`, and run
+   `git merge --no-commit --no-ff origin/main`.
+2. Inspect every conflict. Resolve primary report conflicts with `main`'s
+   reviewed bytes, including reviewed deletions. Resolve generated aggregates
+   with `main`'s version as a starting point; retain the append-only union of
+   both report lists in `dashboard/public/data/manifest.json`. Reconcile any
+   authored source or configuration conflict through its normal review
+   process. Stage the resolutions and confirm no unmerged paths remain.
+3. Run the existing regeneration and verification chain without publication:
+
+   ```bash
+   SIMULATE_DERIVED_REFRESH=1 scripts/commit_refreshed_report.sh recovery oracle-data
+   ```
+
+   Resolve any reported content or gate failure, then repeat the check. This
+   runs the derived generators, staleness checks, and unexplained-mismatch
+   gate; it does not fetch, reset, commit, or push.
+4. Review and stage the regenerated artifacts, commit the merge, and publish
+   it with the normal explicit non-force target:
+   `git push origin HEAD:refs/heads/oracle-data`. If that push is rejected,
+   repeat the reconciliation against the new remote tips.
+5. Retry materialization and selection. Rerun producers and repack any
+   pre-recovery bundles from a fresh `materialize --baseline` checkout;
+   the stale-bundle guard deliberately refuses bundles based on superseded
+   report bytes. Resume affected publication to refresh the snapshot.
 
 ## ACCESS NYC Rule Audit
 

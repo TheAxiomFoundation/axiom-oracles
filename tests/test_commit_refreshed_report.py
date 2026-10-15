@@ -100,10 +100,22 @@ DE_EXACT_DERIVED_PATHS = (
 GIT_ENV = {
     "GIT_CONFIG_GLOBAL": os.devnull,
     "GIT_CONFIG_SYSTEM": os.devnull,
-    # Bare CI has no RuleSpec checkout. Do not fetch from a developer's local
-    # source while exercising committed report/derived-artifact publication.
-    "RULESPEC_DE_REPO": str(REPO_ROOT / ".hub-scratch" / "absent-rulespec-de"),
 }
+
+
+@pytest.fixture(autouse=True)
+def _isolated_rulespec_checkout(tmp_path, monkeypatch):
+    # Bare CI has no RuleSpec checkout. Keep the absent source under this
+    # test's own directory so developer scratch cannot change publication.
+    monkeypatch.setitem(
+        GIT_ENV, "RULESPEC_DE_REPO", str(tmp_path / "absent-rulespec-de"),
+    )
+
+
+def test_rulespec_fixture_uses_test_temporary_directory(tmp_path):
+    absent_repo = Path(GIT_ENV["RULESPEC_DE_REPO"])
+    assert absent_repo.parent == tmp_path
+    assert not absent_repo.exists()
 
 
 def _git(cwd: Path, *args: str) -> str:

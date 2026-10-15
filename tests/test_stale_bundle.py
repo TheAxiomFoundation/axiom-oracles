@@ -13,7 +13,9 @@ from pathlib import Path
 import shutil
 import subprocess
 import sys
+import tempfile
 
+from hypothesis import HealthCheck, given, settings, strategies as st
 import pytest
 
 
@@ -217,3 +219,74 @@ def test_pack_refuses_unreadable_baseline_instead_of_recording_absence(tmp_path)
     )
     assert result.returncode != 0, result.stdout + result.stderr
     assert not (failed_bundles / "scratch-suite").exists()
+
+
+def _manual_case(tmp_path: Path):
+    env, remote, seed, producer, publisher, bundles = _local_case(tmp_path)
+    first = _command(publisher, env, "--publish", str(bundles), "oracle-data")
+    assert first.returncode == 0, first.stdout + first.stderr
+    operator = tmp_path / "operator"
+    _git(tmp_path, env, "clone", str(remote), str(operator))
+    return env, remote, operator
+
+
+def _materialize(root: Path, env: dict[str, str], *, baseline: bool = False):
+    result = subprocess.run(
+        [sys.executable, "scripts/oracle_data.py", "materialize",
+         *(["--baseline"] if baseline else [])],
+        cwd=root, env=env, capture_output=True, text=True, timeout=30,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+
+
+@pytest.mark.parametrize("checkout", ["main", "materialize"])
+@pytest.mark.parametrize("mode", ["single", "pack"])
+def test_manual_refresh_requires_materialized_baseline(tmp_path, checkout, mode):
+    """Refuse an obsolete packing baseline before touching the operator's run."""
+    env, remote, operator = _manual_case(tmp_path)
+    if checkout == "materialize":
+        _materialize(operator, env)
+    _write(operator, REPORT, "second manual run")
+    report_before = (operator / REPORT).read_bytes()
+    head_before = _git(operator, env, "rev-parse", "HEAD")
+    data_before = _git(remote, env, "rev-parse", "oracle-data")
+    bundles = tmp_path / "second-bundles"
+    args = (
+        ["scratch-suite", "oracle-data"] if mode == "single"
+        else ["--pack", str(bundles), "scratch-suite"]
+    )
+    result = _command(operator, env, *args)
+    assert result.returncode != 0, result.stdout + result.stderr
+    assert "materialize --baseline" in result.stderr
+    assert "before" in result.stderr and "rerun" in result.stderr
+    assert "NO-OP TEST GATE" not in result.stdout, "refused only after vetting"
+    assert (operator / REPORT).read_bytes() == report_before
+    assert _git(operator, env, "rev-parse", "HEAD") == head_before
+    assert _git(remote, env, "rev-parse", "oracle-data") == data_before
+    assert not (bundles / "scratch-suite").exists()
+
+
+@settings(
+    max_examples=4, deadline=None,
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
+@given(suffix=st.text(alphabet=st.characters(blacklist_categories=("Cs",)), max_size=40))
+def test_documented_manual_baseline_publishes_repeat_refresh(tmp_path, suffix):
+    """The documented baseline flow publishes any refreshed bytes and preserves main."""
+    # Every property example gets independent Git histories, even though pytest
+    # supplies one tmp_path for the enclosing test.
+    with tempfile.TemporaryDirectory(dir=tmp_path) as case_dir:
+        env, remote, operator = _manual_case(Path(case_dir))
+        main_before = _git(remote, env, "rev-parse", "main")
+        _materialize(operator, env, baseline=True)
+        _write(operator, REPORT, "second manual run: " + suffix)
+        refreshed = (operator / REPORT).read_bytes()
+        result = _command(operator, env, "scratch-suite", "oracle-data")
+        assert result.returncode == 0, result.stdout + result.stderr
+        assert "NO-OP TEST GATE" in result.stdout
+        published = subprocess.run(
+            ["git", "show", f"oracle-data:{REPORT}"], cwd=remote, env=env,
+            capture_output=True, check=True, timeout=30,
+        ).stdout
+        assert published == refreshed
+        assert _git(remote, env, "rev-parse", "main") == main_before

@@ -95,6 +95,8 @@
 # Usage: scripts/commit_refreshed_report.sh <suite-name> oracle-data
 #        scripts/commit_refreshed_report.sh --pack <bundles-dir> <suite-name>
 #        scripts/commit_refreshed_report.sh --publish <bundles-dir> oracle-data
+# Before producing a refresh, run `python3 scripts/oracle_data.py materialize
+# --baseline` in a clean disposable checkout so HEAD records published data.
 # Env:   PYTHON            interpreter for the regeneration scripts (python3)
 #        MAX_ATTEMPTS      push attempts before failing loudly     (10)
 #        PUSH_RETRY_DELAY  seconds between attempts (default: growing + jitter)
@@ -394,6 +396,18 @@ BUNDLE_SCHEMA="axiom_oracles.refreshed_report_bundle.v1"
 # refresh. vet=0 skips only the vet, for the single-suite mode below.
 pack() {
   local out="$1" name="$2" vet="${3:-1}" path staging
+
+  # A main checkout (including plain materialize) still records main's older
+  # report identities in HEAD. Refuse before collecting or vetting a refresh:
+  # publication would otherwise reject it as stale after resetting the tree.
+  # Only inspect the locally known data tip; pack never contacts a remote.
+  if git show-ref --verify --quiet refs/remotes/origin/oracle-data &&
+    ! git merge-base --is-ancestor refs/remotes/origin/oracle-data HEAD; then
+    echo "REFUSED: packing requires the published data baseline. In a clean" \
+      "disposable checkout run 'python3 scripts/oracle_data.py materialize --baseline'" \
+      "before generating reports, then rerun the producer and pack or publish." >&2
+    exit 1
+  fi
 
   # Collect this run's PRIVATE outputs — what run_comparison.py itself wrote
   # (the refreshed report + any fixture reports), BEFORE any regeneration, so
