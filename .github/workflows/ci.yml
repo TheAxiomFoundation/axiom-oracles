@@ -359,6 +359,29 @@ jobs:
           AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE: "1"
         run: uv run --no-sync pytest -q tests/bridges/test_snap_child_support_adapters.py
 
+  snap-income-boundary-live:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install exact PolicyEngine US oracle revision
+        run: |
+          uv sync --extra dev
+          uv pip install "policyengine-us @ git+https://github.com/PolicyEngine/policyengine-us@d89439134c1bac8add0c8261c8a075c33c39401a"
+
+      - name: Check FY2026 SNAP income boundaries against live PolicyEngine
+        env:
+          AXIOM_ORACLES_REQUIRE_POLICYENGINE_LIVE: "1"
+        run: uv run --no-sync pytest -q tests/bridges/test_policyengine_snap_income_boundaries.py
+
   # The dashboard deploys by hand (vercel --prod from dashboard/), so no
   # Vercel check runs on pull requests: build it here and run its
   # self-contained tests. The oracle attribution test checks every report
