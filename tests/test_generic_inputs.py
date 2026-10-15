@@ -55,8 +55,12 @@ def test_generic_projector_relations_bind_without_inventing_member_inputs(tmp_pa
     bound = bind_request_relations(request, artifact)
     if typed:
         assert {record["entity_id"] for record in bound["dataset"]["inputs"]} == {"household"}
-        assert all(record["tuple"] == ["household", "member-0"]
-                   for record in bound["dataset"]["relations"])
+        for record in bound["dataset"]["relations"]:
+            # A bare namesake absent from the artifact has no declaration;
+            # only the exact typed relation can choose owner-first order.
+            expected = (["household", "member-0"] if record["name"] == relation
+                        else ["member-0", "household"])
+            assert record["tuple"] == expected
     else:
         assert bound == request
 

@@ -20,5 +20,18 @@
       "sha256": "fd0690dd03ecf9542370ca2b12f533d62cd0a11b6f4e3670e332d04e20059ae4",
       "compiled_artifact_sha256": "2861af3c3989646b50b193792800b573102f8d39744ffe14129d41ac1e2f9177"
     }
-  ]
+  ],
+  "strict_engine": {
+    "commit": "97dee1004b2cb4006766746315037e8ba4e2cfad",
+    "selection": "origin/main verified read-only with git show on 2026-10-15; includes mandatory relation typing (#199) and filtered_entity_kinds in strict dataset binding.",
+    "commit_date": "2026-10-14T05:48:56-04:00",
+    "commit_subject": "Design: relation roles, atoms and bounded joins for unit predicates (#214) (#252)",
+    "provenance": {
+      "decision": "DECISIONS.md:52-93",
+      "effective_slot_entities": "src/relation_typing.rs:148-182",
+      "filtered_entity_kinds": "src/relation_typing.rs:217-312",
+      "wire_binding": "src/spec.rs:485-561"
+    },
+    "fixture_commit_note": "The top-level commit records the original captured engine fixtures; the native differential uses strict_engine.commit."
+  }
 }

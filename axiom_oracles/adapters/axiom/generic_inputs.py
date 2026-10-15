@@ -32,8 +32,15 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
-from axiom_oracles.bridges.relation_binding import UNIT_ENTITY_KINDS as _UNIT_ENTITIES
 from axiom_oracles.bridges.relation_binding import relation_owner_kind, relation_tuple
+
+
+# Projection keys these entity scopes by the household id. This is an adapter
+# convention, never evidence for relation binding.
+_UNIT_ENTITIES = frozenset({
+    "Household", "SnapUnit", "TaxUnit", "SpmUnit", "TanfUnit",
+    "AssistanceUnit", "Family",
+})
 
 
 # ---------------------------------------------------------------------------

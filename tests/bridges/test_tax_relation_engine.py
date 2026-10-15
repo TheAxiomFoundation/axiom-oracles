@@ -1,6 +1,6 @@
 """Optional real-engine regression for the federal relation producer.
 
-Set AXIOM_STRICT_RELATION_ENGINE_BIN to a #190 strict-binding engine and
+Set AXIOM_STRICT_RELATION_ENGINE_BIN to the pinned mandatory-typing engine and
 AXIOM_RULESPEC_ROOT to a rulespec-us checkout. AXIOM_LEGACY_RELATION_ENGINE_BIN
 optionally reproduces the silent zero with the post-#179, pre-#190 engine.
 AXIOM_REQUIRE_RELATION_ENGINE_TESTS=1 makes missing prerequisites fail in CI.
@@ -22,7 +22,10 @@ import pytest
 import yaml
 
 from axiom_oracles.adapters.axiom import runner, tax_projection
-from axiom_oracles.bridges.relation_binding import RelationBindingAmbiguityWarning
+from axiom_oracles.bridges.relation_binding import (
+    RelationBindingAmbiguityWarning,
+    bind_request_relations,
+)
 from axiom_oracles.core.case import Case, Concepts, Entity
 from axiom_oracles.bridges.tax_populace import (
     CDCC_BASE,
@@ -326,8 +329,8 @@ def test_ctc_pre_strict_engine_reproduces_silent_zero(live_ctc):
     assert _credit(_run(binary, artifact_path, corrected), _CTC_OUTPUT) == 2200
 
 
-def test_real_ctc_tax_case_batch_has_no_false_ambiguity_diagnostics(live_ctc, tmp_path):
-    """Unused bridge data and explicit producer roles need no inference."""
+def test_real_ctc_tax_case_batch_warns_for_executed_untyped_relations(live_ctc, tmp_path):
+    """Pre-typing bridge relations preserve legacy roles and warn when used."""
     binary, _, compiled = live_ctc
     artifact = copy.deepcopy(compiled)
     bridge_relations = [
@@ -366,6 +369,11 @@ def test_real_ctc_tax_case_batch_has_no_false_ambiguity_diagnostics(live_ctc, tm
     def fake_run(command, **kwargs):
         request = json.loads(kwargs["input"])
         assert all("roles" not in row for row in request["dataset"]["relations"])
+        assert all(
+            row["tuple"][1].endswith("::tax_unit")
+            for row in request["dataset"]["relations"]
+            if row["name"] in bridge_relations
+        )
         return subprocess.CompletedProcess(
             command, 0, stdout=json.dumps({"results": [{"outputs": {}}] * 3}),
             stderr="",
@@ -376,5 +384,48 @@ def test_real_ctc_tax_case_batch_has_no_false_ambiguity_diagnostics(live_ctc, tm
         warnings.simplefilter("always", RelationBindingAmbiguityWarning)
         results = adapter._run_case_batch_once(cases, ["unused_output"], artifact_path)
     assert len(results) == 3
-    assert not [item for item in caught if issubclass(item.category, RelationBindingAmbiguityWarning)]
-    assert all(not result.raw.get("relation_binding_diagnostics") for result in results)
+    assert not caught
+    expected_counts = {
+        "us:tax/oracle-bridge#relation.business_income_of_tax_unit": 2,
+        "us:tax/oracle-bridge#relation.co_dependent_of_tax_unit": 1,
+        "us:tax/oracle-bridge#relation.filer_adjusted_earnings_of_tax_unit": 1,
+        "us:tax/oracle-bridge#relation.payroll_member_of_tax_unit": 2,
+    }
+    for result in results:
+        diagnostics = result.raw["relation_binding_diagnostics"]
+        assert diagnostics["count"] == 6
+        assert diagnostics["by_relation"] == expected_counts
+        assert all(
+            sample["tuple"][1].endswith("::tax_unit")
+            for sample in diagnostics["samples"]
+        )
+
+
+@pytest.mark.parametrize("mode", ["explain", "fast"])
+def test_public_relation_alias_ignores_unrelated_same_fragment(mode):
+    """Public references resolve by the engine's bare key, without a name scan."""
+    binary = _configured_path("AXIOM_STRICT_RELATION_ENGINE_BIN")
+    fixture = Path(__file__).parents[1] / "fixtures/relation_binding/typed-relation-binding.json"
+    request = json.loads(fixture.read_text())
+    request["mode"] = mode
+    request["program"]["derived"][-1]["id"] = "us:statutes/26/21#credit"
+    request["queries"][0]["outputs"] = [
+        "qualifying_person_count", "us:statutes/26/21#credit",
+    ]
+    request["dataset"]["relations"][0]["name"] = (
+        "us:statutes/26/21#relation.qualifying_person_of_tax_unit"
+    )
+    extended = copy.deepcopy(request)
+    extended["program"]["relations"].append({
+        "name": "us:statutes/26/999#relation.qualifying_person_of_tax_unit",
+        "arity": 2, "slot_entities": ["Household", "Payment"],
+    })
+    for candidate in (request, extended):
+        native = subprocess.run(
+            [str(binary), "run"], input=json.dumps(candidate),
+            capture_output=True, text=True, check=False, timeout=60,
+        )
+        assert native.returncode == 0, native.stderr
+        output = json.loads(native.stdout)["results"][0]["outputs"]
+        assert output_number(output["us:statutes/26/21#credit"]) == 1500
+        assert bind_request_relations(candidate, {"program": candidate["program"]}) == candidate

@@ -88,9 +88,9 @@ def test_actual_dashboard_json_omits_private_and_hostile_relation_endpoints(
         assert not caught
         assert case.metadata == before
         diagnostics = result.raw["relation_binding_diagnostics"]
-        assert diagnostics["count"] == 3
-        assert diagnostics["samples"][0]["tuple"] == [
-            "case-0::" + private, "case-0::" + hostile,
+        assert diagnostics["count"] == 4
+        assert ["case-0::" + private, "case-0::" + hostile] in [
+            sample["tuple"] for sample in diagnostics["samples"]
         ]
         raw_evidence.append((result.raw, deepcopy(result.raw)))
         comparisons = Comparator([mapping]).compare(
@@ -113,8 +113,8 @@ def test_actual_dashboard_json_omits_private_and_hostile_relation_endpoints(
         assert private not in body
         assert hostile not in body
         assert json.loads(body)["provenance"]["relation_binding_diagnostics"] == {
-            "count": 6, "by_relation": {"members": 6},
-            "samples": [{"relation": "members"}] * 6,
+            "count": 8, "by_relation": {"members": 8},
+            "samples": [{"relation": "members"}] * 8,
         }
     assert all(raw == before for raw, before in raw_evidence)
 

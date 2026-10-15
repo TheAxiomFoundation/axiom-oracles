@@ -1784,6 +1784,7 @@ def run_axiom_cases(
         "end": period.end.isoformat(),
         "name": period.label,
     }
+    ambiguities = []
     inputs = []
     relations = []
     queries = []
@@ -1813,6 +1814,7 @@ def run_axiom_cases(
                             owner_kind="Household",
                             related_id=member_entity_id,
                             related_kind=member_entity_type,
+                            binding_ambiguities=ambiguities,
                         ),
                         "interval": interval,
                     }
@@ -1840,10 +1842,11 @@ def run_axiom_cases(
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": queries,
     }
-    request, ambiguities = bind_materialized_relations(
+    request, raw_ambiguities = bind_materialized_relations(
         request, artifact_payload, materialized=set(range(len(relations))),
         binder=bind_request_relations,
     )
+    ambiguities.extend(raw_ambiguities)
     result = subprocess.run(
         [str(binary), "run-compiled", "--artifact", str(artifact)],
         input=json.dumps(request),

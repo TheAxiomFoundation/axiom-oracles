@@ -449,10 +449,11 @@ class AxiomRulesRunner(EngineAdapter):
         ambiguities = []
         if request["dataset"]["relations"]:
             artifact = json.loads(artifact_path.read_text())
-            materialized = _materialize_relation_roles(request, artifact)
-            request, ambiguities = bind_materialized_relations(
+            materialized = _materialize_relation_roles(request, artifact, binding_ambiguities=ambiguities)
+            request, raw_ambiguities = bind_materialized_relations(
                 request, artifact, materialized=materialized, binder=bind_request_relations,
             )
+            ambiguities.extend(raw_ambiguities)
 
         def case_raw(raw: Any, index: int) -> Any:
             return with_relation_binding_diagnostics(
@@ -628,10 +629,11 @@ class AxiomRulesRunner(EngineAdapter):
         ambiguities = []
         if request["dataset"]["relations"]:
             artifact = json.loads(artifact_path.read_text())
-            materialized = _materialize_relation_roles(request, artifact)
-            request, ambiguities = bind_materialized_relations(
+            materialized = _materialize_relation_roles(request, artifact, binding_ambiguities=ambiguities)
+            request, raw_ambiguities = bind_materialized_relations(
                 request, artifact, materialized=materialized, binder=bind_request_relations,
             )
+            ambiguities.extend(raw_ambiguities)
         diagnostics = relation_binding_diagnostics(ambiguities)
         process = self._subprocess_run(
             [
@@ -1486,13 +1488,17 @@ def _namespace_relation_record(
     return namespaced
 
 
-def _materialize_relation_roles(request: dict[str, Any], artifact: dict[str, Any]) -> set[int]:
+def _materialize_relation_roles(
+    request: dict[str, Any], artifact: dict[str, Any], *, binding_ambiguities: list | None = None,
+) -> set[int]:
     """Resolve producer roles against the artifact actually sent to the engine."""
     materialized = set()
     for index, record in enumerate(request["dataset"]["relations"]):
         roles = record.pop("roles", None)
         if roles is not None:
-            record["tuple"] = relation_tuple(artifact, record["name"], **roles)
+            record["tuple"] = relation_tuple(
+                artifact, record["name"], **roles, binding_ambiguities=binding_ambiguities,
+            )
             materialized.add(index)
     return materialized
 

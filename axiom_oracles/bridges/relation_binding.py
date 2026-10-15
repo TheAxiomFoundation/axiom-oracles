@@ -1,8 +1,10 @@
-"""Order relation tuples using the target artifact's executable entity slots.
+"""Bind binary relations by the rules engine's declared entity typing.
 
-Declarations are positional only for unused relations. In particular, an older
-artifact can declare [TaxUnit, Person] while its count still uses current_slot=1.
-This module reads that executable metadata; it does not evaluate any rules.
+Typed relations inherit kinds only along their source chain. Input and query
+labels provide runtime identity evidence; conflicting labels are unknown.
+Untyped relations retain their supplied order and warn when executed. Artifacts
+whose declarations contradict direct aggregate slots must be recompiled or
+migrated, rather than repaired by this binder.
 """
 
 from __future__ import annotations
@@ -10,18 +12,10 @@ from __future__ import annotations
 from collections import Counter, OrderedDict, defaultdict
 from collections.abc import Callable, Iterable
 from copy import deepcopy
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 import re
 from typing import Any
 import warnings
-
-
-# Generic projection keys these entity kinds by a household id. Other scopes
-# can broadcast inputs to Person ids without describing endpoint identities.
-UNIT_ENTITY_KINDS = frozenset({
-    "Household", "SnapUnit", "TaxUnit", "SpmUnit", "TanfUnit",
-    "AssistanceUnit", "Family",
-})
 
 
 class RelationBindingError(ValueError):
@@ -29,11 +23,7 @@ class RelationBindingError(ValueError):
 
 
 class RelationBindingAmbiguityWarning(UserWarning):
-    """Both orientations are compatible; the supplied tuple was preserved.
-
-    Callers can capture this warning or promote it to an error with the
-    standard warnings API without adding reporting fields to the request.
-    """
+    """The supplied tuple was preserved because its order is undetermined."""
 
     def __init__(self, relation: str, ids: list[str]):
         self.relation = relation
@@ -48,532 +38,422 @@ def _fragment(name: str) -> str:
     return name.rsplit("#", 1)[-1].removeprefix("relation.")
 
 
-class _ArtifactRelations:
-    def __init__(
-        self, artifact: dict[str, Any], *,
-        identity_pairs: dict[str, list[list[set[str]]]] | None = None,
-        constructor_hint: tuple[str, str, str] | None = None,
-    ):
-        program = artifact.get("program", artifact)
-        self.schemas = {
-            relation["name"]: relation for relation in program.get("relations", [])
-        }
-        self.rules = {}
-        for rule in program.get("derived", []):
-            self.rules[rule["name"]] = rule
-            if rule.get("id"):
-                self.rules[rule["id"]] = rule
-        self.identity_pairs = identity_pairs or {}
-        self.constructor_hint = constructor_hint
-        self.usages: dict[str, list[list[str | None]]] = defaultdict(list)
-        self.owner_slots: dict[str, set[int]] = defaultdict(set)
-        self.aggregate_owner_kinds: set[str] = set()
-        self.executable_kinds: set[str] = set()
-        self._expected_by_name: dict[str, list[str | None] | None] = {}
-        self._endpoint_inventories = self._read_endpoint_inventories()
-        self._read_usages(program)
-        # Only executable roles establish kinds independently of the relation
-        # being bound. An unused declaration cannot prove an input's identity.
-        # The second walk can use these roles independently of rule order.
-        self.executable_kinds = self.endpoint_kinds()
-        self.usages.clear()
-        self.owner_slots.clear()
-        self._read_usages(program)
+def _named_records(program: dict[str, Any], key: str) -> dict[str, dict]:
+    records = program.get(key, [])
+    return (
+        records
+        if isinstance(records, dict)
+        else {node["name"]: node for node in records}
+    )
 
-    def _read_endpoint_inventories(self) -> dict[str, frozenset[tuple[str, ...]]]:
-        """Collect structural kinds before any request or aggregate inference.
 
-        A derivation and its source have the same endpoint inventory, even
-        when their executable slot orders differ. Traverse both directions so
-        incoming derivations and arbitrarily long source chains contribute.
-        Components also make cycles and schema ordering immaterial. Preserve
-        repeated kinds; a same-kind pair is still a complete binary inventory.
-        """
-        inventories: dict[str, set[tuple[str, ...]]] = defaultdict(set)
-        neighbors: dict[str, set[str]] = defaultdict(set)
-        for name, schema in self.schemas.items():
-            derivation = schema.get("derivation") or {}
-            for node in (schema, derivation):
-                kinds = node.get("slot_entities")
-                if kinds:
-                    inventories[name].add(tuple(sorted(kinds)))
-            source_name = derivation.get("source_relation")
-            source = self.schema(source_name) if source_name else None
-            if source is not None:
-                source_key = source["name"]
-                neighbors[name].add(source_key)
-                neighbors[source_key].add(name)
+def _effective_slot_entities(program: dict[str, Any], name: str) -> list[str] | None:
+    """Port relation_typing.rs:148-182 at engine 97dee1004b2c.
 
-        result: dict[str, frozenset[tuple[str, ...]]] = {}
-        for name in self.schemas:
-            if name in result:
-                continue
-            component, pending = set(), [name]
-            kinds = set()
-            while pending:
-                key = pending.pop()
-                if key in component:
-                    continue
-                component.add(key)
-                kinds.update(inventories[key])
-                pending.extend(neighbors[key] - component)
-            inventory = frozenset(kinds)
-            for key in component:
-                result[key] = inventory
-        return result
-
-    def _local_endpoint_kinds(self, name: str) -> set[str]:
-        schema = self.schema(name)
-        return {
-            kind
-            for inventory in self._endpoint_inventories.get(
-                schema["name"] if schema else name, (),
-            )
-            for kind in inventory
-        }
-
-    def _remaining_endpoint_kind(self, name: str, known: str | None) -> str | None:
-        schema = self.schema(name)
-        candidates = set()
-        for inventory in self._endpoint_inventories.get(
-            schema["name"] if schema else name, (),
-        ):
-            if len(inventory) == 2 and known in inventory:
-                remaining = list(inventory)
-                remaining.remove(known)
-                candidates.add(remaining[0])
-        return next(iter(candidates)) if len(candidates) == 1 else None
-
-    def _constructor_kinds(self, name: str) -> tuple[str, str] | None:
-        if self.constructor_hint:
-            target, owner, member = self.constructor_hint
-            schema = self.schema(name)
-            if schema is not None and schema is self.schema(target):
-                return owner, member
-        return None
-
-    def _related_identity(self, name: str, owner: str | None) -> str | None:
-        """A row context is known only if every compatible role assignment agrees."""
-        if owner is None:
+    A derivation's declaration wins, then its schema's declaration, then its
+    source. Incoming derivations never type a source relation.
+    """
+    schemas = _named_records(program, "relations")
+    visited = set()
+    while name not in visited:
+        visited.add(name)
+        schema = schemas.get(name)
+        if schema is None:
             return None
-        schema = self.schema(name)
-        identity_kinds = self._input_identity_kinds(name)
-        inferred: set[str] = set()
-        for supplied_name, pairs in self.identity_pairs.items():
-            if schema is None or self.schema(supplied_name) is not schema:
-                continue
-            for pair in pairs:
-                known = [labels & identity_kinds for labels in pair]
-                if len(known) != 2 or any(len(kinds) > 1 for kinds in known):
-                    return None
-                candidates = {
-                    next(iter(known[1 - index])) if known[1 - index] else None
-                    for index in (0, 1)
-                    if not known[index] or owner in known[index]
-                }
-                if len(candidates) != 1 or None in candidates:
-                    return None
-                inferred.update(candidates)
-        return next(iter(inferred)) if len(inferred) == 1 else None
+        derivation = schema.get("derivation") or {}
+        if derivation.get("slot_entities"):
+            return list(derivation["slot_entities"])
+        if schema.get("slot_entities"):
+            return list(schema["slot_entities"])
+        if not derivation:
+            return None
+        name = derivation.get("source_relation")
+    return None
 
-    def _read_usages(self, program: dict[str, Any]) -> None:
-        for rule in program.get("derived", []):
-            # The engine ignores base semantics when explicit versions exist.
-            for version in rule.get("versions") or [rule]:
-                self._walk(version.get("expr", {}), rule.get("entity"))
-        for schema in self.schemas.values():
-            derivation = schema.get("derivation")
-            if derivation:
-                current, related = self._slots(derivation)
-                kinds = derivation.get("slot_entities", [])
-                owner = kinds[current] if current < len(kinds) else None
-                member = kinds[related] if related < len(kinds) else None
-                self._record(
-                    derivation["source_relation"], current, related, owner, member
-                )
-                self._walk(
-                    derivation.get("predicate", {}), member, (owner, member),
-                    independent_owner=False,
-                )
+
+def _filtered_entity_kinds(program: dict[str, Any]) -> dict[str, str]:
+    """Port relation_typing.rs:214-312 at engine 97dee1004b2c.
+
+    Only derived relations with an entity contribute current-slot kinds.
+    Conflicts and cycles are unmapped; a self filter resolves to itself.
+    """
+    known: dict[str, set[str]] = defaultdict(set)
+    for name, schema in _named_records(program, "relations").items():
+        derivation = schema.get("derivation") or {}
+        entity = derivation.get("entity")
+        if entity is None:
+            continue
+        kinds = _effective_slot_entities(program, name)
+        current = derivation.get("current_slot")
+        if kinds is not None and isinstance(current, int) and 0 <= current < len(kinds):
+            known[entity].add(kinds[current])
+    direct = {
+        entity: next(iter(kinds)) for entity, kinds in known.items() if len(kinds) == 1
+    }
+    resolved: dict[str, str | None] = {}
+    for entity in direct:
+        path, visited = [], set()
+        kind = entity
+        while True:
+            if kind in resolved:
+                result = resolved[kind]
+                break
+            if kind in visited:
+                result = None
+                break
+            visited.add(kind)
+            path.append(kind)
+            target = direct.get(kind)
+            if target is None or target == kind:
+                result = kind
+                break
+            kind = target
+        for item in path:
+            resolved[item] = result
+    return {
+        entity: resolved[entity] for entity in direct if resolved[entity] is not None
+    }
+
+
+def _expression_children(node: dict) -> Iterable[Any]:
+    """Only variant operands deserialize as expressions (spec.rs:1070-1435)."""
+    fields = {
+        "parameter_lookup": ("index",),
+        "add": ("items",),
+        "max": ("items",),
+        "min": ("items",),
+        "sub": ("left", "right"),
+        "mul": ("left", "right"),
+        "div": ("left", "right"),
+        "comparison": ("left", "right"),
+        "ceil": ("value",),
+        "floor": ("value",),
+        "date_add_days": ("date", "days"),
+        "date_add_months": ("date", "months"),
+        "date_add_years": ("date", "years"),
+        "days_between": ("from", "to"),
+        "count_related": ("where",),
+        "sum_related": ("where",),
+        "if": ("condition", "then_expr", "else_expr"),
+        "no_match": ("subject", "patterns"),
+        "over_periods": ("value", "n"),
+        "and": ("items",),
+        "or": ("items",),
+        "not": ("item",),
+        "exactly_one": ("items",),
+    }
+    return (node.get(key) for key in fields.get(node.get("kind"), ()))
+
+
+def _execution_nodes(node: Any) -> Iterable[dict]:
+    """Visit the engine's scalar/judgment operands, including no_match patterns."""
+    pending = [node]
+    while pending:
+        value = pending.pop()
+        if isinstance(value, list):
+            pending.extend(reversed(value))
+        elif isinstance(value, dict):
+            yield value
+            pending.extend(reversed(list(_expression_children(value))))
+
+
+def _executed_relations(
+    program: dict[str, Any], *, include_base: bool = False
+) -> set[str]:
+    """Port executed_relations: all versioned rules, then reached sources/predicates."""
+    used = set()
+    pending = []
+
+    def collect(expr: Any) -> None:
+        for node in _execution_nodes(expr):
+            if node.get("kind") in {"count_related", "sum_related", "relation_member"}:
+                name = node.get("relation")
+                if name is not None and name not in used:
+                    used.add(name)
+                    pending.append(name)
+
+    for rule in _named_records(program, "derived").values():
+        versions = (
+            [rule, *rule.get("versions", [])]
+            if include_base
+            else rule.get("versions") or [rule]
+        )
+        for version in versions:
+            collect(version.get("expr"))
+    schemas = _named_records(program, "relations")
+    while pending:
+        derivation = (schemas.get(pending.pop()) or {}).get("derivation") or {}
+        source = derivation.get("source_relation")
+        if source is not None and source not in used:
+            used.add(source)
+            pending.append(source)
+        collect(derivation.get("predicate"))
+    return used
+
+
+class _ArtifactRelations:
+    def __init__(self, artifact: dict[str, Any]):
+        self.program = artifact.get("program", artifact)
+        self.schemas = _named_records(self.program, "relations")
+        self.rules = _named_records(self.program, "derived")
+        self.filtered_kinds = _filtered_entity_kinds(self.program)
+        self.executed = _executed_relations(self.program)
+        self._typing_relations = _executed_relations(self.program, include_base=True)
+        self._expected_by_name: dict[str, list[str] | None] = {}
+        self._validated_relations: set[str] = set()
+
+    def canonical(self, kind: str) -> str:
+        return self.filtered_kinds.get(kind, kind)
 
     def schema(self, name: str) -> dict[str, Any] | None:
         if name in self.schemas:
             return self.schemas[name]
-        matches = [
-            schema
-            for key, schema in self.schemas.items()
-            if schema.get("id") == name or _fragment(key) == _fragment(name)
-        ]
-        if len(matches) > 1:
-            raise RelationBindingError(f"Ambiguous artifact relation {name!r}")
-        return matches[0] if matches else None
-
-    @staticmethod
-    def _slots(node: dict[str, Any]) -> tuple[int, int]:
-        current, related = node.get("current_slot"), node.get("related_slot")
-        if (
-            not isinstance(current, int)
-            or not isinstance(related, int)
-            or min(current, related) < 0
-            or current == related
+        # model.rs:640-658 resolves a public reference to a bare key only.
+        # Searching all matching fragments lets unrelated declarations interfere.
+        if not any(
+            rule.get("id") is not None for rule in self.rules.values()
+        ) and not any(
+            item.get("id") is not None
+            for item in _named_records(self.program, "parameters").values()
         ):
-            raise RelationBindingError(
-                f"Expected distinct nonnegative relation slots, got "
-                f"{current!r} and {related!r}"
+            return None
+        target, separator, fragment = name.partition("#")
+        if not separator or not fragment.startswith("relation.") or "#" in fragment:
+            return None
+        # PublicReference::parse and validate_module_target (rulespec.rs:1229-1266).
+        prefix, colon, relative = target.partition(":")
+        segments = relative.split("/")
+        if (
+            not colon
+            or not re.fullmatch(r"[a-z]{2}(?:-[a-z0-9]+)*", prefix)
+            or len(segments) < 2
+            or segments[0] not in {"legislation", "policies", "regulations", "statutes"}
+            or any(
+                segment in {"", ".", ".."}
+                or not re.fullmatch(r"[A-Za-z0-9_.~\-]+", segment)
+                for segment in segments
             )
-        return current, related
+            or segments[-1].lower().endswith((".yaml", ".yml", ".test"))
+            or name != name.strip()
+        ):
+            return None
+        return self.schemas.get(fragment.removeprefix("relation."))
 
-    def _record(
-        self,
-        name: str,
-        current: int,
-        related: int,
-        owner: str | None,
-        member: str | None,
-        stack: tuple[str, ...] = (),
-    ) -> list[str | None]:
-        schema = self.schema(name)
-        arity = schema.get("arity", 2) if schema else max(current, related) + 1
-        if max(current, related) >= arity:
-            raise RelationBindingError(f"Executable slots exceed arity for {name!r}")
-        kinds: list[str | None] = [None] * arity
-        kinds[current], kinds[related] = owner, member
-        if schema is None:
-            return kinds
-        if arity == 2 and kinds.count(None) == 1:
-            known = next(kind for kind in kinds if kind is not None)
-            kinds[kinds.index(None)] = self._remaining_endpoint_kind(name, known)
-        key = schema["name"]
-        self.usages[key].append(kinds)
-        constructor_kinds = self._constructor_kinds(name)
-        if constructor_kinds and (kinds[current], kinds[related]) == constructor_kinds:
-            self.owner_slots[key].add(current)
-        derivation = schema.get("derivation")
-        if derivation and key not in stack:
-            source_current, source_related = self._slots(derivation)
-            self._record(
-                derivation["source_relation"],
-                source_current,
-                source_related,
-                kinds[current],
-                kinds[related],
-                (*stack, key),
-            )
-        return kinds
-
-    def _referenced_kind(self, node: Any, relation: str) -> str | None:
-        kinds: set[str] = set()
-        identity_kinds = self._input_identity_kinds(relation)
-
-        def depends_on_row(value: Any, stack: tuple[str, ...] = ()) -> bool:
-            if isinstance(value, list):
-                return any(depends_on_row(child, stack) for child in value)
-            if not isinstance(value, dict):
-                return False
-            kind = value.get("kind")
-            if kind == "no_match":
-                return depends_on_row(value.get("subject"), stack)
-            if kind == "derived":
-                name = value.get("name")
-                if name in stack:
-                    return False
-                rule = self.rules.get(name, {})
-                return any(
-                    depends_on_row(version.get("expr"), (*stack, name))
-                    for version in rule.get("versions") or [rule]
-                )
-            if kind in {"input", "count_related", "sum_related", "relation_member"}:
-                return True
-            if kind in {"literal", "parameter", "period_start", "period_end", "input_or_else"}:
-                # An optional input's default can run on any entity id.
-                return False
-            return any(depends_on_row(child, stack) for child in value.values())
-
-        def collect(value: Any) -> None:
-            if isinstance(value, dict):
-                kind = value.get("kind")
-                if kind == "no_match":
-                    # Patterns label errors; only subject is executed.
-                    collect(value.get("subject"))
-                    return
-                if kind == "derived":
-                    name = value.get("name")
-                    rule = self.rules.get(name, {})
-                    entity = rule.get("entity")
-                    if (
-                        entity in identity_kinds
-                        or entity == "Person"
-                        or entity in UNIT_ENTITY_KINDS
-                    ) and depends_on_row(value):
-                        # Keep the referenced rule's execution scope: an alias
-                        # may read an input with another broadcast scope.
-                        kinds.add(entity)
-                    return
-                if kind in {"count_related", "sum_related", "relation_member"}:
-                    # A nested aggregate's references concern another row.
-                    return
-                for child in value.values():
-                    collect(child)
-            elif isinstance(value, list):
-                for child in value:
-                    collect(child)
-
-        collect(node)
-        return next(iter(kinds)) if len(kinds) == 1 else None
-
-    def _walk(
-        self,
-        node: Any,
-        entity: str | None,
-        context: tuple[str | None, str | None] | None = None,
-        *, independent_owner: bool = True,
-    ) -> None:
-        if isinstance(node, list):
-            for child in node:
-                self._walk(child, entity, context, independent_owner=independent_owner)
-        elif isinstance(node, dict):
-            kind = node.get("kind")
-            if kind == "no_match":
-                self._walk(
-                    node.get("subject"), entity, context, independent_owner=independent_owner,
-                )
-                return
-            if kind in {"count_related", "sum_related", "relation_member"}:
-                current, related = self._slots(node)
-                owner = entity
-                member = None
-                member_scope = None
-                schema = self.schema(node["relation"])
-                constructor_kinds = self._constructor_kinds(node["relation"])
-                if kind == "relation_member":
-                    # Membership consumes the enclosing derived pair. Without
-                    # that pair the engine rejects execution, so this node
-                    # supplies no evidence about the relation's slot order.
-                    if context is None:
-                        return
-                    owner, member = context
-                else:
-                    if owner is None and constructor_kinds:
-                        owner = constructor_kinds[0]
-                    derivation = (schema or {}).get("derivation") or {}
-                    if entity is not None and derivation.get("entity") == entity:
-                        structural = derivation.get("slot_entities", [])
-                        if current < len(structural):
-                            owner = structural[current]
-                    member_scope = self._referenced_kind(
-                        [node.get("value"), node.get("where")], node["relation"],
-                    )
-                    member = member_scope
-                    inventory = self._local_endpoint_kinds(node["relation"])
-                    if inventory:
-                        # Structural endpoint kinds, including incoming and
-                        # transitive sources, outrank scalar broadcast scopes.
-                        member = self._remaining_endpoint_kind(node["relation"], owner)
-                        if member is None and member_scope in inventory:
-                            member = member_scope
-                    else:
-                        identity = self._related_identity(node["relation"], owner)
-                        if identity is None and constructor_kinds:
-                            # A relation may also be traversed from its member
-                            # toward its owner. The producer's roles still
-                            # describe the same physical endpoint slots.
-                            identity = (
-                                constructor_kinds[0]
-                                if owner == constructor_kinds[1]
-                                and owner != constructor_kinds[0]
-                                else constructor_kinds[1]
-                            )
-                        if identity is not None:
-                            member = identity
-                        elif self.identity_pairs:
-                            # A scalar's execution scope is not proof of a
-                            # request endpoint's identity, even for Person.
-                            member = None
-                if independent_owner and kind != "relation_member" and owner is not None:
-                    self.aggregate_owner_kinds.add(owner)
-                kinds = self._record(
-                    node["relation"], current, related, owner, member
-                )
-                if kind != "relation_member":
-                    self._walk(
-                        node.get("where"),
-                        kinds[related] if self.identity_pairs or kinds[related] is not None
-                        else member_scope,
-                        independent_owner=independent_owner,
-                    )
-                return
-            # Scalar operands and conditions run on the same bound pair.
-            # Only an aggregate's where clause starts a new entity context
-            # (handled above without forwarding context).
-            for child in node.values():
-                self._walk(child, entity, context, independent_owner=independent_owner)
-
-    def expected(self, name: str) -> list[str | None] | None:
+    def expected(self, name: str) -> list[str] | None:
         schema = self.schema(name)
         if schema is None:
             return None
-        # Namespace aliases share one entry; unknown names are not retained.
         key = schema["name"]
         if key not in self._expected_by_name:
-            self._expected_by_name[key] = self._expected(name)
+            if schema.get("arity", 2) != 2:
+                raise RelationBindingError(
+                    f"Relation {name!r} is not a two-slot relation"
+                )
+            kinds = _effective_slot_entities(self.program, key)
+            if kinds is not None and len(kinds) != 2:
+                raise RelationBindingError(
+                    f"Invalid slot_entities for relation {name!r}"
+                )
+            self._expected_by_name[key] = (
+                [self.canonical(kind) for kind in kinds] if kinds is not None else None
+            )
         expected = self._expected_by_name[key]
         return list(expected) if expected is not None else None
 
-    def _expected(self, name: str) -> list[str | None] | None:
-        schema = self.schema(name)
-        if schema is None:
-            return None
-        if schema.get("arity", 2) != 2:
-            raise RelationBindingError(f"Relation {name!r} is not a two-slot relation")
-        declared = schema.get("slot_entities", [])
-        if declared and len(declared) != 2:
-            raise RelationBindingError(f"Invalid slot_entities for relation {name!r}")
-        usages = self.usages.get(schema["name"])
-        if not usages:
-            return list(declared) if declared else None
-        result: list[str | None] = []
-        for slot in range(2):
-            candidates = {kinds[slot] for kinds in usages if kinds[slot] is not None}
-            if len(candidates) > 1:
-                raise RelationBindingError(
-                    f"Conflicting executable kinds for relation {name!r} "
-                    f"slot {slot}: {sorted(candidates)!r}"
-                )
-            result.append(next(iter(candidates)) if candidates else None)
-        return result
+    def validate_direct_aggregates(self, name: str, expected: list[str]) -> None:
+        """Reject a pre-typing artifact's contradiction; never infer from usage.
 
-    def endpoint_kinds(self) -> set[str]:
-        """Owner roles proven by aggregates, independently of declarations."""
-        return set(self.aggregate_owner_kinds)
-
-    def _input_identity_kinds(self, name: str) -> set[str]:
-        """Use this relation's endpoint inventory before untyped role evidence."""
-        kinds = self._local_endpoint_kinds(name)
-        if kinds:
-            return kinds
+        Only the relation being bound is checked. Nested aggregate predicates
+        run on the related slot's declared kind. This check has no input to
+        expected(), identity classification, or tuple orientation.
+        """
         schema = self.schema(name)
-        # Only structurally untyped legacy artifacts need global owner roles.
-        kinds.update(self.executable_kinds)
-        if schema is not None:
-            kinds.update(
-                kind for usage in self.usages.get(schema["name"], [])
-                for kind in usage if kind is not None
+        target = schema["name"]
+        if target in self._validated_relations:
+            return
+        scopes = []
+        for rule in self.rules.values():
+            # The engine validates base semantics as well as versions.
+            for version in [rule, *rule.get("versions", [])]:
+                scopes.append((version.get("expr"), rule.get("entity"), rule["name"]))
+        for key in sorted(self._typing_relations):
+            derivation = (self.schemas.get(key) or {}).get("derivation") or {}
+            kinds = _effective_slot_entities(self.program, key)
+            related = derivation.get("related_slot")
+            member = (
+                kinds[related]
+                if kinds is not None
+                and isinstance(related, int)
+                and 0 <= related < len(kinds)
+                else None
             )
-        return kinds
+            scopes.append((derivation.get("predicate"), member, key))
+        while scopes:
+            value, entity, citing = scopes.pop()
+            if isinstance(value, list):
+                scopes.extend((child, entity, citing) for child in value)
+            elif isinstance(value, dict):
+                kind = value.get("kind")
+                if kind in {"count_related", "sum_related"}:
+                    relation = value.get("relation")
+                    current = value.get("current_slot")
+                    related = value.get("related_slot")
+                    kinds = _effective_slot_entities(self.program, relation)
+                    if (
+                        relation == target
+                        and entity is not None
+                        and (
+                            not isinstance(current, int)
+                            or not 0 <= current < len(expected)
+                            or self.canonical(entity) != expected[current]
+                        )
+                    ):
+                        raise RelationBindingError(
+                            f"Relation {name!r} declares slot kinds {expected!r}, "
+                            f"but aggregate in {citing!r} uses current_slot="
+                            f"{current!r} for entity {entity!r}; recompile or "
+                            "`axiom-rules-engine migrate artifact`"
+                        )
+                    member = (
+                        kinds[related]
+                        if kinds is not None
+                        and isinstance(related, int)
+                        and 0 <= related < len(kinds)
+                        else None
+                    )
+                    scopes.append((value.get("where"), member, citing))
+                else:
+                    scopes.extend(
+                        (child, entity, citing) for child in _expression_children(value)
+                    )
+        self._validated_relations.add(target)
+
+    def wrapper_owner_slot(self, name: str) -> int | None:
+        """Use only unanimous same-kind wrapper directions reaching this source."""
+        slots = set()
+        for schema in self.schemas.values():
+            derivation = schema.get("derivation") or {}
+            source = derivation.get("source_relation")
+            visited = {schema["name"]}
+            while source is not None and source not in visited:
+                if source == name:
+                    current = derivation.get("current_slot")
+                    if current in (0, 1):
+                        slots.add(current)
+                    break
+                visited.add(source)
+                source = ((self.schemas.get(source) or {}).get("derivation") or {}).get(
+                    "source_relation"
+                )
+        return next(iter(slots)) if len(slots) == 1 else None
+
+    def query_evidence(self, queries: list[dict]) -> Iterable[tuple[str, str]]:
+        # api.rs:387-405: entities come from resolved output rules, excluding scalar.
+        for query in queries:
+            for output in query.get("outputs", []):
+                rule = next(
+                    (item for item in self.rules.values() if item.get("id") == output),
+                    None,
+                )
+                if rule is None:
+                    candidate = self.rules.get(output)
+                    rule = (
+                        candidate if candidate and candidate.get("id") is None else None
+                    )
+                if rule and rule.get("entity") not in (None, "Scalar"):
+                    yield query["entity_id"], rule["entity"]
 
 
 @dataclass
 class _CachedArtifactRelations:
     artifact: dict[str, Any]
     program_snapshot: dict[str, Any]
-    analyses: OrderedDict[tuple[str, str, str] | None, _ArtifactRelations] = field(
-        default_factory=OrderedDict,
-    )
+    analysis: _ArtifactRelations
 
 
 _ARTIFACT_RELATION_CACHE: OrderedDict[int, _CachedArtifactRelations] = OrderedDict()
 _MAX_CACHED_ARTIFACTS = 8
-_MAX_CACHED_CONSTRUCTOR_HINTS = 128
 
 
-def _artifact_relation_analysis(
-    artifact: dict[str, Any], *, constructor_hint: tuple[str, str, str] | None = None,
-) -> _ArtifactRelations:
-    """Reuse constructor analysis, with the same result as a fresh program walk.
-
-    Artifact dictionaries can be edited in place, so identity alone cannot key
-    their executable slots. Compare a retained snapshot before reuse. Retaining
-    the original object prevents recycled ids from hitting a different artifact,
-    and bounded entries avoid retaining every program loaded by a long run.
-    Request identity pairs are deliberately analyzed outside this cache.
-    """
+def _artifact_relation_analysis(artifact: dict[str, Any]) -> _ArtifactRelations:
+    """Cache one analysis per immutable snapshot, observing in-place edits."""
     program = artifact.get("program", artifact)
     key = id(artifact)
     cached = _ARTIFACT_RELATION_CACHE.get(key)
-    if cached is None or cached.artifact is not artifact or program != cached.program_snapshot:
-        cached = _CachedArtifactRelations(artifact, deepcopy(program))
+    if (
+        cached is None
+        or cached.artifact is not artifact
+        or program != cached.program_snapshot
+    ):
+        snapshot = deepcopy(program)
+        cached = _CachedArtifactRelations(
+            artifact, snapshot, _ArtifactRelations(snapshot)
+        )
         _ARTIFACT_RELATION_CACHE[key] = cached
     _ARTIFACT_RELATION_CACHE.move_to_end(key)
     while len(_ARTIFACT_RELATION_CACHE) > _MAX_CACHED_ARTIFACTS:
         _ARTIFACT_RELATION_CACHE.popitem(last=False)
-
-    if constructor_hint and cached.analyses:
-        schema = next(iter(cached.analyses.values())).schema(constructor_hint[0])
-        if schema is not None:
-            constructor_hint = (schema["name"], *constructor_hint[1:])
-    relations = cached.analyses.get(constructor_hint)
-    if relations is None:
-        relations = _ArtifactRelations(cached.program_snapshot, constructor_hint=constructor_hint)
-        if constructor_hint:
-            schema = relations.schema(constructor_hint[0])
-            if schema is not None:
-                constructor_hint = (schema["name"], *constructor_hint[1:])
-        cached.analyses[constructor_hint] = relations
-    cached.analyses.move_to_end(constructor_hint)
-    while len(cached.analyses) > _MAX_CACHED_CONSTRUCTOR_HINTS:
-        cached.analyses.popitem(last=False)
-    return relations
+    return cached.analysis
 
 
 def _ordered_tuple(
-    name: str,
-    expected: list[str | None],
-    ids: list[str],
-    kinds: list[str | None],
-    *,
-    preserve_ambiguous: bool = False,
-    report_ambiguity: bool = True,
+    name: str, expected: list[str], ids: list[str], kinds: list[str | None]
 ) -> list[str]:
-    candidates = [
-        order
-        for order in ([0, 1], [1, 0])
-        if all(
-            expected[slot] is None
-            or (preserve_ambiguous and kinds[index] is None)
-            or expected[slot] == kinds[index]
+    def clean(order: list[int]) -> bool:
+        return all(
+            kinds[index] is None or expected[slot] == kinds[index]
             for slot, index in enumerate(order)
         )
-    ]
-    if preserve_ambiguous and len(candidates) == 2:
-        # A matching label is no evidence against the other orientation when
-        # its endpoint is unknown. Preferences can corrupt a correct request.
-        if report_ambiguity:
+
+    supplied, swapped = clean([0, 1]), clean([1, 0])
+    if supplied:
+        if swapped and None in kinds:
             warnings.warn(RelationBindingAmbiguityWarning(name, ids), stacklevel=3)
         return list(ids)
-    if (
-        len(candidates) == 2
-        and kinds[0] == kinds[1]
-        and any(kind is not None for kind in expected)
-    ):
-        # Equal-kind slots carry no evidence for exchanging the existing ids.
-        return list(ids)
-    if len(candidates) != 1:
-        raise RelationBindingError(
-            f"Cannot unambiguously order relation {name!r}: executable slot kinds "
-            f"{expected!r}, supplied entity kinds {kinds!r}"
-        )
-    return [ids[index] for index in candidates[0]]
+    if swapped:
+        return list(reversed(ids))
+    raise RelationBindingError(
+        f"Cannot order relation {name!r}: declared slot kinds {expected!r}, "
+        f"supplied entity kinds {kinds!r}"
+    )
 
 
 def relation_owner_kind(
-    artifact: dict[str, Any], name: str, *, default_owner_kind: str, related_kind: str,
+    artifact: dict[str, Any],
+    name: str,
+    *,
+    default_owner_kind: str,
+    related_kind: str,
 ) -> str:
-    """Read a projected unit's real kind from the artifact's endpoint slots."""
+    """Read a projected unit's physical kind from the relation's declared slots."""
     relations = _artifact_relation_analysis(artifact)
-    schema = relations.schema(name)
-    if schema is None:
-        return default_owner_kind
     expected = relations.expected(name)
-    if expected is None or default_owner_kind in expected:
+    owner, related = (
+        relations.canonical(default_owner_kind),
+        relations.canonical(related_kind),
+    )
+    if expected is None:
         return default_owner_kind
-    candidates = {kind for kind in expected if kind is not None and kind != related_kind}
+    if owner in expected:
+        return owner
+    candidates = set(expected) - {related}
     if len(candidates) == 1:
         return next(iter(candidates))
-    if expected == [related_kind, related_kind]:
-        return related_kind
-    if None in expected and not candidates:
-        return default_owner_kind
+    if expected == [related, related]:
+        return related
     raise RelationBindingError(f"Cannot determine the owner kind for relation {name!r}")
+
+
+def _report_ambiguity(
+    name: str,
+    ids: list[str],
+    collected: list[RelationBindingAmbiguityWarning] | None = None,
+) -> None:
+    report = RelationBindingAmbiguityWarning(name, ids)
+    if collected is None:
+        warnings.warn(report, stacklevel=3)
+    else:
+        collected.append(report)
 
 
 def relation_tuple(
@@ -585,112 +465,83 @@ def relation_tuple(
     related_id: str,
     related_kind: str,
     legacy_owner_slot: int = 1,
+    binding_ambiguities: list[RelationBindingAmbiguityWarning] | None = None,
 ) -> list[str]:
-    """Build a two-slot tuple, retaining the legacy order without metadata."""
+    """Place explicit roles by engine typing; preserve untyped legacy order."""
     if legacy_owner_slot not in (0, 1):
         raise RelationBindingError("legacy_owner_slot must be 0 or 1")
     ids = [related_id, owner_id] if legacy_owner_slot == 1 else [owner_id, related_id]
     if artifact is None:
         return ids
-    relations = _artifact_relation_analysis(
-        artifact, constructor_hint=(name, owner_kind, related_kind),
-    )
+    relations = _artifact_relation_analysis(artifact)
     expected = relations.expected(name)
-    if expected is None:
-        return ids
     schema = relations.schema(name)
-    if owner_kind == related_kind:
-        slots = relations.owner_slots[schema["name"]]
-        if len(slots) > 1:
-            raise RelationBindingError(f"Conflicting executable owner slots for relation {name!r}")
-        if slots:
-            return [owner_id, related_id] if next(iter(slots)) == 0 else [related_id, owner_id]
-    kinds = (
-        [related_kind, owner_kind]
-        if legacy_owner_slot == 1
-        else [owner_kind, related_kind]
-    )
+    if expected is None:
+        if schema and schema["name"] in relations.executed:
+            _report_ambiguity(name, ids, binding_ambiguities)
+        return ids
+    relations.validate_direct_aggregates(name, expected)
+    owner, related = relations.canonical(owner_kind), relations.canonical(related_kind)
+    if expected == [owner, owner] and owner == related:
+        slot = relations.wrapper_owner_slot(schema["name"])
+        if slot is None:
+            _report_ambiguity(name, ids, binding_ambiguities)
+            return ids
+        return [owner_id, related_id] if slot == 0 else [related_id, owner_id]
+    kinds = [related, owner] if legacy_owner_slot == 1 else [owner, related]
     return _ordered_tuple(name, expected, ids, kinds)
 
 
 def bind_request_relations(
     request: dict[str, Any], artifact: dict[str, Any]
 ) -> dict[str, Any]:
-    """Return a copy with relation records ordered by executable usage.
+    """Copy a request, preserving every supplied order the engine would accept.
 
-    Call after resolving request relation names against the artifact. Released
-    untyped artifacts retain their related-first order through executable slots.
-    Input entity labels also describe broadcast scopes, so multiple labels need
-    not contradict an endpoint's identity. Conflicting known endpoint kinds
-    are errors. Known labels constrain the executable slots. Repair is allowed
-    only when those constraints exclude the other orientation. Otherwise the
-    tuple stays byte-identical and a RelationBindingAmbiguityWarning names the
-    relation and tuple. The caller's request is never mutated.
+    A swap requires a known mismatch in the supplied order and none after
+    swapping. Input and query labels use engine canonical kinds; an ID with
+    conflicting labels stays unknown. No usage or incoming derivation can
+    supply expected kinds or identity evidence.
     """
     result = deepcopy(request)
     records = result.get("dataset", {}).get("relations", [])
     if not records:
         return result
-    # Producer roles determine these tuples by construction. Do not reinterpret
-    # them through incomplete or broadcast input identity labels.
-    raw_records = []
-    for record in records:
-        if "roles" in record:
-            record["tuple"] = relation_tuple(artifact, record["name"], **record["roles"])
+    relations = _artifact_relation_analysis(artifact)
+    entity_by_id: dict[str, str | None] = {}
+    evidence = [
+        (record["entity_id"], record["entity"])
+        for record in result.get("dataset", {}).get("inputs", [])
+        if "entity_id" in record and "entity" in record
+    ]
+    evidence.extend(relations.query_evidence(result.get("queries", [])))
+    for entity_id, entity in evidence:
+        entity = relations.canonical(entity)
+        if entity_id in entity_by_id and entity_by_id[entity_id] != entity:
+            entity_by_id[entity_id] = None
         else:
-            raw_records.append(record)
-    if not raw_records:
-        return result
-    labels: dict[str, set[str]] = defaultdict(set)
-    for record in result.get("dataset", {}).get("inputs", []):
-        if "entity_id" in record and "entity" in record:
-            labels[record["entity_id"]].add(record["entity"])
-    identity_pairs: dict[str, list[list[set[str]]]] = defaultdict(list)
-    for record in raw_records:
-        if len(record.get("tuple", [])) == 2:
-            identity_pairs[record["name"]].append([
-                labels.get(entity_id, set()) for entity_id in record["tuple"]
-            ])
-    relations = _ArtifactRelations(artifact, identity_pairs=identity_pairs)
-    rule_scopes = {
-        rule["entity"] for rule in relations.rules.values() if rule.get("entity")
-    }
-    for record in raw_records:
+            entity_by_id[entity_id] = entity
+    checked = set()
+    for record in records:
         name = record["name"]
+        if "roles" in record:
+            record["tuple"] = relation_tuple(artifact, name, **record["roles"])
+            continue
         schema = relations.schema(name)
         if schema is None or schema.get("arity", 2) != 2:
             continue
         expected = relations.expected(name)
+        ids = record.get("tuple", [])
         if expected is None:
-            if relations.usages.get(schema["name"]) and len(record.get("tuple", [])) == 2:
-                warnings.warn(
-                    RelationBindingAmbiguityWarning(name, record["tuple"]), stacklevel=2
-                )
+            if schema["name"] in relations.executed:
+                warnings.warn(RelationBindingAmbiguityWarning(name, ids), stacklevel=2)
             continue
-        ids = record["tuple"]
         if len(ids) != 2:
             raise RelationBindingError(f"Relation {name!r} requires a two-slot tuple")
-        kinds = []
-        untyped = not relations._local_endpoint_kinds(name)
-        identity_kinds = relations._input_identity_kinds(name)
-        scalar_scopes = rule_scopes - identity_kinds
-        for entity_id in ids:
-            possible = labels.get(entity_id, set())
-            identities = possible & identity_kinds
-            if len(identities) > 1:
-                raise RelationBindingError(
-                    f"Relation {name!r} entity {entity_id!r} needs one input entity "
-                    f"kind; got {sorted(identities)!r}"
-                )
-            if not untyped and len(possible) == 1 and not possible <= scalar_scopes:
-                # A unique typed label must match unless the artifact proves
-                # it is only a scalar scope, rather than an endpoint identity.
-                kinds.append(next(iter(possible)))
-            else:
-                kinds.append(next(iter(identities)) if identities else None)
+        if schema["name"] not in checked:
+            relations.validate_direct_aggregates(name, expected)
+            checked.add(schema["name"])
         record["tuple"] = _ordered_tuple(
-            name, expected, ids, kinds, preserve_ambiguous=True,
-            report_ambiguity=bool(relations.usages.get(schema["name"])),
+            name, expected, ids, [entity_by_id.get(i) for i in ids]
         )
     return result
 
@@ -699,8 +550,11 @@ RELATION_BINDING_SAMPLE_LIMIT = 20
 
 
 def bind_materialized_relations(
-    request: dict[str, Any], artifact: dict[str, Any], *,
-    materialized: set[int], binder: Callable = bind_request_relations,
+    request: dict[str, Any],
+    artifact: dict[str, Any],
+    *,
+    materialized: set[int],
+    binder: Callable = bind_request_relations,
 ) -> tuple[dict[str, Any], list[RelationBindingAmbiguityWarning]]:
     """Bind raw tuples and capture every ambiguity, including repeats.
 
@@ -712,9 +566,14 @@ def bind_materialized_relations(
         return request, []
     pending = {
         **request,
-        "dataset": {**request["dataset"], "relations": [
-            record for index, record in enumerate(records) if index not in materialized
-        ]},
+        "dataset": {
+            **request["dataset"],
+            "relations": [
+                record
+                for index, record in enumerate(records)
+                if index not in materialized
+            ],
+        },
     }
     with warnings.catch_warnings(record=True) as captured:
         warnings.simplefilter("always", RelationBindingAmbiguityWarning)
@@ -725,14 +584,17 @@ def bind_materialized_relations(
         for index, record in enumerate(records)
     ]
     return bound, [
-        report.message for report in captured
+        report.message
+        for report in captured
         if isinstance(report.message, RelationBindingAmbiguityWarning)
     ]
 
 
 def relation_binding_diagnostics(
-    ambiguities: Iterable[RelationBindingAmbiguityWarning], *,
-    namespace: str | None = None, entity_id: str | None = None,
+    ambiguities: Iterable[RelationBindingAmbiguityWarning],
+    *,
+    namespace: str | None = None,
+    entity_id: str | None = None,
 ) -> dict[str, Any]:
     """Count all matching tuples while retaining at most twenty examples."""
     counts: Counter[str] = Counter()
@@ -746,8 +608,14 @@ def relation_binding_diagnostics(
             continue
         counts[ambiguity.relation] += 1
         if len(samples) < RELATION_BINDING_SAMPLE_LIMIT:
-            samples.append({"relation": ambiguity.relation, "tuple": list(ambiguity.tuple)})
-    return {"count": sum(counts.values()), "by_relation": dict(counts), "samples": samples}
+            samples.append(
+                {"relation": ambiguity.relation, "tuple": list(ambiguity.tuple)}
+            )
+    return {
+        "count": sum(counts.values()),
+        "by_relation": dict(counts),
+        "samples": samples,
+    }
 
 
 def merge_relation_binding_diagnostics(target: dict, source: dict) -> None:
@@ -768,6 +636,7 @@ def public_relation_binding_diagnostics(source: dict[str, Any]) -> dict[str, Any
     aliases can contain caller data, so only a bounded identifier fragment is
     retained; other names share a redacted bucket whose counts are summed.
     """
+
     def safe_name(name: Any) -> str:
         fragment = _fragment(name) if isinstance(name, str) else ""
         if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_.-]{0,127}", fragment):
@@ -788,7 +657,8 @@ def public_relation_binding_diagnostics(source: dict[str, Any]) -> dict[str, Any
 
 
 def attach_relation_binding_diagnostics(
-    results: list[dict], ambiguities: list[RelationBindingAmbiguityWarning],
+    results: list[dict],
+    ambiguities: list[RelationBindingAmbiguityWarning],
 ) -> None:
     """Attach every occurrence once, including tuples without a queried id.
 
@@ -805,7 +675,9 @@ def attach_relation_binding_diagnostics(
         matches = [indexes[value] for value in ambiguity.tuple if value in indexes]
         groups[min(matches) if matches else 0].append(ambiguity)
     for index, group in groups.items():
-        results[index]["relation_binding_diagnostics"] = relation_binding_diagnostics(group)
+        results[index]["relation_binding_diagnostics"] = relation_binding_diagnostics(
+            group
+        )
 
 
 def with_relation_binding_diagnostics(raw: Any, diagnostics: dict) -> Any:

@@ -17,6 +17,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import warnings
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from importlib.metadata import PackageNotFoundError, version
@@ -3004,7 +3005,10 @@ def _runtime_axiom_request(
             )
             roles = item.pop("roles", None)
             if roles is not None:
-                item["tuple"] = relation_tuple(artifact_payload, item["name"], **roles)
+                item["tuple"] = relation_tuple(
+                    artifact_payload, item["name"], **roles,
+                    binding_ambiguities=binding_ambiguities,
+                )
                 materialized.add(index)
 
     public_output_by_runtime: dict[str, str] = {}
@@ -3035,6 +3039,9 @@ def _runtime_axiom_request(
     )
     if binding_ambiguities is not None:
         binding_ambiguities.extend(ambiguities)
+    else:
+        for ambiguity in ambiguities:
+            warnings.warn(ambiguity, stacklevel=2)
     return runtime_request, public_output_by_runtime
 
 

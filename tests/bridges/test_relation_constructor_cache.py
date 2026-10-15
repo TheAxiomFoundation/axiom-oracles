@@ -13,80 +13,147 @@ from axiom_oracles.bridges import relation_binding
 from axiom_oracles.core.case import Case, Entity
 
 
-def _artifact(owner_slot=1, owner="Household", member="Person", typed=False):
+def _artifact(owner_slot=1, owner="Household", member="Person", typed=True):
     slots = [member, owner] if owner_slot else [owner, member]
-    return {"program": {
-        "relations": [{"name": "members", "arity": 2,
-                       **({"slot_entities": slots} if typed else {})}],
-        "derived": [{"name": "count", "entity": owner, "expr": {
-            "kind": "count_related", "relation": "members",
-            "current_slot": owner_slot, "related_slot": 1 - owner_slot,
-        }}],
-    }}
+    artifact = {
+        "program": {
+            "relations": [
+                {
+                    "name": "members",
+                    "arity": 2,
+                    **({"slot_entities": slots} if typed else {}),
+                }
+            ],
+            "derived": [
+                {
+                    "name": "count",
+                    "entity": owner,
+                    "expr": {
+                        "kind": "count_related",
+                        "relation": "members",
+                        "current_slot": owner_slot,
+                        "related_slot": 1 - owner_slot,
+                    },
+                }
+            ],
+        }
+    }
+    if owner == member and typed:
+        artifact["program"]["relations"].append(
+            {
+                "name": "wrapper",
+                "arity": 2,
+                "derivation": {
+                    "source_relation": "members",
+                    "current_slot": owner_slot,
+                    "related_slot": 1 - owner_slot,
+                    "predicate": {
+                        "kind": "comparison",
+                        "op": "eq",
+                        "left": {
+                            "kind": "literal",
+                            "value": {"kind": "integer", "value": 1},
+                        },
+                        "right": {
+                            "kind": "literal",
+                            "value": {"kind": "integer", "value": 1},
+                        },
+                    },
+                },
+            }
+        )
+    return artifact
 
 
 def _tuple(artifact, **kwargs):
     return relation_binding.relation_tuple(
-        artifact, "members", owner_id="house", owner_kind="Household",
-        related_id="person", related_kind="Person", **kwargs,
+        artifact,
+        "members",
+        owner_id="house",
+        owner_kind="Household",
+        related_id="person",
+        related_kind="Person",
+        **kwargs,
     )
 
 
 def test_role_construction_analyzes_artifact_once_per_batch(monkeypatch):
     artifact = _artifact()
     walks = []
-    read_usages = relation_binding._ArtifactRelations._read_usages
+    initialize = relation_binding._ArtifactRelations.__init__
 
     def counted(self, program):
         walks.append(program)
-        return read_usages(self, program)
+        return initialize(self, program)
 
-    monkeypatch.setattr(relation_binding._ArtifactRelations, "_read_usages", counted)
+    monkeypatch.setattr(relation_binding._ArtifactRelations, "__init__", counted)
     for index in range(120):
         assert relation_binding.relation_tuple(
-            artifact, "members", owner_id="house", owner_kind="Household",
-            related_id=f"person-{index}", related_kind="Person",
+            artifact,
+            "members",
+            owner_id="house",
+            owner_kind="Household",
+            related_id=f"person-{index}",
+            related_kind="Person",
         ) == [f"person-{index}", "house"]
-    # One analysis retains its two dependency passes; repeated rows add none.
-    assert len(walks) == 2
+    # One snapshot analysis serves every row.
+    assert len(walks) == 1
 
 
 @pytest.mark.parametrize("size", [40, 120])
 def test_producer_and_engine_batch_analysis_count_does_not_grow_with_cases(
-    monkeypatch, tmp_path, size,
+    monkeypatch,
+    tmp_path,
+    size,
 ):
     artifact = _artifact()
     path = tmp_path / "members.compiled.json"
     path.write_text(json.dumps(artifact))
     walks = []
-    original = relation_binding._ArtifactRelations._read_usages
+    original = relation_binding._ArtifactRelations.__init__
 
     def counted(self, program):
         walks.append(program)
         return original(self, program)
 
-    monkeypatch.setattr(relation_binding._ArtifactRelations, "_read_usages", counted)
-    cases = [Case(str(index), "2026-01", entities=tuple(
-        Entity(str(person), "Person") for person in range(3)
-    )) for index in range(size)]
+    monkeypatch.setattr(relation_binding._ArtifactRelations, "__init__", counted)
+    cases = [
+        Case(
+            str(index),
+            "2026-01",
+            entities=tuple(Entity(str(person), "Person") for person in range(3)),
+        )
+        for index in range(size)
+    ]
     projected = generic_inputs.attach_generic_inputs(
-        cases, compiled_program_path=path, member_relation="members",
+        cases,
+        compiled_program_path=path,
+        member_relation="members",
         load_default_mapping=False,
     )
-    # Producer owner discovery and construction each analyze one variant.
-    assert len(walks) == 4
+    # Owner discovery and construction share one analysis.
+    assert len(walks) == 1
 
     def fake_run(command, **kwargs):
         request = json.loads(kwargs["input"])
         assert len(request["dataset"]["relations"]) == 3 * size
-        return subprocess.CompletedProcess(command, 0, stdout=json.dumps({
-            "results": [{"outputs": {}} for _ in cases],
-        }), stderr="")
+        return subprocess.CompletedProcess(
+            command,
+            0,
+            stdout=json.dumps(
+                {
+                    "results": [{"outputs": {}} for _ in cases],
+                }
+            ),
+            stderr="",
+        )
 
-    adapter = runner.AxiomRulesRunner(binary_path=tmp_path / "engine", subprocess_run=fake_run)
+    adapter = runner.AxiomRulesRunner(
+        binary_path=tmp_path / "engine", subprocess_run=fake_run
+    )
     assert len(adapter._run_case_batch_once(projected, ["count"], path)) == size
     # The separately loaded runtime artifact needs one constructor analysis.
-    assert len(walks) == 6
+    assert len(walks) == 2
 
 
 def test_constructor_cache_observes_in_place_artifact_mutation():
@@ -94,6 +161,7 @@ def test_constructor_cache_observes_in_place_artifact_mutation():
     assert _tuple(artifact) == ["person", "house"]
     expression = artifact["program"]["derived"][0]["expr"]
     expression.update(current_slot=0, related_slot=1)
+    artifact["program"]["relations"][0]["slot_entities"].reverse()
     assert _tuple(artifact) == ["house", "person"]
 
 
@@ -111,13 +179,17 @@ def _replace_relation_containers(artifact, replacement):
 @pytest.mark.parametrize("replacement", ["program", "relations", "schemas"])
 @settings(deadline=None)
 @given(owner_slot=st.integers(0, 1))
-def test_constructor_cache_ignores_detached_schema_name_mutation(replacement, owner_slot):
+def test_constructor_cache_ignores_detached_schema_name_mutation(
+    replacement, owner_slot
+):
     artifact = _artifact(owner_slot, owner="Person", member="Person", typed=True)
     detached_schema = artifact["program"]["relations"][0]
     before = deepcopy(artifact)
     arguments = {
-        "owner_id": "owner", "owner_kind": "Person",
-        "related_id": "related", "related_kind": "Person",
+        "owner_id": "owner",
+        "owner_kind": "Person",
+        "related_id": "related",
+        "related_kind": "Person",
         "legacy_owner_slot": 1 - owner_slot,
     }
     expected = ["owner", "related"] if owner_slot == 0 else ["related", "owner"]
@@ -127,60 +199,84 @@ def test_constructor_cache_ignores_detached_schema_name_mutation(replacement, ow
     detached_schema["name"] = "detached-members"
     assert artifact == before
     with patch.object(
-        relation_binding, "_artifact_relation_analysis",
+        relation_binding,
+        "_artifact_relation_analysis",
         side_effect=relation_binding._ArtifactRelations,
     ):
-        assert relation_binding.relation_tuple(artifact, "members", **arguments) == expected
+        assert (
+            relation_binding.relation_tuple(artifact, "members", **arguments)
+            == expected
+        )
     assert relation_binding.relation_tuple(artifact, "members", **arguments) == expected
 
 
 @pytest.mark.parametrize("replacement", ["program", "relations", "schemas"])
 @settings(deadline=None)
 @given(detached_arity=st.integers(3, 10))
-def test_owner_kind_cache_ignores_detached_schema_arity_mutation(replacement, detached_arity):
+def test_owner_kind_cache_ignores_detached_schema_arity_mutation(
+    replacement, detached_arity
+):
     artifact = _artifact(typed=True)
     detached_schema = {
-        "name": "other-members", "arity": 2,
+        "name": "other-members",
+        "arity": 2,
         "slot_entities": ["Household", "Person"],
     }
     artifact["program"]["relations"].append(detached_schema)
     before = deepcopy(artifact)
     arguments = {"default_owner_kind": "TaxUnit", "related_kind": "Person"}
-    assert relation_binding.relation_owner_kind(artifact, "members", **arguments) == "Household"
+    assert (
+        relation_binding.relation_owner_kind(artifact, "members", **arguments)
+        == "Household"
+    )
 
     _replace_relation_containers(artifact, replacement)
     detached_schema["arity"] = detached_arity
     assert artifact == before
     with patch.object(
-        relation_binding, "_artifact_relation_analysis",
+        relation_binding,
+        "_artifact_relation_analysis",
         side_effect=relation_binding._ArtifactRelations,
     ):
-        assert relation_binding.relation_owner_kind(
-            artifact, "other-members", **arguments,
-        ) == "Household"
-    assert relation_binding.relation_owner_kind(
-        artifact, "other-members", **arguments,
-    ) == "Household"
+        assert (
+            relation_binding.relation_owner_kind(
+                artifact,
+                "other-members",
+                **arguments,
+            )
+            == "Household"
+        )
+    assert (
+        relation_binding.relation_owner_kind(
+            artifact,
+            "other-members",
+            **arguments,
+        )
+        == "Household"
+    )
 
 
 def test_constructor_aliases_reuse_the_same_analysis(monkeypatch):
     artifact = _artifact()
-    schema = artifact["program"]["relations"][0]
-    schema["name"] = "example:module#relation.members"
+    artifact["program"]["derived"][0]["id"] = "us:statutes/7/2012/j#count"
     calls = []
-    original = relation_binding._ArtifactRelations._read_usages
+    original = relation_binding._ArtifactRelations.__init__
 
     def counted(self, program):
         calls.append(program)
         return original(self, program)
 
-    monkeypatch.setattr(relation_binding._ArtifactRelations, "_read_usages", counted)
+    monkeypatch.setattr(relation_binding._ArtifactRelations, "__init__", counted)
     assert _tuple(artifact) == ["person", "house"]
     assert relation_binding.relation_tuple(
-        artifact, schema["name"], owner_id="house", owner_kind="Household",
-        related_id="person", related_kind="Person",
+        artifact,
+        "us:statutes/7/2012/j#relation.members",
+        owner_id="house",
+        owner_kind="Household",
+        related_id="person",
+        related_kind="Person",
     ) == ["person", "house"]
-    assert len(calls) == 2
+    assert len(calls) == 1
 
 
 @settings(deadline=None)
@@ -188,41 +284,59 @@ def test_constructor_aliases_reuse_the_same_analysis(monkeypatch):
     owner_slot=st.integers(0, 1),
     namespaces=st.lists(st.integers(), min_size=2, max_size=30, unique=True),
 )
-def test_constructor_aliases_share_one_expected_kind_cache_entry(owner_slot, namespaces):
+def test_constructor_aliases_share_one_expected_kind_cache_entry(
+    owner_slot, namespaces
+):
     artifact = _artifact(owner_slot)
     schema = artifact["program"]["relations"][0]
-    schema.update(name="example:module#relation.members", id="example:relation-id")
+    artifact["program"]["derived"][0]["id"] = "us:statutes/7/2012/j#count"
     before = deepcopy(artifact)
-    aliases = ["members", schema["name"], schema["id"], *(
-        f"namespace-{namespace}#relation.members" for namespace in namespaces
-    )]
+    aliases = [
+        "members",
+        *(
+            f"us:statutes/test/{abs(namespace)}#relation.members"
+            for namespace in namespaces
+        ),
+    ]
     expected = ["house", "person"] if owner_slot == 0 else ["person", "house"]
     for alias in aliases:
-        assert relation_binding.relation_tuple(
-            artifact, alias, owner_id="house", owner_kind="Household",
-            related_id="person", related_kind="Person",
-        ) == expected
+        assert (
+            relation_binding.relation_tuple(
+                artifact,
+                alias,
+                owner_id="house",
+                owner_kind="Household",
+                related_id="person",
+                related_kind="Person",
+            )
+            == expected
+        )
 
     entry = relation_binding._ARTIFACT_RELATION_CACHE[id(artifact)]
-    assert len(entry.analyses) == 1
-    analysis = next(iter(entry.analyses.values()))
+    analysis = entry.analysis
     assert set(analysis._expected_by_name) == {schema["name"]}
     assert artifact == before
 
 
-def test_constructor_cache_retains_bounded_artifacts_and_hints(monkeypatch):
+def test_constructor_cache_retains_bounded_artifacts(monkeypatch):
     monkeypatch.setattr(relation_binding, "_MAX_CACHED_ARTIFACTS", 2)
-    monkeypatch.setattr(relation_binding, "_MAX_CACHED_CONSTRUCTOR_HINTS", 2)
     for _ in range(3):
-        artifact = _artifact()
+        artifact = _artifact(typed=False)
         for kind in ("Person", "Payment", "TaxUnit"):
             relation_binding.relation_tuple(
-                artifact, "members", owner_id="house", owner_kind="Household",
-                related_id="member", related_kind=kind,
+                artifact,
+                "members",
+                owner_id="house",
+                owner_kind="Household",
+                related_id="member",
+                related_kind=kind,
             )
     cache = relation_binding._ARTIFACT_RELATION_CACHE
     assert len(cache) == 2
-    assert all(len(entry.analyses) == 2 for entry in cache.values())
+    assert all(
+        isinstance(entry.analysis, relation_binding._ArtifactRelations)
+        for entry in cache.values()
+    )
 
 
 @settings(deadline=None)
@@ -235,20 +349,33 @@ def test_constructor_cache_retains_bounded_artifacts_and_hints(monkeypatch):
     inverse=st.booleans(),
 )
 def test_cached_constructor_matches_fresh_analysis(
-    owner, member, owner_slot, legacy_owner_slot, typed, inverse,
+    owner,
+    member,
+    owner_slot,
+    legacy_owner_slot,
+    typed,
+    inverse,
 ):
     artifact = _artifact(owner_slot, owner, member, typed)
     if inverse:
-        artifact["program"]["derived"].append({
-            "name": "inverse-count", "entity": member, "expr": {
-                "kind": "count_related", "relation": "members",
-                "current_slot": 1 - owner_slot, "related_slot": owner_slot,
-            },
-        })
+        artifact["program"]["derived"].append(
+            {
+                "name": "inverse-count",
+                "entity": member,
+                "expr": {
+                    "kind": "count_related",
+                    "relation": "members",
+                    "current_slot": 1 - owner_slot,
+                    "related_slot": owner_slot,
+                },
+            }
+        )
     before = deepcopy(artifact)
     arguments = {
-        "owner_id": "owner", "owner_kind": owner,
-        "related_id": "member", "related_kind": member,
+        "owner_id": "owner",
+        "owner_kind": owner,
+        "related_id": "member",
+        "related_kind": member,
         "legacy_owner_slot": legacy_owner_slot,
     }
 
@@ -262,7 +389,10 @@ def test_cached_constructor_matches_fresh_analysis(
     operations = [
         lambda: relation_binding.relation_tuple(artifact, "members", **arguments),
         lambda: relation_binding.relation_owner_kind(
-            artifact, "members", default_owner_kind=owner, related_kind=member,
+            artifact,
+            "members",
+            default_owner_kind=owner,
+            related_kind=member,
         ),
     ]
     for operation in operations:
@@ -270,7 +400,8 @@ def test_cached_constructor_matches_fresh_analysis(
         assert outcome(operation) == expected
         assert outcome(operation) == expected
         with patch.object(
-            relation_binding, "_artifact_relation_analysis",
+            relation_binding,
+            "_artifact_relation_analysis",
             side_effect=relation_binding._ArtifactRelations,
         ):
             assert outcome(operation) == expected

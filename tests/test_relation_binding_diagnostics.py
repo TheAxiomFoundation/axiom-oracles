@@ -9,7 +9,10 @@ import pytest
 from hypothesis import given, settings, strategies as st
 
 from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner, _select_candidate_result
-from axiom_oracles.bridges.relation_binding import bind_request_relations
+from axiom_oracles.bridges.relation_binding import (
+    RelationBindingAmbiguityWarning,
+    bind_request_relations,
+)
 from axiom_oracles.comparison.comparator import Comparator
 from axiom_oracles.comparison.mappings import ProgramMapping
 from axiom_oracles.comparison.report import ComparisonReportAccumulator
@@ -75,7 +78,7 @@ def test_undetermined_tuples_reach_result_diagnostics(tmp_path, batched, failure
 
 
 @pytest.mark.parametrize("batched", [False, True])
-def test_role_materialization_bypasses_identity_inference(tmp_path, batched):
+def test_role_materialization_keeps_untyped_order_and_diagnostic(tmp_path, batched):
     adapter, artifact = _runner(tmp_path, _artifact())
     case = _case("probe", roles=True)
     before = deepcopy(case.metadata)
@@ -84,7 +87,13 @@ def test_role_materialization_bypasses_identity_inference(tmp_path, batched):
         result = (adapter._run_case_batch_once([case], ["n"], artifact)[0] if batched
                   else adapter._run_case_once(case, ["n"], artifact))
     assert not emitted
-    assert "relation_binding_diagnostics" not in result.raw
+    diagnostics = result.raw["relation_binding_diagnostics"]
+    assert diagnostics["count"] == 1
+    assert diagnostics["by_relation"] == {"members": 1}
+    prefix = "case-0::" if batched else ""
+    assert diagnostics["samples"] == [{
+        "relation": "members", "tuple": [prefix + "member", prefix + "owner"],
+    }]
     assert case.metadata == before
 
 
@@ -109,15 +118,15 @@ def test_repeated_batch_names_count_in_report_provenance(tmp_path):
     for case_id in ("first", "second"):
         cases = [_case(case_id, repeats=25), _case(case_id + "-known", roles=True)]
         results = adapter._run_case_batch_once(cases, ["n"], artifact)
-        assert "relation_binding_diagnostics" not in results[1].raw
+        assert results[1].raw["relation_binding_diagnostics"]["count"] == 1
         comparisons = Comparator([mapping]).compare(
             results, [EngineResult("oracle", case.case_id, {"n": 0}) for case in cases],
         )
         accumulator.add_batch(cases, comparisons)
     report = accumulator.to_dict()
     diagnostics = report["provenance"]["relation_binding_diagnostics"]
-    assert diagnostics["count"] == 50
-    assert diagnostics["by_relation"] == {"members": 50}
+    assert diagnostics["count"] == 52
+    assert diagnostics["by_relation"] == {"members": 52}
     assert len(diagnostics["samples"]) == 20
     assert diagnostics["samples"] == [{"relation": "members"}] * 20
     path = tmp_path / "report.json"
@@ -136,8 +145,10 @@ def test_explicit_roles_never_require_input_identity(slot, reversed_tuple):
     with warnings.catch_warnings(record=True) as emitted:
         warnings.simplefilter("always")
         bound = bind_request_relations(request, _artifact(slot))
-    assert bound["dataset"]["relations"][0]["tuple"][slot] == "owner"
-    assert not emitted
+    assert bound["dataset"]["relations"][0]["tuple"] == ["member", "owner"]
+    assert len(emitted) == 1
+    assert isinstance(emitted[0].message, RelationBindingAmbiguityWarning)
+    assert emitted[0].message.relation == "members"
     assert request == before
 
 
@@ -213,3 +224,26 @@ def test_tax_execution_ambiguity_reaches_native_report(tmp_path, monkeypatch, ma
         axiom_outputs_by_surface={"ctc": results}, tolerance=0, relative_tolerance=0,
     ).to_json()
     assert report["provenance"]["relation_binding_diagnostics"]["count"] == 25
+
+
+@pytest.mark.parametrize("roles", [False, True])
+def test_tax_runtime_without_collector_warns_for_untyped_relation(tmp_path, roles):
+    from axiom_oracles.bridges import tax_populace
+
+    record = _case("probe", roles=roles).metadata["axiom_relations"][0]
+    request = {
+        "dataset": {"inputs": [], "relations": [record]},
+        "queries": [{"entity_id": "owner", "outputs": ["n"]}],
+    }
+    before = deepcopy(request)
+    with warnings.catch_warnings(record=True) as emitted:
+        warnings.simplefilter("always")
+        runtime, _ = tax_populace._runtime_axiom_request(
+            request, artifact_payload=_artifact(), rulespec_root=tmp_path,
+        )
+    assert request == before
+    assert runtime["dataset"]["relations"][0]["tuple"] == ["member", "owner"]
+    assert "roles" not in runtime["dataset"]["relations"][0]
+    assert len(emitted) == 1
+    assert isinstance(emitted[0].message, RelationBindingAmbiguityWarning)
+    assert emitted[0].message.relation == "members"

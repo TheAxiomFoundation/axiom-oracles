@@ -3050,7 +3050,9 @@ def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
                 {
                     "name": relation,
                     "arity": 2,
-                    **({"slot_entities": ["TaxUnit", "Person"]} if typed else {}),
+                    **({"slot_entities": (
+                        ["TaxUnit", "Person"] if current_slot == 0 else ["Person", "TaxUnit"]
+                    )} if typed else {}),
                 }
             ],
             "derived": [
@@ -3068,9 +3070,10 @@ def test_dc_request_labels_entity_kinds_and_binds_executable_slots(
         }
     }
     runtime_request = bind_request_relations(request, artifact)
+    expected_slot = current_slot if typed else 0
     for record in runtime_request["dataset"]["relations"]:
-        assert kinds[record["tuple"][current_slot]] == "TaxUnit"
-        assert kinds[record["tuple"][1 - current_slot]] == "Person"
+        assert kinds[record["tuple"][expected_slot]] == "TaxUnit"
+        assert kinds[record["tuple"][1 - expected_slot]] == "Person"
 
 
 def test_delaware_request_emits_canonical_person_schedule_without_relation() -> None:

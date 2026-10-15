@@ -6,6 +6,7 @@ import pandas as pd
 import pytest
 from hypothesis import given, settings, strategies as st
 
+from axiom_oracles.bridges.relation_binding import RelationBindingError
 from axiom_oracles.bridges.tax_populace import (
     AOTC_BASE,
     CDCC_BASE,
@@ -33,22 +34,33 @@ def test_input_record_preserves_four_argument_public_api():
     record = input_record("n", "id", interval, 1)
 
     assert record == {
-        "name": "n", "entity": "Entity", "entity_id": "id",
-        "interval": interval, "value": {"kind": "integer", "value": 1},
+        "name": "n",
+        "entity": "Entity",
+        "entity_id": "id",
+        "interval": interval,
+        "value": {"kind": "integer", "value": 1},
     }
 
 
 @settings(max_examples=24, deadline=None)
-@given(value=st.one_of(
-    st.booleans(), st.integers(),
-    st.floats(allow_nan=False, allow_infinity=False), st.text(max_size=40),
-))
+@given(
+    value=st.one_of(
+        st.booleans(),
+        st.integers(),
+        st.floats(allow_nan=False, allow_infinity=False),
+        st.text(max_size=40),
+    )
+)
 def test_input_record_compatibility_default_keeps_explicit_entity_encoding(value):
     interval = {"start": "2026-01-01", "end": "2027-01-01"}
     before = deepcopy(interval)
 
     assert input_record("n", "id", interval, value) == input_record(
-        "n", "id", interval, value, entity="Entity",
+        "n",
+        "id",
+        interval,
+        value,
+        entity="Entity",
     )
     assert interval == before
 
@@ -91,8 +103,8 @@ def artifact_for(surface, declarations):
     for name, (typed, current, declared_current) in zip(
         RELATIONS[surface], declarations, strict=True
     ):
-        # Historical untyped artifacts execute related-first. Typed declarations
-        # may disagree with usage (the engine preserves them for source fidelity).
+        # Untyped producers retain their explicit related-first convention.
+        # Typed declaration/aggregate contradictions require recompilation.
         current = current if typed else 1
         schema = {"name": name, "arity": 2}
         if typed:
@@ -107,17 +119,14 @@ def artifact_for(surface, declarations):
                 "name": name + "_count",
                 "entity": "TaxUnit",
                 "expr": {
-                    "kind": "scalar",
-                    "expr": {
-                        "kind": "count_related",
-                        "relation": name,
-                        "current_slot": current,
-                        "related_slot": 1 - current,
-                    },
+                    "kind": "count_related",
+                    "relation": name,
+                    "current_slot": current,
+                    "related_slot": 1 - current,
                 },
             }
         )
-        expected[name] = current
+        expected[name] = declared_current if typed else 1
     return {"program": {"relations": relations, "derived": derived}}, expected
 
 
@@ -154,7 +163,7 @@ def test_tax_requests_follow_artifact_slots(surface, typed):
         max_size=2,
     ),
 )
-def test_generated_tax_units_keep_entity_kinds_in_executable_slots(
+def test_generated_tax_units_keep_declared_slots_or_reject_contradictions(
     surface, member_ages, declarations
 ):
     data = population(member_ages)
@@ -162,6 +171,15 @@ def test_generated_tax_units_keep_entity_kinds_in_executable_slots(
     original_artifact = deepcopy(artifact)
     kwargs = dict(pe_data=data, year=2026, surface=surface, contribution_base=184_500)
     legacy = build_axiom_request(**kwargs)
+    contradiction = any(
+        typed and current != declared
+        for typed, current, declared in declarations[: len(RELATIONS[surface])]
+    )
+    if contradiction and sum(map(len, member_ages)):
+        with pytest.raises(RelationBindingError, match="recompile|migrate artifact"):
+            build_axiom_request(**kwargs, artifact=artifact)
+        assert artifact == original_artifact
+        return
     request = build_axiom_request(**kwargs, artifact=artifact)
     kinds = {item["entity_id"]: item["entity"] for item in request["dataset"]["inputs"]}
     assert all(kind in {"TaxUnit", "Person"} for kind in kinds.values())
