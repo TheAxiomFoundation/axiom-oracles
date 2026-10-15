@@ -7682,7 +7682,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 7627
-    rows_sha256: 5b3bd9e77d4f1cf1b6b9e7449e8af6d11e289be310757b7f4ebf71d782060d58
+    rows_sha256: c3a4953aec9f8a71a9e4fbd08dfe9d0a2bf94fb60a4ca0b869c801c66600642d
 - id: eitc-earned-income-populace-partnership-se-income-unread
   concept: us:tax/federal-income-tax#eitc
   kind: amount_difference
@@ -12331,7 +12331,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 4618
-    rows_sha256: 615e46bd0c116c888e722c988ab4e17832df56cd3d0b810640c5e1938866c55a
+    rows_sha256: 9d7e01e38a3c049d1c62c86134521c22b5e2458057a6aca5bc14e06550ebe73a
 - id: eitc-investment-income-populace-dividend-aggregate
   concept: us:tax/federal-income-tax#eitc
   kind: amount_difference
@@ -16450,7 +16450,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 4086
-    rows_sha256: 9cda50c301afbec86bc0b93810ebd4c9a47af6321d05a3255be37b9c0eb560be
+    rows_sha256: b5688869b75170585fe4326eea45639413b9214d2c73a29a09a3d5de2f5d984f
 - id: eitc-investment-income-policyengine-1729-definition
   concept: us:tax/federal-income-tax#eitc
   kind: amount_difference
@@ -17357,15 +17357,15 @@ entries:
       (PolicyEngine/policyengine-us#9572, closing #9567), counts dependents'' amounts (#9883)
       and leaves out farm rental income (#9889; both tracked in #9635). The bridge follows
       Worksheet 1. Per-row counterfactual with every other mechanism applied: 890 rows over
-      582 tax units clear only through one of these four (ambiguous:cg_distributions+farm_rent|div_aggregate+cg_distributions
+      582 tax units each have a smallest clearing set that holds one of these four (ambiguous:cg_distributions+farm_rent|div_aggregate+cg_distributions
       2, ambiguous:cg_distributions|div_aggregate 161, ambiguous:cg_distributions|div_aggregate+farm_rent
       2, ambiguous:div_aggregate+cg_distributions|farm_rent 1, ambiguous:div_aggregate|farm_rent
       8, ambiguous:div_aggregate|rental_unfloor 2, cg_distributions 268, cg_distributions+farm_rent
       2, dependents 3, div_aggregate+cg_distributions 249, div_aggregate+dependents 2, div_aggregate+farm_rent
-      32, farm_rent 158; a row listed with div_aggregate needs or is equally cleared by the
-      Populace dividend artifact too). Tax unit 101289: Axiom 24,108.76 = interest 1,923.04
-      + farm rent 22,185.72; PolicyEngine 1,923.04. Tax unit 31656: PolicyEngine adds a dependent''s
-      690.67 of interest.'
+      32, farm_rent 158). For 171 of them the Populace dividend artifact alone (div_aggregate)
+      is an equally small clearing set, and a row listed with div_aggregate+ needs the dividend
+      artifact as well. Tax unit 101289: Axiom 24,108.76 = interest 1,923.04 + farm rent 22,185.72;
+      PolicyEngine 1,923.04. Tax unit 31656: PolicyEngine adds a dependent''s 690.67 of interest.'
     arithmetic:
     - expression: 1923.0374755859375 + 22185.71875
       equals: 24108.76
@@ -17381,7 +17381,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 890
-    rows_sha256: 6d366ff1fd747dffa8c815d8b9fa0f952013629df1af7f68e81eb686fa72aebc
+    rows_sha256: bf4a25c2baaf9259e4bbecadfc22a73eeda8636ad90bae8a8b5276219c381b81
 - id: eitc-childless-age-test-policyengine-counts-dependents
   concept: us:tax/federal-income-tax#eitc
   kind: amount_difference
@@ -17612,7 +17612,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 203
-    rows_sha256: cab20e5b515d7a6b7727adfbb2a5ebbed71903b4d23c9538d715270547f8dbdd
+    rows_sha256: 5e0e262a75e80a9a3234514ca05349da20d1cbb4664bffc27a42a0031144c674
 - id: tax-before-credits-bracket-rounding
   concept: us:tax/federal-income-tax#tax_before_credits
   kind: amount_difference
@@ -19755,7 +19755,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 2118
-    rows_sha256: 5bd19a350c8fe71180962eb11b942a3f494004428f1e9cb7bf21e42e9b55e58f
+    rows_sha256: 5e232e8d43ffe860b497965de985ca0109f3b9648cf44e502cada459710d64a7
 - id: capital-gain-float-noise
   concept: us:tax/federal-income-tax#capital_gain
   kind: amount_difference
@@ -19787,7 +19787,7 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 8
-    rows_sha256: 3559ecde04cf4d74b58636a80ea9f10c261791fda1ffc81bb1b7d3f661999ca4
+    rows_sha256: aaae70603402e368b24ca39c6b3cff5f475335694454c91a53bda401270be2a0
 - id: ctc-excess-agi-increment-rounding
   concept: us:tax/federal-income-tax#ctc
   kind: amount_difference
@@ -19817,4 +19817,4 @@ entries:
   expires_on_source_change: true
   selector_binding:
     units: 5
-    rows_sha256: bcccc083d502f668495ab51271a256d87a40b550b2c571b202fdc159d7dcc4d8
+    rows_sha256: c0d7ef73cfdeec8f1943cd294f3661ffaa315eef771878bddc36d9decc9d245f

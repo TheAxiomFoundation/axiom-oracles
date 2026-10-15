@@ -94,9 +94,10 @@ def main() -> int:
 
     applied: dict[str, int] = {}
     selected: dict[str, list[dict]] = {}
+    memo: dict = {}
     for row in report.get("mismatches") or []:
         for entry in entries:
-            if not _entry_selects_row(entry, row):
+            if not _entry_selects_row(entry, row, memo):
                 continue
             if not _pin_matches(entry.get("pinned"), row):
                 continue

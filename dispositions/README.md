@@ -64,9 +64,11 @@ whose case matches:
 The first entry, in file order, that selects a row claims it.
 
 A `case_selector` entry can carry `selector_binding: {units, rows_sha256}`.
-That is the count and a digest of the rows it selected, each row's case,
-concept, left, right and signed difference. A merge whose selection differs
-in any way expires the entry, so its rows return to unexplained. Stamp it
+That is the count and a digest of the rows it selected: each row's case,
+concept, output (when the row names one), left, right and signed difference.
+A merge whose selection differs in any way expires the entry, so its rows
+return to unexplained. That includes two equal-valued rows of one case
+trading entries. Stamp it
 with `uv run scripts/stamp_selector_bindings.py <suite>`, which binds against
 the FULL report the suite's dashboard copy names.
 

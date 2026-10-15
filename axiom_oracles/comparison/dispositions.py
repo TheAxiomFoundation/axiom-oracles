@@ -573,18 +573,32 @@ def dispositions_path_for_suite(
     return candidate if candidate.exists() else None
 
 
+def _row_identity(row: dict) -> list[str]:
+    """A mismatch row's identity: case, concept and, when it names one, output.
+
+    One case carries one row per compared output under a concept, and
+    ``case_ids_by_output`` selects by output, so two rows of a case can differ
+    only in their output. The output joins the identity only when the row
+    names it, which keeps every digest over output-less rows unchanged.
+    """
+    identity = [str(row.get("case_id")), str(row.get("concept"))]
+    if row.get("output") is not None:
+        identity.append(str(row["output"]))
+    return identity
+
+
 def selected_rows_sha256(rows: list[dict]) -> str:
     """Canonical digest of a selected mismatch population.
 
-    Sorted by case id; each row contributes its identity plus the exact
-    ``left``/``right``/signed ``difference`` values, so any value movement —
-    sign flips, balanced multi-row swaps, anything that preserves aggregates —
-    changes the digest (sol closing review r2 finding 2).
+    Sorted by case id; each row contributes its identity (``_row_identity``)
+    plus the exact ``left``/``right``/signed ``difference`` values, so any
+    value movement — sign flips, balanced multi-row swaps, anything that
+    preserves aggregates — changes the digest (sol closing review r2 finding
+    2), and so does moving a row between outputs of one case.
     """
     canonical = sorted(
         [
-            str(row.get("case_id")),
-            str(row.get("concept")),
+            *_row_identity(row),
             json.dumps(row.get("left"), sort_keys=True),
             json.dumps(row.get("right"), sort_keys=True),
             json.dumps(row.get("difference"), sort_keys=True),
@@ -614,7 +628,14 @@ def _pin_matches(pinned: dict | None, row: dict) -> bool:
     return True
 
 
-def _entry_selects_row(entry: dict, row: dict) -> bool:
+def _entry_selects_row(entry: dict, row: dict, memo: dict | None = None) -> bool:
+    """Whether ``entry`` selects mismatch ``row``.
+
+    ``memo`` holds the selectors' membership sets for one pass over a
+    report's rows (``_selector_case_sets``). Pass a fresh dict per pass and
+    do not edit the entries during it; without one, each call builds its
+    sets anew.
+    """
     if entry.get("concept") != row.get("concept"):
         return False
     kind = entry.get("kind")
@@ -632,10 +653,10 @@ def _entry_selects_row(entry: dict, row: dict) -> bool:
     if by_output is not None:
         # Row-level: a case can carry several rows under one concept (one per
         # compared output), and each may have its own mechanism.
-        cases = _selector_case_sets(selector)["by_output"].get(row.get("output"))
+        cases = _selector_case_sets(selector, memo)["by_output"].get(row.get("output"))
         return cases is not None and row_case in cases
     case_ids = selector.get("case_ids")
-    if case_ids is not None and row_case not in _selector_case_sets(selector)["ids"]:
+    if case_ids is not None and row_case not in _selector_case_sets(selector, memo)["ids"]:
         return False
     prefix = selector.get("case_id_prefix")
     if prefix is not None and not row_case.startswith(prefix):
@@ -643,33 +664,19 @@ def _entry_selects_row(entry: dict, row: dict) -> bool:
     return True
 
 
-#: Membership sets per selector mapping. A selector can list tens of
-#: thousands of case ids and is tested once per mismatch row, so the sets are
-#: built once. The selector itself is kept in the value so its id cannot be
-#: reused by another object while the entry is cached.
-_SELECTOR_SETS: dict[int, tuple[dict, tuple, dict]] = {}
+def _selector_case_sets(selector: dict, memo: dict | None) -> dict:
+    """The selector's case ids as sets, built once per pass when memoized.
 
-
-def _selector_shape(selector: dict) -> tuple:
-    """Cheap identity of a selector's lists, so an edit invalidates the cache."""
-    case_ids = selector.get("case_ids")
-    by_output = selector.get("case_ids_by_output")
-    return (
-        id(case_ids),
-        len(case_ids) if isinstance(case_ids, list) else None,
-        id(by_output),
-        tuple(
-            (output, id(ids), len(ids) if isinstance(ids, list) else None)
-            for output, ids in (by_output or {}).items()
-        ),
-    )
-
-
-def _selector_case_sets(selector: dict) -> dict:
-    shape = _selector_shape(selector)
-    cached = _SELECTOR_SETS.get(id(selector))
-    if cached is not None and cached[0] is selector and cached[1] == shape:
-        return cached[2]
+    A selector can list tens of thousands of case ids and is tested once per
+    mismatch row, so a pass builds the sets once. The memo lives only as long
+    as the pass, never across merges, so an edit made between merges
+    (including a same-length, in-place one) is always seen. The selector is
+    kept in the value so its id cannot be reused by another object during
+    the pass.
+    """
+    cached = memo.get(id(selector)) if memo is not None else None
+    if cached is not None and cached[0] is selector:
+        return cached[1]
     sets = {
         "ids": {str(value) for value in selector.get("case_ids") or []},
         "by_output": {
@@ -677,7 +684,8 @@ def _selector_case_sets(selector: dict) -> dict:
             for output, ids in (selector.get("case_ids_by_output") or {}).items()
         },
     }
-    _SELECTOR_SETS[id(selector)] = (selector, shape, sets)
+    if memo is not None:
+        memo[id(selector)] = (selector, sets)
     return sets
 
 
@@ -725,10 +733,11 @@ def apply_dispositions(
     # against the FULL selected population before any annotation lands.
     row_winner: list[str | None] = []
     source_rows = list(report.get("mismatches") or [])
+    memo: dict = {}
     for row in source_rows:
         winner = None
         for entry in entries:
-            if not _entry_selects_row(entry, row):
+            if not _entry_selects_row(entry, row, memo):
                 continue
             entry_id = str(entry.get("id"))
             if not _pin_matches(entry.get("pinned"), row):
@@ -831,7 +840,9 @@ def assignment_digest(report: dict) -> str:
 
     Serializes ``[case_id, concept, entry_id | None, disposition | None]``
     for EVERY mismatch row of a merged report as a canonically sorted JSON
-    list and hashes it. Aggregate counts cannot distinguish two entries of
+    list and hashes it; a row that names its ``output`` serializes
+    ``[case_id, concept, output, entry_id | None, disposition | None]``, so
+    swapping two equal-valued rows of one case between entries changes it. Aggregate counts cannot distinguish two entries of
     equal cardinality swapping disposition classes; this digest can, so a
     premerged-slim dashboard block that embeds it is bound to the exact
     row-level assignment a fresh merge over the full report produces (sol
@@ -850,14 +861,7 @@ def assignment_digest(report: dict) -> str:
             if isinstance(annotation, dict)
             else (None, None)
         )
-        assignment.append(
-            [
-                str(row.get("case_id")),
-                str(row.get("concept")),
-                entry_id,
-                disposition,
-            ]
-        )
+        assignment.append([*_row_identity(row), entry_id, disposition])
     assignment.sort(key=lambda item: [part or "" for part in item])
     payload = json.dumps(assignment, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()

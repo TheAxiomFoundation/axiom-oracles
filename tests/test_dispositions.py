@@ -1035,6 +1035,104 @@ def test_case_ids_by_output_selects_exactly_its_pairs(mapping, rows, extra) -> N
     assert selected_with_extra & set(rows) == selected
 
 
+def _two_output_report():
+    """One case, two outputs, identical values: the rows differ only in output."""
+    rows = [
+        {**_row("c1", output), "left": 0, "right": 1, "difference": -1,
+         "kind": "amount_difference"}
+        for output in ("eitc_investment_income_eligible", "eitc_demographic_eligible")
+    ]
+    return {
+        "schema_version": "axiom.comparison_report.v2",
+        "summary": {"comparison_count": 4, "match_count": 2, "mismatch_count": 2},
+        "mismatches": rows,
+    }
+
+
+def test_digests_tell_apart_rows_that_differ_only_in_output() -> None:
+    """Swapping two equal-valued rows of one case between entries changes both
+    digests, so neither a selector binding nor a premerged assignment survives
+    the swap (sol review of #635, finding 1)."""
+    from axiom_oracles.comparison.dispositions import selected_rows_sha256
+
+    report = _two_output_report()
+    investment, age = report["mismatches"]
+    assert selected_rows_sha256([investment]) != selected_rows_sha256([age])
+
+    def merged(first_output, second_output):
+        first = _by_output_entry({first_output: ["c1"]}, id="dividend",
+                                 disposition="bridge_artifact")
+        second = _by_output_entry({second_output: ["c1"]}, id="age")
+        return apply_dispositions(report, _document([first, second]))
+
+    straight = merged("eitc_investment_income_eligible", "eitc_demographic_eligible")
+    swapped = merged("eitc_demographic_eligible", "eitc_investment_income_eligible")
+    assert straight["summary"]["dispositioned"]["counts"] == (
+        swapped["summary"]["dispositioned"]["counts"]
+    )
+    assert assignment_digest(straight) != assignment_digest(swapped)
+
+    # A binding stamped for one output's row expires when the entry is moved
+    # to the other output's equal-valued row.
+    binding = {"units": 1, "rows_sha256": selected_rows_sha256([investment])}
+    moved = _by_output_entry({"eitc_demographic_eligible": ["c1"]}, id="dividend",
+                             selector_binding=binding)
+    result = apply_dispositions(report, _document([moved]))
+    assert result["summary"]["dispositioned"]["binding_violated_entries"] == ["dividend"]
+
+
+def test_digests_of_rows_without_an_output_are_unchanged() -> None:
+    """Output-less rows hash as before, so other suites' bindings stay valid."""
+    from axiom_oracles.comparison.dispositions import selected_rows_sha256
+
+    rows = [
+        {"case_id": f"c{i}", "concept": "us:test#income_tax", "left": i, "right": 2 * i,
+         "difference": -i}
+        for i in range(3)
+    ]
+    legacy = sorted(
+        [str(r["case_id"]), str(r["concept"]), json.dumps(r["left"]),
+         json.dumps(r["right"]), json.dumps(r["difference"])]
+        for r in rows
+    )
+    assert selected_rows_sha256(rows) == hashlib.sha256(
+        json.dumps(legacy, separators=(",", ":")).encode()
+    ).hexdigest()
+
+
+@pytest.mark.parametrize("edit", ["replace", "slice", "case_ids"])
+def test_a_merge_sees_same_length_in_place_selector_edits(edit) -> None:
+    """Editing a selector in place between merges, without changing its length,
+    reclassifies on the next merge (sol review of #635, finding 3)."""
+    from axiom_oracles.comparison.dispositions import selected_rows_sha256
+
+    report = {
+        "schema_version": "axiom.comparison_report.v2",
+        "summary": {"comparison_count": 2, "match_count": 1, "mismatch_count": 1},
+        "mismatches": [{**_row("a", "o"), "left": 1, "right": 2, "difference": -1}],
+    }
+    binding = {"units": 1, "rows_sha256": selected_rows_sha256(report["mismatches"])}
+    if edit == "case_ids":
+        entry = _entry(case_selector={"case_ids": ["a"]}, selector_binding=binding)
+        ids = entry["case_selector"]["case_ids"]
+    else:
+        entry = _by_output_entry({"o": ["a"]}, selector_binding=binding)
+        ids = entry["case_selector"]["case_ids_by_output"]["o"]
+    entry.pop("case_id", None)
+    document = _document([entry])
+    first = apply_dispositions(report, document)
+    assert first["mismatches"][0]["disposition"]["id"] == entry["id"]
+
+    if edit == "slice":
+        ids[:] = ["b"]
+    else:
+        ids[0] = "b"
+    second = apply_dispositions(report, document)
+    assert "disposition" not in second["mismatches"][0]
+    assert second["summary"]["dispositioned"]["unexplained_count"] == 1
+    assert entry["id"] in second["summary"]["dispositioned"]["expired_entries"]
+
+
 def test_selector_cache_sees_an_edited_selector() -> None:
     entry = _by_output_entry({"eitc_earned_income": ["c1"]})
     assert not _entry_selects_row(entry, _row("c2", "eitc_earned_income"))
@@ -1045,3 +1143,5 @@ def test_selector_cache_sees_an_edited_selector() -> None:
     assert not _entry_selects_row(plain, {"case_id": "c3", "concept": "us:test#income_tax"})
     plain["case_selector"]["case_ids"].append("c3")
     assert _entry_selects_row(plain, {"case_id": "c3", "concept": "us:test#income_tax"})
+    plain["case_selector"]["case_ids"][0] = "c4"
+    assert not _entry_selects_row(plain, {"case_id": "c1", "concept": "us:test#income_tax"})

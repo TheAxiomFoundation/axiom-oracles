@@ -4306,6 +4306,59 @@ def test_from_report_republishes_and_binds_to_a_full_v2_report(tmp_path, monkeyp
     ) == []
 
 
+def test_from_report_publishes_one_snapshot_read_under_the_lock(tmp_path, monkeypatch):
+    """A run replacing the report mid-republish cannot pair one run's results
+    with another's provenance (sol review of #635, finding 4)."""
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    raw_path = repo / "reports" / "axiom-policyengine-fiit-ecps-0-2026-10-14.json"
+    first = _raw_tax_ecps_report(units=1001)
+    first["provenance"]["run_id"] = "A"
+    raw_path.write_text(json.dumps(first))
+    second = _raw_tax_ecps_report(units=1002)
+    second["provenance"]["run_id"] = "B"
+
+    events = []
+    real_flock = run_comparison.fcntl.flock
+    real_read_text = Path.read_text
+
+    def flock(handle, operation):
+        events.append("lock")
+        return real_flock(handle, operation)
+
+    def read_text(path, *args, **kwargs):
+        if Path(path) == raw_path:
+            events.append("read")
+        return real_read_text(path, *args, **kwargs)
+
+    real_adapt = run_comparison._adapt_raw_to_v2
+
+    def adapt_while_replaced(raw, *args, **kwargs):
+        # Another run publishes report B after this republish parsed A.
+        raw_path.write_text(json.dumps(second))
+        return real_adapt(raw, *args, **kwargs)
+
+    monkeypatch.setattr(run_comparison.fcntl, "flock", flock)
+    monkeypatch.setattr(Path, "read_text", read_text)
+    monkeypatch.setattr(run_comparison, "_adapt_raw_to_v2", adapt_while_replaced)
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+
+    assert run_comparison.main() == 0
+
+    assert events[0] == "lock", events  # nothing read before the lock is held
+    dashboard = json.loads(
+        (repo / "dashboard/public/data/axiom-policyengine-fiit-ecps.json").read_text()
+    )
+    assert dashboard["provenance"]["run_id"] == "A"
+    assert dashboard["summary"]["mismatch_count"] == 1001
+    full = json.loads(
+        raw_path.with_name("axiom-policyengine-fiit-ecps-0-2026-10-14-v2.json").read_text()
+    )
+    assert full["provenance"]["run_id"] == "A"
+    assert len(full["mismatches"]) == 1001
+
+
 def test_raw_harness_output_is_not_a_v2_binding_source(tmp_path):
     run_comparison = load_run_comparison_module()
     raw = tmp_path / "raw.json"

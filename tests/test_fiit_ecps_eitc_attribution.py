@@ -80,6 +80,39 @@ def test_audit_catches_a_case_moved_between_dispositions(repo_copy):
     assert f"{age['id']}: selects other rows than its evidence" in problems
 
 
+def _edit_first_disposition(root: Path, edit) -> str:
+    path = root / builder.DISPOSITIONS
+    document = yaml.safe_load(path.read_text())
+    edit(document["entries"][0])
+    path.write_text(yaml.safe_dump(document, sort_keys=False))
+    return document["entries"][0]["id"]
+
+
+@pytest.mark.parametrize(
+    ("edit", "expected"),
+    [
+        # The selection lists still match the evidence; production loses the
+        # rows to the filter, the binding or the missing binding (sol review
+        # of #635, finding 2).
+        (lambda entry: entry.update(kind="error"), "the merge gives 7627 of its rows to None"),
+        (
+            lambda entry: entry.update(concept="us:tax/federal-income-tax#ctc"),
+            "the merge gives 7627 of its rows to None",
+        ),
+        (
+            lambda entry: entry["selector_binding"].update(rows_sha256="0" * 64),
+            "the merge reports binding_violated_entries",
+        ),
+        (lambda entry: entry.pop("selector_binding"), "selector_binding is not its rows' binding"),
+        (lambda entry: entry["evidence"].pop("mechanism"), "evidence needs a non-empty `mechanism`"),
+    ],
+)
+def test_audit_follows_what_the_production_merge_does(repo_copy, edit, expected):
+    entry_id = _edit_first_disposition(repo_copy, edit)
+    problems = builder.check(repo_copy)
+    assert any(expected in problem for problem in problems), (entry_id, problems)
+
+
 def test_audit_catches_an_entry_its_stages_do_not_give(repo_copy):
     evidence = json.loads((repo_copy / builder.EVIDENCE).read_text())
     key = _first(evidence["rows"], "partnership")

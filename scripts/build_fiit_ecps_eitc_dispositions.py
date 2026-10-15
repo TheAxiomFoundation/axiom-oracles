@@ -28,7 +28,11 @@ It checks that the committed files agree:
 - every row's entry follows from its recorded stage attributions (EITC) or
   from its surface's per-row bound (the other surfaces);
 - each entry's row and tax-unit counts are its rows';
-- each disposition entry selects exactly its evidence rows, by output.
+- the dispositions document is valid, and each entry selects exactly its
+  evidence rows, by output;
+- the production merge over the bound report gives every row the entry its
+  evidence names, with nothing expired, orphaned or unexplained;
+- each entry's ``selector_binding`` is the binding of exactly its rows.
 """
 
 from __future__ import annotations
@@ -43,6 +47,15 @@ from pathlib import Path
 import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from axiom_oracles.comparison.dispositions import (  # noqa: E402
+    apply_dispositions,
+    selected_rows_sha256,
+    validate_dispositions,
+)
+
 EVIDENCE = "reports/fiit-ecps-eitc-attribution-2026-10-14.json"
 DISPOSITIONS = "dispositions/fiit-ecps.yaml"
 DASHBOARD = "dashboard/public/data/axiom-policyengine-fiit-ecps.json"
@@ -297,6 +310,13 @@ def build_dispositions(evidence: dict, assignment: dict[str, str]) -> str:
     inv_sub = collections.Counter(
         rows[key]["stage3"] for key, entry in assignment.items() if entry == "pe_investment"
     )
+    # Rows for which the dividend artifact alone is an equally small clearing set.
+    inv_dividend_ties = sum(
+        count
+        for mechanism, count in inv_sub.items()
+        if mechanism.startswith("ambiguous:")
+        and "div_aggregate" in mechanism.removeprefix("ambiguous:").split("|")
+    )
 
     def src(entry):
         return f"{EVIDENCE}#{entry}"
@@ -431,11 +451,13 @@ def build_dispositions(evidence: dict, assignment: dict[str, str]) -> str:
                     "income (#9889; both tracked in #9635). The bridge follows "
                     "Worksheet 1. Per-row counterfactual with every other "
                     f"mechanism applied: {counts['pe_investment']} rows over "
-                    f"{units['pe_investment']} tax units clear only through one "
-                    "of these four ("
+                    f"{units['pe_investment']} tax units each have a smallest "
+                    "clearing set that holds one of these four ("
                     + ", ".join(f"{k} {v}" for k, v in sorted(inv_sub.items()))
-                    + "; a row listed with div_aggregate needs or is equally "
-                    "cleared by the Populace dividend artifact too). Tax unit "
+                    + f"). For {inv_dividend_ties} of them the Populace dividend "
+                    "artifact alone (div_aggregate) is an equally small "
+                    "clearing set, and a row listed with div_aggregate+ needs "
+                    "the dividend artifact as well. Tax unit "
                     "101289: Axiom 24,108.76 = interest 1,923.04 + farm rent "
                     "22,185.72; PolicyEngine 1,923.04. Tax unit 31656: "
                     "PolicyEngine adds a dependent's 690.67 of interest."
@@ -642,8 +664,21 @@ def check(root: Path = ROOT) -> list[str]:
     ):
         problems.append(f"{EVIDENCE}: entry counts are not its rows'")
 
-    by_id = {entry["id"]: entry for entry in dispositions["entries"]}
-    if [entry["id"] for entry in dispositions["entries"]] != [
+    problems.extend(
+        f"{DISPOSITIONS}: {error}"
+        for error in validate_dispositions(
+            dispositions,
+            path_label=DISPOSITIONS,
+            expected_suite="fiit-ecps",
+            repo_root=root,
+        )
+    )
+    if not isinstance(dispositions, dict) or not isinstance(
+        dispositions.get("entries"), list
+    ):
+        return problems
+    by_id = {entry.get("id"): entry for entry in dispositions["entries"]}
+    if [entry.get("id") for entry in dispositions["entries"]] != [
         entry_id for entry_id, _ in ENTRIES.values()
     ]:
         problems.append(f"{DISPOSITIONS}: entries are not exactly {list(ENTRIES)}")
@@ -656,6 +691,38 @@ def check(root: Path = ROOT) -> list[str]:
         selected = (disposition.get("case_selector") or {}).get("case_ids_by_output")
         if selected != selector(assignment, entry):
             problems.append(f"{entry_id}: selects other rows than its evidence")
+
+    # What production does with the committed entries: the merge applies each
+    # entry's concept and kind filters, first-match order and binding, so a
+    # listed case can still be lost to any of them.
+    expected_ids = {entry: entry_id for entry, (entry_id, _) in ENTRIES.items()}
+    merged = apply_dispositions(full, dispositions)
+    block = merged["summary"]["dispositioned"]
+    for key in ("expired_entries", "orphaned_entries", "binding_violated_entries"):
+        if block.get(key):
+            problems.append(f"the merge reports {key}: {block[key]}")
+    if block.get("unexplained_count"):
+        problems.append(f"the merge leaves {block['unexplained_count']} rows unexplained")
+    lost = collections.Counter()
+    for row in merged["mismatches"]:
+        expected = expected_ids.get((records.get(row_key(row)) or {}).get("entry"))
+        won = (row.get("disposition") or {}).get("id")
+        if won != expected:
+            lost[(expected, won)] += 1
+    for (expected, won), count in sorted(lost.items(), key=str):
+        problems.append(f"{expected}: the merge gives {count} of its rows to {won!r}")
+
+    rows_by_entry = collections.defaultdict(list)
+    for row in full["mismatches"]:
+        rows_by_entry[(records.get(row_key(row)) or {}).get("entry")].append(row)
+    for entry, (entry_id, _) in ENTRIES.items():
+        disposition = by_id.get(entry_id)
+        if disposition is None:
+            continue
+        rows = rows_by_entry.get(entry, [])
+        expected_binding = {"units": len(rows), "rows_sha256": selected_rows_sha256(rows)}
+        if disposition.get("selector_binding") != expected_binding:
+            problems.append(f"{entry_id}: selector_binding is not its rows' binding")
     return problems
 
 
