@@ -983,6 +983,9 @@ def test_case_ids_by_output_selects_only_the_named_output() -> None:
     # Same case and concept, another output: a different mechanism's row.
     assert not _entry_selects_row(entry, _row("c1", "eitc_investment_income_eligible"))
     assert not _entry_selects_row(entry, _row("c2", "eitc_earned_income"))
+    # Outputs are matched as strings, as the binding digest identifies them.
+    numeric = _by_output_entry({"1": ["c1"]})
+    assert _entry_selects_row(numeric, _row("c1", 1))
     # Rows that do not name their output are never selected by output.
     assert not _entry_selects_row(entry, {"case_id": "c1", "concept": "us:test#income_tax"})
     assert not _entry_selects_row(

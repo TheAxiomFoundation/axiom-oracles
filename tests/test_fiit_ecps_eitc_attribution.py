@@ -144,6 +144,28 @@ def test_audit_catches_a_row_missing_from_the_evidence(repo_copy):
     assert f"{key}: only in the bound report" in builder.check(repo_copy)
 
 
+@pytest.mark.parametrize(
+    "edit",
+    [
+        lambda data: data.pop("run"),
+        lambda data: data.update(rows=[]),
+        lambda data: next(iter(data["rows"].values())).pop("axiom"),
+    ],
+)
+def test_audit_reports_a_malformed_evidence_file_instead_of_raising(repo_copy, edit):
+    _edit_json(repo_copy / builder.EVIDENCE, edit)
+    problems = builder.check(repo_copy)
+    assert problems and all(isinstance(problem, str) for problem in problems)
+
+
+def test_audit_reports_a_malformed_binding_instead_of_raising(repo_copy):
+    _edit_first_disposition(
+        repo_copy, lambda entry: entry.update(selector_binding="not-a-binding")
+    )
+    problems = builder.check(repo_copy)
+    assert problems and all(isinstance(problem, str) for problem in problems)
+
+
 def test_audit_refuses_a_report_that_is_not_the_bound_bytes(repo_copy):
     copy = json.loads((repo_copy / builder.DASHBOARD).read_text())
     source = repo_copy / copy["summary"]["dispositioned"]["source_report"]["path"]

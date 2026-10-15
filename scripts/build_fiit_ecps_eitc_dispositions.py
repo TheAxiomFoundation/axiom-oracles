@@ -624,7 +624,19 @@ def build_dispositions(evidence: dict, assignment: dict[str, str]) -> str:
 
 
 def check(root: Path = ROOT) -> list[str]:
-    """Every disagreement between the committed evidence, dispositions and report."""
+    """Every disagreement between the committed evidence, dispositions and report.
+
+    A file of the wrong shape is reported as a problem, never raised.
+    """
+    try:
+        return _check(root)
+    except (OSError, json.JSONDecodeError, yaml.YAMLError) as error:
+        return [f"cannot read the committed files: {error}"]
+    except (AttributeError, KeyError, TypeError, ValueError) as error:
+        return [f"a committed file has the wrong shape: {type(error).__name__}: {error}"]
+
+
+def _check(root: Path) -> list[str]:
     problems: list[str] = []
     try:
         _, full = bound_full_report(root)

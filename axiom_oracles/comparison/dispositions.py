@@ -653,7 +653,11 @@ def _entry_selects_row(entry: dict, row: dict, memo: dict | None = None) -> bool
     if by_output is not None:
         # Row-level: a case can carry several rows under one concept (one per
         # compared output), and each may have its own mechanism.
-        cases = _selector_case_sets(selector, memo)["by_output"].get(row.get("output"))
+        output = row.get("output")
+        if output is None:
+            return False
+        # Keys are compared as strings, as the binding digest identifies them.
+        cases = _selector_case_sets(selector, memo)["by_output"].get(str(output))
         return cases is not None and row_case in cases
     case_ids = selector.get("case_ids")
     if case_ids is not None and row_case not in _selector_case_sets(selector, memo)["ids"]:
@@ -842,7 +846,8 @@ def assignment_digest(report: dict) -> str:
     for EVERY mismatch row of a merged report as a canonically sorted JSON
     list and hashes it; a row that names its ``output`` serializes
     ``[case_id, concept, output, entry_id | None, disposition | None]``, so
-    swapping two equal-valued rows of one case between entries changes it. Aggregate counts cannot distinguish two entries of
+    swapping two equal-valued rows of one case between entries changes it.
+    Aggregate counts cannot distinguish two entries of
     equal cardinality swapping disposition classes; this digest can, so a
     premerged-slim dashboard block that embeds it is bound to the exact
     row-level assignment a fresh merge over the full report produces (sol
