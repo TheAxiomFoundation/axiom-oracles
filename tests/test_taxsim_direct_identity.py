@@ -21,13 +21,15 @@ from axiom_oracles.bridges import state_tax_populace_runner as bridge
 pytestmark = pytest.mark.skipif(os.name == "nt", reason="uses a POSIX shell script")
 
 
-def _write_binary(path: Path, *, payload: str = "original", mutate: bool = False):
+def _write_binary(
+    path: Path, *, payload: str = "original", mutate: bool = False, liability: int = 1
+):
     path.write_text(
         '#!/bin/sh\n# "cdate-20260521"\n'
         f"# {payload}\n"
         "printf 'taxsimid,siitax,staxbc,cdate-20260521\\n'\n"
         'i=1\nwhile [ "$i" -le "$1" ]; do\n'
-        '  printf "%s,1,1,0\\n" "$i"\n'
+        f'  printf "%s,{liability},{liability},0\\n" "$i"\n'
         "  i=$((i + 1))\ndone\n"
         + ('printf "# replaced\\n" >> "$0"\n' if mutate else "")
     )
@@ -142,6 +144,38 @@ def test_direct_call_rejects_same_stamp_replacement_between_batches(direct_call)
 
     # A rejected replacement contributes no rows to the first executable.
     assert recorder.binaries()[0]["rows"] == 1
+
+
+def test_direct_call_rejects_later_replacement_after_pre_run_hash(
+    direct_call, monkeypatch
+):
+    binary, invoke = direct_call
+    _write_binary(binary)
+    recorder = pins.TaxsimIdentityRecorder()
+    invoke(recorder)
+    original = recorder.binaries()
+    executed = []
+    published = []
+    run = subprocess.run
+
+    def replace_then_run(*args, **kwargs):
+        # Both direct callers have captured their pre-run hash at this point.
+        _write_binary(binary, payload="replacement", liability=99)
+        digest = pins.sha256_file(binary)
+        result = run(*args, **kwargs)
+        executed.append((digest, pd.read_csv(io.StringIO(result.stdout))))
+        return result
+
+    monkeypatch.setattr(subprocess, "run", replace_then_run)
+    with pytest.raises(TaxsimIdentityError, match="changed during the run"):
+        published.append(invoke(recorder, rows=2))
+
+    [(digest, output)] = executed
+    assert digest != original[0]["sha256"]
+    assert digest == pins.sha256_file(binary)
+    assert output["siitax"].tolist() == [99, 99]
+    assert published == []
+    assert recorder.binaries() == original
 
 
 @settings(

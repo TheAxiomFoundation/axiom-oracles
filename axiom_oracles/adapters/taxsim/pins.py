@@ -202,10 +202,11 @@ def same_build(left: str | None, right: str | None) -> bool:
     """
     if left is None or right is None:
         return False
-    return _bare_stamp(left) == _bare_stamp(right)
+    return normalize_build_stamp(left) == normalize_build_stamp(right)
 
 
-def _bare_stamp(stamp: str) -> str:
+def normalize_build_stamp(stamp: str) -> str:
+    """Normalize equivalent CSV and verbose spellings of a build stamp."""
     stamp = stamp.strip().strip('"')
     if stamp.startswith("cdate-"):
         return stamp[len("cdate-") :]
@@ -391,11 +392,16 @@ def _law_year_message(
 class TaxsimIdentityRecorder:
     """Accumulate the identity of every TAXSIM binary a run executes.
 
-    ``observe`` hashes each binary once per path, counts the input rows it
-    was given, and keeps the build stamp its output printed. A printed stamp
-    that names a different build than the hashed bytes, or a ``sha256``
-    (the hash taken before a batch ran) that differs from the recorded one,
-    raises :class:`TaxsimIdentityError`: the hashed file is not what ran.
+    ``observe`` caches each binary's identity per path and keeps the build
+    stamp its output printed. When given ``sha256`` (the pre-run hash), it
+    hashes the file again after every invocation and requires that hash to
+    equal both the pre-run and recorded hashes. A mismatch, or a printed
+    stamp naming a different build, raises :class:`TaxsimIdentityError`
+    before any identity or input rows from that batch are published.
+
+    A file swapped and swapped back entirely within one invocation is not
+    detected. These before/after checks do not provide full execution
+    attestation.
     """
 
     def __init__(self) -> None:
@@ -415,12 +421,14 @@ class TaxsimIdentityRecorder:
         identity = self._identities.get(key)
         if identity is None:
             identity = binary_identity(Path(path))
-        if sha256 is not None and sha256 != identity["sha256"]:
-            raise TaxsimIdentityError(
-                f"TAXSIM binary {path} changed during the run: sha256 "
-                f"{sha256[:12]} before a batch, {identity['sha256'][:12]} "
-                "recorded"
-            )
+        if sha256 is not None:
+            post_sha256 = sha256_file(Path(path))
+            if post_sha256 != sha256 or post_sha256 != identity["sha256"]:
+                raise TaxsimIdentityError(
+                    f"TAXSIM binary {path} changed during the run: sha256 "
+                    f"{sha256[:12]} before a batch, {post_sha256[:12]} after, "
+                    f"{identity['sha256'][:12]} recorded"
+                )
         if build_observed is not None:
             if identity["build"] is not None and not same_build(
                 identity["build"], build_observed

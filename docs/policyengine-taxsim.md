@@ -219,13 +219,20 @@ version, and the rows it ran. The path is the absolute path on the host that
 ran it, as provenance paths in several other committed reports are. A printed stamp that
 names a different build than the hashed bytes raises `TaxsimIdentityError`.
 The adapter and direct state runners hash the actual runner path before
-each invocation. A changed hash raises `TaxsimIdentityError`; a rejected
-observation adds neither an identity nor rows to the recorder.
+and after each invocation. The post-run hash must equal both the pre-run
+hash and the recorded hash, including on later batches. A changed hash
+raises `TaxsimIdentityError`; a rejected observation adds neither an
+identity nor rows to the recorder and publishes no rows for that batch.
+A file swapped and swapped back entirely within one invocation is not
+detected. These before/after checks do not provide full execution attestation.
 `scripts/run_comparison.py` copies the binaries into
 `provenance.oracle.taxsim_binaries`, and `scripts/merge_shard_reports.py` sums
-their rows across shards, keeping one entry per distinct binary and path; it
-refuses to merge shards when only some of them record a binary. Reports
-generated before this existed (such as the committed
+their rows across shards, keeping one entry per distinct recorded binary
+identity and path. Equivalent printed stamps (for example, `cdate-20260521`
+and `20260521`) identify one build and merge into one entry, retaining the
+first shard's observed spelling. Both identity locations contain the same
+merged entries. The merger refuses shards when only some of them record a
+binary. Reports generated before this existed (such as the committed
 `axiom-taxsim-fiit-ecps.json`, generated 2026-08-28) do not say which binary
 produced them.
 

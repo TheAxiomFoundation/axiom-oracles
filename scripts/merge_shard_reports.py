@@ -7,11 +7,13 @@ This merges the shard reports back into one ``axiom.comparison_report.v2``:
 counters and weights sum, row lists concatenate, aggregates re-sum by
 concept, and per-shard identity fields must agree. ``engine_identity``
 binaries (the TAXSIM executables each shard ran) merge by identity with
-their row counts summed; shards that ran different binaries keep one entry
-per binary.
+their row counts summed; equivalent printed build stamps share one entry
+and retain the first shard's observed spelling. Shards that ran different
+binaries keep one entry per binary.
 
-Usage:
-    merge_shard_reports.py OUT.json SHARD0.json SHARD1.json [...]
+Usage (the script imports axiom_oracles, so run it in the project
+environment):
+    uv run scripts/merge_shard_reports.py OUT.json SHARD0.json SHARD1.json [...]
 """
 
 from __future__ import annotations
@@ -20,6 +22,8 @@ import json
 import sys
 from collections import defaultdict
 from pathlib import Path
+
+from axiom_oracles.adapters.taxsim.pins import normalize_build_stamp
 
 _SUM_SUMMARY = (
     "match_count",
@@ -165,8 +169,13 @@ def _merge_engine_identity(shards: list[dict]) -> dict | None:
         binaries: dict[str, dict] = {}
         for part in parts:
             for binary in part.get("binaries") or []:
+                identity = {k: v for k, v in binary.items() if k != "rows"}
+                if engine == "taxsim" and identity.get("build_observed") is not None:
+                    identity["build_observed"] = normalize_build_stamp(
+                        identity["build_observed"]
+                    )
                 key = json.dumps(
-                    {k: v for k, v in binary.items() if k != "rows"},
+                    identity,
                     sort_keys=True,
                 )
                 if key in binaries:

@@ -146,6 +146,14 @@ class TaxsimPackageRunner(EngineAdapter):
         checked = pins.require_law_years(
             _frame_years(input_frame), binary_path=Path(binary)
         )
+        # A batch with no law year skips the range check, but its executable is
+        # still hashed before the run so the recorder can compare after it.
+        if checked is not None:
+            pre_run_sha256 = checked["sha256"]
+        elif Path(binary).is_file():
+            pre_run_sha256 = pins.sha256_file(Path(binary))
+        else:
+            pre_run_sha256 = None
         input_path = write_input(runner.input_df)
         try:
             with open(input_path, "rb") as stdin:
@@ -171,7 +179,7 @@ class TaxsimPackageRunner(EngineAdapter):
                 Path(binary),
                 rows=len(_frame_records(input_frame)),
                 build_observed=pins.build_stamp_from_stdout(execution.stdout),
-                sha256=checked["sha256"] if checked else None,
+                sha256=pre_run_sha256,
             )
         return execution
 
