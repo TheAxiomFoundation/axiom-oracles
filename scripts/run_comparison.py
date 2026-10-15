@@ -749,16 +749,10 @@ def main() -> int:
                     _write_canonical_record(output, canonical_record)
                 print(f"Wrote canonical record: {canonical_record}")
             if dashboard_target and adapted is not None:
-                full_report_path = output
-                if not preserve_existing_versioned and not _is_v2_report_for(
-                    output, adapted.get("suite")
-                ):
-                    full_report_path = _write_full_v2_report(adapted, output)
-                    print(f"Wrote full v2 report: {full_report_path}")
                 _write_dashboard_report(
                     adapted,
                     dashboard_target,
-                    full_report_path=full_report_path,
+                    full_report_path=output,
                     dashboard_config=config.get("dashboard"),
                     preserve_existing_versioned=preserve_existing_versioned,
                 )
@@ -818,14 +812,10 @@ def _republish_from_report(config: dict, source: Path, *, summary: bool) -> int:
     lock_path = source.with_name(f".{source.name}.lock")
     with open(lock_path, "a") as lock_fh:
         fcntl.flock(lock_fh, fcntl.LOCK_EX)
-        full_report_path = source
-        if not _is_v2_report_for(source, suite):
-            full_report_path = _write_full_v2_report(adapted, source)
-            print(f"Wrote full v2 report: {full_report_path}")
         _write_dashboard_report(
             adapted,
             dashboard_target,
-            full_report_path=full_report_path,
+            full_report_path=source,
             dashboard_config=config.get("dashboard"),
         )
     if summary:
@@ -6366,6 +6356,7 @@ def _write_dashboard_report(
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
     from axiom_oracles.comparison.report import strip_heavy_case_metadata
 
+    adapted = report
     report = _merge_dispositions(report)
     versioned_case_chunks = _uses_versioned_case_chunks(report)
     if preserve_existing_versioned and versioned_case_chunks:
@@ -6474,6 +6465,20 @@ def _write_dashboard_report(
                 )
                 return
             full_report_path = None
+    if (
+        full_report_path is not None
+        and merged_is_complete
+        and slim_is_premerged
+        and not _is_v2_report_for(full_report_path, report.get("suite"))
+    ):
+        # The run's own report is in the harness's shape (tax-populace-
+        # compare, for example), which the consumer cannot re-derive from.
+        # Publish the adapted v2 report beside it and bind to that instead.
+        full_report_path = _write_full_v2_report(adapted, full_report_path)
+        source_rel = (
+            full_report_path.resolve().relative_to(REPO_ROOT.resolve()).as_posix()
+        )
+        print(f"Wrote full v2 report: {full_report_path}")
     if (
         full_report_path is not None
         and merged_is_complete
