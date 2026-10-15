@@ -4195,8 +4195,70 @@ def _from_report_repo(tmp_path, monkeypatch):
     return run_comparison, repo
 
 
+def test_published_copies_drop_observed_outputs_past_the_cap_with_their_claims():
+    run_comparison = load_run_comparison_module()
+    cap = run_comparison._PUBLISHED_MAX_OBSERVED_OUTPUTS
+
+    @given(
+        rows=st.integers(min_value=0, max_value=cap + 3),
+        stamped=st.booleans(),
+    )
+    @example(rows=cap, stamped=True)
+    @example(rows=cap + 1, stamped=True)
+    def check(rows, stamped):
+        observed = [{"case_id": f"c{index}"} for index in range(rows)]
+        report = {"suite": "s", "observed_outputs": observed, "output_summary": [{}]}
+        if stamped:
+            report["attestation"] = {
+                "executed": True,
+                "outputs": [{"variable": "v", "comparisons": rows}],
+                "outputs_complete": True,
+            }
+        before = json.dumps(report, sort_keys=True)
+
+        published = run_comparison._without_observed_outputs(report)
+
+        assert json.dumps(report, sort_keys=True) == before  # input untouched
+        if rows <= cap:
+            assert published is report
+            return
+        # Dropped whole, never sampled, and counted.
+        assert "observed_outputs" not in published
+        assert published["observed_outputs_omitted"] == rows
+        assert published["output_summary"] == report["output_summary"]
+        if stamped:
+            # No per-output claim survives the rows that backed it.
+            assert published["attestation"] == {
+                "executed": True,
+                "outputs": [],
+                "outputs_complete": False,
+            }
+
+    check()
+
+
+def test_dashboard_slim_applies_the_observed_outputs_cap(monkeypatch):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "_PUBLISHED_MAX_OBSERVED_OUTPUTS", 2)
+    report = {
+        "suite": "s",
+        "mismatches": [],
+        "cases": [],
+        "observed_outputs": [{"case_id": str(index)} for index in range(3)],
+    }
+    slim = run_comparison._slim_report_for_dashboard(report)
+    assert "observed_outputs" not in slim
+    assert slim["observed_outputs_omitted"] == 3
+    report["observed_outputs"].pop()
+    assert run_comparison._slim_report_for_dashboard(report)["observed_outputs"] == (
+        report["observed_outputs"]
+    )
+
+
 def test_from_report_republishes_and_binds_to_a_full_v2_report(tmp_path, monkeypatch):
     run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    # The fixture's 1,001 observed rows stand in for fiit-ecps's 3.9 million.
+    monkeypatch.setattr(run_comparison, "_PUBLISHED_MAX_OBSERVED_OUTPUTS", 1000)
     raw_path = repo / "reports" / "axiom-policyengine-fiit-ecps-0-2026-10-14.json"
     raw_text = json.dumps(_raw_tax_ecps_report())
     raw_path.write_text(raw_text)
@@ -4212,12 +4274,16 @@ def test_from_report_republishes_and_binds_to_a_full_v2_report(tmp_path, monkeyp
     assert full["suite"] == "fiit-ecps"
     assert "cases" not in full
     assert "observed_outputs" not in full
-    assert "attestation" in full
+    assert full["observed_outputs_omitted"] == 1001
+    assert full["attestation"]["outputs"] == []
+    assert full["attestation"]["outputs_complete"] is False
     assert len(full["mismatches"]) == full["summary"]["mismatch_count"] == 1001
     assert full["provenance"]["generated_by"] == "scripts/run_comparison.py::fiit-ecps"
     dashboard = json.loads(
         (repo / "dashboard/public/data/axiom-policyengine-fiit-ecps.json").read_text()
     )
+    assert "observed_outputs" not in dashboard
+    assert dashboard["observed_outputs_omitted"] == 1001
     block = dashboard["summary"]["dispositioned"]
     assert block["source_report"]["path"] == f"reports/{full_path.name}"
     assert block["source_report"]["sha256"] == hashlib.sha256(

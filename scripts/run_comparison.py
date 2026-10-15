@@ -838,7 +838,36 @@ def _is_v2_report_for(path: Path, suite: object) -> bool:
     )
 
 
-_FULL_V2_REPORT_OMITTED_KEYS = frozenset({"cases", "observed_outputs"})
+# Population runs record one observed-output row per compared value: about
+# 3.9 million rows and 1 GB for fiit-ecps. No published copy carries more
+# than this many; the raw report under reports/ keeps every row.
+_PUBLISHED_MAX_OBSERVED_OUTPUTS = 10_000
+
+
+def _without_observed_outputs(report: dict) -> dict:
+    """Drop ``observed_outputs`` past the published cap, with the claims they back.
+
+    Attestation binds an output only to returned values the report body
+    shows, and a stamp may not claim more than the body shows
+    (``axiom_oracles.conformance.attestation``). A copy without the rows
+    therefore cannot keep the stamp's per-output claims either: ``outputs``
+    is emptied and ``outputs_complete`` set false, so the copy attests no
+    output instead of claiming counts that nothing in it backs.
+    ``observed_outputs_omitted`` records how many rows were dropped, and
+    ``output_summary`` keeps each output's comparison count.
+    """
+    observed = report.get("observed_outputs")
+    if (
+        not isinstance(observed, list)
+        or len(observed) <= _PUBLISHED_MAX_OBSERVED_OUTPUTS
+    ):
+        return report
+    slim = {key: value for key, value in report.items() if key != "observed_outputs"}
+    slim["observed_outputs_omitted"] = len(observed)
+    stamp = slim.get("attestation")
+    if isinstance(stamp, dict) and "outputs" in stamp:
+        slim["attestation"] = {**stamp, "outputs": [], "outputs_complete": False}
+    return slim
 
 
 def _write_full_v2_report(adapted: dict, output: Path) -> Path:
@@ -848,18 +877,15 @@ def _write_full_v2_report(adapted: dict, output: Path) -> Path:
     the raw report under reports/ is not a v2 report and cannot be the
     source a premerged dashboard copy binds to: apply_dispositions.py
     --check requires the pointed file to be this suite's FULL v2 report.
-    This writes that report atomically in the same directory, without the
-    two per-row blocks the consumer never reads: ``cases`` (the dashboard's
-    case chunks carry them) and ``observed_outputs`` (one row per compared
-    value; about 3.9 million rows and 1 GB for fiit-ecps). The consumer
-    re-derives only from ``summary`` and ``mismatches``, and the report keeps
-    its ``attestation`` block with the per-output counts.
+    This writes that report atomically in the same directory, without
+    ``cases`` (the dashboard's case chunks carry them; the consumer
+    re-derives only from ``summary`` and ``mismatches``) and with
+    ``observed_outputs`` capped as in the dashboard copy
+    (``_without_observed_outputs``).
     """
-    full = {
-        key: value
-        for key, value in adapted.items()
-        if key not in _FULL_V2_REPORT_OMITTED_KEYS
-    }
+    full = _without_observed_outputs(
+        {key: value for key, value in adapted.items() if key != "cases"}
+    )
     target = output.with_name(f"{output.stem}-v2{output.suffix}")
     fd, name = tempfile.mkstemp(
         dir=target.parent, prefix=f".{target.name}.", suffix=".tmp"
@@ -6197,6 +6223,9 @@ def _slim_report_for_dashboard(
     intersection suite's unexplained rows were physically untriageable behind
     the default cap) raises ``dashboard.max_mismatches`` in its comparison
     YAML instead of relying on the ephemeral reports/ artifact.
+
+    ``observed_outputs`` past ``_PUBLISHED_MAX_OBSERVED_OUTPUTS`` are dropped
+    whole (``_without_observed_outputs``), never sampled.
     """
     if max_mismatches is None:
         max_mismatches = _DASHBOARD_MAX_MISMATCHES
@@ -6263,7 +6292,7 @@ def _slim_report_for_dashboard(
     ):
         slim["summary"] = dict(summary)
         slim["summary"]["stored_mismatch_example_count"] = len(kept_mismatches)
-    return slim
+    return _without_observed_outputs(slim)
 
 
 def _merge_dispositions(report: dict) -> dict:
