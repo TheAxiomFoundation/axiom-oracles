@@ -314,7 +314,10 @@
       "repos": [
         "TheAxiomFoundation/rulespec-us"
       ],
-      "source": "comparisons/co-state-income-tax-ecps.yaml"
+      "source": "comparisons/co-state-income-tax-ecps.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "ca2d424f"
+      }
     },
     {
       "suite": "co-state-income-tax-taxsim",
@@ -1915,6 +1918,18 @@
       "report": "axiom-yale-us-tariff-schedule.json",
       "repos": [],
       "source": "comparisons/us-tariff-schedule.yaml"
+    },
+    {
+      "suite": "us-taxable-income-grid",
+      "name": "us-taxable-income-grid",
+      "report": "axiom-policyengine-us-taxable-income-grid.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/us-taxable-income-grid.yaml",
+      "pinned": {
+        "TheAxiomFoundation/rulespec-us": "87d3cbd3b6ec580724f0b79a0472105347f79518"
+      }
     },
     {
       "suite": "ut-income-tax-liability",

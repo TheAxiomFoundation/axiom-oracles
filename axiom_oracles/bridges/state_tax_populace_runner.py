@@ -1625,15 +1625,20 @@ def calculate_policyengine_targets(
 
 
 # Person-level PolicyEngine variables projected into the per-tax-unit TAXSIM
-# input row. Concept keys mirror populations/populace_us.py's person loader so
-# the populace TAXSIM leg feeds the binary the same input surface as the
-# Enhanced-CPS lanes (adapters/taxsim/projection.taxsim_input_for_case is the
-# single row-assembly authority for both).
+# input row. Concept keys mirror populations/populace_us.py's tax-unit person
+# loader (less its SSI benefit and resource facts, which no tax projection
+# reads) so the populace TAXSIM leg feeds the binary the same input surface as
+# the Enhanced-CPS lanes (adapters/taxsim/projection.taxsim_input_for_case is
+# the single row-assembly authority for both);
+# tests/bridges/test_state_tax_populace_runner.py pins the mirror.
 _TAXSIM_PERSON_NON_WAGE_VARIABLES: dict[str, str] = {
     "self_employment_income": "self_employment_income",
     "dividend_income": "dividend_income",
     "qualified_dividend_income": "qualified_dividend_income",
     "interest_income": "taxable_interest_income",
+    # Carried for the mirror only: TAXSIM-35 has no tax-exempt-interest
+    # column, so taxsim_input_for_case drops it.
+    "tax_exempt_interest_income": "tax_exempt_interest_income",
     "short_term_capital_gains": "short_term_capital_gains",
     "long_term_capital_gains": "long_term_capital_gains",
     "pension_income": "taxable_pension_income",
@@ -1672,6 +1677,8 @@ def calculate_taxsim_targets(
     contract: StateTaxPopulaceContract | Mapping[str, Any] | None = None,
     microsimulation_factory: Callable[[Any], Any] | None = None,
     taxsim_runner_factory: Callable[[Any], Any] | None = None,
+    unprojected_inputs: dict[str, dict[int | str, dict[str, float]]] | None = None,
+    identity_recorder: Any | None = None,
 ) -> dict[str, dict[int | str, float]]:
     """Calculate the TAXSIM oracle value for every ready-routed tax unit.
 
@@ -1683,9 +1690,23 @@ def calculate_taxsim_targets(
     output concept. Person identity, order, and tax-unit links are verified
     against the certified Populace tables before any values are used —
     the same fail-closed discipline as the PolicyEngine legs.
+
+    When supplied, ``unprojected_inputs`` collects nonzero dropped filer
+    inputs by state and tax-unit id for comparison-row metadata.
+
+    With the default runner, ``year`` is checked against the pinned law-year
+    range of the binary before the Microsimulation is built, and an
+    ``identity_recorder``
+    (:class:`axiom_oracles.adapters.taxsim.pins.TaxsimIdentityRecorder`)
+    receives the path, hash and printed build stamp of every run. A
+    ``taxsim_runner_factory`` supplied by the caller is neither checked nor,
+    unless its runner exposes ``taxsim_path``, recorded.
     """
 
-    from ..adapters.taxsim.projection import taxsim_input_for_case
+    from ..adapters.taxsim.projection import (
+        taxsim_input_for_case,
+        taxsim_unprojected_inputs_for_case,
+    )
     from ..core.case import Case, Concepts, Entity
 
     resolved_contract = (
@@ -1697,6 +1718,14 @@ def calculate_taxsim_targets(
         raise StateTaxPopulationRoutingError(
             f"comparison year must be {resolved_contract.validation_year}; got {year}"
         )
+    default_binary: Path | None = None
+    if taxsim_runner_factory is None:
+        # Before the Microsimulation is built: the host's TAXSIM binary may
+        # not accept this year (the pinned Linux build stops at 2024).
+        from ..adapters.taxsim.pins import require_law_years, resolve_binary_path
+
+        default_binary = resolve_binary_path()
+        require_law_years([year], binary_path=default_binary)
     _require_columns(raw_tax_units, {"tax_unit_id"}, "tax_unit")
     tax_unit_ids = [_clean_id(value) for value in raw_tax_units["tax_unit_id"]]
     _reject_duplicate_ids(tax_unit_ids, "tax_unit_id")
@@ -1849,13 +1878,9 @@ def calculate_taxsim_targets(
     if taxsim_runner_factory is None:
         from policyengine_taxsim.runners.taxsim_runner import TaxsimRunner
 
-        from ..adapters.taxsim.pins import installed_binary_path
-
-        binary = installed_binary_path()
-
         def taxsim_runner_factory(frame: Any) -> Any:
-            if binary is not None:
-                return TaxsimRunner(frame, taxsim_path=binary)
+            if default_binary is not None:
+                return TaxsimRunner(frame, taxsim_path=default_binary)
             return TaxsimRunner(frame)
 
     import pandas as pd
@@ -1872,10 +1897,15 @@ def calculate_taxsim_targets(
         state_routes = ready_by_state[state]
         rows = []
         for route in state_routes:
+            case = _case_for_tax_unit(route.tax_unit_id, state)
             row = taxsim_input_for_case(
-                _case_for_tax_unit(route.tax_unit_id, state),
+                case,
                 taxsimid=route.tax_unit_id,
             )
+            if unprojected_inputs is not None:
+                dropped = taxsim_unprojected_inputs_for_case(case)
+                if dropped:
+                    unprojected_inputs.setdefault(state, {})[route.tax_unit_id] = dropped
             if row["state"] != jurisdiction.taxsim_state_code:
                 raise StateTaxPopulationRoutingError(
                     f"{state}: projected TAXSIM state code {row['state']} "
@@ -1884,10 +1914,24 @@ def calculate_taxsim_targets(
                 )
             rows.append(row)
         runner = taxsim_runner_factory(pd.DataFrame(rows))
+        binary_path = getattr(runner, "taxsim_path", None)
+        binary_sha256 = None
+        if identity_recorder is not None and binary_path is not None:
+            from ..adapters.taxsim.pins import build_stamp_from_columns, sha256_file
+
+            binary_path = Path(binary_path)
+            binary_sha256 = sha256_file(binary_path)
         try:
             result = runner.run(show_progress=False)
         except TypeError:
             result = runner.run()
+        if identity_recorder is not None and binary_path is not None:
+            identity_recorder.observe(
+                binary_path,
+                rows=len(rows),
+                build_observed=build_stamp_from_columns(result.columns),
+                sha256=binary_sha256,
+            )
         records = result.to_dict(orient="records")
         if len(records) != len(state_routes):
             raise StateTaxPopulationRoutingError(
@@ -2478,6 +2522,9 @@ def compare_ready_state_tax_units(
     ]
     | None = None,
     taxsim_targets: Mapping[str, Mapping[int | str, float]] | None = None,
+    taxsim_unprojected_inputs: Mapping[
+        str, Mapping[int | str, Mapping[str, float]]
+    ] | None = None,
     year: int,
     rulespec_root: Path,
     axiom_rules_path: Path,
@@ -2734,6 +2781,15 @@ def compare_ready_state_tax_units(
                     )
                 case_row["taxsim"] = round(taxsim_value, 2)
                 case_row["taxsim_matched"] = taxsim_matched
+                dropped = (
+                    taxsim_unprojected_inputs.get(state, {}).get(route.tax_unit_id)
+                    if taxsim_unprojected_inputs is not None
+                    else None
+                )
+                if dropped:
+                    case_row["metadata"] = {
+                        "taxsim_unprojected_inputs": dict(dropped)
+                    }
             case_rows.append(case_row)
 
         comparisons[state] = {

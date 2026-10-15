@@ -30,6 +30,7 @@ from .adapters.policyengine import PolicyEngineRunner, PolicyEngineTaxsimRunner
 from .adapters.prd import PrdPackageRunner
 from .adapters.taxcalc import TaxCalcPackageRunner, attach_taxcalc_inputs
 from .adapters.taxsim import TaxsimPackageRunner, attach_taxsim_inputs
+from .adapters.taxsim import pins as taxsim_pins
 from .audit.accessnyc_rules import audit_accessnyc_rules
 from .comparison.comparator import Comparator, HouseholdComparison
 from .comparison.mappings import (
@@ -37,6 +38,7 @@ from .comparison.mappings import (
     comparable_mappings,
     comparison_scope_for_targets,
     engine_targets_for_concepts,
+    load_program_mappings,
 )
 from .comparison.report import (
     FULL_CASE_INPUT_LIMIT,
@@ -52,6 +54,7 @@ from .core.case import Case, Concepts
 from .core.engine import EngineAdapter
 from .core.geography import GeographyScope, scope_contains
 from .populations import load_populace_us_cases
+from .populations.populace_us import CaseUnit, CaseUnitSelector
 from .suites import available_suites, load_suite
 
 
@@ -65,8 +68,12 @@ DEFAULT_PERIOD = "2026-05"
 # models law year 2026 rate schedules, the OBBBA standard deduction, childless
 # EITC, and FICA/SECA, so TAXSIM comparisons default to the same 2026
 # validation year as DEFAULT_PERIOD. The Linux binary in the same release
-# (taxsimtest-linux.exe) is an older build that stops at 2024 and fails on
-# 2025 and 2026 rows; on Linux, pass --period 2024. Known 2026 gap in the
+# (taxsimtest-linux.exe, build cdate-compdate) is a different NBER build that
+# accepts law years 1960-2024 only, so `compare` refuses 2025 and 2026 on Linux
+# before loading the population (_require_taxsim_law_year; each binary's range
+# is pinned in taxsim_pins.json); 2024 is the last year a Linux host can pass,
+# and the two builds differ even there (docs/policyengine-taxsim.md). Known
+# 2026 gap in the
 # macOS build, verified empirically: the qualifying-child credit machinery is
 # absent at 2026 — CTC collapses to the $500 ODC path, ACTC and CDCC return
 # zero, and the EITC ignores qualifying children, so a family with children
@@ -168,9 +175,10 @@ def _attach_axiom_outputs(
 ) -> list[Case]:
     """Stash the axiom engine's non-compared outputs into case metadata.
 
-    In full-evidence mode the runner queries every derived rule; the values
-    beyond the compared concepts' targets are the household's complete
-    computed surface (intermediates included). Ordinary results land under
+    In full-evidence mode the runner records the derived rules the engine
+    evaluated on the case's queried entity (its explain trace); the values
+    beyond the compared concepts' targets are the household's computation
+    chain (intermediates included). Ordinary results land under
     ``axiom_all_outputs``. For cross-entity aggregation, intermediate values
     are not meaningful household sums, so they remain attached to their
     executed entity under ``axiom_result_aggregation_applied.components``.
@@ -611,11 +619,46 @@ def compare(
         gc.disable()
     try:
         period = _resolve_period(period, left, right)
+        if "taxsim" in {left, right}:
+            _require_taxsim_law_year(period)
         comparison_scope = comparison_scope_for_targets(left, right)
         suite_name = _resolve_suite_name(suite, left, right)
         _echo_resolved_axiom_composition(
             report_suite or suite_name, {left, right}, axiom_program
         )
+        population_mappings = None
+        population_mapping_locales = None
+        case_unit_selector: CaseUnitSelector | None = None
+        if population == "enhanced-cps":
+
+            def case_unit_selector(population_locales: set[str]) -> CaseUnit:
+                nonlocal population_mappings, population_mapping_locales
+                # Invariant: tax_unit iff every output of the final supported
+                # surface is a tax-unit concept. Empty surfaces never compare.
+                population_mapping_locales = (
+                    set(locales) if locales else population_locales
+                )
+                population_mappings = comparable_mappings(
+                    left,
+                    right,
+                    locales=population_mapping_locales,
+                    scope=comparison_scope,
+                    concepts=set(concepts) or None,
+                    categories=set(categories) or None,
+                    include_components=include_components,
+                )
+                try:
+                    population_mappings = _filter_for_accessnyc_mode(
+                        population_mappings,
+                        left,
+                        right,
+                        accessnyc_mode,
+                        accessnyc_python_path,
+                    )
+                except RuntimeError as exc:
+                    raise click.ClickException(str(exc)) from exc
+                return _populace_us_case_unit((), (), mappings=population_mappings)
+
         cases = _load_population_cases(
             population=population,
             suite_name=suite_name,
@@ -625,6 +668,7 @@ def compare(
             ecps_dataset=ecps_dataset,
             categories=categories,
             concepts=concepts,
+            case_unit_selector=case_unit_selector,
         )
         if jurisdiction_fips and _wants_snap(concepts):
             cases = [
@@ -638,25 +682,31 @@ def compare(
             )
         case_locales = set(locales) if locales else _case_locales(cases)
         requested_concepts = set(concepts) or _case_output_concepts(cases) or None
-        mappings = comparable_mappings(
-            left,
-            right,
-            locales=case_locales,
-            scope=comparison_scope,
-            concepts=requested_concepts,
-            categories=set(categories) or None,
-            include_components=include_components,
-        )
-        try:
-            mappings = _filter_for_accessnyc_mode(
-                mappings,
+        if (
+            population_mappings is not None
+            and population_mapping_locales == case_locales
+        ):
+            mappings = population_mappings
+        else:
+            mappings = comparable_mappings(
                 left,
                 right,
-                accessnyc_mode,
-                accessnyc_python_path,
+                locales=case_locales,
+                scope=comparison_scope,
+                concepts=requested_concepts,
+                categories=set(categories) or None,
+                include_components=include_components,
             )
-        except RuntimeError as exc:
-            raise click.ClickException(str(exc)) from exc
+            try:
+                mappings = _filter_for_accessnyc_mode(
+                    mappings,
+                    left,
+                    right,
+                    accessnyc_mode,
+                    accessnyc_python_path,
+                )
+            except RuntimeError as exc:
+                raise click.ClickException(str(exc)) from exc
         if not mappings:
             raise click.ClickException(
                 "No comparable concepts found for those engines, locales, and filters."
@@ -827,11 +877,19 @@ def compare(
                     raise click.ClickException(
                         f"Invalid comparison results: {exc}"
                     ) from exc
+                # Automatic collection is off for the whole run, so free this
+                # batch's engine objects (simulations held in reference
+                # cycles, for every runner) before the next batch starts.
+                del accumulator_cases, left_results, right_results
+                gc.collect()
 
             if not accumulator.case_count:
                 raise click.ClickException(
                     "No cases remain after engine-specific preparation filters."
                 )
+
+            accumulator.engine_identity = _engine_identity(left_runner, right_runner)
+            _echo_engine_identity(accumulator.engine_identity)
 
             if output_path:
                 accumulator.write_json(output_path)
@@ -1191,6 +1249,7 @@ def _load_population_cases(
     ecps_dataset: str | None,
     categories: tuple[str, ...] = (),
     concepts: tuple[str, ...] = (),
+    case_unit_selector: CaseUnitSelector | None = None,
 ) -> list[Case]:
     if population == "enhanced-cps":
         return load_populace_us_cases(
@@ -1199,6 +1258,7 @@ def _load_population_cases(
             sample_size=sample_size or None,
             dataset=ecps_dataset,
             case_unit=_populace_us_case_unit(categories, concepts),
+            case_unit_selector=case_unit_selector,
         )
     if population == "synthetic":
         cases = [
@@ -1214,10 +1274,22 @@ def _load_population_cases(
 def _populace_us_case_unit(
     categories: tuple[str, ...],
     concepts: tuple[str, ...],
-) -> str:
-    if categories and set(categories) == {"tax"}:
-        return "tax_unit"
-    if concepts and all(concept.startswith("us:tax/") for concept in concepts):
+    *,
+    mappings: list[ProgramMapping] | None = None,
+) -> CaseUnit:
+    if mappings is None:
+        mappings = (
+            [
+                mapping
+                for mapping in load_program_mappings()
+                if (not concepts or mapping.concept_id in concepts)
+                and (not categories or mapping.category in categories)
+                and mapping.target_for_engine("policyengine")
+            ]
+            if concepts or categories
+            else []
+        )
+    if mappings and all(mapping.case_unit == "tax_unit" for mapping in mappings):
         return "tax_unit"
     return "household"
 
@@ -1331,6 +1403,49 @@ def _select_axiom_state_income_tax_candidate(case: Case) -> Case:
         "output": "us:tax/oracle-bridge#state_income_tax",
     }
     return replace(case, metadata=metadata)
+
+
+def _require_taxsim_law_year(period: str) -> None:
+    """Fail before any work when the host's TAXSIM binary rejects the year.
+
+    The Linux and macOS executables in the pinned policyengine-taxsim release
+    are different NBER builds with different law-year ranges
+    (taxsim_pins.json); without this check a Linux run loads the whole
+    population and then dies on the binary's ``STOP 1``.
+    """
+    try:
+        year = int(str(period).split("-", 1)[0])
+    except ValueError as exc:
+        raise click.ClickException(
+            f"--period {period!r} does not start with a law year"
+        ) from exc
+    try:
+        taxsim_pins.require_law_years([year])
+    except taxsim_pins.TaxsimLawYearError as exc:
+        raise click.ClickException(str(exc)) from exc
+
+
+def _engine_identity(*runners: EngineAdapter) -> dict | None:
+    """The report's ``engine_identity`` block: binaries the runners executed."""
+    identity: dict = {}
+    for runner in runners:
+        if isinstance(runner, TaxsimPackageRunner):
+            taxsim = runner.taxsim_identity()
+            if taxsim:
+                identity["taxsim"] = taxsim
+    return identity or None
+
+
+def _echo_engine_identity(identity: dict | None) -> None:
+    for binary in ((identity or {}).get("taxsim") or {}).get("binaries", ()):
+        click.echo(
+            f"TAXSIM binary: {binary['path']} sha256 {binary['sha256'][:12]} "
+            f"build {binary['build_observed'] or binary['build']} on "
+            f"{binary['platform']}/{binary['machine']}"
+            f"{'' if binary['pinned'] else ' (NOT the pinned binary)'}: "
+            f"{binary['rows']} row(s)",
+            err=True,
+        )
 
 
 def _resolve_period(period: str | None, left: str, right: str) -> str:

@@ -242,17 +242,20 @@ def compact_case(case: dict, explained: dict) -> dict:
     outputs = metadata.get("axiom_all_outputs")
     if isinstance(outputs, dict) and outputs:
         kept_o = []
-        dropped_o = 0
+        zero_o = []
         for name in sorted(outputs):
             value = outputs[name]
             if value is None or value is False or value == 0:
-                dropped_o += 1
+                zero_o.append(name)
                 continue
             kept_o.append({"n": name, "v": value})
         row["o"] = kept_o
-        if dropped_o:
-            row["o0"] = dropped_o
+        if zero_o:
+            row["o0"] = len(zero_o)
+        # Both consumed by finalize_slot_dictionaries, stripped before chunks
+        # are written.
         row["_all_output_names"] = sorted(outputs)
+        row["_zero_output_names"] = zero_o
     else:
         synth = engine_pair_records(metadata)
         if synth:
@@ -287,6 +290,54 @@ def compact_case(case: dict, explained: dict) -> dict:
     elif "matches" in case:
         raise ValueError("full-evidence case matches must be an array")
     return row
+
+
+def zero_output_mask(zero_names, output_slots: list[str]) -> str:
+    """Hex bitmask of ``zero_names`` over ``output_slots``.
+
+    Hex digit ``i // 4`` holds slot ``i`` at bit ``3 - i % 4``, so the mask
+    reads left to right in slot order. dashboard/src/utils/zeroOutputs.mjs
+    decodes it.
+    """
+
+    zero = set(zero_names)
+    bits = "".join("1" if name in zero else "0" for name in output_slots)
+    bits += "0" * (-len(bits) % 4)
+    return "".join(
+        format(int(bits[index : index + 4], 2), "x")
+        for index in range(0, len(bits), 4)
+    )
+
+
+def finalize_slot_dictionaries(rows: list[dict]) -> tuple[list[str], list[str]]:
+    """Build the suite's input/output name dictionaries and bind rows to them.
+
+    ``output_slots`` is the union of every output any case recorded. Cases
+    record different outputs — full evidence lists only the rules the
+    engine evaluated for that case — so a row cannot be assumed to hold a
+    zero for every slot it does not list. Each row with zero-valued outputs
+    gets ``oz``, their bitmask over ``output_slots``; a slot outside both
+    ``o`` and ``oz`` was not evaluated for that case.
+    """
+
+    input_slots = sorted(
+        {
+            record.get("name")
+            for row in rows
+            for record in row.get("_all_input_names", [])
+            if record.get("name")
+        }
+    )
+    output_slots = sorted(
+        {name for row in rows for name in row.get("_all_output_names", [])}
+    )
+    for row in rows:
+        row.pop("_all_input_names", None)
+        row.pop("_all_output_names", None)
+        zero_names = row.pop("_zero_output_names", None)
+        if zero_names:
+            row["oz"] = zero_output_mask(zero_names, output_slots)
+    return input_slots, output_slots
 
 
 def normalize_mismatch(m: dict) -> dict:
@@ -356,20 +407,7 @@ def write_artifacts(
     out_dir.mkdir(parents=True, exist_ok=True)
     for stale in out_dir.glob("chunk-*.json"):
         stale.unlink()
-    input_slots = sorted(
-        {
-            record.get("name")
-            for row in rows
-            for record in row.get("_all_input_names", [])
-            if record.get("name")
-        }
-    )
-    output_slots = sorted(
-        {name for row in rows for name in row.get("_all_output_names", [])}
-    )
-    for row in rows:
-        row.pop("_all_input_names", None)
-        row.pop("_all_output_names", None)
+    input_slots, output_slots = finalize_slot_dictionaries(rows)
     chunks = [rows[i : i + CHUNK_SIZE] for i in range(0, len(rows), CHUNK_SIZE)]
     for i, chunk in enumerate(chunks):
         (out_dir / f"chunk-{i}.json").write_text(
