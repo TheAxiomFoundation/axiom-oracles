@@ -70,6 +70,7 @@ class _ArtifactRelations:
         self.aggregate_owner_kinds: set[str] = set()
         self.executable_kinds: set[str] = set()
         self._expected_by_name: dict[str, list[str | None] | None] = {}
+        self._endpoint_inventories = self._read_endpoint_inventories()
         self._read_usages(program)
         # Only executable roles establish kinds independently of the relation
         # being bound. An unused declaration cannot prove an input's identity.
@@ -78,6 +79,70 @@ class _ArtifactRelations:
         self.usages.clear()
         self.owner_slots.clear()
         self._read_usages(program)
+
+    def _read_endpoint_inventories(self) -> dict[str, frozenset[tuple[str, ...]]]:
+        """Collect structural kinds before any request or aggregate inference.
+
+        A derivation and its source have the same endpoint inventory, even
+        when their executable slot orders differ. Traverse both directions so
+        incoming derivations and arbitrarily long source chains contribute.
+        Components also make cycles and schema ordering immaterial. Preserve
+        repeated kinds; a same-kind pair is still a complete binary inventory.
+        """
+        inventories: dict[str, set[tuple[str, ...]]] = defaultdict(set)
+        neighbors: dict[str, set[str]] = defaultdict(set)
+        for name, schema in self.schemas.items():
+            derivation = schema.get("derivation") or {}
+            for node in (schema, derivation):
+                kinds = node.get("slot_entities")
+                if kinds:
+                    inventories[name].add(tuple(sorted(kinds)))
+            source_name = derivation.get("source_relation")
+            source = self.schema(source_name) if source_name else None
+            if source is not None:
+                source_key = source["name"]
+                neighbors[name].add(source_key)
+                neighbors[source_key].add(name)
+
+        result: dict[str, frozenset[tuple[str, ...]]] = {}
+        for name in self.schemas:
+            if name in result:
+                continue
+            component, pending = set(), [name]
+            kinds = set()
+            while pending:
+                key = pending.pop()
+                if key in component:
+                    continue
+                component.add(key)
+                kinds.update(inventories[key])
+                pending.extend(neighbors[key] - component)
+            inventory = frozenset(kinds)
+            for key in component:
+                result[key] = inventory
+        return result
+
+    def _local_endpoint_kinds(self, name: str) -> set[str]:
+        schema = self.schema(name)
+        return {
+            kind
+            for inventory in self._endpoint_inventories.get(
+                schema["name"] if schema else name, (),
+            )
+            for kind in inventory
+        }
+
+    def _remaining_endpoint_kind(self, name: str, known: str | None) -> str | None:
+        schema = self.schema(name)
+        candidates = set()
+        for inventory in self._endpoint_inventories.get(
+            schema["name"] if schema else name, (),
+        ):
+            if len(inventory) == 2 and known in inventory:
+                remaining = list(inventory)
+                remaining.remove(known)
+                candidates.add(remaining[0])
+        return next(iter(candidates)) if len(candidates) == 1 else None
 
     def _constructor_kinds(self, name: str) -> tuple[str, str] | None:
         if self.constructor_hint:
@@ -175,15 +240,9 @@ class _ArtifactRelations:
         kinds[current], kinds[related] = owner, member
         if schema is None:
             return kinds
-        declared = schema.get("slot_entities", [])
-        if len(declared) == arity and kinds.count(None) == 1:
-            remaining = list(declared)
-            for known in (kind for kind in kinds if kind is not None):
-                if known not in remaining:
-                    break
-                remaining.remove(known)
-            else:
-                kinds[kinds.index(None)] = remaining[0]
+        if arity == 2 and kinds.count(None) == 1:
+            known = next(kind for kind in kinds if kind is not None)
+            kinds[kinds.index(None)] = self._remaining_endpoint_kind(name, known)
         key = schema["name"]
         self.usages[key].append(kinds)
         constructor_kinds = self._constructor_kinds(name)
@@ -305,14 +364,14 @@ class _ArtifactRelations:
                         [node.get("value"), node.get("where")], node["relation"],
                     )
                     member = member_scope
-                    declared = (schema or {}).get("slot_entities", [])
-                    if len(declared) == 2 and owner in declared:
-                        # The declaration's kind inventory is stronger than
-                        # a scalar's scope, which can broadcast onto any id.
-                        remaining = list(declared)
-                        remaining.remove(owner)
-                        member = remaining[0]
-                    elif not declared:
+                    inventory = self._local_endpoint_kinds(node["relation"])
+                    if inventory:
+                        # Structural endpoint kinds, including incoming and
+                        # transitive sources, outrank scalar broadcast scopes.
+                        member = self._remaining_endpoint_kind(node["relation"], owner)
+                        if member is None and member_scope in inventory:
+                            member = member_scope
+                    else:
                         identity = self._related_identity(node["relation"], owner)
                         if identity is None and constructor_kinds:
                             # A relation may also be traversed from its member
@@ -389,17 +448,12 @@ class _ArtifactRelations:
 
     def _input_identity_kinds(self, name: str) -> set[str]:
         """Use this relation's endpoint inventory before untyped role evidence."""
-        kinds: set[str] = set()
+        kinds = self._local_endpoint_kinds(name)
+        if kinds:
+            return kinds
         schema = self.schema(name)
-        if schema is not None:
-            kinds.update(schema.get("slot_entities", []))
-            kinds.update((schema.get("derivation") or {}).get("slot_entities", []))
-        if not kinds:
-            # Legacy untyped artifacts rely on independently proven roles.
-            # A typed relation already identifies its endpoint kinds: owners
-            # of unrelated aggregates cannot promote its scalar broadcasts
-            # into additional identities on those endpoints.
-            kinds.update(self.executable_kinds)
+        # Only structurally untyped legacy artifacts need global owner roles.
+        kinds.update(self.executable_kinds)
         if schema is not None:
             kinds.update(
                 kind for usage in self.usages.get(schema["name"], [])
@@ -617,7 +671,7 @@ def bind_request_relations(
         if len(ids) != 2:
             raise RelationBindingError(f"Relation {name!r} requires a two-slot tuple")
         kinds = []
-        untyped = not schema.get("slot_entities")
+        untyped = not relations._local_endpoint_kinds(name)
         identity_kinds = relations._input_identity_kinds(name)
         scalar_scopes = rule_scopes - identity_kinds
         for entity_id in ids:

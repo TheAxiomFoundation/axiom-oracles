@@ -8,6 +8,7 @@ from axiom_oracles.bridges.relation_binding import (
     RelationBindingAmbiguityWarning,
     RelationBindingError,
     bind_request_relations,
+    relation_owner_kind,
     relation_tuple,
 )
 
@@ -1256,16 +1257,73 @@ def test_unrelated_relation_declarations_never_change_binding(
     assert artifact == program_before
 
 
-@settings(max_examples=80, deadline=None)
+def _noninterference_shape(**overrides):
+    shape = {"inventory": "direct", "predicate": "input", "same_kind": False,
+             "proof_first": False, "chain_depth": 2}
+    return shape | overrides
+
+
+@settings(max_examples=120, deadline=None)
 @example(
     owner_slot=0, supplied_owner_slot=0, owner_input=True, member_input=True,
     owner_broadcast=False, scope="Person", executed=True, mode="explain",
-    unrelated=[("Person", "Organization", ["Organization", "Person"])],
+    shape=_noninterference_shape(),
+    unrelated=[("aggregate", "Person", "Organization", ["Organization", "Person"], 0)],
 )
 @example(
     owner_slot=0, supplied_owner_slot=0, owner_input=True, member_input=True,
     owner_broadcast=False, scope="Person", executed=True, mode="fast",
-    unrelated=[("Person", "Organization", ["Organization", "Person"])],
+    shape=_noninterference_shape(inventory="incoming"),
+    unrelated=[("aggregate", "Person", "Organization", ["Person", "Person"], 0)],
+)
+@example(
+    owner_slot=1, supplied_owner_slot=0, owner_input=True, member_input=True,
+    owner_broadcast=True, scope="Person", executed=True, mode="explain",
+    shape=_noninterference_shape(inventory="incoming_chain", proof_first=True, chain_depth=3),
+    unrelated=[("aggregate", "Person", "Organization", ["Person", "Payment"], 1)],
+)
+@example(
+    owner_slot=0, supplied_owner_slot=1, owner_input=True, member_input=True,
+    owner_broadcast=False, scope="Organization", executed=True, mode="fast",
+    shape=_noninterference_shape(inventory="source_chain", predicate="aliases"),
+    unrelated=[("aggregate", "Organization", "Person", ["Organization", "Person"], 1)],
+)
+@example(
+    owner_slot=1, supplied_owner_slot=1, owner_input=True, member_input=True,
+    owner_broadcast=True, scope="Family", executed=True, mode="fast",
+    shape=_noninterference_shape(inventory="own_derivation", predicate="optional_default"),
+    unrelated=[("relation", "Family", "Person", ["Person", "Family", "Payment"], 0),
+               ("aggregate", "Family", "Person", ["Family", "Person"], 0)],
+)
+@example(
+    owner_slot=0, supplied_owner_slot=1, owner_input=True, member_input=True,
+    owner_broadcast=True, scope="Household", executed=True, mode="explain",
+    shape=_noninterference_shape(inventory="incoming_chain", predicate="nested", same_kind=True),
+    unrelated=[("aggregate", "Person", "Payment", ["Person", "Person"], 1)],
+)
+@example(
+    owner_slot=0, supplied_owner_slot=0, owner_input=True, member_input=False,
+    owner_broadcast=False, scope="Organization", executed=True, mode="explain",
+    shape=_noninterference_shape(inventory="incoming", predicate="nested"),
+    unrelated=[("aggregate", "Organization", "Person", ["Organization", "Person"], 1)],
+)
+@example(
+    owner_slot=1, supplied_owner_slot=0, owner_input=False, member_input=False,
+    owner_broadcast=False, scope="Person", executed=True, mode="fast",
+    shape=_noninterference_shape(inventory="incoming", predicate="no_match"),
+    unrelated=[("derived_relation", "Person", "Organization", ["Organization", "Person"], 1)],
+)
+@example(
+    owner_slot=0, supplied_owner_slot=1, owner_input=True, member_input=False,
+    owner_broadcast=True, scope="Payment", executed=True, mode="explain",
+    shape=_noninterference_shape(predicate="versions"),
+    unrelated=[("entity", "Person", "Person", ["Person", "Payment"], 0)],
+)
+@example(
+    owner_slot=1, supplied_owner_slot=0, owner_input=True, member_input=True,
+    owner_broadcast=False, scope="Household", executed=True, mode="fast",
+    shape=_noninterference_shape(inventory="incoming", predicate="literal"),
+    unrelated=[("aggregate", "Household", "Person", ["Household", "Person"], 1)],
 )
 @given(
     owner_slot=st.integers(0, 1), supplied_owner_slot=st.integers(0, 1),
@@ -1273,47 +1331,150 @@ def test_unrelated_relation_declarations_never_change_binding(
     scope=st.sampled_from(["Person", "Organization", "Family", "BroadcastThreshold",
                            "Household", "Payment"]),
     executed=st.booleans(), mode=st.sampled_from(["explain", "fast"]),
+    shape=st.fixed_dictionaries({
+        "inventory": st.sampled_from([
+            "direct", "own_derivation", "incoming", "incoming_chain", "source_chain",
+        ]),
+        "predicate": st.sampled_from([
+            "input", "literal", "optional_default", "aliases", "versions", "no_match", "nested",
+        ]),
+        "same_kind": st.booleans(), "proof_first": st.booleans(),
+        "chain_depth": st.integers(2, 4),
+    }),
     unrelated=st.lists(st.tuples(
+        st.sampled_from(["aggregate", "relation", "derived_relation", "entity"]),
         st.one_of(OWNER_KINDS, st.sampled_from(["Person", "Payment", "Family"])),
         st.one_of(OWNER_KINDS, st.sampled_from(["Person", "Payment", "Family"])),
         st.lists(st.one_of(OWNER_KINDS, st.sampled_from(["Person", "Payment", "Family"])),
                  min_size=2, max_size=3),
+        st.integers(0, 1),
     ), min_size=1, max_size=4),
 )
 def test_unqueried_aggregates_and_entities_preserve_local_endpoint_binding(
     owner_slot, supplied_owner_slot, owner_input, member_input, owner_broadcast,
-    scope, executed, mode, unrelated,
+    scope, executed, mode, shape, unrelated,
 ):
-    # Once the relation establishes its endpoint inventory, unqueried scopes
-    # cannot promote a broadcast label on either endpoint into an identity.
+    # Inventory may live on payments, an incoming derivation, or anywhere in
+    # its source chain. The generated additions never refer to those relations.
+    member_kind = "Household" if shape["same_kind"] else "Payment"
+    kinds = ["Household", member_kind] if owner_slot == 0 else [member_kind, "Household"]
+    one = {"kind": "literal", "value": {"kind": "integer", "value": 1}}
+    predicate = shape["predicate"]
+    threshold = {"kind": "input"}
+    if predicate == "literal":
+        threshold = one
+    elif predicate == "optional_default":
+        threshold = {"kind": "input_or_else", "name": "threshold", "default": one["value"]}
     count = {
         "kind": "count_related", "relation": "payments",
         "current_slot": owner_slot, "related_slot": 1 - owner_slot,
     }
-    if executed:
-        count["where"] = {"kind": "derived", "name": "threshold"}
-    artifact = {"program": {
-        "relations": [{"name": "payments", "arity": 2,
-                       "slot_entities": ["Household", "Payment"]}],
+    program = {
+        "relations": [{"name": "payments", "arity": 2}],
         "derived": [
             {"name": "n", "entity": "Household", "expr": count},
-            {"name": "amount", "entity": "Payment", "expr": {"kind": "input"}},
-            {"name": "threshold", "entity": scope, "expr": {"kind": "input"}},
+            {"name": "amount", "entity": member_kind, "expr": {"kind": "input"}},
+            {"name": "threshold", "entity": scope, "expr": threshold},
         ],
-    }}
+    }
+    artifact = {"program": program}
+
+    def derivation(source, *, typed):
+        result = {
+            "source_relation": source, "current_slot": owner_slot,
+            "related_slot": 1 - owner_slot,
+            "predicate": {"kind": "literal", "value": {"kind": "bool", "value": True}},
+        }
+        if typed:
+            result["slot_entities"] = list(kinds)
+        return result
+
+    inventory = shape["inventory"]
+    if inventory == "direct":
+        # A direct declaration supplies kinds, while executable slots govern order.
+        program["relations"][0]["slot_entities"] = ["Household", member_kind]
+    elif inventory == "own_derivation":
+        program["relations"][0]["derivation"] = derivation("payments_source", typed=True)
+        program["relations"].append({"name": "payments_source", "arity": 2})
+    elif inventory in {"incoming", "incoming_chain"}:
+        source = "payments"
+        depth = 1 if inventory == "incoming" else shape["chain_depth"]
+        for index in range(depth):
+            name = f"filtered_payments_{index}"
+            program["relations"].append({
+                "name": name, "arity": 2,
+                "derivation": derivation(source, typed=index == depth - 1),
+            })
+            source = name
+    else:
+        # The target has no local kinds; its transitive source supplies them.
+        for index in range(shape["chain_depth"]):
+            source = f"payments_source_{index}"
+            program["relations"][-1]["derivation"] = derivation(source, typed=False)
+            program["relations"].append({"name": source, "arity": 2})
+        program["relations"][-1]["slot_entities"] = list(kinds)
+    if shape["proof_first"]:
+        for schema in program["relations"]:
+            schema["id"] = f"artifact#relation.{schema['name']}"
+            if "derivation" in schema:
+                source = schema["derivation"]["source_relation"]
+                schema["derivation"]["source_relation"] = f"artifact#relation.{source}"
+        count["relation"] = "artifact#relation.payments"
+        program["relations"].reverse()
+
+    reference = {"kind": "derived", "name": "threshold"}
+    if predicate == "aliases":
+        for index in range(shape["chain_depth"]):
+            name = f"threshold_alias_{index}"
+            program["derived"].append({"name": name, "entity": scope, "expr": reference})
+            reference = {"kind": "derived", "name": name}
+    elif predicate == "versions":
+        program["derived"][2]["versions"] = [{"expr": one}]
+        program["derived"][2]["expr"] = {"kind": "count_related", "relation": "payments",
+                                          "current_slot": 1 - owner_slot,
+                                          "related_slot": owner_slot}
+    elif predicate == "no_match":
+        reference = {
+            "kind": "no_match", "subject": reference,
+            "patterns": [{"kind": "count_related", "relation": "payments",
+                          "current_slot": 1 - owner_slot, "related_slot": owner_slot}],
+        }
+    if executed:
+        count["where"] = {"kind": "comparison", "op": "gt", "left": reference, "right": one}
+        if predicate == "nested":
+            nested_slot = 1 - owner_slot
+            program["relations"].append({
+                "name": "nested_payments", "arity": 2,
+                "slot_entities": [member_kind, "Person"] if nested_slot == 0
+                else ["Person", member_kind],
+            })
+            count["where"] = {"kind": "and", "items": [count["where"], {
+                "kind": "comparison", "op": "gt", "right": one,
+                "left": {"kind": "count_related", "relation": "nested_payments",
+                         "current_slot": nested_slot, "related_slot": 1 - nested_slot},
+            }]}
+    if shape["proof_first"]:
+        program["derived"].reverse()
+    supplied = ["house", "payment"] if supplied_owner_slot == 0 else ["payment", "house"]
     request = {
         "mode": mode,
         "dataset": {"inputs": [{"entity_id": "payment", "entity": scope}],
-                    "relations": [{"name": "payments", "tuple": ["house", "payment"]
-                                   if supplied_owner_slot == 0 else ["payment", "house"]}]},
+                    "relations": [{"name": schema["name"], "tuple": list(supplied),
+                                   "interval": {"start": "2026-01-01", "end": "2026-12-31"}}
+                                  for schema in program["relations"]]},
         "queries": [{"entity_id": "house", "outputs": ["n"]}],
     }
     if owner_input:
         request["dataset"]["inputs"].append({"entity_id": "house", "entity": "Household"})
     if member_input:
-        request["dataset"]["inputs"].append({"entity_id": "payment", "entity": "Payment"})
+        request["dataset"]["inputs"].append({"entity_id": "payment", "entity": member_kind})
     if owner_broadcast:
         request["dataset"]["inputs"].append({"entity_id": "house", "entity": scope})
+    if executed and predicate == "nested":
+        request["dataset"]["inputs"].append({"entity_id": "nested", "entity": "Person"})
+        request["dataset"]["relations"][-1]["tuple"] = (
+            ["payment", "nested"] if supplied_owner_slot == 0 else ["nested", "payment"]
+        )
     before, artifact_before = deepcopy(request), deepcopy(artifact)
 
     def outcome(program, candidate):
@@ -1329,24 +1490,64 @@ def test_unqueried_aggregates_and_entities_preserve_local_endpoint_binding(
             if isinstance(item.message, RelationBindingAmbiguityWarning)
         ]
 
+    assert relation_owner_kind(
+        artifact, "payments", default_owner_kind="Household", related_kind=member_kind,
+    ) == "Household"
     baseline = outcome(artifact, request)
+    if (not shape["same_kind"] and owner_input and member_input
+            and scope not in {"Household", member_kind} and predicate != "nested"):
+        # Complete real identities must bind successfully. Comparing only two
+        # errors would let a broken implementation satisfy noninterference.
+        assert baseline[1] is None
+        payment_tuple = next(row["tuple"] for row in baseline[0]["dataset"]["relations"]
+                             if row["name"] == "payments")
+        assert payment_tuple[owner_slot] == "house"
+        assert payment_tuple[1 - owner_slot] == "payment"
+    if (predicate == "nested" and executed and not shape["same_kind"]
+            and scope not in {"Household", member_kind, "Person"}):
+        # Structural member context also determines a nested count's owner
+        # when the outer member has only a scalar broadcast input.
+        assert baseline[1] is None
+        nested_tuple = next(row["tuple"] for row in baseline[0]["dataset"]["relations"]
+                            if row["name"] == "nested_payments")
+        assert nested_tuple[1 - owner_slot] == "payment"
+        assert nested_tuple[owner_slot] == "nested"
     extended = deepcopy(artifact)
-    for index, (aggregate_owner, scalar_scope, slots) in enumerate(unrelated):
+    for index, (addition, aggregate_owner, scalar_scope, slots, current_slot) in enumerate(unrelated):
         name = f"unqueried_{index}"
-        extended["program"]["relations"].append({
-            "name": name, "arity": len(slots), "slot_entities": slots,
-        })
-        extended["program"]["derived"].extend([
-            {"name": f"{name}_count", "entity": aggregate_owner, "expr": {
-                "kind": "count_related", "relation": name,
-                "current_slot": 0, "related_slot": 1,
-            }},
-            {"name": f"{name}_scalar", "entity": scalar_scope, "expr": {"kind": "input"}},
-        ])
+        if addition != "entity":
+            declaration = {"name": name, "arity": len(slots), "slot_entities": slots}
+            if addition == "derived_relation":
+                source, probe = f"{name}_source", f"{name}_probe"
+                extended["program"]["relations"].extend([
+                    {"name": source, "arity": len(slots)}, {"name": probe, "arity": 2},
+                ])
+                declaration["derivation"] = {
+                    "source_relation": source, "slot_entities": slots,
+                    "current_slot": current_slot, "related_slot": 1 - current_slot,
+                    "predicate": {"kind": "count_related", "relation": probe,
+                                  "current_slot": 1 - current_slot, "related_slot": current_slot},
+                }
+            extended["program"]["relations"].append(declaration)
+        if addition == "aggregate":
+            extended["program"]["derived"].append({
+                "name": f"{name}_count", "entity": aggregate_owner, "expr": {
+                    "kind": "count_related", "relation": name,
+                    "current_slot": current_slot, "related_slot": 1 - current_slot,
+                },
+            })
+        if addition in {"aggregate", "entity"}:
+            extended["program"]["derived"].append({
+                "name": f"{name}_scalar", "entity": scalar_scope, "expr": {"kind": "input"},
+            })
     extended_before = deepcopy(extended)
+    assert relation_owner_kind(
+        extended, "payments", default_owner_kind="Household", related_kind=member_kind,
+    ) == "Household"
     assert outcome(extended, request) == baseline
     if baseline[0] is not None:
-        assert outcome(extended, baseline[0])[0] == baseline[0]
+        assert outcome(artifact, baseline[0]) == baseline
+        assert outcome(extended, baseline[0]) == baseline
     assert request == before
     assert artifact == artifact_before
     assert extended == extended_before

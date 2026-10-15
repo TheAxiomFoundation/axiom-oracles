@@ -15,6 +15,7 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import warnings
 
 import pytest
 from hypothesis import example, given, settings, strategies as st
@@ -283,10 +284,11 @@ def strict_engine():
     return Path(value).resolve()
 
 
-def _run(binary, request):
+def _run(binary, request, *, legacy=False):
     assert "relation_binding" not in request
     return subprocess.run(
-        [str(binary), "run"], input=json.dumps(request), capture_output=True,
+        [str(binary), *([] if legacy else ["run"])],
+        input=json.dumps(request), capture_output=True,
         text=True, check=False, timeout=60,
     )
 
@@ -619,6 +621,116 @@ def test_strict_engine_unqueried_aggregate_cannot_contradict_payment_identity(st
     assert request == before
     assert bind_request_relations(bound, {"program": bound["program"]}) == bound
     assert _strict_integer_outputs(strict_engine, bound, "n") == [1]
+
+
+_INCOMING_DERIVATION_ENDPOINTS = [
+    ("Person", "Person"),
+    ("Person", "Organization"),
+    ("Person", "Payment"),
+    ("Payment", "Payment"),
+    ("Organization", "Person"),
+    ("Household", "Person"),
+]
+
+
+@pytest.fixture(scope="module", params=["strict", "legacy"])
+def incoming_derivation_engine(request):
+    flavor = request.param
+    variable = f"AXIOM_{flavor.upper()}_RELATION_ENGINE_BIN"
+    value = os.environ.get(variable)
+    if not value or not Path(value).is_file():
+        message = f"{variable} must point to the pinned {flavor} engine"
+        if os.environ.get("AXIOM_REQUIRE_RELATION_ENGINE_TESTS") == "1":
+            pytest.fail(message)
+        pytest.skip(message)
+    return Path(value).resolve(), flavor
+
+
+def _incoming_derivation_request(owner_slot, mode):
+    request = _person_scalar_scope_request(used=True, owner_slot=owner_slot)
+    request["mode"] = mode
+    request["program"]["relations"][0].pop("slot_entities")
+    endpoints = ["Household", "Payment"] if owner_slot == 0 else ["Payment", "Household"]
+    request["program"]["relations"].append({
+        "name": "filtered_payments", "arity": 2,
+        "slot_entities": deepcopy(endpoints),
+        "derivation": {
+            "source_relation": "payments",
+            "current_slot": owner_slot, "related_slot": 1 - owner_slot,
+            "slot_entities": deepcopy(endpoints), "predicate": _constant(True),
+        },
+    })
+    return request
+
+
+def _assert_incoming_derivation_native_count(engine, request):
+    binary, flavor = engine
+    result = _run(binary, request, legacy=flavor == "legacy")
+    assert result.returncode == 0, result.stderr
+    response = json.loads(result.stdout)
+    if flavor == "strict":
+        assert response["metadata"]["relation_binding"] == "strict"
+    assert [int(row["outputs"]["n"]["value"]["value"]) for row in response["results"]] == [1]
+
+
+@pytest.mark.parametrize("mode", ["explain", "fast"])
+@pytest.mark.parametrize("owner_slot", [0, 1])
+@pytest.mark.parametrize("supplied_owner_slot", [0, 1])
+@pytest.mark.parametrize(("other_owner", "other_member"), _INCOMING_DERIVATION_ENDPOINTS)
+def test_native_incoming_derivation_inventory_resists_unrelated_aggregate(
+    incoming_derivation_engine, mode, owner_slot, supplied_owner_slot, other_owner, other_member,
+):
+    # The 24 review shapes exercise both actual engines in both modes. The
+    # source has no declaration; only its incoming derivation types payments.
+    executable = _incoming_derivation_request(owner_slot, mode)
+    _assert_incoming_derivation_native_count(incoming_derivation_engine, executable)
+    request = deepcopy(executable)
+    request["dataset"]["relations"][0]["tuple"] = (
+        ["house", "payment"] if supplied_owner_slot == 0 else ["payment", "house"]
+    )
+    original = deepcopy(request)
+    artifact = {"program": deepcopy(request["program"]), "metadata": {"source": ["review"]}}
+    artifact_before = deepcopy(artifact)
+    with warnings.catch_warnings(record=True) as baseline_warnings:
+        warnings.simplefilter("always")
+        baseline = bind_request_relations(request, artifact)
+    assert baseline == executable
+    assert request == original
+    assert artifact == artifact_before
+
+    extended = deepcopy(request)
+    extended["program"]["relations"].append({
+        "name": "unqueried", "arity": 2, "slot_entities": [other_owner, other_member],
+    })
+    extended["program"]["derived"].append({
+        "name": "unqueried_count", "entity": other_owner, "dtype": "integer",
+        "semantics": "scalar", "expr": {
+            "kind": "count_related", "relation": "unqueried",
+            "current_slot": 0, "related_slot": 1,
+        },
+    })
+    extended_before = deepcopy(extended)
+    extended_executable = deepcopy(extended)
+    extended_executable["dataset"] = deepcopy(executable["dataset"])
+    # Raw engine controls establish that adding the unqueried relation and
+    # aggregate does not alter the executable program's n = 1 result.
+    _assert_incoming_derivation_native_count(incoming_derivation_engine, extended_executable)
+    extended_artifact = {
+        "program": deepcopy(extended["program"]), "metadata": {"source": ["review"]},
+    }
+    extended_artifact_before = deepcopy(extended_artifact)
+    with warnings.catch_warnings(record=True) as extended_warnings:
+        warnings.simplefilter("always")
+        bound = bind_request_relations(extended, extended_artifact)
+    assert bound == extended_executable
+    assert [str(item.message) for item in extended_warnings] == [
+        str(item.message) for item in baseline_warnings
+    ]
+    assert extended == extended_before
+    assert extended_artifact == extended_artifact_before
+    assert bind_request_relations(bound, extended_artifact) == bound
+    assert extended_artifact == extended_artifact_before
+    _assert_incoming_derivation_native_count(incoming_derivation_engine, bound)
 
 
 def _unrelated_scalar_scope_request(scope_kind, *, typed):
