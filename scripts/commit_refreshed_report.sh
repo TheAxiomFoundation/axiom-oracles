@@ -68,9 +68,12 @@
 #
 # A bundle is a directory holding bundle.json (schema
 # axiom_oracles.refreshed_report_bundle.v1: the suite, its private paths, its
-# deletions, and its manifest additions) plus files/<path> for every private
-# path. Publish reads the suite from bundle.json, never from the directory
-# name, so a bundle survives any artifact rename.
+# deletions, their baseline SHA256 identities, and its manifest additions)
+# plus files/<path> for every private path. A baseline is null for a path
+# absent from HEAD. Publish checks every identity before applying any bundle,
+# so a reviewed correction since packing cannot be overwritten. Publish reads
+# the suite from bundle.json, never from the directory name, so a bundle
+# survives any artifact rename.
 #
 # Only leg-PRIVATE outputs are ever restored across attempts. Shared or
 # derived files are not: restoring a stale copy of the shared, append-only
@@ -430,12 +433,29 @@ pack() {
   # restored, so a stale copy can't drop a concurrently-added entry.
   "$PYTHON" - "$manifest" "$staging/bundle.json" "$BUNDLE_SCHEMA" "$name" \
     ${private[@]+"${private[@]}"} -- ${deletions[@]+"${deletions[@]}"} <<'PY'
-import json, subprocess, sys
+import hashlib, json, subprocess, sys
 from pathlib import Path
 
 manifest, out, schema, suite, *rest = sys.argv[1:]
 split = rest.index("--")
 private, deletions = rest[:split], rest[split + 1 :]
+baseline = {}
+for path in private + deletions:
+    try:
+        entry = subprocess.run(
+            ["git", "--literal-pathspecs", "ls-tree", "-z", "HEAD", "--", path],
+            capture_output=True, check=True,
+        )
+        if not entry.stdout:
+            baseline[path] = None
+            continue
+        original = subprocess.run(
+            ["git", "show", f"HEAD:{path}"], capture_output=True, check=True,
+        )
+    except subprocess.CalledProcessError as exc:
+        reason = exc.stderr.decode(errors="replace").strip()
+        sys.exit(f"FAILED: cannot record baseline identity for {path}: {reason}")
+    baseline[path] = hashlib.sha256(original.stdout).hexdigest()
 try:
     now = json.loads(Path(manifest).read_text()).get("reports", [])
 except FileNotFoundError:
@@ -453,6 +473,7 @@ Path(out).write_text(
             "suite": suite,
             "private": private,
             "deletions": deletions,
+            "baseline": baseline,
             "manifest_added": [r for r in now if r not in committed],
         },
         indent=2,
@@ -526,7 +547,7 @@ publish() {
   cleanup_dirs+=("$work")
   "$PYTHON" - "$work" "$manifest" "$BUNDLE_SCHEMA" "${derived_paths[@]}" \
     -- "${bundles[@]}" <<'PY'
-import json, os, sys
+import hashlib, json, os, sys
 from pathlib import Path, PurePosixPath
 
 work, manifest, schema, *rest = sys.argv[1:]
@@ -545,7 +566,7 @@ def in_derived(path):
     )
 
 
-suites, added, owners = [], [], {}
+suites, added, owners, targets = [], [], {}, []
 for index, bundle in enumerate(bundles):
     root = Path(bundle)
     try:
@@ -591,10 +612,37 @@ for index, bundle in enumerate(bundles):
         (work / f"{index}.{key}").write_bytes(
             b"".join(p.encode() + b"\0" for p in lists[key])
         )
+    paths = lists["private"] + lists["deletions"]
+    baseline = doc.get("baseline")
+    if (
+        set(lists["private"]) & set(lists["deletions"])
+        or not isinstance(baseline, dict)
+        or set(baseline) != set(paths)
+        or any(
+            value is not None and (
+                not isinstance(value, str)
+                or len(value) != 64
+                or any(char not in "0123456789abcdef" for char in value)
+            )
+            for value in baseline.values()
+        )
+    ):
+        fail(f"{suite}: missing or invalid baseline SHA256 identities; repack the refresh")
+    for path in paths:
+        targets.append({
+            "suite": suite,
+            "path": path,
+            "baseline": baseline[path],
+            "replacement": (
+                hashlib.sha256((root / "files" / path).read_bytes()).hexdigest()
+                if path in lists["private"] else None
+            ),
+        })
     added.extend(e for e in lists["manifest_added"] if e not in added)
 
 (work / "suites").write_bytes(b"".join(s.encode() + b"\0" for s in suites))
 (work / "manifest-added.json").write_text(json.dumps(added))
+(work / "targets.json").write_text(json.dumps(targets))
 PY
 
   suites=()
@@ -620,6 +668,33 @@ PY
     # prepare merges both histories before resetting the checkout, bootstraps
     # from main when the data branch is absent, and fails closed on conflicts.
     "$PYTHON" scripts/oracle_data.py prepare
+
+    # Check ALL bundles against the prepared tree before cleaning, copying,
+    # or deleting any path. A target may still have its packing baseline, or
+    # already have this bundle's result (including an already-applied deletion).
+    # Any third identity is a concurrent correction that must be reviewed.
+    "$PYTHON" - "$work/targets.json" <<'PY'
+import hashlib, json, sys
+from pathlib import Path
+
+conflicts = []
+for target in json.loads(Path(sys.argv[1]).read_text()):
+    path = Path(target["path"])
+    try:
+        current = hashlib.sha256(path.read_bytes()).hexdigest()
+    except FileNotFoundError:
+        current = None
+    except OSError as exc:
+        sys.exit(f"REFUSED: cannot inspect bundle target {path}: {exc}; nothing was applied")
+    if current not in (target["baseline"], target["replacement"]):
+        conflicts.append(f"{target['suite']}: {path}")
+if conflicts:
+    sys.exit(
+        "REFUSED: stale bundle targets changed since packing: "
+        + ", ".join(conflicts)
+        + "; regenerate and repack the refresh; nothing was applied"
+    )
+PY
     git clean -fdq -- "${derived_paths[@]}"
 
     # Apply every bundle's private outputs and deletions, in sorted order.

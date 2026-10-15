@@ -13,6 +13,7 @@ gates ci.yml runs.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import shutil
@@ -1125,8 +1126,25 @@ def _write_bundle(
     deletions: tuple[str, ...] = (),
     manifest_added: tuple[str, ...] = (),
     directory: str | None = None,
+    baseline_root: Path | None = None,
 ) -> Path:
     """A bundle exactly as --pack lays one out (the pack/publish contract)."""
+    baseline = {}
+    for path in [*files, *deletions]:
+        assert baseline_root is not None, "nonempty bundles need their packing baseline"
+        entry = subprocess.run(
+            ["git", "--literal-pathspecs", "ls-tree", "-z", "HEAD", "--", path],
+            cwd=baseline_root, env={**os.environ, **GIT_ENV},
+            capture_output=True, check=True,
+        )
+        if not entry.stdout:
+            baseline[path] = None
+            continue
+        original = subprocess.run(
+            ["git", "show", f"HEAD:{path}"], cwd=baseline_root,
+            env={**os.environ, **GIT_ENV}, capture_output=True, check=True,
+        )
+        baseline[path] = hashlib.sha256(original.stdout).hexdigest()
     root = bundles / (directory or suite)
     for path, content in files.items():
         (root / "files" / path).parent.mkdir(parents=True, exist_ok=True)
@@ -1139,6 +1157,7 @@ def _write_bundle(
                 "suite": suite,
                 "private": sorted(files),
                 "deletions": list(deletions),
+                "baseline": baseline,
                 "manifest_added": list(manifest_added),
             }
         )
@@ -1363,6 +1382,7 @@ def test_publish_retries_after_a_rejected_push(origin, tmp_path):
         "nc-income-tax-liability",
         {REPORT: (leg / REPORT).read_bytes()},
         directory="refreshed-nc-income-tax-liability",
+        baseline_root=leg,
     )
     # The human commit lands first (the hook only rejects the bot's push), so
     # the publisher's clone is behind before it even starts.
@@ -1391,9 +1411,13 @@ def test_publish_ratchet_refusal_names_every_suite_and_pushes_nothing(
     _perturb_report(leg, REPORT)
     _perturb_report(leg, SIBLING_REPORT)
     bundles = tmp_path / "refreshed"
-    _write_bundle(bundles, "nc-income-tax-liability", {REPORT: (leg / REPORT).read_bytes()})
     _write_bundle(
-        bundles, "mi-income-tax-liability", {SIBLING_REPORT: (leg / SIBLING_REPORT).read_bytes()}
+        bundles, "nc-income-tax-liability", {REPORT: (leg / REPORT).read_bytes()},
+        baseline_root=leg,
+    )
+    _write_bundle(
+        bundles, "mi-income-tax-liability", {SIBLING_REPORT: (leg / SIBLING_REPORT).read_bytes()},
+        baseline_root=leg,
     )
     _pin_ratchet_at_live(origin, tmp_path, "nc-income-tax-liability")
     tip = _git(origin, "rev-parse", DATA_BRANCH)

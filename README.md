@@ -105,8 +105,10 @@ Automated refreshes publish to the dedicated
 `main` holds the reviewed code, configuration, and committed data baseline;
 CI validates that baseline on pull requests. The data branch is a full repository
 snapshot that incorporates current `main` before each publication. Publishers
-use normal pushes with an explicit branch target, and a merge conflict stops
-publication rather than overwriting a reviewed change.
+use normal pushes with an explicit branch target. A merge conflict stops
+publication. Affected bundles record each replaced or deleted file's baseline
+SHA256 and refuse application if the prepared file matches neither that baseline
+nor the bundled result, protecting reviewed corrections made after packing.
 
 The affected rerun publishes reports together with their derived conformance
 artifacts. The scheduled comparison workflow publishes the per-rule verification
@@ -119,10 +121,13 @@ The unattended regeneration scripts also publish their dashboard data to
 from a dedicated clean checkout: `prepare` rebuilds their baseline from current
 remote `main` source and published data before computing. The generic KPI and
 dashboard publisher refuses publication if either remote branch advances during
-generation. This refusal leaves generated edits available for inspection, and
-the next unattended run refuses the dirty checkout. Retry from a fresh clean
-dedicated checkout, or explicitly clean the generated paths after review and
-then prepare and regenerate.
+generation. This refusal leaves generated edits available for inspection. If
+the final push loses a race, the local publication commit is undone while its
+generated edits remain staged and unrelated local edits remain available. The
+next unattended run refuses the dirty checkout. Retry from a fresh clean
+dedicated checkout, or review and explicitly clear both staged and unstaged
+generated changes before preparing and regenerating. Never retry by pushing
+the stale generation over newer published data.
 
 To inspect current published data or run a local consumer against it, use a
 checkout with full Git history and run:
@@ -132,10 +137,17 @@ python3 scripts/oracle_data.py materialize
 ```
 
 This combines the checkout's source revision with the published snapshot and
-applies only generated data changes, including deletions, to the existing file
-paths. Repeated materialization refreshes previously loaded data and refuses
-to overwrite overlapping local or staged generated changes. A missing
-`oracle-data` branch uses the committed baseline. Run it before
+applies only generated data changes, including deletions and both paths of a
+rename, to the existing file paths. Authored conformance documentation,
+manifests, ratchets, and policy inputs stay at the checkout's source revision.
+Repeated materialization refreshes previously loaded data and refuses to
+overwrite overlapping local or staged generated changes. Every target's parent
+directories are checked before any file is restored or deleted; a local
+directory symlink stops materialization. A missing `oracle-data` branch uses
+the committed baseline, restoring previously loaded paths to `HEAD` and
+removing previously loaded additions under the same local-edit guards. If
+local edits prevent recovery, inspect and save or explicitly clear those edits
+before running materialization again. Run it before
 data-reading scripts or `uv build` when a local wheel should include the current
 generated Belgium coverage rollup. Packages built by CI retain the reviewed
 `main` snapshot.

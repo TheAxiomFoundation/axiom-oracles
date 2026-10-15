@@ -22,16 +22,24 @@ import tempfile
 DATA_BRANCH = "oracle-data"
 DATA_REF = f"refs/heads/{DATA_BRANCH}"
 MAIN_REF = "refs/heads/main"
-# Keep in sync with commit_refreshed_report.sh's derived_paths. These are
-# publication boundaries; materialize restores only the merge's changed paths
-# inside them, so human edits to other conformance files remain authoritative.
+# Reader scope: only generated outputs of the publication chain. The publisher
+# carries full source history, including authored inputs beside these outputs;
+# readers must keep those inputs at their own source revision.
 DATA_PATHS = (
     "dashboard/public/data/",
-    "conformance/",
+    "conformance/scoreboard.json",
+    "conformance/detail/",
+    "conformance/history/",
+    "conformance/exercise-census.json",
+    "conformance/de-certificate-census.json",
+    "conformance/executable/de-kindergeld-status.json",
+    "conformance/executable/nz-treasury-incomeexplorer.json",
     "certificates/",
     "closure/de/summary.json",
     "closure/nz/summary.json",
-    "comparisons/de-worker-dual-oracle/",
+    "comparisons/de-worker-dual-oracle/axiom-euromod.json",
+    "comparisons/de-worker-dual-oracle/axiom-gettsim.json",
+    "comparisons/de-worker-dual-oracle/unified-record.json",
     "comparisons/affected_map.json",
     "comparisons/nz-treasury-incomeexplorer/single-person-attestations.json",
     "axiom_oracles/data/euromod_be_coverage.json",
@@ -204,6 +212,20 @@ def _worktree_identity(root: Path, path: str) -> dict:
 
 
 def _guard_worktree(root: Path, source: str, tree: str, paths: list[str], previous: dict) -> dict:
+    # Check every target before restoring even the first one. A final-file
+    # identity cannot detect a local directory symlink redirecting a deletion
+    # to a matching file outside the checkout. Keep final symlinks in the
+    # separate identity check below, where their mode and link bytes matter.
+    for path in paths:
+        parent = root
+        for part in PurePosixPath(path).parts[:-1]:
+            parent /= part
+            try:
+                mode = parent.lstat().st_mode
+            except FileNotFoundError:
+                break  # Restore may create missing directories.
+            if stat.S_ISLNK(mode) or not stat.S_ISDIR(mode):
+                raise DataError(f"local data parent {parent.relative_to(root)} is not a directory; checkout unchanged")
     changed = _git(root, "diff", "--cached", "--name-only", "-z", "--", *paths).stdout
     if changed:
         raise DataError("staged data overlaps published updates; checkout unchanged")
@@ -256,42 +278,41 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
     root = _repository(root)
     source = _sha(root, "HEAD")
     data = _fetch(root, DATA_REF, optional=True)
-    if data is None:
-        return []
-    tree = _reader_merge_tree(root, source, data)
-    changed = _git(root, "diff", "--name-only", "-z", source, tree, "--", *DATA_PATHS).stdout
+    # A disappeared branch also removes the last overlay. Reconcile recorded
+    # paths against HEAD with exactly the same guards as an ordinary refresh.
+    tree = source if data is None else _reader_merge_tree(root, source, data)
+    changed = _git(root, "diff", "--no-renames", "--name-only", "-z", source, tree, "--", *DATA_PATHS).stdout
     paths = [p.decode() for p in changed.split(b"\0") if p]
+    previous = _read_state(root)
+    # Include prior materializations that the remote has since reverted
+    # to HEAD, otherwise such a revert would leave old data in the reader.
+    previous_targets = _tree_identities(root, tree, list(previous))
+    paths.extend(path for path in previous if path not in paths and previous[path] != previous_targets[path])
+    if not paths:
+        return []
+    desired = _guard_worktree(root, source, tree, paths, previous)
     if baseline:
-        if not paths:
-            return []
         # A data branch can contain newer main source. Restrict its merged
         # tree to the publication delta before making the detached baseline.
         # A private index leaves the caller's index untouched until checkout.
         scoped_tree = _scoped_tree(root, source, tree)
-        _checkout_baseline(root, _composite_commit(root, scoped_tree, source, data))
+        commit = source if data is None else _composite_commit(root, scoped_tree, source, data)
+        _checkout_baseline(root, commit)
     else:
-        previous = _read_state(root)
-        # Include prior materializations that the remote has since reverted
-        # to HEAD, otherwise such a revert would leave old data in the reader.
-        previous_targets = _tree_identities(root, tree, list(previous))
-        paths.extend(path for path in previous if path not in paths and previous[path] != previous_targets[path])
-        if not paths:
-            return []
-        desired = _guard_worktree(root, source, tree, paths, previous)
         present = b"".join(path.encode() + b"\0" for path in paths if desired[path]["oid"] is not None)
         if present:
             _git(
                 root, "restore", "--worktree", f"--source={tree}",
                 "--pathspec-from-file=-", "--pathspec-file-nul", input=present,
             )
-        # A previously materialized addition can still be untracked in the
-        # index. Git restore cannot remove it when neither HEAD nor the new
-        # tree contains that path; remove only after validating its identity.
-        for path in paths:
-            if desired[path]["oid"] is None:
-                (root / path).unlink(missing_ok=True)
-        previous.update(desired)
-        _write_state(root, previous)
+    # A previously materialized addition can still be untracked in the
+    # index. Neither restore nor a baseline checkout removes it when neither
+    # HEAD nor the new tree contains it; unlink only after the shared guard.
+    for path in paths:
+        if desired[path]["oid"] is None:
+            (root / path).unlink(missing_ok=True)
+    previous.update(desired)
+    _write_state(root, previous)
     return paths
 
 
@@ -332,7 +353,14 @@ def publish(root: Path | None = None, *, group: str, message: str) -> bool:
         GIT_COMMITTER_EMAIL="41898282+github-actions[bot]@users.noreply.github.com",
     )
     _git(root, "commit", "-m", message, env=env)
-    _git(root, "push", "origin", f"HEAD:{DATA_REF}")
+    try:
+        _git(root, "push", "origin", f"HEAD:{DATA_REF}")
+    except DataError:
+        # Keep the failed publication visible to unattended runs' staged-edit
+        # guard. A clean unpublished commit could otherwise be reset away by
+        # prepare. Soft reset preserves generated bytes and unrelated edits.
+        _git(root, "reset", "--soft", head)
+        raise
     return True
 
 

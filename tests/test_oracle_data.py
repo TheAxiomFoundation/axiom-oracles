@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 from types import SimpleNamespace
@@ -459,3 +460,220 @@ def test_cli_rejects_arbitrary_publish_target(repo, args):
     assert result.returncode == 2
     assert "unrecognized arguments" in result.stderr
     assert remote_main(repo) == repo.main
+
+
+@pytest.mark.parametrize("parent", ["dashboard", "dashboard/public", "dashboard/public/data"])
+@pytest.mark.parametrize("operation", ["replace", "delete"])
+@pytest.mark.parametrize("baseline", [False, True], ids=["ordinary", "baseline"])
+def test_materialize_rejects_every_parent_symlink_before_any_restore(repo, parent, operation, baseline):
+    earlier = "closure/de/summary.json"
+    seed_data(repo, {
+        earlier: "published closure\n",
+        REPORT: None if operation == "delete" else "published replacement\n",
+    })
+    outside = repo.checkout.parent / "external-directory"
+    shutil.move(str(repo.checkout / parent), outside)
+    (repo.checkout / parent).symlink_to(outside, target_is_directory=True)
+    external_report = outside / Path(REPORT).relative_to(parent)
+    before_index = git(repo.checkout, "write-tree")
+
+    with pytest.raises(data.DataError):
+        data.materialize(repo.checkout, baseline=baseline)
+
+    assert external_report.read_text() == "original data\n"
+    assert (repo.checkout / parent).is_symlink()
+    assert not (repo.checkout / earlier).exists(), "a path was restored before parent validation"
+    assert git(repo.checkout, "write-tree") == before_index
+    assert git(repo.checkout, "rev-parse", "HEAD") == repo.main
+
+
+def test_materialize_rejects_final_file_symlink_even_with_matching_target_bytes(repo):
+    seed_data(repo, {REPORT: None, "closure/de/summary.json": "published closure\n"})
+    external_report = repo.checkout.parent / "external-report.json"
+    external_report.write_text("original data\n")
+    (repo.checkout / REPORT).unlink()
+    (repo.checkout / REPORT).symlink_to(external_report)
+
+    with pytest.raises(data.DataError, match="local data edits"):
+        data.materialize(repo.checkout)
+
+    assert (repo.checkout / REPORT).is_symlink()
+    assert external_report.read_text() == "original data\n"
+    assert not (repo.checkout / "closure/de/summary.json").exists()
+
+
+@pytest.mark.parametrize("changed", [False, True], ids=["identical", "similarity-detected"])
+def test_materialize_removes_old_path_for_report_rename(repo, changed):
+    original = "".join(f'"row-{i}": "original report value",\n' for i in range(30))
+    repo.main = advance_main(repo, {REPORT: original})
+    git(repo.checkout, "fetch", "origin", data.MAIN_REF)
+    git(repo.checkout, "reset", "--hard", "FETCH_HEAD")
+    renamed = "dashboard/public/data/renamed.json"
+    git(repo.seed, "checkout", "-B", "oracle-data", repo.main)
+    git(repo.seed, "mv", REPORT, renamed)
+    expected = original.replace("row-29", "changed-row-29") if changed else original
+    tip = commit(repo.seed, {renamed: expected})
+    # Verify the fixture exercises Git's rename detection instead of an ordinary
+    # addition/deletion; the reader must account for both sides of this record.
+    assert git(repo.seed, "diff", "--name-status", "-M", repo.main, tip).startswith("R")
+    git(repo.seed, "push", "origin", "HEAD:refs/heads/oracle-data")
+    git(repo.seed, "checkout", "main")
+    before_index = git(repo.checkout, "write-tree")
+
+    assert set(data.materialize(repo.checkout)) == {REPORT, renamed}
+
+    assert (repo.checkout / renamed).read_text() == expected
+    assert not (repo.checkout / REPORT).exists(), "old report survived its published rename"
+    assert git(repo.checkout, "write-tree") == before_index
+    assert git(repo.checkout, "rev-parse", "HEAD") == repo.main
+
+
+@pytest.mark.parametrize("authored", [
+    "conformance/README.md",
+    "conformance/executable/de-kindergeld-manifest.json",
+    "conformance/ratchet.yaml",
+    "comparisons/de-worker-dual-oracle/output-dependencies.json",
+])
+@pytest.mark.parametrize("baseline", [False, True], ids=["ordinary", "baseline"])
+@pytest.mark.parametrize("feature_edit", [False, True], ids=["old-source", "feature-conflict"])
+def test_reader_excludes_authored_conformance_inputs(repo, authored, baseline, feature_edit):
+    repo.main = advance_main(repo, {authored: "initial authored input\n"})
+    git(repo.checkout, "fetch", "origin", data.MAIN_REF)
+    git(repo.checkout, "reset", "--hard", "FETCH_HEAD")
+    seed_data(repo, {REPORT: "first published data\n"})
+    advance_main(repo, {
+        authored: "new reviewed authored input\n",
+        "source.py": "new reviewed source\n",
+    })
+    data.prepare(repo.seed)
+    commit(repo.seed, {REPORT: "latest published data\n"})
+    git(repo.seed, "push", "origin", "HEAD:refs/heads/oracle-data")
+    git(repo.seed, "checkout", "main")
+    expected = "feature authored input\n" if feature_edit else "initial authored input\n"
+    if feature_edit:
+        commit(repo.checkout, {authored: expected})
+    source = git(repo.checkout, "rev-parse", "HEAD")
+    before_index = git(repo.checkout, "write-tree")
+
+    assert data.materialize(repo.checkout, baseline=baseline) == [REPORT]
+
+    assert (repo.checkout / REPORT).read_text() == "latest published data\n"
+    assert (repo.checkout / authored).read_text() == expected
+    assert git(repo.checkout, "show", f":{authored}") == expected.strip()
+    assert (repo.checkout / "source.py").read_text() == "original source\n"
+    assert git(repo.checkout, "show", "HEAD:source.py") == "original source"
+    if baseline:
+        assert git(repo.checkout, "status", "--porcelain") == ""
+        assert git(repo.checkout, "show", f"HEAD:{authored}") == expected.strip()
+    else:
+        assert git(repo.checkout, "rev-parse", "HEAD") == source
+        assert git(repo.checkout, "write-tree") == before_index
+
+
+@pytest.mark.parametrize("baseline", [False, True], ids=["ordinary", "baseline"])
+def test_reader_still_materializes_generated_conformance_artifacts(repo, baseline):
+    paths = [
+        "conformance/scoreboard.json",
+        "conformance/detail/de.json",
+        "conformance/history/de/2026-10-14.json",
+        "conformance/exercise-census.json",
+        "conformance/de-certificate-census.json",
+        "conformance/executable/de-kindergeld-status.json",
+        "conformance/executable/nz-treasury-incomeexplorer.json",
+    ]
+    seed_data(repo, {path: f"published generated artifact {i}\n" for i, path in enumerate(paths)})
+    before_index = git(repo.checkout, "write-tree")
+
+    assert set(data.materialize(repo.checkout, baseline=baseline)) == set(paths)
+
+    for i, path in enumerate(paths):
+        assert (repo.checkout / path).read_text() == f"published generated artifact {i}\n"
+    assert (repo.checkout / RATCHET).read_text() == "human baseline\n"
+    assert (repo.checkout / "source.py").read_text() == "original source\n"
+    if baseline:
+        assert git(repo.checkout, "status", "--porcelain") == ""
+    else:
+        assert git(repo.checkout, "write-tree") == before_index
+        assert git(repo.checkout, "rev-parse", "HEAD") == repo.main
+
+
+@pytest.mark.parametrize("baseline", [False, True], ids=["ordinary", "baseline"])
+def test_missing_branch_after_materialization_restores_head_and_removes_additions(repo, baseline):
+    new = "dashboard/public/data/new.json"
+    seed_data(repo, {REPORT: "previously published data\n", KPI: None, new: "published addition\n"})
+    data.materialize(repo.checkout)
+    git(repo.seed, "push", "origin", ":refs/heads/oracle-data")
+    before_index = git(repo.checkout, "write-tree")
+
+    assert set(data.materialize(repo.checkout, baseline=baseline)) == {REPORT, KPI, new}
+
+    assert (repo.checkout / REPORT).read_text() == "original data\n"
+    assert (repo.checkout / KPI).read_text() == "original kpi\n"
+    assert not (repo.checkout / new).exists()
+    assert git(repo.checkout, "write-tree") == before_index
+    assert git(repo.checkout, "rev-parse", "HEAD") == repo.main
+    assert git(repo.checkout, "status", "--porcelain") == ""
+    assert data.materialize(repo.checkout, baseline=baseline) == []
+
+
+@pytest.mark.parametrize("staged", [False, True], ids=["local-edit", "staged-edit"])
+def test_missing_branch_recovery_refuses_local_edits_before_restoring_any_path(repo, staged):
+    new = "dashboard/public/data/new.json"
+    seed_data(repo, {REPORT: "previously published data\n", KPI: None, new: "published addition\n"})
+    data.materialize(repo.checkout)
+    git(repo.seed, "push", "origin", ":refs/heads/oracle-data")
+    (repo.checkout / REPORT).write_text("local generated data\n")
+    if staged:
+        git(repo.checkout, "add", REPORT)
+    before_index = git(repo.checkout, "write-tree")
+    before_status = git(repo.checkout, "status", "--porcelain")
+
+    with pytest.raises(data.DataError, match="staged data" if staged else "local data edits"):
+        data.materialize(repo.checkout)
+
+    assert (repo.checkout / REPORT).read_text() == "local generated data\n"
+    assert not (repo.checkout / KPI).exists()
+    assert (repo.checkout / new).read_text() == "published addition\n"
+    assert git(repo.checkout, "write-tree") == before_index
+    assert git(repo.checkout, "status", "--porcelain") == before_status
+    assert git(repo.checkout, "rev-parse", "HEAD") == repo.main
+
+
+def test_late_push_rejection_keeps_generated_edits_visible_to_unattended_guard(repo, monkeypatch):
+    seed_data(repo, {REPORT: "first published data\n"})
+    baseline = data.prepare(repo.checkout)
+    git(repo.checkout, "switch", "-C", data.DATA_BRANCH)
+    (repo.checkout / KPI).write_text("new generated kpi\n")
+    (repo.checkout / "source.py").write_text("local source edit\n")
+    original_git = data._git
+    raced = False
+
+    def git_with_race(root, *args, **kwargs):
+        nonlocal raced
+        if args and args[0] == "push" and not raced:
+            raced = True
+            advance_data(repo, {REPORT: "concurrent published data\n"})
+        return original_git(root, *args, **kwargs)
+
+    monkeypatch.setattr(data, "_git", git_with_race)
+    with pytest.raises(data.DataError, match="git push failed"):
+        data.publish(repo.checkout, group="kpi", message="data: late contention probe")
+
+    assert raced
+    assert git(repo.checkout, "rev-parse", "HEAD") == baseline
+    assert (repo.checkout / KPI).read_text() == "new generated kpi\n"
+    assert (repo.checkout / "source.py").read_text() == "local source edit\n"
+    assert git(repo.checkout, "diff", "--cached", "--name-only") == KPI
+    assert git(repo.checkout, "show", f":{KPI}") == "new generated kpi"
+    assert git(repo.origin, "show", f"{data.DATA_REF}:{KPI}") == "original kpi"
+    assert remote_main(repo) == repo.main
+
+    # Run the actual unattended preflight against the retained generated edit.
+    # Remove the unrelated source edit so only the failed publication stops it.
+    (repo.checkout / "source.py").write_text("original source\n")
+    regen = repo.checkout / "scripts/regenerate_all.sh"
+    regen.parent.mkdir()
+    regen.write_text((SCRIPT.parent / "regenerate_all.sh").read_text())
+    result = subprocess.run(["sh", str(regen)], capture_output=True, text=True)
+    assert result.returncode == 1
+    assert "refusing unattended regen with local tracked changes" in result.stdout
