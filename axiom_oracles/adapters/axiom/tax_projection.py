@@ -3585,8 +3585,11 @@ def _tax_unit_input_records(case: Case, people: list[Entity]) -> list[dict[str, 
         "additional_exemption_allowable_for_spouse_under_section_151_b": spouse
         is not None,
         "age_at_close_of_taxable_year": _age(head),
+        # 26 USC 32(c)(1)(A)(ii)(II) tests "such individual (or, if the
+        # individual is married, either the individual or the individual's
+        # spouse)": the filers only, never a dependent.
         "childless_taxpayer_or_spouse_age_eligible_for_eitc": (
-            any(_eitc_childless_age_eligible(person) for person in people)
+            any(_eitc_childless_age_eligible(person) for person in earners)
         ),
         "childless_taxpayer_principal_place_of_abode_in_united_states_more_than_half_year": True,
         # 32(i) disqualified income in Pub. 596 Worksheet 1 baskets, the same

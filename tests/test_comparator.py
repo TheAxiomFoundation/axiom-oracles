@@ -179,12 +179,18 @@ def test_same_engine_comparison_preserves_both_diagnostic_counts():
         suite_name="same-engine", population="synthetic", locales=set(),
         scope=None, mappings=comparator.mappings, include_inputs=False,
     )
+    identity = {"axiom": {"sha256": "a" * 64}}
+    accumulator.engine_identity = identity
     accumulator.add_batch([Case("case-1", "2026-01")], [comparison])
 
     assert accumulator.to_dict()["provenance"]["relation_binding_diagnostics"] == {
         "count": 5, "by_relation": {"members": 5},
         "samples": [{"relation": "members"}] * 5,
     }
+    report = accumulator.to_dict()
+    assert (
+        report["engine_identity"], report["provenance"]["relation_binding_diagnostics"]["count"],
+    ) == (identity, 5)
 
 
 @settings(max_examples=40, deadline=None)

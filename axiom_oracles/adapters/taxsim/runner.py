@@ -6,6 +6,7 @@ import subprocess
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from importlib import import_module
+from pathlib import Path
 from typing import Any
 
 from ...comparison.mappings import engine_targets_for_concepts
@@ -13,6 +14,7 @@ from ...core.case import Case
 from ...core.engine import EngineAdapter
 from ...core.household import Household
 from ...core.results import EngineResult
+from . import pins
 from .output import TaxsimRecord, TaxsimStdout, id_key, parse_taxsim_stdout
 from .projection import (
     TAXSIM_UNPROJECTED_INPUTS_METADATA_KEY,
@@ -55,6 +57,13 @@ class TaxsimPackageRunner(EngineAdapter):
     ``errors`` entry naming it, and any output row that matches no submitted
     case aborts the batch.
 
+    Before running the binary, the default path refuses law years outside
+    the range pinned for that binary (:func:`pins.require_law_years`), so a
+    Linux host fails with the pinned range instead of the binary's own
+    ``STOP 1``. After each run it records the binary's path, SHA-256, build
+    stamp (embedded and printed) and platform; :meth:`taxsim_identity`
+    returns them for the report's ``engine_identity.taxsim`` block.
+
     ``runner_factory`` keeps the older protocol (an object whose ``run()``
     returns records) for tests and for policyengine-taxsim's PolicyEngine
     runner; ``executor`` replaces the binary invocation (tests feed captured
@@ -73,6 +82,11 @@ class TaxsimPackageRunner(EngineAdapter):
         self.runner_factory = runner_factory
         self.id_column = id_column
         self.executor = executor
+        self.identity = pins.TaxsimIdentityRecorder()
+
+    def taxsim_identity(self) -> dict[str, Any] | None:
+        """Identity of every binary this runner executed, or ``None``."""
+        return self.identity.to_dict()
 
     def run_cases(
         self,
@@ -129,6 +143,17 @@ class TaxsimPackageRunner(EngineAdapter):
                 "_create_taxsim_input_file/taxsim_path; the pinned release in "
                 "taxsim_pins.json does. Refresh the adapter with the pin."
             )
+        checked = pins.require_law_years(
+            _frame_years(input_frame), binary_path=Path(binary)
+        )
+        # A batch with no law year skips the range check, but its executable is
+        # still hashed before the run so the recorder can compare after it.
+        if checked is not None:
+            pre_run_sha256 = checked["sha256"]
+        elif Path(binary).is_file():
+            pre_run_sha256 = pins.sha256_file(Path(binary))
+        else:
+            pre_run_sha256 = None
         input_path = write_input(runner.input_df)
         try:
             with open(input_path, "rb") as stdin:
@@ -143,12 +168,20 @@ class TaxsimPackageRunner(EngineAdapter):
                 os.unlink(input_path)
             except OSError:
                 pass
-        return TaxsimExecution(
+        execution = TaxsimExecution(
             stdout=process.stdout.decode("utf-8", errors="replace"),
             stderr=process.stderr.decode("utf-8", errors="replace"),
             returncode=process.returncode,
             binary=str(binary),
         )
+        if execution.returncode == 0:
+            self.identity.observe(
+                Path(binary),
+                rows=len(_frame_records(input_frame)),
+                build_observed=pins.build_stamp_from_stdout(execution.stdout),
+                sha256=pre_run_sha256,
+            )
+        return execution
 
     def _runner_factory(self) -> Callable[[Any], Any]:
         if self.runner_factory is not None:
@@ -166,12 +199,10 @@ class TaxsimPackageRunner(EngineAdapter):
                 # policyengine-taxsim's own executable search assumes
                 # sys.prefix carries the wheel's share/ data files, which is
                 # false inside uv `--with` overlay environments — resolve the
-                # bundled binary ourselves (pins.installed_binary_path also
-                # walks the sys.path archive roots) and pass it explicitly;
-                # None keeps its native search for source-layout dev runs.
-                from .pins import installed_binary_path
-
-                binary = installed_binary_path()
+                # binary with the same resolver preflight uses (including
+                # sys.path archive roots and native source-layout dev runs)
+                # and pass it explicitly.
+                binary = pins.resolve_binary_path()
                 if binary is not None:
                     # Its signature annotates taxsim_path as str, but
                     # _validate_executable calls .exists() on it — a Path is
@@ -407,6 +438,26 @@ class _SimpleFrameIloc:
 
     def __getitem__(self, index: int) -> dict[str, Any]:
         return self._rows[index]
+
+
+def _frame_records(frame: Any) -> list[dict[str, Any]]:
+    if hasattr(frame, "to_dict"):
+        return frame.to_dict(orient="records")
+    return [dict(row) for row in frame]
+
+
+def _frame_years(frame: Any) -> set[int]:
+    """Distinct law years in a TAXSIM input frame.
+
+    Rows with no year, or one that is not a number, are skipped.
+    """
+    years = set()
+    for row in _frame_records(frame):
+        try:
+            years.add(int(float(row.get("year"))))
+        except (TypeError, ValueError, OverflowError):
+            continue
+    return years
 
 
 def _records(output: Any) -> list[dict[str, Any]]:

@@ -596,6 +596,31 @@ def test_strict_engine_person_scalar_scope_accepts_payment_identity(strict_engin
     assert _strict_integer_outputs(strict_engine, bound, "n") == [1]
 
 
+@pytest.mark.parametrize("mode", ["explain", "fast"])
+def test_strict_engine_unqueried_aggregate_cannot_contradict_payment_identity(strict_engine, mode):
+    request = _person_scalar_scope_request(used=True)
+    request["mode"] = mode
+    assert _strict_integer_outputs(strict_engine, request, "n") == [1]
+    assert bind_request_relations(request, {"program": request["program"]}) == request
+    request["program"]["relations"].append({"name": "friends", "arity": 2})
+    request["program"]["derived"].append({
+        "name": "friend_count", "entity": "Person", "dtype": "integer",
+        "semantics": "scalar", "expr": {
+            "kind": "count_related", "relation": "friends",
+            "current_slot": 0, "related_slot": 1,
+        },
+    })
+    # No query or dataset record changes. The strict native control still
+    # accepts the Person scalar broadcast on this Payment endpoint.
+    assert _strict_integer_outputs(strict_engine, request, "n") == [1]
+    before = deepcopy(request)
+    bound = bind_request_relations(request, {"program": request["program"]})
+    assert bound == before
+    assert request == before
+    assert bind_request_relations(bound, {"program": bound["program"]}) == bound
+    assert _strict_integer_outputs(strict_engine, bound, "n") == [1]
+
+
 def _unrelated_scalar_scope_request(scope_kind, *, typed):
     request = _person_scalar_scope_request(used=True)
     threshold = next(

@@ -1,0 +1,7 @@
+ TAXSIM: Federal tax calculator available 1960 - 2024 only.
+ TAXSIM: Logical Record Number    :           0
+ TAXSIM: Law Year                 :   2026.0000000000000     
+ TAXSIM: State id                 :   32.000000000000000        0.0000000000000000     
+ TAXSIM: Data record, as converted:           1        2026          32           1          26           0           0           0           0           0       10906           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0           0
+ TAXSIM: Abandoning processing    :          14
+ TAXSIM: Taxsimtest version of    : compdate

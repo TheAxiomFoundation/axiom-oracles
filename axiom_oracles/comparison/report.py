@@ -129,6 +129,9 @@ class ComparisonReportAccumulator:
         self._right_engine: str | None = None
         self._seen_case_ids: set[int | str] = set()
         self._relation_binding_diagnostics: dict = {}
+        #: Executed-binary identity per engine (e.g. ``{"taxsim": {...}}``),
+        #: written as the report's top-level ``engine_identity`` when set.
+        self.engine_identity: dict | None = None
 
     @property
     def case_count(self) -> int:
@@ -246,7 +249,7 @@ class ComparisonReportAccumulator:
         )
 
     def to_dict(self, *, include_cases: bool = True) -> dict:
-        return {
+        report = {
             **({"provenance": {
                 "relation_binding_diagnostics": self._relation_binding_diagnostics,
             }} if self._relation_binding_diagnostics.get("count") else {}),
@@ -296,6 +299,9 @@ class ComparisonReportAccumulator:
             "errors": list(self._error_rows),
             "cases": self._stored_case_rows() if include_cases else [],
         }
+        if self.engine_identity:
+            report["engine_identity"] = self.engine_identity
+        return report
 
     def _attestation(self) -> dict:
         """Stamp what this run actually executed (axiom-oracles#355).

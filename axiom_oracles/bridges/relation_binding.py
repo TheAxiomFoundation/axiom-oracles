@@ -388,12 +388,19 @@ class _ArtifactRelations:
         return set(self.aggregate_owner_kinds)
 
     def _input_identity_kinds(self, name: str) -> set[str]:
-        """Combine independent executable roles with this relation's metadata."""
-        kinds = set(self.executable_kinds)
+        """Use this relation's endpoint inventory before untyped role evidence."""
+        kinds: set[str] = set()
         schema = self.schema(name)
         if schema is not None:
             kinds.update(schema.get("slot_entities", []))
             kinds.update((schema.get("derivation") or {}).get("slot_entities", []))
+        if not kinds:
+            # Legacy untyped artifacts rely on independently proven roles.
+            # A typed relation already identifies its endpoint kinds: owners
+            # of unrelated aggregates cannot promote its scalar broadcasts
+            # into additional identities on those endpoints.
+            kinds.update(self.executable_kinds)
+        if schema is not None:
             kinds.update(
                 kind for usage in self.usages.get(schema["name"], [])
                 for kind in usage if kind is not None

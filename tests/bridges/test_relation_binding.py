@@ -1254,3 +1254,99 @@ def test_unrelated_relation_declarations_never_change_binding(
         assert baseline == (before, [("payments", tuple(before["dataset"]["relations"][0]["tuple"]))])
     assert request == before
     assert artifact == program_before
+
+
+@settings(max_examples=80, deadline=None)
+@example(
+    owner_slot=0, supplied_owner_slot=0, owner_input=True, member_input=True,
+    owner_broadcast=False, scope="Person", executed=True, mode="explain",
+    unrelated=[("Person", "Organization", ["Organization", "Person"])],
+)
+@example(
+    owner_slot=0, supplied_owner_slot=0, owner_input=True, member_input=True,
+    owner_broadcast=False, scope="Person", executed=True, mode="fast",
+    unrelated=[("Person", "Organization", ["Organization", "Person"])],
+)
+@given(
+    owner_slot=st.integers(0, 1), supplied_owner_slot=st.integers(0, 1),
+    owner_input=st.booleans(), member_input=st.booleans(), owner_broadcast=st.booleans(),
+    scope=st.sampled_from(["Person", "Organization", "Family", "BroadcastThreshold",
+                           "Household", "Payment"]),
+    executed=st.booleans(), mode=st.sampled_from(["explain", "fast"]),
+    unrelated=st.lists(st.tuples(
+        st.one_of(OWNER_KINDS, st.sampled_from(["Person", "Payment", "Family"])),
+        st.one_of(OWNER_KINDS, st.sampled_from(["Person", "Payment", "Family"])),
+        st.lists(st.one_of(OWNER_KINDS, st.sampled_from(["Person", "Payment", "Family"])),
+                 min_size=2, max_size=3),
+    ), min_size=1, max_size=4),
+)
+def test_unqueried_aggregates_and_entities_preserve_local_endpoint_binding(
+    owner_slot, supplied_owner_slot, owner_input, member_input, owner_broadcast,
+    scope, executed, mode, unrelated,
+):
+    # Once the relation establishes its endpoint inventory, unqueried scopes
+    # cannot promote a broadcast label on either endpoint into an identity.
+    count = {
+        "kind": "count_related", "relation": "payments",
+        "current_slot": owner_slot, "related_slot": 1 - owner_slot,
+    }
+    if executed:
+        count["where"] = {"kind": "derived", "name": "threshold"}
+    artifact = {"program": {
+        "relations": [{"name": "payments", "arity": 2,
+                       "slot_entities": ["Household", "Payment"]}],
+        "derived": [
+            {"name": "n", "entity": "Household", "expr": count},
+            {"name": "amount", "entity": "Payment", "expr": {"kind": "input"}},
+            {"name": "threshold", "entity": scope, "expr": {"kind": "input"}},
+        ],
+    }}
+    request = {
+        "mode": mode,
+        "dataset": {"inputs": [{"entity_id": "payment", "entity": scope}],
+                    "relations": [{"name": "payments", "tuple": ["house", "payment"]
+                                   if supplied_owner_slot == 0 else ["payment", "house"]}]},
+        "queries": [{"entity_id": "house", "outputs": ["n"]}],
+    }
+    if owner_input:
+        request["dataset"]["inputs"].append({"entity_id": "house", "entity": "Household"})
+    if member_input:
+        request["dataset"]["inputs"].append({"entity_id": "payment", "entity": "Payment"})
+    if owner_broadcast:
+        request["dataset"]["inputs"].append({"entity_id": "house", "entity": scope})
+    before, artifact_before = deepcopy(request), deepcopy(artifact)
+
+    def outcome(program, candidate):
+        with warnings.catch_warnings(record=True) as captured:
+            warnings.simplefilter("always", RelationBindingAmbiguityWarning)
+            try:
+                bound = bind_request_relations(candidate, program)
+                error = None
+            except RelationBindingError as exc:
+                bound, error = None, str(exc)
+        return bound, error, [
+            (item.message.relation, item.message.tuple) for item in captured
+            if isinstance(item.message, RelationBindingAmbiguityWarning)
+        ]
+
+    baseline = outcome(artifact, request)
+    extended = deepcopy(artifact)
+    for index, (aggregate_owner, scalar_scope, slots) in enumerate(unrelated):
+        name = f"unqueried_{index}"
+        extended["program"]["relations"].append({
+            "name": name, "arity": len(slots), "slot_entities": slots,
+        })
+        extended["program"]["derived"].extend([
+            {"name": f"{name}_count", "entity": aggregate_owner, "expr": {
+                "kind": "count_related", "relation": name,
+                "current_slot": 0, "related_slot": 1,
+            }},
+            {"name": f"{name}_scalar", "entity": scalar_scope, "expr": {"kind": "input"}},
+        ])
+    extended_before = deepcopy(extended)
+    assert outcome(extended, request) == baseline
+    if baseline[0] is not None:
+        assert outcome(extended, baseline[0])[0] == baseline[0]
+    assert request == before
+    assert artifact == artifact_before
+    assert extended == extended_before
