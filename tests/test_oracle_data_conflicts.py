@@ -2,27 +2,27 @@
 
 from __future__ import annotations
 
-import hashlib
 import json
-from pathlib import Path
 import shutil
 import subprocess
 import sys
 import tempfile
+from pathlib import Path
 from types import SimpleNamespace
 
-from hypothesis import HealthCheck, Phase, given, settings, strategies as st
 import pytest
-
+from hypothesis import HealthCheck, Phase, given, settings
+from hypothesis import strategies as st
 from test_oracle_data import (
     advance_main,
     commit,
     data,
     git,
-    repo as repo,
     seed_data,
 )
-
+from test_oracle_data import (
+    repo as repo,  # noqa: PLC0414 - make the imported pytest fixture explicit
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = "dashboard/public/data/manifest.json"
@@ -54,7 +54,7 @@ def _operate(checkout: Path, operation: str) -> None:
 
 @pytest.mark.parametrize("operation", OPERATIONS)
 def test_conflicting_one_line_aggregates_use_the_snapshot_side(repo, operation):
-    """Rewritten aggregates never wedge publication or either reader mode."""
+    """Isolate aggregate conflict selection from snapshot consistency checks."""
     repo.main = advance_main(repo, {path: '{"value":"base"}\n' for path in AGGREGATES})
     git(repo.checkout, "fetch", "origin", data.MAIN_REF)
     git(repo.checkout, "reset", "--hard", "FETCH_HEAD")
@@ -72,11 +72,14 @@ def test_conflicting_one_line_aggregates_use_the_snapshot_side(repo, operation):
 
 
 @pytest.mark.parametrize("operation", OPERATIONS)
-@pytest.mark.parametrize("report", [
-    "dashboard/public/data/report.json",
-    "conformance/detail/authored/inputs.json",
-    "certificates/review/record.json",
-])
+@pytest.mark.parametrize(
+    "report",
+    [
+        "dashboard/public/data/report.json",
+        "conformance/detail/authored/inputs.json",
+        "certificates/review/record.json",
+    ],
+)
 def test_conflicting_primary_report_names_documented_recovery(repo, operation, report):
     """A reviewed report correction cannot be resolved as a disposable aggregate."""
     seed_data(repo, {report: '{"value":"published correction"}\n'})
@@ -89,14 +92,21 @@ def test_conflicting_primary_report_names_documented_recovery(repo, operation, r
         _operate(repo.checkout, operation)
 
     assert report in str(error.value)
-    assert "comparisons/README.md" in str(error.value), "name the documented report-conflict recovery"
+    assert "comparisons/README.md" in str(error.value), (
+        "name the documented report-conflict recovery"
+    )
     assert git(repo.checkout, "rev-parse", "HEAD") == main
     assert git(repo.checkout, "write-tree") == index
-    assert json.loads((repo.checkout / report).read_text())["value"] == "reviewed correction"
+    assert (
+        json.loads((repo.checkout / report).read_text())["value"]
+        == "reviewed correction"
+    )
 
 
 def _manifest_case(root: Path, main_reports: list[str], published_reports: list[str]):
-    seed, origin, checkout = (root / name for name in ("seed", "origin.git", "checkout"))
+    seed, origin, checkout = (
+        root / name for name in ("seed", "origin.git", "checkout")
+    )
     seed.mkdir()
     git(seed, "init", "--initial-branch=main")
     baseline = commit(seed, {MANIFEST: json.dumps({"reports": ["common.json"]}) + "\n"})
@@ -118,14 +128,23 @@ def _manifest_case(root: Path, main_reports: list[str], published_reports: list[
     suppress_health_check=[HealthCheck.function_scoped_fixture],
 )
 @given(
-    main_ids=st.lists(st.integers(min_value=0, max_value=5), min_size=1, max_size=3, unique=True),
-    published_ids=st.lists(st.integers(min_value=0, max_value=5), min_size=1, max_size=3, unique=True),
+    main_ids=st.lists(
+        st.integers(min_value=0, max_value=5), min_size=1, max_size=3, unique=True
+    ),
+    published_ids=st.lists(
+        st.integers(min_value=0, max_value=5), min_size=1, max_size=3, unique=True
+    ),
 )
-def test_manifest_conflict_is_an_append_only_union(tmp_path, monkeypatch, operation, main_ids, published_ids):
+def test_manifest_conflict_is_an_append_only_union(
+    tmp_path, monkeypatch, operation, main_ids, published_ids
+):
     """No manifest addition is lost, regardless of the preferred aggregate side."""
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", "/dev/null")
     monkeypatch.setenv("GIT_CONFIG_SYSTEM", "/dev/null")
     monkeypatch.delenv("AXIOM_ORACLES_DATA_SOURCE", raising=False)
+    # This property tests only merge selection: its manifest-only fixture has
+    # no reports or generated aggregates to bind as a readable snapshot.
+    monkeypatch.setattr(data, "_verify_snapshot", lambda *_args: [])
     main_reports = ["common.json", *(f"reviewed-{i}.json" for i in main_ids)]
     published_reports = ["common.json", *(f"published-{i}.json" for i in published_ids)]
     with tempfile.TemporaryDirectory(dir=tmp_path) as directory:
@@ -140,8 +159,16 @@ def test_manifest_conflict_is_an_append_only_union(tmp_path, monkeypatch, operat
 
 def _overview(root: Path, *, check: bool = False) -> None:
     result = subprocess.run(
-        [sys.executable, "scripts/generate_dashboard_overview.py", *(["--check"] if check else [])],
-        cwd=root, text=True, capture_output=True, timeout=90,
+        [
+            sys.executable,
+            "scripts/generate_dashboard_overview.py",
+            *(["--check"] if check else []),
+        ],
+        cwd=root,
+        text=True,
+        capture_output=True,
+        timeout=90,
+        check=False,
     )
     assert result.returncode == 0, result.stdout + result.stderr
 
@@ -159,16 +186,28 @@ def test_real_rollout_refresh_survives_an_ordinary_add_suite_pr(tmp_path, monkey
     refresh = "fa43e75600799677ec73289b7dcae221390025ae"
     for ref in (rollout, refresh):
         if not git(ROOT, "rev-parse", "--verify", ref, check=False):
-            pytest.skip("historical rollout objects are unavailable in this shallow checkout")
+            pytest.skip(
+                "historical rollout objects are unavailable in this shallow checkout"
+            )
     assert git(ROOT, "rev-parse", f"{refresh}^1") == rollout
     common = git(ROOT, "rev-parse", "--path-format=absolute", "--git-common-dir")
     checkout, origin = tmp_path / "checkout", tmp_path / "origin.git"
     git(tmp_path, "clone", "--shared", "--no-checkout", common, str(checkout))
-    git(checkout, "sparse-checkout", "set", "--no-cone", "/scripts/", *(f"/{path}" for path in data.DATA_PATHS))
+    git(
+        checkout,
+        "sparse-checkout",
+        "set",
+        "--no-cone",
+        "/scripts/",
+        *(f"/{path}" for path in data.DATA_PATHS),
+    )
     git(checkout, "checkout", "--detach", rollout)
     original = "axiom-policyengine-ca-snap-ecps.json"
     added = "axiom-policyengine-zz-new-suite.json"
-    shutil.copy2(checkout / "dashboard/public/data" / original, checkout / "dashboard/public/data" / added)
+    shutil.copy2(
+        checkout / "dashboard/public/data" / original,
+        checkout / "dashboard/public/data" / added,
+    )
     manifest = json.loads((checkout / MANIFEST).read_text())
     manifest["reports"].append(added)
     (checkout / MANIFEST).write_text(json.dumps(manifest, indent=2) + "\n")
@@ -177,13 +216,22 @@ def test_real_rollout_refresh_survives_an_ordinary_add_suite_pr(tmp_path, monkey
     main = commit(checkout, {})
     reviewed_overview = (checkout / OVERVIEW).read_bytes()
     published_overview = subprocess.run(
-        ["git", "show", f"{refresh}:{OVERVIEW}"], cwd=ROOT, capture_output=True, check=True,
+        ["git", "show", f"{refresh}:{OVERVIEW}"],
+        cwd=ROOT,
+        capture_output=True,
+        check=True,
     ).stdout
     assert reviewed_overview != published_overview
     git(tmp_path, "init", "--bare", str(origin))
     (origin / "objects/info/alternates").write_text(f"{common}/objects\n")
     git(checkout, "remote", "set-url", "origin", str(origin))
-    git(checkout, "push", "origin", f"{main}:{data.MAIN_REF}", f"{refresh}:{data.DATA_REF}")
+    git(
+        checkout,
+        "push",
+        "origin",
+        f"{main}:{data.MAIN_REF}",
+        f"{refresh}:{data.DATA_REF}",
+    )
 
     # The exact refresh is clean until the ordinary reviewed PR lands.
     refresh_tree = git(checkout, "rev-parse", f"{refresh}^{{tree}}")
@@ -192,11 +240,21 @@ def test_real_rollout_refresh_survives_an_ordinary_add_suite_pr(tmp_path, monkey
 
     for baseline in (False, True):
         git(checkout, "reset", "--hard", main)
-        data.materialize(checkout, baseline=baseline)
-        assert (checkout / OVERVIEW).read_bytes() == published_overview
-        overview = json.loads(published_overview)
-        for name, digest in overview["sources"].items():
-            assert hashlib.sha256((checkout / "dashboard/public/data" / name).read_bytes()).hexdigest() == digest
+        before = (
+            git(checkout, "rev-parse", "HEAD"),
+            git(checkout, "write-tree"),
+            git(checkout, "status", "--porcelain"),
+        )
+        # These historical publications predate bindings. Refuse the legacy
+        # merge before changing even the first reader file.
+        with pytest.raises(data.DataError, match="incompatible oracle-data snapshot"):
+            data.materialize(checkout, baseline=baseline)
+        assert (
+            git(checkout, "rev-parse", "HEAD"),
+            git(checkout, "write-tree"),
+            git(checkout, "status", "--porcelain"),
+        ) == before
+        assert (checkout / OVERVIEW).read_bytes() == reviewed_overview
 
     data.prepare(checkout)
     assert (checkout / OVERVIEW).read_bytes() == reviewed_overview

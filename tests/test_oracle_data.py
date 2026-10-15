@@ -4,14 +4,15 @@ from __future__ import annotations
 
 import importlib.util
 import json
-from pathlib import Path
 import shutil
 import subprocess
 import sys
+from pathlib import Path
 from types import SimpleNamespace
 
 import pytest
-from hypothesis import HealthCheck, given, settings, strategies as st
+from hypothesis import HealthCheck, given, settings
+from hypothesis import strategies as st
 
 SCRIPT = Path(__file__).parents[1] / "scripts" / "oracle_data.py"
 spec = importlib.util.spec_from_file_location("oracle_data", SCRIPT)
@@ -27,7 +28,7 @@ RATCHET = "conformance/ratchet.yaml"
 
 def git(root: Path, *args: str, check: bool = True) -> str:
     result = subprocess.run(
-        ["git", *args], cwd=root, capture_output=True, text=True
+        ["git", *args], cwd=root, capture_output=True, text=True, check=False
     )
     if check:
         assert result.returncode == 0, result.stderr
@@ -43,13 +44,27 @@ def commit(root: Path, changes: dict[str, str | None]) -> str:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(content)
     git(root, "add", "-A")
-    git(root, "-c", "user.name=Fixture", "-c", "user.email=fixture@example.com",
-        "commit", "-m", "fixture update")
+    git(
+        root,
+        "-c",
+        "user.name=Fixture",
+        "-c",
+        "user.email=fixture@example.com",
+        "commit",
+        "-m",
+        "fixture update",
+    )
     return git(root, "rev-parse", "HEAD")
 
 
 @pytest.fixture
 def repo(tmp_path, monkeypatch):
+    # These deliberately tiny non-JSON files isolate Git transport, merge,
+    # and checkout guards. Snapshot bindings and freshness gates are exercised
+    # without these substitutions in test_oracle_data_snapshots.py.
+    monkeypatch.setattr(data, "_verify_snapshot", lambda *_args: [])
+    monkeypatch.setattr(data, "_verify_publication", lambda *_args: None)
+    monkeypatch.setattr(data, "_bind_publication", lambda *_args: None)
     # Never inherit developer signing, identity, global hooks or configuration.
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", "/dev/null")
     monkeypatch.setenv("GIT_CONFIG_SYSTEM", "/dev/null")
@@ -57,13 +72,16 @@ def repo(tmp_path, monkeypatch):
     seed, origin, checkout = (tmp_path / p for p in ("seed", "origin.git", "checkout"))
     seed.mkdir()
     git(seed, "init", "--initial-branch=main")
-    main = commit(seed, {
-        "source.py": "original source\n",
-        REPORT: "original data\n",
-        KPI: "original kpi\n",
-        KPI_SUMMARY: "original summary\n",
-        RATCHET: "human baseline\n",
-    })
+    main = commit(
+        seed,
+        {
+            "source.py": "original source\n",
+            REPORT: "original data\n",
+            KPI: "original kpi\n",
+            KPI_SUMMARY: "original summary\n",
+            RATCHET: "human baseline\n",
+        },
+    )
     git(tmp_path, "init", "--bare", str(origin))
     git(seed, "remote", "add", "origin", str(origin))
     git(seed, "push", "origin", "HEAD:refs/heads/main")
@@ -117,9 +135,14 @@ def test_prepare_reuses_data_tip_when_source_has_not_moved(repo):
 
 def test_prepare_merges_current_main_source_and_human_data_edits(repo):
     tip = seed_data(repo, {REPORT: "published data\n"})
-    main = advance_main(repo, {"source.py": "current source\n", RATCHET: "human revision\n"})
+    main = advance_main(
+        repo, {"source.py": "current source\n", RATCHET: "human revision\n"}
+    )
     baseline = data.prepare(repo.checkout)
-    assert git(repo.checkout, "show", "-s", "--format=%P", baseline).split() == [main, tip]
+    assert git(repo.checkout, "show", "-s", "--format=%P", baseline).split() == [
+        main,
+        tip,
+    ]
     assert (repo.checkout / "source.py").read_text() == "current source\n"
     assert (repo.checkout / RATCHET).read_text() == "human revision\n"
     assert (repo.checkout / REPORT).read_text() == "published data\n"
@@ -328,13 +351,23 @@ def test_materialize_baseline_keeps_current_source_and_pins_published_data(repo)
     assert remote_main(repo) == latest
 
 
-@pytest.mark.parametrize("published", [False, True], ids=["no-data-delta", "published-data"])
+@pytest.mark.parametrize(
+    "published", [False, True], ids=["no-data-delta", "published-data"]
+)
 @pytest.mark.parametrize("edits", ["unstaged", "staged", "both"])
-@settings(max_examples=4, deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
+@settings(
+    max_examples=4,
+    deadline=None,
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
 @given(edit=st.text(alphabet="abcdefghijklmnopqrstuvwxyz", min_size=1, max_size=40))
-def test_baseline_refuses_tracked_source_edits_without_changing_checkout(repo, published, edits, edit):
+def test_baseline_refuses_tracked_source_edits_without_changing_checkout(
+    repo, published, edits, edit
+):
     """A detached baseline must never discard tracked work, staged or unstaged."""
-    if published and not git(repo.origin, "show-ref", "--verify", data.DATA_REF, check=False):
+    if published and not git(
+        repo.origin, "show-ref", "--verify", data.DATA_REF, check=False
+    ):
         seed_data(repo, {REPORT: "published data\n"})
     if edits in ("unstaged", "both"):
         (repo.checkout / "source.py").write_text(edit + "\n")
@@ -348,14 +381,20 @@ def test_baseline_refuses_tracked_source_edits_without_changing_checkout(repo, p
         "report": (repo.checkout / REPORT).read_bytes(),
     }
 
-    with pytest.raises(data.DataError, match="baseline requires a clean tracked checkout"):
+    with pytest.raises(
+        data.DataError, match="baseline requires a clean tracked checkout"
+    ):
         data.materialize(repo.checkout, baseline=True)
 
     assert git(repo.checkout, "rev-parse", "HEAD") == before["head"]
     assert git(repo.checkout, "write-tree") == before["index"]
     assert git(repo.checkout, "status", "--porcelain") == before["status"]
-    assert (repo.checkout / "source.py").read_text() == (edit + "\n" if edits in ("unstaged", "both") else "original source\n")
-    assert (repo.checkout / RATCHET).read_text() == ("staged " + edit + "\n" if edits in ("staged", "both") else "human baseline\n")
+    assert (repo.checkout / "source.py").read_text() == (
+        edit + "\n" if edits in ("unstaged", "both") else "original source\n"
+    )
+    assert (repo.checkout / RATCHET).read_text() == (
+        "staged " + edit + "\n" if edits in ("staged", "both") else "human baseline\n"
+    )
     assert (repo.checkout / REPORT).read_bytes() == before["report"]
 
 
@@ -379,11 +418,25 @@ def test_materialize_fetches_new_data_after_previous_read(repo):
 
 
 def test_materialize_cli_from_dashboard_uses_repository_relative_paths(repo):
-    seed_data(repo, {REPORT: "published data\n"})
+    tip = seed_data(repo, {REPORT: "published data\n"})
+    # This subprocess cannot inherit the fixture's isolated reader verifier.
+    # Give its tiny file set a genuine binding instead.
+    advance_data(
+        repo,
+        {
+            data.SNAPSHOT_PATH: json.dumps(
+                data._snapshot_document(repo.seed, tip), sort_keys=True
+            )
+            + "\n",
+        },
+    )
     before_index = git(repo.checkout, "write-tree")
     result = subprocess.run(
         [sys.executable, str(SCRIPT), "materialize"],
-        cwd=repo.checkout / "dashboard", capture_output=True, text=True,
+        cwd=repo.checkout / "dashboard",
+        capture_output=True,
+        text=True,
+        check=False,
     )
     assert result.returncode == 0, result.stderr
     assert (repo.checkout / REPORT).read_text() == "published data\n"
@@ -432,7 +485,9 @@ def test_publish_scope_preserves_unstaged_source_edits(repo):
     data.prepare(repo.checkout)
     (repo.checkout / REPORT).write_text("refreshed data\n")
     (repo.checkout / "source.py").write_text("local source edit\n")
-    assert data.publish(repo.checkout, group="dashboard", message="data: refresh report")
+    assert data.publish(
+        repo.checkout, group="dashboard", message="data: refresh report"
+    )
     published = git(repo.origin, "rev-parse", data.DATA_REF)
     assert git(repo.origin, "diff", "--name-only", tip, published) == REPORT
     assert (repo.checkout / "source.py").read_text() == "local source edit\n"
@@ -473,7 +528,9 @@ def test_publish_accepts_prepared_local_data_branch(repo):
     data.prepare(repo.checkout)
     git(repo.checkout, "switch", "-C", data.DATA_BRANCH)
     (repo.checkout / REPORT).write_text("refreshed data\n")
-    assert data.publish(repo.checkout, group="dashboard", message="data: refresh report")
+    assert data.publish(
+        repo.checkout, group="dashboard", message="data: refresh report"
+    )
     assert git(repo.checkout, "symbolic-ref", "HEAD") == data.DATA_REF
     assert git(repo.origin, "show", f"{data.DATA_REF}:{REPORT}") == "refreshed data"
     assert remote_main(repo) == repo.main
@@ -490,29 +547,42 @@ def test_publish_refuses_other_attached_checkout(repo, branch):
     assert remote_main(repo) == repo.main
 
 
-@pytest.mark.parametrize("args", [
-    ["prepare", "main"],
-    ["publish", "--group", "dashboard", "--message", "refresh", "--target", "main"],
-])
+@pytest.mark.parametrize(
+    "args",
+    [
+        ["prepare", "main"],
+        ["publish", "--group", "dashboard", "--message", "refresh", "--target", "main"],
+    ],
+)
 def test_cli_rejects_arbitrary_publish_target(repo, args):
     result = subprocess.run(
-        [sys.executable, str(SCRIPT), *args], cwd=repo.checkout,
-        capture_output=True, text=True,
+        [sys.executable, str(SCRIPT), *args],
+        cwd=repo.checkout,
+        capture_output=True,
+        text=True,
+        check=False,
     )
     assert result.returncode == 2
     assert "unrecognized arguments" in result.stderr
     assert remote_main(repo) == repo.main
 
 
-@pytest.mark.parametrize("parent", ["dashboard", "dashboard/public", "dashboard/public/data"])
+@pytest.mark.parametrize(
+    "parent", ["dashboard", "dashboard/public", "dashboard/public/data"]
+)
 @pytest.mark.parametrize("operation", ["replace", "delete"])
 @pytest.mark.parametrize("baseline", [False, True], ids=["ordinary", "baseline"])
-def test_materialize_rejects_every_parent_symlink_before_any_restore(repo, parent, operation, baseline):
+def test_materialize_rejects_every_parent_symlink_before_any_restore(
+    repo, parent, operation, baseline
+):
     earlier = "closure/de/summary.json"
-    seed_data(repo, {
-        earlier: "published closure\n",
-        REPORT: None if operation == "delete" else "published replacement\n",
-    })
+    seed_data(
+        repo,
+        {
+            earlier: "published closure\n",
+            REPORT: None if operation == "delete" else "published replacement\n",
+        },
+    )
     outside = repo.checkout.parent / "external-directory"
     shutil.move(str(repo.checkout / parent), outside)
     (repo.checkout / parent).symlink_to(outside, target_is_directory=True)
@@ -524,7 +594,9 @@ def test_materialize_rejects_every_parent_symlink_before_any_restore(repo, paren
 
     assert external_report.read_text() == "original data\n"
     assert (repo.checkout / parent).is_symlink()
-    assert not (repo.checkout / earlier).exists(), "a path was restored before parent validation"
+    assert not (repo.checkout / earlier).exists(), (
+        "a path was restored before parent validation"
+    )
     assert git(repo.checkout, "write-tree") == before_index
     assert git(repo.checkout, "rev-parse", "HEAD") == repo.main
 
@@ -544,7 +616,9 @@ def test_materialize_rejects_final_file_symlink_even_with_matching_target_bytes(
     assert not (repo.checkout / "closure/de/summary.json").exists()
 
 
-@pytest.mark.parametrize("changed", [False, True], ids=["identical", "similarity-detected"])
+@pytest.mark.parametrize(
+    "changed", [False, True], ids=["identical", "similarity-detected"]
+)
 def test_materialize_removes_old_path_for_report_rename(repo, changed):
     original = "".join(f'"row-{i}": "original report value",\n' for i in range(30))
     repo.main = advance_main(repo, {REPORT: original})
@@ -565,33 +639,47 @@ def test_materialize_removes_old_path_for_report_rename(repo, changed):
     assert set(data.materialize(repo.checkout)) == {REPORT, renamed}
 
     assert (repo.checkout / renamed).read_text() == expected
-    assert not (repo.checkout / REPORT).exists(), "old report survived its published rename"
+    assert not (repo.checkout / REPORT).exists(), (
+        "old report survived its published rename"
+    )
     assert git(repo.checkout, "write-tree") == before_index
     assert git(repo.checkout, "rev-parse", "HEAD") == repo.main
 
 
-@pytest.mark.parametrize("authored", [
-    "conformance/README.md",
-    "conformance/executable/de-kindergeld-manifest.json",
-    "conformance/ratchet.yaml",
-    "comparisons/de-worker-dual-oracle/output-dependencies.json",
-])
+@pytest.mark.parametrize(
+    "authored",
+    [
+        "conformance/README.md",
+        "conformance/executable/de-kindergeld-manifest.json",
+        "conformance/ratchet.yaml",
+        "comparisons/de-worker-dual-oracle/output-dependencies.json",
+    ],
+)
 @pytest.mark.parametrize("baseline", [False, True], ids=["ordinary", "baseline"])
-@pytest.mark.parametrize("feature_edit", [False, True], ids=["old-source", "feature-conflict"])
-def test_reader_excludes_authored_conformance_inputs(repo, authored, baseline, feature_edit):
+@pytest.mark.parametrize(
+    "feature_edit", [False, True], ids=["old-source", "feature-conflict"]
+)
+def test_reader_excludes_authored_conformance_inputs(
+    repo, authored, baseline, feature_edit
+):
     repo.main = advance_main(repo, {authored: "initial authored input\n"})
     git(repo.checkout, "fetch", "origin", data.MAIN_REF)
     git(repo.checkout, "reset", "--hard", "FETCH_HEAD")
     seed_data(repo, {REPORT: "first published data\n"})
-    advance_main(repo, {
-        authored: "new reviewed authored input\n",
-        "source.py": "new reviewed source\n",
-    })
+    advance_main(
+        repo,
+        {
+            authored: "new reviewed authored input\n",
+            "source.py": "new reviewed source\n",
+        },
+    )
     data.prepare(repo.seed)
     commit(repo.seed, {REPORT: "latest published data\n"})
     git(repo.seed, "push", "origin", "HEAD:refs/heads/oracle-data")
     git(repo.seed, "checkout", "main")
-    expected = "feature authored input\n" if feature_edit else "initial authored input\n"
+    expected = (
+        "feature authored input\n" if feature_edit else "initial authored input\n"
+    )
     if feature_edit:
         commit(repo.checkout, {authored: expected})
     source = git(repo.checkout, "rev-parse", "HEAD")
@@ -623,13 +711,18 @@ def test_reader_still_materializes_generated_conformance_artifacts(repo, baselin
         "conformance/executable/de-kindergeld-status.json",
         "conformance/executable/nz-treasury-incomeexplorer.json",
     ]
-    seed_data(repo, {path: f"published generated artifact {i}\n" for i, path in enumerate(paths)})
+    seed_data(
+        repo,
+        {path: f"published generated artifact {i}\n" for i, path in enumerate(paths)},
+    )
     before_index = git(repo.checkout, "write-tree")
 
     assert set(data.materialize(repo.checkout, baseline=baseline)) == set(paths)
 
     for i, path in enumerate(paths):
-        assert (repo.checkout / path).read_text() == f"published generated artifact {i}\n"
+        assert (
+            repo.checkout / path
+        ).read_text() == f"published generated artifact {i}\n"
     assert (repo.checkout / RATCHET).read_text() == "human baseline\n"
     assert (repo.checkout / "source.py").read_text() == "original source\n"
     if baseline:
@@ -640,9 +733,14 @@ def test_reader_still_materializes_generated_conformance_artifacts(repo, baselin
 
 
 @pytest.mark.parametrize("baseline", [False, True], ids=["ordinary", "baseline"])
-def test_missing_branch_after_materialization_restores_head_and_removes_additions(repo, baseline):
+def test_missing_branch_after_materialization_restores_head_and_removes_additions(
+    repo, baseline
+):
     new = "dashboard/public/data/new.json"
-    seed_data(repo, {REPORT: "previously published data\n", KPI: None, new: "published addition\n"})
+    seed_data(
+        repo,
+        {REPORT: "previously published data\n", KPI: None, new: "published addition\n"},
+    )
     data.materialize(repo.checkout)
     git(repo.seed, "push", "origin", ":refs/heads/oracle-data")
     before_index = git(repo.checkout, "write-tree")
@@ -651,7 +749,9 @@ def test_missing_branch_after_materialization_restores_head_and_removes_addition
         # Plain materialization is a tracked overlay. Verify the new baseline
         # refusal preserves it, then recover through the ordinary reader.
         before_status = git(repo.checkout, "status", "--porcelain")
-        with pytest.raises(data.DataError, match="baseline requires a clean tracked checkout"):
+        with pytest.raises(
+            data.DataError, match="baseline requires a clean tracked checkout"
+        ):
             data.materialize(repo.checkout, baseline=True)
         assert git(repo.checkout, "status", "--porcelain") == before_status
         assert (repo.checkout / REPORT).read_text() == "previously published data\n"
@@ -662,7 +762,11 @@ def test_missing_branch_after_materialization_restores_head_and_removes_addition
         assert set(data.materialize(repo.checkout)) == {REPORT, KPI, new}
         assert data.materialize(repo.checkout, baseline=True) == []
     else:
-        assert set(data.materialize(repo.checkout, baseline=baseline)) == {REPORT, KPI, new}
+        assert set(data.materialize(repo.checkout, baseline=baseline)) == {
+            REPORT,
+            KPI,
+            new,
+        }
 
     assert (repo.checkout / REPORT).read_text() == "original data\n"
     assert (repo.checkout / KPI).read_text() == "original kpi\n"
@@ -674,9 +778,14 @@ def test_missing_branch_after_materialization_restores_head_and_removes_addition
 
 
 @pytest.mark.parametrize("staged", [False, True], ids=["local-edit", "staged-edit"])
-def test_missing_branch_recovery_refuses_local_edits_before_restoring_any_path(repo, staged):
+def test_missing_branch_recovery_refuses_local_edits_before_restoring_any_path(
+    repo, staged
+):
     new = "dashboard/public/data/new.json"
-    seed_data(repo, {REPORT: "previously published data\n", KPI: None, new: "published addition\n"})
+    seed_data(
+        repo,
+        {REPORT: "previously published data\n", KPI: None, new: "published addition\n"},
+    )
     data.materialize(repo.checkout)
     git(repo.seed, "push", "origin", ":refs/heads/oracle-data")
     (repo.checkout / REPORT).write_text("local generated data\n")
@@ -685,7 +794,9 @@ def test_missing_branch_recovery_refuses_local_edits_before_restoring_any_path(r
     before_index = git(repo.checkout, "write-tree")
     before_status = git(repo.checkout, "status", "--porcelain")
 
-    with pytest.raises(data.DataError, match="staged data" if staged else "local data edits"):
+    with pytest.raises(
+        data.DataError, match="staged data" if staged else "local data edits"
+    ):
         data.materialize(repo.checkout)
 
     assert (repo.checkout / REPORT).read_text() == "local generated data\n"
@@ -696,7 +807,9 @@ def test_missing_branch_recovery_refuses_local_edits_before_restoring_any_path(r
     assert git(repo.checkout, "rev-parse", "HEAD") == repo.main
 
 
-def test_late_push_rejection_keeps_generated_edits_visible_to_unattended_guard(repo, monkeypatch):
+def test_late_push_rejection_keeps_generated_edits_visible_to_unattended_guard(
+    repo, monkeypatch
+):
     seed_data(repo, {REPORT: "first published data\n"})
     baseline = data.prepare(repo.checkout)
     git(repo.checkout, "switch", "-C", data.DATA_BRANCH)
@@ -731,6 +844,8 @@ def test_late_push_rejection_keeps_generated_edits_visible_to_unattended_guard(r
     regen = repo.checkout / "scripts/regenerate_all.sh"
     regen.parent.mkdir()
     regen.write_text((SCRIPT.parent / "regenerate_all.sh").read_text())
-    result = subprocess.run(["sh", str(regen)], capture_output=True, text=True)
+    result = subprocess.run(
+        ["sh", str(regen)], capture_output=True, text=True, check=False
+    )
     assert result.returncode == 1
     assert "refusing unattended regen with local tracked changes" in result.stdout

@@ -17,6 +17,7 @@ from functools import cache
 import json
 import os
 from pathlib import Path, PurePosixPath
+import signal
 import stat
 import subprocess
 import sys
@@ -26,6 +27,8 @@ DATA_BRANCH = "oracle-data"
 DATA_REF = f"refs/heads/{DATA_BRANCH}"
 MAIN_REF = "refs/heads/main"
 MANIFEST_PATH = "dashboard/public/data/manifest.json"
+SNAPSHOT_PATH = "dashboard/public/data/snapshot.json"
+SNAPSHOT_SCHEMA = "axiom.oracle_data_snapshot.v1"
 # Reader scope: only generated outputs of the publication chain. The publisher
 # carries full source history, including authored inputs beside these outputs;
 # readers must keep those inputs at their own source revision.
@@ -84,7 +87,9 @@ def _sha(root: Path, ref: str) -> str:
 def _repository(root: Path | None) -> Path:
     # Readers such as the dashboard's package scripts run below the root;
     # every publication path remains relative to the repository top level.
-    return Path(_git(root or Path.cwd(), "rev-parse", "--show-toplevel").stdout.decode().strip())
+    return Path(
+        _git(root or Path.cwd(), "rev-parse", "--show-toplevel").stdout.decode().strip()
+    )
 
 
 def _fetch(root: Path, ref: str, *, optional: bool = False) -> str | None:
@@ -118,7 +123,8 @@ def _declared_output(script: str, name: str) -> str:
     assignments = {
         node.targets[0].id: node.value
         for node in ast.parse((scripts / script).read_text()).body
-        if isinstance(node, ast.Assign) and len(node.targets) == 1
+        if isinstance(node, ast.Assign)
+        and len(node.targets) == 1
         and isinstance(node.targets[0], ast.Name)
     }
 
@@ -126,7 +132,11 @@ def _declared_output(script: str, name: str) -> str:
         if isinstance(node, ast.Constant) and isinstance(node.value, str):
             return node.value
         if isinstance(node, ast.Name):
-            return scripts.parent if node.id == "REPO_ROOT" else path_value(assignments[node.id])
+            return (
+                scripts.parent
+                if node.id == "REPO_ROOT"
+                else path_value(assignments[node.id])
+            )
         if isinstance(node, ast.BinOp) and isinstance(node.op, ast.Div):
             return path_value(node.left) / path_value(node.right)
         raise DataError(f"unsupported output declaration {script}:{name}")
@@ -146,18 +156,25 @@ def _regenerated_aggregates() -> tuple[str, ...]:
         _declared_output("conformance_scoreboard.py", "DASHBOARD_SCOREBOARD_PATH"),
         _declared_output("conformance_scoreboard.py", "DETAIL_DIR") + "/*.json",
         _declared_output("conformance_scoreboard.py", "HISTORY_DIR") + "/*/*.json",
-        _declared_output("conformance_scoreboard.py", "DASHBOARD_DATA_DIR") + "/conformance_detail_*.json",
+        _declared_output("conformance_scoreboard.py", "DASHBOARD_DATA_DIR")
+        + "/conformance_detail_*.json",
         _declared_output("conformance_burndown.py", "OUTPUT_PATH"),
         _declared_output("exercise_census.py", "OUTPUT_PATH"),
         _declared_output("de_certificate_census.py", "OUTPUT_PATH"),
         _declared_output("certify.py", "OUT_DIR") + "/*.json",
         _declared_output("generate_affected_map.py", "OUTPUT_PATH"),
         MANIFEST_PATH,
+        SNAPSHOT_PATH,
     )
 
 
-def _manifest_union(root: Path, source: str, data: str, *, prefer_data: bool) -> bytes | None:
-    identities = [_tree_identities(root, ref, [MANIFEST_PATH])[MANIFEST_PATH] for ref in (source, data)]
+def _manifest_union(
+    root: Path, source: str, data: str, *, prefer_data: bool
+) -> bytes | None:
+    identities = [
+        _tree_identities(root, ref, [MANIFEST_PATH])[MANIFEST_PATH]
+        for ref in (source, data)
+    ]
     if identities[0] == identities[1]:
         return None
     documents = []
@@ -166,22 +183,30 @@ def _manifest_union(root: Path, source: str, data: str, *, prefer_data: bool) ->
             documents.append({"reports": []})
             continue
         if identity["mode"] not in ("100644", "100755"):
-            raise DataError("report manifest must be a regular JSON file; checkout unchanged")
+            raise DataError(
+                "report manifest must be a regular JSON file; checkout unchanged"
+            )
         try:
             doc = json.loads(_git(root, "cat-file", "blob", identity["oid"]).stdout)
-            if not isinstance(doc, dict) or not isinstance(doc.get("reports"), list) or any(
-                not isinstance(entry, str) for entry in doc["reports"]
+            if (
+                not isinstance(doc, dict)
+                or not isinstance(doc.get("reports"), list)
+                or any(not isinstance(entry, str) for entry in doc["reports"])
             ):
                 raise ValueError("expected a reports list of file names")
         except ValueError as exc:
-            raise DataError(f"cannot union report manifest: {exc}; checkout unchanged") from exc
+            raise DataError(
+                f"cannot union report manifest: {exc}; checkout unchanged"
+            ) from exc
         documents.append(doc)
     preferred, other = documents[::-1] if prefer_data else documents
     preferred["reports"] = list(dict.fromkeys(preferred["reports"] + other["reports"]))
     return (json.dumps(preferred, indent=2) + "\n").encode()
 
 
-def _merge_tree(root: Path, source: str, data: str, *, prefer_data: bool = False) -> str:
+def _merge_tree(
+    root: Path, source: str, data: str, *, prefer_data: bool = False
+) -> str:
     result = _git(root, "merge-tree", "--write-tree", "-z", source, data, check=False)
     if result.returncode not in (0, 1):
         details = (result.stdout + result.stderr).decode(errors="replace").strip()
@@ -197,7 +222,8 @@ def _merge_tree(root: Path, source: str, data: str, *, prefer_data: bool = False
             mode, oid, stage = header.decode().split()
             conflicts.setdefault(path.decode(), {})[stage] = (mode, oid)
         unresolved = [
-            path for path, stages in conflicts.items()
+            path
+            for path, stages in conflicts.items()
             if not any(
                 path.count("/") == pattern.count("/") and fnmatchcase(path, pattern)
                 for pattern in _regenerated_aggregates()
@@ -215,8 +241,8 @@ def _merge_tree(root: Path, source: str, data: str, *, prefer_data: bool = False
     if not conflicts and manifest is None:
         return tree
     # Resolve in a private index: a refused merge never touches HEAD, the real
-    # index, or the worktree. Publishers regenerate and verify after prepare;
-    # readers choose the data-side aggregate that matches published reports.
+    # index, or the worktree. Publishers verify after prepare; readers must
+    # validate the resulting snapshot binding before applying this tree.
     with tempfile.TemporaryDirectory(prefix="oracle-data-merge-") as directory:
         env = {**os.environ, "GIT_INDEX_FILE": str(Path(directory) / "index")}
         _git(root, "read-tree", tree, env=env)
@@ -225,9 +251,15 @@ def _merge_tree(root: Path, source: str, data: str, *, prefer_data: bool = False
             mode, oid = stages.get("3" if prefer_data else "2", ("0", "0" * 40))
             updates.append(f"{mode} {oid}\t{path}\0".encode())
         if manifest is not None:
-            oid = _git(root, "hash-object", "-w", "--stdin", input=manifest).stdout.decode().strip()
+            oid = (
+                _git(root, "hash-object", "-w", "--stdin", input=manifest)
+                .stdout.decode()
+                .strip()
+            )
             updates.append(f"100644 {oid}\t{MANIFEST_PATH}\0".encode())
-        _git(root, "update-index", "-z", "--index-info", input=b"".join(updates), env=env)
+        _git(
+            root, "update-index", "-z", "--index-info", input=b"".join(updates), env=env
+        )
         return _git(root, "write-tree", env=env).stdout.decode().strip()
 
 
@@ -241,10 +273,18 @@ def _commit_tree(root: Path, tree: str, *parents: str) -> str:
         GIT_COMMITTER_EMAIL="41898282+github-actions[bot]@users.noreply.github.com",
     )
     parent_args = [arg for parent in parents for arg in ("-p", parent)]
-    return _git(
-        root, "commit-tree", tree, *parent_args,
-        input=b"Merge current source and published oracle data\n", env=env,
-    ).stdout.decode().strip()
+    return (
+        _git(
+            root,
+            "commit-tree",
+            tree,
+            *parent_args,
+            input=b"Merge current source and published oracle data\n",
+            env=env,
+        )
+        .stdout.decode()
+        .strip()
+    )
 
 
 def _composite_commit(root: Path, tree: str, source: str, data: str) -> str:
@@ -277,13 +317,212 @@ def _reader_merge_tree(root: Path, source: str, data: str) -> str:
     # data branch is irrelevant to a reader and can conflict with feature work.
     base = _git(root, "merge-base", source, data).stdout.decode().strip()
     scoped = _scoped_tree(root, base, data)
-    data_only = base if scoped == _sha(root, f"{base}^{{tree}}") else _commit_tree(root, scoped, base)
+    data_only = (
+        base
+        if scoped == _sha(root, f"{base}^{{tree}}")
+        else _commit_tree(root, scoped, base)
+    )
     return _merge_tree(root, source, data_only, prefer_data=True)
 
 
 def _state_path(root: Path) -> Path:
-    location = Path(_git(root, "rev-parse", "--git-path", "oracle-data-materialized.json").stdout.decode().strip())
+    location = Path(
+        _git(root, "rev-parse", "--git-path", "oracle-data-materialized.json")
+        .stdout.decode()
+        .strip()
+    )
     return location if location.is_absolute() else root / location
+
+
+def _snapshot_document(root: Path, tree: str) -> dict:
+    """Bind the complete generated-file set, including deletions and modes.
+
+    Git blob object IDs hash the file contents (with Git's blob header). This
+    records identities, not a claim that the generators or reports are correct.
+    Publication runs the freshness gates before recording these identities.
+    """
+    manifest = _tree_identities(root, tree, [MANIFEST_PATH])[MANIFEST_PATH]
+    if manifest["oid"] is not None:
+        try:
+            document = json.loads(
+                _git(root, "cat-file", "blob", manifest["oid"]).stdout
+            )
+            if not isinstance(document, dict) or not isinstance(
+                document.get("reports"), list
+            ):
+                raise ValueError("expected a reports list")
+            if any(
+                os.path.normpath(
+                    os.path.join(str(root), "dashboard/public/data", name)
+                ).casefold()
+                == str(root / SNAPSHOT_PATH).casefold()
+                for name in document["reports"]
+            ):
+                raise DataError(
+                    "snapshot.json is reserved metadata and cannot be a dashboard report"
+                )
+            if any(
+                not isinstance(name, str)
+                or not name
+                or name in (".", "..")
+                or "\0" in name
+                or PurePosixPath(name).name != name
+                or "\\" in name
+                for name in document["reports"]
+            ):
+                raise ValueError(
+                    "report names must be plain file names inside dashboard/public/data"
+                )
+        except (ValueError, TypeError, KeyError) as exc:
+            raise DataError("invalid report manifest; cannot bind snapshot") from exc
+    files = _tree_identities(root, tree, list(DATA_PATHS))
+    files = {
+        path: identity
+        for path, identity in files.items()
+        if path != SNAPSHOT_PATH and identity["oid"] is not None
+    }
+    if any(identity["mode"] not in ("100644", "100755") for identity in files.values()):
+        raise DataError(
+            "snapshot contains non-regular generated files; checkout unchanged"
+        )
+    return {"schema": SNAPSHOT_SCHEMA, "files": files}
+
+
+def _verify_snapshot(root: Path, tree: str) -> list[str]:
+    identity = _tree_identities(root, tree, [SNAPSHOT_PATH])[SNAPSHOT_PATH]
+    try:
+        if identity["mode"] not in ("100644", "100755"):
+            raise ValueError("missing regular snapshot.json")
+        document = json.loads(_git(root, "cat-file", "blob", identity["oid"]).stdout)
+        if document != _snapshot_document(root, tree):
+            raise ValueError("generated-file hashes or file set differ")
+    except (ValueError, TypeError) as exc:
+        raise DataError(
+            f"incompatible oracle-data snapshot: {exc}; checkout unchanged; "
+            "prepare, regenerate and publish a reconciled snapshot first"
+        ) from exc
+    return [*document["files"], SNAPSHOT_PATH]
+
+
+def write_snapshot(root: Path | None = None) -> None:
+    """Record generated identities after the caller's regeneration/check gates.
+
+    Use a private index so this also binds untracked generated files without
+    staging unrelated changes. This function itself does not run freshness gates.
+    """
+    root = _repository(root)
+    ignored = _git(root, "check-ignore", "--quiet", "--", SNAPSHOT_PATH, check=False)
+    if ignored.returncode == 0:
+        raise DataError("snapshot.json is ignored; refusing snapshot binding")
+    if ignored.returncode != 1:
+        raise DataError(
+            "cannot inspect snapshot ignore rules; refusing snapshot binding"
+        )
+    tree = _publication_tree(root, DATA_PATHS)
+    document = _snapshot_document(root, tree)
+    untracked = _git(root, "ls-files", "--others", "-z", "--", *DATA_PATHS).stdout
+    if any(
+        path.decode() != SNAPSHOT_PATH and path.decode() not in document["files"]
+        for path in untracked.split(b"\0")
+        if path
+    ):
+        raise DataError(
+            "generated files are outside the candidate snapshot; refusing snapshot binding"
+        )
+    paths = list(document["files"])
+    _guard_checkout_bytes(root, [*paths, SNAPSHOT_PATH])
+    if _worktree_identities(root, paths) != document["files"]:
+        raise DataError(
+            "generated bytes differ from their staged Git blobs; refusing snapshot binding"
+        )
+    (root / SNAPSHOT_PATH).write_text(json.dumps(document, sort_keys=True) + "\n")
+
+
+def _publication_tree(root: Path, scope: tuple[str, ...]) -> str:
+    """Build exactly what would be committed, without changing the real index."""
+    with tempfile.TemporaryDirectory(prefix="oracle-data-candidate-") as directory:
+        env = {**os.environ, "GIT_INDEX_FILE": str(Path(directory) / "index")}
+        _git(root, "read-tree", "HEAD", env=env)
+        tracked = _git(
+            root, "ls-tree", "-r", "--name-only", "-z", "HEAD", "--", *scope
+        ).stdout.split(b"\0")
+        # Optional aggregate families need not exist in every source revision.
+        # Keep tracked deletions, but do not pass never-present pathspecs to add.
+        selected = [
+            path
+            for path in scope
+            if os.path.lexists(root / path)
+            or any(name and _in_scope(name.decode(), (path,)) for name in tracked)
+        ]
+        if selected:
+            _git(root, "add", "-A", "--", *selected, env=env)
+        return _git(root, "write-tree", env=env).stdout.decode().strip()
+
+
+def _bind_publication(root: Path, tree: str) -> None:
+    _guard_checkout_bytes(root, [SNAPSHOT_PATH])
+    (root / SNAPSHOT_PATH).write_text(
+        json.dumps(_snapshot_document(root, tree), sort_keys=True) + "\n"
+    )
+    _git(root, "add", "--", SNAPSHOT_PATH)
+
+
+def _verify_publication(root: Path, tree: str) -> None:
+    """Run all publication gates against the exact candidate, never local edits."""
+    runner = _git(
+        root, "show", f"{tree}:scripts/commit_refreshed_report.sh", check=False
+    )
+    if runner.returncode or b"VERIFY_DERIVED_REFRESH" not in runner.stdout:
+        raise DataError(
+            "publication requires the check-only freshness gate runner; nothing committed"
+        )
+    with tempfile.TemporaryDirectory(prefix="oracle-data-verify-") as directory:
+        checkout = Path(directory) / "checkout"
+        _git(
+            root,
+            "clone",
+            "--quiet",
+            "--shared",
+            "--no-checkout",
+            str(root),
+            str(checkout),
+        )
+        candidate = _commit_tree(root, tree, _sha(root, "HEAD"))
+        _git(checkout, "checkout", "--quiet", "--detach", candidate)
+        env = {
+            **os.environ,
+            "VERIFY_DERIVED_REFRESH": "1",
+            "SIMULATE_DERIVED_REFRESH": "0",
+            "PYTHON": sys.executable,
+            "PYTHONPATH": str(checkout),
+            "AXIOM_ORACLES_DATA_SOURCE": "checkout",
+        }
+        with subprocess.Popen(
+            ["bash", "scripts/commit_refreshed_report.sh", "recovery", DATA_BRANCH],
+            cwd=checkout,
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            start_new_session=True,
+        ) as process:
+            try:
+                output, errors = process.communicate(timeout=540)
+            except subprocess.TimeoutExpired as exc:
+                os.killpg(process.pid, signal.SIGKILL)
+                process.communicate()
+                raise DataError(
+                    "publication freshness gates timed out; nothing committed"
+                ) from exc
+        if process.returncode:
+            raise DataError(
+                "publication freshness gates failed; prepare and regenerate all affected aggregates; "
+                f"nothing committed:\n{output}{errors}"
+            )
+        if _publication_tree(checkout, DATA_PATHS) != tree:
+            raise DataError(
+                "freshness gates changed candidate generated files; nothing committed"
+            )
 
 
 def _read_state(root: Path) -> dict:
@@ -294,10 +533,13 @@ def _read_state(root: Path) -> dict:
     except (OSError, ValueError) as exc:
         raise DataError(f"cannot read previous data materialization: {exc}") from exc
     if not isinstance(state, dict) or any(
-        not isinstance(path, str) or "\0" in path
-        or PurePosixPath(path).is_absolute() or ".." in PurePosixPath(path).parts
+        not isinstance(path, str)
+        or "\0" in path
+        or PurePosixPath(path).is_absolute()
+        or ".." in PurePosixPath(path).parts
         or not _in_scope(path, DATA_PATHS)
-        or not isinstance(identity, dict) or set(identity) != {"oid", "mode"}
+        or not isinstance(identity, dict)
+        or set(identity) != {"oid", "mode"}
         for path, identity in state.items()
     ):
         raise DataError("invalid previous data materialization metadata")
@@ -306,8 +548,17 @@ def _read_state(root: Path) -> dict:
 
 def _tree_identities(root: Path, tree: str, paths: list[str]) -> dict:
     identities = {path: {"oid": None, "mode": None} for path in paths}
-    if paths:
-        entries = _git(root, "ls-tree", "-r", "-z", "--full-tree", tree, "--", *paths).stdout
+    for start in range(0, len(paths), 200):
+        entries = _git(
+            root,
+            "ls-tree",
+            "-r",
+            "-z",
+            "--full-tree",
+            tree,
+            "--",
+            *paths[start : start + 200],
+        ).stdout
         for entry in entries.split(b"\0"):
             if entry:
                 header, name = entry.split(b"\t", 1)
@@ -323,15 +574,84 @@ def _worktree_identity(root: Path, path: str) -> dict:
     except FileNotFoundError:
         return {"oid": None, "mode": None}
     if stat.S_ISLNK(mode):
-        oid = _git(root, "hash-object", "--stdin", input=os.fsencode(os.readlink(absolute))).stdout.decode().strip()
+        oid = (
+            _git(
+                root, "hash-object", "--stdin", input=os.fsencode(os.readlink(absolute))
+            )
+            .stdout.decode()
+            .strip()
+        )
         return {"oid": oid, "mode": "120000"}
     if not stat.S_ISREG(mode):
         raise DataError(f"local data path {path} is not a file; checkout unchanged")
-    oid = _git(root, "hash-object", f"--path={path}", path).stdout.decode().strip()
+    oid = _git(root, "hash-object", "--no-filters", "--", path).stdout.decode().strip()
     return {"oid": oid, "mode": "100755" if mode & 0o111 else "100644"}
 
 
-def _guard_worktree(root: Path, source: str, tree: str, paths: list[str], previous: dict) -> dict:
+def _worktree_identities(root: Path, paths: list[str]) -> dict:
+    # One Git process per file makes a bound real-corpus reader take minutes.
+    # Hash raw bytes: clean filters must not hide a report/overview mismatch.
+    identities, regular = {}, []
+    for path in paths:
+        try:
+            mode = (root / path).lstat().st_mode
+        except FileNotFoundError:
+            identities[path] = {"oid": None, "mode": None}
+            continue
+        if stat.S_ISREG(mode):
+            identities[path] = {"mode": "100755" if mode & 0o111 else "100644"}
+            regular.append(path)
+        else:
+            identities[path] = _worktree_identity(root, path)
+    for start in range(0, len(regular), 200):
+        batch = regular[start : start + 200]
+        hashes = (
+            _git(root, "hash-object", "--no-filters", "--", *batch)
+            .stdout.decode()
+            .splitlines()
+        )
+        if len(hashes) != len(batch):
+            raise DataError("cannot hash generated files; checkout unchanged")
+        for path, oid in zip(batch, hashes, strict=True):
+            identities[path]["oid"] = oid
+    return identities
+
+
+def _guard_checkout_bytes(root: Path, paths: list[str]) -> None:
+    """Refuse transformations that could change bound bytes during restoration."""
+    for name, safe in (
+        ("core.autocrlf", {"false", "no", "off", "0", "input"}),
+        ("core.eol", {"lf", "native"}),
+    ):
+        configured = _git(root, "config", "--get", name, check=False)
+        value = configured.stdout.decode().strip().lower()
+        if configured.returncode == 0 and value not in safe:
+            raise DataError(
+                "Git checkout filters can change bound data bytes; checkout unchanged"
+            )
+    attributes = _git(
+        root,
+        "check-attr",
+        "-z",
+        "--stdin",
+        "--all",
+        input=b"".join(path.encode() + b"\0" for path in paths),
+    ).stdout.split(b"\0")
+    for start in range(0, len(attributes) - 1, 3):
+        _, attribute, value = attributes[start : start + 3]
+        if (attribute == b"eol" and value.lower() == b"crlf") or attribute in (
+            b"filter",
+            b"working-tree-encoding",
+            b"ident",
+        ):
+            raise DataError(
+                "Git checkout filters can change bound data bytes; checkout unchanged"
+            )
+
+
+def _guard_worktree(
+    root: Path, source: str, tree: str, paths: list[str], previous: dict
+) -> dict:
     # Check every target before restoring even the first one. A final-file
     # identity cannot detect a local directory symlink redirecting a deletion
     # to a matching file outside the checkout. Keep final symlinks in the
@@ -345,19 +665,36 @@ def _guard_worktree(root: Path, source: str, tree: str, paths: list[str], previo
             except FileNotFoundError:
                 break  # Restore may create missing directories.
             if stat.S_ISLNK(mode) or not stat.S_ISDIR(mode):
-                raise DataError(f"local data parent {parent.relative_to(root)} is not a directory; checkout unchanged")
-    changed = _git(root, "diff", "--cached", "--name-only", "-z", "--", *paths).stdout
-    if changed:
-        raise DataError("staged data overlaps published updates; checkout unchanged")
+                raise DataError(
+                    f"local data parent {parent.relative_to(root)} is not a directory; checkout unchanged"
+                )
+    for start in range(0, len(paths), 200):
+        changed = _git(
+            root,
+            "diff",
+            "--cached",
+            "--name-only",
+            "-z",
+            "--",
+            *paths[start : start + 200],
+        ).stdout
+        if changed:
+            raise DataError(
+                "staged data overlaps published updates; checkout unchanged"
+            )
+    _guard_checkout_bytes(root, paths)
     committed = _tree_identities(root, source, paths)
     desired = _tree_identities(root, tree, paths)
+    current_files = _worktree_identities(root, paths)
     for path in paths:
-        current = _worktree_identity(root, path)
+        current = current_files[path]
         allowed = [committed[path], desired[path]]
         if path in previous:
             allowed.append(previous[path])
         if current not in allowed:
-            raise DataError(f"local data edits overlap published update at {path}; checkout unchanged")
+            raise DataError(
+                f"local data edits overlap published update at {path}; checkout unchanged"
+            )
     return desired
 
 
@@ -401,14 +738,51 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
     # A disappeared branch also removes the last overlay. Reconcile recorded
     # paths against HEAD with exactly the same guards as an ordinary refresh.
     tree = source if data is None else _reader_merge_tree(root, source, data)
-    changed = _git(root, "diff", "--no-renames", "--name-only", "-z", source, tree, "--", *DATA_PATHS).stdout
+    if data is not None and (
+        _tree_identities(root, tree, [SNAPSHOT_PATH])
+        != _tree_identities(root, data, [SNAPSHOT_PATH])
+    ):
+        raise DataError(
+            "incompatible oracle-data snapshot: merged binding differs from the published binding; checkout unchanged"
+        )
+    bound = [] if data is None else _verify_snapshot(root, tree)
+    changed = _git(
+        root,
+        "diff",
+        "--no-renames",
+        "--name-only",
+        "-z",
+        source,
+        tree,
+        "--",
+        *DATA_PATHS,
+    ).stdout
     paths = [p.decode() for p in changed.split(b"\0") if p]
     previous = _read_state(root)
     # Include prior materializations that the remote has since reverted
     # to HEAD, otherwise such a revert would leave old data in the reader.
     previous_targets = _tree_identities(root, tree, list(previous))
-    paths.extend(path for path in previous if path not in paths and previous[path] != previous_targets[path])
-    desired = _guard_worktree(root, source, tree, paths, previous) if paths else {}
+    paths.extend(
+        path
+        for path in previous
+        if path not in paths and previous[path] != previous_targets[path]
+    )
+    # Check every bound path, even when it has no overlay delta. A local edit
+    # to an otherwise unchanged report must not accompany a successful read.
+    targets = list(dict.fromkeys([*paths, *bound]))
+    if bound:
+        if _git(
+            root, "diff", "--cached", "--name-only", "-z", "--", *DATA_PATHS
+        ).stdout:
+            raise DataError(
+                "staged data overlaps the bound snapshot; checkout unchanged"
+            )
+        untracked = _git(root, "ls-files", "--others", "-z", "--", *DATA_PATHS).stdout
+        if any(path.decode() not in targets for path in untracked.split(b"\0") if path):
+            raise DataError(
+                "local data files are outside the bound snapshot; checkout unchanged"
+            )
+    desired = _guard_worktree(root, source, tree, targets, previous) if targets else {}
     if baseline and _git(root, "status", "--porcelain", "--untracked-files=no").stdout:
         raise DataError(
             "baseline requires a clean tracked checkout; save staged and unstaged edits "
@@ -421,14 +795,25 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
         # tree to the publication delta before making the detached baseline.
         # A private index leaves the caller's index untouched until checkout.
         scoped_tree = _scoped_tree(root, source, tree)
-        commit = source if data is None else _composite_commit(root, scoped_tree, source, data)
+        commit = (
+            source
+            if data is None
+            else _composite_commit(root, scoped_tree, source, data)
+        )
         _checkout_baseline(root, commit)
     else:
-        present = b"".join(path.encode() + b"\0" for path in paths if desired[path]["oid"] is not None)
+        present = b"".join(
+            path.encode() + b"\0" for path in paths if desired[path]["oid"] is not None
+        )
         if present:
             _git(
-                root, "restore", "--worktree", f"--source={tree}",
-                "--pathspec-from-file=-", "--pathspec-file-nul", input=present,
+                root,
+                "restore",
+                "--worktree",
+                f"--source={tree}",
+                "--pathspec-from-file=-",
+                "--pathspec-file-nul",
+                input=present,
             )
     # A previously materialized addition can still be untracked in the
     # index. Neither restore nor a baseline checkout removes it when neither
@@ -456,14 +841,33 @@ def publish(root: Path | None = None, *, group: str, message: str) -> bool:
     head = _sha(root, "HEAD")
     branch = _git(root, "symbolic-ref", "--quiet", "HEAD", check=False)
     if branch.returncode == 0 and branch.stdout.decode().strip() != DATA_REF:
-        raise DataError("publish requires a detached baseline or the local oracle-data branch")
+        raise DataError(
+            "publish requires a detached baseline or the local oracle-data branch"
+        )
     main = _fetch(root, MAIN_REF)
     data = _fetch(root, DATA_REF, optional=True)
     if not _ancestor(root, main, head) or (data and not _ancestor(root, data, head)):
-        raise DataError("source or data advanced; prepare and regenerate before publishing")
+        raise DataError(
+            "source or data advanced; prepare and regenerate before publishing"
+        )
     staged = _git(root, "diff", "--cached", "--name-only", "-z").stdout
     if any(not _in_scope(p.decode(), scope) for p in staged.split(b"\0") if p):
         raise DataError("staged files outside the publication group; nothing committed")
+    tree = _publication_tree(root, scope)
+    _verify_publication(root, tree)
+    # Verification may take several minutes. Recheck remote ancestry before
+    # changing the caller's index or making the publication commit.
+    main = _fetch(root, MAIN_REF)
+    data = _fetch(root, DATA_REF, optional=True)
+    if not _ancestor(root, main, head) or (data and not _ancestor(root, data, head)):
+        raise DataError(
+            "source or data advanced; prepare and regenerate before publishing"
+        )
+    if _publication_tree(root, scope) != tree:
+        raise DataError(
+            "publication files changed during verification; nothing committed"
+        )
+    _bind_publication(root, tree)
     _git(root, "add", "-A", "--", *scope)
     result = _git(root, "diff", "--cached", "--quiet", check=False)
     if result.returncode == 0:
@@ -492,20 +896,41 @@ def publish(root: Path | None = None, *, group: str, message: str) -> bool:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    commands.add_parser("prepare", help="reset disposable publisher to current source + data")
-    read = commands.add_parser("materialize", help="read published data into this checkout")
-    read.add_argument("--baseline", action="store_true", help="make a detached data baseline (requires a clean tracked checkout)")
-    write = commands.add_parser("publish", help="commit prepared data to oracle-data only")
+    commands.add_parser(
+        "prepare", help="reset disposable publisher to current source + data"
+    )
+    commands.add_parser(
+        "snapshot",
+        help="record generated content identities after freshness gates (does not run gates)",
+    )
+    read = commands.add_parser(
+        "materialize", help="read published data into this checkout"
+    )
+    read.add_argument(
+        "--baseline",
+        action="store_true",
+        help="make a detached data baseline (requires a clean tracked checkout)",
+    )
+    write = commands.add_parser(
+        "publish", help="commit prepared data to oracle-data only"
+    )
     write.add_argument("--group", choices=PUBLISH_GROUPS, required=True)
     write.add_argument("--message", required=True)
     args = parser.parse_args()
     try:
         if args.command == "prepare":
             print(f"prepared {prepare()}")
+        elif args.command == "snapshot":
+            write_snapshot()
+            print("recorded generated content identities")
         elif args.command == "materialize":
             print(f"materialized {len(materialize(baseline=args.baseline))} data files")
         else:
-            print("published oracle-data" if publish(group=args.group, message=args.message) else "no data changes")
+            print(
+                "published oracle-data"
+                if publish(group=args.group, message=args.message)
+                else "no data changes"
+            )
     except DataError as exc:
         print(f"FAILED: {exc}", file=sys.stderr)
         return 1

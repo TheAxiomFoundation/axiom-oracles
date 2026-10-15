@@ -196,17 +196,30 @@ before those missing pairs can restore coverage.
 snapshots by `scripts/conformance_burndown.py`. The affected-rerun workflow
 regenerates the dispositions merge (and its EUROMOD-BE coverage rollup),
 appends the daily snapshot, and regenerates the scoreboard, detail, and
-burn-down atomically with every report refresh it publishes to `oracle-data`
-(`scripts/commit_refreshed_report.sh`). The published snapshot incorporates
-current `main` and passes the existing staleness gates before a normal push to
-the data branch. To inspect that snapshot or run these consumers locally:
+burn-down in the same commit as the report refreshes it publishes to
+`oracle-data` (`scripts/commit_refreshed_report.sh`). Each affected publication
+prepares fetched `main` and published data, regenerates artifacts, runs its
+staleness and unexplained-mismatch gates, and records a generated-file hash
+binding before a normal push to the data branch. Generic KPI and dashboard
+publication also checks its candidate tree; it refuses stale aggregates
+instead of publishing them. These are artifact-freshness checks, not a rerun
+of every comparison. To inspect published data or run these consumers locally:
 
 ```bash
 python3 scripts/oracle_data.py materialize
 ```
 
-The helper applies the generated data changes and deletions at their existing
-paths while keeping the checkout's source revision. CI uses
+With an existing data branch, the helper requires the published
+`dashboard/public/data/snapshot.json` binding unchanged in the merged tree,
+then verifies the generated files against it before applying changes and
+deletions at their existing paths. Identities use raw bytes; staged generated
+changes, extra untracked generated files, local changes to bound files, and
+CRLF checkout conversion or declared filter, encoding, or ident attributes
+are refused. A missing binding or a report/aggregate identity mismatch refuses
+the read without applying the overlay; reconcile
+and republish through the [recovery procedure](../README.md#recovering-a-source-data-conflict).
+The checkout's source revision stays unchanged. If the data branch is absent,
+the helper uses the committed checkout baseline without a binding check. CI uses
 `AXIOM_ORACLES_DATA_SOURCE=checkout` to validate the committed PR baseline;
 dashboard builds in a full Git checkout materialize published data, while
 uploaded or archived builds use their bundled snapshot. Materialize before
@@ -485,9 +498,9 @@ Wired in `.github/workflows/ci.yml`, following the repo's existing gate patterns
 
 Every gate has negative tests in `tests/test_conformance.py` proving it can fail.
 
-The scoreboard/detail are derived from the comparison reports, so anything
-that refreshes a report must regenerate them in the same change. Interactive
-PRs update the reviewed baseline and its derivatives together. The automated
+The scoreboard/detail are derived from the comparison reports, so a report
+refresh must regenerate them in the same change to pass freshness checks.
+Interactive PRs are checked against their committed baseline. The automated
 **affected-rerun** bot vets each matrix leg, then publishes all passing bundles
 and their regenerated derivatives in one commit to `oracle-data` via
 `scripts/commit_refreshed_report.sh` (see

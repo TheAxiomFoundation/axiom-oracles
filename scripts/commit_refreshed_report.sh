@@ -372,12 +372,21 @@ verify_derived() {
     "$PYTHON" scripts/certify.py --check
 }
 
+# Generic publications check their exact candidate in an isolated checkout.
+# This mode must exit before packing, fetching, resetting, committing or pushing.
+if [ "${VERIFY_DERIVED_REFRESH:-0}" = "1" ]; then
+  verify_derived
+  "$PYTHON" scripts/unexplained_ratchet.py --check
+  exit 0
+fi
+
 # Safe proof of the exact regeneration path. It exits before collecting
 # private report output, fetching, resetting, committing, or pushing.
 if [ "${SIMULATE_DERIVED_REFRESH:-0}" = "1" ]; then
   regenerate_derived
   verify_derived
   "$PYTHON" scripts/unexplained_ratchet.py --check
+  "$PYTHON" scripts/oracle_data.py snapshot
   echo "simulated derived refresh passed${suite:+ for $suite}"
   exit 0
 fi
@@ -775,6 +784,7 @@ PY
       exit 1
     fi
 
+    "$PYTHON" scripts/oracle_data.py snapshot
     git add -A -- "${derived_paths[@]}"
     if git diff --cached --quiet; then
       echo "nothing to commit for $label after regeneration (attempt $attempt)"

@@ -17,6 +17,7 @@ import tempfile
 
 from hypothesis import HealthCheck, given, settings, strategies as st
 import pytest
+from test_oracle_data import data as oracle_data
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -44,7 +45,8 @@ def _environment(tmp_path: Path) -> dict[str, str]:
     env = os.environ.copy()
     for key in list(env):
         if key.startswith("GIT_") or key in {
-            "AXIOM_ORACLES_DATA_SOURCE", "SIMULATE_DERIVED_REFRESH",
+            "AXIOM_ORACLES_DATA_SOURCE",
+            "SIMULATE_DERIVED_REFRESH",
         }:
             env.pop(key)
     env.update(
@@ -62,8 +64,13 @@ def _environment(tmp_path: Path) -> dict[str, str]:
 
 def _git(root: Path, env: dict[str, str], *args: str) -> str:
     return subprocess.run(
-        ["git", *args], cwd=root, env=env, capture_output=True, text=True,
-        timeout=30, check=True,
+        ["git", *args],
+        cwd=root,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=30,
+        check=True,
     ).stdout.strip()
 
 
@@ -75,8 +82,12 @@ def _write(root: Path, path: str, value: str) -> None:
 
 def _command(root: Path, env: dict[str, str], *args: str):
     return subprocess.run(
-        ["bash", "scripts/commit_refreshed_report.sh", *args], cwd=root,
-        env=env, capture_output=True, text=True, timeout=90,
+        ["bash", "scripts/commit_refreshed_report.sh", *args],
+        cwd=root,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=90,
     )
 
 
@@ -110,6 +121,14 @@ def _local_case(tmp_path: Path, *, deletion: bool = False):
     ):
         _write(seed, path, "fixture")
     _git(seed, env, "add", "-A")
+    # Start both branches with a valid identity binding. The deliberately
+    # stubbed generators above make no artifact-freshness claim.
+    tree = _git(seed, env, "write-tree")
+    document = oracle_data._snapshot_document(seed, tree)
+    (seed / oracle_data.SNAPSHOT_PATH).write_text(
+        json.dumps(document, sort_keys=True) + "\n"
+    )
+    _git(seed, env, "add", "--", oracle_data.SNAPSHOT_PATH)
     _git(seed, env, "commit", "-m", "Baseline")
     _git(seed, env, "remote", "add", "origin", str(remote))
     _git(seed, env, "push", "origin", "HEAD:refs/heads/main")
@@ -131,7 +150,8 @@ def _local_case(tmp_path: Path, *, deletion: bool = False):
 @pytest.mark.parametrize("deletion", [False, True], ids=["replace", "delete"])
 def test_pack_records_baseline_for_replacements_and_deletions(tmp_path, deletion):
     env, remote, seed, producer, publisher, bundles = _local_case(
-        tmp_path, deletion=deletion,
+        tmp_path,
+        deletion=deletion,
     )
     bundle = json.loads((bundles / "scratch-suite" / "bundle.json").read_text())
     expected = hashlib.sha256((seed / REPORT).read_bytes()).hexdigest()
@@ -141,7 +161,8 @@ def test_pack_records_baseline_for_replacements_and_deletions(tmp_path, deletion
 @pytest.mark.parametrize("deletion", [False, True], ids=["replace", "delete"])
 def test_control_bundle_publishes_without_reviewed_main_race(tmp_path, deletion):
     env, remote, seed, producer, publisher, bundles = _local_case(
-        tmp_path, deletion=deletion,
+        tmp_path,
+        deletion=deletion,
     )
     main_before = _git(remote, env, "rev-parse", "refs/heads/main")
     result = _command(publisher, env, "--publish", str(bundles), "oracle-data")
@@ -151,7 +172,9 @@ def test_control_bundle_publishes_without_reviewed_main_race(tmp_path, deletion)
         "value": "other-refresh",
     }
     if deletion:
-        assert REPORT not in _git(remote, env, "ls-tree", "-r", "--name-only", "oracle-data")
+        assert REPORT not in _git(
+            remote, env, "ls-tree", "-r", "--name-only", "oracle-data"
+        )
     else:
         assert json.loads(_git(remote, env, "show", f"oracle-data:{REPORT}")) == {
             "value": "packed-before-main-edit",
@@ -160,10 +183,12 @@ def test_control_bundle_publishes_without_reviewed_main_race(tmp_path, deletion)
 
 @pytest.mark.parametrize("deletion", [False, True], ids=["replace", "delete"])
 def test_reviewed_main_report_edit_refuses_stale_bundle_before_any_write(
-    tmp_path, deletion,
+    tmp_path,
+    deletion,
 ):
     env, remote, seed, producer, publisher, bundles = _local_case(
-        tmp_path, deletion=deletion,
+        tmp_path,
+        deletion=deletion,
     )
     data_before = _git(remote, env, "rev-parse", "refs/heads/oracle-data")
     _write(seed, REPORT, "reviewed-main-edit")
@@ -178,13 +203,16 @@ def test_reviewed_main_report_edit_refuses_stale_bundle_before_any_write(
     assert _git(remote, env, "rev-parse", "refs/heads/main") == main_before
     assert (publisher / REPORT).read_bytes() == (seed / REPORT).read_bytes()
     assert (publisher / OTHER).read_bytes() == (seed / OTHER).read_bytes()
-    assert not (publisher / ADDED).exists(), "another bundled file was copied before refusal"
+    assert not (publisher / ADDED).exists(), (
+        "another bundled file was copied before refusal"
+    )
 
 
 @pytest.mark.parametrize("deletion", [False, True], ids=["replace", "delete"])
 def test_already_applied_bundle_bytes_are_not_a_stale_conflict(tmp_path, deletion):
     env, remote, seed, producer, publisher, bundles = _local_case(
-        tmp_path, deletion=deletion,
+        tmp_path,
+        deletion=deletion,
     )
     if deletion:
         (seed / REPORT).unlink()
@@ -214,8 +242,11 @@ def test_pack_refuses_unreadable_baseline_instead_of_recording_absence(tmp_path)
     shim.chmod(0o755)
     failed_bundles = tmp_path / "unreadable-baseline-bundles"
     result = _command(
-        producer, {**env, "PATH": str(shim_dir) + os.pathsep + env["PATH"]},
-        "--pack", str(failed_bundles), "scratch-suite",
+        producer,
+        {**env, "PATH": str(shim_dir) + os.pathsep + env["PATH"]},
+        "--pack",
+        str(failed_bundles),
+        "scratch-suite",
     )
     assert result.returncode != 0, result.stdout + result.stderr
     assert not (failed_bundles / "scratch-suite").exists()
@@ -232,9 +263,17 @@ def _manual_case(tmp_path: Path):
 
 def _materialize(root: Path, env: dict[str, str], *, baseline: bool = False):
     result = subprocess.run(
-        [sys.executable, "scripts/oracle_data.py", "materialize",
-         *(["--baseline"] if baseline else [])],
-        cwd=root, env=env, capture_output=True, text=True, timeout=30,
+        [
+            sys.executable,
+            "scripts/oracle_data.py",
+            "materialize",
+            *(["--baseline"] if baseline else []),
+        ],
+        cwd=root,
+        env=env,
+        capture_output=True,
+        text=True,
+        timeout=30,
     )
     assert result.returncode == 0, result.stdout + result.stderr
 
@@ -252,7 +291,8 @@ def test_manual_refresh_requires_materialized_baseline(tmp_path, checkout, mode)
     data_before = _git(remote, env, "rev-parse", "oracle-data")
     bundles = tmp_path / "second-bundles"
     args = (
-        ["scratch-suite", "oracle-data"] if mode == "single"
+        ["scratch-suite", "oracle-data"]
+        if mode == "single"
         else ["--pack", str(bundles), "scratch-suite"]
     )
     result = _command(operator, env, *args)
@@ -267,10 +307,13 @@ def test_manual_refresh_requires_materialized_baseline(tmp_path, checkout, mode)
 
 
 @settings(
-    max_examples=4, deadline=None,
+    max_examples=4,
+    deadline=None,
     suppress_health_check=[HealthCheck.function_scoped_fixture],
 )
-@given(suffix=st.text(alphabet=st.characters(blacklist_categories=("Cs",)), max_size=40))
+@given(
+    suffix=st.text(alphabet=st.characters(blacklist_categories=("Cs",)), max_size=40)
+)
 def test_documented_manual_baseline_publishes_repeat_refresh(tmp_path, suffix):
     """The documented baseline flow publishes any refreshed bytes and preserves main."""
     # Every property example gets independent Git histories, even though pytest
@@ -285,8 +328,12 @@ def test_documented_manual_baseline_publishes_repeat_refresh(tmp_path, suffix):
         assert result.returncode == 0, result.stdout + result.stderr
         assert "NO-OP TEST GATE" in result.stdout
         published = subprocess.run(
-            ["git", "show", f"oracle-data:{REPORT}"], cwd=remote, env=env,
-            capture_output=True, check=True, timeout=30,
+            ["git", "show", f"oracle-data:{REPORT}"],
+            cwd=remote,
+            env=env,
+            capture_output=True,
+            check=True,
+            timeout=30,
         ).stdout
         assert published == refreshed
         assert _git(remote, env, "rev-parse", "main") == main_before

@@ -25,6 +25,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from test_oracle_data import data as oracle_data
 
 REPO_ROOT = Path(__file__).parents[1]
 SCRIPT = "scripts/commit_refreshed_report.sh"
@@ -108,7 +109,9 @@ def _isolated_rulespec_checkout(tmp_path, monkeypatch):
     # Bare CI has no RuleSpec checkout. Keep the absent source under this
     # test's own directory so developer scratch cannot change publication.
     monkeypatch.setitem(
-        GIT_ENV, "RULESPEC_DE_REPO", str(tmp_path / "absent-rulespec-de"),
+        GIT_ENV,
+        "RULESPEC_DE_REPO",
+        str(tmp_path / "absent-rulespec-de"),
     )
 
 
@@ -127,6 +130,20 @@ def _git(cwd: Path, *args: str) -> str:
         capture_output=True,
         text=True,
     ).stdout.strip()
+
+
+def _bind_seed_snapshot(seed: Path) -> None:
+    """Bind the staged fixture's identities without claiming freshness gates.
+
+    Both initial branches represent an already published baseline. Recording
+    its binding here keeps idle tests focused on actual refresh behavior.
+    """
+    tree = _git(seed, "write-tree")
+    document = oracle_data._snapshot_document(seed, tree)
+    (seed / oracle_data.SNAPSHOT_PATH).write_text(
+        json.dumps(document, sort_keys=True) + "\n"
+    )
+    _git(seed, "add", "--", oracle_data.SNAPSHOT_PATH)
 
 
 @pytest.fixture(scope="session")
@@ -148,10 +165,10 @@ def seed_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
     _grant_perturbation_headroom(seed)
     _git(seed, "init", "-q", "-b", "main")
     _git(seed, "add", "-A")
+    _bind_seed_snapshot(seed)
     _git(seed, "commit", "-q", "-m", "seed")
     _git(seed, "checkout", "-q", "-b", DATA_BRANCH)
     return seed
-
 
 
 #: Suites whose reports the tests perturb to simulate a rerun.
@@ -193,6 +210,7 @@ def _grant_perturbation_headroom(seed: Path) -> None:
             row["unexplained_max"] = int(row.get("unexplained_max", 0)) + 1
     doc["ratchets"] = sorted(rows, key=lambda row: row["suite"])
     path.write_text(yaml.safe_dump(doc, sort_keys=False, width=100))
+
 
 @pytest.fixture()
 def origin(seed_repo: Path, tmp_path: Path) -> Path:
@@ -546,9 +564,13 @@ def test_refresh_uses_current_main_source_and_preserves_latest_data(origin, tmp_
     future_import = "from __future__ import annotations\n"
     assert future_import in code
     marker = "publisher used current main producer"
-    producer.write_text(code.replace(future_import, f'{future_import}\nprint("{marker}")\n'))
+    producer.write_text(
+        code.replace(future_import, f'{future_import}\nprint("{marker}")\n')
+    )
     (source / "SOURCE_NOTE.md").write_text("new source release\n")
-    _git(source, "add", "--", "scripts/generate_dashboard_overview.py", "SOURCE_NOTE.md")
+    _git(
+        source, "add", "--", "scripts/generate_dashboard_overview.py", "SOURCE_NOTE.md"
+    )
     _git(source, "commit", "-q", "-m", "update source producer")
     source_sha = _git(source, "rev-parse", "HEAD")
     _git(source, "push", "-q", "origin", "HEAD:main")
@@ -595,8 +617,8 @@ def test_de_refresh_rebinds_entire_certificate_chain(origin, tmp_path):
     # subordinate-instrument frontier is undeclared: a refresh must rebind
     # every artifact while keeping the honest certified=no.
     assert certificate["blockers"] == [
-        'closed: instrument frontier incomplete — 4 of 492 subordinate/bearing instruments pending disposition (oracles#491)',
-        'closed: dependency closure open — 145 open dependencies (8 law-derived inputs, 0 unclassified inputs, 137 bearing instruments) (CERTIFIED.md v3)',
+        "closed: instrument frontier incomplete — 4 of 492 subordinate/bearing instruments pending disposition (oracles#491)",
+        "closed: dependency closure open — 145 open dependencies (8 law-derived inputs, 0 unclassified inputs, 137 bearing instruments) (CERTIFIED.md v3)",
     ]
     assert certificate["certified"]["value"] is False
     assert certificate["certified"]["state"] == "no"
@@ -706,7 +728,9 @@ def test_self_heals_preexisting_staleness(origin, tmp_path):
     # actual scores, and guard against this control losing coverage again.
     detail_path = "conformance/detail/us-pe.json"
     policies = json.loads((broken / detail_path).read_text())["policies"]
-    policy = next(row for row in policies if row["id"] == "us-pe:additional_medicare_tax")
+    policy = next(
+        row for row in policies if row["id"] == "us-pe:additional_medicare_tax"
+    )
     assert policy["covered"] and policy["output_attestation"] == "attested"
     assert policy["attested_outputs"] == ["additional_medicare_tax"]
     sentinel = _perturb_report(broken, SCOREBOARD_REPORT)
@@ -1104,7 +1128,9 @@ def _git_subcommands(trace: Path) -> list[str]:
     ["main", "master", "other", "refs/heads/oracle-data", "oracle-data:main"],
 )
 @pytest.mark.parametrize("mode", ["single", "publish", "simulate"])
-def test_invalid_publication_target_fails_before_any_git_command(tmp_path, target, mode):
+def test_invalid_publication_target_fails_before_any_git_command(
+    tmp_path, target, mode
+):
     """Reject protected branches and alternate ref spellings before any action."""
     script = tmp_path / SCRIPT
     script.parent.mkdir()
@@ -1146,15 +1172,20 @@ def _write_bundle(
         assert baseline_root is not None, "nonempty bundles need their packing baseline"
         entry = subprocess.run(
             ["git", "--literal-pathspecs", "ls-tree", "-z", "HEAD", "--", path],
-            cwd=baseline_root, env={**os.environ, **GIT_ENV},
-            capture_output=True, check=True,
+            cwd=baseline_root,
+            env={**os.environ, **GIT_ENV},
+            capture_output=True,
+            check=True,
         )
         if not entry.stdout:
             baseline[path] = None
             continue
         original = subprocess.run(
-            ["git", "show", f"HEAD:{path}"], cwd=baseline_root,
-            env={**os.environ, **GIT_ENV}, capture_output=True, check=True,
+            ["git", "show", f"HEAD:{path}"],
+            cwd=baseline_root,
+            env={**os.environ, **GIT_ENV},
+            capture_output=True,
+            check=True,
         )
         baseline[path] = hashlib.sha256(original.stdout).hexdigest()
     root = bundles / (directory or suite)
@@ -1413,9 +1444,7 @@ def test_publish_retries_after_a_rejected_push(origin, tmp_path):
     assert doc["provenance"]["generated_at"] == sentinel
 
 
-def test_publish_ratchet_refusal_names_every_suite_and_pushes_nothing(
-    origin, tmp_path
-):
+def test_publish_ratchet_refusal_names_every_suite_and_pushes_nothing(origin, tmp_path):
     """Each bundle passed the ratchet where it ran, but the tip moved: the
     combined tree is over a ceiling. The publisher refuses the whole publish
     loudly, naming every suite in it, rather than dropping any silently."""
@@ -1424,11 +1453,15 @@ def test_publish_ratchet_refusal_names_every_suite_and_pushes_nothing(
     _perturb_report(leg, SIBLING_REPORT)
     bundles = tmp_path / "refreshed"
     _write_bundle(
-        bundles, "nc-income-tax-liability", {REPORT: (leg / REPORT).read_bytes()},
+        bundles,
+        "nc-income-tax-liability",
+        {REPORT: (leg / REPORT).read_bytes()},
         baseline_root=leg,
     )
     _write_bundle(
-        bundles, "mi-income-tax-liability", {SIBLING_REPORT: (leg / SIBLING_REPORT).read_bytes()},
+        bundles,
+        "mi-income-tax-liability",
+        {SIBLING_REPORT: (leg / SIBLING_REPORT).read_bytes()},
         baseline_root=leg,
     )
     _pin_ratchet_at_live(origin, tmp_path, "nc-income-tax-liability")
