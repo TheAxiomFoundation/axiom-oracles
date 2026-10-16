@@ -39,6 +39,14 @@ from .population import (
     load_populace_dataset,
     populace_data_requirement,
 )
+from .relation_binding import (
+    RelationBinder,
+    attach_relation_binding_diagnostics,
+    bind_materialized_relations,
+    bind_request_relations,
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
+)
 
 try:
     import numpy as np
@@ -360,8 +368,7 @@ JURISDICTION_CONFIGS = {
             "snap_individual_utility_allowance",
         ),
         relation_id=(
-            "us:policies/usda/snap/state-plan-composition"
-            "#relation.member_of_household"
+            "us:policies/usda/snap/state-plan-composition#relation.member_of_household"
         ),
         member_entity_type="Person",
         temp_prefix="ny-snap-pe-populace-",
@@ -821,7 +828,10 @@ def resolve_program_path(
     ):
         return cwd_program.resolve()
     return (
-        workspace_root / "rulespec-us" / config.jurisdiction / config.program_relative_path
+        workspace_root
+        / "rulespec-us"
+        / config.jurisdiction
+        / config.program_relative_path
     ).resolve()
 
 
@@ -1776,9 +1786,12 @@ def run_axiom_cases(
         "end": period.end.isoformat(),
         "name": period.label,
     }
+    ambiguities = []
     inputs = []
     relations = []
     queries = []
+    artifact_payload = json.loads(artifact.read_text())
+    relation_binder = RelationBinder(artifact_payload)
     for case in cases:
         entity_id = f"spm-{case.spm_unit_id}"
         for name, value in case.inputs.items():
@@ -1797,7 +1810,14 @@ def run_axiom_cases(
                 relations.append(
                     {
                         "name": current_relation_id,
-                        "tuple": [member_entity_id, entity_id],
+                        "tuple": relation_binder.tuple(
+                            current_relation_id,
+                            owner_id=entity_id,
+                            owner_kind="Household",
+                            related_id=member_entity_id,
+                            related_kind=member_entity_type,
+                            binding_ambiguities=ambiguities,
+                        ),
                         "interval": interval,
                     }
                 )
@@ -1824,6 +1844,13 @@ def run_axiom_cases(
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": queries,
     }
+    request, raw_ambiguities = bind_materialized_relations(
+        request,
+        artifact_payload,
+        materialized=set(range(len(relations))),
+        binder=bind_request_relations,
+    )
+    ambiguities.extend(raw_ambiguities)
     result = subprocess.run(
         [str(binary), "run-compiled", "--artifact", str(artifact)],
         input=json.dumps(request),
@@ -1835,6 +1862,7 @@ def run_axiom_cases(
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or result.stdout.strip())
     payload = json.loads(result.stdout)
+    attach_relation_binding_diagnostics(payload["results"], ambiguities)
     return payload["results"]
 
 
@@ -2171,6 +2199,17 @@ def main(args: argparse.Namespace | None = None) -> int:
         output_id_by_label=config.output_id_by_label,
         utility_allowance_labels=config.utility_allowance_labels,
     )
+    diagnostics: dict = {}
+    for result in results:
+        merge_relation_binding_diagnostics(
+            diagnostics, result.get("relation_binding_diagnostics", {})
+        )
+    if diagnostics.get("count"):
+        dataset_identity["relation_binding_diagnostics"] = (
+            public_relation_binding_diagnostics(
+                diagnostics,
+            )
+        )
     if "snapscreener" in args.external_oracle:
         bundle = snapscreener.ensure_api_js(
             api_js=args.snapscreener_api_js,
