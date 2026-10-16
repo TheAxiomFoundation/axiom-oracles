@@ -830,6 +830,14 @@ def test_weighted_mass_must_be_finite_and_nonnegative():
             },
         )
         try:
+            if marker == "finite":
+                # Strict artifact admission rejects non-standard JSON before
+                # it can contribute any leg counts or weighted evidence.
+                with pytest.raises(
+                    ValueError, match="non-standard JSON numeric constant.*NaN"
+                ):
+                    _verdict(name)
+                continue
             leg, _e, defects = _verdict(name)
             assert leg["clean"] is False, marker
             assert any(marker in d for d in defects), (marker, defects)
@@ -1111,7 +1119,7 @@ def test_bridge_manifest_identity_fields_are_typed():
 
 
 def test_dropping_strict_opt_in_drops_bridge_audited():
-    """MUTANT (delta-audit finding): a strict-clean lane that removes or
+    """MUTANT: a strict-clean lane that removes or
     falsifies its `strict: true` opt-in must LOSE bridge_audited — otherwise
     the lane could silence future --strict enforcement while its census row
     and certificate kept claiming audited/exercised. The opt-in is part of the
@@ -2806,7 +2814,7 @@ def test_census_binds_strict_manifest_identity():
     assert census._manifest_strict_audit()["dk-child-youth-benefit"] == before
 
 
-# ── strict covered_by: typed, suite-bound evidence (delta audits #2–#5) ─────
+# ── strict covered_by: typed, suite-bound evidence ────────────────────────
 
 
 COUPLE_REPORT = "dashboard/public/data/axiom-euromod-dk-child-youth-benefit-couple.json"
@@ -3001,6 +3009,8 @@ def test_closure_check_pins_to_recorded_commit(tmp_path):
     cl = importlib.util.module_from_spec(spec)
     sys.modules["_mutant_closure_ledger"] = cl
     spec.loader.exec_module(cl)
+    if not cl.CORPUS_RELEASE_PATH.parent.is_dir():
+        pytest.skip("needs the local corpus checkout for full DK re-derivation")
     recorded = yaml.safe_load(
         (REPO / "conformance/closure/dk-boerne-og-ungeydelse.yaml").read_text()
     )["generated_facts"]["rulespec"]["commit"]
@@ -3022,7 +3032,7 @@ def test_closure_check_pins_to_recorded_commit(tmp_path):
 
 
 def test_strict_evidence_rejects_never_shipped_files():
-    """MUTANT (delta-audit #4): a gitignored __pycache__/*.pyc under an
+    """MUTANT: a gitignored __pycache__/*.pyc under an
     evidence root exists on this disk but in no clone and not in the refresh
     bot's rsync'd tree; it passed as strict evidence. Never-shipped
     components/suffixes are rejected outright, and — when the tree is a git
@@ -3052,7 +3062,7 @@ def test_strict_evidence_rejects_never_shipped_files():
 
 
 def test_producers_must_agree_on_one_rulespec_commit(tmp_path, monkeypatch):
-    """MUTANT (delta-audit #6): the closure ledger and executable receipt each
+    """MUTANT: the closure ledger and executable receipt each
     verify their OWN recorded pin, so a ledger coherently regenerated at
     9986b603 passes its own check while the receipt sits at bbc987b0 (byte-
     identical modules, different commit). certify must refuse to treat those
@@ -3149,7 +3159,7 @@ def test_nz_program_scoped_producers_must_agree_on_one_rulespec_commit(
 
 
 def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
-    """MUTANT (delta-audit #7): a 40-DIGIT YAML integer is a legal scalar
+    """MUTANT: a 40-DIGIT YAML integer is a legal scalar
     that `str(commit)` turned into a passing "sha"; certification then emitted
     a computed closed premise while the commit cross-check silently skipped
     the non-string. The validator now requires a string SHA and ref==commit
@@ -3168,7 +3178,7 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     assert cl._validation_errors(baseline) == []
 
     digits = int("1" * 40)  # a 40-digit integer, not a hex string
-    # delta-audit #8: the !!str-tagged form is a 40-char DECIMAL string, which
+    # The !!str-tagged form is a 40-char DECIMAL string, which
     # is syntactically valid hex — it must still fail (a real git object id
     # has at least one of a-f; a decimal-only id is the forgery shape).
     digit_str = "1234567890123456789012345678901234567890"
@@ -3216,7 +3226,7 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
     ]
     assert cert["certified"]["value"] is False
 
-    # delta-audit #8: COORDINATED equal digit-only strings on both computed
+    # COORDINATED equal digit-only strings on both computed
     # sides satisfied plain equality. Equality now counts only between values
     # that are each a canonical git object id.
     original_exec = certify._producer_executable_verdict
@@ -3254,7 +3264,7 @@ def test_ledger_commit_must_be_a_string_sha_and_ref_must_equal_commit():
 
 
 def test_executable_receipt_rejects_digit_only_sha():
-    """delta-audit #8: the receipt's own sha regex accepted a decimal-only
+    """The receipt's own sha regex accepted a decimal-only
     40-char string; canonical git object ids need at least one of a-f."""
     er = _load("executable_reproduction")
     document = json.loads(
@@ -4151,6 +4161,9 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
     certify = _load("certify")
     # The committed evidence is complete and computed; only the executable
     # verdict is forged here, in both directions.
+    closure_commit = json.loads((REPO / "closure/de/summary.json").read_text())[
+        "rulespec_commit"
+    ]
     signed = {
         "id": "signed-rulespec-estg-66-2025",
         "state": "valid",
@@ -4162,7 +4175,7 @@ def test_de_certificate_flips_only_from_complete_legs_and_computed_replay(
         "trusted_key_id": f"sha256:{'5' * 64}",
         "checkout_observation": {
             "repository": "TheAxiomFoundation/rulespec-de",
-            "commit": "6" * 40,
+            "commit": closure_commit,
             "tree": "7" * 40,
             "claim_mode": "attested",
         },
@@ -5482,7 +5495,7 @@ rules:
         == descriptor["encoding_manifest"]["source_file_sha256"]
     )
     wrong_checkout_commit = copy.deepcopy(descriptor)
-    wrong_checkout_commit["checkout_observation"]["commit"] = "0" * 40
+    wrong_checkout_commit["checkout_observation"]["commit"] = "a" * 40
     with pytest.raises(executable.DEExecutableError, match="pinned commit"):
         executable._validate_signed_descriptor_document(wrong_checkout_commit, manifest)
 
@@ -6247,3 +6260,17 @@ def test_de_census_and_certificate_carry_the_same_closure_blockers():
         )
         assert rows[program]["certificate_status"] == "pending"
         assert certificate["certified"]["value"] is False
+
+
+def test_de_certificate_leg_counts_completed_axiom_mismatches(monkeypatch):
+    certify = _load("certify")
+    entry = certify.PROGRAMS["de/kindergeld"]["suites"][0]
+    report = json.loads((REPO / entry["report"]).read_text())
+    axiom_leg = report["views"]["de/kindergeld"]["legs"][1]
+    axiom_leg["match_count"] -= 1
+    axiom_leg["mismatch_count"] += 1
+    monkeypatch.setattr(certify, "_load", lambda _path: report)
+    monkeypatch.setattr(certify, "_rederived_de_report", lambda: report)
+    leg, _evidence, _defects = certify._de_suite_verdict(entry)
+    assert leg["unexplained"] == leg["mismatches"] == 1
+    assert not leg["clean"]

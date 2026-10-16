@@ -42,6 +42,11 @@ from typing import Any
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 ARTIFACT = ROOT / "conformance/closure/us-tariff-duty.yaml"
 CORPUS = Path.home() / "TheAxiomFoundation/axiom-corpus"
 CORPUS_REF = "bef19f24206a9de4ef29d9ba2b5924f3cc6a00c6"
@@ -606,6 +611,8 @@ def _blob_facts(
     root: Path, ref: str, relative: str
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     commit = _git(root, "rev-parse", "--verify", f"{ref}^{{commit}}").decode().strip()
+    if not GIT_SHA.fullmatch(commit):
+        raise ValueError(f"invalid source commit {commit!r}")
     blob = _git(root, "show", f"{commit}:{relative}")
     rows = [json.loads(line) for line in blob.splitlines() if line.strip()]
     return rows, {
@@ -1537,6 +1544,9 @@ def validate(
     instrument_graph_path: Path = INSTRUMENT_GRAPH,
 ) -> list[str]:
     errors: list[str] = []
+    for label, commit in (("corpus", CORPUS_REF), ("RuleSpec", RULESPEC_REF)):
+        if not isinstance(commit, str) or not GIT_SHA.fullmatch(commit):
+            errors.append(f"{label} pin must be a full lowercase commit SHA")
     try:
         instrument_graph, expected_instrument_graph_facts = _load_instrument_graph(
             instrument_graph_path

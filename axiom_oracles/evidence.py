@@ -52,11 +52,20 @@ def _finite_json_float(value: str) -> float:
     return parsed
 
 
+def _reject_duplicate_json_keys(pairs: list[tuple[str, object]]) -> dict:
+    keys = Counter(key for key, _value in pairs)
+    duplicates = sorted(key for key, count in keys.items() if count > 1)
+    if duplicates:
+        raise ValueError(f"duplicate JSON key(s) {duplicates!r}")
+    return dict(pairs)
+
+
 def strict_json_loads(raw: str | bytes) -> object:
-    """Parse standards-compliant JSON and reject every non-finite number."""
+    """Parse standards-compliant JSON with finite numbers and unique keys."""
 
     return json.loads(
         raw,
+        object_pairs_hook=_reject_duplicate_json_keys,
         parse_constant=_reject_json_constant,
         parse_float=_finite_json_float,
     )

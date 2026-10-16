@@ -97,19 +97,17 @@ from pathlib import Path
 
 import yaml
 
+from axiom_oracles.conformance.unexplained import (
+    CLASSIFIED_DISPOSITION_KINDS,
+    require_count,
+)
+
 from .pe_axiom_standard import validate_axiom_side_fields
 
 DISPOSITIONS_SCHEMA_VERSION = "axiom_oracles.dispositions.v1"
 DISPOSITIONED_REPORT_SCHEMA_VERSION = "axiom.comparison_report.v2.1"
 
-EXPLAINED_DISPOSITION_KINDS = (
-    "explained_residual",
-    "upstream_engine_gap",
-    "bridge_artifact",
-)
-CLASSIFIED_DISPOSITION_KINDS = EXPLAINED_DISPOSITION_KINDS + (
-    "axiom_encoding_gap",
-)
+EXPLAINED_DISPOSITION_KINDS = CLASSIFIED_DISPOSITION_KINDS[:3]
 DISPOSITION_KINDS = CLASSIFIED_DISPOSITION_KINDS + ("unexplained",)
 
 DEFAULT_ARITHMETIC_TOLERANCE = 0.005
@@ -557,7 +555,7 @@ def selected_rows_sha256(rows: list[dict]) -> str:
     Sorted by case id; each row contributes its identity plus the exact
     ``left``/``right``/signed ``difference`` values, so any value movement —
     sign flips, balanced multi-row swaps, anything that preserves aggregates —
-    changes the digest (sol closing review r2 finding 2).
+    changes the digest.
     """
     canonical = sorted(
         [
@@ -641,10 +639,17 @@ def apply_dispositions(
     """
 
     merged = dict(report)
-    summary = dict(report.get("summary") or {})
-    comparison_count = summary.get("comparison_count") or 0
-    match_count = summary.get("match_count") or 0
-    mismatch_count = summary.get("mismatch_count") or 0
+    raw_summary = report.get("summary", {})
+    if not isinstance(raw_summary, dict):
+        raise ValueError("summary must be an object")
+    summary = dict(raw_summary)
+    admitted = {
+        field: require_count(summary.get(field, 0), field, report.get("suite", "<unknown>"))
+        for field in ("comparison_count", "match_count", "mismatch_count")
+    }
+    comparison_count = admitted["comparison_count"]
+    match_count = admitted["match_count"]
+    mismatch_count = admitted["mismatch_count"]
 
     entries = list((dispositions or {}).get("entries") or [])
     counts = {kind: 0 for kind in DISPOSITION_KINDS}
@@ -676,7 +681,7 @@ def apply_dispositions(
             break
         row_winner.append(winner)
 
-    # Selector-binding validation (sol closing review F4, hardened in r2):
+    # Selector-binding validation:
     # the binding pins a canonical per-row digest of the selected population
     # — identity plus left/right/signed difference — so ANY value movement,
     # including sign flips and balanced multi-row changes that preserve
@@ -733,6 +738,11 @@ def apply_dispositions(
     classified_rows = sum(
         counts[kind] for kind in CLASSIFIED_DISPOSITION_KINDS
     )
+    if classified_rows > mismatch_count:
+        raise ValueError(
+            f"classified_rows ({classified_rows}) exceeds mismatch_count "
+            f"({mismatch_count})"
+        )
     summary["dispositioned"] = {
         "schema_version": DISPOSITIONS_SCHEMA_VERSION,
         "dispositions_file": dispositions_file,
@@ -746,7 +756,7 @@ def apply_dispositions(
         "explained_rate": _percentage(
             match_count + classified_rows, comparison_count
         ),
-        "unexplained_count": max(mismatch_count - classified_rows, 0),
+        "unexplained_count": mismatch_count - classified_rows,
         "counts": counts,
         "expired_entries": expired,
         "orphaned_entries": orphaned,
@@ -770,12 +780,11 @@ def assignment_digest(report: dict) -> str:
     list and hashes it. Aggregate counts cannot distinguish two entries of
     equal cardinality swapping disposition classes; this digest can, so a
     premerged-slim dashboard block that embeds it is bound to the exact
-    row-level assignment a fresh merge over the full report produces (sol
-    stack review r2, F2 residual). A sorted LIST — never a mapping keyed
+    row-level assignment a fresh merge over the full report produces.
+    A sorted LIST — never a mapping keyed
     by case_id — because a case validly carries one mismatch row per
     concept, and a map would let same-case rows overwrite each other,
-    hiding count-preserving reclassifications among them (sol stack
-    review r3).
+    hiding count-preserving reclassifications among them.
     """
 
     assignment: list[list[str | None]] = []

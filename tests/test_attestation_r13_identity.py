@@ -19,16 +19,17 @@ from axiom_oracles.core.case import Case
 from axiom_oracles.core.results import EngineResult
 
 
-def _report(*, summed=False, compact=False, stamped=False, value=0):
+def _report(*, summed=False, compact=False, stamped=False, value=0, mismatched=False):
     targets = ["ordinary_tax", "gains_tax"] if summed else "tax"
     mapping = ProgramMapping(
         standard="probe:tax#identity", description="Tax", category="tax",
         comparison="amount", targets={engine: targets for engine in ("axiom", "policyengine")},
     )
     values = {name: value for name in targets} if summed else {targets: value}
+    reference_values = {name: amount + 1 for name, amount in values.items()} if mismatched else values
     comparisons = Comparator([mapping]).compare(
         [EngineResult("axiom", "real-case", values)],
-        [EngineResult("policyengine", "real-case", values)],
+        [EngineResult("policyengine", "real-case", reference_values)],
     )
     report = build_comparison_report(
         suite_name="identity-probe", population="synthetic", locales=set(), scope=None,
@@ -214,7 +215,8 @@ def test_native_fiit_missing_or_reconciled_headings_preserve_zero_coverage(headi
 
 
 def _disposition_metadata_report():
-    report, resolver, universe = _report()
+    # Classify a real returned mismatch; the top-level row below is metadata.
+    report, resolver, universe = _report(mismatched=True)
     report["summary"]["dispositioned"] = {
         "unexplained_count": 0, "counts": {"upstream_engine_gap": 1},
     }

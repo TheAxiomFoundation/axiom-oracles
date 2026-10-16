@@ -35,6 +35,7 @@ SCRIPTS = REPO_ROOT / "scripts"
 from axiom_oracles.conformance.attestation import (  # noqa: E402
     EXECUTION_ATTESTATION_SCHEMA,
 )
+from axiom_oracles.conformance.observations import json_output_values  # noqa: E402
 
 
 def _load_script(name: str):
@@ -226,6 +227,11 @@ def test_attested_value_refresh_stays_stale_until_regenerated(
                 report["summary"]["match_count"] = 0
                 report["summary"]["mismatch_count"] = comparisons
             report_path.write_text(json.dumps(report))
+            if perturbation in {"infinity", "nan"}:
+                with pytest.raises(ValueError, match="invalid dashboard JSON"):
+                    _regenerate(sb)
+            # Native producers serialize nonfinite returned numbers as null.
+            report_path.write_text(json.dumps(json_output_values(report), allow_nan=False))
 
             # Checking never repairs artifacts: they remain red until a write.
             assert _run_check(sb, monkeypatch) == 1
