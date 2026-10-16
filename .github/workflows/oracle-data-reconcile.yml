@@ -60,24 +60,32 @@ jobs:
       - name: Reconcile and publish current main data
         run: |
           if [ "${GITHUB_EVENT_NAME:-}" = "schedule" ]; then
-            # Consumer materialization can overlay generated files. Probe in a
-            # disposable checkout so the publisher stays clean on a no-op.
+            # Probe both readers and the producer's exact-candidate gates in
+            # a disposable checkout so a no-op leaves the publisher clean.
             if (
               probe_dir="$(mktemp -d "$RUNNER_TEMP/oracle-data-probe.XXXXXX")" || exit 1
-              trap 'rm -rf "$probe_dir"' EXIT
+              trap 'python3 -c "import shutil, sys; shutil.rmtree(sys.argv[1])" "$probe_dir"' EXIT
               origin_url="$(git remote get-url origin)" || exit 1
+              # The reader intentionally falls back to main for a missing
+              # branch; a schedule must bootstrap that publication instead.
+              git ls-remote --exit-code --heads "$origin_url" refs/heads/oracle-data >/dev/null || exit 1
               # Chain setup explicitly: errexit is disabled inside an if test.
               git clone --quiet --shared --no-checkout . "$probe_dir" &&
               git -C "$probe_dir" remote set-url origin "$origin_url" &&
               git -C "$probe_dir" fetch --quiet --no-tags origin refs/heads/main &&
               git -C "$probe_dir" checkout --quiet --detach FETCH_HEAD &&
               cd "$probe_dir" &&
-              python3 scripts/oracle_data.py materialize
+              python3 scripts/oracle_data.py materialize &&
+              # Restore the consumer overlay before preparing the clean
+              # producer baseline. Untracked published additions need clean.
+              git reset --hard --quiet HEAD &&
+              python3 -c 'from scripts.oracle_data import DATA_PATHS; import subprocess; subprocess.run(["git", "clean", "-fdx", "--", *DATA_PATHS], check=True)' &&
+              python3 scripts/oracle_data.py verify-baseline
             ); then
-              echo "Consumer materialization succeeds; no reconciliation needed."
+              echo "Consumer reads and producer baseline gates succeed; no reconciliation needed."
               exit 0
             fi
-            echo "Consumer probe failed; reconciling current main and data."
+            echo "Consumer or producer probe failed; reconciling current main and data."
           fi
           for attempt in 1 2 3; do
             python3 scripts/oracle_data.py prepare --reconcile
@@ -86,6 +94,7 @@ jobs:
             python3 -c 'from scripts.oracle_data import DATA_PATHS; import subprocess; subprocess.run(["git", "clean", "-fdx", "--", *DATA_PATHS], check=True)'
             SIMULATE_DERIVED_REFRESH=1 scripts/commit_refreshed_report.sh reconcile oracle-data
             if python3 scripts/oracle_data.py publish --group all \
+              --bootstrap \
               --message "data: reconcile reviewed main changes"; then
               exit 0
             fi

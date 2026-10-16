@@ -331,7 +331,9 @@ def _run_scheduled_reconcile(case, tmp_path):
         },
         capture_output=True,
         text=True,
-        timeout=90,
+        # The probe and publication now run separate exact-candidate gates;
+        # include their disposable Git checkouts within this bounded fixture.
+        timeout=180,
     )
     assert result.returncode == 0, result.stdout + result.stderr
     assert not list(runner_temp.iterdir()), "the scratch probe checkout must be removed"
@@ -415,11 +417,112 @@ def test_scheduled_reconcile_with_readable_data_publishes_nothing(
     before_data = _published(case)
     before_main = git(case.origin, "rev-parse", data.MAIN_REF)
     _run_scheduled_reconcile(case, tmp_path)
-    assert not case.activity.exists(), "a healthy read needs no generation or gates"
+    assert case.activity.read_text().splitlines() == ["gate"], (
+        "a healthy no-op must verify the producer baseline without regeneration"
+    )
     assert _published(case) == before_data
     assert git(case.origin, "rev-parse", data.MAIN_REF) == before_main
     assert _state(case.publisher) == before_checkout
     assert git(case.publisher, "status", "--porcelain") == ""
+
+
+def test_scheduled_reconcile_creates_missing_data_branch(
+    scheduled_reconcile_case, tmp_path
+):
+    from test_oracle_data import data, git
+    from test_oracle_data_snapshot_properties import _read
+
+    case = scheduled_reconcile_case
+    git(case.origin, "update-ref", "-d", data.DATA_REF)
+    before_main = git(case.origin, "rev-parse", data.MAIN_REF)
+    # Main already has a valid binding and fresh aggregates. The reader's
+    # intentional fallback succeeds, but a schedule still must create the
+    # publication branch even when generation produces no changed bytes.
+    assert _read(case, baseline=False)
+    result = _run_scheduled_reconcile(case, tmp_path)
+    assert "no reconciliation needed" not in result.stdout
+    assert case.activity.read_text().splitlines() == ["generate", "gate"]
+    assert git(case.origin, "show-ref", "--verify", data.DATA_REF)
+    assert git(case.origin, "rev-parse", data.DATA_REF) == before_main
+    assert git(case.origin, "rev-parse", data.MAIN_REF) == before_main
+    assert _read(case, baseline=False)
+
+
+@pytest.mark.parametrize("reviewed_change", ["generator", "manifest-order"])
+def test_scheduled_reconcile_repairs_readable_but_stale_producer_baseline(
+    scheduled_reconcile_case, tmp_path, reviewed_change
+):
+    import json
+
+    from test_oracle_data import commit, data, git
+    from test_oracle_data_snapshot_properties import (
+        KPI,
+        MANIFEST,
+        _assert_bound,
+        _overview,
+        _published,
+        _read,
+        _refresh,
+        _write,
+    )
+
+    case = scheduled_reconcile_case
+    if reviewed_change == "manifest-order":
+        # Match production serialization so the manifest union itself does
+        # not change the published binding; only aggregate freshness differs.
+        manifest = case.seed / MANIFEST
+        manifest.write_text(
+            json.dumps(json.loads(manifest.read_text()), indent=2) + "\n"
+        )
+        data.write_snapshot(case.seed)
+        case.main = commit(case.seed, {})
+        git(
+            case.seed,
+            "push",
+            "origin",
+            f"HEAD:{data.MAIN_REF}",
+            f"HEAD:{data.DATA_REF}",
+        )
+    assert _refresh(case, 1, "bot-report")
+    if reviewed_change == "generator":
+        script = case.seed / "scripts/generate_dashboard_overview.py"
+        script.write_text(
+            script.read_text().replace(
+                "axiom.dashboard_overview.v1", "axiom.dashboard_overview.v2"
+            )
+        )
+    else:
+        manifest = case.seed / MANIFEST
+        document = json.loads(manifest.read_text())
+        document["reports"].reverse()
+        manifest.write_text(json.dumps(document, indent=2) + "\n")
+    _overview(case.seed)
+    _overview(case.seed, check=True)
+    case.main = commit(case.seed, {})
+    git(case.seed, "push", "origin", f"HEAD:{data.MAIN_REF}")
+    git(case.reader, "fetch", "origin", data.MAIN_REF)
+    git(case.reader, "reset", "--hard", "FETCH_HEAD")
+    assert data.materialize(case.reader), "the consumer binding remains readable"
+    _assert_bound(case.reader)
+    data.prepare(case.publisher)
+    _write(case.publisher, KPI, {"revision": 2})
+    with pytest.raises(data.DataError, match="publication freshness gates failed"):
+        data.publish(case.publisher, group="kpi", message="stale producer probe")
+    case.activity.unlink()
+    before_data = _published(case)
+    before_main = git(case.origin, "rev-parse", data.MAIN_REF)
+
+    result = _run_scheduled_reconcile(case, tmp_path)
+    assert "no reconciliation needed" not in result.stdout
+    assert case.activity.read_text().splitlines() == ["gate", "generate", "gate"]
+    assert _published(case) != before_data
+    assert git(case.origin, "rev-parse", data.MAIN_REF) == before_main
+    assert _read(case, baseline=False)
+    # Demonstrate that a subsequent ordinary KPI publisher is no longer
+    # waiting for the reconciliation that a read-only probe would skip.
+    data.prepare(case.publisher)
+    _write(case.publisher, KPI, {"revision": 3})
+    assert data.publish(case.publisher, group="kpi", message="fresh producer probe")
 
 
 def test_reconcile_workflow_retries_a_source_only_main_race(tmp_path, monkeypatch):

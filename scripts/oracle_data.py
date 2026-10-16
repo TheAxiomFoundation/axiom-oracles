@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Publish generated oracle data separately from protected source history.
 
-``prepare`` is destructive and belongs in a disposable publisher checkout:
-it combines current main source with the latest data before generation.
+``prepare`` and ``verify-baseline`` are destructive and require a disposable checkout.
+They combine current main source with the latest data before generation/checks.
 ``materialize`` changes only generated files in a reader's worktree; its
 optional ``--baseline`` prepares an unverified detached producer merge so
 generation can reconcile reviewed main data with already-published data.
@@ -246,7 +246,68 @@ def _merge_tree(
                 "comparisons/README.md#recovering-source-data-conflicts"
             )
     manifest = _manifest_union(root, source, data, prefer_data=prefer_data)
-    if not conflicts and manifest is None:
+    merged = {
+        path: identity
+        for path, identity in _tree_identities(root, tree, list(DATA_PATHS)).items()
+        if identity["oid"] is not None
+    }
+    source_files = _tree_identities(root, source, list(merged))
+    data_files = _tree_identities(root, data, list(merged))
+    synthetic = [
+        path
+        for path, identity in merged.items()
+        if identity not in (source_files[path], data_files[path])
+    ]
+    unsupported = [
+        path
+        for path in synthetic
+        if not any(
+            path.count("/") == pattern.count("/") and fnmatchcase(path, pattern)
+            for pattern in _regenerated_aggregates()
+        )
+    ]
+    if unsupported and not reconcile:
+        raise DataError(
+            "source/data merge failed; checkout unchanged; conflicting primary reports or authored inputs: "
+            + ", ".join(unsupported)
+            + "; keep reviewed main reports and follow "
+            "comparisons/README.md#recovering-source-data-conflicts"
+        )
+    # Ordinary producers must never regenerate an overview over a synthetic
+    # primary report. Disposable aggregates select a whole side until rebuilt.
+    preferred_files = data_files if prefer_data else source_files
+    reviewed = {path: preferred_files[path] for path in synthetic}
+    if reconcile:
+        # Enumerate every owned path changed on reviewed main since any merge
+        # base, including deletions, modes and files Git merged without a
+        # conflict. Generated documents are indivisible: a clean textual merge
+        # can silently combine results with unrelated provenance or totals.
+        bases = _git(root, "merge-base", "--all", source, data).stdout.splitlines()
+        paths = set()
+        for base in bases:
+            paths.update(
+                path.decode()
+                for path in _git(
+                    root,
+                    "diff",
+                    "--no-renames",
+                    "--name-only",
+                    "-z",
+                    base.decode(),
+                    source,
+                    "--",
+                    *DATA_PATHS,
+                ).stdout.split(b"\0")
+                if path
+            )
+        # Rename detection can carry a main edit into a bot's new destination,
+        # which is absent from main's changed-path list. No generated merge
+        # result may invent bytes, even at such a destination.
+        for path in synthetic:
+            if source_files[path]["oid"] is None:
+                reviewed[path] = data_files[path]
+        reviewed.update(_tree_identities(root, source, sorted(paths)))
+    if not conflicts and manifest is None and not reviewed:
         return tree
     # Resolve in a private index: a refused merge never touches HEAD, the real
     # index, or the worktree. Publishers verify after prepare; readers must
@@ -255,10 +316,25 @@ def _merge_tree(
         env = {**os.environ, "GIT_INDEX_FILE": str(Path(directory) / "index")}
         _git(root, "read-tree", tree, env=env)
         updates = []
+        source_conflicts = _tree_identities(root, source, list(conflicts))
+        data_conflicts = _tree_identities(root, data, list(conflicts))
         for path, stages in conflicts.items():
-            mode, oid = stages.get("3" if prefer_data else "2", ("0", "0" * 40))
+            if _in_scope(path, DATA_PATHS):
+                # Conflict stages can also be mapped from another pathname by
+                # rename detection. Select only an actual source-path blob.
+                identity = (data_conflicts if prefer_data else source_conflicts)[path]
+                if reconcile and identity["oid"] is None:
+                    identity = data_conflicts[path]
+                mode, oid = identity["mode"] or "0", identity["oid"] or "0" * 40
+            else:
+                mode, oid = stages.get("3" if prefer_data else "2", ("0", "0" * 40))
+            updates.append(f"{mode} {oid}\t{path}\0".encode())
+        for path, identity in reviewed.items():
+            mode, oid = identity["mode"] or "0", identity["oid"] or "0" * 40
             updates.append(f"{mode} {oid}\t{path}\0".encode())
         if manifest is not None:
+            # The manifest is freshly assembled metadata, never a line merge;
+            # retain report names from both sides for the regeneration chain.
             oid = (
                 _git(root, "hash-object", "-w", "--stdin", input=manifest)
                 .stdout.decode()
@@ -498,7 +574,7 @@ def _verify_publication(root: Path, tree: str) -> None:
             str(checkout),
         )
         candidate = _commit_tree(root, tree, _sha(root, "HEAD"))
-        _git(checkout, "checkout", "--quiet", "--detach", candidate)
+        _checkout_baseline(checkout, candidate)
         # A shared clone's origin is the disposable publisher, which need not
         # have a local main branch. NZ ancestor gates must see the actual
         # remote main history rather than silently losing their merge-base.
@@ -563,7 +639,15 @@ def _verify_publication(root: Path, tree: str) -> None:
                 "publication freshness gates failed; prepare and regenerate all affected aggregates; "
                 f"nothing committed:\n{output}{errors}"
             )
-        if _publication_tree(checkout, DATA_PATHS) != tree:
+        expected = {
+            path: identity
+            for path, identity in _tree_identities(root, tree, list(DATA_PATHS)).items()
+            if identity["oid"] is not None
+        }
+        if (
+            _worktree_identities(checkout, list(expected)) != expected
+            or _publication_tree(checkout, DATA_PATHS) != tree
+        ):
             raise DataError(
                 "freshness gates changed candidate generated files; nothing committed"
             )
@@ -661,8 +745,76 @@ def _worktree_identities(root: Path, paths: list[str]) -> dict:
     return identities
 
 
+def _restore_blobs(root: Path, identities: dict) -> None:
+    """Write raw Git blobs, bypassing attributes, encodings and clean/smudge filters."""
+    if any(
+        identity["oid"] is not None and identity["mode"] not in ("100644", "100755")
+        for identity in identities.values()
+    ):
+        raise DataError("cannot materialize non-regular generated files")
+    present = {path: value for path, value in identities.items() if value["oid"]}
+    if present:
+        # Stream one blob at a time through one Git process, keeping both memory
+        # and process counts bounded for full-corpus materializations.
+        with subprocess.Popen(
+            ["git", "cat-file", "--batch"],
+            cwd=root,
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ) as process:
+            assert process.stdin is not None and process.stdout is not None
+            try:
+                for path, identity in present.items():
+                    process.stdin.write(identity["oid"].encode() + b"\n")
+                    process.stdin.flush()
+                    header = process.stdout.readline().split()
+                    if len(header) != 3 or header[:2] != [
+                        identity["oid"].encode(),
+                        b"blob",
+                    ]:
+                        raise DataError(f"cannot read exact generated blob for {path}")
+                    remaining = int(header[2])
+                    target = root / path
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    fd, name = tempfile.mkstemp(
+                        prefix=".oracle-data-", dir=target.parent
+                    )
+                    try:
+                        with os.fdopen(fd, "wb") as output:
+                            while remaining:
+                                chunk = process.stdout.read(min(remaining, 1024 * 1024))
+                                if not chunk:
+                                    raise DataError(
+                                        f"truncated generated blob for {path}"
+                                    )
+                                output.write(chunk)
+                                remaining -= len(chunk)
+                        if process.stdout.read(1) != b"\n":
+                            raise DataError(
+                                f"invalid generated blob framing for {path}"
+                            )
+                        os.chmod(name, int(identity["mode"], 8) & 0o777)
+                        os.replace(name, target)
+                    finally:
+                        Path(name).unlink(missing_ok=True)
+                process.stdin.close()
+                if process.wait():
+                    raise DataError("cannot materialize exact generated blobs")
+            except (OSError, ValueError) as exc:
+                raise DataError(
+                    f"cannot materialize exact generated bytes: {exc}"
+                ) from exc
+            finally:
+                if process.poll() is None:
+                    process.terminate()
+    for path, identity in identities.items():
+        if identity["oid"] is None:
+            (root / path).unlink(missing_ok=True)
+
+
 def _guard_checkout_bytes(root: Path, paths: list[str]) -> None:
-    """Refuse transformations that could change bound bytes during restoration."""
+    """Refuse transformations while binding Git-staged producer bytes."""
     for name, safe in (
         ("core.autocrlf", {"false", "no", "off", "0", "input"}),
         ("core.eol", {"lf", "native"}),
@@ -694,7 +846,13 @@ def _guard_checkout_bytes(root: Path, paths: list[str]) -> None:
 
 
 def _guard_worktree(
-    root: Path, source: str, tree: str, paths: list[str], previous: dict
+    root: Path,
+    source: str,
+    tree: str,
+    paths: list[str],
+    previous: dict,
+    *,
+    baseline: bool = False,
 ) -> dict:
     # Check every target before restoring even the first one. A final-file
     # identity cannot detect a local directory symlink redirecting a deletion
@@ -726,9 +884,15 @@ def _guard_worktree(
             raise DataError(
                 "staged data overlaps published updates; checkout unchanged"
             )
-    _guard_checkout_bytes(root, paths)
     committed = _tree_identities(root, source, paths)
     desired = _tree_identities(root, tree, paths)
+    if any(
+        identity["oid"] is not None and identity["mode"] not in ("100644", "100755")
+        for identity in desired.values()
+    ):
+        raise DataError(
+            "cannot materialize non-regular generated files; checkout unchanged"
+        )
     current_files = _worktree_identities(root, paths)
     for path in paths:
         current = current_files[path]
@@ -738,6 +902,14 @@ def _guard_worktree(
         if current not in allowed:
             raise DataError(
                 f"local data edits overlap published update at {path}; checkout unchanged"
+            )
+        if (
+            baseline
+            and committed[path]["oid"] is not None
+            and current != committed[path]
+        ):
+            raise DataError(
+                "baseline requires a clean tracked checkout; checkout unchanged"
             )
     return desired
 
@@ -756,6 +928,20 @@ def _write_state(root: Path, state: dict) -> None:
 def _checkout_baseline(root: Path, commit: str) -> None:
     _git(root, "checkout", "--detach", "--force", commit)
     _git(root, "reset", "--hard", commit)
+    generated = {
+        path: identity
+        for path, identity in _tree_identities(root, commit, list(DATA_PATHS)).items()
+        if identity["oid"] is not None
+    }
+    actual = _worktree_identities(root, list(generated))
+    _restore_blobs(
+        root,
+        {
+            path: identity
+            for path, identity in generated.items()
+            if actual[path] != identity
+        },
+    )
 
 
 def prepare(root: Path | None = None, *, reconcile: bool = False) -> str:
@@ -766,7 +952,7 @@ def prepare(root: Path | None = None, *, reconcile: bool = False) -> str:
     data = _fetch(root, DATA_REF, optional=True)
     baseline = main
     if data is not None:
-        # Reconciliation keeps reviewed main bytes for conflicting generated
+        # Reconciliation keeps whole reviewed main bytes for changed generated
         # reports. Full regeneration and exact-candidate gates are mandatory
         # before the automated publisher may bind or publish this merge.
         # Authored inputs outside DATA_PATHS always remain fail-closed.
@@ -774,6 +960,13 @@ def prepare(root: Path | None = None, *, reconcile: bool = False) -> str:
         baseline = _composite_commit(root, tree, main, data)
     _checkout_baseline(root, baseline)
     return baseline
+
+
+def verify_baseline(root: Path | None = None) -> None:
+    """Prepare and check a disposable producer without generating or publishing data."""
+    root = _repository(root)
+    prepare(root)
+    _verify_publication(root, _publication_tree(root, DATA_PATHS))
 
 
 def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str]:
@@ -829,9 +1022,8 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
         for path in previous
         if path not in paths and previous[path] != previous_targets[path]
     )
-    # Keep checkout-byte and local-file guards for producers too, independently
-    # of snapshot validity. An unverified baseline still must preserve local
-    # work and must not smudge unchanged generated files on detached checkout.
+    # Raw local-file guards apply to producers too, independently of snapshot
+    # validity. Blob restoration bypasses Git's checkout transformations.
     guarded = bound
     if baseline:
         guarded = [
@@ -840,7 +1032,7 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
             if identity["oid"] is not None
         ]
     targets = list(dict.fromkeys([*paths, *guarded]))
-    if bound:
+    if bound or baseline:
         if _git(
             root, "diff", "--cached", "--name-only", "-z", "--", *DATA_PATHS
         ).stdout:
@@ -853,8 +1045,23 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
             raise DataError(
                 "local data files are outside the prepared data tree; checkout unchanged"
             )
-    desired = _guard_worktree(root, source, tree, targets, previous) if targets else {}
-    if baseline and _git(root, "status", "--porcelain", "--untracked-files=no").stdout:
+    desired = (
+        _guard_worktree(root, source, tree, targets, previous, baseline=baseline)
+        if targets
+        else {}
+    )
+    if (
+        baseline
+        and _git(
+            root,
+            "status",
+            "--porcelain",
+            "--untracked-files=no",
+            "--",
+            ".",
+            *(f":(exclude){path}" for path in DATA_PATHS),
+        ).stdout
+    ):
         raise DataError(
             "baseline requires a clean tracked checkout; save staged and unstaged edits "
             "and use a clean disposable checkout before materialize --baseline"
@@ -871,27 +1078,13 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
             if data is None
             else _composite_commit(root, scoped_tree, source, data)
         )
-        _checkout_baseline(root, commit)
-    else:
-        present = b"".join(
-            path.encode() + b"\0" for path in paths if desired[path]["oid"] is not None
-        )
-        if present:
-            _git(
-                root,
-                "restore",
-                "--worktree",
-                f"--source={tree}",
-                "--pathspec-from-file=-",
-                "--pathspec-file-nul",
-                input=present,
-            )
-    # A previously materialized addition can still be untracked in the
-    # index. Neither restore nor a baseline checkout removes it when neither
-    # HEAD nor the new tree contains it; unlink only after the shared guard.
-    for path in paths:
-        if desired[path]["oid"] is None:
-            (root / path).unlink(missing_ok=True)
+        # Source paths are unchanged in the scoped tree. Move only HEAD/index;
+        # Git checkout would run incoming filters before we could verify bytes.
+        _git(root, "read-tree", commit)
+        _git(root, "update-ref", "--no-deref", "HEAD", commit)
+    _restore_blobs(root, {path: desired[path] for path in paths})
+    if _worktree_identities(root, targets) != desired:
+        raise DataError("materialized bytes differ from the prepared snapshot binding")
     previous.update(desired)
     _write_state(root, previous)
     return paths
@@ -901,7 +1094,9 @@ def _in_scope(path: str, scope: tuple[str, ...]) -> bool:
     return any(path.startswith(p) if p.endswith("/") else path == p for p in scope)
 
 
-def publish(root: Path | None = None, *, group: str, message: str) -> bool:
+def publish(
+    root: Path | None = None, *, group: str, message: str, bootstrap: bool = False
+) -> bool:
     """Commit prepared generated data and push only the fixed data ref.
 
     Call prepare before generation. A source or data update after generation
@@ -942,6 +1137,9 @@ def publish(root: Path | None = None, *, group: str, message: str) -> bool:
     _git(root, "add", "-A", "--", *scope)
     result = _git(root, "diff", "--cached", "--quiet", check=False)
     if result.returncode == 0:
+        if bootstrap and data is None:
+            _git(root, "push", "origin", f"HEAD:{DATA_REF}")
+            return True
         return False
     if result.returncode != 1:
         raise DataError("cannot inspect staged generated data")
@@ -976,6 +1174,10 @@ def main() -> int:
         help="retain reviewed main data on conflicts; regenerate all data before publishing",
     )
     commands.add_parser(
+        "verify-baseline",
+        help="prepare a disposable producer and check freshness without publishing",
+    )
+    commands.add_parser(
         "snapshot",
         help="record generated content identities after freshness gates (does not run gates)",
     )
@@ -992,10 +1194,18 @@ def main() -> int:
     )
     write.add_argument("--group", choices=PUBLISH_GROUPS, required=True)
     write.add_argument("--message", required=True)
+    write.add_argument(
+        "--bootstrap",
+        action="store_true",
+        help="create a missing data branch even without a data diff",
+    )
     args = parser.parse_args()
     try:
         if args.command == "prepare":
             print(f"prepared {prepare(reconcile=args.reconcile)}")
+        elif args.command == "verify-baseline":
+            verify_baseline()
+            print("producer baseline freshness gates passed")
         elif args.command == "snapshot":
             write_snapshot()
             print("recorded generated content identities")
@@ -1004,7 +1214,9 @@ def main() -> int:
         else:
             print(
                 "published oracle-data"
-                if publish(group=args.group, message=args.message)
+                if publish(
+                    group=args.group, message=args.message, bootstrap=args.bootstrap
+                )
                 else "no data changes"
             )
     except DataError as exc:

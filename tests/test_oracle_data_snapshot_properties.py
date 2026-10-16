@@ -735,7 +735,7 @@ def test_reader_refuses_local_generated_files_outside_bound_set(
         "working-tree-encoding",
     ],
 )
-def test_reader_refuses_checkout_transformations_without_changing_bytes(
+def test_reader_bypasses_checkout_transformations_or_refuses_without_changes(
     snapshot_case,
     baseline,
     setting,
@@ -766,12 +766,10 @@ def test_reader_refuses_checkout_transformations_without_changing_bytes(
     elif setting == "filter":
         git(reader, "config", "filter.fixture.clean", "cat")
         git(reader, "config", "filter.fixture.smudge", "cat")
-    before = _state(reader)
-
-    with pytest.raises(data.DataError):
-        data.materialize(reader, baseline=baseline)
-
-    assert _state(reader) == before
+    # Local configurations can already have smudged the checkout during the
+    # explicit reset above. Preserve those raw-byte edits by refusing safely;
+    # otherwise a successful read must reproduce the exact bound Git blobs.
+    _read(case, baseline=baseline)
 
 
 @pytest.mark.parametrize("baseline", [False, True])
