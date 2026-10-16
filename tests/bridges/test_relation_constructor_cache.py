@@ -111,12 +111,20 @@ def test_producer_and_engine_batch_analysis_count_does_not_grow_with_cases(
     path.write_text(json.dumps(artifact))
     walks = []
     original = relation_binding._ArtifactRelations.__init__
+    validations = []
+    original_analysis = relation_binding._artifact_relation_analysis
 
     def counted(self, program):
         walks.append(program)
         return original(self, program)
 
     monkeypatch.setattr(relation_binding._ArtifactRelations, "__init__", counted)
+
+    def validated(artifact):
+        validations.append(artifact)
+        return original_analysis(artifact)
+
+    monkeypatch.setattr(relation_binding, "_artifact_relation_analysis", validated)
     cases = [
         Case(
             str(index),
@@ -133,6 +141,7 @@ def test_producer_and_engine_batch_analysis_count_does_not_grow_with_cases(
     )
     # Owner discovery and construction share one analysis.
     assert len(walks) == 1
+    assert len(validations) == 1
 
     def fake_run(command, **kwargs):
         request = json.loads(kwargs["input"])
@@ -154,6 +163,7 @@ def test_producer_and_engine_batch_analysis_count_does_not_grow_with_cases(
     assert len(adapter._run_case_batch_once(projected, ["count"], path)) == size
     # The separately loaded runtime artifact needs one constructor analysis.
     assert len(walks) == 2
+    assert len(validations) == 2
 
 
 def test_constructor_cache_observes_in_place_artifact_mutation():

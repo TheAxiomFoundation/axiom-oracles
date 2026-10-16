@@ -28,6 +28,7 @@ import yaml
 
 from .jurisdiction import jurisdiction_prefix
 from .relation_binding import (
+    RelationBinder,
     attach_relation_binding_diagnostics,
     bind_materialized_relations,
     bind_request_relations,
@@ -574,33 +575,43 @@ class TaxComparisonReport:
     output_summary: list[dict[str, Any]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
-    relation_binding_diagnostics: dict[str, Any] | None = field(default=None, kw_only=True)
+    relation_binding_diagnostics: dict[str, Any] | None = field(
+        default=None, kw_only=True
+    )
     observed_outputs: list[dict[str, Any]] = field(default_factory=list)
     errors: list[dict[str, Any]] = field(default_factory=list)
 
     def to_json(self) -> dict[str, Any]:
         from axiom_oracles.conformance.observations import json_output_values
 
-        return json_output_values({
-            **({"provenance": {
-                "relation_binding_diagnostics": public_relation_binding_diagnostics(
-                    self.relation_binding_diagnostics,
+        return json_output_values(
+            {
+                **(
+                    {
+                        "provenance": {
+                            "relation_binding_diagnostics": public_relation_binding_diagnostics(
+                                self.relation_binding_diagnostics,
+                            ),
+                        }
+                    }
+                    if self.relation_binding_diagnostics
+                    else {}
                 ),
-            }} if self.relation_binding_diagnostics else {}),
-            "compared_tax_units": self.compared_tax_units,
-            "compared_persons": self.compared_persons,
-            "compared_values": self.compared_values,
-            "mismatch_count": len(self.mismatches),
-            "uncompared_mismatches": sum(
-                row.get("uncompared_mismatches", 0) for row in self.output_summary
-            ),
-            "mismatches": [row.__dict__ for row in self.mismatches],
-            "output_summary": self.output_summary,
-            "projection_notes": self.projection_notes,
-            "dataset_identity": self.dataset_identity,
-            "observed_outputs": self.observed_outputs,
-            "errors": self.errors,
-        })
+                "compared_tax_units": self.compared_tax_units,
+                "compared_persons": self.compared_persons,
+                "compared_values": self.compared_values,
+                "mismatch_count": len(self.mismatches),
+                "uncompared_mismatches": sum(
+                    row.get("uncompared_mismatches", 0) for row in self.output_summary
+                ),
+                "mismatches": [row.__dict__ for row in self.mismatches],
+                "output_summary": self.output_summary,
+                "projection_notes": self.projection_notes,
+                "dataset_identity": self.dataset_identity,
+                "observed_outputs": self.observed_outputs,
+                "errors": self.errors,
+            }
+        )
 
 
 @dataclass(frozen=True)
@@ -891,7 +902,11 @@ def calculate(sim: Any, name: str, period: str | int) -> np.ndarray:
 
 
 def validate_policyengine_outputs(
-    values: Any, *, variable: str, entity_ids: Any, entity: str,
+    values: Any,
+    *,
+    variable: str,
+    entity_ids: Any,
+    entity: str,
 ) -> None:
     """Reject invalid calculated support values before input money projections."""
     if variable == "filing_status":  # PolicyEngine's categorical enum.
@@ -942,15 +957,19 @@ def load_policyengine_tax_data(
     for variable in tax_unit_variables:
         tax_unit_outputs[variable] = calculate(sim, variable, year)
         validate_policyengine_outputs(
-            tax_unit_outputs[variable], variable=variable,
-            entity_ids=raw_tax_units["tax_unit_id"], entity="tax_unit",
+            tax_unit_outputs[variable],
+            variable=variable,
+            entity_ids=raw_tax_units["tax_unit_id"],
+            entity="tax_unit",
         )
     person_outputs = raw_persons[["person_id"]].copy()
     for variable in person_variables:
         person_outputs[variable] = calculate(sim, variable, year)
         validate_policyengine_outputs(
-            person_outputs[variable], variable=variable,
-            entity_ids=raw_persons["person_id"], entity="person",
+            person_outputs[variable],
+            variable=variable,
+            entity_ids=raw_persons["person_id"],
+            entity="person",
         )
     indices = select_tax_unit_indices(
         raw_tax_units=raw_tax_units,
@@ -1151,6 +1170,7 @@ def tax_relation_record(
     person_id: str,
     interval: dict[str, str],
     legacy_owner_slot: int = 1,
+    _binder: RelationBinder | None = None,
 ) -> dict[str, Any]:
     """Keep source roles until compilation supplies executable tuple slots."""
     roles = {
@@ -1162,7 +1182,11 @@ def tax_relation_record(
     }
     record = {
         "name": name,
-        "tuple": relation_tuple(artifact, name, **roles),
+        "tuple": (
+            _binder.tuple(name, **roles)
+            if _binder is not None
+            else relation_tuple(artifact, name, **roles)
+        ),
         "interval": interval,
     }
     if artifact is None:
@@ -1217,6 +1241,7 @@ def build_axiom_request(
 def build_ctc_request(
     *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
 ) -> dict[str, Any]:
+    relation_binder = RelationBinder(artifact)
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1261,6 +1286,7 @@ def build_ctc_request(
                     tax_unit_id=entity_id,
                     person_id=person_id,
                     interval=interval,
+                    _binder=relation_binder,
                 )
             )
             relations.append(
@@ -1270,6 +1296,7 @@ def build_ctc_request(
                     tax_unit_id=entity_id,
                     person_id=person_id,
                     interval=interval,
+                    _binder=relation_binder,
                 )
             )
             for name, value in project_ctc_person_inputs(person, context).items():
@@ -1311,6 +1338,7 @@ def build_ctc_request(
 def build_cdcc_request(
     *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
 ) -> dict[str, Any]:
+    relation_binder = RelationBinder(artifact)
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1347,6 +1375,7 @@ def build_cdcc_request(
                     tax_unit_id=entity_id,
                     person_id=person_id,
                     interval=interval,
+                    _binder=relation_binder,
                 )
             )
             for name, value in project_cdcc_person_inputs(person, context).items():
@@ -1378,6 +1407,7 @@ def build_cdcc_request(
 def build_aotc_request(
     *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
 ) -> dict[str, Any]:
+    relation_binder = RelationBinder(artifact)
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1414,6 +1444,7 @@ def build_aotc_request(
                     tax_unit_id=entity_id,
                     person_id=person_id,
                     interval=interval,
+                    _binder=relation_binder,
                 )
             )
             for name, value in project_aotc_person_inputs(person, context).items():
@@ -1677,6 +1708,7 @@ def build_eitc_request(
     contribution_base: float,
     artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
+    relation_binder = RelationBinder(artifact)
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1753,6 +1785,7 @@ def build_eitc_request(
                     tax_unit_id=entity_id,
                     person_id=person_id,
                     interval=interval,
+                    _binder=relation_binder,
                 )
             )
             for name, value in project_eitc_person_inputs(person, context).items():
@@ -2934,9 +2967,8 @@ def run_axiom_program(
             env=env,
             timeout=60,
         )
-        if (
-            compile_result.returncode != 0
-            and "unknown compile argument" in (compile_result.stderr or "")
+        if compile_result.returncode != 0 and "unknown compile argument" in (
+            compile_result.stderr or ""
         ):
             compile_result = subprocess.run(
                 base_cmd,
@@ -2991,13 +3023,16 @@ def _runtime_axiom_request(
     )
     runtime_request = copy.deepcopy(request)
     materialized = set()
+    relation_binder = RelationBinder(artifact_payload)
     for item in (runtime_request.get("dataset") or {}).get("inputs") or []:
         if isinstance(item, dict) and isinstance(item.get("name"), str):
             item["name"] = _runtime_rulespec_name(
                 item["name"],
                 rulespec_root=rulespec_root,
             )
-    for index, item in enumerate((runtime_request.get("dataset") or {}).get("relations") or []):
+    for index, item in enumerate(
+        (runtime_request.get("dataset") or {}).get("relations") or []
+    ):
         if isinstance(item, dict) and isinstance(item.get("name"), str):
             item["name"] = _runtime_rulespec_name(
                 item["name"],
@@ -3005,8 +3040,9 @@ def _runtime_axiom_request(
             )
             roles = item.pop("roles", None)
             if roles is not None:
-                item["tuple"] = relation_tuple(
-                    artifact_payload, item["name"], **roles,
+                item["tuple"] = relation_binder.tuple(
+                    item["name"],
+                    **roles,
                     binding_ambiguities=binding_ambiguities,
                 )
                 materialized.add(index)
@@ -3035,7 +3071,10 @@ def _runtime_axiom_request(
     # Producers materialize explicit roles above, after compilation and name
     # resolution. The binder also validates raw caller-supplied relation tuples.
     runtime_request, ambiguities = bind_materialized_relations(
-        runtime_request, artifact_payload, materialized=materialized, binder=bind_request_relations,
+        runtime_request,
+        artifact_payload,
+        materialized=materialized,
+        binder=bind_request_relations,
     )
     if binding_ambiguities is not None:
         binding_ambiguities.extend(ambiguities)
@@ -3105,7 +3144,9 @@ def compare_outputs(
     diagnostics: dict = {}
     for results in axiom_outputs_by_surface.values():
         for result in results:
-            merge_relation_binding_diagnostics(diagnostics, result.get("relation_binding_diagnostics", {}))
+            merge_relation_binding_diagnostics(
+                diagnostics, result.get("relation_binding_diagnostics", {})
+            )
     observed_outputs: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
     summary: dict[str, dict[str, Any]] = {
@@ -3143,21 +3184,30 @@ def compare_outputs(
                 else tax_entity_id(int(source_ids[index]))
             )
             outputs = result.get("outputs") or {}
-            result_stopped = (
-                any(result.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
-                or ("executed" in result and result["executed"] is not True)
-            )
+            result_stopped = any(
+                result.get(key) for key in ("error", "errors", "skipped", "skip_reason")
+            ) or ("executed" in result and result["executed"] is not True)
             if result_stopped:
                 # Retain execution stops independently of displayed output
                 # rows, including missing returns and matching stopped rows.
-                errors.append({
-                    "engine": "axiom", "case_id": entity_id, "surface": surface,
-                    **{
-                        key: result[key]
-                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
-                        if key in result
-                    },
-                })
+                errors.append(
+                    {
+                        "engine": "axiom",
+                        "case_id": entity_id,
+                        "surface": surface,
+                        **{
+                            key: result[key]
+                            for key in (
+                                "error",
+                                "errors",
+                                "skipped",
+                                "skip_reason",
+                                "executed",
+                            )
+                            if key in result
+                        },
+                    }
+                )
             pe_row = source_rows.iloc[index]
             for name, spec in output_specs.items():
                 axiom_value = output_number(outputs.get(spec["axiom"]))
@@ -3165,45 +3215,69 @@ def compare_outputs(
                 # Keep actual returns independently of comparison arithmetic.
                 if np is not None and isinstance(returned_pe_value, np.generic):
                     returned_pe_value = returned_pe_value.item()
-                observed_outputs.append({
-                    "case_id": entity_id,
-                    "surface": surface,
-                    "output": name,
-                    "engine": "policyengine",
-                    "variable": spec["pe"],
-                    "value": returned_pe_value,
-                    "counterpart_value": axiom_value,
-                    **{
-                        key: result[key]
-                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
-                        if key in result
-                    },
-                })
+                observed_outputs.append(
+                    {
+                        "case_id": entity_id,
+                        "surface": surface,
+                        "output": name,
+                        "engine": "policyengine",
+                        "variable": spec["pe"],
+                        "value": returned_pe_value,
+                        "counterpart_value": axiom_value,
+                        **{
+                            key: result[key]
+                            for key in (
+                                "error",
+                                "errors",
+                                "skipped",
+                                "skip_reason",
+                                "executed",
+                            )
+                            if key in result
+                        },
+                    }
+                )
                 # Returned stop-marked rows remain diagnostic evidence, but
                 # they are not comparisons and cannot add to any denominator.
                 if result_stopped:
                     continue
-                pe_value = math.nan if returned_pe_value is None else float(returned_pe_value)
+                pe_value = (
+                    math.nan if returned_pe_value is None else float(returned_pe_value)
+                )
                 summary_key = f"{surface}:{name}"
                 invalid_engines = [
-                    engine for engine, value in (
-                        ("axiom", axiom_value), ("policyengine", pe_value),
-                    ) if not math.isfinite(value)
+                    engine
+                    for engine, value in (
+                        ("axiom", axiom_value),
+                        ("policyengine", pe_value),
+                    )
+                    if not math.isfinite(value)
                 ]
                 if invalid_engines:
                     for engine in invalid_engines:
-                        errors.append({
-                            "engine": engine, "case_id": entity_id, "surface": surface,
-                            "output": name, "error": "missing_or_nonfinite_output",
-                        })
+                        errors.append(
+                            {
+                                "engine": engine,
+                                "case_id": entity_id,
+                                "surface": surface,
+                                "output": name,
+                                "error": "missing_or_nonfinite_output",
+                            }
+                        )
                     # Preserve missing Axiom and Infinity mismatch diagnostics,
                     # but no invalid pair is an arithmetic comparison or match.
                     summary[summary_key]["mismatches"] += 1
                     summary[summary_key]["uncompared_mismatches"] += 1
-                    mismatches.append(TaxComparisonRow(
-                        surface=surface, entity_id=entity_id, output=name,
-                        axiom=axiom_value, policyengine=pe_value, diff=math.nan,
-                    ))
+                    mismatches.append(
+                        TaxComparisonRow(
+                            surface=surface,
+                            entity_id=entity_id,
+                            output=name,
+                            axiom=axiom_value,
+                            policyengine=pe_value,
+                            diff=math.nan,
+                        )
+                    )
                     continue
                 diff = axiom_value - pe_value
                 abs_diff = abs(diff)
@@ -3228,14 +3302,12 @@ def compare_outputs(
                     else:
                         if persons_by_tax_unit is None:
                             try:
-                                persons_by_tax_unit = (
-                                    group_person_rows_by_tax_unit(persons)
+                                persons_by_tax_unit = group_person_rows_by_tax_unit(
+                                    persons
                                 )
                             except (KeyError, TypeError, ValueError):
                                 persons_by_tax_unit = {}
-                        members = persons_by_tax_unit.get(
-                            int(source_ids[index]), []
-                        )
+                        members = persons_by_tax_unit.get(int(source_ids[index]), [])
                     ages, earned = _household_context(members)
                     mismatches.append(
                         TaxComparisonRow(
@@ -3365,9 +3437,7 @@ def print_report(
 def _household_context(members: list[Any]) -> tuple[tuple[int, ...], float | None]:
     """Best-effort (ages, earned income) for a mismatch row's household."""
     try:
-        ages = tuple(
-            int(money(person["age"])) for person in members if "age" in person
-        )
+        ages = tuple(int(money(person["age"])) for person in members if "age" in person)
     except (KeyError, TypeError, ValueError):
         ages = ()
     try:
@@ -3391,7 +3461,11 @@ def person_money_sum(persons: list[Any], column: str | tuple[str, ...]) -> float
 
 
 def input_record(
-    name: str, entity_id: str, interval: dict[str, str], value: Any, *,
+    name: str,
+    entity_id: str,
+    interval: dict[str, str],
+    value: Any,
+    *,
     entity: str = "Entity",
 ) -> dict[str, Any]:
     """Label input kinds while preserving the generic four-argument API."""
