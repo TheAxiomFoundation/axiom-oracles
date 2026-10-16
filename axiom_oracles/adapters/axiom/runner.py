@@ -16,11 +16,11 @@ from typing import Any
 import yaml
 
 from ...bridges.relation_binding import (
+    RelationBinder,
     bind_materialized_relations,
     bind_request_relations,
     merge_relation_binding_diagnostics,
     relation_binding_diagnostics,
-    relation_tuple,
     with_relation_binding_diagnostics,
 )
 from ...comparison.mappings import engine_targets_for_concepts
@@ -449,15 +449,21 @@ class AxiomRulesRunner(EngineAdapter):
         ambiguities = []
         if request["dataset"]["relations"]:
             artifact = json.loads(artifact_path.read_text())
-            materialized = _materialize_relation_roles(request, artifact, binding_ambiguities=ambiguities)
+            materialized = _materialize_relation_roles(
+                request, artifact, binding_ambiguities=ambiguities
+            )
             request, raw_ambiguities = bind_materialized_relations(
-                request, artifact, materialized=materialized, binder=bind_request_relations,
+                request,
+                artifact,
+                materialized=materialized,
+                binder=bind_request_relations,
             )
             ambiguities.extend(raw_ambiguities)
 
         def case_raw(raw: Any, index: int) -> Any:
             return with_relation_binding_diagnostics(
-                raw, relation_binding_diagnostics(ambiguities, namespace=f"case-{index}::"),
+                raw,
+                relation_binding_diagnostics(ambiguities, namespace=f"case-{index}::"),
             )
 
         process = self._subprocess_run(
@@ -539,12 +545,17 @@ class AxiomRulesRunner(EngineAdapter):
                     query_result,
                     include_trace=self.record_all_outputs,
                 ),
-                raw=case_raw({
-                    "metadata": payload.get("metadata"),
-                    "result": query_result,
-                }, index),
+                raw=case_raw(
+                    {
+                        "metadata": payload.get("metadata"),
+                        "result": query_result,
+                    },
+                    index,
+                ),
             )
-            for index, (case, query_result) in enumerate(zip(cases, query_results, strict=True))
+            for index, (case, query_result) in enumerate(
+                zip(cases, query_results, strict=True)
+            )
         ]
 
     def _isolate_case_failure(
@@ -629,9 +640,14 @@ class AxiomRulesRunner(EngineAdapter):
         ambiguities = []
         if request["dataset"]["relations"]:
             artifact = json.loads(artifact_path.read_text())
-            materialized = _materialize_relation_roles(request, artifact, binding_ambiguities=ambiguities)
+            materialized = _materialize_relation_roles(
+                request, artifact, binding_ambiguities=ambiguities
+            )
             request, raw_ambiguities = bind_materialized_relations(
-                request, artifact, materialized=materialized, binder=bind_request_relations,
+                request,
+                artifact,
+                materialized=materialized,
+                binder=bind_request_relations,
             )
             ambiguities.extend(raw_ambiguities)
         diagnostics = relation_binding_diagnostics(ambiguities)
@@ -865,7 +881,11 @@ class AxiomRulesRunner(EngineAdapter):
                     "name": str(relation["name"]),
                     "tuple": [str(value) for value in relation["tuple"]],
                     "interval": _interval(period),
-                    **({"roles": dict(relation["roles"])} if "roles" in relation else {}),
+                    **(
+                        {"roles": dict(relation["roles"])}
+                        if "roles" in relation
+                        else {}
+                    ),
                 }
             )
         return records
@@ -1273,7 +1293,8 @@ def _select_candidate_result(
     for candidate in candidates:
         if isinstance(candidate.raw, Mapping):
             merge_relation_binding_diagnostics(
-                diagnostics, candidate.raw.get("relation_binding_diagnostics", {}),
+                diagnostics,
+                candidate.raw.get("relation_binding_diagnostics", {}),
             )
 
     def selection_raw(raw: Any) -> Any:
@@ -1339,11 +1360,13 @@ def _select_candidate_result(
         engine=engine_name,
         household_id=case.case_id,
         values=selected.values,
-        raw=selection_raw({
-            "selection": dict(raw_selection),
-            "selected_candidate": selected_index,
-            "candidates": _candidate_raw(candidates),
-        }),
+        raw=selection_raw(
+            {
+                "selection": dict(raw_selection),
+                "selected_candidate": selected_index,
+                "candidates": _candidate_raw(candidates),
+            }
+        ),
         errors=selected.errors,
     )
 
@@ -1482,22 +1505,32 @@ def _namespace_relation_record(
     if "roles" in namespaced:
         namespaced["roles"] = {
             **namespaced["roles"],
-            "owner_id": _namespace_entity_id(namespace, namespaced["roles"]["owner_id"]),
-            "related_id": _namespace_entity_id(namespace, namespaced["roles"]["related_id"]),
+            "owner_id": _namespace_entity_id(
+                namespace, namespaced["roles"]["owner_id"]
+            ),
+            "related_id": _namespace_entity_id(
+                namespace, namespaced["roles"]["related_id"]
+            ),
         }
     return namespaced
 
 
 def _materialize_relation_roles(
-    request: dict[str, Any], artifact: dict[str, Any], *, binding_ambiguities: list | None = None,
+    request: dict[str, Any],
+    artifact: dict[str, Any],
+    *,
+    binding_ambiguities: list | None = None,
 ) -> set[int]:
     """Resolve producer roles against the artifact actually sent to the engine."""
     materialized = set()
+    relation_binder = RelationBinder(artifact)
     for index, record in enumerate(request["dataset"]["relations"]):
         roles = record.pop("roles", None)
         if roles is not None:
-            record["tuple"] = relation_tuple(
-                artifact, record["name"], **roles, binding_ambiguities=binding_ambiguities,
+            record["tuple"] = relation_binder.tuple(
+                record["name"],
+                **roles,
+                binding_ambiguities=binding_ambiguities,
             )
             materialized.add(index)
     return materialized

@@ -22,9 +22,9 @@ from typing import Any, Callable
 import yaml
 
 from .relation_binding import (
+    RelationBinder,
     merge_relation_binding_diagnostics,
     public_relation_binding_diagnostics,
-    relation_tuple,
 )
 from .tax_populace import (
     _version_tuple,
@@ -1913,25 +1913,33 @@ class UKEFRSComparisonReport:
     def to_json(self) -> dict[str, Any]:
         from axiom_oracles.conformance.observations import json_output_values
 
-        return json_output_values({
-            "compared_persons": self.compared_persons,
-            "compared_benunits": self.compared_benunits,
-            "compared_values": self.compared_values,
-            "mismatch_count": len(self.mismatches),
-            "mismatches": [row.__dict__ for row in self.mismatches],
-            "oracle_divergence_count": len(self.oracle_divergences),
-            "oracle_divergences": [row.__dict__ for row in self.oracle_divergences],
-            "output_summary": self.output_summary,
-            "skipped_surfaces": self.skipped_surfaces,
-            "projection_notes": self.projection_notes,
-            "dataset_identity": self.dataset_identity,
-            "errors": self.errors,
-            **({"provenance": {
-                "relation_binding_diagnostics": public_relation_binding_diagnostics(
-                    self.relation_binding_diagnostics,
+        return json_output_values(
+            {
+                "compared_persons": self.compared_persons,
+                "compared_benunits": self.compared_benunits,
+                "compared_values": self.compared_values,
+                "mismatch_count": len(self.mismatches),
+                "mismatches": [row.__dict__ for row in self.mismatches],
+                "oracle_divergence_count": len(self.oracle_divergences),
+                "oracle_divergences": [row.__dict__ for row in self.oracle_divergences],
+                "output_summary": self.output_summary,
+                "skipped_surfaces": self.skipped_surfaces,
+                "projection_notes": self.projection_notes,
+                "dataset_identity": self.dataset_identity,
+                "errors": self.errors,
+                **(
+                    {
+                        "provenance": {
+                            "relation_binding_diagnostics": public_relation_binding_diagnostics(
+                                self.relation_binding_diagnostics,
+                            ),
+                        }
+                    }
+                    if self.relation_binding_diagnostics.get("count")
+                    else {}
                 ),
-            }} if self.relation_binding_diagnostics.get("count") else {}),
-        })
+            }
+        )
 
 
 def configure_parser(parser: argparse.ArgumentParser) -> None:
@@ -2240,9 +2248,7 @@ def compare_uk_efrs(
         ):
             program = universal_credit_program.resolve()
             if not program.exists():
-                raise SystemExit(
-                    f"{selected_surface} RuleSpec not found: {program}"
-                )
+                raise SystemExit(f"{selected_surface} RuleSpec not found: {program}")
         else:
             # rulespec-uk moved its content under a top-level ``uk/``
             # jurisdiction directory (canonical-layout cut, 2026-06-12).
@@ -4068,7 +4074,9 @@ def build_axiom_request(
         return build_marriage_allowance_request(pe_data=pe_data, year=year)
     if surface == "income-tax-income-base":
         return build_income_tax_income_base_request(
-            pe_data=pe_data, year=year, artifact=artifact,
+            pe_data=pe_data,
+            year=year,
+            artifact=artifact,
         )
     if surface == "income-tax-section-10-earned-income":
         return build_income_tax_section_10_request(pe_data=pe_data, year=year)
@@ -4468,6 +4476,7 @@ def build_income_tax_income_base_request(
     inputs: list[dict[str, Any]] = []
     relations: list[dict[str, Any]] = []
     queries: list[dict[str, Any]] = []
+    relation_binder = RelationBinder(artifact)
     for row in rows_for_surface(pe_data, "income-tax-income-base"):
         person_id = int(row_value(row, "person_id"))
         entity_id = person_entity_id(person_id)
@@ -4476,19 +4485,23 @@ def build_income_tax_income_base_request(
                 person_id,
                 str(component["name"]),
             )
-            relation_name = f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer"
+            relation_name = (
+                f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer"
+            )
             roles = {
                 "owner_id": entity_id,
                 "owner_kind": "Person",
                 "related_id": payment_id,
                 "related_kind": "Payment",
             }
-            relations.append({
-                "name": relation_name,
-                "tuple": relation_tuple(artifact, relation_name, **roles),
-                "interval": interval,
-                **({"roles": roles} if artifact is None else {}),
-            })
+            relations.append(
+                {
+                    "name": relation_name,
+                    "tuple": relation_binder.tuple(relation_name, **roles),
+                    "interval": interval,
+                    **({"roles": roles} if artifact is None else {}),
+                }
+            )
             inputs.append(
                 input_record(
                     f"{INCOME_TAX_SECTION_23_BASE}#input.amount_charged_to_income_tax",
@@ -4975,7 +4988,9 @@ def build_housing_benefit_applicable_amount_request(
     queries: list[dict[str, Any]] = []
     for row in rows_for_surface(pe_data, "housing-benefit-applicable-amount"):
         entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
-        for name, value in project_housing_benefit_applicable_amount_inputs(row).items():
+        for name, value in project_housing_benefit_applicable_amount_inputs(
+            row
+        ).items():
             inputs.append(
                 input_record(
                     f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
@@ -6574,9 +6589,7 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
         ]
     if surface == "marriage-allowance":
         return [
-            row
-            for row in persons
-            if money(row_value(row, "marriage_allowance", 0)) > 0
+            row for row in persons if money(row_value(row, "marriage_allowance", 0)) > 0
         ]
     if SURFACE_SPECS[surface].entity == "benunit":
         return benunits
@@ -6618,27 +6631,37 @@ def compare_outputs(
                 f"for {len(persons):,} PolicyEngine rows"
             )
         for index, result in enumerate(axiom_outputs):
-            merge_relation_binding_diagnostics(diagnostics, public_relation_binding_diagnostics(
-                result.get("relation_binding_diagnostics") or {},
-            ))
+            merge_relation_binding_diagnostics(
+                diagnostics,
+                public_relation_binding_diagnostics(
+                    result.get("relation_binding_diagnostics") or {},
+                ),
+            )
             pe_row = persons[index]
             entity_id = entity_id_for_surface(surface, pe_row)
-            if (
-                any(result.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
-                or ("executed" in result and result["executed"] is not True)
-            ):
+            if any(
+                result.get(key) for key in ("error", "errors", "skipped", "skip_reason")
+            ) or ("executed" in result and result["executed"] is not True):
                 # Keep stop evidence independently of displayed mismatches,
                 # including results whose returned values would have matched.
-                errors.append({
-                    "engine": "axiom",
-                    "case_id": entity_id,
-                    "surface": surface,
-                    **{
-                        key: result[key]
-                        for key in ("error", "errors", "skipped", "skip_reason", "executed")
-                        if key in result
-                    },
-                })
+                errors.append(
+                    {
+                        "engine": "axiom",
+                        "case_id": entity_id,
+                        "surface": surface,
+                        **{
+                            key: result[key]
+                            for key in (
+                                "error",
+                                "errors",
+                                "skipped",
+                                "skip_reason",
+                                "executed",
+                            )
+                            if key in result
+                        },
+                    }
+                )
                 continue
             outputs = result.get("outputs") or {}
             for name, spec in output_specs.items():
@@ -6971,7 +6994,9 @@ def policyengine_raw_output_value(spec: dict[str, Any], row: Any) -> float:
             return math.nan
         maximum_amount, income_reduction = float(maximum), float(reduction)
         # max(0, NaN) itself erases a missing return, so validate first.
-        if not all(math.isfinite(value) for value in (maximum_amount, income_reduction)):
+        if not all(
+            math.isfinite(value) for value in (maximum_amount, income_reduction)
+        ):
             return math.nan
         return max(0.0, maximum_amount - income_reduction)
     if expression is not None:

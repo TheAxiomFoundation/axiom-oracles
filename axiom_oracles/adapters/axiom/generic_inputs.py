@@ -32,15 +32,22 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
-from axiom_oracles.bridges.relation_binding import relation_owner_kind, relation_tuple
+from axiom_oracles.bridges.relation_binding import RelationBinder
 
 
 # Projection keys these entity scopes by the household id. This is an adapter
 # convention, never evidence for relation binding.
-_UNIT_ENTITIES = frozenset({
-    "Household", "SnapUnit", "TaxUnit", "SpmUnit", "TanfUnit",
-    "AssistanceUnit", "Family",
-})
+_UNIT_ENTITIES = frozenset(
+    {
+        "Household",
+        "SnapUnit",
+        "TaxUnit",
+        "SpmUnit",
+        "TanfUnit",
+        "AssistanceUnit",
+        "Family",
+    }
+)
 
 
 # ---------------------------------------------------------------------------
@@ -418,7 +425,9 @@ def _resolve_value(
         return mapper(case_facts, None)
 
     # Fact-table fallback: look up by slot name (or its unqualified suffix).
-    unqualified = slot.name.split("#input.")[-1] if "#input." in slot.name else slot.name
+    unqualified = (
+        slot.name.split("#input.")[-1] if "#input." in slot.name else slot.name
+    )
     facts_table = person_facts if slot.entity == "Person" else case_facts
     if facts_table is None:
         facts_table = {}
@@ -467,6 +476,7 @@ def attach_generic_inputs(
     with open(compiled_program_path) as f:
         compiled = json.load(f)
     program = compiled.get("program", compiled)
+    relation_binder = RelationBinder(compiled)
 
     # If the caller didn't pass a mapping, resolve one from the default YAML.
     # The mapping table itself is data
@@ -566,8 +576,10 @@ def attach_generic_inputs(
         emit_bare = bare_name != member_relation and len(variants) == 1
         relation_names = [*variants, *([bare_name] if emit_bare else [])]
         owner_kind_by_name = {
-            name: relation_owner_kind(
-                compiled, name, default_owner_kind=household_entity, related_kind="Person",
+            name: relation_binder.owner_kind(
+                name,
+                default_owner_kind=household_entity,
+                related_kind="Person",
             )
             for name in relation_names
         }
@@ -581,11 +593,13 @@ def attach_generic_inputs(
                     "related_id": pid,
                     "related_kind": "Person",
                 }
-                relation_records.append({
-                    "name": name,
-                    "tuple": relation_tuple(compiled, name, **roles),
-                    "roles": roles,
-                })
+                relation_records.append(
+                    {
+                        "name": name,
+                        "tuple": relation_binder.tuple(name, **roles),
+                        "roles": roles,
+                    }
+                )
 
         metadata[AXIOM_INPUT_RECORDS_METADATA_KEY] = input_dicts
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [
