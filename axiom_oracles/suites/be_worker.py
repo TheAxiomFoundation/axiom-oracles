@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from ..bridges.relation_binding import relation_tuple
 from ..core.case import Case, Concepts, Entity
 
 
@@ -1129,12 +1130,21 @@ def _single_earner_couple_pit_case(case_id: str, annual_income: float) -> Case:
                     "value": True,
                 },
             ],
-            "axiom_relations": {
-                COUPLE_SPOUSE_RELATION: [
-                    ["head", "taxunit"],
-                    ["spouse", "taxunit"],
-                ]
-            },
+            "axiom_relations": [
+                {
+                    "name": COUPLE_SPOUSE_RELATION,
+                    "tuple": relation_tuple(
+                        None, COUPLE_SPOUSE_RELATION,
+                        owner_id="taxunit", owner_kind="TaxUnit",
+                        related_id=member_id, related_kind="Person",
+                    ),
+                    "roles": {
+                        "owner_id": "taxunit", "owner_kind": "TaxUnit",
+                        "related_id": member_id, "related_kind": "Person",
+                    },
+                }
+                for member_id in ("head", "spouse")
+            ],
             "euromod_inputs": _single_earner_couple_euromod_rows(annual_income),
             EUROMOD_TO_AXIOM_INPUT_BRIDGE: {
                 "yem": {

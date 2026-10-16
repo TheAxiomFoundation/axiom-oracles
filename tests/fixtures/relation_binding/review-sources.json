@@ -1,0 +1,21 @@
+{
+  "issue": 575,
+  "fixtures": [
+    {
+      "path": "round9-scalar-broadcast.json",
+      "review_evidence": "r9-sol/pr-575-review.md, P2",
+      "reconstruction": "Typed payments(Household, Payment), Payment amount plus Person threshold on payment id, and unrelated typed Person friends count; request fields preserved from the round-10 minimization of the same scalar-label shape.",
+      "sha256": "64b1e5c76a6d3f07559369c2a8566fd440ccf47bc30b51919231fd2f42cc34dc"
+    },
+    {
+      "path": "round10-incoming-derivation.json",
+      "review_evidence": "r10-sol/review/derived-source-request.json",
+      "sha256": "dbd0a963b155f81d8f8564a4246d945588200198892fdd9da3ac46e4f2678cc1"
+    },
+    {
+      "path": "round11-filtered-inheritance.json",
+      "review_evidence": "r11-sol/review/filtered_inventory_reproducer.json",
+      "sha256": "37d33793a5ee3241b0bc33496085cde45e2958637fbae059c7ee722722f22699"
+    }
+  ]
+}

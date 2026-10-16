@@ -686,7 +686,9 @@ def main() -> int:
                 config,
                 suite=suite,
             )
-            adapted["provenance"] = provenance
+            adapted["provenance"] = _preserve_relation_binding_diagnostics(
+                provenance, adapted.get("provenance")
+            )
         preserve_existing_versioned = bool(
             config["runner"].get("_reemitted_report")
         )
@@ -1432,6 +1434,23 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     return provenance
 
 
+def _preserve_relation_binding_diagnostics(
+    provenance: dict,
+    existing_provenance: object,
+) -> dict:
+    """Keep public-safe run diagnostics while replacing runner provenance."""
+    from axiom_oracles.bridges.relation_binding import public_relation_binding_diagnostics
+
+    combined = dict(provenance)
+    key = "relation_binding_diagnostics"
+    if key in combined:
+        combined[key] = public_relation_binding_diagnostics(combined[key])
+    if isinstance(existing_provenance, dict):
+        if key in existing_provenance:
+            combined[key] = public_relation_binding_diagnostics(existing_provenance[key])
+    return combined
+
+
 def _stamp_report_provenance(
     output: Path,
     provenance: dict,
@@ -1469,7 +1488,13 @@ def _stamp_report_provenance(
             },
         }
     else:
-        data["provenance"] = provenance
+        data["provenance"] = _preserve_relation_binding_diagnostics(
+            provenance, existing_provenance
+        )
+    if preserve_runner_provenance:
+        data["provenance"] = _preserve_relation_binding_diagnostics(
+            data["provenance"], data["provenance"],
+        )
     engines = data.get("engines")
     if require_engine_versions and not isinstance(engines, dict):
         raise SystemExit(
@@ -1893,6 +1918,11 @@ def _compose_uk_universal_credit_program(params: dict) -> Path | None:
 
 
 def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
+    from axiom_oracles.bridges.relation_binding import (
+        merge_relation_binding_diagnostics,
+        public_relation_binding_diagnostics,
+    )
+
     if not reports:
         return {
             "compared_persons": 0,
@@ -1908,7 +1938,12 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
             "projection_notes": [],
         }
     if len(reports) == 1:
-        return reports[0]
+        report = dict(reports[0])
+        if "provenance" in report:
+            report["provenance"] = _preserve_relation_binding_diagnostics(
+                report["provenance"], report["provenance"],
+            )
+        return report
     merged = {
         "compared_persons": max(r.get("compared_persons", 0) for r in reports),
         "compared_benunits": max(r.get("compared_benunits", 0) for r in reports),
@@ -1922,7 +1957,11 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
     }
     seen_notes: set[str] = set()
     seen_skipped: set[str] = set()
+    diagnostics: dict = {}
     for report in reports:
+        merge_relation_binding_diagnostics(diagnostics, public_relation_binding_diagnostics(
+            (report.get("provenance") or {}).get("relation_binding_diagnostics", {}),
+        ))
         merged["errors"].extend(report.get("errors") or [])
         merged["mismatches"].extend(report.get("mismatches", []))
         merged["oracle_divergences"].extend(report.get("oracle_divergences", []))
@@ -1938,6 +1977,8 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
                 merged["projection_notes"].append(note)
     merged["mismatch_count"] = len(merged["mismatches"])
     merged["oracle_divergence_count"] = len(merged["oracle_divergences"])
+    if diagnostics.get("count"):
+        merged["provenance"] = {"relation_binding_diagnostics": diagnostics}
     return merged
 
 
@@ -2012,8 +2053,20 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
         with csv_path.open(newline="") as f:
             rows = list(csv.DictReader(f))
+        # The bridge's optional sidecar carries run diagnostics separately
+        # from the CSV rows. Read them before removing the temporary files.
+        identity_path = csv_path.with_suffix(csv_path.suffix + ".dataset_identity.json")
+        try:
+            sidecar = json.loads(identity_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            sidecar = {}
+        diagnostic_provenance = _preserve_relation_binding_diagnostics({}, sidecar)
 
     report = _adapt_snap_ecps_csv_to_v2(rows, runner)
+    if diagnostic_provenance:
+        report["provenance"] = _preserve_relation_binding_diagnostics(
+            report.get("provenance") or {}, diagnostic_provenance
+        )
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
@@ -4853,17 +4906,22 @@ def _print_quality_flags(aggregates: list) -> None:
 def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) -> dict:
     raw = json.loads(raw_path.read_text())
     if runner_type == "axiom-encode-tax-ecps-compare":
-        return _adapt_tax_ecps_to_v2(raw, config, suite=suite)
-    if runner_type == "axiom-encode-uk-efrs-compare":
-        return _adapt_uk_efrs_to_v2(raw, config, suite=suite)
+        adapted = _adapt_tax_ecps_to_v2(raw, config, suite=suite)
+    elif runner_type == "axiom-encode-uk-efrs-compare":
+        adapted = _adapt_uk_efrs_to_v2(raw, config, suite=suite)
+    else:
+        adapted = raw
+    diagnostic_provenance = _preserve_relation_binding_diagnostics({}, raw.get("provenance"))
+    if diagnostic_provenance:
+        adapted["provenance"] = {**adapted.get("provenance", {}), **diagnostic_provenance}
     # axiom-oracles-compare already emits v2 — pass through, but override
     # the suite with the comparison-config value. The upstream report
     # stamps the population/synthetic-subset name (e.g. "nyc-synthetic"),
     # not the per-comparison identity, so without this override every
     # state's SNAP report collapses into one suite bucket in the
     # dashboard's suite selector.
-    raw["suite"] = suite
-    return raw
+    adapted["suite"] = suite
+    return adapted
 
 
 def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
@@ -6160,6 +6218,10 @@ def _write_dashboard_report(
     from axiom_oracles.comparison.report import strip_heavy_case_metadata
 
     report = _merge_dispositions(report)
+    report = dict(report)
+    for key in ("provenance", "dataset_identity"):
+        if isinstance(report.get(key), dict):
+            report[key] = _preserve_relation_binding_diagnostics(report[key], report[key])
     versioned_case_chunks = _uses_versioned_case_chunks(report)
     if preserve_existing_versioned and versioned_case_chunks:
         # A skip-capable runner copied the committed dashboard view and did

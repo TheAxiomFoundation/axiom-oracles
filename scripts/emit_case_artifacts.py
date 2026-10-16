@@ -144,6 +144,13 @@ def engine_pair_records(metadata: dict) -> list[dict]:
         value = metadata[key]
         if value is None or isinstance(value, str):
             continue
+        if key == "axiom_relations" and isinstance(value, (list, tuple)):
+            # Older full reports can still carry internal producer role hints.
+            value = [
+                {field: item for field, item in record.items() if field != "roles"}
+                if isinstance(record, dict) else record
+                for record in value
+            ]
         name = key[len("axiom_") :]
         out.append({"n": name, "v": value})
         peer = metadata.get("pe_" + name)
