@@ -213,9 +213,10 @@ With an existing data branch, the helper requires the published
 `dashboard/public/data/snapshot.json` binding unchanged in the merged tree,
 then verifies the generated files against it before applying changes and
 deletions at their existing paths. Identities use raw bytes; staged generated
-changes, extra untracked generated files, local changes to bound files, and
-CRLF checkout conversion or declared filter, encoding, or ident attributes
-are refused. A missing binding or a report/aggregate identity mismatch refuses
+changes, extra untracked generated files and local changes to bound files are
+refused. Bound files are written from their raw Git blobs, bypassing attributes,
+encodings and filters, and checked against the binding before the read
+succeeds. A missing binding or a report/aggregate identity mismatch refuses
 the read without applying the overlay; reconcile
 and republish through the [recovery procedure](../README.md#recovering-a-source-data-conflict).
 The checkout's source revision stays unchanged. If the data branch is absent,

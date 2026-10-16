@@ -127,8 +127,11 @@ prepares with `--reconcile`, retains reviewed `main` bytes on generated-report
 conflicts, regenerates the full derived chain, and publishes the gated result.
 Publication failures repeat that sequence against current remote heads for up
 to three attempts (two retries). Reconciliation also runs every three hours and
-can be dispatched manually. A scheduled run first tries a consumer materialization
-in a scratch checkout; if it succeeds, the run exits without publishing.
+can be dispatched manually. A scheduled run first checks, in a scratch checkout,
+that `oracle-data` exists, that a consumer materialization succeeds and that the
+producer baseline passes its gates (`verify-baseline`); only if all three hold
+does it exit without publishing. Otherwise it reconciles, creating `oracle-data`
+if it is missing.
 Conflicts outside the generated data allowlist still require the recovery
 procedure. The binding checks file identity; it does not rerun comparisons
 against the reader's source revision.
@@ -182,9 +185,11 @@ create or repair bindings.
 Repeated materialization refreshes previously loaded data. With a bound data
 branch, it refuses staged generated changes, extra untracked generated files,
 and local edits to bound files even when they have no overlay change. File
-identities hash raw worktree bytes. Use a checkout that preserves Git blob
-bytes: CRLF checkout conversion and declared filter, working-tree-encoding,
-or ident attributes are refused. Every target's parent directories are checked
+identities hash raw worktree bytes. Bound files are written from their raw Git
+blobs, bypassing attributes, encodings and filters, and every written file is
+checked against the binding before the read succeeds. A checkout whose own
+settings have already converted bound files (for example `core.autocrlf=true`)
+is refused as a local edit. Every target's parent directories are checked
 before any file is restored or deleted; a local
 directory symlink stops materialization. A missing `oracle-data` branch uses
 the committed checkout baseline without a snapshot-binding check, restoring
@@ -203,7 +208,9 @@ conflict policy into a detached baseline so packing can identify refreshed
 files. Producer baselines bypass the consumer binding check; full regeneration
 and candidate gates must pass before a new binding is published. It refuses
 tracked staged or unstaged edits anywhere in the checkout and generated files
-outside the prepared tree. Checkout-byte guards also apply to producer baselines. Plain
+outside the prepared tree. Snapshot writers refuse CRLF checkout conversion and
+declared filter, working-tree-encoding or ident attributes on the paths they
+bind. Plain
 `materialize` is for readers and does not establish that packing baseline.
 See the [manual publication sequence](comparisons/README.md#manual-single-suite-publication).
 
