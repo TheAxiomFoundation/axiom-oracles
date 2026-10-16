@@ -125,8 +125,10 @@ reconciles and republishes the generated artifacts. Pushes to `main` touching
 the generated data allowlist automatically run the reconcile publisher: it
 prepares with `--reconcile`, retains reviewed `main` bytes on generated-report
 conflicts, regenerates the full derived chain, and publishes the gated result.
-Publication failures retry that sequence up to three times against current
-remote heads.
+Publication failures repeat that sequence against current remote heads for up
+to three attempts (two retries). Reconciliation also runs every three hours and
+can be dispatched manually. A scheduled run first tries a consumer materialization
+in a scratch checkout; if it succeeds, the run exits without publishing.
 Conflicts outside the generated data allowlist still require the recovery
 procedure. The binding checks file identity; it does not rerun comparisons
 against the reader's source revision.
@@ -143,7 +145,11 @@ The affected rerun publishes reports together with their derived conformance
 artifacts. The scheduled comparison workflow publishes the per-rule verification
 KPI to the same branch; its manually dispatched KPI run still only computes and
 summarizes the result. All Actions publication jobs share the
-`oracle-data-publication` concurrency group, so they write in sequence. Weekly
+`oracle-data-publication` concurrency group, so they write in sequence, with
+`queue: max` allowing up to 100 pending jobs. GitHub's default single pending
+publication can be replaced by a later run; a full queue can still drop a run,
+and publication can fail. The scheduled reconcile recovers consumer reads after
+a missed or failed reconcile by rebuilding against current remote heads. Weekly
 comparison reports remain workflow artifacts.
 The unattended regeneration scripts regenerate and publish the full data
 allowlist to `oracle-data`, retaining their existing build and deployment sequence. Run them

@@ -245,6 +245,183 @@ def test_main_data_pushes_reconcile_the_complete_publication():
     assert shell.rstrip().endswith("exit 1")
 
 
+def test_reconcile_has_scheduled_and_manual_recovery_for_missed_pushes():
+    doc = workflow("oracle-data-reconcile.yml")
+    triggers = doc.get("on", doc.get(True))
+    assert set(triggers) == {"push", "schedule", "workflow_dispatch"}
+    assert triggers["push"]["branches"] == ["main"]
+    assert triggers["schedule"] == [{"cron": "0 */3 * * *"}]
+    assert doc["jobs"]["reconcile"]["concurrency"] == {
+        "group": "oracle-data-publication",
+        "cancel-in-progress": False,
+        "queue": "max",
+    }
+
+
+@pytest.fixture
+def scheduled_reconcile_case(tmp_path, monkeypatch):
+    import shutil
+
+    from test_oracle_data import commit, data, git
+    from test_oracle_data_snapshot_properties import _case
+
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", "/dev/null")
+    monkeypatch.setenv("GIT_CONFIG_SYSTEM", "/dev/null")
+    monkeypatch.delenv("AXIOM_ORACLES_DATA_SOURCE", raising=False)
+    case = _case(tmp_path)
+    # Keep the real snapshot/merge CLI and the fixture's real complete derived
+    # family. The other generators supply declarations used by merge policy.
+    for name in (
+        "oracle_data.py",
+        "check_vacuous_gate.py",
+        "conformance_scoreboard.py",
+        "conformance_burndown.py",
+        "exercise_census.py",
+        "de_certificate_census.py",
+        "certify.py",
+        "generate_affected_map.py",
+    ):
+        shutil.copy2(ROOT / "scripts" / name, case.seed / "scripts" / name)
+    (case.seed / "scripts/commit_refreshed_report.sh").write_text(
+        "#!/usr/bin/env bash\nset -euo pipefail\n"
+        'if [ "${SIMULATE_DERIVED_REFRESH:-0}" = 1 ]; then\n'
+        '  echo generate >> "$ORACLE_DATA_ACTIVITY"\n'
+        '  "$PYTHON" scripts/generate_dashboard_overview.py\n'
+        '  "$PYTHON" scripts/oracle_data.py snapshot\n'
+        "  exit 0\nfi\n"
+        '[ "${VERIFY_DERIVED_REFRESH:-0}" = 1 ]\n'
+        'echo gate >> "$ORACLE_DATA_ACTIVITY"\n'
+        '"$PYTHON" scripts/generate_dashboard_overview.py --check\n'
+    )
+    (case.seed / "scripts/commit_refreshed_report.sh").chmod(0o755)
+    case.main = commit(case.seed, {})
+    git(case.seed, "push", "origin", f"HEAD:{data.MAIN_REF}", f"HEAD:{data.DATA_REF}")
+    case.activity = tmp_path / "generation-and-gates"
+    monkeypatch.setenv("ORACLE_DATA_ACTIVITY", str(case.activity))
+    return case
+
+
+def _run_scheduled_reconcile(case, tmp_path):
+    import os
+    import subprocess
+    import sys
+
+    from test_oracle_data import data, git
+
+    # Match checkout@v4's main checkout. A successful probe must not overlay
+    # published data here: prepare/publish expects this checkout to stay clean.
+    git(case.publisher, "fetch", "origin", data.MAIN_REF)
+    git(case.publisher, "reset", "--hard", "FETCH_HEAD")
+    runner_temp = tmp_path / "runner-temp"
+    runner_temp.mkdir()
+    shell = next(
+        step["run"]
+        for step in workflow("oracle-data-reconcile.yml")["jobs"]["reconcile"]["steps"]
+        if "for attempt in 1 2 3" in step.get("run", "")
+    )
+    result = subprocess.run(
+        ["bash", "-eo", "pipefail", "-c", shell],
+        cwd=case.publisher,
+        env={
+            **os.environ,
+            "PATH": str(Path(sys.executable).parent) + os.pathsep + os.environ["PATH"],
+            "PYTHON": sys.executable,
+            "GITHUB_EVENT_NAME": "schedule",
+            "RUNNER_TEMP": str(runner_temp),
+        },
+        capture_output=True,
+        text=True,
+        timeout=90,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert not list(runner_temp.iterdir()), "the scratch probe checkout must be removed"
+    return result
+
+
+def test_scheduled_reconcile_recovers_after_the_last_push_reconcile_is_dropped(
+    scheduled_reconcile_case, tmp_path
+):
+    import subprocess
+    import sys
+
+    from test_oracle_data import data, git
+    from test_oracle_data_snapshot_properties import (
+        BOT_REPORT,
+        _published,
+        _read,
+        _refresh,
+        _review,
+    )
+
+    case = scheduled_reconcile_case
+    assert _refresh(case, 1, "bot-report")
+    _review(case, 2, "main-edit-bot")
+    reviewed_main = case.main
+    reviewed_bytes = (case.seed / BOT_REPORT).read_bytes()
+    before_data = _published(case)
+    case.activity.unlink()
+    assert not _read(case, baseline=False)
+    assert not _read(case, baseline=True)
+
+    # Deliberately drop the push-triggered reconcile. Ordinary publishers and
+    # producer selection cannot resolve this primary-report conflict, however
+    # many subsequent runs are queued.
+    git(case.publisher, "fetch", "origin", data.MAIN_REF)
+    git(case.publisher, "reset", "--hard", "FETCH_HEAD")
+    for _ in range(3):
+        for arguments in (("prepare",), ("materialize", "--baseline")):
+            result = subprocess.run(
+                [sys.executable, "scripts/oracle_data.py", *arguments],
+                cwd=case.publisher,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            assert result.returncode != 0, result.stdout + result.stderr
+            assert "merge failed" in result.stderr
+        assert not _read(case, baseline=False)
+    assert _published(case) == before_data
+    assert git(case.origin, "rev-parse", data.MAIN_REF) == reviewed_main
+    assert not case.activity.exists()
+
+    # Evaluate this only after reproducing the wedged producers, so the old
+    # workflow fails specifically because it cannot dispatch scheduled recovery.
+    doc = workflow("oracle-data-reconcile.yml")
+    triggers = doc.get("on", doc.get(True))
+    assert "schedule" in triggers, "a dropped push reconcile needs scheduled recovery"
+    _run_scheduled_reconcile(case, tmp_path)
+    assert case.activity.read_text().splitlines() == ["generate", "gate"]
+    assert _published(case) != before_data
+    assert git(case.origin, "rev-parse", data.MAIN_REF) == reviewed_main
+    assert _read(case, baseline=False), "the next scheduled run must restore reads"
+    assert (case.reader / BOT_REPORT).read_bytes() == reviewed_bytes
+
+
+def test_scheduled_reconcile_with_readable_data_publishes_nothing(
+    scheduled_reconcile_case, tmp_path
+):
+    from test_oracle_data import data, git
+    from test_oracle_data_snapshot_properties import _published, _refresh, _state
+
+    case = scheduled_reconcile_case
+    assert _refresh(case, 1, "bot-report")
+    case.activity.unlink()
+    git(case.publisher, "fetch", "origin", data.MAIN_REF)
+    git(case.publisher, "reset", "--hard", "FETCH_HEAD")
+    # This live publication differs from main. Materializing directly in the
+    # publisher would leave an overlay even though the probe succeeds.
+    assert git(case.publisher, "diff", "HEAD", _published(case), "--", "dashboard")
+    before_checkout = _state(case.publisher)
+    before_data = _published(case)
+    before_main = git(case.origin, "rev-parse", data.MAIN_REF)
+    _run_scheduled_reconcile(case, tmp_path)
+    assert not case.activity.exists(), "a healthy read needs no generation or gates"
+    assert _published(case) == before_data
+    assert git(case.origin, "rev-parse", data.MAIN_REF) == before_main
+    assert _state(case.publisher) == before_checkout
+    assert git(case.publisher, "status", "--porcelain") == ""
+
+
 def test_reconcile_workflow_retries_a_source_only_main_race(tmp_path, monkeypatch):
     import os
     import shutil
@@ -397,6 +574,7 @@ def test_workflow_publications_are_serialized_on_the_data_branch():
         assert workflow(file)["jobs"][job_name]["concurrency"] == {
             "group": "oracle-data-publication",
             "cancel-in-progress": False,
+            "queue": "max",
         }
 
 

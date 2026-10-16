@@ -23,6 +23,9 @@ on:
       - comparisons/affected_map.json
       - comparisons/nz-treasury-incomeexplorer/single-person-attestations.json
       - axiom_oracles/data/euromod_be_coverage.json
+  workflow_dispatch:
+  schedule:
+    - cron: "0 */3 * * *"
 
 permissions:
   contents: read
@@ -34,6 +37,7 @@ jobs:
     concurrency:
       group: oracle-data-publication
       cancel-in-progress: false
+      queue: max
     permissions:
       contents: write
     steps:
@@ -55,6 +59,26 @@ jobs:
 
       - name: Reconcile and publish current main data
         run: |
+          if [ "${GITHUB_EVENT_NAME:-}" = "schedule" ]; then
+            # Consumer materialization can overlay generated files. Probe in a
+            # disposable checkout so the publisher stays clean on a no-op.
+            if (
+              probe_dir="$(mktemp -d "$RUNNER_TEMP/oracle-data-probe.XXXXXX")" || exit 1
+              trap 'rm -rf "$probe_dir"' EXIT
+              origin_url="$(git remote get-url origin)" || exit 1
+              # Chain setup explicitly: errexit is disabled inside an if test.
+              git clone --quiet --shared --no-checkout . "$probe_dir" &&
+              git -C "$probe_dir" remote set-url origin "$origin_url" &&
+              git -C "$probe_dir" fetch --quiet --no-tags origin refs/heads/main &&
+              git -C "$probe_dir" checkout --quiet --detach FETCH_HEAD &&
+              cd "$probe_dir" &&
+              python3 scripts/oracle_data.py materialize
+            ); then
+              echo "Consumer materialization succeeds; no reconciliation needed."
+              exit 0
+            fi
+            echo "Consumer probe failed; reconciling current main and data."
+          fi
           for attempt in 1 2 3; do
             python3 scripts/oracle_data.py prepare --reconcile
             # Retry from a clean generated tree. An earlier attempt may have

@@ -242,6 +242,7 @@ jobs:
     concurrency:
       group: oracle-data-publication
       cancel-in-progress: false
+      queue: max
     permissions:
       contents: write
     steps:
