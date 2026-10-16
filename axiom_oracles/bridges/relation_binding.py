@@ -249,8 +249,17 @@ class _ArtifactRelations:
                 raise RelationBindingError(
                     f"Relation {name!r} is not a two-slot relation"
                 )
+            # spec.rs:617-633 checks schema declarations even when a
+            # derivation overrides them with a different effective list.
+            declared = schema.get("slot_entities")
+            if declared and len(declared) != 2:
+                raise RelationBindingError(
+                    f"Invalid slot_entities for relation {name!r}"
+                )
             kinds = _effective_slot_entities(self.program, key)
-            if kinds is not None and len(kinds) != 2:
+            # relation_typing.rs:637 checks effective counts only when the
+            # program types a use, including base semantics of versioned rules.
+            if kinds is not None and len(kinds) != 2 and key in self._typing_relations:
                 raise RelationBindingError(
                     f"Invalid slot_entities for relation {name!r}"
                 )
@@ -401,7 +410,10 @@ def _ordered_tuple(
 ) -> list[str]:
     def clean(order: list[int]) -> bool:
         return all(
-            kinds[index] is None or expected[slot] == kinds[index]
+            # spec.rs:542 checks only declarations present for wire slots.
+            slot >= len(expected)
+            or kinds[index] is None
+            or expected[slot] == kinds[index]
             for slot, index in enumerate(order)
         )
 
@@ -418,6 +430,89 @@ def _ordered_tuple(
     )
 
 
+class RelationBinder:
+    """Bind tuples using one validated program snapshot for a request.
+
+    Create a new binder at each request construction or binding boundary so
+    in-place program edits between calls are observed. The captured analysis
+    owns a detached snapshot, shared by every tuple and owner-kind lookup.
+    """
+
+    def __init__(self, artifact: dict[str, Any] | None):
+        self._relations = (
+            _artifact_relation_analysis(artifact) if artifact is not None else None
+        )
+
+    def owner_kind(
+        self,
+        name: str,
+        *,
+        default_owner_kind: str,
+        related_kind: str,
+    ) -> str:
+        """Read a projected unit's physical kind from the relation's declared slots."""
+        relations = self._relations
+        if relations is None:
+            return default_owner_kind
+        expected = relations.expected(name)
+        owner, related = (
+            relations.canonical(default_owner_kind),
+            relations.canonical(related_kind),
+        )
+        if expected is None:
+            return default_owner_kind
+        if owner in expected:
+            return owner
+        candidates = set(expected) - {related}
+        if len(candidates) == 1:
+            return next(iter(candidates))
+        if expected == [related, related]:
+            return related
+        raise RelationBindingError(
+            f"Cannot determine the owner kind for relation {name!r}"
+        )
+
+    def tuple(
+        self,
+        name: str,
+        *,
+        owner_id: str,
+        owner_kind: str,
+        related_id: str,
+        related_kind: str,
+        legacy_owner_slot: int = 1,
+        binding_ambiguities: list[RelationBindingAmbiguityWarning] | None = None,
+    ) -> list[str]:
+        """Place explicit roles by engine typing; preserve untyped legacy order."""
+        if legacy_owner_slot not in (0, 1):
+            raise RelationBindingError("legacy_owner_slot must be 0 or 1")
+        ids = (
+            [related_id, owner_id] if legacy_owner_slot == 1 else [owner_id, related_id]
+        )
+        relations = self._relations
+        if relations is None:
+            return ids
+        expected = relations.expected(name)
+        schema = relations.schema(name)
+        if expected is None:
+            if schema and schema["name"] in relations.executed:
+                _report_ambiguity(name, ids, binding_ambiguities)
+            return ids
+        relations.validate_direct_aggregates(name, expected)
+        owner, related = (
+            relations.canonical(owner_kind),
+            relations.canonical(related_kind),
+        )
+        if expected == [owner, owner] and owner == related:
+            slot = relations.wrapper_owner_slot(schema["name"])
+            if slot is None:
+                _report_ambiguity(name, ids, binding_ambiguities)
+                return ids
+            return [owner_id, related_id] if slot == 0 else [related_id, owner_id]
+        kinds = [related, owner] if legacy_owner_slot == 1 else [owner, related]
+        return _ordered_tuple(name, expected, ids, kinds)
+
+
 def relation_owner_kind(
     artifact: dict[str, Any],
     name: str,
@@ -426,22 +521,9 @@ def relation_owner_kind(
     related_kind: str,
 ) -> str:
     """Read a projected unit's physical kind from the relation's declared slots."""
-    relations = _artifact_relation_analysis(artifact)
-    expected = relations.expected(name)
-    owner, related = (
-        relations.canonical(default_owner_kind),
-        relations.canonical(related_kind),
+    return RelationBinder(artifact).owner_kind(
+        name, default_owner_kind=default_owner_kind, related_kind=related_kind
     )
-    if expected is None:
-        return default_owner_kind
-    if owner in expected:
-        return owner
-    candidates = set(expected) - {related}
-    if len(candidates) == 1:
-        return next(iter(candidates))
-    if expected == [related, related]:
-        return related
-    raise RelationBindingError(f"Cannot determine the owner kind for relation {name!r}")
 
 
 def _report_ambiguity(
@@ -468,28 +550,15 @@ def relation_tuple(
     binding_ambiguities: list[RelationBindingAmbiguityWarning] | None = None,
 ) -> list[str]:
     """Place explicit roles by engine typing; preserve untyped legacy order."""
-    if legacy_owner_slot not in (0, 1):
-        raise RelationBindingError("legacy_owner_slot must be 0 or 1")
-    ids = [related_id, owner_id] if legacy_owner_slot == 1 else [owner_id, related_id]
-    if artifact is None:
-        return ids
-    relations = _artifact_relation_analysis(artifact)
-    expected = relations.expected(name)
-    schema = relations.schema(name)
-    if expected is None:
-        if schema and schema["name"] in relations.executed:
-            _report_ambiguity(name, ids, binding_ambiguities)
-        return ids
-    relations.validate_direct_aggregates(name, expected)
-    owner, related = relations.canonical(owner_kind), relations.canonical(related_kind)
-    if expected == [owner, owner] and owner == related:
-        slot = relations.wrapper_owner_slot(schema["name"])
-        if slot is None:
-            _report_ambiguity(name, ids, binding_ambiguities)
-            return ids
-        return [owner_id, related_id] if slot == 0 else [related_id, owner_id]
-    kinds = [related, owner] if legacy_owner_slot == 1 else [owner, related]
-    return _ordered_tuple(name, expected, ids, kinds)
+    return RelationBinder(artifact).tuple(
+        name,
+        owner_id=owner_id,
+        owner_kind=owner_kind,
+        related_id=related_id,
+        related_kind=related_kind,
+        legacy_owner_slot=legacy_owner_slot,
+        binding_ambiguities=binding_ambiguities,
+    )
 
 
 def bind_request_relations(
@@ -506,7 +575,8 @@ def bind_request_relations(
     records = result.get("dataset", {}).get("relations", [])
     if not records:
         return result
-    relations = _artifact_relation_analysis(artifact)
+    binder = RelationBinder(artifact)
+    relations = binder._relations
     entity_by_id: dict[str, str | None] = {}
     evidence = [
         (record["entity_id"], record["entity"])
@@ -524,7 +594,7 @@ def bind_request_relations(
     for record in records:
         name = record["name"]
         if "roles" in record:
-            record["tuple"] = relation_tuple(artifact, name, **record["roles"])
+            record["tuple"] = binder.tuple(name, **record["roles"])
             continue
         schema = relations.schema(name)
         if schema is None or schema.get("arity", 2) != 2:

@@ -432,3 +432,99 @@ def test_strict_engine_derivation_predicate_aggregates_on_related_id(
         assert "relation_current_slot_entity_mismatch" in rejected.stderr
         with pytest.raises(RelationBindingError, match="recompile|migrate artifact"):
             bind_request_relations(request, {"program": request["program"]})
+
+
+def _unexecuted_derivation_request(slot_entities):
+    request = _fixture("relation-member-nested-if.json")
+    request["program"]["relations"] = [
+        {"name": "S", "arity": 2, "slot_entities": ["Household", "Person"]},
+        {
+            "name": "D",
+            "arity": 2,
+            "slot_entities": ["Household", "Person"],
+            "derivation": {
+                "source_relation": "S",
+                "current_slot": 0,
+                "related_slot": 1,
+                "slot_entities": slot_entities,
+                "predicate": _constant(),
+            },
+        },
+    ]
+    # The queried rule never executes D or its source. Its wire tuple is still
+    # checked per declared slot, without the executable relation-count check.
+    request["program"]["derived"][0]["expr"] = _integer(1)
+    request["dataset"]["relations"] = [
+        {
+            "name": "D",
+            "tuple": ["h1", "p1"],
+            "interval": {"start": "2026-01-01", "end": "2026-01-31"},
+        }
+    ]
+    return request
+
+
+@pytest.mark.parametrize("mode", ["explain", "fast"])
+@pytest.mark.parametrize(
+    "slot_entities", [["Household"], ["Household", "Person", "Person"]]
+)
+@pytest.mark.parametrize("reversed_tuple", [False, True])
+def test_strict_engine_unexecuted_derivation_compares_only_present_tuple_slots(
+    strict_engine, mode, slot_entities, reversed_tuple
+):
+    expected = _unexecuted_derivation_request(slot_entities)
+    expected["mode"] = mode
+    assert int(_outputs(strict_engine, expected)[0]["n"]["value"]["value"]) == 1
+    request = deepcopy(expected)
+    if reversed_tuple:
+        request["dataset"]["relations"][0]["tuple"].reverse()
+        rejected = _run(strict_engine, request)
+        assert rejected.returncode != 0
+        assert "strict dataset relation entity validation failed" in rejected.stderr
+    before = deepcopy(request)
+    bound = bind_request_relations(request, {"program": request["program"]})
+    assert request == before
+    assert bound == expected
+    assert _outputs(strict_engine, bound) == _outputs(strict_engine, expected)
+
+
+@pytest.mark.parametrize("mode", ["explain", "fast"])
+def test_strict_engine_unexecuted_short_derivation_leaves_undeclared_slot_unchecked(
+    strict_engine, mode
+):
+    request = _unexecuted_derivation_request(["Household"])
+    request["mode"] = mode
+    request["dataset"]["inputs"][1]["entity"] = "Payment"
+    assert int(_outputs(strict_engine, request)[0]["n"]["value"]["value"]) == 1
+    assert bind_request_relations(request, {"program": request["program"]}) == request
+
+
+@pytest.mark.parametrize("mode", ["explain", "fast"])
+@pytest.mark.parametrize("invalid_count", ["schema", "executed_derivation"])
+@pytest.mark.parametrize(
+    "slot_entities", [["Household"], ["Household", "Person", "Person"]]
+)
+def test_strict_engine_slot_count_rejected_at_schema_load_or_execution(
+    strict_engine, mode, invalid_count, slot_entities
+):
+    request = _unexecuted_derivation_request(slot_entities)
+    request["mode"] = mode
+    schema = request["program"]["relations"][1]
+    if invalid_count == "schema":
+        schema["slot_entities"] = slot_entities
+        schema["derivation"]["slot_entities"] = ["Household", "Person"]
+    else:
+        request["program"]["derived"][0]["expr"] = {
+            "kind": "count_related",
+            "relation": "D",
+            "current_slot": 0,
+            "related_slot": 1,
+        }
+    rejected = _run(strict_engine, request)
+    assert rejected.returncode != 0
+    if invalid_count == "schema":
+        assert "slot entity kinds" in rejected.stderr
+    else:
+        assert "relation_slot_entity_count" in rejected.stderr
+    with pytest.raises(RelationBindingError, match="Invalid slot_entities"):
+        bind_request_relations(request, {"program": request["program"]})
