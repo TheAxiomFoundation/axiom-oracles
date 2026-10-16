@@ -253,6 +253,7 @@ def test_kpi_publication_refuses_or_repairs_real_stale_aggregates(historical_rep
         )
     except data.DataError as exc:
         assert "publication freshness gates failed" in str(exc), str(exc)
+        assert "overview.json is stale" in str(exc), str(exc)
         assert checkpoint(root) == before
         assert remote_tips(repo) == tips
     else:
@@ -264,6 +265,115 @@ def test_kpi_publication_refuses_or_repairs_real_stale_aggregates(historical_rep
         assert_consistent(root)
         assert_snapshot(root)
     recover_and_read(repo)
+
+
+@pytest.fixture
+def publication_gate_repo(tmp_path, monkeypatch):
+    """Build a detached publisher with a real origin and a bounded gate runner."""
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", "/dev/null")
+    monkeypatch.setenv("GIT_CONFIG_SYSTEM", "/dev/null")
+
+    def make(body: str):
+        root, origin = tmp_path / "publisher", tmp_path / "origin.git"
+        root.mkdir()
+        git(root, "init", "--initial-branch=main")
+        main = commit(
+            root,
+            {
+                "scripts/commit_refreshed_report.sh": (
+                    "#!/usr/bin/env bash\nset -eu\n"
+                    '[ "${VERIFY_DERIVED_REFRESH:-0}" = 1 ]\n' + body + "\n"
+                ),
+            },
+        )
+        git(tmp_path, "init", "--bare", str(origin))
+        git(root, "remote", "add", "origin", str(origin))
+        git(root, "push", "origin", f"HEAD:{data.MAIN_REF}")
+        git(root, "checkout", "--detach", "HEAD")
+        git(root, "branch", "-D", "main")
+        return SimpleNamespace(root=root, origin=origin, main=main)
+
+    return make
+
+
+@pytest.mark.parametrize(
+    "diagnostic",
+    [
+        "ModuleNotFoundError: No module named 'requests'",
+        "ImportError: cannot import name 'needed' from 'installed_package'",
+        "scripts/check.sh: line 1: missing-tool: command not found",
+        "FileNotFoundError: [Errno 2] No such file or directory: 'git'",
+    ],
+)
+def test_publication_distinguishes_gate_environment_failures(
+    publication_gate_repo, diagnostic
+):
+    # Print the exact diagnostic without requiring an actually broken host.
+    repo = publication_gate_repo(
+        "cat >&2 <<'GATE_ERROR'\n" + diagnostic + "\nGATE_ERROR\nexit 1"
+    )
+    with pytest.raises(
+        data.DataError, match="publication gate environment failed"
+    ) as exc:
+        data._verify_publication(repo.root, git(repo.root, "rev-parse", "HEAD^{tree}"))
+    assert diagnostic in str(exc.value)
+    assert "regenerate all affected aggregates" not in str(exc.value)
+
+
+@pytest.mark.parametrize(
+    "diagnostic",
+    [
+        "overview.json is stale",
+        "FileNotFoundError: [Errno 2] No such file or directory: 'comparisons/input.json'",
+    ],
+)
+def test_publication_keeps_specific_stale_aggregate_diagnosis(
+    publication_gate_repo, diagnostic
+):
+    repo = publication_gate_repo(
+        "cat >&2 <<'GATE_ERROR'\n" + diagnostic + "\nGATE_ERROR\nexit 1"
+    )
+    with pytest.raises(
+        data.DataError, match="publication freshness gates failed"
+    ) as exc:
+        data._verify_publication(repo.root, git(repo.root, "rev-parse", "HEAD^{tree}"))
+    assert diagnostic in str(exc.value)
+    assert "regenerate all affected aggregates" in str(exc.value)
+
+
+def test_publication_distinguishes_missing_gate_runner(
+    publication_gate_repo, monkeypatch
+):
+    repo = publication_gate_repo("exit 0")
+    popen = data.subprocess.Popen
+
+    def missing_bash(args, *positional, **kwargs):
+        if args[0] == "bash":
+            raise FileNotFoundError(2, "No such file or directory", "bash")
+        return popen(args, *positional, **kwargs)
+
+    monkeypatch.setattr(data.subprocess, "Popen", missing_bash)
+    with pytest.raises(
+        data.DataError, match="publication gate environment failed"
+    ) as exc:
+        data._verify_publication(repo.root, git(repo.root, "rev-parse", "HEAD^{tree}"))
+    assert "bash" in str(exc.value)
+
+
+def test_publication_supplies_main_history_to_detached_gate_clone(
+    publication_gate_repo,
+):
+    repo = publication_gate_repo(
+        "git merge-base --is-ancestor refs/remotes/origin/main HEAD\n"
+        f'test "$(git rev-parse refs/remotes/origin/main)" = "{data.MAIN_REF}"'
+    )
+    # Substitute the immutable source SHA without depending on a local main
+    # branch: Actions and unattended publishers can both be detached.
+    runner = repo.root / "scripts/commit_refreshed_report.sh"
+    runner.write_text(runner.read_text().replace(data.MAIN_REF, repo.main))
+    commit(repo.root, {})
+    assert not git(repo.root, "show-ref", "--heads", "main", check=False)
+    data._verify_publication(repo.root, git(repo.root, "rev-parse", "HEAD^{tree}"))
 
 
 def test_reader_refuses_or_repairs_real_interleaved_report_snapshot(historical_repo):

@@ -65,7 +65,7 @@ def test_conflicting_one_line_aggregates_use_the_snapshot_side(repo, operation):
 
     _operate(repo.checkout, operation)
 
-    expected = "reviewed" if operation == "prepare" else "published"
+    expected = "published" if operation == "materialize" else "reviewed"
     for path in AGGREGATES:
         assert json.loads((repo.checkout / path).read_text()) == {"value": expected}
     assert git(repo.origin, "rev-parse", data.MAIN_REF) == main
@@ -101,6 +101,32 @@ def test_conflicting_primary_report_names_documented_recovery(repo, operation, r
         json.loads((repo.checkout / report).read_text())["value"]
         == "reviewed correction"
     )
+
+
+def test_automated_reconcile_retains_reviewed_primary_report_corrections(repo):
+    report = "dashboard/public/data/report.json"
+    seed_data(repo, {report: '{"value":"published correction"}\n'})
+    main = advance_main(repo, {report: '{"value":"reviewed correction"}\n'})
+
+    baseline = data.prepare(repo.checkout, reconcile=True)
+
+    assert json.loads((repo.checkout / report).read_text()) == {
+        "value": "reviewed correction"
+    }
+    assert data._ancestor(repo.checkout, main, baseline)
+    assert git(repo.origin, "rev-parse", data.MAIN_REF) == main
+
+
+def test_automated_reconcile_still_refuses_conflicting_authored_inputs(repo):
+    path = "conformance/ratchet.yaml"
+    seed_data(repo, {path: "published input\n"})
+    advance_main(repo, {path: "reviewed input\n"})
+    before = git(repo.checkout, "write-tree")
+
+    with pytest.raises(data.DataError, match="authored inputs"):
+        data.prepare(repo.checkout, reconcile=True)
+
+    assert git(repo.checkout, "write-tree") == before
 
 
 def _manifest_case(root: Path, main_reports: list[str], published_reports: list[str]):
@@ -201,6 +227,10 @@ def test_real_rollout_refresh_survives_an_ordinary_add_suite_pr(tmp_path, monkey
         "/scripts/",
         *(f"/{path}" for path in data.DATA_PATHS),
     )
+    git(checkout, "checkout", "--detach", refresh)
+    _overview(checkout, check=True)
+    data.write_snapshot(checkout)
+    bound_refresh = commit(checkout, {})
     git(checkout, "checkout", "--detach", rollout)
     original = "axiom-policyengine-ca-snap-ecps.json"
     added = "axiom-policyengine-zz-new-suite.json"
@@ -230,13 +260,18 @@ def test_real_rollout_refresh_survives_an_ordinary_add_suite_pr(tmp_path, monkey
         "push",
         "origin",
         f"{main}:{data.MAIN_REF}",
-        f"{refresh}:{data.DATA_REF}",
+        f"{bound_refresh}:{data.DATA_REF}",
     )
 
     # The exact refresh is clean until the ordinary reviewed PR lands.
-    refresh_tree = git(checkout, "rev-parse", f"{refresh}^{{tree}}")
-    assert data._merge_tree(checkout, rollout, refresh) == refresh_tree
-    assert data._reader_merge_tree(checkout, rollout, refresh) == refresh_tree
+    refresh_tree = git(checkout, "rev-parse", f"{bound_refresh}^{{tree}}")
+    assert data._merge_tree(checkout, rollout, bound_refresh) == refresh_tree
+    assert data._reader_merge_tree(checkout, rollout, bound_refresh) == refresh_tree
+
+    git(checkout, "reset", "--hard", rollout)
+    data.materialize(checkout)
+    _overview(checkout, check=True)
+    data._verify_snapshot(checkout, bound_refresh)
 
     for baseline in (False, True):
         git(checkout, "reset", "--hard", main)
@@ -245,22 +280,49 @@ def test_real_rollout_refresh_survives_an_ordinary_add_suite_pr(tmp_path, monkey
             git(checkout, "write-tree"),
             git(checkout, "status", "--porcelain"),
         )
-        # These historical publications predate bindings. Refuse the legacy
-        # merge before changing even the first reader file.
-        with pytest.raises(data.DataError, match="incompatible oracle-data snapshot"):
+        if baseline:
             data.materialize(checkout, baseline=baseline)
-        assert (
-            git(checkout, "rev-parse", "HEAD"),
-            git(checkout, "write-tree"),
-            git(checkout, "status", "--porcelain"),
-        ) == before
+            assert data._ancestor(
+                checkout, bound_refresh, git(checkout, "rev-parse", "HEAD")
+            )
+        else:
+            with pytest.raises(
+                data.DataError, match="incompatible oracle-data snapshot"
+            ):
+                data.materialize(checkout)
+            assert (
+                git(checkout, "rev-parse", "HEAD"),
+                git(checkout, "write-tree"),
+                git(checkout, "status", "--porcelain"),
+            ) == before
         assert (checkout / OVERVIEW).read_bytes() == reviewed_overview
 
-    data.prepare(checkout)
+    data.prepare(checkout, reconcile=True)
     assert (checkout / OVERVIEW).read_bytes() == reviewed_overview
     _overview(checkout)
     _overview(checkout, check=True)
     regenerated = json.loads((checkout / OVERVIEW).read_text())
     assert added in regenerated["sources"]
     assert regenerated["sources"] != json.loads(reviewed_overview)["sources"]
+
+    # This fixture isolates the real overview/merge/binding transaction. Check
+    # its gate against exactly the full-scope candidate bytes without copying
+    # unrelated source history. The KPI regression tests the full gate clone.
+    def verify_overview_candidate(root, tree):
+        files = {
+            path: identity
+            for path, identity in data._tree_identities(
+                root, tree, list(data.DATA_PATHS)
+            ).items()
+            if identity["oid"] is not None
+        }
+        assert data._worktree_identities(root, list(files)) == files
+        _overview(root, check=True)
+
+    monkeypatch.setattr(data, "_verify_publication", verify_overview_candidate)
+    assert data.publish(checkout, group="all", message="fixture: automatic reconcile")
+    git(checkout, "reset", "--hard", main)
+    data.materialize(checkout)
+    _overview(checkout, check=True)
+    data._verify_snapshot(checkout, git(origin, "rev-parse", data.DATA_REF))
     assert git(origin, "rev-parse", data.MAIN_REF) == main

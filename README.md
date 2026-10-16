@@ -121,12 +121,19 @@ data allowlist. Before applying published data, readers require the merged
 binding to equal the data branch's published binding and verify it against the
 candidate merged tree. A reviewed report edit or report-list addition
 that disagrees with the published binding stops the read until a producer
-reconciles and republishes the generated artifacts. The binding checks file
-identity; it does not rerun comparisons against the reader's source revision.
+reconciles and republishes the generated artifacts. Pushes to `main` touching
+the generated data allowlist automatically run the reconcile publisher: it
+prepares with `--reconcile`, retains reviewed `main` bytes on generated-report
+conflicts, regenerates the full derived chain, and publishes the gated result.
+Publication failures retry that sequence up to three times against current
+remote heads.
+Conflicts outside the generated data allowlist still require the recovery
+procedure. The binding checks file identity; it does not rerun comparisons
+against the reader's source revision.
 The shared report list retains additions from both branches. Its entries must
 be plain filenames; `snapshot.json`, including case variants, is reserved for
-metadata. Conflicts in primary reports or authored inputs also stop the
-operation for the
+metadata. Ordinary prepare and materialize operations refuse primary-report
+conflicts; conflicting authored inputs require the
 [recovery procedure below](#recovering-a-source-data-conflict). Affected
 bundles record each replaced or deleted file's baseline SHA256 and refuse
 application if the prepared file matches neither that baseline nor the bundled
@@ -135,14 +142,14 @@ result, protecting reviewed corrections made after packing.
 The affected rerun publishes reports together with their derived conformance
 artifacts. The scheduled comparison workflow publishes the per-rule verification
 KPI to the same branch; its manually dispatched KPI run still only computes and
-summarizes the result. Both Actions publication jobs share the
+summarizes the result. All Actions publication jobs share the
 `oracle-data-publication` concurrency group, so they write in sequence. Weekly
 comparison reports remain workflow artifacts.
-The unattended regeneration scripts also publish their dashboard data to
-`oracle-data`, retaining their existing build and deployment sequence. Run them
+The unattended regeneration scripts regenerate and publish the full data
+allowlist to `oracle-data`, retaining their existing build and deployment sequence. Run them
 from a dedicated clean checkout: `prepare` rebuilds their baseline from current
-remote `main` source and published data before computing. The generic KPI and
-dashboard publisher refuses publication if either remote branch advances during
+remote `main` source and published data before computing. The generic publisher
+refuses publication if either remote branch advances during
 generation or the candidate fails a publication gate. This refusal leaves
 generated edits available for inspection. If
 the final push loses a race, the local publication commit is undone while its
@@ -185,9 +192,12 @@ generated Belgium coverage rollup. Packages built by CI retain the reviewed
 
 For a refresh that will be packed or published, start in a clean disposable
 checkout and run `python3 scripts/oracle_data.py materialize --baseline`
-**before** the report producer. This records the published data as a detached
-baseline so packing compares against the previous publication. It refuses
-tracked staged or unstaged edits anywhere in the checkout. Plain
+**before** the report producer. This merges generated data with the publisher's
+conflict policy into a detached baseline so packing can identify refreshed
+files. Producer baselines bypass the consumer binding check; full regeneration
+and candidate gates must pass before a new binding is published. It refuses
+tracked staged or unstaged edits anywhere in the checkout and generated files
+outside the prepared tree. Checkout-byte guards also apply to producer baselines. Plain
 `materialize` is for readers and does not establish that packing baseline.
 See the [manual publication sequence](comparisons/README.md#manual-single-suite-publication).
 

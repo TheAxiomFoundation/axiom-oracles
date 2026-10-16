@@ -4,8 +4,8 @@
 ``prepare`` is destructive and belongs in a disposable publisher checkout:
 it combines current main source with the latest data before generation.
 ``materialize`` changes only generated files in a reader's worktree; its
-optional ``--baseline`` makes those files part of a detached CI baseline so
-the report packer can distinguish a refresh from already-published data.
+optional ``--baseline`` prepares an unverified detached producer merge so
+generation can reconcile reviewed main data with already-published data.
 """
 
 from __future__ import annotations
@@ -17,6 +17,7 @@ from functools import cache
 import json
 import os
 from pathlib import Path, PurePosixPath
+import re
 import signal
 import stat
 import subprocess
@@ -52,6 +53,7 @@ DATA_PATHS = (
     "axiom_oracles/data/euromod_be_coverage.json",
 )
 PUBLISH_GROUPS = {
+    "all": DATA_PATHS,
     "dashboard": ("dashboard/public/data/",),
     "kpi": (
         "dashboard/public/data/rule_verification.json",
@@ -205,7 +207,12 @@ def _manifest_union(
 
 
 def _merge_tree(
-    root: Path, source: str, data: str, *, prefer_data: bool = False
+    root: Path,
+    source: str,
+    data: str,
+    *,
+    prefer_data: bool = False,
+    reconcile: bool = False,
 ) -> str:
     result = _git(root, "merge-tree", "--write-tree", "-z", source, data, check=False)
     if result.returncode not in (0, 1):
@@ -224,7 +231,8 @@ def _merge_tree(
         unresolved = [
             path
             for path, stages in conflicts.items()
-            if not any(
+            if not (reconcile and _in_scope(path, DATA_PATHS))
+            and not any(
                 path.count("/") == pattern.count("/") and fnmatchcase(path, pattern)
                 for pattern in _regenerated_aggregates()
             )
@@ -312,7 +320,9 @@ def _scoped_tree(root: Path, source: str, target: str) -> str:
         Path(index_name).unlink(missing_ok=True)
 
 
-def _reader_merge_tree(root: Path, source: str, data: str) -> str:
+def _reader_merge_tree(
+    root: Path, source: str, data: str, *, producer: bool = False
+) -> str:
     # Merge data changes in isolation. Source code carried by the full-history
     # data branch is irrelevant to a reader and can conflict with feature work.
     base = _git(root, "merge-base", source, data).stdout.decode().strip()
@@ -322,7 +332,7 @@ def _reader_merge_tree(root: Path, source: str, data: str) -> str:
         if scoped == _sha(root, f"{base}^{{tree}}")
         else _commit_tree(root, scoped, base)
     )
-    return _merge_tree(root, source, data_only, prefer_data=True)
+    return _merge_tree(root, source, data_only, prefer_data=not producer)
 
 
 def _state_path(root: Path) -> Path:
@@ -489,6 +499,12 @@ def _verify_publication(root: Path, tree: str) -> None:
         )
         candidate = _commit_tree(root, tree, _sha(root, "HEAD"))
         _git(checkout, "checkout", "--quiet", "--detach", candidate)
+        # A shared clone's origin is the disposable publisher, which need not
+        # have a local main branch. NZ ancestor gates must see the actual
+        # remote main history rather than silently losing their merge-base.
+        main = _fetch(root, MAIN_REF)
+        assert main is not None
+        _git(checkout, "update-ref", "refs/remotes/origin/main", main)
         env = {
             **os.environ,
             "VERIFY_DERIVED_REFRESH": "1",
@@ -497,15 +513,21 @@ def _verify_publication(root: Path, tree: str) -> None:
             "PYTHONPATH": str(checkout),
             "AXIOM_ORACLES_DATA_SOURCE": "checkout",
         }
-        with subprocess.Popen(
-            ["bash", "scripts/commit_refreshed_report.sh", "recovery", DATA_BRANCH],
-            cwd=checkout,
-            env=env,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            start_new_session=True,
-        ) as process:
+        try:
+            process = subprocess.Popen(
+                ["bash", "scripts/commit_refreshed_report.sh", "recovery", DATA_BRANCH],
+                cwd=checkout,
+                env=env,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                start_new_session=True,
+            )
+        except OSError as exc:
+            raise DataError(
+                f"publication gate environment failed; nothing committed: {exc}"
+            ) from exc
+        with process:
             try:
                 output, errors = process.communicate(timeout=540)
             except subprocess.TimeoutExpired as exc:
@@ -515,6 +537,28 @@ def _verify_publication(root: Path, tree: str) -> None:
                     "publication freshness gates timed out; nothing committed"
                 ) from exc
         if process.returncode:
+            diagnostics = output + errors
+            if (
+                process.returncode in (126, 127)
+                or re.search(
+                    r"ModuleNotFoundError:|ImportError:|command not found",
+                    diagnostics,
+                )
+                or (
+                    "FileNotFoundError:" in diagnostics
+                    and (
+                        "subprocess.py" in diagnostics
+                        or re.search(
+                            r"No such file or directory: ['\"](?:git|bash|sh|curl|uv|python[\d.]*)['\"]",
+                            diagnostics,
+                        )
+                    )
+                )
+            ):
+                raise DataError(
+                    "publication gate environment failed; install the package and required tools; "
+                    f"nothing committed:\n{output}{errors}"
+                )
             raise DataError(
                 "publication freshness gates failed; prepare and regenerate all affected aggregates; "
                 f"nothing committed:\n{output}{errors}"
@@ -714,7 +758,7 @@ def _checkout_baseline(root: Path, commit: str) -> None:
     _git(root, "reset", "--hard", commit)
 
 
-def prepare(root: Path | None = None) -> str:
+def prepare(root: Path | None = None, *, reconcile: bool = False) -> str:
     """Prepare a disposable publisher from current remote main and data."""
     root = _repository(root)
     main = _fetch(root, MAIN_REF)
@@ -722,14 +766,24 @@ def prepare(root: Path | None = None) -> str:
     data = _fetch(root, DATA_REF, optional=True)
     baseline = main
     if data is not None:
-        tree = _merge_tree(root, main, data)
+        # Reconciliation keeps reviewed main bytes for conflicting generated
+        # reports. Full regeneration and exact-candidate gates are mandatory
+        # before the automated publisher may bind or publish this merge.
+        # Authored inputs outside DATA_PATHS always remain fail-closed.
+        tree = _merge_tree(root, main, data, reconcile=reconcile)
         baseline = _composite_commit(root, tree, main, data)
     _checkout_baseline(root, baseline)
     return baseline
 
 
 def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str]:
-    """Merge published data into this checkout without replacing source files."""
+    """Read bound data, or prepare an unverified producer baseline.
+
+    Producer baselines use the publisher's aggregate conflict policy. They
+    deliberately accept an unbound merged tree: generation and candidate
+    gates must reconcile it before publication. Consumer reads verify the
+    exact published binding before changing any checkout bytes.
+    """
     if os.environ.get("AXIOM_ORACLES_DATA_SOURCE") == "checkout":
         return []
     root = _repository(root)
@@ -737,15 +791,23 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
     data = _fetch(root, DATA_REF, optional=True)
     # A disappeared branch also removes the last overlay. Reconcile recorded
     # paths against HEAD with exactly the same guards as an ordinary refresh.
-    tree = source if data is None else _reader_merge_tree(root, source, data)
-    if data is not None and (
-        _tree_identities(root, tree, [SNAPSHOT_PATH])
-        != _tree_identities(root, data, [SNAPSHOT_PATH])
+    tree = (
+        source
+        if data is None
+        else _reader_merge_tree(root, source, data, producer=baseline)
+    )
+    if (
+        not baseline
+        and data is not None
+        and (
+            _tree_identities(root, tree, [SNAPSHOT_PATH])
+            != _tree_identities(root, data, [SNAPSHOT_PATH])
+        )
     ):
         raise DataError(
             "incompatible oracle-data snapshot: merged binding differs from the published binding; checkout unchanged"
         )
-    bound = [] if data is None else _verify_snapshot(root, tree)
+    bound = [] if data is None or baseline else _verify_snapshot(root, tree)
     changed = _git(
         root,
         "diff",
@@ -767,9 +829,17 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
         for path in previous
         if path not in paths and previous[path] != previous_targets[path]
     )
-    # Check every bound path, even when it has no overlay delta. A local edit
-    # to an otherwise unchanged report must not accompany a successful read.
-    targets = list(dict.fromkeys([*paths, *bound]))
+    # Keep checkout-byte and local-file guards for producers too, independently
+    # of snapshot validity. An unverified baseline still must preserve local
+    # work and must not smudge unchanged generated files on detached checkout.
+    guarded = bound
+    if baseline:
+        guarded = [
+            path
+            for path, identity in _tree_identities(root, tree, list(DATA_PATHS)).items()
+            if identity["oid"] is not None
+        ]
+    targets = list(dict.fromkeys([*paths, *guarded]))
     if bound:
         if _git(
             root, "diff", "--cached", "--name-only", "-z", "--", *DATA_PATHS
@@ -777,10 +847,11 @@ def materialize(root: Path | None = None, *, baseline: bool = False) -> list[str
             raise DataError(
                 "staged data overlaps the bound snapshot; checkout unchanged"
             )
+    if bound or baseline:
         untracked = _git(root, "ls-files", "--others", "-z", "--", *DATA_PATHS).stdout
         if any(path.decode() not in targets for path in untracked.split(b"\0") if path):
             raise DataError(
-                "local data files are outside the bound snapshot; checkout unchanged"
+                "local data files are outside the prepared data tree; checkout unchanged"
             )
     desired = _guard_worktree(root, source, tree, targets, previous) if targets else {}
     if baseline and _git(root, "status", "--porcelain", "--untracked-files=no").stdout:
@@ -896,8 +967,13 @@ def publish(root: Path | None = None, *, group: str, message: str) -> bool:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    commands.add_parser(
+    prep = commands.add_parser(
         "prepare", help="reset disposable publisher to current source + data"
+    )
+    prep.add_argument(
+        "--reconcile",
+        action="store_true",
+        help="retain reviewed main data on conflicts; regenerate all data before publishing",
     )
     commands.add_parser(
         "snapshot",
@@ -909,7 +985,7 @@ def main() -> int:
     read.add_argument(
         "--baseline",
         action="store_true",
-        help="make a detached data baseline (requires a clean tracked checkout)",
+        help="prepare an unverified producer baseline (requires a clean tracked checkout)",
     )
     write = commands.add_parser(
         "publish", help="commit prepared data to oracle-data only"
@@ -919,7 +995,7 @@ def main() -> int:
     args = parser.parse_args()
     try:
         if args.command == "prepare":
-            print(f"prepared {prepare()}")
+            print(f"prepared {prepare(reconcile=args.reconcile)}")
         elif args.command == "snapshot":
             write_snapshot()
             print("recorded generated content identities")

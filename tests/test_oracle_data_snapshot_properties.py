@@ -1,4 +1,4 @@
-"""Exercise snapshot safety against arbitrary source/refresh interleavings.
+"""Exercise snapshot safety and liveness against source/refresh interleavings.
 
 The small repositories use the real overview generator. Their shell entrypoint
 contains only that generator's check gate, so these tests exercise the generic
@@ -122,8 +122,7 @@ def _data_files(root: Path) -> dict[str, tuple[bytes, str]]:
     return files
 
 
-def _assert_bound(root: Path) -> None:
-    """Compare all materialized bytes/modes to the manifest, independently."""
+def _actual_files(root: Path) -> dict:
     actual = {}
     for path, (payload, mode) in _data_files(root).items():
         if path == SNAPSHOT:
@@ -131,8 +130,13 @@ def _assert_bound(root: Path) -> None:
         # Git's SHA-1 blob identity includes the header, unlike overview.sources.
         oid = hashlib.sha1(f"blob {len(payload)}\0".encode() + payload).hexdigest()
         actual[path] = {"oid": oid, "mode": mode}
+    return actual
+
+
+def _assert_bound(root: Path) -> None:
+    """Compare all materialized bytes/modes to the manifest, independently."""
     snapshot = json.loads((root / SNAPSHOT).read_bytes())
-    assert snapshot == {"schema": SCHEMA, "files": actual}
+    assert snapshot == {"schema": SCHEMA, "files": _actual_files(root)}
     bundle = json.loads((root / OVERVIEW).read_bytes())
     for name, digest in bundle["sources"].items():
         assert (
@@ -250,8 +254,13 @@ def _read(case, *, baseline: bool) -> bool:
     except data.DataError:
         assert _state(reader) == before, "a rejected read must not partly materialize"
         return False
-    _assert_bound(reader)
-    _overview(reader, check=True)
+    if baseline:
+        # Producer baselines intentionally admit unreconciled aggregates and
+        # bindings. They must still check out the exact Git tree they merged.
+        assert _actual_files(reader) == _tree_files(reader, "HEAD")
+    else:
+        _assert_bound(reader)
+        _overview(reader, check=True)
     return True
 
 
@@ -285,6 +294,32 @@ def _refresh(case, revision: int, operation: str) -> bool:
     return True
 
 
+OPERATIONS = (
+    "main-add",
+    "main-edit",
+    "main-delete",
+    "main-edit-bot",
+    "bot-kpi",
+    "bot-report",
+    "bot-race",
+    "read",
+)
+MAIN_OPERATIONS = tuple(op for op in OPERATIONS if op.startswith("main-"))
+ARBITRARY_SCHEDULE = st.lists(st.sampled_from(OPERATIONS), min_size=1, max_size=8)
+# Every generated safety schedule reaches a stale merged candidate, varying
+# the reviewed change and everything that follows it. Disabling the candidate
+# gate must therefore fail generated examples as well as pinned regressions.
+SAFETY_SCHEDULE = st.tuples(
+    st.sampled_from(["main-add", "main-edit", "main-delete"]),
+    ARBITRARY_SCHEDULE,
+).map(lambda parts: ["bot-report", parts[0], "bot-kpi", *parts[1]])
+LIVENESS_SCHEDULE = st.tuples(
+    st.lists(st.sampled_from(OPERATIONS), max_size=4),
+    st.sampled_from(MAIN_OPERATIONS),
+    st.lists(st.sampled_from(OPERATIONS), max_size=4),
+).map(lambda parts: [*parts[0], parts[1], *parts[2]])
+
+
 @settings(
     max_examples=12,
     deadline=None,
@@ -296,24 +331,7 @@ def _refresh(case, revision: int, operation: str) -> bool:
 @example(schedule=["main-add", "bot-kpi", "bot-report", "main-delete", "read"])
 @example(schedule=["bot-report", "main-edit-bot", "bot-report", "read"])
 @example(schedule=["bot-race", "read", "bot-report"])
-@given(
-    schedule=st.lists(
-        st.sampled_from(
-            [
-                "main-add",
-                "main-edit",
-                "main-delete",
-                "main-edit-bot",
-                "bot-kpi",
-                "bot-report",
-                "bot-race",
-                "read",
-            ]
-        ),
-        min_size=1,
-        max_size=8,
-    )
-)
+@given(schedule=SAFETY_SCHEDULE)
 def test_every_successful_interleaving_is_verified_and_bound(
     tmp_path, monkeypatch, schedule
 ):
@@ -339,6 +357,84 @@ def test_every_successful_interleaving_is_verified_and_bound(
                 _refresh(case, revision, operation)
             for baseline in (False, True):
                 _read(case, baseline=baseline)
+
+
+def _reconcile(case) -> None:
+    """The automated workflow: reviewed merge, all generators, gated publish."""
+    data.prepare(case.publisher, reconcile=True)
+    _overview(case.publisher)
+    data.publish(case.publisher, group="all", message="automated reconcile")
+    _audit_publication(case)
+
+
+@settings(
+    max_examples=12,
+    deadline=None,
+    database=None,
+    phases=[Phase.explicit, Phase.generate],
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
+@example(schedule=["bot-report", "main-edit", "bot-kpi", "read"])
+@example(schedule=["main-add", "bot-kpi", "bot-report", "main-delete", "read"])
+@example(schedule=["bot-report", "main-edit-bot", "bot-report", "read"])
+@example(schedule=["bot-race", "read", "bot-report"])
+@given(schedule=LIVENESS_SCHEDULE)
+def test_one_automated_reconcile_restores_reads_after_every_main_data_commit(
+    tmp_path, monkeypatch, schedule
+):
+    """A reviewed data commit requires at most one producer run to restore reads.
+
+    Primary report conflicts, additions/deletions, and a main update racing a
+    producer all remain recoverable. Every schedule also finishes readable.
+    Successful consumer reads retain the independent safety oracle above.
+    """
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", "/dev/null")
+    monkeypatch.setenv("GIT_CONFIG_SYSTEM", "/dev/null")
+    monkeypatch.delenv("AXIOM_ORACLES_DATA_SOURCE", raising=False)
+    with tempfile.TemporaryDirectory(dir=tmp_path) as directory:
+        case = _case(Path(directory))
+        assert _refresh(case, 1, "bot-kpi")
+        assert _read(case, baseline=False)
+        for revision, operation in enumerate(schedule, start=2):
+            previous_main = case.main
+            if operation.startswith("main-"):
+                _review(case, revision, operation)
+            elif operation.startswith("bot-"):
+                _refresh(case, revision, operation)
+            if case.main != previous_main:
+                _read(case, baseline=False)
+                # Baselines may refuse unresolved primary-report conflicts,
+                # which the automated reconcile explicitly resolves to main.
+                baseline = _read(case, baseline=True)
+                if operation in ("main-add", "bot-race"):
+                    assert baseline, (
+                        "producer baselines must not require consumer binding",
+                        schedule,
+                        operation,
+                    )
+                _reconcile(case)
+                assert _read(case, baseline=False), (
+                    "one automated reconcile must restore a consumer read",
+                    schedule,
+                    operation,
+                )
+                changed = git(
+                    case.seed, "diff", "--name-only", previous_main, case.main
+                ).splitlines()
+                for name in changed:
+                    if name in (MANIFEST, OVERVIEW, SNAPSHOT):
+                        continue
+                    reviewed, materialized = case.seed / name, case.reader / name
+                    assert materialized.exists() == reviewed.exists()
+                    if reviewed.exists():
+                        assert materialized.read_bytes() == reviewed.read_bytes(), (
+                            "reconcile must retain reviewed main corrections",
+                            name,
+                        )
+                assert _read(case, baseline=True)
+        _reconcile(case)
+        assert _read(case, baseline=False), "no generated schedule may end wedged"
+        assert _read(case, baseline=True)
 
 
 def test_kpi_candidate_cannot_borrow_unstaged_aggregate_repair(snapshot_case):
@@ -543,10 +639,8 @@ def test_publication_refuses_overview_dependencies_outside_the_bound_directory(
     assert _published(case) == before
 
 
-@pytest.mark.parametrize("baseline", [False, True])
 def test_reader_requires_the_published_binding_even_if_main_rebinds_its_own_data(
     snapshot_case,
-    baseline,
 ):
     case = snapshot_case
     # Main alone edits a report and then writes a full, internally valid hash
@@ -570,14 +664,14 @@ def test_reader_requires_the_published_binding_even_if_main_rebinds_its_own_data
     )
     assert result.returncode == 1 and "stale" in result.stdout
     git(case.seed, "push", "origin", f"{main}:{data.MAIN_REF}")
-    reader = case.baseline_reader if baseline else case.reader
+    reader = case.reader
     git(reader, "fetch", "origin", data.MAIN_REF)
     git(reader, "reset", "--hard", "FETCH_HEAD")
     before = _state(reader)
     published = _published(case)
 
     with pytest.raises(data.DataError):
-        data.materialize(reader, baseline=baseline)
+        data.materialize(reader)
 
     assert _state(reader) == before
     assert _published(case) == published
@@ -727,7 +821,6 @@ def test_reader_never_succeeds_with_a_new_report_smudged_to_crlf(
     _read(case, baseline=baseline)
 
 
-@pytest.mark.parametrize("baseline", [False, True])
 @pytest.mark.parametrize(
     "corruption",
     [
@@ -743,7 +836,7 @@ def test_reader_never_succeeds_with_a_new_report_smudged_to_crlf(
     ],
 )
 def test_invalid_snapshot_is_refused_before_any_materialization(
-    snapshot_case, baseline, corruption
+    snapshot_case, corruption
 ):
     case = snapshot_case
     git(case.seed, "checkout", "-B", "oracle-data", case.main)
@@ -773,10 +866,89 @@ def test_invalid_snapshot_is_refused_before_any_materialization(
         _write(case.seed, SNAPSHOT, snapshot)
     commit(case.seed, {})
     git(case.seed, "push", "origin", f"HEAD:{data.DATA_REF}")
-    reader = case.baseline_reader if baseline else case.reader
+    reader = case.reader
     before = _state(reader)
 
     with pytest.raises(data.DataError):
-        data.materialize(reader, baseline=baseline)
+        data.materialize(reader)
 
     assert _state(reader) == before
+
+
+DELAYED_LIVENESS_SCHEDULE = st.tuples(
+    st.lists(st.sampled_from(OPERATIONS), max_size=4),
+    st.sampled_from(MAIN_OPERATIONS),
+    st.lists(st.sampled_from(OPERATIONS), max_size=4),
+    st.sampled_from(MAIN_OPERATIONS),
+).map(lambda parts: [*parts[0], parts[1], *parts[2], parts[3]])
+
+
+@settings(
+    max_examples=12,
+    deadline=None,
+    database=None,
+    phases=[Phase.explicit, Phase.generate],
+    suppress_health_check=[HealthCheck.function_scoped_fixture],
+)
+@example(schedule=["bot-report", "main-edit", "main-add", "bot-kpi", "main-delete"])
+@example(
+    schedule=[
+        "bot-report",
+        "main-edit-bot",
+        "main-delete",
+        "bot-report",
+        "main-add",
+    ]
+)
+@example(schedule=["main-add", "bot-race", "main-delete", "main-edit-bot"])
+@example(schedule=["main-delete", "main-delete", "bot-report", "main-edit"])
+@given(schedule=DELAYED_LIVENESS_SCHEDULE)
+def test_one_delayed_reconcile_restores_reads_from_reachable_pending_main_states(
+    tmp_path, monkeypatch, schedule
+):
+    """Several unpublished main updates still need only one final producer run.
+
+    Build the reachable state with arbitrary reviewed changes, failed/successful
+    bot runs, and read attempts, without invoking the reconcile producer. After
+    one further main data commit, a single producer must restore bound reads.
+    """
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", "/dev/null")
+    monkeypatch.setenv("GIT_CONFIG_SYSTEM", "/dev/null")
+    monkeypatch.delenv("AXIOM_ORACLES_DATA_SOURCE", raising=False)
+    with tempfile.TemporaryDirectory(dir=tmp_path) as directory:
+        case = _case(Path(directory))
+        assert _refresh(case, 1, "bot-kpi")
+        assert _read(case, baseline=False)
+        for revision, operation in enumerate(schedule[:-1], start=2):
+            if operation.startswith("main-"):
+                _review(case, revision, operation)
+            elif operation.startswith("bot-"):
+                _refresh(case, revision, operation)
+            for baseline in (False, True):
+                _read(case, baseline=baseline)
+
+        previous_main = case.main
+        assert schedule[-1] in MAIN_OPERATIONS
+        _review(case, len(schedule) + 2, schedule[-1])
+        _read(case, baseline=False)
+        _read(case, baseline=True)
+        # Exactly one reconcile follows the entire pending-main schedule.
+        _reconcile(case)
+        assert _read(case, baseline=False), (
+            "one delayed producer must restore a consumer read",
+            schedule,
+        )
+        changed = git(
+            case.seed, "diff", "--name-only", previous_main, case.main
+        ).splitlines()
+        for name in changed:
+            if name in (MANIFEST, OVERVIEW, SNAPSHOT):
+                continue
+            reviewed, materialized = case.seed / name, case.reader / name
+            assert materialized.exists() == reviewed.exists()
+            if reviewed.exists():
+                assert materialized.read_bytes() == reviewed.read_bytes(), (
+                    "delayed reconcile must retain the final reviewed correction",
+                    name,
+                )
+        assert _read(case, baseline=True), "no delayed schedule may end wedged"

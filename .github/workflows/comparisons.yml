@@ -267,8 +267,12 @@ jobs:
         with:
           python-version: "3.14"
 
-      - name: Install PyYAML
-        run: pip install pyyaml
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package for generation and candidate gates
+        run: uv pip install --system -e .
 
       - name: Regenerate per-rule verification data
         run: |

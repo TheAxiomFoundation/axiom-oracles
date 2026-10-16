@@ -70,11 +70,16 @@ done
 .venv/bin/python scripts/generate_dashboard_overview.py || echo "!! overview bundle failed"
 # Full-evidence reports run to GBs; keep only the newest generation each.
 .venv/bin/python scripts/prune_superseded_reports.py || echo "!! report prune failed"
+# Reports feed generated conformance, closure and certificate outputs outside
+# the dashboard tree. Reconcile every derived output before publication.
+PYTHON=.venv/bin/python SIMULATE_DERIVED_REFRESH=1 \
+  scripts/commit_refreshed_report.sh scheduled oracle-data
 .venv/bin/python -m pytest tests/ -q
 
-if ! git diff --quiet dashboard/public/data; then
-  .venv/bin/python scripts/oracle_data.py publish --group dashboard \
-    --message "data: scheduled oracle regeneration $(date +%Y-%m-%d)"
+before_publish=$(git rev-parse HEAD)
+.venv/bin/python scripts/oracle_data.py publish --group all \
+  --message "data: scheduled oracle regeneration $(date +%Y-%m-%d)"
+if [ "$(git rev-parse HEAD)" != "$before_publish" ]; then
   (cd dashboard && AXIOM_ORACLES_DATA_SOURCE=checkout bun run build && vercel --prod)
 else
   echo "no data changes"

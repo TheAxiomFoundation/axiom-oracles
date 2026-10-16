@@ -44,11 +44,15 @@ done
 # against coverage_overview.json. sync_rulespec_roots.sh already pulled
 # $HOME/rulespec-us to origin/main, so read HEAD offline here.
 .venv/bin/python scripts/rule_verification.py --no-fetch || true
+# Publish the full derived transaction, including conformance and certificates.
+PYTHON=.venv/bin/python SIMULATE_DERIVED_REFRESH=1 \
+  scripts/commit_refreshed_report.sh scheduled oracle-data
 .venv/bin/python -m pytest tests/ -q
 
-if ! git diff --quiet dashboard/public/data; then
-  .venv/bin/python scripts/oracle_data.py publish --group dashboard \
-    --message "data: scheduled oracle regeneration $(date +%Y-%m-%d)"
+before_publish=$(git rev-parse HEAD)
+.venv/bin/python scripts/oracle_data.py publish --group all \
+  --message "data: scheduled oracle regeneration $(date +%Y-%m-%d)"
+if [ "$(git rev-parse HEAD)" != "$before_publish" ]; then
   (cd dashboard && AXIOM_ORACLES_DATA_SOURCE=checkout bun run build && vercel --prod)
 else
   echo "no data changes"
