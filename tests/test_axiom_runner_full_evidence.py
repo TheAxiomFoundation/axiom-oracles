@@ -31,10 +31,11 @@ from __future__ import annotations
 import json
 import os
 import subprocess
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
-from hypothesis import given, settings
+from hypothesis import example, given, settings
 from hypothesis import strategies as st
 
 from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
@@ -363,6 +364,79 @@ def test_full_evidence_and_isolation_invariants(tmp_path_factory, specs, batch_s
         )
         assert alone.values == batched.values
         assert alone.errors == batched.errors
+
+
+@PROPERTY_SETTINGS
+@example(repeats=[1, 1], failing_index=0, batch_size=2)
+@given(
+    repeats=st.lists(st.integers(min_value=1, max_value=25), min_size=2, max_size=10),
+    failing_index=st.integers(min_value=0, max_value=9),
+    batch_size=st.integers(min_value=1, max_value=12),
+)
+def test_relation_diagnostics_survive_case_error_isolation(
+    tmp_path_factory, repeats, failing_index, batch_size
+):
+    """Every case keeps its own ambiguities, including a failed confirming run.
+
+    Evidence mode and retry batching must change neither the compared result
+    nor diagnostic counts, and binding must leave caller metadata untouched.
+    """
+
+    artifact = _artifact(tmp_path_factory.mktemp("relation-artifact"))
+    compiled = json.loads(artifact.read_text())
+    compiled["program"]["relations"] = [{"name": "members", "arity": 2}]
+    compiled["program"]["derived"].append({
+        "name": "member_count",
+        "entity": "Household",
+        "expr": {
+            "kind": "count_related",
+            "relation": "members",
+            "current_slot": 0,
+            "related_slot": 1,
+        },
+    })
+    artifact.write_text(json.dumps(compiled))
+    failing_index %= len(repeats)
+    cases = []
+    for index, count in enumerate(repeats):
+        case = _case(
+            f"unit-{index}", True, ABSENT if index == failing_index else True, 1_000
+        )
+        # Neither endpoint has an input identity. The used relation preserves
+        # each supplied tuple and reports every occurrence as ambiguous.
+        case.metadata["axiom_relations"] = [
+            {"name": "members", "tuple": [f"member-{index}", f"owner-{index}"]}
+            for _ in range(count)
+        ]
+        cases.append(case)
+    metadata_before = deepcopy([case.metadata for case in cases])
+
+    for full_evidence in (False, True):
+        for size in dict.fromkeys((1, batch_size, len(cases))):
+            results = _runner(
+                artifact, _GuardedEngine(), full_evidence=full_evidence, batch_size=size
+            ).run_cases(cases, [OUTPUT])
+            for index, (count, result) in enumerate(zip(repeats, results, strict=True)):
+                if index == failing_index:
+                    assert result.values == {}
+                    assert result.errors == (
+                        "missing input `expense_requirements_satisfied` for entity "
+                        "`tax_unit` over 2026-01-01..2026-12-31",
+                    )
+                else:
+                    assert result.errors == ()
+                    assert result.values[OUTPUT] == pytest.approx(200.0)
+                diagnostics = result.raw["relation_binding_diagnostics"]
+                assert diagnostics["count"] == count
+                assert diagnostics["by_relation"] == {"members": count}
+                assert len(diagnostics["samples"]) == min(count, 20)
+                assert all(
+                    sample["relation"] == "members"
+                    and [value.partition("::")[2] for value in sample["tuple"]]
+                    == [f"member-{index}", f"owner-{index}"]
+                    for sample in diagnostics["samples"]
+                )
+            assert [case.metadata for case in cases] == metadata_before
 
 
 def test_untaken_branch_input_no_longer_fails_the_batch(tmp_path):

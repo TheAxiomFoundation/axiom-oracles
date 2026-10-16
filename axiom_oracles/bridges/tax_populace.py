@@ -17,6 +17,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import warnings
 from dataclasses import dataclass, field
 from decimal import Decimal, InvalidOperation
 from importlib.metadata import PackageNotFoundError, version
@@ -26,6 +27,14 @@ from typing import Any
 import yaml
 
 from .jurisdiction import jurisdiction_prefix
+from .relation_binding import (
+    attach_relation_binding_diagnostics,
+    bind_materialized_relations,
+    bind_request_relations,
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
+    relation_tuple,
+)
 from .rulespec_paths import (
     _canonical_rulespec_compile_path,
     _rulespec_public_item_keys,
@@ -565,6 +574,7 @@ class TaxComparisonReport:
     output_summary: list[dict[str, Any]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
+    relation_binding_diagnostics: dict[str, Any] | None = field(default=None, kw_only=True)
     observed_outputs: list[dict[str, Any]] = field(default_factory=list)
     errors: list[dict[str, Any]] = field(default_factory=list)
 
@@ -572,6 +582,11 @@ class TaxComparisonReport:
         from axiom_oracles.conformance.observations import json_output_values
 
         return json_output_values({
+            **({"provenance": {
+                "relation_binding_diagnostics": public_relation_binding_diagnostics(
+                    self.relation_binding_diagnostics,
+                ),
+            }} if self.relation_binding_diagnostics else {}),
             "compared_tax_units": self.compared_tax_units,
             "compared_persons": self.compared_persons,
             "compared_values": self.compared_values,
@@ -1128,6 +1143,33 @@ def policyengine_data_certification_override_required() -> bool:
     return False
 
 
+def tax_relation_record(
+    artifact: dict[str, Any] | None,
+    name: str,
+    *,
+    tax_unit_id: str,
+    person_id: str,
+    interval: dict[str, str],
+    legacy_owner_slot: int = 1,
+) -> dict[str, Any]:
+    """Keep source roles until compilation supplies executable tuple slots."""
+    roles = {
+        "owner_id": tax_unit_id,
+        "owner_kind": "TaxUnit",
+        "related_id": person_id,
+        "related_kind": "Person",
+        "legacy_owner_slot": legacy_owner_slot,
+    }
+    record = {
+        "name": name,
+        "tuple": relation_tuple(artifact, name, **roles),
+        "interval": interval,
+    }
+    if artifact is None:
+        record["roles"] = roles
+    return record
+
+
 def build_axiom_request(
     *,
     pe_data: dict[str, Any],
@@ -1135,9 +1177,10 @@ def build_axiom_request(
     surface: str = "ctc",
     oasdi_wage_base_results: list[dict[str, Any]] | None = None,
     contribution_base: float | None = None,
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if surface == "ctc":
-        return build_ctc_request(pe_data=pe_data, year=year)
+        return build_ctc_request(pe_data=pe_data, year=year, artifact=artifact)
     if surface == "standard-deduction":
         return build_standard_deduction_request(pe_data=pe_data, year=year)
     if surface == "capital-gain-definitions":
@@ -1151,11 +1194,12 @@ def build_axiom_request(
             pe_data=pe_data,
             year=year,
             contribution_base=contribution_base,
+            artifact=artifact,
         )
     if surface == "cdcc":
-        return build_cdcc_request(pe_data=pe_data, year=year)
+        return build_cdcc_request(pe_data=pe_data, year=year, artifact=artifact)
     if surface == "aotc":
-        return build_aotc_request(pe_data=pe_data, year=year)
+        return build_aotc_request(pe_data=pe_data, year=year, artifact=artifact)
     if surface == "nonrefundable-credits":
         return build_nonrefundable_credits_request(pe_data=pe_data, year=year)
     if surface == "income-tax":
@@ -1170,7 +1214,9 @@ def build_axiom_request(
     raise ValueError(f"unsupported tax surface: {surface}")
 
 
-def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+def build_ctc_request(
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
+) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1185,7 +1231,13 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
         entity_id = tax_entity_id(tax_unit_id)
         for name, value in project_tax_unit_inputs(row).items():
             inputs.append(
-                input_record(f"{CTC_BASE}#input.{name}", entity_id, interval, value)
+                input_record(
+                    f"{CTC_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                    entity="TaxUnit",
+                )
             )
         inputs.append(
             input_record(
@@ -1193,6 +1245,7 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
                 entity_id,
                 interval,
                 ctc_h_filing_status_code(str(row["filing_status"])),
+                entity="TaxUnit",
             )
         )
         tax_unit_persons = persons_by_tax_unit.get(tax_unit_id, [])
@@ -1202,31 +1255,45 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
         ):
             person_id = f"{entity_id}_person_{person_index}"
             relations.append(
-                {
-                    "name": f"{CTC_BASE}#relation.ctc_qualifying_child_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{CTC_BASE}#relation.ctc_qualifying_child_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             relations.append(
-                {
-                    "name": f"{CTC_H_BASE}#relation.dependent_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{CTC_H_BASE}#relation.dependent_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             for name, value in project_ctc_person_inputs(person, context).items():
                 inputs.append(
-                    input_record(f"{CTC_BASE}#input.{name}", person_id, interval, value)
+                    input_record(
+                        f"{CTC_BASE}#input.{name}",
+                        person_id,
+                        interval,
+                        value,
+                        entity="Person",
+                    )
                 )
             for name, value in project_ctc_h_person_inputs(person, context).items():
                 inputs.append(
                     input_record(
-                        f"{CTC_H_BASE}#input.{name}", person_id, interval, value
+                        f"{CTC_H_BASE}#input.{name}",
+                        person_id,
+                        interval,
+                        value,
+                        entity="Person",
                     )
                 )
 
-    return {
+    request = {
         "mode": "explain",
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
@@ -1238,9 +1305,12 @@ def build_ctc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
+    return request
 
 
-def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+def build_cdcc_request(
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
+) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1257,7 +1327,13 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
         contexts = project_tax_unit_person_contexts(tax_unit_persons)
         for name, value in project_cdcc_tax_unit_inputs(row=row).items():
             inputs.append(
-                input_record(f"{CDCC_BASE}#input.{name}", entity_id, interval, value)
+                input_record(
+                    f"{CDCC_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                    entity="TaxUnit",
+                )
             )
 
         for person_index, (person, context) in enumerate(
@@ -1265,11 +1341,13 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
         ):
             person_id = f"{entity_id}_person_{person_index}"
             relations.append(
-                {
-                    "name": f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{CDCC_BASE}#relation.qualifying_individual_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             for name, value in project_cdcc_person_inputs(person, context).items():
                 inputs.append(
@@ -1278,10 +1356,11 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
                         person_id,
                         interval,
                         value,
+                        entity="Person",
                     )
                 )
 
-    return {
+    request = {
         "mode": "explain",
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
@@ -1293,9 +1372,12 @@ def build_cdcc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
+    return request
 
 
-def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
+def build_aotc_request(
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
+) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
         "start": f"{year:04d}-01-01",
@@ -1312,7 +1394,13 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
         contexts = project_tax_unit_person_contexts(tax_unit_persons)
         for name, value in project_aotc_tax_unit_inputs(row=row).items():
             inputs.append(
-                input_record(f"{AOTC_BASE}#input.{name}", entity_id, interval, value)
+                input_record(
+                    f"{AOTC_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                    entity="TaxUnit",
+                )
             )
 
         for person_index, (person, context) in enumerate(
@@ -1320,20 +1408,26 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
         ):
             person_id = f"{entity_id}_person_{person_index}"
             relations.append(
-                {
-                    "name": f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{AOTC_BASE}#relation.education_credit_member_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             for name, value in project_aotc_person_inputs(person, context).items():
                 inputs.append(
                     input_record(
-                        f"{AOTC_BASE}#input.{name}", person_id, interval, value
+                        f"{AOTC_BASE}#input.{name}",
+                        person_id,
+                        interval,
+                        value,
+                        entity="Person",
                     )
                 )
 
-    return {
+    request = {
         "mode": "explain",
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
@@ -1345,6 +1439,7 @@ def build_aotc_request(*, pe_data: dict[str, Any], year: int) -> dict[str, Any]:
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
+    return request
 
 
 def build_nonrefundable_credits_request(
@@ -1367,6 +1462,7 @@ def build_nonrefundable_credits_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1404,6 +1500,7 @@ def build_income_tax_request(*, pe_data: dict[str, Any], year: int) -> dict[str,
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1445,6 +1542,7 @@ def build_standard_deduction_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1488,6 +1586,7 @@ def build_capital_gain_definitions_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1528,6 +1627,7 @@ def build_tax_before_credits_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
             inputs.append(
@@ -1536,6 +1636,7 @@ def build_tax_before_credits_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
         tax_unit_persons = persons_by_tax_unit.get(tax_unit_id, [])
@@ -1549,6 +1650,7 @@ def build_tax_before_credits_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
 
@@ -1569,7 +1671,11 @@ def build_tax_before_credits_request(
 
 
 def build_eitc_request(
-    *, pe_data: dict[str, Any], year: int, contribution_base: float
+    *,
+    pe_data: dict[str, Any],
+    year: int,
+    contribution_base: float,
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     interval = {
         "period_kind": "tax_year",
@@ -1590,7 +1696,13 @@ def build_eitc_request(
             persons=tax_unit_persons,
         ).items():
             inputs.append(
-                input_record(f"{EITC_BASE}#input.{name}", entity_id, interval, value)
+                input_record(
+                    f"{EITC_BASE}#input.{name}",
+                    entity_id,
+                    interval,
+                    value,
+                    entity="TaxUnit",
+                )
             )
         for name, value in project_section_7703_tax_unit_inputs(row=row).items():
             inputs.append(
@@ -1599,6 +1711,7 @@ def build_eitc_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
         for name, value in project_section_32_c_2_tax_unit_inputs(
@@ -1611,6 +1724,7 @@ def build_eitc_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
         for name, value in project_section_112_tax_unit_inputs().items():
@@ -1620,6 +1734,7 @@ def build_eitc_request(
                     entity_id,
                     interval,
                     value,
+                    entity="TaxUnit",
                 )
             )
         # The generated EITC re-encode grounds earned income in 32(c)(2)'s
@@ -1632,16 +1747,22 @@ def build_eitc_request(
         ):
             person_id = f"{entity_id}_person_{person_index}"
             relations.append(
-                {
-                    "name": f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
-                    "tuple": [person_id, entity_id],
-                    "interval": interval,
-                }
+                tax_relation_record(
+                    artifact,
+                    f"{EITC_BASE}#relation.qualifying_child_of_tax_unit",
+                    tax_unit_id=entity_id,
+                    person_id=person_id,
+                    interval=interval,
+                )
             )
             for name, value in project_eitc_person_inputs(person, context).items():
                 inputs.append(
                     input_record(
-                        f"{EITC_BASE}#input.{name}", person_id, interval, value
+                        f"{EITC_BASE}#input.{name}",
+                        person_id,
+                        interval,
+                        value,
+                        entity="Person",
                     )
                 )
             for name, value in project_section_152_c_person_inputs(
@@ -1654,10 +1775,11 @@ def build_eitc_request(
                         person_id,
                         interval,
                         value,
+                        entity="Person",
                     )
                 )
 
-    return {
+    request = {
         "mode": "explain",
         "dataset": {"inputs": inputs, "relations": relations},
         "queries": [
@@ -1669,6 +1791,7 @@ def build_eitc_request(
             for tax_unit_id in pe_data["tax_unit_ids"]
         ],
     }
+    return request
 
 
 def build_payroll_request(
@@ -1712,6 +1835,7 @@ def build_payroll_request(
                 person_entity_id(person_id),
                 interval,
                 wages,
+                entity="Person",
             )
         )
 
@@ -1847,6 +1971,7 @@ def build_oasdi_wage_base_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
 
@@ -2826,10 +2951,12 @@ def run_axiom_program(
                 compile_result.stderr.strip() or compile_result.stdout.strip()
             )
         artifact_payload = json.loads(artifact.read_text())
+        ambiguities = []
         runtime_request, public_output_by_runtime = _runtime_axiom_request(
             request,
             artifact_payload=artifact_payload,
             rulespec_root=rulespec_root,
+            binding_ambiguities=ambiguities,
         )
         run_result = subprocess.run(
             [str(binary), "run-compiled", "--artifact", str(artifact)],
@@ -2847,6 +2974,7 @@ def run_axiom_program(
             results,
             public_output_by_runtime=public_output_by_runtime,
         )
+        attach_relation_binding_diagnostics(results, ambiguities)
         return results
 
 
@@ -2855,24 +2983,33 @@ def _runtime_axiom_request(
     *,
     artifact_payload: dict[str, Any],
     rulespec_root: Path,
+    binding_ambiguities: list | None = None,
 ) -> tuple[dict[str, Any], dict[str, str]]:
     runtime_by_public_output = _runtime_output_ids_by_public_name(
         artifact_payload,
         rulespec_root=rulespec_root,
     )
     runtime_request = copy.deepcopy(request)
+    materialized = set()
     for item in (runtime_request.get("dataset") or {}).get("inputs") or []:
         if isinstance(item, dict) and isinstance(item.get("name"), str):
             item["name"] = _runtime_rulespec_name(
                 item["name"],
                 rulespec_root=rulespec_root,
             )
-    for item in (runtime_request.get("dataset") or {}).get("relations") or []:
+    for index, item in enumerate((runtime_request.get("dataset") or {}).get("relations") or []):
         if isinstance(item, dict) and isinstance(item.get("name"), str):
             item["name"] = _runtime_rulespec_name(
                 item["name"],
                 rulespec_root=rulespec_root,
             )
+            roles = item.pop("roles", None)
+            if roles is not None:
+                item["tuple"] = relation_tuple(
+                    artifact_payload, item["name"], **roles,
+                    binding_ambiguities=binding_ambiguities,
+                )
+                materialized.add(index)
 
     public_output_by_runtime: dict[str, str] = {}
     for query in runtime_request.get("queries") or []:
@@ -2895,6 +3032,16 @@ def _runtime_axiom_request(
             runtime_outputs.append(runtime_output)
             public_output_by_runtime[runtime_output] = output
         query["outputs"] = runtime_outputs
+    # Producers materialize explicit roles above, after compilation and name
+    # resolution. The binder also validates raw caller-supplied relation tuples.
+    runtime_request, ambiguities = bind_materialized_relations(
+        runtime_request, artifact_payload, materialized=materialized, binder=bind_request_relations,
+    )
+    if binding_ambiguities is not None:
+        binding_ambiguities.extend(ambiguities)
+    else:
+        for ambiguity in ambiguities:
+            warnings.warn(ambiguity, stacklevel=2)
     return runtime_request, public_output_by_runtime
 
 
@@ -2955,6 +3102,10 @@ def compare_outputs(
     relative_tolerance: float,
 ) -> TaxComparisonReport:
     mismatches: list[TaxComparisonRow] = []
+    diagnostics: dict = {}
+    for results in axiom_outputs_by_surface.values():
+        for result in results:
+            merge_relation_binding_diagnostics(diagnostics, result.get("relation_binding_diagnostics", {}))
     observed_outputs: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
     summary: dict[str, dict[str, Any]] = {
@@ -3107,6 +3258,7 @@ def compare_outputs(
         observed_outputs=observed_outputs,
         errors=errors,
         dataset_identity=pe_data.get("dataset_identity") or None,
+        relation_binding_diagnostics=diagnostics if diagnostics.get("count") else None,
         projection_notes=[
             "Current CTC projection uses Populace raw tax-unit membership, age, "
             "student status, separation status, and SSN-card type to reconstruct "
@@ -3239,11 +3391,13 @@ def person_money_sum(persons: list[Any], column: str | tuple[str, ...]) -> float
 
 
 def input_record(
-    name: str, entity_id: str, interval: dict[str, str], value: Any
+    name: str, entity_id: str, interval: dict[str, str], value: Any, *,
+    entity: str = "Entity",
 ) -> dict[str, Any]:
+    """Label input kinds while preserving the generic four-argument API."""
     return {
         "name": name,
-        "entity": "Entity",
+        "entity": entity,
         "entity_id": entity_id,
         "interval": interval,
         "value": scalar_value(value),

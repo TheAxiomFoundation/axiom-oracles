@@ -19,6 +19,7 @@ from functools import cache
 from pathlib import Path
 from typing import Any
 
+from ...bridges.relation_binding import relation_tuple
 from ...core.case import Case, Concepts, Entity
 from ._snap_co_base_inputs import BASE_INPUTS, BASE_MEMBER
 from .runner import (
@@ -131,12 +132,15 @@ def _supported_input_records(records: list[dict[str, Any]]) -> list[dict[str, An
 
 def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
     """Attach Axiom CO SNAP input records to cases that lack them."""
+    artifact = None
     projected = []
     for case in cases:
         metadata = dict(case.metadata)
         if metadata.get(AXIOM_INPUT_RECORDS_METADATA_KEY):
             projected.append(case)
             continue
+        if artifact is None:
+            artifact = json.loads(US_SNAP_CO_COMPILED_ARTIFACT_PATH.read_text())
 
         people = _people(case)
         household_size = max(len(people), 1)
@@ -162,10 +166,21 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
         # Member relation: one entry per person, with age and citizenship
         # carried from the Case.
         member_records = []
-        relation_tuples = []
+        relation_records = []
         for index, person in enumerate(people):
             person_id = f"snap-member-{index}"
-            relation_tuples.append([person_id, _SNAP_HOUSEHOLD_ID])
+            roles = {
+                "owner_id": _SNAP_HOUSEHOLD_ID,
+                "owner_kind": _SNAP_HOUSEHOLD_ENTITY,
+                "related_id": person_id,
+                "related_kind": "Person",
+            }
+            for relation_name in (_MEMBER_RELATION, _MEMBER_RELATION_RUNTIME):
+                relation_records.append({
+                    "name": relation_name,
+                    "tuple": relation_tuple(artifact, relation_name, **roles),
+                    "roles": roles,
+                })
             for input_name, default in BASE_MEMBER.items():
                 value = _member_value(input_name, person, default)
                 member_records.append(
@@ -186,11 +201,7 @@ def attach_axiom_snap_co_inputs(cases: list[Case]) -> list[Case]:
         )
         metadata[AXIOM_RELATIONS_METADATA_KEY] = [
             *metadata.get(AXIOM_RELATIONS_METADATA_KEY, []),
-            *[
-                {"name": relation_name, "tuple": tup}
-                for tup in relation_tuples
-                for relation_name in (_MEMBER_RELATION, _MEMBER_RELATION_RUNTIME)
-            ],
+            *relation_records,
         ]
         # Output entity for SNAP outputs is the Household, not the default
         # TaxUnit used by the federal-income-tax projection.
