@@ -9,7 +9,12 @@ schedule.
 
 ## How to run one locally
 
+Materialize the latest published data first when the run should use current
+reports and fallback artifacts. Set `AXIOM_ORACLES_DATA_SOURCE=checkout` to
+validate the reviewed checkout or work offline instead.
+
 ```bash
+python3 scripts/oracle_data.py materialize
 uv run scripts/run_comparison.py fiit-ecps --summary
 uv run scripts/run_comparison.py co-snap-ecps --summary
 uv run scripts/run_comparison.py co-snap-qc --summary
@@ -27,6 +32,17 @@ workflows materialize that layout per matrix leg with
 `affected_map.json` (which repos to clone) and the suite YAML (which
 conventions to link, whether to build the compose venv), skip-if-present so a
 supervised machine is never touched (#296, #300).
+
+Source checkouts use `main` with full history. Before selecting suites or
+running a comparison, the workflows run
+`scripts/oracle_data.py materialize --baseline` to combine that source with
+the latest `oracle-data` snapshot. This makes published report provenance and
+fallback reports available at their existing paths while retaining current
+source code. `--baseline` records the combined tree as a disposable detached
+baseline, so packing a run measures its own generated changes. It requires a
+clean tracked worktree and index; save or commit local edits before using it.
+For manual publication, run it before the producer as shown
+[below](#manual-single-suite-publication).
 
 Engine compiles follow the post-hard-cut contract via
 `axiom_oracles/engine_compat.py`: explicit repeatable `--rulespec-root` flags
@@ -404,7 +420,8 @@ are never read. The **affected-rerun** workflow
 (`.github/workflows/affected-rerun.yml`, every 6h + `repository_dispatch`)
 resolves each mapped repo's `main` HEAD, and `scripts/select_affected_suites.py`
 selects only the suites whose report ran against an older SHA — those get
-rerun. Each matrix leg then packs its refresh
+rerun. Selection and matrix legs read the published `oracle-data` snapshot
+materialized over current `main`. Each matrix leg then packs its refresh
 (`scripts/commit_refreshed_report.sh --pack`): it collects the run's private
 outputs, vets them once on its own checkout (the re-emission guard,
 regenerating and verifying every derived artifact, the unexplained ratchet)
@@ -415,31 +432,77 @@ the reports (the dispositions merge + EUROMOD-BE coverage rollup, freshness,
 conformance scoreboard + detail, the daily history snapshot, the burn-down,
 census and certificates), self-checks the tree against ci.yml's staleness
 gates and the unexplained ratchet before pushing, and rebuilds the commit from
-scratch on the current tip whenever a push is rejected, so a concurrent push
-can't strand main stale or conflicted. Run by hand,
-`scripts/commit_refreshed_report.sh <suite> <branch>` still commits one suite
-(pack, then publish that one bundle).
+scratch on the current `oracle-data` tip whenever a push is rejected. Each
+attempt incorporates current `main` first. Conflicts in regenerated aggregates
+use `main`'s version before regeneration and verification; the shared manifest
+retains an append-only union of both report lists. Primary report and authored
+input conflicts refuse publication and materialization until a maintainer
+performs the [source-data conflict recovery](#recovering-source-data-conflicts).
+Readers resolve aggregate conflicts to the published data version, which
+matches the reports they load. A missing data branch is seeded from
+`main`; successful pushes explicitly target `HEAD:refs/heads/oracle-data`
+without force. The [manual sequence below](#manual-single-suite-publication)
+packs and publishes one suite. The publisher refuses `main`, `master`, and
+other targets.
 The conformance ratchet is never re-pinned from that bot path. Stale suites
 with `name: null` (parameter suites and `ci: manual` suites) are listed as
 awaiting the manual lane, not rerun. The weekly full matrix (`comparisons.yml`)
 runs every suite that does not declare `ci: manual` as a CI signal; it uploads
-reports as artifacts and never commits them.
+reports as artifacts and never commits them. Its separate scheduled KPI job
+prepares the same data branch before generating `rule_verification.json` and
+`rule_verification_summary.json`, and publishes only those files. A manual
+dispatch of that job computes the KPI without publishing.
+The affected publisher and KPI job share the `oracle-data-publication`
+concurrency group, serializing their writes to the data branch.
 Regenerate the map after adding a comparison:
 `uv run scripts/generate_affected_map.py`.
 
-Regenerating these aggregates with the report is not optional bookkeeping —
-they are *derived* from the committed reports, so a report refresh that skips
-them leaves `conformance/scoreboard.json` + `conformance/detail/<jur>.json`
-stale and reds `conformance_scoreboard.py --check` on **every open PR** until
-someone regenerates by hand (the 2026-07-14 il/ky/oh/va income-tax incident,
-fixed reactively in #282). Regeneration happens inside the publish job's
-push-retry loop, because each attempt rebuilds on the current tip: an
-aggregate recomputed there is consistent with every report committed so far,
-so every push is gate-green — there is no red window and nothing for a
-separate reconcile pass to repair (#283's post-matrix job, briefly on main, is
-superseded by this; see `tests/test_commit_refreshed_report.py`). It used to
-happen in every matrix leg, each racing its siblings to push: with ~47 legs,
-each successful push invalidated every other leg's ~4-minute attempt, and runs
+### Manual single-suite publication
+
+Use a clean disposable checkout of current `main` with full history and the
+suite's required dependencies. Establish the published baseline before running
+the producer; for example:
+
+```bash
+python3 scripts/oracle_data.py materialize --baseline
+uv run scripts/run_comparison.py fiit-ecps --summary
+scripts/commit_refreshed_report.sh fiit-ecps oracle-data
+```
+
+Substitute the registry suite name and its documented producer when the lane
+uses a specialized live-run command. `--baseline` requires no tracked staged
+or unstaged edits and records the combined snapshot in a detached local
+commit. Plain `materialize` leaves `HEAD` unchanged and is insufficient for
+packing a refresh after prior publication. Single-suite and `--pack` modes
+refuse when the locally known `oracle-data` tip is missing from `HEAD`'s
+history; packing itself never fetches. If this guard fires, save the output
+for inspection, restart in a clean checkout, run `materialize --baseline`,
+then rerun the producer and pack. If a remote report changes after packing,
+the stale-bundle guard similarly requires regeneration and repacking.
+
+### Recovering source-data conflicts
+
+For a primary report conflict, follow the
+[recovery procedure](../README.md#recovering-a-source-data-conflict): reconcile
+current `main` into the data branch in a separate checkout, keep reviewed
+`main` report corrections, regenerate and verify derived outputs, and publish
+the merge with a normal push to `oracle-data`. Then rerun selection and rebuild
+old bundles. Do not resolve that refusal by pushing an older bundle over the
+reviewed report.
+
+Regenerating these aggregates with the report is required because they are
+*derived* from its bytes. The `oracle-data` snapshot keeps the reports,
+`conformance/scoreboard.json`, detail, history, census, certificates, and served
+mirrors consistent. Regeneration happens inside the publish job's push-retry
+loop against the combined source and data tip, followed by the existing
+staleness and publication gates (see `tests/test_commit_refreshed_report.py`).
+PR CI independently validates the reviewed committed baseline using
+`AXIOM_ORACLES_DATA_SOURCE=checkout`; a PR that updates baseline reports must
+still regenerate their derivatives. Before publication moved off `main`,
+skipping this step reddened every open PR in the 2026-07-14 income-tax incident
+(#282). Regeneration also used to happen in every matrix leg, each racing its
+siblings to push: with ~47 legs, each successful push invalidated every other
+leg's ~4-minute attempt, and runs
 36239293795 and 35958364304 lost 7 and 11 legs to the 90-minute timeout inside
 that loop. Publishing once removes the race; the legs still vet their own
 refresh so that a refused one fails its own leg (`tests/test_affected_rerun_publisher.py`

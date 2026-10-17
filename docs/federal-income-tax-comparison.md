@@ -15,11 +15,13 @@ see [`comparisons/README.md`](../comparisons/README.md) for the registry
 pattern and the available runner types. FIIT is **the same unified path** as
 every other lane: `scripts/run_comparison.py` dispatches it, its output is
 normalized to the `axiom.comparison_report.v2` schema, and the committed
-dashboard artifact refreshes through this path (it is the first suite in
+dashboard artifact refreshes through this path (it is the first suite in both
+regeneration entry points, `scripts/regenerate_all.sh` and
 `dashboard/scripts/regenerate_all.sh`). It declares `ci: manual`, so the weekly
 matrix (`.github/workflows/comparisons.yml`) skips it and it refreshes only from
 a supervised local run; [`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml)
-records why.
+records why. Refreshed dashboard data publishes to `oracle-data`; `main` retains
+the reviewed baseline.
 
 ## Population: pinned Populace, with recorded identity
 
@@ -41,8 +43,13 @@ output without the block falls back to the legacy `enhanced_cps` label.)
 ## TL;DR — run it locally
 
 ```bash
+python3 scripts/oracle_data.py materialize
 uv run scripts/run_comparison.py fiit-ecps --summary
 ```
+
+Materialization loads the current published data into the checkout's existing
+data paths before the comparison. For offline or reviewed-baseline validation,
+set `AXIOM_ORACLES_DATA_SOURCE=checkout` instead.
 
 That reads [`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml),
 clones `rulespec-us` fresh, builds the engine if needed, runs the comparison
@@ -86,8 +93,10 @@ runner) still works and is fine for local development and residual triage. But
 it is **deprecated for CI / weekly reporting**: it does not normalize into the
 `axiom.comparison_report.v2` schema, does not land in the dashboard, and is not
 what refreshes the committed FIIT artifact. From now on the committed FIIT
-report refreshes only through `scripts/run_comparison.py fiit-ecps` (the weekly
-matrix and `regenerate_all.sh`). Use the direct command for a quick local
+report refreshes only through `scripts/run_comparison.py fiit-ecps`. The weekly
+matrix uploads its output as an artifact; the affected rerun and unattended
+regeneration scripts publish refreshes to `oracle-data`. Use the direct command
+for a quick local
 `--json` dump or `--tax-unit-id` residual check; use the runner for anything
 that produces a reported number.
 
@@ -253,7 +262,15 @@ the dashboard copy nor the FULL v2 report carries them. Both keep the
 per-output comparison counts in `output_summary`.
 
 The dashboard consumes the generated aggregate report directly through
-`dashboard/public/data/axiom-policyengine-fiit-ecps.json`.
+`dashboard/public/data/axiom-policyengine-fiit-ecps.json`. Its build and dev
+commands materialize the published `oracle-data` snapshot when run from a full
+Git checkout, preserving the existing report and case-explorer URLs. Uploaded
+or archived dashboards build from their bundled data; materialize in the source
+checkout before uploading or manually deploying. The workflow publishes data
+without deploying the dashboard. PR CI sets
+`AXIOM_ORACLES_DATA_SOURCE=checkout` and validates the reviewed committed
+snapshot instead. See the
+[publication and rollout instructions](../README.md#generated-data-and-dashboard-publication).
 
 ## See also
 

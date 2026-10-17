@@ -32,6 +32,8 @@ jobs:
       matrix: ${{ steps.list.outputs.matrix }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Install PyYAML
         run: pip install pyyaml
@@ -94,6 +96,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: axiom-oracles
+          ref: main
+          fetch-depth: 0
 
       - name: Checkout axiom-encode
         uses: actions/checkout@v4
@@ -135,6 +139,10 @@ jobs:
         working-directory: axiom-oracles
         run: |
           uv pip install --system -e '.[policyengine]'
+
+      - name: Load published data for the comparison
+        working-directory: axiom-oracles
+        run: python3 scripts/oracle_data.py materialize --baseline
 
       - name: Cache PolicyEngine ECPS dataset
         uses: actions/cache@v4
@@ -222,19 +230,30 @@ jobs:
 
   # Per-rule verification KPI (Phase-A item A7). Regenerates
   # rule_verification.json + rule_verification_summary.json from the current
-  # rulespec-us tree so the coverage number can't rot, and commits the refresh
-  # back on the weekly schedule. Guards: only commits on schedule (not
+  # rulespec-us tree so the coverage number can't rot, and publishes the refresh
+  # to oracle-data on the weekly schedule. Guards: only commits on schedule (not
   # workflow_dispatch dry-runs), and no-ops cleanly if the checkout is missing.
+  # Source and data are merged before generation; main is never a push target.
   rule-coverage:
     needs: compare
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    concurrency:
+      group: oracle-data-publication
+      cancel-in-progress: false
+      queue: max
     permissions:
       contents: write
     steps:
       - name: Checkout axiom-oracles
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Prepare current main source and published data
+        run: python3 scripts/oracle_data.py prepare
 
       - name: Checkout rulespec-us
         uses: actions/checkout@v4
@@ -249,8 +268,12 @@ jobs:
         with:
           python-version: "3.14"
 
-      - name: Install PyYAML
-        run: pip install pyyaml
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install package for generation and candidate gates
+        run: uv pip install --system -e .
 
       - name: Regenerate per-rule verification data
         run: |
@@ -261,20 +284,11 @@ jobs:
           python3 scripts/rule_verification.py \
             --rulespec .rulespec-us --ref HEAD --no-fetch
 
-      - name: Commit refreshed coverage KPI (scheduled runs only)
+      - name: Publish refreshed coverage KPI to oracle-data (scheduled runs only)
         if: github.event_name == 'schedule'
         run: |
-          if git diff --quiet -- dashboard/public/data/rule_verification.json \
-               dashboard/public/data/rule_verification_summary.json; then
-            echo "no coverage changes"
-            exit 0
-          fi
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dashboard/public/data/rule_verification.json \
-                  dashboard/public/data/rule_verification_summary.json
-          git commit -m "data: refresh per-rule verification KPI $(date +%Y-%m-%d)"
-          git push
+          python3 scripts/oracle_data.py publish --group kpi \
+            --message "data: refresh per-rule verification KPI $(date +%Y-%m-%d)"
 
       - name: Summarize coverage KPI
         if: always()
