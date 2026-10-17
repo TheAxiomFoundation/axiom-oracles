@@ -18,9 +18,10 @@ normalized to the `axiom.comparison_report.v2` schema, and the committed
 dashboard artifact refreshes through this path (it is the first suite in both
 regeneration entry points, `scripts/regenerate_all.sh` and
 `dashboard/scripts/regenerate_all.sh`). It declares `ci: manual`, so the weekly
-matrix (`.github/workflows/comparisons.yml`) skips it and it refreshes only from
-a supervised local run; [`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml)
-records why. Refreshed dashboard data publishes to `oracle-data`; `main` retains
+matrix (`.github/workflows/comparisons.yml`) skips it;
+[`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml) records why. The
+unattended regeneration scripts still attempt it, but the runner refuses unless
+the engine checkout it names is at the commit that file pins. Refreshed dashboard data publishes to `oracle-data`; `main` retains
 the reviewed baseline.
 
 ## Population: pinned Populace, with recorded identity
