@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Commit refreshed comparison reports atomically with every artifact derived
 # from them: vet each suite's refresh where it ran (pack), then commit every
-# vetted refresh from one job (publish), retrying only a rejected push.
+# vetted refresh from one job (publish) to oracle-data, retrying only a rejected
+# push. The protected main branch is a source-code input, never a push target.
 #
 # Refreshing a dashboard/public/data/*.json report changes the inputs of
 # derived, CI-validated artifacts:
@@ -67,9 +68,12 @@
 #
 # A bundle is a directory holding bundle.json (schema
 # axiom_oracles.refreshed_report_bundle.v1: the suite, its private paths, its
-# deletions, and its manifest additions) plus files/<path> for every private
-# path. Publish reads the suite from bundle.json, never from the directory
-# name, so a bundle survives any artifact rename.
+# deletions, their baseline SHA256 identities, and its manifest additions)
+# plus files/<path> for every private path. A baseline is null for a path
+# absent from HEAD. Publish checks every identity before applying any bundle,
+# so a reviewed correction since packing cannot be overwritten. Publish reads
+# the suite from bundle.json, never from the directory name, so a bundle
+# survives any artifact rename.
 #
 # Only leg-PRIVATE outputs are ever restored across attempts. Shared or
 # derived files are not: restoring a stale copy of the shared, append-only
@@ -88,9 +92,11 @@
 # ratchet gate failing on main IS the alarm working as designed — this script
 # keeps mechanical staleness out of CI; it must not muffle real regressions.
 #
-# Usage: scripts/commit_refreshed_report.sh <suite-name> <branch>
+# Usage: scripts/commit_refreshed_report.sh <suite-name> oracle-data
 #        scripts/commit_refreshed_report.sh --pack <bundles-dir> <suite-name>
-#        scripts/commit_refreshed_report.sh --publish <bundles-dir> <branch>
+#        scripts/commit_refreshed_report.sh --publish <bundles-dir> oracle-data
+# Before producing a refresh, run `python3 scripts/oracle_data.py materialize
+# --baseline` in a clean disposable checkout so HEAD records published data.
 # Env:   PYTHON            interpreter for the regeneration scripts (python3)
 #        MAX_ATTEMPTS      push attempts before failing loudly     (10)
 #        PUSH_RETRY_DELAY  seconds between attempts (default: growing + jitter)
@@ -99,9 +105,9 @@ set -euo pipefail
 
 usage() {
   {
-    echo "usage: commit_refreshed_report.sh <suite-name> <branch>"
+    echo "usage: commit_refreshed_report.sh <suite-name> oracle-data"
     echo "       commit_refreshed_report.sh --pack <bundles-dir> <suite-name>"
-    echo "       commit_refreshed_report.sh --publish <bundles-dir> <branch>"
+    echo "       commit_refreshed_report.sh --publish <bundles-dir> oracle-data"
   } >&2
   exit 2
 }
@@ -144,6 +150,12 @@ case "$suite" in
 esac
 [ "$mode" = publish ] || [ -n "$suite" ] || usage
 [ "$mode" = pack ] || [ -n "$branch" ] || usage
+# Never accept another ref, even in simulate mode or an empty publication.
+# Validate before configuring git or collecting any private outputs.
+if [ "$mode" != pack ] && [ "$branch" != oracle-data ]; then
+  echo "refusing publication target '$branch'; expected oracle-data" >&2
+  exit 2
+fi
 
 PYTHON="${PYTHON:-python3}"
 # 10, not the old per-leg 60: one publisher no longer races 40+ siblings, so
@@ -360,12 +372,21 @@ verify_derived() {
     "$PYTHON" scripts/certify.py --check
 }
 
+# Generic publications check their exact candidate in an isolated checkout.
+# This mode must exit before packing, fetching, resetting, committing or pushing.
+if [ "${VERIFY_DERIVED_REFRESH:-0}" = "1" ]; then
+  verify_derived
+  "$PYTHON" scripts/unexplained_ratchet.py --check
+  exit 0
+fi
+
 # Safe proof of the exact regeneration path. It exits before collecting
 # private report output, fetching, resetting, committing, or pushing.
 if [ "${SIMULATE_DERIVED_REFRESH:-0}" = "1" ]; then
   regenerate_derived
   verify_derived
   "$PYTHON" scripts/unexplained_ratchet.py --check
+  "$PYTHON" scripts/oracle_data.py snapshot
   echo "simulated derived refresh passed${suite:+ for $suite}"
   exit 0
 fi
@@ -384,6 +405,18 @@ BUNDLE_SCHEMA="axiom_oracles.refreshed_report_bundle.v1"
 # refresh. vet=0 skips only the vet, for the single-suite mode below.
 pack() {
   local out="$1" name="$2" vet="${3:-1}" path staging
+
+  # A main checkout (including plain materialize) still records main's older
+  # report identities in HEAD. Refuse before collecting or vetting a refresh:
+  # publication would otherwise reject it as stale after resetting the tree.
+  # Only inspect the locally known data tip; pack never contacts a remote.
+  if git show-ref --verify --quiet refs/remotes/origin/oracle-data &&
+    ! git merge-base --is-ancestor refs/remotes/origin/oracle-data HEAD; then
+    echo "REFUSED: packing requires the published data baseline. In a clean" \
+      "disposable checkout run 'python3 scripts/oracle_data.py materialize --baseline'" \
+      "before generating reports, then rerun the producer and pack or publish." >&2
+    exit 1
+  fi
 
   # Collect this run's PRIVATE outputs — what run_comparison.py itself wrote
   # (the refreshed report + any fixture reports), BEFORE any regeneration, so
@@ -423,12 +456,29 @@ pack() {
   # restored, so a stale copy can't drop a concurrently-added entry.
   "$PYTHON" - "$manifest" "$staging/bundle.json" "$BUNDLE_SCHEMA" "$name" \
     ${private[@]+"${private[@]}"} -- ${deletions[@]+"${deletions[@]}"} <<'PY'
-import json, subprocess, sys
+import hashlib, json, subprocess, sys
 from pathlib import Path
 
 manifest, out, schema, suite, *rest = sys.argv[1:]
 split = rest.index("--")
 private, deletions = rest[:split], rest[split + 1 :]
+baseline = {}
+for path in private + deletions:
+    try:
+        entry = subprocess.run(
+            ["git", "--literal-pathspecs", "ls-tree", "-z", "HEAD", "--", path],
+            capture_output=True, check=True,
+        )
+        if not entry.stdout:
+            baseline[path] = None
+            continue
+        original = subprocess.run(
+            ["git", "show", f"HEAD:{path}"], capture_output=True, check=True,
+        )
+    except subprocess.CalledProcessError as exc:
+        reason = exc.stderr.decode(errors="replace").strip()
+        sys.exit(f"FAILED: cannot record baseline identity for {path}: {reason}")
+    baseline[path] = hashlib.sha256(original.stdout).hexdigest()
 try:
     now = json.loads(Path(manifest).read_text()).get("reports", [])
 except FileNotFoundError:
@@ -446,6 +496,7 @@ Path(out).write_text(
             "suite": suite,
             "private": private,
             "deletions": deletions,
+            "baseline": baseline,
             "manifest_added": [r for r in now if r not in committed],
         },
         indent=2,
@@ -519,7 +570,7 @@ publish() {
   cleanup_dirs+=("$work")
   "$PYTHON" - "$work" "$manifest" "$BUNDLE_SCHEMA" "${derived_paths[@]}" \
     -- "${bundles[@]}" <<'PY'
-import json, os, sys
+import hashlib, json, os, sys
 from pathlib import Path, PurePosixPath
 
 work, manifest, schema, *rest = sys.argv[1:]
@@ -538,7 +589,7 @@ def in_derived(path):
     )
 
 
-suites, added, owners = [], [], {}
+suites, added, owners, targets = [], [], {}, []
 for index, bundle in enumerate(bundles):
     root = Path(bundle)
     try:
@@ -584,10 +635,37 @@ for index, bundle in enumerate(bundles):
         (work / f"{index}.{key}").write_bytes(
             b"".join(p.encode() + b"\0" for p in lists[key])
         )
+    paths = lists["private"] + lists["deletions"]
+    baseline = doc.get("baseline")
+    if (
+        set(lists["private"]) & set(lists["deletions"])
+        or not isinstance(baseline, dict)
+        or set(baseline) != set(paths)
+        or any(
+            value is not None and (
+                not isinstance(value, str)
+                or len(value) != 64
+                or any(char not in "0123456789abcdef" for char in value)
+            )
+            for value in baseline.values()
+        )
+    ):
+        fail(f"{suite}: missing or invalid baseline SHA256 identities; repack the refresh")
+    for path in paths:
+        targets.append({
+            "suite": suite,
+            "path": path,
+            "baseline": baseline[path],
+            "replacement": (
+                hashlib.sha256((root / "files" / path).read_bytes()).hexdigest()
+                if path in lists["private"] else None
+            ),
+        })
     added.extend(e for e in lists["manifest_added"] if e not in added)
 
 (work / "suites").write_bytes(b"".join(s.encode() + b"\0" for s in suites))
 (work / "manifest-added.json").write_text(json.dumps(added))
+(work / "targets.json").write_text(json.dumps(targets))
 PY
 
   suites=()
@@ -609,10 +687,37 @@ PY
 
   push_landed=""
   for attempt in $(seq 1 "$MAX_ATTEMPTS"); do
-    # Rebuild from scratch on the current remote tip (fetch + hard reset; never
-    # rebase). git clean keeps the generated trees hermetic across attempts.
-    git fetch origin "$target"
-    git reset --hard FETCH_HEAD --quiet
+    # Rebuild from current main source and the latest oracle-data snapshot.
+    # prepare merges both histories before resetting the checkout, bootstraps
+    # from main when the data branch is absent, and fails closed on conflicts.
+    "$PYTHON" scripts/oracle_data.py prepare
+
+    # Check ALL bundles against the prepared tree before cleaning, copying,
+    # or deleting any path. A target may still have its packing baseline, or
+    # already have this bundle's result (including an already-applied deletion).
+    # Any third identity is a concurrent correction that must be reviewed.
+    "$PYTHON" - "$work/targets.json" <<'PY'
+import hashlib, json, sys
+from pathlib import Path
+
+conflicts = []
+for target in json.loads(Path(sys.argv[1]).read_text()):
+    path = Path(target["path"])
+    try:
+        current = hashlib.sha256(path.read_bytes()).hexdigest()
+    except FileNotFoundError:
+        current = None
+    except OSError as exc:
+        sys.exit(f"REFUSED: cannot inspect bundle target {path}: {exc}; nothing was applied")
+    if current not in (target["baseline"], target["replacement"]):
+        conflicts.append(f"{target['suite']}: {path}")
+if conflicts:
+    sys.exit(
+        "REFUSED: stale bundle targets changed since packing: "
+        + ", ".join(conflicts)
+        + "; regenerate and repack the refresh; nothing was applied"
+    )
+PY
     git clean -fdq -- "${derived_paths[@]}"
 
     # Apply every bundle's private outputs and deletions, in sorted order.
@@ -679,6 +784,7 @@ PY
       exit 1
     fi
 
+    "$PYTHON" scripts/oracle_data.py snapshot
     git add -A -- "${derived_paths[@]}"
     if git diff --cached --quiet; then
       echo "nothing to commit for $label after regeneration (attempt $attempt)"
@@ -695,11 +801,11 @@ PY
       -m "Includes the regenerated derived conformance artifacts (dispositioned
 reports + EUROMOD-BE coverage rollup, DE unified/closure/census/executable
 status, scoreboard, detail, daily history snapshot, burn-down, freshness) so
-main CI's staleness gates stay green.
+the published snapshot passes CI's staleness gates.
 Committed by scripts/commit_refreshed_report.sh; the ratchet is never
 re-pinned here."
 
-    if git push origin "HEAD:$target"; then
+    if git push origin "HEAD:refs/heads/oracle-data"; then
       push_landed=1
       break
     fi

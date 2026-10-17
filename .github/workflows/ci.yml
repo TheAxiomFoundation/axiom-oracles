@@ -390,6 +390,9 @@ jobs:
   # config behind every UKMOD and SOUTHMOD credit.
   dashboard:
     runs-on: ubuntu-latest
+    env:
+      # PR validation uses the reviewed snapshot, including the build.
+      AXIOM_ORACLES_DATA_SOURCE: checkout
     defaults:
       run:
         working-directory: dashboard
