@@ -13,13 +13,16 @@ Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
 The comparison is one entry in the [comparisons registry](../comparisons/);
 see [`comparisons/README.md`](../comparisons/README.md) for the registry
 pattern and the available runner types. FIIT is **the same unified path** as
-every other lane: `scripts/run_comparison.py` dispatches it, it is
-auto-discovered by the weekly matrix (`.github/workflows/comparisons.yml`),
-its output is normalized to the `axiom.comparison_report.v2` schema, and the
-committed dashboard artifact refreshes through this path (it is the first suite
-in both unattended regeneration entry points, `scripts/regenerate_all.sh` and
-`dashboard/scripts/regenerate_all.sh`). Automated refreshes publish dashboard
-data to `oracle-data`; `main` retains the reviewed baseline.
+every other lane: `scripts/run_comparison.py` dispatches it, its output is
+normalized to the `axiom.comparison_report.v2` schema, and the committed
+dashboard artifact refreshes through this path (it is the first suite in both
+regeneration entry points, `scripts/regenerate_all.sh` and
+`dashboard/scripts/regenerate_all.sh`). It declares `ci: manual`, so the weekly
+matrix (`.github/workflows/comparisons.yml`) skips it;
+[`comparisons/fiit-ecps.yaml`](../comparisons/fiit-ecps.yaml) records why. The
+unattended regeneration scripts still attempt it, but the runner refuses unless
+the engine checkout it names is at the commit that file pins. Refreshed dashboard data publishes to `oracle-data`; `main` retains
+the reviewed baseline.
 
 ## Population: pinned Populace, with recorded identity
 
@@ -55,6 +58,17 @@ with the pinned PolicyEngine stack, writes a JSON report under `reports/`,
 rewrites the dashboard data at
 `dashboard/public/data/axiom-policyengine-fiit-ecps.json`, and prints the
 headline agreement numbers.
+
+A full run takes hours. Run it under launchd (or another supervisor that
+outlives the shell), and raise the engine timeouts with
+`AXIOM_ENGINE_RUN_TIMEOUT_SECONDS` and `AXIOM_ENGINE_COMPILE_TIMEOUT_SECONDS`
+(defaults 600 and 60 seconds; the 2026-10-14 run used 14400 and 1800). To
+republish the dashboard copy from a finished run, for example after a
+dispositions edit, without executing anything:
+
+```bash
+uv run scripts/run_comparison.py fiit-ecps --from-report reports/<raw report>.json
+```
 
 To list every available comparison:
 
@@ -97,9 +111,12 @@ The harness has four hard requirements that are not obvious:
    `rulespec-us-clean`, etc.) produces a different namespace and every import
    fails. The script enforces this by cloning to `<tmpdir>/rulespec-us`.
 
-2. **`axiom-rules-engine` release binary must exist.** The runner probes
-   `$AXIOM_RULES_REPO/target/release/axiom-rules-engine` and runs
-   `cargo build --bin axiom-rules-engine --release` if it's missing.
+2. **`axiom-rules-engine` release binary must exist, at the pinned commit.**
+   The runner probes `$AXIOM_RULES_REPO/target/release/axiom-rules-engine`
+   and runs `cargo build --bin axiom-rules-engine --release` if it's missing.
+   It refuses a checkout at any commit but `axiom_rules_repo_revision`
+   (v0.1.2, `98af0dce`). On 2026-10-14, engine main could not compile
+   rulespec-us main's 1(h), 1(j), 32 and 25A programs.
 
 3. **`AXIOM_RULESPEC_REPO_ROOTS` only matters for the lower-level
    `axiom-oracles compare` path.** `tax-ecps-compare` takes
@@ -153,105 +170,97 @@ case's `metadata.dataset_identity`, with `metadata.dataset` set to a
 
 `agreement = 100 * (compared_values - mismatch_count) / compared_values`.
 
-## Current residuals (June 2026)
+## Current residuals (October 2026)
 
-The June 3, 2026 full ECPS run compared 299,993 values with 172 mismatches for
-99.9427% agreement. CTC, standard deduction, capital-gain definitions, tax
-before credits, CDCC, AOTC, capped nonrefundable credits, employee/employer
-OASDI, and employee/employer Medicare all matched at 100%. The remaining
-residuals are all in EITC.
-
-Per-surface result:
+The 2026-10-14 full run compared 3,881,635 values over 87,519 tax units with
+19,555 mismatches, 99.50% agreement. It ran rulespec-us `172bf04e`,
+axiom-rules-engine v0.1.2 `98af0dce` and PolicyEngine-US 1.729.0 over
+`populace-us-2024-f0af251`. Every mismatch is dispositioned in
+[`dispositions/fiit-ecps.yaml`](../dispositions/fiit-ecps.yaml), and none is
+unexplained.
 
 | Surface | Compared values | Mismatches | Agreement |
 | --- | ---: | ---: | ---: |
-| EITC | 77,429 | 172 | 99.78% |
-| CTC | 35,195 | 0 | 100.00% |
-| Standard deduction | 21,117 | 0 | 100.00% |
-| Capital-gain definitions | 14,078 | 0 | 100.00% |
-| Tax before credits | 7,039 | 0 | 100.00% |
-| CDCC | 42,234 | 0 | 100.00% |
-| AOTC | 28,156 | 0 | 100.00% |
-| Capped nonrefundable credits | 21,117 | 0 | 100.00% |
-| Employee OASDI | 13,407 | 0 | 100.00% |
-| Employee Medicare | 13,407 | 0 | 100.00% |
-| Employer OASDI | 13,407 | 0 | 100.00% |
-| Employer Medicare | 13,407 | 0 | 100.00% |
+| EITC | 962,709 | 17,424 | 98.19% |
+| Tax before credits | 87,519 | 2,118 | 97.58% |
+| Capital-gain definitions | 175,038 | 8 | 99.995% |
+| CTC | 437,595 | 5 | 99.999% |
+| Standard deduction | 262,557 | 0 | 100.00% |
+| CDCC | 525,114 | 0 | 100.00% |
+| AOTC | 350,076 | 0 | 100.00% |
+| Capped nonrefundable credits | 262,557 | 0 | 100.00% |
+| Income tax | 175,038 | 0 | 100.00% |
+| Employee OASDI | 160,858 | 0 | 100.00% |
+| Employee Medicare | 160,858 | 0 | 100.00% |
+| Employer OASDI | 160,858 | 0 | 100.00% |
+| Employer Medicare | 160,858 | 0 | 100.00% |
 
-EITC residual split:
+Each EITC row was attributed by counterfactual. Each mechanism is one change
+to Axiom's inputs that makes Axiom see what PolicyEngine sees, and a row
+belongs to the smallest set of changes whose re-run clears it. The evidence is
+[`reports/fiit-ecps-eitc-attribution-2026-10-14.json`](../reports/fiit-ecps-eitc-attribution-2026-10-14.json)
+and the tooling is in
+[`scripts/fiit_ecps_eitc_attribution/`](../scripts/fiit_ecps_eitc_attribution/).
 
-| EITC output | Compared values | Mismatches | Max absolute diff |
-| --- | ---: | ---: | ---: |
-| `eitc_earned_income` | 7,039 | 113 | $11,439.03 |
-| `eitc_reduction` | 7,039 | 59 | $2,409.04 |
+| EITC mechanism | Rows | Disposition | Tracked in |
+| --- | ---: | --- | --- |
+| The bridge's 26 USC 32(c)(2) self-employment input floors each filer at zero and deducts a flat 164(f) fraction | 7,627 | `bridge_artifact` | axiom-oracles#640 |
+| The Populace artifact stores `partnership_se_income`, which PolicyEngine-US 1.729.0 no longer reads after #8614's rename | 4,618 | `bridge_artifact` | PolicyEngine/microcosm#35 |
+| The Populace artifact's stored `dividend_income` disagrees with its components | 4,086 | `bridge_artifact` | PolicyEngine/microcosm#37 |
+| PolicyEngine-US 1.729.0's 32(i)(2) investment-income definition | 890 | `upstream_engine_gap` | PolicyEngine/policyengine-us#9635 and #9567; rulespec-us#1416 |
+| PolicyEngine-US 1.729.0's childless age test counts dependents | 203 | `upstream_engine_gap` | PolicyEngine/policyengine-us#9131; rulespec-us#1776 |
 
-Even at high agreement, a few non-PE-bug categories of mismatch can persist:
+The other surfaces' rows are explained residuals, each re-verified on every
+row:
+
+- **Tax before credits.** All 2,118 rows have |diff| <= $5.83, with both
+  signs. That rounding-scale signature is the one attributed to
+  bracket-boundary rounding in July 2026.
+- **Capital-gain definitions.** All 8 rows have |diff| <= $3.25, which is float
+  noise.
+- **CTC.** All 5 rows are exactly +$50, one $1,000 excess-AGI increment at 5%.
+
+### Surface notes
 
 - **OASDI 2026 base drift.** Older PolicyEngine-US releases used $186,000 as
   the Social Security contribution-and-benefit base; the encoded SSA 2026
   automatic determination is $184,500. The pinned PolicyEngine-US 1.729.0 (and
   every release at or above the runner's 1.723 floor) includes the corrected
   base.
-- **EITC amount residuals.** All 113 `eitc_earned_income` residual tax units
-  are joint returns. Axiom's live RuleSpec chain still has 26 USC 1402(a),
-  1402(b), and 32(c)(2) shaped around aggregate TaxUnit self-employment and
-  earned-income inputs, while PolicyEngine computes `self_employment_tax_ald`
-  per filer and sums non-dependent filers for EITC. The residual triage
-  confirms every Axiom `eitc_earned_income` value matches that aggregate
-  Section 1402(b)/164(f) model; 45 of the 113 affected tax units have PE's
-  Social Security self-employment taxable income capped below Medicare taxable
-  self-employment income for at least one filer. Encoder guardrails now flag
-  stale TaxUnit-shaped 26 USC 1402(a) money outputs and block new unit-scope
-  formulas that compose those stale imports, but no live RuleSpec file has been
-  replaced yet. A no-manual 26 USC 1402(a) rerun deferred because the full
-  subsection has unresolved exception branches, and a narrower 26 USC
-  1402(a)(12) rerun failed validation while still importing the stale aggregate
-  1402(a) base. Replacing the encoded earned-income chain with PE's helper
-  would be an output alignment override, so the residuals stay visible until the
-  staged person-scoped re-encode can land.
-- **Capital-gain definitions and tax before credits.** These now compare
-  cleanly on the full ECPS slice. The tax-before-credits surface feeds the
-  Section 1(j) rate calculation with source-backed filing-status and taxable
-  income inputs, plus the imported Section 1(h) capital-gain definition inputs
-  required by the encoded rule.
 - **Payroll components.** Employee OASDI, employee Medicare, employer OASDI,
-  and employer Medicare compare cleanly on the full ECPS slice. The dashboard
-  now tracks these as first-class encoded coverage, backed by 26 USC 3101(a),
-  3101(b)(1), 3111(a), and 3111(b).
-- **CDCC.** Child and dependent care credit now runs as an emitted ECPS
-  surface and compares cleanly on the full ECPS slice. The projection uses
-  encoded 26 USC 21 math for qualifying counts, expense limits, rates,
-  potential credit, and final credit; childcare expenses, the head/spouse
-  earned-income cap, and available nonrefundable-credit limit remain explicit
-  upstream boundary inputs until those chains are encoded end-to-end.
-- **AOTC.** American Opportunity Credit now runs as an emitted ECPS surface and
-  compares cleanly on the current dashboard ECPS cache. The projection uses
-  encoded 26 USC 25A math from tuition, educational-assistance, enrollment,
-  credential, institution, prior-claim, and SSN facts; income tax before
-  credits, CDCC, and foreign tax credit remain explicit upstream boundary
-  inputs until the full federal credit-ordering chain is encoded end-to-end.
-  A newer local PolicyEngine data cache with raw AOTC fields surfaced 28
-  residual output entries across 8 tax units after the duplicate-column loader
-  fix: most are PolicyEngine-positive/Axiom-zero where PE uses tuition directly
-  while RuleSpec subtracts educational assistance under 26 USC 25A(g)(2), and
-  two are filer-identification edge cases that should be handled by a future
-  25A re-encode rather than a dashboard override.
-- **Capped nonrefundable credits.** Section 26 aggregate nonrefundable-credit
-  sum and cap math now runs as an emitted ECPS surface and compares cleanly on
-  the full ECPS slice. Upstream component credits are supplied as explicit
-  boundary inputs for this aggregate surface; individual component-credit
-  correctness remains with each component surface until the full federal
-  credit chain is encoded end-to-end.
+  and employer Medicare are tracked as first-class encoded coverage, backed by
+  26 USC 3101(a), 3101(b)(1), 3111(a), and 3111(b).
+- **CDCC.** The projection uses encoded 26 USC 21 math for qualifying counts,
+  expense limits, rates, potential credit, and final credit; childcare
+  expenses, the head/spouse earned-income cap, and available
+  nonrefundable-credit limit remain explicit upstream boundary inputs until
+  those chains are encoded end-to-end.
+- **AOTC.** The projection uses encoded 26 USC 25A math from tuition,
+  educational-assistance, enrollment, credential, institution, prior-claim,
+  and SSN facts; income tax before credits, CDCC, and foreign tax credit remain
+  explicit upstream boundary inputs until the full federal credit-ordering
+  chain is encoded end-to-end.
+- **Capped nonrefundable credits.** Upstream component credits are supplied as
+  explicit boundary inputs for this aggregate surface; individual
+  component-credit correctness remains with each component surface until the
+  full federal credit chain is encoded end-to-end.
 
 ## CI
 
 `.github/workflows/comparisons.yml` matrix-runs every entry in
 `comparisons/*.yaml` weekly (Mondays 06:00 UTC) and on demand
 (`workflow_dispatch`, with an optional `only` input to scope to one
-comparison). Every run uploads the JSON as a workflow artifact and writes the
-headline agreement numbers to the run summary. Reports themselves are
-gitignored — the existing repo convention treats them as transient outputs,
-not committed history.
+comparison), except suites that declare `ci: manual`, as fiit-ecps does. Every
+run uploads the JSON as a workflow artifact and writes the headline agreement
+numbers to the run summary. Raw reports are gitignored, since the repo treats
+them as transient outputs. Two fiit-ecps reports are committed anyway:
+
+- the FULL v2 report the dashboard copy's dispositions bind to;
+- the EITC attribution evidence the dispositions cite.
+
+The raw report carries 3.9 million observed-output rows (about 1 GB). Neither
+the dashboard copy nor the FULL v2 report carries them. Both keep the
+per-output comparison counts in `output_summary`.
 
 The dashboard consumes the generated aggregate report directly through
 `dashboard/public/data/axiom-policyengine-fiit-ecps.json`. Its build and dev

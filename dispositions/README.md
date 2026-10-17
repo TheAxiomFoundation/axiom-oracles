@@ -22,7 +22,8 @@ entries:
   - id: work-bonus-january-2025-timing
     concept: be:regulations/...#belgium_worker_work_bonus_..._total_reduction
     case_id: be-worker-ssc-30k        # or case_selector: {case_ids: [...]} /
-                                      #    {case_id_prefix: "..."}
+                                      #    {case_id_prefix: "..."} /
+                                      #    {case_ids_by_output: {output: [...]}}
     kind: amount_difference           # optional mismatch-kind filter
     disposition: upstream_engine_gap
     evidence:
@@ -40,6 +41,36 @@ entries:
       left: 3398.52
       right: 3386.87
 ```
+
+## Selecting rows
+
+An entry selects the mismatch rows of its `concept` (and `kind`, when set)
+whose case matches:
+
+- `case_id`: one case;
+- `case_selector.case_ids`: a list of cases;
+- `case_selector.case_id_prefix`: every case whose id starts with the
+  prefix. This matches every unit of a population suite, so a new mechanism
+  in that concept is attributed to the entry silently. Prefer an explicit
+  list bound with `selector_binding` (below).
+- `case_selector.case_ids_by_output`: a mapping from output name to cases.
+  A row matches when its `output` is a key and its case is listed under it.
+  Use it where one concept covers several compared outputs, so that one case
+  carries several rows under the concept and each can have its own
+  mechanism. fiit-ecps's EITC surface compares eleven outputs, and its rows
+  name their `output`. It cannot be combined with `case_ids` or
+  `case_id_prefix`.
+
+The first entry, in file order, that selects a row claims it.
+
+A `case_selector` entry can carry `selector_binding: {units, rows_sha256}`.
+That is the count and a digest of the rows it selected: each row's case,
+concept, output (when the row names one), left, right and signed difference.
+A merge whose selection differs in any way expires the entry, so its rows
+return to unexplained. That includes two equal-valued rows of one case
+trading entries. Stamp it
+with `uv run scripts/stamp_selector_bindings.py <suite>`, which binds against
+the FULL report the suite's dashboard copy names.
 
 ## Disposition kinds
 
