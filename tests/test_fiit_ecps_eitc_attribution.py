@@ -6,6 +6,7 @@ import importlib.util
 import itertools
 import json
 import math
+import re
 import shutil
 import sys
 from pathlib import Path
@@ -201,6 +202,300 @@ def test_eitc_rows_need_an_attribution():
     assert builder.entry_of(row, "investment", "div_aggregate") == "dividend_aggregate"
     assert builder.entry_of(row, "investment", "cg_distributions") == "pe_investment"
     assert builder.entry_of(row, "age+investment", "farm_rent") == "age"
+
+
+# --- fail closed on incomplete downstream evidence ------------------------
+
+
+@pytest.fixture
+def build_payloads():
+    """Reconstruct the stage fields used by the builder from its committed run."""
+    evidence = json.loads((ROOT / builder.EVIDENCE).read_text())
+    _, full = builder.bound_full_report(ROOT)
+    rows = evidence["rows"]
+    stages = {
+        stage: {
+            "attribution": {
+                key: {"mechanism": record[stage]}
+                for key, record in rows.items()
+                if stage in record
+            }
+        }
+        for stage in ("stage1", "stage2", "stage3")
+    }
+    stages["stage1"].update(
+        baseline_reproduces_full_run=True,
+        baseline_value_drift=[],
+        explain_sample_tax_units=1500,
+        explain_sample_matches_full_run=True,
+    )
+    stages["stage2"].update(
+        decomposition=evidence["age_units"] | evidence["investment_units"],
+        explained_units={
+            "age": list(evidence["age_units"]),
+            "age+investment": [],
+            "investment": list(evidence["investment_units"]),
+        },
+        base_reproduces_stage1_all_mechanisms=True,
+        variants={"se_loss+seca": {"rows": {}}},
+    )
+    stages["stage3"].update(
+        switch_model_exact=True,
+        bridge_aggregate_variant_leaves_stage1_investment_rows=True,
+        policyengine_aggregate_variant_clears_all=True,
+    )
+    return {"full": full, "evidence": evidence, **stages}
+
+
+def _build(payloads):
+    return builder.build_evidence(
+        payloads["full"],
+        payloads["stage1"],
+        payloads["stage2"],
+        payloads["stage3"],
+        raw_report=payloads["evidence"]["run"]["report"],
+        raw_sha256=payloads["evidence"]["run"]["report_sha256"],
+    )
+
+
+def _downstream_key(rows, stage1):
+    # The old audit already caught a dividend row defaulting to PE investment.
+    # Exercise the PE investment rows that its permissive fallback accepted.
+    return next(
+        key for key, record in rows.items()
+        if record.get("stage1") == stage1
+        and (stage1 != "investment" or record["entry"] == "pe_investment")
+    )
+
+
+def test_valid_stage_payloads_rebuild_committed_artifacts_byte_for_byte(build_payloads):
+    evidence, assignment = _build(build_payloads)
+    assert json.dumps(evidence, indent=1, sort_keys=True) + "\n" == (
+        ROOT / builder.EVIDENCE
+    ).read_text()
+    # The build intentionally precedes stamping. Remove only the existing
+    # binding stanzas, leaving all other bytes (including comments) intact.
+    unbound = re.sub(
+        r"^  selector_binding:\n(?:    .*\n)*",
+        "",
+        (ROOT / builder.DISPOSITIONS).read_text(),
+        flags=re.M,
+    )
+    assert builder.build_dispositions(evidence, assignment) == unbound
+
+
+def test_builder_and_audit_refuse_the_reviewers_corrupted_labels(build_payloads, repo_copy):
+    rows = build_payloads["evidence"]["rows"]
+    se = _downstream_key(rows, "residual")
+    investment = _downstream_key(rows, "investment")
+    build_payloads["stage2"]["attribution"][se]["mechanism"] = "residual"
+    build_payloads["stage3"]["attribution"][investment]["mechanism"] = "residual"
+    build_payloads["stage2"]["variants"]["se_loss+seca"]["rows"][se] = {}
+    build_payloads["stage3"]["policyengine_aggregate_variant_clears_all"] = False
+
+    with pytest.raises(ValueError):
+        _build(build_payloads)
+
+    evidence = build_payloads["evidence"]
+    evidence["rows"][se]["stage2"] = "residual"
+    evidence["rows"][investment]["stage3"] = "residual"
+    evidence["checks"]["stage2_all_mechanisms_rows_left"] = 1
+    evidence["checks"]["stage3_policyengine_aggregate_clears_all"] = False
+    (repo_copy / builder.EVIDENCE).write_text(json.dumps(evidence))
+    assert builder.check(repo_copy)
+    with pytest.raises(ValueError):
+        builder.build_dispositions(
+            evidence, {key: record["entry"] for key, record in evidence["rows"].items()}
+        )
+
+
+@pytest.mark.parametrize("stage1,stage", [("residual", "stage2"), ("investment", "stage3")])
+@pytest.mark.parametrize(
+    "label", ["residual", None, "", "unknown", "ambiguous:", "ambiguous:div_aggregate|unknown"]
+)
+def test_builder_refuses_uncleared_or_unsupported_downstream_labels(
+    build_payloads, stage1, stage, label
+):
+    key = _downstream_key(build_payloads["evidence"]["rows"], stage1)
+    build_payloads[stage]["attribution"][key]["mechanism"] = label
+    with pytest.raises(ValueError):
+        _build(build_payloads)
+
+
+@pytest.mark.parametrize("stage1,stage", [("residual", "stage2"), ("investment", "stage3")])
+@pytest.mark.parametrize("label", ["residual", None, "", "unknown"])
+def test_audit_refuses_uncleared_or_unsupported_downstream_labels(
+    repo_copy, stage1, stage, label
+):
+    evidence = json.loads((repo_copy / builder.EVIDENCE).read_text())
+    key = _downstream_key(evidence["rows"], stage1)
+    evidence["rows"][key][stage] = label
+    (repo_copy / builder.EVIDENCE).write_text(json.dumps(evidence))
+    assert any(key in problem for problem in builder.check(repo_copy))
+    with pytest.raises(ValueError):
+        builder.build_dispositions(
+            evidence, {key: record["entry"] for key, record in evidence["rows"].items()}
+        )
+
+
+@pytest.mark.parametrize("stage1", ["investment", "age+investment"])
+def test_builder_and_audit_refuse_a_missing_stage3_label(build_payloads, repo_copy, stage1):
+    key = _downstream_key(build_payloads["evidence"]["rows"], stage1)
+    build_payloads["stage3"]["attribution"].pop(key)
+    with pytest.raises(ValueError):
+        _build(build_payloads)
+
+    def remove_label(evidence):
+        evidence["rows"][key].pop("stage3")
+
+    _edit_json(repo_copy / builder.EVIDENCE, remove_label)
+    assert any(key in problem for problem in builder.check(repo_copy))
+
+
+@pytest.mark.parametrize(
+    "stage,field,value",
+    [
+        ("stage1", "baseline_reproduces_full_run", False),
+        ("stage1", "baseline_value_drift", ["tax_unit_1|eitc"]),
+        ("stage1", "explain_sample_matches_full_run", False),
+        ("stage2", "base_reproduces_stage1_all_mechanisms", False),
+        ("stage3", "switch_model_exact", False),
+        ("stage3", "bridge_aggregate_variant_leaves_stage1_investment_rows", False),
+        ("stage3", "policyengine_aggregate_variant_clears_all", False),
+    ],
+)
+def test_builder_refuses_failed_recorded_baseline_or_model_checks(
+    build_payloads, stage, field, value
+):
+    build_payloads[stage][field] = value
+    with pytest.raises(ValueError):
+        _build(build_payloads)
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("stage1_baseline_reproduces_full_run", False),
+        ("stage1_baseline_value_drift_rows", 1),
+        ("explain_mode_sample_matches_fast_full_run", False),
+        ("stage2_base_reproduces_stage1", False),
+        ("stage2_all_mechanisms_rows_left", 1),
+        ("stage3_switch_model_reproduces_both_aggregates", False),
+        ("stage3_policyengine_aggregate_clears_all", False),
+        ("bridge_aggregate_variant_leaves_stage1_investment_rows", False),
+    ],
+)
+def test_audit_and_disposition_builder_refuse_failed_recorded_checks(repo_copy, field, value):
+    evidence = json.loads((repo_copy / builder.EVIDENCE).read_text())
+    evidence["checks"][field] = value
+    (repo_copy / builder.EVIDENCE).write_text(json.dumps(evidence))
+    assert any(field in problem for problem in builder.check(repo_copy))
+    with pytest.raises(ValueError):
+        builder.build_dispositions(
+            evidence, {key: record["entry"] for key, record in evidence["rows"].items()}
+        )
+
+
+def test_builder_checks_original_rows_clear_but_allows_counterfactual_only_extras(build_payloads):
+    final_rows = build_payloads["stage2"]["variants"]["se_loss+seca"]["rows"]
+    extra = "tax_unit_999999999|eitc_earned_income"
+    assert extra not in build_payloads["evidence"]["rows"]
+    final_rows[extra] = {"axiom": 10.0, "policyengine": 0.0, "diff": 10.0}
+    build_payloads["stage3"]["base_counterfactual_only_rows"] = [extra]
+    evidence, assignment = _build(build_payloads)
+    assert evidence["checks"]["stage2_all_mechanisms_rows_left"] == 0
+    assert extra not in evidence["rows"] and extra not in assignment
+    builder.build_dispositions(evidence, assignment)
+
+    original = _downstream_key(evidence["rows"], "residual")
+    final_rows[original] = final_rows[extra]
+    with pytest.raises(ValueError):
+        _build(build_payloads)
+
+
+@pytest.mark.parametrize(
+    "stage1,stage2_label,stage3_label,entry",
+    [
+        ("residual", "se_loss", None, "se_projection"),
+        ("residual", "seca", None, "se_projection"),
+        ("residual", "se_loss+seca", None, "se_projection"),
+        ("residual", "ambiguous:se_loss|seca", None, "se_projection"),
+        ("investment", None, "div_aggregate", "dividend_aggregate"),
+        ("investment", None, "ambiguous:cg_distributions|div_aggregate", "pe_investment"),
+        (
+            "investment",
+            None,
+            "ambiguous:cg_distributions+farm_rent|div_aggregate+cg_distributions",
+            "pe_investment",
+        ),
+        ("age+investment", None, "ambiguous:div_aggregate|farm_rent", "age"),
+    ],
+)
+def test_supported_clearing_attributions_include_ambiguous_labels(
+    stage1, stage2_label, stage3_label, entry
+):
+    row = {"case_id": "ecps-tax_unit_1", "output": "eitc", "concept": builder.EITC}
+    assert builder.entry_of(row, stage1, stage3_label, stage2=stage2_label) == entry
+
+
+def test_builder_refuses_honestly_unresolved_output_of_real_stage2_main(
+    tmp_path, monkeypatch, build_payloads
+):
+    stage2_main = _load(
+        "counterfactuals_stage2_unresolved_test", ATTRIBUTION / "counterfactuals_stage2.py"
+    )
+    key = "tax_unit_1|eitc_earned_income"
+    values = {"axiom": 10.0, "policyengine": 0.0, "diff": 10.0}
+    stage1_payload = {
+        **build_payloads["stage1"],
+        "attribution": {key: {"mechanism": "residual"}},
+        "variants": {"age+partnership+investment": {"rows": {key: values}}},
+    }
+    stage1_path, output_path = tmp_path / "stage1.json", tmp_path / "stage2.json"
+    stage1_path.write_text(json.dumps(stage1_payload))
+    monkeypatch.setattr(stage2_main, "load_with_decomposition", lambda ids: ({}, {}))
+    monkeypatch.setattr(stage2_main.cf, "subset_pe_data", lambda data, ids: data)
+    monkeypatch.setattr(stage2_main, "decompose", lambda *args: {})
+    monkeypatch.setattr(stage2_main, "version", lambda name: "fixture")
+    # Every real stage-2 variant keeps the original mismatch. Its baseline is
+    # faithful, so stage 2 legitimately exits zero and records an unresolved row.
+    monkeypatch.setattr(
+        stage2_main,
+        "run",
+        lambda *args, **kwargs: ({("tax_unit_1", "eitc_earned_income"): values}, 1),
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "stage2", "--stage1", str(stage1_path),
+            "--rulespec-root", str(tmp_path / "rulespec"),
+            "--engine", str(tmp_path / "engine"), "--out", str(output_path),
+        ],
+    )
+    assert stage2_main.main() == 0
+    unresolved = json.loads(output_path.read_text())
+    assert unresolved["base_reproduces_stage1_all_mechanisms"] is True
+    assert unresolved["attribution"][key]["mechanism"] == "residual"
+    assert key in unresolved["variants"]["se_loss+seca"]["rows"]
+
+    build_payloads["stage1"] = stage1_payload
+    build_payloads["stage2"] = unresolved
+    build_payloads["stage3"]["attribution"] = {}
+    build_payloads["full"] = {
+        "mismatches": [{
+            "case_id": "ecps-tax_unit_1",
+            "output": "eitc_earned_income",
+            "concept": builder.EITC,
+            "left": 10.0,
+            "right": 0.0,
+            "difference": 10.0,
+        }],
+        "summary": {"mismatch_count": 1},
+        "provenance": build_payloads["full"]["provenance"],
+    }
+    with pytest.raises(ValueError):
+        _build(build_payloads)
 
 
 # --- minimal clearing sets ------------------------------------------------

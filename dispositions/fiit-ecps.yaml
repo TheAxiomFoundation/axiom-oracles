@@ -3,8 +3,8 @@
 # 2026-10-14 run: rulespec-us 172bf04e, axiom-rules-engine v0.1.2 98af0dce,
 # axiom-oracles with #632. 19,555 mismatch rows; every one is
 # in exactly one entry below, listed by output (case_ids_by_output), and each
-# selector is bound to its rows (selector_binding), so a new mechanism in any
-# of these concepts expires the entry instead of riding it.
+# selector is bound to its rows (selector_binding). Changes to selected rows
+# expire their entries; new unlisted rows remain unexplained.
 #
 # EITC rows were attributed per row by counterfactual: each mechanism is one
 # Axiom-side input change that makes Axiom see what PolicyEngine sees, and a

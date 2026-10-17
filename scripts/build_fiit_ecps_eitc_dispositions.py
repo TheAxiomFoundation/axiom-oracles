@@ -27,6 +27,8 @@ It checks that the committed files agree:
   same values;
 - every row's entry follows from its recorded stage attributions (EITC) or
   from its surface's per-row bound (the other surfaces);
+- every applicable downstream attribution names supported clearing sets,
+  and the recorded baseline and model checks pass;
 - each entry's row and tax-unit counts are its rows';
 - the dispositions document is valid, and each entry selects exactly its
   evidence rows, by output;
@@ -141,8 +143,62 @@ def row_key(row: dict) -> str:
     return f"{row['case_id'].removeprefix('ecps-')}|{row['output']}"
 
 
-def eitc_entry_of(stage1: str, stage3: str | None) -> str:
+STAGE2_MECHANISMS = ("se_loss", "seca")
+STAGE3_MECHANISMS = (
+    "div_aggregate", "dependents", "cg_distributions", "farm_rent", "rental_unfloor"
+)
+
+
+def require_clearing_attribution(label: str | None, mechanisms: tuple[str, ...], stage: str) -> None:
+    """Accept only labels of nonempty minimal clearing sets from this stage."""
+    invalid = ValueError(f"{stage}: unsupported clearing attribution {label!r}")
+    if not isinstance(label, str) or not label:
+        raise invalid
+    ambiguous = label.startswith("ambiguous:")
+    alternatives = label.removeprefix("ambiguous:").split("|") if ambiguous else [label]
+    if ambiguous and len(alternatives) < 2:
+        raise invalid
+    sets = []
+    for alternative in alternatives:
+        selected = frozenset(alternative.split("+"))
+        if not selected <= set(mechanisms) or alternative != "+".join(
+            mechanism for mechanism in mechanisms if mechanism in selected
+        ):
+            raise invalid
+        # Alternatives emitted by minimal_sets are distinct and no one is a
+        # subset of another; such a superset could not be minimal.
+        if any(other <= selected or selected <= other for other in sets):
+            raise invalid
+        sets.append(selected)
+
+
+def check_failures(checks: dict) -> list[str]:
+    """Failed or missing success checks in the saved evidence."""
+    problems = []
+    for name in (
+        "stage1_baseline_reproduces_full_run",
+        "explain_mode_sample_matches_fast_full_run",
+        "stage2_base_reproduces_stage1",
+        "stage3_switch_model_reproduces_both_aggregates",
+        "stage3_policyengine_aggregate_clears_all",
+    ):
+        if checks.get(name) is not True:
+            problems.append(f"{name}: must be true")
+    for name in ("stage1_baseline_value_drift_rows", "stage2_all_mechanisms_rows_left"):
+        if type(checks.get(name)) is not int or checks[name] != 0:
+            problems.append(f"{name}: must be zero")
+    # Historical evidence predates this base check, but a recorded failure
+    # must never be ignored by either publication or the offline audit.
+    base_check = "bridge_aggregate_variant_leaves_stage1_investment_rows"
+    if base_check in checks and checks[base_check] is not True:
+        problems.append(f"{base_check}: must be true")
+    return problems
+
+
+def eitc_entry_of(stage1: str, stage3: str | None, stage2: str | None = None) -> str:
     """The entry an EITC row belongs to, from its stage attributions."""
+    if stage1 in ("investment", "age+investment"):
+        require_clearing_attribution(stage3, STAGE3_MECHANISMS, "stage3")
     if stage1 in ("age", "age+investment"):
         return "age"
     if stage1 == "partnership":
@@ -150,11 +206,14 @@ def eitc_entry_of(stage1: str, stage3: str | None) -> str:
     if stage1 == "investment":
         return "dividend_aggregate" if stage3 == "div_aggregate" else "pe_investment"
     if stage1 == "residual":
+        require_clearing_attribution(stage2, STAGE2_MECHANISMS, "stage2")
         return "se_projection"
     raise ValueError(f"no entry for stage-1 mechanism {stage1!r}")
 
 
-def entry_of(row: dict, stage1: str | None, stage3: str | None) -> str:
+def entry_of(
+    row: dict, stage1: str | None, stage3: str | None, stage2: str | None = None
+) -> str:
     """The entry one FULL-report mismatch row belongs to.
 
     Raises ``ValueError`` when the row fits no entry: an EITC row without a
@@ -164,7 +223,10 @@ def entry_of(row: dict, stage1: str | None, stage3: str | None) -> str:
     if concept == EITC:
         if stage1 is None:
             raise ValueError(f"{row_key(row)}: EITC row without a stage-1 attribution")
-        return eitc_entry_of(stage1, stage3)
+        try:
+            return eitc_entry_of(stage1, stage3, stage2)
+        except ValueError as error:
+            raise ValueError(f"{row_key(row)}: {error}") from error
     if concept not in ROW_BOUNDS:
         raise ValueError(f"{row_key(row)}: no entry for concept {concept}")
     entry, holds, bound = ROW_BOUNDS[concept]
@@ -212,6 +274,32 @@ def build_evidence(full: dict, stage1: dict, stage2: dict, stage3: dict, *,
     s1 = stage1["attribution"]
     s2 = stage2["attribution"]
     s3 = stage3["attribution"]
+    # Only original report rows need an explanation. A counterfactual may
+    # introduce extra rows that were never mismatches in the original run.
+    original_keys = {row_key(row) for row in full["mismatches"]}
+    checks = {
+        "stage1_baseline_reproduces_full_run": stage1["baseline_reproduces_full_run"],
+        "stage1_baseline_value_drift_rows": len(stage1["baseline_value_drift"]),
+        "explain_mode_sample_tax_units": stage1["explain_sample_tax_units"],
+        "explain_mode_sample_matches_fast_full_run": stage1["explain_sample_matches_full_run"],
+        "stage2_base_reproduces_stage1": stage2["base_reproduces_stage1_all_mechanisms"],
+        "stage2_all_mechanisms_rows_left": len(
+            original_keys & stage2["variants"]["se_loss+seca"]["rows"].keys()
+        ),
+        "stage3_switch_model_reproduces_both_aggregates": stage3["switch_model_exact"],
+        "stage3_policyengine_aggregate_clears_all": stage3[
+            "policyengine_aggregate_variant_clears_all"
+        ],
+    }
+    problems = check_failures(checks)
+    # This check was added after the historical stage-3 run. When present,
+    # its verdict must pass; do not replace it with equality to the target,
+    # which would reject legitimate counterfactual-only base rows.
+    base_check = "bridge_aggregate_variant_leaves_stage1_investment_rows"
+    if base_check in stage3 and stage3[base_check] is not True:
+        problems.append(f"stage3 {base_check}: must be true")
+    if problems:
+        raise ValueError("; ".join(problems))
     assignment: dict[str, str] = {}
     records: dict[str, dict] = {}
     for row in full["mismatches"]:
@@ -219,8 +307,9 @@ def build_evidence(full: dict, stage1: dict, stage2: dict, stage3: dict, *,
         if key in assignment:
             raise ValueError(f"{key}: two FULL-report rows")
         stage1_mechanism = s1.get(key, {}).get("mechanism")
+        stage2_mechanism = s2.get(key, {}).get("mechanism")
         stage3_mechanism = s3.get(key, {}).get("mechanism")
-        entry = entry_of(row, stage1_mechanism, stage3_mechanism)
+        entry = entry_of(row, stage1_mechanism, stage3_mechanism, stage2_mechanism)
         assignment[key] = entry
         record = {
             "entry": entry,
@@ -276,18 +365,7 @@ def build_evidence(full: dict, stage1: dict, stage2: dict, stage3: dict, *,
             "differ (2^5), with every other mechanism applied."
         ),
         "checks": {
-            "stage1_baseline_reproduces_full_run": stage1["baseline_reproduces_full_run"],
-            "stage1_baseline_value_drift_rows": len(stage1["baseline_value_drift"]),
-            "explain_mode_sample_tax_units": stage1["explain_sample_tax_units"],
-            "explain_mode_sample_matches_fast_full_run": stage1[
-                "explain_sample_matches_full_run"
-            ],
-            "stage2_base_reproduces_stage1": stage2["base_reproduces_stage1_all_mechanisms"],
-            "stage2_all_mechanisms_rows_left": len(stage2["variants"]["se_loss+seca"]["rows"]),
-            "stage3_switch_model_reproduces_both_aggregates": stage3["switch_model_exact"],
-            "stage3_policyengine_aggregate_clears_all": stage3[
-                "policyengine_aggregate_variant_clears_all"
-            ],
+            **checks,
             "stage3_base_note": base_note,
             "age_units_childless_filers_65_plus_dependent_25_64": len(age_units),
         },
@@ -301,6 +379,25 @@ def build_evidence(full: dict, stage1: dict, stage2: dict, stage3: dict, *,
 
 def build_dispositions(evidence: dict, assignment: dict[str, str]) -> str:
     """``dispositions/fiit-ecps.yaml`` (before selector bindings are stamped)."""
+    problems = check_failures(evidence["checks"])
+    for key, record in evidence["rows"].items():
+        if "stage1" not in record and record["entry"] in {
+            bound[0] for bound in ROW_BOUNDS.values()
+        }:
+            continue
+        try:
+            expected = eitc_entry_of(
+                record.get("stage1"), record.get("stage3"), record.get("stage2")
+            )
+        except ValueError as error:
+            problems.append(f"{key}: {error}")
+            continue
+        if record["entry"] != expected:
+            problems.append(f"{key}: entry {record['entry']!r}, stages give {expected!r}")
+    if assignment != {key: record["entry"] for key, record in evidence["rows"].items()}:
+        problems.append("assignment is not the evidence's rows")
+    if problems:
+        raise ValueError("; ".join(problems))
     counts = {entry: value["rows"] for entry, value in evidence["entries"].items()}
     units = {entry: value["tax_units"] for entry, value in evidence["entries"].items()}
     rows = evidence["rows"]
@@ -596,8 +693,8 @@ def build_dispositions(evidence: dict, assignment: dict[str, str]) -> str:
 # 2026-10-14 run: rulespec-us 172bf04e, axiom-rules-engine v0.1.2 98af0dce,
 # axiom-oracles with #632. {evidence['run']['mismatch_count']:,} mismatch rows; every one is
 # in exactly one entry below, listed by output (case_ids_by_output), and each
-# selector is bound to its rows (selector_binding), so a new mechanism in any
-# of these concepts expires the entry instead of riding it.
+# selector is bound to its rows (selector_binding). Changes to selected rows
+# expire their entries; new unlisted rows remain unexplained.
 #
 # EITC rows were attributed per row by counterfactual: each mechanism is one
 # Axiom-side input change that makes Axiom see what PolicyEngine sees, and a
@@ -648,6 +745,7 @@ def _check(root: Path) -> list[str]:
         problems.append(f"{EVIDENCE}: schema is not {EVIDENCE_SCHEMA}")
     if evidence["run"]["provenance"] != full.get("provenance"):
         problems.append(f"{EVIDENCE}: run provenance is not the bound report's")
+    problems.extend(check_failures(evidence["checks"]))
 
     records = evidence["rows"]
     full_rows = {row_key(row): row for row in full["mismatches"]}
@@ -664,7 +762,9 @@ def _check(root: Path) -> list[str]:
         ):
             problems.append(f"{key}: evidence values differ from the bound report's")
         try:
-            expected = entry_of(row, record.get("stage1"), record.get("stage3"))
+            expected = entry_of(
+                row, record.get("stage1"), record.get("stage3"), record.get("stage2")
+            )
         except ValueError as error:
             problems.append(str(error))
             continue
