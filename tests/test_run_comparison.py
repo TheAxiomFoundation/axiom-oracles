@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 import json
 import math
@@ -129,6 +130,186 @@ def test_tax_ecps_runner_uses_current_python_and_policyengine_us(monkeypatch, tm
     assert "--allow-policyengine-us-version" in cmd
     assert "--allow-uncertified-policyengine-data" in cmd
     assert output.read_text() == "{}"
+
+
+PE_US_1729_SOURCE = (
+    "https://github.com/PolicyEngine/policyengine-us/archive/"
+    "180410fe35209fb8201378c1b32dadd38051c342.tar.gz"
+)
+
+
+def _tax_ecps_runner_fixture(monkeypatch, tmp_path, *, installed_version="1.729.0"):
+    """Run the tax-ecps runner against a fake `uv`; return (calls, envs)."""
+    run_comparison = load_run_comparison_module()
+    axiom_encode = tmp_path / "axiom-encode"
+    axiom_rules = tmp_path / "axiom-rules-engine"
+    rulespec = tmp_path / "workspace" / "rulespec-us"
+    for path in (axiom_encode, axiom_rules, rulespec):
+        path.mkdir(parents=True)
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary", lambda *_args, **_kwargs: None
+    )
+    monkeypatch.setattr(
+        run_comparison, "_ensure_rulespec_us_checkout", lambda _remote: rulespec
+    )
+    calls: list[list[str]] = []
+    envs: list[dict | None] = []
+
+    def fake_run(cmd, *, check, stdout=None, cwd=None, capture_output=False,
+                 text=False, env=None, input=None):
+        del check, cwd, capture_output, text, input
+        calls.append(cmd)
+        envs.append(env)
+        if cmd[0] == "uv" and cmd[-3:-1] == ["python", "-c"]:
+            return subprocess.CompletedProcess(
+                cmd, 0, stdout=f"{installed_version}\n", stderr=""
+            )
+        if stdout is not None:
+            stdout.write("{}")
+        return subprocess.CompletedProcess(cmd, 0, stdout="", stderr="")
+
+    monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    runner_config = {
+        "axiom_encode_repo": str(axiom_encode),
+        "axiom_rules_repo": str(axiom_rules),
+        "rulespec_remote": "https://example.test/rulespec-us.git",
+        "parameters": {
+            "sample_size": 0,
+            "year": 2026,
+            "python": "3.13",
+            "surface": "all",
+            "pinned": True,
+            "policyengine_us_version": "1.729.0",
+            "policyengine_us_source": PE_US_1729_SOURCE,
+        },
+    }
+    return run_comparison, runner_config, calls, envs
+
+
+def test_tax_ecps_runner_overlays_this_checkouts_bridge(monkeypatch, tmp_path):
+    """tax-populace-compare re-exports axiom_oracles.bridges.tax_populace, so the
+    harness must import this checkout's bridge, not axiom-encode's pinned copy."""
+    run_comparison, runner_config, calls, envs = _tax_ecps_runner_fixture(
+        monkeypatch, tmp_path
+    )
+    run_comparison._run_axiom_encode_tax_ecps_compare(
+        runner_config, tmp_path / "report.json"
+    )
+    harness_index = next(
+        index for index, cmd in enumerate(calls) if "tax-populace-compare" in cmd
+    )
+    env = envs[harness_index]
+    assert env is not None
+    assert env["PYTHONPATH"].split(os.pathsep)[0] == str(run_comparison.REPO_ROOT)
+
+
+def test_tax_ecps_runner_installs_commit_pinned_policyengine_us(monkeypatch, tmp_path):
+    run_comparison, runner_config, calls, _envs = _tax_ecps_runner_fixture(
+        monkeypatch, tmp_path
+    )
+    run_comparison._run_axiom_encode_tax_ecps_compare(
+        runner_config, tmp_path / "report.json"
+    )
+    uv_calls = [cmd for cmd in calls if cmd[0] == "uv"]
+    # The version pre-flight runs first, in the same environment as the run.
+    preflight, harness = uv_calls
+    assert preflight[-3:-1] == ["python", "-c"]
+    assert "tax-populace-compare" in harness
+    requirement = f"policyengine-us @ {PE_US_1729_SOURCE}"
+    for cmd in (preflight, harness):
+        assert cmd[cmd.index(requirement) - 1] == "--with"
+        assert not any(arg.startswith("policyengine-us==") for arg in cmd)
+        assert "policyengine==4.11.0" in cmd
+        assert "policyengine-core==3.26.11" in cmd
+        assert cmd[cmd.index("spm-calculator==0.3.1") - 1] == "--with"
+    assert preflight[: preflight.index("python")] == harness[
+        : harness.index("axiom-encode", harness.index(requirement))
+    ]
+
+
+def test_tax_ecps_runner_refuses_source_that_installs_another_version(
+    monkeypatch, tmp_path
+):
+    run_comparison, runner_config, calls, _envs = _tax_ecps_runner_fixture(
+        monkeypatch, tmp_path, installed_version="1.730.0"
+    )
+    with pytest.raises(SystemExit, match="1.730.0"):
+        run_comparison._run_axiom_encode_tax_ecps_compare(
+            runner_config, tmp_path / "report.json"
+        )
+    assert not any("tax-populace-compare" in cmd for cmd in calls)
+
+
+@pytest.mark.parametrize(
+    "source",
+    [
+        # Movable refs: a branch, a tag, a short SHA.
+        "https://github.com/PolicyEngine/policyengine-us/archive/main.tar.gz",
+        "https://github.com/PolicyEngine/policyengine-us/archive/1.729.0.tar.gz",
+        "https://github.com/PolicyEngine/policyengine-us/archive/180410fe35.tar.gz",
+        # Another repository or host, and a git URL uv would clone at HEAD.
+        "https://github.com/someone/policyengine-us/archive/"
+        "180410fe35209fb8201378c1b32dadd38051c342.tar.gz",
+        "https://example.test/PolicyEngine/policyengine-us/archive/"
+        "180410fe35209fb8201378c1b32dadd38051c342.tar.gz",
+        "git+https://github.com/PolicyEngine/policyengine-us",
+        # Uppercase hex is not the canonical SHA spelling.
+        "https://github.com/PolicyEngine/policyengine-us/archive/"
+        "180410FE35209FB8201378C1B32DADD38051C342.tar.gz",
+        PE_US_1729_SOURCE + "?ref=main",
+    ],
+)
+def test_policyengine_us_source_rejects_movable_or_foreign_refs(source):
+    run_comparison = load_run_comparison_module()
+    with pytest.raises(SystemExit, match="policyengine_us_source"):
+        run_comparison._policyengine_us_source_requirement(source)
+
+
+def test_policyengine_us_source_accepts_any_full_commit():
+    run_comparison = load_run_comparison_module()
+
+    @given(st.text(alphabet="0123456789abcdef", min_size=40, max_size=40))
+    def accepts(sha):
+        source = (
+            f"https://github.com/PolicyEngine/policyengine-us/archive/{sha}.tar.gz"
+        )
+        assert (
+            run_comparison._policyengine_us_source_requirement(source)
+            == f"policyengine-us @ {source}"
+        )
+
+    accepts()
+
+
+def test_tax_ecps_provenance_records_policyengine_us_source(tmp_path):
+    run_comparison = load_run_comparison_module()
+    output = tmp_path / "report.json"
+    output.write_text("{}")
+    config = {
+        "name": "fiit-ecps",
+        "ci": "manual",
+        "runner": {
+            "type": "axiom-encode-tax-ecps-compare",
+            "rulespec_remote": "https://github.com/TheAxiomFoundation/rulespec-us.git",
+            "parameters": {
+                "pinned": True,
+                "policyengine_us_version": "1.729.0",
+                "policyengine_us_source": PE_US_1729_SOURCE,
+            },
+        },
+    }
+    block = run_comparison._build_run_provenance(
+        config, "axiom-encode-tax-ecps-compare", output
+    )
+    assert block["oracle"]["policyengine_us"] == "1.729.0"
+    assert block["oracle"]["model_source"] == PE_US_1729_SOURCE
+    # Attestation reads every `policyengine_*` key as a country-model version.
+    assert not any(
+        key.startswith("policyengine_") and key not in (
+            "policyengine_package", "policyengine_us"
+        )
+        for key in block["oracle"]
+    )
 
 
 def test_axiom_oracles_runner_composes_declared_program(monkeypatch, tmp_path):
@@ -1093,6 +1274,8 @@ def test_tax_ecps_dashboard_adapter_maps_summary_and_cases():
     assert len(report["cases"]) == 2
     assert report["cases"][0]["metadata"]["entity_id"] == "tax_unit_1"
     assert report["mismatches"][0]["concept"] == "us:tax/federal-income-tax#ctc"
+    # Rows name their output: one concept covers several compared outputs.
+    assert report["mismatches"][0]["output"] == "ctc_before_advance_payments"
     assert any(
         aggregate["concept"] == "us:tax/federal-income-tax#cdcc"
         for aggregate in report["aggregates"]
@@ -3908,3 +4091,381 @@ def test_federal_grid_accepts_configured_root_matching_pin(monkeypatch, tmp_path
     )
 
     assert params["rulespec_roots"] == [str(good_root)]
+
+
+# ---------------------------------------------------------------------------
+# A runner whose harness emits its own JSON (tax-populace-compare) publishes a
+# FULL v2 report beside the raw one, so the premerged dashboard copy binds to
+# a file apply_dispositions.py --check accepts; --from-report rebuilds that
+# copy from an earlier real run after a dispositions edit, executing nothing.
+# ---------------------------------------------------------------------------
+
+_FROM_REPORT_SUITE_YAML = (
+    "name: fiit-ecps\n"
+    "ci: manual\n"
+    "runner:\n"
+    "  type: axiom-encode-tax-ecps-compare\n"
+    "  parameters: {sample_size: 0}\n"
+    "artifacts:\n"
+    "  report_basename: axiom-policyengine-fiit-ecps\n"
+    "dashboard:\n"
+    "  filename: axiom-policyengine-fiit-ecps.json\n"
+    "  suite: fiit-ecps\n"
+)
+
+
+_FROM_REPORT_DISPOSITIONS = (
+    "schema: axiom_oracles.dispositions.v1\n"
+    "suite: fiit-ecps\n"
+    'updated: "2026-10-14"\n'
+    "entries:\n"
+    "  - id: one-open-row\n"
+    "    concept: us:tax/federal-income-tax#eitc\n"
+    "    case_id: ecps-tax_unit_0\n"
+    "    disposition: unexplained\n"
+    "    evidence:\n"
+    "      mechanism: An open investigation recorded for the fixture.\n"
+    "      upstream_url: https://example.test/issue/1\n"
+    "    expires_on_source_change: false\n"
+)
+
+
+def _raw_tax_ecps_report(*, units=1001, generated_by="scripts/run_comparison.py::fiit-ecps",
+                         reemitted=False):
+    """A stamped raw tax-populace-compare report large enough to slim."""
+    provenance = {"generated_by": generated_by, "run_kind": "manual"}
+    if reemitted:
+        provenance["reemitted_report"] = True
+    return {
+        "compared_tax_units": units,
+        "compared_values": units * 2,
+        "mismatch_count": units,
+        "output_summary": [
+            {
+                "surface": "eitc",
+                "output": "eitc_demographic_eligible",
+                "compared": units * 2,
+                "mismatches": units,
+                "max_abs_diff": 1,
+                "max_relative_diff": 1,
+            }
+        ],
+        "mismatches": [
+            {
+                "entity_id": f"tax_unit_{index}",
+                "surface": "eitc",
+                "output": "eitc_demographic_eligible",
+                "axiom": 0,
+                "policyengine": 1,
+                "diff": -1,
+            }
+            for index in range(units)
+        ],
+        "observed_outputs": [
+            {
+                "case_id": f"tax_unit_{index}",
+                "surface": "eitc",
+                "output": "eitc_demographic_eligible",
+                "axiom": 0,
+                "policyengine": 1,
+            }
+            for index in range(units)
+        ],
+        "provenance": provenance,
+    }
+
+
+def _from_report_repo(tmp_path, monkeypatch):
+    run_comparison = load_run_comparison_module()
+    repo = tmp_path / "repo"
+    for sub in ("reports", "dashboard/public/data", "comparisons", "dispositions"):
+        (repo / sub).mkdir(parents=True)
+    (repo / "comparisons" / "fiit-ecps.yaml").write_text(_FROM_REPORT_SUITE_YAML)
+    (repo / "dispositions" / "fiit-ecps.yaml").write_text(_FROM_REPORT_DISPOSITIONS)
+    monkeypatch.setattr(run_comparison, "REPO_ROOT", repo)
+    monkeypatch.setattr(run_comparison, "COMPARISONS_DIR", repo / "comparisons")
+    monkeypatch.setattr(
+        run_comparison, "DASHBOARD_DATA_DIR", repo / "dashboard" / "public" / "data"
+    )
+
+    def refuse(*_args, **_kwargs):
+        raise AssertionError("--from-report must not execute the runner")
+
+    monkeypatch.setitem(run_comparison.RUNNERS, "axiom-encode-tax-ecps-compare", refuse)
+    return run_comparison, repo
+
+
+def test_published_copies_drop_observed_outputs_past_the_cap_with_their_claims():
+    run_comparison = load_run_comparison_module()
+    cap = run_comparison._PUBLISHED_MAX_OBSERVED_OUTPUTS
+
+    @given(
+        rows=st.integers(min_value=0, max_value=cap + 3),
+        stamped=st.booleans(),
+    )
+    @example(rows=cap, stamped=True)
+    @example(rows=cap + 1, stamped=True)
+    def check(rows, stamped):
+        observed = [{"case_id": f"c{index}"} for index in range(rows)]
+        report = {"suite": "s", "observed_outputs": observed, "output_summary": [{}]}
+        if stamped:
+            report["attestation"] = {
+                "executed": True,
+                "outputs": [{"variable": "v", "comparisons": rows}],
+                "outputs_complete": True,
+            }
+        before = json.dumps(report, sort_keys=True)
+
+        published = run_comparison._without_observed_outputs(report)
+
+        assert json.dumps(report, sort_keys=True) == before  # input untouched
+        if rows <= cap:
+            assert published is report
+            return
+        # Dropped whole, never sampled, and counted.
+        assert "observed_outputs" not in published
+        assert published["observed_outputs_omitted"] == rows
+        assert published["output_summary"] == report["output_summary"]
+        if stamped:
+            # No per-output claim survives the rows that backed it.
+            assert published["attestation"] == {
+                "executed": True,
+                "outputs": [],
+                "outputs_complete": False,
+            }
+
+    check()
+
+
+def test_dashboard_slim_applies_the_observed_outputs_cap(monkeypatch):
+    run_comparison = load_run_comparison_module()
+    monkeypatch.setattr(run_comparison, "_PUBLISHED_MAX_OBSERVED_OUTPUTS", 2)
+    report = {
+        "suite": "s",
+        "mismatches": [],
+        "cases": [],
+        "observed_outputs": [{"case_id": str(index)} for index in range(3)],
+    }
+    slim = run_comparison._slim_report_for_dashboard(report)
+    assert "observed_outputs" not in slim
+    assert slim["observed_outputs_omitted"] == 3
+    report["observed_outputs"].pop()
+    assert run_comparison._slim_report_for_dashboard(report)["observed_outputs"] == (
+        report["observed_outputs"]
+    )
+
+
+def test_from_report_republishes_and_binds_to_a_full_v2_report(tmp_path, monkeypatch):
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    # The fixture's 1,001 observed rows stand in for fiit-ecps's 3.9 million.
+    monkeypatch.setattr(run_comparison, "_PUBLISHED_MAX_OBSERVED_OUTPUTS", 1000)
+    raw_path = repo / "reports" / "axiom-policyengine-fiit-ecps-0-2026-10-14.json"
+    raw_text = json.dumps(_raw_tax_ecps_report())
+    raw_path.write_text(raw_text)
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+
+    assert run_comparison.main() == 0
+
+    assert raw_path.read_text() == raw_text  # the run's own bytes are untouched
+    full_path = raw_path.with_name("axiom-policyengine-fiit-ecps-0-2026-10-14-v2.json")
+    full = json.loads(full_path.read_text())
+    assert full["suite"] == "fiit-ecps"
+    assert "cases" not in full
+    assert "observed_outputs" not in full
+    assert full["observed_outputs_omitted"] == 1001
+    assert full["attestation"]["outputs"] == []
+    assert full["attestation"]["outputs_complete"] is False
+    assert len(full["mismatches"]) == full["summary"]["mismatch_count"] == 1001
+    assert full["provenance"]["generated_by"] == "scripts/run_comparison.py::fiit-ecps"
+    dashboard = json.loads(
+        (repo / "dashboard/public/data/axiom-policyengine-fiit-ecps.json").read_text()
+    )
+    assert "observed_outputs" not in dashboard
+    assert dashboard["observed_outputs_omitted"] == 1001
+    block = dashboard["summary"]["dispositioned"]
+    assert block["source_report"]["path"] == f"reports/{full_path.name}"
+    assert block["source_report"]["sha256"] == hashlib.sha256(
+        full_path.read_bytes()
+    ).hexdigest()
+
+    # The consumer accepts the binding: the pointed file is this suite's FULL
+    # v2 report, and a fresh merge over it reproduces the embedded block.
+    apply_dispositions = load_script_module("apply_dispositions")
+    monkeypatch.setattr(apply_dispositions, "REPO_ROOT", repo)
+    from axiom_oracles.comparison.dispositions import load_dispositions
+
+    dashboard_path = repo / "dashboard/public/data/axiom-policyengine-fiit-ecps.json"
+    dispositions = load_dispositions(
+        repo / "dispositions" / "fiit-ecps.yaml", repo_root=repo
+    )
+    assert block["counts"]["unexplained"] == 1
+    assert apply_dispositions._premerged_block_problems(
+        dashboard_path, dashboard, dispositions
+    ) == []
+
+
+def test_from_report_publishes_one_snapshot_read_under_the_lock(tmp_path, monkeypatch):
+    """A run replacing the report mid-republish cannot pair one run's results
+    with another's provenance (sol review of #635, finding 4)."""
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    raw_path = repo / "reports" / "axiom-policyengine-fiit-ecps-0-2026-10-14.json"
+    first = _raw_tax_ecps_report(units=1001)
+    first["provenance"]["run_id"] = "A"
+    raw_path.write_text(json.dumps(first))
+    second = _raw_tax_ecps_report(units=1002)
+    second["provenance"]["run_id"] = "B"
+
+    events = []
+    real_flock = run_comparison.fcntl.flock
+    real_read_text = Path.read_text
+
+    def flock(handle, operation):
+        events.append("lock")
+        return real_flock(handle, operation)
+
+    def read_text(path, *args, **kwargs):
+        if Path(path) == raw_path:
+            events.append("read")
+        return real_read_text(path, *args, **kwargs)
+
+    real_adapt = run_comparison._adapt_raw_to_v2
+
+    def adapt_while_replaced(raw, *args, **kwargs):
+        # Another run publishes report B after this republish parsed A.
+        raw_path.write_text(json.dumps(second))
+        return real_adapt(raw, *args, **kwargs)
+
+    monkeypatch.setattr(run_comparison.fcntl, "flock", flock)
+    monkeypatch.setattr(Path, "read_text", read_text)
+    monkeypatch.setattr(run_comparison, "_adapt_raw_to_v2", adapt_while_replaced)
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+
+    assert run_comparison.main() == 0
+
+    assert events[0] == "lock", events  # nothing read before the lock is held
+    dashboard = json.loads(
+        (repo / "dashboard/public/data/axiom-policyengine-fiit-ecps.json").read_text()
+    )
+    assert dashboard["provenance"]["run_id"] == "A"
+    assert dashboard["summary"]["mismatch_count"] == 1001
+    full = json.loads(
+        raw_path.with_name("axiom-policyengine-fiit-ecps-0-2026-10-14-v2.json").read_text()
+    )
+    assert full["provenance"]["run_id"] == "A"
+    assert len(full["mismatches"]) == 1001
+
+
+def test_raw_harness_output_is_not_a_v2_binding_source(tmp_path):
+    run_comparison = load_run_comparison_module()
+    raw = tmp_path / "raw.json"
+    raw.write_text(json.dumps(_raw_tax_ecps_report(units=1)))
+    assert not run_comparison._is_v2_report_for(raw, "fiit-ecps")
+    v2 = tmp_path / "v2.json"
+    v2.write_text(json.dumps({"suite": "fiit-ecps", "summary": {}, "mismatches": []}))
+    assert run_comparison._is_v2_report_for(v2, "fiit-ecps")
+    assert not run_comparison._is_v2_report_for(v2, "fiit-taxsim-ecps")
+    assert not run_comparison._is_v2_report_for(tmp_path / "missing.json", "fiit-ecps")
+
+
+@pytest.mark.parametrize(
+    "raw_kwargs, message",
+    [
+        ({"generated_by": "scripts/run_comparison.py::fiit-taxsim-ecps"}, "generated by"),
+        ({"reemitted": True}, "re-emission"),
+    ],
+)
+def test_from_report_refuses_reports_that_are_not_this_suites_real_run(
+    tmp_path, monkeypatch, raw_kwargs, message
+):
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    raw_path = repo / "reports" / "raw.json"
+    raw_path.write_text(json.dumps(_raw_tax_ecps_report(units=2, **raw_kwargs)))
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+    with pytest.raises(SystemExit, match=message):
+        run_comparison.main()
+    assert not any((repo / "dashboard/public/data").iterdir())
+
+
+def test_from_report_refuses_a_report_outside_reports(tmp_path, monkeypatch):
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    raw_path = repo / "elsewhere.json"
+    raw_path.write_text(json.dumps(_raw_tax_ecps_report(units=2)))
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+    with pytest.raises(SystemExit, match="must be under"):
+        run_comparison.main()
+
+
+def test_from_report_binding_holds_when_one_cases_rows_split_by_output(
+    tmp_path, monkeypatch
+):
+    """Two rows of one case under one concept, attributed to different
+    entries by output, must survive the premerged binding check (it keys
+    retained rows by output as well as case and concept)."""
+    run_comparison, repo = _from_report_repo(tmp_path, monkeypatch)
+    raw = _raw_tax_ecps_report(units=1001)
+    raw["mismatches"].append(
+        {
+            "entity_id": "tax_unit_0",
+            "surface": "eitc",
+            "output": "eitc_earned_income",
+            "axiom": 10,
+            "policyengine": 0,
+            "diff": 10,
+        }
+    )
+    raw["mismatch_count"] = len(raw["mismatches"])
+    (repo / "dispositions" / "fiit-ecps.yaml").write_text(
+        "schema: axiom_oracles.dispositions.v1\n"
+        "suite: fiit-ecps\n"
+        'updated: "2026-10-14"\n'
+        "entries:\n"
+        "  - id: demographic\n"
+        "    concept: us:tax/federal-income-tax#eitc\n"
+        "    case_selector:\n"
+        "      case_ids_by_output:\n"
+        "        eitc_demographic_eligible: [ecps-tax_unit_0]\n"
+        "    disposition: upstream_engine_gap\n"
+        "    evidence:\n"
+        "      mechanism: Fixture age mechanism.\n"
+        "      upstream_url: https://example.test/issue/1\n"
+        "    expires_on_source_change: true\n"
+        "  - id: earned\n"
+        "    concept: us:tax/federal-income-tax#eitc\n"
+        "    case_selector:\n"
+        "      case_ids_by_output:\n"
+        "        eitc_earned_income: [ecps-tax_unit_0]\n"
+        "    disposition: bridge_artifact\n"
+        "    evidence:\n"
+        "      mechanism: Fixture input mechanism.\n"
+        "      upstream_url: https://example.test/issue/2\n"
+        "    expires_on_source_change: true\n"
+    )
+    raw_path = repo / "reports" / "axiom-policyengine-fiit-ecps-0-2026-10-14.json"
+    raw_path.write_text(json.dumps(raw))
+    monkeypatch.setattr(
+        "sys.argv", ["run_comparison.py", "fiit-ecps", "--from-report", str(raw_path)]
+    )
+    assert run_comparison.main() == 0
+
+    from axiom_oracles.comparison.dispositions import load_dispositions
+
+    dashboard_path = repo / "dashboard/public/data/axiom-policyengine-fiit-ecps.json"
+    dashboard = json.loads(dashboard_path.read_text())
+    counts = dashboard["summary"]["dispositioned"]["counts"]
+    assert counts["upstream_engine_gap"] == 1 and counts["bridge_artifact"] == 1
+    apply_dispositions = load_script_module("apply_dispositions")
+    monkeypatch.setattr(apply_dispositions, "REPO_ROOT", repo)
+    dispositions = load_dispositions(
+        repo / "dispositions" / "fiit-ecps.yaml", repo_root=repo
+    )
+    assert apply_dispositions._premerged_block_problems(
+        dashboard_path, dashboard, dispositions
+    ) == []

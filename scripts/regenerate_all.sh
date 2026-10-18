@@ -6,13 +6,22 @@
 set -e
 cd "$(dirname "$0")/.."
 
-# Unattended runs commit and deploy production — never do that from a
-# review branch someone left checked out.
+# Unattended runs publish data and deploy production. Use a dedicated
+# checkout; never run from a review branch someone left checked out.
 branch=$(git rev-parse --abbrev-ref HEAD)
-if [ "$branch" != "main" ]; then
-  echo "!! refusing unattended regen on branch '$branch' (expected main)"
+if [ "$branch" != "main" ] && [ "$branch" != "oracle-data" ]; then
+  echo "!! refusing unattended regen on branch '$branch' (expected main or oracle-data)"
   exit 1
 fi
+
+# Prepare before computing, so generations read current source and live data.
+# Refuse local edits before the disposable checkout is rebuilt.
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "!! refusing unattended regen with local tracked changes"
+  exit 1
+fi
+.venv/bin/python scripts/oracle_data.py prepare
+git switch -C oracle-data
 
 ./scripts/sync_rulespec_roots.sh
 
@@ -61,13 +70,17 @@ done
 .venv/bin/python scripts/generate_dashboard_overview.py || echo "!! overview bundle failed"
 # Full-evidence reports run to GBs; keep only the newest generation each.
 .venv/bin/python scripts/prune_superseded_reports.py || echo "!! report prune failed"
+# Reports feed generated conformance, closure and certificate outputs outside
+# the dashboard tree. Reconcile every derived output before publication.
+PYTHON=.venv/bin/python SIMULATE_DERIVED_REFRESH=1 \
+  scripts/commit_refreshed_report.sh scheduled oracle-data
 .venv/bin/python -m pytest tests/ -q
 
-if ! git diff --quiet dashboard/public/data; then
-  git add dashboard/public/data
-  git commit -m "data: scheduled oracle regeneration $(date +%Y-%m-%d)"
-  git push origin main
-  (cd dashboard && bun run build && vercel --prod)
+before_publish=$(git rev-parse HEAD)
+.venv/bin/python scripts/oracle_data.py publish --group all \
+  --message "data: scheduled oracle regeneration $(date +%Y-%m-%d)"
+if [ "$(git rev-parse HEAD)" != "$before_publish" ]; then
+  (cd dashboard && AXIOM_ORACLES_DATA_SOURCE=checkout bun run build && vercel --prod)
 else
   echo "no data changes"
 fi

@@ -8,7 +8,20 @@ _comment: PolicyEngine-attributed mismatch explanations and their Axiom side. Ev
   debt + grandfathered) and may only fall, except through an appended debt_raises
   record (append-only). Monotonicity is checked against every committed version of
   this file. Re-pin with `uv run scripts/pe_axiom_standard.py` after an improvement.
-open_max: 81
+open_max: 82
+debt_raises:
+- date: '2026-10-15'
+  from: 81
+  to: 82
+  reason: 'fiit-ecps: the grandfathered blanket entry eitc-earned-income-8614-partnership-scorp-split
+    (case_id_prefix over every tax unit) hid two PolicyEngine-US 1.729.0 mechanisms
+    behind one bridge explanation. Per-row counterfactual attribution (reports/fiit-ecps-eitc-attribution-2026-10-14.json)
+    splits it: the #8614 rows become bridge_artifact (no PE attribution), and two
+    upstream_engine_gap entries now declare their Axiom side as encoding debt instead
+    of hiding it: the childless-EITC age test counting dependents (PolicyEngine/policyengine-us#9131;
+    rulespec-us#1776) and the 32(i)(2) investment-income definition (PolicyEngine/policyengine-us#9635;
+    rulespec-us#1416). Net +1: one grandfathered entry closed, two declared debts
+    opened. Approved by Max 2026-10-15.'
 grandfathered:
 - source: dashboard/public/data/known_causes.json
   id: co-state-supplement|us-co:regulations/9-ccr-2503-5/3.530#oap_total_monthly_grant_standard|amount_difference
@@ -187,12 +200,6 @@ grandfathered:
 - source: dispositions/ca-snap-ecps.yaml
   id: ca-362-pe-student-earnings-ecps-62315-eligibility
   concept: us:statutes/7/2014/o#snap_eligible
-  basis: rows
-  pe_issue: present
-  axiom: missing
-- source: dispositions/fiit-ecps.yaml
-  id: eitc-earned-income-8614-partnership-scorp-split
-  concept: us:tax/federal-income-tax#eitc
   basis: rows
   pe_issue: present
   axiom: missing

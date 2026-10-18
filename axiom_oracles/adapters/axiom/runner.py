@@ -15,6 +15,14 @@ from typing import Any
 
 import yaml
 
+from ...bridges.relation_binding import (
+    RelationBinder,
+    bind_materialized_relations,
+    bind_request_relations,
+    merge_relation_binding_diagnostics,
+    relation_binding_diagnostics,
+    with_relation_binding_diagnostics,
+)
 from ...comparison.mappings import engine_targets_for_concepts
 from ...core.engine import EngineAdapter
 from ...core.household import Household
@@ -438,6 +446,26 @@ class AxiomRulesRunner(EngineAdapter):
             allowed_program_refs=allowed_program_refs,
             input_record_overlays=input_record_overlays,
         )
+        ambiguities = []
+        if request["dataset"]["relations"]:
+            artifact = json.loads(artifact_path.read_text())
+            materialized = _materialize_relation_roles(
+                request, artifact, binding_ambiguities=ambiguities
+            )
+            request, raw_ambiguities = bind_materialized_relations(
+                request,
+                artifact,
+                materialized=materialized,
+                binder=bind_request_relations,
+            )
+            ambiguities.extend(raw_ambiguities)
+
+        def case_raw(raw: Any, index: int) -> Any:
+            return with_relation_binding_diagnostics(
+                raw,
+                relation_binding_diagnostics(ambiguities, namespace=f"case-{index}::"),
+            )
+
         process = self._subprocess_run(
             [
                 str(self.binary_path),
@@ -452,6 +480,8 @@ class AxiomRulesRunner(EngineAdapter):
         )
         if process.returncode != 0:
             error = process.stderr.strip() or "Axiom RuleSpec execution failed"
+            if len(cases) == 1:
+                error = _strip_batch_namespace(error, 0)
             isolated = self._isolate_case_failure(
                 cases,
                 output_targets,
@@ -468,8 +498,9 @@ class AxiomRulesRunner(EngineAdapter):
                     household_id=case.case_id,
                     values={},
                     errors=(error,),
+                    raw=case_raw(None, index),
                 )
-                for case in cases
+                for index, case in enumerate(cases)
             ]
         try:
             payload = json.loads(process.stdout)
@@ -480,9 +511,9 @@ class AxiomRulesRunner(EngineAdapter):
                     household_id=case.case_id,
                     values={},
                     errors=(f"Axiom RuleSpec execution emitted invalid JSON: {exc}",),
-                    raw=process.stdout,
+                    raw=case_raw(process.stdout, index),
                 )
-                for case in cases
+                for index, case in enumerate(cases)
             ]
 
         query_results = [
@@ -501,9 +532,9 @@ class AxiomRulesRunner(EngineAdapter):
                     household_id=case.case_id,
                     values={},
                     errors=(error,),
-                    raw=payload,
+                    raw=case_raw(payload, index),
                 )
-                for case in cases
+                for index, case in enumerate(cases)
             ]
 
         return [
@@ -514,12 +545,17 @@ class AxiomRulesRunner(EngineAdapter):
                     query_result,
                     include_trace=self.record_all_outputs,
                 ),
-                raw={
-                    "metadata": payload.get("metadata"),
-                    "result": query_result,
-                },
+                raw=case_raw(
+                    {
+                        "metadata": payload.get("metadata"),
+                        "result": query_result,
+                    },
+                    index,
+                ),
             )
-            for case, query_result in zip(cases, query_results, strict=True)
+            for index, (case, query_result) in enumerate(
+                zip(cases, query_results, strict=True)
+            )
         ]
 
     def _isolate_case_failure(
@@ -554,14 +590,8 @@ class AxiomRulesRunner(EngineAdapter):
         """
 
         if len(cases) == 1:
-            return [
-                EngineResult(
-                    engine=self.name,
-                    household_id=cases[0].case_id,
-                    values={},
-                    errors=(_strip_batch_namespace(error, 0),),
-                )
-            ]
+            # The caller's normal error path retains binding diagnostics.
+            return None
         suspect = _suspect_case_index(error, len(cases))
         if suspect is None:
             return None
@@ -607,6 +637,20 @@ class AxiomRulesRunner(EngineAdapter):
             allowed_program_refs=allowed_program_refs,
             input_record_overlay=input_record_overlay,
         )
+        ambiguities = []
+        if request["dataset"]["relations"]:
+            artifact = json.loads(artifact_path.read_text())
+            materialized = _materialize_relation_roles(
+                request, artifact, binding_ambiguities=ambiguities
+            )
+            request, raw_ambiguities = bind_materialized_relations(
+                request,
+                artifact,
+                materialized=materialized,
+                binder=bind_request_relations,
+            )
+            ambiguities.extend(raw_ambiguities)
+        diagnostics = relation_binding_diagnostics(ambiguities)
         process = self._subprocess_run(
             [
                 str(self.binary_path),
@@ -626,6 +670,7 @@ class AxiomRulesRunner(EngineAdapter):
                 household_id=case.case_id,
                 values={},
                 errors=(error,),
+                raw=with_relation_binding_diagnostics(None, diagnostics),
             )
         try:
             payload = json.loads(process.stdout)
@@ -635,7 +680,7 @@ class AxiomRulesRunner(EngineAdapter):
                 household_id=case.case_id,
                 values={},
                 errors=(f"Axiom RuleSpec execution emitted invalid JSON: {exc}",),
-                raw=process.stdout,
+                raw=with_relation_binding_diagnostics(process.stdout, diagnostics),
             )
         aggregation = _case_result_aggregation(case)
         raw: Any = payload
@@ -664,13 +709,13 @@ class AxiomRulesRunner(EngineAdapter):
                     household_id=case.case_id,
                     values={},
                     errors=aggregation_errors,
-                    raw=raw,
+                    raw=with_relation_binding_diagnostics(raw, diagnostics),
                 )
         return EngineResult(
             engine=self.name,
             household_id=case.case_id,
             values=values,
-            raw=raw,
+            raw=with_relation_binding_diagnostics(raw, diagnostics),
         )
 
     def _execution_request(
@@ -836,6 +881,11 @@ class AxiomRulesRunner(EngineAdapter):
                     "name": str(relation["name"]),
                     "tuple": [str(value) for value in relation["tuple"]],
                     "interval": _interval(period),
+                    **(
+                        {"roles": dict(relation["roles"])}
+                        if "roles" in relation
+                        else {}
+                    ),
                 }
             )
         return records
@@ -1239,6 +1289,17 @@ def _select_candidate_result(
     case: Case,
     candidates: list[EngineResult],
 ) -> EngineResult:
+    diagnostics: dict = {}
+    for candidate in candidates:
+        if isinstance(candidate.raw, Mapping):
+            merge_relation_binding_diagnostics(
+                diagnostics,
+                candidate.raw.get("relation_binding_diagnostics", {}),
+            )
+
+    def selection_raw(raw: Any) -> Any:
+        return with_relation_binding_diagnostics(raw, diagnostics)
+
     raw_selection = case.metadata.get(AXIOM_RESULT_SELECTION_METADATA_KEY)
     if not isinstance(raw_selection, Mapping):
         return EngineResult(
@@ -1249,7 +1310,7 @@ def _select_candidate_result(
                 "metadata['axiom_result_selection'] is required when "
                 "metadata['axiom_input_record_overlays'] is provided.",
             ),
-            raw=_candidate_raw(candidates),
+            raw=selection_raw(_candidate_raw(candidates)),
         )
     strategy = str(raw_selection.get("strategy", ""))
     output = str(raw_selection.get("output", ""))
@@ -1259,7 +1320,7 @@ def _select_candidate_result(
             household_id=case.case_id,
             values={},
             errors=("metadata['axiom_result_selection'].strategy must be min or max.",),
-            raw=_candidate_raw(candidates),
+            raw=selection_raw(_candidate_raw(candidates)),
         )
     if not output:
         return EngineResult(
@@ -1267,7 +1328,7 @@ def _select_candidate_result(
             household_id=case.case_id,
             values={},
             errors=("metadata['axiom_result_selection'].output is required.",),
-            raw=_candidate_raw(candidates),
+            raw=selection_raw(_candidate_raw(candidates)),
         )
 
     valid_candidates = [
@@ -1287,7 +1348,7 @@ def _select_candidate_result(
                 f"Axiom candidate selection found no numeric '{output}' result.",
                 *candidate_errors,
             ),
-            raw=_candidate_raw(candidates),
+            raw=selection_raw(_candidate_raw(candidates)),
         )
 
     selector = min if strategy == "min" else max
@@ -1299,11 +1360,13 @@ def _select_candidate_result(
         engine=engine_name,
         household_id=case.case_id,
         values=selected.values,
-        raw={
-            "selection": dict(raw_selection),
-            "selected_candidate": selected_index,
-            "candidates": _candidate_raw(candidates),
-        },
+        raw=selection_raw(
+            {
+                "selection": dict(raw_selection),
+                "selected_candidate": selected_index,
+                "candidates": _candidate_raw(candidates),
+            }
+        ),
         errors=selected.errors,
     )
 
@@ -1439,7 +1502,38 @@ def _namespace_relation_record(
     namespaced["tuple"] = [
         _namespace_entity_id(namespace, value) for value in namespaced.get("tuple", [])
     ]
+    if "roles" in namespaced:
+        namespaced["roles"] = {
+            **namespaced["roles"],
+            "owner_id": _namespace_entity_id(
+                namespace, namespaced["roles"]["owner_id"]
+            ),
+            "related_id": _namespace_entity_id(
+                namespace, namespaced["roles"]["related_id"]
+            ),
+        }
     return namespaced
+
+
+def _materialize_relation_roles(
+    request: dict[str, Any],
+    artifact: dict[str, Any],
+    *,
+    binding_ambiguities: list | None = None,
+) -> set[int]:
+    """Resolve producer roles against the artifact actually sent to the engine."""
+    materialized = set()
+    relation_binder = RelationBinder(artifact)
+    for index, record in enumerate(request["dataset"]["relations"]):
+        roles = record.pop("roles", None)
+        if roles is not None:
+            record["tuple"] = relation_binder.tuple(
+                record["name"],
+                **roles,
+                binding_ambiguities=binding_ambiguities,
+            )
+            materialized.add(index)
+    return materialized
 
 
 def _namespace_entity_id(namespace: str, entity_id: Any) -> str:
