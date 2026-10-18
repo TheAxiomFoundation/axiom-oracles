@@ -14,6 +14,11 @@ from pathlib import Path
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.provenance import GIT_SHA  # noqa: E402
+
 SCRIPTS_DIR = Path(__file__).resolve().parent
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
@@ -37,8 +42,8 @@ SOURCE_SHA256 = "a69b872fbc9fd9a98132ea5b7f5272d8be9631d3060651603b2b3c1f7cd64ae
 EVALUATION_TRACE_SHA256 = (
     "43cca386b15e71fc07fa8fb223b2bef8d351e0bb56ecfdf05fe98e790e66f4da"
 )
-RULESPEC_REPO = Path("/Users/maxghenis/TheAxiomFoundation/rulespec-nz")
-CORPUS_REPO = Path("/Users/maxghenis/TheAxiomFoundation/axiom-corpus")
+RULESPEC_REPO = Path.home() / "TheAxiomFoundation" / "rulespec-nz"
+CORPUS_REPO = Path.home() / "TheAxiomFoundation" / "axiom-corpus"
 RULESPEC_SHA = "89a7d25dc03a4d045348620283332de10b1047da"
 CORPUS_RELEASE_REF = "origin/release/nz-rulespec-2026-07-18"
 CORPUS_RELEASE_SHA = "3f7b5d985bce759cb487f1b7fd050f5cbf007d17"
@@ -714,12 +719,16 @@ def build(
     corpus = source.get("corpus") or {}
     ledger = source.get("pending_ledger") or {}
     if (
-        rulespec.get("commit") != RULESPEC_SHA
+        not isinstance(rulespec.get("commit"), str)
+        or not GIT_SHA.fullmatch(rulespec["commit"])
+        or rulespec.get("commit") != RULESPEC_SHA
         or tuple(rulespec.get("roots") or ()) != ROOTS
     ):
         raise ClosureError("NZ closure RuleSpec pin or declared roots drifted")
     if (
         corpus.get("release") != "nz-rulespec-2026-07-18"
+        or not isinstance(corpus.get("commit"), str)
+        or not GIT_SHA.fullmatch(corpus["commit"])
         or corpus.get("commit") != CORPUS_RELEASE_SHA
     ):
         raise ClosureError("NZ closure corpus release pin drifted")
