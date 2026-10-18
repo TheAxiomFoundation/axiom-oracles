@@ -113,7 +113,7 @@ committed decisions themselves (the validators prove consistency; audits
 prove honesty — they have caught a gerrymandered exclusion, a
 misclassified regulation, and pages nobody had read). And no certification
 is announced anywhere, in any words, without the designated certification
-approver's explicit clearance.
+approver's explicit clearance. The designated approver is currently Max Ghenis.
 
 ## Definition history
 
