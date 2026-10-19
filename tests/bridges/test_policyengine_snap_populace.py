@@ -225,23 +225,15 @@ def test_arizona_oracle_bridge_never_counts_a_matching_amount_as_parity(capsys):
         [case],
         [{"outputs": outputs}],
         1.5,
-        output_id_by_label=config.output_id_by_label,
-        utility_allowance_labels=config.utility_allowance_labels,
-        eligibility_oracle_bridge=config.eligibility_oracle_bridge,
+        config=config,
     )
 
     assert rows[0]["amount_match"] is True
     assert rows[0]["comparison_status"] == "not_comparable"
     assert "PolicyEngine eligibility" in rows[0]["not_comparable_reason"]
     assert rows[0]["match"] is False
-    independently_comparable = snap_populace.compare(
-        [case],
-        [{"outputs": outputs}],
-        1.5,
-        output_id_by_label=config.output_id_by_label,
-        utility_allowance_labels=config.utility_allowance_labels,
-    )
-    assert independently_comparable[0]["match"] is True
+    with pytest.raises(TypeError, match="config"):
+        snap_populace.compare([case], [{"outputs": outputs}], 1.5)
     snap_populace.print_summary(rows, 1.5, 1)
     assert "No comparable rows; parity is not established" in capsys.readouterr().out
 
@@ -253,6 +245,12 @@ def test_arizona_oracle_bridge_never_counts_a_matching_amount_as_parity(capsys):
     )
     assert rows[0]["snapscreener_comparable"] is False
     assert rows[0]["axiom_snapscreener_match"] is False
+    assert rows[0]["pe_snapscreener_comparable"] is True
+    assert rows[0]["pe_snapscreener_match"] is True
+    snap_populace.print_snapscreener_summary(rows, 1.5, 1)
+    summary = capsys.readouterr().out
+    assert "PolicyEngine matches SnapScreener: 1/1" in summary
+    assert "Axiom matches SnapScreener:" not in summary
 
 
 def test_arizona_raw_utility_projection_uses_arizona_input_surface():

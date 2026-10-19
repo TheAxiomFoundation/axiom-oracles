@@ -206,8 +206,8 @@ JURISDICTION_CONFIGS = {
         member_entity_type="Person",
         temp_prefix="az-snap-pe-populace-",
         display_name="Arizona SNAP",
-        # The projector supplies PE's eligibility decision to this program.
-        # Remove only when RuleSpec derives eligibility from household facts.
+        # The projector supplies PE eligibility and benefit inputs to this program.
+        # Remove only when compared outcomes are independent of PE-derived inputs.
         eligibility_oracle_bridge=True,
     ),
     "us-ga": JurisdictionConfig(
@@ -1897,10 +1897,11 @@ def compare(
     results: list[dict[str, Any]],
     tolerance: float,
     *,
-    output_id_by_label: dict[str, str],
-    utility_allowance_labels: tuple[str, ...],
-    eligibility_oracle_bridge: bool = False,
+    config: JurisdictionConfig,
 ):
+    output_id_by_label = config.output_id_by_label
+    utility_allowance_labels = config.utility_allowance_labels
+    eligibility_oracle_bridge = config.eligibility_oracle_bridge
     rows = []
     for case, result in zip(cases, results, strict=True):
         raw_outputs = result.get("outputs", {})
@@ -1939,7 +1940,7 @@ def compare(
                 "not_comparable" if eligibility_oracle_bridge else "comparable"
             ),
             "not_comparable_reason": (
-                "PolicyEngine eligibility is supplied as an Axiom input"
+                "PolicyEngine eligibility and benefit inputs are supplied to Axiom"
                 if eligibility_oracle_bridge
                 else ""
             ),
@@ -2015,9 +2016,12 @@ def add_snapscreener_results(
         row["snapscreener_status"] = result.get("status")
         errors = result.get("errors") or []
         row["snapscreener_error"] = "; ".join(str(error) for error in errors)
-        row["snapscreener_comparable"] = row.get(
-            "comparison_status", "comparable"
-        ) == "comparable" and primary_oracles_find_eligible(row)
+        eligible_in_primary_oracle = primary_oracles_find_eligible(row)
+        row["snapscreener_comparable"] = (
+            eligible_in_primary_oracle
+            and row.get("comparison_status", "comparable") == "comparable"
+        )
+        row["pe_snapscreener_comparable"] = eligible_in_primary_oracle
         if result.get("status") != "OK":
             row["snapscreener_snap"] = None
             row["snapscreener_eligible"] = None
@@ -2037,7 +2041,7 @@ def add_snapscreener_results(
             row["snapscreener_comparable"] and abs(axiom_difference) <= tolerance
         )
         row["pe_snapscreener_match"] = (
-            row["snapscreener_comparable"] and abs(pe_difference) <= tolerance
+            row["pe_snapscreener_comparable"] and abs(pe_difference) <= tolerance
         )
 
 
@@ -2092,6 +2096,9 @@ def print_snapscreener_summary(
         return
     valid_rows = [row for row in rows if row["snapscreener_status"] == "OK"]
     comparable_rows = [row for row in valid_rows if row["snapscreener_comparable"]]
+    pe_comparable_rows = [
+        row for row in valid_rows if row["pe_snapscreener_comparable"]
+    ]
     noncomparable_positive = [
         row
         for row in valid_rows
@@ -2103,24 +2110,22 @@ def print_snapscreener_summary(
         if bool(row["pe_snap_eligible"]) != (row["axiom_snap_eligible"] == "holds")
     ]
     axiom_matches = sum(1 for row in comparable_rows if row["axiom_snapscreener_match"])
-    pe_matches = sum(1 for row in comparable_rows if row["pe_snapscreener_match"])
+    pe_matches = sum(1 for row in pe_comparable_rows if row["pe_snapscreener_match"])
     disagreement_axiom_matches = sum(
         1 for row in disagreement_rows if row["axiom_snapscreener_match"]
-    )
-    disagreement_pe_matches = sum(
-        1 for row in disagreement_rows if row["pe_snapscreener_match"]
     )
     print()
     print("SnapScreener diagnostic oracle")
     print(f"Rows: {len(valid_rows):,}/{len(rows):,} OK")
     print(
-        f"Comparable rows: {len(comparable_rows):,} "
-        "(eligible in a primary oracle and no oracle-fed eligibility bridge)"
+        f"Axiom-comparable rows: {len(comparable_rows):,} "
+        "(eligible in a primary oracle and no oracle-fed outcome bridge)"
     )
+    print(f"PolicyEngine-comparable rows: {len(pe_comparable_rows):,}")
     if noncomparable_positive:
         print(
-            f"Excluded {len(noncomparable_positive):,} non-comparable row(s) "
-            "where SnapScreener estimates a positive benefit."
+            f"Excluded {len(noncomparable_positive):,} row(s) from Axiom/SnapScreener "
+            "comparison where SnapScreener estimates a positive benefit."
         )
     print(f"Tolerance: ${tolerance:,.2f}")
     if comparable_rows:
@@ -2129,16 +2134,16 @@ def print_snapscreener_summary(
             f"{axiom_matches:,}/{len(comparable_rows):,} "
             f"({axiom_matches / len(comparable_rows):.1%})"
         )
+    if pe_comparable_rows:
         print(
             f"PolicyEngine matches SnapScreener: "
-            f"{pe_matches:,}/{len(comparable_rows):,} "
-            f"({pe_matches / len(comparable_rows):.1%})"
+            f"{pe_matches:,}/{len(pe_comparable_rows):,} "
+            f"({pe_matches / len(pe_comparable_rows):.1%})"
         )
     if disagreement_rows:
         print(
-            f"On PE/Axiom eligibility disagreements: "
-            f"Axiom {disagreement_axiom_matches:,}/{len(disagreement_rows):,}, "
-            f"PolicyEngine {disagreement_pe_matches:,}/{len(disagreement_rows):,} "
+            f"On PE/Axiom eligibility disagreements in Axiom-comparable rows: "
+            f"Axiom {disagreement_axiom_matches:,}/{len(disagreement_rows):,} "
             "match SnapScreener."
         )
     diffs = sorted(
@@ -2224,9 +2229,7 @@ def main(args: argparse.Namespace | None = None) -> int:
         cases,
         results,
         args.tolerance,
-        output_id_by_label=config.output_id_by_label,
-        utility_allowance_labels=config.utility_allowance_labels,
-        eligibility_oracle_bridge=config.eligibility_oracle_bridge,
+        config=config,
     )
     diagnostics: dict = {}
     for result in results:
