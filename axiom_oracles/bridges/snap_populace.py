@@ -86,6 +86,7 @@ class JurisdictionConfig:
     temp_prefix: str
     display_name: str
     additional_relation_ids: tuple[str, ...] = ()
+    eligibility_oracle_bridge: bool = False
 
 
 JURISDICTION_CONFIGS = {
@@ -205,6 +206,9 @@ JURISDICTION_CONFIGS = {
         member_entity_type="Person",
         temp_prefix="az-snap-pe-populace-",
         display_name="Arizona SNAP",
+        # The projector supplies PE's eligibility decision to this program.
+        # Remove only when RuleSpec derives eligibility from household facts.
+        eligibility_oracle_bridge=True,
     ),
     "us-ga": JurisdictionConfig(
         jurisdiction="us-ga",
@@ -1895,6 +1899,7 @@ def compare(
     *,
     output_id_by_label: dict[str, str],
     utility_allowance_labels: tuple[str, ...],
+    eligibility_oracle_bridge: bool = False,
 ):
     rows = []
     for case, result in zip(cases, results, strict=True):
@@ -1921,6 +1926,7 @@ def compare(
         axiom_snap = float(outputs[COMPARED_AXIOM_OUTPUT])
         pe_snap = float(case.pe_outputs[PE_COMPARED_OUTPUT])
         diff = axiom_snap - pe_snap
+        amount_match = abs(diff) <= tolerance
         row = {
             "spm_unit_id": case.spm_unit_id,
             "household_id": case.household_id,
@@ -1928,7 +1934,16 @@ def compare(
             "axiom_snap_allotment": axiom_snap,
             "difference": diff,
             "absolute_difference": abs(diff),
-            "match": abs(diff) <= tolerance,
+            "amount_match": amount_match,
+            "comparison_status": (
+                "not_comparable" if eligibility_oracle_bridge else "comparable"
+            ),
+            "not_comparable_reason": (
+                "PolicyEngine eligibility is supplied as an Axiom input"
+                if eligibility_oracle_bridge
+                else ""
+            ),
+            "match": amount_match and not eligibility_oracle_bridge,
             "pe_snap_eligible": bool(case.pe_outputs["is_snap_eligible"]),
             "axiom_snap_eligible": outputs["snap_eligible"],
             "pe_gross_income": case.pe_outputs["snap_gross_income"],
@@ -2000,7 +2015,9 @@ def add_snapscreener_results(
         row["snapscreener_status"] = result.get("status")
         errors = result.get("errors") or []
         row["snapscreener_error"] = "; ".join(str(error) for error in errors)
-        row["snapscreener_comparable"] = primary_oracles_find_eligible(row)
+        row["snapscreener_comparable"] = row.get(
+            "comparison_status", "comparable"
+        ) == "comparable" and primary_oracles_find_eligible(row)
         if result.get("status") != "OK":
             row["snapscreener_snap"] = None
             row["snapscreener_eligible"] = None
@@ -2016,8 +2033,12 @@ def add_snapscreener_results(
         row["snapscreener_eligible"] = bool(result.get("estimated_eligibility"))
         row["axiom_snapscreener_difference"] = axiom_difference
         row["pe_snapscreener_difference"] = pe_difference
-        row["axiom_snapscreener_match"] = abs(axiom_difference) <= tolerance
-        row["pe_snapscreener_match"] = abs(pe_difference) <= tolerance
+        row["axiom_snapscreener_match"] = (
+            row["snapscreener_comparable"] and abs(axiom_difference) <= tolerance
+        )
+        row["pe_snapscreener_match"] = (
+            row["snapscreener_comparable"] and abs(pe_difference) <= tolerance
+        )
 
 
 def primary_oracles_find_eligible(row: dict[str, Any]) -> bool:
@@ -2028,18 +2049,25 @@ def print_summary(
     rows: list[dict[str, Any]], tolerance: float, max_differences: int
 ) -> None:
     total = len(rows)
-    matches = sum(1 for row in rows if row["match"])
+    comparable_rows = [
+        row
+        for row in rows
+        if row.get("comparison_status", "comparable") == "comparable"
+    ]
+    matches = sum(1 for row in comparable_rows if row["match"])
     diffs = sorted(rows, key=lambda row: row["absolute_difference"], reverse=True)
     mean_abs = sum(row["absolute_difference"] for row in rows) / total if total else 0.0
     print()
-    print(f"Compared {total:,} PolicyEngine Populace SPM units")
+    print(f"Evaluated {total:,} PolicyEngine Populace SPM units")
+    print(f"Comparable rows: {len(comparable_rows):,}/{total:,}")
     print(f"Tolerance: ${tolerance:,.2f}")
     print(
-        f"Matches: {matches:,}/{total:,} ({matches / total:.1%})"
-        if total
-        else "No rows"
+        f"Matches: {matches:,}/{len(comparable_rows):,} "
+        f"({matches / len(comparable_rows):.1%})"
+        if comparable_rows
+        else "No comparable rows; parity is not established"
     )
-    print(f"Mean absolute difference: ${mean_abs:,.2f}")
+    print(f"Diagnostic mean absolute difference: ${mean_abs:,.2f}")
     if diffs:
         print(f"Max absolute difference: ${diffs[0]['absolute_difference']:,.2f}")
     print()
@@ -2087,12 +2115,12 @@ def print_snapscreener_summary(
     print(f"Rows: {len(valid_rows):,}/{len(rows):,} OK")
     print(
         f"Comparable rows: {len(comparable_rows):,} "
-        "(PolicyEngine or Axiom marks SNAP eligible)"
+        "(eligible in a primary oracle and no oracle-fed eligibility bridge)"
     )
     if noncomparable_positive:
         print(
-            f"Excluded {len(noncomparable_positive):,} row(s) where PE and Axiom "
-            "both mark ineligible but SnapScreener estimates a positive benefit."
+            f"Excluded {len(noncomparable_positive):,} non-comparable row(s) "
+            "where SnapScreener estimates a positive benefit."
         )
     print(f"Tolerance: ${tolerance:,.2f}")
     if comparable_rows:
@@ -2198,6 +2226,7 @@ def main(args: argparse.Namespace | None = None) -> int:
         args.tolerance,
         output_id_by_label=config.output_id_by_label,
         utility_allowance_labels=config.utility_allowance_labels,
+        eligibility_oracle_bridge=config.eligibility_oracle_bridge,
     )
     diagnostics: dict = {}
     for result in results:
@@ -2244,7 +2273,12 @@ def main(args: argparse.Namespace | None = None) -> int:
             )
             print(f"Wrote {identity_path}")
 
-    match_rate = sum(1 for row in rows if row["match"]) / len(rows) if rows else 0
+    comparable_rows = [row for row in rows if row["comparison_status"] == "comparable"]
+    match_rate = (
+        sum(1 for row in comparable_rows if row["match"]) / len(comparable_rows)
+        if comparable_rows
+        else 0
+    )
     if args.min_match_rate is not None and match_rate < args.min_match_rate:
         print(
             f"Match rate {match_rate:.1%} is below required {args.min_match_rate:.1%}"
