@@ -185,6 +185,74 @@ def test_arizona_projection_uses_composed_financial_outputs_not_pe_values():
     assert "snap_excess_shelter_deduction_for_net_income" not in projected
 
 
+def test_arizona_oracle_bridge_never_counts_a_matching_amount_as_parity(capsys):
+    config = JURISDICTION_CONFIGS["us-az"]
+    assert config.eligibility_oracle_bridge is True
+    case = ProjectedCase(
+        spm_unit_id=1,
+        household_id=1,
+        inputs={},
+        member_inputs=[],
+        pe_outputs={
+            "snap_normal_allotment": 100,
+            "is_snap_eligible": True,
+            "snap_gross_income": 0,
+            "snap_net_income": 0,
+            "snap_excess_shelter_expense_deduction": 0,
+            "snap_standard_deduction": 0,
+            "snap_earned_income_deduction": 0,
+            "snap_dependent_care_deduction": 0,
+            "snap_child_support_deduction": 0,
+            "snap_child_support_gross_income_deduction": 0,
+            "snap_excess_medical_expense_deduction": 0,
+            "snap_max_allotment": 100,
+            "snap_utility_allowance": 0,
+            "housing_cost": 0,
+            "has_usda_elderly_disabled": False,
+            "meets_snap_categorical_eligibility": False,
+            "snap_utility_allowance_type": "",
+        },
+    )
+    outputs = {
+        output_id: (
+            {"kind": "judgment", "outcome": "holds"}
+            if label == "snap_eligible"
+            else {"value": {"kind": "decimal", "value": 100}}
+        )
+        for label, output_id in config.output_id_by_label.items()
+    }
+    rows = snap_populace.compare(
+        [case],
+        [{"outputs": outputs}],
+        1.5,
+        config=config,
+    )
+
+    assert rows[0]["amount_match"] is True
+    assert rows[0]["comparison_status"] == "not_comparable"
+    assert "PolicyEngine eligibility" in rows[0]["not_comparable_reason"]
+    assert rows[0]["match"] is False
+    with pytest.raises(TypeError, match="config"):
+        snap_populace.compare([case], [{"outputs": outputs}], 1.5)
+    snap_populace.print_summary(rows, 1.5, 1)
+    assert "No comparable rows; parity is not established" in capsys.readouterr().out
+
+    add_snapscreener_results(
+        rows,
+        [{"state_or_territory": "AZ"}],
+        [{"status": "OK", "estimated_monthly_benefit": 100}],
+        tolerance=1.5,
+    )
+    assert rows[0]["snapscreener_comparable"] is False
+    assert rows[0]["axiom_snapscreener_match"] is False
+    assert rows[0]["pe_snapscreener_comparable"] is True
+    assert rows[0]["pe_snapscreener_match"] is True
+    snap_populace.print_snapscreener_summary(rows, 1.5, 1)
+    summary = capsys.readouterr().out
+    assert "PolicyEngine matches SnapScreener: 1/1" in summary
+    assert "Axiom matches SnapScreener:" not in summary
+
+
 def test_arizona_raw_utility_projection_uses_arizona_input_surface():
     config = JURISDICTION_CONFIGS["us-az"]
     values = {
@@ -252,7 +320,11 @@ def test_run_axiom_cases_uses_artifact_order_and_configured_member_entity(
                         {
                             "name": name,
                             "arity": 2,
-                            **({"slot_entities": ["Household", "Person"]} if typed else {}),
+                            **(
+                                {"slot_entities": ["Household", "Person"]}
+                                if typed
+                                else {}
+                            ),
                         }
                         for name in relation_ids
                     ],
@@ -297,9 +369,7 @@ def test_run_axiom_cases_uses_artifact_order_and_configured_member_entity(
     assert config.member_entity_type == "Person"
     request = runtime_requests[0]
     expected_tuple = (
-        ["spm-42", "spm-42-member-1"]
-        if typed
-        else ["spm-42-member-1", "spm-42"]
+        ["spm-42", "spm-42-member-1"] if typed else ["spm-42-member-1", "spm-42"]
     )
     assert request["dataset"]["relations"] == [
         {
@@ -515,9 +585,7 @@ def test_program_resolves_from_the_monorepo_never_a_standalone_checkout(
     the affected map does not list."""
     config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
     workspace = tmp_path / "TheAxiomFoundation"
-    standalone = (
-        workspace / f"rulespec-{jurisdiction}" / config.program_relative_path
-    )
+    standalone = workspace / f"rulespec-{jurisdiction}" / config.program_relative_path
     standalone.parent.mkdir(parents=True)
     standalone.write_text("archived\n")
     monkeypatch.chdir(tmp_path)
@@ -561,9 +629,7 @@ def test_implicit_program_ignores_a_cwd_without_monorepo_identity(
     """A jurisdiction basename alone cannot establish live monorepo membership."""
     config = snap_populace.JURISDICTION_CONFIGS[jurisdiction]
     workspace = tmp_path / "workspace"
-    expected = (
-        workspace / "rulespec-us" / jurisdiction / config.program_relative_path
-    )
+    expected = workspace / "rulespec-us" / jurisdiction / config.program_relative_path
     expected.parent.mkdir(parents=True)
     expected.write_text("live monorepo\n")
 
@@ -609,7 +675,12 @@ def test_implicit_program_accepts_a_renamed_live_monorepo_checkout(
     subprocess.run(["git", "init", "-q", str(checkout)], check=True)
     subprocess.run(
         [
-            "git", "-C", str(checkout), "remote", "add", "origin",
+            "git",
+            "-C",
+            str(checkout),
+            "remote",
+            "add",
+            "origin",
             "https://github.com/theaxiomfoundation/RuleSpec-US.git",
         ],
         check=True,
