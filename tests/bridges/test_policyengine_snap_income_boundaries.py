@@ -101,3 +101,34 @@ def test_net_and_gross_tests_flip_one_dollar_above_fy2026_limits(pe):
         True,
         False,
     ] * len(LIMITS)
+
+
+def test_arizona_expanded_categorical_eligibility_march_2026_boundary(pe):
+    """Pin the oracle side of the ECE change; this is not RuleSpec parity."""
+    policyengine_us, _ = pe
+    months = ("2026-02", "2026-03")
+    sim = policyengine_us.Simulation(
+        situation={
+            "people": {"p": {"age": {2026: 30}}},
+            "spm_units": {
+                "s": {
+                    "members": ["p"],
+                    "snap_unit_size": {month: 1 for month in months},
+                    "tanf_non_cash_fpg": {month: 1000 for month in months},
+                    "snap_gross_test_income": {month: 1900 for month in months},
+                }
+            },
+            "tax_units": {"t": {"members": ["p"], "filing_status": {2026: "SINGLE"}}},
+            "households": {"h": {"members": ["p"], "state_code_str": {2026: "AZ"}}},
+            "families": {"f": {"members": ["p"]}},
+            "marital_units": {"m": {"members": ["p"]}},
+        }
+    )
+    assert [
+        sim.calculate("tanf_non_cash_gross_income_limit", month).tolist()
+        for month in months
+    ] == [[1850.0], [2000.0]]
+    assert [
+        sim.calculate("meets_tanf_non_cash_gross_income_test", month).tolist()
+        for month in months
+    ] == [[False], [True]]
