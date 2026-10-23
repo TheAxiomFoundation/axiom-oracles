@@ -193,23 +193,61 @@ committed_decisions:
     family: china-301-2024-action
     status: partially-encoded
     count: 1
-    reason: Membership and overlay exist, but the action is not fed into the final composition.
+    reason: 'Of the additional-duty headings and subheadings FR 2024-21217 inserts, two have encoded rates composed
+      through china_section_301_component_rate, which every generated chapter composition sums into schedule_statutory_stack:
+      heading 9903.91.01 (U.S. note 31(b), 25 percent) as an overlay rate, recorded here, and heading 9903.91.02
+      (note 31(c), 50 percent) as a composition-local rate, recorded under solar-china. The 9903.91.01 term applies
+      when entry_is_china_301_2024_action and origin_is_china hold. The input entry_is_china_301_2024_action is
+      named for the whole action but gates only the note 31(b) rate, and it has no defining rule: no generated U.S.
+      note 31 membership table exists and entry preparation supplies it as false, so the term is zero for every
+      prepared entry and the law-derived note 31(b) membership leaf is not encoded. The component also does not
+      apply the note 31(a) chapter 98 exclusion. Headings 9903.91.03 through 9903.91.08 (note 31(d) through (i);
+      9903.91.04 covered only 2025 entries) and subheading 9903.92.10 have no encoded rate and appear only as rows
+      of the generated ch99c disposition tables. The action''s other inserted headings and subheadings (exception
+      headings 9903.91.09 and 9903.91.10, exclusion heading 9903.88.70, superior heading 9903.92 and subheading
+      9903.92.80) add no duty.'
   - root: fr-instrument-families
     family: brazil-301
     status: partially-encoded
     count: 1
-    reason: Membership and headings exist, but the family is not fed into the final composition.
+    reason: 'The heading 9903.05.01 rate (25 percent; the heading cites U.S. note 50(a)) is encoded as an overlay
+      parameter and composed: every generated chapter composition sums brazil_section_301_component_rate into schedule_statutory_stack,
+      and from 2026-07-22 that component applies the rate when entry_is_brazil_301_listed and origin_is_brazil hold.
+      Under note 50(a)(i), the heading applies to all products of Brazil except those in headings 9903.05.02 through
+      9903.05.09 and subdivisions (a)(ii) through (a)(vi), accompanied baggage and most chapter 98 entries, so the
+      law-derived leaf is coverage net of those exceptions, not a list of covered goods. The input entry_is_brazil_301_listed
+      has no defining rule: no generated U.S. note 50 exception membership table exists, no composition uses the
+      overlay''s heading_applies rule, and entry preparation supplies the input as false, so the component is zero
+      for every prepared entry although the law applies the duty by default.'
   - root: fr-instrument-families
     family: note-52-country-tier-action
     status: partially-encoded
     count: 1
-    reason: Membership and country tiers exist under a legacy-named input, but the family is not fed into the final
-      composition; the exact legal label remains open.
+    reason: 'The country-tier rates of headings 9903.05.20 through 9903.05.84 are encoded and composed: every generated
+      chapter composition sums forced_labor_section_301_component_rate into schedule_statutory_stack, and from 2026-07-24
+      that component applies the flat and floor tiers by origin, each gated on entry_is_forced_labor_301_listed,
+      whose name is not used here as a legal description. Under note 52(a), those headings apply to all products
+      of the listed countries except those in headings 9903.05.85 through 9903.06.21 and subdivisions (b) through
+      (k), accompanied baggage and most chapter 98 entries, so the law-derived leaf is coverage net of the exceptions
+      that turn on the article and its origin. The input entry_is_forced_labor_301_listed has no defining rule:
+      no generated U.S. note 52 exception membership table exists, no composition imports the exception overlays
+      for headings 9903.05.86 and 9903.05.90, and entry preparation supplies the input as false, so the component
+      is zero for every prepared entry although the law applies the duties by default. For this family, the in-transit,
+      USMCA, chapter 98, donation, informational-material and accompanied-baggage exceptions are applied only in
+      forced_labor_section_301_entry_component_rate, which no rule consumes, and no composition rule applies the
+      CAFTA-DR exceptions of subdivision (i) and headings 9903.06.06 and 9903.06.09; only unimported country overlays
+      reference them. The exact legal label remains open.'
   - root: fr-instrument-families
     family: solar-china
     status: partially-encoded
     count: 1
-    reason: Membership is encoded but the action is not fed into the final composition.
+    reason: 'The 50 percent heading 9903.91.02 rate (U.S. note 31(c), inserted by FR 2024-21217) is encoded as a
+      composition-local parameter and composed: every generated chapter composition sums china_section_301_component_rate
+      into schedule_statutory_stack, and that component adds the rate when entry_is_china_301_solar and origin_is_china
+      hold. The input entry_is_china_301_solar has no defining rule: no generated U.S. note 31 membership table
+      exists (note 31(c) lists subheadings 8541.42.00 and 8541.43.00), and entry preparation supplies the input
+      as false, so the term is zero for every prepared entry and the law-derived membership leaf is not encoded.
+      The component also does not apply the note 31(a) chapter 98 exclusion.'
   - root: fr-instrument-families
     family: section-201-proclamation-10339
     status: encoded
@@ -386,20 +424,58 @@ computed:
   - family: china-301-2024-action
     root: fr-instrument-families
     status: partially-encoded
-    blocker: Membership and overlay exist, but the action is not fed into the final composition.
+    blocker: 'Of the additional-duty headings and subheadings FR 2024-21217 inserts, two have encoded rates composed
+      through china_section_301_component_rate, which every generated chapter composition sums into schedule_statutory_stack:
+      heading 9903.91.01 (U.S. note 31(b), 25 percent) as an overlay rate, recorded here, and heading 9903.91.02
+      (note 31(c), 50 percent) as a composition-local rate, recorded under solar-china. The 9903.91.01 term applies
+      when entry_is_china_301_2024_action and origin_is_china hold. The input entry_is_china_301_2024_action is
+      named for the whole action but gates only the note 31(b) rate, and it has no defining rule: no generated U.S.
+      note 31 membership table exists and entry preparation supplies it as false, so the term is zero for every
+      prepared entry and the law-derived note 31(b) membership leaf is not encoded. The component also does not
+      apply the note 31(a) chapter 98 exclusion. Headings 9903.91.03 through 9903.91.08 (note 31(d) through (i);
+      9903.91.04 covered only 2025 entries) and subheading 9903.92.10 have no encoded rate and appear only as rows
+      of the generated ch99c disposition tables. The action''s other inserted headings and subheadings (exception
+      headings 9903.91.09 and 9903.91.10, exclusion heading 9903.88.70, superior heading 9903.92 and subheading
+      9903.92.80) add no duty.'
   - family: brazil-301
     root: fr-instrument-families
     status: partially-encoded
-    blocker: Membership and headings exist, but the family is not fed into the final composition.
+    blocker: 'The heading 9903.05.01 rate (25 percent; the heading cites U.S. note 50(a)) is encoded as an overlay
+      parameter and composed: every generated chapter composition sums brazil_section_301_component_rate into schedule_statutory_stack,
+      and from 2026-07-22 that component applies the rate when entry_is_brazil_301_listed and origin_is_brazil hold.
+      Under note 50(a)(i), the heading applies to all products of Brazil except those in headings 9903.05.02 through
+      9903.05.09 and subdivisions (a)(ii) through (a)(vi), accompanied baggage and most chapter 98 entries, so the
+      law-derived leaf is coverage net of those exceptions, not a list of covered goods. The input entry_is_brazil_301_listed
+      has no defining rule: no generated U.S. note 50 exception membership table exists, no composition uses the
+      overlay''s heading_applies rule, and entry preparation supplies the input as false, so the component is zero
+      for every prepared entry although the law applies the duty by default.'
   - family: note-52-country-tier-action
     root: fr-instrument-families
     status: partially-encoded
-    blocker: Membership and country tiers exist under a legacy-named input, but the family is not fed into the final
-      composition; the exact legal label remains open.
+    blocker: 'The country-tier rates of headings 9903.05.20 through 9903.05.84 are encoded and composed: every generated
+      chapter composition sums forced_labor_section_301_component_rate into schedule_statutory_stack, and from 2026-07-24
+      that component applies the flat and floor tiers by origin, each gated on entry_is_forced_labor_301_listed,
+      whose name is not used here as a legal description. Under note 52(a), those headings apply to all products
+      of the listed countries except those in headings 9903.05.85 through 9903.06.21 and subdivisions (b) through
+      (k), accompanied baggage and most chapter 98 entries, so the law-derived leaf is coverage net of the exceptions
+      that turn on the article and its origin. The input entry_is_forced_labor_301_listed has no defining rule:
+      no generated U.S. note 52 exception membership table exists, no composition imports the exception overlays
+      for headings 9903.05.86 and 9903.05.90, and entry preparation supplies the input as false, so the component
+      is zero for every prepared entry although the law applies the duties by default. For this family, the in-transit,
+      USMCA, chapter 98, donation, informational-material and accompanied-baggage exceptions are applied only in
+      forced_labor_section_301_entry_component_rate, which no rule consumes, and no composition rule applies the
+      CAFTA-DR exceptions of subdivision (i) and headings 9903.06.06 and 9903.06.09; only unimported country overlays
+      reference them. The exact legal label remains open.'
   - family: solar-china
     root: fr-instrument-families
     status: partially-encoded
-    blocker: Membership is encoded but the action is not fed into the final composition.
+    blocker: 'The 50 percent heading 9903.91.02 rate (U.S. note 31(c), inserted by FR 2024-21217) is encoded as
+      a composition-local parameter and composed: every generated chapter composition sums china_section_301_component_rate
+      into schedule_statutory_stack, and that component adds the rate when entry_is_china_301_solar and origin_is_china
+      hold. The input entry_is_china_301_solar has no defining rule: no generated U.S. note 31 membership table
+      exists (note 31(c) lists subheadings 8541.42.00 and 8541.43.00), and entry preparation supplies the input
+      as false, so the term is zero for every prepared entry and the law-derived membership leaf is not encoded.
+      The component also does not apply the note 31(a) chapter 98 exclusion.'
   - family: section-338-instruments
     root: fr-instrument-families
     status: pending
