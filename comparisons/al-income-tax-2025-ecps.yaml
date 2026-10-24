@@ -1,0 +1,30 @@
+# Refresh locally: uv run --extra dev python scripts/run_comparison.py al-income-tax-2025-ecps
+name: al-income-tax-2025-ecps
+title: Alabama TY2025 income tax — Axiom, PolicyEngine, and NBER TAXSIM
+description: >-
+  Reconciles committed PolicyEngine and TAXSIM state liabilities for 1,155
+  Alabama eCPS households (taxsimid 88052-89206), with a $1 absolute tolerance
+  and a separate $1-$15 diagnostic band. Two Axiom legs use each engine's
+  available federal worksheet inputs once the Alabama TY2025 composed module
+  exists; absent modules and unavailable federal amounts remain explicit.
+
+# Encoding awaits the signed narrow corpus union (axiom-corpus#746, decision
+# d270). Keep this lane manual until the TY2025 composed module is available.
+ci: manual
+
+runner:
+  type: al-income-tax-2025-ecps
+  parameters:
+    population: enhanced-cps-alabama
+    sample_size: 1155
+    period: "2025"
+    concept: us:tax/state-income-tax#liability
+    reference_dir: reference/al-income-tax-2025
+    # The generator resolves RULESPEC_US_REPO, falling back to ../rulespec-us.
+    rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
+
+artifacts:
+  report_basename: al-income-tax-2025-three-way
+
+selector:
+  report: reports/al-income-tax-2025-three-way.json
