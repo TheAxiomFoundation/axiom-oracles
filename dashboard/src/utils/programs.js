@@ -10,7 +10,8 @@ import {
   nearMetric,
   isAxiomPair,
   otherOracle,
-} from "./suites";
+} from "./suites.js";
+import { publishedUnexplained } from "./unexplained.js";
 
 export function buildProgramRows(reports) {
   const programs = new Map();
@@ -110,23 +111,7 @@ export function countUnexplained(reports, knownCauses) {
   for (const report of reports || []) {
     if (!isAxiomPair(report)) continue;
     if (suiteMeta(report.suite).kind === "diagnostic") continue;
-    const dispositioned = report.summary?.dispositioned;
-    if (
-      dispositioned?.dispositions_file &&
-      dispositioned.unexplained_count != null
-    ) {
-      total += dispositioned.unexplained_count;
-      continue;
-    }
-    const buckets = new Map();
-    for (const m of report.mismatches || []) {
-      const key = `${m.concept}::${m.kind}`;
-      buckets.set(key, (buckets.get(key) || 0) + 1);
-    }
-    for (const [key, count] of buckets) {
-      const [concept, kind] = key.split("::");
-      if (!causeFor(knownCauses, report, concept, kind)) total += count;
-    }
+    total += publishedUnexplained(report, { known_causes: knownCauses || [] });
   }
   return total;
 }

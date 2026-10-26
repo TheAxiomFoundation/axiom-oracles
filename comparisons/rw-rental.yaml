@@ -1,0 +1,56 @@
+name: rw-rental
+title: Rwanda rw-rental — Axiom vs RWAMOD
+description: >-
+  Compares the rulespec-rw Law 048/2023 rental income tax (Article 43 base =
+  gross rental less 50% deemed expenses; Article 42 bands 0/20/30% at
+  180,000/1,000,000 FRW annual) against RWAMOD tpr_s. The engine's
+  post-uprating ypr is bridged onto the module's annual gross input. RWAMOD
+  starts each band at its printed lower bound (180,001/1,000,001 annual), one
+  franc above the encoded threshold - the PAYE convention - so the band-2 and
+  band-3 cases price 0.2 and 0.3 FRW per year below the encoded schedule
+  (43,999.8 vs 44,000; 223,999.7 vs 224,000), inside the 1-FRW tolerance. The
+  Axiom side evaluates period 2026; RWAMOD runs RW_2025 (CY2025), and every
+  schedule this suite compares is value-identical across 2025 and 2026.
+  Results are based on the tax-benefit microsimulation model for Rwanda
+  (RWAMOD) in SOUTHMOD_A4.0, developed, maintained and managed by UNU-WIDER
+  with SASPRI, the LSE International Inequalities Institute and local
+  partners, run on the EUROMOD software (EM_Executable 1.0.0 via the euromod
+  connector 0.2.18) under the registered rw_2024_a1 dataset name; the bundle
+  ships no Rwandan microdata, so a header-only input file is built locally
+  from the model's own variable list and every household is synthetic. The
+  results and their interpretation are Axiom's responsibility. The SOUTHMOD
+  bundle is licensed and non-redistributable: it is referenced only by path
+  (euromod_model_root), and no model XML, dataset row, or DRD text is
+  committed.
+
+# Not runnable on the CI matrix runners. The SOUTHMOD bundle is licensed to
+# Axiom by UNU-WIDER under the SOUTHMOD_A4.0 Adhesion Agreement, which bars
+# providing the model or its input datasets to any third party (clause 4), so
+# no shared runner can hold it; the runner also needs the x64 EUROMOD engine
+# (EM_Executable.dll) under EUROMOD_PYTHON and a .NET runtime. Manual lane
+# only: scripts/regenerate_euromod_rw.sh, where the licensed bundle and
+# runtime exist, refreshes the committed report. This marker stays unless
+# UNU-WIDER licenses a runner-held copy.
+ci: manual
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: rw-rental
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: RW
+    euromod_system: RW_2025
+    euromod_dataset: rw_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-rw-rental.json
+
+artifacts:
+  report_basename: axiom-euromod-rw-rental
+
+dashboard:
+  filename: axiom-euromod-rw-rental.json
+  suite: rw-rental

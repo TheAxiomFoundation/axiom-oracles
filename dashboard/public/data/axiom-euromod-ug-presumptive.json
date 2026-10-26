@@ -1,0 +1,815 @@
+{
+  "aggregates": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "comparison_count": 10,
+      "comparison_weight": 10,
+      "components": [],
+      "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+      "description": "Uganda presumptive small-business income tax (Second Schedule as substituted by Act 20 of 2020)",
+      "left_weighted_sum": 2490000,
+      "match_rate": 100,
+      "match_weight": 10,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 2490000,
+      "weighted_difference": 0,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 10,
+  "cases": [
+    {
+      "case_id": "ug-presumptive-nil-band-8m-records",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 8000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 8000000.0,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": true
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 1,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 642531.509788147
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 8000000.0
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": true
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-presumptive-band1-20m-no-records",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 80000.0,
+          "right": 80000
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 20000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 20000000.0,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": false
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 0,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 1606328.7744703675
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 20000000.0
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-presumptive-band2-40m-no-records",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 199999.99999999997,
+          "right": 200000
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 40000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 40000000.0,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": false
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 0,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 3212657.548940735
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 40000000.0
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-presumptive-band3-60m-no-records",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 399999.99999999994,
+          "right": 400000
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 60000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 59999999.999999985,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": false
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 0,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 4818986.323411102
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 59999999.999999985
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-presumptive-band4-100m-no-records",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 900000.0,
+          "right": 900000
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 100000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 99999999.99999999,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": false
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 0,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 8031643.872351837
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 99999999.99999999
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-presumptive-band1-20m-records",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 40000.0,
+          "right": 40000.0
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 20000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 20000000.0,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": true
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 1,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 1606328.7744703675
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 20000000.0
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": true
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-presumptive-band2-40m-records",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 129999.99999999999,
+          "right": 130000.0
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 40000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 40000000.0,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": true
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 1,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 3212657.548940735
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 40000000.0
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": true
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-presumptive-band3-60m-records",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 239999.99999999994,
+          "right": 239999.9999999999
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 60000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 59999999.999999985,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": true
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 1,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 4818986.323411102
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 59999999.999999985
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": true
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-presumptive-band4-100m-records",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 500000.0,
+          "right": 499999.99999999994
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 100000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 99999999.99999999,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": true
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 1,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 8031643.872351837
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 99999999.99999999
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": true
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "ug-presumptive-above-ceiling-160m",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+          "left": 0.0,
+          "right": 0.0
+        }
+      ],
+      "metadata": {
+        "annual_gross_turnover": 160000000.0,
+        "axiom_all_outputs_count": 1,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 160000000.0,
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.taxpayer_keeps_records": false
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "deh": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 0,
+            "lfo": 0,
+            "tcl": 1,
+            "trc": 0,
+            "yem": 0.0,
+            "yem00": 0.0,
+            "ytn": 12850630.19576294
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "ytn": [
+            "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "ug:statutes/act-2020-20/income-tax-amendment-2020#input.annual_gross_turnover": 160000000.0
+        },
+        "household_summary": {
+          "ages": [
+            40
+          ],
+          "household_size": 1
+        },
+        "locale": "UG",
+        "scenario": "small-business-presumptive-turnover",
+        "scope": {
+          "geoid": "UG",
+          "type": "country"
+        },
+        "taxpayer_keeps_records": false
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "tax",
+      "comparison": "amount",
+      "components": [],
+      "description": "Uganda presumptive small-business income tax (Second Schedule as substituted by Act 20 of 2020)",
+      "id": "ug:statutes/act-2020-20/income-tax-amendment-2020#presumptive_small_business_income_tax_before_credits",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "UG"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:10:51Z",
+    "generated_by": "scripts/run_comparison.py::ug-presumptive",
+    "oracle": {
+      "euromod_country": "UG",
+      "euromod_dataset": "ug_2024_a1",
+      "euromod_system": "UG_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-ug",
+        "sha": "c0b6597047472a1277a0eeb4b4fe7837079f68b3"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "ug-presumptive",
+  "summary": {
+    "comparison_count": 10,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 10,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 10,
+      "match_rate": 100,
+      "match_weight": 10,
+      "mismatch_weight": 0
+    }
+  }
+}

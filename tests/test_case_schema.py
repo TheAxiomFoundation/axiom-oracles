@@ -622,9 +622,17 @@ def test_belgium_marital_quotient_suite_feeds_related_person_records() -> None:
             record["entity"] == "Person"
             for record in case.metadata["axiom_input_records"]
         )
-        assert case.metadata["axiom_relations"] == {
-            relation: [["head", "taxunit"], ["spouse", "taxunit"]]
-        }
+        assert case.metadata["axiom_relations"] == [
+            {
+                "name": relation,
+                "tuple": [member_id, "taxunit"],
+                "roles": {
+                    "owner_id": "taxunit", "owner_kind": "TaxUnit",
+                    "related_id": member_id, "related_kind": "Person",
+                },
+            }
+            for member_id in ("head", "spouse")
+        ]
         assert case.metadata["euromod_to_axiom_input_bridge"] == {
             "yem": {
                 "records": [

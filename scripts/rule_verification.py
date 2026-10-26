@@ -117,7 +117,7 @@ classify, SKIP_DIRS = _load_classifier()
 #    working tree) ──────────────────────────────────────────────────────────
 def git(repo: Path, *args: str) -> str:
     return subprocess.run(
-        ["git", "-C", str(repo), *args],
+        ["git", "--no-replace-objects", "-C", str(repo), *args],
         capture_output=True,
         text=True,
         check=True,
@@ -139,7 +139,7 @@ def batch_blobs(repo: Path, ref: str, paths: list[str]) -> dict[str, bytes]:
         return {}
     req = "".join(f"{ref}:{p}\n" for p in paths).encode()
     proc = subprocess.run(
-        ["git", "-C", str(repo), "cat-file", "--batch"],
+        ["git", "--no-replace-objects", "-C", str(repo), "cat-file", "--batch"],
         input=req,
         capture_output=True,
         check=True,

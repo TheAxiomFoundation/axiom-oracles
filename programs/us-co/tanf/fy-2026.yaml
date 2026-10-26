@@ -1,8 +1,8 @@
 # Colorado Works TANF -- FY 2026
 #
 # This package exposes the encoded Colorado Works basic cash assistance
-# calculation slice. The source law lives in rulespec-us-co; this wrapper only
-# assembles a reusable program-facing benefit output.
+# calculation slice. The source law lives in rulespec-us/us-co; this wrapper
+# only assembles a reusable program-facing benefit output.
 
 program: us-co/tanf
 period: 2026-01
@@ -13,7 +13,6 @@ outputs:
 
 acknowledged_incomplete:
   - co_tanf_annual_benefit
-  - tanf_benefit
 
 scope:
   state:

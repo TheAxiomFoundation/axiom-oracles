@@ -8,8 +8,7 @@ description: >-
   gross-income test and $90 applicant net-income test, and the grant =
   min(payment standard, 50% of the standard-of-need deficit after the $90 + $30 +
   1/3 earned-income disregard)) against PolicyEngine's de_tanf on Enhanced CPS
-  households in Delaware. Refresh the rulespec root after pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-de/ ~/.axiom-oracles/roots/rulespec-us-de/
+  households in Delaware, using the canonical rulespec-us monorepo checkout.
 
 # Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
 # staging fails the engine's canonical-path scan (non-canonical filenames in
@@ -43,9 +42,9 @@ runner:
     axiom_program: $HOME/axiom-oracles/programs/us-de/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/de-tanf-composed.yaml
     axiom_compiled_program: /tmp/de-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
     rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-de
+      - $HOME/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-de-tanf-ecps

@@ -342,3 +342,85 @@ def test_clone_double_failure_never_leaks_the_token(monkeypatch, tmp_path, capsy
     assert "sekret-token" not in message
     out = capsys.readouterr()
     assert "sekret-token" not in out.out + out.err
+
+
+def _registry_configs() -> list[dict]:
+    configs = []
+    for path in sorted((REPO_ROOT / "comparisons").glob("*.yaml")):
+        if path.name.endswith(".fixtures.yaml"):
+            continue
+        config = yaml.safe_load(path.read_text())
+        if isinstance(config, dict) and "name" in config and "runner" in config:
+            configs.append(config)
+    return configs
+
+
+def test_every_referenced_rulespec_path_is_provided_and_none_is_absorbed(tmp_path):
+    """EXHAUSTIVE: for every registry suite, the plan on an empty workspace
+    creates each ``$HOME`` rulespec path its runner names (a checkout, a
+    ``~/rulespec-*`` link, or a synced-roots child), and never clones an
+    absorbed state repo. Those repos are archived: a clone would feed a
+    harness frozen rules while the map and report say rulespec-us."""
+    import re
+
+    from axiom_oracles.provenance import ABSORBED_RULESPEC_REPOS
+
+    mcw = _load()
+    amap = _real_map()
+    home_path = re.compile(
+        r"\$HOME/((?:\.axiom-oracles/roots/|TheAxiomFoundation/)?"
+        r"rulespec-[A-Za-z0-9_-]+)"
+    )
+    configs = _registry_configs()
+    assert len(configs) > 100
+    for config in configs:
+        name = config["name"]
+        plan = mcw.build_plan(config, mcw.mapped_repos(amap, name), tmp_path)
+        created = {
+            action.get("dest") or action.get("link")
+            for action in plan
+            if action["kind"] in ("clone", "symlink")
+        }
+        for action in plan:
+            if action["kind"] == "clone":
+                assert action["repo"].split("/", 1)[1] not in ABSORBED_RULESPEC_REPOS, (
+                    f"{name} clones absorbed repo {action['repo']}"
+                )
+        for value in mcw._iter_strings(config["runner"]):
+            for relative in home_path.findall(value):
+                assert str(tmp_path / relative) in created, (
+                    f"{name} reads $HOME/{relative} but the plan never provides it"
+                )
+
+
+def test_state_harnesses_get_the_monorepo_they_read(tmp_path):
+    """The formerly state-mapped classes each get the rulespec-us checkout
+    their harness resolves the state layer from, and nothing named for a
+    state repo."""
+    mcw = _load()
+    amap = _real_map()
+    org = tmp_path / "TheAxiomFoundation"
+
+    # Composed TANF over $HOME/rulespec-us (formerly an rsync'd
+    # ~/.axiom-oracles/roots/rulespec-us-al copy).
+    plan = mcw.build_plan(
+        _real_config("al-tanf-ecps"), mcw.mapped_repos(amap, "al-tanf-ecps"), tmp_path
+    )
+    assert {a["repo"] for a in plan if a["kind"] == "clone"} == {
+        "TheAxiomFoundation/rulespec-us"
+    }
+    links = {a["link"]: a["target"] for a in plan if a["kind"] == "symlink"}
+    assert links[str(tmp_path / "rulespec-us")] == str(org / "rulespec-us")
+    assert not any("rulespec-us-" in link for link in links)
+
+    # Encoder SNAP lane and SNAP QC: the bridge resolves
+    # <workspace>/rulespec-us (resolve_workspace_root falls back to
+    # ~/TheAxiomFoundation), so the org-dir clone is what they read.
+    for suite in ("co-snap-ecps", "co-snap-qc"):
+        plan = mcw.build_plan(
+            _real_config(suite), mcw.mapped_repos(amap, suite), tmp_path
+        )
+        clones = {a["repo"]: a["dest"] for a in plan if a["kind"] == "clone"}
+        assert clones == {"TheAxiomFoundation/rulespec-us": str(org / "rulespec-us")}, (
+            suite
+        )

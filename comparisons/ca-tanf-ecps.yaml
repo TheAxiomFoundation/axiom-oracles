@@ -1,17 +1,16 @@
-# California TANF -- Axiom vs PolicyEngine on Enhanced CPS, NY households.
+# California TANF -- Axiom vs PolicyEngine on Enhanced CPS, California households.
 
 name: ca-tanf-ecps
 title: California TANF -- Axiom vs PolicyEngine
 description: >-
-  Compares the monthly NY TANF (Family Assistance) grant from the composed
-  us-ca/tanf program (state plan 2024-2026 standard of need, home energy
-  allowances, with-children shelter allowance, and earned income
-  disregards) against PolicyEngine's ny_tanf on Enhanced CPS households in
-  California. Known parameter divergences the suite is expected to surface:
-  the encoded state plan's 62% earned income disregard vs PolicyEngine's
-  50%, and different local-agency shelter maximum schedules. Refresh the
-  rulespec root after pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-ny/ ~/.axiom-oracles/roots/rulespec-us-ca/
+  Compares the California CalWORKs (TANF) grant from the composed us-ca/tanf
+  program (W&I Code 11450 maximum aid payment schedules for regions 1 and 2,
+  exempt and non-exempt, paying the MAP less countable income, floored at
+  zero) against PolicyEngine's ca_tanf on Enhanced CPS households in
+  California, using the canonical rulespec-us monorepo checkout. The
+  program's v1 scope decisions (region by county FIPS, SSI as the exemption
+  proxy, recipient month only) are documented in
+  programs/us-ca/tanf/fy-2026.yaml.
 
 # Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
 # staging fails the engine's canonical-path scan (non-canonical filenames in
@@ -42,9 +41,9 @@ runner:
     axiom_program: $HOME/axiom-oracles/programs/us-ca/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/ca-tanf-composed.yaml
     axiom_compiled_program: /tmp/ca-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
     rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-ca
+      - $HOME/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-ca-tanf-ecps

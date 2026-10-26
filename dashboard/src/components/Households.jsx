@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { loadSuiteCases } from "../utils/caseData";
 import { caseAgreement } from "../utils/caseAgreement.mjs";
+import { zeroOutputNames } from "../utils/zeroOutputs.mjs";
 import { engineLabel, formatPct } from "../utils/format";
 import { suiteMeta, suiteLabel, otherOracle } from "../utils/suites";
 
@@ -143,7 +144,7 @@ function Triangulation({ runs, bySuite, onPick }) {
           })}
         </div>
         <span className="tri-hint mono">
-          disagreeing with independent engines points at the encoding; oracles
+          disagreeing with the other engines points at the encoding; oracles
           disagreeing with each other lets it arbitrate
         </span>
       </div>
@@ -163,11 +164,10 @@ function HouseholdDetail({ c, conceptLabels, oracleLabel, inputSlots, outputSlot
   const matched = c.v || [];
   const [showDefaults, setShowDefaults] = useState(false);
   const [showZeroOutputs, setShowZeroOutputs] = useState(false);
-  const zeroOutputSlots = useMemo(() => {
-    if (!showZeroOutputs || !Array.isArray(outputSlots)) return [];
-    const present = new Set((outputs || []).map((r) => r.n));
-    return outputSlots.filter((n) => !present.has(n));
-  }, [showZeroOutputs, outputSlots, outputs]);
+  const zeroOutputSlots = useMemo(
+    () => (showZeroOutputs ? zeroOutputNames(c, outputSlots) : []),
+    [showZeroOutputs, outputSlots, c],
+  );
   const defaultedSlots = useMemo(() => {
     if (!showDefaults || !Array.isArray(inputSlots)) return [];
     const present = new Set((records || []).map((r) => r.n));

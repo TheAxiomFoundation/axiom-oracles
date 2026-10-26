@@ -1,7 +1,9 @@
 # SNAP State Encoding Inventory
 
-Current as of 2026-06-02. This is an implementation inventory, not a claim that
-all listed rules are fully comparable to PolicyEngine.
+Current as of 2026-06-02. This is an implementation inventory. It does not claim
+that the listed rules are fully comparable to PolicyEngine.
+
+Disclosure: Max Ghenis is CEO of both the Axiom Foundation and PolicyEngine.
 
 ## Dashboard / Program Coverage
 

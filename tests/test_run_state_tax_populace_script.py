@@ -91,10 +91,14 @@ def test_repeatable_state_filter_preserves_national_routing_report(
         calls["comparison"] = tuple(kwargs["routes"])
         calls["known_tax_unit_ids"] = set(kwargs["known_tax_unit_ids"])
         calls["taxsim_targets"] = kwargs["taxsim_targets"]
+        calls["taxsim_unprojected_inputs"] = kwargs["taxsim_unprojected_inputs"]
         return {"scope": "filtered"}
 
     def taxsim_targets(**kwargs):
         calls["taxsim"] = tuple(kwargs["routes"])
+        kwargs["unprojected_inputs"]["NJ"] = {
+            1: {"tax_exempt_interest_income": 2_500.0}
+        }
         return {"NJ": {1: 0.0}}
 
     monkeypatch.setattr(campaign, "calculate_policyengine_targets", targets)
@@ -102,6 +106,9 @@ def test_repeatable_state_filter_preserves_national_routing_report(
         campaign, "calculate_policyengine_projection_inputs", projections
     )
     monkeypatch.setattr(campaign, "calculate_taxsim_targets", taxsim_targets)
+    # The TAXSIM leg is stubbed, so the host's binary is not consulted: the
+    # pinned Linux build would refuse the 2026 validation year (CI is Linux).
+    monkeypatch.setattr(campaign, "require_law_years", lambda years: None)
     monkeypatch.setattr(campaign, "population_routing_report", routing_report)
     monkeypatch.setattr(campaign, "compare_ready_state_tax_units", comparison)
     monkeypatch.setattr(campaign, "runtime_provenance", lambda **kwargs: {})
@@ -136,6 +143,9 @@ def test_repeatable_state_filter_preserves_national_routing_report(
     # targets flow into the comparison.
     assert calls["taxsim"] == expected_filtered
     assert calls["taxsim_targets"] == {"NJ": {1: 0.0}}
+    assert calls["taxsim_unprojected_inputs"] == {
+        "NJ": {1: {"tax_exempt_interest_income": 2_500.0}}
+    }
     assert report["taxsim_leg"] == "graded"
 
 

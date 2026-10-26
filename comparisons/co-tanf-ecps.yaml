@@ -1,4 +1,4 @@
-# Colorado TANF -- Axiom vs PolicyEngine on Enhanced CPS, NY households.
+# Colorado TANF -- Axiom vs PolicyEngine on Enhanced CPS, Colorado households.
 
 name: co-tanf-ecps
 title: Colorado TANF -- Axiom vs PolicyEngine
@@ -6,9 +6,8 @@ description: >-
   Compares the monthly Colorado Works basic cash assistance grant from the
   composed us-co/tanf program (9 CCR 2503-6 grant standard chart, need
   standard, and earned income disregards) against PolicyEngine's co_tanf
-  on Enhanced CPS households in Colorado. Refresh the rulespec root after
-  pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-co/ ~/.axiom-oracles/roots/rulespec-us-co/
+  on Enhanced CPS households in Colorado, using the canonical rulespec-us
+  monorepo checkout.
 
 # Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
 # staging fails the engine's canonical-path scan (non-canonical filenames in
@@ -39,9 +38,9 @@ runner:
     axiom_program: $HOME/axiom-oracles/programs/us-co/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/co-tanf-composed.yaml
     axiom_compiled_program: /tmp/co-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
     rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-co
+      - $HOME/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-co-tanf-ecps

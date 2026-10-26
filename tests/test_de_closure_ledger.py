@@ -123,8 +123,8 @@ def _committed_ledger_git_only(module):
     }
 
     def run(argv, *args, **kwargs):
-        assert argv[:4] == ["git", "-C", str(REPO_ROOT), "show"]
-        assert len(argv) == 5 and argv[4] in allowed_specs
+        assert argv[:5] == ["git", "--no-replace-objects", "-C", str(REPO_ROOT), "show"]
+        assert len(argv) == 6 and argv[5] in allowed_specs
         assert kwargs["env"]["GIT_NO_LAZY_FETCH"] == "1"
         assert kwargs["env"]["GIT_TERMINAL_PROMPT"] == "0"
         assert not any(

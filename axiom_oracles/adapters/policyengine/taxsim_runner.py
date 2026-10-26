@@ -28,6 +28,11 @@ class PolicyEngineTaxsimRunner(TaxsimPackageRunner):
     ) -> None:
         super().__init__(runner_factory=runner_factory, id_column=id_column)
 
+    def _run(self, input_frame: Any) -> Any:
+        # policyengine-taxsim's PolicyEngineRunner computes in-process and
+        # returns records; there is no TAXSIM binary stdout to parse here.
+        return self._run_runner(self._runner_factory()(input_frame))
+
     def _runner_factory(self) -> Callable[[Any], Any]:
         if self.runner_factory is not None:
             return self.runner_factory

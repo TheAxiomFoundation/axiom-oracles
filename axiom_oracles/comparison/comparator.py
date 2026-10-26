@@ -6,6 +6,7 @@ from dataclasses import dataclass, field
 from math import isclose, isfinite
 
 from .mappings import ProgramMapping
+from ..bridges.relation_binding import merge_relation_binding_diagnostics
 from ..core.results import EngineResult, Value
 
 
@@ -19,6 +20,12 @@ class VariableComparison:
     tolerance: float = 0
     relative_tolerance: float = 0
     description: str = ""
+    # Configured targets actually present in each engine result.
+    left_variables: tuple[str, ...] = ()
+    right_variables: tuple[str, ...] = ()
+    # Raw per-target values survive summed/partial comparisons for attestation.
+    left_output_values: tuple[tuple[str, Value], ...] = ()
+    right_output_values: tuple[tuple[str, Value], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -29,6 +36,7 @@ class HouseholdComparison:
     comparisons: list[VariableComparison] = field(default_factory=list)
     left_errors: tuple[str, ...] = field(default_factory=tuple)
     right_errors: tuple[str, ...] = field(default_factory=tuple)
+    relation_binding_diagnostics: dict[str, dict] = field(default_factory=dict)
 
     @property
     def match_count(self) -> int:
@@ -63,6 +71,8 @@ class Comparator:
         """Compare selected mappings, optionally scoped to each case's outputs."""
         left_ids = [result.household_id for result in left_results]
         right_ids = [result.household_id for result in right_results]
+        require_usable_ids(left_results, "left result household IDs")
+        require_usable_ids(right_results, "right result household IDs")
         require_unique_ids(left_ids, "left result household IDs")
         require_unique_ids(right_ids, "right result household IDs")
         require_same_ids(left_ids, right_ids, "right result household IDs")
@@ -104,6 +114,15 @@ class Comparator:
                     f"No comparable mappings for household {left.household_id!r} "
                     f"between {left.engine!r} and {right.engine!r}"
                 )
+            relation_binding_diagnostics: dict[str, dict] = {}
+            for result in (left, right):
+                if isinstance(result.raw, Mapping):
+                    diagnostics = result.raw.get("relation_binding_diagnostics", {})
+                    if diagnostics.get("count"):
+                        merge_relation_binding_diagnostics(
+                            relation_binding_diagnostics.setdefault(result.engine, {}),
+                            diagnostics,
+                        )
             comparisons.append(
                 HouseholdComparison(
                     household_id=left.household_id,
@@ -112,6 +131,7 @@ class Comparator:
                     comparisons=variable_comparisons,
                     left_errors=left.errors,
                     right_errors=right.errors,
+                    relation_binding_diagnostics=relation_binding_diagnostics,
                 )
             )
 
@@ -172,7 +192,35 @@ class Comparator:
             tolerance=mapping.tolerance,
             relative_tolerance=mapping.relative_tolerance,
             description=mapping.description,
+            left_variables=self._observed_mapping_variables(mapping, left),
+            right_variables=self._observed_mapping_variables(mapping, right),
+            left_output_values=self._mapping_output_values(mapping, left),
+            right_output_values=self._mapping_output_values(mapping, right),
         )
+
+    def _observed_mapping_variables(
+        self, mapping: ProgramMapping, result: EngineResult
+    ) -> tuple[str, ...]:
+        from ..conformance.observations import observed_output_value
+
+        rows = [
+            dict(case_id=result.household_id, engine=result.engine,
+                 concept=mapping.concept_id, variable=name, value=value)
+            for name, value in self._mapping_output_values(mapping, result)
+        ]
+        evidence = {"attestation": {"executed": True}, "observed_outputs": rows,
+                    "errors": list(result.errors)}
+        return tuple(row["variable"] for row in rows if observed_output_value(
+            evidence, case_id=result.household_id, engine=result.engine,
+            concept=mapping.concept_id, output=row["variable"], value=row["value"],
+        ))
+
+    def _mapping_output_values(
+        self, mapping: ProgramMapping, result: EngineResult,
+    ) -> tuple[tuple[str, Value], ...]:
+        key = self._mapping_key(mapping, result.engine)
+        names = [key] if isinstance(key, str) else list(key or ())
+        return tuple((name, result.get(name)) for name in dict.fromkeys(names))
 
     def _mapped_value(self, mapping: ProgramMapping, result: EngineResult) -> Value:
         key = self._mapping_key(mapping, result.engine)
@@ -212,6 +260,26 @@ class Comparator:
         if isinstance(value, bool):
             return float(value)
         return float(value)
+
+
+def require_usable_ids(results: Sequence[EngineResult], label: str) -> None:
+    """Reject ids that cannot key a case: ``None`` and non-finite floats.
+
+    A float NaN compares unequal to itself, so it slips past the duplicate
+    check and reads as one "unexpected" id per row in the set difference
+    (``unexpected [nan, nan, ...]``) without naming the engine that produced
+    it. Fail on it directly, with the engine's name.
+    """
+    for result in results:
+        household_id = result.household_id
+        unusable = household_id is None or (
+            isinstance(household_id, float) and not isfinite(household_id)
+        )
+        if unusable:
+            raise ValueError(
+                f"Invalid {label}: engine {result.engine!r} returned a result "
+                f"with household id {household_id!r}"
+            )
 
 
 def require_unique_ids(ids: Sequence[int | str], label: str) -> None:

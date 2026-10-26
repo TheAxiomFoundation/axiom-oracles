@@ -4038,72 +4038,44 @@ mappings:
   - legal_id: us:policies/usda/snap/fy-2026-cola/income-eligibility-standards#snap_net_income_limit_100_percent_fpl_48_states_dc_table
     country: us
     program: snap
-    mapping_type: direct_variable
-    policyengine_variable: snap_fpg
-    entity: spm_unit
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP net-income limit at 100 percent of the federal poverty guideline.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The RuleSpec output is a complete published monthly household-size table; PolicyEngine snap_fpg is an unrounded scalar SPM-unit guideline, not this table or its official rounded limits. Compare matched eligibility boundaries separately.
 
   - legal_id: us:policies/usda/snap/fy-2026-cola/income-eligibility-standards#snap_net_income_limit_100_percent_fpl_48_states_dc
     country: us
     program: snap
-    mapping_type: direct_variable
-    policyengine_variable: snap_fpg
-    entity: spm_unit
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP net-income limit at 100 percent of the federal poverty guideline.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This selected published monthly net-income limit applies USDA table rounding; PolicyEngine snap_fpg exposes the unrounded guideline, not the exact selected threshold. Compare matched eligibility boundaries separately.
 
   - legal_id: us:policies/usda/snap/fy-2026-cola/income-eligibility-standards#snap_gross_income_limit_130_percent_fpl_48_states_dc_table
     country: us
     program: snap
-    mapping_type: direct_variable
-    policyengine_variable: snap_fpg
-    result_multiplier: 1.3
-    entity: spm_unit
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP gross-income limit at 130 percent of the federal poverty guideline.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The RuleSpec output is a complete published monthly household-size table; PolicyEngine snap_fpg times 1.3 is an unrounded scalar, not the table or its official rounded limits. Compare matched eligibility boundaries separately.
 
   - legal_id: us:policies/usda/snap/fy-2026-cola/income-eligibility-standards#snap_gross_income_limit_130_percent_fpl_48_states_dc
     country: us
     program: snap
-    mapping_type: direct_variable
-    policyengine_variable: snap_fpg
-    result_multiplier: 1.3
-    entity: spm_unit
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP gross-income limit at 130 percent of the federal poverty guideline.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This selected published monthly gross-income limit applies USDA table rounding; PolicyEngine snap_fpg times 1.3 is not the exact selected threshold. Compare matched eligibility boundaries separately.
 
   - legal_id: us:policies/usda/snap/fy-2026-cola/income-eligibility-standards#snap_gross_income_limit_165_percent_fpl_48_states_dc_table
     country: us
     program: snap
-    mapping_type: direct_variable
-    policyengine_variable: snap_fpg
-    result_multiplier: 1.65
-    entity: spm_unit
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP gross-income limit at 165 percent of the federal poverty guideline.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: The RuleSpec output is a complete published monthly household-size table; PolicyEngine snap_fpg times 1.65 is an unrounded scalar, not the table or its official rounded limits. Compare matched eligibility boundaries separately.
 
   - legal_id: us:policies/usda/snap/fy-2026-cola/income-eligibility-standards#snap_gross_income_limit_165_percent_fpl_48_states_dc
     country: us
     program: snap
-    mapping_type: direct_variable
-    policyengine_variable: snap_fpg
-    result_multiplier: 1.65
-    entity: spm_unit
-    period: month
-    unit: USD
-    comparison: money
-    rationale: Same USDA SNAP gross-income limit at 165 percent of the federal poverty guideline.
+    mapping_type: not_comparable
+    candidate_priority: P4
+    rationale: This selected published monthly gross-income limit applies USDA table rounding; PolicyEngine snap_fpg times 1.65 is not the exact selected threshold. Compare matched eligibility boundaries separately.
 
   - legal_id: us-co:regulations/10-ccr-2506-1/4.407.31#snap_standard_utility_allowance
     country: us
@@ -7463,6 +7435,38 @@ mappings:
     period: month
     comparison: boolean
     rationale: Same federal SNAP net-income eligibility test.
+
+  - legal_id: us:regulations/7-cfr/273/9/c/17#snap_child_support_income_exclusion
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_child_support_gross_income_deduction
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same 7 CFR 273.9(c)(17) child support exclusion from gross income. PolicyEngine-US calls the excluded amount a gross income deduction (its state exclusion parameter times countable child support). The adapter replays the test's State election in a state with that election (TX deducts, CA excludes from policyengine-us 2.11.4) and reports the case unsupported when that state's parameter disagrees.
+
+  - legal_id: us:regulations/7-cfr/273/9/d/5#snap_child_support_deduction_for_net_income
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_child_support_deduction
+    entity: spm_unit
+    period: month
+    unit: USD
+    comparison: money
+    rationale: Same optional 7 CFR 273.9(d)(5) child support deduction taken in net income. PolicyEngine-US deducts countable child support that its state parameter does not exclude. The adapter replays the test's State election as for the (c)(17) exclusion.
+
+  - legal_id: us:regulations/7-cfr/273/9/d/5#snap_state_agency_provides_child_support_deduction
+    country: us
+    program: snap
+    mapping_type: direct_variable
+    policyengine_variable: snap_state_agency_provides_child_support_deduction
+    entity: household
+    period: month
+    comparison: boolean
+    rationale: Same 7 CFR 273.9(d)(5) State election to provide the child support deduction instead of the (c)(17) exclusion. PolicyEngine-US has no variable for it; the adapter reads the negation of gov.usda.snap.income.deductions.child_support, which is true when the state excludes.
 
   - legal_id: us:regulations/7-cfr/273/10#snap_gross_monthly_income
     country: us

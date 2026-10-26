@@ -22,6 +22,20 @@ description: >-
   on both engines.
 documentation: docs/uk-coverage-matrix.md
 
+# Not runnable on the CI matrix runners. scripts/generate_uk_tv_licence.py
+# evaluates the encoded rules through an axiom rules engine binary
+# (AXIOM_RULES_ENGINE_BINARY, an axiom-rules-engine build, or axiom-rules on
+# PATH). The 6-hourly affected rerun and the weekly matrix never export or
+# build one there, so each leg fails with "No such file or directory:
+# 'axiom-rules'" and falls back to copying the committed report (sampled
+# affected-rerun logs from 2026-07-07 to 2026-09-14 show nothing else). That
+# fallback is not marked as a re-emission, so the affected rerun committed the
+# July numbers under each later rulespec-uk SHA as if they had run. Manual
+# lane only: a supervised run_comparison.py run with a built engine refreshes
+# the committed report. Drop this marker only once a workflow provisions the
+# engine for this lane.
+ci: manual
+
 runner:
   type: uk-tv-licence-grid
   parameters:
