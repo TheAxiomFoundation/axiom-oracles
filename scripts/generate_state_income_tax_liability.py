@@ -335,6 +335,7 @@ _POPULACE_MODULE = {
     ),
     "KS": "us-ks:policies/income_tax/2026_k40es_schedule_before_credits",
     "MN": _MODULE["MN"],
+    "NC": "us-nc:policies/income_tax/resident_core_liability_pipeline",
 }
 _POPULACE_OUTPUT = {
     "AR": (
@@ -357,6 +358,7 @@ _POPULACE_OUTPUT = {
     ),
     "MS": _LIABILITY_OUTPUT["MS"],
     "MN": f"{_POPULACE_MODULE['MN']}#mn_pit_pilot_schedule_tax",
+    "NC": f"{_POPULACE_MODULE['NC']}#nc_pit_2026_income_tax_before_credits",
     "OH": f"{_MODULE['OH']}#oh_pit_pilot_schedule_tax",
     "UT": _LIABILITY_OUTPUT["UT"],
 }
