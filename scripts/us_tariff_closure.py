@@ -603,8 +603,11 @@ DECISIONS = [
         "count": 1,
         "reason": (
             "Membership and country tiers exist under a legacy-named input, but "
-            "the family is not fed into the final composition; the exact legal "
-            "label remains open."
+            "the family is not fed into the final composition. The pinned "
+            "titles of FR 2026-15181 and FR 2026-15274 identify actions in "
+            "Section 301 investigations concerning failures to impose and "
+            "effectively enforce prohibitions on imports of goods produced "
+            "with forced labor."
         ),
     },
     {

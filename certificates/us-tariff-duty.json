@@ -29,7 +29,7 @@
       "artifact": "conformance/closure/us-tariff-duty.yaml",
       "claim": "closed:us/tariff-duty",
       "mode": "computed",
-      "sha256": "45b256f118f9280c62ea3f9fc09ea5f0470d2e960effd1c7dc03c113c6bfd8e0",
+      "sha256": "d0eea38d3adce5f924694a596a9db27eb592b6ccbac206cc78b5cc95311a9f88",
       "verification": "producer_artifact_validation"
     },
     {
@@ -506,7 +506,7 @@
           "status": "partially-encoded"
         },
         {
-          "blocker": "Membership and country tiers exist under a legacy-named input, but the family is not fed into the final composition; the exact legal label remains open.",
+          "blocker": "Membership and country tiers exist under a legacy-named input, but the family is not fed into the final composition. The pinned titles of FR 2026-15181 and FR 2026-15274 identify actions in Section 301 investigations concerning failures to impose and effectively enforce prohibitions on imports of goods produced with forced labor.",
           "family": "note-52-country-tier-action",
           "root": "fr-instrument-families",
           "status": "partially-encoded"

@@ -246,7 +246,9 @@ committed_decisions:
     status: partially-encoded
     count: 1
     reason: Membership and country tiers exist under a legacy-named input, but the family is not fed into the final
-      composition; the exact legal label remains open.
+      composition. The pinned titles of FR 2026-15181 and FR 2026-15274 identify actions in Section 301 investigations
+      concerning failures to impose and effectively enforce prohibitions on imports of goods produced with forced
+      labor.
   - root: fr-instrument-families
     family: solar-china
     status: partially-encoded
@@ -494,7 +496,9 @@ computed:
     root: fr-instrument-families
     status: partially-encoded
     blocker: Membership and country tiers exist under a legacy-named input, but the family is not fed into the final
-      composition; the exact legal label remains open.
+      composition. The pinned titles of FR 2026-15181 and FR 2026-15274 identify actions in Section 301 investigations
+      concerning failures to impose and effectively enforce prohibitions on imports of goods produced with forced
+      labor.
   - family: solar-china
     root: fr-instrument-families
     status: partially-encoded

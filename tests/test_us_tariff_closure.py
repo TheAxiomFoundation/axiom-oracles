@@ -118,6 +118,102 @@ def test_committed_ledger_is_valid_and_honestly_open():
     assert contract["engine_binary_provenance"]["published_provenance"] is False
 
 
+@pytest.mark.parametrize(
+    ("family", "component", "membership_input"),
+    [
+        (
+            "china-301-2024-action",
+            "china_section_301_component_rate",
+            "entry_is_china_301_2024_action",
+        ),
+        (
+            "brazil-301",
+            "brazil_section_301_component_rate",
+            "entry_is_brazil_301_listed",
+        ),
+        (
+            "note-52-country-tier-action",
+            "forced_labor_section_301_component_rate",
+            "entry_is_forced_labor_301_listed",
+        ),
+        (
+            "solar-china",
+            "china_section_301_component_rate",
+            "entry_is_china_301_solar",
+        ),
+    ],
+)
+def test_section301_reasons_distinguish_composition_from_missing_membership(
+    family, component, membership_input
+):
+    """Merging other reason repairs must preserve #547's four corrections."""
+    module = _module()
+    decision = next(row for row in module.DECISIONS if row["family"] == family)
+    ledger_row = next(
+        row
+        for row in _document(module)["committed_decisions"]["ledger"]
+        if row["family"] == family
+    )
+    for row in (decision, ledger_row):
+        assert row["status"] == "partially-encoded"
+        assert row["count"] == 1
+        reason = row["reason"]
+        assert component in reason
+        assert "schedule_statutory_stack" in reason
+        assert membership_input in reason
+        assert "no defining rule" in reason
+        assert "false" in reason
+        assert "zero for every prepared entry" in reason
+
+
+def test_note52_reason_uses_the_pinned_section301_forced_labor_titles():
+    """The pinned FR titles settle the legal label, not membership closure."""
+    module = _module()
+    decision = next(
+        row
+        for row in module.DECISIONS
+        if row["family"] == "note-52-country-tier-action"
+    )
+    ledger_row = next(
+        row
+        for row in _document(module)["committed_decisions"]["ledger"]
+        if row["family"] == decision["family"]
+    )
+    for row in (decision, ledger_row):
+        reason = row["reason"]
+        assert "FR 2026-15181" in reason
+        assert "FR 2026-15274" in reason
+        assert "Section 301 investigations" in reason
+        assert "forced labor" in reason
+        assert "exact legal label remains open" not in reason.lower()
+
+
+@pytest.mark.parametrize(
+    ("family", "disclosure"),
+    [
+        (
+            "non-ad-valorem-or-partial-value-rate-bearing-lines",
+            "9802.00.20.00",
+        ),
+        ("non-rate-structural-rows", "Additional duties"),
+        ("section-232-metal-instruments", "No 2018 or 2025 metal-action path"),
+        ("china-301-original-2018-actions", "a second time"),
+        ("section-201-proclamation-10339", "post-expiry zero"),
+        ("section-338-instruments", "U.S. note 51 is ingested"),
+    ],
+)
+def test_tariff_reason_merge_retains_the_six_551_corrections(family, disclosure):
+    module = _module()
+    decision = next(row for row in module.DECISIONS if row["family"] == family)
+    ledger_row = next(
+        row
+        for row in _document(module)["committed_decisions"]["ledger"]
+        if row["family"] == family
+    )
+    assert disclosure in decision["reason"]
+    assert ledger_row["reason"] == decision["reason"]
+
+
 def test_closure_reproduction_contract_cannot_drift():
     module = _module()
     document = _document(module)
