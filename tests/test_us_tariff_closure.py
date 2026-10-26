@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from hypothesis import given, settings, strategies as st
 
 REPO = Path(__file__).parents[1]
 SCRIPT = REPO / "scripts" / "us_tariff_closure.py"
@@ -186,6 +187,50 @@ def test_note52_reason_uses_the_pinned_section301_forced_labor_titles():
         assert "Section 301 investigations" in reason
         assert "forced labor" in reason
         assert "exact legal label remains open" not in reason.lower()
+
+
+@pytest.mark.parametrize("source", ["producer", "input_grounding", "frontier"])
+def test_section232_description_bounds_the_pinned_notes_revisions(source):
+    """Rev-3 predates the surcharge but does not carry heading 9903.03.06."""
+    module = _module()
+    name = "entry_is_section_232_covered"
+    if source == "producer":
+        reason = module.LAW_DERIVED_INPUTS[name][0]
+    else:
+        document = _document(module)
+        rows = (
+            document["committed_decisions"]["input_grounding"]
+            if source == "input_grounding"
+            else document["computed"]["boundary_frontier"]["inputs"]
+        )
+        reason = next(row["reason"] for row in rows if row["input"] == name)
+    assert "in every notes revision in force while the surcharge applied" not in reason
+    assert "from Rev-4 (effective 2026-02-25) through Rev-15" in reason
+    assert "9903.03.06 in HTS U.S. note 2(aa)(v)" in reason
+    assert "copper, vehicle, vehicle-part, wood, and semiconductor articles" in reason
+
+
+@settings(max_examples=28, deadline=None)
+@given(
+    first_revision=st.integers(min_value=1, max_value=15).filter(lambda rev: rev != 4),
+    frontier=st.booleans(),
+)
+def test_section232_description_rejects_revision_drift(first_revision, frontier):
+    module = _module()
+    document = _document(module)
+    document["computed"]["boundary_frontier"]["inputs"] = copy.deepcopy(
+        document["computed"]["boundary_frontier"]["inputs"]
+    )
+    rows = (
+        document["computed"]["boundary_frontier"]["inputs"]
+        if frontier
+        else document["committed_decisions"]["input_grounding"]
+    )
+    row = next(row for row in rows if row["input"] == "entry_is_section_232_covered")
+    assert "from Rev-4 (effective 2026-02-25)" in row["reason"]
+    row["reason"] = row["reason"].replace("Rev-4", f"Rev-{first_revision}")
+    with pytest.raises(ValueError, match="decisions changed|frontier inputs changed"):
+        module.validate_artifact(document)
 
 
 @pytest.mark.parametrize(

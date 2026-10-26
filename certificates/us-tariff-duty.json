@@ -29,7 +29,7 @@
       "artifact": "conformance/closure/us-tariff-duty.yaml",
       "claim": "closed:us/tariff-duty",
       "mode": "computed",
-      "sha256": "b6ef3c3ac45fd364532232e43311a2f31764083a541343f66190673d8b87eee2",
+      "sha256": "450e364f3cc097ae93511bbdfa0d6509e2b10e6e15f0d3dfe19b006934f7811e",
       "verification": "producer_artifact_validation"
     },
     {
@@ -418,7 +418,7 @@
             "grounding": "uncaptured",
             "input": "entry_is_section_232_covered",
             "leaf_kind": "law_derived",
-            "reason": "Subjection to a Section 232 tariff, which Proclamation 11012 clause (4) excludes from the Section 122 surcharge for the part of the import that tariff covers, so the scope is not limited to the aluminum and steel tariffs the compositions encode: heading 9903.03.06 in HTS U.S. note 2(aa)(v), in every notes revision in force while the surcharge applied (Rev-4 through Rev-12; later revisions keep the list), also names copper, vehicle, vehicle-part, wood, and semiconductor articles. Its only consumer, section_122_component_rate, zeroes the whole surcharge when it holds."
+            "reason": "Subjection to a Section 232 tariff, which Proclamation 11012 clause (4) excludes from the Section 122 surcharge for the part of the import that tariff covers, so the scope is not limited to the aluminum and steel tariffs the compositions encode: heading 9903.03.06 in HTS U.S. note 2(aa)(v), which the pinned notes revisions carry from Rev-4 (effective 2026-02-25) through Rev-15, also names copper, vehicle, vehicle-part, wood, and semiconductor articles. Its only consumer, section_122_component_rate, zeroes the whole surcharge when it holds."
           },
           {
             "derivation_instrument": "us-hts-2026-rev15",
