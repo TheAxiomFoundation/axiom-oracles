@@ -3371,6 +3371,24 @@ concepts:
         scope: {type: country, geoid: US}
       policyengine: ks_k40es_schedule_before_credits_reviewed
       taxsim: staxbc
+  us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits:
+    description: North Carolina section 105-153.7 tax on full-year resident taxable income composed from federal AGI under section 105-153.5, before credits
+    category: tax
+    case_unit: tax_unit
+    comparison: amount
+    # Pre-credit surface: TAXSIM staxbc is state tax before credits, and
+    # PolicyEngine nc_income_tax_before_credits is max(0, nc_taxable_income)
+    # times the 2026 rate, before nc_ctc.
+    tolerance: 1
+    priority: high
+    locales: [US-NC]
+    scope: {type: country, geoid: US}
+    targets:
+      axiom:
+        name: nc_pit_2026_income_tax_before_credits
+        scope: {type: country, geoid: US}
+      policyengine: nc_income_tax_before_credits
+      taxsim: staxbc
   us-mn:policies/income_tax/pilot_liability_pipeline#mn_pit_pilot_schedule_tax:
     description: Minnesota section 290.06 basic schedule tax on completed Minnesota taxable income, before credits
     category: tax

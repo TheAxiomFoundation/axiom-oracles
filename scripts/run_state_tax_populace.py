@@ -81,6 +81,32 @@ _NY_JOINT_OR_SURVIVING_INPUT = (
 _NY_HEAD_OF_HOUSEHOLD_INPUT = (
     f"{_NY_INPUT_PREFIX}ny_pit_pilot_filing_status_head_of_household"
 )
+_NC_INPUT_PREFIX = (
+    "us-nc:policies/income_tax/resident_core_liability_pipeline#input."
+)
+_NC_BOOLEAN_INPUTS = {
+    "joint_or_surviving": "nc_pit_2026_filing_status_joint_or_surviving_spouse",
+    "head_of_household": "nc_pit_2026_filing_status_head_of_household",
+    "married_separately": "nc_pit_2026_filing_status_married_separately",
+    "standard_deduction_eligible": (
+        "nc_pit_2026_eligible_for_federal_standard_deduction"
+    ),
+}
+_NC_PRESENCE_INPUTS = {
+    "qualifying_children": "nc_pit_2026_federal_child_tax_credit_qualifying_children",
+    "charitable_contributions": "nc_pit_2026_charitable_contributions",
+    "qualified_residence_interest": "nc_pit_2026_qualified_residence_interest",
+    "real_estate_property_taxes": "nc_pit_2026_real_estate_property_taxes",
+    "medical_and_dental_expenses": "nc_pit_2026_medical_and_dental_expenses",
+    "united_states_obligation_interest": "nc_pit_2026_eligible_obligation_interest",
+    "taxable_social_security": (
+        "nc_pit_2026_taxable_social_security_and_railroad_retirement"
+    ),
+    "uniformed_services_retirement": (
+        "nc_pit_2026_eligible_uniformed_services_retirement"
+    ),
+}
+_NC_AGI_INPUT = f"{_NC_INPUT_PREFIX}nc_pit_2026_federal_adjusted_gross_income"
 
 
 def _projection_branch_diagnostics(
@@ -328,6 +354,57 @@ def _projection_branch_diagnostics(
             "joint_or_surviving_count": joint_or_surviving_count,
             "head_of_household_count": head_of_household_count,
             "single_or_separate_count": single_or_separate_count,
+        }
+    north_carolina = projection_inputs.get("NC")
+    if isinstance(north_carolina, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "NC" and route.disposition == DISPOSITION_READY
+        }
+        flags = {
+            label: [
+                north_carolina[f"{_NC_INPUT_PREFIX}{name}"][item]
+                for item in ready_ids
+            ]
+            for label, name in _NC_BOOLEAN_INPUTS.items()
+        }
+        if any(type(value) is not bool for values in flags.values() for value in values):
+            raise ValueError(
+                "NC projection diagnostics require strict Boolean filing-status "
+                "and eligibility values for every ready TaxUnit"
+            )
+        statuses = list(
+            zip(
+                flags["joint_or_surviving"],
+                flags["head_of_household"],
+                flags["married_separately"],
+                strict=True,
+            )
+        )
+        if any(sum(status) > 1 for status in statuses):
+            raise ValueError(
+                "NC projection diagnostics require mutually exclusive "
+                "filing-status values"
+            )
+        agi = [float(north_carolina[_NC_AGI_INPUT][item]) for item in ready_ids]
+        diagnostics["NC"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "joint_or_surviving_count": sum(flags["joint_or_surviving"]),
+            "head_of_household_count": sum(flags["head_of_household"]),
+            "married_separately_count": sum(flags["married_separately"]),
+            "single_count": sum(not any(status) for status in statuses),
+            "standard_deduction_ineligible_count": sum(
+                not value for value in flags["standard_deduction_eligible"]
+            ),
+            "nonpositive_agi_count": sum(value <= 0 for value in agi),
+            **{
+                f"{label}_present_count": sum(
+                    float(north_carolina[f"{_NC_INPUT_PREFIX}{name}"][item]) > 0
+                    for item in ready_ids
+                )
+                for label, name in _NC_PRESENCE_INPUTS.items()
+            },
         }
     utah = projection_inputs.get("UT")
     if not isinstance(utah, dict):
