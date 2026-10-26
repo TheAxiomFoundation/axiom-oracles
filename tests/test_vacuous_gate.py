@@ -312,6 +312,141 @@ def test_campaign_projection_chain_validates_end_to_end(tmp_path, monkeypatch):
     assert gate._campaign_projection_problems("campaign.yaml", config) == []
 
 
+def _dispositioned_projection_fixture(gate, tmp_path, monkeypatch, *, with_file):
+    """One-mismatch campaign projected with row identity and dispositions."""
+
+    config, report_path, _ = _campaign_projection_fixture(gate, tmp_path, monkeypatch)
+    root = tmp_path / "repo"
+    campaign_path = root / "reports" / "campaign.json"
+    campaign = json.loads(campaign_path.read_text())
+    state_entry = campaign["comparison"]["states"]["CT"]
+    row = {
+        "absolute_difference": 1.5,
+        "axiom": 10.5,
+        "policyengine": 9.0,
+        "relative_difference": 1.5 / 10.5,
+        "state": "CT",
+        "tax_unit_id": 7,
+        "weight": 1.0,
+    }
+    state_entry["mismatch_count"] = 1
+    state_entry["mismatches"] = [row]
+    state_entry["max_absolute_difference"] = 1.5
+    campaign_path.write_text(json.dumps(campaign))
+
+    report = json.loads(report_path.read_text())
+    report["schema_version"] = "axiom.comparison_report.v2.1"
+    report["mismatches"] = [
+        {
+            **row,
+            "case_id": 7,
+            "concept": state_entry["output"],
+            "kind": "amount_difference",
+            "left": 10.5,
+            "right": 9.0,
+            "difference": 1.5,
+            "disposition": {"id": "example", "disposition": "explained_residual"},
+        }
+    ]
+    report["summary"] = {
+        "comparison_count": 2,
+        "match_count": 1,
+        "match_rate": 50.0,
+        "mismatch_count": 1,
+        "dispositioned": {"unexplained_count": 0},
+    }
+    report["aggregates"][0].update(
+        match_count=1,
+        matched=1,
+        mismatch_count=1,
+        match_rate=50.0,
+        weighted_match_rate=50.0,
+    )
+    report["provenance"]["max_absolute_difference"] = 1.5
+    report_path.write_text(json.dumps(report))
+
+    dispositions = root / "dispositions"
+    dispositions.mkdir()
+    if with_file:
+        (dispositions / "ct-income-tax-populace.yaml").write_text("entries: []\n")
+    monkeypatch.setattr(gate, "DISPOSITIONS_DIR", dispositions)
+    return config, report_path
+
+
+def test_campaign_projection_accepts_dispositioned_report(tmp_path, monkeypatch):
+    gate = _load_gate()
+    config, _ = _dispositioned_projection_fixture(
+        gate, tmp_path, monkeypatch, with_file=True
+    )
+    assert gate._campaign_projection_problems("campaign.yaml", config) == []
+
+
+def test_campaign_projection_rejects_dispositioned_report_without_a_file(
+    tmp_path, monkeypatch
+):
+    gate = _load_gate()
+    config, _ = _dispositioned_projection_fixture(
+        gate, tmp_path, monkeypatch, with_file=False
+    )
+    problems = "\n".join(gate._campaign_projection_problems("campaign.yaml", config))
+    assert "report schema is not axiom.comparison_report.v2" in problems
+    assert "summary does not align" in problems
+
+
+def test_campaign_projection_rejects_missing_dispositioned_block(
+    tmp_path, monkeypatch
+):
+    gate = _load_gate()
+    config, report_path = _dispositioned_projection_fixture(
+        gate, tmp_path, monkeypatch, with_file=True
+    )
+    report = json.loads(report_path.read_text())
+    report["summary"].pop("dispositioned")
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any("summary.dispositioned" in problem for problem in problems)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("difference", -1.5),
+        ("left", 9.0),
+        ("case_id", 8),
+        ("concept", "us-ct:policies/income_tax/example#other"),
+        ("kind", "eligibility_left_only"),
+    ],
+)
+def test_campaign_projection_rejects_tampered_row_identity(
+    tmp_path, monkeypatch, field, value
+):
+    gate = _load_gate()
+    config, report_path = _dispositioned_projection_fixture(
+        gate, tmp_path, monkeypatch, with_file=True
+    )
+    report = json.loads(report_path.read_text())
+    report["mismatches"][0][field] = value
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any("mismatches do not align" in problem for problem in problems)
+
+
+def test_campaign_projection_rejects_raw_campaign_rows(tmp_path, monkeypatch):
+    gate = _load_gate()
+    config, report_path = _dispositioned_projection_fixture(
+        gate, tmp_path, monkeypatch, with_file=True
+    )
+    campaign = json.loads((tmp_path / "repo/reports/campaign.json").read_text())
+    report = json.loads(report_path.read_text())
+    report["mismatches"] = campaign["comparison"]["states"]["CT"]["mismatches"]
+    report_path.write_text(json.dumps(report))
+
+    problems = gate._campaign_projection_problems("campaign.yaml", config)
+    assert any("mismatches do not align" in problem for problem in problems)
+
+
 @pytest.mark.parametrize(
     ("field", "relative"),
     [

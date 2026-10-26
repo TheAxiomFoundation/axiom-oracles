@@ -54,6 +54,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 COMPARISONS_DIR = REPO_ROOT / "comparisons"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 REPORTS_DIR = REPO_ROOT / "reports"
+DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
 COVERAGE_OVERVIEW = DASHBOARD_DATA_DIR / "coverage_overview.json"
 AFFECTED_MAP = COMPARISONS_DIR / "affected_map.json"
 FRESHNESS_OUTPUT = DASHBOARD_DATA_DIR / "freshness.json"
@@ -308,6 +309,33 @@ def _campaign_identity_problems(label: str, campaign: dict) -> list[str]:
     return problems
 
 
+def _expected_projected_mismatch(row: object, concept: object) -> object:
+    """Derive one projected Populace mismatch row from its campaign row.
+
+    The projector keeps the campaign's fields and adds the v2 row identity
+    dispositions select on (``case_id``, ``concept``, ``kind``) plus
+    ``left``/``right`` and the signed ``difference``. Re-derived here, not
+    imported, so the gate checks the projector rather than repeating it.
+    """
+
+    if not isinstance(row, dict):
+        return row
+    try:
+        left = float(row["axiom"])
+        right = float(row["policyengine"])
+    except (KeyError, TypeError, ValueError):
+        return row
+    return {
+        **row,
+        "case_id": row.get("tax_unit_id"),
+        "concept": concept,
+        "kind": "amount_difference",
+        "left": left,
+        "right": right,
+        "difference": left - right,
+    }
+
+
 def _campaign_projection_problems(name: str, config: dict) -> list[str]:
     """Validate declaration, projected report, and source campaign as one chain."""
 
@@ -350,8 +378,17 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
         )
         if report is None:
             continue
-        if report.get("schema_version") != "axiom.comparison_report.v2":
-            problems.append(f"{label} report schema is not axiom.comparison_report.v2")
+        # A suite with dispositions/<suite>.yaml is projected with them
+        # merged (schema v2.1 plus summary.dispositioned); every other suite
+        # stays plain v2. apply_dispositions.py --check validates the merge.
+        dispositioned = (DISPOSITIONS_DIR / f"{suite_name}.yaml").is_file()
+        expected_schema = (
+            "axiom.comparison_report.v2.1"
+            if dispositioned
+            else "axiom.comparison_report.v2"
+        )
+        if report.get("schema_version") != expected_schema:
+            problems.append(f"{label} report schema is not {expected_schema}")
         if report.get("suite") != suite_name:
             problems.append(
                 f"{label} report suite is {report.get('suite')!r}, "
@@ -546,9 +583,19 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
             problems.append(
                 f"{label} report oracle target does not align with source campaign"
             )
-        if not _json_values_exactly_equal(
-            report.get("mismatches"), campaign_mismatches
-        ):
+        expected_mismatches = [
+            _expected_projected_mismatch(row, state_entry.get("output"))
+            for row in campaign_mismatches
+        ]
+        report_mismatches = report.get("mismatches")
+        if dispositioned and isinstance(report_mismatches, list):
+            report_mismatches = [
+                {key: value for key, value in row.items() if key != "disposition"}
+                if isinstance(row, dict)
+                else row
+                for row in report_mismatches
+            ]
+        if not _json_values_exactly_equal(report_mismatches, expected_mismatches):
             problems.append(
                 f"{label} report mismatches do not align with source campaign"
             )
@@ -559,7 +606,22 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
             "match_rate": match_rate,
             "mismatch_count": mismatch_count,
         }
-        if not _json_values_exactly_equal(report.get("summary"), expected_summary):
+        report_summary = report.get("summary")
+        if dispositioned:
+            if not isinstance(report_summary, dict) or not isinstance(
+                report_summary.get("dispositioned"), dict
+            ):
+                problems.append(
+                    f"{label} report lacks the summary.dispositioned block its "
+                    "dispositions file requires"
+                )
+            else:
+                report_summary = {
+                    key: value
+                    for key, value in report_summary.items()
+                    if key != "dispositioned"
+                }
+        if not _json_values_exactly_equal(report_summary, expected_summary):
             problems.append(
                 f"{label} report summary does not align with source campaign"
             )

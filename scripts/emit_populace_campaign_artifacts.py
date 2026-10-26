@@ -25,12 +25,18 @@ from pathlib import Path
 
 import yaml
 
+from axiom_oracles.comparison.dispositions import (
+    apply_dispositions,
+    dispositions_path_for_suite,
+    load_dispositions,
+)
 from axiom_oracles.provenance import RUN_KINDS, build_provenance
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
 DASH_DATA = REPO_ROOT / "dashboard" / "public" / "data"
 POPULACE_SUITE_CONFIG = REPO_ROOT / "comparisons/state-income-tax-populace.yaml"
+DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
 RETIRED_MANIFEST_REPORTS = frozenset(
     {
         "axiom-policyengine-taxsim-al-income-tax-liability.json",
@@ -170,6 +176,20 @@ _DESCRIPTION_BY_OUTPUT = {
         "tax unit in the pinned US Populace; this bounded suite excludes "
         "taxable-income construction, credits, payments, and final annual "
         "liability"
+    ),
+    (
+        "us-nc:policies/income_tax/resident_core_liability_pipeline"
+        "#nc_pit_2026_income_tax_before_credits"
+    ): (
+        "North Carolina tax-year-2026 resident income tax before credits, "
+        "computed by the resident-core pipeline from federal adjusted gross "
+        "income, filing status, and the classified section 105-153.5 "
+        "deduction components (charitable contributions, medical expenses, "
+        "qualified residence interest, real estate property taxes, child "
+        "count, and taxable Social Security) over every routed tax unit in "
+        "the pinned US Populace; additions, subtractions, and itemized items "
+        "the population does not carry enter as reviewed zero constants, and "
+        "credits, payments, and final liability are out of scope"
     ),
     (
         "us-ny:policies/income_tax/pilot_liability_pipeline"
@@ -314,6 +334,50 @@ def validate_campaign_run_provenance(campaign: dict) -> tuple[str, str, dict]:
     return generated_at, run_kind, runtime
 
 
+def standard_mismatch_row(row: dict, *, concept: str) -> dict:
+    """Give a campaign mismatch the v2 row identity dispositions select on.
+
+    The campaign stores each mismatch by ``tax_unit_id`` with ``axiom`` and
+    ``policyengine`` values. Dispositions select rows by ``concept``,
+    ``case_id`` and ``kind`` and pin ``left``, ``right`` and the signed
+    ``difference`` (left minus right), so the projection adds those fields
+    and keeps the campaign's own.
+    """
+
+    left = float(row["axiom"])
+    right = float(row["policyengine"])
+    return {
+        **row,
+        "case_id": row["tax_unit_id"],
+        "concept": concept,
+        "kind": "amount_difference",
+        "left": left,
+        "right": right,
+        "difference": left - right,
+    }
+
+
+def apply_suite_dispositions(
+    report: dict,
+    dispositions_dir: Path = DISPOSITIONS_DIR,
+) -> dict:
+    """Merge ``dispositions/<suite>.yaml`` into a projected report, if present.
+
+    Suites without a dispositions file are returned unchanged, so their
+    committed reports keep their current shape.
+    """
+
+    path = dispositions_path_for_suite(dispositions_dir, report.get("suite"))
+    if path is None:
+        return report
+    dispositions = load_dispositions(path, repo_root=REPO_ROOT)
+    return apply_dispositions(
+        report,
+        dispositions,
+        dispositions_file=f"dispositions/{path.name}",
+    )
+
+
 def project_state(
     state: str,
     entry: dict,
@@ -321,11 +385,14 @@ def project_state(
     source_name: str,
 ) -> dict:
     compared = int(entry["compared_count"])
-    mismatches = entry.get("mismatches") or []
+    concept = entry["output"]
+    mismatches = [
+        standard_mismatch_row(row, concept=concept)
+        for row in entry.get("mismatches") or []
+    ]
     mismatch_count = int(entry["mismatch_count"])
     matched = compared - mismatch_count
     rate = (matched / compared * 100) if compared else 100.0
-    concept = entry["output"]
     description = _DESCRIPTION_BY_OUTPUT.get(
         concept,
         (
@@ -545,11 +612,13 @@ def main() -> int:
         emitted = emit_case_chunks(state, entry)
         if emitted:
             print(emitted)
-        report = project_state(
-            state,
-            entry,
-            campaign,
-            source.name,
+        report = apply_suite_dispositions(
+            project_state(
+                state,
+                entry,
+                campaign,
+                source.name,
+            )
         )
         filename = f"axiom-policyengine-{state.lower()}-income-tax-populace.json"
         (DASH_DATA / filename).write_text(

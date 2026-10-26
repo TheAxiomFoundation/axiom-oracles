@@ -6869,27 +6869,27 @@
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-0.json",
-          "sha256": "0d0e9b993c40ec68c8d90a333ca0d05580b6cd445306467627b985db938bfb48"
+          "sha256": "12ac85dd79c95b8923dd9739a936369bb62ae141e00cd03c88e72c26d4dbb34e"
         },
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-1.json",
-          "sha256": "6553d16a190b4c381fe4c28dae6efdd9b7c58048fc00501232e3e8c3fae11ccd"
+          "sha256": "a270664c7dcd0cc14098f0c254c0434961326186ce612fd962f95897d81d8af9"
         },
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-2.json",
-          "sha256": "7f2cc7544e6bbb9e64f46b8e3d02f82393d24bc32994bd901ed165c041555ca4"
+          "sha256": "785d8e6eb152ea3907c20bcce4de2964f4ca73c5e525931d2d725283de491cfb"
         },
         {
           "cases": 500,
           "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-3.json",
-          "sha256": "d3cdf52d4346755c9337ccbabe8473021b9483ff2c6970ba4fc3a68112b39791"
+          "sha256": "acb5922ef1cb42b0be80975374e53fbedff6360e1f30f539616f8606d7d579bd"
         },
         {
           "cases": 169,
           "chunk": "dashboard/public/data/cases/nc-income-tax-populace/chunk-4.json",
-          "sha256": "3a54f1574dcbe1a19e3c06fc43ed65dbc0131c1079deaec3d291f7b3400e3c6f"
+          "sha256": "641a35e59c3b31728cb531638b4676c46a0175869c5ba42d830f2cdefec7135e"
         }
       ],
       "constant_fields": 0,
@@ -6898,11 +6898,11 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-policyengine-nc-income-tax-populace.json",
-      "report_sha256": "e37dfffa9f96cbbf4fffc32df813d90eaf785566896f4e42cd8b0af6892a166e",
+      "report_sha256": "a572753dc5526358ecaa44e15c2d94d0b341f7e7444d07416b24c73ff2125510",
       "varied_fields": 0,
       "verdict_concepts": {
-        "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability": {
-          "distinct_left_values": 1724
+        "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits": {
+          "distinct_left_values": 1718
         }
       }
     },

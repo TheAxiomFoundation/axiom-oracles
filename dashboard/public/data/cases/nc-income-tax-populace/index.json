@@ -9,7 +9,7 @@
   "right": "policyengine"
  },
  "mismatch_concepts": [
-  "us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability"
+  "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits"
  ],
  "source": "state-tax-populace-campaign"
 }
