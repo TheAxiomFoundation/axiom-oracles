@@ -169,6 +169,27 @@ def test_removed_legacy_exception_cannot_return_after_revert(tmp_path):
     assert legacy_history_errors(tmp_path, legacy)
 
 
+def test_a_shallow_clone_cannot_run_the_allowlist_ratchet(tmp_path):
+    """A shallow clone lacks the commit that removed an exception, so a
+    restored entry would look like the baseline."""
+    origin = tmp_path / "origin"
+    origin.mkdir()
+    legacy = _legacy_repo(origin)
+    _write_allowlist(origin, {})
+    _git(origin, "add", LEGACY_ALLOWLIST)
+    _git(origin, "commit", "-q", "-m", "remove old exception")
+    _write_allowlist(origin, legacy)
+    _git(origin, "add", LEGACY_ALLOWLIST)
+    _git(origin, "commit", "-q", "-m", "restore it")
+    shallow = tmp_path / "shallow"
+    _git(tmp_path, "clone", "-q", "--depth", "1", f"file://{origin}", str(shallow))
+    assert legacy_history_errors(shallow, legacy) == [
+        "legacy engine identity allow-list history needs a full clone; "
+        "this checkout is shallow"
+    ]
+    assert legacy_history_errors(origin, legacy)
+
+
 @pytest.mark.parametrize("reports", [[], {"../outside.json": "a" * 64}, {REPORT_PATH: "abc"}])
 def test_legacy_allowlist_rejects_invalid_entries(reports):
     with pytest.raises(ValueError):

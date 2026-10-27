@@ -32,7 +32,11 @@ from axiom_oracles.comparison.dispositions import (
     load_dispositions,
 )
 from axiom_oracles.provenance import RUN_KINDS, build_provenance
-from axiom_oracles.engine_publication import validate_engine_identity
+from axiom_oracles.engine_identity import VERIFIED_RECEIPT
+from axiom_oracles.engine_publication import (
+    engine_identity_errors,
+    validate_engine_identity,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
@@ -336,13 +340,20 @@ def validate_campaign_run_provenance(campaign: dict) -> tuple[str, str, dict]:
     return generated_at, run_kind, runtime
 
 
-def campaign_engine_provenance(campaign: dict, runtime: dict) -> dict:
+def campaign_engine_provenance(campaign: dict, runtime: dict) -> dict | None:
     """Carry the source run's identity into its projection without relabelling.
 
-    Older campaigns already recorded the executable digest under the runtime
-    block. Normalize that historical evidence; never inspect the publisher's
-    engine checkout or executable. Campaigns with the canonical block keep it
-    verbatim, including any additional receipt evidence.
+    Never inspect the publisher's engine checkout or executable. A campaign
+    with the canonical block keeps it verbatim, including any additional
+    receipt evidence. A runtime block whose commit came from a verified build
+    receipt is the same evidence under its historical field names.
+
+    Campaigns from before receipts recorded the checkout's HEAD and the
+    executable's digest independently, so nothing binds that commit to those
+    bytes. Their projection asserts no engine identity (None): the evidence
+    stays under ``runtime_provenance``, an otherwise unchanged report keeps
+    its committed bytes, and publication admission accepts it only as a
+    byte-identical legacy exception until the campaign is rerun.
     """
 
     source_provenance = campaign.get("provenance")
@@ -350,7 +361,18 @@ def campaign_engine_provenance(campaign: dict, runtime: dict) -> dict:
         engine = deepcopy(source_provenance["engine"])
     else:
         engine = deepcopy(runtime["axiom_engine"])
-        engine["binary_sha256"] = engine.pop("executable_sha256")
+        executable = engine.pop("executable_sha256")
+        if engine.setdefault("binary_sha256", executable) != executable:
+            raise ValueError(
+                "runtime_provenance.axiom_engine records two different "
+                "executable digests"
+            )
+        if engine.get("source_status") != VERIFIED_RECEIPT:
+            # Malformed historical evidence still fails closed.
+            errors = engine_identity_errors({"provenance": {"engine": engine}})
+            if errors:
+                raise ValueError("; ".join(errors))
+            return None
     validate_engine_identity({"provenance": {"engine": engine}})
     return engine
 
@@ -457,7 +479,8 @@ def project_state(
         if rulespec.get("repository")
         else None,
     )
-    standard_provenance["engine"] = engine
+    if engine is not None:
+        standard_provenance["engine"] = engine
     standard_provenance.update(
         {
             "campaign_report": source_name,

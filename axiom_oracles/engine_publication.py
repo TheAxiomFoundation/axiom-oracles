@@ -105,7 +105,22 @@ def legacy_history_errors(repo_root: Path, legacy: Mapping[str, str]) -> list[st
     CI uses a full checkout. Comparing every ancestor also prevents a revert
     from restoring a removed exception. The migration's initial file has no
     ancestor and establishes the baseline, like the other conformance floors.
+    A shallow clone lacks the ancestors that removed an exception, so it
+    cannot run this check.
     """
+    shallow = subprocess.run(
+        ["git", "rev-parse", "--is-shallow-repository"],
+        cwd=repo_root,
+        capture_output=True,
+        text=True,
+        check=True,
+        env=_git_env(),
+    )
+    if shallow.stdout.strip() != "false":
+        return [
+            "legacy engine identity allow-list history needs a full clone; "
+            "this checkout is shallow"
+        ]
     history = subprocess.run(
         [
             "git", "--no-replace-objects", "log", "--full-history", "--format=%H",

@@ -1,6 +1,7 @@
 # Published engine identity
 
-Every new or edited Axiom-bearing dashboard report must contain
+Every new or edited Axiom-bearing report directly under
+`dashboard/public/data/` must contain
 `provenance.engine.commit` as a full 40-character hexadecimal source commit
 and `provenance.engine.binary_sha256` as a 64-character hexadecimal digest of
 the executable that ran. `axiom_oracles.engine_publication` supplies the shared
@@ -9,7 +10,9 @@ publication gates after the existing re-emission guard and again after derived
 regeneration, so the final bytes are checked. The generic publisher's
 `VERIFY_DERIVED_REFRESH` check-only route applies the same validator.
 Validation never supplies identity
-from the publishing machine.
+from the publishing machine. Nested files there, such as the case chunks under
+`dashboard/public/data/cases/`, and comparison records elsewhere are outside
+this check.
 
 Build the intended engine in a clean checkout at its full source commit. The
 build helper verifies the checkout before and after the build, removes stale
@@ -56,7 +59,18 @@ both the path and bytes match. New files, copied files at another path, and
 any edit to an existing file require the new identity. The list may only
 shrink: validation compares it with every committed ancestor version, so an
 entry cannot be added, have its digest changed, or be restored by a revert
-after removal. CI checks out full history for this ratchet.
+after removal. CI checks out full history for this ratchet, and a shallow
+clone is refused, since it lacks the commits that removed exceptions.
+
+Populace campaign projections (`scripts/emit_populace_campaign_artifacts.py`)
+copy a campaign's canonical `provenance.engine` block verbatim, or its runtime
+engine block when that block's `source_status` is `verified build receipt`.
+Campaigns from before build receipts recorded the engine checkout's HEAD and
+the executable's digest independently, so nothing binds that commit to those
+bytes. Their projections carry no `provenance.engine`: the historical fields
+stay under `runtime_provenance`, so re-emission adds no identity and an
+otherwise unchanged report keeps its committed bytes. Such a report passes
+only as a byte-identical legacy exception until its campaign is rerun.
 
 A copied report keeps the engine block describing the original results. The
 re-emission guard restores an existing published report before identity

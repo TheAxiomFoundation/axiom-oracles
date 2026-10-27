@@ -36,6 +36,11 @@ class EngineIdentityError(ValueError):
     """Engine bytes cannot be bound to the claimed source identity."""
 
 
+# source_status of a commit taken from a build receipt whose digest matches
+# the executable's bytes; every other status leaves the commit unresolved.
+VERIFIED_RECEIPT = "verified build receipt"
+
+
 def record_engine_receipt(receipt: Mapping[str, Any]) -> None:
     """Record verified execution evidence for a parent that wraps a generator.
 
@@ -154,7 +159,7 @@ def engine_receipt(
             bound_version = binding.get("version")
             version = bound_version if isinstance(bound_version, str) else None
             working_tree = str(binding.get("working_tree", "unresolved"))
-            status = "verified build receipt"
+            status = VERIFIED_RECEIPT
         else:
             status = "unresolved: build receipt does not match executable"
     if include_version and digest is not None and version is None:
