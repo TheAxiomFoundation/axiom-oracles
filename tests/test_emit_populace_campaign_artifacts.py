@@ -1992,6 +1992,52 @@ def test_a_runtime_engine_with_two_digests_is_rejected():
         project_state("NC", _nc_entry(), campaign, "campaign.json")
 
 
+
+def _canonical_engine(campaign: dict) -> dict:
+    runtime = campaign["runtime_provenance"]["axiom_engine"]
+    return {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": runtime["commit"],
+        "binary_sha256": runtime["executable_sha256"],
+        "version": "0.1.0",
+        "source_status": VERIFIED_RECEIPT,
+        "working_tree": "clean",
+    }
+
+
+def test_a_verified_canonical_engine_block_is_kept_verbatim():
+    campaign = _campaign()
+    campaign["provenance"] = {"engine": _canonical_engine(campaign)}
+    projected = project_state("NC", _nc_entry(), campaign, "campaign.json")
+    assert projected["provenance"]["engine"] == campaign["provenance"]["engine"]
+    assert not engine_identity_errors(projected)
+
+
+@pytest.mark.parametrize(
+    "status", [None, "unresolved: no build receipt", "recorded by original campaign"]
+)
+def test_a_canonical_engine_block_needs_a_verified_receipt(status):
+    campaign = _campaign()
+    engine = _canonical_engine(campaign)
+    if status is None:
+        del engine["source_status"]
+    else:
+        engine["source_status"] = status
+    campaign["provenance"] = {"engine": engine}
+    with pytest.raises(ValueError, match="verified build receipt"):
+        project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+
+@pytest.mark.parametrize("runtime_field", ["commit", "executable_sha256", "binary_sha256"])
+def test_a_canonical_engine_block_must_agree_with_the_runtime_block(runtime_field):
+    campaign = _campaign()
+    campaign["provenance"] = {"engine": _canonical_engine(campaign)}
+    runtime = campaign["runtime_provenance"]["axiom_engine"]
+    runtime[runtime_field] = "6" * (40 if runtime_field == "commit" else 64)
+    with pytest.raises(ValueError, match="disagrees with runtime_provenance"):
+        project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+
 def test_committed_pre_receipt_report_reprojects_to_its_committed_bytes():
     """Re-emission keeps a historical report under its byte-identical legacy
     exception instead of relabelling it with an unbound commit."""
@@ -2026,9 +2072,10 @@ def test_reprojection_preserves_canonical_source_engine_exactly(commit, digest, 
         "commit": commit,
         "binary_sha256": digest,
         "version": version,
-        "source_status": "recorded by original campaign",
+        "source_status": VERIFIED_RECEIPT,
     }
     campaign["provenance"] = {"engine": engine}
+    campaign["runtime_provenance"]["axiom_engine"].update(commit=commit, executable_sha256=digest)
 
     first = project_state("NC", _nc_entry(), campaign, "campaign.json")
     second = project_state("NC", _nc_entry(), campaign, "campaign.json")

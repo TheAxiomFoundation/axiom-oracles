@@ -40,6 +40,13 @@ sidecars retain the actual binary digest and leave the source commit unresolved.
 These local build attestations protect against accidental drift and are not
 signed statements.
 
+`scripts/run_comparison.py` reuses an existing engine executable only when its
+receipt verifies and names the engine checkout's current HEAD, and the checkout
+is clean. Otherwise a clean checkout rebuilds through the build helper, so a
+restored `target/` cache with an unreceipted or older binary is rebuilt rather
+than published under the wrong identity. A dirty checkout keeps its existing
+binary, which carries whatever identity its receipt verifies.
+
 The comparison runner supplies a private `AXIOM_ENGINE_RECEIPT_OUTPUT` journal
 to generator subprocesses. The engine adapter writes its receipt after each
 verified invocation, so wrappers that omit raw engine evidence can still return

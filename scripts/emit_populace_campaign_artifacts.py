@@ -345,8 +345,10 @@ def campaign_engine_provenance(campaign: dict, runtime: dict) -> dict | None:
 
     Never inspect the publisher's engine checkout or executable. A campaign
     with the canonical block keeps it verbatim, including any additional
-    receipt evidence. A runtime block whose commit came from a verified build
-    receipt is the same evidence under its historical field names.
+    receipt evidence, provided it came from a verified build receipt and agrees
+    with the campaign's runtime engine block. A runtime block whose commit came
+    from a verified build receipt is the same evidence under its historical
+    field names.
 
     Campaigns from before receipts recorded the checkout's HEAD and the
     executable's digest independently, so nothing binds that commit to those
@@ -359,6 +361,23 @@ def campaign_engine_provenance(campaign: dict, runtime: dict) -> dict | None:
     source_provenance = campaign.get("provenance")
     if isinstance(source_provenance, dict) and "engine" in source_provenance:
         engine = deepcopy(source_provenance["engine"])
+        validate_engine_identity({"provenance": {"engine": engine}})
+        if engine.get("source_status") != VERIFIED_RECEIPT:
+            raise ValueError("provenance.engine does not come from a verified build receipt")
+        # The runner writes both blocks from one receipt, so they must agree.
+        recorded = runtime.get("axiom_engine") if isinstance(runtime, dict) else None
+        if isinstance(recorded, dict):
+            for field, runtime_fields in (
+                ("commit", ("commit",)),
+                ("binary_sha256", ("binary_sha256", "executable_sha256")),
+            ):
+                for runtime_field in runtime_fields:
+                    value = recorded.get(runtime_field)
+                    if value is not None and str(value).lower() != engine[field].lower():
+                        raise ValueError(
+                            f"provenance.engine.{field} disagrees with "
+                            f"runtime_provenance.axiom_engine.{runtime_field}"
+                        )
     else:
         engine = deepcopy(runtime["axiom_engine"])
         executable = engine.pop("executable_sha256")
