@@ -286,7 +286,7 @@ EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
     "c742343daf35998d934c4288008c47097b2ebe4a249e59838a7c3e635e5bedaf"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "8120626c8f3267347a50860403c816c60dd28404b5f1410246ef32b1fc77dc77"
+    "37583f05537744f9a4f99abfdb3399fa936ac9c99c5c9ab5c1af7932ef9cda79"
 )
 _NC_RESIDENT_CORE_INPUT = (
     "us-nc:policies/income_tax/resident_core_liability_pipeline#input."
@@ -765,6 +765,12 @@ ALLOWED_DERIVED_PE_BOUNDARIES: frozenset[tuple[str, str, str, str]] = frozenset(
             "person_sum_to_tax_unit",
         ),
         (
+            "NC",
+            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_income_tax_refunds",
+            "salt_refund_income",
+            "person_sum_to_tax_unit",
+        ),
+        (
             "NY",
             "us-ny:policies/income_tax/pilot_liability_pipeline#input."
             "ny_pit_pilot_filing_status_joint_or_surviving_spouse",
@@ -869,7 +875,6 @@ ALLOWED_PROJECTION_CONSTANTS: frozenset[tuple[str, str, float]] = frozenset(
                 "nc_pit_2026_excess_federal_nol_carryforward_deduction",
                 "nc_pit_2026_taxed_pass_through_loss_addition",
                 "nc_pit_2026_exempt_obligation_gain",
-                "nc_pit_2026_income_tax_refunds",
                 "nc_pit_2026_bailey_retirement_benefits",
                 "nc_pit_2026_eligible_uniformed_services_retirement",
                 "nc_pit_2026_eligible_tribal_income",

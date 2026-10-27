@@ -6,6 +6,9 @@ import pytest
 import yaml
 from hypothesis import given, strategies as st
 
+from axiom_oracles.bridges.state_tax_populace_runner import (
+    require_policyengine_us_floor,
+)
 import scripts.emit_populace_campaign_artifacts as emitter
 from scripts.emit_populace_campaign_artifacts import (
     RETIRED_MANIFEST_REPORTS,
@@ -2074,18 +2077,16 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
     )
     campaign_path = (
         REPO_ROOT
-        / "reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json"
+        / "reports/state-tax-populace-nc-resident-core-campaign-2026-10-27-pe-us-2.68.0.json"
     )
     trace_path = (
         REPO_ROOT
-        / "reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json"
+        / "reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27-pe-us-2.68.0.json"
     )
     report_path = (
         DASHBOARD_DATA / "axiom-policyengine-nc-income-tax-populace.json"
     )
     cases_path = DASHBOARD_DATA / "cases/nc-income-tax-populace"
-    mismatch_ids = [32354, 109890, 110647, 156182, 158448, 160401]
-    issue = "https://github.com/PolicyEngine/policyengine-us/issues/10468"
 
     campaign = json.loads(campaign_path.read_text())
     state = campaign["comparison"]["states"]["NC"]
@@ -2100,23 +2101,22 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
     assert routing["states"]["NC"]["dispositions"] == {"ready": 2_169}
     assert state["compared_count"] == len(cases) == 2_169
     assert state["comparison_aggregation"] == "tax_unit"
-    assert state["mismatch_count"] == 6
-    assert sorted(row["tax_unit_id"] for row in state["mismatches"]) == mismatch_ids
-    assert state["max_absolute_difference"] == 87.83294540100087
+    assert state["mismatch_count"] == 0
+    assert state["mismatches"] == []
+    assert state["max_absolute_difference"] == 0.5906000006943941
     assert state["tolerance"] == 1.0
     assert state["relative_tolerance"] == 0.0
     assert state["output"] == NC_OUTPUT
     assert state["policyengine_target"] == "nc_income_tax_before_credits"
-    assert sum(not case["matched"] for case in cases) == 6
-    assert all(
-        abs(case["axiom"] - case["policyengine"]) <= 1.0
-        for case in cases
-        if case["matched"]
-    )
-    # Every mismatch has Axiom above PolicyEngine: PolicyEngine's larger
-    # deduction is the only direction the traced mechanism can move.
-    assert all(row["axiom"] > row["policyengine"] for row in state["mismatches"])
+    assert all(case["matched"] for case in cases)
+    # Cases store cents, so the case gaps sit within a cent of the exact max.
+    assert abs(
+        max(abs(case["axiom"] - case["policyengine"]) for case in cases)
+        - state["max_absolute_difference"]
+    ) < 0.01
 
+    # The Axiom side is byte-for-byte the one PR #647 ran on policyengine-us
+    # 1.752.2; only the oracle moved, to a release with the mortgage fix.
     runtime = campaign["runtime_provenance"]
     assert runtime["rulespec"]["commit"] == rulespec_sha
     assert runtime["rulespec"]["working_tree"] == "clean"
@@ -2124,33 +2124,25 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
     assert runtime["axiom_engine"]["executable_sha256"] == executable_sha
     assert runtime["axiom_engine"]["working_tree"] == "clean"
     assert runtime["packages"] == {
-        "policyengine": "4.18.9",
-        "policyengine-us": "1.752.2",
+        "policyengine": "6.11.1",
+        "policyengine-us": "2.68.0",
     }
+    require_policyengine_us_floor(
+        {"NC"}, installed=runtime["packages"]["policyengine-us"]
+    )
 
     report = json.loads(report_path.read_text())
     assert report["suite"] == "nc-income-tax-populace"
-    assert report["schema_version"] == "axiom.comparison_report.v2.1"
+    assert report["schema_version"] == "axiom.comparison_report.v2"
     assert report["case_count"] == 2_169
-    summary = report["summary"]
-    assert {key: summary[key] for key in summary if key != "dispositioned"} == {
+    assert report["summary"] == {
         "comparison_count": 2_169,
-        "match_count": 2_163,
-        "match_rate": 2_163 / 2_169 * 100,
-        "mismatch_count": 6,
+        "match_count": 2_169,
+        "match_rate": 100.0,
+        "mismatch_count": 0,
     }
-    block = summary["dispositioned"]
-    assert block["counts"]["upstream_engine_gap"] == 6
-    assert block["unexplained_count"] == 0
-    assert block["expired_entries"] == block["orphaned_entries"] == []
-    assert [row["case_id"] for row in report["mismatches"]] == [
-        row["tax_unit_id"] for row in state["mismatches"]
-    ]
-    assert all(
-        row["disposition"]["linked_issue"] == issue
-        and row["disposition"]["disposition"] == "upstream_engine_gap"
-        for row in report["mismatches"]
-    )
+    assert report["mismatches"] == []
+    assert not (REPO_ROOT / "dispositions/nc-income-tax-populace.yaml").exists()
     assert report["aggregates"][0]["concept"] == NC_OUTPUT
     assert report["provenance"]["campaign_report"] == campaign_path.name
     assert (
@@ -2161,10 +2153,10 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
         {"repo": "TheAxiomFoundation/rulespec-us", "sha": rulespec_sha}
     ]
 
-    # The trace recomputes the statute reading from PolicyEngine's own
-    # components. Each mismatch is 3.99 percent of the non-deductible mortgage
-    # interest PolicyEngine counted (float32 tax storage bounds the residual),
-    # and the reading reproduces Axiom on every compared unit.
+    # The trace recomputes section 105-153.5's mortgage reading from
+    # PolicyEngine's own components. On 2.68.0 PolicyEngine already reads it
+    # that way: 229 units carry federally non-deductible mortgage interest,
+    # yet no unit's deduction moves beyond float32 storage noise.
     trace = json.loads(trace_path.read_text())
     assert trace["campaign_report"] == campaign_path.name
     assert trace["dataset_identity"]["revision"] == (
@@ -2172,22 +2164,13 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
     )
     assert trace["packages"] == runtime["packages"]
     assert trace["compared_tax_unit_count"] == 2_169
-    assert [row["tax_unit_id"] for row in trace["mismatches"]] == mismatch_ids
-    for row in trace["mismatches"]:
-        gap = row["axiom_tax"] - row["policyengine_tax"]
-        assert row["non_deductible_mortgage_interest"] > 0
-        assert abs(gap - row["non_deductible_mortgage_interest"] * 0.0399) < 0.07
-        assert abs(row["axiom_minus_predicted"]) < 0.05
-    assert trace["max_abs_axiom_minus_predicted_all_units"] < 1.0
+    assert trace["mismatches"] == []
+    assert trace["units_with_nonzero_non_deductible_mortgage_interest"] == 229
     moved = trace["units_where_statute_reading_moves_deduction"]
-    assert sorted(
-        unit["tax_unit_id"] for unit in moved if unit["reported_mismatch"]
-    ) == mismatch_ids
-    assert all(
-        abs(unit["observed_tax_change"]) < 1.0
-        for unit in moved
-        if not unit["reported_mismatch"]
-    )
+    assert not any(unit["reported_mismatch"] for unit in moved)
+    assert all(abs(unit["deduction_change"]) < 0.25 for unit in moved)
+    assert all(abs(unit["observed_tax_change"]) < 1.0 for unit in moved)
+    assert trace["max_abs_axiom_minus_predicted_all_units"] < 1.0
 
     index = json.loads((cases_path / "index.json").read_text())
     chunks = [
@@ -2197,13 +2180,9 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
     assert index["count"] == index["total_cases"] == 2_169
     assert [len(chunk) for chunk in chunks] == [500, 500, 500, 500, 169]
     projected_cases = [case for chunk in chunks for case in chunk]
-    # The explorer lists mismatches first (a stable sort on the match rate),
-    # then every matched unit in campaign order.
+    # With every unit matched, the explorer keeps campaign order.
     assert [case["id"] for case in projected_cases] == [
-        case["tax_unit_id"] for case in cases if not case["matched"]
-    ] + [case["tax_unit_id"] for case in cases if case["matched"]]
-    assert [case["id"] for case in projected_cases[:6]] == [
-        row["tax_unit_id"] for row in state["mismatches"]
+        case["tax_unit_id"] for case in cases
     ]
 
     manifest = json.loads((DASHBOARD_DATA / "manifest.json").read_text())

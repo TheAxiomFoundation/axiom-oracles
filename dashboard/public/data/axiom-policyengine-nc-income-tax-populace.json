@@ -7,15 +7,15 @@
    "components": [],
    "concept": "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits",
    "description": "North Carolina tax-year-2026 resident income tax before credits, computed by the resident-core pipeline from federal adjusted gross income, filing status, and the classified section 105-153.5 deduction components (charitable contributions, medical expenses, qualified residence interest, real estate property taxes, child count, and taxable Social Security) over every routed tax unit in the pinned US Populace; additions, subtractions, and itemized items the population does not carry enter as reviewed zero constants, and credits, payments, and final liability are out of scope",
-   "match_count": 2163,
-   "match_rate": 99.72337482710927,
-   "matched": 2163,
-   "mismatch_count": 6,
+   "match_count": 2169,
+   "match_rate": 100.0,
+   "matched": 2169,
+   "mismatch_count": 0,
    "missing_both_count": 0,
    "missing_left_count": 0,
    "missing_right_count": 0,
    "parent": null,
-   "weighted_match_rate": 99.72337482710927
+   "weighted_match_rate": 100.0
   }
  ],
  "case_count": 2169,
@@ -25,147 +25,27 @@
   "policyengine": "nc_income_tax_before_credits"
  },
  "errors": [],
- "mismatches": [
-  {
-   "absolute_difference": 87.83294540100087,
-   "axiom": 1421.7307725494384,
-   "case_id": 32354,
-   "concept": "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits",
-   "difference": 87.83294540100087,
-   "disposition": {
-    "disposition": "upstream_engine_gap",
-    "id": "nc-populace-pe-non-deductible-mortgage-interest-32354",
-    "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/10468"
-   },
-   "kind": "amount_difference",
-   "left": 1421.7307725494384,
-   "policyengine": 1333.8978271484375,
-   "relative_difference": 0.0658468314539257,
-   "right": 1333.8978271484375,
-   "state": "NC",
-   "tax_unit_id": 32354,
-   "weight": 0.016129292009695508
-  },
-  {
-   "absolute_difference": 4.58541408691417,
-   "axiom": 2390.172084008789,
-   "case_id": 109890,
-   "concept": "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits",
-   "difference": 4.58541408691417,
-   "disposition": {
-    "disposition": "upstream_engine_gap",
-    "id": "nc-populace-pe-non-deductible-mortgage-interest-109890",
-    "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/10468"
-   },
-   "kind": "amount_difference",
-   "left": 2390.172084008789,
-   "policyengine": 2385.586669921875,
-   "relative_difference": 0.0019221326748377315,
-   "right": 2385.586669921875,
-   "state": "NC",
-   "tax_unit_id": 109890,
-   "weight": 0.44145517862317474
-  },
-  {
-   "absolute_difference": 61.84045844726643,
-   "axiom": 16358.840458447266,
-   "case_id": 110647,
-   "concept": "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits",
-   "difference": 61.84045844726643,
-   "disposition": {
-    "disposition": "upstream_engine_gap",
-    "id": "nc-populace-pe-non-deductible-mortgage-interest-110647",
-    "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/10468"
-   },
-   "kind": "amount_difference",
-   "left": 16358.840458447266,
-   "policyengine": 16297.0,
-   "relative_difference": 0.0037945915473563494,
-   "right": 16297.0,
-   "state": "NC",
-   "tax_unit_id": 110647,
-   "weight": 2422.3105940208948
-  },
-  {
-   "absolute_difference": 56.833825732421246,
-   "axiom": 54922.95101323242,
-   "case_id": 156182,
-   "concept": "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits",
-   "difference": 56.833825732421246,
-   "disposition": {
-    "disposition": "upstream_engine_gap",
-    "id": "nc-populace-pe-non-deductible-mortgage-interest-156182",
-    "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/10468"
-   },
-   "kind": "amount_difference",
-   "left": 54922.95101323242,
-   "policyengine": 54866.1171875,
-   "relative_difference": 0.0010358638198908223,
-   "right": 54866.1171875,
-   "state": "NC",
-   "tax_unit_id": 156182,
-   "weight": 0.00014510662460488232
-  },
-  {
-   "absolute_difference": 17.592965380754322,
-   "axiom": 1858895.0929653808,
-   "case_id": 158448,
-   "concept": "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits",
-   "difference": 17.592965380754322,
-   "disposition": {
-    "disposition": "upstream_engine_gap",
-    "id": "nc-populace-pe-non-deductible-mortgage-interest-158448",
-    "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/10468"
-   },
-   "kind": "amount_difference",
-   "left": 1858895.0929653808,
-   "policyengine": 1858877.5,
-   "relative_difference": 9.464295189303395e-06,
-   "right": 1858877.5,
-   "state": "NC",
-   "tax_unit_id": 158448,
-   "weight": 0.00031625496957868744
-  },
-  {
-   "absolute_difference": 24.720342187443748,
-   "axiom": 1533713.2203421874,
-   "case_id": 160401,
-   "concept": "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits",
-   "difference": 24.720342187443748,
-   "disposition": {
-    "disposition": "upstream_engine_gap",
-    "id": "nc-populace-pe-non-deductible-mortgage-interest-160401",
-    "linked_issue": "https://github.com/PolicyEngine/policyengine-us/issues/10468"
-   },
-   "kind": "amount_difference",
-   "left": 1533713.2203421874,
-   "policyengine": 1533688.5,
-   "relative_difference": 1.6118228823808582e-05,
-   "right": 1533688.5,
-   "state": "NC",
-   "tax_unit_id": 160401,
-   "weight": 0.0006068245606075086
-  }
- ],
+ "mismatches": [],
  "population": "populace-us",
  "provenance": {
   "branch_diagnostics": {
-   "charitable_contributions_present_count": 611,
+   "charitable_contributions_present_count": 617,
    "compared_tax_unit_count": 2169,
-   "head_of_household_count": 178,
-   "joint_or_surviving_count": 933,
+   "head_of_household_count": 171,
+   "income_tax_refunds_present_count": 425,
+   "joint_or_surviving_count": 918,
    "married_separately_count": 38,
-   "medical_and_dental_expenses_present_count": 514,
-   "nonpositive_agi_count": 94,
-   "qualified_residence_interest_present_count": 694,
-   "qualifying_children_present_count": 450,
+   "medical_and_dental_expenses_present_count": 528,
+   "nonpositive_agi_count": 64,
+   "qualified_residence_interest_present_count": 700,
+   "qualifying_children_present_count": 437,
    "real_estate_property_taxes_present_count": 848,
-   "single_count": 1020,
+   "single_count": 1042,
    "standard_deduction_ineligible_count": 0,
    "taxable_social_security_present_count": 426,
    "united_states_obligation_interest_present_count": 0
   },
-  "campaign_report": "state-tax-populace-nc-resident-core-campaign-2026-10-27.json",
+  "campaign_report": "state-tax-populace-nc-resident-core-campaign-2026-10-27-pe-us-2.68.0.json",
   "dataset_identity": {
    "built_with": "1.729.0",
    "country": "us",
@@ -174,9 +54,9 @@
    "sha256": "16be6338f9d0",
    "source": "pinned"
   },
-  "generated_at": "2026-10-27T07:02:01Z",
+  "generated_at": "2026-10-27T07:36:37Z",
   "generated_by": "scripts/emit_populace_campaign_artifacts.py::nc-income-tax-populace",
-  "max_absolute_difference": 87.83294540100087,
+  "max_absolute_difference": 0.5906000006943941,
   "relative_tolerance": 0.0,
   "rulespecs": [
    {
@@ -193,8 +73,8 @@
     "working_tree": "clean"
    },
    "packages": {
-    "policyengine": "4.18.9",
-    "policyengine-us": "1.752.2"
+    "policyengine": "6.11.1",
+    "policyengine-us": "2.68.0"
    },
    "rulespec": {
     "commit": "56455a56d08cdeeab76818e45a33efe6ea42be6b",
@@ -206,28 +86,12 @@
   "tolerance": 1.0,
   "weighted_compared_tax_units": 5338585.218401721
  },
- "schema_version": "axiom.comparison_report.v2.1",
+ "schema_version": "axiom.comparison_report.v2",
  "suite": "nc-income-tax-populace",
  "summary": {
   "comparison_count": 2169,
-  "dispositioned": {
-   "counts": {
-    "axiom_encoding_gap": 0,
-    "bridge_artifact": 0,
-    "explained_residual": 0,
-    "unexplained": 0,
-    "upstream_engine_gap": 6
-   },
-   "dispositions_file": "dispositions/nc-income-tax-populace.yaml",
-   "expired_entries": [],
-   "explained_rate": 100,
-   "orphaned_entries": [],
-   "raw_match_rate": 99.723375,
-   "schema_version": "axiom_oracles.dispositions.v1",
-   "unexplained_count": 0
-  },
-  "match_count": 2163,
-  "match_rate": 99.72337482710927,
-  "mismatch_count": 6
+  "match_count": 2169,
+  "match_rate": 100.0,
+  "mismatch_count": 0
  }
 }

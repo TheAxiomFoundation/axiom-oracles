@@ -22,11 +22,13 @@ from axiom_oracles.bridges.state_tax_populace import (
 from axiom_oracles.bridges.state_tax_populace_runner import (
     DISPOSITION_READY,
     NO_BROAD_PIT_FIPS,
+    StateTaxPopulationRoutingError,
     calculate_policyengine_targets,
     calculate_policyengine_projection_inputs,
     calculate_taxsim_targets,
     compare_ready_state_tax_units,
     population_routing_report,
+    require_policyengine_us_floor,
     route_tax_units,
     runtime_provenance,
     select_ready_tax_units,
@@ -102,6 +104,7 @@ _NC_PRESENCE_INPUTS = {
     "taxable_social_security": (
         "nc_pit_2026_taxable_social_security_and_railroad_retirement"
     ),
+    "income_tax_refunds": "nc_pit_2026_income_tax_refunds",
 }
 _NC_AGI_INPUT = f"{_NC_INPUT_PREFIX}nc_pit_2026_federal_adjusted_gross_income"
 
@@ -503,6 +506,17 @@ def main(argv: list[str] | None = None) -> int:
             f"got {args.populace_year}"
         )
     requested_states = _requested_states(args.states, contract=contract)
+    # Before the dataset loads: a state whose projection relies on a
+    # policyengine-us fix refuses an older oracle.
+    campaign_states = requested_states or {
+        state
+        for state, jurisdiction in contract.by_state().items()
+        if jurisdiction.status == "ready"
+    }
+    try:
+        require_policyengine_us_floor(campaign_states)
+    except StateTaxPopulationRoutingError as exc:
+        raise SystemExit(str(exc)) from exc
     if not args.no_taxsim:
         # Before the dataset loads: the host's TAXSIM binary may stop short
         # of the validation year (the pinned Linux build accepts 1960-2024).
