@@ -21,6 +21,8 @@ import subprocess
 from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlparse
 
+from axiom_oracles.engine_identity import engine_receipt
+
 from .state_tax_populace import (
     ALLOWED_DERIVED_PE_BOUNDARIES,
     ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES,
@@ -598,21 +600,18 @@ def population_routing_report(
 
 
 def runtime_provenance(*, rulespec_root: Path, axiom_rules_path: Path) -> dict[str, Any]:
-    """Record source revisions and installed engine package versions."""
+    """Record the rulespec checkout and the executed binary's bound identity."""
 
     rulespec_commit = _clean_git_commit(
         rulespec_root,
         expected_github_repository="TheAxiomFoundation/rulespec-us",
-    )
-    axiom_commit = _clean_git_commit(
-        axiom_rules_path,
-        expected_github_repository="TheAxiomFoundation/axiom-rules-engine",
     )
     binary = Path(axiom_rules_path) / "target" / "release" / "axiom-rules-engine"
     if not binary.is_file():
         raise StateTaxPopulationRoutingError(
             f"axiom-rules-engine binary not found: {binary}"
         )
+    engine = engine_receipt(binary)
     return {
         "rulespec": {
             "repository": "TheAxiomFoundation/rulespec-us",
@@ -620,10 +619,10 @@ def runtime_provenance(*, rulespec_root: Path, axiom_rules_path: Path) -> dict[s
             "working_tree": "clean",
         },
         "axiom_engine": {
-            "repository": "TheAxiomFoundation/axiom-rules-engine",
-            "commit": axiom_commit,
-            "working_tree": "clean",
-            "executable_sha256": _file_sha256(binary),
+            **engine,
+            "working_tree": engine.get("working_tree", "unresolved"),
+            # Retain the campaign field read by historical projectors.
+            "executable_sha256": engine["binary_sha256"],
         },
         "packages": {
             package: _package_version(package)
@@ -2773,6 +2772,7 @@ def compare_ready_state_tax_units(
     sample_size_per_state: int = 0,
     contract: StateTaxPopulaceContract | Mapping[str, Any] | None = None,
     axiom_runner: Callable[..., list[dict[str, Any]]] | None = None,
+    expected_engine_receipt: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Execute every ready state once and compare all selected tax units.
 
@@ -2822,7 +2822,28 @@ def compare_ready_state_tax_units(
     if axiom_runner is None:
         from .tax_populace import run_axiom_program
 
-        axiom_runner = run_axiom_program
+        recorded_receipt = dict(expected_engine_receipt or {})
+
+        def axiom_runner(**kwargs: Any) -> list[dict[str, Any]]:
+            binary = (
+                Path(kwargs["axiom_rules_path"])
+                / "target" / "release" / "axiom-rules-engine"
+            )
+            receipt = engine_receipt(binary)
+            if recorded_receipt and any(
+                recorded_receipt.get(field) != receipt.get(field)
+                for field in ("binary_sha256", "commit")
+            ):
+                raise StateTaxPopulationRoutingError(
+                    "Axiom engine identity changed between campaign executions"
+                )
+            recorded_receipt.update(receipt)
+            results = run_axiom_program(**kwargs)
+            if engine_receipt(binary)["binary_sha256"] != receipt["binary_sha256"]:
+                raise StateTaxPopulationRoutingError(
+                    "Axiom engine binary changed during campaign execution"
+                )
+            return results
 
     comparisons: dict[str, dict[str, Any]] = {}
     all_mismatches: list[dict[str, Any]] = []

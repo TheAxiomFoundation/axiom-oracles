@@ -18,6 +18,7 @@ used.
 
 from __future__ import annotations
 
+from copy import deepcopy
 import json
 import sys
 from datetime import datetime
@@ -31,6 +32,7 @@ from axiom_oracles.comparison.dispositions import (
     load_dispositions,
 )
 from axiom_oracles.provenance import RUN_KINDS, build_provenance
+from axiom_oracles.engine_publication import validate_engine_identity
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 REPORTS = REPO_ROOT / "reports"
@@ -334,6 +336,25 @@ def validate_campaign_run_provenance(campaign: dict) -> tuple[str, str, dict]:
     return generated_at, run_kind, runtime
 
 
+def campaign_engine_provenance(campaign: dict, runtime: dict) -> dict:
+    """Carry the source run's identity into its projection without relabelling.
+
+    Older campaigns already recorded the executable digest under the runtime
+    block. Normalize that historical evidence; never inspect the publisher's
+    engine checkout or executable. Campaigns with the canonical block keep it
+    verbatim, including any additional receipt evidence.
+    """
+
+    source_provenance = campaign.get("provenance")
+    if isinstance(source_provenance, dict) and "engine" in source_provenance:
+        engine = deepcopy(source_provenance["engine"])
+    else:
+        engine = deepcopy(runtime["axiom_engine"])
+        engine["binary_sha256"] = engine.pop("executable_sha256")
+    validate_engine_identity({"provenance": {"engine": engine}})
+    return engine
+
+
 def standard_mismatch_row(row: dict, *, concept: str) -> dict:
     """Give a campaign mismatch the v2 row identity dispositions select on.
 
@@ -419,6 +440,7 @@ def project_state(
     }
     generated_at, run_kind, runtime = validate_campaign_run_provenance(campaign)
     rulespec = runtime.get("rulespec") or {}
+    engine = campaign_engine_provenance(campaign, runtime)
     standard_provenance = build_provenance(
         generated_by=(
             "scripts/emit_populace_campaign_artifacts.py"
@@ -435,6 +457,7 @@ def project_state(
         if rulespec.get("repository")
         else None,
     )
+    standard_provenance["engine"] = engine
     standard_provenance.update(
         {
             "campaign_report": source_name,

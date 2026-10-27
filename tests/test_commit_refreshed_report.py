@@ -13,6 +13,7 @@ gates ci.yml runs.
 
 from __future__ import annotations
 
+import ctypes
 import hashlib
 import json
 import os
@@ -103,6 +104,29 @@ GIT_ENV = {
     "GIT_CONFIG_SYSTEM": os.devnull,
 }
 
+_CLONEFILE = (
+    getattr(ctypes.CDLL(None, use_errno=True), "clonefile", None)
+    if sys.platform == "darwin" else None
+)
+if _CLONEFILE is not None:
+    _CLONEFILE.argtypes = [ctypes.c_char_p, ctypes.c_char_p, ctypes.c_int]
+    _CLONEFILE.restype = ctypes.c_int
+
+
+def _copy_fixture_file(source: str | Path, destination: str | Path) -> str:
+    """Use APFS copy-on-write so exact fixture copies do not fill the disk.
+
+    Other platforms, or a different destination filesystem, retain copy2's
+    normal semantics. Reflinks keep writes isolated between test checkouts.
+    """
+    # clonefile already copies attributes, including the executable bit and
+    # timestamps. Repeating copystat adds several syscalls per fixture file.
+    if _CLONEFILE is not None and _CLONEFILE(
+        os.fsencode(source), os.fsencode(destination), 0
+    ) == 0:
+        return str(destination)
+    return shutil.copy2(source, destination)
+
 
 @pytest.fixture(autouse=True)
 def _isolated_rulespec_checkout(tmp_path, monkeypatch):
@@ -146,28 +170,110 @@ def _bind_seed_snapshot(seed: Path) -> None:
     _git(seed, "add", "--", oracle_data.SNAPSHOT_PATH)
 
 
+def _seed_source_fingerprint() -> str:
+    """Bind a reusable seed to source blobs, edits, new files, and factory code.
+
+    Unchanged report bytes are already named by the source index's Git blob
+    IDs, avoiding another 500 MB hashing pass for each bounded pytest batch.
+    """
+    def output(*args: str) -> bytes:
+        return subprocess.run(
+            ["git", *args], cwd=REPO_ROOT, env={**os.environ, **GIT_ENV},
+            check=True, capture_output=True,
+        ).stdout
+
+    root_markdown = [
+        path for path in output("ls-files", "--cached", "--others", "-z", "--", "*.md")
+        .decode().split("\0")
+        if path and Path(path).parent == Path(".")
+    ]
+    scope = [
+        *SEED_DIRS, SEED_DATA, "dashboard/src/utils/suites.js",
+        "tests/test_commit_refreshed_report.py", *root_markdown,
+    ]
+    untracked = []
+    for relative in output("ls-files", "--others", "-z", "--", *scope).decode().split("\0"):
+        path = Path(relative)
+        if not relative or any(
+            part in {"__pycache__", ".venv"} or part.endswith(".pyc")
+            for part in path.parts
+        ):
+            continue
+        untracked.append((relative, hashlib.sha256((REPO_ROOT / path).read_bytes()).hexdigest()))
+    fingerprint = {
+        "index": hashlib.sha256(output("ls-files", "--stage", "-z", "--", *scope)).hexdigest(),
+        "diff": hashlib.sha256(output(
+            "diff", "--no-ext-diff", "--no-textconv", "--binary", "HEAD", "--", *scope,
+        )).hexdigest(),
+        "untracked": sorted(untracked),
+        "factory": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+    }
+    return hashlib.sha256(json.dumps(fingerprint, sort_keys=True).encode()).hexdigest()
+
+
 @pytest.fixture(scope="session")
 def seed_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
     """This repo's relevant subtrees, committed once as a throwaway git repo."""
-    seed = tmp_path_factory.mktemp("affected-rerun") / "seed"
+    cache = os.environ.get("AXIOM_ORACLES_PUBLICATION_SEED")
+    fingerprint = _seed_source_fingerprint() if cache else None
+    seed = Path(cache).expanduser().resolve() if cache else (
+        tmp_path_factory.mktemp("affected-rerun") / "seed"
+    )
+    marker = seed.parent / f"{seed.name}.source-fingerprint.json"
+    if cache and seed.exists():
+        if not marker.exists():
+            raise RuntimeError(f"publication seed cache is incomplete: {seed}")
+        recorded = json.loads(marker.read_text())
+        if recorded.get("fingerprint") != fingerprint:
+            raise RuntimeError(f"publication seed cache is stale for the current sources: {seed}")
+        if (
+            _git(seed, "rev-parse", "HEAD") != recorded.get("commit")
+            or _git(seed, "rev-parse", "refs/heads/main") != recorded.get("commit")
+            or _git(seed, "symbolic-ref", "HEAD") != f"refs/heads/{DATA_BRANCH}"
+            or _git(seed, "status", "--porcelain", "--untracked-files=all")
+        ):
+            raise RuntimeError(f"publication seed cache was modified: {seed}")
+        return seed
+    if cache:
+        seed.mkdir(parents=True)
     ignore = shutil.ignore_patterns("__pycache__", "*.pyc", ".venv")
     for d in SEED_DIRS:
-        shutil.copytree(REPO_ROOT / d, seed / d, ignore=ignore)
-    shutil.copytree(REPO_ROOT / SEED_DATA, seed / SEED_DATA, ignore=ignore)
+        shutil.copytree(
+            REPO_ROOT / d, seed / d, ignore=ignore, copy_function=_copy_fixture_file
+        )
+    shutil.copytree(
+        REPO_ROOT / SEED_DATA, seed / SEED_DATA, ignore=ignore,
+        copy_function=_copy_fixture_file,
+    )
     # The unexplained publication gate scopes out kind:"diagnostic" suites via
     # the dashboard's suite table; without it, nyc-synthetic (a diagnostic
     # suite the gate must ignore) would trip the fixture's ratchet.
     suites_table = Path("dashboard/src/utils/suites.js")
     (seed / suites_table).parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(REPO_ROOT / suites_table, seed / suites_table)
+    _copy_fixture_file(REPO_ROOT / suites_table, seed / suites_table)
     for md in REPO_ROOT.glob("*.md"):  # dispositions evidence (e.g. PROGRESS.md)
-        shutil.copy2(md, seed / md.name)
+        _copy_fixture_file(md, seed / md.name)
     _grant_perturbation_headroom(seed)
     _git(seed, "init", "-q", "-b", "main")
-    _git(seed, "add", "-A")
+    if cache:
+        # Borrow only source objects, never its refs/history: the synthetic
+        # ratchet baseline must remain independent of real repository history.
+        objects = _git(
+            REPO_ROOT, "rev-parse", "--path-format=absolute", "--git-path", "objects"
+        )
+        (seed / ".git/objects/info/alternates").write_text(objects + "\n")
+        for directory in (*SEED_DIRS, SEED_DATA):
+            _git(seed, "add", "--", directory)
+        _git(seed, "add", "--", "dashboard/src/utils/suites.js", "*.md")
+    else:
+        _git(seed, "add", "-A")
     _bind_seed_snapshot(seed)
     _git(seed, "commit", "-q", "-m", "seed")
     _git(seed, "checkout", "-q", "-b", DATA_BRANCH)
+    if cache:
+        marker.write_text(json.dumps({
+            "fingerprint": fingerprint, "commit": _git(seed, "rev-parse", "HEAD"),
+        }) + "\n")
     return seed
 
 
@@ -217,12 +323,83 @@ def origin(seed_repo: Path, tmp_path: Path) -> Path:
     """A fresh BARE origin per test (pushable; hardlinked, so cheap)."""
     bare = tmp_path / "origin.git"
     _git(seed_repo.parent, "clone", "-q", "--bare", str(seed_repo), str(bare))
+    _git(bare, "config", "test.seedSnapshot", str(seed_repo))
     return bare
 
 
 def _clone(origin: Path, dst: Path, branch: str = DATA_BRANCH) -> Path:
-    _git(origin.parent, "clone", "-q", "--branch", branch, str(origin), str(dst))
+    # Git's ordinary checkout writes a fresh ~500 MB per clone. Materialize
+    # unchanged blobs from the seed using independent copy-on-write files;
+    # every different blob still comes from the actual branch being tested.
+    _git(
+        origin.parent, "clone", "-q", "--no-checkout", "--branch", branch,
+        str(origin), str(dst),
+    )
+    seed = Path(_git(origin, "config", "--get", "test.seedSnapshot"))
+
+    def entries(root: Path) -> dict[str, tuple[str, str]]:
+        result = {}
+        for entry in _git(root, "ls-tree", "-r", "-z", "HEAD").split("\0"):
+            if entry:
+                metadata, path = entry.split("\t", 1)
+                mode, _, digest = metadata.split(" ")
+                result[path] = (mode, digest)
+        return result
+
+    seed_entries = entries(seed)
+    for relative, identity in entries(dst).items():
+        path = dst / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        mode, _ = identity
+        if seed_entries.get(relative) == identity:
+            if mode == "120000":
+                path.symlink_to(os.readlink(seed / relative))
+            else:
+                _copy_fixture_file(seed / relative, path)
+        else:
+            blob = subprocess.run(
+                ["git", "show", f"HEAD:{relative}"], cwd=dst,
+                env={**os.environ, **GIT_ENV}, capture_output=True, check=True,
+            ).stdout
+            if mode == "120000":
+                path.symlink_to(os.fsdecode(blob))
+            else:
+                path.write_bytes(blob)
+                path.chmod(int(mode, 8) & 0o777)
+    _git(dst, "read-tree", "HEAD")
+    _git(dst, "update-index", "--refresh")
     return dst
+
+
+def test_fixture_clones_materialize_branch_blobs_modes_and_isolated_copies(tmp_path):
+    seed = tmp_path / "tiny-seed"
+    seed.mkdir()
+    _git(seed, "init", "-q", "-b", DATA_BRANCH)
+    (seed / "unchanged").write_text("independent copy\n")
+    (seed / "updated").write_text("old branch\n")
+    (seed / "removed").write_text("removed in next commit\n")
+    _git(seed, "add", ".")
+    _git(seed, "commit", "-q", "-m", "baseline")
+    origin = tmp_path / "tiny-origin.git"
+    _git(tmp_path, "clone", "-q", "--bare", str(seed), str(origin))
+    _git(origin, "config", "test.seedSnapshot", str(seed))
+    producer = tmp_path / "tiny-producer"
+    _git(tmp_path, "clone", "-q", str(origin), str(producer))
+    (producer / "updated").write_text("actual branch\n")
+    (producer / "updated").chmod(0o755)
+    (producer / "removed").unlink()
+    (producer / "new-link").symlink_to("updated")
+    _git(producer, "add", "-A")
+    _git(producer, "commit", "-q", "-m", "changed branch")
+    _git(producer, "push", "-q", "origin", DATA_BRANCH)
+    checkout = _clone(origin, tmp_path / "tiny-checkout")
+    assert _git(checkout, "status", "--porcelain") == ""
+    assert (checkout / "updated").read_text() == "actual branch\n"
+    assert (checkout / "updated").stat().st_mode & 0o111
+    assert (checkout / "new-link").is_symlink()
+    assert not (checkout / "removed").exists()
+    (checkout / "unchanged").write_text("changed only in clone\n")
+    assert (seed / "unchanged").read_text() == "independent copy\n"
 
 
 def _main_tip(clone: Path) -> str:
@@ -283,8 +460,18 @@ def _perturb_report(clone: Path, report: str = REPORT) -> str:
         "committed report timestamp collides with now; cannot discriminate"
     )
     doc["provenance"]["generated_at"] = sentinel
+    _stamp_test_engine(doc)
     path.write_text(json.dumps(doc, indent=2) + "\n")
     return sentinel
+
+
+def _stamp_test_engine(report: dict) -> None:
+    """The synthetic rerun has a resolved engine, as real new runs must."""
+    report.setdefault("provenance", {})["engine"] = {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": "a" * 40,
+        "binary_sha256": hashlib.sha256(b"synthetic test engine").hexdigest(),
+    }
 
 
 def _staleness_gate(
@@ -328,6 +515,7 @@ def _assert_origin_tip_green(origin: Path, tmp_path: Path) -> Path:
         "publish_issue_ledgers.py",
         "exercise_census.py",
         "certify.py",
+        "check_engine_identity.py",
     ):
         result = _staleness_gate(verify, script)
         assert result.returncode == 0, (
@@ -440,6 +628,71 @@ def test_reemission_guard_runs_on_every_attempt_before_regeneration():
     assert loop.index('cp -p "$stash/$path" "$path"') < guard
     assert guard < loop.index("regenerate_derived")
     assert guard < loop.index("git add -A")
+    identity = loop.index('"$PYTHON" scripts/check_engine_identity.py --check')
+    assert guard < identity < loop.index("regenerate_derived")
+    assert loop.index("verify_derived") < loop.rindex(
+        '"$PYTHON" scripts/check_engine_identity.py --check'
+    ) < loop.index("git add -A")
+
+
+@pytest.mark.parametrize("resolved", [False, True])
+def test_generic_publication_check_validates_engine_identity(tmp_path, resolved):
+    """The generic publisher's check-only route uses the real identity gate.
+
+    Unrelated freshness commands are recorded successful prerequisites here;
+    the full end-to-end tests exercise those gates against the complete seed.
+    """
+    checkout = tmp_path / "generic-publication"
+    (checkout / "scripts").mkdir(parents=True)
+    for relative in (SCRIPT, "scripts/check_engine_identity.py"):
+        _copy_fixture_file(REPO_ROOT / relative, checkout / relative)
+    shutil.copytree(
+        REPO_ROOT / "axiom_oracles", checkout / "axiom_oracles",
+        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"),
+        copy_function=_copy_fixture_file,
+    )
+    report = {"engines": {"left": "axiom", "right": "policyengine"}}
+    if resolved:
+        _stamp_test_engine(report)
+    path = checkout / REPORT
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps(report))
+    allowlist = checkout / "conformance/legacy-engine-identity.json"
+    allowlist.parent.mkdir()
+    allowlist.write_text(json.dumps({
+        "schema": "axiom_oracles.legacy-engine-identity.v1", "reports": {},
+    }))
+    _git(checkout, "init", "-q", "-b", "main")
+    _git(checkout, "add", "--", REPORT, "conformance/legacy-engine-identity.json")
+    _git(checkout, "commit", "-q", "-m", "generic publication candidate")
+    checks = tmp_path / "checks.log"
+    wrapper = tmp_path / "python-wrapper"
+    wrapper.write_text(
+        "#!/bin/sh\n"
+        f'printf "%s\\n" "$1" >> "{checks}"\n'
+        'if [ "$1" = "scripts/check_engine_identity.py" ]; then\n'
+        f'  exec "{sys.executable}" "$@"\n'
+        "fi\n"
+    )
+    wrapper.chmod(0o755)
+    result = subprocess.run(
+        [str(checkout / SCRIPT), "recovery", DATA_BRANCH], cwd=checkout,
+        env=_mode_env(
+            PYTHON=str(wrapper), VERIFY_DERIVED_REFRESH="1", SIMULATE_DERIVED_REFRESH="0",
+        ),
+        capture_output=True, text=True,
+    )
+    called = checks.read_text().splitlines()
+    identity = called.index("scripts/check_engine_identity.py")
+    assert called.index("scripts/certify.py") < identity
+    assert "engine identity: 1 Axiom reports" in result.stdout
+    if resolved:
+        assert result.returncode == 0, result.stderr
+        assert identity < called.index("scripts/unexplained_ratchet.py")
+    else:
+        assert result.returncode != 0
+        assert "provenance.engine.commit must be 40 hex characters" in result.stderr
+        assert "scripts/unexplained_ratchet.py" not in called
 
 
 def test_reemission_never_replaces_a_real_report(origin, tmp_path):
@@ -476,7 +729,16 @@ def test_reemission_over_a_reemission_pushes_nothing(origin, tmp_path):
     # The tip as the churn left it: a committed re-emission, with every derived
     # artifact regenerated around it (the script's own simulate mode).
     seed = _clone(origin, tmp_path / "seed-reemitted")
+    # This fixture edits the historical bytes, so give its source run a
+    # resolved test identity before copying it. Both re-emissions preserve
+    # that source identity, including when the publisher runs later.
+    source_path = seed / EUROMOD_REPORT
+    source_report = json.loads(source_path.read_text())
+    _stamp_test_engine(source_report)
+    source_engine = source_report["provenance"]["engine"]
+    source_path.write_text(json.dumps(source_report, indent=2) + "\n")
     _reemit(seed, EUROMOD_REPORT)
+    assert json.loads(source_path.read_text())["provenance"]["engine"] == source_engine
     simulate = subprocess.run(
         [str(seed / SCRIPT), "uk-winter-fuel-ukmod", DATA_BRANCH],
         cwd=seed,
@@ -511,6 +773,7 @@ def test_reemission_over_a_reemission_pushes_nothing(origin, tmp_path):
     assert _git(origin, "rev-parse", DATA_BRANCH) == before
     verify = _clone(origin, tmp_path / "verify-reemit-again")
     assert (verify / EUROMOD_REPORT).read_bytes() == committed
+    assert json.loads((verify / EUROMOD_REPORT).read_text())["provenance"]["engine"] == source_engine
 
 
 def test_refresh_pushes_report_with_derived_artifacts(origin, tmp_path):
@@ -638,6 +901,7 @@ def test_be_refresh_regenerates_euromod_coverage_rollup(origin, tmp_path):
     doc = json.loads(path.read_text())
     doc["summary"]["match_count"] -= 1
     doc["summary"]["mismatch_count"] += 1
+    _stamp_test_engine(doc)
     path.write_text(json.dumps(doc, indent=2) + "\n")
     assert _staleness_gate(clone, "apply_dispositions.py").returncode == 1
 
@@ -916,6 +1180,7 @@ def _add_first_time_report(clone: Path, suite: str) -> str:
     filename = f"axiom-policyengine-{suite}.json"
     doc = json.loads((clone / REPORT).read_text())
     doc["suite"] = suite
+    _stamp_test_engine(doc)
     (clone / SEED_DATA / filename).write_text(json.dumps(doc, indent=2) + "\n")
     manifest_path = clone / SEED_DATA / "manifest.json"
     manifest = (
@@ -1245,6 +1510,7 @@ def test_pack_never_fetches_resets_commits_or_pushes():
         assert command not in pack, f"pack must never run `{command}`"
     for step in (
         '"$PYTHON" scripts/guard_reemitted_reports.py',
+        '"$PYTHON" scripts/check_engine_identity.py --check',
         "regenerate_derived",
         "verify_derived",
         '"$PYTHON" scripts/unexplained_ratchet.py --check',
@@ -1252,6 +1518,9 @@ def test_pack_never_fetches_resets_commits_or_pushes():
         assert step in pack, f"pack must vet with {step}"
     # The bundle appears only after the ratchet passed.
     assert pack.index("unexplained_ratchet.py --check") < pack.index('mv "$staging"')
+    assert pack.index("guard_reemitted_reports.py") < pack.index("check_engine_identity.py")
+    assert pack.index("check_engine_identity.py") < pack.index("regenerate_derived")
+    assert pack.index("verify_derived") < pack.rindex("check_engine_identity.py")
 
 
 def test_pack_writes_a_bundle_and_never_touches_git_remotes(origin, tmp_path):
@@ -1321,6 +1590,42 @@ def test_pack_ratchet_refusal_packs_nothing_and_fails(origin, tmp_path):
     assert "REFUSED" in result.stderr
     assert "[nc-income-tax-liability] RATCHET regressed" in result.stderr
     assert [p for p in bundles.iterdir() if not p.name.startswith(".")] == []
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip
+
+
+def test_pack_rejects_new_report_without_resolved_engine(origin, tmp_path):
+    clone = _clone(origin, tmp_path / "unresolved-leg")
+    _perturb_report(clone)
+    path = clone / REPORT
+    report = json.loads(path.read_text())
+    report["provenance"]["engine"] = {"binary_sha256": "b" * 64}
+    path.write_text(json.dumps(report, indent=2) + "\n")
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
+    bundles = tmp_path / "unresolved-bundles"
+    result = _pack(clone, bundles, "nc-income-tax-liability")
+    assert result.returncode != 0
+    assert "provenance.engine.commit must be 40 hex characters" in result.stderr
+    assert not (bundles / "nc-income-tax-liability").exists()
+    assert _git(origin, "rev-parse", DATA_BRANCH) == tip
+
+
+def test_publish_rejects_unresolved_engine_in_prepacked_bundle(origin, seed_repo, tmp_path):
+    # A malformed prepacked payload needs no producer checkout. Read the
+    # immutable baseline, then exercise the independent publisher unchanged.
+    report = json.loads((seed_repo / REPORT).read_text())
+    report["provenance"]["engine"] = {"commit": "a" * 40}
+    bundles = tmp_path / "unresolved-bundles"
+    _write_bundle(
+        bundles,
+        "nc-income-tax-liability",
+        {REPORT: (json.dumps(report, indent=2) + "\n").encode()},
+        baseline_root=seed_repo,
+    )
+    tip = _git(origin, "rev-parse", DATA_BRANCH)
+    publisher = _clone(origin, tmp_path / "unresolved-publisher")
+    result = _publish(publisher, bundles)
+    assert result.returncode != 0
+    assert "provenance.engine.binary_sha256 must be 64 hex characters" in result.stderr
     assert _git(origin, "rev-parse", DATA_BRANCH) == tip
 
 

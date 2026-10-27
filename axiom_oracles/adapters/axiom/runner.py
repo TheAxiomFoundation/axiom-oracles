@@ -34,6 +34,7 @@ from ...engine_compat import (
     explicit_engine_roots,
     import_prefixes,
 )
+from ...engine_identity import EngineIdentityError, engine_receipt, record_engine_receipt
 
 
 SubprocessRun = Callable[..., subprocess.CompletedProcess[str]]
@@ -96,6 +97,32 @@ class AxiomRulesRunner(EngineAdapter):
         self.batch_size = batch_size
         self._subprocess_run = subprocess_run
         self._staged_roots: StagedRootCache | None = None
+        self.engine_receipt: dict[str, Any] | None = None
+
+    def _execute_engine(self, args: list[str], **kwargs: Any) -> Any:
+        """Receipt the executable at each invocation, including cached binaries."""
+        receipt = engine_receipt(args[0])
+        previous = self.engine_receipt
+        if previous is not None and (
+            previous.get("binary_sha256") != receipt.get("binary_sha256")
+            or previous.get("commit") != receipt.get("commit")
+        ):
+            raise EngineIdentityError("Engine identity changed during this oracle run")
+        invocation = list(args)
+        if receipt["binary_sha256"] is not None:
+            invocation[0] = receipt["binary_path"]
+        self.engine_receipt = receipt
+        process = self._subprocess_run(invocation, **kwargs)
+        after = engine_receipt(invocation[0])
+        if after["binary_sha256"] != receipt["binary_sha256"]:
+            raise EngineIdentityError("Engine executable changed during execution")
+        record_engine_receipt(receipt)
+        return process
+
+    def _raw_with_engine_receipt(self, raw: Any) -> dict[str, Any]:
+        result = dict(raw) if isinstance(raw, Mapping) else {"response": raw}
+        result["engine_receipt"] = dict(self.engine_receipt or {})
+        return result
 
     def run_cases(
         self,
@@ -272,7 +299,7 @@ class AxiomRulesRunner(EngineAdapter):
             composed=composed,
             env=self._compile_env(),
             legacy_program=legacy_program_path,
-            run=self._subprocess_run,
+            run=self._execute_engine,
         )
         return artifact_path
 
@@ -461,12 +488,14 @@ class AxiomRulesRunner(EngineAdapter):
             ambiguities.extend(raw_ambiguities)
 
         def case_raw(raw: Any, index: int) -> Any:
-            return with_relation_binding_diagnostics(
-                raw,
-                relation_binding_diagnostics(ambiguities, namespace=f"case-{index}::"),
+            return self._raw_with_engine_receipt(
+                with_relation_binding_diagnostics(
+                    raw,
+                    relation_binding_diagnostics(ambiguities, namespace=f"case-{index}::"),
+                )
             )
 
-        process = self._subprocess_run(
+        process = self._execute_engine(
             [
                 str(self.binary_path),
                 "run-compiled",
@@ -651,7 +680,7 @@ class AxiomRulesRunner(EngineAdapter):
             )
             ambiguities.extend(raw_ambiguities)
         diagnostics = relation_binding_diagnostics(ambiguities)
-        process = self._subprocess_run(
+        process = self._execute_engine(
             [
                 str(self.binary_path),
                 "run-compiled",
@@ -670,7 +699,9 @@ class AxiomRulesRunner(EngineAdapter):
                 household_id=case.case_id,
                 values={},
                 errors=(error,),
-                raw=with_relation_binding_diagnostics(None, diagnostics),
+                raw=self._raw_with_engine_receipt(
+                    with_relation_binding_diagnostics(None, diagnostics)
+                ),
             )
         try:
             payload = json.loads(process.stdout)
@@ -680,7 +711,9 @@ class AxiomRulesRunner(EngineAdapter):
                 household_id=case.case_id,
                 values={},
                 errors=(f"Axiom RuleSpec execution emitted invalid JSON: {exc}",),
-                raw=with_relation_binding_diagnostics(process.stdout, diagnostics),
+                raw=self._raw_with_engine_receipt(
+                    with_relation_binding_diagnostics(process.stdout, diagnostics)
+                ),
             )
         aggregation = _case_result_aggregation(case)
         raw: Any = payload
@@ -709,13 +742,17 @@ class AxiomRulesRunner(EngineAdapter):
                     household_id=case.case_id,
                     values={},
                     errors=aggregation_errors,
-                    raw=with_relation_binding_diagnostics(raw, diagnostics),
+                    raw=self._raw_with_engine_receipt(
+                        with_relation_binding_diagnostics(raw, diagnostics)
+                    ),
                 )
         return EngineResult(
             engine=self.name,
             household_id=case.case_id,
             values=values,
-            raw=with_relation_binding_diagnostics(raw, diagnostics),
+            raw=self._raw_with_engine_receipt(
+                with_relation_binding_diagnostics(raw, diagnostics)
+            ),
         )
 
     def _execution_request(
@@ -1290,15 +1327,25 @@ def _select_candidate_result(
     candidates: list[EngineResult],
 ) -> EngineResult:
     diagnostics: dict = {}
+    receipt: dict = {}
     for candidate in candidates:
         if isinstance(candidate.raw, Mapping):
+            candidate_receipt = candidate.raw.get("engine_receipt")
+            if candidate_receipt:
+                if receipt and receipt != candidate_receipt:
+                    raise EngineIdentityError("Engine identity changed between candidate evaluations")
+                receipt = dict(candidate_receipt)
             merge_relation_binding_diagnostics(
                 diagnostics,
                 candidate.raw.get("relation_binding_diagnostics", {}),
             )
 
     def selection_raw(raw: Any) -> Any:
-        return with_relation_binding_diagnostics(raw, diagnostics)
+        result = with_relation_binding_diagnostics(raw, diagnostics)
+        if receipt:
+            result = dict(result) if isinstance(result, Mapping) else {"response": result}
+            result["engine_receipt"] = dict(receipt)
+        return result
 
     raw_selection = case.metadata.get(AXIOM_RESULT_SELECTION_METADATA_KEY)
     if not isinstance(raw_selection, Mapping):

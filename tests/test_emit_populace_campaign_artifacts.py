@@ -1,15 +1,19 @@
 import hashlib
 import json
 from pathlib import Path
+from subprocess import CompletedProcess
 
 import pytest
 import yaml
-from hypothesis import given, strategies as st
+from hypothesis import HealthCheck, given, settings, strategies as st
 
 from axiom_oracles.bridges.state_tax_populace_runner import (
     require_policyengine_us_floor,
 )
 import scripts.emit_populace_campaign_artifacts as emitter
+from axiom_oracles.adapters.axiom.runner import AxiomRulesRunner
+from axiom_oracles.bridges import state_tax_populace_runner as campaign_runner
+from axiom_oracles.engine_identity import engine_binding_receipt_path, engine_receipt
 from scripts.emit_populace_campaign_artifacts import (
     RETIRED_MANIFEST_REPORTS,
     apply_suite_dispositions,
@@ -1796,6 +1800,15 @@ def test_projected_report_carries_standard_rulespec_provenance():
     assert provenance["schema"] == "axiom_oracles.provenance.v1"
     assert provenance["generated_at"] == "2026-07-26T12:00:00Z"
     assert provenance["run_kind"] == "manual"
+    assert provenance["engine"] == {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": "2" * 40,
+        "binary_sha256": "4" * 64,
+        "working_tree": "clean",
+    }
+    assert provenance["runtime_provenance"]["axiom_engine"] == (
+        _campaign()["runtime_provenance"]["axiom_engine"]
+    )
     assert provenance["rulespecs"] == [
         {
             "repo": "TheAxiomFoundation/rulespec-us",
@@ -1913,6 +1926,89 @@ def test_reprojection_is_deterministic_and_preserves_campaign_time():
 
     assert first == second
     assert first["provenance"]["generated_at"] == "2026-07-26T12:00:00Z"
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [("commit", "abc123"), ("commit", "z" * 40),
+     ("executable_sha256", "1234"), ("executable_sha256", "z" * 64)],
+)
+def test_projector_rejects_malformed_source_engine_identity(field, value):
+    campaign = _campaign()
+    campaign["runtime_provenance"]["axiom_engine"][field] = value
+    with pytest.raises(ValueError, match="commit|binary_sha256"):
+        project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+
+def test_projector_does_not_replace_unresolved_canonical_identity_with_legacy_fields():
+    campaign = _campaign()
+    campaign["provenance"] = {"engine": {"binary_sha256": "4" * 64}}
+    with pytest.raises(ValueError, match="commit"):
+        project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+
+@given(
+    commit=st.text(alphabet="0123456789abcdef", min_size=40, max_size=40),
+    digest=st.text(alphabet="0123456789abcdef", min_size=64, max_size=64),
+    version=st.one_of(st.none(), st.text(max_size=40)),
+)
+def test_reprojection_preserves_canonical_source_engine_exactly(commit, digest, version):
+    campaign = _campaign()
+    engine = {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": commit,
+        "binary_sha256": digest,
+        "version": version,
+        "source_status": "recorded by original campaign",
+    }
+    campaign["provenance"] = {"engine": engine}
+
+    first = project_state("NC", _nc_entry(), campaign, "campaign.json")
+    second = project_state("NC", _nc_entry(), campaign, "campaign.json")
+
+    assert first["provenance"]["engine"] == second["provenance"]["engine"] == engine
+    assert first["provenance"]["engine"] is not engine
+    assert campaign["provenance"]["engine"] == engine
+
+
+@settings(deadline=None, suppress_health_check=[HealthCheck.function_scoped_fixture])
+@given(payload=st.binary(max_size=4096))
+def test_runner_and_campaign_projection_agree_for_cached_binary(
+    tmp_path, monkeypatch, payload
+):
+    engine_root = tmp_path / "engine"
+    binary = engine_root / "target/release/axiom-rules-engine"
+    binary.parent.mkdir(parents=True, exist_ok=True)
+    binary.write_bytes(payload)
+    digest = hashlib.sha256(payload).hexdigest()
+    engine_binding_receipt_path(binary).write_text(json.dumps({
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "engine_commit": "2" * 40,
+        "binary_sha256": digest,
+        "working_tree": "clean",
+        "version": "1.0",
+    }))
+    executed_hashes = []
+
+    def execute(args, **kwargs):
+        executed_hashes.append(hashlib.sha256(Path(args[0]).read_bytes()).hexdigest())
+        return CompletedProcess(args, 0, stdout="", stderr="")
+
+    runner = AxiomRulesRunner(binary_path=binary, subprocess_run=execute)
+    runner._execute_engine([str(binary), "run-compiled"])
+    monkeypatch.setattr(campaign_runner, "_clean_git_commit", lambda *a, **k: "1" * 40)
+    monkeypatch.setattr(campaign_runner, "_package_version", lambda _: "1.0")
+    campaign = _campaign()
+    campaign["runtime_provenance"] = campaign_runner.runtime_provenance(
+        rulespec_root=tmp_path / "rulespec-us", axiom_rules_path=engine_root
+    )
+    report = project_state("NC", _nc_entry(), campaign, "campaign.json")
+    projected = report["provenance"]["engine"]
+
+    assert executed_hashes == [digest]
+    assert runner.engine_receipt == engine_receipt(binary)
+    for field in ("repository", "commit", "binary_sha256", "version", "source_status"):
+        assert projected[field] == runner.engine_receipt[field]
 
 
 NC_OUTPUT = (
@@ -2204,12 +2300,20 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
         }
     ]
 
-    # Re-projecting the committed campaign reproduces the committed report.
+    # Re-projecting keeps the committed comparison and promotes its existing
+    # runtime identity into the canonical block. Historical files stay intact.
     reprojected = apply_suite_dispositions(
         project_state("NC", state, campaign, campaign_path.name)
     )
+    expected_report = json.loads(report_path.read_text())
+    expected_report["provenance"]["engine"] = {
+        "repository": "TheAxiomFoundation/axiom-rules-engine",
+        "commit": engine_sha,
+        "binary_sha256": executable_sha,
+        "working_tree": "clean",
+    }
     assert json.dumps(reprojected, indent=1, sort_keys=True) + "\n" == (
-        report_path.read_text()
+        json.dumps(expected_report, indent=1, sort_keys=True) + "\n"
     )
     monkeypatch.setattr(emitter, "CASES_ROOT", tmp_path)
     emitter.emit_case_chunks("NC", state)

@@ -26,6 +26,7 @@ from typing import Any
 
 import yaml
 
+from ..engine_identity import EngineIdentityError, engine_receipt, record_engine_receipt
 from .jurisdiction import jurisdiction_prefix
 from .relation_binding import (
     RelationBinder,
@@ -2908,6 +2909,28 @@ def run_axiom_program(
     binary = axiom_rules_path / "target" / "release" / "axiom-rules-engine"
     if not binary.exists():
         raise SystemExit(f"axiom-rules-engine binary not found: {binary}")
+    expected_receipt = engine_receipt(binary)
+
+    def execute_engine(command: list[str], **kwargs: Any) -> Any:
+        receipt = engine_receipt(binary)
+        if any(
+            receipt.get(field) != expected_receipt.get(field)
+            for field in ("commit", "binary_sha256")
+        ):
+            raise EngineIdentityError("Engine identity changed between program invocations")
+        invocation = list(command)
+        if receipt["binary_sha256"] is not None:
+            invocation[0] = receipt["binary_path"]
+        process = subprocess.run(invocation, **kwargs)
+        after = engine_receipt(invocation[0])
+        if any(
+            after.get(field) != receipt.get(field)
+            for field in ("commit", "binary_sha256")
+        ):
+            raise EngineIdentityError("Engine executable changed during program invocation")
+        record_engine_receipt(receipt)
+        return process
+
     env = os.environ.copy()
     roots = [rulespec_root, rulespec_root.parent]
     alias_parent = _rulespec_repo_alias_parent(rulespec_root)
@@ -2991,7 +3014,7 @@ def run_axiom_program(
             "--output",
             str(artifact),
         ]
-        compile_result = subprocess.run(
+        compile_result = execute_engine(
             base_cmd[:4] + ["--rulespec-root", str(engine_root)] + base_cmd[4:],
             capture_output=True,
             text=True,
@@ -3002,7 +3025,7 @@ def run_axiom_program(
         if compile_result.returncode != 0 and "unknown compile argument" in (
             compile_result.stderr or ""
         ):
-            compile_result = subprocess.run(
+            compile_result = execute_engine(
                 base_cmd,
                 capture_output=True,
                 text=True,
@@ -3022,7 +3045,7 @@ def run_axiom_program(
             rulespec_root=rulespec_root,
             binding_ambiguities=ambiguities,
         )
-        run_result = subprocess.run(
+        run_result = execute_engine(
             [str(binary), "run-compiled", "--artifact", str(artifact)],
             input=json.dumps(runtime_request),
             capture_output=True,

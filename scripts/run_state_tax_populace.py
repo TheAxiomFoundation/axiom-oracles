@@ -13,7 +13,8 @@ from axiom_oracles.adapters.taxsim.pins import (
     TaxsimLawYearError,
     require_law_years,
 )
-from axiom_oracles.provenance import resolve_run_kind
+from axiom_oracles.engine_identity import engine_receipt
+from axiom_oracles.provenance import build_provenance, resolve_run_kind
 from axiom_oracles.bridges.population import load_populace_dataset, population_table
 from axiom_oracles.bridges.state_tax_populace import (
     StateTaxPopulaceContract,
@@ -610,6 +611,10 @@ def main(argv: list[str] | None = None) -> int:
             unprojected_inputs=taxsim_unprojected_inputs,
             identity_recorder=taxsim_recorder,
         )
+    runtime = runtime_provenance(
+        rulespec_root=args.rulespec_root.resolve(),
+        axiom_rules_path=args.axiom_rules_path.resolve(),
+    )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -617,10 +622,7 @@ def main(argv: list[str] | None = None) -> int:
         "run_kind": resolve_run_kind(),
         "requested_states": sorted(requested_states),
         "dataset_identity": identity,
-        "runtime_provenance": runtime_provenance(
-            rulespec_root=args.rulespec_root.resolve(),
-            axiom_rules_path=args.axiom_rules_path.resolve(),
-        ),
+        "runtime_provenance": runtime,
         # Diagnostics describe the selected (graded) population — the same
         # routes the projection inputs were computed for.
         "projection_diagnostics": _projection_branch_diagnostics(
@@ -634,6 +636,7 @@ def main(argv: list[str] | None = None) -> int:
             contract=contract,
         ),
         "comparison": compare_ready_state_tax_units(
+            expected_engine_receipt=runtime.get("axiom_engine"),
             routes=comparison_routes,
             raw_persons=raw_persons,
             known_tax_unit_ids={route.tax_unit_id for route in routes},
@@ -651,6 +654,20 @@ def main(argv: list[str] | None = None) -> int:
             "skipped" if args.no_taxsim else "graded"
         ),
     }
+    engine = dict(report["runtime_provenance"].get("axiom_engine") or {})
+    if engine:
+        binary = (
+            args.axiom_rules_path.resolve()
+            / "target" / "release" / "axiom-rules-engine"
+        )
+        if engine_receipt(binary)["binary_sha256"] != engine["binary_sha256"]:
+            raise SystemExit("Axiom engine binary changed during campaign execution")
+    report["provenance"] = build_provenance(
+        generated_by=report["generated_by"],
+        generated_at=report["generated_at"],
+        run_kind=report["run_kind"],
+        engine=engine,
+    )
     if taxsim_recorder.to_dict():
         report["engine_identity"] = {"taxsim": taxsim_recorder.to_dict()}
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
