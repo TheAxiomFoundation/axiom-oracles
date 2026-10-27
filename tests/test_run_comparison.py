@@ -2290,6 +2290,14 @@ def test_euromod_synthetic_runner_forwards_extra_template_columns(
         captured.update({"command": command, "check": check, "cwd": cwd, "env": env})
 
     monkeypatch.setattr(run_comparison.subprocess, "run", fake_run)
+    # The engine directory is not a checkout; this test is about the EUROMOD
+    # command, so its binary is taken as found.
+    from axiom_oracles.engine_identity import engine_receipt
+
+    monkeypatch.setattr(
+        run_comparison, "_ensure_engine_binary",
+        lambda repo, *, kind: engine_receipt(engine_binary),
+    )
     run_comparison._run_euromod_synthetic_compare(
         {
             "axiom_rules_repo": str(engine_repo),
