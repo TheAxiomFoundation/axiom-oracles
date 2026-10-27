@@ -6,23 +6,31 @@ Invariants:
    holds a macOS (``/Users/<name>``) or Linux (``/home/<name>``) home path.
    Docs name a repo-relative path (``data/corpus``) or a placeholder
    (``<policyengine-uk checkout>``) instead.
-2. The scanner reports every ``/Users/<name>`` or ``/home/<name>`` (also with
-   JSON-escaped ``\\/`` separators) on its own line and column, except where
-   it is not a home path:
-   - inside a URL of any scheme but ``file:``. A URL ends at whitespace,
-     ``|``, ``;``, a quote or backtick, ``<`` or ``>``, or an unbalanced ``)``
-     or ``]``, so ``[site](https://host)|/home/<name>`` is still reported;
+2. The scanner reports every ``/Users/<name>`` or ``/home/<name>``, plain or
+   with JSON-escaped ``\\/`` separators, on its own line and column, except
+   where it is not a home path:
+   - continuing the path or fragment of a URL of any scheme but ``file:``
+     (``https://host/Users/<name>``, ``https://[::1]/home/<name>``,
+     ``https://host/#/home/<name>``, escaped ``https:\\/\\/host\\/home\\/<name>``).
+     One after ``=``, ``&`` or ``;`` in a URL is reported
+     (``?file=/Users/<name>``, ``curl https://host&&/Users/<name>``), and a URL
+     ends at whitespace, ``|``, ``;``, a quote or backtick, ``<``, ``>``, or an
+     unbalanced ``)`` or ``]``;
    - continuing a relative path: the text in front of it, back to the previous
-     space or punctuation, is a path segment (``data/home/<name>``,
-     ``host/Users/<name>``, ``/opt/x/home/<name>``, ``./home/<name>``). An
-     option flag (``-I/Users/...``) or underscores (``_/Users/..._``) there
-     are not segments, so those are reported;
+     space or punctuation, is a path segment joined by the same separator
+     (``data/home/<name>``, ``/opt/x/home/<name>``, ``./home/<name>``), or a
+     shell or format placeholder roots it (``$ROOT/home/<name>``,
+     ``${ROOT}/home/<name>``, ``$(pwd)/home/<name>``, ``{root}/home/<name>``).
+     Option flags (``-I/Users/...``) and underscores (``_/Users/..._``) are not
+     segments, a bare ``/`` before an escaped path is a delimiter
+     (``sed 's/X/\\/Users\\/<name>/'``), and neither a tilde (GitHub renders
+     ``~/Users/<name>~`` as strikethrough) nor an HTML tag
+     (``<code>/Users/<name>``) roots a path, so those are reported;
    - naming no one: ``/Users/`` alone, ``/Users/<you>/``, ``/Users/$USER/``,
      ``/Users/.../``.
-   ``file:`` URLs are scanned whatever their case or host
-   (``FILE:///Users/...``, ``file://localhost/Users/...``).
-   Percent-encoded separators (``%2FUsers%2F``) and Windows paths are outside
-   this contract.
+   ``file:`` URLs are scanned whatever their case, host or extra slashes
+   (``FILE:///Users/...``, ``file://localhost//Users/...``). Percent-encoded
+   text and Windows paths are outside this contract.
 
 Failures name ``file:line:column`` only, so the CI log does not republish the
 path.
@@ -35,18 +43,21 @@ import subprocess
 from pathlib import Path
 
 import pytest
-from hypothesis import given
+from hypothesis import assume, given, settings
 from hypothesis import strategies as st
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 _CANDIDATE = re.compile(
-    r"\\?/(?:Users|home)\\?/(?P<name>[^\s/\\<>`'\"()\[\]{}$%*|,;:=]+)"
+    r"\\?/(?:Users|home)\\?/(?P<name>[^\s/\\<>`'\"()\[\]{}$%*|,;:=&]+)"
 )
-_URL_START = re.compile(r"\b(?P<scheme>[A-Za-z][A-Za-z0-9+.-]*)://")
+_URL_START = re.compile(r"\b(?P<scheme>[A-Za-z][A-Za-z0-9+.-]*):\\?/\\?/")
 _URL_END = frozenset("<>\"'`|;")
-_FILE_URL_AUTHORITY = re.compile(r"(?i)\bfile://[^/\s]*\Z")
+# A candidate right after one of these (or a letter or digit) continues a URL's path.
+_URL_PATH_CHARS = frozenset("-._~/#])%\\")
+_FILE_URL_PREFIX = re.compile(r"(?i)\bfile:\\?/\\?/[^/\\\s]*(?:\\?/)*\Z")
 _OPTION_FLAG = re.compile(r"-{1,2}[A-Za-z][\w-]*")
+_PLACEHOLDER_ROOT = re.compile(r"(?:\$\{\w+\}|\$\([^()]*\)|\{\w+\})\Z")
 
 
 def tracked_docs(root: Path) -> list[str]:
@@ -83,23 +94,33 @@ def _url_spans(line: str) -> list[tuple[int, int]]:
     return spans
 
 
+def _continues_url_path(line: str, start: int, urls: list[tuple[int, int]]) -> bool:
+    before = line[start - 1] if start else ""
+    return any(url_start < start < url_end for url_start, url_end in urls) and (
+        before.isalnum() or before in _URL_PATH_CHARS
+    )
+
+
 def _is_path_segment_char(char: str) -> bool:
     return char.isalnum() or char in "._-"
 
 
 def _starts_home_path(line: str, start: int) -> bool:
-    if _FILE_URL_AUTHORITY.search(line, 0, start):
+    if _FILE_URL_PREFIX.search(line, 0, start):
         return True
+    separator = "\\/" if line.startswith("\\", start) else "/"
     slashes = start
-    while slashes and line[slashes - 1] == "/":
-        slashes -= 1
+    while line.endswith(separator, 0, slashes):
+        slashes -= len(separator)
+    if separator == "\\/" and line.endswith("/", 0, slashes):
+        return True
     segment_start = slashes
     while segment_start and _is_path_segment_char(line[segment_start - 1]):
         segment_start -= 1
     segment = line[segment_start:slashes]
     if not segment:
-        return True
-    if slashes < start or (segment_start and line[segment_start - 1] in "/\\"):
+        return not _PLACEHOLDER_ROOT.search(line, 0, slashes)
+    if slashes < start or line.endswith(separator, 0, segment_start):
         return False
     if _OPTION_FLAG.fullmatch(segment):
         return True
@@ -115,7 +136,7 @@ def home_path_hits(text: str) -> list[tuple[int, int]]:
             start = match.start()
             if (
                 any(char.isalnum() for char in match["name"])
-                and not any(url_start <= start < url_end for url_start, url_end in urls)
+                and not _continues_url_path(line, start, urls)
                 and _starts_home_path(line, start)
             ):
                 hits.append((number, start + 1))
@@ -148,7 +169,7 @@ def test_tracked_docs_have_no_home_paths() -> None:
         "PYTHONPATH=src:/Users/jane/lib",
         "the HTML at file:///Users/jane/staging/page.html",
         "FILE:///Users/jane/repo and file://localhost/Users/jane/repo",
-        "file:/Users/jane/repo",
+        "file:/Users/jane/repo and file://localhost//Users/jane/repo",
         "(checked out at /home/runner/work/repo)",
         "/Users/jane",
         "cd /home/jane",
@@ -156,13 +177,21 @@ def test_tracked_docs_have_no_home_paths() -> None:
         "|/home/jane|",
         "|[site](https://example.org)|/home/jane|",
         "curl https://example.org;/Users/jane/repo/bin/tool",
+        "curl https://example.org&&/Users/jane/repo/bin/tool",
+        "curl https://example.org&/Users/jane/repo/bin/tool",
+        "http://localhost:8000/view?file=/Users/jane/report.html",
+        "https://example.org/search?q=/Users/jane",
         "_/Users/jane/checkout_ and */home/jane/x*",
         "~~/Users/jane/repo~~",
+        "~/Users/jane/repo~",
+        "<code>/Users/jane/repo</code>",
         "cc @/Users/jane/options.rsp",
         "+/Users/jane/repo in a diff and ^/home/jane/ in a regex",
         "cc -I/Users/jane/checkout/include main.c",
         "tar -C/Users/jane/repo -tf archive.tar",
         '{"path": "\\/Users\\/jane\\/repo"}',
+        "sed 's/CHECKOUT/\\/Users\\/jane\\/repo/g' config.json",
+        '{"file": "file:\\/\\/\\/Users\\/jane\\/repo"}',
         "/Users/Jane Doe/repo and /home/Jane Doe/repo",
         "/Users/jöran/repo",
     ],
@@ -182,6 +211,7 @@ def test_home_path_is_reported(line: str) -> None:
         "https://example.org/#/home/jane/profile",
         "https://example.org//Users/jane/profile",
         "https://en.wikipedia.org/wiki/Home_(film)/home/jane",
+        '{"url":"https:\\/\\/example.org\\/#\\/home\\/jane\\/profile"}',
         "see (https://example.org/Users/jane) for the route",
         "[site](https://example.org/Users/jane) and <https://example.org/home/jane/>",
         "--base <axiom-corpus checkout>/data/corpus",
@@ -191,6 +221,9 @@ def test_home_path_is_reported(line: str) -> None:
         "/Users/%USER%/axiom-corpus and /Users/.../axiom-corpus and /Users/*/x",
         "data/home/jane/ and /homepage/jane/ and example.com/Users/jane",
         "/opt/app/home/jane/ and ./home/jane and ../home/jane/ and $HOME/Users/jane",
+        '{"path": "data\\/home\\/jane\\/x"} and \\/opt\\/app\\/home\\/jane',
+        "${ROOT}/home/jane and $(git rev-parse --show-toplevel)/Users/jane/x",
+        'f"{root}/home/jane"',
     ],
 )
 def test_non_path_is_not_reported(line: str) -> None:
@@ -204,30 +237,17 @@ _FILLER = st.text(
     max_size=40,
 )
 _LEADS = [
-    *[
-        "",
-        " ",
-        "`",
-        '"',
-        "'",
-        "(",
-        "[",
-        "|",
-        "=",
-        ":",
-        "*",
-        "_",
-        "~~",
-        "@",
-        "+",
-        "^",
-        "#",
-    ],
-    *["-I", "--root=", "file://", "FILE://", "file://localhost", "file:"],
+    *["", " ", "`", '"', "'", "(", "[", "|", "=", ":", "*", "_", "~", "~~", "@"],
+    *["+", "^", "#", "<code>", "<br>", "{", "}", "${", "$("],
+    *["-I", "--root=", "file://", "FILE://", "file://localhost"],
+    *["file://localhost/", "file:"],
     *["|[site](https://example.org)|", "curl https://example.org;"],
+    *["curl https://example.org&&", "curl https://example.org&"],
+    *["http://localhost:8000/view?file=", "sed 's/X/"],
 ]
 
 
+@settings(max_examples=300, deadline=None)
 @given(
     root=st.sampled_from(["Users", "home"]),
     name=_NAMES,
@@ -246,6 +266,8 @@ def test_any_home_path_is_reported_on_its_line(
     rest: str,
     tail: str,
 ) -> None:
+    # Inside a sed replacement only an escaped path is valid sed.
+    assume(escaped or not lead.startswith("sed "))
     slash = "\\/" if escaped else "/"
     path = f"{slash}{root}{slash}{name}{rest.replace('/', slash)}"
     text = "\n".join([*before, f"{lead}{path} {tail}"])
@@ -260,28 +282,42 @@ _HOSTS = st.one_of(
 )
 
 
+@settings(max_examples=300, deadline=None)
 @given(
     scheme=st.sampled_from(["http", "https", "HTTPS", "ftp", "ssh"]),
     host=_HOSTS,
     between=st.sampled_from(["", "/", "/#", "/app", "/wiki/Home_(film)"]),
     root=st.sampled_from(["Users", "home"]),
     name=_NAMES,
-    wrap=st.sampled_from(["{}", "[site]({})", "<{}>", "({}) and", "| {} |"]),
+    escaped=st.booleans(),
+    wrap=st.sampled_from(
+        ["{}", "[site]({})", "<{}>", "({}) and", "| {} |", '{{"url":"{}"}}']
+    ),
 )
 def test_web_url_path_is_not_reported(
-    scheme: str, host: str, between: str, root: str, name: str, wrap: str
+    scheme: str, host: str, between: str, root: str, name: str, escaped: bool, wrap: str
 ) -> None:
     url = f"{scheme}://{host}{between}/{root}/{name}/"
+    if escaped:
+        url = url.replace("/", "\\/")
     assert home_path_hits(wrap.format(url)) == []
 
 
+@settings(max_examples=300, deadline=None)
 @given(
     lead=st.sampled_from(["see ", "/opt/", "./", "../", "data/", "`"]),
-    segment=st.from_regex(r"[A-Za-z0-9][A-Za-z0-9.-]{0,15}", fullmatch=True),
+    segment=st.one_of(
+        st.from_regex(r"[A-Za-z0-9][A-Za-z0-9.-]{0,15}", fullmatch=True),
+        st.sampled_from(["$ROOT", "${ROOT}", "$(pwd)", "{root}"]),
+    ),
     root=st.sampled_from(["Users", "home"]),
     name=_NAMES,
+    escaped=st.booleans(),
 )
 def test_relative_path_is_not_reported(
-    lead: str, segment: str, root: str, name: str
+    lead: str, segment: str, root: str, name: str, escaped: bool
 ) -> None:
-    assert home_path_hits(f"{lead}{segment}/{root}/{name}/x") == []
+    text = f"{lead}{segment}/{root}/{name}/x"
+    if escaped:
+        text = text.replace("/", "\\/")
+    assert home_path_hits(text) == []
