@@ -388,6 +388,19 @@ def test_inspect_cli_rejects_unreceipted_cache_hit(tmp_path, capsys):
     assert json.loads(capsys.readouterr().out)["commit"] == COMMIT
 
 
+def test_inspect_cli_names_the_bound_commit_when_it_differs(tmp_path, capsys):
+    binary = tmp_path / "axiom-rules-engine"
+    binary.write_bytes(b"receipted binary")
+    _write_binding(binary)
+    other = "f" * 40
+    with pytest.raises(SystemExit) as exc:
+        main(["inspect", str(binary), "--expect-commit", other])
+    assert exc.value.code == 2
+    err = capsys.readouterr().err
+    assert f"names {COMMIT}, not {other}" in err
+    assert "no verified receipt" not in err
+
+
 def test_execution_journal_is_optional(tmp_path, monkeypatch):
     monkeypatch.delenv(ENGINE_RECEIPT_OUTPUT_ENV, raising=False)
     record_engine_receipt({"commit": COMMIT, "binary_sha256": "a" * 64})

@@ -336,10 +336,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             if args.expect_commit is not None:
                 if _COMMIT.fullmatch(args.expect_commit) is None:
                     raise EngineIdentityError("Expected commit must be a full 40-hex SHA")
-                if receipt["commit"] != args.expect_commit.lower():
+                if receipt["commit"] is None:
                     raise EngineIdentityError(
                         f"Executable has no verified receipt for {args.expect_commit}: "
                         f"{receipt['source_status']}"
+                    )
+                if receipt["commit"] != args.expect_commit.lower():
+                    raise EngineIdentityError(
+                        f"Executable's verified receipt names {receipt['commit']}, "
+                        f"not {args.expect_commit}"
                     )
     except (EngineIdentityError, OSError, subprocess.SubprocessError) as exc:
         parser.error(str(exc))

@@ -33,7 +33,10 @@ The receipt names `TheAxiomFoundation/axiom-rules-engine` without checking the
 checkout's remote (local engine clones often point at a filesystem path), so
 `--repo` must be a checkout of that repository.
 
-Existing matching axiom-encode `.provenance.json` receipts are also accepted.
+Receipts written by axiom-encode's `engine-bind`
+(`write_engine_binding_receipt` in `src/axiom_encode/engine_binding.py`,
+with `engine_commit` and `binary_sha256` fields) are also accepted when
+they match the executable.
 Cache the sidecar with the executable. Every invocation hashes the resolved
 executable before and after execution, including cache hits; absent or stale
 sidecars retain the actual binary digest and leave the source commit unresolved.
