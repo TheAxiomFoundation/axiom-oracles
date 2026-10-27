@@ -1021,6 +1021,15 @@
       "source": "comparisons/nc-income-tax-liability.yaml"
     },
     {
+      "suite": "nc-income-tax-populace",
+      "name": null,
+      "report": "axiom-policyengine-nc-income-tax-populace.json",
+      "repos": [
+        "TheAxiomFoundation/rulespec-us"
+      ],
+      "source": "comparisons/state-income-tax-populace.yaml"
+    },
+    {
       "suite": "nc-snap-ecps",
       "name": null,
       "report": "axiom-policyengine-nc-snap-ecps.json",

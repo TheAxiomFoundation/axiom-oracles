@@ -30424,6 +30424,17 @@ mappings:
     comparison: money
     rationale: Both outputs apply the post-2021 seven-band District schedule to completed joint-method District taxable income before credits. The exact joint-method target intentionally excludes PolicyEngine's broader filing-method selector dc_income_tax_before_credits.
 
+  - legal_id: us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+    country: us
+    program: tax
+    mapping_type: direct_variable
+    policyengine_variable: nc_income_tax_before_credits
+    entity: tax_unit
+    period: year
+    unit: USD
+    comparison: money
+    rationale: Both outputs apply the section 105-153.7 3.99 percent rate to nonnegative North Carolina taxable income before credits. Axiom composes that taxable income from federal adjusted gross income and the classified section 105-153.5 modifications; PolicyEngine computes nc_taxable_income from the same federal AGI.
+
   # South Carolina's 2026 resident core has a mixed oracle surface.  Keep
   # every executable output exact here: otherwise the broad us-sc fallback
   # below falsely reports the whole module as one undifferentiated agency-

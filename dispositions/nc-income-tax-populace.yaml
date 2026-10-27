@@ -1,0 +1,269 @@
+schema: axiom_oracles.dispositions.v1
+suite: nc-income-tax-populace
+updated: "2026-10-27"
+# NC resident-core pipeline vs PolicyEngine nc_income_tax_before_credits on
+# all 2,169 routed NC tax units in pinned Populace (campaign
+# reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json).
+# 2,163 match within $1. The 6 PolicyEngine mismatches share one cause:
+# policyengine-us 1.752.2 counts federally non-deductible mortgage interest
+# in the NC itemized deduction. Each tax difference is 3.99 percent of that
+# interest. reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
+# recomputes the statute reading from PolicyEngine's own components and
+# reproduces Axiom within $0.57 on every compared unit (largest gap $0.5624).
+entries:
+  - id: nc-populace-pe-non-deductible-mortgage-interest-32354
+    concept: us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+    case_id: 32354
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/10468
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/10468. Tax unit
+        32354 (single) itemizes below the $20,000 mortgage-and-property-tax cap.
+        policyengine-us 1.752.2 nc_itemized_deductions adds mortgage_interest
+        10727.61, which is deductible_mortgage_interest 8526.28 plus
+        non_deductible_mortgage_interest 2201.33. G.S. 105-153.5(a)(2)b allows only
+        interest allowed under Code section 163(h), so Axiom receives the deductible
+        amount as qualified residence interest. The NC itemized deduction is 17663.97
+        under the statute and 19865.30 in PolicyEngine, and the tax difference is 3.99
+        percent of the excluded interest. PolicyEngine main fixed this in
+        PolicyEngine/policyengine-us#10274 (released in 2.60.4).
+      arithmetic:
+        - expression: "1421.7307725494384 - 1333.8978271484375"
+          equals: 87.8329
+        - expression: "2201.33 * 0.0399"
+          equals: 87.8329
+          tolerance: 0.01
+      sources:
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
+        - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
+        - https://github.com/PolicyEngine/policyengine-us/pull/10274
+    linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
+    axiom_companion:
+      legal_ids:
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_itemized_deduction
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_mortgage_and_property_tax_deduction
+      tests:
+        - rulespec-us@56455a56d08cdeeab76818e45a33efe6ea42be6b:us-nc/policies/income_tax/resident_core_liability_pipeline.test.yaml#joint resident itemized child and modification path
+    expires_on_source_change: true
+    pinned:
+      left: 1421.7307725494384
+      right: 1333.8978271484375
+      difference: 87.83294540100087
+  - id: nc-populace-pe-non-deductible-mortgage-interest-109890
+    concept: us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+    case_id: 109890
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/10468
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/10468. Tax unit
+        109890 (single) itemizes below the $20,000 mortgage-and-property-tax cap.
+        policyengine-us 1.752.2 nc_itemized_deductions adds mortgage_interest 952.59,
+        which is deductible_mortgage_interest 837.66 plus
+        non_deductible_mortgage_interest 114.93. G.S. 105-153.5(a)(2)b allows only
+        interest allowed under Code section 163(h), so Axiom receives the deductible
+        amount as qualified residence interest. The NC itemized deduction is 40239.48
+        under the statute and 40354.41 in PolicyEngine, and the tax difference is 3.99
+        percent of the excluded interest. PolicyEngine main fixed this in
+        PolicyEngine/policyengine-us#10274 (released in 2.60.4).
+      arithmetic:
+        - expression: "2390.172084008789 - 2385.586669921875"
+          equals: 4.5854
+        - expression: "114.93 * 0.0399"
+          equals: 4.5854
+          tolerance: 0.01
+      sources:
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
+        - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
+        - https://github.com/PolicyEngine/policyengine-us/pull/10274
+    linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
+    axiom_companion:
+      legal_ids:
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_itemized_deduction
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_mortgage_and_property_tax_deduction
+      tests:
+        - rulespec-us@56455a56d08cdeeab76818e45a33efe6ea42be6b:us-nc/policies/income_tax/resident_core_liability_pipeline.test.yaml#joint resident itemized child and modification path
+    expires_on_source_change: true
+    pinned:
+      left: 2390.172084008789
+      right: 2385.586669921875
+      difference: 4.58541408691417
+  - id: nc-populace-pe-non-deductible-mortgage-interest-110647
+    concept: us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+    case_id: 110647
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/10468
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/10468. Tax unit
+        110647 (joint) itemizes below the $20,000 mortgage-and-property-tax cap.
+        policyengine-us 1.752.2 nc_itemized_deductions adds mortgage_interest
+        10229.33, which is deductible_mortgage_interest 8679.43 plus
+        non_deductible_mortgage_interest 1549.90. G.S. 105-153.5(a)(2)b allows only
+        interest allowed under Code section 163(h), so Axiom receives the deductible
+        amount as qualified residence interest. The NC itemized deduction is 107231.00
+        under the statute and 108780.90 in PolicyEngine, and the tax difference is
+        3.99 percent of the excluded interest. PolicyEngine main fixed this in
+        PolicyEngine/policyengine-us#10274 (released in 2.60.4).
+      arithmetic:
+        - expression: "16358.840458447266 - 16297.0"
+          equals: 61.8405
+        - expression: "1549.9 * 0.0399"
+          equals: 61.8405
+          tolerance: 0.01
+      sources:
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
+        - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
+        - https://github.com/PolicyEngine/policyengine-us/pull/10274
+    linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
+    axiom_companion:
+      legal_ids:
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_itemized_deduction
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_mortgage_and_property_tax_deduction
+      tests:
+        - rulespec-us@56455a56d08cdeeab76818e45a33efe6ea42be6b:us-nc/policies/income_tax/resident_core_liability_pipeline.test.yaml#joint resident itemized child and modification path
+    expires_on_source_change: true
+    pinned:
+      left: 16358.840458447266
+      right: 16297.0
+      difference: 61.84045844726643
+  - id: nc-populace-pe-non-deductible-mortgage-interest-156182
+    concept: us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+    case_id: 156182
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/10468
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/10468. Tax unit
+        156182 (single) itemizes below the $20,000 mortgage-and-property-tax cap.
+        policyengine-us 1.752.2 nc_itemized_deductions adds mortgage_interest 8470.71,
+        which is deductible_mortgage_interest 7046.31 plus
+        non_deductible_mortgage_interest 1424.39. G.S. 105-153.5(a)(2)b allows only
+        interest allowed under Code section 163(h), so Axiom receives the deductible
+        amount as qualified residence interest. The NC itemized deduction is
+        1391396.94 under the statute and 1392821.38 in PolicyEngine, and the tax
+        difference is 3.99 percent of the excluded interest. PolicyEngine main fixed
+        this in PolicyEngine/policyengine-us#10274 (released in 2.60.4).
+      arithmetic:
+        - expression: "54922.95101323242 - 54866.1171875"
+          equals: 56.8338
+        - expression: "1424.39 * 0.0399"
+          equals: 56.8338
+          tolerance: 0.01
+      sources:
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
+        - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
+        - https://github.com/PolicyEngine/policyengine-us/pull/10274
+    linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
+    axiom_companion:
+      legal_ids:
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_itemized_deduction
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_mortgage_and_property_tax_deduction
+      tests:
+        - rulespec-us@56455a56d08cdeeab76818e45a33efe6ea42be6b:us-nc/policies/income_tax/resident_core_liability_pipeline.test.yaml#joint resident itemized child and modification path
+    expires_on_source_change: true
+    pinned:
+      left: 54922.95101323242
+      right: 54866.1171875
+      difference: 56.833825732421246
+  - id: nc-populace-pe-non-deductible-mortgage-interest-158448
+    concept: us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+    case_id: 158448
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/10468
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/10468. Tax unit
+        158448 (joint) itemizes below the $20,000 mortgage-and-property-tax cap.
+        policyengine-us 1.752.2 nc_itemized_deductions adds mortgage_interest 3912.94,
+        which is deductible_mortgage_interest 3471.00 plus
+        non_deductible_mortgage_interest 441.94. G.S. 105-153.5(a)(2)b allows only
+        interest allowed under Code section 163(h), so Axiom receives the deductible
+        amount as qualified residence interest. The NC itemized deduction is
+        1303798.55 under the statute and 1304240.50 in PolicyEngine, and the tax
+        difference is 3.99 percent of the excluded interest. PolicyEngine main fixed
+        this in PolicyEngine/policyengine-us#10274 (released in 2.60.4). PolicyEngine's
+        tax here, 1858877.5, is float32-exact, and float32 spacing at this magnitude is
+        0.125, so the rate reconciliation carries a 0.07 tolerance.
+      arithmetic:
+        - expression: "1858895.0929653808 - 1858877.5"
+          equals: 17.593
+        - expression: "441.94 * 0.0399"
+          equals: 17.593
+          tolerance: 0.07
+      sources:
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
+        - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
+        - https://github.com/PolicyEngine/policyengine-us/pull/10274
+    linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
+    axiom_companion:
+      legal_ids:
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_itemized_deduction
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_mortgage_and_property_tax_deduction
+      tests:
+        - rulespec-us@56455a56d08cdeeab76818e45a33efe6ea42be6b:us-nc/policies/income_tax/resident_core_liability_pipeline.test.yaml#joint resident itemized child and modification path
+    expires_on_source_change: true
+    pinned:
+      left: 1858895.0929653808
+      right: 1858877.5
+      difference: 17.592965380754322
+  - id: nc-populace-pe-non-deductible-mortgage-interest-160401
+    concept: us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+    case_id: 160401
+    kind: amount_difference
+    disposition: upstream_engine_gap
+    evidence:
+      upstream_url: https://github.com/PolicyEngine/policyengine-us/issues/10468
+      mechanism: >-
+        issue: https://github.com/PolicyEngine/policyengine-us/issues/10468. Tax unit
+        160401 (single) itemizes below the $20,000 mortgage-and-property-tax cap.
+        policyengine-us 1.752.2 nc_itemized_deductions adds mortgage_interest 5495.70,
+        which is deductible_mortgage_interest 4875.00 plus
+        non_deductible_mortgage_interest 620.70. G.S. 105-153.5(a)(2)b allows only
+        interest allowed under Code section 163(h), so Axiom receives the deductible
+        amount as qualified residence interest. The NC itemized deduction is 456388.17
+        under the statute and 457008.88 in PolicyEngine, and the tax difference is
+        3.99 percent of the excluded interest. PolicyEngine main fixed this in
+        PolicyEngine/policyengine-us#10274 (released in 2.60.4). PolicyEngine's tax
+        here, 1533688.5, is float32-exact, and float32 spacing at this magnitude is
+        0.125, so the rate reconciliation carries a 0.07 tolerance.
+      arithmetic:
+        - expression: "1533713.2203421874 - 1533688.5"
+          equals: 24.7203
+        - expression: "620.7 * 0.0399"
+          equals: 24.7203
+          tolerance: 0.07
+      sources:
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
+        - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
+        - https://github.com/PolicyEngine/policyengine-us/pull/10274
+    linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
+    axiom_companion:
+      legal_ids:
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_itemized_deduction
+        - us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_mortgage_and_property_tax_deduction
+      tests:
+        - rulespec-us@56455a56d08cdeeab76818e45a33efe6ea42be6b:us-nc/policies/income_tax/resident_core_liability_pipeline.test.yaml#joint resident itemized child and modification path
+    expires_on_source_change: true
+    pinned:
+      left: 1533713.2203421874
+      right: 1533688.5
+      difference: 24.720342187443748

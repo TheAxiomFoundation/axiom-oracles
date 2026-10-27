@@ -1179,3 +1179,22 @@ def test_selector_cache_sees_an_edited_selector() -> None:
     assert _entry_selects_row(plain, {"case_id": "c3", "concept": "us:test#income_tax"})
     plain["case_selector"]["case_ids"][0] = "c4"
     assert not _entry_selects_row(plain, {"case_id": "c1", "concept": "us:test#income_tax"})
+
+
+def test_serialize_like_keeps_the_populace_projector_indent(tmp_path: Path) -> None:
+    """The Populace projector writes sorted indent-1 JSON; a merge keeps it."""
+
+    module = _load_script_module()
+    original = {"suite": "nc-income-tax-populace", "summary": {"match_count": 1}}
+    text = json.dumps(original, indent=1, sort_keys=True) + "\n"
+    path = tmp_path / "report.json"
+    path.write_text(text)
+    merged = {
+        **original,
+        "summary": {**original["summary"], "dispositioned": {"counts": {}}},
+    }
+
+    assert module._serialize_like(path, text, original) == text
+    assert module._serialize_like(path, text, merged) == (
+        json.dumps(merged, indent=1, sort_keys=True) + "\n"
+    )

@@ -3,7 +3,8 @@
 Population accounting remains independent of execution.  Runnable projections
 are limited to exact sources admitted by the declarative contract; unresolved
 slots remain blocked, and values may enter Axiom only through exact reviewed
-upstream, statutory-constant, or derived-transform allowlists.
+upstream, statutory-constant, projection-constant, or derived-transform
+allowlists.
 """
 
 from __future__ import annotations
@@ -20,6 +21,10 @@ from typing import Any, Callable, Iterable, Mapping
 from urllib.parse import urlparse
 
 from .state_tax_populace import (
+    ALLOWED_DERIVED_PE_BOUNDARIES,
+    ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES,
+    ALLOWED_PE_UPSTREAM_BOUNDARIES,
+    ALLOWED_PROJECTION_CONSTANTS,
     DEFAULT_COMPARISON_AGGREGATION,
     EXPECTED_STATE_FIPS,
     StateTaxPopulaceContract,
@@ -116,6 +121,24 @@ SC_BEFORE_NONREFUNDABLE_CREDITS_INPUT = (
     "sc_pit_pilot_state_taxable_income"
 )
 SC_TAXABLE_INCOME = "sc_taxable_income"
+NC_RESIDENT_CORE_TARGET = "nc_income_tax_before_credits"
+NC_RESIDENT_CORE_PROGRAM = (
+    "us-nc:policies/income_tax/resident_core_liability_pipeline"
+)
+NC_RESIDENT_CORE_OUTPUT = (
+    f"{NC_RESIDENT_CORE_PROGRAM}#nc_pit_2026_income_tax_before_credits"
+)
+NC_RESIDENT_CORE_INPUT_COUNT = 43
+# PolicyEngine's 2026 nc_deductions list.  Every other section 105-153.5
+# subtraction enters the projection as a reviewed zero constant, so a new
+# PolicyEngine deduction must fail closed until its slot is re-reviewed.
+NC_REVIEWED_POLICYENGINE_DEDUCTIONS = (
+    "us_govt_interest",
+    "nc_standard_or_itemized_deductions",
+    "nc_child_deduction",
+    "taxable_social_security",
+    "nc_military_retirement_deduction",
+)
 OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
     "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
 )
@@ -146,6 +169,13 @@ _REVIEWED_ROUTE_BOOLEAN_INPUTS_BY_STATE = {
 _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
     "HI": frozenset({"long_term_capital_gains"}),
     "KY": frozenset({"ky_taxable_income_indiv", "ky_taxable_income_joint"}),
+    "NC": frozenset(
+        {
+            "deductible_mortgage_interest",
+            "real_estate_taxes",
+            "taxable_social_security",
+        }
+    ),
     "MT": frozenset(
         {
             "long_term_capital_gains",
@@ -176,7 +206,27 @@ _REVIEWED_RAW_PERSON_VALUE_ASSUMPTIONS_BY_STATE = {
 # absent from the source-backed RuleSpec is not present in selected tax units.
 # These assertions never supply an input or select an output branch.
 _REVIEWED_PE_ZERO_ASSUMPTIONS_BY_STATE = {
+    # The NC resident core supplies zero for every classified addition, for
+    # the wagering-loss deduction not taken in AGI, and for uniformed-services
+    # retirement; PolicyEngine carries those items only in nc_additions, the
+    # federal wagering_losses_deduction, and nc_military_retirement_deduction.
+    "NC": frozenset(
+        {
+            "nc_additions",
+            "nc_military_retirement_deduction",
+            "wagering_losses_deduction",
+        }
+    ),
     "VT": frozenset({"us_govt_interest"}),
+}
+
+# Exact upstream PolicyEngine Person leaves that must be zero for every person
+# in a selected TaxUnit.  Proving the leaf, not only a state-derived TaxUnit
+# value, shows the reviewed zero holds under any eligibility reading.
+_REVIEWED_PE_PERSON_ZERO_ASSUMPTIONS_BY_STATE = {
+    # Section 105-153.5(b)(5a) deducts only uniformed-services retirement pay
+    # and survivor-plan payments; with no such pay the deduction is zero.
+    "NC": frozenset({"military_retirement_pay"}),
 }
 
 # RuleSpec inputs are TaxUnit-grain unless their complete legal ID is listed
@@ -837,6 +887,9 @@ def calculate_policyengine_targets(
         if state == "SC":
             _validate_south_carolina_runtime_contract(jurisdiction)
             _validate_south_carolina_policyengine_runtime(sim=sim, year=year)
+        if state == "NC":
+            _validate_north_carolina_runtime_contract(jurisdiction)
+            _validate_north_carolina_policyengine_runtime(sim=sim, year=year)
         if state == "IL":
             _validate_illinois_runtime_contract(jurisdiction)
         if (
@@ -2020,15 +2073,24 @@ def calculate_policyengine_projection_inputs(
 
     sim = microsimulation_factory(dataset)
     for state in sorted(selected_states):
+        selected_tax_unit_ids = {
+            route.tax_unit_id
+            for route in route_rows
+            if route.state == state and route.disposition == DISPOSITION_READY
+        }
         _validate_reviewed_pe_zero_assumptions(
             state=state,
             sim=sim,
             tax_unit_ids=tax_unit_ids,
-            selected_tax_unit_ids={
-                route.tax_unit_id
-                for route in route_rows
-                if route.state == state and route.disposition == DISPOSITION_READY
-            },
+            selected_tax_unit_ids=selected_tax_unit_ids,
+            year=year,
+        )
+        _validate_reviewed_pe_person_zero_assumptions(
+            state=state,
+            sim=sim,
+            raw_persons=raw_persons,
+            tax_unit_ids=tax_unit_ids,
+            selected_tax_unit_ids=selected_tax_unit_ids,
             year=year,
         )
     projections: dict[str, dict[str, dict[int | str, float | bool]]] = {}
@@ -2043,6 +2105,9 @@ def calculate_policyengine_projection_inputs(
         if state == "SC":
             _validate_south_carolina_runtime_contract(jurisdiction)
             _validate_south_carolina_policyengine_runtime(sim=sim, year=year)
+        if state == "NC":
+            _validate_north_carolina_runtime_contract(jurisdiction)
+            _validate_north_carolina_policyengine_runtime(sim=sim, year=year)
         if state == "IL":
             _validate_illinois_runtime_contract(jurisdiction)
             for variable in IL_REVIEWED_INPUTS.values():
@@ -2051,7 +2116,7 @@ def calculate_policyengine_projection_inputs(
                     state="IL",
                     variable=variable,
                 )
-        if state in {"IL", "IN", "NY", "PA", "SC"}:
+        if state in {"IL", "IN", "NC", "NY", "PA", "SC"}:
             modeled_ids = [
                 _clean_id(value)
                 for value in _array_values(
@@ -2108,6 +2173,7 @@ def calculate_policyengine_projection_inputs(
             if slot.policyengine_transform
             in {
                 "person_sum_to_tax_unit",
+                "person_sums_to_combined_amount",
                 "person_sums_to_net_long_term_capital_gain",
             }
             for variable in (
@@ -2201,11 +2267,11 @@ def calculate_policyengine_projection_inputs(
                     zip(person_ids, projected, strict=True)
                 )
                 continue
-            if slot.source_kind == "statutory_constant":
+            if slot.source_kind in {"statutory_constant", "projection_constant"}:
                 if slot.constant_value is None:
                     raise StateTaxPopulationRoutingError(
-                        f"{state}: statutory constant omitted its reviewed value "
-                        f"for {slot.slot}"
+                        f"{state}: {slot.source_kind.replace('_', ' ')} omitted "
+                        f"its reviewed value for {slot.slot}"
                     )
                 state_inputs[slot.slot] = {
                     tax_unit_id: slot.constant_value for tax_unit_id in tax_unit_ids
@@ -2243,6 +2309,18 @@ def calculate_policyengine_projection_inputs(
                 )
             if slot.policyengine_transform == "person_sum_to_tax_unit":
                 projected = person_sums[source_variables[0]]
+            elif slot.policyengine_transform == "person_sums_to_combined_amount":
+                projected = [
+                    _apply_projection_transform(
+                        components,
+                        transform=slot.policyengine_transform,
+                        label=slot.slot,
+                    )
+                    for components in zip(
+                        *(person_sums[variable] for variable in source_variables),
+                        strict=True,
+                    )
+                ]
             elif (
                 slot.policyengine_transform
                 == "filing_method_selected_person_summed_taxable_income"
@@ -2508,6 +2586,62 @@ def _validate_reviewed_pe_zero_assumptions(
             raise StateTaxPopulationRoutingError(
                 f"{state}: reviewed zero assumption failed for {variable!r}: "
                 f"{len(nonzero)} selected tax unit(s) are nonzero"
+            )
+
+
+def _validate_reviewed_pe_person_zero_assumptions(
+    *,
+    state: str,
+    sim: Any,
+    raw_persons: Any | None,
+    tax_unit_ids: list[int | str],
+    selected_tax_unit_ids: set[int | str],
+    year: int,
+) -> None:
+    """Prove exact zero-valued Person leaves for every selected person."""
+
+    variables = _REVIEWED_PE_PERSON_ZERO_ASSUMPTIONS_BY_STATE.get(state)
+    if variables is None:
+        return
+    for variable in sorted(variables):
+        _require_policyengine_person_year_money_variable(
+            sim,
+            state=state,
+            variable=variable,
+        )
+    _, person_values = _reviewed_person_values(
+        state=state,
+        sim=sim,
+        variables=set(variables),
+        raw_persons=raw_persons,
+        tax_unit_ids=tax_unit_ids,
+        year=year,
+    )
+    selected_ids = {_clean_id(value) for value in selected_tax_unit_ids}
+    person_tax_unit_ids = [
+        _clean_id(value) for value in raw_persons["person_tax_unit_id"]
+    ]
+    unlinked = selected_ids - set(person_tax_unit_ids)
+    if unlinked:
+        raise StateTaxPopulationRoutingError(
+            f"{state}: reviewed Person zero assumption cannot be proved because "
+            f"{len(unlinked)} selected tax unit(s) have no linked person"
+        )
+    for variable in sorted(variables):
+        nonzero: set[int | str] = set()
+        for tax_unit_id, value in zip(
+            person_tax_unit_ids, person_values[variable], strict=True
+        ):
+            if tax_unit_id not in selected_ids:
+                continue
+            number = _finite_number(value, label=f"{state}:{variable}")
+            if number != 0:
+                nonzero.add(tax_unit_id)
+        if nonzero:
+            raise StateTaxPopulationRoutingError(
+                f"{state}: reviewed Person zero assumption failed for "
+                f"{variable!r}: {len(nonzero)} selected tax unit(s) have a "
+                "nonzero member"
             )
 
 
@@ -3708,6 +3842,137 @@ def _validate_south_carolina_policyengine_runtime(
             )
 
 
+def _validate_north_carolina_runtime_contract(jurisdiction: Any) -> None:
+    """Fail closed if the NC resident-core contract drifts from its review."""
+
+    if jurisdiction.policyengine_target != NC_RESIDENT_CORE_TARGET:
+        raise StateTaxPopulationRoutingError(
+            "NC: reviewed runner requires the exact nc_income_tax_before_credits "
+            "target"
+        )
+    if (
+        jurisdiction.program != NC_RESIDENT_CORE_PROGRAM
+        or jurisdiction.output != NC_RESIDENT_CORE_OUTPUT
+    ):
+        raise StateTaxPopulationRoutingError(
+            "NC: reviewed runner requires the exact resident-core RuleSpec "
+            "program and tax-before-credits output"
+        )
+    if jurisdiction.relations:
+        raise StateTaxPopulationRoutingError(
+            "NC: reviewed resident core declares no relations"
+        )
+    reviewed: dict[str, tuple[Any, ...]] = {}
+    for state, slot, variable in ALLOWED_PE_UPSTREAM_BOUNDARIES:
+        if state == "NC":
+            reviewed[slot] = ("pe_upstream_boundary", variable, (), None, None)
+    for state, slot, variable, transform in ALLOWED_DERIVED_PE_BOUNDARIES:
+        if state == "NC":
+            reviewed[slot] = ("derived", variable, (), transform, None)
+    for state, slot, variables, transform in (
+        ALLOWED_MULTI_SOURCE_DERIVED_PE_BOUNDARIES
+    ):
+        if state == "NC":
+            reviewed[slot] = ("derived", None, variables, transform, None)
+    for state, slot, value in ALLOWED_PROJECTION_CONSTANTS:
+        if state == "NC":
+            reviewed[slot] = ("projection_constant", None, (), None, value)
+    actual = {
+        slot.slot: (
+            slot.source_kind,
+            slot.policyengine_variable,
+            slot.policyengine_variables,
+            slot.policyengine_transform,
+            None if slot.constant_value is None else float(slot.constant_value),
+        )
+        for slot in jurisdiction.inputs
+        if slot.status == "ready"
+    }
+    if (
+        len(jurisdiction.inputs) != NC_RESIDENT_CORE_INPUT_COUNT
+        or len(reviewed) != NC_RESIDENT_CORE_INPUT_COUNT
+        or actual != reviewed
+    ):
+        raise StateTaxPopulationRoutingError(
+            "NC: reviewed runner requires exactly the 43 reviewed resident-core "
+            "input sources"
+        )
+
+
+def _validate_north_carolina_policyengine_runtime(*, sim: Any, year: int) -> None:
+    """Prove the PolicyEngine NC structure the projection constants rely on."""
+
+    if year != 2026:
+        raise StateTaxPopulationRoutingError(
+            "NC: reviewed resident-core projection is 2026 only"
+        )
+    for variable in (
+        NC_RESIDENT_CORE_TARGET,
+        "nc_taxable_income",
+        "nc_additions",
+        "nc_deductions",
+        "nc_military_retirement_deduction",
+        "adjusted_gross_income",
+        "wagering_losses_deduction",
+    ):
+        _require_policyengine_tax_unit_year_money_variable(
+            sim,
+            state="NC",
+            variable=variable,
+        )
+    try:
+        variables = sim.tax_benefit_system.variables
+        taxable_income = variables["nc_taxable_income"]
+        deductions = variables["nc_deductions"]
+        mortgage_interest = variables["mortgage_interest"]
+        parameters = sim.tax_benefit_system.parameters(year)
+        deduction_list = tuple(
+            parameters.gov.states.nc.tax.income.deductions.deductions
+        )
+        gross_income_sources = tuple(parameters.gov.irs.gross_income.sources)
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            "NC: active 2026 taxable-income, deduction, or gross-income "
+            "schema drifted"
+        ) from exc
+    if (
+        list(getattr(taxable_income, "adds", None) or ())
+        != ["adjusted_gross_income", "nc_additions"]
+        or list(getattr(taxable_income, "subtracts", None) or ())
+        != ["nc_deductions"]
+        or taxable_income.get_formula(year) is not None
+    ):
+        raise StateTaxPopulationRoutingError(
+            "NC: nc_taxable_income must remain federal AGI plus nc_additions "
+            "minus nc_deductions"
+        )
+    if (
+        getattr(deductions, "adds", None)
+        != "gov.states.nc.tax.income.deductions.deductions"
+        or deduction_list != NC_REVIEWED_POLICYENGINE_DEDUCTIONS
+    ):
+        raise StateTaxPopulationRoutingError(
+            "NC: nc_deductions must remain the reviewed 2026 list "
+            + ", ".join(NC_REVIEWED_POLICYENGINE_DEDUCTIONS)
+            + f"; got {deduction_list!r}"
+        )
+    # Section 105-153.5(b)(4) subtracts only refunds included in gross income;
+    # the projection supplies zero because federal AGI excludes them.
+    if "salt_refund_income" in gross_income_sources:
+        raise StateTaxPopulationRoutingError(
+            "NC: federal gross income now includes salt_refund_income; the "
+            "reviewed zero income-tax-refund subtraction no longer holds"
+        )
+    if list(getattr(mortgage_interest, "adds", None) or ()) != [
+        "non_deductible_mortgage_interest",
+        "deductible_mortgage_interest",
+    ]:
+        raise StateTaxPopulationRoutingError(
+            "NC: mortgage_interest must remain deductible plus nondeductible "
+            "Person mortgage interest"
+        )
+
+
 def _require_policyengine_tax_unit_year_money_variable(
     sim: Any,
     *,
@@ -3742,6 +4007,40 @@ def _require_policyengine_tax_unit_year_money_variable(
         )
 
 
+def _require_policyengine_person_year_money_variable(
+    sim: Any,
+    *,
+    state: str,
+    variable: str,
+) -> None:
+    """Require a reviewed Person leaf's exact accounting schema."""
+
+    try:
+        definition = sim.tax_benefit_system.variables[variable]
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            f"{state}: PolicyEngine variable {variable!r} is missing reviewed "
+            "schema metadata"
+        ) from exc
+    entity = getattr(getattr(definition, "entity", None), "key", None)
+    period = str(getattr(definition, "definition_period", "")).lower()
+    value_type = getattr(definition, "value_type", None)
+    unit = getattr(definition, "unit", None)
+    if (
+        entity != "person"
+        or period != "year"
+        or value_type is not float
+        or unit != "currency-USD"
+    ):
+        value_type_name = getattr(value_type, "__name__", repr(value_type))
+        raise StateTaxPopulationRoutingError(
+            f"{state}: PolicyEngine variable {variable!r} must use the reviewed "
+            "Person/year/currency-USD float schema; got "
+            f"entity={entity!r}, period={period!r}, "
+            f"value_type={value_type_name!r}, unit={unit!r}"
+        )
+
+
 def _projection_scalar(value: Any, *, label: str) -> float | bool:
     if hasattr(value, "item"):
         value = value.item()
@@ -3762,6 +4061,23 @@ def _apply_projection_transform(
                 f"{label}: age-threshold source returned boolean value"
             )
         return value >= 65
+    if transform == "boolean_negation":
+        if not isinstance(value, bool):
+            raise StateTaxPopulationRoutingError(
+                f"{label}: Boolean negation requires a PolicyEngine boolean; "
+                f"got {value!r}"
+            )
+        return not value
+    if transform == "person_sums_to_combined_amount":
+        if not isinstance(value, tuple) or len(value) < 2:
+            raise StateTaxPopulationRoutingError(
+                f"{label}: combined-amount transform requires at least two "
+                "Person-summed components"
+            )
+        return sum(
+            _finite_number(component, label=f"{label}:component_{index}")
+            for index, component in enumerate(value)
+        )
     if transform == "zero_one_to_boolean":
         value = _projection_scalar(value, label=label)
         if isinstance(value, bool):

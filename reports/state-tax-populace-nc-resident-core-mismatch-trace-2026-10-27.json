@@ -1,0 +1,265 @@
+{
+ "campaign_report": "state-tax-populace-nc-resident-core-campaign-2026-10-27.json",
+ "compared_tax_unit_count": 2169,
+ "count_axiom_minus_predicted_over_0_50": 1,
+ "dataset_identity": {
+  "built_with": "1.729.0",
+  "country": "us",
+  "path": "/Users/maxghenis/.cache/huggingface/hub/datasets--policyengine--populace-us/snapshots/d8f5cff65f36205a613cb144fd97db3087bbd82a/populace_us_2024.h5",
+  "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+  "sha256": "16be6338f9d0",
+  "source": "pinned"
+ },
+ "max_abs_axiom_minus_predicted_all_units": 0.5624,
+ "mismatches": [
+  {
+   "agi": 70856.46,
+   "axiom_minus_predicted": -0.0009,
+   "axiom_tax": 1421.73,
+   "charitable": 471.52,
+   "deductible_mortgage_interest": 8526.28,
+   "deduction_change": -2201.33,
+   "filing_status": "SINGLE",
+   "medical": 0.0,
+   "mortgage_interest": 10727.61,
+   "nc_standard_deduction": 12750.0,
+   "non_deductible_mortgage_interest": 2201.33,
+   "policyengine_nc_itemized_deductions": 19865.3,
+   "policyengine_nc_taxable_income": 33431.02,
+   "policyengine_tax": 1333.9,
+   "predicted_axiom_tax": 1421.7309,
+   "real_estate_taxes": 8666.18,
+   "statute_itemized_deductions": 17663.97,
+   "tax_unit_id": 32354
+  },
+  {
+   "agi": 134025.39,
+   "axiom_minus_predicted": -0.0022,
+   "axiom_tax": 2390.17,
+   "charitable": 22451.27,
+   "deductible_mortgage_interest": 837.66,
+   "deduction_change": -114.93,
+   "filing_status": "SINGLE",
+   "medical": 2577.38,
+   "mortgage_interest": 952.59,
+   "nc_standard_deduction": 12750.0,
+   "non_deductible_mortgage_interest": 114.93,
+   "policyengine_nc_itemized_deductions": 40354.41,
+   "policyengine_nc_taxable_income": 59789.14,
+   "policyengine_tax": 2385.59,
+   "predicted_axiom_tax": 2390.1722,
+   "real_estate_taxes": 14373.17,
+   "statute_itemized_deductions": 40239.48,
+   "tax_unit_id": 109890
+  },
+  {
+   "agi": 517227.0,
+   "axiom_minus_predicted": -0.0001,
+   "axiom_tax": 16358.84,
+   "charitable": 92266.83,
+   "deductible_mortgage_interest": 8679.43,
+   "deduction_change": -1549.9,
+   "filing_status": "JOINT",
+   "medical": 0.0,
+   "mortgage_interest": 10229.33,
+   "nc_standard_deduction": 25500.0,
+   "non_deductible_mortgage_interest": 1549.9,
+   "policyengine_nc_itemized_deductions": 108780.9,
+   "policyengine_nc_taxable_income": 408446.09,
+   "policyengine_tax": 16297.0,
+   "predicted_axiom_tax": 16358.8401,
+   "real_estate_taxes": 6284.74,
+   "statute_itemized_deductions": 107231.0,
+   "tax_unit_id": 110647
+  },
+  {
+   "agi": 2767912.0,
+   "axiom_minus_predicted": -0.001,
+   "axiom_tax": 54922.95,
+   "charitable": 1384350.62,
+   "deductible_mortgage_interest": 7046.31,
+   "deduction_change": -1424.44,
+   "filing_status": "SINGLE",
+   "medical": 0.0,
+   "mortgage_interest": 8470.71,
+   "nc_standard_deduction": 12750.0,
+   "non_deductible_mortgage_interest": 1424.39,
+   "policyengine_nc_itemized_deductions": 1392821.38,
+   "policyengine_nc_taxable_income": 1375090.62,
+   "policyengine_tax": 54866.12,
+   "predicted_axiom_tax": 54922.951,
+   "real_estate_taxes": 0.0,
+   "statute_itemized_deductions": 1391396.94,
+   "tax_unit_id": 156182
+  },
+  {
+   "agi": 47892648.0,
+   "axiom_minus_predicted": -0.0229,
+   "axiom_tax": 1858895.09,
+   "charitable": 1293493.25,
+   "deductible_mortgage_interest": 3471.0,
+   "deduction_change": -441.95,
+   "filing_status": "JOINT",
+   "medical": 0.0,
+   "mortgage_interest": 3912.94,
+   "nc_standard_deduction": 25500.0,
+   "non_deductible_mortgage_interest": 441.94,
+   "policyengine_nc_itemized_deductions": 1304240.5,
+   "policyengine_nc_taxable_income": 46588408.0,
+   "policyengine_tax": 1858877.5,
+   "predicted_axiom_tax": 1858895.1129,
+   "real_estate_taxes": 6834.3,
+   "statute_itemized_deductions": 1303798.55,
+   "tax_unit_id": 158448
+  },
+  {
+   "agi": 38895316.0,
+   "axiom_minus_predicted": -0.0353,
+   "axiom_tax": 1533713.22,
+   "charitable": 437140.0,
+   "deductible_mortgage_interest": 4875.0,
+   "deduction_change": -620.7,
+   "filing_status": "SINGLE",
+   "medical": 0.0,
+   "mortgage_interest": 5495.7,
+   "nc_standard_deduction": 12750.0,
+   "non_deductible_mortgage_interest": 620.7,
+   "policyengine_nc_itemized_deductions": 457008.88,
+   "policyengine_nc_taxable_income": 38438308.0,
+   "policyengine_tax": 1533688.5,
+   "predicted_axiom_tax": 1533713.2553,
+   "real_estate_taxes": 14373.17,
+   "statute_itemized_deductions": 456388.17,
+   "tax_unit_id": 160401
+  }
+ ],
+ "packages": {
+  "policyengine": "4.18.9",
+  "policyengine-us": "1.752.2"
+ },
+ "rate": 0.0399,
+ "schema_version": "axiom.nc_populace_mismatch_trace.v1",
+ "units_where_statute_reading_moves_deduction": [
+  {
+   "deduction_change": -2201.33,
+   "observed_tax_change": 87.83,
+   "predicted_tax_change": 87.8309,
+   "reported_mismatch": true,
+   "tax_unit_id": 32354
+  },
+  {
+   "deduction_change": -114.93,
+   "observed_tax_change": 4.58,
+   "predicted_tax_change": 4.5822,
+   "reported_mismatch": true,
+   "tax_unit_id": 109890
+  },
+  {
+   "deduction_change": -1549.9,
+   "observed_tax_change": 61.84,
+   "predicted_tax_change": 61.8401,
+   "reported_mismatch": true,
+   "tax_unit_id": 110647
+  },
+  {
+   "deduction_change": 0.01,
+   "observed_tax_change": -0.01,
+   "predicted_tax_change": -0.0093,
+   "reported_mismatch": false,
+   "tax_unit_id": 154846
+  },
+  {
+   "deduction_change": 0.01,
+   "observed_tax_change": -0.01,
+   "predicted_tax_change": -0.0142,
+   "reported_mismatch": false,
+   "tax_unit_id": 154878
+  },
+  {
+   "deduction_change": 0.07,
+   "observed_tax_change": -0.12,
+   "predicted_tax_change": -0.381,
+   "reported_mismatch": false,
+   "tax_unit_id": 154921
+  },
+  {
+   "deduction_change": -0.39,
+   "observed_tax_change": 0.01,
+   "predicted_tax_change": -0.163,
+   "reported_mismatch": false,
+   "tax_unit_id": 155858
+  },
+  {
+   "deduction_change": -1424.44,
+   "observed_tax_change": 56.83,
+   "predicted_tax_change": 56.831,
+   "reported_mismatch": true,
+   "tax_unit_id": 156182
+  },
+  {
+   "deduction_change": 0.03,
+   "observed_tax_change": 0.06,
+   "predicted_tax_change": -0.0719,
+   "reported_mismatch": false,
+   "tax_unit_id": 157203
+  },
+  {
+   "deduction_change": -0.17,
+   "observed_tax_change": -0.08,
+   "predicted_tax_change": -0.0783,
+   "reported_mismatch": false,
+   "tax_unit_id": 157965
+  },
+  {
+   "deduction_change": -441.95,
+   "observed_tax_change": 17.59,
+   "predicted_tax_change": 17.6129,
+   "reported_mismatch": true,
+   "tax_unit_id": 158448
+  },
+  {
+   "deduction_change": 0.06,
+   "observed_tax_change": -0.07,
+   "predicted_tax_change": -0.0941,
+   "reported_mismatch": false,
+   "tax_unit_id": 159813
+  },
+  {
+   "deduction_change": -620.7,
+   "observed_tax_change": 24.72,
+   "predicted_tax_change": 24.7553,
+   "reported_mismatch": true,
+   "tax_unit_id": 160401
+  },
+  {
+   "deduction_change": -0.02,
+   "observed_tax_change": -0.02,
+   "predicted_tax_change": -0.0514,
+   "reported_mismatch": false,
+   "tax_unit_id": 162704
+  },
+  {
+   "deduction_change": 0.01,
+   "observed_tax_change": -0.09,
+   "predicted_tax_change": -0.0722,
+   "reported_mismatch": false,
+   "tax_unit_id": 163616
+  },
+  {
+   "deduction_change": 0.02,
+   "observed_tax_change": -0.03,
+   "predicted_tax_change": 0.0002,
+   "reported_mismatch": false,
+   "tax_unit_id": 164176
+  },
+  {
+   "deduction_change": -0.25,
+   "observed_tax_change": -0.02,
+   "predicted_tax_change": -0.0172,
+   "reported_mismatch": false,
+   "tax_unit_id": 164500
+  }
+ ],
+ "units_with_nonzero_non_deductible_mortgage_interest": 227,
+ "year": 2026
+}

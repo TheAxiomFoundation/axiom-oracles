@@ -756,21 +756,588 @@ jurisdictions:
   fips: '37'
   taxsim_state_code: 34
   jurisdiction: us-nc
-  program: us-nc:policies/income_tax/pilot_liability_pipeline
-  output: us-nc:policies/income_tax/pilot_liability_pipeline#nc_pit_pilot_income_tax_liability
+  program: us-nc:policies/income_tax/resident_core_liability_pipeline
+  output: us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
   policyengine:
     target: nc_income_tax_before_credits
     tolerance: 1.0
     relative_tolerance: 0.0
   status: ready
-  evidence: RuleSpec accepts one completed-return North Carolina taxable-income boundary and imports the statutory 3.99% rate for 2026. Independent RuleSpec review and a full certified-Populace probe confirmed the boundary is upstream of nc_income_tax_before_credits for all 2,169 positive-weight routed North Carolina tax units, with no differences above the $1 tolerance.
+  evidence: >-
+    RuleSpec composes North Carolina tax-year-2026 full-year resident tax
+    before credits from federal adjusted gross income under N.C. Gen. Stat.
+    105-153.5 and the 3.99 percent section 105-153.7 rate. The projection
+    supplies federal AGI, filing status, the federal deduction components and
+    child count that section 105-153.5 references, United States obligation
+    interest, and taxable Social Security from PolicyEngine values that carry
+    no North Carolina rule. Every other addition, subtraction, and itemized
+    item enters as a reviewed zero constant: either PolicyEngine models no
+    counterpart (the runner pins its nc_deductions list), or the runner
+    proves the counterpart is zero for every selected tax unit. No completed
+    North Carolina taxable-income, deduction, subtraction, or tax boundary is
+    supplied. A full certified-Populace campaign
+    (reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json,
+    rulespec-us 56455a56) compared all 2,169 positive-weight routed North
+    Carolina tax units: 2,163 match within the $1 tolerance. The other 6
+    differ by $4.59 to $87.83 because policyengine-us 1.752.2 counts
+    federally non-deductible mortgage interest in the North Carolina
+    itemized deduction (PolicyEngine/policyengine-us#10468, fixed in
+    2.60.4); dispositions/nc-income-tax-populace.yaml traces each one.
   inputs:
-  - slot: us-nc:policies/income_tax/pilot_liability_pipeline#input.nc_pit_pilot_state_taxable_income
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_federal_adjusted_gross_income
     source_kind: pe_upstream_boundary
     status: ready
-    evidence: N.C. Gen. Stat. 105-153.7 imposes tax on North Carolina taxable income, and the reviewed RuleSpec module declares that completed-return amount as its sole upstream boundary. PolicyEngine nc_taxable_income is a direct upstream dependency of the distinct comparison target nc_income_tax_before_credits; rulespec-us#959 and the full-Populace probe reviewed this exact relationship.
-    policyengine_variable: nc_taxable_income
+    evidence: >-
+      N.C. Gen. Stat. 105-153.5 computes North Carolina taxable income by
+      modifying the taxpayer's federal adjusted gross income. PolicyEngine
+      adjusted_gross_income is the federal AGI that nc_taxable_income adds
+      before the distinct nc_income_tax_before_credits target. RuleSpec, not
+      PolicyEngine, then applies every section 105-153.5 addition,
+      subtraction, deduction, and child deduction and the section 105-153.7
+      rate; no completed North Carolina taxable-income boundary is supplied.
+    policyengine_variable: adjusted_gross_income
     policyengine_relationship: upstream
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_filing_status_joint_or_surviving_spouse
+    source_kind: derived
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(1) and (a1) use one row for married filing jointly
+      and surviving spouse. The reviewed strict transform derives exactly
+      those two classifications from the upstream canonical PolicyEngine
+      filing_status enum and rejects noncanonical values.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_joint_or_surviving_spouse
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_filing_status_head_of_household
+    source_kind: derived
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(1) and (a1) supply a head-of-household row. The
+      reviewed strict transform derives that classification from the same
+      upstream filing_status enum; single and married-separate filers fall
+      through to the narrow row.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_is_head_of_household
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_filing_status_married_separately
+    source_kind: derived
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(2)b applies its combined spousal cap and proration
+      to married-separate returns. The reviewed strict transform derives that
+      classification from the upstream filing_status enum.
+    policyengine_variable: filing_status
+    policyengine_relationship: upstream
+    policyengine_transform: filing_status_is_separate
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_eligible_for_federal_standard_deduction
+    source_kind: derived
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(1) sets the standard deduction to zero for a person
+      not eligible for a standard deduction under section 63 of the Code.
+      PolicyEngine's federal basic_standard_deduction denies the deduction
+      through the strict Boolean separate_filer_itemizes (the section
+      63(c)(6)(A) married-separate rule) and models no other section 63(c)(6)
+      denial; the reviewed transform negates that exact Boolean.
+      PolicyEngine's nc_standard_deduction applies no eligibility test, so any
+      selected unit with separate_filer_itemizes true would surface as a
+      difference rather than be suppressed.
+    policyengine_variable: separate_filer_itemizes
+    policyengine_relationship: upstream
+    policyengine_transform: boolean_negation
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_charitable_contributions
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(2)a allows the amount allowed as a deduction for
+      charitable contributions under section 170 of the Code. PolicyEngine
+      charitable_deduction is its section 170 deduction and the charitable
+      component that nc_itemized_deductions adds upstream of the distinct
+      target.
+    policyengine_variable: charitable_deduction
+    policyengine_relationship: upstream
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_section_170_deduction_attributable_to_credit_backed_donation
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(2)a.3 excludes a qualified real-property donation
+      that is the basis for an allocated section 105-153.11 credit. The
+      certified Populace population records no real-property donation or
+      credit allocation, and PolicyEngine's North Carolina itemized deduction
+      applies no such exclusion, so both computations carry no excluded
+      amount.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_qualified_residence_interest
+    source_kind: derived
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(2)b allows the amount allowed as a deduction for
+      interest under section 163(h) of the Code with respect to any qualified
+      residence. PolicyEngine's federal interest_deduction adds the Person
+      deductible_mortgage_interest, its section 163(h)(3) home-mortgage
+      interest after the acquisition-debt caps, so the reviewed projection
+      sums that Person amount over the certified TaxUnit membership after
+      verifying Person identity, order, and every Person-to-TaxUnit link. It
+      is upstream of the target through mortgage_interest, which adds
+      deductible_mortgage_interest and non_deductible_mortgage_interest.
+      PolicyEngine's nc_itemized_deductions adds that total mortgage_interest,
+      including the federally nondeductible interest above the caps; the
+      projection supplies the statute's allowed amount and the comparison
+      reports any resulting difference rather than adopting the broader sum.
+    policyengine_variable: deductible_mortgage_interest
+    policyengine_relationship: upstream
+    policyengine_transform: person_sum_to_tax_unit
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_real_estate_property_taxes
+    source_kind: derived
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(2)b adds property taxes paid on real estate under
+      section 164 of the Code. The reviewed projection sums PolicyEngine's
+      Person real_estate_taxes over the certified TaxUnit membership after
+      verifying Person identity, order, and every Person-to-TaxUnit link.
+      PolicyEngine's nc_itemized_deductions first limits this amount by its
+      base federal SALT cap for the filing status; every 2026 base cap (at
+      least $20,200) exceeds the section 105-153.5(a)(2)b $20,000 combined
+      cap, so that limit cannot change either result. The projection supplies
+      real-estate taxes before any section 164(b)(6) limitation, the same
+      amount PolicyEngine's North Carolina formula reads; neither computation
+      allocates a binding federal state-and-local-tax limitation between
+      income and property taxes, which this comparison therefore does not
+      test.
+    policyengine_variable: real_estate_taxes
+    policyengine_relationship: upstream
+    policyengine_transform: person_sum_to_tax_unit
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_mfs_combined_mortgage_interest_and_property_taxes
+    source_kind: derived
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(2)b caps the qualified residence interest and
+      real-estate taxes claimed by both spouses combined when they file
+      separately. The certified Populace population links no separately filing
+      spouse's return to a married-separate TaxUnit, so the reviewed transform
+      adds the TaxUnit's own Person-summed deductible mortgage interest and
+      real-estate taxes as the combined amount, which is equivalent to the
+      other spouse claiming none. PolicyEngine also caps each married-separate
+      unit on its own amounts. RuleSpec consults this value only on the
+      married-separate branch.
+    policyengine_variables:
+    - deductible_mortgage_interest
+    - real_estate_taxes
+    policyengine_relationship: upstream
+    policyengine_transform: person_sums_to_combined_amount
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_mfs_cap_allocation_share
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      When spouses filing separately exceed the combined cap, section
+      105-153.5(a)(2)b prorates the deduction by the percentage each spouse
+      paid. With no separately filing spouse's return linked in the certified
+      Populace population, the unit is treated as having paid all of the
+      combined amount, matching the combined-amount projection; RuleSpec
+      consults this share only on the married-separate branch.
+    constant_value: 1.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_medical_and_dental_expenses
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(2)c allows the amount allowed as a deduction for
+      medical and dental expenses under section 213 of the Code. PolicyEngine
+      medical_expense_deduction applies the section 213(a) AGI floor and is
+      the medical component nc_itemized_deductions adds upstream of the
+      distinct target.
+    policyengine_variable: medical_expense_deduction
+    policyengine_relationship: upstream
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_claim_of_right_repayment_deduction
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(2)d allows a claim-of-right repayment deduction.
+      The certified Populace population records no claim-of-right repayment
+      and PolicyEngine's North Carolina itemized deduction has no such
+      component, so both computations carry zero.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_wagering_loss_deduction_not_in_federal_agi
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(a)(2) allows wagering losses deductible under section
+      165(d) of the Code to the extent not deducted in arriving at AGI. The
+      runner proves PolicyEngine's federal section 165(d)
+      wagering_losses_deduction is zero for every selected TaxUnit (the
+      certified population records no gambling losses), and PolicyEngine's
+      North Carolina itemized deduction has no wagering component, so both
+      computations carry zero.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_federal_child_tax_credit_qualifying_children
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      Section 105-153.5(a1) allows the child deduction for each qualifying
+      child for whom the taxpayer is allowed the federal section 24 child tax
+      credit. PolicyEngine ctc_qualifying_children is the count that
+      nc_child_deduction multiplies upstream of the distinct target; RuleSpec,
+      not PolicyEngine, selects the AGI band and per-child amount.
+    policyengine_variable: ctc_qualifying_children
+    policyengine_relationship: upstream
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_other_state_obligation_interest
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c)(1) adds interest on obligations of other states and
+      their subdivisions. PolicyEngine represents every North Carolina
+      addition only through the input-only nc_additions aggregate that
+      nc_taxable_income adds to federal AGI; the runner proves nc_additions is
+      zero for every selected TaxUnit, and the certified Populace population
+      records no separately classified amount for this item. The projection
+      therefore supplies zero, the value PolicyEngine's own computation
+      carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_s_corporation_built_in_gains_reduction
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c)(2) adds the S-corporation built-in-gains reduction.
+      PolicyEngine represents every North Carolina addition only through the
+      input-only nc_additions aggregate that nc_taxable_income adds to federal
+      AGI; the runner proves nc_additions is zero for every selected TaxUnit,
+      and the certified Populace population records no separately classified
+      amount for this item. The projection therefore supplies zero, the value
+      PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_federal_basis_excess
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c)(3) adds the excess of federal over State basis on
+      disposed property. PolicyEngine represents every North Carolina addition
+      only through the input-only nc_additions aggregate that
+      nc_taxable_income adds to federal AGI; the runner proves nc_additions is
+      zero for every selected TaxUnit, and the certified Populace population
+      records no separately classified amount for this item. The projection
+      therefore supplies zero, the value PolicyEngine's own computation
+      carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_accelerated_depreciation_and_expensing_addback
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.6 requires the accelerated-depreciation and expensing
+      add-back. PolicyEngine represents every North Carolina addition only
+      through the input-only nc_additions aggregate that nc_taxable_income
+      adds to federal AGI; the runner proves nc_additions is zero for every
+      selected TaxUnit, and the certified Populace population records no
+      separately classified amount for this item. The projection therefore
+      supplies zero, the value PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_federal_net_operating_loss_deduction
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c)(6) adds the federal net operating loss deduction.
+      PolicyEngine represents every North Carolina addition only through the
+      input-only nc_additions aggregate that nc_taxable_income adds to federal
+      AGI; the runner proves nc_additions is zero for every selected TaxUnit,
+      and the certified Populace population records no separately classified
+      amount for this item. The projection therefore supplies zero, the value
+      PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_nonqualified_education_withdrawal
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c)(7) adds a previously deducted nonqualified
+      education withdrawal. PolicyEngine represents every North Carolina
+      addition only through the input-only nc_additions aggregate that
+      nc_taxable_income adds to federal AGI; the runner proves nc_additions is
+      zero for every selected TaxUnit, and the certified Populace population
+      records no separately classified amount for this item. The projection
+      therefore supplies zero, the value PolicyEngine's own computation
+      carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_opportunity_fund_deferred_gain
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c2)(5) adds opportunity-fund deferred gain.
+      PolicyEngine represents every North Carolina addition only through the
+      input-only nc_additions aggregate that nc_taxable_income adds to federal
+      AGI; the runner proves nc_additions is zero for every selected TaxUnit,
+      and the certified Populace population records no separately classified
+      amount for this item. The projection therefore supplies zero, the value
+      PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_opportunity_fund_step_up_gain
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c2)(7) adds opportunity-fund basis step-up gain.
+      PolicyEngine represents every North Carolina addition only through the
+      input-only nc_additions aggregate that nc_taxable_income adds to federal
+      AGI; the runner proves nc_additions is zero for every selected TaxUnit,
+      and the certified Populace population records no separately classified
+      amount for this item. The projection therefore supplies zero, the value
+      PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_exempt_income_allocated_expenses
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c2)(20) adds expenses allocable to exempt income.
+      PolicyEngine represents every North Carolina addition only through the
+      input-only nc_additions aggregate that nc_taxable_income adds to federal
+      AGI; the runner proves nc_additions is zero for every selected TaxUnit,
+      and the certified Populace population records no separately classified
+      amount for this item. The projection therefore supplies zero, the value
+      PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_excess_federal_nol_carryforward_deduction
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c2)(13) adds the excess federal net operating loss
+      carryforward deduction. PolicyEngine represents every North Carolina
+      addition only through the input-only nc_additions aggregate that
+      nc_taxable_income adds to federal AGI; the runner proves nc_additions is
+      zero for every selected TaxUnit, and the certified Populace population
+      records no separately classified amount for this item. The projection
+      therefore supplies zero, the value PolicyEngine's own computation
+      carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_taxed_pass_through_loss_addition
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c3) adds a taxed S-corporation or partnership loss.
+      PolicyEngine represents every North Carolina addition only through the
+      input-only nc_additions aggregate that nc_taxable_income adds to federal
+      AGI; the runner proves nc_additions is zero for every selected TaxUnit,
+      and the certified Populace population records no separately classified
+      amount for this item. The projection therefore supplies zero, the value
+      PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_eligible_obligation_interest
+    source_kind: pe_upstream_boundary
+    status: ready
+    evidence: >-
+      Section 105-153.5(b)(1) deducts interest on obligations of the United
+      States or its possessions included in AGI. PolicyEngine us_govt_interest
+      is the United States obligation interest that nc_deductions subtracts
+      upstream of the distinct target. The certified population represents no
+      separately classified interest on North Carolina, local,
+      educational-institution, or hospital-authority obligations.
+    policyengine_variable: us_govt_interest
+    policyengine_relationship: upstream
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_exempt_obligation_gain
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(b)(2) deducts exempt gain on obligations issued before
+      July 1, 1995. PolicyEngine's reviewed nc_deductions list
+      (us_govt_interest, nc_standard_or_itemized_deductions,
+      nc_child_deduction, taxable_social_security,
+      nc_military_retirement_deduction), which the runner pins at runtime, has
+      no counterpart for this item, and the certified Populace population
+      records no separately classified amount. The projection therefore
+      supplies zero, the value PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_taxable_social_security_and_railroad_retirement
+    source_kind: derived
+    status: ready
+    evidence: >-
+      Section 105-153.5(b)(3) deducts Social Security and Railroad Retirement
+      benefits included in AGI. PolicyEngine's reviewed nc_deductions list
+      subtracts the Person taxable_social_security, the benefit amount
+      included in federal gross income; the reviewed projection sums that
+      exact Person amount over the certified TaxUnit membership after
+      verifying Person identity, order, and every Person-to-TaxUnit link.
+    policyengine_variable: taxable_social_security
+    policyengine_relationship: upstream
+    policyengine_transform: person_sum_to_tax_unit
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_income_tax_refunds
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(b)(4) deducts refunds of State, local, and foreign
+      income taxes included in gross income. PolicyEngine's federal gross
+      income sources (gov.irs.gross_income.sources) exclude
+      salt_refund_income, which the runner verifies at runtime, so the
+      supplied federal AGI includes no refund and the included amount is zero.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_bailey_retirement_benefits
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(b)(5) deducts government retirement benefits exempt
+      under the Bailey, Emory, and Patton settlements. PolicyEngine's reviewed
+      nc_deductions list (us_govt_interest,
+      nc_standard_or_itemized_deductions, nc_child_deduction,
+      taxable_social_security, nc_military_retirement_deduction), which the
+      runner pins at runtime, has no counterpart for this item, and the
+      certified Populace population records no separately classified amount.
+      The projection therefore supplies zero, the value PolicyEngine's own
+      computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_eligible_uniformed_services_retirement
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(b)(5a) deducts uniformed-services retirement pay for
+      members with 20 years of service or a medical retirement, and
+      survivor-plan payments under 10 U.S.C. 1447. PolicyEngine's
+      nc_military_retirement_deduction applies North Carolina's own
+      eligibility test and fraction, so it is not a leaf input. The certified
+      Populace person table records no separately classified uniformed-services
+      retirement pay, years of service, or medical retirement. The runner
+      proves at runtime that PolicyEngine's Person leaf military_retirement_pay
+      (benefits under a United States military retirement plan, including
+      survivor benefits) is zero for every person in every selected tax unit,
+      and that nc_military_retirement_deduction is zero for every selected tax
+      unit. The projection therefore supplies zero, the value PolicyEngine's
+      own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_eligible_tribal_income
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(b)(6) deducts eligible income of enrolled tribal
+      members. PolicyEngine's reviewed nc_deductions list (us_govt_interest,
+      nc_standard_or_itemized_deductions, nc_child_deduction,
+      taxable_social_security, nc_military_retirement_deduction), which the
+      runner pins at runtime, has no counterpart for this item, and the
+      certified Populace population records no separately classified amount.
+      The projection therefore supplies zero, the value PolicyEngine's own
+      computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_north_carolina_basis_excess
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(b)(7) deducts the excess of State over federal basis
+      on disposed property. PolicyEngine's reviewed nc_deductions list
+      (us_govt_interest, nc_standard_or_itemized_deductions,
+      nc_child_deduction, taxable_social_security,
+      nc_military_retirement_deduction), which the runner pins at runtime, has
+      no counterpart for this item, and the certified Populace population
+      records no separately classified amount. The projection therefore
+      supplies zero, the value PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_accelerated_depreciation_recovery
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.6 allows the later recovery deduction for added-back
+      depreciation and expensing. PolicyEngine's reviewed nc_deductions list
+      (us_govt_interest, nc_standard_or_itemized_deductions,
+      nc_child_deduction, taxable_social_security,
+      nc_military_retirement_deduction), which the runner pins at runtime, has
+      no counterpart for this item, and the certified Populace population
+      records no separately classified amount. The projection therefore
+      supplies zero, the value PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_federal_credit_disallowed_business_expense
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(b)(11) deducts business expenses disallowed because of
+      a federal credit. PolicyEngine's reviewed nc_deductions list
+      (us_govt_interest, nc_standard_or_itemized_deductions,
+      nc_child_deduction, taxable_social_security,
+      nc_military_retirement_deduction), which the runner pins at runtime, has
+      no counterpart for this item, and the certified Populace population
+      records no separately classified amount. The projection therefore
+      supplies zero, the value PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_employee_retention_credit_disallowed_expense
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5 deducts expenses disallowed because of the federal
+      employee retention credit. PolicyEngine's reviewed nc_deductions list
+      (us_govt_interest, nc_standard_or_itemized_deductions,
+      nc_child_deduction, taxable_social_security,
+      nc_military_retirement_deduction), which the runner pins at runtime, has
+      no counterpart for this item, and the certified Populace population
+      records no separately classified amount. The projection therefore
+      supplies zero, the value PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_personal_education_student_account_deposit
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5 deducts eligible personal education student account
+      deposits. PolicyEngine's reviewed nc_deductions list (us_govt_interest,
+      nc_standard_or_itemized_deductions, nc_child_deduction,
+      taxable_social_security, nc_military_retirement_deduction), which the
+      runner pins at runtime, has no counterpart for this item, and the
+      certified Populace population records no separately classified amount.
+      The projection therefore supplies zero, the value PolicyEngine's own
+      computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_disaster_relief_payment
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5 deducts eligible State disaster-relief payments.
+      PolicyEngine's reviewed nc_deductions list (us_govt_interest,
+      nc_standard_or_itemized_deductions, nc_child_deduction,
+      taxable_social_security, nc_military_retirement_deduction), which the
+      runner pins at runtime, has no counterpart for this item, and the
+      certified Populace population records no separately classified amount.
+      The projection therefore supplies zero, the value PolicyEngine's own
+      computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_economic_incentive_and_recovery_grants
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5 deducts eligible economic-incentive and recovery
+      grants. PolicyEngine's reviewed nc_deductions list (us_govt_interest,
+      nc_standard_or_itemized_deductions, nc_child_deduction,
+      taxable_social_security, nc_military_retirement_deduction), which the
+      runner pins at runtime, has no counterpart for this item, and the
+      certified Populace population records no separately classified amount.
+      The projection therefore supplies zero, the value PolicyEngine's own
+      computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_state_net_operating_loss
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5A allows the State net operating loss. PolicyEngine's
+      reviewed nc_deductions list (us_govt_interest,
+      nc_standard_or_itemized_deductions, nc_child_deduction,
+      taxable_social_security, nc_military_retirement_deduction), which the
+      runner pins at runtime, has no counterpart for this item, and the
+      certified Populace population records no separately classified amount.
+      The projection therefore supplies zero, the value PolicyEngine's own
+      computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_previously_taxed_opportunity_fund_gain
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5 deducts opportunity-fund gain previously included in
+      North Carolina taxable income. PolicyEngine's reviewed nc_deductions
+      list (us_govt_interest, nc_standard_or_itemized_deductions,
+      nc_child_deduction, taxable_social_security,
+      nc_military_retirement_deduction), which the runner pins at runtime, has
+      no counterpart for this item, and the certified Populace population
+      records no separately classified amount. The projection therefore
+      supplies zero, the value PolicyEngine's own computation carries.
+    constant_value: 0.0
+  - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_taxed_pass_through_income_deduction
+    source_kind: projection_constant
+    status: ready
+    evidence: >-
+      Section 105-153.5(c3) deducts taxed S-corporation or partnership income.
+      PolicyEngine's reviewed nc_deductions list (us_govt_interest,
+      nc_standard_or_itemized_deductions, nc_child_deduction,
+      taxable_social_security, nc_military_retirement_deduction), which the
+      runner pins at runtime, has no counterpart for this item, and the
+      certified Populace population records no separately classified amount.
+      The projection therefore supplies zero, the value PolicyEngine's own
+      computation carries.
+    constant_value: 0.0
   relations: []
 - state: DC
   fips: '11'
