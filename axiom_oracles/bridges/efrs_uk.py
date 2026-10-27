@@ -51,20 +51,26 @@ MIN_POLICYENGINE_UK_VERSION = "2.88"
 CATEGORY_THRESHOLD_WEEKLY_TOLERANCE = 1.0
 # Person variables that only newer PolicyEngine UK releases define. The loader
 # skips them on older releases, and the projections that read them fall back to
-# the older release's own semantics.
+# the older release's own semantics. Upstream citations below are to
+# policyengine-uk at POLICYENGINE_UK_EXACT_AGE_COMMIT, the merge of
+# PolicyEngine/policyengine-uk#1899 (first released in 2.111.2).
+POLICYENGINE_UK_EXACT_AGE_COMMIT = "0c7ea8210d39d4c9b42aa452ad7161d6ad1ec738"
 OPTIONAL_POLICYENGINE_UK_PERSON_VARIABLES = frozenset(
     {
-        # PolicyEngine/policyengine-uk#1899: months since the last birthday
-        # on 6 October, which with age places the date of birth.
+        # policyengine_uk/variables/household/demographic/
+        # months_since_last_birthday.py: months since the last birthday on
+        # 6 October, which with a whole age places the date of birth.
         "months_since_last_birthday",
     }
 )
-# policyengine_uk.utils.dates caps months since the last birthday just short
-# of 12, so an exact age never rounds onto the next birthday.
+# policyengine_uk/utils/dates.py (_LATEST_MONTHS_SINCE_BIRTHDAY,
+# exact_age_in_months) clips months since the last birthday to [0, 12 - 1e-4],
+# so an exact age never rounds onto the next birthday.
 POLICYENGINE_UK_LATEST_MONTHS_SINCE_BIRTHDAY = 12 - 1e-4
-# PolicyEngine UK rounds months_since_state_pension_age to a thousandth of a
-# month before is_SP_age tests it against zero, so a person who attains State
-# Pension age at the commencement of 6 October counts despite float error.
+# policyengine_uk/variables/gov/dwp/months_since_state_pension_age.py rounds
+# with np.round(..., 3), to a thousandth of a month, and is_SP_age.py tests the
+# result >= 0, so a person who attains State Pension age at the commencement
+# of 6 October counts despite float error.
 POLICYENGINE_UK_MONTHS_SINCE_STATE_PENSION_AGE_DECIMALS = 3
 
 NATIONAL_INSURANCE_SECTION_1_PROGRAM_PATH = Path("statutes/ukpga/1992/4/1.yaml")
@@ -5959,17 +5965,21 @@ def project_state_pension_credit_qualifying_age_inputs(row: Any) -> dict[str, An
 def policyengine_uk_exact_age(row: Any, state_pension_age: float) -> float:
     """The person's exact age on 6 October, as PolicyEngine UK's is_SP_age reads it.
 
-    From PolicyEngine/policyengine-uk#1899, state_pension_age is the person's
-    own State Pension age from their date of birth, and is_SP_age holds when
-    12 * floor(age) + months_since_last_birthday - 12 * state_pension_age,
-    rounded to a thousandth of a month, is at least zero, with months since the
-    last birthday clipped to [0, 12 - 1e-4]. The exact age is floor(age) +
+    At policyengine-uk POLICYENGINE_UK_EXACT_AGE_COMMIT (#1899),
+    state_pension_age.py gives the person's own State Pension age from the date
+    of birth that age and months_since_last_birthday place, and is_SP_age.py
+    holds when months_since_state_pension_age.py's 12 * exact age - 12 *
+    state_pension_age, rounded to a thousandth of a month, is at least zero.
+    For a whole age, utils/dates.py's exact age in months is 12 * age +
+    months_since_last_birthday clipped to [0, 12 - 1e-4]; a fractional age is
+    read as the exact age there, which this projection does not reproduce
+    (months_since_last_birthday.py: microdata records age in whole years). The exact age here is floor(age) +
     months_since_last_birthday / 12 with the same clip. Where that rounds to the
     State Pension age, the State Pension age is returned itself, so a person
     who attains it at the commencement of 6 October stays an exact tie instead
     of landing either side of it by float32 storage error. Earlier releases
-    compare the whole age, so without months_since_last_birthday the exact age
-    is the age.
+    (2.88.56's is_SP_age.py is age >= state_pension_age) have no
+    months_since_last_birthday, so without it the exact age is the age.
     """
     age = money(row_value(row, "age", 0))
     months_since_last_birthday = row_value(row, "months_since_last_birthday")
@@ -6852,40 +6862,49 @@ def compare_outputs(
             "annual child_minimum_guarantee_addition divided by 52.",
             "State Pension Credit Act section 1 qualifying-age comparison "
             "queries RuleSpec's day-level qualifying_age on 6 October of the "
-            "fiscal year, the day PolicyEngine UK reads State Pension age "
-            "status on from policyengine-uk#1899 (the day does not change "
-            "RuleSpec's result, which takes pensionable age as an input), "
-            "and supplies PolicyEngine's state_pension_age for "
-            "both the pensionable-age leaf and the woman-born-same-day leaf. "
-            "From policyengine-uk#1899 that is each person's own State "
-            "Pension age from their date of birth (66 years and 1 month for "
-            "someone born 6 April 1960), not one age per year. The attained-age "
-            "judgment is compared against PolicyEngine's is_SP_age, which "
-            "tests exact age on 6 October, so claimant_age is the exact age "
-            "floor(age) + months_since_last_birthday / 12, with months capped "
-            "at 12 - 1e-4 as in PolicyEngine, not the whole age. Whole age "
-            "would put people below a State Pension age they have reached "
-            "whenever it exceeds their whole age: 66-year-olds past a State "
-            "Pension age of 66 and some months (born 6 April to 5 July 1960 "
-            "in 2026-27, 7 October 1960 to 5 January 1961 in 2027-28), and, "
-            "in simulations built from data, almost everyone in the year of "
-            "age in which they reach a State Pension age of 66 or 67, because "
-            "PolicyEngine then places each birth within a day and its "
-            "state_pension_age includes the rest of that day (for example "
-            "66.0013 rather than 66). Where "
-            "the exact age rounds to the State Pension age at PolicyEngine's "
-            "thousandth-of-a-month resolution, claimant_age is the State "
-            "Pension age itself, so attaining it at the commencement of 6 "
-            "October is a tie as in PolicyEngine. PolicyEngine UK releases "
-            "before #1899 have no months_since_last_birthday and compare "
-            "whole age with one State Pension age per year, and the projection "
-            "then supplies whole age. rulespec-uk takes pensionable age as an "
-            "input until Pensions Act 1995 Sch 4 para 1 is encoded "
-            "(rulespec-uk#369). PolicyEngine has no separate Pension Credit "
-            "qualifying age, so the woman-born-same-day leaf also takes the "
-            "person's own State Pension age; the two differ only for men born "
-            "before 6 December 1953, whose State Pension age is 65 and who "
-            "are over both from 2019-20.",
+            "fiscal year and supplies PolicyEngine's state_pension_age for both"
+            " the pensionable-age leaf and the woman-born-same-day leaf (the "
+            "day does not change RuleSpec's result, which takes pensionable age"
+            " as an input). At policyengine-uk 0c7ea821 (the merge of #1899, "
+            "first released in 2.111.2): is_SP_age.py is "
+            "months_since_state_pension_age >= 0; "
+            "months_since_state_pension_age.py rounds 12 x exact age - 12 x "
+            "state_pension_age to a thousandth of a month on 6 October; "
+            "utils/dates.py takes the exact age of a whole age as age plus "
+            "months_since_last_birthday, clipped to [0, 12 - 1e-4] months; and "
+            "state_pension_age.py gives each person's own State Pension age "
+            "from the date of birth those place. The attained-age judgment is "
+            "therefore compared with claimant_age = floor(age) + "
+            "months_since_last_birthday / 12, clipped the same way, not the "
+            "whole age; where that rounds to the State Pension age at a "
+            "thousandth of a month, claimant_age is the State Pension age "
+            "itself, so attaining it at the commencement of 6 October is a tie."
+            " Whole age would put people below a State Pension age they have "
+            "reached whenever it exceeds their whole age. Under Pensions Act "
+            "1995 Sch 4 para 1 rule (7) and table 3 (66 years and 1 to 11 "
+            "months for births from 6 April 1960 to 5 March 1961), that covers "
+            "66-year-olds born 6 April to 5 July 1960 in 2026-27 and 7 October "
+            "1960 to 5 January 1961 in 2027-28. In simulations built from data,"
+            " months_since_last_birthday.py spreads each year of age and sex "
+            "evenly over the year, and state_pension_age.py measures from that "
+            "birth instant to the commencement of the anniversary of the day "
+            "starting at or after it, so a State Pension age of 66 or 67 years "
+            "comes out above that whole number by part of a day, and whole age "
+            "would also miss people who have reached it. PolicyEngine UK "
+            "releases before #1899, including the 2.88.56 that "
+            "uk-tax-benefits-efrs pins, have no months_since_last_birthday: "
+            "is_SP_age there is age >= state_pension_age, with "
+            "state_pension_age set by sex and year, and the projection supplies"
+            " age unchanged. rulespec-uk takes pensionable age as an input "
+            "until Pensions Act 1995 Sch 4 para 1 is encoded (rulespec-uk#369)."
+            " PolicyEngine's Pension Credit age conditions read is_SP_age "
+            "(meets_pension_credit_age_conditions.py), with no separate "
+            "qualifying-age variable, so the woman-born-same-day leaf also "
+            "takes the person's own State Pension age. Under Sch 4 para 1 rule "
+            "(1), men born before 6 December 1953 attain pensionable age at 65;"
+            " men born on or after it follow the same rules as a woman born the "
+            "same day, so the two leaves differ only for those men, who are "
+            "over both from 2019-20.",
             "State Pension Credit Act section 2 guarantee-credit comparison "
             "projects PolicyEngine's annual minimum_guarantee into the "
             "statutory appropriate minimum guarantee by supplying "
@@ -7462,7 +7481,9 @@ def day_interval(year: int) -> dict[str, str]:
 
 def fiscal_mid_year_day_interval(year: int) -> dict[str, str]:
     """6 October of the fiscal year starting in ``year``: the day on which
-    PolicyEngine UK reads State Pension age status and exact age."""
+    PolicyEngine UK reads State Pension age status and exact age from #1899
+    (is_SP_age.py and months_since_last_birthday.py at
+    POLICYENGINE_UK_EXACT_AGE_COMMIT)."""
     return {
         "period_kind": "custom",
         "name": "day",

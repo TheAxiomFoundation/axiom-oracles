@@ -498,8 +498,20 @@ def test_engine_judges_projected_rows_as_policyengine_does():
         axiom_rules_path=engine,
     )
 
+    assert_engine_results_match_rows(results, rows)
+
+
+def assert_engine_results_match_rows(results, rows):
+    """One engine result per requested row, each with PolicyEngine's judgment
+    and State Pension age; a missing or extra result fails rather than being
+    dropped by zip."""
+    assert len(results) == len(rows), (
+        f"engine returned {len(results)} results for {len(rows)} rows"
+    )
     outputs = STATE_PENSION_CREDIT_QUALIFYING_AGE_OUTPUTS
-    for result, (months, state_pension_age, is_sp_age, _) in zip(results, rows):
+    for result, (months, state_pension_age, is_sp_age, _) in zip(
+        results, rows, strict=True
+    ):
         values = result["outputs"]
         judgment = values[outputs["claimant_has_attained_qualifying_age"]["axiom"]]
         qualifying_age = values[outputs["qualifying_age"]["axiom"]]["value"]
@@ -507,3 +519,49 @@ def test_engine_judges_projected_rows_as_policyengine_does():
         assert Decimal(qualifying_age["value"]) == Decimal(
             decimal_literal(float(np.float32(state_pension_age)))
         )
+
+
+def engine_result(is_sp_age, state_pension_age):
+    outputs = STATE_PENSION_CREDIT_QUALIFYING_AGE_OUTPUTS
+    return {
+        "outputs": {
+            outputs["claimant_has_attained_qualifying_age"]["axiom"]: {
+                "outcome": "holds" if is_sp_age else "not_holds"
+            },
+            outputs["qualifying_age"]["axiom"]: {
+                "value": {
+                    "value": decimal_literal(float(np.float32(state_pension_age)))
+                }
+            },
+        }
+    }
+
+
+ENGINE_ROWS = [
+    (2.0, 66 + 1 / 12, True, "FEMALE"),
+    (8.0, 66 + 7 / 12, False, "MALE"),
+]
+
+
+def test_engine_result_comparison_accepts_one_matching_result_per_row():
+    assert_engine_results_match_rows(
+        [engine_result(is_sp_age, spa) for _, spa, is_sp_age, _ in ENGINE_ROWS],
+        ENGINE_ROWS,
+    )
+
+
+@pytest.mark.parametrize(
+    "results",
+    [
+        pytest.param([], id="empty"),
+        pytest.param([engine_result(True, 66 + 1 / 12)], id="short"),
+        pytest.param(
+            [engine_result(is_sp_age, spa) for _, spa, is_sp_age, _ in ENGINE_ROWS]
+            + [engine_result(True, 66)],
+            id="long",
+        ),
+    ],
+)
+def test_engine_result_comparison_fails_when_result_count_differs(results):
+    with pytest.raises(AssertionError, match="results for 2 rows"):
+        assert_engine_results_match_rows(results, ENGINE_ROWS)
