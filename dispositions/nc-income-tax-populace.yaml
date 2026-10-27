@@ -1,15 +1,15 @@
 schema: axiom_oracles.dispositions.v1
 suite: nc-income-tax-populace
-updated: "2026-10-26"
+updated: "2026-10-27"
 # NC resident-core pipeline vs PolicyEngine nc_income_tax_before_credits on
 # all 2,169 routed NC tax units in pinned Populace (campaign
-# reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json).
+# reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json).
 # 2,163 match within $1. The 6 PolicyEngine mismatches share one cause:
 # policyengine-us 1.752.2 counts federally non-deductible mortgage interest
 # in the NC itemized deduction. Each tax difference is 3.99 percent of that
-# interest. reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-26.json
+# interest. reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
 # recomputes the statute reading from PolicyEngine's own components and
-# reproduces Axiom within $0.56 on every compared unit.
+# reproduces Axiom within $0.57 on every compared unit (largest gap $0.5624).
 entries:
   - id: nc-populace-pe-non-deductible-mortgage-interest-32354
     concept: us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits
@@ -36,8 +36,8 @@ entries:
           equals: 87.8329
           tolerance: 0.01
       sources:
-        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json
-        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-26.json
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
         - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
         - https://github.com/PolicyEngine/policyengine-us/pull/10274
     linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
@@ -78,8 +78,8 @@ entries:
           equals: 4.5854
           tolerance: 0.01
       sources:
-        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json
-        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-26.json
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
         - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
         - https://github.com/PolicyEngine/policyengine-us/pull/10274
     linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
@@ -120,8 +120,8 @@ entries:
           equals: 61.8405
           tolerance: 0.01
       sources:
-        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json
-        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-26.json
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
         - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
         - https://github.com/PolicyEngine/policyengine-us/pull/10274
     linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
@@ -162,8 +162,8 @@ entries:
           equals: 56.8338
           tolerance: 0.01
       sources:
-        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json
-        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-26.json
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
         - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
         - https://github.com/PolicyEngine/policyengine-us/pull/10274
     linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
@@ -206,8 +206,8 @@ entries:
           equals: 17.593
           tolerance: 0.07
       sources:
-        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json
-        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-26.json
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
         - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
         - https://github.com/PolicyEngine/policyengine-us/pull/10274
     linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468
@@ -250,8 +250,8 @@ entries:
           equals: 24.7203
           tolerance: 0.07
       sources:
-        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json
-        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-26.json
+        - reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json
+        - reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json
         - https://www.ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_105/GS_105-153.5.html
         - https://github.com/PolicyEngine/policyengine-us/pull/10274
     linked_issue: https://github.com/PolicyEngine/policyengine-us/issues/10468

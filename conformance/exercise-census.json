@@ -6898,7 +6898,7 @@
       "inline_cases_not_counted": 0,
       "reconciliation": "cardinality",
       "report": "dashboard/public/data/axiom-policyengine-nc-income-tax-populace.json",
-      "report_sha256": "a572753dc5526358ecaa44e15c2d94d0b341f7e7444d07416b24c73ff2125510",
+      "report_sha256": "c85c115e4e26760d4ad80096a27d4c1c9defcbcc393e5fc08ed4eb3b38e1c282",
       "varied_fields": 0,
       "verdict_concepts": {
         "us-nc:policies/income_tax/resident_core_liability_pipeline#nc_pit_2026_income_tax_before_credits": {

@@ -776,7 +776,7 @@ jurisdictions:
     proves the counterpart is zero for every selected tax unit. No completed
     North Carolina taxable-income, deduction, subtraction, or tax boundary is
     supplied. A full certified-Populace campaign
-    (reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json,
+    (reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json,
     rulespec-us 56455a56) compared all 2,169 positive-weight routed North
     Carolina tax units: 2,163 match within the $1 tolerance. The other 6
     differ by $4.59 to $87.83 because policyengine-us 1.752.2 counts

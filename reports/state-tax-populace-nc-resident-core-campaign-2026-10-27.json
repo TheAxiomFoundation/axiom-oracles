@@ -54588,7 +54588,7 @@
       "pinned_policyengine_taxsim": "2.30.0"
     }
   },
-  "generated_at": "2026-10-26T22:12:45Z",
+  "generated_at": "2026-10-27T07:02:01Z",
   "generated_by": "scripts/run_state_tax_populace.py",
   "projection_diagnostics": {
     "NC": {
@@ -54605,7 +54605,6 @@
       "single_count": 1020,
       "standard_deduction_ineligible_count": 0,
       "taxable_social_security_present_count": 426,
-      "uniformed_services_retirement_present_count": 0,
       "united_states_obligation_interest_present_count": 0
     }
   },

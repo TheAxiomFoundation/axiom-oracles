@@ -2074,11 +2074,11 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
     )
     campaign_path = (
         REPO_ROOT
-        / "reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json"
+        / "reports/state-tax-populace-nc-resident-core-campaign-2026-10-27.json"
     )
     trace_path = (
         REPO_ROOT
-        / "reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-26.json"
+        / "reports/state-tax-populace-nc-resident-core-mismatch-trace-2026-10-27.json"
     )
     report_path = (
         DASHBOARD_DATA / "axiom-policyengine-nc-income-tax-populace.json"

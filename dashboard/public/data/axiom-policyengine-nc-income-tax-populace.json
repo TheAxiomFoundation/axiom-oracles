@@ -163,10 +163,9 @@
    "single_count": 1020,
    "standard_deduction_ineligible_count": 0,
    "taxable_social_security_present_count": 426,
-   "uniformed_services_retirement_present_count": 0,
    "united_states_obligation_interest_present_count": 0
   },
-  "campaign_report": "state-tax-populace-nc-resident-core-campaign-2026-10-26.json",
+  "campaign_report": "state-tax-populace-nc-resident-core-campaign-2026-10-27.json",
   "dataset_identity": {
    "built_with": "1.729.0",
    "country": "us",
@@ -175,7 +174,7 @@
    "sha256": "16be6338f9d0",
    "source": "pinned"
   },
-  "generated_at": "2026-10-26T22:12:45Z",
+  "generated_at": "2026-10-27T07:02:01Z",
   "generated_by": "scripts/emit_populace_campaign_artifacts.py::nc-income-tax-populace",
   "max_absolute_difference": 87.83294540100087,
   "relative_tolerance": 0.0,
