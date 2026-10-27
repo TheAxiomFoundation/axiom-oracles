@@ -17,6 +17,10 @@ It then predicts the Axiom value as 3.99 percent of PolicyEngine's
 If the statute reading reproduces Axiom on every unit, the reading is the
 whole mismatch mechanism.
 
+From policyengine-us 2.60.4 the two readings agree, so on a current oracle the
+trace should find no mismatch and move no unit's deduction beyond float32
+storage noise; a unit that moves further shows a new divergence to examine.
+
 Usage:
     python scripts/trace_nc_populace_mismatches.py CAMPAIGN.json OUT.json
 """

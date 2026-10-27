@@ -15,6 +15,7 @@ import hashlib
 from importlib.metadata import PackageNotFoundError, version
 import math
 from pathlib import Path
+import re
 import struct
 import subprocess
 from typing import Any, Callable, Iterable, Mapping
@@ -129,16 +130,35 @@ NC_RESIDENT_CORE_OUTPUT = (
     f"{NC_RESIDENT_CORE_PROGRAM}#nc_pit_2026_income_tax_before_credits"
 )
 NC_RESIDENT_CORE_INPUT_COUNT = 43
-# PolicyEngine's 2026 nc_deductions list.  Every other section 105-153.5
-# subtraction enters the projection as a reviewed zero constant, so a new
-# PolicyEngine deduction must fail closed until its slot is re-reviewed.
+# PolicyEngine's 2026 nc_deductions list (policyengine-us 2.60.4 and later).
+# Every other section 105-153.5 subtraction enters the projection as a
+# reviewed zero constant, so a new PolicyEngine deduction must fail closed
+# until its slot is re-reviewed.
 NC_REVIEWED_POLICYENGINE_DEDUCTIONS = (
     "us_govt_interest",
     "nc_standard_or_itemized_deductions",
     "nc_child_deduction",
     "taxable_social_security",
     "nc_military_retirement_deduction",
+    "salt_refund_income",
+    "nc_other_subtractions",
 )
+# PolicyEngine's 2026 itemized items outside the mortgage-and-property-tax
+# pool.  Charitable and medical are projected; the claim-of-right deduction is
+# proved zero.
+NC_REVIEWED_POLICYENGINE_OTHER_ITEMIZED = (
+    "charitable_deduction",
+    "medical_expense_deduction",
+    "nc_claim_of_right_deduction",
+)
+# Section 105-153.5(a)(2)b's combined mortgage-interest and property-tax cap.
+NC_MORTGAGE_AND_PROPERTY_TAX_CAP = 20_000.0
+# policyengine-us before 2.60.4 put federally non-deductible mortgage interest
+# in the North Carolina mortgage and property-tax pool
+# (PolicyEngine/policyengine-us#10468, fixed by #10274). The runtime proofs
+# read parameters and variable metadata, not formulas, so they cannot see that
+# fix; a campaign over these states refuses an older oracle instead.
+MINIMUM_POLICYENGINE_US_BY_STATE: Mapping[str, str] = {"NC": "2.60.4"}
 OH_NONBUSINESS_BEFORE_CREDITS_DERIVED_TARGET = (
     "oh_nonbusiness_income_tax_before_non_refundable_credits_derived"
 )
@@ -173,6 +193,7 @@ _REVIEWED_PERSON_SUM_VARIABLES_BY_STATE = {
         {
             "deductible_mortgage_interest",
             "real_estate_taxes",
+            "salt_refund_income",
             "taxable_social_security",
         }
     ),
@@ -206,18 +227,35 @@ _REVIEWED_RAW_PERSON_VALUE_ASSUMPTIONS_BY_STATE = {
 # absent from the source-backed RuleSpec is not present in selected tax units.
 # These assertions never supply an input or select an output branch.
 _REVIEWED_PE_ZERO_ASSUMPTIONS_BY_STATE = {
-    # The NC resident core supplies zero for every classified addition, for
-    # the wagering-loss deduction not taken in AGI, and for uniformed-services
-    # retirement; PolicyEngine carries those items only in nc_additions, the
-    # federal wagering_losses_deduction, and nc_military_retirement_deduction.
+    # The NC resident core supplies zero for every classified addition, the
+    # other classified subtractions, the wagering-loss deduction not taken in
+    # AGI, uniformed-services retirement, the claim-of-right deduction, and
+    # qualified mortgage insurance premiums. PolicyEngine carries those items
+    # only in nc_additions, nc_other_subtractions, the federal
+    # wagering_losses_deduction, nc_military_retirement_deduction,
+    # nc_claim_of_right_deduction, and deductible_mortgage_insurance_premiums.
     "NC": frozenset(
         {
+            "deductible_mortgage_insurance_premiums",
             "nc_additions",
+            "nc_claim_of_right_deduction",
             "nc_military_retirement_deduction",
+            "nc_other_subtractions",
             "wagering_losses_deduction",
         }
     ),
     "VT": frozenset({"us_govt_interest"}),
+}
+
+# Exact upstream PolicyEngine values that must equal a reviewed constant for
+# every selected TaxUnit.  Like the zero assumptions, they never supply an
+# input; they prove a branch the projection fixes is the one PolicyEngine takes.
+_REVIEWED_PE_VALUE_ASSUMPTIONS_BY_STATE = {
+    # The NC projection treats each married-separate unit as paying all of the
+    # combined mortgage interest and property taxes (share 1). PolicyEngine
+    # prorates the $20,000 limitation only for a linked separately filing
+    # couple, so an unprorated limitation on every unit proves that branch.
+    "NC": {"nc_mortgage_and_property_tax_limitation": NC_MORTGAGE_AND_PROPERTY_TAX_CAP},
 }
 
 # Exact upstream PolicyEngine Person leaves that must be zero for every person
@@ -225,8 +263,15 @@ _REVIEWED_PE_ZERO_ASSUMPTIONS_BY_STATE = {
 # value, shows the reviewed zero holds under any eligibility reading.
 _REVIEWED_PE_PERSON_ZERO_ASSUMPTIONS_BY_STATE = {
     # Section 105-153.5(b)(5a) deducts only uniformed-services retirement pay
-    # and survivor-plan payments; with no such pay the deduction is zero.
-    "NC": frozenset({"military_retirement_pay"}),
+    # and survivor-plan payments, and (a)(2)d only claim-of-right repayments;
+    # with none of them the deductions are zero.
+    "NC": frozenset(
+        {
+            "claim_of_right_repayment",
+            "military_retirement_pay",
+            "military_retirement_pay_survivors",
+        }
+    ),
 }
 
 # RuleSpec inputs are TaxUnit-grain unless their complete legal ID is listed
@@ -2085,6 +2130,13 @@ def calculate_policyengine_projection_inputs(
             selected_tax_unit_ids=selected_tax_unit_ids,
             year=year,
         )
+        _validate_reviewed_pe_value_assumptions(
+            state=state,
+            sim=sim,
+            tax_unit_ids=tax_unit_ids,
+            selected_tax_unit_ids=selected_tax_unit_ids,
+            year=year,
+        )
         _validate_reviewed_pe_person_zero_assumptions(
             state=state,
             sim=sim,
@@ -2560,32 +2612,88 @@ def _validate_reviewed_pe_zero_assumptions(
     variables = _REVIEWED_PE_ZERO_ASSUMPTIONS_BY_STATE.get(state)
     if variables is None:
         return
+    _require_reviewed_pe_tax_unit_values(
+        state=state,
+        sim=sim,
+        expected={variable: 0.0 for variable in variables},
+        kind="zero",
+        tax_unit_ids=tax_unit_ids,
+        selected_tax_unit_ids=selected_tax_unit_ids,
+        year=year,
+    )
+
+
+def _validate_reviewed_pe_value_assumptions(
+    *,
+    state: str,
+    sim: Any,
+    tax_unit_ids: list[int | str],
+    selected_tax_unit_ids: set[int | str],
+    year: int,
+) -> None:
+    """Prove exact reviewed upstream values for selected TaxUnits."""
+
+    expected = _REVIEWED_PE_VALUE_ASSUMPTIONS_BY_STATE.get(state)
+    if expected is None:
+        return
+    for variable in sorted(expected):
+        _require_policyengine_tax_unit_year_money_variable(
+            sim,
+            state=state,
+            variable=variable,
+        )
+    _require_reviewed_pe_tax_unit_values(
+        state=state,
+        sim=sim,
+        expected=expected,
+        kind="value",
+        tax_unit_ids=tax_unit_ids,
+        selected_tax_unit_ids=selected_tax_unit_ids,
+        year=year,
+    )
+
+
+def _require_reviewed_pe_tax_unit_values(
+    *,
+    state: str,
+    sim: Any,
+    expected: Mapping[str, float],
+    kind: str,
+    tax_unit_ids: list[int | str],
+    selected_tax_unit_ids: set[int | str],
+    year: int,
+) -> None:
     selected_ids = {_clean_id(value) for value in selected_tax_unit_ids}
     known_ids = set(tax_unit_ids)
     unknown = sorted(selected_ids - known_ids, key=str)
     if unknown:
         raise StateTaxPopulationRoutingError(
-            f"{state}: reviewed zero assumption references unknown tax_unit_id "
+            f"{state}: reviewed {kind} assumption references unknown tax_unit_id "
             "values: " + ", ".join(str(value) for value in unknown)
         )
-    for variable in sorted(variables):
+    for variable in sorted(expected):
         values = _array_values(sim.calculate(variable, period=year))
         if len(values) != len(tax_unit_ids):
             raise StateTaxPopulationRoutingError(
-                f"{state}: reviewed zero-assumption variable {variable!r} returned "
+                f"{state}: reviewed {kind}-assumption variable {variable!r} returned "
                 f"{len(values)} rows for {len(tax_unit_ids)} tax units"
             )
-        nonzero: list[int | str] = []
+        differing: list[int | str] = []
         for tax_unit_id, value in zip(tax_unit_ids, values, strict=True):
             if tax_unit_id not in selected_ids:
                 continue
             number = _finite_number(value, label=f"{state}:{variable}")
-            if number != 0:
-                nonzero.append(tax_unit_id)
-        if nonzero:
+            if number != expected[variable]:
+                differing.append(tax_unit_id)
+        if differing:
+            outcome = (
+                "are nonzero"
+                if kind == "zero"
+                else f"differ from {expected[variable]!r}"
+            )
             raise StateTaxPopulationRoutingError(
-                f"{state}: reviewed zero assumption failed for {variable!r}: "
-                f"{len(nonzero)} selected tax unit(s) are nonzero"
+                f"{state}: reviewed {kind} assumption failed for {variable!r}: "
+                f"{len(differing)} selected tax unit(s) {outcome}"
             )
 
 
@@ -3912,6 +4020,9 @@ def _validate_north_carolina_policyengine_runtime(*, sim: Any, year: int) -> Non
         "nc_additions",
         "nc_deductions",
         "nc_military_retirement_deduction",
+        "nc_other_subtractions",
+        "nc_claim_of_right_deduction",
+        "deductible_mortgage_insurance_premiums",
         "adjusted_gross_income",
         "wagering_losses_deduction",
     ):
@@ -3924,10 +4035,12 @@ def _validate_north_carolina_policyengine_runtime(*, sim: Any, year: int) -> Non
         variables = sim.tax_benefit_system.variables
         taxable_income = variables["nc_taxable_income"]
         deductions = variables["nc_deductions"]
-        mortgage_interest = variables["mortgage_interest"]
         parameters = sim.tax_benefit_system.parameters(year)
-        deduction_list = tuple(
-            parameters.gov.states.nc.tax.income.deductions.deductions
+        nc_deductions = parameters.gov.states.nc.tax.income.deductions
+        deduction_list = tuple(nc_deductions.deductions)
+        other_itemized = tuple(nc_deductions.itemized.other_sources)
+        mortgage_and_property_tax_cap = (
+            nc_deductions.itemized.cap.mortgage_and_property_tax
         )
         gross_income_sources = tuple(parameters.gov.irs.gross_income.sources)
     except (AttributeError, KeyError, TypeError) as exc:
@@ -3957,19 +4070,24 @@ def _validate_north_carolina_policyengine_runtime(*, sim: Any, year: int) -> Non
             + f"; got {deduction_list!r}"
         )
     # Section 105-153.5(b)(4) subtracts only refunds included in gross income;
-    # the projection supplies zero because federal AGI excludes them.
-    if "salt_refund_income" in gross_income_sources:
+    # the projection supplies salt_refund_income because federal AGI includes it.
+    if "salt_refund_income" not in gross_income_sources:
         raise StateTaxPopulationRoutingError(
-            "NC: federal gross income now includes salt_refund_income; the "
-            "reviewed zero income-tax-refund subtraction no longer holds"
+            "NC: federal gross income no longer includes salt_refund_income; "
+            "the reviewed income-tax-refund subtraction no longer holds"
         )
-    if list(getattr(mortgage_interest, "adds", None) or ()) != [
-        "non_deductible_mortgage_interest",
-        "deductible_mortgage_interest",
-    ]:
+    if other_itemized != NC_REVIEWED_POLICYENGINE_OTHER_ITEMIZED:
         raise StateTaxPopulationRoutingError(
-            "NC: mortgage_interest must remain deductible plus nondeductible "
-            "Person mortgage interest"
+            "NC: itemized deductions outside the mortgage and property-tax "
+            "pool must remain the reviewed list "
+            + ", ".join(NC_REVIEWED_POLICYENGINE_OTHER_ITEMIZED)
+            + f"; got {other_itemized!r}"
+        )
+    if mortgage_and_property_tax_cap != NC_MORTGAGE_AND_PROPERTY_TAX_CAP:
+        raise StateTaxPopulationRoutingError(
+            "NC: the mortgage and property-tax cap must remain "
+            f"{NC_MORTGAGE_AND_PROPERTY_TAX_CAP!r}; got "
+            f"{mortgage_and_property_tax_cap!r}"
         )
 
 
@@ -4565,6 +4683,59 @@ def _file_sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def require_policyengine_us_floor(
+    states: Iterable[str],
+    *,
+    installed: str | None = None,
+) -> None:
+    """Refuse a campaign whose states need a newer policyengine-us.
+
+    ``installed`` defaults to the installed distribution's version. A version
+    that is not plain dot-separated integers is refused rather than guessed.
+    """
+
+    floors = {
+        state: MINIMUM_POLICYENGINE_US_BY_STATE[state]
+        for state in sorted(set(states))
+        if state in MINIMUM_POLICYENGINE_US_BY_STATE
+    }
+    if not floors:
+        return
+    if installed is None:
+        installed = _package_version("policyengine-us")
+    current = _release_segments(installed)
+    too_old = [
+        state
+        for state, floor in floors.items()
+        if current is None or not _release_at_least(current, _release_segments(floor))
+    ]
+    if too_old:
+        raise StateTaxPopulationRoutingError(
+            "; ".join(
+                f"{state} requires policyengine-us>={floors[state]}"
+                for state in too_old
+            )
+            + f"; installed {installed!r}"
+        )
+
+
+def _release_segments(text: str) -> tuple[int, ...] | None:
+    if not re.fullmatch(r"[0-9]+(?:\.[0-9]+)*", text):
+        return None
+    return tuple(int(part) for part in text.split("."))
+
+
+def _release_at_least(
+    current: tuple[int, ...], floor: tuple[int, ...] | None
+) -> bool:
+    if floor is None:
+        raise ValueError("policyengine-us floors must be plain releases")
+    width = max(len(current), len(floor))
+    return current + (0,) * (width - len(current)) >= floor + (0,) * (
+        width - len(floor)
+    )
 
 
 def _package_version(package: str) -> str:

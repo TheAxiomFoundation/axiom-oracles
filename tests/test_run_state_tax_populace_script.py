@@ -59,6 +59,60 @@ def test_invalid_requested_state_fails_before_dataset_load(
         )
 
 
+def _contract_with_ready_nc():
+    contract = _contract()
+    jurisdictions = {**contract.by_state(), "NC": SimpleNamespace(status="ready")}
+    return SimpleNamespace(
+        validation_year=contract.validation_year,
+        populace_year=contract.populace_year,
+        by_state=lambda: jurisdictions,
+    )
+
+
+@pytest.mark.parametrize("states", [["--state", "nc"], []])
+@pytest.mark.parametrize(
+    ("installed", "error"),
+    [
+        ("1.752.2", r"NC requires policyengine-us>=2\.60\.4; installed '1\.752\.2'"),
+        (None, "cannot record required package version for policyengine-us"),
+    ],
+)
+def test_nc_campaign_refuses_an_old_or_missing_policyengine_us_before_dataset_load(
+    monkeypatch, tmp_path, states, installed, error
+) -> None:
+    import axiom_oracles.bridges.state_tax_populace_runner as runner
+
+    monkeypatch.setattr(
+        campaign, "load_state_tax_populace_contract", _contract_with_ready_nc
+    )
+
+    def installed_release(package: str) -> str:
+        if installed is None:
+            raise runner.PackageNotFoundError(package)
+        return installed
+
+    monkeypatch.setattr(runner, "version", installed_release)
+
+    def reject_dataset_load(*args, **kwargs):
+        pytest.fail("policyengine-us should be checked before the dataset loads")
+
+    monkeypatch.setattr(campaign, "load_populace_dataset", reject_dataset_load)
+
+    with pytest.raises(SystemExit, match=error):
+        campaign.main(
+            [
+                *states,
+                "--no-taxsim",
+                "--rulespec-root",
+                str(tmp_path),
+                "--axiom-rules-path",
+                str(tmp_path),
+                "--output",
+                str(tmp_path / "report.json"),
+            ]
+        )
+
+
 def test_repeatable_state_filter_preserves_national_routing_report(
     monkeypatch, tmp_path
 ) -> None:
@@ -654,6 +708,7 @@ def _nc_inputs(**overrides) -> dict:
         "nc_pit_2026_taxable_social_security_and_railroad_retirement": {
             1: 1_000.0, 2: 0.0, 3: 0.0, 4: 1.0,
         },
+        "nc_pit_2026_income_tax_refunds": {1: 0.0, 2: 0.0, 3: 250.0, 4: 1.0},
     }
     for name, by_unit in overrides.items():
         values[name] = {**values[name], **by_unit}
@@ -689,6 +744,7 @@ def test_north_carolina_projection_diagnostics_pin_status_and_presence_counts():
             "medical_and_dental_expenses_present_count": 1,
             "united_states_obligation_interest_present_count": 0,
             "taxable_social_security_present_count": 1,
+            "income_tax_refunds_present_count": 1,
         }
     }
 

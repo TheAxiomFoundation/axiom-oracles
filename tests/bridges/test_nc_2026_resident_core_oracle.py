@@ -25,13 +25,16 @@ from axiom_oracles.bridges.state_tax_populace import (
 from axiom_oracles.bridges.state_tax_populace_runner import (
     DISPOSITION_READY,
     NC_REVIEWED_POLICYENGINE_DEDUCTIONS,
+    NC_REVIEWED_POLICYENGINE_OTHER_ITEMIZED,
     StateTaxPopulationRoutingError,
     TaxUnitRoute,
     _apply_projection_transform,
     _validate_north_carolina_policyengine_runtime,
     _validate_north_carolina_runtime_contract,
     calculate_policyengine_projection_inputs,
+    require_policyengine_us_floor,
 )
+import axiom_oracles.bridges.state_tax_populace_runner as runner
 
 
 MODULE = "us-nc:policies/income_tax/resident_core_liability_pipeline"
@@ -133,8 +136,8 @@ def test_nc_row_supplies_only_leaf_inputs_never_a_completed_nc_boundary() -> Non
     kinds = [slot.source_kind for slot in nc.inputs]
 
     assert kinds.count("pe_upstream_boundary") == 5
-    assert kinds.count("derived") == 8
-    assert kinds.count("projection_constant") == 30
+    assert kinds.count("derived") == 9
+    assert kinds.count("projection_constant") == 29
     used = {variable for slot in nc.inputs for variable in _sources(slot)}
     assert used.isdisjoint(COMPLETED_NC_BOUNDARIES)
     assert used == {
@@ -148,6 +151,7 @@ def test_nc_row_supplies_only_leaf_inputs_never_a_completed_nc_boundary() -> Non
         "ctc_qualifying_children",
         "us_govt_interest",
         "taxable_social_security",
+        "salt_refund_income",
     }
     agi = nc.inputs[0]
     assert (agi.source_kind, agi.policyengine_variable) == (
@@ -165,7 +169,7 @@ def test_nc_projection_constants_are_the_reviewed_zero_and_share_values() -> Non
 
     assert constants.pop("nc_pit_2026_mfs_cap_allocation_share") == 1.0
     assert set(constants.values()) == {0.0}
-    assert len(constants) == 29
+    assert len(constants) == 28
 
 
 def test_nc_slots_partition_exactly_across_the_reviewed_allowlists() -> None:
@@ -198,7 +202,7 @@ def _nc_slot(document: dict, name: str) -> dict:
     ("name", "edit", "message"),
     [
         (
-            "nc_pit_2026_income_tax_refunds",
+            "nc_pit_2026_bailey_retirement_benefits",
             {"constant_value": 1.0},
             "constant allowlist",
         ),
@@ -208,17 +212,17 @@ def _nc_slot(document: dict, name: str) -> dict:
             "constant allowlist",
         ),
         (
-            "nc_pit_2026_income_tax_refunds",
+            "nc_pit_2026_bailey_retirement_benefits",
             {"constant_value": True},
             "projection constant must be numeric",
         ),
         (
-            "nc_pit_2026_income_tax_refunds",
+            "nc_pit_2026_bailey_retirement_benefits",
             {"constant_value": None},
             "projection constant requires constant_value",
         ),
         (
-            "nc_pit_2026_income_tax_refunds",
+            "nc_pit_2026_bailey_retirement_benefits",
             {"policyengine_variable": "salt_refund_income"},
             "projection constant may not declare PE metadata",
         ),
@@ -241,6 +245,24 @@ def test_contract_rejects_projection_constant_for_a_modeled_upstream_slot() -> N
     document = _document()
     slot = _nc_slot(document, "nc_pit_2026_federal_adjusted_gross_income")
     for key in ("policyengine_variable", "policyengine_relationship"):
+        slot.pop(key)
+    slot["source_kind"] = "projection_constant"
+    slot["constant_value"] = 0.0
+
+    with pytest.raises(StateTaxPopulaceContractError, match="constant allowlist"):
+        validate_state_tax_populace_contract(document)
+
+
+def test_contract_rejects_a_zero_constant_for_the_refund_in_federal_agi() -> None:
+    # policyengine-us 2.60.4 and later include salt_refund_income in federal
+    # gross income, so the section 105-153.5(b)(4) refund is no longer zero.
+    document = _document()
+    slot = _nc_slot(document, "nc_pit_2026_income_tax_refunds")
+    for key in (
+        "policyengine_variable",
+        "policyengine_relationship",
+        "policyengine_transform",
+    ):
         slot.pop(key)
     slot["source_kind"] = "projection_constant"
     slot["constant_value"] = 0.0
@@ -287,7 +309,7 @@ def test_runtime_contract_accepts_the_packaged_row() -> None:
             nc,
             inputs=tuple(
                 replace(slot, constant_value=1.0)
-                if slot.slot.endswith("nc_pit_2026_income_tax_refunds")
+                if slot.slot.endswith("nc_pit_2026_bailey_retirement_benefits")
                 else slot
                 for slot in nc.inputs
             ),
@@ -297,6 +319,21 @@ def test_runtime_contract_accepts_the_packaged_row() -> None:
             inputs=tuple(
                 replace(slot, policyengine_transform="person_sum_to_tax_unit")
                 if slot.slot.endswith("nc_pit_2026_eligible_for_federal_standard_deduction")
+                else slot
+                for slot in nc.inputs
+            ),
+        ),
+        lambda nc: replace(
+            nc,
+            inputs=tuple(
+                replace(
+                    slot,
+                    source_kind="projection_constant",
+                    policyengine_variable=None,
+                    policyengine_transform=None,
+                    constant_value=0.0,
+                )
+                if slot.slot.endswith("nc_pit_2026_income_tax_refunds")
                 else slot
                 for slot in nc.inputs
             ),
@@ -323,10 +360,15 @@ def _money(entity="tax_unit", **extra):
 def _nc_system(
     *,
     deductions=NC_REVIEWED_POLICYENGINE_DEDUCTIONS,
-    gross_income_sources=("employment_income", "taxable_social_security"),
+    gross_income_sources=(
+        "employment_income",
+        "taxable_social_security",
+        "salt_refund_income",
+    ),
     taxable_adds=("adjusted_gross_income", "nc_additions"),
     taxable_subtracts=("nc_deductions",),
-    mortgage_adds=("non_deductible_mortgage_interest", "deductible_mortgage_interest"),
+    other_itemized=NC_REVIEWED_POLICYENGINE_OTHER_ITEMIZED,
+    mortgage_and_property_tax_cap=20_000,
     deductions_adds="gov.states.nc.tax.income.deductions.deductions",
     taxable_formula=None,
 ):
@@ -336,25 +378,43 @@ def _nc_system(
             "nc_income_tax_before_credits",
             "nc_additions",
             "nc_military_retirement_deduction",
+            "nc_other_subtractions",
+            "nc_claim_of_right_deduction",
+            "deductible_mortgage_insurance_premiums",
+            "nc_mortgage_and_property_tax_limitation",
             "adjusted_gross_income",
             "wagering_losses_deduction",
         )
     }
-    variables["military_retirement_pay"] = _money(entity="person")
+    for name in (
+        "claim_of_right_repayment",
+        "military_retirement_pay",
+        "military_retirement_pay_survivors",
+    ):
+        variables[name] = _money(entity="person")
     variables["nc_taxable_income"] = _money(
         adds=list(taxable_adds), subtracts=list(taxable_subtracts)
     )
     if taxable_formula is not None:
         variables["nc_taxable_income"].get_formula = lambda period: taxable_formula
     variables["nc_deductions"] = _money(adds=deductions_adds)
-    variables["mortgage_interest"] = SimpleNamespace(adds=list(mortgage_adds))
     parameters = SimpleNamespace(
         gov=SimpleNamespace(
             states=SimpleNamespace(
                 nc=SimpleNamespace(
                     tax=SimpleNamespace(
                         income=SimpleNamespace(
-                            deductions=SimpleNamespace(deductions=list(deductions))
+                            deductions=SimpleNamespace(
+                                deductions=list(deductions),
+                                itemized=SimpleNamespace(
+                                    other_sources=list(other_itemized),
+                                    cap=SimpleNamespace(
+                                        mortgage_and_property_tax=(
+                                            mortgage_and_property_tax_cap
+                                        )
+                                    ),
+                                ),
+                            )
                         )
                     )
                 )
@@ -383,8 +443,8 @@ def test_policyengine_runtime_accepts_the_reviewed_structure() -> None:
         ({"deductions": NC_REVIEWED_POLICYENGINE_DEDUCTIONS[:-1]}, "reviewed 2026 list"),
         ({"deductions_adds": ["us_govt_interest"]}, "reviewed 2026 list"),
         (
-            {"gross_income_sources": ("employment_income", "salt_refund_income")},
-            "salt_refund_income",
+            {"gross_income_sources": ("employment_income", "taxable_social_security")},
+            "no longer includes salt_refund_income",
         ),
         (
             {"taxable_adds": ("adjusted_gross_income", "nc_additions", "nc_other")},
@@ -392,7 +452,20 @@ def test_policyengine_runtime_accepts_the_reviewed_structure() -> None:
         ),
         ({"taxable_subtracts": ()}, "federal AGI plus nc_additions"),
         ({"taxable_formula": lambda *args: 0.0}, "federal AGI plus nc_additions"),
-        ({"mortgage_adds": ("deductible_mortgage_interest",)}, "mortgage_interest"),
+        (
+            {
+                "other_itemized": (
+                    *NC_REVIEWED_POLICYENGINE_OTHER_ITEMIZED,
+                    "nc_gambling_loss_deduction",
+                )
+            },
+            "pool must remain the reviewed list",
+        ),
+        (
+            {"other_itemized": NC_REVIEWED_POLICYENGINE_OTHER_ITEMIZED[:-1]},
+            "pool must remain the reviewed list",
+        ),
+        ({"mortgage_and_property_tax_cap": 25_000}, "cap must remain"),
     ],
 )
 def test_policyengine_runtime_fails_closed_on_structural_drift(kwargs, message) -> None:
@@ -444,8 +517,15 @@ def _values(**overrides):
         "us_govt_interest": [125.0, 0.0],
         "nc_military_retirement_deduction": [0.0, 0.0],
         "nc_additions": [0.0, 0.0],
+        "nc_other_subtractions": [0.0, 0.0],
+        "nc_claim_of_right_deduction": [0.0, 0.0],
+        "deductible_mortgage_insurance_premiums": [0.0, 0.0],
+        "nc_mortgage_and_property_tax_limitation": [20_000.0, 20_000.0],
         "wagering_losses_deduction": [0.0, 0.0],
+        "claim_of_right_repayment": [0.0, 0.0, 0.0],
         "military_retirement_pay": [0.0, 0.0, 0.0],
+        "military_retirement_pay_survivors": [0.0, 0.0, 0.0],
+        "salt_refund_income": [300.0, 0.0, 450.0],
         "deductible_mortgage_interest": [6_000.0, 4_000.0, 1_500.0],
         "real_estate_taxes": [2_000.0, 1_000.0, 800.0],
         "taxable_social_security": [0.0, 9_000.0, 0.0],
@@ -528,7 +608,7 @@ def test_projection_builds_every_resident_core_input_from_leaf_values() -> None:
         2: 0.0,
     }
     assert slot("nc_pit_2026_mfs_cap_allocation_share") == {1: 1.0, 2: 1.0}
-    assert slot("nc_pit_2026_income_tax_refunds") == {1: 0.0, 2: 0.0}
+    assert slot("nc_pit_2026_income_tax_refunds") == {1: 300.0, 2: 450.0}
     assert slot("nc_pit_2026_other_state_obligation_interest") == {1: 0.0, 2: 0.0}
     assert slot("nc_pit_2026_eligible_uniformed_services_retirement") == {
         1: 0.0,
@@ -538,20 +618,93 @@ def test_projection_builds_every_resident_core_input_from_leaf_values() -> None:
 
 @pytest.mark.parametrize(
     "variable",
-    ["nc_additions", "nc_military_retirement_deduction", "wagering_losses_deduction"],
+    [
+        "deductible_mortgage_insurance_premiums",
+        "nc_additions",
+        "nc_claim_of_right_deduction",
+        "nc_military_retirement_deduction",
+        "nc_other_subtractions",
+        "wagering_losses_deduction",
+    ],
 )
 def test_projection_fails_closed_when_a_zero_constant_is_unproved(variable) -> None:
     with pytest.raises(StateTaxPopulationRoutingError, match=variable):
         _project(_values(**{variable: [0.0, 25.0]}))
 
 
-def test_projection_fails_closed_on_any_selected_military_retirement_pay() -> None:
+def test_projection_fails_closed_on_a_prorated_mortgage_and_property_tax_cap() -> None:
+    # PolicyEngine prorates the cap only for a linked separately filing
+    # couple; the projection's full MFS share holds only without proration.
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match="'nc_mortgage_and_property_tax_limitation'.*differ from 20000.0",
+    ):
+        _project(
+            _values(nc_mortgage_and_property_tax_limitation=[20_000.0, 12_500.0])
+        )
+
+
+def test_projection_requires_the_tax_unit_schema_for_the_cap_limitation() -> None:
+    system = _nc_system()
+    system.variables["nc_mortgage_and_property_tax_limitation"] = _money(
+        entity="person"
+    )
+
+    with pytest.raises(StateTaxPopulationRoutingError, match="TaxUnit/year"):
+        _project(_values(), system=system)
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    limitation=st.lists(
+        st.sampled_from([20_000.0, 19_999.99, 20_000.01, 10_000.0, 0.0]),
+        min_size=2,
+        max_size=2,
+    ),
+    selected=st.lists(st.booleans(), min_size=2, max_size=2),
+)
+def test_value_proof_fails_exactly_when_a_selected_limitation_differs(
+    limitation, selected
+) -> None:
+    routes = tuple(
+        TaxUnitRoute(
+            tax_unit_id,
+            tax_unit_id,
+            "NC" if keep else "SC",
+            "37" if keep else "45",
+            1,
+            DISPOSITION_READY if keep else "excluded_out_of_scope",
+        )
+        for tax_unit_id, keep in zip((1, 2), selected, strict=True)
+    )
+    values = _values(nc_mortgage_and_property_tax_limitation=limitation)
+    if not any(selected):
+        return
+    if any(
+        keep and amount != 20_000.0
+        for amount, keep in zip(limitation, selected, strict=True)
+    ):
+        with pytest.raises(StateTaxPopulationRoutingError, match="differ from"):
+            _project(values, routes=routes)
+    else:
+        _project(values, routes=routes)
+
+
+@pytest.mark.parametrize(
+    "variable",
+    [
+        "claim_of_right_repayment",
+        "military_retirement_pay",
+        "military_retirement_pay_survivors",
+    ],
+)
+def test_projection_fails_closed_on_any_selected_person_leaf_amount(variable) -> None:
     # Pay that fails NC's eligibility test leaves PolicyEngine's deduction at
     # zero, so only the Person leaf proves the reviewed zero constant.
     with pytest.raises(
-        StateTaxPopulationRoutingError, match="'military_retirement_pay'.*1 selected"
+        StateTaxPopulationRoutingError, match=f"'{variable}'.*1 selected"
     ):
-        _project(_values(military_retirement_pay=[0.0, 1_200.0, 0.0]))
+        _project(_values(**{variable: [0.0, 1_200.0, 0.0]}))
 
 
 def test_military_retirement_pay_outside_the_selected_units_is_ignored() -> None:
@@ -678,3 +831,52 @@ def test_registry_maps_the_resident_core_output_exactly() -> None:
         "USD",
         "money",
     )
+
+
+@pytest.mark.parametrize(
+    "installed",
+    ["1.752.2", "1.764.6", "2.60.3", "2.60", "2.59.99", "2.60.4rc1", "2.68.0.post1", "", "v2.68.0"],
+)
+def test_nc_campaign_refuses_policyengine_us_before_the_mortgage_fix(installed):
+    with pytest.raises(
+        StateTaxPopulationRoutingError,
+        match=r"NC requires policyengine-us>=2\.60\.4; installed",
+    ):
+        require_policyengine_us_floor({"NC", "NJ"}, installed=installed)
+
+
+@pytest.mark.parametrize("installed", ["2.60.4", "2.60.4.0", "2.60.10", "2.68.0", "3.0"])
+def test_nc_campaign_accepts_policyengine_us_with_the_mortgage_fix(installed):
+    require_policyengine_us_floor({"NC"}, installed=installed)
+
+
+@settings(max_examples=300)
+@given(st.lists(st.integers(min_value=0, max_value=200), min_size=1, max_size=4))
+def test_policyengine_us_floor_is_the_release_order(segments):
+    installed = ".".join(str(segment) for segment in segments)
+    padded = tuple(segments) + (0,) * (4 - len(segments))
+    should_refuse = padded < (2, 60, 4, 0)
+    try:
+        require_policyengine_us_floor({"NC"}, installed=installed)
+    except StateTaxPopulationRoutingError:
+        refused = True
+    else:
+        refused = False
+    assert refused is should_refuse
+
+
+def test_states_without_a_floor_never_read_the_installed_version(monkeypatch):
+    def fail(package):
+        pytest.fail(f"read {package} for states without a floor")
+
+    monkeypatch.setattr(runner, "_package_version", fail)
+
+    require_policyengine_us_floor({"NJ", "NM", "MI"})
+    require_policyengine_us_floor(())
+
+
+def test_nc_floor_reads_the_installed_policyengine_us(monkeypatch):
+    monkeypatch.setattr(runner, "_package_version", lambda package: "1.752.2")
+
+    with pytest.raises(StateTaxPopulationRoutingError, match="installed '1.752.2'"):
+        require_policyengine_us_floor(["NC"])

@@ -1,0 +1,130 @@
+{
+ "campaign_report": "state-tax-populace-nc-resident-core-campaign-2026-10-27-pe-us-2.68.0.json",
+ "compared_tax_unit_count": 2169,
+ "count_axiom_minus_predicted_over_0_50": 3,
+ "dataset_identity": {
+  "built_with": "1.729.0",
+  "country": "us",
+  "path": "/Users/maxghenis/.cache/huggingface/hub/datasets--policyengine--populace-us/snapshots/d8f5cff65f36205a613cb144fd97db3087bbd82a/populace_us_2024.h5",
+  "revision": "populace-us-2024-f0af251-703bd81a565c-20260620T201958Z",
+  "sha256": "16be6338f9d0",
+  "source": "pinned"
+ },
+ "max_abs_axiom_minus_predicted_all_units": 0.6144,
+ "mismatches": [],
+ "packages": {
+  "policyengine": "6.11.1",
+  "policyengine-us": "2.68.0"
+ },
+ "rate": 0.0399,
+ "schema_version": "axiom.nc_populace_mismatch_trace.v1",
+ "units_where_statute_reading_moves_deduction": [
+  {
+   "deduction_change": -0.01,
+   "observed_tax_change": 0.0,
+   "predicted_tax_change": 0.0022,
+   "reported_mismatch": false,
+   "tax_unit_id": 32554
+  },
+  {
+   "deduction_change": -0.01,
+   "observed_tax_change": 0.0,
+   "predicted_tax_change": 0.0,
+   "reported_mismatch": false,
+   "tax_unit_id": 109450
+  },
+  {
+   "deduction_change": -0.01,
+   "observed_tax_change": 0.0,
+   "predicted_tax_change": 0.002,
+   "reported_mismatch": false,
+   "tax_unit_id": 109574
+  },
+  {
+   "deduction_change": -0.01,
+   "observed_tax_change": -0.01,
+   "predicted_tax_change": -0.0082,
+   "reported_mismatch": false,
+   "tax_unit_id": 154846
+  },
+  {
+   "deduction_change": -0.07,
+   "observed_tax_change": -0.02,
+   "predicted_tax_change": -0.2802,
+   "reported_mismatch": false,
+   "tax_unit_id": 154921
+  },
+  {
+   "deduction_change": 0.21,
+   "observed_tax_change": 0.17,
+   "predicted_tax_change": -0.0318,
+   "reported_mismatch": false,
+   "tax_unit_id": 155858
+  },
+  {
+   "deduction_change": -0.05,
+   "observed_tax_change": 0.0,
+   "predicted_tax_change": 0.0043,
+   "reported_mismatch": false,
+   "tax_unit_id": 156182
+  },
+  {
+   "deduction_change": -0.01,
+   "observed_tax_change": -0.27,
+   "predicted_tax_change": -0.1188,
+   "reported_mismatch": false,
+   "tax_unit_id": 157203
+  },
+  {
+   "deduction_change": -0.16,
+   "observed_tax_change": -0.01,
+   "predicted_tax_change": -0.0155,
+   "reported_mismatch": false,
+   "tax_unit_id": 157965
+  },
+  {
+   "deduction_change": -0.01,
+   "observed_tax_change": -0.12,
+   "predicted_tax_change": -0.1118,
+   "reported_mismatch": false,
+   "tax_unit_id": 158448
+  },
+  {
+   "deduction_change": -0.01,
+   "observed_tax_change": 0.03,
+   "predicted_tax_change": -0.0448,
+   "reported_mismatch": false,
+   "tax_unit_id": 160401
+  },
+  {
+   "deduction_change": -0.01,
+   "observed_tax_change": -0.03,
+   "predicted_tax_change": -0.0669,
+   "reported_mismatch": false,
+   "tax_unit_id": 160543
+  },
+  {
+   "deduction_change": 0.01,
+   "observed_tax_change": 0.01,
+   "predicted_tax_change": 0.0196,
+   "reported_mismatch": false,
+   "tax_unit_id": 162704
+  },
+  {
+   "deduction_change": 0.02,
+   "observed_tax_change": 0.04,
+   "predicted_tax_change": 0.0176,
+   "reported_mismatch": false,
+   "tax_unit_id": 163616
+  },
+  {
+   "deduction_change": -0.01,
+   "observed_tax_change": -0.08,
+   "predicted_tax_change": -0.0433,
+   "reported_mismatch": false,
+   "tax_unit_id": 164176
+  }
+ ],
+ "units_with_nonzero_non_deductible_mortgage_interest": 229,
+ "year": 2026
+}
