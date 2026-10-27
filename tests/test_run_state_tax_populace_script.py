@@ -654,9 +654,6 @@ def _nc_inputs(**overrides) -> dict:
         "nc_pit_2026_taxable_social_security_and_railroad_retirement": {
             1: 1_000.0, 2: 0.0, 3: 0.0, 4: 1.0,
         },
-        "nc_pit_2026_eligible_uniformed_services_retirement": {
-            1: 0.0, 2: 0.0, 3: 0.0, 4: 1.0,
-        },
     }
     for name, by_unit in overrides.items():
         values[name] = {**values[name], **by_unit}
@@ -692,7 +689,6 @@ def test_north_carolina_projection_diagnostics_pin_status_and_presence_counts():
             "medical_and_dental_expenses_present_count": 1,
             "united_states_obligation_interest_present_count": 0,
             "taxable_social_security_present_count": 1,
-            "uniformed_services_retirement_present_count": 0,
         }
     }
 

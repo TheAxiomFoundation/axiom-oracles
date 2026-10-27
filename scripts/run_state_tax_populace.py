@@ -102,9 +102,6 @@ _NC_PRESENCE_INPUTS = {
     "taxable_social_security": (
         "nc_pit_2026_taxable_social_security_and_railroad_retirement"
     ),
-    "uniformed_services_retirement": (
-        "nc_pit_2026_eligible_uniformed_services_retirement"
-    ),
 }
 _NC_AGI_INPUT = f"{_NC_INPUT_PREFIX}nc_pit_2026_federal_adjusted_gross_income"
 

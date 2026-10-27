@@ -352,7 +352,6 @@ def test_packaged_contract_has_reviewed_ready_states() -> None:
             "medical_expense_deduction",
             "ctc_qualifying_children",
             "us_govt_interest",
-            "nc_military_retirement_deduction",
         ],
         "NM": ["nm_taxable_income"],
         "OH": ["oh_taxable_income"],

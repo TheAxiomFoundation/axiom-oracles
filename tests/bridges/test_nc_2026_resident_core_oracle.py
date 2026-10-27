@@ -97,6 +97,7 @@ COMPLETED_NC_BOUNDARIES = frozenset(
         "nc_itemized_deductions",
         "nc_standard_deduction",
         "nc_child_deduction",
+        "nc_military_retirement_deduction",
         "mortgage_interest",
     }
 )
@@ -131,9 +132,9 @@ def test_nc_row_supplies_only_leaf_inputs_never_a_completed_nc_boundary() -> Non
     nc = _nc()
     kinds = [slot.source_kind for slot in nc.inputs]
 
-    assert kinds.count("pe_upstream_boundary") == 6
+    assert kinds.count("pe_upstream_boundary") == 5
     assert kinds.count("derived") == 8
-    assert kinds.count("projection_constant") == 29
+    assert kinds.count("projection_constant") == 30
     used = {variable for slot in nc.inputs for variable in _sources(slot)}
     assert used.isdisjoint(COMPLETED_NC_BOUNDARIES)
     assert used == {
@@ -147,7 +148,6 @@ def test_nc_row_supplies_only_leaf_inputs_never_a_completed_nc_boundary() -> Non
         "ctc_qualifying_children",
         "us_govt_interest",
         "taxable_social_security",
-        "nc_military_retirement_deduction",
     }
     agi = nc.inputs[0]
     assert (agi.source_kind, agi.policyengine_variable) == (
@@ -165,7 +165,7 @@ def test_nc_projection_constants_are_the_reviewed_zero_and_share_values() -> Non
 
     assert constants.pop("nc_pit_2026_mfs_cap_allocation_share") == 1.0
     assert set(constants.values()) == {0.0}
-    assert len(constants) == 28
+    assert len(constants) == 29
 
 
 def test_nc_slots_partition_exactly_across_the_reviewed_allowlists() -> None:
@@ -258,6 +258,18 @@ def test_contract_rejects_the_completed_nc_taxable_income_boundary() -> None:
         validate_state_tax_populace_contract(document)
 
 
+def test_contract_rejects_the_completed_nc_military_retirement_deduction() -> None:
+    document = _document()
+    slot = _nc_slot(document, "nc_pit_2026_eligible_uniformed_services_retirement")
+    slot.pop("constant_value")
+    slot["source_kind"] = "pe_upstream_boundary"
+    slot["policyengine_variable"] = "nc_military_retirement_deduction"
+    slot["policyengine_relationship"] = "upstream"
+
+    with pytest.raises(StateTaxPopulaceContractError, match="upstream allowlist"):
+        validate_state_tax_populace_contract(document)
+
+
 def test_runtime_contract_accepts_the_packaged_row() -> None:
     _validate_north_carolina_runtime_contract(_nc())
 
@@ -297,9 +309,9 @@ def test_runtime_contract_fails_closed_on_drift(mutate) -> None:
         _validate_north_carolina_runtime_contract(mutate(_nc()))
 
 
-def _money(**extra):
+def _money(entity="tax_unit", **extra):
     return SimpleNamespace(
-        entity=SimpleNamespace(key="tax_unit"),
+        entity=SimpleNamespace(key=entity),
         definition_period="year",
         value_type=float,
         unit="currency-USD",
@@ -323,10 +335,12 @@ def _nc_system(
         for name in (
             "nc_income_tax_before_credits",
             "nc_additions",
+            "nc_military_retirement_deduction",
             "adjusted_gross_income",
             "wagering_losses_deduction",
         )
     }
+    variables["military_retirement_pay"] = _money(entity="person")
     variables["nc_taxable_income"] = _money(
         adds=list(taxable_adds), subtracts=list(taxable_subtracts)
     )
@@ -431,6 +445,7 @@ def _values(**overrides):
         "nc_military_retirement_deduction": [0.0, 0.0],
         "nc_additions": [0.0, 0.0],
         "wagering_losses_deduction": [0.0, 0.0],
+        "military_retirement_pay": [0.0, 0.0, 0.0],
         "deductible_mortgage_interest": [6_000.0, 4_000.0, 1_500.0],
         "real_estate_taxes": [2_000.0, 1_000.0, 800.0],
         "taxable_social_security": [0.0, 9_000.0, 0.0],
@@ -439,11 +454,11 @@ def _values(**overrides):
     return values
 
 
-def _simulation(values):
+def _simulation(values, system=None):
     class FakeSimulation:
         def __init__(self, dataset):
             assert dataset == "dataset"
-            self.tax_benefit_system = _nc_system()
+            self.tax_benefit_system = system or _nc_system()
 
         def calculate(self, variable, period, map_to=None):
             assert period == 2026
@@ -455,19 +470,20 @@ def _simulation(values):
     return FakeSimulation
 
 
-def _project(values):
+def _project(values, *, system=None, routes=None):
     return calculate_policyengine_projection_inputs(
         dataset="dataset",
         raw_tax_units=pd.DataFrame({"tax_unit_id": [1, 2]}),
         raw_persons=pd.DataFrame(
             {"person_id": _PERSON_IDS, "person_tax_unit_id": _PERSON_TAX_UNITS}
         ),
-        routes=(
+        routes=routes
+        or (
             TaxUnitRoute(1, 1, "NC", "37", 1, DISPOSITION_READY),
             TaxUnitRoute(2, 2, "NC", "37", 1, DISPOSITION_READY),
         ),
         year=2026,
-        microsimulation_factory=_simulation(values),
+        microsimulation_factory=_simulation(values, system),
     )["NC"]
 
 
@@ -514,12 +530,71 @@ def test_projection_builds_every_resident_core_input_from_leaf_values() -> None:
     assert slot("nc_pit_2026_mfs_cap_allocation_share") == {1: 1.0, 2: 1.0}
     assert slot("nc_pit_2026_income_tax_refunds") == {1: 0.0, 2: 0.0}
     assert slot("nc_pit_2026_other_state_obligation_interest") == {1: 0.0, 2: 0.0}
+    assert slot("nc_pit_2026_eligible_uniformed_services_retirement") == {
+        1: 0.0,
+        2: 0.0,
+    }
 
 
-@pytest.mark.parametrize("variable", ["nc_additions", "wagering_losses_deduction"])
+@pytest.mark.parametrize(
+    "variable",
+    ["nc_additions", "nc_military_retirement_deduction", "wagering_losses_deduction"],
+)
 def test_projection_fails_closed_when_a_zero_constant_is_unproved(variable) -> None:
     with pytest.raises(StateTaxPopulationRoutingError, match=variable):
         _project(_values(**{variable: [0.0, 25.0]}))
+
+
+def test_projection_fails_closed_on_any_selected_military_retirement_pay() -> None:
+    # Pay that fails NC's eligibility test leaves PolicyEngine's deduction at
+    # zero, so only the Person leaf proves the reviewed zero constant.
+    with pytest.raises(
+        StateTaxPopulationRoutingError, match="'military_retirement_pay'.*1 selected"
+    ):
+        _project(_values(military_retirement_pay=[0.0, 1_200.0, 0.0]))
+
+
+def test_military_retirement_pay_outside_the_selected_units_is_ignored() -> None:
+    projected = _project(
+        _values(military_retirement_pay=[0.0, 0.0, 1_200.0]),
+        routes=(
+            TaxUnitRoute(1, 1, "NC", "37", 1, DISPOSITION_READY),
+            TaxUnitRoute(2, 2, "SC", "45", 1, "excluded_out_of_scope"),
+        ),
+    )
+
+    assert projected[
+        f"{PREFIX}nc_pit_2026_eligible_uniformed_services_retirement"
+    ] == {1: 0.0, 2: 0.0}
+
+
+def test_projection_requires_the_person_schema_for_military_retirement_pay() -> None:
+    system = _nc_system()
+    system.variables["military_retirement_pay"] = _money()
+
+    with pytest.raises(StateTaxPopulationRoutingError, match="Person/year"):
+        _project(_values(), system=system)
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    pay=st.lists(
+        st.sampled_from([0.0, -0.0, 0.01, -0.01, 1_200.0]), min_size=3, max_size=3
+    )
+)
+def test_person_zero_proof_fails_exactly_when_a_selected_member_is_nonzero(
+    pay,
+) -> None:
+    values = _values(military_retirement_pay=pay)
+    if any(amount != 0 for amount in pay):
+        with pytest.raises(StateTaxPopulationRoutingError, match="military"):
+            _project(values)
+    else:
+        assert set(
+            _project(values)[
+                f"{PREFIX}nc_pit_2026_eligible_uniformed_services_retirement"
+            ].values()
+        ) == {0.0}
 
 
 @pytest.mark.parametrize("value", [0, 1, 0.0, "False", None])

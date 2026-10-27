@@ -767,9 +767,14 @@ jurisdictions:
     RuleSpec composes North Carolina tax-year-2026 full-year resident tax
     before credits from federal adjusted gross income under N.C. Gen. Stat.
     105-153.5 and the 3.99 percent section 105-153.7 rate. The projection
-    supplies federal AGI and each separately classified section 105-153.5
-    addition, subtraction, deduction component, and child-deduction count; no
-    completed North Carolina taxable-income, deduction, or tax boundary is
+    supplies federal AGI, filing status, the federal deduction components and
+    child count that section 105-153.5 references, United States obligation
+    interest, and taxable Social Security from PolicyEngine values that carry
+    no North Carolina rule. Every other addition, subtraction, and itemized
+    item enters as a reviewed zero constant: either PolicyEngine models no
+    counterpart (the runner pins its nc_deductions list), or the runner
+    proves the counterpart is zero for every selected tax unit. No completed
+    North Carolina taxable-income, deduction, subtraction, or tax boundary is
     supplied. A full certified-Populace campaign
     (reports/state-tax-populace-nc-resident-core-campaign-2026-10-26.json,
     rulespec-us 56455a56) compared all 2,169 positive-weight routed North
@@ -1173,16 +1178,23 @@ jurisdictions:
       computation carries.
     constant_value: 0.0
   - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_eligible_uniformed_services_retirement
-    source_kind: pe_upstream_boundary
+    source_kind: projection_constant
     status: ready
     evidence: >-
       Section 105-153.5(b)(5a) deducts uniformed-services retirement pay for
       members with 20 years of service or a medical retirement, and
-      survivor-plan payments. PolicyEngine nc_military_retirement_deduction is
-      that classified subtraction in nc_deductions, upstream of the distinct
-      target.
-    policyengine_variable: nc_military_retirement_deduction
-    policyengine_relationship: upstream
+      survivor-plan payments under 10 U.S.C. 1447. PolicyEngine's
+      nc_military_retirement_deduction applies North Carolina's own
+      eligibility test and fraction, so it is not a leaf input. The certified
+      Populace person table records no separately classified uniformed-services
+      retirement pay, years of service, or medical retirement. The runner
+      proves at runtime that PolicyEngine's Person leaf military_retirement_pay
+      (benefits under a United States military retirement plan, including
+      survivor benefits) is zero for every person in every selected tax unit,
+      and that nc_military_retirement_deduction is zero for every selected tax
+      unit. The projection therefore supplies zero, the value PolicyEngine's
+      own computation carries.
+    constant_value: 0.0
   - slot: us-nc:policies/income_tax/resident_core_liability_pipeline#input.nc_pit_2026_eligible_tribal_income
     source_kind: projection_constant
     status: ready

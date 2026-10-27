@@ -206,11 +206,27 @@ _REVIEWED_RAW_PERSON_VALUE_ASSUMPTIONS_BY_STATE = {
 # absent from the source-backed RuleSpec is not present in selected tax units.
 # These assertions never supply an input or select an output branch.
 _REVIEWED_PE_ZERO_ASSUMPTIONS_BY_STATE = {
-    # The NC resident core supplies zero for every classified addition and for
-    # the wagering-loss deduction not taken in AGI; PolicyEngine carries those
-    # items only in nc_additions and the federal wagering_losses_deduction.
-    "NC": frozenset({"nc_additions", "wagering_losses_deduction"}),
+    # The NC resident core supplies zero for every classified addition, for
+    # the wagering-loss deduction not taken in AGI, and for uniformed-services
+    # retirement; PolicyEngine carries those items only in nc_additions, the
+    # federal wagering_losses_deduction, and nc_military_retirement_deduction.
+    "NC": frozenset(
+        {
+            "nc_additions",
+            "nc_military_retirement_deduction",
+            "wagering_losses_deduction",
+        }
+    ),
     "VT": frozenset({"us_govt_interest"}),
+}
+
+# Exact upstream PolicyEngine Person leaves that must be zero for every person
+# in a selected TaxUnit.  Proving the leaf, not only a state-derived TaxUnit
+# value, shows the reviewed zero holds under any eligibility reading.
+_REVIEWED_PE_PERSON_ZERO_ASSUMPTIONS_BY_STATE = {
+    # Section 105-153.5(b)(5a) deducts only uniformed-services retirement pay
+    # and survivor-plan payments; with no such pay the deduction is zero.
+    "NC": frozenset({"military_retirement_pay"}),
 }
 
 # RuleSpec inputs are TaxUnit-grain unless their complete legal ID is listed
@@ -2057,15 +2073,24 @@ def calculate_policyengine_projection_inputs(
 
     sim = microsimulation_factory(dataset)
     for state in sorted(selected_states):
+        selected_tax_unit_ids = {
+            route.tax_unit_id
+            for route in route_rows
+            if route.state == state and route.disposition == DISPOSITION_READY
+        }
         _validate_reviewed_pe_zero_assumptions(
             state=state,
             sim=sim,
             tax_unit_ids=tax_unit_ids,
-            selected_tax_unit_ids={
-                route.tax_unit_id
-                for route in route_rows
-                if route.state == state and route.disposition == DISPOSITION_READY
-            },
+            selected_tax_unit_ids=selected_tax_unit_ids,
+            year=year,
+        )
+        _validate_reviewed_pe_person_zero_assumptions(
+            state=state,
+            sim=sim,
+            raw_persons=raw_persons,
+            tax_unit_ids=tax_unit_ids,
+            selected_tax_unit_ids=selected_tax_unit_ids,
             year=year,
         )
     projections: dict[str, dict[str, dict[int | str, float | bool]]] = {}
@@ -2561,6 +2586,62 @@ def _validate_reviewed_pe_zero_assumptions(
             raise StateTaxPopulationRoutingError(
                 f"{state}: reviewed zero assumption failed for {variable!r}: "
                 f"{len(nonzero)} selected tax unit(s) are nonzero"
+            )
+
+
+def _validate_reviewed_pe_person_zero_assumptions(
+    *,
+    state: str,
+    sim: Any,
+    raw_persons: Any | None,
+    tax_unit_ids: list[int | str],
+    selected_tax_unit_ids: set[int | str],
+    year: int,
+) -> None:
+    """Prove exact zero-valued Person leaves for every selected person."""
+
+    variables = _REVIEWED_PE_PERSON_ZERO_ASSUMPTIONS_BY_STATE.get(state)
+    if variables is None:
+        return
+    for variable in sorted(variables):
+        _require_policyengine_person_year_money_variable(
+            sim,
+            state=state,
+            variable=variable,
+        )
+    _, person_values = _reviewed_person_values(
+        state=state,
+        sim=sim,
+        variables=set(variables),
+        raw_persons=raw_persons,
+        tax_unit_ids=tax_unit_ids,
+        year=year,
+    )
+    selected_ids = {_clean_id(value) for value in selected_tax_unit_ids}
+    person_tax_unit_ids = [
+        _clean_id(value) for value in raw_persons["person_tax_unit_id"]
+    ]
+    unlinked = selected_ids - set(person_tax_unit_ids)
+    if unlinked:
+        raise StateTaxPopulationRoutingError(
+            f"{state}: reviewed Person zero assumption cannot be proved because "
+            f"{len(unlinked)} selected tax unit(s) have no linked person"
+        )
+    for variable in sorted(variables):
+        nonzero: set[int | str] = set()
+        for tax_unit_id, value in zip(
+            person_tax_unit_ids, person_values[variable], strict=True
+        ):
+            if tax_unit_id not in selected_ids:
+                continue
+            number = _finite_number(value, label=f"{state}:{variable}")
+            if number != 0:
+                nonzero.add(tax_unit_id)
+        if nonzero:
+            raise StateTaxPopulationRoutingError(
+                f"{state}: reviewed Person zero assumption failed for "
+                f"{variable!r}: {len(nonzero)} selected tax unit(s) have a "
+                "nonzero member"
             )
 
 
@@ -3830,6 +3911,7 @@ def _validate_north_carolina_policyengine_runtime(*, sim: Any, year: int) -> Non
         "nc_taxable_income",
         "nc_additions",
         "nc_deductions",
+        "nc_military_retirement_deduction",
         "adjusted_gross_income",
         "wagering_losses_deduction",
     ):
@@ -3920,6 +4002,40 @@ def _require_policyengine_tax_unit_year_money_variable(
         raise StateTaxPopulationRoutingError(
             f"{state}: PolicyEngine variable {variable!r} must use the reviewed "
             "TaxUnit/year/currency-USD float schema; got "
+            f"entity={entity!r}, period={period!r}, "
+            f"value_type={value_type_name!r}, unit={unit!r}"
+        )
+
+
+def _require_policyengine_person_year_money_variable(
+    sim: Any,
+    *,
+    state: str,
+    variable: str,
+) -> None:
+    """Require a reviewed Person leaf's exact accounting schema."""
+
+    try:
+        definition = sim.tax_benefit_system.variables[variable]
+    except (AttributeError, KeyError, TypeError) as exc:
+        raise StateTaxPopulationRoutingError(
+            f"{state}: PolicyEngine variable {variable!r} is missing reviewed "
+            "schema metadata"
+        ) from exc
+    entity = getattr(getattr(definition, "entity", None), "key", None)
+    period = str(getattr(definition, "definition_period", "")).lower()
+    value_type = getattr(definition, "value_type", None)
+    unit = getattr(definition, "unit", None)
+    if (
+        entity != "person"
+        or period != "year"
+        or value_type is not float
+        or unit != "currency-USD"
+    ):
+        value_type_name = getattr(value_type, "__name__", repr(value_type))
+        raise StateTaxPopulationRoutingError(
+            f"{state}: PolicyEngine variable {variable!r} must use the reviewed "
+            "Person/year/currency-USD float schema; got "
             f"entity={entity!r}, period={period!r}, "
             f"value_type={value_type_name!r}, unit={unit!r}"
         )

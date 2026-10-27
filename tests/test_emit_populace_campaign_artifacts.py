@@ -2234,5 +2234,13 @@ def test_committed_north_carolina_resident_core_evidence_is_complete(
     )
     monkeypatch.setattr(emitter, "CASES_ROOT", tmp_path)
     emitter.emit_case_chunks("NC", state)
-    for path in sorted((tmp_path / "nc-income-tax-populace").iterdir()):
+    generated = sorted((tmp_path / "nc-income-tax-populace").iterdir())
+    expected_names = ["index.json"] + [
+        f"chunk-{number}.json" for number in range(index["chunks"])
+    ]
+    assert sorted(path.name for path in generated) == sorted(expected_names)
+    assert sorted(path.name for path in cases_path.iterdir()) == sorted(
+        expected_names
+    )
+    for path in generated:
         assert path.read_bytes() == (cases_path / path.name).read_bytes()

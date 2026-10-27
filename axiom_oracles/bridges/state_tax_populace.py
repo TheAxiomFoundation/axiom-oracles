@@ -286,7 +286,7 @@ EXPECTED_JURISDICTION_REGISTRY_SHA256 = (
     "c742343daf35998d934c4288008c47097b2ebe4a249e59838a7c3e635e5bedaf"
 )
 EXPECTED_SOURCE_METADATA_SHA256 = (
-    "5349516db528f55fc5f1ae0c0bd98e2fbaea560229b5bcc3e3cf4f649bd2e492"
+    "8120626c8f3267347a50860403c816c60dd28404b5f1410246ef32b1fc77dc77"
 )
 _NC_RESIDENT_CORE_INPUT = (
     "us-nc:policies/income_tax/resident_core_liability_pipeline#input."
@@ -466,11 +466,6 @@ ALLOWED_PE_UPSTREAM_BOUNDARIES: frozenset[tuple[str, str, str]] = frozenset(
             "NC",
             _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_eligible_obligation_interest",
             "us_govt_interest",
-        ),
-        (
-            "NC",
-            _NC_RESIDENT_CORE_INPUT + "nc_pit_2026_eligible_uniformed_services_retirement",
-            "nc_military_retirement_deduction",
         ),
         (
             "NJ",
@@ -876,6 +871,7 @@ ALLOWED_PROJECTION_CONSTANTS: frozenset[tuple[str, str, float]] = frozenset(
                 "nc_pit_2026_exempt_obligation_gain",
                 "nc_pit_2026_income_tax_refunds",
                 "nc_pit_2026_bailey_retirement_benefits",
+                "nc_pit_2026_eligible_uniformed_services_retirement",
                 "nc_pit_2026_eligible_tribal_income",
                 "nc_pit_2026_north_carolina_basis_excess",
                 "nc_pit_2026_accelerated_depreciation_recovery",
