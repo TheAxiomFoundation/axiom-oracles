@@ -70,22 +70,35 @@ def _contract_with_ready_nc():
 
 
 @pytest.mark.parametrize("states", [["--state", "nc"], []])
-def test_nc_campaign_refuses_an_old_policyengine_us_before_dataset_load(
-    monkeypatch, tmp_path, states
+@pytest.mark.parametrize(
+    ("installed", "error"),
+    [
+        ("1.752.2", r"NC requires policyengine-us>=2\.60\.4; installed '1\.752\.2'"),
+        (None, "cannot record required package version for policyengine-us"),
+    ],
+)
+def test_nc_campaign_refuses_an_old_or_missing_policyengine_us_before_dataset_load(
+    monkeypatch, tmp_path, states, installed, error
 ) -> None:
     import axiom_oracles.bridges.state_tax_populace_runner as runner
 
     monkeypatch.setattr(
         campaign, "load_state_tax_populace_contract", _contract_with_ready_nc
     )
-    monkeypatch.setattr(runner, "_package_version", lambda package: "1.752.2")
+
+    def installed_release(package: str) -> str:
+        if installed is None:
+            raise runner.PackageNotFoundError(package)
+        return installed
+
+    monkeypatch.setattr(runner, "version", installed_release)
 
     def reject_dataset_load(*args, **kwargs):
-        pytest.fail("an old policyengine-us should fail before the dataset loads")
+        pytest.fail("policyengine-us should be checked before the dataset loads")
 
     monkeypatch.setattr(campaign, "load_populace_dataset", reject_dataset_load)
 
-    with pytest.raises(SystemExit, match=r"NC requires policyengine-us>=2\.60\.4"):
+    with pytest.raises(SystemExit, match=error):
         campaign.main(
             [
                 *states,

@@ -222,12 +222,13 @@ policyengine-us 1.752.2.
 A state whose projection depends on a PolicyEngine fix that the runtime
 proofs cannot see sets a floor in `MINIMUM_POLICYENGINE_US_BY_STATE`
 (`axiom_oracles/bridges/state_tax_populace_runner.py`). The campaign checks
-every requested state, or every ready state when none is requested, and exits
-before loading the dataset if the installed policyengine-us is older or is not
-a plain release. North Carolina requires 2.60.4 or later. Earlier releases
-counted federally non-deductible mortgage interest in the North Carolina
-itemized deduction (PolicyEngine/policyengine-us#10468), and that is a formula
-change, not a parameter or schema change the runner can pin. The extra's
+every requested state, or every ready state when none is requested, after the
+TAXSIM host check and before loading the dataset. It exits if policyengine-us
+is missing, older than the floor, or not a plain release. North Carolina
+requires 2.60.4 or later. Earlier releases counted federally non-deductible
+mortgage interest in the North Carolina itemized deduction
+(PolicyEngine/policyengine-us#10468), and that is a formula change, not a
+parameter or schema change the runner can pin. The extra's
 1.764.6 is below that floor, so run North Carolina in its own environment.
 These pins resolve to the versions the committed report records:
 

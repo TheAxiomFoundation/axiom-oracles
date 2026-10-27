@@ -506,8 +506,15 @@ def main(argv: list[str] | None = None) -> int:
             f"got {args.populace_year}"
         )
     requested_states = _requested_states(args.states, contract=contract)
+    if not args.no_taxsim:
+        # Before the dataset loads: the host's TAXSIM binary may stop short
+        # of the validation year (the pinned Linux build accepts 1960-2024).
+        try:
+            require_law_years([args.year])
+        except TaxsimLawYearError as exc:
+            raise SystemExit(str(exc)) from exc
     # Before the dataset loads: a state whose projection relies on a
-    # policyengine-us fix refuses an older oracle.
+    # policyengine-us fix refuses an older or missing oracle.
     campaign_states = requested_states or {
         state
         for state, jurisdiction in contract.by_state().items()
@@ -517,13 +524,6 @@ def main(argv: list[str] | None = None) -> int:
         require_policyengine_us_floor(campaign_states)
     except StateTaxPopulationRoutingError as exc:
         raise SystemExit(str(exc)) from exc
-    if not args.no_taxsim:
-        # Before the dataset loads: the host's TAXSIM binary may stop short
-        # of the validation year (the pinned Linux build accepts 1960-2024).
-        try:
-            require_law_years([args.year])
-        except TaxsimLawYearError as exc:
-            raise SystemExit(str(exc)) from exc
     identity: dict = {}
     dataset = load_populace_dataset(
         "us",

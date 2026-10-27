@@ -812,11 +812,21 @@ def test_grid_generator_stops_on_linux_and_records_binaries(
 def test_populace_campaign_stops_on_linux_before_loading_data(
     on_host, monkeypatch, tmp_path
 ) -> None:
+    from axiom_oracles.bridges import state_tax_populace_runner as runner
+
     campaign = _load_script("run_state_tax_populace")
     on_host("linux")
 
     def refuse(*args, **kwargs):
         raise AssertionError("dataset loaded")
+
+    def policyengine_us(release: str | None):
+        def installed(package: str) -> str:
+            if release is None:
+                raise runner.PackageNotFoundError(package)
+            return release
+
+        monkeypatch.setattr(runner, "version", installed)
 
     monkeypatch.setattr(campaign, "load_populace_dataset", refuse)
     args = [
@@ -827,8 +837,11 @@ def test_populace_campaign_stops_on_linux_before_loading_data(
         "--output",
         str(tmp_path / "out.json"),
     ]
+    # The host check comes before North Carolina's policyengine-us floor.
+    policyengine_us(None)
     with pytest.raises(SystemExit, match="TAXSIM cannot run law year 2026 on linux"):
         campaign.main(args)
+    policyengine_us("2.68.0")
     with pytest.raises(AssertionError, match="dataset loaded"):
         campaign.main([*args, "--no-taxsim"])
     # A bad --state is still reported as a bad state, not as a TAXSIM error.
