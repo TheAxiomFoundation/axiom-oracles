@@ -1,0 +1,57 @@
+name: ug-rental
+title: Uganda rental income tax — Axiom vs UGAMOD
+description: >-
+  Compares the rulespec-ug individual rental income tax (Third Schedule Part
+  VI as substituted by the Income Tax (Amendment) Act 2022: 12% of gross
+  rental income above 2,820,000 a year, no expense deductions for individuals)
+  against UGAMOD tpr_s (SOUTHMOD A4.0, country UG, system UG_2025 = FY2025/26,
+  dataset ug_2024_a1) below, at and above the threshold. Each case pre-divides
+  the euromod rental input (ypr) by the UG_2025 employment-income uprating
+  index (1.0375626043405675, probed) and bridges the Axiom gross_rental_income
+  input on the engine's own post-uprating ypr. The live report shows the
+  bridged ypr equal to the grid value (2,820,000 exactly in the threshold
+  case), so UG_2025 uprates ypr by the same index as yem and the threshold
+  case does sit on the threshold. Run live exact: 0 at 2,000,000 and at
+  2,820,000, 261,600 at 5,000,000 and 861,600 at 10,000,000. Results are based
+  on the tax-benefit microsimulation model for Uganda (UGAMOD) in
+  SOUTHMOD_A4.0, developed, maintained and managed by UNU-WIDER with SASPRI,
+  the LSE International Inequalities Institute and local partners, run on the
+  EUROMOD software (EM_Executable 1.0.0 via the euromod connector 0.2.18)
+  under the ug_2024_a1 dataset configuration (Uganda Bureau of Statistics,
+  Uganda National Household Survey 2023/24); only the dataset's variable list
+  is read and every household is synthetic. The results and their
+  interpretation are Axiom's responsibility. The SOUTHMOD bundle is licensed
+  and non-redistributable: it is referenced only by path (euromod_model_root),
+  and no model XML, dataset row, or DRD text is committed.
+
+# Not runnable on the CI matrix runners. The SOUTHMOD bundle is licensed to
+# Axiom by UNU-WIDER under the SOUTHMOD_A4.0 Adhesion Agreement, which bars
+# providing the model or its input datasets to any third party (clause 4), so
+# no shared runner can hold it; the runner also needs the x64 EUROMOD engine
+# (EM_Executable.dll) under EUROMOD_PYTHON and a .NET runtime. Manual lane
+# only: scripts/regenerate_euromod_ug.sh, where the licensed bundle and
+# runtime exist, refreshes the committed report. This marker stays unless
+# UNU-WIDER licenses a runner-held copy.
+ci: manual
+
+runner:
+  type: euromod-synthetic-compare
+  axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine
+  parameters:
+    suite: ug-rental
+    population: synthetic
+    sample_size: 0
+    period: 2026
+    euromod_model_root: $HOME/.axiom/oracles/southmod/bundle/SOUTHMOD_A4.0
+    euromod_country: UG
+    euromod_system: UG_2025
+    euromod_dataset: ug_2024_a1
+    axiom_rulespec_repo_roots: $HOME/TheAxiomFoundation
+    dashboard_filename: axiom-euromod-ug-rental.json
+
+artifacts:
+  report_basename: axiom-euromod-ug-rental
+
+dashboard:
+  filename: axiom-euromod-ug-rental.json
+  suite: ug-rental

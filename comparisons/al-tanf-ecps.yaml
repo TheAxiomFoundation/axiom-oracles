@@ -7,8 +7,7 @@ description: >-
   us-al/tanf program (2024 State Plan Attachment E payment-standard chart and
   Appendix N Section 2 20%-earned-income / nearest-dollar / $10-minimum-grant
   computation) against PolicyEngine's al_tanf on Enhanced CPS households in
-  Alabama. Refresh the rulespec root after pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-al/ ~/.axiom-oracles/roots/rulespec-us-al/
+  Alabama, using the canonical rulespec-us monorepo checkout.
 
 # Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
 # staging fails the engine's canonical-path scan (non-canonical filenames in
@@ -42,9 +41,9 @@ runner:
     axiom_program: $HOME/axiom-oracles/programs/us-al/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/al-tanf-composed.yaml
     axiom_compiled_program: /tmp/al-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
     rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-al
+      - $HOME/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-al-tanf-ecps

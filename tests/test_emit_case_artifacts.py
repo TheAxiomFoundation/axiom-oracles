@@ -2,7 +2,14 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
+import shutil
+import subprocess
 from pathlib import Path
+
+import pytest
+from hypothesis import given, settings
+from hypothesis import strategies as st
 
 
 def _load_module():
@@ -110,6 +117,51 @@ def _write_fixture(
     index.update(index_updates or {})
     (out / "index.json").write_text(json.dumps(index))
     return {"basename": basename}
+
+
+def test_emitter_preserves_complete_legacy_corpus_without_full_source(tmp_path):
+    module = _load_module()
+    config = _write_fixture(
+        module, tmp_path, report=_canonical_report(), rows=_served_rows(),
+    )
+    module.REPORTS = tmp_path / "absent-reports"
+    corpus = module.OUT_ROOT / "test-suite"
+    before = {path.name: path.read_bytes() for path in corpus.iterdir()}
+
+    assert "preserve" in module.emit_suite("test-suite", config)
+    assert {path.name: path.read_bytes() for path in corpus.iterdir()} == before
+
+
+def test_emitter_refuses_stale_legacy_corpus_without_downgrading(tmp_path):
+    module = _load_module()
+    rows = _served_rows()
+    rows[0]["m"][0]["x"] = 101
+    config = _write_fixture(
+        module, tmp_path, report=_canonical_report(), rows=rows,
+    )
+    module.REPORTS = tmp_path / "absent-reports"
+    corpus = module.OUT_ROOT / "test-suite"
+    before = {path.name: path.read_bytes() for path in corpus.iterdir()}
+
+    with pytest.raises(ValueError, match="cannot preserve complete case corpus"):
+        module.emit_suite("test-suite", config)
+    assert {path.name: path.read_bytes() for path in corpus.iterdir()} == before
+
+
+@pytest.mark.parametrize("index", [[], False, None, {"partial": True}, {"partial": "unknown"}])
+def test_emitter_refuses_malformed_existing_index_without_deleting_cases(tmp_path, index):
+    module = _load_module()
+    config = _write_fixture(
+        module, tmp_path, report=_canonical_report(), rows=_served_rows(),
+    )
+    module.REPORTS = tmp_path / "absent-reports"
+    corpus = module.OUT_ROOT / "test-suite"
+    (corpus / "index.json").write_text(json.dumps(index))
+    before = {path.name: path.read_bytes() for path in corpus.iterdir()}
+
+    with pytest.raises(ValueError, match="index must be an object|unsupported.*partial mode"):
+        module.emit_suite("test-suite", config)
+    assert {path.name: path.read_bytes() for path in corpus.iterdir()} == before
 
 
 def test_case_artifact_check_accepts_exact_annotations_and_values(tmp_path):
@@ -322,3 +374,105 @@ def test_served_delta_parity_accepts_either_faithful_convention():
             )
         ]
         assert (not drift) is ok, (served_d, drift)
+
+
+OUTPUT_NAMES = [f"module#rule_{index}" for index in range(11)]
+# Each case evaluates its own subset of rules (full evidence lists only what
+# the engine evaluated), to a zero-like or a non-zero value.
+CASE_OUTPUTS = st.lists(
+    st.dictionaries(
+        st.sampled_from(OUTPUT_NAMES),
+        st.sampled_from([0, 0.0, False, None, True, 1, 250.5, -3]),
+        max_size=len(OUTPUT_NAMES),
+    ),
+    min_size=1,
+    max_size=6,
+)
+
+
+def _is_zero(value) -> bool:
+    return value is None or value is False or value == 0
+
+
+def _compact_rows(module, case_outputs):
+    rows = [
+        module.compact_case(
+            {
+                "case_id": f"case-{index}",
+                "matches": [],
+                "mismatches": [],
+                "metadata": {"axiom_all_outputs": outputs},
+            },
+            {},
+        )
+        for index, outputs in enumerate(case_outputs)
+    ]
+    _, output_slots = module.finalize_slot_dictionaries(rows)
+    return rows, output_slots
+
+
+def _decode_zero_mask(mask: str, output_slots: list[str]) -> list[str]:
+    return [
+        name
+        for index, name in enumerate(output_slots)
+        if (int(mask[index // 4], 16) >> (3 - index % 4)) & 1
+    ]
+
+
+@settings(max_examples=200, deadline=None, derandomize=True)
+@given(case_outputs=CASE_OUTPUTS)
+def test_rows_record_exactly_their_own_zero_outputs(case_outputs):
+    """A slot is non-zero (o), zero (oz) or unevaluated (neither) per case;
+    the suite-wide slot union never turns an unevaluated rule into a zero."""
+
+    module = _load_module()
+    rows, output_slots = _compact_rows(module, case_outputs)
+
+    assert output_slots == sorted(
+        {name for outputs in case_outputs for name in outputs}
+    )
+    for row, outputs in zip(rows, case_outputs, strict=True):
+        assert "_zero_output_names" not in row
+        assert "_all_output_names" not in row
+        zero = sorted(name for name, value in outputs.items() if _is_zero(value))
+        non_zero = sorted(
+            name for name, value in outputs.items() if not _is_zero(value)
+        )
+        assert [record["n"] for record in row.get("o", [])] == non_zero
+        assert row.get("o0", 0) == len(zero)
+        decoded = _decode_zero_mask(row["oz"], output_slots) if "oz" in row else []
+        assert decoded == zero
+        assert not (set(decoded) | set(non_zero)) - set(outputs)
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="node runtime not available")
+def test_dashboard_decodes_the_python_zero_output_masks():
+    module = _load_module()
+    case_outputs = [
+        {"module#rule_0": 0, "module#rule_3": 12.5, "module#rule_9": False},
+        {"module#rule_3": 0, "module#rule_4": True},
+        {name: 0 for name in OUTPUT_NAMES},
+        {"module#rule_10": 7},
+    ]
+    rows, output_slots = _compact_rows(module, case_outputs)
+    fixture = {
+        "output_slots": output_slots,
+        "cases": [
+            {
+                "row": row,
+                "zero": sorted(
+                    name for name, value in outputs.items() if _is_zero(value)
+                ),
+            }
+            for row, outputs in zip(rows, case_outputs, strict=True)
+        ],
+    }
+    proc = subprocess.run(
+        ["node", "scripts/test-zero-outputs.mjs"],
+        cwd=Path(__file__).parents[1] / "dashboard",
+        env={**os.environ, "ZERO_OUTPUTS_FIXTURE": json.dumps(fixture)},
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stdout + proc.stderr
+    assert "ZERO OUTPUT MASKS: true" in proc.stdout

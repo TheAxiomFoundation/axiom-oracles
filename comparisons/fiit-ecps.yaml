@@ -19,19 +19,26 @@ description: >-
   Populace US validation population.
 documentation: docs/federal-income-tax-comparison.md
 
-# Not CI-runnable: the axiom leg's engine-main compile of rulespec-us main is
-# blocked by rulespec-us#1049/#1050 (canonical-path root scan; removed plural
-# corpus_citation_paths), and the 2026-08-05 sweeps additionally saw the hosted
-# runner receive a shutdown signal minutes into the PolicyEngine outputs pass
-# in consecutive runs -- consistent with runner memory limits at sample_size 0.
-# Manual lane only; re-verify both before dropping this marker
-# (axiom-oracles#455 tracks the flip-back).
+# Not CI-runnable. Engine main cannot compile rulespec-us main's surfaces:
+# on 2026-10-14 (engine 97dee100, rulespec-us 172bf04e) the 26 USC 1(h),
+# 1(j), 32 and 25A programs failed to load on the
+# `module.source_verification.values` schema change (rulespec-us#1050). The
+# suite therefore pins the engine line rulespec-us builds its program
+# artifacts with (`axiom_artifact_rules_engine_ref` in rulespec-us
+# .axiom/workflow-toolchain.toml: 98af0dce, release/v0.1, v0.1.2), which
+# compiles all thirteen. The 2026-08-05 sweeps also saw the hosted runner
+# receive a shutdown signal minutes into the PolicyEngine outputs pass,
+# consistent with runner memory limits at sample_size 0. Manual lane only;
+# re-verify both before dropping this marker (axiom-oracles#455 tracks the
+# flip-back).
 ci: manual
 
 runner:
   type: axiom-encode-tax-ecps-compare
   axiom_encode_repo: $HOME/axiom-encode
   axiom_rules_repo: $HOME/axiom-rules
+  # The runner refuses an axiom_rules_repo checkout at any other commit.
+  axiom_rules_repo_revision: 98af0dcec5a09e1dca12d1458e08ccb02516c1ef
   rulespec_remote: https://github.com/TheAxiomFoundation/rulespec-us.git
   parameters:
     # No `data_folder`: Populace loads from the sha256-pinned Hugging Face cache
@@ -49,30 +56,38 @@ runner:
     # built_with policyengine-us 1.729.0. Model and data are pinned together on
     # purpose.
     #
-    # The us-pe universe LABELS its oracle 1.767.3 (which carries PE-US #8614,
-    # "Split partnership and S-corp income inputs"), on the theory that #8614
-    # would add partnership self-employment net earnings to eitc_earned_income and
-    # resolve the EITC divergence. Regenerating against 1.767.3 empirically does
-    # NOT (verified 2026-07-08): the pinned f0af251 build stores partnership income
-    # under the pre-#8614 layout, so 1.767.3's eitc_earned_income still reads $0
-    # partnership (e.g. tax_unit 154343 axiom 117,741.43 vs PE 0.00, identical to
-    # 1.729.0). Resolving EITC needs a NEW Populace build that feeds PE the split
-    # input — not a model bump. Worse, 1.767.3 drifts from the pinned Axiom
-    # rulespec on capital gains (adjusted_net_capital_gain: 8 float residuals at
-    # 1.729.0 -> 6,173 large divergences at 1.767.3, e.g. tax_unit 103 axiom
-    # 4,334.86 vs PE 7,192.42) and downstream tax_before_credits (2,118 -> 4,655),
-    # lifting unexplained 18,791 -> 27,513.
+    # Both 1.729.0 and the us-pe universe's 1.767.3 carry PE-US #8614 ("Split
+    # partnership and S-corp income inputs", merged 2026-06-14 as 1de4bff6,
+    # an ancestor of 1.729.0's release commit 180410fe). Both read partnership
+    # self-employment earnings from `partnership_self_employment_net_earnings`
+    # (the variable #8614 renamed from `partnership_se_income`). The pinned
+    # f0af251 artifact still stores the old `partnership_se_income` column
+    # (6,392 nonzero person rows) and has no
+    # `partnership_self_employment_net_earnings`, so either version reads $0
+    # partnership earnings while the bridge feeds Axiom the old column (e.g.
+    # tax_unit 154343 axiom 117,741.43 vs PE 0.00 under both). That is a data
+    # layout gap (PolicyEngine/microcosm#35's rename did not reach this build),
+    # not a model vintage: a model bump cannot resolve it, a Populace build
+    # that stores the renamed column can. 1.767.3 also drifts from the pinned
+    # Axiom rulespec on capital gains (adjusted_net_capital_gain: 8 float
+    # residuals at 1.729.0 -> 6,173 large divergences at 1.767.3, e.g.
+    # tax_unit 103 axiom 4,334.86 vs PE 7,192.42) and downstream
+    # tax_before_credits (2,118 -> 4,655), lifting unexplained 18,791 -> 27,513
+    # (measured 2026-07-08).
     #
-    # So we pin the oracle to 1.729.0 — coherent with the built_with of the pinned
-    # data — which keeps capital-gain/tax clean and isolates EITC as the sole
-    # structural divergence (an upstream #8614 gap in PE 1.729.0; Axiom correctly
-    # includes partnership SE net earnings per 26 USC 32(c)(2)/1402(a)). The
-    # conformance scoreboard matches reports by suite, not oracle-version label, so
-    # this coherent pairing is what drives an honest unexplained count. See
-    # dispositions/fiit-ecps.yaml.
+    # So we pin the oracle to 1.729.0, the built_with of the pinned data. The
+    # conformance scoreboard matches reports by suite, not oracle-version
+    # label. See dispositions/fiit-ecps.yaml for every residual mechanism.
     pinned: true
     policyengine_version: "4.11.0"
     policyengine_us_version: "1.729.0"
+    # PyPI no longer serves policyengine-us 1.729.0 (checked 2026-10-14: the
+    # index lists 1.726.0 and then 1.730.0). This is its release commit, the
+    # "Update PolicyEngine US" version bump of 2026-06-14. Built from this
+    # archive, the package is byte-identical to the 1.729.0 PyPI wheel (all
+    # 15,007 files, compared against a cached copy on 2026-10-14). The runner
+    # checks that the installed version matches the label before it runs.
+    policyengine_us_source: https://github.com/PolicyEngine/policyengine-us/archive/180410fe35209fb8201378c1b32dadd38051c342.tar.gz
     policyengine_core_version: "3.26.11"
     allow_policyengine_us_version: true
     # Deprecated no-op on this harness (Populace validation no longer loads

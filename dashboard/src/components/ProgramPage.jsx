@@ -15,6 +15,7 @@ import {
   topLevelAggregates,
   isAxiomPair,
   otherOracle,
+  displayEngines,
   programKey,
 } from "../utils/suites";
 import { causeFor } from "../utils/programs";
@@ -319,7 +320,7 @@ function WhySection({ programReports, knownCauses }) {
         suite: report.suite,
         oracle: otherOracle(report),
         region: suiteMeta(report.suite).region,
-        engines: report.engines,
+        engines: displayEngines(report),
       });
     }
   }

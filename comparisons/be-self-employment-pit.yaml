@@ -9,6 +9,16 @@ description: >-
   against the worker activity. All RuleSpec inputs are Person records, with
   post-uprating yse, yem, and yemeq_s bridged per case.
 
+# Not runnable on the CI matrix runners. The EUROMOD-platform runner needs
+# EUROMOD's x64 engine (EM_Executable.dll), the euromod connector under
+# EUROMOD_PYTHON, a .NET runtime and the model checkout; the 6-hourly affected
+# rerun and the weekly matrix provide none of them, so there run_comparison.py
+# can only re-emit the committed report. Manual lane only: a supervised
+# run_comparison.py run where the EUROMOD J2.0+ model and runtime exist
+# (docs/euromod-platform-playbook.md) refreshes the committed report. Drop
+# this marker only once a workflow provisions the model and runtime.
+ci: manual
+
 runner:
   type: euromod-synthetic-compare
   axiom_rules_repo: $HOME/TheAxiomFoundation/axiom-rules-engine

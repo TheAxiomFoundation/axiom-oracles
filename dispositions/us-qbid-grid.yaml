@@ -25,6 +25,11 @@ entries:
         - comparisons/us-qbid-grid.yaml
         - https://www.congress.gov/119/plaws/publ21/PLAW-119publ21.pdf
         - https://github.com/PolicyEngine/policyengine-us/blob/49d19b239a593dbac8920ac6fd80cfe33372343a/policyengine_us/variables/gov/irs/income/taxable_income/deductions/qualified_business_income_deduction/qualified_business_income_deduction.py#L20-L34
+    axiom_companion:
+      legal_ids:
+        - us:policies/income_tax/qualified_business_income_deduction_pipeline#federal_qualified_business_income_deduction
+      tests:
+        - rulespec-us@dcb2e47e0af964be6d59f80688f519d0a6a96a71:us/policies/income_tax/qualified_business_income_deduction_pipeline.test.yaml#qbid-above-nowages
     expires_on_source_change: true
     pinned:
       left: 0

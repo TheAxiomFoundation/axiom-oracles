@@ -87,6 +87,38 @@ def _build_report(*, right_values=(125, 50)) -> dict:
     )
 
 
+@pytest.mark.parametrize("field", ["comparison_count", "match_count", "mismatch_count"])
+@pytest.mark.parametrize("raw", [True, False, -1, -0.5, 1.5, float("nan"), float("inf"), "1", None])
+def test_merge_rejects_invalid_summary_counts(field, raw) -> None:
+    report = _build_report()
+    report["summary"][field] = raw
+    with pytest.raises(ValueError, match=field):
+        apply_dispositions(report, _document([_entry()]))
+
+
+@pytest.mark.parametrize("raw", [None, False, [], ""])
+def test_merge_rejects_invalid_summary_shape(raw) -> None:
+    report = _build_report()
+    report["summary"] = raw
+    with pytest.raises(ValueError, match="summary must be an object"):
+        apply_dispositions(report, _document([_entry()]))
+
+
+def test_merge_accepts_integral_float_counts() -> None:
+    report = _build_report()
+    for field in ("comparison_count", "match_count", "mismatch_count"):
+        report["summary"][field] = float(report["summary"][field])
+    merged = apply_dispositions(report, _document([_entry()]))
+    assert merged["summary"]["dispositioned"]["unexplained_count"] == 0
+
+
+def test_classified_rows_cannot_exceed_reported_mismatches() -> None:
+    report = _build_report()
+    report["summary"]["mismatch_count"] = 0
+    with pytest.raises(ValueError, match="classified_rows.*exceeds mismatch_count"):
+        apply_dispositions(report, _document([_entry()]))
+
+
 # ---------------------------------------------------------------------------
 # Schema validation
 # ---------------------------------------------------------------------------
@@ -408,7 +440,7 @@ def _premerged_fixture(tmp_path: Path) -> tuple[object, Path, dict, dict]:
     report, dispositions document). The full report carries TWO mismatch
     rows classified by two entries of EQUAL cardinality but different
     disposition classes — the shape whose class swap keeps every aggregate
-    count identical (sol stack review r2). The slim copy embeds the
+    count identical. The slim copy embeds the
     ``summary.dispositioned`` block a fresh merge over the full report
     produces, bound to its source via the ``source_report`` pointer and
     the row-level ``assignment_sha256``, and retains one annotated
@@ -533,7 +565,7 @@ def test_partial_reports_are_not_full_merge_targets(tmp_path: Path) -> None:
 
 
 def test_equal_cardinality_class_swap_is_flagged(tmp_path: Path) -> None:
-    # Sol stack review r2 F2 residual: swapping the disposition classes of
+    # Swapping the disposition classes of
     # two equal-cardinality entries keeps EVERY aggregate count identical,
     # so the aggregate comparison stays silent — the row-level assignment
     # digest and the retained row's annotation must catch it.
@@ -588,7 +620,7 @@ def test_missing_pointer_with_committed_full_report_is_flagged(
 
 
 def test_dangling_source_pointer_fails_closed(tmp_path: Path) -> None:
-    # Sol stack review r2 MED: an absent source must fail --check, never
+    # An absent source must fail --check, never
     # fall back to trusting the embedded block.
     module, slim_path, slim, doc = _premerged_fixture(tmp_path)
     (tmp_path / "reports" / "example-suite-full.json").unlink()
@@ -642,8 +674,7 @@ def test_source_pointer_outside_reports_dir_is_rejected(
 
 def test_absolute_source_pointer_path_is_rejected(tmp_path: Path) -> None:
     # The pointer contract is repo-relative; an absolute path — even one
-    # that resolves inside reports/ — must be rejected (sol stack review
-    # r3).
+    # that resolves inside reports/ — must be rejected.
     module, slim_path, slim, doc = _premerged_fixture(tmp_path)
     slim["summary"]["dispositioned"]["source_report"]["path"] = str(
         tmp_path / "reports" / "example-suite-full.json"
@@ -658,7 +689,7 @@ def test_non_mapping_json_source_is_a_problem_not_a_crash(
 ) -> None:
     # A hash-matching source whose JSON is valid but not a report object
     # (e.g. a bare list) must produce a validation problem, not an
-    # AttributeError (sol stack review r3).
+    # AttributeError.
     module, slim_path, slim, doc = _premerged_fixture(tmp_path)
     full_path = tmp_path / "reports" / "example-suite-full.json"
     payload = "[1]"
@@ -681,8 +712,8 @@ def _premerged_multi_concept_fixture(
     A report validly emits one mismatch row per (case, concept); a digest
     or row map keyed by case_id alone collapses same-case rows, so a
     count-preserving swap confined to rows shadowed in that map — and to
-    rows not retained in the dashboard sample — would go unseen (sol
-    stack review r3). Two single-row entries of different classes annotate
+    rows not retained in the dashboard sample — would go unseen.
+    Two single-row entries of different classes annotate
     the income-tax row of each case; the payroll rows stay unannotated,
     and the retained dashboard row is an unannotated payroll row.
     """
@@ -789,7 +820,7 @@ def _premerged_multi_concept_fixture(
 
 
 def test_same_case_multi_concept_swap_is_flagged(tmp_path: Path) -> None:
-    # Sol stack review r3: with one mismatch row per (case, concept), a
+    # With one mismatch row per (case, concept), a
     # case_id-keyed digest lets later concept rows shadow earlier ones, so
     # swapping the classes of two single-row entries that annotate only
     # shadowed, non-retained rows preserved aggregates, digest, and
@@ -852,11 +883,11 @@ def test_panel_dashboard_block_is_bound_to_committed_full_report() -> None:
 
 
 def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
-    """expires_on_source_change made real for selector entries (sol closing
-    review F4): a selector_binding records the selected population's unit
+    """expires_on_source_change made real for selector entries:
+    a selector_binding records the selected population's unit
     count and summed |difference|; a source change that moves any selected
     value violates the binding, EXPIRES the entry, and returns its rows to
-    unexplained. This is sol's exact counterfactual — before the binding, an
+    unexplained. Before the binding, an
     in-memory value mutation stayed classified with zero unexplained."""
     entry = {
         "id": "sel-bound",
@@ -897,7 +928,7 @@ def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
     assert "binding_violated_entries" not in block
     assert merged["mismatches"][0]["disposition"]["id"] == "sel-bound"
 
-    # Sol's mutation: one selected row's value drifts (.145 -> .89).
+    # One selected row's value drifts (.145 -> .89).
     mutated = json.loads(json.dumps(report))
     mutated["mismatches"][1]["right"] = 0.99
     mutated["mismatches"][1]["difference"] = -0.89
@@ -908,7 +939,7 @@ def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
     assert block["unexplained_count"] == 2
     assert all("disposition" not in row for row in merged["mismatches"])
 
-    # Sol r2 finding 2: a sign flip preserves unit count and |difference|
+    # A sign flip preserves unit count and |difference|
     # aggregates — the per-row digest must still trip.
     flipped = json.loads(json.dumps(report))
     flipped["mismatches"][1]["left"] = 0.145
@@ -928,3 +959,242 @@ def test_selector_binding_violation_expires_entry_and_unclassifies_rows():
     assert merged["summary"]["dispositioned"]["expired_entries"] == [
         "sel-bound"
     ]
+
+
+# ---------------------------------------------------------------------------
+# case_selector.case_ids_by_output: one concept can cover several compared
+# outputs (fiit-ecps's EITC surface compares eleven), so a case can carry
+# several rows under one concept with different mechanisms. The row-level
+# selector attributes each row by its `output`.
+# ---------------------------------------------------------------------------
+
+from hypothesis import given, settings, strategies as st  # noqa: E402
+
+from axiom_oracles.comparison.dispositions import _entry_selects_row  # noqa: E402
+
+
+def _by_output_entry(mapping, **overrides):
+    entry = _entry(case_selector={"case_ids_by_output": mapping}, **overrides)
+    entry.pop("case_id")
+    return entry
+
+
+def _row(case_id, output, concept="us:test#income_tax"):
+    return {"case_id": case_id, "concept": concept, "output": output}
+
+
+def test_case_ids_by_output_is_valid() -> None:
+    assert validate_dispositions(
+        _document([_by_output_entry({"eitc_earned_income": ["c1", "c2"]})])
+    ) == []
+
+
+@pytest.mark.parametrize(
+    "selector",
+    [
+        {"case_ids_by_output": {}},
+        {"case_ids_by_output": {"eitc_earned_income": []}},
+        {"case_ids_by_output": {"eitc_earned_income": "c1"}},
+        {"case_ids_by_output": {"": ["c1"]}},
+        {"case_ids_by_output": ["c1"]},
+        {"case_ids_by_output": {"eitc_earned_income": ["c1"]}, "case_ids": ["c1"]},
+        {"case_ids_by_output": {"x": ["c1"]}, "case_id_prefix": "c"},
+    ],
+)
+def test_case_ids_by_output_rejects_malformed_selectors(selector) -> None:
+    entry = _entry(case_selector=selector)
+    entry.pop("case_id")
+    errors = validate_dispositions(_document([entry]))
+    assert any("case_selector" in error for error in errors), errors
+
+
+def test_case_ids_by_output_selects_only_the_named_output() -> None:
+    entry = _by_output_entry({"eitc_earned_income": ["c1"]})
+    assert _entry_selects_row(entry, _row("c1", "eitc_earned_income"))
+    # Same case and concept, another output: a different mechanism's row.
+    assert not _entry_selects_row(entry, _row("c1", "eitc_investment_income_eligible"))
+    assert not _entry_selects_row(entry, _row("c2", "eitc_earned_income"))
+    # Outputs are matched as strings, as the binding digest identifies them.
+    numeric = _by_output_entry({"1": ["c1"]})
+    assert _entry_selects_row(numeric, _row("c1", 1))
+    # Rows that do not name their output are never selected by output.
+    assert not _entry_selects_row(entry, {"case_id": "c1", "concept": "us:test#income_tax"})
+    assert not _entry_selects_row(
+        entry, _row("c1", "eitc_earned_income", concept="us:test#other")
+    )
+
+
+def test_merge_splits_one_cases_rows_by_output() -> None:
+    first = _by_output_entry(
+        {"eitc_earned_income": ["c1"]}, id="earned", disposition="bridge_artifact"
+    )
+    second = _by_output_entry({"eitc_investment_income_eligible": ["c1"]}, id="investment")
+    report = {
+        "schema_version": "axiom.comparison_report.v2",
+        "summary": {"comparison_count": 4, "match_count": 2, "mismatch_count": 2},
+        "mismatches": [
+            {**_row("c1", "eitc_earned_income"), "left": 1, "right": 2, "difference": -1},
+            {**_row("c1", "eitc_investment_income_eligible"), "left": 0, "right": 1,
+             "difference": -1},
+        ],
+    }
+    merged = apply_dispositions(report, _document([first, second]))
+    assert [row["disposition"]["id"] for row in merged["mismatches"]] == [
+        "earned", "investment",
+    ]
+    counts = merged["summary"]["dispositioned"]["counts"]
+    assert counts["bridge_artifact"] == 1 and counts["upstream_engine_gap"] == 1
+
+
+_cases = st.sampled_from([f"c{i}" for i in range(8)])
+_outputs = st.sampled_from(["a", "b", "c", "d"])
+
+
+@settings(max_examples=200, deadline=None)
+@given(
+    mapping=st.dictionaries(_outputs, st.lists(_cases, min_size=1), min_size=1),
+    rows=st.lists(st.tuples(_cases, _outputs), max_size=30),
+    extra=st.lists(st.tuples(_cases, _outputs), max_size=10),
+)
+def test_case_ids_by_output_selects_exactly_its_pairs(mapping, rows, extra) -> None:
+    """For all inputs: a row is selected iff its (case, output) pair is listed,
+    and adding rows elsewhere never changes which listed rows are selected."""
+    entry = _by_output_entry(mapping)
+    listed = {(case, output) for output, cases in mapping.items() for case in cases}
+    selected = {pair for pair in rows if _entry_selects_row(entry, _row(*pair))}
+    assert selected == set(rows) & listed
+    selected_with_extra = {
+        pair for pair in rows + extra if _entry_selects_row(entry, _row(*pair))
+    }
+    assert selected_with_extra & set(rows) == selected
+
+
+def _two_output_report():
+    """One case, two outputs, identical values: the rows differ only in output."""
+    rows = [
+        {**_row("c1", output), "left": 0, "right": 1, "difference": -1,
+         "kind": "amount_difference"}
+        for output in ("eitc_investment_income_eligible", "eitc_demographic_eligible")
+    ]
+    return {
+        "schema_version": "axiom.comparison_report.v2",
+        "summary": {"comparison_count": 4, "match_count": 2, "mismatch_count": 2},
+        "mismatches": rows,
+    }
+
+
+def test_digests_tell_apart_rows_that_differ_only_in_output() -> None:
+    """Swapping two equal-valued rows of one case between entries changes both
+    digests, so neither a selector binding nor a premerged assignment survives
+    the swap (sol review of #635, finding 1)."""
+    from axiom_oracles.comparison.dispositions import selected_rows_sha256
+
+    report = _two_output_report()
+    investment, age = report["mismatches"]
+    assert selected_rows_sha256([investment]) != selected_rows_sha256([age])
+
+    def merged(first_output, second_output):
+        first = _by_output_entry({first_output: ["c1"]}, id="dividend",
+                                 disposition="bridge_artifact")
+        second = _by_output_entry({second_output: ["c1"]}, id="age")
+        return apply_dispositions(report, _document([first, second]))
+
+    straight = merged("eitc_investment_income_eligible", "eitc_demographic_eligible")
+    swapped = merged("eitc_demographic_eligible", "eitc_investment_income_eligible")
+    assert straight["summary"]["dispositioned"]["counts"] == (
+        swapped["summary"]["dispositioned"]["counts"]
+    )
+    assert assignment_digest(straight) != assignment_digest(swapped)
+
+    # A binding stamped for one output's row expires when the entry is moved
+    # to the other output's equal-valued row.
+    binding = {"units": 1, "rows_sha256": selected_rows_sha256([investment])}
+    moved = _by_output_entry({"eitc_demographic_eligible": ["c1"]}, id="dividend",
+                             selector_binding=binding)
+    result = apply_dispositions(report, _document([moved]))
+    assert result["summary"]["dispositioned"]["binding_violated_entries"] == ["dividend"]
+
+
+def test_digests_of_rows_without_an_output_are_unchanged() -> None:
+    """Output-less rows hash as before, so other suites' bindings stay valid."""
+    from axiom_oracles.comparison.dispositions import selected_rows_sha256
+
+    rows = [
+        {"case_id": f"c{i}", "concept": "us:test#income_tax", "left": i, "right": 2 * i,
+         "difference": -i}
+        for i in range(3)
+    ]
+    legacy = sorted(
+        [str(r["case_id"]), str(r["concept"]), json.dumps(r["left"]),
+         json.dumps(r["right"]), json.dumps(r["difference"])]
+        for r in rows
+    )
+    assert selected_rows_sha256(rows) == hashlib.sha256(
+        json.dumps(legacy, separators=(",", ":")).encode()
+    ).hexdigest()
+
+
+@pytest.mark.parametrize("edit", ["replace", "slice", "case_ids"])
+def test_a_merge_sees_same_length_in_place_selector_edits(edit) -> None:
+    """Editing a selector in place between merges, without changing its length,
+    reclassifies on the next merge (sol review of #635, finding 3)."""
+    from axiom_oracles.comparison.dispositions import selected_rows_sha256
+
+    report = {
+        "schema_version": "axiom.comparison_report.v2",
+        "summary": {"comparison_count": 2, "match_count": 1, "mismatch_count": 1},
+        "mismatches": [{**_row("a", "o"), "left": 1, "right": 2, "difference": -1}],
+    }
+    binding = {"units": 1, "rows_sha256": selected_rows_sha256(report["mismatches"])}
+    if edit == "case_ids":
+        entry = _entry(case_selector={"case_ids": ["a"]}, selector_binding=binding)
+        ids = entry["case_selector"]["case_ids"]
+    else:
+        entry = _by_output_entry({"o": ["a"]}, selector_binding=binding)
+        ids = entry["case_selector"]["case_ids_by_output"]["o"]
+    entry.pop("case_id", None)
+    document = _document([entry])
+    first = apply_dispositions(report, document)
+    assert first["mismatches"][0]["disposition"]["id"] == entry["id"]
+
+    if edit == "slice":
+        ids[:] = ["b"]
+    else:
+        ids[0] = "b"
+    second = apply_dispositions(report, document)
+    assert "disposition" not in second["mismatches"][0]
+    assert second["summary"]["dispositioned"]["unexplained_count"] == 1
+    assert entry["id"] in second["summary"]["dispositioned"]["expired_entries"]
+
+
+def test_selector_cache_sees_an_edited_selector() -> None:
+    entry = _by_output_entry({"eitc_earned_income": ["c1"]})
+    assert not _entry_selects_row(entry, _row("c2", "eitc_earned_income"))
+    entry["case_selector"]["case_ids_by_output"]["eitc_earned_income"].append("c2")
+    assert _entry_selects_row(entry, _row("c2", "eitc_earned_income"))
+    plain = _entry(case_selector={"case_ids": ["c1"]})
+    plain.pop("case_id")
+    assert not _entry_selects_row(plain, {"case_id": "c3", "concept": "us:test#income_tax"})
+    plain["case_selector"]["case_ids"].append("c3")
+    assert _entry_selects_row(plain, {"case_id": "c3", "concept": "us:test#income_tax"})
+    plain["case_selector"]["case_ids"][0] = "c4"
+    assert not _entry_selects_row(plain, {"case_id": "c1", "concept": "us:test#income_tax"})
+
+
+def test_serialize_like_keeps_the_populace_projector_indent(tmp_path: Path) -> None:
+    """The Populace projector writes sorted indent-1 JSON; a merge keeps it."""
+
+    module = _load_script_module()
+    original = {"suite": "nc-income-tax-populace", "summary": {"match_count": 1}}
+    text = json.dumps(original, indent=1, sort_keys=True) + "\n"
+    path = tmp_path / "report.json"
+    path.write_text(text)
+    merged = {
+        **original,
+        "summary": {**original["summary"], "dispositioned": {"counts": {}}},
+    }
+
+    assert module._serialize_like(path, text, original) == text
+    assert module._serialize_like(path, text, merged) == (
+        json.dumps(merged, indent=1, sort_keys=True) + "\n"
+    )

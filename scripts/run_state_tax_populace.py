@@ -8,6 +8,11 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from axiom_oracles.adapters.taxsim.pins import (
+    TaxsimIdentityRecorder,
+    TaxsimLawYearError,
+    require_law_years,
+)
 from axiom_oracles.provenance import resolve_run_kind
 from axiom_oracles.bridges.population import load_populace_dataset, population_table
 from axiom_oracles.bridges.state_tax_populace import (
@@ -17,11 +22,13 @@ from axiom_oracles.bridges.state_tax_populace import (
 from axiom_oracles.bridges.state_tax_populace_runner import (
     DISPOSITION_READY,
     NO_BROAD_PIT_FIPS,
+    StateTaxPopulationRoutingError,
     calculate_policyengine_targets,
     calculate_policyengine_projection_inputs,
     calculate_taxsim_targets,
     compare_ready_state_tax_units,
     population_routing_report,
+    require_policyengine_us_floor,
     route_tax_units,
     runtime_provenance,
     select_ready_tax_units,
@@ -76,6 +83,30 @@ _NY_JOINT_OR_SURVIVING_INPUT = (
 _NY_HEAD_OF_HOUSEHOLD_INPUT = (
     f"{_NY_INPUT_PREFIX}ny_pit_pilot_filing_status_head_of_household"
 )
+_NC_INPUT_PREFIX = (
+    "us-nc:policies/income_tax/resident_core_liability_pipeline#input."
+)
+_NC_BOOLEAN_INPUTS = {
+    "joint_or_surviving": "nc_pit_2026_filing_status_joint_or_surviving_spouse",
+    "head_of_household": "nc_pit_2026_filing_status_head_of_household",
+    "married_separately": "nc_pit_2026_filing_status_married_separately",
+    "standard_deduction_eligible": (
+        "nc_pit_2026_eligible_for_federal_standard_deduction"
+    ),
+}
+_NC_PRESENCE_INPUTS = {
+    "qualifying_children": "nc_pit_2026_federal_child_tax_credit_qualifying_children",
+    "charitable_contributions": "nc_pit_2026_charitable_contributions",
+    "qualified_residence_interest": "nc_pit_2026_qualified_residence_interest",
+    "real_estate_property_taxes": "nc_pit_2026_real_estate_property_taxes",
+    "medical_and_dental_expenses": "nc_pit_2026_medical_and_dental_expenses",
+    "united_states_obligation_interest": "nc_pit_2026_eligible_obligation_interest",
+    "taxable_social_security": (
+        "nc_pit_2026_taxable_social_security_and_railroad_retirement"
+    ),
+    "income_tax_refunds": "nc_pit_2026_income_tax_refunds",
+}
+_NC_AGI_INPUT = f"{_NC_INPUT_PREFIX}nc_pit_2026_federal_adjusted_gross_income"
 
 
 def _projection_branch_diagnostics(
@@ -324,6 +355,57 @@ def _projection_branch_diagnostics(
             "head_of_household_count": head_of_household_count,
             "single_or_separate_count": single_or_separate_count,
         }
+    north_carolina = projection_inputs.get("NC")
+    if isinstance(north_carolina, dict):
+        ready_ids = {
+            route.tax_unit_id
+            for route in routes
+            if route.state == "NC" and route.disposition == DISPOSITION_READY
+        }
+        flags = {
+            label: [
+                north_carolina[f"{_NC_INPUT_PREFIX}{name}"][item]
+                for item in ready_ids
+            ]
+            for label, name in _NC_BOOLEAN_INPUTS.items()
+        }
+        if any(type(value) is not bool for values in flags.values() for value in values):
+            raise ValueError(
+                "NC projection diagnostics require strict Boolean filing-status "
+                "and eligibility values for every ready TaxUnit"
+            )
+        statuses = list(
+            zip(
+                flags["joint_or_surviving"],
+                flags["head_of_household"],
+                flags["married_separately"],
+                strict=True,
+            )
+        )
+        if any(sum(status) > 1 for status in statuses):
+            raise ValueError(
+                "NC projection diagnostics require mutually exclusive "
+                "filing-status values"
+            )
+        agi = [float(north_carolina[_NC_AGI_INPUT][item]) for item in ready_ids]
+        diagnostics["NC"] = {
+            "compared_tax_unit_count": len(ready_ids),
+            "joint_or_surviving_count": sum(flags["joint_or_surviving"]),
+            "head_of_household_count": sum(flags["head_of_household"]),
+            "married_separately_count": sum(flags["married_separately"]),
+            "single_count": sum(not any(status) for status in statuses),
+            "standard_deduction_ineligible_count": sum(
+                not value for value in flags["standard_deduction_eligible"]
+            ),
+            "nonpositive_agi_count": sum(value <= 0 for value in agi),
+            **{
+                f"{label}_present_count": sum(
+                    float(north_carolina[f"{_NC_INPUT_PREFIX}{name}"][item]) > 0
+                    for item in ready_ids
+                )
+                for label, name in _NC_PRESENCE_INPUTS.items()
+            },
+        }
     utah = projection_inputs.get("UT")
     if not isinstance(utah, dict):
         return diagnostics
@@ -424,6 +506,24 @@ def main(argv: list[str] | None = None) -> int:
             f"got {args.populace_year}"
         )
     requested_states = _requested_states(args.states, contract=contract)
+    if not args.no_taxsim:
+        # Before the dataset loads: the host's TAXSIM binary may stop short
+        # of the validation year (the pinned Linux build accepts 1960-2024).
+        try:
+            require_law_years([args.year])
+        except TaxsimLawYearError as exc:
+            raise SystemExit(str(exc)) from exc
+    # Before the dataset loads: a state whose projection relies on a
+    # policyengine-us fix refuses an older or missing oracle.
+    campaign_states = requested_states or {
+        state
+        for state, jurisdiction in contract.by_state().items()
+        if jurisdiction.status == "ready"
+    }
+    try:
+        require_policyengine_us_floor(campaign_states)
+    except StateTaxPopulationRoutingError as exc:
+        raise SystemExit(str(exc)) from exc
     identity: dict = {}
     dataset = load_populace_dataset(
         "us",
@@ -496,6 +596,8 @@ def main(argv: list[str] | None = None) -> int:
         microsimulation_factory=_shared_microsimulation,
     )
     taxsim_targets = None
+    taxsim_unprojected_inputs = {}
+    taxsim_recorder = TaxsimIdentityRecorder()
     if not args.no_taxsim:
         taxsim_targets = calculate_taxsim_targets(
             dataset=dataset,
@@ -505,6 +607,8 @@ def main(argv: list[str] | None = None) -> int:
             year=args.year,
             contract=contract,
             microsimulation_factory=_shared_microsimulation,
+            unprojected_inputs=taxsim_unprojected_inputs,
+            identity_recorder=taxsim_recorder,
         )
     report = {
         "schema_version": "axiom.state_tax_populace_campaign_report.v1",
@@ -536,6 +640,7 @@ def main(argv: list[str] | None = None) -> int:
             policyengine_targets=targets,
             policyengine_projection_inputs=projection_inputs,
             taxsim_targets=taxsim_targets,
+            taxsim_unprojected_inputs=taxsim_unprojected_inputs,
             year=args.year,
             rulespec_root=args.rulespec_root.resolve(),
             axiom_rules_path=args.axiom_rules_path.resolve(),
@@ -546,6 +651,8 @@ def main(argv: list[str] | None = None) -> int:
             "skipped" if args.no_taxsim else "graded"
         ),
     }
+    if taxsim_recorder.to_dict():
+        report["engine_identity"] = {"taxsim": taxsim_recorder.to_dict()}
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
     return 0
 

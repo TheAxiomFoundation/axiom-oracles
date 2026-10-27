@@ -23,6 +23,17 @@
 #   uv run python scripts/generate_ca_federal_tax_spsm.py --run-spsm
 
 name: ca-federal-schedule-tax-spsm
+
+# Not CI-runnable: SPSD/M is licensed software, and neither the Package nor
+# the SPSD database is ever vendored or committed (Licence Agreement v34; see
+# docs/spsdm-oracle-design.md). No runner can hold an install, so the generator
+# hard-fails with "No SPSD/M installation found" on every CI leg: the weekly
+# matrix's only red leg (run 36426573617, 2026-09-28). Unlike the
+# EUROMOD/UKMOD lanes it never re-emits, so the leg could only ever fail.
+# Manual lane only: a licensee's supervised run_comparison.py run refreshes
+# the committed report. Drop this marker only if a workflow ever provisions a
+# licensed install.
+ci: manual
 title: Canada federal schedule tax — Axiom vs SPSD/M
 description: >-
   Compares the encoded 2025 T1 federal tax-on-taxable-income schedule

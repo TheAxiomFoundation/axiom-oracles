@@ -7,9 +7,8 @@ description: >-
   (PAMMS Appendix A financial standards by AU size, 1605 GIC/standard-of-need
   budgeting, 1615 standard $250 work deduction, and the Step 11-13
   min(standard-of-need deficit, family maximum) benefit) against PolicyEngine's
-  ga_tanf on Enhanced CPS households in Georgia. Refresh the rulespec root after
-  pulling ~/rulespec-us with:
-  rsync -a --delete --exclude .axiom ~/rulespec-us/us-ga/ ~/.axiom-oracles/roots/rulespec-us-ga/
+  ga_tanf on Enhanced CPS households in Georgia, using the canonical rulespec-us
+  monorepo checkout.
 
 # Not CI-runnable while engine-main x rulespec-us-main is broken: composed-root
 # staging fails the engine's canonical-path scan (non-canonical filenames in
@@ -44,9 +43,9 @@ runner:
     axiom_program: $HOME/axiom-oracles/programs/us-ga/tanf/fy-2026.yaml
     axiom_composed_program: /tmp/ga-tanf-composed.yaml
     axiom_compiled_program: /tmp/ga-tanf-compiled.json
-    axiom_rulespec_repo_roots: $HOME/.axiom-oracles/roots
+    axiom_rulespec_repo_roots: $HOME/rulespec-us
     rulespec_roots:
-      - $HOME/.axiom-oracles/roots/rulespec-us-ga
+      - $HOME/rulespec-us
 
 artifacts:
   report_basename: axiom-policyengine-ga-tanf-ecps

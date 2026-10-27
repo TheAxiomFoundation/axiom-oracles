@@ -16,6 +16,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -48,6 +49,13 @@ DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 # silently fails and the coverage warnings get dropped.
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
+
+from axiom_oracles.provenance import (  # noqa: E402
+    _git_env,
+    _git_sha,
+    _git_toplevel,
+    _repository_mismatch,
+)
 
 # ---------------------------------------------------------------------------
 # tax-ecps-compare → v2 dashboard schema adapter
@@ -94,6 +102,13 @@ FIIT_SURFACE_CONCEPTS: dict[str, dict] = {
     "tax-before-credits": {
         "concept": "us:tax/federal-income-tax#tax_before_credits",
         "description": "Federal tax before credits",
+        "parent": "us:tax/federal-income-tax#liability",
+        "category": "tax",
+        "tolerance": 5,
+    },
+    "income-tax": {
+        "concept": "us:tax/federal-income-tax#income_tax",
+        "description": "Federal income tax and refundable credits",
         "parent": "us:tax/federal-income-tax#liability",
         "category": "tax",
         "tolerance": 5,
@@ -552,6 +567,18 @@ def main() -> int:
             "prove a real run."
         ),
     )
+    parser.add_argument(
+        "--from-report",
+        type=Path,
+        default=None,
+        help=(
+            "Republish an earlier real run of this comparison from its "
+            "stamped reports/ JSON instead of executing the runner: re-adapt "
+            "it, merge the current dispositions/<suite>.yaml and rebind the "
+            "dashboard copy. For manual suites whose dispositions change "
+            "after a long population run."
+        ),
+    )
     args = parser.parse_args()
 
     if args.list:
@@ -589,6 +616,8 @@ def main() -> int:
         return _run_sanity(args.name)
 
     config = _load_comparison(args.name)
+    if args.from_report is not None:
+        return _republish_from_report(config, args.from_report, summary=args.summary)
     _verify_declared_pins(config)
     if args.sample_size is not None:
         config["runner"]["parameters"]["sample_size"] = args.sample_size
@@ -648,6 +677,7 @@ def main() -> int:
         # report records exactly what it ran against and the affected-rerun
         # map can diff its SHAs.
         provenance = _build_run_provenance(config, runner_type, staging)
+        _guard_unclean_rulespec_trees(config["name"], provenance)
         compared_engines = {
             str(config["runner"]["parameters"].get("left", "")),
             str(config["runner"]["parameters"].get("right", "")),
@@ -671,7 +701,9 @@ def main() -> int:
                 config,
                 suite=suite,
             )
-            adapted["provenance"] = provenance
+            adapted["provenance"] = _preserve_relation_binding_diagnostics(
+                provenance, adapted.get("provenance")
+            )
         preserve_existing_versioned = bool(
             config["runner"].get("_reemitted_report")
         )
@@ -736,6 +768,185 @@ def main() -> int:
     return 0
 
 
+def _republish_from_report(config: dict, source: Path, *, summary: bool) -> int:
+    """Rebuild a suite's dashboard copy from an earlier real run's report.
+
+    The report must be this suite's stamped reports/ JSON from a real
+    execution: its provenance names this comparison and is not a
+    re-emission. Nothing executes and nothing is re-stamped; the report keeps
+    the provenance its run recorded. The dashboard copy is re-adapted from it,
+    merged with the current dispositions and bound to a FULL v2 report under
+    reports/, exactly as the run itself would have published it.
+
+    It holds the report's publication lock from its first read through
+    publication, the lock a run takes to publish that report, and adapts the
+    one snapshot it parsed. So a run that replaces the report meanwhile can
+    never pair one run's results with another's provenance.
+    """
+    name = config["name"]
+    source = source.resolve()
+    reports_dir = (REPO_ROOT / "reports").resolve()
+    if reports_dir not in source.parents:
+        raise SystemExit(
+            f"--from-report {source} must be under {reports_dir}: the "
+            "dashboard copy binds to a repo-relative reports/ path"
+        )
+    dashboard_target = config.get("dashboard", {}).get("filename")
+    if not dashboard_target:
+        raise SystemExit(f"{name} declares no dashboard copy to republish")
+    suite = config.get("dashboard", {}).get("suite", name)
+    runner_type = config["runner"]["type"]
+    lock_path = source.with_name(f".{source.name}.lock")
+    with open(lock_path, "a") as lock_fh:
+        fcntl.flock(lock_fh, fcntl.LOCK_EX)
+        try:
+            raw = json.loads(source.read_text())
+        except (OSError, json.JSONDecodeError) as exc:
+            raise SystemExit(f"--from-report {source}: cannot read JSON ({exc})")
+        provenance = raw.get("provenance") if isinstance(raw, dict) else None
+        if not isinstance(provenance, dict):
+            raise SystemExit(f"--from-report {source} carries no provenance block")
+        expected = f"scripts/run_comparison.py::{name}"
+        if provenance.get("generated_by") != expected:
+            raise SystemExit(
+                f"--from-report {source} was generated by "
+                f"{provenance.get('generated_by')!r}, not {expected!r}"
+            )
+        if provenance.get("reemitted_report"):
+            raise SystemExit(
+                f"--from-report {source} is a re-emission, not a real run; "
+                "there is nothing to republish"
+            )
+        adapted = _adapt_raw_to_v2(raw, runner_type, config, suite=suite)
+        adapted["provenance"] = provenance
+        _write_dashboard_report(
+            adapted,
+            dashboard_target,
+            full_report_path=source,
+            dashboard_config=config.get("dashboard"),
+        )
+        if summary:
+            _print_summary(source)
+    return 0
+
+
+def _is_v2_report_for(path: Path, suite: object) -> bool:
+    """Whether ``path`` already holds this suite's v2 report (the binding
+    source a premerged dashboard copy can name)."""
+    try:
+        data = json.loads(path.read_text())
+    except (OSError, json.JSONDecodeError):
+        return False
+    return (
+        isinstance(data, dict)
+        and data.get("suite") == suite
+        and isinstance(data.get("summary"), dict)
+        and isinstance(data.get("mismatches"), list)
+    )
+
+
+# Population runs record one observed-output row per compared value: about
+# 3.9 million rows and 1 GB for fiit-ecps. No published copy carries more
+# than this many; the raw report under reports/ keeps every row.
+_PUBLISHED_MAX_OBSERVED_OUTPUTS = 10_000
+
+
+def _without_observed_outputs(report: dict) -> dict:
+    """Drop ``observed_outputs`` past the published cap, with the claims they back.
+
+    Attestation binds an output only to returned values the report body
+    shows, and a stamp may not claim more than the body shows
+    (``axiom_oracles.conformance.attestation``). A copy without the rows
+    therefore cannot keep the stamp's per-output claims either: ``outputs``
+    is emptied and ``outputs_complete`` set false, so the copy attests no
+    output instead of claiming counts that nothing in it backs.
+    ``observed_outputs_omitted`` records how many rows were dropped, and
+    ``output_summary`` keeps each output's comparison count.
+    """
+    observed = report.get("observed_outputs")
+    if (
+        not isinstance(observed, list)
+        or len(observed) <= _PUBLISHED_MAX_OBSERVED_OUTPUTS
+    ):
+        return report
+    slim = {key: value for key, value in report.items() if key != "observed_outputs"}
+    slim["observed_outputs_omitted"] = len(observed)
+    stamp = slim.get("attestation")
+    if isinstance(stamp, dict) and "outputs" in stamp:
+        slim["attestation"] = {**stamp, "outputs": [], "outputs_complete": False}
+    return slim
+
+
+def _write_full_v2_report(adapted: dict, output: Path) -> Path:
+    """Publish the adapted v2 report, every mismatch row kept, beside ``output``.
+
+    Harnesses such as ``tax-populace-compare`` emit their own JSON shape, so
+    the raw report under reports/ is not a v2 report and cannot be the
+    source a premerged dashboard copy binds to: apply_dispositions.py
+    --check requires the pointed file to be this suite's FULL v2 report.
+    This writes that report atomically in the same directory, without
+    ``cases`` (the dashboard's case chunks carry them; the consumer
+    re-derives only from ``summary`` and ``mismatches``) and with
+    ``observed_outputs`` capped as in the dashboard copy
+    (``_without_observed_outputs``).
+    """
+    full = _without_observed_outputs(
+        {key: value for key, value in adapted.items() if key != "cases"}
+    )
+    target = output.with_name(f"{output.stem}-v2{output.suffix}")
+    fd, name = tempfile.mkstemp(
+        dir=target.parent, prefix=f".{target.name}.", suffix=".tmp"
+    )
+    try:
+        with os.fdopen(fd, "w") as fh:
+            fh.write(json.dumps(full, indent=2, sort_keys=True))
+            fh.write("\n")
+        os.replace(name, target)
+    finally:
+        Path(name).unlink(missing_ok=True)
+    return target
+
+
+def _guard_unclean_rulespec_trees(name: str, provenance: dict) -> None:
+    """Refuse a non-manual report from rules that differ from their recorded SHA.
+
+    Provenance names each rulespec checkout by its HEAD SHA, but the run read
+    the working tree, so a modified checkout would otherwise publish values
+    under a SHA whose committed rules cannot produce them. A ``weekly``,
+    ``pr-triggered`` or ``affected-rerun`` report is published as what the
+    committed rules compute, so it must come from trees whose state is recorded
+    and clean (untracked files do not count). Exits before stamping or
+    publication, so nothing this script publishes reaches reports/ or the
+    dashboard (a generator that writes its own files during the run is not
+    rolled back, as with --require-live). A ``manual`` run
+    may use a dirty tree: it is published with ``dirty: true`` and the diff
+    hash on each such entry, the affected-rerun selector treats it as stale,
+    and this warns on stderr.
+    """
+    from axiom_oracles.provenance import describe_rulespec_tree, unclean_rulespecs
+
+    unclean = unclean_rulespecs(provenance.get("rulespecs"), require_recorded=True)
+    if not unclean:
+        return
+    trees = "; ".join(describe_rulespec_tree(entry) for entry in unclean)
+    run_kind = provenance.get("run_kind")
+    if run_kind != "manual":
+        raise SystemExit(
+            f"{name}: {run_kind} run refused before publication: these "
+            "rulespec working trees are not verified clean against their "
+            f"recorded SHA: "
+            f"{trees}. Commit or discard the tracked changes (untracked files "
+            "are ignored), or run manually (AXIOM_ORACLES_RUN_KIND unset) to "
+            "publish a report marked dirty."
+        )
+    sys.stderr.write(
+        f"WARNING: {name}: these numbers come from rulespec working trees that "
+        f"are not verified clean against their recorded SHA: {trees}. The "
+        "report's provenance records this, and the affected-rerun selector "
+        "will treat the report as stale.\n"
+    )
+
+
 def _euromod_release_from_model_root(model_root: str | None) -> str | None:
     """Read the EUROMOD-platform release label off the model-root directory name.
 
@@ -769,18 +980,21 @@ def _affected_map_repos(config: dict) -> list[str]:
     return mapped_repos
 
 
-def _declared_repo_root_checkouts(config: dict, params: dict) -> list[str]:
+def _declared_repo_root_checkouts(params: dict) -> list[str]:
     """Checkouts an ``axiom_rulespec_repo_roots`` suite actually compiled against.
 
     ``_run_axiom_oracles_compare`` exports the suite's roots as
     AXIOM_RULESPEC_REPO_ROOTS, with AXIOM_RULESPEC_US_ROOT's parent first when
     that override is set (``_rulespec_repo_roots_env``). The engine lifts a
     root that is itself a ``rulespec-*`` checkout to its parent and resolves
-    each repo as ``<root>/<name>`` (``_default_rulespec_repo_roots`` in
-    adapters/axiom/runner.py). Mirroring that order keeps a pinned suite (e.g.
+    all country children (``_default_rulespec_repo_roots`` and
+    ``explicit_engine_roots`` in adapters/axiom/runner.py). Recording every
+    discovered checkout keeps a pinned suite (e.g.
     ``$HOME/oracle-pins`` at ``axiom_rulespec_repo_roots_revision``) from being
     stamped with whatever the developer's convention-path checkout is on.
     """
+    from axiom_oracles.engine_compat import explicit_engine_roots
+
     declared = params.get("axiom_rulespec_repo_roots")
     if not declared:
         return []
@@ -795,19 +1009,12 @@ def _declared_repo_root_checkouts(config: dict, params: dict) -> list[str]:
         if root.name.startswith("rulespec-"):
             root = root.parent
         roots.append(root)
-    paths: list[str] = []
-    for repo in _affected_map_repos(config):
-        name = repo.split("/", 1)[-1]
-        for root in roots:
-            candidate = root / name
-            if candidate.exists():
-                paths.append(str(candidate))
-                break
-    return paths
+    return [str(path) for path in explicit_engine_roots(roots)]
 
 
 def _complete_rulespecs_from_affected_map(
-    config: dict, runner: dict, rulespecs: list[dict]
+    config: dict, runner: dict, rulespecs: list[dict],
+    *, declared_paths: list[str] | None = None,
 ) -> list[dict]:
     """Fill missing or SHA-less rulespec entries for the suite's mapped repos.
 
@@ -817,40 +1024,155 @@ def _complete_rulespecs_from_affected_map(
     repo this report cannot yet prove a SHA for, resolve one honestly:
 
     * the runner's own fresh-clone SHA when it recorded one
-      (``_cloned_rulespec_us_sha``, the tax lane's temp clone), else
+      (``_cloned_rulespec_us_sha``, the tax lane's temp clone, with the
+      worktree state the runner measured before deleting it), else
     * the checkout the supervised-layout conventions resolve
       (:func:`axiom_oracles.provenance.resolve_rulespec_checkout` — the same
-      locations the harnesses themselves search).
+      locations the harnesses themselves search), with its worktree state.
 
-    Entries that already carry a SHA are untouched, and declared-path entries
-    always win over convention lookups. Unresolvable repos keep or gain a
+    Declared paths never borrow clone or convention SHAs. GitHub identities
+    match case-insensitively, while raw remote spelling is retained. A mapped
+    SHA comes only from agreeing observations for all contributing declared
+    roots, including discovered workspace children. Missing or conflicting
+    SHAs, or a declared absorbed or foreign layer, leave country provenance ambiguous.
+    Unresolvable repos keep or gain a
     ``sha: None`` entry so the selector's conservative "cannot prove fresh"
-    reading stays intact. Never raises — provenance must annotate a run,
-    never fail one.
+    reading stays intact. So does a mapped repo that a declared checkout of an
+    absorbed repo folds into (a clone of an archived ``rulespec-us-<st>``,
+    stamped under its own name): that run read frozen rules, not the
+    monorepo, so no monorepo SHA is vouched for and the selector reruns the
+    suite. Never raises — provenance must annotate a run, never fail one.
     """
     try:
-        from axiom_oracles.provenance import resolve_rulespec_checkout
+        from axiom_oracles.engine_compat import explicit_engine_roots
+        from axiom_oracles.provenance import (
+            canonical_rulespec_slug,
+            checkout_remote_matches_slug,
+            resolve_rulespec_checkout,
+            rulespec_provenance,
+            worktree_attestation,
+        )
 
         mapped_repos = _affected_map_repos(config)
         if not mapped_repos:
             return rulespecs
         by_repo = {e.get("repo"): e for e in rulespecs}
+        read_other_instead = {
+            canonical_rulespec_slug(e["repo"].rsplit("/", 1)[-1].casefold()).casefold()
+            for e in rulespecs
+            if e.get("repo")
+            and canonical_rulespec_slug(
+                e["repo"].rsplit("/", 1)[-1].casefold()
+            ).casefold() != e["repo"].casefold()
+        }
+        declared_roots = [Path(path) for path in declared_paths or []]
+        declared_roots.extend(
+            path for path in explicit_engine_roots(declared_roots) if path not in declared_roots
+        )
+        observations = [(path, rulespec_provenance([path])[0]) for path in declared_roots]
         completed = list(rulespecs)
         for repo in mapped_repos:
-            if by_repo.get(repo, {}).get("sha"):
+            # The selector uses canonical, case-sensitive keys. Preserve every
+            # attestation when mirroring a case-variant origin, including a
+            # dirty contributor alongside another clean canonical checkout.
+            for entry in list(completed):
+                if (entry.get("repo") or "").casefold() == repo.casefold() and entry["repo"] != repo:
+                    canonical = {**entry, "repo": repo}
+                    if canonical not in completed:
+                        completed.append(canonical)
+                    by_repo[repo] = canonical
+            country = repo.rsplit("/", 1)[-1].removeprefix("rulespec-").casefold()
+            # A foreign checkout can supply this country's rules even when its
+            # origin has another name. Inspect the layouts the composer and
+            # engine read, without invalidating separate-country checkouts.
+            contributing = [
+                (path, observation) for path, observation in observations
+                if (
+                    (observation.get("repo") or "").casefold() == repo.casefold()
+                    or canonical_rulespec_slug(path.name.casefold()).casefold() == repo.casefold()
+                    or path.name == country
+                    or path.name.startswith(f"{country}-")
+                    or any(
+                        child.is_dir()
+                        for pattern in (country, f"{country}-*")
+                        for child in path.glob(pattern)
+                    )
+                )
+            ]
+            contradictory_root = repo.casefold() in read_other_instead or any(
+                not checkout_remote_matches_slug(path, repo) for path, _ in contributing
+            )
+            # Any absorbed or contradictory layer makes country freshness
+            # unknown, even when a separate country root supplied a live SHA.
+            if contradictory_root:
+                for entry in completed:
+                    if (entry.get("repo") or "").casefold() == repo.casefold():
+                        entry["sha"] = None
+                if repo not in by_repo:
+                    entry = {"repo": repo, "sha": None}
+                    by_repo[repo] = entry
+                    completed.append(entry)
+                continue
+            matching = [
+                entry for entry in completed
+                if (entry.get("repo") or "").casefold() == repo.casefold()
+            ]
+            if declared_paths or any(entry.get("sha") for entry in matching):
+                # The canonical selector key must describe these checkouts,
+                # even if a different convention checkout is newer. Unknown
+                # or contradictory declared origins cannot establish its SHA.
+                shas = {entry.get("sha") for entry in matching}
+                # A workspace child's unknown SHA and a layout-only jurisdiction
+                # observation must participate even when their stamp uses another
+                # name. Canonical known entries already carry any verified upstream
+                # SHA substitution performed by _build_run_provenance.
+                known_roots = {
+                    entry["sha_toplevel"] for entry in matching
+                    if entry.get("sha") and entry.get("sha_toplevel")
+                }
+                shas.update(
+                    observation.get("sha") if (
+                        (observation.get("repo") or "").casefold() == repo.casefold()
+                        or observation.get("sha_toplevel") in known_roots
+                    ) else None
+                    for _, observation in contributing
+                    if observation.get("sha") is None
+                    or (observation.get("repo") or "").casefold() != repo.casefold()
+                )
+                sha = next(iter(shas)) if matching and len(shas) == 1 else None
+                if sha is None:
+                    for entry in matching:
+                        entry["sha"] = None
+                if repo in by_repo:
+                    by_repo[repo]["sha"] = sha
+                else:
+                    entry = {"repo": repo, "sha": sha}
+                    by_repo[repo] = entry
+                    completed.append(entry)
                 continue
             sha = None
+            state: dict = {}
             if repo == "TheAxiomFoundation/rulespec-us":
                 sha = runner.get("_cloned_rulespec_us_sha")
+                state = runner.get("_cloned_rulespec_us_worktree") or {}
+                if "_cloned_rulespec_us_sha_toplevel" in runner:
+                    state = {**state, "sha_toplevel": runner["_cloned_rulespec_us_sha_toplevel"]}
             if sha is None:
                 checkout = resolve_rulespec_checkout(repo)
                 if checkout is not None:
                     sha = _git_head_sha(checkout)
+                    state = {
+                        "sha_toplevel": _git_toplevel(checkout),
+                        **worktree_attestation(checkout, reference=sha),
+                    } if sha else {}
+            if _repository_mismatch(state):
+                state = {**state, "dirty": None}
+                state.pop("diff_sha256", None)
             if repo in by_repo:
                 if sha:
-                    by_repo[repo]["sha"] = sha
+                    by_repo[repo].update({"sha": sha, **state})
             else:
-                entry = {"repo": repo, "sha": sha}
+                entry = {"repo": repo, "sha": sha, **(state if sha else {})}
                 by_repo[repo] = entry
                 completed.append(entry)
         return completed
@@ -868,9 +1190,11 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     """
     from axiom_oracles.provenance import (
         build_provenance,
+        canonical_rulespec_slug,
         dataset_provenance_from_identity,
         engine_provenance,
         rulespec_provenance,
+        worktree_attestation,
     )
 
     runner = config.get("runner") or {}
@@ -889,8 +1213,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         val = runner.get(key) or params.get(key)
         if val:
             rulespec_paths.append(str(_expand_path(val)))
-    if runner_type == "axiom-oracles-compare" and not rulespec_paths:
-        rulespec_paths.extend(_declared_repo_root_checkouts(config, params))
+    if runner_type == "axiom-oracles-compare":
+        rulespec_paths.extend(_declared_repo_root_checkouts(params))
     # The EUROMOD/UKMOD synthetic lane points `axiom_rulespec_repo_roots` at the
     # whole org directory and names the model country; the encoded rules live in
     # that country's `rulespec-<cc>` repo under the roots dir, so resolve it
@@ -922,17 +1246,88 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 rulespec_paths.append(str(ran_against))
         except Exception:  # provenance must annotate, never fail a run
             pass
-    rulespecs = rulespec_provenance(rulespec_paths)
+    # Workspace containers may contribute country children even when another
+    # composition path already supplied a SHA. Stamp the compiler's normalized
+    # children as well, retaining their raw origins and unknown SHA observations.
+    from axiom_oracles.engine_compat import JURISDICTION_DIR_NAME, explicit_engine_roots
+
+    rulespec_paths = list(dict.fromkeys([
+        *rulespec_paths, *(str(path) for path in explicit_engine_roots(rulespec_paths)),
+    ]))
+    rulespecs = []
+    for raw in rulespec_paths:
+        [entry] = rulespec_provenance([raw])
+        path = Path(raw).resolve()
+        # Composition can read a direct jurisdiction inside a country repo.
+        # Measure that actual checkout against the already captured SHA;
+        # arbitrary nested rulespec directories remain unverifiable.
+        country_repo = canonical_rulespec_slug(f"rulespec-{path.name.split('-')[0]}")
+        country_origin = (entry.get("repo") or "").casefold() == country_repo.casefold()
+        country_layout = (
+            entry.get("repo") == path.name
+            and path.parent.name.casefold() == country_repo.rsplit("/", 1)[-1].casefold()
+        )
+        if (
+            entry.get("sha")
+            and JURISDICTION_DIR_NAME.fullmatch(path.name)
+            and entry.get("sha_toplevel") == str(path.parent)
+            and (country_origin or country_layout)
+        ):
+            if country_layout:
+                entry["repo"] = country_repo
+            entry.update(worktree_attestation(path.parent, reference=entry["sha"]))
+        if entry not in rulespecs:
+            rulespecs.append(entry)
     verified_upstream_sha = params.get(_VERIFIED_RULESPEC_UPSTREAM_SHA)
     if verified_upstream_sha and rulespecs:
-        # The federal runner set this private marker only after checking that
-        # the clean local snapshot's tree equals the public upstream tree pin.
-        # Record the merged-main commit whose content ran, not a local
-        # content-equivalent materialization commit.
+        # The pin was verified in this object database, which may differ from
+        # a configured root. Preserve that source so the publication gate can
+        # reject an attestation collected from another checkout.
         rulespecs = [
-            {**entry, "sha": str(verified_upstream_sha)}
+            {
+                **entry,
+                "sha_toplevel": params.get(
+                    _VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL, entry.get("sha_toplevel")
+                ),
+            }
             for entry in rulespecs
         ]
+        # Object-reading producers and working-tree runners need different
+        # attestations: the latter must remeasure against the pre-run tree.
+        if params.get(_VERIFIED_RULESPEC_UPSTREAM_TREE):
+            # The DE producer read the pinned commit straight from git objects
+            # (de_axiom_legs.inspect_pinned_ref: rev-parse, ls-tree and
+            # `git show <commit>:<path>`), so no working-tree file fed the run
+            # and the checkout's state, measured against its own HEAD, says
+            # nothing about the pin. What ran is the pin's committed content.
+            rulespecs = [
+                {
+                    "repo": entry.get("repo"),
+                    "sha": str(verified_upstream_sha),
+                    "sha_toplevel": entry.get("sha_toplevel"),
+                    "worktree_toplevel": entry.get("worktree_toplevel"),
+                    "dirty": False,
+                }
+                for entry in rulespecs
+            ]
+        else:
+            verified_tree = params.get(_VERIFIED_RULESPEC_WORKTREE_TREE)
+            for entry in rulespecs:
+                # Replace the local-HEAD measurement, including its digest.
+                entry.pop("diff_sha256", None)
+                entry.update(
+                    sha=str(verified_upstream_sha),
+                    **worktree_attestation(
+                        entry.get("worktree_toplevel"),
+                        reference=str(verified_tree or verified_upstream_sha),
+                    ),
+                )
+        for entry in rulespecs:
+            if _repository_mismatch(entry):
+                # A manual run may publish this entry, so record unknown
+                # rather than a clean flag the stale selector could trust.
+                entry["dirty"] = None
+                entry.pop("diff_sha256", None)
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote and not rulespecs:
         from axiom_oracles.provenance import repo_slug_from_remote
@@ -957,13 +1352,16 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         "axiom-oracles-compare",
         "de-axiom-oracle-compare",
     ):
-        rulespecs = _complete_rulespecs_from_affected_map(config, runner, rulespecs)
+        rulespecs = _complete_rulespecs_from_affected_map(
+            config, runner, rulespecs, declared_paths=rulespec_paths
+        )
     # A skip-capable runner that re-emitted the committed report never
     # executed any rules this run — no matter which path produced a rulespec
     # entry (configured roots included), its SHA must not be recorded, or the
-    # selector would mark rules-stale numbers fresh (#296 review).
+    # selector would mark rules-stale numbers fresh (#296 review). The
+    # checkout's worktree state goes with it: no tree ran, clean or dirty.
     if runner.get("_reemitted_report"):
-        rulespecs = [{**entry, "sha": None} for entry in rulespecs]
+        rulespecs = [{"repo": entry.get("repo"), "sha": None} for entry in rulespecs]
 
     # Engine identity (Axiom side under test).
     axiom_rules_ref = runner.get("axiom_rules_repo") or params.get("axiom_rules_repo")
@@ -984,6 +1382,13 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         engine = {**engine, "binary": str(engine_binary)}
     if engine_binary_sha256:
         engine = {**engine, "binary_sha256": str(engine_binary_sha256)}
+    # A re-emission executed no engine. Recording the leg's own checkout here
+    # labels the copied numbers with an engine that never produced them, and
+    # _stamp_report_provenance then writes that version into the report's
+    # engines.versions: re-emissions of the BE marital-quotient report turned
+    # its real run's axiom_rules_engine 0.1.0 into 0.2.2.
+    if runner.get("_reemitted_report"):
+        engine = {}
 
     # Oracle identity (the side compared to). Derived from the runner type +
     # the pins each runner installs, so the report says which oracle stack ran.
@@ -1002,6 +1407,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
                 else None
             ),
         }
+        # Not a `policyengine_*` key: attestation reads those as country-model
+        # versions (conformance/attestation.py).
+        if params.get("pinned", True) and params.get("policyengine_us_source"):
+            oracle["model_source"] = str(params["policyengine_us_source"])
     elif runner_type == "axiom-encode-uk-efrs-compare":
         oracle = {
             "name": "policyengine",
@@ -1057,6 +1466,8 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
         # run). Matches the pin the runner installs into its isolated env.
         if "taxcalc" in engines:
             oracle["taxcalc"] = "6.7.1"
+        if "taxsim" in engines:
+            oracle.update(_taxsim_oracle_identity(output))
     elif runner_type in ("federal-tax-liability-grid", "snap-abawd-boundary-grid"):
         pins = _resolve_pe_oracle_pins(params)
         oracle = {
@@ -1072,7 +1483,7 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
             "policyengine_package": pins[0],
             "policyengine_us": pins[1].split("==", 1)[-1],
             "policyengine_core": pins[2].split("==", 1)[-1],
-            "policyengine_taxsim": _taxsim_pin_version(),
+            **_taxsim_oracle_identity(output),
         }
     elif runner_type == "axiom-encode-snap-ecps-compare":
         oracle = {"name": "policyengine", "policyengine_us": "1.705.1"}
@@ -1126,8 +1537,10 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     elif runner_type == "snap-qc-compare":
         # The USDA SNAP QC public-use file is the oracle; its identity is the
         # pinned posting for the fiscal year (immutable, sha256-verified by the
-        # loader). The bridge's own summary.provenance carries the richer
-        # overlay/engine identity for the run.
+        # loader). The bridge's own summary.provenance carries the overlay
+        # identity (file sha256s, patches, module-id rewrites) and the local
+        # paths of the engine binary and rulespec root; it records no engine
+        # commit or binary hash (TheAxiomFoundation/axiom-oracles#584).
         oracle = {"name": "snap-qc", "fiscal_year": params.get("fiscal_year")}
         try:
             from axiom_oracles.populations.snap_qc import SNAP_QC_PINS
@@ -1179,6 +1592,23 @@ def _build_run_provenance(config: dict, runner_type: str, output: Path) -> dict:
     return provenance
 
 
+def _preserve_relation_binding_diagnostics(
+    provenance: dict,
+    existing_provenance: object,
+) -> dict:
+    """Keep public-safe run diagnostics while replacing runner provenance."""
+    from axiom_oracles.bridges.relation_binding import public_relation_binding_diagnostics
+
+    combined = dict(provenance)
+    key = "relation_binding_diagnostics"
+    if key in combined:
+        combined[key] = public_relation_binding_diagnostics(combined[key])
+    if isinstance(existing_provenance, dict):
+        if key in existing_provenance:
+            combined[key] = public_relation_binding_diagnostics(existing_provenance[key])
+    return combined
+
+
 def _stamp_report_provenance(
     output: Path,
     provenance: dict,
@@ -1216,7 +1646,13 @@ def _stamp_report_provenance(
             },
         }
     else:
-        data["provenance"] = provenance
+        data["provenance"] = _preserve_relation_binding_diagnostics(
+            provenance, existing_provenance
+        )
+    if preserve_runner_provenance:
+        data["provenance"] = _preserve_relation_binding_diagnostics(
+            data["provenance"], data["provenance"],
+        )
     engines = data.get("engines")
     if require_engine_versions and not isinstance(engines, dict):
         raise SystemExit(
@@ -1340,6 +1776,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # against (a `sha: null` entry reads as "cannot prove fresh" to
     # select_affected_suites.py and re-selects the suite every run).
     runner["_cloned_rulespec_us_sha"] = _git_head_sha(rulespec_root)
+    runner["_cloned_rulespec_us_sha_toplevel"] = _git_toplevel(rulespec_root)
     params = runner["parameters"]
     pinned = params.get("pinned", True)
     # PolicyEngine-US 1.729.0 is the model version the certified pinned Populace
@@ -1352,19 +1789,23 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
     # --allow-policyengine-us-version to the harness.
     # Oracle PE stack. The pinned versions default to the model version the
     # certified Populace artifact was built with (1.729.0), but a comparison can
-    # override them to validate against a newer certified oracle — the us-pe
-    # universe pins policyengine-us 1.767.3, which carries the #8614 partnership
-    # self-employment split absent from 1.729.0's eitc_earned_income. The harness
-    # still runs against the pinned Populace inputs (--allow-policyengine-us-version
-    # bypasses the build_with gate), so only the PE computation vintage moves.
+    # override them to validate against a newer certified oracle (the us-pe
+    # universe pins policyengine-us 1.767.3). The harness still runs against the
+    # pinned Populace inputs (--allow-policyengine-us-version bypasses the
+    # build_with gate), so only the PE computation vintage moves.
     pe_meta = params.get("policyengine_version", "4.11.0")
     pe_us = params.get("policyengine_us_version", "1.729.0")
     pe_core = params.get("policyengine_core_version", "3.26.11")
+    pe_us_source = params.get("policyengine_us_source")
     pe_pins = (
         _pe_oracle_with_args(
             (
                 f"policyengine=={pe_meta}",
-                f"policyengine-us=={pe_us}",
+                (
+                    _policyengine_us_source_requirement(pe_us_source)
+                    if pe_us_source
+                    else f"policyengine-us=={pe_us}"
+                ),
                 f"policyengine-core=={pe_core}",
             )
         )
@@ -1378,7 +1819,7 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
             "policyengine-core",
         ]
     )
-    cmd = [
+    uv_prefix = [
         "uv",
         "run",
         "--python",
@@ -1387,6 +1828,24 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         "--with-editable",
         str(axiom_encode_repo),
         *pe_pins,
+    ]
+    if pinned and pe_us_source:
+        # The source is an immutable commit, but the suite labels it with a
+        # version; refuse to spend a population run under a label the
+        # installed distribution does not carry.
+        _require_installed_policyengine_us_version(uv_prefix, pe_us)
+    # Overlay THIS checkout's bridge over the encoder's pinned axiom-oracles
+    # dependency, as the UK EFRS runner does: tax-populace-compare is a thin
+    # re-export of axiom_oracles.bridges.tax_populace, so without the overlay
+    # a suite run validates whatever axiom-oracles commit axiom-encode pins,
+    # not this checkout. uv rejects a second URL for one package, so the
+    # overlay rides PYTHONPATH, which precedes site-packages on sys.path.
+    env = os.environ.copy()
+    env["PYTHONPATH"] = os.pathsep.join(
+        [str(REPO_ROOT)] + ([env["PYTHONPATH"]] if env.get("PYTHONPATH") else [])
+    )
+    cmd = [
+        *uv_prefix,
         "axiom-encode",
         "tax-populace-compare",
         "--rulespec-root",
@@ -1412,8 +1871,15 @@ def _run_axiom_encode_tax_ecps_compare(runner: dict, output: Path) -> None:
         cmd.append("--allow-uncertified-policyengine-data")
     try:
         with output.open("w") as f:
-            subprocess.run(cmd, check=True, stdout=f)
+            subprocess.run(cmd, check=True, stdout=f, cwd=REPO_ROOT, env=env)
     finally:
+        # Measure after execution against the captured commit, even if the
+        # harness or a concurrent checkout moved HEAD to a new clean commit.
+        from axiom_oracles.provenance import worktree_attestation
+
+        runner["_cloned_rulespec_us_worktree"] = worktree_attestation(
+            rulespec_root, reference=runner["_cloned_rulespec_us_sha"] or "HEAD"
+        )
         shutil.rmtree(rulespec_root.parent, ignore_errors=True)
 
 
@@ -1632,6 +2098,11 @@ def _compose_uk_universal_credit_program(params: dict) -> Path | None:
 
 
 def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
+    from axiom_oracles.bridges.relation_binding import (
+        merge_relation_binding_diagnostics,
+        public_relation_binding_diagnostics,
+    )
+
     if not reports:
         return {
             "compared_persons": 0,
@@ -1639,6 +2110,7 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
             "compared_values": 0,
             "mismatch_count": 0,
             "mismatches": [],
+            "errors": [],
             "oracle_divergence_count": 0,
             "oracle_divergences": [],
             "output_summary": [],
@@ -1646,12 +2118,18 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
             "projection_notes": [],
         }
     if len(reports) == 1:
-        return reports[0]
+        report = dict(reports[0])
+        if "provenance" in report:
+            report["provenance"] = _preserve_relation_binding_diagnostics(
+                report["provenance"], report["provenance"],
+            )
+        return report
     merged = {
         "compared_persons": max(r.get("compared_persons", 0) for r in reports),
         "compared_benunits": max(r.get("compared_benunits", 0) for r in reports),
         "compared_values": sum(r.get("compared_values", 0) for r in reports),
         "mismatches": [],
+        "errors": [],
         "oracle_divergences": [],
         "output_summary": [],
         "skipped_surfaces": [],
@@ -1659,7 +2137,12 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
     }
     seen_notes: set[str] = set()
     seen_skipped: set[str] = set()
+    diagnostics: dict = {}
     for report in reports:
+        merge_relation_binding_diagnostics(diagnostics, public_relation_binding_diagnostics(
+            (report.get("provenance") or {}).get("relation_binding_diagnostics", {}),
+        ))
+        merged["errors"].extend(report.get("errors") or [])
         merged["mismatches"].extend(report.get("mismatches", []))
         merged["oracle_divergences"].extend(report.get("oracle_divergences", []))
         merged["output_summary"].extend(report.get("output_summary", []))
@@ -1674,6 +2157,8 @@ def _merge_uk_efrs_reports(reports: list[dict]) -> dict:
                 merged["projection_notes"].append(note)
     merged["mismatch_count"] = len(merged["mismatches"])
     merged["oracle_divergence_count"] = len(merged["oracle_divergences"])
+    if diagnostics.get("count"):
+        merged["provenance"] = {"relation_binding_diagnostics": diagnostics}
     return merged
 
 
@@ -1748,8 +2233,20 @@ def _run_axiom_encode_snap_ecps_compare(runner: dict, output: Path) -> None:
         subprocess.run(cmd, check=True, cwd=REPO_ROOT)
         with csv_path.open(newline="") as f:
             rows = list(csv.DictReader(f))
+        # The bridge's optional sidecar carries run diagnostics separately
+        # from the CSV rows. Read them before removing the temporary files.
+        identity_path = csv_path.with_suffix(csv_path.suffix + ".dataset_identity.json")
+        try:
+            sidecar = json.loads(identity_path.read_text())
+        except (OSError, json.JSONDecodeError):
+            sidecar = {}
+        diagnostic_provenance = _preserve_relation_binding_diagnostics({}, sidecar)
 
     report = _adapt_snap_ecps_csv_to_v2(rows, runner)
+    if diagnostic_provenance:
+        report["provenance"] = _preserve_relation_binding_diagnostics(
+            report.get("provenance") or {}, diagnostic_provenance
+        )
     output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n")
 
 
@@ -1778,6 +2275,52 @@ def _taxsim_pin_version() -> str:
     from axiom_oracles.adapters.taxsim import pins
 
     return pins.pinned_version()
+
+
+def _taxsim_oracle_identity(output: Path) -> dict:
+    """TAXSIM keys for ``provenance.oracle``, lifted from the written report.
+
+    ``policyengine_taxsim`` is the pinned package version the runner
+    installs. ``taxsim_binaries`` is the report's
+    ``engine_identity.taxsim.binaries``: the path, SHA-256, build stamp
+    (embedded and printed), platform and row count of each TAXSIM binary
+    the run executed. A report without that block (written before it
+    existed) records the version only.
+    """
+    identity: dict = {"policyengine_taxsim": _taxsim_pin_version()}
+    try:
+        report = json.loads(output.read_text())
+    except (OSError, json.JSONDecodeError):
+        return identity
+    taxsim = (
+        (report.get("engine_identity") or {}).get("taxsim")
+        if isinstance(report, dict)
+        else None
+    )
+    if isinstance(taxsim, dict) and taxsim.get("binaries"):
+        identity["taxsim_binaries"] = [dict(item) for item in taxsim["binaries"]]
+    return identity
+
+
+def _require_taxsim_law_year(period: object, suite: str) -> None:
+    """Stop before building anything when TAXSIM rejects the law year here.
+
+    Checks the pinned binary for this platform (what ``--with
+    policyengine-taxsim==<pin>`` installs into the run's environment), not
+    whatever this script's own venv holds.
+    """
+    from axiom_oracles.adapters.taxsim import pins
+
+    try:
+        year = int(str(period).split("-", 1)[0])
+    except ValueError as exc:
+        raise SystemExit(
+            f"{suite}: period {period!r} does not start with a law year"
+        ) from exc
+    try:
+        pins.require_law_years([year], use_installed=False)
+    except pins.TaxsimLawYearError as exc:
+        raise SystemExit(f"{suite}: {exc}") from exc
 
 
 def _resolve_pe_oracle_pins(params: dict) -> tuple[str, str, str]:
@@ -1816,6 +2359,50 @@ def _pe_oracle_with_args(pins) -> list[str]:
         for pin in (*pins, *_PE_US_COMPANION_PINS)
         for arg in ("--with", pin)
     ]
+
+
+# PolicyEngine prunes old policyengine-us releases from PyPI (1.705.1 and
+# 1.729.0 were gone by 2026-10-14), so a suite can pin its oracle to the
+# release commit instead. Only GitHub's archive of a full 40-hex commit is
+# accepted: a branch, tag or short SHA could move under the version label.
+_PE_US_SOURCE_RE = re.compile(
+    r"https://github\.com/PolicyEngine/policyengine-us/archive/[0-9a-f]{40}\.tar\.gz"
+)
+
+
+def _policyengine_us_source_requirement(source: str) -> str:
+    """PEP 508 direct reference for a commit-pinned policyengine-us source."""
+    if not isinstance(source, str) or not _PE_US_SOURCE_RE.fullmatch(source):
+        raise SystemExit(
+            "policyengine_us_source must be "
+            "https://github.com/PolicyEngine/policyengine-us/archive/<40-hex "
+            f"commit>.tar.gz; got {source!r}"
+        )
+    return f"policyengine-us @ {source}"
+
+
+def _require_installed_policyengine_us_version(
+    uv_prefix: list[str], expected: str
+) -> None:
+    """Fail unless the environment ``uv_prefix`` builds holds ``expected``."""
+    result = subprocess.run(
+        [
+            *uv_prefix,
+            "python",
+            "-c",
+            "from importlib.metadata import version; "
+            "print(version('policyengine-us'))",
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    installed = result.stdout.strip().splitlines()[-1] if result.stdout else ""
+    if installed != str(expected):
+        raise SystemExit(
+            f"policyengine_us_source installs policyengine-us {installed!r}, "
+            f"but the suite labels its oracle {expected!r}; refusing to run"
+        )
 
 # The compare and sanity subprocesses share this import shim — extracted to
 # module scope so `_run_sanity` can reuse it. With _PE_ORACLE_PINS it should not
@@ -1919,6 +2506,8 @@ def _run_axiom_oracles_compare(runner: dict, output: Path) -> None:
     # Axiom side, so it needs neither a built engine binary nor a composed
     # program — skip the Rust dependency entirely rather than force a build.
     uses_axiom = "axiom" in engines
+    if "taxsim" in engines:
+        _require_taxsim_law_year(params["period"], params.get("suite") or "compare")
     if uses_axiom:
         _ensure_engine_binary(axiom_rules_repo, kind="release")
         _ensure_composed_axiom_program(params, axiom_rules_repo)
@@ -2125,10 +2714,13 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     connector plus a .NET runtime, and the model checkout is not present on
     the shared CI runner, so this runner **skips gracefully** when the model
     root or ``EUROMOD_PYTHON`` is unavailable: it re-emits the committed
-    dashboard report as the run output so the weekly matrix stays green and
-    the dashboard copy is idempotent. The suite is regenerated locally
-    (``scripts/regenerate_euromod_uk.sh``) where the model and x64 runtime
-    exist; that regeneration is the source of the committed numbers.
+    dashboard report as the run output, and the publisher leaves the committed
+    copy byte-for-byte unchanged (``_write_dashboard_report``). Because the CI
+    legs never have the model, every suite of this type declares
+    ``ci: manual``. The suites are regenerated locally
+    (``scripts/regenerate_euromod_uk.sh``, ``scripts/regenerate_euromod_dk.sh``,
+    or a supervised run) where the model and x64 runtime exist; that
+    regeneration is the source of the committed numbers.
     """
     params = runner["parameters"]
     model_root_raw = params.get("euromod_model_root") or os.environ.get(
@@ -2247,6 +2839,9 @@ def _run_euromod_synthetic_compare(runner: dict, output: Path) -> None:
     constant_overrides = params.get("euromod_constant_overrides")
     if constant_overrides:
         env["EUROMOD_CONSTANT_OVERRIDES"] = str(constant_overrides)
+    annualize_outputs = params.get("euromod_annualize_outputs")
+    if annualize_outputs is not None:
+        env["EUROMOD_ANNUALIZE_OUTPUTS"] = str(annualize_outputs)
     extra_columns = params.get("euromod_extra_columns")
     if extra_columns:
         if not isinstance(extra_columns, list):
@@ -2522,6 +3117,7 @@ def _resolve_state_income_tax_grid_repos(
                 check=True,
                 capture_output=True,
                 text=True,
+                env=_git_env(),
             ).stdout
         except (OSError, subprocess.CalledProcessError) as exc:
             raise SystemExit(
@@ -2557,6 +3153,12 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
     unavailable; committed numerical reports are never silently reused.
     """
     params = runner["parameters"]
+    # The generator re-checks its own TAXSIM_YEAR against the binary it
+    # resolves; this stops a Linux host before the environment is built. A
+    # config that declares neither year is left to the generator's check.
+    declared_year = params.get("taxsim_law_year", params.get("period"))
+    if declared_year is not None:
+        _require_taxsim_law_year(declared_year, str(params["state"]))
     rulespec_root, axiom_rules_repo = _resolve_state_income_tax_grid_repos(params)
     # The config object is shared with the outer provenance stamper. Record the
     # exact paths that actually execute, so a successful grid can never replace
@@ -2592,6 +3194,13 @@ def _run_state_income_tax_liability_grid(runner: dict, output: Path) -> None:
 
 
 _VERIFIED_RULESPEC_UPSTREAM_SHA = "_verified_rulespec_upstream_sha"
+#: Set beside the SHA marker by scripts/de_axiom_legs.py once it has verified
+#: the pinned commit and tree in the object database it reads them from.
+_VERIFIED_RULESPEC_UPSTREAM_TREE = "_verified_rulespec_upstream_tree"
+_VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL = "_verified_rulespec_upstream_toplevel"
+#: Federal execution reads checkout files; retain its verified tree separately
+#: from the marker for producers that read pinned objects directly (DE).
+_VERIFIED_RULESPEC_WORKTREE_TREE = "_verified_rulespec_worktree_tree"
 
 
 def _pinned_snapshot_unusable_reason(root: Path, upstream_tree: str) -> str | None:
@@ -2603,18 +3212,22 @@ def _pinned_snapshot_unusable_reason(root: Path, upstream_tree: str) -> str | No
     non-fatally so a non-matching checkout falls through to pinned-revision
     materialization instead of failing the leg.
     """
+    if _git_toplevel(root) != str(root.resolve()):
+        return "not a git checkout rooted at the requested path"
     try:
         status = subprocess.run(
             ["git", "-C", str(root), "status", "--porcelain"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         local_tree = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.strip()
     except (OSError, subprocess.CalledProcessError):
         return "not a verifiable git work tree"
@@ -2667,6 +3280,8 @@ def _verify_federal_rulespec_snapshot(
         )
 
     root = roots[0].resolve()
+    if _git_toplevel(root) != str(root):
+        raise SystemExit(f"cannot verify pinned federal rulespec snapshot {root}: repository root mismatch")
     if root.name != "rulespec-us":
         raise SystemExit(
             "the pinned federal rulespec snapshot must use the canonical "
@@ -2678,18 +3293,21 @@ def _verify_federal_rulespec_snapshot(
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         local_head = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.strip()
         local_tree = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD^{tree}"],
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.strip()
     except (OSError, subprocess.CalledProcessError) as exc:
         raise SystemExit(
@@ -2706,6 +3324,8 @@ def _verify_federal_rulespec_snapshot(
         )
 
     params[_VERIFIED_RULESPEC_UPSTREAM_SHA] = upstream_sha
+    params[_VERIFIED_RULESPEC_WORKTREE_TREE] = upstream_tree
+    params[_VERIFIED_RULESPEC_UPSTREAM_TOPLEVEL] = _git_toplevel(root)
     print(
         "Verified rulespec-us snapshot "
         f"tree {local_tree[:12]} for upstream main {upstream_sha[:12]} "
@@ -2778,7 +3398,12 @@ def _run_federal_tax_liability_grid(runner: dict, output: Path) -> None:
                     "rulespec_remote fallback is declared"
                 )
             roots = [_ensure_rulespec_us_checkout(str(remote), upstream_sha)]
-            params["rulespec_roots"] = [str(roots[0])]
+        # The config object is shared with the outer provenance stamper,
+        # which stamps the verified pin onto every recorded root. Record
+        # exactly the snapshot that runs: a set-aside or missing root would
+        # otherwise carry the pin's SHA without having run it (and, with no
+        # worktree state, refuse a non-manual run).
+        params["rulespec_roots"] = [str(root) for root in roots]
     elif not roots:
         remote = params.get("rulespec_remote")
         if not remote:
@@ -2845,6 +3470,7 @@ def _rulespec_checkout_unclean_reason(
             ["git", "-C", str(root), "rev-parse", "--is-inside-work-tree"],
             capture_output=True,
             text=True,
+            env=_git_env(),
         )
     except OSError:
         return "git is unavailable to verify it"
@@ -2854,6 +3480,7 @@ def _rulespec_checkout_unclean_reason(
         ["git", "-C", str(root), "status", "--porcelain"],
         capture_output=True,
         text=True,
+        env=_git_env(),
     )
     if status.returncode != 0:
         return "git status failed"
@@ -2863,6 +3490,7 @@ def _rulespec_checkout_unclean_reason(
         committed = subprocess.run(
             ["git", "-C", str(root), "show", f"HEAD:{relpath}"],
             capture_output=True,
+            env=_git_env(),
         )
         if committed.returncode != 0:
             return f"HEAD does not carry {relpath}"
@@ -3705,6 +4333,7 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout.split()
         candidates = [
             path
@@ -3725,6 +4354,7 @@ def _run_us_tariff_panel(runner: dict, output: Path) -> None:
             capture_output=True,
             text=True,
             check=True,
+            env=_git_env(),
         ).stdout
         head_payload = json.loads(text)
         _validate_us_tariff_panel_payload(head_payload, f"HEAD:{committed}")
@@ -3818,10 +4448,10 @@ def _snap_qc_cola_marker_reason(rulespec_root: Path, fiscal_year: int) -> str | 
     The overlay compiles the CO SNAP composition with its COLA module ids
     rewritten from the in-repo fy-2026 vintage to ``fy-<year>-cola``, so the base
     checkout must actually define that vintage under
-    ``us/policies/usda/snap/fy-<year>-cola/``. A plain rulespec-us checkout (or an
-    un-rebased clone) carries only fy-2026 and is skipped — the common CI case.
-    ``fy-2024-cola`` currently lives on the branch tracked by
-    TheAxiomFoundation/rulespec-us#759, which retires the overlay once it lands.
+    ``us/policies/usda/snap/fy-<year>-cola/``. A checkout that predates the
+    target vintage is skipped. ``fy-2024-cola`` is on rulespec-us main
+    (TheAxiomFoundation/rulespec-us#760); the parameter-set inversion tracked by
+    TheAxiomFoundation/rulespec-us#759 retires the overlay once it lands.
     """
     if not rulespec_root.exists():
         return f"rulespec root not found at {rulespec_root}"
@@ -3903,9 +4533,11 @@ def _reemit_snap_qc_committed_report(
     """Re-emit the committed dashboard report as the run output (graceful skip).
 
     Mirrors ``_run_euromod_synthetic_compare``: when the replay cannot run here,
-    reuse the committed dashboard JSON so the weekly matrix stays green and the
-    dashboard copy is idempotent. Falls back to an empty v2 report shell when no
-    committed report exists yet (the first run before numbers are checked in).
+    reuse the committed dashboard JSON as the run output. The publisher then
+    leaves a committed report from a real run byte-for-byte unchanged
+    (``_write_dashboard_report``), so a skip never replaces it. Falls back to
+    an empty v2 report shell when no committed report exists yet (the first
+    run before numbers are checked in).
     """
     dashboard_filename = runner.get("dashboard_filename") or params.get(
         "dashboard_filename", ""
@@ -3955,11 +4587,13 @@ def _run_snap_qc_compare(runner: dict, output: Path) -> None:
     The replay needs three things a shared CI runner does not carry: the built
     ``axiom-rules-engine`` binary, a rulespec-us checkout whose SNAP COLA modules
     are dated for the target fiscal year (the overlay base), and the downloaded
-    QC public-use file. When any is absent — or the bridge is still mid-build —
-    this runner **skips gracefully**, re-emitting the committed dashboard report
-    so the weekly matrix stays green and the dashboard copy is idempotent, exactly
-    like ``_run_euromod_synthetic_compare``. Regenerate the committed numbers
-    locally where all three exist.
+    QC public-use file. The snap-qc suites therefore declare ``ci: manual``, so
+    neither the weekly matrix nor the affected rerun dispatches them. When any
+    prerequisite is absent — or the bridge is still mid-build — this runner
+    **skips gracefully**, re-emitting the committed dashboard report exactly like
+    ``_run_euromod_synthetic_compare``; that re-emission never replaces a
+    committed real report. Regenerate the committed numbers with a supervised run
+    where all three exist.
     """
     params = runner["parameters"]
     fiscal_year = int(params.get("fiscal_year", 2024))
@@ -4239,21 +4873,10 @@ def _git_toplevel_head(path: Path) -> str | None:
     ``--show-toplevel`` keeps a non-checkout from borrowing an identity.
     """
     try:
-        toplevel = subprocess.run(
-            ["git", "-C", str(path), "rev-parse", "--show-toplevel"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-        if Path(toplevel).resolve() != path.resolve():
+        if _git_toplevel(path) != str(path.resolve()):
             return None
-        return subprocess.run(
-            ["git", "-C", str(path), "rev-parse", "HEAD"],
-            check=True,
-            capture_output=True,
-            text=True,
-        ).stdout.strip()
-    except (subprocess.CalledProcessError, OSError):
+        return _git_sha(path)
+    except OSError:
         return None
 
 
@@ -4387,8 +5010,9 @@ def _ensure_rulespec_us_checkout(remote: str, revision: str | None = None) -> Pa
     target = workspace / "rulespec-us"
     print(f"Cloning rulespec-us into {target}...")
     subprocess.run(
-        ["git", "clone", "--depth", "1", "--quiet", remote, str(target)],
+        ["git", "-C", str(workspace), "clone", "--depth", "1", "--quiet", remote, str(target)],
         check=True,
+        env=_git_env(),
     )
     if revision:
         print(f"Materializing pinned rulespec-us revision {revision[:12]}...")
@@ -4396,27 +5020,20 @@ def _ensure_rulespec_us_checkout(remote: str, revision: str | None = None) -> Pa
             ["git", "-C", str(target), "fetch", "--depth", "1", "--quiet",
              "origin", revision],
             check=True,
+            env=_git_env(),
         )
         subprocess.run(
             ["git", "-C", str(target), "checkout", "--detach", "--quiet",
              revision],
             check=True,
+            env=_git_env(),
         )
     return target
 
 
 def _git_head_sha(repo: Path) -> str | None:
     """Best-effort HEAD SHA of a checkout; None when unresolvable."""
-    try:
-        result = subprocess.run(
-            ["git", "-C", str(repo), "rev-parse", "HEAD"],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-    except (subprocess.CalledProcessError, FileNotFoundError, OSError):
-        return None
-    return result.stdout.strip() or None
+    return _git_sha(repo)
 
 
 def _print_summary(output: Path) -> None:
@@ -4511,24 +5128,38 @@ def _print_quality_flags(aggregates: list) -> None:
 
 
 def _adapt_to_v2(raw_path: Path, runner_type: str, config: dict, *, suite: str) -> dict:
-    raw = json.loads(raw_path.read_text())
+    return _adapt_raw_to_v2(
+        json.loads(raw_path.read_text()), runner_type, config, suite=suite
+    )
+
+
+def _adapt_raw_to_v2(raw: dict, runner_type: str, config: dict, *, suite: str) -> dict:
+    """``_adapt_to_v2`` over an already-parsed report."""
     if runner_type == "axiom-encode-tax-ecps-compare":
-        return _adapt_tax_ecps_to_v2(raw, config, suite=suite)
-    if runner_type == "axiom-encode-uk-efrs-compare":
-        return _adapt_uk_efrs_to_v2(raw, config, suite=suite)
+        adapted = _adapt_tax_ecps_to_v2(raw, config, suite=suite)
+    elif runner_type == "axiom-encode-uk-efrs-compare":
+        adapted = _adapt_uk_efrs_to_v2(raw, config, suite=suite)
+    else:
+        adapted = raw
+    diagnostic_provenance = _preserve_relation_binding_diagnostics({}, raw.get("provenance"))
+    if diagnostic_provenance:
+        adapted["provenance"] = {**adapted.get("provenance", {}), **diagnostic_provenance}
     # axiom-oracles-compare already emits v2 — pass through, but override
     # the suite with the comparison-config value. The upstream report
     # stamps the population/synthetic-subset name (e.g. "nyc-synthetic"),
     # not the per-comparison identity, so without this override every
     # state's SNAP report collapses into one suite bucket in the
     # dashboard's suite selector.
-    raw["suite"] = suite
-    return raw
+    adapted["suite"] = suite
+    return adapted
 
 
 def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     """Convert uk-efrs-compare output to axiom.comparison_report.v2."""
     from collections import Counter, defaultdict
+
+    from axiom_oracles.bridges.efrs_uk import SURFACE_SPECS
+    from axiom_oracles.conformance.observations import json_output_values
 
     dashboard_config = config.get("dashboard") or {}
     parent_concept = dashboard_config.get("parent_concept", UK_UNIVERSAL_CREDIT_PARENT)
@@ -4564,6 +5195,21 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         for row in raw.get("output_summary", [])
         if spec_for(row)
     }
+    output_bindings = {}
+    for row in by_output.values():
+        native_surface = SURFACE_SPECS.get(row.get("surface"))
+        native_output = (
+            native_surface.outputs.get(row.get("output"), {})
+            if native_surface is not None
+            else {}
+        )
+        # A native expression is not a returned final PolicyEngine variable.
+        # Keep that oracle binding explicitly unresolved rather than infer one
+        # from the dashboard concept's generic mapping.
+        output_bindings[spec_for(row)["concept"]] = {
+            "axiom": native_output.get("axiom", []),
+            "policyengine": native_output.get("pe", []),
+        }
     mismatch_rows = [
         {**row, "kind": "amount_difference"}
         for row in raw.get("mismatches", [])
@@ -4698,6 +5344,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
     cases_by_entity: dict[str, list[dict]] = defaultdict(list)
     flat_mismatches: list[dict] = []
+    observed_outputs: list[dict] = []
     for row in visible_difference_rows:
         spec = spec_for(row)
         if spec is None:
@@ -4711,15 +5358,36 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "difference": row.get("diff", 0),
             "issue_url": row.get("issue_url"),
             "kind": kind,
-            "left": row.get("axiom", 0),
+            "left": row.get("axiom"),
             "parent": parent_concept,
             "relative_tolerance": 2e-7,
-            "right": row.get("policyengine", 0),
+            "right": row.get("policyengine"),
             "surface": row.get("surface"),
             "tolerance": 0.01,
         }
         cases_by_entity[str(row["entity_id"])].append(mismatch)
         flat_mismatches.append(mismatch)
+        for key in ("error", "errors", "skipped", "skip_reason", "executed"):
+            if key in row:
+                mismatch[key] = row[key]
+        bindings = output_bindings.get(spec["concept"], {})
+        for engine in ("axiom", "policyengine"):
+            variable = bindings.get(engine)
+            if isinstance(variable, str) and variable:
+                observed_outputs.append(
+                    {
+                        "case_id": mismatch["case_id"],
+                        "concept": spec["concept"],
+                        "engine": engine,
+                        "variable": variable,
+                        "value": row.get(engine),
+                        **{
+                            key: row[key]
+                            for key in ("error", "errors", "skipped", "skip_reason", "executed")
+                            if key in row
+                        },
+                    }
+                )
 
     cases = []
     for entity_id, case_mismatches in cases_by_entity.items():
@@ -4774,7 +5442,7 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             }
         )
 
-    return {
+    report = {
         "aggregates": aggregates,
         "case_count": raw.get("compared_persons", 0) + raw.get("compared_benunits", 0),
         "cases": cases,
@@ -4783,6 +5451,8 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "errors": [],
         "locales": ["UK"],
         "mismatches": flat_mismatches,
+        "observed_outputs": observed_outputs,
+        "output_bindings": output_bindings,
         "population": "enhanced-frs",
         "projection_notes": raw.get("projection_notes", []),
         "schema_version": "axiom.comparison_report.v2",
@@ -4791,8 +5461,11 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "summary": {
             "alarms": alarms,
             "comparison_count": parent_compared,
-            "error_count": 0,
-            "errors_by_engine": {},
+            "error_count": len(raw.get("errors") or []),
+            "errors_by_engine": dict(Counter(
+                row.get("engine", "axiom") for row in raw.get("errors") or []
+                if isinstance(row, dict)
+            )),
             "known_policyengine_divergence_count": parent_known_divergences,
             "match_count": parent_matched,
             "mismatch_count": parent_mismatches,
@@ -4809,6 +5482,10 @@ def _adapt_uk_efrs_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             },
         },
     }
+    for key in ("error", "errors", "skipped", "skip_reason", "executed"):
+        if key in raw:
+            report[key] = raw[key]
+    return json_output_values(report)
 
 
 def _limit_rows_by_output(rows: list[dict], *, limit_per_output: int) -> list[dict]:
@@ -4876,6 +5553,10 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
     """
     from collections import Counter, defaultdict
 
+    from axiom_oracles.conformance.attestation import EXECUTION_ATTESTATION_SCHEMA
+    from axiom_oracles.conformance.fiit import FIIT_SURFACE_CONCEPT_IDS, fiit_output_rows
+    from axiom_oracles.conformance.observations import valid_case_id
+
     identity = _normalize_dataset_identity(raw)
     dataset_label = _dataset_label_from_identity(identity, fallback="enhanced_cps")
 
@@ -4898,7 +5579,10 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             continue
         compared = sum(r["compared"] for r in rows)
         mismatches = sum(r["mismatches"] for r in rows)
-        matched = compared - mismatches
+        # Invalid returns remain diagnostic mismatches with engine errors,
+        # but have no arithmetic comparison weight and cannot consume a match.
+        uncompared_mismatches = sum(r.get("uncompared_mismatches", 0) for r in rows)
+        matched = compared - (mismatches - uncompared_mismatches)
         match_rate = (matched / compared * 100) if compared else 100.0
         aggregates.append(
             {
@@ -4913,7 +5597,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "match_rate": match_rate,
                 "match_weight": matched,
                 "mismatch_count": mismatches,
-                "mismatch_weight": mismatches,
+                "uncompared_mismatches": uncompared_mismatches,
+                "mismatch_weight": mismatches - uncompared_mismatches,
                 "missing_both_count": 0,
                 "missing_left_count": 0,
                 "missing_right_count": 0,
@@ -4927,7 +5612,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
 
     parent_compared = raw.get("compared_values", 0)
     parent_mismatches = raw.get("mismatch_count", 0)
-    parent_matched = parent_compared - parent_mismatches
+    parent_uncompared_mismatches = raw.get("uncompared_mismatches", 0)
+    parent_matched = parent_compared - (parent_mismatches - parent_uncompared_mismatches)
     parent_rate = (parent_matched / parent_compared * 100) if parent_compared else 100.0
     aggregates.insert(
         0,
@@ -4943,7 +5629,8 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
             "match_rate": parent_rate,
             "match_weight": parent_matched,
             "mismatch_count": parent_mismatches,
-            "mismatch_weight": parent_mismatches,
+            "uncompared_mismatches": parent_uncompared_mismatches,
+            "mismatch_weight": parent_mismatches - parent_uncompared_mismatches,
             "missing_both_count": 0,
             "missing_left_count": 0,
             "missing_right_count": 0,
@@ -5004,6 +5691,10 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "difference": m.get("diff", 0),
                 "kind": "amount_difference",
                 "left": m.get("axiom", 0),
+                # One concept covers several compared outputs, so a case can
+                # carry several rows under it; dispositions select by output
+                # (case_selector.case_ids_by_output).
+                "output": m["output"],
                 "parent": spec["parent"],
                 "right": m.get("policyengine", 0),
                 "tolerance": spec["tolerance"],
@@ -5048,19 +5739,40 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
         "cases": cases,
         "concepts": concepts,
         "engines": {"left": "axiom", "right": "policyengine"},
-        "errors": [],
+        "errors": raw.get("errors") or [],
         "locales": [],
         "mismatches": flat_mismatches,
+        # Preserve the producer's output-level evidence; surface aggregates
+        # cannot distinguish a subset from the full configured output list.
+        "output_summary": raw.get("output_summary", []),
+        # Preserve actual returned values, including invalid diagnostics.
+        "observed_outputs": [
+            {
+                **row,
+                "case_id": (
+                    f"ecps-{row['case_id']}"
+                    if valid_case_id(row.get("case_id"))
+                    else row.get("case_id")
+                ),
+                "concept": FIIT_SURFACE_CONCEPT_IDS.get(row.get("surface")),
+            }
+            for row in raw.get("observed_outputs") or []
+            if isinstance(row, dict)
+        ],
         "population": "enhanced-cps",
         "schema_version": "axiom.comparison_report.v2",
         "scope": {"geoid": "US", "type": "country"},
         "suite": suite,
         "summary": {
             "comparison_count": parent_compared,
-            "error_count": 0,
-            "errors_by_engine": {},
+            "error_count": len(raw.get("errors") or []),
+            "errors_by_engine": dict(Counter(
+                row.get("engine", "axiom") for row in raw.get("errors") or []
+                if isinstance(row, dict)
+            )),
             "match_count": parent_matched,
             "mismatch_count": parent_mismatches,
+            "uncompared_mismatches": parent_uncompared_mismatches,
             "mismatches_by_concept": mismatches_by_concept,
             "mismatches_by_kind": [
                 {"value": "amount_difference", "count": parent_mismatches}
@@ -5070,10 +5782,33 @@ def _adapt_tax_ecps_to_v2(raw: dict, config: dict, *, suite: str) -> dict:
                 "comparison_weight": parent_compared,
                 "match_rate": parent_rate,
                 "match_weight": parent_matched,
-                "mismatch_weight": parent_mismatches,
+                "mismatch_weight": parent_mismatches - parent_uncompared_mismatches,
             },
         },
     }
+    for key in ("error", "skipped", "skip_reason", "executed"):
+        if key in raw:
+            report[key] = raw[key]
+    report["attestation"] = {
+        "schema_version": EXECUTION_ATTESTATION_SCHEMA,
+        "executed": (
+            report["case_count"] > 0 and parent_compared > 0
+            and raw.get("executed", True) is True
+            and not any(raw.get(key) for key in ("error", "errors", "skipped", "skip_reason"))
+        ),
+        "case_count": report["case_count"],
+        "comparison_count": parent_compared,
+        "error_count": report["summary"]["error_count"],
+        "engines": dict(report["engines"]),
+        **{key: raw[key] for key in ("error", "skipped", "skip_reason") if key in raw},
+    }
+    output_rows, outputs_complete = fiit_output_rows(
+        report["output_summary"], report=report,
+    )
+    report["attestation"].update(
+        outputs=output_rows,
+        outputs_complete=outputs_complete,
+    )
     # Thread encode's dataset identity onto the report top-level so the
     # checked-in FIIT report records which pinned Populace artifact produced
     # it — and so it survives even when `cases` is slimmed to empty on a run
@@ -5464,6 +6199,7 @@ def _refresh_versioned_case_chunks(report: dict) -> dict | None:
         MAX_CASES,
         compact_case,
         explained_lookup,
+        finalize_slot_dictionaries,
     )
 
     if len(raw_cases) > MAX_CASES:
@@ -5472,20 +6208,7 @@ def _refresh_versioned_case_chunks(report: dict) -> dict | None:
         )
     explained = explained_lookup(report)
     rows = [compact_case(case, explained) for case in raw_cases]
-    input_slots = sorted(
-        {
-            record.get("name")
-            for row in rows
-            for record in row.get("_all_input_names", [])
-            if record.get("name")
-        }
-    )
-    output_slots = sorted(
-        {name for row in rows for name in row.get("_all_output_names", [])}
-    )
-    for row in rows:
-        row.pop("_all_input_names", None)
-        row.pop("_all_output_names", None)
+    input_slots, output_slots = finalize_slot_dictionaries(rows)
 
     out_dir = DASHBOARD_DATA_DIR / "cases" / suite
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -5569,6 +6292,9 @@ def _slim_report_for_dashboard(
     intersection suite's unexplained rows were physically untriageable behind
     the default cap) raises ``dashboard.max_mismatches`` in its comparison
     YAML instead of relying on the ephemeral reports/ artifact.
+
+    ``observed_outputs`` past ``_PUBLISHED_MAX_OBSERVED_OUTPUTS`` are dropped
+    whole (``_without_observed_outputs``), never sampled.
     """
     if max_mismatches is None:
         max_mismatches = _DASHBOARD_MAX_MISMATCHES
@@ -5635,7 +6361,7 @@ def _slim_report_for_dashboard(
     ):
         slim["summary"] = dict(summary)
         slim["summary"]["stored_mismatch_example_count"] = len(kept_mismatches)
-    return slim
+    return _without_observed_outputs(slim)
 
 
 def _merge_dispositions(report: dict) -> dict:
@@ -5663,7 +6389,8 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
     """Whether a skip publish would overwrite its preserved bound source.
 
     The pointer is read from the existing dashboard copy, because that is the
-    evidence set a versioned skip preserves.  Resolution mirrors
+    evidence set a skip preserves: whatever copy is already there (see
+    ``_write_dashboard_report``).  Resolution mirrors
     ``apply_dispositions._resolve_source_pointer``: only a repo-relative path
     resolving beneath ``reports/`` is eligible.  Digest and fullness remain
     the consumer's fail-closed responsibility; this helper only prevents the
@@ -5676,9 +6403,7 @@ def _preserved_versioned_source_is_output(filename: str, output: Path) -> bool:
         existing = json.loads(target.read_text())
     except (OSError, json.JSONDecodeError):
         return False
-    if not isinstance(existing, dict) or not _uses_versioned_case_chunks(
-        existing
-    ):
+    if not isinstance(existing, dict):
         return False
     block = (existing.get("summary") or {}).get("dispositioned")
     pointer = block.get("source_report") if isinstance(block, dict) else None
@@ -5719,12 +6444,22 @@ def _write_dashboard_report(
     bytes, so the preserved binding remains checkable while that source stays
     present and unchanged.  The main publisher also protects a same-path,
     same-day skip from replacing those prior source bytes before this return.
+
+    The flag also covers unversioned reports: a skip leaves any committed
+    report byte-for-byte unchanged, whether it came from a real run or was
+    itself a re-emission. It publishes only the first copy, when none is
+    committed.
     """
 
     DASHBOARD_DATA_DIR.mkdir(parents=True, exist_ok=True)
     from axiom_oracles.comparison.report import strip_heavy_case_metadata
 
+    adapted = report
     report = _merge_dispositions(report)
+    report = dict(report)
+    for key in ("provenance", "dataset_identity"):
+        if isinstance(report.get(key), dict):
+            report[key] = _preserve_relation_binding_diagnostics(report[key], report[key])
     versioned_case_chunks = _uses_versioned_case_chunks(report)
     if preserve_existing_versioned and versioned_case_chunks:
         # A skip-capable runner copied the committed dashboard view and did
@@ -5737,6 +6472,21 @@ def _write_dashboard_report(
         )
         return
     target = DASHBOARD_DATA_DIR / filename
+    if preserve_existing_versioned and target.exists():
+        # A re-emission copies the committed numbers, so publishing it over a
+        # committed copy changes labels, never results. Over a real run it
+        # replaces the provenance that run recorded (the rulespec SHAs it ran
+        # against, its run kind and date) with "re-emitted, SHA unknown", and
+        # the affected-rerun selector can then never again prove the suite
+        # fresh; on 2026-09-23 that replaced five real SNAP QC reports. Over
+        # an earlier re-emission it only moves generated_at, which let the
+        # affected rerun commit a generated_at-only diff for 35 EUROMOD,
+        # UKMOD and tariff suites sweep after sweep.
+        print(
+            f"Preserved committed dashboard report {filename} for skipped "
+            f"{report['suite']}: a re-emission never replaces a committed report"
+        )
+        return
     dashboard_config = dashboard_config or {}
     slim = _slim_report_for_dashboard(
         strip_heavy_case_metadata(report),
@@ -5817,6 +6567,20 @@ def _write_dashboard_report(
                 )
                 return
             full_report_path = None
+    if (
+        full_report_path is not None
+        and merged_is_complete
+        and slim_is_premerged
+        and not _is_v2_report_for(full_report_path, report.get("suite"))
+    ):
+        # The run's own report is in the harness's shape (tax-populace-
+        # compare, for example), which the consumer cannot re-derive from.
+        # Publish the adapted v2 report beside it and bind to that instead.
+        full_report_path = _write_full_v2_report(adapted, full_report_path)
+        source_rel = (
+            full_report_path.resolve().relative_to(REPO_ROOT.resolve()).as_posix()
+        )
+        print(f"Wrote full v2 report: {full_report_path}")
     if (
         full_report_path is not None
         and merged_is_complete

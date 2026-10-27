@@ -15,12 +15,27 @@ Derivation, per suite, unions three signals (all deterministic):
    ``rulespec_remote``. The path basename (or the remote's ``owner/repo``)
    names the repo directly. This is the authoritative signal.
 2. **concept id prefixes** — a concept like ``us-co:policies/…#co_tanf_benefit``
-   is encoded in ``rulespec-us-co``; ``us:statutes/…`` in ``rulespec-us``;
-   ``uk:…`` in the UK rulespec; ``be:…`` in ``rulespec-be``. This backstops
-   suites whose rulespec paths are indirected (e.g. rsync'd roots).
+   is encoded in ``rulespec-us`` (its ``us-co/`` directory), as is
+   ``us:statutes/…``; ``uk:…`` in the UK rulespec; ``be:…`` in ``rulespec-be``.
+   This backstops suites whose rulespec paths are indirected (e.g. rsync'd
+   roots). US state prefixes map to the country dependency ``rulespec-us``;
+   this routing does not depend on a standalone repository's existence or
+   archive history.
+   ``axiom_oracles.provenance.canonical_rulespec_slug`` folds absorbed names
+   (``ABSORBED_RULESPEC_REPOS``) in the path and prefix signals. A declared
+   ``rulespec_remote`` stays as-is, as the report stamper keeps a git remote:
+   a harness that clones an archived remote really reads it, and
+   ``tests/test_affected_map.py`` rejects the archived and unreadable names
+   in its regression fixtures and requires country-shaped dependency names.
 3. **parameter-suite ``file:`` prefixes** — the non-registry
    ``parameter-oracles.yaml`` names files like ``us-ga/policies/…`` whose top
    path segment maps to a rulespec repo the same way.
+
+A few runner types add their own rules (the encoder SNAP lane's jurisdiction,
+the EUROMOD country). A SNAP QC replay (``snap-qc-compare``) uses only a
+configured ``rulespec_root`` (signal 1), defaulting to rulespec-us, and ignores
+concept prefixes and the jurisdiction: it maps to exactly the one rulespec root
+its overlay is built from (see ``snap_qc_repos``).
 
 The output is sorted and stable; ``--check`` fails if the committed file drifts
 from a fresh regeneration, so CI keeps it honest.
@@ -70,7 +85,7 @@ def _rel(path: Path) -> str:
 
 
 def _repo_from_path(path_str: str) -> str | None:
-    """``$HOME/.axiom-oracles/roots/rulespec-us-co`` → the repo slug."""
+    """``$HOME/.axiom-oracles/roots/rulespec-uk`` → the repo slug."""
     name = Path(os.path.expandvars(str(path_str))).name
     if not name.startswith("rulespec-"):
         return None
@@ -96,8 +111,9 @@ def _repo_from_remote(remote: str) -> str | None:
 
 def _repo_from_prefix(prefix: str) -> str | None:
     """Map a concept/file jurisdiction prefix (``us``, ``us-co``, ``uk``, ``be``)
-    to its rulespec repo slug. ``us`` → ``rulespec-us``; ``us-co`` →
-    ``rulespec-us-co``; ``uk``/``be`` → ``rulespec-uk``/``rulespec-be``."""
+    to its rulespec repo slug. ``us`` and ``us-co`` → ``rulespec-us`` (the
+    state lives in the monorepo's ``us-co/``); ``uk``/``be`` →
+    ``rulespec-uk``/``rulespec-be``."""
     prefix = prefix.strip().lower()
     if not prefix:
         return None
@@ -182,10 +198,40 @@ def pinned_repos_for_registry_config(config: dict) -> dict[str, str]:
     return {repos.pop(): sha}
 
 
+def snap_qc_repos(config: dict) -> set[str]:
+    """The one rulespec repo a ``snap-qc-compare`` replay reads.
+
+    The bridge builds its fiscal-year overlay from a single rulespec root:
+    ``build_overlay`` copies both the federal ``us/`` chain and the state's
+    ``us-<st>/`` layer out of that root, and the engine is pointed at the
+    overlay alone (``bridges/snap_qc_compare.run_snap_qc_comparison``). That
+    root's repo is therefore the suite's whole rules dependency, and the only
+    repo whose SHA its report can record (``provenance.rulespecs``). The root is
+    the rulespec-us monorepo unless the config names another one.
+
+    The per-state ``rulespec-us-<st>`` repos are never read: they were archived
+    into ``rulespec-us/us-<st>`` on 2026-06-27. Mapping them anyway meant no
+    report could ever prove it was fresh, so the affected-rerun selector picked
+    every snap-qc suite on every sweep ("rulespec-us-<st>: report ran against
+    unknown SHA").
+    """
+    runner = config.get("runner") or {}
+    params = runner.get("parameters") or {}
+    root = runner.get("rulespec_root") or params.get("rulespec_root")
+    slug = _repo_from_path(str(root)) if root else None
+    return {slug or _slug("rulespec-us")}
+
+
 def repos_for_registry_config(config: dict) -> set[str]:
     repos: set[str] = set()
     runner = config.get("runner") or {}
     params = runner.get("parameters") or {}
+
+    # The SNAP QC administrative-data lane depends on exactly the root its
+    # overlay is built from; no other signal (concept prefixes, the
+    # jurisdiction) names a repo it reads. See snap_qc_repos.
+    if runner.get("type") == "snap-qc-compare":
+        return snap_qc_repos(config)
 
     remote = runner.get("rulespec_remote") or params.get("rulespec_remote")
     if remote:
@@ -233,22 +279,12 @@ def repos_for_registry_config(config: dict) -> set[str]:
                 repos.add(slug)
 
     # The encoder SNAP lane (axiom-encode-snap-ecps-compare) names its state as
-    # `jurisdiction: us-ca` and runs the state's axiom-programs SNAP spec over
-    # federal SNAP rules. Map the jurisdiction to the state rulespec repo, and
-    # add federal rulespec-us since every state SNAP inherits the 7 USC/7 CFR
-    # federal chain.
+    # `jurisdiction: us-ca` and runs the state's SNAP program over federal SNAP
+    # rules. The bridge reads that program from rulespec-us/us-ca
+    # (bridges/snap_populace.resolve_program_path), and every state SNAP
+    # inherits the 7 USC/7 CFR federal chain, so both signals name rulespec-us.
     jurisdiction = params.get("jurisdiction")
     if runner.get("type") == "axiom-encode-snap-ecps-compare" and jurisdiction:
-        state_slug = _repo_from_prefix(str(jurisdiction))
-        if state_slug:
-            repos.add(state_slug)
-        repos.add(_slug("rulespec-us"))
-
-    # The SNAP QC administrative-data lane (snap-qc-compare) replays USDA QC
-    # public-use cases through the state's composed SNAP program under the
-    # fy-cola overlay; rule changes in the state shard or the federal SNAP
-    # chain both move its results.
-    if runner.get("type") == "snap-qc-compare" and jurisdiction:
         state_slug = _repo_from_prefix(str(jurisdiction))
         if state_slug:
             repos.add(state_slug)
@@ -361,10 +397,12 @@ def build_map() -> dict:
             # (e.g. dashboard suite `uk-benefit-cap` runs under registry
             # name `uk-benefit-cap-ukmod`); dispatching the dashboard
             # suite key crashes the leg with "unknown comparison".
-            # A suite declaring `ci: manual` cannot run in CI at all
-            # (e.g. or/ut SNAP: the encoder's snap-populace-compare has no
-            # jurisdiction config for them yet) — emit null so the
-            # selector and the weekly matrix leave it to the manual lane.
+            # A suite declaring `ci: manual` cannot produce a real report
+            # in CI (e.g. or/ut SNAP: the encoder's snap-populace-compare
+            # has no jurisdiction config for them yet; the SNAP QC replays:
+            # no CI matrix provisions the engine or the QC file, so a leg
+            # could only re-emit) — emit null so the selector and the
+            # weekly matrix leave it to the manual lane.
             "name": None if config.get("ci") == "manual" else config["name"],
             "report": report,
             "repos": sorted(repos_for_registry_config(config)),

@@ -59,6 +59,60 @@ def test_invalid_requested_state_fails_before_dataset_load(
         )
 
 
+def _contract_with_ready_nc():
+    contract = _contract()
+    jurisdictions = {**contract.by_state(), "NC": SimpleNamespace(status="ready")}
+    return SimpleNamespace(
+        validation_year=contract.validation_year,
+        populace_year=contract.populace_year,
+        by_state=lambda: jurisdictions,
+    )
+
+
+@pytest.mark.parametrize("states", [["--state", "nc"], []])
+@pytest.mark.parametrize(
+    ("installed", "error"),
+    [
+        ("1.752.2", r"NC requires policyengine-us>=2\.60\.4; installed '1\.752\.2'"),
+        (None, "cannot record required package version for policyengine-us"),
+    ],
+)
+def test_nc_campaign_refuses_an_old_or_missing_policyengine_us_before_dataset_load(
+    monkeypatch, tmp_path, states, installed, error
+) -> None:
+    import axiom_oracles.bridges.state_tax_populace_runner as runner
+
+    monkeypatch.setattr(
+        campaign, "load_state_tax_populace_contract", _contract_with_ready_nc
+    )
+
+    def installed_release(package: str) -> str:
+        if installed is None:
+            raise runner.PackageNotFoundError(package)
+        return installed
+
+    monkeypatch.setattr(runner, "version", installed_release)
+
+    def reject_dataset_load(*args, **kwargs):
+        pytest.fail("policyengine-us should be checked before the dataset loads")
+
+    monkeypatch.setattr(campaign, "load_populace_dataset", reject_dataset_load)
+
+    with pytest.raises(SystemExit, match=error):
+        campaign.main(
+            [
+                *states,
+                "--no-taxsim",
+                "--rulespec-root",
+                str(tmp_path),
+                "--axiom-rules-path",
+                str(tmp_path),
+                "--output",
+                str(tmp_path / "report.json"),
+            ]
+        )
+
+
 def test_repeatable_state_filter_preserves_national_routing_report(
     monkeypatch, tmp_path
 ) -> None:
@@ -91,10 +145,14 @@ def test_repeatable_state_filter_preserves_national_routing_report(
         calls["comparison"] = tuple(kwargs["routes"])
         calls["known_tax_unit_ids"] = set(kwargs["known_tax_unit_ids"])
         calls["taxsim_targets"] = kwargs["taxsim_targets"]
+        calls["taxsim_unprojected_inputs"] = kwargs["taxsim_unprojected_inputs"]
         return {"scope": "filtered"}
 
     def taxsim_targets(**kwargs):
         calls["taxsim"] = tuple(kwargs["routes"])
+        kwargs["unprojected_inputs"]["NJ"] = {
+            1: {"tax_exempt_interest_income": 2_500.0}
+        }
         return {"NJ": {1: 0.0}}
 
     monkeypatch.setattr(campaign, "calculate_policyengine_targets", targets)
@@ -102,6 +160,9 @@ def test_repeatable_state_filter_preserves_national_routing_report(
         campaign, "calculate_policyengine_projection_inputs", projections
     )
     monkeypatch.setattr(campaign, "calculate_taxsim_targets", taxsim_targets)
+    # The TAXSIM leg is stubbed, so the host's binary is not consulted: the
+    # pinned Linux build would refuse the 2026 validation year (CI is Linux).
+    monkeypatch.setattr(campaign, "require_law_years", lambda years: None)
     monkeypatch.setattr(campaign, "population_routing_report", routing_report)
     monkeypatch.setattr(campaign, "compare_ready_state_tax_units", comparison)
     monkeypatch.setattr(campaign, "runtime_provenance", lambda **kwargs: {})
@@ -136,6 +197,9 @@ def test_repeatable_state_filter_preserves_national_routing_report(
     # targets flow into the comparison.
     assert calls["taxsim"] == expected_filtered
     assert calls["taxsim_targets"] == {"NJ": {1: 0.0}}
+    assert calls["taxsim_unprojected_inputs"] == {
+        "NJ": {1: {"tax_exempt_interest_income": 2_500.0}}
+    }
     assert report["taxsim_leg"] == "graded"
 
 
@@ -602,4 +666,110 @@ def test_new_york_projection_diagnostics_reject_invalid_schedule_values(
                 }
             },
             (TaxUnitRoute(1, 1, "NY", "36", 1, DISPOSITION_READY),),
+        )
+
+
+_NC_PREFIX = "us-nc:policies/income_tax/resident_core_liability_pipeline#input."
+
+
+def _nc_inputs(**overrides) -> dict:
+    """Three ready NC units plus one blocked unit that must not count."""
+
+    values = {
+        "nc_pit_2026_federal_adjusted_gross_income": {
+            1: 50_000.0, 2: -5.0, 3: 0.0, 4: 90_000.0,
+        },
+        "nc_pit_2026_filing_status_joint_or_surviving_spouse": {
+            1: True, 2: False, 3: False, 4: True,
+        },
+        "nc_pit_2026_filing_status_head_of_household": {
+            1: False, 2: True, 3: False, 4: False,
+        },
+        "nc_pit_2026_filing_status_married_separately": {
+            1: False, 2: False, 3: False, 4: False,
+        },
+        "nc_pit_2026_eligible_for_federal_standard_deduction": {
+            1: True, 2: True, 3: False, 4: False,
+        },
+        "nc_pit_2026_federal_child_tax_credit_qualifying_children": {
+            1: 2.0, 2: 0.0, 3: 0.0, 4: 3.0,
+        },
+        "nc_pit_2026_charitable_contributions": {1: 100.0, 2: 0.0, 3: 0.0, 4: 1.0},
+        "nc_pit_2026_qualified_residence_interest": {
+            1: 0.0, 2: 3_000.0, 3: 0.0, 4: 1.0,
+        },
+        "nc_pit_2026_real_estate_property_taxes": {
+            1: 500.0, 2: 0.0, 3: 0.0, 4: 1.0,
+        },
+        "nc_pit_2026_medical_and_dental_expenses": {
+            1: 0.0, 2: 200.0, 3: 0.0, 4: 1.0,
+        },
+        "nc_pit_2026_eligible_obligation_interest": {1: 0.0, 2: 0.0, 3: 0.0, 4: 1.0},
+        "nc_pit_2026_taxable_social_security_and_railroad_retirement": {
+            1: 1_000.0, 2: 0.0, 3: 0.0, 4: 1.0,
+        },
+        "nc_pit_2026_income_tax_refunds": {1: 0.0, 2: 0.0, 3: 250.0, 4: 1.0},
+    }
+    for name, by_unit in overrides.items():
+        values[name] = {**values[name], **by_unit}
+    return {f"{_NC_PREFIX}{name}": by_unit for name, by_unit in values.items()}
+
+
+_NC_ROUTES = (
+    TaxUnitRoute(1, 1, "NC", "37", 1, DISPOSITION_READY),
+    TaxUnitRoute(2, 2, "NC", "37", 1, DISPOSITION_READY),
+    TaxUnitRoute(3, 3, "NC", "37", 1, DISPOSITION_READY),
+    TaxUnitRoute(4, 4, "NC", "37", 1, DISPOSITION_BLOCKED),
+)
+
+
+def test_north_carolina_projection_diagnostics_pin_status_and_presence_counts():
+    diagnostics = campaign._projection_branch_diagnostics(
+        {"NC": _nc_inputs()}, _NC_ROUTES
+    )
+
+    assert diagnostics == {
+        "NC": {
+            "compared_tax_unit_count": 3,
+            "joint_or_surviving_count": 1,
+            "head_of_household_count": 1,
+            "married_separately_count": 0,
+            "single_count": 1,
+            "standard_deduction_ineligible_count": 1,
+            "nonpositive_agi_count": 2,
+            "qualifying_children_present_count": 1,
+            "charitable_contributions_present_count": 1,
+            "qualified_residence_interest_present_count": 1,
+            "real_estate_property_taxes_present_count": 1,
+            "medical_and_dental_expenses_present_count": 1,
+            "united_states_obligation_interest_present_count": 0,
+            "taxable_social_security_present_count": 1,
+            "income_tax_refunds_present_count": 1,
+        }
+    }
+
+
+@pytest.mark.parametrize(
+    ("overrides", "message"),
+    [
+        (
+            {"nc_pit_2026_filing_status_joint_or_surviving_spouse": {1: 1}},
+            "strict Boolean",
+        ),
+        (
+            {"nc_pit_2026_eligible_for_federal_standard_deduction": {2: None}},
+            "strict Boolean",
+        ),
+        (
+            {"nc_pit_2026_filing_status_head_of_household": {1: True}},
+            "mutually exclusive",
+        ),
+    ],
+)
+def test_north_carolina_projection_diagnostics_reject_invalid_status_values(
+    overrides, message
+):
+    with pytest.raises(ValueError, match=message):
+        campaign._projection_branch_diagnostics(
+            {"NC": _nc_inputs(**overrides)}, _NC_ROUTES
         )

@@ -422,7 +422,7 @@ def committed_case_count(config: dict) -> int | None:
     relative = (DASHBOARD_DATA_DIR / filename).relative_to(REPO_ROOT).as_posix()
     try:
         committed = subprocess.run(
-            ["git", "-C", str(REPO_ROOT), "show", f"HEAD:{relative}"],
+            ["git", "--no-replace-objects", "-C", str(REPO_ROOT), "show", f"HEAD:{relative}"],
             capture_output=True,
             check=True,
             text=True,

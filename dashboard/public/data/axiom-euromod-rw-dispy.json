@@ -1,0 +1,633 @@
+{
+  "aggregates": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "comparison_count": 6,
+      "comparison_weight": 6,
+      "components": [],
+      "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+      "description": "Rwanda composed worker disposable income (Table 2 tax + employee pension/maternity/CBHI-levy stack)",
+      "left_weighted_sum": 1241402.695478,
+      "match_rate": 100,
+      "match_weight": 6,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 1241401.799978,
+      "weighted_difference": 0.8955,
+      "weighted_match_rate": 100
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "comparison_count": 6,
+      "comparison_weight": 6,
+      "components": [],
+      "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy",
+      "description": "Rwanda CBHI employee levy (PM Order 105/03 Article 5, 0.5%) on the composed pipeline's net salary (formal private-sector worker)",
+      "left_weighted_sum": 6238.2045,
+      "match_rate": 100,
+      "match_weight": 6,
+      "mismatch_count": 0,
+      "mismatch_weight": 0,
+      "missing_both_count": 0,
+      "missing_left_count": 0,
+      "missing_right_count": 0,
+      "parent": null,
+      "right_weighted_sum": 6238.2,
+      "weighted_difference": 0.0045,
+      "weighted_match_rate": 100
+    }
+  ],
+  "case_count": 6,
+  "cases": [
+    {
+      "case_id": "rw-dispy-30000-nil-zone",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 27969.4499994749,
+          "right": 27969.4499994749
+        },
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy",
+          "left": 140.54999999736128,
+          "right": 140.54999999736128
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 5,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 29999.999999436775,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 29999.999999436775,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 29999.999999436775
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 27997.389790657668
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income",
+            "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+            "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 29999.999999436775,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 29999.999999436775,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 29999.999999436775
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            360000.0
+          ],
+          "yearly_earned_income_total": 360000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 30000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-dispy-60000-exempt-bound",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 55938.8999989498,
+          "right": 55938.8999989498
+        },
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy",
+          "left": 281.09999999472257,
+          "right": 281.09999999472257
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 5,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 59999.99999887355,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 59999.99999887355,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 59999.99999887355
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 55994.779581315335
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income",
+            "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+            "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 59999.99999887355,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 59999.99999887355,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 59999.99999887355
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            720000.0
+          ],
+          "yearly_earned_income_total": 720000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 60000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-dispy-80000-band2",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 72595.29949874917,
+          "right": 72595.19999874917
+        },
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy",
+          "left": 364.8004999937145,
+          "right": 364.79999999371444
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 5,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 79999.99999849807,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 79999.99999849807,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 79999.99999849807
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 74659.70610842045
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income",
+            "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+            "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 79999.99999849807,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 79999.99999849807,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 79999.99999849807
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            960000.0
+          ],
+          "yearly_earned_income_total": 960000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 80000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-dispy-150000-band3",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 125917.4489979349,
+          "right": 125917.2499979349
+        },
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy",
+          "left": 632.7509999896226,
+          "right": 632.7499999896226
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 5,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 149999.99999718388,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 149999.99999718388,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 149999.99999718388
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 139986.94895328835
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income",
+            "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+            "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 149999.99999718388,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 149999.99999718388,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 149999.99999718388
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            1800000.0
+          ],
+          "yearly_earned_income_total": 1800000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 150000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-dispy-400000-top-band",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 289346.2984952403,
+          "right": 289345.99999524024
+        },
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy",
+          "left": 1454.001499976082,
+          "right": 1453.9999999760817
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 5,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 399999.99999249034,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 399999.99999249034,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 399999.99999249034
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 373298.53054210223
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income",
+            "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+            "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 399999.99999249034,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 399999.99999249034,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 399999.99999249034
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            4800000.0
+          ],
+          "yearly_earned_income_total": 4800000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 400000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    },
+    {
+      "case_id": "rw-dispy-1000000-high-income",
+      "left_engine": "euromod",
+      "left_errors": [],
+      "match_rate": 100.0,
+      "matches": [
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+          "left": 669635.2984881008,
+          "right": 669634.9999881006
+        },
+        {
+          "concept": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy",
+          "left": 3365.0014999402047,
+          "right": 3364.9999999402044
+        }
+      ],
+      "metadata": {
+        "axiom_all_outputs_count": 5,
+        "axiom_entity": "Person",
+        "axiom_entity_id": "head",
+        "axiom_inputs": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 999999.9999812258,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 999999.9999812258,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 999999.9999812258
+        },
+        "euromod_inputs": [
+          {
+            "dag": 35,
+            "ddi": 0,
+            "dec": 0,
+            "dgn": 1,
+            "dhh": 1,
+            "dms": 1,
+            "dwt": 1.0,
+            "idfather": 0,
+            "idhh": 1,
+            "idmother": 0,
+            "idpartner": 0,
+            "idperson": 101,
+            "les": 3,
+            "lfo": 1,
+            "lindi": 5,
+            "loc": 3,
+            "yem": 933246.3263552556
+          }
+        ],
+        "euromod_to_axiom_input_bridge": {
+          "yem": [
+            "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income",
+            "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration",
+            "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary"
+          ]
+        },
+        "euromod_to_axiom_input_bridge_applied": {
+          "rw:regulations/po-2024-086-01/pension-contribution-rate#input.covered_remuneration": 999999.9999812258,
+          "rw:statutes/law-2016-003/maternity-leave-contributions#input.contributory_salary": 999999.9999812258,
+          "rw:statutes/law-2022-027/employment-income-tax#input.monthly_taxable_employment_income": 999999.9999812258
+        },
+        "household_summary": {
+          "ages": [
+            35
+          ],
+          "household_size": 1,
+          "yearly_earned_income_per_person": [
+            12000000.0
+          ],
+          "yearly_earned_income_total": 12000000.0
+        },
+        "locale": "RW",
+        "monthly_employment_income": 1000000.0,
+        "scenario": "single-formal-employee-disposable-income",
+        "scope": {
+          "geoid": "RW",
+          "type": "country"
+        }
+      },
+      "mismatches": [],
+      "right_engine": "axiom",
+      "right_errors": []
+    }
+  ],
+  "concepts": [
+    {
+      "category": "income",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda composed worker disposable income (Table 2 tax + employee pension/maternity/CBHI-levy stack)",
+      "id": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_disposable_income",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    },
+    {
+      "category": "contribution",
+      "comparison": "amount",
+      "components": [],
+      "description": "Rwanda CBHI employee levy (PM Order 105/03 Article 5, 0.5%) on the composed pipeline's net salary (formal private-sector worker)",
+      "id": "rw:statutes/composed/pilot-worker-disposable-income-pipeline#pilot_worker_cbhi_levy",
+      "parent": null,
+      "priority": "high",
+      "relative_tolerance": 0,
+      "tolerance": 1
+    }
+  ],
+  "engines": {
+    "left": "euromod",
+    "right": "axiom",
+    "versions": {
+      "axiom_rules_engine": "0.2.2"
+    }
+  },
+  "errors": [],
+  "locales": [
+    "RW"
+  ],
+  "mismatches": [],
+  "population": "synthetic",
+  "provenance": {
+    "dataset": {
+      "population": "synthetic",
+      "source": "config"
+    },
+    "engine": {
+      "axiom_rules_engine_sha": "6f62c12a9eddfba4b30a3bf156bb23d68a8aea7a",
+      "axiom_rules_engine_version": "0.2.2"
+    },
+    "generated_at": "2026-10-04T14:35:55Z",
+    "generated_by": "scripts/run_comparison.py::rw-dispy",
+    "oracle": {
+      "euromod_country": "RW",
+      "euromod_dataset": "rw_2024_a1",
+      "euromod_system": "RW_2025",
+      "name": "euromod"
+    },
+    "rulespecs": [
+      {
+        "repo": "TheAxiomFoundation/rulespec-rw",
+        "sha": "001fa4b6267d5d8f3694770984aacd36774e400e"
+      }
+    ],
+    "run_kind": "manual",
+    "schema": "axiom_oracles.provenance.v1"
+  },
+  "schema_version": "axiom.comparison_report.v2.1",
+  "scope": null,
+  "suite": "rw-dispy",
+  "summary": {
+    "comparison_count": 12,
+    "dispositioned": {
+      "counts": {
+        "axiom_encoding_gap": 0,
+        "bridge_artifact": 0,
+        "explained_residual": 0,
+        "unexplained": 0,
+        "upstream_engine_gap": 0
+      },
+      "dispositions_file": null,
+      "expired_entries": [],
+      "explained_rate": 100,
+      "orphaned_entries": [],
+      "raw_match_rate": 100,
+      "schema_version": "axiom_oracles.dispositions.v1",
+      "unexplained_count": 0
+    },
+    "error_count": 0,
+    "errors_by_engine": {},
+    "match_count": 12,
+    "mismatch_count": 0,
+    "mismatches_by_concept": [],
+    "mismatches_by_kind": [],
+    "mismatches_by_scenario": [],
+    "weighted": {
+      "comparison_weight": 12,
+      "match_rate": 100,
+      "match_weight": 12,
+      "mismatch_weight": 0
+    }
+  }
+}

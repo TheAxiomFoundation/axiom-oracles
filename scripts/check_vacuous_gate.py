@@ -44,12 +44,17 @@ except ImportError:  # pragma: no cover
     sys.stderr.write("PyYAML is required (uv pip install pyyaml).\n")
     sys.exit(2)
 
-from axiom_oracles.provenance import PROVENANCE_SCHEMA_VERSION, RUN_KINDS
+from axiom_oracles.provenance import (
+    PROVENANCE_SCHEMA_VERSION,
+    RUN_KINDS,
+    unclean_rulespecs,
+)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 COMPARISONS_DIR = REPO_ROOT / "comparisons"
 DASHBOARD_DATA_DIR = REPO_ROOT / "dashboard" / "public" / "data"
 REPORTS_DIR = REPO_ROOT / "reports"
+DISPOSITIONS_DIR = REPO_ROOT / "dispositions"
 COVERAGE_OVERVIEW = DASHBOARD_DATA_DIR / "coverage_overview.json"
 AFFECTED_MAP = COMPARISONS_DIR / "affected_map.json"
 FRESHNESS_OUTPUT = DASHBOARD_DATA_DIR / "freshness.json"
@@ -304,6 +309,33 @@ def _campaign_identity_problems(label: str, campaign: dict) -> list[str]:
     return problems
 
 
+def _expected_projected_mismatch(row: object, concept: object) -> object:
+    """Derive one projected Populace mismatch row from its campaign row.
+
+    The projector keeps the campaign's fields and adds the v2 row identity
+    dispositions select on (``case_id``, ``concept``, ``kind``) plus
+    ``left``/``right`` and the signed ``difference``. Re-derived here, not
+    imported, so the gate checks the projector rather than repeating it.
+    """
+
+    if not isinstance(row, dict):
+        return row
+    try:
+        left = float(row["axiom"])
+        right = float(row["policyengine"])
+    except (KeyError, TypeError, ValueError):
+        return row
+    return {
+        **row,
+        "case_id": row.get("tax_unit_id"),
+        "concept": concept,
+        "kind": "amount_difference",
+        "left": left,
+        "right": right,
+        "difference": left - right,
+    }
+
+
 def _campaign_projection_problems(name: str, config: dict) -> list[str]:
     """Validate declaration, projected report, and source campaign as one chain."""
 
@@ -346,8 +378,17 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
         )
         if report is None:
             continue
-        if report.get("schema_version") != "axiom.comparison_report.v2":
-            problems.append(f"{label} report schema is not axiom.comparison_report.v2")
+        # A suite with dispositions/<suite>.yaml is projected with them
+        # merged (schema v2.1 plus summary.dispositioned); every other suite
+        # stays plain v2. apply_dispositions.py --check validates the merge.
+        dispositioned = (DISPOSITIONS_DIR / f"{suite_name}.yaml").is_file()
+        expected_schema = (
+            "axiom.comparison_report.v2.1"
+            if dispositioned
+            else "axiom.comparison_report.v2"
+        )
+        if report.get("schema_version") != expected_schema:
+            problems.append(f"{label} report schema is not {expected_schema}")
         if report.get("suite") != suite_name:
             problems.append(
                 f"{label} report suite is {report.get('suite')!r}, "
@@ -542,9 +583,19 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
             problems.append(
                 f"{label} report oracle target does not align with source campaign"
             )
-        if not _json_values_exactly_equal(
-            report.get("mismatches"), campaign_mismatches
-        ):
+        expected_mismatches = [
+            _expected_projected_mismatch(row, state_entry.get("output"))
+            for row in campaign_mismatches
+        ]
+        report_mismatches = report.get("mismatches")
+        if dispositioned and isinstance(report_mismatches, list):
+            report_mismatches = [
+                {key: value for key, value in row.items() if key != "disposition"}
+                if isinstance(row, dict)
+                else row
+                for row in report_mismatches
+            ]
+        if not _json_values_exactly_equal(report_mismatches, expected_mismatches):
             problems.append(
                 f"{label} report mismatches do not align with source campaign"
             )
@@ -555,7 +606,22 @@ def _campaign_projection_problems(name: str, config: dict) -> list[str]:
             "match_rate": match_rate,
             "mismatch_count": mismatch_count,
         }
-        if not _json_values_exactly_equal(report.get("summary"), expected_summary):
+        report_summary = report.get("summary")
+        if dispositioned:
+            if not isinstance(report_summary, dict) or not isinstance(
+                report_summary.get("dispositioned"), dict
+            ):
+                problems.append(
+                    f"{label} report lacks the summary.dispositioned block its "
+                    "dispositions file requires"
+                )
+            else:
+                report_summary = {
+                    key: value
+                    for key, value in report_summary.items()
+                    if key != "dispositioned"
+                }
+        if not _json_values_exactly_equal(report_summary, expected_summary):
             problems.append(
                 f"{label} report summary does not align with source campaign"
             )
@@ -731,6 +797,21 @@ def build_freshness() -> dict:
                 "reemitted_from": provenance.get("reemitted_from"),
             }
         )
+        # Repos whose working tree was dirty (or unverifiable) when the
+        # report ran, so `ran_against` names a commit that did not produce
+        # its numbers. Present only when non-empty: reports stamped before
+        # provenance recorded `dirty` carry nothing to surface, and an
+        # always-present empty list would rewrite every suite row of this
+        # frequently regenerated file for no information.
+        dirty = sorted(
+            {
+                entry["repo"]
+                for entry in unclean_rulespecs(prov_rulespecs)
+                if entry.get("repo")
+            }
+        )
+        if dirty:
+            suites_out[-1]["dirty_rulespecs"] = dirty
 
     # Executable surfaces + the report suites that verify each one, so the
     # dashboard can compute both the "stale report" and "no report at all"
@@ -877,12 +958,22 @@ def main() -> int:
             )
             return 1
         unstamped = [s for s in freshness["suites"] if s["unstamped"]]
+        dirty = [s for s in freshness["suites"] if s.get("dirty_rulespecs")]
         print(
             f"vacuous-gate OK: {len(list(COMPARISONS_DIR.glob('*.yaml')))} configs "
             f"oracle-backed; {len(freshness['suites'])} suites, "
             f"{len(freshness['executable_surfaces'])} executable surfaces, "
-            f"{len(unstamped)} suite(s) awaiting provenance"
+            f"{len(unstamped)} suite(s) awaiting provenance, "
+            f"{len(dirty)} suite(s) from dirty rulespec trees"
         )
+        for suite in dirty:
+            # Non-blocking, like staleness. The affected-rerun selector reruns a
+            # dirty report for the repos its map entry lists; the annotation
+            # makes every dirty report visible in CI, mapped or not.
+            print(
+                f"::warning::{suite['suite']} report ran on dirty rulespec "
+                f"trees: {', '.join(suite['dirty_rulespecs'])}"
+            )
         return 0
 
     if problems:

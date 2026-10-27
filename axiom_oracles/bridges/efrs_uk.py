@@ -14,13 +14,18 @@ import json
 import math
 import sys
 from collections import Counter, defaultdict
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, Callable
 
 import yaml
 
+from .relation_binding import (
+    RelationBinder,
+    merge_relation_binding_diagnostics,
+    public_relation_binding_diagnostics,
+)
 from .tax_populace import (
     _version_tuple,
     input_record,
@@ -1920,21 +1925,39 @@ class UKEFRSComparisonReport:
     skipped_surfaces: list[dict[str, str]]
     projection_notes: list[str]
     dataset_identity: dict[str, Any] | None = None
+    errors: list[dict[str, Any]] = field(default_factory=list)
+    relation_binding_diagnostics: dict[str, Any] = field(default_factory=dict)
 
     def to_json(self) -> dict[str, Any]:
-        return {
-            "compared_persons": self.compared_persons,
-            "compared_benunits": self.compared_benunits,
-            "compared_values": self.compared_values,
-            "mismatch_count": len(self.mismatches),
-            "mismatches": [row.__dict__ for row in self.mismatches],
-            "oracle_divergence_count": len(self.oracle_divergences),
-            "oracle_divergences": [row.__dict__ for row in self.oracle_divergences],
-            "output_summary": self.output_summary,
-            "skipped_surfaces": self.skipped_surfaces,
-            "projection_notes": self.projection_notes,
-            "dataset_identity": self.dataset_identity,
-        }
+        from axiom_oracles.conformance.observations import json_output_values
+
+        return json_output_values(
+            {
+                "compared_persons": self.compared_persons,
+                "compared_benunits": self.compared_benunits,
+                "compared_values": self.compared_values,
+                "mismatch_count": len(self.mismatches),
+                "mismatches": [row.__dict__ for row in self.mismatches],
+                "oracle_divergence_count": len(self.oracle_divergences),
+                "oracle_divergences": [row.__dict__ for row in self.oracle_divergences],
+                "output_summary": self.output_summary,
+                "skipped_surfaces": self.skipped_surfaces,
+                "projection_notes": self.projection_notes,
+                "dataset_identity": self.dataset_identity,
+                "errors": self.errors,
+                **(
+                    {
+                        "provenance": {
+                            "relation_binding_diagnostics": public_relation_binding_diagnostics(
+                                self.relation_binding_diagnostics,
+                            ),
+                        }
+                    }
+                    if self.relation_binding_diagnostics.get("count")
+                    else {}
+                ),
+            }
+        )
 
 
 def configure_parser(parser: argparse.ArgumentParser) -> None:
@@ -2243,9 +2266,7 @@ def compare_uk_efrs(
         ):
             program = universal_credit_program.resolve()
             if not program.exists():
-                raise SystemExit(
-                    f"{selected_surface} RuleSpec not found: {program}"
-                )
+                raise SystemExit(f"{selected_surface} RuleSpec not found: {program}")
         else:
             # rulespec-uk moved its content under a top-level ``uk/``
             # jurisdiction directory (canonical-layout cut, 2026-06-12).
@@ -4071,6 +4092,7 @@ def build_axiom_request(
     pe_data: dict[str, Any],
     year: int,
     surface: str = "personal-allowance",
+    artifact: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     if surface == "national-insurance-class-1":
         return build_national_insurance_class_1_request(pe_data=pe_data, year=year)
@@ -4088,7 +4110,11 @@ def build_axiom_request(
     if surface == "marriage-allowance":
         return build_marriage_allowance_request(pe_data=pe_data, year=year)
     if surface == "income-tax-income-base":
-        return build_income_tax_income_base_request(pe_data=pe_data, year=year)
+        return build_income_tax_income_base_request(
+            pe_data=pe_data,
+            year=year,
+            artifact=artifact,
+        )
     if surface == "income-tax-section-10-earned-income":
         return build_income_tax_section_10_request(pe_data=pe_data, year=year)
     if surface == "income-tax-section-11d-savings-income":
@@ -4221,6 +4247,9 @@ def build_axiom_request(
     raise ValueError(f"unsupported UK Populace surface: {surface}")
 
 
+# Input entity kinds follow each RuleSpec's scope. A benefit-unit projection
+# can represent a statutory Person (the claimant), so its ID prefix alone
+# does not determine whether its inputs belong to Person or Family.
 def build_national_insurance_class_1_request(
     *, pe_data: dict[str, Any], year: int
 ) -> dict[str, Any]:
@@ -4254,6 +4283,7 @@ def build_national_insurance_class_1_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4289,6 +4319,7 @@ def build_national_insurance_class_4_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4329,6 +4360,7 @@ def build_national_insurance_class_4_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4364,6 +4396,7 @@ def build_national_insurance_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4398,6 +4431,7 @@ def build_personal_allowance_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4452,6 +4486,7 @@ def build_marriage_allowance_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4472,12 +4507,13 @@ def build_marriage_allowance_request(
 
 
 def build_income_tax_income_base_request(
-    *, pe_data: dict[str, Any], year: int
+    *, pe_data: dict[str, Any], year: int, artifact: dict[str, Any] | None = None
 ) -> dict[str, Any]:
     interval = tax_year_interval(year)
     inputs: list[dict[str, Any]] = []
     relations: list[dict[str, Any]] = []
     queries: list[dict[str, Any]] = []
+    relation_binder = RelationBinder(artifact)
     for row in rows_for_surface(pe_data, "income-tax-income-base"):
         person_id = int(row_value(row, "person_id"))
         entity_id = person_entity_id(person_id)
@@ -4486,11 +4522,21 @@ def build_income_tax_income_base_request(
                 person_id,
                 str(component["name"]),
             )
+            relation_name = (
+                f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer"
+            )
+            roles = {
+                "owner_id": entity_id,
+                "owner_kind": "Person",
+                "related_id": payment_id,
+                "related_kind": "Payment",
+            }
             relations.append(
                 {
-                    "name": f"{INCOME_TAX_SECTION_23_BASE}#relation.income_component_of_taxpayer",
-                    "tuple": [payment_id, entity_id],
+                    "name": relation_name,
+                    "tuple": relation_binder.tuple(relation_name, **roles),
                     "interval": interval,
+                    **({"roles": roles} if artifact is None else {}),
                 }
             )
             inputs.append(
@@ -4499,6 +4545,7 @@ def build_income_tax_income_base_request(
                     payment_id,
                     interval,
                     money(component["amount_charged_to_income_tax"]),
+                    entity="Payment",
                 )
             )
             inputs.append(
@@ -4507,6 +4554,7 @@ def build_income_tax_income_base_request(
                     payment_id,
                     interval,
                     money(component["relief_deducted_under_section_24"]),
+                    entity="Payment",
                 )
             )
         for name, value in project_income_tax_section_23_inputs(row).items():
@@ -4516,6 +4564,7 @@ def build_income_tax_income_base_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4554,6 +4603,7 @@ def build_income_tax_section_10_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4592,6 +4642,7 @@ def build_income_tax_section_11d_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4630,6 +4681,7 @@ def build_income_tax_section_13_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4664,6 +4716,7 @@ def build_child_benefit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4696,6 +4749,7 @@ def build_benefit_cap_relevant_amount_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -4733,6 +4787,7 @@ def build_state_pension_credit_qualifying_age_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4768,6 +4823,7 @@ def build_pension_credit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4800,6 +4856,7 @@ def build_pension_credit_child_addition_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4835,6 +4892,7 @@ def build_pension_credit_deemed_income_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4876,6 +4934,7 @@ def build_legacy_weekly_tariff_income_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -4966,13 +5025,16 @@ def build_housing_benefit_applicable_amount_request(
     queries: list[dict[str, Any]] = []
     for row in rows_for_surface(pe_data, "housing-benefit-applicable-amount"):
         entity_id = benunit_entity_id(int(row_value(row, "benunit_id")))
-        for name, value in project_housing_benefit_applicable_amount_inputs(row).items():
+        for name, value in project_housing_benefit_applicable_amount_inputs(
+            row
+        ).items():
             inputs.append(
                 input_record(
                     f"{HOUSING_BENEFIT_ENTITLEMENT_BASE}#input.{name}",
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5010,6 +5072,7 @@ def build_housing_benefit_non_dependant_deductions_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5045,6 +5108,7 @@ def build_housing_benefit_entitlement_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5082,6 +5146,7 @@ def build_state_pension_credit_guarantee_credit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5121,6 +5186,7 @@ def build_state_pension_credit_savings_credit_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5184,6 +5250,7 @@ def build_universal_credit_childcare_element_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5221,6 +5288,7 @@ def build_universal_credit_childcare_work_condition_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5256,6 +5324,7 @@ def build_universal_credit_award_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5290,6 +5359,7 @@ def build_universal_credit_housing_costs_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5327,6 +5397,7 @@ def build_universal_credit_income_deduction_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5364,6 +5435,7 @@ def build_universal_credit_assessable_capital_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5399,6 +5471,7 @@ def build_universal_credit_tariff_income_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5434,6 +5507,7 @@ def build_universal_credit_work_allowance_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Family",
                 )
             )
         queries.append(
@@ -5469,6 +5543,7 @@ def build_student_loan_repayment_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5506,6 +5581,7 @@ def build_carers_allowance_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5543,6 +5619,7 @@ def build_carer_support_payment_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5578,6 +5655,7 @@ def build_scottish_child_payment_final_request(
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5611,6 +5689,7 @@ def build_dla_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, 
                     entity_id,
                     interval,
                     value,
+                    entity="Person",
                 )
             )
         queries.append(
@@ -5635,7 +5714,9 @@ def build_pip_final_request(*, pe_data: dict[str, Any], year: int) -> dict[str, 
     for row in rows_for_surface(pe_data, "personal-independence-payment-final"):
         entity_id = person_entity_id(int(row_value(row, "person_id")))
         for name, value in project_pip_final_inputs(row).items():
-            inputs.append(input_record(name, entity_id, interval, value))
+            inputs.append(
+                input_record(name, entity_id, interval, value, entity="Person")
+            )
         queries.append(
             {
                 "entity_id": entity_id,
@@ -6579,9 +6660,7 @@ def rows_for_surface(pe_data: dict[str, Any], surface: str) -> list[dict[str, An
         ]
     if surface == "marriage-allowance":
         return [
-            row
-            for row in persons
-            if money(row_value(row, "marriage_allowance", 0)) > 0
+            row for row in persons if money(row_value(row, "marriage_allowance", 0)) > 0
         ]
     if SURFACE_SPECS[surface].entity == "benunit":
         return benunits
@@ -6597,6 +6676,8 @@ def compare_outputs(
 ) -> UKEFRSComparisonReport:
     mismatches: list[UKEFRSComparisonRow] = []
     oracle_divergences: list[UKEFRSOracleDivergence] = []
+    errors: list[dict[str, Any]] = []
+    diagnostics: dict[str, Any] = {}
     summary: dict[str, dict[str, Any]] = {
         f"{surface}:{name}": {
             "surface": surface,
@@ -6621,8 +6702,38 @@ def compare_outputs(
                 f"for {len(persons):,} PolicyEngine rows"
             )
         for index, result in enumerate(axiom_outputs):
+            merge_relation_binding_diagnostics(
+                diagnostics,
+                public_relation_binding_diagnostics(
+                    result.get("relation_binding_diagnostics") or {},
+                ),
+            )
             pe_row = persons[index]
             entity_id = entity_id_for_surface(surface, pe_row)
+            if any(
+                result.get(key) for key in ("error", "errors", "skipped", "skip_reason")
+            ) or ("executed" in result and result["executed"] is not True):
+                # Keep stop evidence independently of displayed mismatches,
+                # including results whose returned values would have matched.
+                errors.append(
+                    {
+                        "engine": "axiom",
+                        "case_id": entity_id,
+                        "surface": surface,
+                        **{
+                            key: result[key]
+                            for key in (
+                                "error",
+                                "errors",
+                                "skipped",
+                                "skip_reason",
+                                "executed",
+                            )
+                            if key in result
+                        },
+                    }
+                )
+                continue
             outputs = result.get("outputs") or {}
             for name, spec in output_specs.items():
                 if not output_applies(spec, pe_row):
@@ -6679,6 +6790,8 @@ def compare_outputs(
         oracle_divergences=oracle_divergences,
         output_summary=list(summary.values()),
         dataset_identity=pe_data.get("dataset_identity") or None,
+        errors=errors,
+        relation_binding_diagnostics=diagnostics,
         skipped_surfaces=SKIPPED_SURFACES,
         projection_notes=[
             "Personal allowance projection supplies validation-population adjusted net income "
@@ -6962,11 +7075,10 @@ def policyengine_output_value(spec: dict[str, Any], row: Any) -> float:
     if spec.get("pe_transform") == "annual_to_weekly":
         return raw_value / WEEKS_IN_YEAR
     if spec.get("pe_transform") == "annual_to_weekly_per_carer":
-        return (
-            raw_value
-            / WEEKS_IN_YEAR
-            / max(1, int(money(row_value(row, "num_carers", 0))))
-        )
+        carers = row_value(row, "num_carers")
+        if carers is None or not math.isfinite(float(carers)):
+            return math.nan
+        return raw_value / WEEKS_IN_YEAR / max(1, int(carers))
     if spec.get("pe_transform") == "annual_to_monthly":
         return raw_value / MONTHS_IN_YEAR
     return raw_value
@@ -6975,12 +7087,23 @@ def policyengine_output_value(spec: dict[str, Any], row: Any) -> float:
 def policyengine_raw_output_value(spec: dict[str, Any], row: Any) -> float:
     expression = spec.get("pe_expression")
     if expression == "uc_award_before_takeup":
-        maximum_amount = money(row_value(row, "uc_maximum_amount", 0))
-        income_reduction = money(row_value(row, "uc_income_reduction", 0))
+        maximum = row_value(row, "uc_maximum_amount")
+        reduction = row_value(row, "uc_income_reduction")
+        if maximum is None or reduction is None:
+            return math.nan
+        maximum_amount, income_reduction = float(maximum), float(reduction)
+        # max(0, NaN) itself erases a missing return, so validate first.
+        if not all(
+            math.isfinite(value) for value in (maximum_amount, income_reduction)
+        ):
+            return math.nan
         return max(0.0, maximum_amount - income_reduction)
     if expression is not None:
         raise ValueError(f"unsupported PolicyEngine expression: {expression!r}")
-    return money(row_value(row, spec["pe"]))
+    raw_value = row_value(row, spec["pe"])
+    # Preserve an absent/nonfinite returned output through the comparison.
+    # Input money projections may default to zero; output evidence cannot.
+    return math.nan if raw_value is None else float(raw_value)
 
 
 def output_applies(spec: dict[str, Any], row: Any) -> bool:

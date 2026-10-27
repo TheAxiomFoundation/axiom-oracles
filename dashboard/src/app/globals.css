@@ -1515,6 +1515,102 @@ body {
   text-decoration: underline;
 }
 
+/* SOUTHMOD model findings (SouthmodFindings.jsx): the ledger rows reuse
+   .v2-ledger-row without the count column; details reuse .v2-expl. */
+.v2-finding-intro {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 78ch;
+}
+.v2-finding-intro .mono {
+  font-size: 11px;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+.v2-finding-count {
+  font-size: 10.5px;
+  color: var(--ink-mute);
+  white-space: nowrap;
+}
+.v2-finding-row {
+  grid-template-columns: 1fr auto;
+}
+.v2-finding-row:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.v2-finding-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+/* the finding a #finding-<id> link opened */
+.v2-finding-pinned > .v2-finding-row {
+  background: var(--paper-warm);
+  box-shadow: inset 2px 0 0 var(--accent);
+  padding-left: 8px;
+}
+.v2-finding-expl {
+  margin-left: 0;
+}
+.v2-finding-field {
+  display: grid;
+  grid-template-columns: 112px 1fr;
+  gap: 10px;
+  padding: 3px 0;
+}
+.v2-finding-field + .v2-finding-field {
+  border-top: 1px dashed var(--hairline);
+}
+.v2-finding-label {
+  padding-top: 2px;
+  font-size: 9.5px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+.v2-finding-value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.v2-finding-concept {
+  font-size: 10.5px;
+  color: var(--ink);
+}
+.v2-finding-note {
+  flex-basis: 100%;
+}
+.v2-finding-suite {
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  color: var(--accent);
+  cursor: pointer;
+}
+.v2-finding-suite:hover {
+  text-decoration: underline;
+}
+.v2-finding-none {
+  padding: 2px 0 8px;
+}
+@media (max-width: 640px) {
+  .v2-finding-field {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
 .v2-action {
   font-family: var(--font-mono), "JetBrains Mono", monospace;
   font-size: 10.5px;
@@ -1543,6 +1639,12 @@ a.v2-action-filed:hover {
   color: var(--good);
 }
 
+.v2-action-muted {
+  background: var(--paper-warm);
+  color: var(--ink-mute);
+  border: 1px solid var(--hairline);
+}
+
 
 
 .v2-ledger-more > summary {
@@ -1568,6 +1670,8 @@ a.v2-action-filed:hover {
 
 .v2-footer {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
   justify-content: space-between;
   align-items: center;
   font-size: 12px;

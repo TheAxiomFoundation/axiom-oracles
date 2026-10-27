@@ -1,0 +1,322 @@
+{
+  "baseline": {
+    "mode": "explain",
+    "program": {
+      "units": [
+        {
+          "name": "USD",
+          "kind": "currency",
+          "minor_units": 2
+        }
+      ],
+      "relations": [
+        {
+          "name": "payments",
+          "arity": 2,
+          "slot_entities": [
+            "Household",
+            "Payment"
+          ]
+        }
+      ],
+      "derived": [
+        {
+          "name": "n",
+          "entity": "Household",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "count_related",
+            "relation": "payments",
+            "current_slot": 0,
+            "related_slot": 1,
+            "where": {
+              "kind": "comparison",
+              "op": "gt",
+              "left": {
+                "kind": "derived",
+                "name": "payment_threshold"
+              },
+              "right": {
+                "kind": "literal",
+                "value": {
+                  "kind": "integer",
+                  "value": 0
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "payment_threshold",
+          "entity": "Person",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "threshold"
+          }
+        },
+        {
+          "name": "house_marker",
+          "entity": "Household",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "marker"
+          }
+        },
+        {
+          "name": "payment_amount",
+          "entity": "Payment",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "amount"
+          }
+        }
+      ]
+    },
+    "dataset": {
+      "inputs": [
+        {
+          "name": "marker",
+          "entity": "Household",
+          "entity_id": "house",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        },
+        {
+          "name": "threshold",
+          "entity": "Person",
+          "entity_id": "payment",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 10
+          }
+        },
+        {
+          "name": "amount",
+          "entity": "Payment",
+          "entity_id": "payment",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        }
+      ],
+      "relations": [
+        {
+          "name": "payments",
+          "tuple": [
+            "house",
+            "payment"
+          ],
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          }
+        }
+      ]
+    },
+    "queries": [
+      {
+        "entity_id": "house",
+        "period": {
+          "period_kind": "tax_year",
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "outputs": [
+          "n"
+        ]
+      }
+    ]
+  },
+  "extended": {
+    "mode": "explain",
+    "program": {
+      "units": [
+        {
+          "name": "USD",
+          "kind": "currency",
+          "minor_units": 2
+        }
+      ],
+      "relations": [
+        {
+          "name": "payments",
+          "arity": 2,
+          "slot_entities": [
+            "Household",
+            "Payment"
+          ]
+        },
+        {
+          "name": "friends",
+          "arity": 2,
+          "slot_entities": [
+            "Person",
+            "Person"
+          ]
+        }
+      ],
+      "derived": [
+        {
+          "name": "n",
+          "entity": "Household",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "count_related",
+            "relation": "payments",
+            "current_slot": 0,
+            "related_slot": 1,
+            "where": {
+              "kind": "comparison",
+              "op": "gt",
+              "left": {
+                "kind": "derived",
+                "name": "payment_threshold"
+              },
+              "right": {
+                "kind": "literal",
+                "value": {
+                  "kind": "integer",
+                  "value": 0
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "payment_threshold",
+          "entity": "Person",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "threshold"
+          }
+        },
+        {
+          "name": "house_marker",
+          "entity": "Household",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "marker"
+          }
+        },
+        {
+          "name": "payment_amount",
+          "entity": "Payment",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "input",
+            "name": "amount"
+          }
+        },
+        {
+          "name": "friend_count",
+          "entity": "Person",
+          "dtype": "integer",
+          "semantics": "scalar",
+          "expr": {
+            "kind": "count_related",
+            "relation": "friends",
+            "current_slot": 0,
+            "related_slot": 1
+          }
+        }
+      ]
+    },
+    "dataset": {
+      "inputs": [
+        {
+          "name": "marker",
+          "entity": "Household",
+          "entity_id": "house",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        },
+        {
+          "name": "threshold",
+          "entity": "Person",
+          "entity_id": "payment",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 10
+          }
+        },
+        {
+          "name": "amount",
+          "entity": "Payment",
+          "entity_id": "payment",
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          },
+          "value": {
+            "kind": "integer",
+            "value": 1
+          }
+        }
+      ],
+      "relations": [
+        {
+          "name": "payments",
+          "tuple": [
+            "house",
+            "payment"
+          ],
+          "interval": {
+            "start": "2026-01-01",
+            "end": "2026-12-31"
+          }
+        }
+      ]
+    },
+    "queries": [
+      {
+        "entity_id": "house",
+        "period": {
+          "period_kind": "tax_year",
+          "start": "2026-01-01",
+          "end": "2026-12-31"
+        },
+        "outputs": [
+          "n"
+        ]
+      }
+    ]
+  }
+}
